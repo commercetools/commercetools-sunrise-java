@@ -1,0 +1,14 @@
+language: scala
+scala:
+- 2.10.4
+script:
+- ./sbt test
+jdk:
+- oraclejdk8
+env:
+  matrix:
+  - SBT_OPTS="-XX:PermSize=512M -XX:MaxPermSize=1024M"
+notifications:
+  email:
+    on_success: never
+    on_failure: change
