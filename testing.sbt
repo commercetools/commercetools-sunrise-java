@@ -17,3 +17,9 @@ libraryDependencies ++= Seq(
   "com.novocode" % "junit-interface" % "0.10" % "it",
   "org.easytesting" % "fest-assert" % "1.4" % "it"
 )
+
+lazy val cover = TaskKey[Unit]("cover", "Creates the JaCoCo reports for unit and integration tests.")
+
+cover := { (itJacoco.cover in itJacoco.Config).value }
+
+cover <<= cover.dependsOn(jacoco.check in jacoco.Config)

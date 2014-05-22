@@ -5,5 +5,6 @@ sphere-sunrise
 
 The next generation shop template. Currently under initial development.
 
-## Commands
+## Special Commands
 
+* `sbt cover` executes all tests (unit, integration) and creates test reports in `target/scala-2.10/it-jacoco/html/index.html`
