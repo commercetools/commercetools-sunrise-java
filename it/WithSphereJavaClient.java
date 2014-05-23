@@ -29,7 +29,10 @@ public abstract class WithSphereJavaClient {
 
     @AfterClass
     public static void stopJavaClient() {
-        sphereJavaClient.close();
+        if (sphereJavaClient != null) {
+            sphereJavaClient.close();
+        }
+
     }
 
     private static List<EnvSetting> requiredEnvironmentVariables() {
