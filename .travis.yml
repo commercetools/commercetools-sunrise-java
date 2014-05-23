@@ -2,12 +2,16 @@ language: scala
 scala:
 - 2.10.4
 script:
-- ./sbt test
+- ./sbt test it:test
 jdk:
 - oraclejdk8
 env:
   matrix:
   - SBT_OPTS="-XX:PermSize=512M -XX:MaxPermSize=1024M"
+  global:
+    secure: "9664RMqkt5IZ0uMDeAHENnbTb4aoKwuRDmbkywjtDFPoYvjm9na9A7djV13MyAaS1W7gkTHsTrzmQWrG/qH4W5IFZ1+vM78RzULdvnik5rQlenXPOWgWCj+1aSNOXRJPYYlhoGgaBojeWm3r09oApPUkXCw8tm+4Ss3aHZAvCA="
+    secure: "YE+z8alsfbv59BhwYZGpTZCjKd1cUhnP0i5n1Y2nGt3jnPd3c4C3kwRwx+munyfiyUmsm8yNDTKevzrOFNzLx0h7X00glJZg1dr8g8P30M8a819JQFnzVLy/iTZknBk/Ez1DNXtXZ/2S/dqyPqClwIFKvjHUnQXGfxqXvSgtINo="
+    secure: "iUR0SAogIfTZVmYPvCGCuB6XzT7D1rPqoSOeI9VqHe8JwIuqwWMhGC09/4pXwTqzuHBJV8R5AVCOnAgvFaTBw0ciVSRepXQhkqTYsqEVO5T0bc4VbjUfB8pHLjCiRkxriFsgTVofYTbr2ciamJGPM2Z7Qe7u6VJtkn00LK7PMnM="
 notifications:
   email:
     on_success: never
