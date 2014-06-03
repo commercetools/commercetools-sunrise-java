@@ -18,6 +18,7 @@ notifications:
     on_failure: change
 deploy:
   provider: heroku
+  strategy: git
   api_key:
     secure: NE6m0300BPmc8jJQbpTFyOP1uU6uK+7aVpN5lmKAPhV2gByzzq9XT3uwYqPcD9turCYujDXAmXrBzI6ISfLlrqpcxKjSupeUvvjpOxqhbpP65hA79VTuxDIajazzXrvjuKPgvUJAjD+1qdQWzoOjKJ4Y/iJ1YL+fqt8omOSFda0=
   app: sphere-sunrise
