@@ -7,7 +7,7 @@ sphere-sunrise
 
 The next generation shop template. Currently under initial development.
 
-* Demo: https://sphere-sunrise.herokuapp.com
+* Demo: https://sunrise.sphere.io
 
 ## Preconditions
 
