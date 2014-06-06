@@ -12,7 +12,42 @@ The next generation shop template. Currently under initial development.
 ## Preconditions
 
 * install [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+    * for now we just require Java 7, but soon we will move to Java 8
 * install [SBT](http://www.scala-sbt.org/release/tutorial/Setup.html), Mac/Linux users can use the SBT script in the base folder (use `./sbt` instead of `sbt` in commands)
+
+## Run it locally
+
+* Setup your environment variables, so you need not to put your shop credentials under version control:
+
+```bash
+export SPHERE_SUNRISE_PROJECT="your-project-key"
+export SPHERE_SUNRISE_CLIENT_SECRET="your-the-client-secret"
+export SPHERE_SUNRISE_CLIENT_ID="your-client-id"
+```
+
+* `sbt ~run`
+
+The output will be like
+
+```
+[info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+
+(Server started, use Ctrl+D to stop and go back to the console...)
+```
+
+* open http://localhost:9000 in your browser
+
+## Integration tests against SPHERE.IO backend
+
+* Setup your environment variables (use a test project), so you need not to put your shop credentials under version control:
+
+```bash
+export SPHERE_SUNRISE_IT_TESTS_PROJECT="your-project-key"
+export SPHERE_SUNRISE_IT_TESTS_CLIENT_SECRET="your-the-client-secret"
+export SPHERE_SUNRISE_IT_TESTS_CLIENT_ID="your-client-id"
+```
+* `sbt it:test`
+
 
 ## Special Commands
 

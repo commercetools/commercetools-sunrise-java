@@ -23,3 +23,9 @@ lazy val cover = TaskKey[Unit]("cover", "Creates the JaCoCo reports for unit and
 cover := { (itJacoco.cover in itJacoco.Config).value }
 
 cover <<= cover.dependsOn(jacoco.check in jacoco.Config)
+
+val jacocoExcludes = Seq("views*", "*Routes*", "controllers*routes*", "controllers*Reverse*", "controllers*javascript*", "controller*ref*")
+
+jacoco.excludes in jacoco.Config := jacocoExcludes
+
+jacoco.excludes in itJacoco.Config := jacocoExcludes

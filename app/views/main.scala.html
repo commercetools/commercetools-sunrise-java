@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, data: models.CommonData)(content: Html)
 
 <!DOCTYPE html>
 
@@ -11,10 +11,16 @@
     <body>
         
         <header>
-            <a href="@routes.Application.index">@title</a>
+            <a href="@routes.ApplicationController.index">@title</a>
         </header>
         
         <section>
+
+            <ol id="categories">
+                @for(category <- data.rootCategories){
+                    <li>@category.getName.get(data.locales()).or("")</li>
+                }
+            </ol>
             @content
         </section>
         

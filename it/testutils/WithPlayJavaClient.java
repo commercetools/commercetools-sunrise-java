@@ -1,3 +1,5 @@
+package testutils;
+
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
@@ -5,8 +7,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import io.sphere.sdk.client.SphereJavaClient;
-import io.sphere.sdk.client.SphereJavaClientImpl;
+import io.sphere.sdk.client.PlayJavaClient;
+import io.sphere.sdk.client.PlayJavaClientImpl;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -15,8 +17,8 @@ import java.util.List;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Iterables.isEmpty;
 
-public abstract class WithSphereJavaClient {
-    protected static SphereJavaClient sphereJavaClient;
+public abstract class WithPlayJavaClient {
+    protected static PlayJavaClient client;
 
     @BeforeClass
     public static void setupJavaClient() {
@@ -24,13 +26,13 @@ public abstract class WithSphereJavaClient {
         requirePresent(requiredEnv);
         final String configAsString = getConfig(requiredEnv);
         final Config config = ConfigFactory.parseString(configAsString).withFallback(ConfigFactory.load());
-        sphereJavaClient = new SphereJavaClientImpl(config);
+        client = new PlayJavaClientImpl(config);
     }
 
     @AfterClass
     public static void stopJavaClient() {
-        if (sphereJavaClient != null) {
-            sphereJavaClient.close();
+        if (client != null) {
+            client.close();
         }
 
     }
