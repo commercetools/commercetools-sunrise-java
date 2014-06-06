@@ -46,7 +46,7 @@ public class ApplicationControllerTest extends WithSunriseApplication {
                     final TypeReference<PagedQueryResult<CategoryImpl>> typeReference = new TypeReference<PagedQueryResult<CategoryImpl>>() {
 
                     };
-                    result = Fixtures.readParseJsonInClasspath("categories.json", typeReference);
+                    result = Fixtures.readJsonFromClasspath("categories.json", typeReference);
                 } else {
                     result = super.result(query);
                 }

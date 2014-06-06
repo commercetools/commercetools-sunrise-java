@@ -13,7 +13,7 @@ public final class Fixtures {
     private Fixtures() {
     }
 
-    public static <I, R> I readParseJsonInClasspath(String resourcePath, TypeReference<R> typeReference) {
+    public static <I, R> I readJsonFromClasspath(String resourcePath, TypeReference<R> typeReference) {
         final URL url = Resources.getResource(resourcePath);
         try {
             String categoriesJson = Resources.toString(url, Charsets.UTF_8);
