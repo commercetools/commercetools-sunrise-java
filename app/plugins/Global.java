@@ -23,11 +23,15 @@ public class Global extends GlobalSettings {
     @Override
     public void onStart(final Application app) {
         this.app = app;
-        client = new PlayJavaClientImpl(app.configuration());
+        client = createPlayJavaClient(app);
         final PagedQueryResult<Category> queryResult = client.execute(Categories.query()).get(2000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
         //TODO this does not take all categories if there are a lot.
         categoryTree = CategoryTreeFactory.create(queryResult.getResults());
         super.onStart(app);
+    }
+
+    protected PlayJavaClient createPlayJavaClient(final Application app) {
+        return new PlayJavaClientImpl(app.configuration());
     }
 
     @Override

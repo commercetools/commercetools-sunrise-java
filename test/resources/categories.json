@@ -1,9 +1,12 @@
-[
-    {
+{
+    "offset" : 0,
+    "count" : 4,
+    "total" : 4,
+    "results" : [ {
         "id" : "5ebe6dc9-ba32-4030-9f3e-eee0137a1274",
         "version" : 1,
         "name" : {
-            "en" : "Snowboard equipment"
+            "en" : "TestSnowboard equipment"
         },
         "slug" : {
             "en" : "snowboard-equipment"
@@ -16,7 +19,7 @@
         "id" : "3621ef75-adc4-4a31-8a3b-3753b1c0a209",
         "version" : 1,
         "name" : {
-            "en" : "Tank tops"
+            "en" : "TestTank tops"
         },
         "slug" : {
             "en" : "tank-tops"
@@ -29,7 +32,7 @@
         "id" : "7c100d2e-0228-425e-919e-5f3177fadd6c",
         "version" : 1,
         "name" : {
-            "en" : "Long sleeves"
+            "en" : "TestLong sleeves"
         },
         "slug" : {
             "en" : "long-sleeves"
@@ -42,7 +45,7 @@
         "id" : "a96dc371-3320-437e-bea8-1323535eed42",
         "version" : 1,
         "name" : {
-            "en" : "Hats"
+            "en" : "TestHats"
         },
         "slug" : {
             "en" : "hats"
@@ -51,5 +54,5 @@
         "orderHint" : "0.000014020459255441665602288",
         "createdAt" : "2014-06-06T09:12:05.544Z",
         "lastModifiedAt" : "2014-06-06T09:12:05.544Z"
-    }
-]
+    } ]
+}
