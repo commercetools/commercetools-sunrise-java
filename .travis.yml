@@ -12,6 +12,9 @@ env:
   - secure: MmhdvkSl+padAaeCJSMZMvgJRVNTQqiTLw9eyG/Yg4uZwWcOXaeeiW4+rMHr6j+JCeStoSC8NO4rbTKdnZpZuhxuKFfbslFH3oTmc4u45KxxtdMiFIf92iDAj2KVpYLmf2j23lCNyV8rq0s6wmvOtEz2DIbnDTfaiDo/68RxDSg=
   - secure: XbQrJLUKFfEsPe37YjhiAq/glXLqQxmIimgWgzoMi7D/W2g4pPNu00XbBhIBj8JrXYMyh9dTj34+1DgJFTkazHp5Vls/hxyU/y9eDk42k2vpfvcMOZEvUEmbWxfVendlRyAM1EWOQQGRE7wcQ8CKhrgixOrVtz9PjQwpF/pQUNQ=
   - secure: PDIHePa/DiW/ED/Mlwx5G1DABH2EojwUaRRPyGUPoS8jlx2bJNrqhfzKXfJAHBdd9y2bA22jQ1OPzBzu7Ui+mzPPZRVqwYSwGa61DwXsyIcCwJ4OpxzUlNORKSQiSWkTLXg31epMcFO3QibnBekQSzbbWHLC99F5uV9552goSNE=
+  - SPHERE_SUNRISE_PROJECT="dummysetting"
+  - SPHERE_SUNRISE_CLIENT_SECRET="dummysetting"
+  - SPHERE_SUNRISE_CLIENT_ID="dummysetting"
 notifications:
   email:
     on_success: never
