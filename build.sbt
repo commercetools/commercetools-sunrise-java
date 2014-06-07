@@ -15,3 +15,7 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 libraryDependencies ++= Seq(
   "io.sphere.jvmsdk" %% "play-sdk" % "1.0.0-20140606-SNAPSHOT"
 )
+
+initialCommands in console := "import tutorial.ClientFactory.createClient;" +
+  "import io.sphere.sdk.categories._;" +
+  """println("Use 'val client = createClient()' to create a client instance.")"""
