@@ -12,7 +12,6 @@ The next generation shop template. Currently under initial development.
 ## Preconditions
 
 * install [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-    * for now we just require Java 7, but soon we will move to Java 8
 * install [SBT](http://www.scala-sbt.org/release/tutorial/Setup.html), Mac/Linux users can use the SBT script in the base folder (use `./sbt` instead of `sbt` in commands)
 
 ## Run it locally
@@ -25,6 +24,7 @@ export SPHERE_SUNRISE_CLIENT_SECRET="your-the-client-secret"
 export SPHERE_SUNRISE_CLIENT_ID="your-client-id"
 ```
 
+* You can store the variables in `~/.bash_profile` (Mac) or `~/.bashrc` (Linux) so the next time you open a console they are automatically available.
 * `sbt ~run`
 
 The output will be like
