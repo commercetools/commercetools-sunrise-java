@@ -29,3 +29,9 @@ val jacocoExcludes = Seq("views*", "*Routes*", "controllers*routes*", "controlle
 jacoco.excludes in jacoco.Config := jacocoExcludes
 
 jacoco.excludes in itJacoco.Config := jacocoExcludes
+
+lazy val thresholds = Thresholds(instruction = 94, method = 90, branch = 50, complexity = 35, line = 95, clazz = 99)
+
+jacoco.thresholds in jacoco.Config := thresholds
+
+jacoco.thresholds in itJacoco.Config := thresholds
