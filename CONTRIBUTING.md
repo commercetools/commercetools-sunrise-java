@@ -18,7 +18,7 @@ We want to have a clear and tested code base.
 * never reformat code, we want in diffs only real changes
 * use code formatting like in the rest of the application
 * use the namespace io.sphere.sdk
-* don't commit code which emmits warnings like unchecked generics
+* your committed code should not emit warnings such as unchecked generics
 * you need to use tests to prove that your code works, JUnit tests are sufficient
 * production code should be in Java
 * your code is from you and not copied from third party sources
