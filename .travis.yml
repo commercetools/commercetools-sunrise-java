@@ -2,7 +2,7 @@ language: scala
 scala:
 - 2.10.4
 script:
-- ./sbt test it:test
+- ./sbt cover
 jdk:
 - oraclejdk8
 env:
