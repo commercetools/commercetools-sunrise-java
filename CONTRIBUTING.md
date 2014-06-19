@@ -4,9 +4,15 @@ Contributions are welcome!
 
 ## Contribution process for all committers
 
+### Typos 
+
+If you have push access to the repository you can fix them directly otherwise just make a pull request.
+
+### Code
+
 1. on bigger effort changes: open an issue and ask if you can/should/need to help
 1. fork the repository
-1. produce production code and unit tests (tests can be omitted on pure documentation changes like typos)
+1. produce production code and unit tests
 1. make a pull request
 1. @lauraluiz and @schleichardt will review and optionally merge
 
