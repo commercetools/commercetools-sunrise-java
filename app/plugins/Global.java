@@ -18,6 +18,10 @@ public class Global extends GlobalSettings {
 
     //TODO this will be most likely moved to a plugin
     private PlayJavaClient client;
+
+    /**
+     * The cached tree of categories.
+     */
     private CategoryTree categoryTree;
 
     @Override
