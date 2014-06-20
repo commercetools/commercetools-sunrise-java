@@ -8,6 +8,8 @@ sphere-sunrise
 The next generation shop template. Currently under initial development.
 
 * Demo: https://sunrise.sphere.io
+* [Javadoc](https://sphereio.github.io/sphere-sunrise/javadoc/index.html)
+* [Test Coverage Report](https://sphereio.github.io/sphere-sunrise/coverage/index.html)
 
 ## Preconditions
 
