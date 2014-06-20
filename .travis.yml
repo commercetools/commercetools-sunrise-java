@@ -3,6 +3,7 @@ scala:
 - 2.10.4
 script:
 - ./sbt cover
+- if [ "$TRAVIS_BRANCH"  = "master" ]; then sbt "jvm-sdk/gitPublish target/scala-2.10/it-jacoco/html https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git \"coverage/<version>\" sphere-oss automation@commercetools.de"; fi
 jdk:
 - oraclejdk8
 env:
@@ -15,6 +16,7 @@ env:
   - SPHERE_SUNRISE_PROJECT="dummysetting"
   - SPHERE_SUNRISE_CLIENT_SECRET="dummysetting"
   - SPHERE_SUNRISE_CLIENT_ID="dummysetting"
+  - secure: ocKHAWZJhmxs6tqMXtRf5mtbo671DHll91nzk2yl+bFMvhxHt5/7Y50ReLhq8Y/gXBfwA/qBAQg/ql8/q6jElg4/5T1mUdK2U153kf7FaVhDEF5ZtFbfGl+LugZAwrNGSM1+18C0ctIq87P04NU9GKY+06ZLEi95v0SS7JaRJPg=
 notifications:
   email:
     on_success: never
