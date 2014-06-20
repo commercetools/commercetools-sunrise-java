@@ -19,3 +19,5 @@ libraryDependencies ++= Seq(
 initialCommands in console := "import tutorial.ClientFactory.createClient;" +
   "import io.sphere.sdk.categories._;" +
   """println("Use 'val client = createClient()' to create a client instance.")"""
+
+javaUnidocSettings

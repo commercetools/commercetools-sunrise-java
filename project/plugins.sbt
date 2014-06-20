@@ -17,3 +17,5 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "0.7.0-M3")
 addSbtPlugin("io.sphere.de.johoop" % "jacoco4sbt" % "2.1.5-fork-1.0.0")
 
 addSbtPlugin("io.sphere" % "git-publisher" % "0.2")
+
+addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.1")
