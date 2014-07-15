@@ -13,7 +13,7 @@ import static org.fest.assertions.Assertions.assertThat;
 public class ApplicationControllerIntegrationTest extends WithPlayJavaClient {
     @Test
     public void itFindsSomeCategories() throws Exception {
-        final PagedQueryResult<Category> queryResult = client.execute(Categories.query()).get(1000);
+        final PagedQueryResult<Category> queryResult = client.execute(Categories.query()).get(2000);
         final int count = queryResult.getCount();
         assertThat(count).isGreaterThan(3);
         //this is a project specific assertion as example
