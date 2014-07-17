@@ -2,12 +2,13 @@ package controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import fixtures.Fixtures;
-import io.sphere.sdk.categories.CategoryImpl;
-import io.sphere.sdk.client.PagedQueryResult;
-import io.sphere.sdk.client.Query;
+import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.client.SphereRequestExecutor;
 import io.sphere.sdk.client.SphereRequestExecutorTestDouble;
-import io.sphere.sdk.queries.EntityQueryWithCopyImpl;
+import io.sphere.sdk.queries.PagedQueryResult;
+import io.sphere.sdk.queries.Query;
+import io.sphere.sdk.queries.QueryDsl;
+import io.sphere.sdk.requests.ClientRequest;
 import org.junit.Test;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -40,22 +41,22 @@ public class ApplicationControllerTest extends WithSunriseApplication {
     protected SphereRequestExecutor getSphereRequestExecutor() {
         return new SphereRequestExecutorTestDouble() {
             @Override
-            protected <I, R> PagedQueryResult<I> result(Query<I, R> query) {
-                final PagedQueryResult<I> result;
-                if (isCategoryEndpoint(query)) {
-                    final TypeReference<PagedQueryResult<CategoryImpl>> typeReference = new TypeReference<PagedQueryResult<CategoryImpl>>() {
+                protected <T> T result(ClientRequest<T> requestable) {
+                final T result;
+                if (isCategoryEndpoint(requestable)) {
+                    final TypeReference<PagedQueryResult<Category>> typeReference = new TypeReference<PagedQueryResult<Category>>() {
 
                     };
-                    result = Fixtures.readJsonFromClasspath("categories.json", typeReference);
+                    result = (T) Fixtures.readJsonFromClasspath("categories.json", typeReference);
                 } else {
-                    result = super.result(query);
+                    result = super.result(requestable);
                 }
                 return result;
             }
         };
     }
 
-    private <I, R> boolean isCategoryEndpoint(final Query<I, R> query) {
-        return (query instanceof EntityQueryWithCopyImpl) && ((EntityQueryWithCopyImpl) query).endpoint().equals("/categories");
+    private <I> boolean isCategoryEndpoint(final ClientRequest<I> query) {
+        return (query instanceof QueryDsl) && ((QueryDsl) query).endpoint().equals("/categories");
     }
 }
