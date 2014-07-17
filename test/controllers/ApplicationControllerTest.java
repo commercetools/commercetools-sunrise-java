@@ -5,6 +5,7 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.client.SphereRequestExecutor;
 import io.sphere.sdk.client.SphereRequestExecutorTestDouble;
 import io.sphere.sdk.queries.PagedQueryResult;
+import io.sphere.sdk.queries.Query;
 import io.sphere.sdk.queries.QueryDsl;
 import io.sphere.sdk.requests.ClientRequest;
 import io.sphere.sdk.utils.JsonUtils;
@@ -47,6 +48,8 @@ public class ApplicationControllerTest extends WithSunriseApplication {
 
                     };
                     result = (T) JsonUtils.readObjectFromJsonFileInClasspath("categories.json", typeReference);
+                } else if(requestable instanceof Query) {
+                    result = (T) PagedQueryResult.empty();
                 } else {
                     result = super.result(requestable);
                 }
