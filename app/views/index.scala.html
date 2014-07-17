@@ -2,6 +2,10 @@
 
 @main("SPHERE.IO Sunrise Home", data) {
 
-    <p>Hello World</p>
-
+    <h2>Products</h2>
+    <ol>
+    @data.products.map { product =>
+        <li>@product.getMasterData.getCurrent.getName.get(data.locales()).orElse("")</li>
+    }
+    </ol>
 }
