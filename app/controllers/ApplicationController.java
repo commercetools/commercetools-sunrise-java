@@ -9,10 +9,14 @@ import play.mvc.*;
 
 import views.html.*;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public final class ApplicationController extends SunriseController {
 
+    @Inject
     public ApplicationController(final PlayJavaClient client, final CategoryTree categoryTree) {
         super(client, categoryTree);
     }

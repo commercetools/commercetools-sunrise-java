@@ -1,14 +1,11 @@
 package controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.client.SphereRequestExecutor;
 import io.sphere.sdk.client.SphereRequestExecutorTestDouble;
 import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.queries.Query;
 import io.sphere.sdk.queries.QueryDsl;
 import io.sphere.sdk.requests.ClientRequest;
-import io.sphere.sdk.utils.JsonUtils;
 import org.junit.Test;
 import play.mvc.Result;
 import play.test.FakeRequest;
@@ -43,12 +40,7 @@ public class ApplicationControllerTest extends WithSunriseApplication {
             @Override
                 protected <T> T result(ClientRequest<T> requestable) {
                 final T result;
-                if (isCategoryEndpoint(requestable)) {
-                    final TypeReference<PagedQueryResult<Category>> typeReference = new TypeReference<PagedQueryResult<Category>>() {
-
-                    };
-                    result = (T) JsonUtils.readObjectFromJsonFileInClasspath("categories.json", typeReference);
-                } else if(requestable instanceof Query) {
+                if(requestable instanceof Query) {
                     result = (T) PagedQueryResult.empty();
                 } else {
                     result = super.result(requestable);
