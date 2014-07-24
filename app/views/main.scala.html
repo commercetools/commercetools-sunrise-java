@@ -18,7 +18,7 @@
 
             <ol id="categories">
                 @for(category <- data.rootCategories){
-                    <li>@category.getName.get(data.locales()).or("")</li>
+                    <li>@category.getName.get(data.locales()).orElse("")</li>
                 }
             </ol>
             @content

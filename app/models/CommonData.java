@@ -1,6 +1,7 @@
 package models;
 
 import com.google.common.collect.Lists;
+import io.sphere.sdk.products.Product;
 import play.i18n.Lang;
 
 import java.util.List;
@@ -15,11 +16,13 @@ public class CommonData {
     private final List<Category> rootCategories;
     private final Locale fallbackLocale;
     private final List<Locale> locales;
+    private final List<Product> products;
 
-    CommonData(final Lang lang, final List<Category> rootCategories, Locale fallbackLocale) {
+    CommonData(final Lang lang, final List<Category> rootCategories, Locale fallbackLocale, List<Product> products) {
         this.lang = lang;
         this.rootCategories = rootCategories;
         this.fallbackLocale = fallbackLocale;
+        this.products = products;
         locales = Lists.newArrayList(locale(), fallbackLocale);
     }
 
@@ -41,5 +44,9 @@ public class CommonData {
 
     public Locale fallbackLocale() {
         return fallbackLocale;
+    }
+
+    public List<Product> products() {
+        return products;
     }
 }

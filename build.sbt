@@ -12,8 +12,11 @@ javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 resolvers += Resolver.sonatypeRepo("snapshots")
 
+resolvers += Resolver.sonatypeRepo("releases")
+
 libraryDependencies ++= Seq(
-  "io.sphere.jvmsdk" %% "play-sdk" % "1.0.0-20140606-SNAPSHOT"
+  "io.sphere" %% "sphere-play-sdk" % "1.0.0-M1",
+  "com.google.inject" % "guice" % "3.0"
 )
 
 initialCommands in console := "import tutorial.ClientFactory.createClient;" +
