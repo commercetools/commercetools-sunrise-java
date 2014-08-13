@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.CategoryTreeFactory;
+import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.PlayJavaClient;
 import io.sphere.sdk.client.PlayJavaClientImpl;
 import io.sphere.sdk.queries.PagedQueryResult;
@@ -25,7 +26,7 @@ class ProductionModule extends AbstractModule {
     @Override
     protected void configure() {
         final PlayJavaClient client = new PlayJavaClientImpl(app.configuration());
-        final PagedQueryResult<Category> queryResult = client.execute(Category.query()).get(2000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
+        final PagedQueryResult<Category> queryResult = client.execute(new CategoryQuery()).get(2000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
         //TODO this does not take all categories if there are a lot.
         final CategoryTree categoryTree = CategoryTreeFactory.create(queryResult.getResults());
         bind(PlayJavaClient.class).toInstance(client);

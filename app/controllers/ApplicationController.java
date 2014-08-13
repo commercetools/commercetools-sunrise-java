@@ -3,6 +3,7 @@ package controllers;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaClient;
 import io.sphere.sdk.products.Product;
+import io.sphere.sdk.products.queries.ProductQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
 import play.libs.F;
 import play.mvc.*;
@@ -22,7 +23,7 @@ public final class ApplicationController extends SunriseController {
     }
 
     public F.Promise<Result> index() {
-        return client().execute(Product.query()).map(this::showProducts);
+        return client().execute(new ProductQuery()).map(this::showProducts);
     }
 
     private Result showProducts(PagedQueryResult<Product> productPagedQueryResult) {
