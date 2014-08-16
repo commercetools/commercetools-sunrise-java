@@ -7,17 +7,14 @@
   "env": {
     "SPHERE_SUNRISE_PROJECT": {
       "description": "The project Key for your SPHERE.IO project.",
-      "value": "snowflake2",
       "required": true
     },
     "SPHERE_SUNRISE_CLIENT_ID": {
       "description": "The clientId of your SPHERE.IO project.",
-      "value": "QKStD-HjZLZGRqie2SPvzXSt",
       "required": true
     },
     "SPHERE_SUNRISE_CLIENT_SECRET": {
       "description": "The clientSecret of your SPHERE.IO project.",
-      "value": "lnkNveGqslWKwt-qVE5yqVE0KBKM-sQL",
       "required": true
     }
   }
