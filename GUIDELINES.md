@@ -3,7 +3,7 @@ General guidelines about how to successfully develop an application based on [SP
 ###Controllers
 Controllers should do all HTTP related stuff.
 
-#####Takes care of
+#####Take care of
 - HTTP requests and responses.
 - Cookies and sessions.
 - Forms.
@@ -27,7 +27,7 @@ Controllers should do all HTTP related stuff.
 ###Services
 Services request domain related stuff, usually to external services.
 
-#####Takes care of
+#####Take care of
 - Sphere and any other service needed.
 - Communication with external systems.
 - No access to HTML templates, except for email templates.
@@ -43,4 +43,20 @@ Services request domain related stuff, usually to external services.
 #####How do tests look like
 - Should never use running application.
 - Use mocking for external system.
+
+###Models
+Models hold local data containers and domain logic.
+
+#####Take care of
+- Only aware of other models.
+
+#####Patterns and rules
+- Immutable objects.
+- Highly reused.
+- Created by static factory methods or builders.
+- Should not end with the term "Model".
+
+#####How do tests look like
+- Should never use running application.
+- No dependency injection should be necessary.
 
