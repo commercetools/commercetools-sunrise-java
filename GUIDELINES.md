@@ -24,3 +24,23 @@ Controllers should do all HTTP related stuff.
 - Use `callAction` with `fakeRequest` from Play.
 - Extend test classes like `WithApplication` instead of creating an anonymous runnable in every test method.
 
+###Services
+Services request domain related stuff, usually to external services.
+
+#####Takes care of
+- Sphere and any other service needed.
+- Communication with external systems.
+- No access to HTML templates, except for email templates.
+
+#####Patterns and rules
+- Asynchronous calls for external services.
+- Interface with implementation to mock external result.
+- May be reused.
+- May end with with the term "Service".
+- Should be thread-safe.
+- Most likely doesn't have mutable members.
+
+#####How do tests look like
+- Should never use running application.
+- Use mocking for external system.
+
