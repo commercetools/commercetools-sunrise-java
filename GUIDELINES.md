@@ -74,3 +74,18 @@ Views generate pages with data provided by controller “as is”, with almost n
 #####How do tests look like
 - Without running application (in Play 2.2.x is not every time possible).
 - No dependency injection should be necessary.
+
+###Utils
+Util classes hold common re-used methods among different classes.
+
+#####Take care of
+- Other util classes, if any.
+
+#####Patterns and rules
+- Final classes with static methods and private constructors.
+- No observable state changes.
+- No instance members.
+
+#####How do tests look like
+- Without running application.
+
