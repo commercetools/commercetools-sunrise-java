@@ -89,3 +89,11 @@ Util classes hold common re-used methods among different classes.
 #####How do tests look like
 - Without running application.
 
+###In general
+- Unit tests in `test` folder, integration tests in `it` folder.
+- Use new Java 7 features:
+ - [`AutoCloseable`](http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html) and [`Closeable`](http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html) interfaces
+ - [Type inference](http://docs.oracle.com/javase/tutorial/java/generics/genTypeInference.html)
+ - [`try-with-resources`](http://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
+ - [Multicatch Exceptions](http://docs.oracle.com/javase/7/docs/technotes/guides/language/catch-multiple.html)
+- Never use "helper" to call classes or methods.
