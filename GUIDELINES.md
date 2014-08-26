@@ -60,3 +60,17 @@ Models hold local data containers and domain logic.
 - Should never use running application.
 - No dependency injection should be necessary.
 
+###Views
+Views generate pages with data provided by controller “as is”, with almost no logic.
+
+#####Take care of
+- Template parameters.
+- Internal URLs by reverse routing.
+- Optionally request, session or context (but harder to test).
+ 
+#####Patterns and rules
+- `Optional` class instances, to easily generate default messages.
+
+#####How do tests look like
+- Without running application (in Play 2.2.x is not every time possible).
+- No dependency injection should be necessary.
