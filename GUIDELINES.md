@@ -92,8 +92,13 @@ Util classes hold common re-used methods among different classes.
 ###In general
 - Unit tests in `test` folder, integration tests in `it` folder.
 - Use new Java 7 features:
- - [`AutoCloseable`](http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html) and [`Closeable`](http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html) interfaces
+ - [`AutoCloseable`](http://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html) and [`Closeable`](http://docs.oracle.com/javase/8/docs/api/java/io/Closeable.html) interfaces
  - [Type inference](http://docs.oracle.com/javase/tutorial/java/generics/genTypeInference.html)
  - [`try-with-resources`](http://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
- - [Multicatch Exceptions](http://docs.oracle.com/javase/7/docs/technotes/guides/language/catch-multiple.html)
-- Never use "helper" to call classes or methods.
+ - [Multicatch Exceptions](http://docs.oracle.com/javase/8/docs/technotes/guides/language/catch-multiple.html)
+ - [`Objects`](http://docs.oracle.com/javase/8/docs/api/java/util/Objects.html) class methods, e.g. `equals`, `hashCode` or `requireNonNull`.
+- Take special care when naming classes or methods.
+ - Never use "helper" in the name.
+- Use fully qualified class names when using Scala classes that clashes with JDK standard classes (e.g. use `scala.collection.mutable.StringBuilder`, as it clashes with `java.lang.StringBuilder`).
+- Only self written code should exist in the GIT repository, any external JavaScript and CSS should be loaded with Webjars.
+
