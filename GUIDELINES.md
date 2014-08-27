@@ -101,4 +101,6 @@ Util classes hold common re-used methods among different classes.
  - Never use "helper" in the name.
 - Use fully qualified class names when using Scala classes that clashes with JDK standard classes (e.g. use `scala.collection.mutable.StringBuilder`, as it clashes with `java.lang.StringBuilder`).
 - Only self written code should exist in the GIT repository, any external JavaScript and CSS should be loaded with Webjars.
+- Do not hesitate to use `*` for imports, especially for `import static play.test.Helpers.*;`.
+- Java8 streams.
 
