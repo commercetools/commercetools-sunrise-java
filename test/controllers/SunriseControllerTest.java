@@ -3,7 +3,6 @@ package controllers;
 import com.neovisionaries.i18n.CountryCode;
 import com.typesafe.config.ConfigFactory;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import play.Configuration;
 import play.mvc.Http;
