@@ -52,8 +52,12 @@ public class SunriseController extends ShopController {
         return country(request(), Play.application().configuration());
     }
 
-    protected final void changeCountry(String country) {
-        Optional<CountryCode> countryCode = parseCountryCode(country);
+    /**
+     * Sets the country associated with the user, if a valid country code is provided.
+     * @param countryCodeAsString the string representing a country code.
+     */
+    protected final void changeCountry(String countryCodeAsString) {
+        Optional<CountryCode> countryCode = parseCountryCode(countryCodeAsString);
         if (countryCode.isPresent()) {
             changeCountry(countryCode.get(), response(), Play.application().configuration());
         }
