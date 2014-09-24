@@ -6,7 +6,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.categories.CategoryTreeFactory;
 import io.sphere.sdk.client.PlayJavaClient;
 import io.sphere.sdk.client.PlayJavaClientImpl;
 import io.sphere.sdk.client.SphereRequestExecutor;
@@ -43,8 +42,8 @@ public abstract class WithSunriseApplication extends WithApplication {
 
         };
         final PagedQueryResult<Category> categoryPagedQueryResult =
-                JsonUtils.readObjectFromJsonFileInClasspath("categories.json", typeReference);
-        return CategoryTreeFactory.create(categoryPagedQueryResult.getResults());
+                JsonUtils.readObjectFromResource("categories.json", typeReference);
+        return CategoryTree.of(categoryPagedQueryResult.getResults());
     }
 
     protected PlayJavaClient injectedClientInstance(final Application app){
