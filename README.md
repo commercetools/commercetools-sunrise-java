@@ -56,7 +56,7 @@ export SPHERE_SUNRISE_IT_TESTS_CLIENT_ID="your-client-id"
 * `sbt cover` executes all tests (unit, integration) and creates test reports in `target/scala-2.10/it-jacoco/html/index.html`
 * `sbt console` creates an interactive Scala console where you can experiment, use Ctrl d to exit.
 
-example session: 
+example session:
 
 ```
 sbt console
@@ -81,3 +81,9 @@ promise: play.libs.F.Promise[io.sphere.sdk.client.PagedQueryResult[io.sphere.sdk
 scala> val result = promise.get(1000)
 result: io.sphere.sdk.client.PagedQueryResult[io.sphere.sdk.categories.Category] = PagedQueryResponse{offset=0, count=4, total=4, results=[CategoryImpl{id=5ebe6dc9-ba32-4030-9f3e-eee0137a1274, version=1, createdAt=2014-06-06T11:12:05.520+02:00, lastModifiedAt=2014-06-06T11:12:05.520+02:00, name=LocalizedString(en -> Snowboard equipment), slug=LocalizedString(en -> snowboard-equipment), description=Optional.absent(), ancestors=, parent=Optional.absent(), orderHint=Optional.of(0.000014020459255201865700631), children=[], pathInTree=}, CategoryImpl{id=3621ef75-adc4-4a31-8a3b-3753b1c0a209, version=1, createdAt=2014-06-06T11:12:05.531+02:00, lastModifiedAt=2014-06-06T11:12:05.531+02:00, name=LocalizedString(en -> Tank tops), slug=LocalizedString(en -> tank-tops), description=Optional.absent(...
 ```
+
+## Deployment
+
+For an easy and fast deployment of your application we recommend [heroku](https://www.heroku.com):
+
+<a href="https://heroku.com/deploy?template=https://github.com/sphereio/sphere-sunrise"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a>

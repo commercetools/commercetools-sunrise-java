@@ -1,0 +1,21 @@
+{
+  "name": "SPHERE.IO Sunrise",
+  "description": "Create your own webshop in minutes with SPHERE.IO and our template 'sphere-sunrise'",
+  "repository": "https://github.com/sphereio/sphere-sunrise",
+  "logo": "http://www.commercetools.com/assets/img/ct_logo_farbe.gif",
+  "keywords": ["sphere", "ecommerce", "shopping"],
+  "env": {
+    "SPHERE_SUNRISE_PROJECT": {
+      "description": "The project Key for your SPHERE.IO project.",
+      "required": true
+    },
+    "SPHERE_SUNRISE_CLIENT_ID": {
+      "description": "The clientId of your SPHERE.IO project.",
+      "required": true
+    },
+    "SPHERE_SUNRISE_CLIENT_SECRET": {
+      "description": "The clientSecret of your SPHERE.IO project.",
+      "required": true
+    }
+  }
+}
