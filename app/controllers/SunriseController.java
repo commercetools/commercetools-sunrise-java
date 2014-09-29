@@ -58,9 +58,7 @@ public class SunriseController extends ShopController {
      */
     protected final void changeCountry(String countryCodeAsString) {
         Optional<CountryCode> countryCode = parseCountryCode(countryCodeAsString);
-        if (countryCode.isPresent()) {
-            changeCountry(countryCode.get(), response(), Play.application().configuration());
-        }
+        countryCode.ifPresent(code -> changeCountry(code, response(), Play.application().configuration()));
     }
 
     /**
