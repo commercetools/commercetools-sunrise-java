@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static com.neovisionaries.i18n.CountryCode.ES;
+import static com.neovisionaries.i18n.CountryCode.AT;
+import static com.neovisionaries.i18n.CountryCode.UK;
 
 public class SunriseControllerTest extends WithSunriseApplication {
 
@@ -26,35 +29,35 @@ public class SunriseControllerTest extends WithSunriseApplication {
 
     @Test
     public void userCountryIsCountryFoundInCookie() {
-        List<Http.Cookie> cookies = Collections.singletonList(countryCookie("SHOP_COUNTRY", CountryCode.ES));
+        List<Http.Cookie> cookies = Collections.singletonList(countryCookie("SHOP_COUNTRY", ES));
         Http.Request request = new TestableRequestBuilder().cookies(cookies).build();
         Configuration config = configuration(Collections.singletonMap("sphere.countries", Arrays.asList("AT")));
-        assertThat(controller.country(request, config)).isEqualTo(CountryCode.ES);
+        assertThat(controller.country(request, config)).isEqualTo(ES);
     }
 
     @Test
     public void userCountryIsDefaultWhenNoCookieFound() {
         Http.Request request = new TestableRequestBuilder().build();
         Configuration config = configuration(Collections.singletonMap("sphere.countries", Arrays.asList("AT")));
-        assertThat(controller.country(request, config)).isEqualTo(CountryCode.AT);
+        assertThat(controller.country(request, config)).isEqualTo(AT);
     }
 
     @Test
     public void availableCountriesSkipsInvalidCountryFromConfiguration() {
         Configuration config = configuration(Collections.singletonMap("sphere.countries", Arrays.asList("INVALID","UK")));
-        assertThat(controller.availableCountries(config)).containsExactly(CountryCode.UK);
+        assertThat(controller.availableCountries(config)).containsExactly(UK);
     }
 
     @Test
     public void availableCountriesGetsAllCountriesFromConfiguration() {
         Configuration config = configuration(Collections.singletonMap("sphere.countries", Arrays.asList("AT","UK")));
-        assertThat(controller.availableCountries(config)).containsExactly(CountryCode.AT, CountryCode.UK);
+        assertThat(controller.availableCountries(config)).containsExactly(AT, UK);
     }
 
     @Test
     public void defaultCountryIsFirstCountryFromConfiguration() {
         Configuration config = configuration(Collections.singletonMap("sphere.countries", Arrays.asList("AT","UK")));
-        assertThat(controller.defaultCountry(config)).isEqualTo(CountryCode.AT);
+        assertThat(controller.defaultCountry(config)).isEqualTo(AT);
     }
 
     @Test(expected=RuntimeException.class)
