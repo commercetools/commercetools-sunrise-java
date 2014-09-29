@@ -27,7 +27,7 @@ public class SunriseControllerTest extends WithSunriseApplication {
     @Test
     public void userCountryIsCountryFoundInCookie() {
         List<Http.Cookie> cookies = Collections.singletonList(countryCookie("SHOP_COUNTRY", CountryCode.ES));
-        Http.Request request = new TestableRequestBuilder().setCookies(cookies).build();
+        Http.Request request = new TestableRequestBuilder().cookies(cookies).build();
         Configuration config = configuration(Collections.singletonMap("sphere.countries", Arrays.asList("AT")));
         assertThat(controller.country(request, config)).isEqualTo(CountryCode.ES);
     }

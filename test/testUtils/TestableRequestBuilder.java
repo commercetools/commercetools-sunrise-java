@@ -30,67 +30,67 @@ public class TestableRequestBuilder {
                 acceptedTypes, queryString, cookies, headers);
     }
 
-    public TestableRequestBuilder setUri(String uri) {
+    public TestableRequestBuilder uri(String uri) {
         this.uri = uri;
         return this;
     }
 
-    public TestableRequestBuilder setMethod(String method) {
+    public TestableRequestBuilder method(String method) {
         this.method = method;
         return this;
     }
 
-    public TestableRequestBuilder setVersion(String version) {
+    public TestableRequestBuilder version(String version) {
         this.version = version;
         return this;
     }
 
-    public TestableRequestBuilder setRemoteAddress(String remoteAddress) {
+    public TestableRequestBuilder remoteAddress(String remoteAddress) {
         this.remoteAddress = remoteAddress;
         return this;
     }
 
-    public TestableRequestBuilder setSecure(boolean secure) {
+    public TestableRequestBuilder secure(boolean secure) {
         this.secure = secure;
         return this;
     }
 
-    public TestableRequestBuilder setHost(String host) {
+    public TestableRequestBuilder host(String host) {
         this.host = host;
         return this;
     }
 
-    public TestableRequestBuilder setPath(String path) {
+    public TestableRequestBuilder path(String path) {
         this.path = path;
         return this;
     }
 
-    public TestableRequestBuilder setAcceptLanguages(List<Lang> acceptLanguages) {
+    public TestableRequestBuilder acceptLanguages(List<Lang> acceptLanguages) {
         this.acceptLanguages = acceptLanguages;
         return this;
     }
 
-    public TestableRequestBuilder setAccept(List<String> accept) {
+    public TestableRequestBuilder accept(List<String> accept) {
         this.accept = accept;
         return this;
     }
 
-    public TestableRequestBuilder setAcceptedTypes(List<String> acceptedTypes) {
+    public TestableRequestBuilder acceptedTypes(List<String> acceptedTypes) {
         this.acceptedTypes = acceptedTypes;
         return this;
     }
 
-    public TestableRequestBuilder setQueryString(Map<String, String[]> queryString) {
+    public TestableRequestBuilder queryString(Map<String, String[]> queryString) {
         this.queryString = queryString;
         return this;
     }
 
-    public TestableRequestBuilder setCookies(List<Http.Cookie> cookieList) {
+    public TestableRequestBuilder cookies(List<Http.Cookie> cookieList) {
         this.cookies = new TestableCookies(cookieList);
         return this;
     }
 
-    public TestableRequestBuilder setHeaders(Map<String, String[]> headers) {
+    public TestableRequestBuilder headers(Map<String, String[]> headers) {
         this.headers = headers;
         return this;
     }
