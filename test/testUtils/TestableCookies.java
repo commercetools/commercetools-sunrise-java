@@ -7,7 +7,7 @@ import java.util.List;
 
 public class TestableCookies implements Http.Cookies {
 
-    private List<Http.Cookie> cookieList;
+    private final List<Http.Cookie> cookieList;
 
     TestableCookies(List<Http.Cookie> cookieList) {
         this.cookieList = cookieList;
