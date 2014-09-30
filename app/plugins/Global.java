@@ -2,6 +2,7 @@ package plugins;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import controllers.CountryOperations;
 import io.sphere.sdk.client.PlayJavaClient;
 import play.Application;
 import play.GlobalSettings;
@@ -12,12 +13,17 @@ public class Global extends GlobalSettings {
 
     @Override
     public void onStart(final Application app) {
+        checkDefaultCountry(app);
         super.onStart(app);
         injector = createInjector(app);
     }
 
     protected Injector createInjector(Application app) {
         return Guice.createInjector(new ProductionModule(app));
+    }
+
+    private void checkDefaultCountry(Application app) {
+        CountryOperations.of(app.configuration()).defaultCountry();
     }
 
     @Override
