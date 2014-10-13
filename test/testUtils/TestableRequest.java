@@ -1,4 +1,4 @@
-package testUtils;
+package testutils;
 
 import play.api.http.MediaRange;
 import play.i18n.Lang;

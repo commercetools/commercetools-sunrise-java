@@ -1,4 +1,4 @@
-package testUtils;
+package testutils;
 
 import play.i18n.Lang;
 import play.mvc.Http;
