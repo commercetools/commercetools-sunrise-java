@@ -27,65 +27,63 @@ public class CountryOperationsTest extends WithSunriseApplication {
         Http.Context.current.set(context);
     }
 
-    public void init(Configuration configuration, Optional<String> countryInSession, Runnable test) {
+    public void init(List<String> availableCountries, Runnable test) {
+        Configuration configuration = configWithAvailableCountries(availableCountries);
         operations = CountryOperations.of(configuration);
-        countryInSession.ifPresent(country -> session().put(COUNTRY_SESSION_KEY, country));
         test.run();
         session().clear();
     }
 
     @Test
     public void userCountryIsCountryFoundInSession() {
-        init(configWithAvailableCountries("AT"), Optional.of("DE"), () ->
-            assertThat(operations.country()).isEqualTo(DE)
-        );
+        init(withAvailableCountries("AT"), () -> {
+            session().put(COUNTRY_SESSION_KEY, "DE");
+            assertThat(operations.country()).isEqualTo(DE);
+        });
     }
 
     @Test
     public void userCountryIsDefaultWhenNoCountryFoundInSession() {
-        init(configWithAvailableCountries("AT"), Optional.empty(), () ->
+        init(withAvailableCountries("AT"), () ->
             assertThat(operations.country()).isEqualTo(AT)
         );
     }
 
     @Test
     public void availableCountriesGetsAllCountriesFromConfiguration() {
-        init(configWithAvailableCountries("DE", "AT"), Optional.empty(), () ->
+        init(withAvailableCountries("DE", "AT"), () ->
             assertThat(operations.availableCountries()).containsExactly(DE, AT)
         );
     }
 
     @Test
     public void availableCountriesSkipsInvalidCountryFromConfiguration() {
-        init(configWithAvailableCountries("INVALID", "AT"), Optional.empty(), () ->
+        init(withAvailableCountries("INVALID", "AT"), () ->
             assertThat(operations.availableCountries()).containsExactly(AT)
         );
     }
 
     @Test
     public void defaultCountryIsFirstCountryFromConfiguration() {
-        init(configWithAvailableCountries("DE", "AT"), Optional.empty(), () ->
-                        assertThat(operations.defaultCountry()).isEqualTo(DE)
-        );
+        init(withAvailableCountries("DE", "AT"), () ->
+            assertThat(operations.defaultCountry()).isEqualTo(DE));
     }
 
     @Test
     public void defaultCountrySkipsInvalidCountryFromConfiguration() {
-        init(configWithAvailableCountries("INVALID", "AT"), Optional.empty(), () ->
-                        assertThat(operations.defaultCountry()).isEqualTo(AT)
-        );
+        init(withAvailableCountries("INVALID", "AT"), () ->
+            assertThat(operations.defaultCountry()).isEqualTo(AT));
     }
 
     @Test(expected = DefaultCountryNotFound.class)
     public void defaultCountryThrowsExceptionWhenNoneConfigured() {
-        init(configWithAvailableCountries(), Optional.empty(), () ->
-                        operations.defaultCountry()
-        );
+        init(withAvailableCountries(), () ->
+            operations.defaultCountry());
     }
 
     @Test
     public void changeCountrySavesCodeInSessionWhenValidCountryCode() {
-        init(configWithAvailableCountries("DE"), Optional.empty(), () -> {
+        init(withAvailableCountries("DE"), () -> {
             operations.changeCountry("DE");
             assertThat(session().get(COUNTRY_SESSION_KEY)).isEqualTo("DE");
         });
@@ -93,7 +91,7 @@ public class CountryOperationsTest extends WithSunriseApplication {
 
     @Test
     public void changeCountrySkipsCodeWhenCountryNotAvailable() {
-        init(configWithAvailableCountries("DE"), Optional.empty(), () -> {
+        init(withAvailableCountries("DE"), () -> {
             operations.changeCountry("UK");
             assertThat(session().containsKey(COUNTRY_SESSION_KEY)).isFalse();
         });
@@ -101,9 +99,8 @@ public class CountryOperationsTest extends WithSunriseApplication {
 
     @Test(expected = InvalidCountryCode.class)
     public void changeCountryThrowsExceptionWhenInvalidCountryCode() {
-        init(configWithAvailableCountries(), Optional.empty(), () ->
-                        operations.changeCountry("INVALID")
-        );
+        init(withAvailableCountries(), () ->
+            operations.changeCountry("INVALID"));
     }
 
     @Test
@@ -116,8 +113,12 @@ public class CountryOperationsTest extends WithSunriseApplication {
         assertThat(parseCode("INVALID").isPresent()).isFalse();
     }
 
-    private Configuration configWithAvailableCountries(String...codes) {
-        Map<String, List<String>> configMap = Collections.singletonMap(COUNTRY_CONFIG_LIST, Arrays.asList(codes));
+    private List<String> withAvailableCountries(String...countryCodes) {
+        return Arrays.asList(countryCodes);
+    }
+
+    private Configuration configWithAvailableCountries(List<String> availableCountries) {
+        Map<String, List<String>> configMap = Collections.singletonMap(COUNTRY_CONFIG_LIST, availableCountries);
         return new Configuration(ConfigFactory.parseMap(configMap));
     }
 }
