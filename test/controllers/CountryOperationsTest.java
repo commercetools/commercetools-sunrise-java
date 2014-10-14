@@ -3,6 +3,7 @@ package controllers;
 import com.typesafe.config.ConfigFactory;
 import exceptions.DefaultCountryNotFound;
 import exceptions.InvalidCountryCode;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import play.Configuration;
 import play.mvc.Http;
@@ -15,70 +16,76 @@ import static com.neovisionaries.i18n.CountryCode.DE;
 import static com.neovisionaries.i18n.CountryCode.AT;
 import static org.fest.assertions.Assertions.assertThat;
 import static play.mvc.Controller.session;
-import static play.test.Helpers.fakeApplication;
-import static play.test.Helpers.running;
 
 public class CountryOperationsTest extends WithSunriseApplication {
     private CountryOperations operations;
 
-    public void setUp(Configuration configuration) {
+    @BeforeClass
+    public static void setUp() {
+        final Map<String, String> sessionData = new HashMap<>();
+        Http.Context context = new Http.Context(null, null, null, sessionData, emptyMap(), emptyMap());
+        Http.Context.current.set(context);
+    }
+
+    public void init(Configuration configuration, Optional<String> countryInSession, Runnable test) {
         operations = CountryOperations.of(configuration);
+        countryInSession.ifPresent(country -> session().put(COUNTRY_SESSION_KEY, country));
+        test.run();
+        session().clear();
     }
 
     @Test
     public void userCountryIsCountryFoundInSession() {
-        running(fakeApplication(), () -> {
-            setUp(configWithAvailableCountries("AT"));
-            setContext();
-            session().put(COUNTRY_SESSION_KEY, "DE");
-            assertThat(operations.country()).isEqualTo(DE);
-        });
+        init(configWithAvailableCountries("AT"), Optional.of("DE"), () ->
+            assertThat(operations.country()).isEqualTo(DE)
+        );
     }
 
     @Test
     public void userCountryIsDefaultWhenNoCountryFoundInSession() {
-        running(fakeApplication(), () -> {
-            setUp(configWithAvailableCountries("AT"));
-            setContext();
-            assertThat(operations.country()).isEqualTo(AT);
-        });
+        init(configWithAvailableCountries("AT"), Optional.empty(), () ->
+            assertThat(operations.country()).isEqualTo(AT)
+        );
     }
 
     @Test
     public void availableCountriesGetsAllCountriesFromConfiguration() {
-        setUp(configWithAvailableCountries("DE", "AT"));
-        assertThat(operations.availableCountries()).containsExactly(DE, AT);
+        init(configWithAvailableCountries("DE", "AT"), Optional.empty(), () ->
+            assertThat(operations.availableCountries()).containsExactly(DE, AT)
+        );
     }
 
     @Test
     public void availableCountriesSkipsInvalidCountryFromConfiguration() {
-        setUp(configWithAvailableCountries("INVALID", "AT"));
-        assertThat(operations.availableCountries()).containsExactly(AT);
+        init(configWithAvailableCountries("INVALID", "AT"), Optional.empty(), () ->
+            assertThat(operations.availableCountries()).containsExactly(AT)
+        );
     }
 
     @Test
     public void defaultCountryIsFirstCountryFromConfiguration() {
-        setUp(configWithAvailableCountries("DE", "AT"));
-        assertThat(operations.defaultCountry()).isEqualTo(DE);
+        init(configWithAvailableCountries("DE", "AT"), Optional.empty(), () ->
+                        assertThat(operations.defaultCountry()).isEqualTo(DE)
+        );
     }
 
     @Test
     public void defaultCountrySkipsInvalidCountryFromConfiguration() {
-        setUp(configWithAvailableCountries("INVALID", "AT"));
-        assertThat(operations.defaultCountry()).isEqualTo(AT);
+        init(configWithAvailableCountries("INVALID", "AT"), Optional.empty(), () ->
+                        assertThat(operations.defaultCountry()).isEqualTo(AT)
+        );
     }
 
     @Test(expected = DefaultCountryNotFound.class)
     public void defaultCountryThrowsExceptionWhenNoneConfigured() {
-        setUp(configWithAvailableCountries());
-        operations.defaultCountry();
+        init(configWithAvailableCountries(), Optional.empty(), () ->
+                        operations.defaultCountry()
+        );
     }
 
     @Test
     public void changeCountrySavesCodeInSessionWhenValidCountryCode() {
-        running(fakeApplication(), () -> {
-            setUp(configWithAvailableCountries("DE"));
-            setContext();
+        init(configWithAvailableCountries("DE"), Optional.empty(), () -> {
             operations.changeCountry("DE");
             assertThat(session().get(COUNTRY_SESSION_KEY)).isEqualTo("DE");
         });
@@ -86,9 +93,7 @@ public class CountryOperationsTest extends WithSunriseApplication {
 
     @Test
     public void changeCountrySkipsCodeWhenCountryNotAvailable() {
-        running(fakeApplication(), () -> {
-            setUp(configWithAvailableCountries("DE"));
-            setContext();
+        init(configWithAvailableCountries("DE"), Optional.empty(), () -> {
             operations.changeCountry("UK");
             assertThat(session().containsKey(COUNTRY_SESSION_KEY)).isFalse();
         });
@@ -96,8 +101,9 @@ public class CountryOperationsTest extends WithSunriseApplication {
 
     @Test(expected = InvalidCountryCode.class)
     public void changeCountryThrowsExceptionWhenInvalidCountryCode() {
-        setUp(configWithAvailableCountries());
-        operations.changeCountry("INVALID");
+        init(configWithAvailableCountries(), Optional.empty(), () ->
+                        operations.changeCountry("INVALID")
+        );
     }
 
     @Test
@@ -113,11 +119,5 @@ public class CountryOperationsTest extends WithSunriseApplication {
     private Configuration configWithAvailableCountries(String...codes) {
         Map<String, List<String>> configMap = Collections.singletonMap(COUNTRY_CONFIG_LIST, Arrays.asList(codes));
         return new Configuration(ConfigFactory.parseMap(configMap));
-    }
-
-    private void setContext() {
-        final Map<String, String> sessionData = new HashMap<>();
-        final Http.Context context = new Http.Context(null, null, null, sessionData, emptyMap(), emptyMap());
-        Http.Context.current.set(context);
     }
 }
