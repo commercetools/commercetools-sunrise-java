@@ -25,11 +25,19 @@ public class UserContext {
         return lang;
     }
 
-    public Locale locale() {
-        return lang.toLocale();
-    }
-
     public CountryCode country() {
         return countryCode;
+    }
+
+    /**
+     * Gets the locale representing the language and country of the user.
+     * @return the locale matching the language and country.
+     */
+    public Locale locale() {
+        if (lang.country().isEmpty()) {
+            return new Locale(lang.language(), countryCode.getAlpha2());
+        } else {
+            return lang.toLocale();
+        }
     }
 }
