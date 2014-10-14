@@ -44,41 +44,32 @@ public class CountryOperationsTest extends WithSunriseApplication {
 
     @Test
     public void userCountryIsDefaultWhenNoCountryFoundInSession() {
-        init(withAvailableCountries("AT"), () ->
-            assertThat(operations.country()).isEqualTo(AT)
-        );
+        init(withAvailableCountries("AT"), () -> assertThat(operations.country()).isEqualTo(AT));
     }
 
     @Test
     public void availableCountriesGetsAllCountriesFromConfiguration() {
-        init(withAvailableCountries("DE", "AT"), () ->
-            assertThat(operations.availableCountries()).containsExactly(DE, AT)
-        );
+        init(withAvailableCountries("DE", "AT"), () -> assertThat(operations.availableCountries()).containsExactly(DE, AT));
     }
 
     @Test
     public void availableCountriesSkipsInvalidCountryFromConfiguration() {
-        init(withAvailableCountries("INVALID", "AT"), () ->
-            assertThat(operations.availableCountries()).containsExactly(AT)
-        );
+        init(withAvailableCountries("INVALID", "AT"), () -> assertThat(operations.availableCountries()).containsExactly(AT));
     }
 
     @Test
     public void defaultCountryIsFirstCountryFromConfiguration() {
-        init(withAvailableCountries("DE", "AT"), () ->
-            assertThat(operations.defaultCountry()).isEqualTo(DE));
+        init(withAvailableCountries("DE", "AT"), () -> assertThat(operations.defaultCountry()).isEqualTo(DE));
     }
 
     @Test
     public void defaultCountrySkipsInvalidCountryFromConfiguration() {
-        init(withAvailableCountries("INVALID", "AT"), () ->
-            assertThat(operations.defaultCountry()).isEqualTo(AT));
+        init(withAvailableCountries("INVALID", "AT"), () -> assertThat(operations.defaultCountry()).isEqualTo(AT));
     }
 
     @Test(expected = DefaultCountryNotFound.class)
     public void defaultCountryThrowsExceptionWhenNoneConfigured() {
-        init(withAvailableCountries(), () ->
-            operations.defaultCountry());
+        init(withAvailableCountries(), () -> operations.defaultCountry());
     }
 
     @Test
@@ -99,8 +90,7 @@ public class CountryOperationsTest extends WithSunriseApplication {
 
     @Test(expected = InvalidCountryCode.class)
     public void changeCountryThrowsExceptionWhenInvalidCountryCode() {
-        init(withAvailableCountries(), () ->
-            operations.changeCountry("INVALID"));
+        init(withAvailableCountries(), () -> operations.changeCountry("INVALID"));
     }
 
     @Test
