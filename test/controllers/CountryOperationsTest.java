@@ -10,7 +10,7 @@ import play.mvc.Http;
 import java.util.*;
 
 import static java.util.Collections.emptyMap;
-import static controllers.CountryOperations.parseCode;
+import static controllers.CountryOperations.*;
 import static com.neovisionaries.i18n.CountryCode.DE;
 import static com.neovisionaries.i18n.CountryCode.AT;
 import static org.fest.assertions.Assertions.assertThat;
@@ -19,7 +19,6 @@ import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 
 public class CountryOperationsTest extends WithSunriseApplication {
-    public static final String SESSION_KEY = "SHOP_COUNTRY";
     private CountryOperations operations;
 
     public void setUp(Configuration configuration) {
@@ -31,7 +30,7 @@ public class CountryOperationsTest extends WithSunriseApplication {
         running(fakeApplication(), () -> {
             setUp(configWithAvailableCountries("AT"));
             setContext();
-            session().put(SESSION_KEY, "DE");
+            session().put(COUNTRY_SESSION_KEY, "DE");
             assertThat(operations.country()).isEqualTo(DE);
         });
     }
@@ -81,7 +80,7 @@ public class CountryOperationsTest extends WithSunriseApplication {
             setUp(configWithAvailableCountries("DE"));
             setContext();
             operations.changeCountry("DE");
-            assertThat(session().get(SESSION_KEY)).isEqualTo("DE");
+            assertThat(session().get(COUNTRY_SESSION_KEY)).isEqualTo("DE");
         });
     }
 
@@ -91,7 +90,7 @@ public class CountryOperationsTest extends WithSunriseApplication {
             setUp(configWithAvailableCountries("DE"));
             setContext();
             operations.changeCountry("UK");
-            assertThat(session().containsKey(SESSION_KEY)).isFalse();
+            assertThat(session().containsKey(COUNTRY_SESSION_KEY)).isFalse();
         });
     }
 
@@ -112,7 +111,7 @@ public class CountryOperationsTest extends WithSunriseApplication {
     }
 
     private Configuration configWithAvailableCountries(String...codes) {
-        Map<String, List<String>> configMap = Collections.singletonMap("sphere.countries", Arrays.asList(codes));
+        Map<String, List<String>> configMap = Collections.singletonMap(COUNTRY_CONFIG_LIST, Arrays.asList(codes));
         return new Configuration(ConfigFactory.parseMap(configMap));
     }
 

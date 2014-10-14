@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class CountryOperations {
-    private static final String COUNTRY_SESSION_KEY = "SHOP_COUNTRY";
-    private static final String COUNTRY_CONFIG_LIST = "sphere.countries";
+    static final String COUNTRY_SESSION_KEY = "SHOP_COUNTRY";
+    static final String COUNTRY_CONFIG_LIST = "sphere.countries";
     public static final Logger.ALogger LOGGER = Logger.of(CountryOperations.class);
     private final Configuration configuration;
 
