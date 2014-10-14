@@ -3,7 +3,6 @@ package controllers;
 import com.typesafe.config.ConfigFactory;
 import exceptions.DefaultCountryNotFound;
 import exceptions.InvalidCountryCode;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import play.Configuration;
 import play.mvc.Http;
