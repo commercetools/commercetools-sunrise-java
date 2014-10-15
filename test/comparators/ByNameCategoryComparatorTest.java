@@ -18,12 +18,6 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public class ByNameCategoryComparatorTest {
 
-    public void sort(List<Category> unsortedList, Locale locale, Consumer<List<String>> test) {
-        Stream<Category> sortedCategories = unsortedList.stream().sorted(new ByNameCategoryComparator(locale));
-        Stream<String> sortedNames = sortedCategories.map(category -> category.getName().get(locale).orElse(""));
-        test.accept(sortedNames.collect(Collectors.toList()));
-    }
-
     @Test
     public void sortsAccordingToTheProvidedLocale() {
         List<Category> categories = asList(
@@ -44,10 +38,14 @@ public class ByNameCategoryComparatorTest {
         sort(categories, ENGLISH, (sortedNames) -> assertThat(sortedNames).containsExactly("", "Dresses", "Pants"));
     }
 
+    private void sort(List<Category> unsortedList, Locale locale, Consumer<List<String>> test) {
+        Stream<Category> sortedCategories = unsortedList.stream().sorted(new ByNameCategoryComparator(locale));
+        Stream<String> sortedNames = sortedCategories.map(category -> category.getName().get(locale).orElse(""));
+        test.accept(sortedNames.collect(Collectors.toList()));
+    }
+
     private static Category category(LocalizedString name) {
         LocalizedString description = LocalizedString.ofEnglishLocale("");
         return CategoryBuilder.of("id", name, description).build();
     }
-
-
 }

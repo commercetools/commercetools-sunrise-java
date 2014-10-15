@@ -19,14 +19,6 @@ import static play.mvc.Controller.session;
 
 public class CountryOperationsTest extends WithSunriseApplication {
 
-    public void init(List<String> availableCountries, Consumer<CountryOperations> test) {
-        Http.Context.current.set(emptyContext());
-        Configuration configuration = configWithAvailableCountries(availableCountries);
-        CountryOperations operations = CountryOperations.of(configuration);
-        test.accept(operations);
-        Http.Context.current.remove();
-    }
-
     @Test
     public void userCountryIsCountryFoundInSession() {
         init(availableCountries("AT"), operations -> {
@@ -94,6 +86,14 @@ public class CountryOperationsTest extends WithSunriseApplication {
     @Test
     public void parserReturnsAbsentWhenInvalidCountryCode() {
         assertThat(parseCode("INVALID").isPresent()).isFalse();
+    }
+
+    private void init(List<String> availableCountries, Consumer<CountryOperations> test) {
+        Http.Context.current.set(emptyContext());
+        Configuration configuration = configWithAvailableCountries(availableCountries);
+        CountryOperations operations = CountryOperations.of(configuration);
+        test.accept(operations);
+        Http.Context.current.remove();
     }
 
     private List<String> availableCountries(String...countryCodes) {
