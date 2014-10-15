@@ -39,6 +39,6 @@ public class CommonDataTest {
         ProductVariant variant = ProductVariantBuilder.of(1).build();
         ProductData productData = ProductDataBuilder.of(locString, locString, variant).build();
         ProductCatalogData catalogData = ProductCatalogDataBuilder.ofStaged(productData).build();
-        return ProductBuilder.of(productType.toReference(), catalogData).build();
+        return ProductBuilder.of(productType, catalogData).build();
     }
 }
