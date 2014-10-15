@@ -8,6 +8,7 @@ import io.sphere.sdk.client.PlayJavaClient;
 import io.sphere.sdk.client.PlayJavaClientImpl;
 import io.sphere.sdk.queries.PagedQueryResult;
 import play.Application;
+import play.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,5 +31,6 @@ class ProductionModule extends AbstractModule {
         final CategoryTree categoryTree = CategoryTree.of(queryResult.getResults());
         bind(PlayJavaClient.class).toInstance(client);
         bind(CategoryTree.class).toInstance(categoryTree);
+        bind(Configuration.class).toInstance(app.configuration());
     }
 }

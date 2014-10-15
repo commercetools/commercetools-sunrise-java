@@ -9,6 +9,8 @@ import io.sphere.sdk.play.controllers.ShopController;
 import models.CommonDataBuilder;
 
 import io.sphere.sdk.categories.Category;
+import models.UserContext;
+import play.Configuration;
 
 /**
  * An application specific controller.
@@ -16,10 +18,12 @@ import io.sphere.sdk.categories.Category;
  */
 public class SunriseController extends ShopController {
     private final CategoryTree categoryTree;
+    private final CountryOperations countryOperations;
 
-    protected SunriseController(final PlayJavaClient client, final CategoryTree categoryTree) {
+    protected SunriseController(final PlayJavaClient client, final CategoryTree categoryTree, final Configuration configuration) {
         super(client);
         this.categoryTree = categoryTree;
+        this.countryOperations = CountryOperations.of(configuration);
     }
 
     protected final CategoryTree categories() {
@@ -29,6 +33,10 @@ public class SunriseController extends ShopController {
     protected final CommonDataBuilder data() {
         final ByNameCategoryComparator comparator = new ByNameCategoryComparator(lang().toLocale());
         final ImmutableList<Category> categories = Ordering.from(comparator).immutableSortedCopy(categories().getRoots());
-        return CommonDataBuilder.of(lang(), categories);
+        return CommonDataBuilder.of(userContext(), categories);
+    }
+
+    protected final UserContext userContext() {
+        return UserContext.of(lang(), countryOperations.country());
     }
 }

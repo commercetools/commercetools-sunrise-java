@@ -31,6 +31,7 @@ public abstract class WithSunriseApplication extends WithApplication {
                     protected void configure() {
                         bind(PlayJavaClient.class).toInstance(injectedClientInstance(app));
                         bind(CategoryTree.class).toInstance(injectedCategoryTree());
+                        bind(Configuration.class).toInstance(app.configuration());
                     }
                 });
             }

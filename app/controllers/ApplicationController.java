@@ -5,6 +5,7 @@ import io.sphere.sdk.client.PlayJavaClient;
 import io.sphere.sdk.products.Product;
 import io.sphere.sdk.products.queries.ProductQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
+import play.Configuration;
 import play.libs.F;
 import play.mvc.*;
 
@@ -18,8 +19,8 @@ import java.util.List;
 public final class ApplicationController extends SunriseController {
 
     @Inject
-    public ApplicationController(final PlayJavaClient client, final CategoryTree categoryTree) {
-        super(client, categoryTree);
+    public ApplicationController(final PlayJavaClient client, final CategoryTree categoryTree, final Configuration configuration) {
+        super(client, categoryTree, configuration);
     }
 
     public F.Promise<Result> index() {
