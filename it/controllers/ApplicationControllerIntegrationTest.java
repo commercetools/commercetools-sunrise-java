@@ -14,7 +14,7 @@ public class ApplicationControllerIntegrationTest extends WithPlayJavaClient {
     @Test
     public void itFindsSomeCategories() throws Exception {
         final PagedQueryResult<Category> queryResult = client.execute(new CategoryQuery()).get(2000);
-        final int count = queryResult.getCount();
+        final int count = queryResult.size();
         assertThat(count).isGreaterThan(3);
         //this is a project specific assertion as example
         assertThat(queryResult.getResults().get(0).getName().get(Locale.ENGLISH).get()).isEqualTo("Tank tops");
