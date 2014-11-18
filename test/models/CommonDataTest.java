@@ -1,7 +1,7 @@
 package models;
 
 import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.models.LocalizedString;
+import io.sphere.sdk.models.LocalizedStrings;
 import io.sphere.sdk.products.*;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.ProductTypeBuilder;
@@ -35,7 +35,7 @@ public class CommonDataTest {
 
     private Product defaultProduct() {
         ProductType productType = ProductTypeBuilder.of("id", "product-type", "", emptyList()).build();
-        LocalizedString locString = LocalizedString.ofEnglishLocale("text");
+        LocalizedStrings locString = LocalizedStrings.ofEnglishLocale("text");
         ProductVariant variant = ProductVariantBuilder.of(1).build();
         ProductData productData = ProductDataBuilder.of(locString, locString, variant).build();
         ProductCatalogData catalogData = ProductCatalogDataBuilder.ofStaged(productData).build();

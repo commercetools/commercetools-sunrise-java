@@ -2,7 +2,7 @@ package comparators;
 
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryBuilder;
-import io.sphere.sdk.models.LocalizedString;
+import io.sphere.sdk.models.LocalizedStrings;
 import org.junit.Test;
 
 import java.util.List;
@@ -21,9 +21,9 @@ public class ByNameCategoryComparatorTest {
     @Test
     public void sortsAccordingToTheProvidedLocale() {
         List<Category> categories = asList(
-                category(LocalizedString.of(GERMAN, "Hose", ENGLISH, "Pants")),
-                category(LocalizedString.of(GERMAN, "Hemden", ENGLISH, "Shirts")),
-                category(LocalizedString.of(GERMAN, "Kleider", ENGLISH, "Dresses"))
+                category(LocalizedStrings.of(GERMAN, "Hose", ENGLISH, "Pants")),
+                category(LocalizedStrings.of(GERMAN, "Hemden", ENGLISH, "Shirts")),
+                category(LocalizedStrings.of(GERMAN, "Kleider", ENGLISH, "Dresses"))
         );
         sort(categories, ENGLISH, (sortedNames) -> assertThat(sortedNames).containsExactly("Dresses", "Pants", "Shirts"));
     }
@@ -31,9 +31,9 @@ public class ByNameCategoryComparatorTest {
     @Test
     public void sortsWhenTheLocalizedNameForTheProvidedLocaleIsMissing() {
         List<Category> categories = asList(
-                category(LocalizedString.of(GERMAN, "Hose", ENGLISH, "Pants")),
-                category(LocalizedString.of(GERMAN, "Hemden")),
-                category(LocalizedString.of(GERMAN, "Kleider", ENGLISH, "Dresses"))
+                category(LocalizedStrings.of(GERMAN, "Hose", ENGLISH, "Pants")),
+                category(LocalizedStrings.of(GERMAN, "Hemden")),
+                category(LocalizedStrings.of(GERMAN, "Kleider", ENGLISH, "Dresses"))
         );
         sort(categories, ENGLISH, (sortedNames) -> assertThat(sortedNames).containsExactly("", "Dresses", "Pants"));
     }
@@ -44,8 +44,8 @@ public class ByNameCategoryComparatorTest {
         test.accept(sortedNames.collect(Collectors.toList()));
     }
 
-    private static Category category(LocalizedString name) {
-        LocalizedString description = LocalizedString.ofEnglishLocale("");
+    private static Category category(LocalizedStrings name) {
+        LocalizedStrings description = LocalizedStrings.ofEnglishLocale("");
         return CategoryBuilder.of("id", name, description).build();
     }
 }
