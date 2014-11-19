@@ -6,7 +6,9 @@ sphere-sunrise
 [![Build Status](https://travis-ci.org/sphereio/sphere-sunrise.png?branch=master)](https://travis-ci.org/sphereio/sphere-sunrise)
 
 The next generation shop template.
-:warning: **Notice this template is in a very early stage of development. Unfortunately we do not currently have any finished template that uses our last version of the (SPHERE JVM SDK)[https://github.com/sphereio/sphere-jvm-sdk]. If you are looking for a more complete project you can check our (Fedora)[https://github.com/commercetools/sphere-fedora] template, but be aware that this project uses the older version (SPHERE Play SDK)[https://github.com/commercetools/sphere-play-sdk].**
+
+:warning: **Notice this template is in a very early stage of development.**
+Unfortunately we do not currently have any finished template that uses our last version of the [SPHERE JVM SDK](https://github.com/sphereio/sphere-jvm-sdk). If you are looking for a more complete project you can check our [Fedora](https://github.com/commercetools/sphere-fedora) template, but be aware that this project uses the older version [SPHERE Play SDK](https://github.com/commercetools/sphere-play-sdk).
 
 * Demo: https://sunrise.sphere.io
 * [Javadoc](https://sphereio.github.io/sphere-sunrise/javadoc/index.html)
