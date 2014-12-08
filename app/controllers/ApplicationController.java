@@ -24,7 +24,7 @@ public final class ApplicationController extends SunriseController {
     }
 
     public F.Promise<Result> index() {
-        return client().execute(new ProductQuery()).map(this::showProducts);
+        return client().execute(ProductQuery.of()).map(this::showProducts);
     }
 
     private Result showProducts(PagedQueryResult<Product> productPagedQueryResult) {
