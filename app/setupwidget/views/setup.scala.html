@@ -1,15 +1,26 @@
 @(sphereCredentialsForm: Form[setupwidget.models.SphereCredentials])
 
-<h1>SPHERE.IO credentials setup</h1>
+<html>
+    <head>
+        <title>SPHERE.IO credentials setup</title>
+    </head>
 
-<p>You can find your project credentials in the <a href="https://admin.sphere.io">Merchant Center</a> in "developers" | "api clients".</p>
+    <body>
+        <h1>SPHERE.IO credentials setup</h1>
 
-<img src="http://sphereio.github.io/sphere-jvm-sdk/javadoc/master/documentation-resources/images/merchant-center/project-credentials.png" alt="Merchant Center with project credentials view">
+        <p>You can find your project credentials in the <a href="https://admin.sphere.io">Merchant Center</a> in "developers" | "api clients".</p>
 
-@helper.form(action = setupwidget.controllers.routes.SetupController.processForm) {
-    @helper.inputText(sphereCredentialsForm("projectKey"), '_label -> "Project key")
-    @helper.inputText(sphereCredentialsForm("clientId"), '_label -> "client ID")
-    @helper.inputPassword(sphereCredentialsForm("clientSecret"), '_label -> "client secret")
-    <input type="submit" value="submit">
-}
+        <img src="http://sphereio.github.io/sphere-jvm-sdk/javadoc/master/documentation-resources/images/merchant-center/project-credentials.png" alt="Merchant Center with project credentials view">
+
+        @helper.form(action = setupwidget.controllers.routes.SetupController.processForm) {
+            @helper.inputText(sphereCredentialsForm("projectKey"), '_label -> "Project key")
+            @helper.inputText(sphereCredentialsForm("clientId"), '_label -> "client ID")
+            @helper.inputPassword(sphereCredentialsForm("clientSecret"), '_label -> "client secret")
+            <input id="submit" type="submit" value="submit">
+        }
+
+
+    </body>
+
+</html>
 

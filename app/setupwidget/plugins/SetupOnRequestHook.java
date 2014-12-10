@@ -1,11 +1,11 @@
 package setupwidget.plugins;
 
+import play.Logger;
 import play.libs.F;
 import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
 import setupwidget.controllers.SetupController;
-import setupwidget.controllers.routes;
 
 import java.lang.reflect.Method;
 import java.nio.file.FileSystems;
@@ -24,12 +24,16 @@ public class SetupOnRequestHook {
 
     public Action onRequest(final Http.Request request, final Method method, final Supplier<Action> fallback) {
         final Action result;
-        if (play.Play.isDev()) {
+        if (isEnabled()) {
             result = provideWidgetToSetCredentialsToAConfFile(request, fallback);
         } else {
             result = fallback.get();
         }
         return result;
+    }
+
+    public static boolean isEnabled() {
+        return play.Play.application().configuration().getBoolean("application.settingsWidget.enabled", true);
     }
 
     private Action provideWidgetToSetCredentialsToAConfFile(Http.Request request, Supplier<Action> fallback) {
@@ -54,7 +58,7 @@ public class SetupOnRequestHook {
     }
 
     private boolean isCredentialsSubmitPage(Http.Request request) {
-        return routes.SetupController.processForm().url().equals(request.path());
+        return setupwidget.controllers.routes.SetupController.processForm().url().equals(request.path());
     }
 
 

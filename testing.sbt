@@ -15,7 +15,8 @@ javaSource in IntegrationTest := baseDirectory.value / "it"
 libraryDependencies ++= Seq(
   "junit" % "junit-dep" % "4.11" % "it",
   "com.novocode" % "junit-interface" % "0.10" % "it",
-  "org.easytesting" % "fest-assert" % "1.4" % "it"
+  "org.easytesting" % "fest-assert" % "1.4" % "it",
+  "com.typesafe.play" %% "play-test" % Play.autoImport.javaCore.revision % "it"
 )
 
 lazy val cover = TaskKey[Unit]("cover", "Creates the JaCoCo reports for unit and integration tests.")

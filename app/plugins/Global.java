@@ -1,7 +1,6 @@
 package plugins;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.google.inject.*;
 import controllers.CountryOperations;
 import io.sphere.sdk.client.PlayJavaClient;
 import play.Application;
@@ -35,7 +34,11 @@ public class Global extends GlobalSettings {
 
     @Override
     public void onStop(final Application app) {
-        injector.getInstance(PlayJavaClient.class).close();
+        try {
+            injector.getInstance(PlayJavaClient.class).close();
+        } catch (final ProvisionException e) {
+            Logger.debug("Java client not instantiated");
+        }
         super.onStop(app);
     }
 
@@ -51,7 +54,7 @@ public class Global extends GlobalSettings {
     }
 
     private void logRequest(Http.Request request, Method method) {
-        if (Logger.isDebugEnabled() && !request.path().startsWith("/assets")) {
+        if (Logger.isDebugEnabled()) {
             StringBuilder sb = new StringBuilder(request.toString());
             sb.append(" ").append(method.getDeclaringClass().getCanonicalName());
             sb.append(".").append(method.getName()).append("(");

@@ -5,9 +5,12 @@ import play.data.validation.Constraints;
 
 public class SphereCredentials extends Base {
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String projectKey;
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String clientId;
+    @Constraints.MinLength(1)
     @Constraints.Required
     private String clientSecret;
 

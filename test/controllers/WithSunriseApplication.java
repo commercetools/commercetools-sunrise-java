@@ -18,12 +18,17 @@ import plugins.Global;
 import play.test.FakeApplication;
 import play.test.WithApplication;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static play.test.Helpers.fakeApplication;
 
 public abstract class WithSunriseApplication extends WithApplication {
     @Override
     protected FakeApplication provideFakeApplication() {
-        return fakeApplication(new Global() {
+        final Map<String, Object> additionalSettings = new HashMap<>();
+        additionalSettings.put("application.settingsWidget.enabled", false);
+        return fakeApplication(additionalSettings, new Global() {
             @Override
             protected Injector createInjector(final Application app) {
                 return Guice.createInjector(new AbstractModule() {
