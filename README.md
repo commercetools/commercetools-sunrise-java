@@ -22,7 +22,8 @@ _Unfortunately we do not currently have any finished template that uses our last
 
 ## Run it locally
 
-* `sbt ~run`
+* on Linux/Mac: `./activator ~run` 
+* on Windows: `activator ~run`
 
 The output will be like
 
