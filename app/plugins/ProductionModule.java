@@ -1,6 +1,8 @@
 package plugins;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
+import com.typesafe.config.ConfigFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
@@ -9,7 +11,10 @@ import io.sphere.sdk.client.PlayJavaClientImpl;
 import io.sphere.sdk.queries.PagedQueryResult;
 import play.Application;
 import play.Configuration;
+import play.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,12 +30,35 @@ class ProductionModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        final PlayJavaClient client = new PlayJavaClientImpl(app.configuration());
-        final PagedQueryResult<Category> queryResult = client.execute(CategoryQuery.of()).get(2000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
-        //TODO this does not take all categories if there are a lot.
-        final CategoryTree categoryTree = CategoryTree.of(queryResult.getResults());
-        bind(PlayJavaClient.class).toInstance(client);
-        bind(CategoryTree.class).toInstance(categoryTree);
+        bind(PlayJavaClient.class).toProvider(PlayJavaClientProvider.class).in(Singleton.class);
+        bind(CategoryTree.class).toProvider(CategoryTreeProvider.class).in(Singleton.class);
         bind(Configuration.class).toInstance(app.configuration());
+    }
+
+    @Singleton
+    private static class CategoryTreeProvider implements Provider<CategoryTree> {
+        private final PlayJavaClient client;
+
+        @Inject
+        private CategoryTreeProvider(final PlayJavaClient client) {
+            this.client = client;
+        }
+
+        @Override
+        public CategoryTree get() {
+            Logger.info("execute CategoryTreeProvider.get()");
+            final PagedQueryResult<Category> pagedQueryResult = client.execute(CategoryQuery.of()).get(2000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
+            return CategoryTree.of(pagedQueryResult.getResults());
+        }
+    }
+
+
+    @Singleton
+    private static class PlayJavaClientProvider implements Provider<PlayJavaClient> {
+        @Override
+        public PlayJavaClient get() {
+            Logger.info("execute PlayJavaClientProvider.get()");
+            return new PlayJavaClientImpl(ConfigFactory.load());
+        }
     }
 }

@@ -15,7 +15,8 @@ javaSource in IntegrationTest := baseDirectory.value / "it"
 libraryDependencies ++= Seq(
   "junit" % "junit-dep" % "4.11" % "it",
   "com.novocode" % "junit-interface" % "0.10" % "it",
-  "org.easytesting" % "fest-assert" % "1.4" % "it"
+  "org.easytesting" % "fest-assert" % "1.4" % "it",
+  "com.typesafe.play" %% "play-test" % Play.autoImport.javaCore.revision % "it"
 )
 
 lazy val cover = TaskKey[Unit]("cover", "Creates the JaCoCo reports for unit and integration tests.")
@@ -30,7 +31,7 @@ jacoco.excludes in jacoco.Config := jacocoExcludes
 
 jacoco.excludes in itJacoco.Config := jacocoExcludes
 
-lazy val thresholds = Thresholds(instruction = 75, method = 75, branch = 50, complexity = 35, line = 75, clazz = 75)
+lazy val thresholds = Thresholds(instruction = 60, method = 60, branch = 50, complexity = 35, line = 60, clazz = 60)
 
 jacoco.thresholds in jacoco.Config := thresholds
 

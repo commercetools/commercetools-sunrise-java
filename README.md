@@ -22,16 +22,8 @@ _Unfortunately we do not currently have any finished template that uses our last
 
 ## Run it locally
 
-* Setup your environment variables, so you need not to put your shop credentials under version control:
-
-```bash
-export SPHERE_SUNRISE_PROJECT="your-project-key"
-export SPHERE_SUNRISE_CLIENT_SECRET="your-the-client-secret"
-export SPHERE_SUNRISE_CLIENT_ID="your-client-id"
-```
-
-* You can store the variables in `~/.bash_profile` (Mac) or `~/.bashrc` (Linux) so the next time you open a console they are automatically available.
-* `sbt ~run`
+* on Linux/Mac: `./activator ~run` 
+* on Windows: `activator ~run`
 
 The output will be like
 
@@ -41,7 +33,7 @@ The output will be like
 (Server started, use Ctrl+D to stop and go back to the console...)
 ```
 
-* open http://localhost:9000 in your browser
+* open <a href="http://localhost:9000">http://localhost:9000</a> in your browser and set the SPHERE.IO project credentials
 
 ## Integration tests against SPHERE.IO backend
 

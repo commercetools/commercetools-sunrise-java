@@ -39,11 +39,10 @@ public abstract class WithPlayJavaClient {
 
     private static List<EnvSetting> requiredEnvironmentVariables() {
         final String descEnd = " for the integration test SPHERE.IO project.";
-        final String prefix = "SPHERE_SUNRISE_IT_TESTS_";
         return Lists.newArrayList(
-                new EnvSetting(prefix + "PROJECT", "The project key" + descEnd, "sphere.project"),
-                new EnvSetting(prefix + "CLIENT_SECRET", "The client secret" + descEnd, "sphere.clientSecret"),
-                new EnvSetting(prefix + "CLIENT_ID", "The client id" + descEnd, "sphere.clientId")
+                new EnvSetting(EnvironmentKeys.PROJECT, "The project key" + descEnd, "sphere.project"),
+                new EnvSetting(EnvironmentKeys.CLIENT_SECRET, "The client secret" + descEnd, "sphere.clientSecret"),
+                new EnvSetting(EnvironmentKeys.CLIENT_ID, "The client id" + descEnd, "sphere.clientId")
         );
     }
 
