@@ -46,7 +46,7 @@ class ProductionModule extends AbstractModule {
 
         @Override
         public CategoryTree get() {
-            Logger.info("categoryTreeProvider");
+            Logger.info("execute CategoryTreeProvider.get()");
             final PagedQueryResult<Category> pagedQueryResult = client.execute(CategoryQuery.of()).get(2000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
             return CategoryTree.of(pagedQueryResult.getResults());
         }
@@ -57,7 +57,7 @@ class ProductionModule extends AbstractModule {
     private static class PlayJavaClientProvider implements Provider<PlayJavaClient> {
         @Override
         public PlayJavaClient get() {
-            Logger.info("playJavaClientProvider");
+            Logger.info("execute PlayJavaClientProvider.get()");
             return new PlayJavaClientImpl(ConfigFactory.load());
         }
     }
