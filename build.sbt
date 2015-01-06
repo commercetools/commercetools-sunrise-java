@@ -15,8 +15,8 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 resolvers += Resolver.sonatypeRepo("releases")
 
 libraryDependencies ++=
-  "io.sphere.sdk.jvm" % "models" % "1.0.0-M8" ::
-  "io.sphere.sdk.jvm" %% "play-2_3-java-client" % "1.0.0-M8" ::
+  "io.sphere.sdk.jvm" % "models" % "1.0.0-M9" ::
+  "io.sphere.sdk.jvm" %% "play-2_3-java-client" % "1.0.0-M9" ::
   "com.google.inject" % "guice" % "3.0" ::
   Nil
 
