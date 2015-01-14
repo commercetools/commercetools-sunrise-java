@@ -41,7 +41,7 @@ public class CountryOperations {
     public List<CountryCode> availableCountries() {
         List<CountryCode> countries = new ArrayList<>();
         for (String configCountry : configCountryList()) {
-            parseCode(configCountry).ifPresent(code -> countries.add(code));
+            parseCode(configCountry).ifPresent(countries::add);
         }
         return countries;
     }
@@ -102,7 +102,7 @@ public class CountryOperations {
     private Optional<CountryCode> countryInSession() {
         Http.Session session = Http.Context.current().session();
         Optional<String> code = Optional.ofNullable(session.get(COUNTRY_SESSION_KEY));
-        return code.flatMap(country -> parseCode(country));
+        return code.flatMap(CountryOperations::parseCode);
     }
 
     /**
