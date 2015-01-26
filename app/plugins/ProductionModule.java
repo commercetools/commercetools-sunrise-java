@@ -2,12 +2,13 @@ package plugins;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
+import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
-import io.sphere.sdk.client.PlayJavaClient;
-import io.sphere.sdk.client.PlayJavaClientImpl;
+import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.client.PlayJavaSphereClientFactory;
 import io.sphere.sdk.queries.PagedQueryResult;
 import play.Application;
 import play.Configuration;
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * Configuration for the Guice {@link com.google.inject.Injector} which
  * shall be used in production and integration tests.
  */
-class ProductionModule extends AbstractModule {
+public class ProductionModule extends AbstractModule {
     private final Application app;
 
     public ProductionModule(Application app) {
@@ -30,17 +31,17 @@ class ProductionModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(PlayJavaClient.class).toProvider(PlayJavaClientProvider.class).in(Singleton.class);
+        bind(PlayJavaSphereClient.class).toProvider(PlayJavaSphereClientProvider.class).in(Singleton.class);
         bind(CategoryTree.class).toProvider(CategoryTreeProvider.class).in(Singleton.class);
         bind(Configuration.class).toInstance(app.configuration());
     }
 
     @Singleton
     private static class CategoryTreeProvider implements Provider<CategoryTree> {
-        private final PlayJavaClient client;
+        private final PlayJavaSphereClient client;
 
         @Inject
-        private CategoryTreeProvider(final PlayJavaClient client) {
+        private CategoryTreeProvider(final PlayJavaSphereClient client) {
             this.client = client;
         }
 
@@ -54,11 +55,19 @@ class ProductionModule extends AbstractModule {
 
 
     @Singleton
-    private static class PlayJavaClientProvider implements Provider<PlayJavaClient> {
+    private static class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
         @Override
-        public PlayJavaClient get() {
-            Logger.info("execute PlayJavaClientProvider.get()");
-            return new PlayJavaClientImpl(ConfigFactory.load());
+        public PlayJavaSphereClient get() {
+            return createClient();
         }
+    }
+
+    public static PlayJavaSphereClient createClient() {
+        Logger.info("execute PlayJavaSphereClientProvider.get()");
+        final Config classpathConf = ConfigFactory.load();
+        final String project = classpathConf.getString("sphere.project");
+        final String clientId = classpathConf.getString("sphere.clientId");
+        final String clientSecret = classpathConf.getString("sphere.clientSecret");
+        return PlayJavaSphereClientFactory.of().createClient(project, clientId, clientSecret);
     }
 }

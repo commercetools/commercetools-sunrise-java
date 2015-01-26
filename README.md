@@ -69,7 +69,7 @@ Type in expressions to have them evaluated.
 Type :help for more information.
 
 scala> val client = createClient()
-client: io.sphere.sdk.client.PlayJavaClient = io.sphere.sdk.client.PlayJavaClientImpl@467e33e7
+client: io.sphere.sdk.client.PlayJavaSphereClient = io.sphere.sdk.client.PlayJavaSphereClientImpl@467e33e7
 
 scala> val promise = client.execute(Categories.query())
 promise: play.libs.F.Promise[io.sphere.sdk.client.PagedQueryResult[io.sphere.sdk.categories.Category]] = play.libs.F$Promise@39c6382c
