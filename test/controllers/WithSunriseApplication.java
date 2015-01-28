@@ -6,20 +6,22 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.client.PlayJavaSphereClientImpl;
-import io.sphere.sdk.client.SphereRequestExecutor;
-import io.sphere.sdk.client.SphereRequestExecutorTestDouble;
+import io.sphere.sdk.client.*;
+import io.sphere.sdk.http.HttpRequest;
+import io.sphere.sdk.http.Requestable;
 import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.utils.JsonUtils;
 import play.Application;
 import play.Configuration;
+import play.libs.F;
 import plugins.Global;
 import play.test.FakeApplication;
 import play.test.WithApplication;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 import static play.test.Helpers.fakeApplication;
 
@@ -52,14 +54,11 @@ public abstract class WithSunriseApplication extends WithApplication {
         return CategoryTree.of(categoryPagedQueryResult.getResults());
     }
 
-    protected PlayJavaSphereClient injectedClientInstance(final Application app){
-        return new PlayJavaSphereClientImpl(getConfiguration(app), getSphereRequestExecutor());
+    protected final PlayJavaSphereClient injectedClientInstance(final Application app) {
+        return createObjectTestDoubleFromRequestablePlay(getTestDoubleBehavior());
     }
 
-    protected SphereRequestExecutor getSphereRequestExecutor() {
-        return new SphereRequestExecutorTestDouble() {
-        };
-    }
+    protected abstract Function<Requestable, Object> getTestDoubleBehavior();
 
     /**
      * Override this to add additional settings
@@ -68,5 +67,24 @@ public abstract class WithSunriseApplication extends WithApplication {
      */
     protected Configuration getConfiguration(Application app) {
         return app.configuration();
+    }
+
+    public PlayJavaSphereClient createObjectTestDoubleFromRequestablePlay(final Function<Requestable, Object> function) {
+        return new PlayJavaSphereClient() {
+            @Override
+            public <T> F.Promise<T> execute(final SphereRequest<T> sphereRequest) {
+                final T result = (T) function.apply(sphereRequest);
+                return F.Promise.pure(result);
+            }
+
+            @Override
+            public void close() {
+            }
+
+            @Override
+            public String toString() {
+                return "SphereClientObjectTestDouble";
+            }
+        };
     }
 }

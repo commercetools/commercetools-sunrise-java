@@ -3,12 +3,14 @@ package controllers;
 import com.typesafe.config.ConfigFactory;
 import exceptions.DefaultCountryNotFound;
 import exceptions.InvalidCountryCode;
+import io.sphere.sdk.http.Requestable;
 import org.junit.Test;
 import play.Configuration;
 import play.mvc.Http;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static java.util.Collections.emptyMap;
 import static controllers.CountryOperations.*;
@@ -107,5 +109,10 @@ public class CountryOperationsTest extends WithSunriseApplication {
     private Configuration configWithAvailableCountries(List<String> availableCountries) {
         Map<String, List<String>> configMap = Collections.singletonMap(COUNTRY_CONFIG_LIST, availableCountries);
         return new Configuration(ConfigFactory.parseMap(configMap));
+    }
+
+    @Override
+    protected Function<Requestable, Object> getTestDoubleBehavior() {
+        return null;
     }
 }
