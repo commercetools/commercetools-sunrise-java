@@ -29,5 +29,6 @@ We want to have a clear and tested code base.
 * production code should be in Java
 * your code is from you and not copied from third party sources
 * use [good commit messages](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
-* tests have to be passed in Travis CI
+* unit tests have to be passed in Travis CI
+    * the integration tests will fail since we use encrypted credentials which are not available in forks for security reasons
 * the SDK should be backwards compatible when released as 1.0.0
