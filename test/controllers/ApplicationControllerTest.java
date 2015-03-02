@@ -1,8 +1,7 @@
 package controllers;
 
+import io.sphere.sdk.client.HttpRequestIntent;
 import io.sphere.sdk.client.SphereRequest;
-import io.sphere.sdk.http.HttpRequest;
-import io.sphere.sdk.http.Requestable;
 import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.queries.Query;
 import io.sphere.sdk.queries.QueryDsl;
@@ -37,15 +36,9 @@ public class ApplicationControllerTest extends WithSunriseApplication {
     }
 
     @Override
-    protected Function<Requestable, Object> getTestDoubleBehavior() {
+    protected Function<HttpRequestIntent, Object> getTestDoubleBehavior() {
         return requestable -> {
-            final Object result;
-            if (requestable instanceof Query) {
-                result = PagedQueryResult.empty();
-            } else {
-                throw new UnsupportedOperationException("did not expect " + requestable);
-            }
-            return result;
+            return PagedQueryResult.empty();
         };
     }
 

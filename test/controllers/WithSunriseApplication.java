@@ -7,10 +7,8 @@ import com.google.inject.Injector;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.*;
-import io.sphere.sdk.http.HttpRequest;
-import io.sphere.sdk.http.Requestable;
+import io.sphere.sdk.json.JsonUtils;
 import io.sphere.sdk.queries.PagedQueryResult;
-import io.sphere.sdk.utils.JsonUtils;
 import play.Application;
 import play.Configuration;
 import play.libs.F;
@@ -58,7 +56,7 @@ public abstract class WithSunriseApplication extends WithApplication {
         return createObjectTestDoubleFromRequestablePlay(getTestDoubleBehavior());
     }
 
-    protected abstract Function<Requestable, Object> getTestDoubleBehavior();
+    protected abstract Function<HttpRequestIntent, Object> getTestDoubleBehavior();
 
     /**
      * Override this to add additional settings
@@ -69,11 +67,11 @@ public abstract class WithSunriseApplication extends WithApplication {
         return app.configuration();
     }
 
-    public PlayJavaSphereClient createObjectTestDoubleFromRequestablePlay(final Function<Requestable, Object> function) {
+    public PlayJavaSphereClient createObjectTestDoubleFromRequestablePlay(final Function<HttpRequestIntent, Object> function) {
         return new PlayJavaSphereClient() {
             @Override
             public <T> F.Promise<T> execute(final SphereRequest<T> sphereRequest) {
-                final T result = (T) function.apply(sphereRequest);
+                final T result = (T) function.apply(sphereRequest.httpRequestIntent());
                 return F.Promise.pure(result);
             }
 

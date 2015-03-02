@@ -8,7 +8,8 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.client.PlayJavaSphereClientFactory;
+import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.client.SphereClientFactory;
 import io.sphere.sdk.queries.PagedQueryResult;
 import play.Application;
 import play.Configuration;
@@ -68,6 +69,7 @@ public class ProductionModule extends AbstractModule {
         final String project = classpathConf.getString("sphere.project");
         final String clientId = classpathConf.getString("sphere.clientId");
         final String clientSecret = classpathConf.getString("sphere.clientSecret");
-        return PlayJavaSphereClientFactory.of().createClient(project, clientId, clientSecret);
+        final SphereClient sphereClient = SphereClientFactory.of().createClient(project, clientId, clientSecret);
+        return PlayJavaSphereClient.of(sphereClient);
     }
 }

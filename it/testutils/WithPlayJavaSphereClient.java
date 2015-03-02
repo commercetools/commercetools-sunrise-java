@@ -8,7 +8,8 @@ import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.client.PlayJavaSphereClientFactory;
+import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.client.SphereClientFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -29,7 +30,8 @@ public abstract class WithPlayJavaSphereClient {
         final String projectKey = config.getString("sphere.project");
         final String clientId = config.getString("sphere.clientId");
         final String clientSecret = config.getString("sphere.clientSecret");
-        client = PlayJavaSphereClientFactory.of().createClient(projectKey, clientId, clientSecret);
+        final SphereClient sphereClient = SphereClientFactory.of().createClient(projectKey, clientId, clientSecret);
+        client = PlayJavaSphereClient.of(sphereClient);
     }
 
     @AfterClass

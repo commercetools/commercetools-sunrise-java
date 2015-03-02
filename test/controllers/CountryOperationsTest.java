@@ -3,7 +3,7 @@ package controllers;
 import com.typesafe.config.ConfigFactory;
 import exceptions.DefaultCountryNotFound;
 import exceptions.InvalidCountryCode;
-import io.sphere.sdk.http.Requestable;
+import io.sphere.sdk.client.HttpRequestIntent;
 import org.junit.Test;
 import play.Configuration;
 import play.mvc.Http;
@@ -112,7 +112,7 @@ public class CountryOperationsTest extends WithSunriseApplication {
     }
 
     @Override
-    protected Function<Requestable, Object> getTestDoubleBehavior() {
+    protected Function<HttpRequestIntent, Object> getTestDoubleBehavior() {
         return null;
     }
 }
