@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import comparators.ByNameCategoryComparator;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.client.PlayJavaClient;
+import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.play.controllers.ShopController;
 import models.CommonDataBuilder;
 
@@ -20,7 +20,7 @@ public class SunriseController extends ShopController {
     private final CategoryTree categoryTree;
     private final CountryOperations countryOperations;
 
-    protected SunriseController(final PlayJavaClient client, final CategoryTree categoryTree, final Configuration configuration) {
+    protected SunriseController(final PlayJavaSphereClient client, final CategoryTree categoryTree, final Configuration configuration) {
         super(client);
         this.categoryTree = categoryTree;
         this.countryOperations = CountryOperations.of(configuration);

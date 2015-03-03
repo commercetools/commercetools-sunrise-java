@@ -2,7 +2,7 @@ package plugins;
 
 import com.google.inject.*;
 import controllers.CountryOperations;
-import io.sphere.sdk.client.PlayJavaClient;
+import io.sphere.sdk.client.PlayJavaSphereClient;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
@@ -35,7 +35,7 @@ public class Global extends GlobalSettings {
     @Override
     public void onStop(final Application app) {
         try {
-            injector.getInstance(PlayJavaClient.class).close();
+            injector.getInstance(PlayJavaSphereClient.class).close();
         } catch (final ProvisionException e) {
             Logger.debug("Java client not instantiated");
         }

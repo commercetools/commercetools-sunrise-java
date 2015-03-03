@@ -1,8 +1,7 @@
 package tutorial;
 
-import com.typesafe.config.ConfigFactory;
-import io.sphere.sdk.client.PlayJavaClient;
-import io.sphere.sdk.client.PlayJavaClientImpl;
+import io.sphere.sdk.client.PlayJavaSphereClient;
+import plugins.ProductionModule;
 
 public final class ClientFactory {
     private ClientFactory() {
@@ -13,7 +12,7 @@ public final class ClientFactory {
      * @return a new sphere client
      */
     @SuppressWarnings("unused")//it is not a part of the application
-    public static PlayJavaClient createClient() {
-        return new PlayJavaClientImpl(ConfigFactory.load());
+    public static PlayJavaSphereClient createClient() {
+        return ProductionModule.createClient();
     }
 }

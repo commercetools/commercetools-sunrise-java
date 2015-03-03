@@ -7,8 +7,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import io.sphere.sdk.client.PlayJavaClient;
-import io.sphere.sdk.client.PlayJavaClientImpl;
+import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.client.SphereClientFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -17,8 +18,8 @@ import java.util.List;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Iterables.isEmpty;
 
-public abstract class WithPlayJavaClient {
-    protected static PlayJavaClient client;
+public abstract class WithPlayJavaSphereClient {
+    protected static PlayJavaSphereClient client;
 
     @BeforeClass
     public static void setupJavaClient() {
@@ -26,7 +27,11 @@ public abstract class WithPlayJavaClient {
         requirePresent(requiredEnv);
         final String configAsString = getConfig(requiredEnv);
         final Config config = ConfigFactory.parseString(configAsString).withFallback(ConfigFactory.load());
-        client = new PlayJavaClientImpl(config);
+        final String projectKey = config.getString("sphere.project");
+        final String clientId = config.getString("sphere.clientId");
+        final String clientSecret = config.getString("sphere.clientSecret");
+        final SphereClient sphereClient = SphereClientFactory.of().createClient(projectKey, clientId, clientSecret);
+        client = PlayJavaSphereClient.of(sphereClient);
     }
 
     @AfterClass

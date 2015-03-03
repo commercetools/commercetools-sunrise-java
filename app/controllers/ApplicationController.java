@@ -1,7 +1,7 @@
 package controllers;
 
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.client.PlayJavaClient;
+import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.products.Product;
 import io.sphere.sdk.products.queries.ProductQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
@@ -19,7 +19,7 @@ import java.util.List;
 public final class ApplicationController extends SunriseController {
 
     @Inject
-    public ApplicationController(final PlayJavaClient client, final CategoryTree categoryTree, final Configuration configuration) {
+    public ApplicationController(final PlayJavaSphereClient client, final CategoryTree categoryTree, final Configuration configuration) {
         super(client, categoryTree, configuration);
     }
 
