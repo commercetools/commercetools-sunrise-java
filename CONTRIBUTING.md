@@ -20,10 +20,9 @@ If you have push access to the repository you can fix them directly otherwise ju
 
 We want to have a clear and tested code base.
 
-* change as few lines as possible
-* never reformat code, we want in diffs only real changes
-* use code formatting like in the rest of the application
-* use the namespace io.sphere.sdk
+* change as few lines as necessary, do not mix up concerns
+* never reformat code, we want in diffs only real changes, except it is a pure refactoring pull request
+* use code formatting and concepts like in the rest of the application
 * your committed code should not emit warnings such as unchecked generics
 * you need to use tests to prove that your code works, JUnit tests are sufficient
 * production code should be in Java
