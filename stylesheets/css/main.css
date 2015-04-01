@@ -1,0 +1,64 @@
+/*****************************************************************************/
+/*
+/* GENERAL STYLING
+/*
+/*****************************************************************************/
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+a,
+a:link,
+a:visited,
+a:active,
+a:hover {
+  text-decoration: none;
+  color: inherit; }
+
+/*****************************************************************************/
+/*
+/* TYPOGRAPHY
+/*
+/*****************************************************************************/
+/*****************************************************************************/
+/*
+/* COLORS
+/*
+/*****************************************************************************/
+/*****************************************************************************/
+/*
+/* HEADER
+/*
+/*****************************************************************************/
+#header {
+  background: #2A344F;
+  font-size: 12px;
+  text-align: center;
+  font-family: 'Source Sans Pro', sans-serif; }
+
+.header-left li,
+.header-right li {
+  display: inline-block;
+  margin: 10px 10px; }
+
+.header-left,
+.header-right {
+  margin-bottom: 0; }
+
+.glyphicon.glyphicon-map-marker,
+.glyphicon.glyphicon-user,
+.glyphicon.glyphicon-lock {
+  font-size: 20px;
+  padding-right: 5px;
+  vertical-align: middle; }
+
+.header-left {
+  color: #ADADAD; }
+
+.header-left a:hover {
+  color: #FFFFFF; }
+
+.header-right {
+  color: #D6D6D6; }
+
+.header-right a:hover {
+  color: #FFFFFF; }
+
+/*# sourceMappingURL=main.css.map */

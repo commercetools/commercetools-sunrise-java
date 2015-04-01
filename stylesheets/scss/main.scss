@@ -1,0 +1,128 @@
+/*****************************************************************************/
+/*
+/* GENERAL STYLING
+/*
+/*****************************************************************************/
+
+// Links
+a, 
+a:link, 
+a:visited, 
+a:active, 
+a:hover { 
+	text-decoration: none; 
+	color: inherit;
+}
+
+/*****************************************************************************/
+/*
+/* TYPOGRAPHY
+/*
+/*****************************************************************************/
+
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
+/*****************************************************************************/
+/*
+/* COLORS
+/*
+/*****************************************************************************/
+
+$white: #FFFFFF;
+$lighter-grey: #F5F5F5;
+$light-grey: #D6D6D6;
+$grey: #ADADAD;
+$dark-grey: #858585;
+$black: #333333;
+$yellow: #FFBA27;
+$red: #D54D4D;
+$dark-blue: #2A344F;
+$steel: #AAAEB2;
+$lighter-steel: #D9D7CE;
+$dirty-white: #F5F2EA;
+$green: #7D945E;
+$blue: #6989C2;
+
+
+/*****************************************************************************/
+/*
+/* HEADER
+/*
+/*****************************************************************************/
+
+// General 
+
+#header {
+	background: $dark-blue;
+	font-size: 12px;
+	text-align: center;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+.header-left li,
+.header-right li {
+	display: inline-block;
+	margin: 10px 10px;
+}
+
+.header-left,
+.header-right {
+	margin-bottom: 0;
+}
+
+.glyphicon.glyphicon-map-marker,
+.glyphicon.glyphicon-user,
+.glyphicon.glyphicon-lock {
+	font-size: 20px;
+	padding-right: 5px;
+	vertical-align: middle;
+}
+
+// Left
+
+.header-left {
+	color: $grey;
+}
+
+.header-left a:hover {
+	color: $white;
+}
+
+// Right
+
+.header-right {
+	color: $light-grey;
+}
+
+.header-right a:hover {
+	color: $white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
