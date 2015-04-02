@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link href="stylesheets/css/main.css" rel="stylesheet">
+    <link href="assets/stylesheets/css/main.css" rel="stylesheet">
 
     <title>Sunrise</title>
 
@@ -29,7 +29,9 @@
         <div class="col-sm-6">
           <ul class="header-right">
             <li class="dropdown-toggle" data-toggle="dropdown"><a href="#">DE</a></li>
-              <li class="dropdown-menu" role="menu"><a href="#">DE</a></li>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">ENG</a></li>
+              </ul>
             <li><a href="#"><span class="glyphicon glyphicon-user"></span>SIGN IN</a></li>
             <li><a href="#"><span class="glyphicon glyphicon-lock"></span>YOUR BAG</a></li>
           </ul>
@@ -37,8 +39,19 @@
       </div>
     </header>
 
-    <nav class="navbar">
-
+    <nav id="navbar" class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="sunrise-logo">
+            <img class="img-responsive" src="assets/img/sunrise-logo.png" alt="sunrise logo">
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="search-box">
+            search box 
+          </div>
+        </div>
+      </div>
     </nav>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
