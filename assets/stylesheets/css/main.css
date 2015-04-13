@@ -28,7 +28,7 @@ a:hover {
 /*
 /*****************************************************************************/
 #header {
-  background: #2A344F;
+  background: #2A343F;
   font-size: 12px;
   text-align: center;
   font-family: 'Source Sans Pro', sans-serif; }
@@ -60,5 +60,68 @@ a:hover {
 
 .header-right a:hover {
   color: #FFFFFF; }
+
+/*****************************************************************************/
+/*
+/* NAVIGATION
+/*
+/*****************************************************************************/
+.logo_search {
+  padding: 1em 0; }
+
+.search-box input {
+  background: #F5F2EA; }
+
+#nav {
+  list-style: none;
+  margin-bottom: 10px;
+  width: 100%;
+  position: relative;
+  z-index: 5; }
+
+#nav li {
+  float: left;
+  margin-right: 10px;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.1em; }
+
+#nav a {
+  display: block;
+  padding: 5px;
+  color: #333333;
+  text-decoration: none; }
+
+#nav a:hover {
+  color: #FFBA27; }
+
+#nav ul {
+  list-style: none;
+  position: absolute;
+  left: -9999px; }
+
+#nav ul li {
+  padding-top: 1px;
+  float: none;
+  text-align: left; }
+
+#nav ul a {
+  white-space: nowrap; }
+
+#nav li:hover ul {
+  left: 0;
+  background: tomato; }
+
+/*****************************************************************************/
+/*
+/* POP PAGE
+/*
+/*****************************************************************************/
+#pop-page {
+  height: 2000px;
+  background: #F5F2EA; }
+
+.breadcrumbs {
+  padding: 1em 1em; }
 
 /*# sourceMappingURL=main.css.map */

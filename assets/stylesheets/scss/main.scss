@@ -36,7 +36,7 @@ $dark-grey: #858585;
 $black: #333333;
 $yellow: #FFBA27;
 $red: #D54D4D;
-$dark-blue: #2A344F;
+$dark-blue: #2A343F;
 $steel: #AAAEB2;
 $lighter-steel: #D9D7CE;
 $dirty-white: #F5F2EA;
@@ -104,11 +104,82 @@ $blue: #6989C2;
 /*
 /*****************************************************************************/
 
+// Sunrise logo  and searchbox
 
+.logo_search {
+	padding: 1em 0;
+}
 
+.search-box input {
+	background: $dirty-white
+}
 
+// Main navigation
 
+#nav {
+    list-style: none;
+    margin-bottom: 10px;
+    width: 100%;
+    position: relative;
+    z-index: 5;
+} 
 
+#nav li { 
+    float: left;
+    margin-right: 10px;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+#nav a {
+    display: block;
+    padding: 5px;
+    color: $black;
+    text-decoration: none;
+}
+
+#nav a:hover {
+    color: $yellow;
+}
+
+// Dropdown
+
+#nav ul {
+    list-style: none;
+    position: absolute;
+    left: -9999px; 
+}
+
+#nav ul li {
+    padding-top: 1px; 
+    float: none;
+    text-align: left;
+}
+
+#nav ul a {
+    white-space: nowrap; 
+} 
+
+#nav li:hover ul { 
+    left: 0;
+    background: tomato;
+}
+
+/*****************************************************************************/
+/*
+/* POP PAGE
+/*
+/*****************************************************************************/
+
+#pop-page {
+	height: 2000px;
+	background: $dirty-white;
+}
+
+.breadcrumbs {
+	padding: 1em 1em;
+}
 
 
 
