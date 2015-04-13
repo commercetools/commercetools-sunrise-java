@@ -121,7 +121,8 @@ a:hover {
   height: 2000px;
   background: #F5F2EA; }
 
-.breadcrumbs {
-  padding: 1em 1em; }
+.breadcrumbs,
+.product-filter {
+  padding: 0.5em 0.5em; }
 
 /*# sourceMappingURL=main.css.map */
