@@ -14,6 +14,10 @@ a:hover {
 	color: inherit;
 }
 
+.container {
+    margin: 0 2em;
+}
+
 /*****************************************************************************/
 /*
 /* TYPOGRAPHY
@@ -148,7 +152,8 @@ $blue: #6989C2;
 #nav ul {
     list-style: none;
     position: absolute;
-    left: -9999px; 
+    left: -9999px;
+    padding-left: 0px; 
 }
 
 #nav ul li {
@@ -163,7 +168,7 @@ $blue: #6989C2;
 
 #nav li:hover ul { 
     left: 0;
-    background: tomato;
+    background: $white;
 }
 
 /*****************************************************************************/
@@ -175,13 +180,55 @@ $blue: #6989C2;
 #pop-page {
 	height: 2000px;
 	background: $dirty-white;
+    font-size: .8em;
+    text-transform: uppercase;
 }
 
-.breadcrumbs,
+.hr {
+    margin: 0;
+    border: 1px solid $black;
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0.5em 0.5em;
+}
+
 .product-filter {
 	padding: 0.5em 0.5em;
 }
 
+.product-type {
+    margin-top: 10px;
+}
+
+// Product type accordion menu
+
+.panel-heading,
+.panel-body {
+    padding: 0 0;
+}
+
+.panel-title {
+    background-color: $dirty-white;
+}
+
+.panel {
+    background-color: transparent;
+    border: none;
+}
+
+.collapsed {
+    font-size: .6em;
+}
+
+// Size Box
+
+.size-box,
+.color-box,
+.price-slider {
+    padding: 1em 0 0;
+}
 
 
 

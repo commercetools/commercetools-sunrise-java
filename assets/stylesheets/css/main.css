@@ -12,6 +12,9 @@ a:hover {
   text-decoration: none;
   color: inherit; }
 
+.container {
+  margin: 0 2em; }
+
 /*****************************************************************************/
 /*
 /* TYPOGRAPHY
@@ -98,7 +101,8 @@ a:hover {
 #nav ul {
   list-style: none;
   position: absolute;
-  left: -9999px; }
+  left: -9999px;
+  padding-left: 0px; }
 
 #nav ul li {
   padding-top: 1px;
@@ -110,7 +114,7 @@ a:hover {
 
 #nav li:hover ul {
   left: 0;
-  background: tomato; }
+  background: #FFFFFF; }
 
 /*****************************************************************************/
 /*
@@ -119,10 +123,41 @@ a:hover {
 /*****************************************************************************/
 #pop-page {
   height: 2000px;
-  background: #F5F2EA; }
+  background: #F5F2EA;
+  font-size: .8em;
+  text-transform: uppercase; }
 
-.breadcrumbs,
+.hr {
+  margin: 0;
+  border: 1px solid #333333; }
+
+.breadcrumb {
+  background: none;
+  padding: 0.5em 0.5em; }
+
 .product-filter {
   padding: 0.5em 0.5em; }
+
+.product-type {
+  margin-top: 10px; }
+
+.panel-heading,
+.panel-body {
+  padding: 0 0; }
+
+.panel-title {
+  background-color: #F5F2EA; }
+
+.panel {
+  background-color: transparent;
+  border: none; }
+
+.collapsed {
+  font-size: .6em; }
+
+.size-box,
+.color-box,
+.price-slider {
+  padding: 1em 0 0; }
 
 /*# sourceMappingURL=main.css.map */
