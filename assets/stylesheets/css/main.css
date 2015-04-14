@@ -50,7 +50,8 @@ a:hover {
   vertical-align: middle; }
 
 .header-left {
-  color: #ADADAD; }
+  color: #ADADAD;
+  padding-left: 0; }
 
 .header-left a:hover {
   color: #FFFFFF; }
@@ -132,9 +133,6 @@ a:hover {
   background: none;
   padding: 0.5em 0.5em; }
 
-.back-to-btn {
-  padding: 0.5em 0.5em; }
-
 .product-filter {
   padding: 0.5em 0.5em; }
 
@@ -157,9 +155,12 @@ a:hover {
 
 .size-box,
 .color-box,
-.price-slider,
-.designer-box {
+.designer-box,
+.price-box {
   padding: 1em 0 0; }
+
+.price-slider {
+  margin: 2em 0; }
 
 .designer-list {
   margin-top: 1em;
@@ -172,5 +173,11 @@ a:hover {
 
 .text-capitalize {
   text-transform: capitalize; }
+
+.item-list-pagination {
+  padding: 1em 0; }
+
+.gallery-item {
+  padding: 0 0 2em; }
 
 /*# sourceMappingURL=main.css.map */

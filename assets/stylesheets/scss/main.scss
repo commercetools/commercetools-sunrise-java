@@ -82,6 +82,7 @@ $blue: #6989C2;
 
 .header-left {
 	color: $grey;
+    padding-left: 0;
 }
 
 .header-left a:hover {
@@ -190,10 +191,6 @@ $blue: #6989C2;
     padding: 0.5em 0.5em;
 }
 
-.back-to-btn {
-    padding: 0.5em 0.5em;
-}
-
 .product-filter {
 	padding: 0.5em 0.5em;
 }
@@ -226,9 +223,15 @@ $blue: #6989C2;
 
 .size-box,
 .color-box,
-.price-slider,
-.designer-box {
+.designer-box,
+.price-box {
     padding: 1em 0 0;
+}
+
+// Price slider
+
+.price-slider {
+    margin: 2em 0;
 }
 
 // Designer box
@@ -251,6 +254,16 @@ $blue: #6989C2;
 }
 
 // Pagination
+
+.item-list-pagination {
+    padding: 1em 0;
+}
+
+// Gallery items
+
+.gallery-item {
+    padding: 0 0 2em;
+}
 
 
 
