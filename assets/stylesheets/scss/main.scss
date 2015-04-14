@@ -1,0 +1,276 @@
+/*****************************************************************************/
+/*
+/* GENERAL STYLING
+/*
+/*****************************************************************************/
+
+// Links
+a, 
+a:link, 
+a:visited, 
+a:active, 
+a:hover { 
+	text-decoration: none; 
+	color: inherit;
+}
+
+.container {
+    margin: 0 2em;
+}
+
+/*****************************************************************************/
+/*
+/* TYPOGRAPHY
+/*
+/*****************************************************************************/
+
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+
+/*****************************************************************************/
+/*
+/* COLORS
+/*
+/*****************************************************************************/
+
+$white: #FFFFFF;
+$lighter-grey: #F5F5F5;
+$light-grey: #D6D6D6;
+$grey: #ADADAD;
+$dark-grey: #858585;
+$black: #333333;
+$yellow: #FFBA27;
+$red: #D54D4D;
+$dark-blue: #2A343F;
+$steel: #AAAEB2;
+$lighter-steel: #D9D7CE;
+$dirty-white: #F5F2EA;
+$green: #7D945E;
+$blue: #6989C2;
+
+
+/*****************************************************************************/
+/*
+/* HEADER
+/*
+/*****************************************************************************/
+
+// General 
+
+#header {
+	background: $dark-blue;
+	font-size: 12px;
+	text-align: center;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+.header-left li,
+.header-right li {
+	display: inline-block;
+	margin: 10px 10px;
+}
+
+.header-left,
+.header-right {
+	margin-bottom: 0;
+}
+
+.glyphicon.glyphicon-map-marker,
+.glyphicon.glyphicon-user,
+.glyphicon.glyphicon-lock {
+	font-size: 20px;
+	padding-right: 5px;
+	vertical-align: middle;
+}
+
+// Left
+
+.header-left {
+	color: $grey;
+}
+
+.header-left a:hover {
+	color: $white;
+}
+
+// Right
+
+.header-right {
+	color: $light-grey;
+}
+
+.header-right a:hover {
+	color: $white;
+}
+
+/*****************************************************************************/
+/*
+/* NAVIGATION
+/*
+/*****************************************************************************/
+
+// Sunrise logo  and searchbox
+
+.logo_search {
+	padding: 1em 0;
+}
+
+.search-box input {
+	background: $dirty-white
+}
+
+// Main navigation
+
+#nav {
+    list-style: none;
+    margin-bottom: 10px;
+    width: 100%;
+    position: relative;
+    z-index: 5;
+} 
+
+#nav li { 
+    float: left;
+    margin-right: 10px;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+#nav a {
+    display: block;
+    padding: 5px;
+    color: $black;
+    text-decoration: none;
+}
+
+#nav a:hover {
+    color: $yellow;
+}
+
+// Dropdown
+
+#nav ul {
+    list-style: none;
+    position: absolute;
+    left: -9999px;
+    padding-left: 0px; 
+}
+
+#nav ul li {
+    padding-top: 1px; 
+    float: none;
+    text-align: left;
+}
+
+#nav ul a {
+    white-space: nowrap; 
+} 
+
+#nav li:hover ul { 
+    left: 0;
+    background: $white;
+}
+
+/*****************************************************************************/
+/*
+/* POP PAGE
+/*
+/*****************************************************************************/
+
+#pop-page {
+	height: 2000px;
+	background: $dirty-white;
+    font-size: .8em;
+    text-transform: uppercase;
+}
+
+.hr {
+    margin: 0;
+    border: 1px solid rgba(214, 214, 214, 0.4);
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0.5em 0.5em;
+}
+
+.product-filter {
+	padding: 0.5em 0.5em;
+}
+
+.product-type {
+    margin-top: 10px;
+}
+
+// Product type accordion menu
+
+.panel-heading,
+.panel-body {
+    padding: 0 0;
+}
+
+.panel-title {
+    background-color: $dirty-white;
+}
+
+.panel {
+    background-color: transparent;
+    border: none;
+}
+
+.collapsed {
+    font-size: .6em;
+}
+
+// Size Box
+
+.size-box,
+.color-box,
+.price-slider,
+.designer-box {
+    padding: 1em 0 0;
+}
+
+// Designer box
+
+.designer-list {
+    margin-top: 1em;
+    border: 1px solid $light-grey;
+    height: 200px;
+    overflow: scroll;
+}
+
+// Placeholder image
+
+.placeholder-img {
+    margin: 1em 0;
+}
+
+.text-capitalize {
+    text-transform: capitalize;
+}
+
+// Pagination
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

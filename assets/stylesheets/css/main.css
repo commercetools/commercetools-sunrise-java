@@ -1,0 +1,176 @@
+/*****************************************************************************/
+/*
+/* GENERAL STYLING
+/*
+/*****************************************************************************/
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+a,
+a:link,
+a:visited,
+a:active,
+a:hover {
+  text-decoration: none;
+  color: inherit; }
+
+.container {
+  margin: 0 2em; }
+
+/*****************************************************************************/
+/*
+/* TYPOGRAPHY
+/*
+/*****************************************************************************/
+/*****************************************************************************/
+/*
+/* COLORS
+/*
+/*****************************************************************************/
+/*****************************************************************************/
+/*
+/* HEADER
+/*
+/*****************************************************************************/
+#header {
+  background: #2A343F;
+  font-size: 12px;
+  text-align: center;
+  font-family: 'Source Sans Pro', sans-serif; }
+
+.header-left li,
+.header-right li {
+  display: inline-block;
+  margin: 10px 10px; }
+
+.header-left,
+.header-right {
+  margin-bottom: 0; }
+
+.glyphicon.glyphicon-map-marker,
+.glyphicon.glyphicon-user,
+.glyphicon.glyphicon-lock {
+  font-size: 20px;
+  padding-right: 5px;
+  vertical-align: middle; }
+
+.header-left {
+  color: #ADADAD; }
+
+.header-left a:hover {
+  color: #FFFFFF; }
+
+.header-right {
+  color: #D6D6D6; }
+
+.header-right a:hover {
+  color: #FFFFFF; }
+
+/*****************************************************************************/
+/*
+/* NAVIGATION
+/*
+/*****************************************************************************/
+.logo_search {
+  padding: 1em 0; }
+
+.search-box input {
+  background: #F5F2EA; }
+
+#nav {
+  list-style: none;
+  margin-bottom: 10px;
+  width: 100%;
+  position: relative;
+  z-index: 5; }
+
+#nav li {
+  float: left;
+  margin-right: 10px;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.1em; }
+
+#nav a {
+  display: block;
+  padding: 5px;
+  color: #333333;
+  text-decoration: none; }
+
+#nav a:hover {
+  color: #FFBA27; }
+
+#nav ul {
+  list-style: none;
+  position: absolute;
+  left: -9999px;
+  padding-left: 0px; }
+
+#nav ul li {
+  padding-top: 1px;
+  float: none;
+  text-align: left; }
+
+#nav ul a {
+  white-space: nowrap; }
+
+#nav li:hover ul {
+  left: 0;
+  background: #FFFFFF; }
+
+/*****************************************************************************/
+/*
+/* POP PAGE
+/*
+/*****************************************************************************/
+#pop-page {
+  height: 2000px;
+  background: #F5F2EA;
+  font-size: .8em;
+  text-transform: uppercase; }
+
+.hr {
+  margin: 0;
+  border: 1px solid rgba(214, 214, 214, 0.4); }
+
+.breadcrumb {
+  background: none;
+  padding: 0.5em 0.5em; }
+
+.product-filter {
+  padding: 0.5em 0.5em; }
+
+.product-type {
+  margin-top: 10px; }
+
+.panel-heading,
+.panel-body {
+  padding: 0 0; }
+
+.panel-title {
+  background-color: #F5F2EA; }
+
+.panel {
+  background-color: transparent;
+  border: none; }
+
+.collapsed {
+  font-size: .6em; }
+
+.size-box,
+.color-box,
+.price-slider,
+.designer-box {
+  padding: 1em 0 0; }
+
+.designer-list {
+  margin-top: 1em;
+  border: 1px solid #D6D6D6;
+  height: 200px;
+  overflow: scroll; }
+
+.placeholder-img {
+  margin: 1em 0; }
+
+.text-capitalize {
+  text-transform: capitalize; }
+
+/*# sourceMappingURL=main.css.map */
