@@ -129,7 +129,7 @@ a:hover {
 
 .hr {
   margin: 0;
-  border: 1px solid #333333; }
+  border: 1px solid rgba(214, 214, 214, 0.4); }
 
 .breadcrumb {
   background: none;
@@ -166,5 +166,11 @@ a:hover {
   border: 1px solid #D6D6D6;
   height: 200px;
   overflow: scroll; }
+
+.placeholder-img {
+  margin: 1em 0; }
+
+.text-capitalize {
+  text-transform: capitalize; }
 
 /*# sourceMappingURL=main.css.map */

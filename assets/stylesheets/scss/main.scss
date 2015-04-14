@@ -186,7 +186,7 @@ $blue: #6989C2;
 
 .hr {
     margin: 0;
-    border: 1px solid $black;
+    border: 1px solid rgba(214, 214, 214, 0.4);
 }
 
 .breadcrumb {
@@ -239,6 +239,19 @@ $blue: #6989C2;
     height: 200px;
     overflow: scroll;
 }
+
+// Placeholder image
+
+.placeholder-img {
+    margin: 1em 0;
+}
+
+.text-capitalize {
+    text-transform: capitalize;
+}
+
+// Pagination
+
 
 
 
