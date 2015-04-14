@@ -157,7 +157,14 @@ a:hover {
 
 .size-box,
 .color-box,
-.price-slider {
+.price-slider,
+.designer-box {
   padding: 1em 0 0; }
+
+.designer-list {
+  margin-top: 1em;
+  border: 1px solid #D6D6D6;
+  height: 200px;
+  overflow: scroll; }
 
 /*# sourceMappingURL=main.css.map */

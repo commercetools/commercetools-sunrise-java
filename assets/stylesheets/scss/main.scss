@@ -226,8 +226,18 @@ $blue: #6989C2;
 
 .size-box,
 .color-box,
-.price-slider {
+.price-slider,
+.designer-box {
     padding: 1em 0 0;
+}
+
+// Designer box
+
+.designer-list {
+    margin-top: 1em;
+    border: 1px solid $light-grey;
+    height: 200px;
+    overflow: scroll;
 }
 
 
