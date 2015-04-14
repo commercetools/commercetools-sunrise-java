@@ -14,10 +14,6 @@ a:hover {
 	color: inherit;
 }
 
-.container {
-    margin: 0 2em;
-}
-
 /*****************************************************************************/
 /*
 /* TYPOGRAPHY
@@ -191,6 +187,10 @@ $blue: #6989C2;
 
 .breadcrumb {
     background: none;
+    padding: 0.5em 0.5em;
+}
+
+.back-to-btn {
     padding: 0.5em 0.5em;
 }
 
