@@ -27,6 +27,9 @@ a:hover {
 /* HEADER
 /*
 /*****************************************************************************/
+.header {
+  background: #2A343F; }
+
 #header {
   background: #2A343F;
   font-size: 12px;
@@ -56,6 +59,27 @@ a:hover {
 .header-left a:hover {
   color: #FFFFFF; }
 
+.language-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color: #D6D6D6;
+  border: none;
+  background: transparent;
+  width: 21px; }
+
+.language-select:hover {
+  color: #FFFFFF;
+  cursor: pointer; }
+
+.cart-item-number {
+  background: #FFBA27;
+  padding: 5px 10px;
+  width: 21px;
+  border-radius: 50%;
+  color: #2A343F;
+  font-size: 1.1em; }
+
 .header-right {
   color: #D6D6D6; }
 
@@ -67,11 +91,19 @@ a:hover {
 /* NAVIGATION
 /*
 /*****************************************************************************/
+.navbar {
+  background: #FFFFFF; }
+
 .logo_search {
   padding: 1em 0; }
 
 .search-box input {
   background: #F5F2EA; }
+
+.search-field {
+  width: 300px;
+  margin: 6px 0;
+  height: 30px; }
 
 #nav {
   list-style: none;
@@ -119,6 +151,9 @@ a:hover {
 /* POP PAGE
 /*
 /*****************************************************************************/
+.pop-page {
+  background: #F5F2EA; }
+
 #pop-page {
   background: #F5F2EA;
   font-size: .8em;
@@ -209,6 +244,9 @@ a:hover {
 /* FOOTER
 /*
 /*****************************************************************************/
+.footer {
+  background: #2A343F; }
+
 #footer {
   font-size: 0.7em;
   font-weight: 200;
@@ -218,8 +256,7 @@ a:hover {
   letter-spacing: 0.1em; }
 
 .sub-footer {
-  background: #333333;
-  padding: 1em 0; }
+  background: #333333; }
 
 #footer ul {
   list-style: none;
