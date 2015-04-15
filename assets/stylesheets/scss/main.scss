@@ -175,7 +175,6 @@ $blue: #6989C2;
 /*****************************************************************************/
 
 #pop-page {
-	height: 2000px;
 	background: $dirty-white;
     font-size: .8em;
     text-transform: uppercase;
@@ -259,15 +258,62 @@ $blue: #6989C2;
     padding: 1em 0;
 }
 
+.pagination, {
+    margin: 0 auto;
+}
+
+.page-numbers {
+    padding-left: 0;
+}
+
+.page-numbers li {
+    display: inline-block;
+}
+
 // Gallery items
 
 .gallery-item {
     padding: 0 0 2em;
 }
 
+/*****************************************************************************/
+/*
+/* FOOTER
+/*
+/*****************************************************************************/
 
+#footer {
+    font-size: 0.7em;
+    font-weight: 200;
+    padding-top: 2em;
+    color: white;
+    background: $dark-blue;
+    letter-spacing: 0.1em;
+}
 
+.sub-footer {
+    background: $black;
+    padding: 1em 0;
+}
 
+#footer ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#footer ul li {
+    padding: 1em 0;
+}
+
+.footer-title {
+    color: $dark-grey;
+    font-size: 1em;
+    margin: 0 0;
+}
+
+.footer-title-yellow {
+    color: $yellow;
+}
 
 
 

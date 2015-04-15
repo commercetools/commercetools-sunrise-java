@@ -120,7 +120,6 @@ a:hover {
 /*
 /*****************************************************************************/
 #pop-page {
-  height: 2000px;
   background: #F5F2EA;
   font-size: .8em;
   text-transform: uppercase; }
@@ -177,7 +176,48 @@ a:hover {
 .item-list-pagination {
   padding: 1em 0; }
 
+.pagination {
+  margin: 0 auto; }
+
+.page-numbers {
+  padding-left: 0; }
+
+.page-numbers li {
+  display: inline-block; }
+
 .gallery-item {
   padding: 0 0 2em; }
+
+/*****************************************************************************/
+/*
+/* FOOTER
+/*
+/*****************************************************************************/
+#footer {
+  font-size: 0.7em;
+  font-weight: 200;
+  padding-top: 2em;
+  color: white;
+  background: #2A343F;
+  letter-spacing: 0.1em; }
+
+.sub-footer {
+  background: #333333;
+  padding: 1em 0; }
+
+#footer ul {
+  list-style: none;
+  padding-left: 0; }
+
+#footer ul li {
+  padding: 1em 0; }
+
+.footer-title {
+  color: #858585;
+  font-size: 1em;
+  margin: 0 0; }
+
+.footer-title-yellow {
+  color: #FFBA27; }
 
 /*# sourceMappingURL=main.css.map */
