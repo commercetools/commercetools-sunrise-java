@@ -96,6 +96,9 @@ body {
 /* NAVIGATION
 /*
 /*****************************************************************************/
+.logo-img {
+  margin-left: 10px; }
+
 .logo-search {
   padding: 1em 0; }
 
@@ -103,6 +106,7 @@ body {
   background: url(../../../assets/img/magnifying-glass34.png) no-repeat 270px 4px #F5F2EA;
   background-size: 20px;
   border: 1px solid rgba(170, 174, 178, 0.5);
+  border-radius: 3px;
   padding: 0 1em; }
 
 .search-field {
@@ -206,6 +210,21 @@ body {
 .price-slider {
   margin: 2em 0; }
 
+.per-page {
+  background: transparent; }
+
+.low-btn {
+  background: #AAAEB2;
+  border: none;
+  border-radius: 3px;
+  color: #FFFFFF; }
+
+.high-btn {
+  background: #FFFFFF;
+  border: 1px solid #AAAEB2;
+  border-radius: 3px;
+  color: #AAAEB2; }
+
 .designer-list {
   margin-top: 1em;
   border: 1px solid #D6D6D6;
@@ -219,7 +238,8 @@ body {
   text-transform: capitalize; }
 
 .item-list-pagination {
-  padding: 1em 0; }
+  padding: 1em 0;
+  font-size: 0.8em; }
 
 .pagination {
   margin: 0 auto; }
@@ -250,7 +270,9 @@ body {
   letter-spacing: 0.1em; }
 
 .sub-footer {
-  background: #333333; }
+  background: #333333;
+  padding-top: 1em;
+  font-size: 0.8em; }
 
 #footer ul {
   list-style: none;
@@ -265,14 +287,23 @@ body {
   margin: 0 0; }
 
 .newsletter-box {
-  padding: 5em 0; }
+  padding: 3em 0; }
+
+.email-box {
+  width: 200px;
+  color: white;
+  background: #333333;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  padding: 0.5em 0.5em; }
 
 .card-info {
   padding-top: 5em; }
 
 .footer-title-yellow {
   color: #FFBA27;
-  text-align: left; }
+  text-align: center;
+  padding-top: 0.5em; }
 
 .social-icons li {
   display: inline-block; }
@@ -295,7 +326,10 @@ body {
   .logo-img {
     display: block;
     margin-left: auto;
-    margin-right: auto; } }
+    margin-right: auto; }
+
+  #footer {
+    text-align: center; } }
 @media screen and (max-width: 629px) {
   .cart-item-number,
   .your-bag,

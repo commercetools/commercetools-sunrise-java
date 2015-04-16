@@ -390,8 +390,8 @@
           <div class="row item-list-pagination">
             <div class="col-sm-4 text-left">
               <span class="text-capitalize">Sort by</span>
-              <button>Low</button>
-              <button>High</button>
+              <button class="low-btn">Low</button>
+              <button class="high-btn">High</button>
               <span class="text-capitalize">123 of 123</span>
             </div>
             <div class="col-sm-4 text-center pagination">
@@ -407,7 +407,7 @@
             </div>
             <div class="col-sm-4 text-right">
               <span class="text-capitalize">items per page</span>
-              <select>
+              <select class="per-page">
                 <option value="12">12</option>
                 <option value="24">24</option>
                 <option value="48">48</option>
@@ -499,16 +499,19 @@
         </div>
         <div class="col-sm-6 text-center newsletter-box">
           <div class="row">
-            <div class="col-sm-6 footer-title-yellow">
+            <div class="col-sm-5 footer-title-yellow">
               <p>Join our newsletter</p>
             </div>
-            <div class="col-sm-6">
-              <input type="text" placeholder="Your email ...">
+            <div class="col-sm-7">
+              <input class="email-box" type="text" placeholder="Your email ...">
             </div>
           </div>
           <div class="row">
             <div class="col-sm-12 text-left card-info footer-title">
               <p>Pay securely with these payment methods</p>
+            </div>
+            <div class="col-sm-12 text-left">
+              cards cards cards cards cards cards
             </div>
           </div>
         </div>
@@ -518,7 +521,7 @@
 
   <div class="sub-footer">
     <div class="container">
-      <div class="row">
+      <div class="row text-uppercase">
         <div class="col-sm-6 text-left">
           <p class="footer-title">&copy; 2015 Sunrise</p>
         </div>
