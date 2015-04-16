@@ -1,18 +1,3 @@
-/*****************************************************************************/
-/*
-/* GENERAL STYLING
-/*
-/*****************************************************************************/
-
-// Links
-a, 
-a:link, 
-a:visited, 
-a:active, 
-a:hover { 
-	text-decoration: none; 
-	color: inherit;
-}
 
 /*****************************************************************************/
 /*
@@ -43,6 +28,25 @@ $dirty-white: #F5F2EA;
 $green: #7D945E;
 $blue: #6989C2;
 
+/*****************************************************************************/
+/*
+/* GENERAL STYLING
+/*
+/*****************************************************************************/
+
+// Links
+a, 
+a:link, 
+a:visited, 
+a:active, 
+a:hover { 
+	text-decoration: none; 
+	color: inherit;
+}
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+}
 
 /*****************************************************************************/
 /*
@@ -58,9 +62,8 @@ $blue: #6989C2;
 
 #header {
 	background: $dark-blue;
-	font-size: 12px;
+	font-size: 0.8em;
 	text-align: center;
-	font-family: 'Source Sans Pro', sans-serif;
 }
 
 .header-left li,
@@ -110,9 +113,13 @@ $blue: #6989C2;
     cursor: pointer;
 }
 
+.header-right .cart-items {
+    margin: 10px 0;
+}
+
 .cart-item-number {
     background: $yellow;
-    padding: 5px 10px;
+    padding: 2px 7px;
     width: 21px;
     border-radius: 50%;
     color: $dark-blue;
@@ -133,18 +140,17 @@ $blue: #6989C2;
 /*
 /*****************************************************************************/
 
-.navbar {
-    background: $white;
-}
-
 // Sunrise logo  and searchbox
 
-.logo_search {
+.logo-search {
 	padding: 1em 0;
 }
 
 .search-box input {
-	background: $dirty-white
+    background: url(../../../assets/img/magnifying-glass34.png) no-repeat 270px 4px $dirty-white;
+    background-size: 20px;
+    border: 1px solid rgba(170, 174, 178, 0.5);
+    padding: 0 1em;
 }
 
 .search-field {
@@ -155,55 +161,68 @@ $blue: #6989C2;
 
 // Main navigation
 
-#nav {
-    list-style: none;
-    margin-bottom: 10px;
-    width: 100%;
-    position: relative;
-    z-index: 5;
-} 
-
-#nav li { 
-    float: left;
-    margin-right: 10px;
-    position: relative;
+.navbar {
+    background: transparent;
+    margin: 0 0;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
 }
 
-#nav a {
-    display: block;
-    padding: 5px;
-    color: $black;
-    text-decoration: none;
+.navbar-default {
+    border: none;
 }
 
-#nav a:hover {
-    color: $yellow;
+.main-nav {
+    padding: 0 0;
 }
 
-// Dropdown
-
-#nav ul {
-    list-style: none;
-    position: absolute;
-    left: -9999px;
-    padding-left: 0px; 
+#navigation {
+    padding: 0 0.2em;
 }
 
-#nav ul li {
-    padding-top: 1px; 
-    float: none;
-    text-align: left;
+.navbar-default .navbar-nav>li>a:first-child {
+    padding-left: 4px;
+}
+ 
+.navbar-default .navbar-nav .open a, 
+.navbar-default .navbar-nav .open a:focus, 
+.navbar-default .navbar-nav .open a:hover {
+    background: transparent;
 }
 
-#nav ul a {
-    white-space: nowrap; 
-} 
+.dropdown-menu {
+    border: none;
+    box-shadow: none;
+}
 
-#nav li:hover ul { 
-    left: 0;
-    background: $white;
+.navbar-collapse.in, {
+    text-align: center;
+}
+
+.navbar-collapse,
+.navbar-collapsing {
+    text-align: center;
+}
+
+.navbar-default .navbar-toggle {
+    border: none;
+}
+
+.navbar-default .navbar-toggle:focus,
+.navbar-default .navbar-toggle:hover {
+    background: none;
+}
+
+// // Dispaly dropdown on hover
+// ul.nav li.dropdown:hover > ul.dropdown-menu {
+//     display: block;    
+// }
+
+.glyphicon-tags:before {
+    padding-right: 0.5em;
+}
+
+.glyphicon-tags {
+    color: $red;
 }
 
 /*****************************************************************************/
@@ -218,7 +237,7 @@ $blue: #6989C2;
 
 #pop-page {
 	background: $dirty-white;
-    font-size: .8em;
+    font-size: .9em;
     text-transform: uppercase;
 }
 
@@ -318,23 +337,23 @@ $blue: #6989C2;
     padding: 0 0 2em;
 }
 
-// Overlay on hover
+// // Overlay on hover
 
-.shop-item {
-    position: relative;
-}
+// .shop-item {
+//     position: relative;
+// }
 
-.shop-item:after {
-    content:'Quick View';
-    position:absolute;
-    width:100%; height:100%;
-    top:0; left:0;
-    background:rgba(0,0,0,0.1);
-    opacity:0;
-}
-.shop-item:hover:after {
-    opacity:1;
-}
+// .shop-item:after {
+//     content:'Quick View';
+//     position:absolute;
+//     width:100%; height:100%;
+//     top:0; left:0;
+//     background:rgba(0,0,0,0.1);
+//     opacity:0;
+// }
+// .shop-item:hover:after {
+//     opacity:1;
+// }
 
 /*****************************************************************************/
 /*
@@ -405,9 +424,26 @@ $blue: #6989C2;
     .filter-options {
         display: none;
     }
+    .search-box {
+        text-align: center;
+    }
+    .logo-img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
-
+@media screen and (max-width: 629px) {
+    .cart-item-number,
+    .your-bag,
+    .call-us {
+        display: none;
+    }
+    .header-right {
+        height: 20px;
+    }
+}
 
 
 

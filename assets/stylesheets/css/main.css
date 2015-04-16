@@ -1,9 +1,19 @@
 /*****************************************************************************/
 /*
-/* GENERAL STYLING
+/* TYPOGRAPHY
 /*
 /*****************************************************************************/
 @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);
+/*****************************************************************************/
+/*
+/* COLORS
+/*
+/*****************************************************************************/
+/*****************************************************************************/
+/*
+/* GENERAL STYLING
+/*
+/*****************************************************************************/
 a,
 a:link,
 a:visited,
@@ -12,16 +22,9 @@ a:hover {
   text-decoration: none;
   color: inherit; }
 
-/*****************************************************************************/
-/*
-/* TYPOGRAPHY
-/*
-/*****************************************************************************/
-/*****************************************************************************/
-/*
-/* COLORS
-/*
-/*****************************************************************************/
+body {
+  font-family: 'Source Sans Pro', sans-serif; }
+
 /*****************************************************************************/
 /*
 /* HEADER
@@ -32,9 +35,8 @@ a:hover {
 
 #header {
   background: #2A343F;
-  font-size: 12px;
-  text-align: center;
-  font-family: 'Source Sans Pro', sans-serif; }
+  font-size: 0.8em;
+  text-align: center; }
 
 .header-left li,
 .header-right li {
@@ -72,9 +74,12 @@ a:hover {
   color: #FFFFFF;
   cursor: pointer; }
 
+.header-right .cart-items {
+  margin: 10px 0; }
+
 .cart-item-number {
   background: #FFBA27;
-  padding: 5px 10px;
+  padding: 2px 7px;
   width: 21px;
   border-radius: 50%;
   color: #2A343F;
@@ -91,60 +96,65 @@ a:hover {
 /* NAVIGATION
 /*
 /*****************************************************************************/
-.navbar {
-  background: #FFFFFF; }
-
-.logo_search {
+.logo-search {
   padding: 1em 0; }
 
 .search-box input {
-  background: #F5F2EA; }
+  background: url(../../../assets/img/magnifying-glass34.png) no-repeat 270px 4px #F5F2EA;
+  background-size: 20px;
+  border: 1px solid rgba(170, 174, 178, 0.5);
+  padding: 0 1em; }
 
 .search-field {
   width: 300px;
   margin: 6px 0;
   height: 30px; }
 
-#nav {
-  list-style: none;
-  margin-bottom: 10px;
-  width: 100%;
-  position: relative;
-  z-index: 5; }
+.navbar {
+  background: transparent;
+  margin: 0 0;
+  text-transform: uppercase; }
 
-#nav li {
-  float: left;
-  margin-right: 10px;
-  position: relative;
-  text-transform: uppercase;
-  letter-spacing: 0.1em; }
+.navbar-default {
+  border: none; }
 
-#nav a {
-  display: block;
-  padding: 5px;
-  color: #333333;
-  text-decoration: none; }
+.main-nav {
+  padding: 0 0; }
 
-#nav a:hover {
-  color: #FFBA27; }
+#navigation {
+  padding: 0 0.2em; }
 
-#nav ul {
-  list-style: none;
-  position: absolute;
-  left: -9999px;
-  padding-left: 0px; }
+.navbar-default .navbar-nav > li > a:first-child {
+  padding-left: 4px; }
 
-#nav ul li {
-  padding-top: 1px;
-  float: none;
-  text-align: left; }
+.navbar-default .navbar-nav .open a,
+.navbar-default .navbar-nav .open a:focus,
+.navbar-default .navbar-nav .open a:hover {
+  background: transparent; }
 
-#nav ul a {
-  white-space: nowrap; }
+.dropdown-menu {
+  border: none;
+  box-shadow: none; }
 
-#nav li:hover ul {
-  left: 0;
-  background: #FFFFFF; }
+.navbar-collapse.in {
+  text-align: center; }
+
+.navbar-collapse,
+.navbar-collapsing {
+  text-align: center; }
+
+.navbar-default .navbar-toggle {
+  border: none; }
+
+.navbar-default .navbar-toggle:focus,
+.navbar-default .navbar-toggle:hover {
+  background: none; }
+
+.glyphicon-tags:before {
+  padding-right: 0.5em; }
+
+.glyphicon-tags {
+  color: #D54D4D; }
 
 /*****************************************************************************/
 /*
@@ -156,7 +166,7 @@ a:hover {
 
 #pop-page {
   background: #F5F2EA;
-  font-size: .8em;
+  font-size: .9em;
   text-transform: uppercase; }
 
 .hr {
@@ -223,22 +233,6 @@ a:hover {
 .gallery-item {
   padding: 0 0 2em; }
 
-.shop-item {
-  position: relative; }
-
-.shop-item:after {
-  content: 'Quick View';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.1);
-  opacity: 0; }
-
-.shop-item:hover:after {
-  opacity: 1; }
-
 /*****************************************************************************/
 /*
 /* FOOTER
@@ -293,6 +287,22 @@ a:hover {
 /*****************************************************************************/
 @media screen and (max-width: 768px) {
   .filter-options {
-    display: none; } }
+    display: none; }
+
+  .search-box {
+    text-align: center; }
+
+  .logo-img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto; } }
+@media screen and (max-width: 629px) {
+  .cart-item-number,
+  .your-bag,
+  .call-us {
+    display: none; }
+
+  .header-right {
+    height: 20px; } }
 
 /*# sourceMappingURL=main.css.map */
