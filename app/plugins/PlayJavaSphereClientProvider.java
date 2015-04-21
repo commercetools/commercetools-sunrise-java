@@ -1,9 +1,8 @@
 package plugins;
 
 import com.google.inject.Provider;
-import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.client.SphereClientFactory;
+import io.sphere.sdk.client.*;
+import io.sphere.sdk.play.metrics.MetricHttpClient;
 import play.Configuration;
 import play.Logger;
 import play.inject.ApplicationLifecycle;
@@ -27,15 +26,26 @@ class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
     @Override
     public PlayJavaSphereClient get() {
         Logger.info("execute PlayJavaSphereClientProvider.get()");
-        final String project = configuration.getString("sphere.project");
-        final String clientId = configuration.getString("sphere.clientId");
-        final String clientSecret = configuration.getString("sphere.clientSecret");
-        final SphereClient sphereClient = SphereClientFactory.of().createClient(project, clientId, clientSecret);
+        final SphereClientConfig config = getSphereClientConfig();
+        final SphereClient sphereClient = createSphereClient(config);
         final PlayJavaSphereClient playJavaSphereClient = PlayJavaSphereClient.of(sphereClient);
         applicationLifecycle.addStopHook(() -> F.Promise.promise(() -> {
             playJavaSphereClient.close();
             return null;
         }));
         return playJavaSphereClient;
+    }
+
+    private SphereClient createSphereClient(SphereClientConfig config) {
+        final MetricHttpClient httpClient = MetricHttpClient.of(NingHttpClientAdapter.of());
+        final SphereAccessTokenSupplier tokenSupplier = SphereAccessTokenSupplierFactory.of().createSupplierOfAutoRefresh(config);
+        return SphereClient.of(config, httpClient, tokenSupplier);
+    }
+
+    private SphereClientConfig getSphereClientConfig() {
+        final String project = configuration.getString("sphere.project");
+        final String clientId = configuration.getString("sphere.clientId");
+        final String clientSecret = configuration.getString("sphere.clientSecret");
+        return SphereClientConfig.of(project, clientId, clientSecret);
     }
 }
