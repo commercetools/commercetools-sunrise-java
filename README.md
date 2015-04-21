@@ -29,6 +29,21 @@ The output will be like
 
 ```
 [info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+(Server started, use Ctrl+D to stop and go back to the console...)
+```
+
+* open <a href="http://localhost:9000">http://localhost:9000</a> in your browser and set the SPHERE.IO project credentials
+
+## Integration tests against SPHERE.IO backend
+
+* Setup your environment variables (use a test project), so you need not to put your shop credentials under version control:
+
+```bash
+export SPHERE_SUNRISE_IT_TESTS_PROJECT="your-project-key"
+export SPHERE_SUNRISE_IT_TESTS_CLIENT_SECRET="your-the-client-secret"
+export SPHERE_SUNRISE_IT_TESTS_CLIENT_ID="your-client-id"
+```
+* `sbt it:test`
 
 ## Deployment
 
