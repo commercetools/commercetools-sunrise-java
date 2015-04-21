@@ -14,14 +14,13 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 
 resolvers += Resolver.sonatypeRepo("releases")
 
-libraryDependencies ++=
-  ("io.sphere.sdk.jvm" % "models" % "1.0.0-M12" withSources()) ::
-  "io.sphere.sdk.jvm" %% "play-2_3-java-client" % "1.0.0-M12" ::
-  "com.google.inject" % "guice" % "3.0" ::
-  Nil
+val jvmSdkVersion = "1.0.0-M13"
 
-initialCommands in console := "import tutorial.ClientFactory.createClient;" +
-  "import io.sphere.sdk.categories._;" +
-  """println("Use 'val client = createClient()' to create a client instance.")"""
+libraryDependencies ++=
+  ("io.sphere.sdk.jvm" % "sphere-models" % jvmSdkVersion withSources()) ::
+  "io.sphere.sdk.jvm" %% "sphere-play-2_4-java-client" % jvmSdkVersion ::
+  "com.google.inject" % "guice" % "3.0" ::
+    "org.easytesting" % "fest-assert" % "1.4" % "test" ::
+  Nil
 
 javaUnidocSettings
