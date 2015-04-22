@@ -21,9 +21,11 @@ libraryDependencies ++=
   "io.sphere.sdk.jvm" %% "sphere-play-2_4-java-client" % jvmSdkVersion ::
   "com.google.inject" % "guice" % "3.0" ::
   "org.easytesting" % "fest-assert" % "1.4" % "test" ::
-  "com.typesafe.netty" % "netty-http-pipelining" % "1.1.4" ::
   Nil
 
-dependencyOverrides += ("com.typesafe.play" %% "play-omnidoc" % "2.4.0-M3")
+dependencyOverrides ++=
+  "com.typesafe.play" %% "play-omnidoc" % "2.4.0-M3" ::
+  "com.typesafe.netty" % "netty-http-pipelining" % "1.1.4" ::
+  Nil
 
 javaUnidocSettings
