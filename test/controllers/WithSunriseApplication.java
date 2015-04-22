@@ -29,7 +29,7 @@ public abstract class WithSunriseApplication extends WithApplication {
         Application application = new GuiceApplicationBuilder()
                 .overrides(bind(PlayJavaSphereClient.class).toInstance(injectedClientInstance(app)))
                 .overrides(bind(CategoryTree.class).toInstance(injectedCategoryTree()))
-                .loadConfig(Configuration.load(new Environment(Mode.TEST)).withFallback(new Configuration(additionalSettings)))
+                .loadConfig(new Configuration(additionalSettings).withFallback(Configuration.load(new Environment(Mode.TEST))))
                 .build();
         return application;
     }
