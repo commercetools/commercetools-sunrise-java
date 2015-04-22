@@ -279,7 +279,7 @@ body {
   padding-left: 0; }
 
 #footer ul li {
-  padding: 1em 0; }
+  padding: 0.5em 0; }
 
 .footer-title {
   color: #858585;
@@ -291,19 +291,26 @@ body {
 
 .email-box {
   width: 200px;
-  color: white;
+  color: #white;
   background: #333333;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 3px;
   padding: 0.5em 0.5em; }
 
+.email-submit input {
+  background: url(../../../assets/img/arrow-28-32.png) no-repeat 183px 1px #333333;
+  background-size: 12px;
+  padding: 0 1em; }
+
 .card-info {
   padding-top: 5em; }
 
+.payment-cards {
+  width: 240px; }
+
 .footer-title-yellow {
   color: #FFBA27;
-  text-align: center;
-  padding-top: 0.5em; }
+  text-align: center; }
 
 .social-icons li {
   display: inline-block; }
@@ -329,7 +336,15 @@ body {
     margin-right: auto; }
 
   #footer {
-    text-align: center; } }
+    text-align: center; }
+
+  .card-info {
+    text-align: center; }
+
+  .payment-cards {
+    display: block;
+    margin-left: auto;
+    margin-right: auto; } }
 @media screen and (max-width: 629px) {
   .cart-item-number,
   .your-bag,

@@ -418,7 +418,7 @@ input[type="range"] {
 }
 
 #footer ul li {
-    padding: 1em 0;
+    padding: 0.5em 0;
 }
 
 .footer-title {
@@ -433,21 +433,29 @@ input[type="range"] {
 
 .email-box {
     width: 200px;
-    color: white;
+    color: #white;
     background: $black;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 3px;
     padding: 0.5em 0.5em;
 }
 
+.email-submit input {
+    background: url(../../../assets/img/arrow-28-32.png) no-repeat 183px 1px $black;
+    background-size: 12px;
+    padding: 0 1em;}
+
 .card-info {
     padding-top: 5em;
+}
+
+.payment-cards {
+    width: 240px;
 }
 
 .footer-title-yellow {
     color: $yellow;
     text-align: center;
-    padding-top: 0.5em;
 }
 
 .social-icons li {
@@ -478,6 +486,14 @@ input[type="range"] {
     }
     #footer {
         text-align: center;
+    }
+    .card-info {
+        text-align: center;
+    }
+    .payment-cards {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
