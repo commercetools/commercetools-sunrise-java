@@ -31,8 +31,8 @@ public class MetricHttpClient implements HttpClient {
 
     @SuppressWarnings("unchecked")
     private void report(final Http.Context context, final HttpRequest httpRequest, final HttpResponse response, long startTimestamp, long stopTimestamp) {
-        final List<ReportRawData> data = (List<ReportRawData>) context.args.get(MetricAction.KEY);
-        data.add(new ReportRawData(httpRequest, response, startTimestamp, stopTimestamp));
+        final Optional<List<ReportRawData>> dataOption = Optional.ofNullable((List<ReportRawData>) context.args.get(MetricAction.KEY));
+        dataOption.ifPresent(data -> data.add(new ReportRawData(httpRequest, response, startTimestamp, stopTimestamp)));
     }
 
     @Override
