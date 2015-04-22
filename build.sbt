@@ -18,7 +18,7 @@ val jvmSdkVersion = "1.0.0-M13"
 
 libraryDependencies ++=
   ("io.sphere.sdk.jvm" % "sphere-models" % jvmSdkVersion withSources()) ::
-  "io.sphere.sdk.jvm" %% "sphere-play-2_4-java-client" % jvmSdkVersion ::
+  "io.sphere.sdk.jvm" %% "sphere-play-2_4-java-client" % "1.0.0-M14-SNAPSHOT" ::
   "com.google.inject" % "guice" % "3.0" ::
   "org.easytesting" % "fest-assert" % "1.4" % "test" ::
   Nil
