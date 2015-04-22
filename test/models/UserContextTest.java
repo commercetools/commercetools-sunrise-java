@@ -1,5 +1,6 @@
 package models;
 
+import common.models.UserContext;
 import org.junit.Test;
 import play.i18n.Lang;
 

@@ -31,7 +31,7 @@ jacoco.excludes in jacoco.Config := jacocoExcludes
 
 jacoco.excludes in itJacoco.Config := jacocoExcludes
 
-lazy val thresholds = Thresholds(instruction = 60, method = 60, branch = 50, complexity = 35, line = 60, clazz = 60)
+lazy val thresholds = Thresholds(instruction = 50, method = 50, branch = 50, complexity = 35, line = 50, clazz = 50)
 
 jacoco.thresholds in jacoco.Config := thresholds
 

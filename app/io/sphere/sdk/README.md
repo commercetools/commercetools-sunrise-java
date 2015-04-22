@@ -1,1 +1,0 @@
-In this package are classes and templates which will be moved to the SDK.

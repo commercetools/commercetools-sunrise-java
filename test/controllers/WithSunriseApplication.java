@@ -1,9 +1,6 @@
 package controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.*;
@@ -11,36 +8,30 @@ import io.sphere.sdk.json.JsonUtils;
 import io.sphere.sdk.queries.PagedQueryResult;
 import play.Application;
 import play.Configuration;
+import play.Environment;
+import play.Mode;
+import play.inject.guice.GuiceApplicationBuilder;
 import play.libs.F;
-import plugins.Global;
-import play.test.FakeApplication;
 import play.test.WithApplication;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-import static play.test.Helpers.fakeApplication;
+import static play.inject.Bindings.bind;
 
 public abstract class WithSunriseApplication extends WithApplication {
     @Override
-    protected FakeApplication provideFakeApplication() {
+    protected Application provideApplication() {
         final Map<String, Object> additionalSettings = new HashMap<>();
         additionalSettings.put("application.settingsWidget.enabled", false);
-        return fakeApplication(additionalSettings, new Global() {
-            @Override
-            protected Injector createInjector(final Application app) {
-                return Guice.createInjector(new AbstractModule() {
-                    @Override
-                    protected void configure() {
-                        bind(PlayJavaSphereClient.class).toInstance(injectedClientInstance(app));
-                        bind(CategoryTree.class).toInstance(injectedCategoryTree());
-                        bind(Configuration.class).toInstance(app.configuration());
-                    }
-                });
-            }
-        });
+
+        Application application = new GuiceApplicationBuilder()
+                .overrides(bind(PlayJavaSphereClient.class).toInstance(injectedClientInstance(app)))
+                .overrides(bind(CategoryTree.class).toInstance(injectedCategoryTree()))
+                .loadConfig(new Configuration(additionalSettings).withFallback(Configuration.load(new Environment(Mode.TEST))))
+                .build();
+        return application;
     }
 
     private CategoryTree injectedCategoryTree() {
@@ -58,15 +49,7 @@ public abstract class WithSunriseApplication extends WithApplication {
 
     protected abstract Function<HttpRequestIntent, Object> getTestDoubleBehavior();
 
-    /**
-     * Override this to add additional settings
-     * @param app the application used
-     * @return a configuration containing the {@code app} configuration values and overridden values
-     */
-    protected Configuration getConfiguration(Application app) {
-        return app.configuration();
-    }
-
+    @SuppressWarnings("unchecked")
     public PlayJavaSphereClient createObjectTestDoubleFromRequestablePlay(final Function<HttpRequestIntent, Object> function) {
         return new PlayJavaSphereClient() {
             @Override

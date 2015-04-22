@@ -1,13 +1,10 @@
 package controllers;
 
 import io.sphere.sdk.client.HttpRequestIntent;
-import io.sphere.sdk.client.SphereRequest;
 import io.sphere.sdk.queries.PagedQueryResult;
-import io.sphere.sdk.queries.Query;
-import io.sphere.sdk.queries.QueryDsl;
 import org.junit.Test;
+import play.mvc.Http;
 import play.mvc.Result;
-import play.test.FakeRequest;
 
 import java.util.function.Function;
 
@@ -26,23 +23,14 @@ public class ApplicationControllerTest extends WithSunriseApplication {
         checkCategoryCorrectlyDisplayed("fr-FR");//using not existing locale
     }
 
-    private void checkCategoryCorrectlyDisplayed(String lang) {
-        Result result = callAction(
-                controllers.routes.ref.ApplicationController.index(),
-                new FakeRequest(GET, "/").withHeader("Accept-Language", lang)
-        );
-        assertThat(status(result)).isEqualTo(OK);
+    private void checkCategoryCorrectlyDisplayed(final String lang) {
+        final Result result = route(new Http.RequestBuilder().header("Accept-Language", lang).path(generalpages.controllers.routes.HomeController.index().url()));
+        assertThat(result.status()).isEqualTo(OK);
         assertThat(contentAsString(result)).contains("TestSnowboard equipment");
     }
 
     @Override
     protected Function<HttpRequestIntent, Object> getTestDoubleBehavior() {
-        return requestable -> {
-            return PagedQueryResult.empty();
-        };
-    }
-
-    private <I> boolean isCategoryEndpoint(final SphereRequest<I> query) {
-        return (query instanceof QueryDsl) && ((QueryDsl) query).endpoint().equals("/categories");
+        return intent -> PagedQueryResult.empty();
     }
 }

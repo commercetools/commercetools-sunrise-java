@@ -1,0 +1,10 @@
+@(data: common.models.CommonData)
+
+@common.views.html.main("SPHERE.IO Sunrise Home", data) {
+    <h2 id="products">Products</h2>
+    <ol>
+    @data.products.map { product =>
+        <li>@product.getMasterData.getCurrent.get.getName.get(data.locales()).orElse("")</li>
+    }
+    </ol>
+}

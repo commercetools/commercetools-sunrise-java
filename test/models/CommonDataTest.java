@@ -1,6 +1,8 @@
 package models;
 
 import com.neovisionaries.i18n.CountryCode;
+import common.models.CommonDataBuilder;
+import common.models.UserContext;
 import io.sphere.sdk.models.LocalizedStrings;
 import io.sphere.sdk.products.*;
 import io.sphere.sdk.producttypes.ProductType;
