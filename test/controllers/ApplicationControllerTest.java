@@ -24,7 +24,7 @@ public class ApplicationControllerTest extends WithSunriseApplication {
     }
 
     private void checkCategoryCorrectlyDisplayed(final String lang) {
-        final Result result = route(new Http.RequestBuilder().header("Accept-Language", lang).path(routes.ApplicationController.index().url()));
+        final Result result = route(new Http.RequestBuilder().header("Accept-Language", lang).path(generalpages.controllers.routes.HomeController.index().url()));
         assertThat(result.status()).isEqualTo(OK);
         assertThat(contentAsString(result)).contains("TestSnowboard equipment");
     }

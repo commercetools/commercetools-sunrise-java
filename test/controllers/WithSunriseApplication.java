@@ -49,6 +49,7 @@ public abstract class WithSunriseApplication extends WithApplication {
 
     protected abstract Function<HttpRequestIntent, Object> getTestDoubleBehavior();
 
+    @SuppressWarnings("unchecked")
     public PlayJavaSphereClient createObjectTestDoubleFromRequestablePlay(final Function<HttpRequestIntent, Object> function) {
         return new PlayJavaSphereClient() {
             @Override

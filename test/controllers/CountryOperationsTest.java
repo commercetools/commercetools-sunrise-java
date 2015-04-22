@@ -1,8 +1,9 @@
 package controllers;
 
 import com.typesafe.config.ConfigFactory;
-import exceptions.DefaultCountryNotFound;
-import exceptions.InvalidCountryCode;
+import common.countries.CountryOperations;
+import common.countries.DefaultCountryNotFound;
+import common.countries.InvalidCountryCode;
 import io.sphere.sdk.client.HttpRequestIntent;
 import org.junit.Test;
 import play.Configuration;
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static java.util.Collections.emptyMap;
-import static controllers.CountryOperations.*;
+import static common.countries.CountryOperations.*;
 import static com.neovisionaries.i18n.CountryCode.DE;
 import static com.neovisionaries.i18n.CountryCode.AT;
 import static org.fest.assertions.Assertions.assertThat;
