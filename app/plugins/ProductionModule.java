@@ -1,11 +1,13 @@
 package plugins;
 
+import com.neovisionaries.i18n.CountryCode;
+import controllers.CountryOperations;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 
 import javax.inject.Singleton;
 
-import play.api.*;
+import play.api.Environment;
 import play.api.inject.*;
 import scala.collection.Seq;
 
@@ -18,6 +20,7 @@ public class ProductionModule extends Module {
     @Override
     public Seq<Binding<?>> bindings(final Environment environment, final play.api.Configuration configuration) {
         return seq(
+                bind(CountryCode.class).qualifiedWith("default").toInstance(CountryOperations.of(new play.Configuration(configuration)).defaultCountry()),//check on start
                 bind(PlayJavaSphereClient.class).toProvider(PlayJavaSphereClientProvider.class).in(Singleton.class),
                 bind(CategoryTree.class).toProvider(CategoryTreeProvider.class)
         );

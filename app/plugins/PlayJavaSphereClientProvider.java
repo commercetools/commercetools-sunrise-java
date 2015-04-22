@@ -11,6 +11,8 @@ import play.libs.F;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static java.util.Objects.requireNonNull;
+
 @Singleton
 class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
 
@@ -43,9 +45,9 @@ class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
     }
 
     private SphereClientConfig getSphereClientConfig() {
-        final String project = configuration.getString("sphere.project");
-        final String clientId = configuration.getString("sphere.clientId");
-        final String clientSecret = configuration.getString("sphere.clientSecret");
+        final String project = requireNonNull(configuration.getString("sphere.project"));
+        final String clientId = requireNonNull(configuration.getString("sphere.clientId"));
+        final String clientSecret = requireNonNull(configuration.getString("sphere.clientSecret"));
         return SphereClientConfig.of(project, clientId, clientSecret);
     }
 }

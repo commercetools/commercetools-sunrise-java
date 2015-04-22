@@ -1,26 +1,44 @@
 package setupwidget.controllers;
 
-import play.Play;
+import play.Configuration;
+import play.libs.F;
 import setupwidget.models.SphereCredentials;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import setupwidget.plugins.SetupOnRequestHook;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Supplier;
 
+@Singleton
 public class SetupController extends Controller {
 
     private static final Form<SphereCredentials> sphereCredentialsForm = Form.form(SphereCredentials.class);
+    private final Configuration config;
+    public static final Path PATH = FileSystems.getDefault().getPath("conf", "dev.conf");
 
-    public static Result renderForm() {
+    private boolean setupComplete = configFileExists();
+
+    private boolean configFileExists() {
+        return Files.exists(PATH);
+    }
+
+    @Inject
+    public SetupController(final Configuration config) {
+        this.config = config;
+    }
+
+    public Result renderForm() {
         return onWidgetEnabled(SetupController::renderFormImpl);
     }
 
-    public static Result processForm() {
+    public Result processForm() {
         return onWidgetEnabled(SetupController::processFormImpl);
     }
 
@@ -53,11 +71,37 @@ public class SetupController extends Controller {
         }
     }
 
-    private static Result onWidgetEnabled(Supplier<Result> action) {
-        if (SetupOnRequestHook.isEnabled()) {
+    private Result onWidgetEnabled(final Supplier<Result> action) {
+        if (settingsWidgetIsEnabled()) {
             return action.get();
         } else {
             return notFound();
         }
+    }
+
+    private boolean settingsWidgetIsEnabled() {
+        return config.getBoolean("application.settingsWidget.enabled", true);
+    }
+
+    public F.Promise<Result> handleOrFallback(final Supplier<F.Promise<Result>> fallback) {
+        final boolean widgetActionsRequired = settingsWidgetIsEnabled() && (!isSetupComplete());
+
+        System.err.println("booleans");
+        System.err.println(settingsWidgetIsEnabled());
+        System.err.println(isSetupComplete());
+        System.err.println(widgetActionsRequired);
+
+        return widgetActionsRequired ? handle() : fallback.get();
+    }
+
+    private boolean isSetupComplete() {
+        if (!setupComplete) {
+            setupComplete = configFileExists();
+        }
+        return setupComplete;
+    }
+
+    private F.Promise<Result> handle() {
+        return F.Promise.pure(renderForm());
     }
 }
