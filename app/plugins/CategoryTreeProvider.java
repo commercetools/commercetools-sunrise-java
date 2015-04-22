@@ -24,7 +24,7 @@ class CategoryTreeProvider implements Provider<CategoryTree> {
     @Override
     public CategoryTree get() {
         Logger.info("execute CategoryTreeProvider.get()");
-        final PagedQueryResult<Category> pagedQueryResult = client.execute(CategoryQuery.of()).get(2000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
+        final PagedQueryResult<Category> pagedQueryResult = client.execute(CategoryQuery.of()).get(3000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
         return CategoryTree.of(pagedQueryResult.getResults());
     }
 }

@@ -16,10 +16,10 @@ import scala.collection.Seq;
 public class ProductionModule extends Module {
 
     @Override
-    public Seq<Binding<?>> bindings(Environment environment, play.api.Configuration configuration) {
+    public Seq<Binding<?>> bindings(final Environment environment, final play.api.Configuration configuration) {
         return seq(
                 bind(PlayJavaSphereClient.class).toProvider(PlayJavaSphereClientProvider.class).in(Singleton.class),
-                bind(CategoryTree.class).toProvider(CategoryTreeProvider.class).eagerly()//eagerly to fetch categories at start and not at first request
+                bind(CategoryTree.class).toProvider(CategoryTreeProvider.class)
         );
     }
 }
