@@ -4,7 +4,7 @@ scala:
 script:
 - ./sbt cover
 - if [ "$TRAVIS_BRANCH"  = "master" ]; then sbt "gitPublish target/scala-2.11/it-jacoco/html https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git coverage sphere-oss automation@commercetools.de"; fi
-- if [ "$TRAVIS_BRANCH"  = "master" ]; then sbt "gitPublish target/streams/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git javadoc sphere-oss automation@commercetools.de"; fi
+#- if [ "$TRAVIS_BRANCH"  = "master" ]; then sbt "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git javadoc sphere-oss automation@commercetools.de"; fi
 jdk:
 - oraclejdk8
 env:
