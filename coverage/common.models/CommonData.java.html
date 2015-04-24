@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.Locale;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.products.Product;
+import io.sphere.sdk.products.ProductProjection;
 
 /**
  * A container for stuff needed in almost every template.
@@ -15,10 +15,10 @@ public class CommonData {
     private final Locale fallbackLocale;
     private final List&lt;Locale&gt; locales;
     private final List&lt;Category&gt; rootCategories;
-    private final List&lt;Product&gt; products;
+    private final List&lt;ProductProjection&gt; products;
 
     CommonData(final UserContext userContext, final Locale fallbackLocale, final List&lt;Category&gt; rootCategories,
-<span class="fc" id="L21">               final List&lt;Product&gt; products) {</span>
+<span class="fc" id="L21">               final List&lt;ProductProjection&gt; products) {</span>
 <span class="fc" id="L22">        this.userContext = userContext;</span>
 <span class="fc" id="L23">        this.rootCategories = rootCategories;</span>
 <span class="fc" id="L24">        this.products = products;</span>
@@ -42,7 +42,7 @@ public class CommonData {
         return rootCategories;
     }
 
-    public List&lt;Product&gt; products() {
+    public List&lt;ProductProjection&gt; products() {
         return products;
     }
 }

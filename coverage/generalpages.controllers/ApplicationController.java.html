@@ -4,18 +4,18 @@ import common.controllers.SunriseController;
 import generalpages.views.html.index;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.products.Product;
-import io.sphere.sdk.products.queries.ProductQuery;
+import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
 import play.Configuration;
 import play.libs.F;
 import play.mvc.*;
 
-import views.html.*;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+
+import static io.sphere.sdk.products.ProductProjectionType.CURRENT;
 
 /**
  * Controller for main web pages like index, imprint and contact.
@@ -29,11 +29,11 @@ public final class ApplicationController extends SunriseController {
 <span class="fc" id="L29">    }</span>
 
     public F.Promise&lt;Result&gt; index() {
-<span class="fc" id="L32">        return client().execute(ProductQuery.of()).map(this::showProducts);</span>
+<span class="fc" id="L32">        return client().execute(ProductProjectionQuery.of(CURRENT)).map(this::showProducts);</span>
     }
 
-    private Result showProducts(PagedQueryResult&lt;Product&gt; productPagedQueryResult) {
-<span class="fc" id="L36">        final List&lt;Product&gt; products = productPagedQueryResult.getResults();</span>
+    private Result showProducts(PagedQueryResult&lt;ProductProjection&gt; productPagedQueryResult) {
+<span class="fc" id="L36">        final List&lt;ProductProjection&gt; products = productPagedQueryResult.getResults();</span>
 <span class="fc" id="L37">        return ok(index.render(data().products(products).build()));</span>
     }
 }

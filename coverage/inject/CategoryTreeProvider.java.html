@@ -6,6 +6,7 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.queries.PagedQueryResult;
+import io.sphere.sdk.queries.QueryDsl;
 import play.Logger;
 
 import javax.inject.Inject;
@@ -17,15 +18,16 @@ class CategoryTreeProvider implements Provider&lt;CategoryTree&gt; {
     private final PlayJavaSphereClient client;
 
     @Inject
-<span class="nc" id="L20">    private CategoryTreeProvider(final PlayJavaSphereClient client) {</span>
-<span class="nc" id="L21">        this.client = client;</span>
-<span class="nc" id="L22">    }</span>
+<span class="nc" id="L21">    private CategoryTreeProvider(final PlayJavaSphereClient client) {</span>
+<span class="nc" id="L22">        this.client = client;</span>
+<span class="nc" id="L23">    }</span>
 
     @Override
     public CategoryTree get() {
-<span class="nc" id="L26">        Logger.info(&quot;execute CategoryTreeProvider.get()&quot;);</span>
-<span class="nc" id="L27">        final PagedQueryResult&lt;Category&gt; pagedQueryResult = client.execute(CategoryQuery.of()).get(3000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin</span>
-<span class="nc" id="L28">        return CategoryTree.of(pagedQueryResult.getResults());</span>
+<span class="nc" id="L27">        Logger.info(&quot;execute CategoryTreeProvider.get()&quot;);</span>
+<span class="nc" id="L28">        final QueryDsl&lt;Category&gt; categoryRequest = CategoryQuery.of().withLimit(200);</span>
+<span class="nc" id="L29">        final PagedQueryResult&lt;Category&gt; pagedQueryResult = client.execute(categoryRequest).get(3000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin</span>
+<span class="nc" id="L30">        return CategoryTree.of(pagedQueryResult.getResults());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>
