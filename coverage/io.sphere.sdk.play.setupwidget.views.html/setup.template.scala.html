@@ -20,15 +20,15 @@ import play.api.data.Field
 import play.mvc.Http.Context.Implicit._
 
 /**/
-<span class="nc" id="L23">object setup extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template1[Form[io.sphere.sdk.play.setupwidget.models.SphereCredentials],play.twirl.api.HtmlFormat.Appendable] {</span>
+<span class="fc" id="L23">object setup extends BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with play.twirl.api.Template1[Form[io.sphere.sdk.play.setupwidget.models.SphereCredentials],play.twirl.api.HtmlFormat.Appendable] {</span>
 
   /**/
   def apply/*1.2*/(sphereCredentialsForm: Form[io.sphere.sdk.play.setupwidget.models.SphereCredentials]):play.twirl.api.HtmlFormat.Appendable = {
-<span class="nc" id="L27">      _display_ {</span>
+<span class="fc" id="L27">      _display_ {</span>
 
-<span class="nc" id="L29">Seq[Any](format.raw/*1.88*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L29">Seq[Any](format.raw/*1.88*/(&quot;&quot;&quot;</span>
 
-<span class="nc" id="L31">&quot;&quot;&quot;),format.raw/*3.1*/(&quot;&quot;&quot;&lt;html&gt;</span>
+<span class="fc" id="L31">&quot;&quot;&quot;),format.raw/*3.1*/(&quot;&quot;&quot;&lt;html&gt;</span>
     &lt;head&gt;
         &lt;title&gt;SPHERE.IO credentials setup&lt;/title&gt;
     &lt;/head&gt;
@@ -40,22 +40,22 @@ import play.mvc.Http.Context.Implicit._
 
         &lt;img src=&quot;http://sphereio.github.io/sphere-jvm-sdk/javadoc/master/documentation-resources/images/merchant-center/project-credentials.png&quot; alt=&quot;Merchant Center with project credentials view&quot;&gt;
 
-<span class="nc" id="L43">        &quot;&quot;&quot;),_display_(/*15.10*/helper/*15.16*/.form(action = io.sphere.sdk.play.setupwidget.controllers.routes.SetupController.processForm)/*15.109*/ {_display_(Seq[Any](format.raw/*15.111*/(&quot;&quot;&quot;</span>
-<span class="nc" id="L44">            &quot;&quot;&quot;),_display_(/*16.14*/helper/*16.20*/.inputText(sphereCredentialsForm(&quot;projectKey&quot;), '_label -&gt; &quot;Project key&quot;)),format.raw/*16.93*/(&quot;&quot;&quot;</span>
-<span class="nc" id="L45">            &quot;&quot;&quot;),_display_(/*17.14*/helper/*17.20*/.inputText(sphereCredentialsForm(&quot;clientId&quot;), '_label -&gt; &quot;client ID&quot;)),format.raw/*17.89*/(&quot;&quot;&quot;</span>
-<span class="nc" id="L46">            &quot;&quot;&quot;),_display_(/*18.14*/helper/*18.20*/.inputPassword(sphereCredentialsForm(&quot;clientSecret&quot;), '_label -&gt; &quot;client secret&quot;)),format.raw/*18.101*/(&quot;&quot;&quot;</span>
-<span class="nc" id="L47">            &quot;&quot;&quot;),format.raw/*19.13*/(&quot;&quot;&quot;&lt;input id=&quot;submit&quot; type=&quot;submit&quot; value=&quot;submit&quot;&gt;</span>
-<span class="nc" id="L48">        &quot;&quot;&quot;)))}),format.raw/*20.10*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L43">        &quot;&quot;&quot;),_display_(/*15.10*/helper/*15.16*/.form(action = io.sphere.sdk.play.setupwidget.controllers.routes.SetupController.processForm)/*15.109*/ {_display_(Seq[Any](format.raw/*15.111*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L44">            &quot;&quot;&quot;),_display_(/*16.14*/helper/*16.20*/.inputText(sphereCredentialsForm(&quot;projectKey&quot;), '_label -&gt; &quot;Project key&quot;)),format.raw/*16.93*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L45">            &quot;&quot;&quot;),_display_(/*17.14*/helper/*17.20*/.inputText(sphereCredentialsForm(&quot;clientId&quot;), '_label -&gt; &quot;client ID&quot;)),format.raw/*17.89*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L46">            &quot;&quot;&quot;),_display_(/*18.14*/helper/*18.20*/.inputPassword(sphereCredentialsForm(&quot;clientSecret&quot;), '_label -&gt; &quot;client secret&quot;)),format.raw/*18.101*/(&quot;&quot;&quot;</span>
+<span class="fc" id="L47">            &quot;&quot;&quot;),format.raw/*19.13*/(&quot;&quot;&quot;&lt;input id=&quot;submit&quot; type=&quot;submit&quot; value=&quot;submit&quot;&gt;</span>
+<span class="fc" id="L48">        &quot;&quot;&quot;)))}),format.raw/*20.10*/(&quot;&quot;&quot;</span>
 
 
-<span class="nc" id="L51">    &quot;&quot;&quot;),format.raw/*23.5*/(&quot;&quot;&quot;&lt;/body&gt;</span>
+<span class="fc" id="L51">    &quot;&quot;&quot;),format.raw/*23.5*/(&quot;&quot;&quot;&lt;/body&gt;</span>
 
 &lt;/html&gt;
 
 &quot;&quot;&quot;))}
   }
 
-<span class="nc" id="L58">  def render(sphereCredentialsForm:Form[io.sphere.sdk.play.setupwidget.models.SphereCredentials]): play.twirl.api.HtmlFormat.Appendable = apply(sphereCredentialsForm)</span>
+<span class="fc" id="L58">  def render(sphereCredentialsForm:Form[io.sphere.sdk.play.setupwidget.models.SphereCredentials]): play.twirl.api.HtmlFormat.Appendable = apply(sphereCredentialsForm)</span>
 
 <span class="nc" id="L60">  def f:((Form[io.sphere.sdk.play.setupwidget.models.SphereCredentials]) =&gt; play.twirl.api.HtmlFormat.Appendable) = (sphereCredentialsForm) =&gt; apply(sphereCredentialsForm)</span>
 
@@ -64,8 +64,8 @@ import play.mvc.Http.Context.Implicit._
 }
               /*
                   -- GENERATED --
-                  DATE: Fri Apr 24 20:16:25 CEST 2015
-                  SOURCE: /Users/lauraluiz/dev/src/sphere-sunrise/app/io/sphere/sdk/play/setupwidget/views/setup.scala.html
+                  DATE: Fri Apr 24 19:49:59 UTC 2015
+                  SOURCE: /home/travis/build/sphereio/sphere-sunrise/app/io/sphere/sdk/play/setupwidget/views/setup.scala.html
                   HASH: 0b39a1f6a2bf217f0b588675dac072c1801b2cf9
                   MATRIX: 809-&gt;1|983-&gt;87|1011-&gt;89|1534-&gt;585|1549-&gt;591|1652-&gt;684|1693-&gt;686|1734-&gt;700|1749-&gt;706|1843-&gt;779|1884-&gt;793|1899-&gt;799|1989-&gt;868|2030-&gt;882|2045-&gt;888|2148-&gt;969|2189-&gt;982|2278-&gt;1040|2312-&gt;1047
                   LINES: 26-&gt;1|29-&gt;1|31-&gt;3|43-&gt;15|43-&gt;15|43-&gt;15|43-&gt;15|44-&gt;16|44-&gt;16|44-&gt;16|45-&gt;17|45-&gt;17|45-&gt;17|46-&gt;18|46-&gt;18|46-&gt;18|47-&gt;19|48-&gt;20|51-&gt;23

@@ -35,45 +35,45 @@ public class SetupController extends Controller {
 <span class="fc" id="L35">    }</span>
 
     public Result renderForm() {
-<span class="nc" id="L38">        return onWidgetEnabled(SetupController::renderFormImpl);</span>
+<span class="fc" id="L38">        return onWidgetEnabled(SetupController::renderFormImpl);</span>
     }
 
     public Result processForm() {
-<span class="nc" id="L42">        return onWidgetEnabled(SetupController::processFormImpl);</span>
+<span class="fc" id="L42">        return onWidgetEnabled(SetupController::processFormImpl);</span>
     }
 
     private static Result renderFormImpl() {
-<span class="nc" id="L46">        return ok(io.sphere.sdk.play.setupwidget.views.html.setup.render(sphereCredentialsForm));</span>
+<span class="fc" id="L46">        return ok(io.sphere.sdk.play.setupwidget.views.html.setup.render(sphereCredentialsForm));</span>
     }
 
     private static Result processFormImpl() {
-<span class="nc" id="L50">        final Form&lt;SphereCredentials&gt; filledForm = sphereCredentialsForm.bindFromRequest();</span>
+<span class="fc" id="L50">        final Form&lt;SphereCredentials&gt; filledForm = sphereCredentialsForm.bindFromRequest();</span>
         final Result result;
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (filledForm.hasErrors()) {</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (filledForm.hasErrors()) {</span>
 <span class="nc" id="L53">            result = badRequest(io.sphere.sdk.play.setupwidget.views.html.setup.render(filledForm));</span>
         } else {
-<span class="nc" id="L55">            final SphereCredentials credentials = filledForm.get();</span>
-<span class="nc" id="L56">            final String content = String.format(&quot;sphere.project=%s\n&quot; +</span>
+<span class="fc" id="L55">            final SphereCredentials credentials = filledForm.get();</span>
+<span class="fc" id="L56">            final String content = String.format(&quot;sphere.project=%s\n&quot; +</span>
                             &quot;sphere.clientId=%s\n&quot; +
                             &quot;sphere.clientSecret=%s\n&quot;,
-<span class="nc" id="L59">                    credentials.getProjectKey(), credentials.getClientId(), credentials.getClientSecret());</span>
-<span class="nc" id="L60">            writeSettingsFile(content);</span>
-<span class="nc" id="L61">            result = ok(io.sphere.sdk.play.setupwidget.views.html.success.render());</span>
+<span class="fc" id="L59">                    credentials.getProjectKey(), credentials.getClientId(), credentials.getClientSecret());</span>
+<span class="fc" id="L60">            writeSettingsFile(content);</span>
+<span class="fc" id="L61">            result = ok(io.sphere.sdk.play.setupwidget.views.html.success.render());</span>
         }
-<span class="nc" id="L63">        return result;</span>
+<span class="fc" id="L63">        return result;</span>
     }
 
     private static void writeSettingsFile(String content) {
         try {
-<span class="nc" id="L68">            Files.write(Paths.get(&quot;conf/dev.conf&quot;), content.getBytes());</span>
+<span class="fc" id="L68">            Files.write(Paths.get(&quot;conf/dev.conf&quot;), content.getBytes());</span>
 <span class="nc" id="L69">        } catch (IOException e) {</span>
 <span class="nc" id="L70">            throw new RuntimeException(e);</span>
-<span class="nc" id="L71">        }</span>
-<span class="nc" id="L72">    }</span>
+<span class="fc" id="L71">        }</span>
+<span class="fc" id="L72">    }</span>
 
     private Result onWidgetEnabled(final Supplier&lt;Result&gt; action) {
-<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (settingsWidgetIsEnabled()) {</span>
-<span class="nc" id="L76">            return action.get();</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (settingsWidgetIsEnabled()) {</span>
+<span class="fc" id="L76">            return action.get();</span>
         } else {
 <span class="nc" id="L78">            return notFound();</span>
         }
@@ -84,19 +84,19 @@ public class SetupController extends Controller {
     }
 
     public F.Promise&lt;Result&gt; handleOrFallback(final Supplier&lt;F.Promise&lt;Result&gt;&gt; fallback) {
-<span class="pc bpc" id="L87" title="3 of 4 branches missed.">        final boolean widgetActionsRequired = settingsWidgetIsEnabled() &amp;&amp; (!isSetupComplete());</span>
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        return widgetActionsRequired ? handle() : fallback.get();</span>
+<span class="pc bpc" id="L87" title="1 of 4 branches missed.">        final boolean widgetActionsRequired = settingsWidgetIsEnabled() &amp;&amp; (!isSetupComplete());</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        return widgetActionsRequired ? handle() : fallback.get();</span>
     }
 
     private boolean isSetupComplete() {
-<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (!setupComplete) {</span>
-<span class="nc" id="L93">            setupComplete = configFileExists();</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        if (!setupComplete) {</span>
+<span class="fc" id="L93">            setupComplete = configFileExists();</span>
         }
-<span class="nc" id="L95">        return setupComplete;</span>
+<span class="fc" id="L95">        return setupComplete;</span>
     }
 
     private F.Promise&lt;Result&gt; handle() {
-<span class="nc" id="L99">        return F.Promise.pure(renderForm());</span>
+<span class="fc" id="L99">        return F.Promise.pure(renderForm());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>
