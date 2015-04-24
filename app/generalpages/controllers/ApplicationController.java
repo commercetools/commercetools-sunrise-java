@@ -4,8 +4,8 @@ import common.controllers.SunriseController;
 import generalpages.views.html.index;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.products.Product;
-import io.sphere.sdk.products.queries.ProductQuery;
+import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
 import play.Configuration;
 import play.libs.F;
@@ -16,6 +16,8 @@ import views.html.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+
+import static io.sphere.sdk.products.ProductProjectionType.CURRENT;
 
 /**
  * Controller for main web pages like index, imprint and contact.
@@ -29,11 +31,11 @@ public final class ApplicationController extends SunriseController {
     }
 
     public F.Promise<Result> index() {
-        return client().execute(ProductQuery.of()).map(this::showProducts);
+        return client().execute(ProductProjectionQuery.of(CURRENT)).map(this::showProducts);
     }
 
-    private Result showProducts(PagedQueryResult<Product> productPagedQueryResult) {
-        final List<Product> products = productPagedQueryResult.getResults();
+    private Result showProducts(PagedQueryResult<ProductProjection> productPagedQueryResult) {
+        final List<ProductProjection> products = productPagedQueryResult.getResults();
         return ok(index.render(data().products(products).build()));
     }
 }

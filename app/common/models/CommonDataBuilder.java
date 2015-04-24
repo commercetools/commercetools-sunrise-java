@@ -1,7 +1,7 @@
 package common.models;
 
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.products.Product;
+import io.sphere.sdk.products.ProductProjection;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +11,7 @@ public class CommonDataBuilder {
     private UserContext userContext;
     private Locale fallbackLocale = Locale.ENGLISH;
     private List<Category> rootCategories;
-    private List<Product> products = Collections.emptyList();
+    private List<ProductProjection> products = Collections.emptyList();
 
     private CommonDataBuilder(final UserContext userContext, final List<Category> rootCategories) {
         this.userContext = userContext;
@@ -22,7 +22,7 @@ public class CommonDataBuilder {
         return new CommonData(userContext, fallbackLocale, rootCategories, products);
     }
 
-    public CommonDataBuilder products(final List<Product> products) {
+    public CommonDataBuilder products(final List<ProductProjection> products) {
         this.products = products;
         return this;
     }
