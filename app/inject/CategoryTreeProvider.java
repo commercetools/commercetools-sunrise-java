@@ -6,6 +6,7 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.queries.PagedQueryResult;
+import io.sphere.sdk.queries.QueryDsl;
 import play.Logger;
 
 import javax.inject.Inject;
@@ -24,7 +25,8 @@ class CategoryTreeProvider implements Provider<CategoryTree> {
     @Override
     public CategoryTree get() {
         Logger.info("execute CategoryTreeProvider.get()");
-        final PagedQueryResult<Category> pagedQueryResult = client.execute(CategoryQuery.of()).get(3000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
+        final QueryDsl<Category> categoryRequest = CategoryQuery.of().withLimit(200);
+        final PagedQueryResult<Category> pagedQueryResult = client.execute(categoryRequest).get(3000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
         return CategoryTree.of(pagedQueryResult.getResults());
     }
 }

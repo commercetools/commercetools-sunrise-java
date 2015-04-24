@@ -11,8 +11,6 @@ import play.Configuration;
 import play.libs.F;
 import play.mvc.*;
 
-import views.html.*;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
