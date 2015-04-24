@@ -13,6 +13,7 @@ import play.i18n.Lang;
 import java.util.Arrays;
 import java.util.List;
 
+import static io.sphere.sdk.products.ProductProjectionType.CURRENT;
 import static java.util.Collections.emptyList;
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -20,7 +21,7 @@ public class CommonDataTest {
 
     @Test
     public void hasProvidedProductList() {
-        List<Product> productList = Arrays.asList(defaultProduct());
+        List<ProductProjection> productList = Arrays.asList(defaultProduct());
         CommonDataBuilder builder = CommonDataBuilder.of(defaultContext(), emptyList()).products(productList);
         assertThat(builder.build().products()).isEqualTo(productList);
     }
@@ -35,12 +36,12 @@ public class CommonDataTest {
         return UserContext.of(Lang.forCode("de"), CountryCode.DE);
     }
 
-    private Product defaultProduct() {
+    private ProductProjection defaultProduct() {
         ProductType productType = ProductTypeBuilder.of("id", "product-type", "", emptyList()).build();
         LocalizedStrings locString = LocalizedStrings.ofEnglishLocale("text");
         ProductVariant variant = ProductVariantBuilder.of(1).build();
         ProductData productData = ProductDataBuilder.of(locString, locString, variant).build();
         ProductCatalogData catalogData = ProductCatalogDataBuilder.ofStaged(productData).build();
-        return ProductBuilder.of(productType, catalogData).build();
+        return ProductBuilder.of(productType, catalogData).build().toProjection(CURRENT).get();
     }
 }
