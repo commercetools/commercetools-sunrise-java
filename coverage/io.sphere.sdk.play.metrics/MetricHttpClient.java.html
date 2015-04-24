@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MetricHttpClient.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">io.sphere.sdk.play.metrics</a> &gt; <span class="el_source">MetricHttpClient.java</span></div><h1>MetricHttpClient.java</h1><pre class="source lang-java linenums">package io.sphere.sdk.play.metrics;
+
+import io.sphere.sdk.http.HttpClient;
+import io.sphere.sdk.http.HttpRequest;
+import io.sphere.sdk.http.HttpResponse;
+import play.mvc.Http;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+
+public class MetricHttpClient implements HttpClient {
+    private final HttpClient underlying;
+
+<span class="nc" id="L15">    private MetricHttpClient(final HttpClient underlying) {</span>
+<span class="nc" id="L16">        this.underlying = underlying;</span>
+<span class="nc" id="L17">    }</span>
+
+    @Override
+    public CompletionStage&lt;HttpResponse&gt; execute(final HttpRequest httpRequest) {
+<span class="nc" id="L21">        final Optional&lt;Http.Context&gt; contextOptional = Optional.ofNullable(Http.Context.current.get());</span>
+<span class="nc" id="L22">        final CompletionStage&lt;HttpResponse&gt; result = underlying.execute(httpRequest);</span>
+<span class="nc" id="L23">        final long startTimestamp = System.currentTimeMillis();</span>
+<span class="nc" id="L24">        contextOptional.ifPresent(context -&gt;</span>
+                result.thenAccept(response -&gt; {
+                    final long stopTimestamp = System.currentTimeMillis();
+                    report(context, httpRequest, response, startTimestamp, stopTimestamp);
+                }));
+<span class="nc" id="L29">        return result;</span>
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    private void report(final Http.Context context, final HttpRequest httpRequest, final HttpResponse response, long startTimestamp, long stopTimestamp) {
+<span class="nc" id="L34">        final Optional&lt;List&lt;ReportRawData&gt;&gt; dataOption = Optional.ofNullable((List&lt;ReportRawData&gt;) context.args.get(MetricAction.KEY));</span>
+<span class="nc" id="L35">        dataOption.ifPresent(data -&gt; data.add(new ReportRawData(httpRequest, response, startTimestamp, stopTimestamp)));</span>
+<span class="nc" id="L36">    }</span>
+
+    @Override
+    public void close() {
+<span class="nc" id="L40">        underlying.close();</span>
+<span class="nc" id="L41">    }</span>
+
+    public static MetricHttpClient of(final HttpClient underlying) {
+<span class="nc" id="L44">        return new MetricHttpClient(underlying);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

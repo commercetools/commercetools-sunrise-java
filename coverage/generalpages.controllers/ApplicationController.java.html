@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ApplicationController.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">generalpages.controllers</a> &gt; <span class="el_source">ApplicationController.java</span></div><h1>ApplicationController.java</h1><pre class="source lang-java linenums">package generalpages.controllers;
+
+import common.controllers.SunriseController;
+import generalpages.views.html.index;
+import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.products.Product;
+import io.sphere.sdk.products.queries.ProductQuery;
+import io.sphere.sdk.queries.PagedQueryResult;
+import play.Configuration;
+import play.libs.F;
+import play.mvc.*;
+
+import views.html.*;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.util.List;
+
+/**
+ * Controller for main web pages like index, imprint and contact.
+ */
+@Singleton
+public final class ApplicationController extends SunriseController {
+
+    @Inject
+    public ApplicationController(final PlayJavaSphereClient client, final CategoryTree categoryTree, final Configuration configuration) {
+<span class="fc" id="L28">        super(client, categoryTree, configuration);</span>
+<span class="fc" id="L29">    }</span>
+
+    public F.Promise&lt;Result&gt; index() {
+<span class="fc" id="L32">        return client().execute(ProductQuery.of()).map(this::showProducts);</span>
+    }
+
+    private Result showProducts(PagedQueryResult&lt;Product&gt; productPagedQueryResult) {
+<span class="fc" id="L36">        final List&lt;Product&gt; products = productPagedQueryResult.getResults();</span>
+<span class="fc" id="L37">        return ok(index.render(data().products(products).build()));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>

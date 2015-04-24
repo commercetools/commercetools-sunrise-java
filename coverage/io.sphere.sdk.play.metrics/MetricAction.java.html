@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>MetricAction.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=2;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Jacoco Coverage Report</a> &gt; <a href="index.source.html" class="el_package">io.sphere.sdk.play.metrics</a> &gt; <span class="el_source">MetricAction.java</span></div><h1>MetricAction.java</h1><pre class="source lang-java linenums">package io.sphere.sdk.play.metrics;
+
+import io.sphere.sdk.http.HttpMethod;
+import io.sphere.sdk.utils.ListUtils;
+import io.sphere.sdk.utils.SphereInternalLogger;
+import org.apache.commons.lang3.tuple.Pair;
+import play.libs.F;
+import play.mvc.Http;
+import play.mvc.Result;
+
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.lang.String.*;
+import static java.util.stream.Collectors.joining;
+
+<span class="nc" id="L18">public class MetricAction extends play.mvc.Action.Simple {</span>
+
+    public static final String KEY = &quot;io.sphere.sdk.play.metrics.reportRawData&quot;;
+<span class="nc" id="L21">    private static final SphereInternalLogger LOGGER = SphereInternalLogger.getLogger(&quot;metrics.simple&quot;);</span>
+
+    public F.Promise&lt;Result&gt; call(final Http.Context ctx) throws Throwable {
+<span class="nc" id="L24">        final List&lt;ReportRawData&gt; rawDatas = Collections.synchronizedList(new LinkedList&lt;&gt;());</span>
+<span class="nc" id="L25">        ctx.args.put(KEY, rawDatas);</span>
+<span class="nc" id="L26">        final F.Promise&lt;Result&gt; resultPromise = delegate.call(ctx);</span>
+<span class="nc" id="L27">        logRequestDataOnComplete(ctx, rawDatas, resultPromise);</span>
+<span class="nc" id="L28">        return resultPromise;</span>
+    }
+
+    private void logRequestDataOnComplete(final Http.Context ctx, final List&lt;ReportRawData&gt; rawDatas, final F.Promise&lt;Result&gt; resultPromise) {
+<span class="nc" id="L32">        resultPromise.onRedeem(r -&gt; {</span>
+            final Pair&lt;List&lt;ReportRawData&gt;, List&lt;ReportRawData&gt;&gt; queryCommandPair = splitByQueriesAndCommands(rawDatas);
+            final List&lt;ReportRawData&gt; queries = queryCommandPair.getLeft();
+            final List&lt;ReportRawData&gt; commands = queryCommandPair.getRight();
+            final int size = calculateTotalSize(rawDatas);
+            final String durations = rawDatas.stream().map(data -&gt; data.getStopTimestamp() - data.getStartTimestamp()).map(l -&gt; Long.toString(l) + &quot; ms&quot;).collect(joining(&quot;, &quot;));
+            LOGGER.debug(() -&gt; format(&quot;%s used %d requests (%d queries, %d commands, %d bytes fetched, in (%s)).&quot;, ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
+        });
+<span class="nc" id="L40">    }</span>
+
+    private Pair&lt;List&lt;ReportRawData&gt;, List&lt;ReportRawData&gt;&gt; splitByQueriesAndCommands(final List&lt;ReportRawData&gt; rawDatas) {
+<span class="nc" id="L43">        return ListUtils.partition(rawDatas, data -&gt; data.getHttpRequest().getHttpMethod() == HttpMethod.GET);</span>
+    }
+
+    private Integer calculateTotalSize(final List&lt;ReportRawData&gt; rawDatas) {
+<span class="nc" id="L47">        return rawDatas.stream().map(elem -&gt; elem.getHttpResponse().getResponseBody().map(b -&gt; b.length).orElse(0)).reduce(0, (a, b) -&gt; a + b);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.1.201405082137</span></div></body></html>
