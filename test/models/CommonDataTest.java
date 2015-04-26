@@ -13,7 +13,7 @@ import play.i18n.Lang;
 import java.util.Arrays;
 import java.util.List;
 
-import static io.sphere.sdk.products.ProductProjectionType.CURRENT;
+import static io.sphere.sdk.products.ProductProjectionType.STAGED;
 import static java.util.Collections.emptyList;
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -42,6 +42,6 @@ public class CommonDataTest {
         ProductVariant variant = ProductVariantBuilder.of(1).build();
         ProductData productData = ProductDataBuilder.of(locString, locString, variant).build();
         ProductCatalogData catalogData = ProductCatalogDataBuilder.ofStaged(productData).build();
-        return ProductBuilder.of(productType, catalogData).build().toProjection(CURRENT).get();
+        return ProductBuilder.of(productType, catalogData).build().toProjection(STAGED).get();
     }
 }
