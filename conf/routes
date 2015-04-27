@@ -3,9 +3,7 @@
 # ~~~~
 
 # Home page
-GET         /                         @generalpages.controllers.HomeController.index()
-->          /products                 products.Routes
-POST        /setup-credentials        @io.sphere.sdk.play.setupwidget.controllers.SetupController.processForm()
+GET        /                @generalpages.controllers.HomeController.index()
 
-# Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file             controllers.Assets.at(path="/public", file)
+->         /common          common.Routes
+->         /products        products.Routes

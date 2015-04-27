@@ -1,7 +1,7 @@
 package inject;
 
 import com.neovisionaries.i18n.CountryCode;
-import common.countries.CountryOperations;
+import countries.CountryOperations;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 

@@ -28,8 +28,19 @@ dependencyOverrides += "com.typesafe.netty" % "netty-http-pipelining" % "1.1.4"
 
 javaUnidocSettings
 
-lazy val root = (project in file(".")).enablePlugins(PlayJava).configs(IntegrationTest).dependsOn(`product-catalog`)//.aggregate(webapp, `product-catalog`)
+lazy val root = (project in file("."))
+  .configs(IntegrationTest)
+  .enablePlugins(PlayJava)
+  .dependsOn(common, `product-catalog`)
+  .aggregate(webapp, common, `product-catalog`)
 
-lazy val webapp = project.enablePlugins(PlayJava).dependsOn(`product-catalog`)
+lazy val common = project
+  .enablePlugins(PlayJava)
 
-lazy val `product-catalog` = project.enablePlugins(PlayJava)
+lazy val `product-catalog` = project
+  .enablePlugins(PlayJava)
+  .dependsOn(common)
+
+lazy val webapp = project
+  .enablePlugins(PlayJava)
+  .dependsOn(`product-catalog`)

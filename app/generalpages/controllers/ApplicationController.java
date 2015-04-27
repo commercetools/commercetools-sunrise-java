@@ -1,6 +1,6 @@
 package generalpages.controllers;
 
-import common.controllers.SunriseController;
+import controllers.SunriseController;
 import generalpages.views.html.index;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;

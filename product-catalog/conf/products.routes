@@ -1,2 +1,2 @@
 
-GET     /       products.controllers.ProductController.index()
+GET     /       @products.controllers.ProductController.index()

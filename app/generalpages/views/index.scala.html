@@ -1,6 +1,6 @@
-@(data: common.models.CommonData)
+@(data: CommonData)
 
-@common.views.html.main("SPHERE.IO Sunrise Home", data) {
+@views.html.main("SPHERE.IO Sunrise Home", data) {
     <h2 id="products">Products</h2>
     <ol>
     @data.products.map { product =>
