@@ -4,7 +4,6 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
 import org.junit.Test;
-import testutils.WithPlayJavaSphereClient;
 
 import java.util.Locale;
 

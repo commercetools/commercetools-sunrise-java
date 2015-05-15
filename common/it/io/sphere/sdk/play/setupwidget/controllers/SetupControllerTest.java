@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import play.*;
 import play.test.WithBrowser;
-import testutils.EnvironmentKeys;
+import controllers.EnvironmentKeys;
 
 import java.io.File;
 

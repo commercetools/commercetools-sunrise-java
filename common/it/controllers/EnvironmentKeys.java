@@ -1,4 +1,4 @@
-package testutils;
+package controllers;
 
 public class EnvironmentKeys {
     private static final String prefix = "SPHERE_SUNRISE_IT_TESTS_";
