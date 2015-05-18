@@ -4,6 +4,7 @@
 
 # Home page
 GET        /                @generalpages.controllers.HomeController.index()
+GET        /test            @generalpages.controllers.TemplateController.foo()
 
 ->         /common          common.Routes
 ->         /products        products.Routes

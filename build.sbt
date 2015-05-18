@@ -8,19 +8,24 @@ scalaVersion := "2.10.3"
 
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
-resolvers += Resolver.sonatypeRepo("snapshots")
+resolvers in ThisBuild += Resolver.sonatypeRepo("snapshots")
 
-resolvers += Resolver.sonatypeRepo("releases")
+resolvers in ThisBuild += Resolver.sonatypeRepo("releases")
+
+resolvers in ThisBuild += Resolver.mavenLocal
 
 val jvmSdkVersion = "1.0.0-M13"
 
 libraryDependencies in ThisBuild ++=
   ("io.sphere.sdk.jvm" % "sphere-models" % jvmSdkVersion withSources()) ::
-  "io.sphere.sdk.jvm" %% "sphere-play-2_4-java-client" % "1.0.0-M13" ::
+  "io.sphere.sdk.jvm" %% "sphere-play-2_4-java-client" % jvmSdkVersion ::
   "com.google.inject" % "guice" % "3.0" ::
   "com.typesafe" % "config" % "1.3.0-M3" ::
+  "com.github.jknack" % "handlebars" % "2.0.0" ::
+  "com.github.jknack" % "handlebars-jackson2" % "2.0.0" ::
+  "io.sphere" % "sphere-sunrise-design" % "1.0.0" ::
   "org.easytesting" % "fest-assert" % "1.4" % "test,it" ::
-    play.sbt.PlayImport.component("play-test") % "it" ::
+  play.sbt.PlayImport.component("play-test") % "it" ::
   Nil
 
 dependencyOverrides += "com.typesafe.play" %% "play-omnidoc" % "2.4.0-M3"
