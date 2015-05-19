@@ -2,6 +2,7 @@ package inject;
 
 import com.neovisionaries.i18n.CountryCode;
 import countries.CountryOperations;
+import generalpages.controllers.ViewService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 
@@ -22,7 +23,8 @@ public class ProductionModule extends Module {
         return seq(
                 bind(CountryCode.class).qualifiedWith("default").toInstance(CountryOperations.of(new play.Configuration(configuration)).defaultCountry()),//check on start
                 bind(PlayJavaSphereClient.class).toProvider(PlayJavaSphereClientProvider.class).in(Singleton.class),
-                bind(CategoryTree.class).toProvider(CategoryTreeProvider.class)
+                bind(CategoryTree.class).toProvider(CategoryTreeProvider.class),
+                bind(ViewService.class).toInstance(ViewService.of())
         );
     }
 }

@@ -1,8 +1,8 @@
-package generalpages.controllers;
+package models;
 
 import java.util.List;
 
-public class PopPageData {
+public class PopPageData extends PageData {
     public String title;
     public List<Breadcrumb> breadcrumb;
 

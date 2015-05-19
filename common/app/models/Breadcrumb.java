@@ -1,4 +1,4 @@
-package generalpages.controllers;
+package models;
 
 public class Breadcrumb {
     public String url;
