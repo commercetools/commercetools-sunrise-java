@@ -15,7 +15,6 @@ import static java.util.Objects.requireNonNull;
 
 @Singleton
 class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
-
     private final Configuration configuration;
     private final ApplicationLifecycle applicationLifecycle;
 
@@ -31,14 +30,16 @@ class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
         final SphereClientConfig config = getSphereClientConfig();
         final SphereClient sphereClient = createSphereClient(config);
         final PlayJavaSphereClient playJavaSphereClient = PlayJavaSphereClient.of(sphereClient);
-        applicationLifecycle.addStopHook(() -> F.Promise.promise(() -> {
-            playJavaSphereClient.close();
-            return null;
-        }));
+        applicationLifecycle.addStopHook(() ->
+            F.Promise.promise(() -> {
+                playJavaSphereClient.close();
+                return null;
+            })
+        );
         return playJavaSphereClient;
     }
 
-    private SphereClient createSphereClient(SphereClientConfig config) {
+    private SphereClient createSphereClient(final SphereClientConfig config) {
         final MetricHttpClient httpClient = MetricHttpClient.of(NingHttpClientAdapter.of());
         final SphereAccessTokenSupplier tokenSupplier = SphereAccessTokenSupplierFactory.of().createSupplierOfAutoRefresh(config);
         return SphereClient.of(config, httpClient, tokenSupplier);

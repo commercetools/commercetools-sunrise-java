@@ -1,6 +1,6 @@
 language: scala
 scala:
-- 2.10.4
+- 2.10.5
 script:
 - ./sbt cover unidoc
 - if [ "$TRAVIS_BRANCH"  = "master" ]; then sbt "gitPublish target/scala-2.11/it-jacoco/html https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git coverage sphere-oss automation@commercetools.de"; fi
