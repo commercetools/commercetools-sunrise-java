@@ -1,4 +1,4 @@
-package setupwidget.controllers;
+package controllers;
 
 public class EnvironmentKeys {
     private static final String PREFIX = "SPHERE_SUNRISE_IT_TESTS_";

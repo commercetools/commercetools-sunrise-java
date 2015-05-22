@@ -1,4 +1,4 @@
-package setupwidget.controllers;
+package controllers;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -9,9 +9,7 @@ import play.test.WithBrowser;
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static setupwidget.controllers.EnvironmentKeys.CLIENT_ID;
-import static setupwidget.controllers.EnvironmentKeys.CLIENT_SECRET;
-import static setupwidget.controllers.EnvironmentKeys.PROJECT;
+import static controllers.EnvironmentKeys.*;
 
 public class SetupControllerIntegrationTest extends WithBrowser {
 
