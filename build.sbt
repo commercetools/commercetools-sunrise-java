@@ -68,6 +68,7 @@ lazy val testScopes = "test,it"
 
 lazy val testSettings = Defaults.itSettings ++ Seq (
   javaSource in IntegrationTest := baseDirectory.value / "it",
+  scalaSource in IntegrationTest := baseDirectory.value / "it",
   resourceDirectory in IntegrationTest := baseDirectory.value / "it/resources",
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
   libraryDependencies ++= Seq (
@@ -83,7 +84,7 @@ lazy val testSettings = Defaults.itSettings ++ Seq (
  * TEST COVERAGE SETTINGS
  */
 
-lazy val testCoverageCover = TaskKey[Unit]("cover", "Creates the JaCoCo reports for unit and integration tests.")
+lazy val testCoverageTask = TaskKey[Unit]("cover", "Creates the JaCoCo reports for unit and integration tests.")
 
 lazy val testCoverageExcludes = Seq ( )// "*views*", "*Routes*", "*controllers*routes*", "*controllers*Reverse*", "*controllers*javascript*", "*controller*ref*" )
 
@@ -95,10 +96,10 @@ lazy val testCoverageSettings =  jacoco.settings ++ itJacoco.settings ++ Seq (
   jacoco.excludes in itJacoco.Config := testCoverageExcludes,
   jacoco.thresholds in jacoco.Config := testCoverageThresholds,
   jacoco.thresholds in itJacoco.Config := testCoverageThresholds,
-  testCoverageCover := { (itJacoco.cover in itJacoco.Config).value },
-  testCoverageCover <<= testCoverageCover.dependsOn(jacoco.check in jacoco.Config),
+  testCoverageTask := { (itJacoco.cover in itJacoco.Config).value },
+  testCoverageTask <<= testCoverageTask.dependsOn(jacoco.check in jacoco.Config),
   libraryDependencies ++= Seq (
     "junit" % "junit-dep" % "4.11" % "it",
-    "com.novocode" % "junit-interface" % "0.10" % "it"
+    "com.novocode" % "junit-interface" % "0.11" % "it"
   )
 )
