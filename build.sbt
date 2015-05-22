@@ -37,7 +37,7 @@ lazy val `move-to-sdk` = project
  * COMMON SETTINGS
  */
 
-//javaUnidocSettings
+javaUnidocSettings
 
 lazy val sphereJvmSdkVersion = "1.0.0-M13"
 
