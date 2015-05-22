@@ -2,10 +2,9 @@ common.controllers
 common.countries
 common.models
 controllers
-generalpages.controllers
 inject
 io.sphere.sdk.play.controllers
 io.sphere.sdk.play.metrics
-io.sphere.sdk.play.setupwidget.controllers
-io.sphere.sdk.play.setupwidget.models
-products.controllers
+productcatalog.controllers
+setupwidget.controllers
+setupwidget.models
