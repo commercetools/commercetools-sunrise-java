@@ -1,6 +1,5 @@
 package setupwidget.controllers;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -16,7 +15,6 @@ import static setupwidget.controllers.EnvironmentKeys.PROJECT;
 
 public class SetupControllerIntegrationTest extends WithBrowser {
 
-    @Ignore
     @Test
     public void widget() throws Exception {
         if (isExecutedInCIServer()) {
