@@ -6,15 +6,15 @@
   "keywords": ["sphere", "ecommerce", "shopping"],
   "env": {
     "SPHERE_SUNRISE_PROJECT": {
-      "description": "The project Key for your SPHERE.IO project.",
+      "description": "The project key for your SPHERE.IO project.",
       "required": true
     },
     "SPHERE_SUNRISE_CLIENT_ID": {
-      "description": "The clientId of your SPHERE.IO project.",
+      "description": "The client ID of your SPHERE.IO project.",
       "required": true
     },
     "SPHERE_SUNRISE_CLIENT_SECRET": {
-      "description": "The clientSecret of your SPHERE.IO project.",
+      "description": "The client secret of your SPHERE.IO project.",
       "required": true
     }
   }
