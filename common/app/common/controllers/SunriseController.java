@@ -5,14 +5,17 @@ import common.models.UserContext;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.play.controllers.ShopController;
+import io.sphere.sdk.play.metrics.MetricAction;
 import play.Configuration;
 import play.mvc.Controller;
+import play.mvc.With;
 
 /**
  * An application specific controller.
  * Since we want to show a standard web shop it contains categories.
  */
-public class SunriseController extends ShopController {
+@With(MetricAction.class)
+public abstract class SunriseController extends ShopController {
     private final CategoryTree categoryTree;
     private final CountryOperations countryOperations;
 
