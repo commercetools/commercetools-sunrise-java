@@ -39,7 +39,7 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val sphereJvmSdkVersion = "1.0.0-M13"
+lazy val sphereJvmSdkVersion = "1.0.0-M14"
 
 lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   scalaVersion := "2.10.5",
