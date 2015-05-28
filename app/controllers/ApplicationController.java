@@ -33,6 +33,6 @@ public final class ApplicationController extends SunriseController {
 
     private Result showProducts(PagedQueryResult<ProductProjection> productPagedQueryResult) {
         final List<ProductProjection> products = productPagedQueryResult.getResults();
-        return ok("some products");
+        return ok(products.toString());
     }
 }
