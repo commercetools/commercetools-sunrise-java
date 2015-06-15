@@ -21,12 +21,17 @@ public class PlayCmsPageTest extends WithApplication {
 
     @Test
     public void getsMessage() throws Exception {
-        assertThat(cms(DE).get("foo")).contains("bar");
+        assertThat(cms(DE, "pop").get("title")).contains("foo");
+    }
+
+    @Test
+    public void getsMessageWithoutPageKey() throws Exception {
+        assertThat(cms(DE).get("pop.title")).contains("foo");
     }
 
     @Test
     public void getsMessageWithRegion() throws Exception {
-        assertThat(cms(DE_AT).get("foo")).contains("baz");
+        assertThat(cms(DE_AT, "pop").get("title")).contains("bar");
     }
 
     @Test
@@ -43,7 +48,11 @@ public class PlayCmsPageTest extends WithApplication {
     }
 
     private CmsPage cms(final Locale locale) {
+        return cms(locale, null);
+    }
+
+    private CmsPage cms(final Locale locale, final String pageKey) {
         final MessagesApi messagesApi = app.injector().instanceOf(MessagesApi.class);
-        return PlayCmsService.of(messagesApi).get(locale, "").get(0);
+        return PlayCmsService.of(messagesApi).get(locale, pageKey).get(0);
     }
 }
