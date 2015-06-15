@@ -46,12 +46,15 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   resolvers ++= Seq (
     Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots")
+    Resolver.sonatypeRepo("snapshots"),
+    Resolver.bintrayRepo("commercetools", "maven")
   ),
   libraryDependencies ++= Seq (
     "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
-    "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % sphereJvmSdkVersion
-    //"com.github.jknack" % "handlebars" % "2.0.0",
+    "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % sphereJvmSdkVersion,
+    "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
+    "io.sphere" % "sphere-sunrise-design" % "0.1.0",
+    "com.github.jknack" % "handlebars" % "2.2.0"
   ),
   dependencyOverrides ++= Set (
     "com.typesafe.play" % "play-java_2.10" % "2.4.0-RC5",
