@@ -15,38 +15,35 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PlayCmsServiceTest extends WithApplication {
-
-    public static final int TIMEOUT = 100;
+public class PlayCmsPageTest extends WithApplication {
+    private static final Locale DE = Locale.forLanguageTag("de");
+    private static final Locale DE_AT = Locale.forLanguageTag("de-AT");
 
     @Test
     public void getsMessage() throws Exception {
-        final Optional<String> message = cms().get(Locale.forLanguageTag("de"), "foo").get(TIMEOUT);
-        assertThat(message).contains("bar");
+        assertThat(cms(DE).get("foo")).contains("bar");
     }
 
     @Test
     public void getsMessageWithRegion() throws Exception {
-        final Optional<String> message = cms().get(Locale.forLanguageTag("de-AT"), "foo").get(TIMEOUT);
-        assertThat(message).contains("baz");
+        assertThat(cms(DE_AT).get("foo")).contains("baz");
     }
 
     @Test
     public void getsEmptyWhenKeyNotFound() throws Exception {
-        final Optional<String> message = cms().get(Locale.forLanguageTag("de"), "wrong.message").get(TIMEOUT);
-        assertThat(message).isEmpty();
+        assertThat(cms(DE).get("wrong.message")).isEmpty();
     }
 
     @Override
     protected Application provideApplication() {
-        final Configuration config = new Configuration(singletonMap("play.i18n.langs", asList("de", "de-AT")));
+        final Configuration config = new Configuration(singletonMap("play.i18n.langs", asList(DE.toLanguageTag(), DE_AT.toLanguageTag())));
         final Configuration fallbackConfig = Configuration.load(new Environment(Mode.TEST));
         return new GuiceApplicationBuilder().loadConfig(config.withFallback(fallbackConfig)).build();
 
     }
 
-    private CmsService cms() {
+    private CmsPage cms(final Locale locale) {
         final MessagesApi messagesApi = app.injector().instanceOf(MessagesApi.class);
-        return PlayCmsService.of(messagesApi);
+        return PlayCmsService.of(messagesApi).get(locale, "").get(0);
     }
 }

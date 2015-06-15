@@ -11,16 +11,16 @@ import javax.inject.Singleton;
 
 @Singleton
 class CmsServiceProvider implements Provider<CmsService> {
-    private final MessagesApi messages;
+    private final MessagesApi messagesApi;
 
     @Inject
-    private CmsServiceProvider(final MessagesApi messages) {
-        this.messages = messages;
+    private CmsServiceProvider(final MessagesApi messagesApi) {
+        this.messagesApi = messagesApi;
     }
 
     @Override
     public CmsService get() {
         Logger.info("execute CmsServiceProvider.get()");
-        return PlayCmsService.of(messages);
+        return PlayCmsService.of(messagesApi);
     }
 }
