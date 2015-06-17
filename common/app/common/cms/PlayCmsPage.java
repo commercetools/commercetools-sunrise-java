@@ -4,7 +4,7 @@ import play.i18n.Messages;
 
 import java.util.Optional;
 
-public class PlayCmsPage implements CmsPage {
+public final class PlayCmsPage implements CmsPage {
     private final Messages messages;
     private final Optional<String> pageKey;
 

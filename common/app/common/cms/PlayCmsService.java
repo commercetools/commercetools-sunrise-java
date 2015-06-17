@@ -16,7 +16,7 @@ import java.util.Locale;
  * Nonetheless, you can always skip the Page Key and provide only a Message Key "home.title".
  */
 @Singleton
-public class PlayCmsService implements CmsService {
+public final class PlayCmsService implements CmsService {
     private final MessagesApi messagesApi;
 
     @Inject
