@@ -1,4 +1,4 @@
-package common.models;
+package common.pages;
 
 import org.junit.Test;
 import play.i18n.Lang;

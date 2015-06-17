@@ -2,7 +2,7 @@ package common.controllers;
 
 import common.cms.CmsService;
 import common.countries.CountryOperations;
-import common.models.UserContext;
+import common.pages.UserContext;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.play.controllers.ShopController;
