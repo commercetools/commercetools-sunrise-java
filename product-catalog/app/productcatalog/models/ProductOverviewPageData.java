@@ -11,6 +11,6 @@ public class ProductOverviewPageData extends PageData {
 
     @Override
     protected String additionalTitle() {
-        return "bar";
+        return "Product overview page";
     }
 }
