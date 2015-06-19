@@ -4,8 +4,7 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.context.JavaBeanValueResolver;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.FileTemplateLoader;
+import com.github.jknack.handlebars.io.TemplateLoader;
 import common.pages.PageData;
 import play.Logger;
 import play.twirl.api.Html;
@@ -13,9 +12,6 @@ import play.twirl.api.Html;
 import java.io.IOException;
 
 public class HandlebarsViewService implements ViewService {
-    private static final String DEFAULT_TEMPLATE_PATH = "/META-INF/resources/webjars/templates";
-    private static final String OVERRIDE_TEMPLATE_PATH = "app/assets/templates";
-
     private final Handlebars defaultTemplateSystem;
     private final Handlebars overrideTemplateSystem;
 
@@ -54,9 +50,9 @@ public class HandlebarsViewService implements ViewService {
         }
     }
 
-    public static HandlebarsViewService of() {
-        final Handlebars defaultTemplateSystem = new Handlebars(new ClassPathTemplateLoader(DEFAULT_TEMPLATE_PATH));
-        final Handlebars overrideTemplateSystem = new Handlebars(new FileTemplateLoader(OVERRIDE_TEMPLATE_PATH));
+    public static HandlebarsViewService of(final TemplateLoader defaultLoader, final TemplateLoader overrideLoader) {
+        final Handlebars defaultTemplateSystem = new Handlebars(defaultLoader);
+        final Handlebars overrideTemplateSystem = new Handlebars(overrideLoader);
         return new HandlebarsViewService(defaultTemplateSystem, overrideTemplateSystem);
     }
 }

@@ -27,8 +27,8 @@ public class ProductionModule extends Module {
                 bind(CountryCode.class).qualifiedWith("default").toInstance(defaultCountry(configuration)), // checks on start
                 bind(PlayJavaSphereClient.class).toProvider(PlayJavaSphereClientProvider.class).in(Singleton.class),
                 bind(CategoryTree.class).toProvider(CategoryTreeProvider.class),
-                bind(CmsService.class).toProvider(CmsServiceProvider.class),
-                bind(ViewService.class).toInstance(HandlebarsViewService.of())
+                bind(ViewService.class).toProvider(ViewServiceProvider.class),
+                bind(CmsService.class).toProvider(CmsServiceProvider.class)
         );
     }
 
