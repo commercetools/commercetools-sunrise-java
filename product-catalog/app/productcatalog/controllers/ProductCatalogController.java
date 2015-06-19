@@ -2,6 +2,7 @@ package productcatalog.controllers;
 
 import common.cms.CmsService;
 import common.controllers.SunriseController;
+import common.templates.ViewService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import play.Configuration;
@@ -17,9 +18,9 @@ public class ProductCatalogController extends SunriseController {
 
     @Inject
     public ProductCatalogController(final PlayJavaSphereClient client, final CategoryTree categoryTree,
-                                    final Configuration configuration, final CmsService cmsService) {
+                                    final Configuration configuration, final ViewService viewService, final CmsService cmsService) {
         super(client, categoryTree, configuration, cmsService);
-        this.viewService = new ProductCatalogViewService();
+        this.viewService = new ProductCatalogViewService(viewService);
     }
 
     public F.Promise<Result> pop() {

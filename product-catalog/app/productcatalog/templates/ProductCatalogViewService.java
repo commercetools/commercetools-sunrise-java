@@ -1,12 +1,17 @@
 package productcatalog.templates;
 
-import common.templates.HandlebarsViewService;
+import common.templates.ViewService;
 import play.twirl.api.Html;
 import productcatalog.models.ProductOverviewPageData;
 
-public final class ProductCatalogViewService extends HandlebarsViewService {
+public final class ProductCatalogViewService {
+    private final ViewService viewService;
+
+    public ProductCatalogViewService(final ViewService viewService) {
+        this.viewService = viewService;
+    }
 
     public Html productOverviewPage(final ProductOverviewPageData pageData) {
-        return html("pop", pageData);
+        return viewService.apply("pop", pageData);
     }
 }

@@ -12,19 +12,20 @@ import play.twirl.api.Html;
 
 import java.io.IOException;
 
-public abstract class HandlebarsViewService {
+public class HandlebarsViewService implements ViewService {
     private static final String DEFAULT_TEMPLATE_PATH = "/META-INF/resources/webjars/templates";
     private static final String OVERRIDE_TEMPLATE_PATH = "app/assets/templates";
 
-    private Handlebars defaultTemplateSystem;
-    private Handlebars overrideTemplateSystem;
+    private final Handlebars defaultTemplateSystem;
+    private final Handlebars overrideTemplateSystem;
 
-    protected HandlebarsViewService() {
-        this.defaultTemplateSystem = new Handlebars(new ClassPathTemplateLoader(DEFAULT_TEMPLATE_PATH));
-        this.overrideTemplateSystem = new Handlebars(new FileTemplateLoader(OVERRIDE_TEMPLATE_PATH));
+    private HandlebarsViewService(final Handlebars defaultTemplateSystem, final Handlebars overrideTemplateSystem) {
+        this.defaultTemplateSystem = defaultTemplateSystem;
+        this.overrideTemplateSystem = overrideTemplateSystem;
     }
 
-    protected Html html(final String templateName, final PageData pageData) {
+    @Override
+    public Html apply(final String templateName, final PageData pageData) {
         final Template template = compileTemplate(templateName);
         final Context context = buildContext(pageData);
         try {
@@ -51,5 +52,11 @@ public abstract class HandlebarsViewService {
                 throw new TemplateException("Could not find the default template", eDefault);
             }
         }
+    }
+
+    public static HandlebarsViewService of() {
+        final Handlebars defaultTemplateSystem = new Handlebars(new ClassPathTemplateLoader(DEFAULT_TEMPLATE_PATH));
+        final Handlebars overrideTemplateSystem = new Handlebars(new FileTemplateLoader(OVERRIDE_TEMPLATE_PATH));
+        return new HandlebarsViewService(defaultTemplateSystem, overrideTemplateSystem);
     }
 }
