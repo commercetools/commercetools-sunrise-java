@@ -7,7 +7,7 @@ import common.templates.HandlebarsTemplateService;
 import common.templates.TemplateService;
 import play.Logger;
 
-public class ViewServiceProvider implements Provider<TemplateService> {
+public class TemplateServiceProvider implements Provider<TemplateService> {
     private static final String DEFAULT_TEMPLATE_PATH = "/META-INF/resources/webjars/templates";
     private static final String OVERRIDE_TEMPLATE_PATH = "app/assets/templates";
 
