@@ -9,7 +9,7 @@ import play.libs.F;
 import java.util.Optional;
 
 public abstract class WithPlayJavaSphereClient {
-    private static final String IT_SPHERE_PREFIX = "SPHERE_SUNRISE_IT_TESTS_";
+    private static final String IT_SPHERE_PREFIX = "SPHERE_SUNRISE_IT_";
     private static final String IT_SPHERE_PROJECT_KEY = IT_SPHERE_PREFIX + "PROJECT";
     private static final String IT_SPHERE_CLIENT_SECRET = IT_SPHERE_PREFIX + "CLIENT_SECRET";
     private static final String IT_SPHERE_CLIENT_ID = IT_SPHERE_PREFIX + "CLIENT_ID";
