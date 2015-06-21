@@ -7,10 +7,12 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HandlebarsTemplateServiceTest {
+    private static final ClassPathTemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
+    private static final ClassPathTemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
 
     @Test
     public void fillsTemplate() throws Exception {
-        final String html = handlebars().fill("template", somePageData());
+        final String html = handlebars().fill("template", pageDataWithTitleAndMessage());
         assertThat(html).contains("<title>foo</title>")
                 .contains("<h1>bar</h1>")
                 .contains("<p></p>");
@@ -18,21 +20,21 @@ public class HandlebarsTemplateServiceTest {
 
     @Test
     public void fillsOverriddenTemplate() throws Exception {
-        final String html = handlebarsWithOverride().fill("template", somePageData());
+        final String html = handlebarsWithOverride().fill("template", pageDataWithTitleAndMessage());
         assertThat(html).contains("<title>more foo</title>")
                 .contains("<h1>more bar</h1>")
                 .contains("<p>more </p>");
     }
 
     private HandlebarsTemplateService handlebarsWithOverride() {
-        return HandlebarsTemplateService.of(new ClassPathTemplateLoader(), new ClassPathTemplateLoader("/override"));
+        return HandlebarsTemplateService.of(DEFAULT_LOADER, OVERRIDE_LOADER);
     }
 
     private HandlebarsTemplateService handlebars() {
-        return HandlebarsTemplateService.of(new ClassPathTemplateLoader());
+        return HandlebarsTemplateService.of(DEFAULT_LOADER);
     }
 
-    private PageData somePageData() {
+    private PageData pageDataWithTitleAndMessage() {
         return new PageData() {
 
             public String getTitle() {
