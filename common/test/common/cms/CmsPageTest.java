@@ -10,12 +10,16 @@ public class CmsPageTest {
     @Test
     public void getsMessage() throws Exception {
         final CmsPage cmsPage = ((k, a) -> Optional.of("bar"));
-        assertThat(cmsPage.getOrEmpty("foo")).isEqualTo("bar");
+        assertThat(cmsPage.getOrEmpty(someMessageKey())).isEqualTo("bar");
     }
 
     @Test
     public void getsEmptyStringWhenKeyNotFound() throws Exception {
         final CmsPage cmsPage = ((k, a) -> Optional.empty());
-        assertThat(cmsPage.getOrEmpty("foo")).isEmpty();
+        assertThat(cmsPage.getOrEmpty(someMessageKey())).isEmpty();
+    }
+
+    private String someMessageKey() {
+        return "foo";
     }
 }
