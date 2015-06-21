@@ -2,11 +2,17 @@ package common.pages;
 
 import common.cms.CmsPage;
 
-public class HeaderData {
+public class PageHeader {
     private final CmsPage cms;
+    private final String title;
 
-    public HeaderData(final CmsPage cms) {
+    public PageHeader(final CmsPage cms, final String title) {
         this.cms = cms;
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public LinkData getStores() {

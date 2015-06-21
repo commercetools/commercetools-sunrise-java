@@ -8,25 +8,30 @@ import io.sphere.sdk.client.PlayJavaSphereClient;
 import play.Configuration;
 import play.libs.F;
 import play.mvc.Result;
-import productcatalog.models.ProductOverviewPageData;
-import productcatalog.templates.ProductCatalogViewService;
+import productcatalog.models.ProductOverviewPageContent;
+import productcatalog.templates.ProductCatalogView;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class ProductCatalogController extends SunriseController {
-    private final ProductCatalogViewService viewService;
 
     @Inject
     public ProductCatalogController(final PlayJavaSphereClient client, final CategoryTree categoryTree,
                                     final Configuration configuration, final ViewService viewService, final CmsService cmsService) {
-        super(client, categoryTree, configuration, cmsService);
-        this.viewService = new ProductCatalogViewService(viewService);
+        super(client, categoryTree, configuration, viewService, cmsService);
     }
 
     public F.Promise<Result> pop() {
-        return cmsService().get(userContext().locale(), "pop").map(cms -> {
-            final ProductOverviewPageData pageData = new ProductOverviewPageData(cms);
-            return ok(viewService.productOverviewPage(pageData));
+        return cmsService().get(userContext().locale(), "pop").flatMap(cms -> {
+            final ProductOverviewPageContent pageData = new ProductOverviewPageContent(cms);
+            return view().map(view -> ok(view.productOverviewPage(pageData)));
         });
+    }
+
+    private F.Promise<ProductCatalogView> view() {
+        return cmsService().get(userContext().locale(), "common")
+                .map(cms -> new ProductCatalogView(viewService(), cms));
     }
 }

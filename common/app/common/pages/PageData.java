@@ -1,21 +1,12 @@
 package common.pages;
 
-import common.cms.CmsPage;
+public interface PageData {
 
-public abstract class PageData {
-    protected final CmsPage cms;
+    PageHeader getHeader();
 
-    public PageData(final CmsPage cms) {
-        this.cms = cms;
-    }
+    PageContent getContent();
 
-    protected abstract String additionalTitle();
+    PageFooter getFooter();
 
-    public String getTitle() {
-        return cms.getOrEmpty("title.base") + additionalTitle();
-    }
-
-    public HeaderData getHeader() {
-        return new HeaderData(cms);
-    }
+    SeoData getSeo();
 }
