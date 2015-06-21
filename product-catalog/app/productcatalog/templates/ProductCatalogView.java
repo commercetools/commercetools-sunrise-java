@@ -10,11 +10,11 @@ import productcatalog.models.ProductOverviewPageContent;
 
 public final class ProductCatalogView {
     private final TemplateService templateService;
-    private final CmsPage cms;
+    private final CmsPage commonCms;
 
-    public ProductCatalogView(final TemplateService templateService, final CmsPage cms) {
+    public ProductCatalogView(final TemplateService templateService, final CmsPage commonCms) {
         this.templateService = templateService;
-        this.cms = cms;
+        this.commonCms = commonCms;
     }
 
     public Html productOverviewPage(final ProductOverviewPageContent content) {
@@ -22,6 +22,6 @@ public final class ProductCatalogView {
     }
 
     private PageData pageData(final PageContent pageContent) {
-        return SunrisePageData.of(cms, pageContent);
+        return SunrisePageData.of(commonCms, pageContent);
     }
 }
