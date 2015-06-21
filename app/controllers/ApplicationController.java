@@ -2,6 +2,7 @@ package controllers;
 
 import common.cms.CmsService;
 import common.controllers.SunriseController;
+import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.products.ProductProjection;
@@ -25,8 +26,8 @@ public final class ApplicationController extends SunriseController {
 
     @Inject
     public ApplicationController(final PlayJavaSphereClient client, final CategoryTree categoryTree,
-                                 final Configuration configuration, final CmsService cmsService) {
-        super(client, categoryTree, configuration, cmsService);
+                                 final Configuration configuration, final TemplateService templateService, final CmsService cmsService) {
+        super(client, categoryTree, configuration, templateService, cmsService);
     }
 
     public F.Promise<Result> index() {
