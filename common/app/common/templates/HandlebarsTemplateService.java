@@ -11,11 +11,11 @@ import play.Logger;
 import java.io.IOException;
 import java.util.Optional;
 
-public final class HandlebarsViewService implements ViewService {
+public final class HandlebarsTemplateService implements TemplateService {
     private final Handlebars defaultTemplateSystem;
     private final Optional<Handlebars> overrideTemplateSystem;
 
-    private HandlebarsViewService(final Handlebars defaultTemplateSystem, final Optional<Handlebars> overrideTemplateSystem) {
+    private HandlebarsTemplateService(final Handlebars defaultTemplateSystem, final Optional<Handlebars> overrideTemplateSystem) {
         this.defaultTemplateSystem = defaultTemplateSystem;
         this.overrideTemplateSystem = overrideTemplateSystem;
     }
@@ -31,14 +31,14 @@ public final class HandlebarsViewService implements ViewService {
         }
     }
 
-    public static HandlebarsViewService of(final TemplateLoader defaultLoader) {
+    public static HandlebarsTemplateService of(final TemplateLoader defaultLoader) {
         return of(defaultLoader, null);
     }
 
-    public static HandlebarsViewService of(final TemplateLoader defaultLoader, final TemplateLoader overrideLoader) {
+    public static HandlebarsTemplateService of(final TemplateLoader defaultLoader, final TemplateLoader overrideLoader) {
         final Handlebars defaultTemplateSystem = new Handlebars(defaultLoader);
         final Optional<Handlebars> overrideTemplateSystem = Optional.ofNullable(overrideLoader).map(Handlebars::new);
-        return new HandlebarsViewService(defaultTemplateSystem, overrideTemplateSystem);
+        return new HandlebarsTemplateService(defaultTemplateSystem, overrideTemplateSystem);
     }
 
     private Context buildContext(final PageData pageData) {

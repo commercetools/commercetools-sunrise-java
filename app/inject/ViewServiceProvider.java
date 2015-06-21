@@ -3,18 +3,18 @@ package inject;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
 import com.google.inject.Provider;
-import common.templates.HandlebarsViewService;
-import common.templates.ViewService;
+import common.templates.HandlebarsTemplateService;
+import common.templates.TemplateService;
 import play.Logger;
 
-public class ViewServiceProvider implements Provider<ViewService> {
+public class ViewServiceProvider implements Provider<TemplateService> {
     private static final String DEFAULT_TEMPLATE_PATH = "/META-INF/resources/webjars/templates";
     private static final String OVERRIDE_TEMPLATE_PATH = "app/assets/templates";
 
     @Override
-    public ViewService get() {
+    public TemplateService get() {
         Logger.info("execute ViewServiceProvider.get()");
-        return HandlebarsViewService.of(defaultLoader(), overrideLoader());
+        return HandlebarsTemplateService.of(defaultLoader(), overrideLoader());
     }
 
     private ClassPathTemplateLoader defaultLoader() {

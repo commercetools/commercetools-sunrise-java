@@ -2,8 +2,8 @@ package common.controllers;
 
 import common.cms.CmsService;
 import common.countries.CountryOperations;
-import common.context.UserContext;
-import common.templates.ViewService;
+import common.contexts.UserContext;
+import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.play.controllers.ShopController;
@@ -20,15 +20,15 @@ import play.mvc.With;
 public abstract class SunriseController extends ShopController {
     private final CategoryTree categoryTree;
     private final CountryOperations countryOperations;
-    private final ViewService viewService;
+    private final TemplateService templateService;
     private final CmsService cmsService;
 
     protected SunriseController(final PlayJavaSphereClient client, final CategoryTree categoryTree,
-                                final Configuration configuration, final ViewService viewService, final CmsService cmsService) {
+                                final Configuration configuration, final TemplateService templateService, final CmsService cmsService) {
         super(client);
         this.categoryTree = categoryTree;
         this.countryOperations = CountryOperations.of(configuration);
-        this.viewService = viewService;
+        this.templateService = templateService;
         this.cmsService = cmsService;
     }
 
@@ -36,8 +36,8 @@ public abstract class SunriseController extends ShopController {
         return categoryTree;
     }
 
-    public ViewService viewService() {
-        return viewService;
+    public TemplateService viewService() {
+        return templateService;
     }
 
     protected final CmsService cmsService() {

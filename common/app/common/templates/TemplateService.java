@@ -6,7 +6,7 @@ import play.twirl.api.Html;
 /**
  * Service that provides HTML pages, using some kind of template system.
  */
-public interface ViewService {
+public interface TemplateService {
 
     /**
      * Injects the page data into the template with the given name.

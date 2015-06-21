@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HandlebarsViewServiceTest {
+public class HandlebarsTemplateServiceTest {
 
     @Test
     public void fillsTemplate() throws Exception {
@@ -24,12 +24,12 @@ public class HandlebarsViewServiceTest {
                 .contains("<p>more </p>");
     }
 
-    private HandlebarsViewService handlebarsWithOverride() {
-        return HandlebarsViewService.of(new ClassPathTemplateLoader(), new ClassPathTemplateLoader("/override"));
+    private HandlebarsTemplateService handlebarsWithOverride() {
+        return HandlebarsTemplateService.of(new ClassPathTemplateLoader(), new ClassPathTemplateLoader("/override"));
     }
 
-    private HandlebarsViewService handlebars() {
-        return HandlebarsViewService.of(new ClassPathTemplateLoader());
+    private HandlebarsTemplateService handlebars() {
+        return HandlebarsTemplateService.of(new ClassPathTemplateLoader());
     }
 
     private PageData somePageData() {

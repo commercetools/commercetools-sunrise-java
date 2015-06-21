@@ -4,21 +4,21 @@ import common.cms.CmsPage;
 import common.pages.PageContent;
 import common.pages.PageData;
 import common.pages.SunrisePageData;
-import common.templates.ViewService;
+import common.templates.TemplateService;
 import play.twirl.api.Html;
 import productcatalog.models.ProductOverviewPageContent;
 
 public final class ProductCatalogView {
-    private final ViewService viewService;
+    private final TemplateService templateService;
     private final CmsPage cms;
 
-    public ProductCatalogView(final ViewService viewService, final CmsPage cms) {
-        this.viewService = viewService;
+    public ProductCatalogView(final TemplateService templateService, final CmsPage cms) {
+        this.templateService = templateService;
         this.cms = cms;
     }
 
     public Html productOverviewPage(final ProductOverviewPageContent content) {
-        return viewService.fillToHtml("pop", pageData(content));
+        return templateService.fillToHtml("pop", pageData(content));
     }
 
     private PageData pageData(final PageContent pageContent) {
