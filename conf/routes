@@ -3,9 +3,9 @@
 # ~~~~
 
 # Home page
-#GET        /                           @controllers.HomeController.index()
+GET        /                           @controllers.HomeController.index()
 
-GET        /                           @productcatalog.controllers.ProductCatalogController.pop()
+GET        /pop                        @productcatalog.controllers.ProductCatalogController.pop()
 
 ->         /setup                      setupwidget.Routes
 
