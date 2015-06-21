@@ -7,28 +7,38 @@ import com.github.jknack.handlebars.context.JavaBeanValueResolver;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.pages.PageData;
 import play.Logger;
-import play.twirl.api.Html;
 
 import java.io.IOException;
+import java.util.Optional;
 
-public class HandlebarsViewService implements ViewService {
+public final class HandlebarsViewService implements ViewService {
     private final Handlebars defaultTemplateSystem;
-    private final Handlebars overrideTemplateSystem;
+    private final Optional<Handlebars> overrideTemplateSystem;
 
-    private HandlebarsViewService(final Handlebars defaultTemplateSystem, final Handlebars overrideTemplateSystem) {
+    private HandlebarsViewService(final Handlebars defaultTemplateSystem, final Optional<Handlebars> overrideTemplateSystem) {
         this.defaultTemplateSystem = defaultTemplateSystem;
         this.overrideTemplateSystem = overrideTemplateSystem;
     }
 
     @Override
-    public Html apply(final String templateName, final PageData pageData) {
+    public String fill(final String templateName, final PageData pageData) {
         final Template template = compileTemplate(templateName);
         final Context context = buildContext(pageData);
         try {
-            return new Html(template.apply(context));
+            return template.apply(context);
         } catch (IOException e) {
             throw new TemplateException("Context could not be applied to template " + templateName, e);
         }
+    }
+
+    public static HandlebarsViewService of(final TemplateLoader defaultLoader) {
+        return of(defaultLoader, null);
+    }
+
+    public static HandlebarsViewService of(final TemplateLoader defaultLoader, final TemplateLoader overrideLoader) {
+        final Handlebars defaultTemplateSystem = new Handlebars(defaultLoader);
+        final Optional<Handlebars> overrideTemplateSystem = Optional.ofNullable(overrideLoader).map(Handlebars::new);
+        return new HandlebarsViewService(defaultTemplateSystem, overrideTemplateSystem);
     }
 
     private Context buildContext(final PageData pageData) {
@@ -38,21 +48,25 @@ public class HandlebarsViewService implements ViewService {
     }
 
     private Template compileTemplate(final String templateName) {
-        try {
-            return overrideTemplateSystem.compile(templateName);
-        } catch (IOException eOverride) {
-            try {
-                Logger.debug("Overridden template not found in " + eOverride.getMessage());
-                return defaultTemplateSystem.compile(templateName);
-            } catch (IOException eDefault) {
-                throw new TemplateException("Could not find the default template", eDefault);
-            }
-        }
+        return compileOverrideTemplate(templateName).orElse(compileDefaultTemplate(templateName));
     }
 
-    public static HandlebarsViewService of(final TemplateLoader defaultLoader, final TemplateLoader overrideLoader) {
-        final Handlebars defaultTemplateSystem = new Handlebars(defaultLoader);
-        final Handlebars overrideTemplateSystem = new Handlebars(overrideLoader);
-        return new HandlebarsViewService(defaultTemplateSystem, overrideTemplateSystem);
+    private Optional<Template> compileOverrideTemplate(final String templateName) {
+        return overrideTemplateSystem.flatMap(templateSystem -> {
+            try {
+                return Optional.of(templateSystem.compile(templateName));
+            } catch (IOException e) {
+                Logger.debug("Overridden template not found in " + e.getMessage());
+                return Optional.empty();
+            }
+        });
+    }
+
+    private Template compileDefaultTemplate(final String templateName) {
+        try {
+            return defaultTemplateSystem.compile(templateName);
+        } catch (IOException e) {
+            throw new TemplateException("Could not find the default template", e);
+        }
     }
 }
