@@ -1,4 +1,4 @@
-package common.context;
+package common.contexts;
 
 import com.neovisionaries.i18n.CountryCode;
 import play.i18n.Lang;

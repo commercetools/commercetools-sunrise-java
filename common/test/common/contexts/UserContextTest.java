@@ -1,6 +1,5 @@
-package common.pages;
+package common.contexts;
 
-import common.context.UserContext;
 import org.junit.Test;
 import play.i18n.Lang;
 
