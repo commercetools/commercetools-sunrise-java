@@ -27,7 +27,7 @@ public final class HandlebarsTemplateService implements TemplateService {
         try {
             return template.apply(context);
         } catch (IOException e) {
-            throw new TemplateException("Context could not be applied to template " + templateName, e);
+            throw new TemplateRenderException("Context could not be applied to template " + templateName, e);
         }
     }
 
@@ -66,7 +66,7 @@ public final class HandlebarsTemplateService implements TemplateService {
         try {
             return defaultTemplateSystem.compile(templateName);
         } catch (IOException e) {
-            throw new TemplateException("Could not find the default template", e);
+            throw new TemplateNotFoundException("Could not find the default template", e);
         }
     }
 }
