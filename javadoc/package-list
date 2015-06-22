@@ -1,15 +1,10 @@
-common.cms
-common.contexts
 common.controllers
 common.countries
-common.pages
-common.templates
+common.models
 controllers
 inject
 io.sphere.sdk.play.controllers
 io.sphere.sdk.play.metrics
 productcatalog.controllers
-productcatalog.models
-productcatalog.templates
 setupwidget.controllers
 setupwidget.models
