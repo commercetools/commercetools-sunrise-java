@@ -13,7 +13,6 @@ _Unfortunately we do not currently have any finished template that uses our last
 
 * Demo: https://sunrise.sphere.io
 * [Javadoc](https://sphereio.github.io/sphere-sunrise/javadoc/index.html)
-* [Test Coverage Report](https://sphereio.github.io/sphere-sunrise/coverage/index.html)
 
 ## Preconditions
 
