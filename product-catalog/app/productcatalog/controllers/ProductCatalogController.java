@@ -14,6 +14,7 @@ import productcatalog.templates.ProductCatalogView;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.function.Function;
 
 @Singleton
 public class ProductCatalogController extends SunriseController {
@@ -25,14 +26,17 @@ public class ProductCatalogController extends SunriseController {
     }
 
     public F.Promise<Result> pop() {
-        return cmsService().getPage(userContext().locale(), "pop").flatMap(cms -> {
+        return withCms("pop", cms -> {
             final ProductOverviewPageContent content = new ProductOverviewPageContent(cms);
-            return view().map(view -> ok(view.productOverviewPage(content)));
+            return render(view -> ok(view.productOverviewPage(content)));
         });
     }
 
-    private F.Promise<ProductCatalogView> view() {
+    private F.Promise<Result> render(final Function<ProductCatalogView, Result> pageRenderer) {
         final F.Promise<CmsPage> commonPage = cmsService().getPage(userContext().locale(), "common");
-        return commonPage.map(cms -> new ProductCatalogView(templateService(), cms));
+        return commonPage.map(cms -> {
+            final ProductCatalogView view = new ProductCatalogView(templateService(), cms);
+            return pageRenderer.apply(view);
+        });
     }
 }
