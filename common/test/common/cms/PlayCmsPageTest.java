@@ -53,6 +53,6 @@ public class PlayCmsPageTest extends WithApplication {
 
     private CmsPage cms(final Locale locale, final String pageKey) {
         final MessagesApi messagesApi = app.injector().instanceOf(MessagesApi.class);
-        return PlayCmsService.of(messagesApi).get(locale, pageKey).get(0);
+        return PlayCmsService.of(messagesApi).getPage(locale, pageKey).get(0);
     }
 }

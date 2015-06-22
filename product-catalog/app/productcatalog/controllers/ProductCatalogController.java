@@ -1,5 +1,6 @@
 package productcatalog.controllers;
 
+import common.cms.CmsPage;
 import common.cms.CmsService;
 import common.controllers.SunriseController;
 import common.templates.TemplateService;
@@ -24,14 +25,14 @@ public class ProductCatalogController extends SunriseController {
     }
 
     public F.Promise<Result> pop() {
-        return cmsService().get(userContext().locale(), "pop").flatMap(cms -> {
-            final ProductOverviewPageContent pageData = new ProductOverviewPageContent(cms);
-            return view().map(view -> ok(view.productOverviewPage(pageData)));
+        return cmsService().getPage(userContext().locale(), "pop").flatMap(cms -> {
+            final ProductOverviewPageContent content = new ProductOverviewPageContent(cms);
+            return view().map(view -> ok(view.productOverviewPage(content)));
         });
     }
 
     private F.Promise<ProductCatalogView> view() {
-        return cmsService().get(userContext().locale(), "common")
-                .map(cms -> new ProductCatalogView(templateService(), cms));
+        final F.Promise<CmsPage> commonPage = cmsService().getPage(userContext().locale(), "common");
+        return commonPage.map(cms -> new ProductCatalogView(templateService(), cms));
     }
 }
