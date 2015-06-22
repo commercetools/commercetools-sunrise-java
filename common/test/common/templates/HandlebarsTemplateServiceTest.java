@@ -5,13 +5,14 @@ import common.pages.*;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class HandlebarsTemplateServiceTest {
     private static final ClassPathTemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
     private static final ClassPathTemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
 
     @Test
-    public void fillsTemplate() throws Exception {
+    public void rendersTemplate() throws Exception {
         final String html = handlebars().render("template", pageDataWithTitleAndMessage());
         assertThat(html).contains("<title>foo</title>")
                 .contains("<h1>bar</h1>")
@@ -19,11 +20,17 @@ public class HandlebarsTemplateServiceTest {
     }
 
     @Test
-    public void fillsOverriddenTemplate() throws Exception {
+    public void rendersOverriddenTemplate() throws Exception {
         final String html = handlebarsWithOverride().render("template", pageDataWithTitleAndMessage());
         assertThat(html).contains("<title>more foo</title>")
                 .contains("<h1>more bar</h1>")
                 .contains("<p>more </p>");
+    }
+
+    @Test
+    public void throwsExceptionWhenTemplateNotFound() throws Exception {
+        assertThatThrownBy(() -> handlebars().render("unknown", pageDataWithTitleAndMessage()))
+                .isInstanceOf(TemplateNotFoundException.class);
     }
 
     private HandlebarsTemplateService handlebarsWithOverride() {
