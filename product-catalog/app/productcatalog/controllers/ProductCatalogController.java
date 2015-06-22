@@ -32,6 +32,6 @@ public class ProductCatalogController extends SunriseController {
 
     private F.Promise<ProductCatalogView> view() {
         return cmsService().get(userContext().locale(), "common")
-                .map(cms -> new ProductCatalogView(viewService(), cms));
+                .map(cms -> new ProductCatalogView(templateService(), cms));
     }
 }
