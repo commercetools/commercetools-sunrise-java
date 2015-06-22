@@ -20,7 +20,7 @@ class CmsServiceProvider implements Provider<CmsService> {
 
     @Override
     public CmsService get() {
-        Logger.info("execute CmsServiceProvider.get()");
+        Logger.debug("execute CmsServiceProvider.get()");
         return PlayCmsService.of(messagesApi);
     }
 }
