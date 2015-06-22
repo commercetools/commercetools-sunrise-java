@@ -26,7 +26,7 @@ class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
 
     @Override
     public PlayJavaSphereClient get() {
-        Logger.debug("execute PlayJavaSphereClientProvider.get()");
+        Logger.debug("Provide PlayJavaSphereClient");
         final SphereClientConfig config = getSphereClientConfig();
         final SphereClient sphereClient = createSphereClient(config);
         final PlayJavaSphereClient playJavaSphereClient = PlayJavaSphereClient.of(sphereClient);
