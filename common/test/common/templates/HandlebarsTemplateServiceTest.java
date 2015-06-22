@@ -12,7 +12,7 @@ public class HandlebarsTemplateServiceTest {
 
     @Test
     public void fillsTemplate() throws Exception {
-        final String html = handlebars().fill("template", pageDataWithTitleAndMessage());
+        final String html = handlebars().render("template", pageDataWithTitleAndMessage());
         assertThat(html).contains("<title>foo</title>")
                 .contains("<h1>bar</h1>")
                 .contains("<p></p>");
@@ -20,7 +20,7 @@ public class HandlebarsTemplateServiceTest {
 
     @Test
     public void fillsOverriddenTemplate() throws Exception {
-        final String html = handlebarsWithOverride().fill("template", pageDataWithTitleAndMessage());
+        final String html = handlebarsWithOverride().render("template", pageDataWithTitleAndMessage());
         assertThat(html).contains("<title>more foo</title>")
                 .contains("<h1>more bar</h1>")
                 .contains("<p>more </p>");

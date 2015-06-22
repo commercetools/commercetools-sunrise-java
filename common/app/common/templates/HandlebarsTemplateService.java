@@ -21,7 +21,7 @@ public final class HandlebarsTemplateService implements TemplateService {
     }
 
     @Override
-    public String fill(final String templateName, final PageData pageData) {
+    public String render(final String templateName, final PageData pageData) {
         final Template template = compileTemplate(templateName);
         final Context context = buildContext(pageData);
         try {

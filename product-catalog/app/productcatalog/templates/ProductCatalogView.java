@@ -18,7 +18,7 @@ public final class ProductCatalogView {
     }
 
     public Html productOverviewPage(final ProductOverviewPageContent content) {
-        return templateService.fillToHtml("pop", pageData(content));
+        return templateService.renderToHtml("pop", pageData(content));
     }
 
     private PageData pageData(final PageContent pageContent) {

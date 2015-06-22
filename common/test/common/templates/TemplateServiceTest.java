@@ -12,7 +12,7 @@ public class TemplateServiceTest {
     public void fillsToHtml() throws Exception {
         final String expectedHtml = someHtml();
         final TemplateService templateService = (t, p) -> expectedHtml;
-        final Html html = templateService.fillToHtml(someTemplateName(), somePageData());
+        final Html html = templateService.renderToHtml(someTemplateName(), somePageData());
         assertThat(html.body()).isEqualTo(expectedHtml);
     }
 
