@@ -2,18 +2,18 @@ language: scala
 scala:
 - 2.10.5
 script:
-- ./sbt test it:test unidoc #cover
-#- if [ "$TRAVIS_BRANCH"  = "master" ]; then sbt "gitPublish target/scala-2.11/it-jacoco/html https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git coverage sphere-oss automation@commercetools.de"; fi
-- if [ "$TRAVIS_BRANCH"  = "master" ]; then sbt "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git javadoc sphere-oss automation@commercetools.de"; fi
+- "./sbt test it:test unidoc" #cover
+#- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt "gitPublish target/scala-2.11/it-jacoco/html https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git coverage sphere-oss automation@commercetools.de"; fi
+- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git javadoc sphere-oss automation@commercetools.de"; fi
 jdk:
 - oraclejdk8
 env:
   matrix:
   - SBT_OPTS="-XX:PermSize=512M -XX:MaxPermSize=1024M"
   global:
-  - secure: MmhdvkSl+padAaeCJSMZMvgJRVNTQqiTLw9eyG/Yg4uZwWcOXaeeiW4+rMHr6j+JCeStoSC8NO4rbTKdnZpZuhxuKFfbslFH3oTmc4u45KxxtdMiFIf92iDAj2KVpYLmf2j23lCNyV8rq0s6wmvOtEz2DIbnDTfaiDo/68RxDSg=
-  - secure: XbQrJLUKFfEsPe37YjhiAq/glXLqQxmIimgWgzoMi7D/W2g4pPNu00XbBhIBj8JrXYMyh9dTj34+1DgJFTkazHp5Vls/hxyU/y9eDk42k2vpfvcMOZEvUEmbWxfVendlRyAM1EWOQQGRE7wcQ8CKhrgixOrVtz9PjQwpF/pQUNQ=
-  - secure: PDIHePa/DiW/ED/Mlwx5G1DABH2EojwUaRRPyGUPoS8jlx2bJNrqhfzKXfJAHBdd9y2bA22jQ1OPzBzu7Ui+mzPPZRVqwYSwGa61DwXsyIcCwJ4OpxzUlNORKSQiSWkTLXg31epMcFO3QibnBekQSzbbWHLC99F5uV9552goSNE=
+  - secure: MGKwVKFrBHDPBKuyvDsvDreT+zoPbw0dKiWMoGxJfnJBwEL1DVqHeYkuK4sfBKD4LE2pze1nRURSP7+RcKCB2IhMcL2GkDBx0lIkq2s0YnDbI/b0WFNFv8yyT70LYSeHmme5EcPT0OlMeu8//UQu136yO6NLKXMl5H3LMj4v020=
+  - secure: AFCenTD52oSdFplohvf5z/eT8t5tLzpCAvbgA26zApeTkbl26fOKkCwiaR2lg0MUrlEnnWcCMHu9fuSB9hW6Q+BPOfuDeT4ZfUku2EVNiXqjW8S3Vux82gF3So9fZbBCmpt+/n7yAy3SOGX8cSahMN15XvN7rgy4yKSyPQFL0vs=
+  - secure: VSXOYdyfnBMdHyFuPzZMxYE94c7Afve3meKZXNs+h7YofW33tgP3PNQBMk8gMjD/taZX4dELmyJqZTJW1kKeC9KDkGtcDPhQnJ8kPaW2YX0WInq7n5/++TwYL5eFU/RPa34572cmz4bDLW5ONKuWU8X4b+tOpGk3Kzqz/RKB7QA=
   - SPHERE_SUNRISE_PROJECT="dummysetting"
   - SPHERE_SUNRISE_CLIENT_SECRET="dummysetting"
   - SPHERE_SUNRISE_CLIENT_ID="dummysetting"

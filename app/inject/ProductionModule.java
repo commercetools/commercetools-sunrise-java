@@ -1,7 +1,9 @@
 package inject;
 
 import com.neovisionaries.i18n.CountryCode;
+import common.cms.CmsService;
 import common.countries.CountryOperations;
+import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import play.api.Configuration;
@@ -23,7 +25,9 @@ public class ProductionModule extends Module {
         return seq(
                 bind(CountryCode.class).qualifiedWith("default").toInstance(defaultCountry(configuration)), // checks on start
                 bind(PlayJavaSphereClient.class).toProvider(PlayJavaSphereClientProvider.class).in(Singleton.class),
-                bind(CategoryTree.class).toProvider(CategoryTreeProvider.class)
+                bind(CategoryTree.class).toProvider(CategoryTreeProvider.class).in(Singleton.class),
+                bind(TemplateService.class).toProvider(TemplateServiceProvider.class).in(Singleton.class),
+                bind(CmsService.class).toProvider(CmsServiceProvider.class).in(Singleton.class)
         );
     }
 

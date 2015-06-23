@@ -1,2 +1,1 @@
 
-GET     /       @productcatalog.controllers.ProductController.index()

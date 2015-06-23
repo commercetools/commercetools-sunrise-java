@@ -38,9 +38,9 @@ The output will be like
 * Setup your environment variables (use a test project), so you need not to put your shop credentials under version control:
 
 ```bash
-export SPHERE_SUNRISE_IT_TESTS_PROJECT="your-project-key"
-export SPHERE_SUNRISE_IT_TESTS_CLIENT_SECRET="your-the-client-secret"
-export SPHERE_SUNRISE_IT_TESTS_CLIENT_ID="your-client-id"
+export SPHERE_SUNRISE_IT_PROJECT="your-project-key"
+export SPHERE_SUNRISE_IT_CLIENT_SECRET="your-the-client-secret"
+export SPHERE_SUNRISE_IT_CLIENT_ID="your-client-id"
 ```
 * `sbt it:test`
 
