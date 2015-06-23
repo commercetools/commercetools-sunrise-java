@@ -57,7 +57,7 @@ public final class HandlebarsTemplateService implements TemplateService {
             try {
                 return Optional.of(templateSystem.compile(templateName));
             } catch (IOException e) {
-                Logger.debug("Overridden template not found in " + e.getMessage());
+                Logger.debug("Override template not found in " + e.getMessage());
                 return Optional.empty();
             }
         });
