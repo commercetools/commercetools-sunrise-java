@@ -3,7 +3,6 @@ package common.templates;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.context.JavaBeanValueResolver;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.pages.PageData;
 import play.Logger;
@@ -25,6 +24,7 @@ public final class HandlebarsTemplateService implements TemplateService {
         final Template template = compileTemplate(templateName);
         final Context context = buildContext(pageData);
         try {
+            Logger.debug("Rendering template " + templateName);
             return template.apply(context);
         } catch (IOException e) {
             throw new TemplateRenderException("Context could not be applied to template " + templateName, e);
@@ -42,8 +42,9 @@ public final class HandlebarsTemplateService implements TemplateService {
     }
 
     private Context buildContext(final PageData pageData) {
+        // TODO Use resolver with cache on production
         return Context.newBuilder(pageData)
-                .resolver(JavaBeanValueResolver.INSTANCE)
+                .resolver(NonCachedJavaBeanValueResolver.INSTANCE)
                 .build();
     }
 
