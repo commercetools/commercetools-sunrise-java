@@ -13,8 +13,8 @@ public class TemplateServiceProvider implements Provider<TemplateService> {
 
     @Override
     public TemplateService get() {
-        Logger.debug("Provide TemplateService");
-        return HandlebarsTemplateService.of(defaultLoader(), overrideLoader());
+        Logger.debug("Provide HandlebarsTemplateService");
+        return HandlebarsTemplateService.of(overrideLoader(), defaultLoader());
     }
 
     private ClassPathTemplateLoader defaultLoader() {
