@@ -1,4 +1,4 @@
-package productcatalog.models;
+package productcatalog.pages;
 
 import common.cms.CmsPage;
 import common.pages.PageContent;
@@ -11,6 +11,7 @@ public class ProductOverviewPageContent extends PageContent {
 
     @Override
     public String additionalTitle() {
-        return cms.getOrEmpty("title");
+        // TODO Fill with category name?
+        return "";
     }
 }

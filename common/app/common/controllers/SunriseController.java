@@ -2,6 +2,7 @@ package common.controllers;
 
 import common.cms.CmsPage;
 import common.cms.CmsService;
+import common.contexts.ProjectContext;
 import common.countries.CountryOperations;
 import common.contexts.UserContext;
 import common.templates.TemplateService;
@@ -25,14 +26,16 @@ import java.util.function.Function;
 public abstract class SunriseController extends ShopController {
     private final CategoryTree categoryTree;
     private final CountryOperations countryOperations;
+    private final ProjectContext projectContext;
     private final TemplateService templateService;
     private final CmsService cmsService;
 
-    protected SunriseController(final PlayJavaSphereClient client, final CategoryTree categoryTree,
+    protected SunriseController(final PlayJavaSphereClient client, final CategoryTree categoryTree, final ProjectContext projectContext,
                                 final Configuration configuration, final TemplateService templateService, final CmsService cmsService) {
         super(client);
         this.categoryTree = categoryTree;
         this.countryOperations = CountryOperations.of(configuration);
+        this.projectContext = projectContext;
         this.templateService = templateService;
         this.cmsService = cmsService;
     }
@@ -51,6 +54,15 @@ public abstract class SunriseController extends ShopController {
 
     protected final UserContext userContext() {
         return UserContext.of(Controller.lang(), countryOperations.country());
+    }
+
+    protected final ProjectContext projectContext() {
+        return projectContext;
+    }
+
+    protected F.Promise<Result> withCommonCms(final Function<CmsPage, Result> pageRenderer) {
+        final F.Promise<CmsPage> commonPage = cmsService().getPage(userContext().locale(), "common");
+        return commonPage.map(pageRenderer::apply);
     }
 
     protected F.Promise<Result> withCms(final String pageKey, final Function<CmsPage, F.Promise<Result>> action) {

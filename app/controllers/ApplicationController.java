@@ -1,6 +1,7 @@
 package controllers;
 
 import common.cms.CmsService;
+import common.contexts.ProjectContext;
 import common.controllers.SunriseController;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
@@ -19,9 +20,9 @@ import javax.inject.Singleton;
 public final class ApplicationController extends SunriseController {
 
     @Inject
-    public ApplicationController(final PlayJavaSphereClient client, final CategoryTree categoryTree,
+    public ApplicationController(final PlayJavaSphereClient client, final CategoryTree categoryTree, final ProjectContext projectContext,
                                  final Configuration configuration, final TemplateService templateService, final CmsService cmsService) {
-        super(client, categoryTree, configuration, templateService, cmsService);
+        super(client, categoryTree, projectContext, configuration, templateService, cmsService);
     }
 
     public F.Promise<Result> index() {
