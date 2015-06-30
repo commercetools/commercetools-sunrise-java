@@ -1,12 +1,8 @@
 package productcatalog.controllers;
 
-import common.cms.CmsService;
-import common.contexts.ProjectContext;
+import common.controllers.ControllerDependencies;
 import common.controllers.SunriseController;
-import common.templates.TemplateService;
-import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
-import play.Configuration;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.pages.ProductCatalogView;
@@ -20,9 +16,8 @@ import java.util.function.Function;
 public class ProductCatalogController extends SunriseController {
 
     @Inject
-    public ProductCatalogController(final PlayJavaSphereClient client, final CategoryTree categoryTree, final ProjectContext projectContext,
-                                    final Configuration configuration, final TemplateService templateService, final CmsService cmsService) {
-        super(client, categoryTree, projectContext, configuration, templateService, cmsService);
+    public ProductCatalogController(final PlayJavaSphereClient client, final ControllerDependencies controllerDependencies) {
+        super(client, controllerDependencies);
     }
 
     public F.Promise<Result> pop() {
