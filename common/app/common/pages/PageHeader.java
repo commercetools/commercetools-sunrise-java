@@ -35,7 +35,7 @@ public class PageHeader {
     }
 
     public CollectionData getCountries() {
-        final List<SelectableData> countries = projectContext.getCountries().stream().map(country -> {
+        final List<SelectableData> countries = projectContext.countries().stream().map(country -> {
             final String name = country.getName();
             final String value = country.getAlpha2();
             final String currency = country.getCurrency().getCurrencyCode();

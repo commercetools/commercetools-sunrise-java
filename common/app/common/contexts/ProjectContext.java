@@ -9,16 +9,20 @@ public class ProjectContext {
     private final List<Locale> languages;
     private final List<CountryCode> countries;
 
-    public ProjectContext(final List<Locale> languages, final List<CountryCode> countries) {
+    private ProjectContext(final List<Locale> languages, final List<CountryCode> countries) {
         this.languages = languages;
         this.countries = countries;
     }
 
-    public List<Locale> getLanguages() {
+    public List<Locale> languages() {
         return languages;
     }
 
-    public List<CountryCode> getCountries() {
+    public List<CountryCode> countries() {
         return countries;
+    }
+
+    public static ProjectContext of(final List<Locale> languages, final List<CountryCode> countries) {
+        return new ProjectContext(languages, countries);
     }
 }
