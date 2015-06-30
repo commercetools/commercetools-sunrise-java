@@ -1,32 +1,20 @@
 package common.contexts;
 
+import com.neovisionaries.i18n.CountryCode;
 import org.junit.Test;
-import play.i18n.Lang;
 
 import java.util.Locale;
 
-import static com.neovisionaries.i18n.CountryCode.AT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserContextTest {
+    private static final Locale SELECTED_LANGUAGE = Locale.ENGLISH;
+    private static final CountryCode SELECTED_COUNTRY = CountryCode.UK;
 
     @Test
-    public void hasCorrespondingLocaleWhenCountryAndLanguageProvided() {
-        UserContext context = UserContext.of(lang("de-DE"), AT);
-        assertThat(context.locale()).isEqualTo(locale("de", "DE"));
-    }
-
-    @Test
-    public void hasLocaleWithCountryWhenOnlyLanguageProvided() {
-        UserContext context = UserContext.of(lang("de"), AT);
-        assertThat(context.locale()).isEqualTo(locale("de", "AT"));
-    }
-
-    private Lang lang(String code) {
-        return Lang.forCode(code);
-    }
-
-    private Locale locale(String language, String country) {
-        return new Locale(language, country);
+    public void createsProjectContext() throws Exception {
+        final UserContext userContext = UserContext.of(SELECTED_LANGUAGE, SELECTED_COUNTRY);
+        assertThat(userContext.language()).isEqualTo(SELECTED_LANGUAGE);
+        assertThat(userContext.country()).isEqualTo(SELECTED_COUNTRY);
     }
 }

@@ -1,43 +1,30 @@
 package common.contexts;
 
 import com.neovisionaries.i18n.CountryCode;
-import play.i18n.Lang;
 
 import java.util.Locale;
 
 /**
- * A container for all information related to the current user, such as country, language, cart, associated customer.
+ * A container for all information related to the current user, such as selected country or language.
  */
 public class UserContext {
-    private final Lang lang;
-    private final CountryCode countryCode;
+    private final Locale language;
+    private final CountryCode country;
 
-    private UserContext(final Lang lang, final CountryCode countryCode) {
-        this.lang = lang;
-        this.countryCode = countryCode;
+    private UserContext(final Locale language, final CountryCode country) {
+        this.language = language;
+        this.country = country;
     }
 
-    public Lang lang() {
-        return lang;
+    public Locale language() {
+        return language;
     }
 
     public CountryCode country() {
-        return countryCode;
+        return country;
     }
 
-    /**
-     * Gets the locale representing the language and country of the user.
-     * @return the locale matching the language and country.
-     */
-    public Locale locale() {
-        if (lang.country().isEmpty()) {
-            return new Locale(lang.language(), countryCode.getAlpha2());
-        } else {
-            return lang.toLocale();
-        }
-    }
-
-    public static UserContext of(final Lang lang, final CountryCode countryCode) {
-        return new UserContext(lang, countryCode);
+    public static UserContext of(final Locale language, final CountryCode country) {
+        return new UserContext(language, country);
     }
 }
