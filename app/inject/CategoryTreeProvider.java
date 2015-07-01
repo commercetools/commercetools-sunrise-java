@@ -27,7 +27,7 @@ class CategoryTreeProvider implements Provider<CategoryTree> {
     public CategoryTree get() {
         try {
             final QueryAll<Category> query = QueryAll.of(CategoryQuery.of());
-            final List<Category> categories = query.executeWith(client).toCompletableFuture().get();
+            final List<Category> categories = query.run(client).toCompletableFuture().get();
             Logger.debug("Provide CategoryTree with " + categories.size() + " categories");
             return CategoryTree.of(categories);
         } catch (InterruptedException | ExecutionException e) {

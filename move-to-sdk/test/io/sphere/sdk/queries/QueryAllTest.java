@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 
@@ -47,7 +48,7 @@ public class QueryAllTest {
 
     private void withClient(final SphereClient client, final Consumer<List> test) {
         final QueryAll<Category> query = QueryAll.of(CategoryQuery.of(), 5);
-        final List elements = query.executeWith(client).toCompletableFuture().join();
+        final List elements = query.run(client).toCompletableFuture().join();
         test.accept(elements);
     }
 
@@ -76,7 +77,7 @@ public class QueryAllTest {
                         try {
                             Thread.sleep(100 / (offset + 1));
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            throw new CompletionException(e);
                         }
                     }
                     return (T) generatePagedQueryResult(offset);

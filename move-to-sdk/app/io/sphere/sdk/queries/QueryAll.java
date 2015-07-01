@@ -23,7 +23,7 @@ public class QueryAll<T> {
         this.pageSize = pageSize;
     }
 
-    public CompletionStage<List<T>> executeWith(final SphereClient client) {
+    public CompletionStage<List<T>> run(final SphereClient client) {
         return queryPage(client, 0).thenCompose(result -> {
             final List<CompletableFuture<List<T>>> futureResults = new ArrayList<>();
             futureResults.add(completedFuture(result.getResults()));
