@@ -11,10 +11,10 @@ import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import play.libs.F;
-import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.With;
 
+import java.util.Locale;
 import java.util.function.Function;
 
 /**
@@ -43,7 +43,7 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected final UserContext userContext() {
-        return UserContext.of(Controller.lang().toLocale(), CountryCode.DE);
+        return UserContext.of(Locale.GERMAN, CountryCode.DE);
     }
 
     protected final ProjectContext projectContext() {
