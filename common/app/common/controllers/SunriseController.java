@@ -13,9 +13,11 @@ import play.libs.F;
 import play.mvc.Result;
 import play.mvc.With;
 
-import java.util.Collections;
-import java.util.Locale;
 import java.util.function.Function;
+
+import static com.neovisionaries.i18n.CountryCode.DE;
+import static java.util.Collections.emptyList;
+import static java.util.Locale.GERMAN;
 
 /**
  * An application specific controller.
@@ -27,9 +29,9 @@ public abstract class SunriseController extends ShopController {
     private final ControllerDependency controllerDependency;
 
     protected SunriseController(final ControllerDependency controllerDependency) {
-        super(controllerDependency.client());
+        super(controllerDependency.sphere());
         // TODO Fill it properly
-        final UserContext userContext = UserContext.of(Locale.GERMAN, Collections.<Locale>emptyList(), CountryCode.DE);
+        final UserContext userContext = UserContext.of(GERMAN, emptyList(), DE);
         this.context = AppContext.of(userContext, controllerDependency.projectContext());
         this.controllerDependency = controllerDependency;
     }
