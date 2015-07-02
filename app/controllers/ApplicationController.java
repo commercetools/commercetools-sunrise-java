@@ -1,8 +1,7 @@
 package controllers;
 
-import common.controllers.ControllerDependencies;
+import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
-import io.sphere.sdk.client.PlayJavaSphereClient;
 import play.libs.F;
 import play.mvc.Result;
 
@@ -16,11 +15,11 @@ import javax.inject.Singleton;
 public final class ApplicationController extends SunriseController {
 
     @Inject
-    public ApplicationController(final PlayJavaSphereClient client, final ControllerDependencies controllerDependencies) {
-        super(client, controllerDependencies);
+    public ApplicationController(final ControllerDependency controllerDependency) {
+        super(controllerDependency);
     }
 
     public F.Promise<Result> index() {
-        return F.Promise.pure(redirect(productcatalog.controllers.routes.ProductCatalogController.pop()));
+        return F.Promise.pure(redirect(productcatalog.controllers.routes.ProductCatalogController.pop(1)));
     }
 }

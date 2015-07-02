@@ -1,23 +1,23 @@
 package common.pages;
 
 import common.cms.CmsPage;
-import common.contexts.ProjectContext;
+import common.contexts.AppContext;
 
 public final class SunrisePageData implements PageData {
     private final CmsPage cms;
-    private final ProjectContext projectContext;
+    private final AppContext context;
     private final PageContent pageContent;
 
-    private SunrisePageData(final CmsPage cms, final ProjectContext projectContext, final PageContent pageContent) {
+    private SunrisePageData(final CmsPage cms, final AppContext context, final PageContent pageContent) {
         this.cms = cms;
-        this.projectContext = projectContext;
+        this.context = context;
         this.pageContent = pageContent;
     }
 
     @Override
     public PageHeader getHeader() {
         final String title = cms.getOrEmpty("header.title") + pageContent.additionalTitle();
-        return new PageHeader(cms, projectContext, title);
+        return new PageHeader(cms, context, title);
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class SunrisePageData implements PageData {
         return new SeoData();
     }
 
-    public static SunrisePageData of(final CmsPage cms, final ProjectContext projectContext, final PageContent pageContent) {
-        return new SunrisePageData(cms, projectContext, pageContent);
+    public static SunrisePageData of(final CmsPage cms, final AppContext context, final PageContent pageContent) {
+        return new SunrisePageData(cms, context, pageContent);
     }
 }

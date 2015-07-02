@@ -1,7 +1,7 @@
 package common.pages;
 
 import common.cms.CmsPage;
-import common.contexts.ProjectContext;
+import common.contexts.AppContext;
 
 import java.util.List;
 
@@ -9,12 +9,12 @@ import static java.util.stream.Collectors.toList;
 
 public class PageHeader {
     private final CmsPage cms;
-    private final ProjectContext projectContext;
+    private final AppContext context;
     private final String title;
 
-    public PageHeader(final CmsPage cms, final ProjectContext projectContext, final String title) {
+    public PageHeader(final CmsPage cms, final AppContext context, final String title) {
         this.cms = cms;
-        this.projectContext = projectContext;
+        this.context = context;
         this.title = title;
     }
 
@@ -35,7 +35,7 @@ public class PageHeader {
     }
 
     public CollectionData getCountries() {
-        final List<SelectableData> countries = projectContext.countries().stream().map(country -> {
+        final List<SelectableData> countries = context.project().countries().stream().map(country -> {
             final String name = country.getName();
             final String value = country.getAlpha2();
             final String currency = country.getCurrency().getCurrencyCode();
