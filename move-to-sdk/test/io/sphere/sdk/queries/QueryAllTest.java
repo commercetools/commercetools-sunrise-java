@@ -38,7 +38,7 @@ public class QueryAllTest {
 
     @Test
     public void onWrongTotalResult() throws Exception {
-        withClient(clientWithWrongResults(16, 10), list -> assertThat(list).isSorted().hasSize(16));
+        withClient(clientWithWrongResults(16), list -> assertThat(list).isSorted().hasSize(16));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class QueryAllTest {
     }
 
     private void withClient(final SphereClient client, final Consumer<List> test) {
-        final QueryAll<Category> query = QueryAll.of(CategoryQuery.of(), 5);
+        final QueryAll<Category, CategoryQuery> query = QueryAll.of(CategoryQuery.of(), 5);
         final List elements = query.run(client).toCompletableFuture().join();
         test.accept(elements);
     }
@@ -56,21 +56,21 @@ public class QueryAllTest {
         return client(totalResults, 0, false);
     }
 
-    private SphereClient clientWithWrongResults(final int totalResults, final int deviation) {
-        return client(totalResults, deviation, false);
+    private SphereClient clientWithWrongResults(final int totalResults) {
+        return client(totalResults, 10, false);
     }
 
     private SphereClient clientWithDelays(final int totalResults) {
         return client(totalResults, 0, true);
     }
 
-    private SphereClient client(final int totalResults, final int deviation, final boolean withDelays) {
+    private <C> SphereClient client(final int totalResults, final int deviation, final boolean withDelays) {
         return new SphereClient() {
 
             @SuppressWarnings("unchecked")
             @Override
             public <T> CompletionStage<T> execute(final SphereRequest<T> request) {
-                final QueryDslImpl<T> query = (QueryDslImpl<T>) request;
+                final QueryDsl<T, C> query = (QueryDsl<T, C>) request;
                 final int offset = query.offset().get().intValue();
                 return CompletableFuture.supplyAsync(() -> {
                     if (withDelays) {

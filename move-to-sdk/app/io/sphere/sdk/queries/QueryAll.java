@@ -13,12 +13,12 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.LongStream.rangeClosed;
 
-public class QueryAll<T> {
+public class QueryAll<T, C extends QueryDsl<T, C>> {
     private static final int DEFAULT_PAGE_SIZE = 500;
-    private final QueryDsl<T> baseQuery;
+    private final QueryDsl<T, C> baseQuery;
     private final long pageSize;
 
-    private QueryAll(final QueryDsl<T> baseQuery, final long pageSize) {
+    private QueryAll(final QueryDsl<T, C> baseQuery, final long pageSize) {
         this.baseQuery = baseQuery;
         this.pageSize = pageSize;
     }
@@ -42,7 +42,7 @@ public class QueryAll<T> {
     }
 
     private CompletionStage<PagedQueryResult<T>> queryPage(final SphereClient client, final long pageNumber) {
-        final QueryDsl<T> query = baseQuery
+        final QueryDsl<T, C> query = baseQuery
                 .withOffset(pageNumber * pageSize)
                 .withLimit(pageSize);
         return client.execute(query);
@@ -57,11 +57,11 @@ public class QueryAll<T> {
                         .collect(Collectors.<T>toList()));
     }
 
-    public static <T> QueryAll<T> of(final QueryDsl<T> baseQuery) {
+    public static <T, C extends QueryDsl<T, C>> QueryAll<T, C> of(final QueryDsl<T, C> baseQuery) {
         return of(baseQuery, DEFAULT_PAGE_SIZE);
     }
 
-    public static <T> QueryAll<T> of(final QueryDsl<T> baseQuery, final int pageSize) {
+    public static <T, C extends QueryDsl<T, C>> QueryAll<T, C> of(final QueryDsl<T, C> baseQuery, final int pageSize) {
         return new QueryAll<>(baseQuery, pageSize);
     }
 }
