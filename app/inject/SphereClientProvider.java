@@ -1,7 +1,11 @@
 package inject;
 
 import com.google.inject.Provider;
-import io.sphere.sdk.client.*;
+import io.sphere.sdk.client.SphereAccessTokenSupplier;
+import io.sphere.sdk.client.SphereAccessTokenSupplierFactory;
+import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.client.SphereClientConfig;
+import io.sphere.sdk.http.NingHttpClientAdapter;
 import io.sphere.sdk.play.metrics.MetricHttpClient;
 import play.Configuration;
 import play.Logger;
