@@ -11,11 +11,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.IntStream.range;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QueryAllTest {
@@ -98,7 +98,7 @@ public class QueryAllTest {
             }
 
             private List<Integer> generateSortedResultList(final int offset, final int count) {
-                return range(offset, offset + count)
+                return IntStream.range(offset, offset + count)
                         .boxed()
                         .collect(toList());
             }

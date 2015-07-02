@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.LongStream.rangeClosed;
 
 public class QueryAll<T, C extends QueryDsl<T, C>> {
     private static final int DEFAULT_PAGE_SIZE = 500;
@@ -34,7 +34,7 @@ public class QueryAll<T, C extends QueryDsl<T, C>> {
 
     private List<CompletableFuture<List<T>>> queryNextPages(final SphereClient client, final long totalElements) {
         final long totalPages = totalElements / pageSize;
-        return rangeClosed(1, totalPages)
+        return LongStream.rangeClosed(1, totalPages)
                 .mapToObj(page -> queryPage(client, page)
                         .thenApply(PagedQueryResult::getResults)
                         .toCompletableFuture())
