@@ -1,5 +1,6 @@
 package common.contexts;
 
+import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
 import org.junit.Test;
@@ -16,7 +17,7 @@ public class UserContextTest {
 
     @Test
     public void createsProjectContext() throws Exception {
-        final UserContext userContext = UserContext.of(ENGLISH, asList(ENGLISH, GERMAN, FRENCH), UK, customerGroup());
+        final UserContext userContext = UserContext.of(ENGLISH, asList(ENGLISH, GERMAN, FRENCH), UK, customerGroup(), channel());
         assertThat(userContext.language()).isEqualTo(ENGLISH);
         assertThat(userContext.fallbackLanguages()).containsExactly(ENGLISH, GERMAN, FRENCH);
         assertThat(userContext.country()).isEqualTo(UK);
@@ -34,5 +35,9 @@ public class UserContextTest {
 
     private Reference<CustomerGroup> customerGroup() {
         return Reference.of(CustomerGroup.typeId(), "foo");
+    }
+
+    private Reference<Channel> channel() {
+        return Reference.of(Channel.typeId(), "foo");
     }
 }
