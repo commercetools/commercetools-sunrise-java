@@ -2,6 +2,7 @@ package productcatalog.controllers;
 
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
+import common.utils.PriceFormatterImpl;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.SearchDsl;
@@ -26,7 +27,7 @@ public class ProductCatalogController extends SunriseController {
     public F.Promise<Result> pop(int page) {
         return withCms("pop", cms ->
             sphere().execute(searchProducts(page)).flatMap(result -> {
-                final ProductOverviewPageContent content = new ProductOverviewPageContent(cms, context(), result, null);
+                final ProductOverviewPageContent content = new ProductOverviewPageContent(cms, context(), result, PriceFormatterImpl.of());
                 return render(view -> ok(view.productOverviewPage(content)));
             })
         );
