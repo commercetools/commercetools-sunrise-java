@@ -8,7 +8,7 @@ import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.Price;
 
 import javax.money.CurrencyUnit;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class PriceScope {
     final Optional<CountryCode> country;
     final Optional<Reference<CustomerGroup>> customerGroup;
     final Optional<Reference<Channel>> channel;
-    final Optional<Instant> date;
+    final Optional<ZonedDateTime> date;
 
     private Predicate<Price> currencyPredicate;
     private Predicate<Price> countryPredicate;
@@ -76,15 +76,12 @@ public class PriceScope {
         return price.getChannel().map(c -> c.hasSameIdAs(channel)).orElse(false);
     }
 
-    private boolean priceHasValidDate(Price price, Instant date) {
-        // find in priority a price with a period
-        if(!price.getValidFrom().isPresent() & !price.getValidUntil().isPresent())
-            return false;
-
+    private boolean priceHasValidDate(Price price, ZonedDateTime date) {
+        final boolean hasPeriod = price.getValidFrom().isPresent() | price.getValidUntil().isPresent();
         final boolean toEarly = price.getValidFrom().map(from -> from.isAfter(date)).orElse(false);
         final boolean toLate = price.getValidUntil().map(until -> until.isBefore(date)).orElse(false);
 
-        return !toEarly & !toLate;
+        return hasPeriod & !toEarly & !toLate;
     }
 
     private boolean priceHasNoDate(Price price) {

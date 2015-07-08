@@ -10,7 +10,7 @@ import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductVariant;
 
-import java.time.Instant;
+import java.time.ZonedDateTime;
 
 public class PriceFinder {
 
@@ -36,7 +36,7 @@ public class PriceFinder {
      any left
      */
     public Optional<Price> findPriceForContext(final UserContext userContext) {
-        final PriceScopeBuilder base = PriceScopeBuilder.of().currency(userContext.currency()).date(Instant.now());
+        final PriceScopeBuilder base = PriceScopeBuilder.of().currency(userContext.currency()).date(ZonedDateTime.now());
         final CountryCode country = userContext.country();
         final java.util.Optional<Reference<CustomerGroup>> customerGroup = userContext.customerGroup();
         final java.util.Optional<Reference<Channel>> channel = userContext.channel();

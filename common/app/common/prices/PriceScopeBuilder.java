@@ -6,7 +6,7 @@ import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
 
 import javax.money.CurrencyUnit;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 public class PriceScopeBuilder {
@@ -15,7 +15,7 @@ public class PriceScopeBuilder {
     Optional<CountryCode> country = Optional.empty();
     Optional<Reference<CustomerGroup>> customerGroup = Optional.empty();
     Optional<Reference<Channel>> channel = Optional.empty();
-    Optional<Instant> date = Optional.empty();
+    Optional<ZonedDateTime> date = Optional.empty();
 
     private PriceScopeBuilder() {
 
@@ -55,7 +55,7 @@ public class PriceScopeBuilder {
         return this;
     }
 
-    public PriceScopeBuilder date(final Instant date) {
+    public PriceScopeBuilder date(final ZonedDateTime date) {
         this.date = Optional.of(date);
         return this;
     }
