@@ -16,21 +16,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserContextTest {
 
     @Test
-    public void createsProjectContext() throws Exception {
+    public void createsUserContext() throws Exception {
         final UserContext userContext = UserContext.of(ENGLISH, asList(ENGLISH, GERMAN, FRENCH), UK, customerGroup(), channel());
         assertThat(userContext.language()).isEqualTo(ENGLISH);
         assertThat(userContext.fallbackLanguages()).containsExactly(ENGLISH, GERMAN, FRENCH);
         assertThat(userContext.country()).isEqualTo(UK);
         assertThat(userContext.customerGroup()).contains(customerGroup());
+        assertThat(userContext.channel()).contains((channel()));
     }
 
     @Test
-    public void createsProjectContextWithEmptyCustomerGroup() throws Exception {
+    public void createsUserContextWithEmptyCustomerGroupAndChannel() throws Exception {
         final UserContext userContext = UserContext.of(ENGLISH, emptyList(), UK);
         assertThat(userContext.language()).isEqualTo(ENGLISH);
         assertThat(userContext.fallbackLanguages()).isEmpty();
         assertThat(userContext.country()).isEqualTo(UK);
         assertThat(userContext.customerGroup()).isEmpty();
+        assertThat(userContext.channel()).isEmpty();
     }
 
     private Reference<CustomerGroup> customerGroup() {
