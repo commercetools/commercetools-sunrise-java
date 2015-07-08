@@ -13,6 +13,7 @@ import play.libs.F;
 import play.mvc.Result;
 import play.mvc.With;
 
+import java.time.ZoneId;
 import java.util.function.Function;
 
 import static com.neovisionaries.i18n.CountryCode.DE;
@@ -31,7 +32,7 @@ public abstract class SunriseController extends ShopController {
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
         // TODO Fill it properly
-        final UserContext userContext = UserContext.of(GERMAN, emptyList(), DE);
+        final UserContext userContext = UserContext.of(GERMAN, emptyList(), DE, ZoneId.of("DE"));
         this.context = AppContext.of(userContext, controllerDependency.projectContext());
         this.controllerDependency = controllerDependency;
     }
