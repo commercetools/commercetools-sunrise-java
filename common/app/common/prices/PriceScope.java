@@ -22,12 +22,12 @@ public class PriceScope {
     final Optional<Reference<Channel>> channel;
     final Optional<Instant> date;
 
-    private Predicate<Price> currencyPredicate = price -> this.currency.map(c -> priceHasCurrency(price, c)).orElse(true);
-    private Predicate<Price> countryPredicate = price -> this.country.map(c -> priceHasCountry(price, c)).orElse(true);
-    private Predicate<Price> customerGroupPredicate = price -> this.customerGroup.map(c -> priceHasCustomerGroup(price, c)).orElse(true);
-    private Predicate<Price> channelPredicate = price -> this.channel.map(c -> priceHasChannel(price, c)).orElse(true);
-    private Predicate<Price> datePredicate = price -> this.date.map(d -> priceHasValidDate(price, d)).orElse(true);
-    private Predicate<Price> dateFallbackPredicate = this::priceHasNoDate;
+    private Predicate<Price> currencyPredicate;
+    private Predicate<Price> countryPredicate;
+    private Predicate<Price> customerGroupPredicate;
+    private Predicate<Price> channelPredicate;
+    private Predicate<Price> datePredicate;
+    private Predicate<Price> dateFallbackPredicate;
 
     PriceScope(final PriceScopeBuilder builder) {
         this.currency = builder.currency;
@@ -35,6 +35,17 @@ public class PriceScope {
         this.customerGroup = builder.customerGroup;
         this.channel = builder.channel;
         this.date = builder.date;
+
+        initializePredicates();
+    }
+
+    private void initializePredicates() {
+        currencyPredicate = price -> this.currency.map(c -> priceHasCurrency(price, c)).orElse(true);
+        countryPredicate = price -> this.country.map(c -> priceHasCountry(price, c)).orElse(true);
+        customerGroupPredicate = price -> this.customerGroup.map(c -> priceHasCustomerGroup(price, c)).orElse(true);
+        channelPredicate = price -> this.channel.map(c -> priceHasChannel(price, c)).orElse(true);
+        datePredicate = price -> this.date.map(d -> priceHasValidDate(price, d)).orElse(true);
+        dateFallbackPredicate = this::priceHasNoDate;
     }
 
     public Predicate<Price> predicates() {
