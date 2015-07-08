@@ -1,6 +1,7 @@
 package common.contexts;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
 import org.javamoney.moneta.CurrencyUnitBuilder;
@@ -20,13 +21,15 @@ public class UserContext {
     private final List<Locale> fallbackLanguages;
     private final CountryCode country;
     private final Optional<Reference<CustomerGroup>> customerGroup;
+    private final Optional<Reference<Channel>> channel;
 
     private UserContext(final Locale language, final List<Locale> fallbackLanguages, final CountryCode country,
-                        final Reference<CustomerGroup> customerGroup) {
+                        final Reference<CustomerGroup> customerGroup, final Reference<Channel> channel) {
         this.language = language;
         this.country = country;
         this.fallbackLanguages = fallbackLanguages;
         this.customerGroup = Optional.ofNullable(customerGroup);
+        this.channel = Optional.ofNullable(channel);
     }
 
     public Locale language() {
@@ -45,17 +48,21 @@ public class UserContext {
         return customerGroup;
     }
 
+    public Optional<Reference<Channel>> channel() {
+        return channel;
+    }
+
     public CurrencyUnit currency() {
         final CurrencyContext currencyContext = CurrencyContextBuilder.of("").build();
         return CurrencyUnitBuilder.of(country.getCurrency().getCurrencyCode(), currencyContext).build();
     }
 
     public static UserContext of(final Locale language, final List<Locale> fallbackLanguages, final CountryCode country) {
-        return new UserContext(language, fallbackLanguages, country, null);
+        return new UserContext(language, fallbackLanguages, country, null, null);
     }
 
     public static UserContext of(final Locale language, final List<Locale> fallbackLanguages, final CountryCode country,
-                                 final Reference<CustomerGroup> customerGroup) {
-        return new UserContext(language, fallbackLanguages, country, customerGroup);
+                                 final Reference<CustomerGroup> customerGroup, final Reference<Channel> channel) {
+        return new UserContext(language, fallbackLanguages, country, customerGroup, channel);
     }
 }
