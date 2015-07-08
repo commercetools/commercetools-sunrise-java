@@ -35,7 +35,7 @@ public class ProductThumbnailData {
     }
 
     public String getPrice() {
-        return PriceFinder.of(variant).findPriceForContext(context.user())
+        return PriceFinder.of().findPriceForContext(variant.getPrices(), context.user())
                 .transform(price -> priceFormatter.format(price.getValue(), context))
                 .or("");
     }

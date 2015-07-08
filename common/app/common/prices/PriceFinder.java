@@ -8,20 +8,18 @@ import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.Price;
-import io.sphere.sdk.products.ProductVariant;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 public class PriceFinder {
 
-    private final ProductVariant variant;
+    private PriceFinder() {
 
-    private PriceFinder(final ProductVariant variant) {
-        this.variant = variant;
     }
 
-    public static PriceFinder of(final ProductVariant variant) {
-        return new PriceFinder(variant);
+    public static PriceFinder of() {
+        return new PriceFinder();
     }
 
     /**
@@ -35,24 +33,24 @@ public class PriceFinder {
      country
      any left
      */
-    public Optional<Price> findPriceForContext(final UserContext userContext) {
+    public Optional<Price> findPriceForContext(final List<Price> prices, final UserContext userContext) {
         final PriceScopeBuilder base = PriceScopeBuilder.of().currency(userContext.currency()).date(ZonedDateTime.now());
         final CountryCode country = userContext.country();
         final java.util.Optional<Reference<CustomerGroup>> customerGroup = userContext.customerGroup();
         final java.util.Optional<Reference<Channel>> channel = userContext.channel();
 
-        return findPriceForScope(base.country(country).customerGroup(customerGroup).channel(channel).build())
-                .or(findPriceForScope(base.customerGroup(customerGroup).channel(channel).build()))
-                .or(findPriceForScope(base.customerGroup(customerGroup).country(country).build()))
-                .or(findPriceForScope(base.customerGroup(customerGroup).build()))
-                .or(findPriceForScope(base.country(country).channel(channel).build()))
-                .or(findPriceForScope(base.channel(channel).build()))
-                .or(findPriceForScope(base.country(country).build()))
-                .or(findPriceForScope(base.build()));
+        return findPriceForScope(prices, base.country(country).customerGroup(customerGroup).channel(channel).build())
+                .or(findPriceForScope(prices, base.customerGroup(customerGroup).channel(channel).build()))
+                .or(findPriceForScope(prices, base.customerGroup(customerGroup).country(country).build()))
+                .or(findPriceForScope(prices, base.customerGroup(customerGroup).build()))
+                .or(findPriceForScope(prices, base.country(country).channel(channel).build()))
+                .or(findPriceForScope(prices, base.channel(channel).build()))
+                .or(findPriceForScope(prices, base.country(country).build()))
+                .or(findPriceForScope(prices, base.build()));
     }
 
-    private Optional<Price> findPriceForScope(final PriceScope scope) {
-        return Iterables.tryFind(variant.getPrices(), scope.predicates())
-                .or(Iterables.tryFind(variant.getPrices(), scope.predicatesWithDateFallback()));
+    private Optional<Price> findPriceForScope(final List<Price> prices, final PriceScope scope) {
+        return Iterables.tryFind(prices, scope.predicates())
+                .or(Iterables.tryFind(prices, scope.predicatesWithDateFallback()));
     }
 }
