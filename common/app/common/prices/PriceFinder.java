@@ -9,6 +9,7 @@ import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.Price;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -34,7 +35,8 @@ public class PriceFinder {
      any left
      */
     public Optional<Price> findPriceForContext(final List<Price> prices, final UserContext userContext) {
-        final PriceScopeBuilder base = PriceScopeBuilder.of().currency(userContext.currency()).date(ZonedDateTime.now());
+        final ZonedDateTime userTime = ZonedDateTime.of(LocalDateTime.now(), userContext.zoneId());
+        final PriceScopeBuilder base = PriceScopeBuilder.of().currency(userContext.currency()).date(userTime);
         final CountryCode country = userContext.country();
         final java.util.Optional<Reference<CustomerGroup>> customerGroup = userContext.customerGroup();
         final java.util.Optional<Reference<Channel>> channel = userContext.channel();
