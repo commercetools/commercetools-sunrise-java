@@ -1,12 +1,19 @@
 package productcatalog.pages;
 
+import com.google.common.base.Optional;
 import common.contexts.AppContext;
+import common.contexts.UserContext;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.models.Image;
 import io.sphere.sdk.models.LocalizedStrings;
+import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
+
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.List;
 
 public class ProductThumbnailData {
     private final ProductProjection product;
@@ -35,9 +42,18 @@ public class ProductThumbnailData {
     }
 
     public String getPrice() {
-        return PriceFinder.of().findPriceForContext(variant.getPrices(), context.user())
+        return findPrice(variant.getPrices(), context.user())
                 .transform(price -> priceFormatter.format(price.getValue(), context))
                 .or("");
+    }
+
+    private Optional<Price> findPrice(List<Price> prices, UserContext userContext) {
+        return PriceFinder.of().findPrice(prices,
+                userContext.currency(),
+                userContext.country(),
+                userContext.customerGroup(),
+                userContext.channel(),
+                ZonedDateTime.of(LocalDateTime.now(), userContext.zoneId()));
     }
 
     public String findSuitableLanguage(final LocalizedStrings localizedStrings) {

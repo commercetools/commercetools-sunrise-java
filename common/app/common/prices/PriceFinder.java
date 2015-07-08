@@ -3,13 +3,12 @@ package common.prices;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.neovisionaries.i18n.CountryCode;
-import common.contexts.UserContext;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.Price;
 
-import java.time.LocalDateTime;
+import javax.money.CurrencyUnit;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -34,12 +33,13 @@ public class PriceFinder {
      country
      any left
      */
-    public Optional<Price> findPriceForContext(final List<Price> prices, final UserContext userContext) {
-        final ZonedDateTime userTime = ZonedDateTime.of(LocalDateTime.now(), userContext.zoneId());
-        final PriceScopeBuilder base = PriceScopeBuilder.of().currency(userContext.currency()).date(userTime);
-        final CountryCode country = userContext.country();
-        final java.util.Optional<Reference<CustomerGroup>> customerGroup = userContext.customerGroup();
-        final java.util.Optional<Reference<Channel>> channel = userContext.channel();
+    public Optional<Price> findPrice(final List<Price> prices,
+                                     final CurrencyUnit currency,
+                                     final CountryCode country,
+                                     final java.util.Optional<Reference<CustomerGroup>> customerGroup,
+                                     final java.util.Optional<Reference<Channel>> channel,
+                                     final ZonedDateTime userTime) {
+        final PriceScopeBuilder base = PriceScopeBuilder.of().currency(currency).date(userTime);
 
         return findPriceForScope(prices, base.country(country).customerGroup(customerGroup).channel(channel).build())
                 .or(findPriceForScope(prices, base.customerGroup(customerGroup).channel(channel).build()))
