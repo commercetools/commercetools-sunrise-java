@@ -5,6 +5,8 @@ import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
 import org.junit.Test;
 
+import java.time.ZoneId;
+
 import static com.neovisionaries.i18n.CountryCode.UK;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -17,7 +19,7 @@ public class UserContextTest {
 
     @Test
     public void createsUserContext() throws Exception {
-        final UserContext userContext = UserContext.of(ENGLISH, asList(ENGLISH, GERMAN, FRENCH), UK, customerGroup(), channel());
+        final UserContext userContext = UserContext.of(ENGLISH, asList(ENGLISH, GERMAN, FRENCH), UK, ZoneId.of("Europe/London"), customerGroup(), channel());
         assertThat(userContext.language()).isEqualTo(ENGLISH);
         assertThat(userContext.fallbackLanguages()).containsExactly(ENGLISH, GERMAN, FRENCH);
         assertThat(userContext.country()).isEqualTo(UK);
@@ -27,7 +29,7 @@ public class UserContextTest {
 
     @Test
     public void createsUserContextWithEmptyCustomerGroupAndChannel() throws Exception {
-        final UserContext userContext = UserContext.of(ENGLISH, emptyList(), UK);
+        final UserContext userContext = UserContext.of(ENGLISH, emptyList(), UK, ZoneId.of("Europe/London"));
         assertThat(userContext.language()).isEqualTo(ENGLISH);
         assertThat(userContext.fallbackLanguages()).isEmpty();
         assertThat(userContext.country()).isEqualTo(UK);
