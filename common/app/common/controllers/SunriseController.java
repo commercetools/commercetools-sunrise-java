@@ -32,7 +32,7 @@ public abstract class SunriseController extends ShopController {
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
         // TODO Fill it properly
-        final UserContext userContext = UserContext.of(GERMAN, emptyList(), DE, ZoneId.of("DE"));
+        final UserContext userContext = UserContext.of(GERMAN, emptyList(), DE, ZoneId.of("Europe/Berlin"));
         this.context = AppContext.of(userContext, controllerDependency.projectContext());
         this.controllerDependency = controllerDependency;
     }
