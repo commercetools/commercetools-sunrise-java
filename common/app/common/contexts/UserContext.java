@@ -9,6 +9,7 @@ import org.javamoney.moneta.CurrencyUnitBuilder;
 import javax.money.CurrencyContext;
 import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -20,13 +21,16 @@ public class UserContext {
     private final Locale language;
     private final List<Locale> fallbackLanguages;
     private final CountryCode country;
+    private final ZoneId zoneId;
     private final Optional<Reference<CustomerGroup>> customerGroup;
     private final Optional<Reference<Channel>> channel;
 
-    private UserContext(final Locale language, final List<Locale> fallbackLanguages, final CountryCode country,
+    private UserContext(final Locale language, final List<Locale> fallbackLanguages,
+                        final CountryCode country, final ZoneId zoneId,
                         final Reference<CustomerGroup> customerGroup, final Reference<Channel> channel) {
         this.language = language;
         this.country = country;
+        this.zoneId = zoneId;
         this.fallbackLanguages = fallbackLanguages;
         this.customerGroup = Optional.ofNullable(customerGroup);
         this.channel = Optional.ofNullable(channel);
@@ -38,6 +42,10 @@ public class UserContext {
 
     public CountryCode country() {
         return country;
+    }
+
+    public ZoneId zoneId() {
+        return zoneId;
     }
 
     public List<Locale> fallbackLanguages() {
@@ -57,12 +65,14 @@ public class UserContext {
         return CurrencyUnitBuilder.of(country.getCurrency().getCurrencyCode(), currencyContext).build();
     }
 
-    public static UserContext of(final Locale language, final List<Locale> fallbackLanguages, final CountryCode country) {
-        return new UserContext(language, fallbackLanguages, country, null, null);
+    public static UserContext of(final Locale language, final List<Locale> fallbackLanguages,
+                                 final CountryCode country, final ZoneId zoneId) {
+        return new UserContext(language, fallbackLanguages, country, zoneId, null, null);
     }
 
-    public static UserContext of(final Locale language, final List<Locale> fallbackLanguages, final CountryCode country,
+    public static UserContext of(final Locale language, final List<Locale> fallbackLanguages,
+                                 final CountryCode country, final ZoneId zoneId,
                                  final Reference<CustomerGroup> customerGroup, final Reference<Channel> channel) {
-        return new UserContext(language, fallbackLanguages, country, customerGroup, channel);
+        return new UserContext(language, fallbackLanguages, country, zoneId, customerGroup, channel);
     }
 }
