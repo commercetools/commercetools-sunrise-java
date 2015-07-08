@@ -1,20 +1,12 @@
 package productcatalog.pages;
 
-import com.neovisionaries.i18n.CountryCode;
 import common.contexts.AppContext;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
-import io.sphere.sdk.channels.Channel;
-import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Image;
 import io.sphere.sdk.models.LocalizedStrings;
-import io.sphere.sdk.models.Reference;
-import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-
-import javax.money.CurrencyUnit;
-import java.util.Optional;
 
 public class ProductThumbnailData {
     private final ProductProjection product;
