@@ -31,11 +31,11 @@ public class ProductThumbnailData {
     }
 
     public String getText() {
-        return foo(product.getName());
+        return findSuitableLanguage(product.getName());
     }
 
     public String getDescription() {
-        return product.getDescription().map(this::foo).orElse("");
+        return product.getDescription().map(this::findSuitableLanguage).orElse("");
     }
 
     public String getImage() {
@@ -48,7 +48,7 @@ public class ProductThumbnailData {
                 .or("");
     }
 
-    public String foo(final LocalizedStrings localizedStrings) {
+    public String findSuitableLanguage(final LocalizedStrings localizedStrings) {
         return localizedStrings.get(context.user().language())
                 .orElse(localizedStrings.get(context.user().fallbackLanguages())
                         .orElse(localizedStrings.get(context.project().languages()).orElse("")));
