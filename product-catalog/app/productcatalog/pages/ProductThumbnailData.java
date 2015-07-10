@@ -1,6 +1,5 @@
 package productcatalog.pages;
 
-import com.google.common.base.Optional;
 import common.contexts.AppContext;
 import common.contexts.UserContext;
 import common.prices.PriceFinder;
@@ -13,7 +12,8 @@ import io.sphere.sdk.products.ProductVariant;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.List;
+import java.util.Collection;
+import java.util.Optional;
 
 public class ProductThumbnailData {
     private final ProductProjection product;
@@ -43,11 +43,11 @@ public class ProductThumbnailData {
 
     public String getPrice() {
         return findPrice(variant.getPrices(), context.user())
-                .transform(price -> priceFormatter.format(price.getValue(), context))
-                .or("");
+                .map(price -> priceFormatter.format(price.getValue(), context))
+                .orElse("");
     }
 
-    private Optional<Price> findPrice(List<Price> prices, UserContext userContext) {
+    private Optional<Price> findPrice(final Collection<Price> prices, final UserContext userContext) {
         return PriceFinder.of().findPrice(prices,
                 userContext.currency(),
                 userContext.country(),
