@@ -68,10 +68,10 @@ public class PriceFinder {
                 .filter(price -> scope.channel.map(c -> priceHasChannel(price, c)).orElse(true))
                 .collect(Collectors.toList());
 
-        return applyDate(foundPrices, scope.date);
+        return findCurrentPrice(foundPrices, scope.date);
     }
 
-    private Optional<Price> applyDate(final Collection<Price> prices, final Optional<ZonedDateTime> date) {
+    private Optional<Price> findCurrentPrice(final Collection<Price> prices, final Optional<ZonedDateTime> date) {
         final Optional<Price> priceWithDate = prices.stream()
                 .filter(price -> date.map(d -> !priceHasNoDate(price) & priceHasValidDate(price, d)).orElse(true))
                 .findFirst();
