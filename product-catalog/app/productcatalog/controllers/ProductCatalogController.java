@@ -9,6 +9,7 @@ import io.sphere.sdk.search.SearchDsl;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.pages.ProductCatalogView;
+import productcatalog.pages.ProductDetailPageContent;
 import productcatalog.pages.ProductOverviewPageContent;
 
 import javax.inject.Inject;
@@ -29,6 +30,15 @@ public class ProductCatalogController extends SunriseController {
             sphere().execute(searchProducts(page)).flatMap(result -> {
                 final ProductOverviewPageContent content = new ProductOverviewPageContent(cms, context(), result, PriceFormatterImpl.of());
                 return render(view -> ok(view.productOverviewPage(content)));
+            })
+        );
+    }
+
+    public F.Promise<Result> pdp(int page) {
+        return withCms("pdp", cms ->
+            sphere().execute(searchProducts(page)).flatMap(result -> {
+                final ProductDetailPageContent content = new ProductDetailPageContent(cms, context(), result, PriceFormatterImpl.of());
+                return render(view -> ok(view.productDetailPage(content)));
             })
         );
     }
