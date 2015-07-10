@@ -1,6 +1,5 @@
 package common.prices;
 
-import com.google.common.base.Optional;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
@@ -16,9 +15,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PriceFinderTest {
@@ -42,6 +42,7 @@ public class PriceFinderTest {
     private final ZoneId berlin = ZoneId.of("Europe/Berlin");
 
     private final ZonedDateTime tomorrowDe = ZonedDateTime.of(tomorrow, berlin);
+    private final ZonedDateTime todayDe = ZonedDateTime.of(today, berlin);
 
     private final Price euroPrice = Price.of(BigDecimal.valueOf(10), eur);
     private final Price dollarPrice = Price.of(BigDecimal.valueOf(10), usd);
@@ -50,121 +51,179 @@ public class PriceFinderTest {
     private final Price invalidDatePrice = euroPrice.withValidFrom(tomorrowDe);
 
     // correct prices that must be found in tests, the one with highest number is always to be prioritized
-    private final Price p1 = euroPrice;
-    private final Price p2 = euroPrice.withValidUntil(tomorrowDe);
-    private final Price p3 = p2.withCountry(de);
-    private final Price p4 = p2.withChannel(channel1);
-    private final Price p5 = p2.withCountry(de).withChannel(channel1);
-    private final Price p6 = p2.withCustomerGroup(group1);
-    private final Price p7 = p2.withCustomerGroup(group1).withCountry(de);
-    private final Price p8 = p2.withCustomerGroup(group1).withChannel(channel1);
-    private final Price p9 = p2.withCountry(de).withCustomerGroup(group1).withChannel(channel1);
+    private final Price priceWithoutDate = euroPrice;
+    private final Price priceWithDate = euroPrice.withValidUntil(tomorrowDe);
+    private final Price priceWithCountry = priceWithDate.withCountry(de);
+    private final Price priceWithChannel = priceWithDate.withChannel(channel1);
+    private final Price priceWithCountryAndChannel = priceWithDate.withCountry(de).withChannel(channel1);
+    private final Price priceWithGroup = priceWithDate.withCustomerGroup(group1);
+    private final Price priceWithGroupAndCountry = priceWithDate.withCustomerGroup(group1).withCountry(de);
+    private final Price priceWithGroupAndChannel = priceWithDate.withCustomerGroup(group1).withChannel(channel1);
+    private final Price priceWithCountryGroupAndChannel = priceWithDate.withCountry(de).withCustomerGroup(group1).withChannel(channel1);
 
     // values that might be in users scope
     private final CurrencyUnit currency = eur;
     private final CountryCode country = de;
-    private final java.util.Optional<Reference<CustomerGroup>> customerGroup = java.util.Optional.of(group1);
-    private final java.util.Optional<Reference<Channel>> channel = java.util.Optional.of(channel1);
-    private final ZonedDateTime userTime = ZonedDateTime.of(today, berlin);
+    private final Optional<Reference<CustomerGroup>> customerGroup = Optional.of(group1);
+    private final Optional<Reference<Channel>> channel = Optional.of(channel1);
+    private final ZonedDateTime userTime = todayDe;
+
+    private final Optional<Reference<CustomerGroup>> emptyCustomerGroup = Optional.empty();
+    private final Optional<Reference<Channel>> emptyChannel = Optional.empty();
 
     @Test
     public void findWithCurrencyAndEmptyDate() throws Exception {
-        final List<Price> prices = Arrays.asList(p1, invalidCurrencyPrice, invalidDatePrice);
+        final List<Price> prices = asList(invalidCurrencyPrice, invalidDatePrice, priceWithoutDate);
 
         final Optional<Price> foundPrice =
                 priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
 
-        assertThat(foundPrice.isPresent());
-        assertThat(foundPrice.get().equals(p1));
+        assertThat(foundPrice).contains(priceWithoutDate);
     }
 
     @Test
     public void findWithCurrencyAndDate() throws Exception {
-        final List<Price> prices = Arrays.asList(p1, p2, invalidCurrencyPrice, invalidDatePrice);
+        final List<Price> prices = asList(invalidCurrencyPrice, invalidDatePrice, priceWithoutDate, priceWithDate);
 
         final Optional<Price> foundPrice =
                 priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
 
-        assertThat(foundPrice.isPresent());
-        assertThat(foundPrice.get().equals(p2));
+        assertThat(foundPrice).contains(priceWithDate);
     }
 
     @Test
     public void findWithCountry() throws Exception {
-        final List<Price> prices = Arrays.asList(p1, p2, p3, invalidCurrencyPrice, invalidDatePrice);
+        final List<Price> prices = asList(
+                invalidCurrencyPrice,
+                invalidDatePrice,
+                priceWithoutDate,
+                priceWithDate,
+                priceWithCountry);
 
         final Optional<Price> foundPrice =
                 priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
 
-        assertThat(foundPrice.isPresent());
-        assertThat(foundPrice.get().equals(p3));
+        assertThat(foundPrice).contains(priceWithCountry);
+
     }
 
     @Test
     public void findWithChannel() throws Exception {
-        final List<Price> prices = Arrays.asList(p1, p2, p3, p4, invalidCurrencyPrice, invalidDatePrice);
+        final List<Price> prices = asList(
+                invalidCurrencyPrice,
+                invalidDatePrice,
+                priceWithoutDate,
+                priceWithDate,
+                priceWithCountry,
+                priceWithChannel);
 
         final Optional<Price> foundPrice =
                 priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
 
-        assertThat(foundPrice.isPresent());
-        assertThat(foundPrice.get().equals(p4));
+        assertThat(foundPrice).contains(priceWithChannel);
     }
 
     @Test
     public void findWithCountryAndChannel() throws Exception {
-        final List<Price> prices = Arrays.asList(p1, p2, p3, p4, p5, invalidCurrencyPrice, invalidDatePrice);
+        final List<Price> prices = asList(invalidCurrencyPrice,
+                invalidDatePrice,
+                priceWithoutDate,
+                priceWithDate,
+                priceWithCountry,
+                priceWithChannel,
+                priceWithCountryAndChannel);
 
         final Optional<Price> foundPrice =
                 priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
 
-        assertThat(foundPrice.isPresent());
-        assertThat(foundPrice.get().equals(p5));
+        assertThat(foundPrice).contains(priceWithCountryAndChannel);
     }
 
     @Test
     public void findWithCustomerGroup() throws Exception {
-        final List<Price> prices = Arrays.asList(p1, p2, p3, p4, p5, p6, invalidCurrencyPrice, invalidDatePrice);
+        final List<Price> prices = asList(invalidCurrencyPrice,
+                invalidDatePrice,
+                priceWithoutDate,
+                priceWithDate,
+                priceWithCountry,
+                priceWithChannel,
+                priceWithCountryAndChannel,
+                priceWithGroup);
 
         final Optional<Price> foundPrice =
                 priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
 
-        assertThat(foundPrice.isPresent());
-        assertThat(foundPrice.get().equals(p6));
+        assertThat(foundPrice).contains(priceWithGroup);
     }
 
     @Test
     public void findWithCustomerGroupAndCountry() throws Exception {
-        final List<Price> prices = Arrays.asList(p1, p2, p3, p4, p5, p6, p7, invalidCurrencyPrice, invalidDatePrice);
+        final List<Price> prices = asList(
+                invalidCurrencyPrice,
+                invalidDatePrice,
+                priceWithoutDate,
+                priceWithDate,
+                priceWithCountry,
+                priceWithChannel,
+                priceWithCountryAndChannel,
+                priceWithGroup,
+                priceWithGroupAndCountry);
 
         final Optional<Price> foundPrice =
                 priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
 
-        assertThat(foundPrice.isPresent());
-        assertThat(foundPrice.get().equals(p7));
+        assertThat(foundPrice).contains(priceWithGroupAndCountry);
     }
 
     @Test
     public void findWithCustomerGroupAndChannel() throws Exception {
-        final List<Price> prices =
-                Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, invalidCurrencyPrice, invalidDatePrice);
+        final List<Price> prices = asList(
+                invalidCurrencyPrice,
+                invalidDatePrice,
+                priceWithoutDate,
+                priceWithDate,
+                priceWithCountry,
+                priceWithChannel,
+                priceWithCountryAndChannel,
+                priceWithGroup,
+                priceWithGroupAndCountry,
+                priceWithGroupAndChannel);
 
         final Optional<Price> foundPrice =
                 priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
 
-        assertThat(foundPrice.isPresent());
-        assertThat(foundPrice.get().equals(p8));
+        assertThat(foundPrice).contains(priceWithGroupAndChannel);
     }
 
     @Test
-    public void findExactMatch() throws Exception {
-        final List<Price> prices =
-                Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, invalidCurrencyPrice, invalidDatePrice);
+    public void findWithCountryCustomerGroupAndChannel() throws Exception {
+        final List<Price> prices = asList(
+                invalidCurrencyPrice,
+                invalidDatePrice,
+                priceWithoutDate,
+                priceWithDate,
+                priceWithCountry,
+                priceWithChannel,
+                priceWithCountryAndChannel,
+                priceWithGroup,
+                priceWithGroupAndCountry,
+                priceWithGroupAndChannel,
+                priceWithCountryGroupAndChannel);
 
         final Optional<Price> foundPrice =
                 priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
 
-        assertThat(foundPrice.isPresent());
-        assertThat(foundPrice.get().equals(p9));
+        assertThat(foundPrice).contains(priceWithCountryGroupAndChannel);
     }
+
+    @Test
+    public void findWithCustomerGroupAndChannelWithIncompleteScope() throws Exception {
+        final List<Price> prices = asList(invalidCurrencyPrice, invalidDatePrice, priceWithoutDate);
+
+        final Optional<Price> foundPrice =
+                priceFinder.findPrice(prices, currency, country, emptyCustomerGroup, emptyChannel, userTime);
+
+        assertThat(foundPrice).contains(priceWithoutDate);
+    }
+
 }
