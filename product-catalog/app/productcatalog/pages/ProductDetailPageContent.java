@@ -5,18 +5,23 @@ import common.contexts.AppContext;
 import common.pages.PageContent;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.search.PagedSearchResult;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
 
 public class ProductDetailPageContent extends PageContent {
     private final AppContext context;
     private final PriceFormatter priceFormatter;
-    private final PagedSearchResult<ProductProjection> productList;
+    private final ProductProjection product;
+    private final List<ProductProjection> suggestionList;
 
-    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final PagedSearchResult<ProductProjection> productList, final PriceFormatter priceFormatter) {
+    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final ProductProjection product, List<ProductProjection> suggestionList, final PriceFormatter priceFormatter) {
         super(cms);
         this.context = context;
         this.priceFormatter = priceFormatter;
-        this.productList = productList;
+        this.product = product;
+        this.suggestionList = suggestionList;
     }
 
     @Override
@@ -25,7 +30,23 @@ public class ProductDetailPageContent extends PageContent {
         return "";
     }
 
-    public ProductListData getProducts() {
-        return new ProductListData(productList.getResults(), context, priceFormatter);
+    public String getText() {
+        return "Products";
+    }
+
+    public List<ImageData> getGallery() {
+        return asList(new ImageData(), new ImageData(), new ImageData(), new ImageData());
+    }
+
+    public ProductData getProduct() {
+        return new ProductData(product);
+    }
+
+    public SuggestionListData getSuggestions() {
+        return new SuggestionListData(suggestionList, context, priceFormatter);
+    }
+
+    public String getReviews() {
+        return "reviews";
     }
 }

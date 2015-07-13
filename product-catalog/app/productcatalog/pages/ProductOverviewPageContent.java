@@ -7,12 +7,14 @@ import common.utils.PriceFormatter;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 
+import java.util.List;
+
 public class ProductOverviewPageContent extends PageContent {
     private final AppContext context;
     private final PriceFormatter priceFormatter;
-    private final PagedSearchResult<ProductProjection> productList;
+    private final List<ProductProjection> productList;
 
-    public ProductOverviewPageContent(final CmsPage cms, final AppContext context, final PagedSearchResult<ProductProjection> productList, final PriceFormatter priceFormatter) {
+    public ProductOverviewPageContent(final CmsPage cms, final AppContext context, final List<ProductProjection> productList, final PriceFormatter priceFormatter) {
         super(cms);
         this.context = context;
         this.priceFormatter = priceFormatter;
@@ -26,6 +28,6 @@ public class ProductOverviewPageContent extends PageContent {
     }
 
     public ProductListData getProducts() {
-        return new ProductListData(productList.getResults(), context, priceFormatter);
+        return new ProductListData(productList, context, priceFormatter);
     }
 }

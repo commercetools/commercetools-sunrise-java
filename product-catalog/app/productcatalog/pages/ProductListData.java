@@ -19,6 +19,26 @@ public class ProductListData {
         this.priceFormatter = priceFormatter;
     }
 
+    public String getSale() {
+        return "Sale";
+    }
+
+    public String getNew() {
+        return "New";
+    }
+
+    public String quickView() {
+        return "Quick View";
+    }
+
+    public String getWishlist() {
+        return "Add Item to Wishlist";
+    }
+
+    public String getMoreColors() {
+        return "More Colors";
+    }
+
     public List<ProductThumbnailData> getList() {
         return productList.stream().map(product -> new ProductThumbnailData(product, product.getMasterVariant(), context, priceFormatter)).collect(toList());
     }
