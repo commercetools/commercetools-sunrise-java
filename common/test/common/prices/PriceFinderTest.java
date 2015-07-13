@@ -21,9 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PriceFinderTest {
 
-    private final PriceFinder priceFinder = PriceFinder.of();
-
-
     private final CurrencyUnit eur = Monetary.getCurrency("EUR");
     private final CurrencyUnit usd = Monetary.getCurrency("USD");
 
@@ -67,12 +64,15 @@ public class PriceFinderTest {
     private final Optional<Reference<CustomerGroup>> emptyCustomerGroup = Optional.empty();
     private final Optional<Reference<Channel>> emptyChannel = Optional.empty();
 
+    private final PriceFinder priceFinder = PriceFinder.of(eur, de, customerGroup, channel, userTime);
+    private final PriceFinder priceFinderIncompleteScope = PriceFinder.of(eur, de, emptyCustomerGroup, emptyChannel, userTime);
+
     @Test
     public void findWithCurrencyAndEmptyDate() throws Exception {
         final List<Price> prices = asList(invalidCurrencyPrice, invalidDatePrice, priceWithoutDate);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
+                priceFinder.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithoutDate);
     }
@@ -82,7 +82,7 @@ public class PriceFinderTest {
         final List<Price> prices = asList(invalidCurrencyPrice, invalidDatePrice, priceWithoutDate, priceWithDate);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
+                priceFinder.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithDate);
     }
@@ -97,7 +97,7 @@ public class PriceFinderTest {
                 priceWithCountry);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
+                priceFinder.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithCountry);
 
@@ -114,7 +114,7 @@ public class PriceFinderTest {
                 priceWithChannel);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
+                priceFinder.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithChannel);
     }
@@ -130,7 +130,7 @@ public class PriceFinderTest {
                 priceWithCountryAndChannel);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
+                priceFinder.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithCountryAndChannel);
     }
@@ -147,7 +147,7 @@ public class PriceFinderTest {
                 priceWithGroup);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
+                priceFinder.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithGroup);
     }
@@ -166,7 +166,7 @@ public class PriceFinderTest {
                 priceWithGroupAndCountry);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
+                priceFinder.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithGroupAndCountry);
     }
@@ -186,7 +186,7 @@ public class PriceFinderTest {
                 priceWithGroupAndChannel);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
+                priceFinder.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithGroupAndChannel);
     }
@@ -207,7 +207,7 @@ public class PriceFinderTest {
                 priceWithCountryGroupAndChannel);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, customerGroup, channel, userTime);
+                priceFinder.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithCountryGroupAndChannel);
     }
@@ -217,7 +217,7 @@ public class PriceFinderTest {
         final List<Price> prices = asList(invalidCurrencyPrice, invalidDatePrice, priceWithoutDate);
 
         final Optional<Price> foundPrice =
-                priceFinder.findPrice(prices, currency, country, emptyCustomerGroup, emptyChannel, userTime);
+                priceFinderIncompleteScope.findPrice(prices);
 
         assertThat(foundPrice).contains(priceWithoutDate);
     }

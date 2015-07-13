@@ -1,25 +1,22 @@
 package productcatalog.pages;
 
 import common.contexts.AppContext;
-import common.contexts.UserContext;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.models.Image;
 import io.sphere.sdk.models.LocalizedStrings;
-import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.Collection;
-import java.util.Optional;
 
 public class ProductThumbnailData {
     private final ProductProjection product;
     private final ProductVariant variant;
     private final AppContext context;
     private final PriceFormatter priceFormatter;
+    private final PriceFinder priceFinder;
 
     public ProductThumbnailData(final ProductProjection product, final ProductVariant variant,
                                 final AppContext context, final PriceFormatter priceFormatter) {
@@ -27,6 +24,9 @@ public class ProductThumbnailData {
         this.variant = variant;
         this.context = context;
         this.priceFormatter = priceFormatter;
+        this.priceFinder = PriceFinder.of(
+                context.user().currency(), context.user().country(), context.user().customerGroup(),
+                context.user().channel(), ZonedDateTime.of(LocalDateTime.now(), context.user().zoneId()));
     }
 
     public String getText() {
@@ -42,18 +42,9 @@ public class ProductThumbnailData {
     }
 
     public String getPrice() {
-        return findPrice(variant.getPrices(), context.user())
+        return priceFinder.findPrice(variant.getPrices())
                 .map(price -> priceFormatter.format(price.getValue(), context))
                 .orElse("");
-    }
-
-    private Optional<Price> findPrice(final Collection<Price> prices, final UserContext userContext) {
-        return PriceFinder.of().findPrice(prices,
-                userContext.currency(),
-                userContext.country(),
-                userContext.customerGroup(),
-                userContext.channel(),
-                ZonedDateTime.of(LocalDateTime.now(), userContext.zoneId()));
     }
 
     public String findSuitableLanguage(final LocalizedStrings localizedStrings) {

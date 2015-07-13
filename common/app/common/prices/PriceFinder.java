@@ -8,7 +8,6 @@ import io.sphere.sdk.products.Price;
 
 import javax.money.CurrencyUnit;
 import java.time.ZonedDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,12 +16,22 @@ import static java.util.Arrays.asList;
 
 public class PriceFinder {
 
-    private PriceFinder() {
+    final CurrencyUnit currency;
+    final CountryCode country;
+    final java.util.Optional<Reference<CustomerGroup>> customerGroup;
+    final java.util.Optional<Reference<Channel>> channel;
+    final ZonedDateTime userTime;
 
+    private PriceFinder(final CurrencyUnit currency, final CountryCode country, final java.util.Optional<Reference<CustomerGroup>> customerGroup, final java.util.Optional<Reference<Channel>> channel, final ZonedDateTime userTime) {
+        this.currency = currency;
+        this.country = country;
+        this.customerGroup = customerGroup;
+        this.channel = channel;
+        this.userTime = userTime;
     }
 
-    public static PriceFinder of() {
-        return new PriceFinder();
+    public static PriceFinder of(final CurrencyUnit currency, final CountryCode country, final java.util.Optional<Reference<CustomerGroup>> customerGroup, final java.util.Optional<Reference<Channel>> channel, final ZonedDateTime userTime) {
+        return new PriceFinder(currency, country, customerGroup, channel, userTime);
     }
 
     /**
@@ -36,12 +45,7 @@ public class PriceFinder {
      country
      any left
      */
-    public Optional<Price> findPrice(final Collection<Price> prices,
-                                     final CurrencyUnit currency,
-                                     final CountryCode country,
-                                     final java.util.Optional<Reference<CustomerGroup>> customerGroup,
-                                     final java.util.Optional<Reference<Channel>> channel,
-                                     final ZonedDateTime userTime) {
+    public Optional<Price> findPrice(final List<Price> prices) {
         final PriceScope base = PriceScopeBuilder.of().currency(currency).date(userTime).build();
         final List<PriceScope> scopes = asList(
                 PriceScopeBuilder.of(base).country(country).customerGroup(customerGroup).channel(channel).build(),
@@ -60,7 +64,7 @@ public class PriceFinder {
                 .findFirst();
     }
 
-    private Optional<Price> findPriceForScope(final Collection<Price> prices, final PriceScope scope) {
+    private Optional<Price> findPriceForScope(final List<Price> prices, final PriceScope scope) {
         final List<Price> foundPrices = prices.stream()
                 .filter(price -> scope.currency.map(c -> priceHasCurrency(price, c)).orElse(true))
                 .filter(price -> scope.country.map(c -> priceHasCountry(price, c)).orElse(true))
@@ -71,7 +75,7 @@ public class PriceFinder {
         return findCurrentPrice(foundPrices, scope.date);
     }
 
-    private Optional<Price> findCurrentPrice(final Collection<Price> prices, final Optional<ZonedDateTime> date) {
+    private Optional<Price> findCurrentPrice(final List<Price> prices, final Optional<ZonedDateTime> date) {
         final Optional<Price> priceWithDate = prices.stream()
                 .filter(price -> date.map(d -> !priceHasNoDate(price) & priceHasValidDate(price, d)).orElse(true))
                 .findFirst();
