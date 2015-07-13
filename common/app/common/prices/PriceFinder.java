@@ -106,7 +106,7 @@ public class PriceFinder {
         final boolean toEarly = price.getValidFrom().map(from -> from.isAfter(date)).orElse(false);
         final boolean toLate = price.getValidUntil().map(until -> until.isBefore(date)).orElse(false);
 
-        return !toEarly & !toLate;
+        return !toEarly && !toLate;
     }
 
     private boolean priceHasNoDate(Price price) {
