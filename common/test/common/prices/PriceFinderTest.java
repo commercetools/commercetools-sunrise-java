@@ -5,12 +5,10 @@ import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.Price;
-import org.javamoney.moneta.CurrencyUnitBuilder;
 import org.junit.Test;
 
-import javax.money.CurrencyContext;
-import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -25,11 +23,9 @@ public class PriceFinderTest {
 
     private final PriceFinder priceFinder = PriceFinder.of();
 
-    private final CurrencyContext eurContext = CurrencyContextBuilder.of("EUR").build();
-    private final CurrencyContext usdContext = CurrencyContextBuilder.of("USD").build();
 
-    private final CurrencyUnit eur = CurrencyUnitBuilder.of("EUR", eurContext).build();
-    private final CurrencyUnit usd = CurrencyUnitBuilder.of("USD", usdContext).build();
+    private final CurrencyUnit eur = Monetary.getCurrency("EUR");
+    private final CurrencyUnit usd = Monetary.getCurrency("USD");
 
     private final CountryCode de = CountryCode.DE;
 
