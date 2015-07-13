@@ -9,7 +9,7 @@ import javax.money.CurrencyUnit;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
-public class PriceScope {
+class PriceScope {
 
     final Optional<CurrencyUnit> currency;
     final Optional<CountryCode> country;
