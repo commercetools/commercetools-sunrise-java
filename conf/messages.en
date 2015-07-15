@@ -4,3 +4,33 @@ common.header.stores = STORES
 common.header.help = HELP
 common.header.callUs = CALL US ON +44 123 456 000
 common.header.countries = Location
+
+
+pdp.content.text = Products
+
+pdp.product.ratingList.text = Write first review
+pdp.product.ratingList.fiveStarRating.text = Rocks
+pdp.product.ratingList.fourStarRating.text = Pretty good
+pdp.product.ratingList.threeStarRating.text = Meh
+pdp.product.ratingList.twoStarRating.text = Kinda bad
+pdp.product.ratingList.oneStarRating.text = Sucks big time
+pdp.product.viewDetails = View Details
+pdp.product.colorList.text = Color
+pdp.product.colorList.choose.text = Chooose Color
+pdp.product.sizeList.text = Size
+pdp.product.sizeList.choose.text = Choose Size
+pdp.product.sizeGuide = Size Guide
+pdp.product.addToBag = Add To Bag
+pdp.product.addToWishlist = Add To Wishlist
+pdp.product.available = Available
+pdp.product.productDetails.text = Product Details
+pdp.product.deliveryAndReturn.text = Delivery & Returns
+
+pdp.suggestions.text = You may also like
+pdp.suggestions.sale = Sale
+pdp.suggestions.new = New
+pdp.suggestions.quickView = Quick View
+pdp.suggestions.wishlist = Add item to wishlist
+pdp.suggestions.moreColors = More Colors
+
+pdp.reviews.text = Reviews

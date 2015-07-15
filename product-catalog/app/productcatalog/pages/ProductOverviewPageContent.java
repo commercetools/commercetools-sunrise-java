@@ -28,6 +28,6 @@ public class ProductOverviewPageContent extends PageContent {
     }
 
     public ProductListData getProducts() {
-        return new ProductListData(productList, context, priceFormatter);
+        return new ProductListData(productList, context, priceFormatter, "", "", "", "", "", "");
     }
 }

@@ -3,6 +3,7 @@ package productcatalog.pages;
 import common.contexts.AppContext;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.products.ProductProjection;
+import play.i18n.Messages;
 
 import java.util.List;
 
@@ -12,31 +13,47 @@ public class ProductListData {
     private final List<ProductProjection> productList;
     private final AppContext context;
     private final PriceFormatter priceFormatter;
+    private final String text;
+    private final String sale;
+    private final String newx;
+    private final String quickView;
+    private final String wishlist;
+    private final String moreColors;
 
-    public ProductListData(final List<ProductProjection> productList, final AppContext context, final PriceFormatter priceFormatter) {
+    public ProductListData(final List<ProductProjection> productList, final AppContext context, final PriceFormatter priceFormatter, final String text, final String sale, final String newx, final String quickView, final String wishlist, final String moreColors) {
         this.productList = productList;
         this.context = context;
         this.priceFormatter = priceFormatter;
+        this.text = text;
+        this.sale = sale;
+        this.newx = newx;
+        this.quickView = quickView;
+        this.wishlist = wishlist;
+        this.moreColors = moreColors;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public String getSale() {
-        return "Sale";
+        return sale;
     }
 
     public String getNew() {
-        return "New";
+        return newx;
     }
 
     public String quickView() {
-        return "Quick View";
+        return quickView;
     }
 
     public String getWishlist() {
-        return "Add Item to Wishlist";
+        return wishlist;
     }
 
     public String getMoreColors() {
-        return "More Colors";
+        return moreColors;
     }
 
     public List<ProductThumbnailData> getList() {

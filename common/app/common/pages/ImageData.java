@@ -1,4 +1,4 @@
-package productcatalog.pages;
+package common.pages;
 
 import io.sphere.sdk.models.Image;
 

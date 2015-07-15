@@ -2,12 +2,14 @@ package productcatalog.pages;
 
 import common.cms.CmsPage;
 import common.contexts.AppContext;
+import common.pages.CollectionData;
+import common.pages.ImageData;
 import common.pages.PageContent;
+import common.pages.SelectableData;
 import common.utils.PriceFormatter;
-import io.sphere.sdk.models.Image;
 import io.sphere.sdk.products.ProductProjection;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,22 +34,27 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public String getText() {
-        return "Products";
+        return cms.getOrEmpty("content.text");
     }
 
     public List<ImageData> getGallery() {
-        return product.getMasterVariant().getImages().stream().map(image -> ImageData.of(image)).collect(Collectors.toList());
+        return product.getMasterVariant().getImages().stream()
+                .map(image -> ImageData.of(image))
+                .collect(Collectors.toList());
     }
 
     public ProductData getProduct() {
         return new ProductData(product, context);
     }
 
-    public SuggestionListData getSuggestions() {
-        return new SuggestionListData(suggestionList, context, priceFormatter);
+    public ProductListData getSuggestions() {
+        return new ProductListData(suggestionList, context, priceFormatter,
+                cms.getOrEmpty("suggestions.text"), cms.getOrEmpty("suggestions.sale"),
+                cms.getOrEmpty("suggestions.new"), cms.getOrEmpty("suggestions.quickView"),
+                cms.getOrEmpty("suggestions.wishlist"), cms.getOrEmpty("suggestions.moreColors"));
     }
 
-    public String getReviews() {
-        return "reviews";
+    public CollectionData getReviews() {
+        return new CollectionData(cms.getOrEmpty("reviews.text"), Collections.<SelectableData>emptyList());
     }
 }
