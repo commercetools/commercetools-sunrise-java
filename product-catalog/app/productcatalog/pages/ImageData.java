@@ -1,12 +1,24 @@
 package productcatalog.pages;
 
+import io.sphere.sdk.models.Image;
+
 public class ImageData {
 
+    private final Image image;
+
+    private ImageData(final Image image) {
+        this.image = image;
+    }
+
+    public static ImageData of(final Image image) {
+        return new ImageData(image);
+    }
+
     public String getThumbImage() {
-        return "http://sphereio.github.io/nodejs/assets/img/sphere_logo_rgb_big.png";
+        return image.getUrl();
     }
 
     public String getBigImage() {
-        return "http://sphereio.github.io/nodejs/assets/img/sphere_logo_rgb_big.png";
+        return image.getUrl();
     }
 }

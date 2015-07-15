@@ -4,11 +4,12 @@ import common.cms.CmsPage;
 import common.contexts.AppContext;
 import common.pages.PageContent;
 import common.utils.PriceFormatter;
+import io.sphere.sdk.models.Image;
 import io.sphere.sdk.products.ProductProjection;
 
+import java.util.Arrays;
 import java.util.List;
-
-import static java.util.Arrays.asList;
+import java.util.stream.Collectors;
 
 public class ProductDetailPageContent extends PageContent {
     private final AppContext context;
@@ -35,7 +36,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public List<ImageData> getGallery() {
-        return asList(new ImageData(), new ImageData(), new ImageData(), new ImageData());
+        return product.getMasterVariant().getImages().stream().map(image -> ImageData.of(image)).collect(Collectors.toList());
     }
 
     public ProductData getProduct() {
