@@ -39,7 +39,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public ProductData getProduct() {
-        return new ProductData(product);
+        return new ProductData(product, context);
     }
 
     public SuggestionListData getSuggestions() {

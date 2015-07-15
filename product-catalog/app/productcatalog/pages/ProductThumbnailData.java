@@ -2,6 +2,7 @@ package productcatalog.pages;
 
 import common.contexts.AppContext;
 import common.prices.PriceFinder;
+import common.utils.Languages;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.models.Image;
 import io.sphere.sdk.models.LocalizedStrings;
@@ -10,6 +11,8 @@ import io.sphere.sdk.products.ProductVariant;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+
+import static common.utils.Languages.*;
 
 public class ProductThumbnailData {
     private final ProductProjection product;
@@ -30,26 +33,21 @@ public class ProductThumbnailData {
     }
 
     public String getText() {
-        return findSuitableLanguage(product.getName());
+        return withSuitableLanguage(product.getName(), context);
     }
 
     public String getDescription() {
-        return product.getDescription().map(this::findSuitableLanguage).orElse("");
+        return product.getDescription().map(description -> withSuitableLanguage(description, context))
+                .orElse("");
     }
 
     public String getImage() {
-        return variant.getImages().stream().findFirst().map(Image::getUrl).orElse("");
+        return variant.getImages().stream().findFirst().map(Image::getUrl).orElse("http://sphereio.github.io/nodejs/assets/img/sphere_logo_rgb_big.png");
     }
 
     public String getPrice() {
         return priceFinder.findPrice(variant.getPrices())
                 .map(price -> priceFormatter.format(price.getValue(), context))
                 .orElse("");
-    }
-
-    public String findSuitableLanguage(final LocalizedStrings localizedStrings) {
-        return localizedStrings.get(context.user().language())
-                .orElse(localizedStrings.get(context.user().fallbackLanguages())
-                        .orElse(localizedStrings.get(context.project().languages()).orElse("")));
     }
 }

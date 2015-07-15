@@ -1,33 +1,39 @@
 package productcatalog.pages;
 
+import common.contexts.AppContext;
 import io.sphere.sdk.products.ProductProjection;
+
+import static common.utils.Languages.withSuitableLanguage;
 
 public class ProductData {
 
     private final ProductProjection product;
+    private final AppContext context;
 
-    public ProductData(final ProductProjection product) {
+    public ProductData(final ProductProjection product, final AppContext context) {
         this.product = product;
+        this.context = context;
     }
 
     public String getText() {
-        return "getText";
+        return withSuitableLanguage(product.getName(), context);
     }
 
     public String getSku() {
-        return "getSku";
+        return product.getMasterVariant().getSku().orElse("");
     }
 
     public RatingListData getRating() {
         return new RatingListData();
     }
 
-    public String getdescription() {
-        return "description";
+    public String getDescription() {
+        return product.getDescription().map(description -> withSuitableLanguage(description, context))
+                .orElse("");
     }
 
     public String getViewDetails() {
-        return "viewDetails";
+        return "View Details";
     }
 
     public String getPrice() {
@@ -47,7 +53,7 @@ public class ProductData {
     }
 
     public String getSizeGuide() {
-        return "SizeGuide";
+        return "Size Guide";
     }
 
     public BagItemListData getBagItems() {
@@ -55,15 +61,15 @@ public class ProductData {
     }
 
     public String getAddToBag() {
-        return "addToBag";
+        return "Add to Bag";
     }
 
     public String getAddToWishlist() {
-        return "addToWishlist";
+        return "Add to Wishlist";
     }
 
     public String getAvailable() {
-        return "10 Stk";
+        return "Available";
     }
 
     public ProductDetailData getProductDetails() {
