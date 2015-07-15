@@ -9,11 +9,11 @@ common.header.countries = Location
 pdp.content.text = Products
 
 pdp.product.ratingList.text = Write first review
-pdp.product.ratingList.fiveStarRating.text = Rocks
-pdp.product.ratingList.fourStarRating.text = Pretty good
-pdp.product.ratingList.threeStarRating.text = Meh
-pdp.product.ratingList.twoStarRating.text = Kinda bad
-pdp.product.ratingList.oneStarRating.text = Sucks big time
+pdp.product.ratingList.five.text = Rocks
+pdp.product.ratingList.four.text = Pretty good
+pdp.product.ratingList.three.text = Meh
+pdp.product.ratingList.two.text = Kinda bad
+pdp.product.ratingList.one.text = Sucks big time
 pdp.product.viewDetails = View Details
 pdp.product.colorList.text = Color
 pdp.product.colorList.choose.text = Chooose Color
