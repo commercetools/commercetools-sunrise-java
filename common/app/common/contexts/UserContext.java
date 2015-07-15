@@ -1,43 +1,78 @@
 package common.contexts;
 
 import com.neovisionaries.i18n.CountryCode;
-import play.i18n.Lang;
+import io.sphere.sdk.channels.Channel;
+import io.sphere.sdk.customergroups.CustomerGroup;
+import io.sphere.sdk.models.Reference;
+import org.javamoney.moneta.CurrencyUnitBuilder;
 
+import javax.money.CurrencyContext;
+import javax.money.CurrencyContextBuilder;
+import javax.money.CurrencyUnit;
+import java.time.ZoneId;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 /**
- * A container for all information related to the current user, such as country, language, cart, associated customer.
+ * A container for all information related to the current user, such as selected country, language or customer group.
  */
 public class UserContext {
-    private final Lang lang;
-    private final CountryCode countryCode;
+    private final Locale language;
+    private final List<Locale> fallbackLanguages;
+    private final CountryCode country;
+    private final ZoneId zoneId;
+    private final Optional<Reference<CustomerGroup>> customerGroup;
+    private final Optional<Reference<Channel>> channel;
 
-    private UserContext(final Lang lang, final CountryCode countryCode) {
-        this.lang = lang;
-        this.countryCode = countryCode;
+    private UserContext(final Locale language, final List<Locale> fallbackLanguages,
+                        final CountryCode country, final ZoneId zoneId,
+                        final Reference<CustomerGroup> customerGroup, final Reference<Channel> channel) {
+        this.language = language;
+        this.country = country;
+        this.zoneId = zoneId;
+        this.fallbackLanguages = fallbackLanguages;
+        this.customerGroup = Optional.ofNullable(customerGroup);
+        this.channel = Optional.ofNullable(channel);
     }
 
-    public Lang lang() {
-        return lang;
+    public Locale language() {
+        return language;
     }
 
     public CountryCode country() {
-        return countryCode;
+        return country;
     }
 
-    /**
-     * Gets the locale representing the language and country of the user.
-     * @return the locale matching the language and country.
-     */
-    public Locale locale() {
-        if (lang.country().isEmpty()) {
-            return new Locale(lang.language(), countryCode.getAlpha2());
-        } else {
-            return lang.toLocale();
-        }
+    public ZoneId zoneId() {
+        return zoneId;
     }
 
-    public static UserContext of(final Lang lang, final CountryCode countryCode) {
-        return new UserContext(lang, countryCode);
+    public List<Locale> fallbackLanguages() {
+        return fallbackLanguages;
+    }
+
+    public Optional<Reference<CustomerGroup>> customerGroup() {
+        return customerGroup;
+    }
+
+    public Optional<Reference<Channel>> channel() {
+        return channel;
+    }
+
+    public CurrencyUnit currency() {
+        final CurrencyContext currencyContext = CurrencyContextBuilder.of("").build();
+        return CurrencyUnitBuilder.of(country.getCurrency().getCurrencyCode(), currencyContext).build();
+    }
+
+    public static UserContext of(final Locale language, final List<Locale> fallbackLanguages,
+                                 final CountryCode country, final ZoneId zoneId) {
+        return new UserContext(language, fallbackLanguages, country, zoneId, null, null);
+    }
+
+    public static UserContext of(final Locale language, final List<Locale> fallbackLanguages,
+                                 final CountryCode country, final ZoneId zoneId,
+                                 final Reference<CustomerGroup> customerGroup, final Reference<Channel> channel) {
+        return new UserContext(language, fallbackLanguages, country, zoneId, customerGroup, channel);
     }
 }

@@ -21,17 +21,17 @@ public class PlayCmsPageTest extends WithApplication {
 
     @Test
     public void getsMessage() throws Exception {
-        assertThat(cms(DE, "pop").get("title")).contains("foo");
+        assertThat(cms(DE, "home").get("title")).contains("foo");
     }
 
     @Test
     public void getsMessageWithoutPageKey() throws Exception {
-        assertThat(cms(DE).get("pop.title")).contains("foo");
+        assertThat(cms(DE).get("home.title")).contains("foo");
     }
 
     @Test
     public void getsMessageWithRegion() throws Exception {
-        assertThat(cms(DE_AT, "pop").get("title")).contains("bar");
+        assertThat(cms(DE_AT, "home").get("title")).contains("bar");
     }
 
     @Test

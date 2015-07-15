@@ -1,54 +1,34 @@
 package inject;
 
 import com.google.inject.Provider;
-import io.sphere.sdk.client.*;
-import io.sphere.sdk.play.metrics.MetricHttpClient;
-import play.Configuration;
+import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.client.SphereClient;
 import play.Logger;
 import play.inject.ApplicationLifecycle;
 import play.libs.F;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import static java.util.Objects.requireNonNull;
-
-@Singleton
-class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
-    private final Configuration configuration;
+public class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
     private final ApplicationLifecycle applicationLifecycle;
+    private final SphereClient sphereClient;
 
     @Inject
-    public PlayJavaSphereClientProvider(final Configuration configuration, final ApplicationLifecycle applicationLifecycle) {
-        this.configuration = configuration;
+    public PlayJavaSphereClientProvider(final ApplicationLifecycle applicationLifecycle, final SphereClient sphereClient) {
         this.applicationLifecycle = applicationLifecycle;
+        this.sphereClient = sphereClient;
     }
 
     @Override
     public PlayJavaSphereClient get() {
         Logger.debug("Provide PlayJavaSphereClient");
-        final SphereClientConfig config = getSphereClientConfig();
-        final SphereClient sphereClient = createSphereClient(config);
         final PlayJavaSphereClient playJavaSphereClient = PlayJavaSphereClient.of(sphereClient);
         applicationLifecycle.addStopHook(() ->
-            F.Promise.promise(() -> {
-                playJavaSphereClient.close();
-                return null;
-            })
+                        F.Promise.promise(() -> {
+                            playJavaSphereClient.close();
+                            return null;
+                        })
         );
         return playJavaSphereClient;
-    }
-
-    private SphereClient createSphereClient(final SphereClientConfig config) {
-        final MetricHttpClient httpClient = MetricHttpClient.of(NingHttpClientAdapter.of());
-        final SphereAccessTokenSupplier tokenSupplier = SphereAccessTokenSupplierFactory.of().createSupplierOfAutoRefresh(config);
-        return SphereClient.of(config, httpClient, tokenSupplier);
-    }
-
-    private SphereClientConfig getSphereClientConfig() {
-        final String project = requireNonNull(configuration.getString("sphere.project"));
-        final String clientId = requireNonNull(configuration.getString("sphere.clientId"));
-        final String clientSecret = requireNonNull(configuration.getString("sphere.clientSecret"));
-        return SphereClientConfig.of(project, clientId, clientSecret);
     }
 }

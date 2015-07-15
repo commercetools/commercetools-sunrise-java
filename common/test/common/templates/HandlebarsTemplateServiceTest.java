@@ -12,19 +12,28 @@ public class HandlebarsTemplateServiceTest {
     private static final ClassPathTemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
 
     @Test
-    public void rendersTemplate() throws Exception {
+    public void rendersTemplateWithPartial() throws Exception {
         final String html = handlebars().render("template", pageDataWithTitleAndMessage());
         assertThat(html).contains("<title>foo</title>")
                 .contains("<h1>bar</h1>")
-                .contains("<p></p>");
+                .contains("<h2></h2>")
+                .contains("<p>default partial</p>");
     }
 
     @Test
-    public void rendersOverriddenTemplate() throws Exception {
+    public void rendersOverriddenTemplateUsingOverriddenAndDefaultPartials() throws Exception {
         final String html = handlebarsWithOverride().render("template", pageDataWithTitleAndMessage());
-        assertThat(html).contains("<title>more foo</title>")
-                .contains("<h1>more bar</h1>")
-                .contains("<p>more </p>");
+        assertThat(html).contains("overridden template")
+                .contains("overridden partial")
+                .contains("another default partial");
+    }
+
+    @Test
+    public void rendersDefaultTemplateUsingOverriddenAndDefaultPartials() throws Exception {
+        final String html = handlebarsWithOverride().render("anotherTemplate", pageDataWithTitleAndMessage());
+        assertThat(html).contains("default template")
+                .contains("overridden partial")
+                .contains("another default partial");
     }
 
     @Test
@@ -34,7 +43,7 @@ public class HandlebarsTemplateServiceTest {
     }
 
     private HandlebarsTemplateService handlebarsWithOverride() {
-        return HandlebarsTemplateService.of(DEFAULT_LOADER, OVERRIDE_LOADER);
+        return HandlebarsTemplateService.of(OVERRIDE_LOADER, DEFAULT_LOADER);
     }
 
     private HandlebarsTemplateService handlebars() {

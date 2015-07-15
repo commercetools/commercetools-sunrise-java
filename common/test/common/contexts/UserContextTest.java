@@ -1,32 +1,47 @@
 package common.contexts;
 
+import io.sphere.sdk.channels.Channel;
+import io.sphere.sdk.customergroups.CustomerGroup;
+import io.sphere.sdk.models.Reference;
 import org.junit.Test;
-import play.i18n.Lang;
 
-import java.util.Locale;
+import java.time.ZoneId;
 
-import static com.neovisionaries.i18n.CountryCode.AT;
+import static com.neovisionaries.i18n.CountryCode.UK;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Locale.ENGLISH;
+import static java.util.Locale.FRENCH;
+import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserContextTest {
 
     @Test
-    public void hasCorrespondingLocaleWhenCountryAndLanguageProvided() {
-        UserContext context = UserContext.of(lang("de-DE"), AT);
-        assertThat(context.locale()).isEqualTo(locale("de", "DE"));
+    public void createsUserContext() throws Exception {
+        final UserContext userContext = UserContext.of(ENGLISH, asList(ENGLISH, GERMAN, FRENCH), UK, ZoneId.of("Europe/London"), customerGroup(), channel());
+        assertThat(userContext.language()).isEqualTo(ENGLISH);
+        assertThat(userContext.fallbackLanguages()).containsExactly(ENGLISH, GERMAN, FRENCH);
+        assertThat(userContext.country()).isEqualTo(UK);
+        assertThat(userContext.customerGroup()).contains(customerGroup());
+        assertThat(userContext.channel()).contains((channel()));
     }
 
     @Test
-    public void hasLocaleWithCountryWhenOnlyLanguageProvided() {
-        UserContext context = UserContext.of(lang("de"), AT);
-        assertThat(context.locale()).isEqualTo(locale("de", "AT"));
+    public void createsUserContextWithEmptyCustomerGroupAndChannel() throws Exception {
+        final UserContext userContext = UserContext.of(ENGLISH, emptyList(), UK, ZoneId.of("Europe/London"));
+        assertThat(userContext.language()).isEqualTo(ENGLISH);
+        assertThat(userContext.fallbackLanguages()).isEmpty();
+        assertThat(userContext.country()).isEqualTo(UK);
+        assertThat(userContext.customerGroup()).isEmpty();
+        assertThat(userContext.channel()).isEmpty();
     }
 
-    private Lang lang(String code) {
-        return Lang.forCode(code);
+    private Reference<CustomerGroup> customerGroup() {
+        return Reference.of(CustomerGroup.typeId(), "foo");
     }
 
-    private Locale locale(String language, String country) {
-        return new Locale(language, country);
+    private Reference<Channel> channel() {
+        return Reference.of(Channel.typeId(), "foo");
     }
 }

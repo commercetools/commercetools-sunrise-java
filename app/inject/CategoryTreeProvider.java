@@ -4,29 +4,34 @@ import com.google.inject.Provider;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
-import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.queries.PagedQueryResult;
-import io.sphere.sdk.queries.QueryDsl;
+import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.queries.QueryAll;
 import play.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.concurrent.TimeUnit;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Singleton
 class CategoryTreeProvider implements Provider<CategoryTree> {
-    private final PlayJavaSphereClient client;
+    private final SphereClient client;
 
     @Inject
-    private CategoryTreeProvider(final PlayJavaSphereClient client) {
+    private CategoryTreeProvider(final SphereClient client) {
         this.client = client;
     }
 
     @Override
     public CategoryTree get() {
-        Logger.debug("Provide CategoryTree");
-        final QueryDsl<Category> categoryRequest = CategoryQuery.of().withLimit(200);
-        final PagedQueryResult<Category> pagedQueryResult = client.execute(categoryRequest).get(3000, TimeUnit.MILLISECONDS);//TODO this will be most likely moved to a plugin
-        return CategoryTree.of(pagedQueryResult.getResults());
+        try {
+            final QueryAll<Category, CategoryQuery> query = QueryAll.of(CategoryQuery.of());
+            final List<Category> categories = query.run(client).toCompletableFuture().get();
+            Logger.debug("Provide CategoryTree with " + categories.size() + " categories");
+            return CategoryTree.of(categories);
+        } catch (InterruptedException | ExecutionException e) {
+            throw new SunriseInitializationException("Could not fetch categories", e);
+        }
     }
 }

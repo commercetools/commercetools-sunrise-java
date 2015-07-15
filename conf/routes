@@ -5,7 +5,7 @@
 # Home page
 GET        /                           @controllers.HomeController.index()
 
-GET        /pop                        @productcatalog.controllers.ProductCatalogController.pop()
+GET        /pop                        @productcatalog.controllers.ProductCatalogController.pop(page: Int ?= 1)
 
 ->         /setup                      setupwidget.Routes
 

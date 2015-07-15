@@ -4,13 +4,13 @@ import io.sphere.sdk.client.PlayJavaSphereClient;
 import play.mvc.Controller;
 
 public abstract class ShopController extends Controller {
-    private final PlayJavaSphereClient client;
+    private final PlayJavaSphereClient sphere;
 
-    protected ShopController(PlayJavaSphereClient client) {
-        this.client = client;
+    protected ShopController(PlayJavaSphereClient sphere) {
+        this.sphere = sphere;
     }
 
-    protected final PlayJavaSphereClient client() {
-        return client;
+    protected final PlayJavaSphereClient sphere() {
+        return sphere;
     }
 }
