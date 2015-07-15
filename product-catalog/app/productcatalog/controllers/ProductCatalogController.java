@@ -3,9 +3,18 @@ package productcatalog.controllers;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.utils.PriceFormatterImpl;
+import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.categories.queries.CategoryQuery;
+import io.sphere.sdk.products.Product;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.ProductProjectionType;
+import io.sphere.sdk.products.queries.ProductByIdFetch;
+import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
+import io.sphere.sdk.queries.PagedQueryResult;
+import io.sphere.sdk.queries.PagedResult;
 import io.sphere.sdk.search.SearchDsl;
+import play.api.mvc.Controller;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.pages.ProductCatalogView;
@@ -14,7 +23,13 @@ import productcatalog.pages.ProductOverviewPageContent;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Function;
+
+import static io.sphere.sdk.products.ProductProjectionType.*;
+import static java.util.Locale.GERMAN;
 
 @Singleton
 public class ProductCatalogController extends SunriseController {
@@ -27,25 +42,43 @@ public class ProductCatalogController extends SunriseController {
 
     public F.Promise<Result> pop(int page) {
         return withCms("pop", cms ->
-            sphere().execute(searchProducts(page)).flatMap(result -> {
+            searchProducts(page).flatMap(result -> {
                 final ProductOverviewPageContent content = new ProductOverviewPageContent(cms, context(), result, PriceFormatterImpl.of());
                 return render(view -> ok(view.productOverviewPage(content)));
             })
         );
     }
 
-    public F.Promise<Result> pdp(int page) {
-        return withCms("pdp", cms ->
-            sphere().execute(searchProducts(page)).flatMap(result -> {
-                final ProductDetailPageContent content = new ProductDetailPageContent(cms, context(), result, PriceFormatterImpl.of());
-                return render(view -> ok(view.productDetailPage(content)));
-            })
+    public F.Promise<Result> pdp(final String slug) {
+        final F.Promise<Optional<ProductProjection>> productOptPromise = searchProductBySlug(slug);
+        final F.Promise<List<ProductProjection>> suggestionsPromise = getSuggestions();
+
+        final F.Promise<F.Tuple<Optional<ProductProjection>, List<ProductProjection>>> zip = productOptPromise.zip(suggestionsPromise);
+
+        return withCms("pdp", cms -> zip.flatMap(tuple -> {
+                    final Optional<ProductProjection> productOpt = tuple._1;
+                    final List<ProductProjection> suggestions = tuple._2;
+
+                    return productOpt.map(product -> {
+                        final ProductDetailPageContent content = new ProductDetailPageContent(cms, context(), product, suggestions, PriceFormatterImpl.of());
+                        return render(view -> ok(view.productDetailPage(content)));
+                    }).orElse(F.Promise.pure(notFound()));
+                })
         );
     }
 
-    private SearchDsl<ProductProjection> searchProducts(final int page) {
+    private F.Promise<List<ProductProjection>> getSuggestions() {
+        return searchProducts(1);
+    }
+
+    private F.Promise<Optional<ProductProjection>> searchProductBySlug(final String slug) {
+        return sphere().execute(ProductProjectionQuery.ofCurrent().bySlug(GERMAN, slug)).map(PagedQueryResult::head);
+    }
+
+    private F.Promise<List<ProductProjection>> searchProducts(final int page) {
         final int offset = (page - 1) * PAGE_SIZE;
-        return ProductProjectionSearch.ofCurrent().withOffset(offset).withLimit(PAGE_SIZE);
+        return sphere().execute(ProductProjectionSearch.ofCurrent().withOffset(offset).withLimit(PAGE_SIZE))
+                .map(PagedResult::getResults);
     }
 
     private F.Promise<Result> render(final Function<ProductCatalogView, Result> pageRenderer) {

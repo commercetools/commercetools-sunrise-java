@@ -1,12 +1,12 @@
 package common.controllers;
 
-import com.neovisionaries.i18n.CountryCode;
 import common.cms.CmsPage;
 import common.cms.CmsService;
 import common.contexts.AppContext;
 import common.contexts.UserContext;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import play.libs.F;
