@@ -6,7 +6,6 @@
 GET        /                           @controllers.HomeController.index()
 
 GET        /pop                        @productcatalog.controllers.ProductCatalogController.pop(page: Int ?= 1)
-GET        /pdp                        @productcatalog.controllers.ProductCatalogController.pdp(page: Int ?= 1)
 
 ->         /setup                      setupwidget.Routes
 
