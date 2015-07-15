@@ -1,106 +1,108 @@
 package productcatalog.pages;
 
-import common.contexts.AppContext;
 import common.pages.CollectionData;
 import common.pages.DetailData;
-import common.pages.SelectableData;
-import io.sphere.sdk.products.ProductProjection;
-
-import java.util.Arrays;
-
-import static common.utils.Languages.withSuitableLanguage;
 
 public class ProductData {
 
-    private final ProductProjection product;
-    private final AppContext context;
+    private final String text;
+    private final String sku;
+    private final CollectionData ratingList;
+    private final String description;
+    private final String viewDetailsText;
+    private final String price;
+    private final String priceOld;
+    private final CollectionData colorList;
+    private final CollectionData sizeList;
+    private final String sizeGuideText;
+    private final CollectionData bagItemList;
+    private final String addToBagText;
+    private final String addToWishlistText;
+    private final String availableText;
+    private final DetailData productDetails;
+    private final DetailData deliveryAndReturn;
 
-    public ProductData(final ProductProjection product, final AppContext context) {
-        this.product = product;
-        this.context = context;
+
+    ProductData (ProductDataBuilder builder) {
+        this.text = builder.text;
+        this.sku = builder.sku;
+        this.ratingList = builder.ratingList;
+        this.description = builder.description;
+        this.viewDetailsText = builder.viewDetailsText;
+        this.price = builder.price;
+        this.priceOld = builder.priceOld;
+        this.colorList = builder.colorList;
+        this.sizeList = builder.sizeList;
+        this.sizeGuideText = builder.sizeGuideText;
+        this.bagItemList = builder.bagItemList;
+        this.addToBagText = builder.addToBagText;
+        this.addToWishlistText = builder.addToWishlistText;
+        this.availableText = builder.availableText;
+        this.productDetails = builder.productDetails;
+        this.deliveryAndReturn = builder.deliveryAndReturn;
     }
 
     public String getText() {
-        return withSuitableLanguage(product.getName(), context);
+        return text;
     }
 
     public String getSku() {
-        return product.getMasterVariant().getSku().orElse("");
+        return sku;
     }
 
     public CollectionData getRating() {
-        return new CollectionData("4/5", Arrays.asList(
-                new SelectableData("5 Stars", "5", "", "", false),
-                new SelectableData("4 Stars", "4", "", "", false),
-                new SelectableData("3 Stars", "3", "", "", false),
-                new SelectableData("2 Stars", "2", "", "", false),
-                new SelectableData("1 Stars", "1", "", "", false)
-        ));
+        return ratingList;
     }
 
     public String getDescription() {
-        return product.getDescription().map(description -> withSuitableLanguage(description, context))
-                .orElse("");
+        return description;
     }
 
-    public String getViewDetailsText() {
-        return "View Details";
+    public String getViewDetails() {
+        return viewDetailsText;
     }
 
     public String getPrice() {
-        return "13.50";
+        return price;
     }
 
     public String getPriceOld() {
-        return "15.00";
+        return priceOld;
     }
 
     public CollectionData getColor() {
-        return new CollectionData("Color", Arrays.asList(
-                new SelectableData("Choose Color", "none", "", "", true),
-                new SelectableData("Blue", "blue", "", "", false),
-                new SelectableData("Red", "red", "", "", false)
-        ));
+        return colorList;
     }
 
     public CollectionData getSize() {
-        return new CollectionData("Size", Arrays.asList(
-                new SelectableData("Choose Size", "none", "", "", true),
-                new SelectableData("l", "l", "", "", false),
-                new SelectableData("m", "m", "", "", false),
-                new SelectableData("s", "s", "", "", false)
-        ));
+        return sizeList;
     }
 
     public String getSizeGuide() {
-        return "Size Guide";
+        return sizeGuideText;
     }
 
     public CollectionData getBagItems() {
-        return new CollectionData("", Arrays.asList(
-                new SelectableData("1", "", "", "", true),
-                new SelectableData("2", "", "", "", false),
-                new SelectableData("3", "", "", "", false)
-        ));
+        return bagItemList;
     }
 
     public String getAddToBag() {
-        return "Add to Bag";
+        return addToBagText;
     }
 
     public String getAddToWishlist() {
-        return "Add to Wishlist";
+        return addToWishlistText;
     }
 
     public String getAvailable() {
-        return "Available";
+        return availableText;
     }
 
     public DetailData getProductDetails() {
-        return new DetailData("Product Details", "detailed description");
+        return productDetails;
     }
 
     public DetailData getDeliveryAndReturn() {
-        return new DetailData("Delivery & Returns", "delivery description");
+        return deliveryAndReturn;
     }
 }
