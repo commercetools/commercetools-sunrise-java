@@ -4,6 +4,7 @@ import common.pages.CollectionData;
 import common.pages.DetailData;
 
 public class ProductData {
+    private static final String SKU_PREFIX = "SUNRISE #";
 
     private final String text;
     private final String sku;
@@ -48,7 +49,7 @@ public class ProductData {
     }
 
     public String getSku() {
-        return sku;
+        return SKU_PREFIX + sku;
     }
 
     public CollectionData getRating() {
