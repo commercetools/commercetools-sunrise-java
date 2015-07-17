@@ -3,6 +3,7 @@ scala:
 - 2.10.5
 script:
 - "./sbt test it:test unidoc" #cover
+- rm conf/dev.conf
 #- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt "gitPublish target/scala-2.11/it-jacoco/html https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git coverage sphere-oss automation@commercetools.de"; fi
 - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git javadoc sphere-oss automation@commercetools.de"; fi
 jdk:
@@ -22,12 +23,12 @@ notifications:
   email:
     on_success: never
     on_failure: change
-#deploy:
-#  provider: heroku
-#  buildpack: scala
-#  api_key:
-#    secure: NE6m0300BPmc8jJQbpTFyOP1uU6uK+7aVpN5lmKAPhV2gByzzq9XT3uwYqPcD9turCYujDXAmXrBzI6ISfLlrqpcxKjSupeUvvjpOxqhbpP65hA79VTuxDIajazzXrvjuKPgvUJAjD+1qdQWzoOjKJ4Y/iJ1YL+fqt8omOSFda0=
-#  app: sphere-sunrise
-#  on:
-#    repo: sphereio/sphere-sunrise
-#    branch: master
+deploy:
+  provider: heroku
+  buildpack: scala
+  api_key:
+    secure: NE6m0300BPmc8jJQbpTFyOP1uU6uK+7aVpN5lmKAPhV2gByzzq9XT3uwYqPcD9turCYujDXAmXrBzI6ISfLlrqpcxKjSupeUvvjpOxqhbpP65hA79VTuxDIajazzXrvjuKPgvUJAjD+1qdQWzoOjKJ4Y/iJ1YL+fqt8omOSFda0=
+  app: sphere-sunrise
+  on:
+    repo: sphereio/sphere-sunrise
+    branch: master
