@@ -5,18 +5,22 @@ import common.contexts.AppContext;
 import common.pages.*;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
+import io.sphere.sdk.attributes.Attribute;
+import io.sphere.sdk.attributes.AttributeAccess;
+import io.sphere.sdk.attributes.LocalizedEnumType;
+import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
 
 import javax.money.MonetaryAmount;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static common.utils.Languages.withSuitableLanguage;
+import static java.util.Arrays.asList;
 
 public class ProductDetailPageContent extends PageContent {
     private final AppContext context;
@@ -84,7 +88,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private CollectionData buildRating() {
-        return new CollectionData("4/5", Arrays.asList(
+        return new CollectionData("4/5", asList(
                 new SelectableData("5 Stars", "5", cms.getOrEmpty("product.ratingList.five.text"), "", false),
                 new SelectableData("4 Stars", "4", cms.getOrEmpty("product.ratingList.four.text"), "", false),
                 new SelectableData("3 Stars", "3", cms.getOrEmpty("product.ratingList.three.text"), "", false),
@@ -94,15 +98,24 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private CollectionData buildColorList() {
-        return new CollectionData(cms.getOrEmpty("product.colorList.text"), Arrays.asList(
-                new SelectableData(cms.getOrEmpty("product.colorList.choose.text"), "none", "", "", true),
-                new SelectableData("Blue", "blue", "", "", false),
-                new SelectableData("Red", "red", "", "", false)
-        ));
+        final AttributeAccess<LocalizedEnumValue> access = AttributeAccess.ofLocalizedEnumValue();
+        final List<SelectableData> colors = product.getAllVariants().stream()
+                .map(variant -> variant.getAttribute("color")).filter(Optional::isPresent).map(Optional::get).distinct()
+                .map(color -> selectableColor(color, access))
+                .collect(Collectors.toList());
+
+        colors.add(0, new SelectableData(cms.getOrEmpty("product.colorList.choose.text"), "none", "", "", true));
+
+        return new CollectionData(cms.getOrEmpty("product.colorList.text"), colors);
+    }
+
+    private SelectableData selectableColor(final Attribute attr, final AttributeAccess<LocalizedEnumValue> access) {
+        return new SelectableData(
+                withSuitableLanguage(attr.getValue(access).getLabel(), context), attr.getName(), "", "", false);
     }
 
     private CollectionData buildSizeList() {
-        return new CollectionData(cms.getOrEmpty("product.sizeList.text"), Arrays.asList(
+        return new CollectionData(cms.getOrEmpty("product.sizeList.text"), asList(
                 new SelectableData(cms.getOrEmpty("product.sizeList.choose.text"), "none", "", "", true),
                 new SelectableData("l", "l", "", "", false),
                 new SelectableData("m", "m", "", "", false),
@@ -111,7 +124,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private CollectionData buildBagItemList() {
-        return new CollectionData("", Arrays.asList(
+        return new CollectionData("", asList(
                 new SelectableData("1", "", "", "", true),
                 new SelectableData("2", "", "", "", false),
                 new SelectableData("3", "", "", "", false),
