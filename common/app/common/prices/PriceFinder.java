@@ -1,12 +1,14 @@
 package common.prices;
 
 import com.neovisionaries.i18n.CountryCode;
+import common.contexts.UserContext;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.Price;
 
 import javax.money.CurrencyUnit;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +34,11 @@ public class PriceFinder {
 
     public static PriceFinder of(final CurrencyUnit currency, final CountryCode country, final java.util.Optional<Reference<CustomerGroup>> customerGroup, final java.util.Optional<Reference<Channel>> channel, final ZonedDateTime userTime) {
         return new PriceFinder(currency, country, customerGroup, channel, userTime);
+    }
+
+    public static PriceFinder of(final UserContext context) {
+        return PriceFinder.of(context.currency(), context.country(), context.customerGroup(),
+                context.channel(), ZonedDateTime.of(LocalDateTime.now(), context.zoneId()));
     }
 
     /**

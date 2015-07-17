@@ -77,7 +77,7 @@ public class ProductDataBuilder {
         return this;
     }
 
-    public ProductDataBuilder withsizeGuideText(final String sizeGuideText) {
+    public ProductDataBuilder withSizeGuideText(final String sizeGuideText) {
         this.sizeGuideText = sizeGuideText;
         return this;
     }

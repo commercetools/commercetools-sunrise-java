@@ -3,28 +3,37 @@ package productcatalog.pages;
 import common.cms.CmsPage;
 import common.contexts.AppContext;
 import common.pages.*;
+import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
+import io.sphere.sdk.productdiscounts.DiscountedPrice;
+import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
 
+import javax.money.MonetaryAmount;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static common.utils.Languages.withSuitableLanguage;
 
 public class ProductDetailPageContent extends PageContent {
     private final AppContext context;
+    private final PriceFinder priceFinder;
     private final PriceFormatter priceFormatter;
     private final ProductProjection product;
     private final List<ProductProjection> suggestionList;
+    private final Optional<Price> priceOpt;
 
-    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final ProductProjection product, List<ProductProjection> suggestionList, final PriceFormatter priceFormatter) {
+    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final ProductProjection product, List<ProductProjection> suggestionList, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
         super(cms);
         this.context = context;
+        this.priceFinder = priceFinder;
         this.priceFormatter = priceFormatter;
         this.product = product;
         this.suggestionList = suggestionList;
+        this.priceOpt = priceFinder.findPrice(product.getMasterVariant().getPrices());
     }
 
     @Override
@@ -49,11 +58,11 @@ public class ProductDetailPageContent extends PageContent {
                 .withRatingList(buildRating())
                 .withDescription(product.getDescription().map(description -> withSuitableLanguage(description, context)).orElse(""))
                 .withViewDetailsText(cms.getOrEmpty("product.viewDetails"))
-                .withPrice("13.50EUR")
-                .withPriceOld("15.00EUR")
+                .withPrice(getFormattedPrice())
+                .withPriceOld(getFormattedPriceOld())
                 .withColorList(buildColorList())
                 .withSizeList(buildSizeList())
-                .withsizeGuideText(cms.getOrEmpty("product.sizeGuide"))
+                .withSizeGuideText(cms.getOrEmpty("product.sizeGuide"))
                 .withBagItemList(buildBagItemList())
                 .withAddToBagText(cms.getOrEmpty("product.addToBag"))
                 .withAddToWishlistText(cms.getOrEmpty("product.addToWishlist"))
@@ -122,5 +131,20 @@ public class ProductDetailPageContent extends PageContent {
 
     private DetailData buildDeliveryAndReturn() {
         return new DetailData(cms.getOrEmpty("product.deliveryAndReturn.text"), "Some Description");
+    }
+
+    private String getFormattedPrice() {
+        final Optional<MonetaryAmount> currentPrice = priceOpt.map(price -> price.getDiscounted()
+                .map(DiscountedPrice::getValue)
+                .orElse(price.getValue()));
+
+        return currentPrice.map(price -> priceFormatter.format(price, context)).orElse("");
+    }
+
+    private String getFormattedPriceOld() {
+        final Optional<MonetaryAmount> oldPrice = priceOpt.flatMap(price -> price.getDiscounted()
+                .map(d -> price.getValue()));
+
+        return oldPrice.map(price -> priceFormatter.format(price, context)).orElse("");
     }
 }

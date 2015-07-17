@@ -1,7 +1,10 @@
 package productcatalog.controllers;
 
+import common.contexts.AppContext;
+import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
+import common.prices.PriceFinder;
 import common.utils.PriceFormatterImpl;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
@@ -52,7 +55,9 @@ public class ProductCatalogController extends SunriseController {
                     final List<ProductProjection> suggestions = tuple._2;
 
                     return productOpt.map(product -> {
-                        final ProductDetailPageContent content = new ProductDetailPageContent(cms, context(), product, suggestions, PriceFormatterImpl.of());
+                        final ProductDetailPageContent content =
+                                new ProductDetailPageContent(cms, context(), product, suggestions,
+                                        PriceFinder.of(context().user()), PriceFormatterImpl.of());
                         return render(view -> ok(view.productDetailPage(content)));
                     }).orElse(F.Promise.pure(notFound()));
                 })
