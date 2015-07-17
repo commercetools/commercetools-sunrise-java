@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static common.utils.Languages.translate;
 import static java.util.Arrays.asList;
@@ -130,17 +131,13 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private CollectionData buildBagItemList() {
-        return new CollectionData("", asList(
-                new SelectableData("1", "", "", "", true),
-                new SelectableData("2", "", "", "", false),
-                new SelectableData("3", "", "", "", false),
-                new SelectableData("4", "", "", "", false),
-                new SelectableData("5", "", "", "", false),
-                new SelectableData("6", "", "", "", false),
-                new SelectableData("7", "", "", "", false),
-                new SelectableData("8", "", "", "", false),
-                new SelectableData("9", "", "", "", false)
-        ));
+        final List<SelectableData> items = IntStream.range(2, 10)
+                .mapToObj(n -> new SelectableData(Integer.toString(n), "", "", "", false))
+                .collect(Collectors.toList());
+
+        items.add(0, new SelectableData("1", "", "", "", true));
+
+        return new CollectionData("", items);
     }
 
     private DetailData buildProductDetails() {
