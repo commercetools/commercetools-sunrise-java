@@ -7,7 +7,6 @@ import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.attributes.Attribute;
 import io.sphere.sdk.attributes.AttributeAccess;
-import io.sphere.sdk.attributes.LocalizedEnumType;
 import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
 import io.sphere.sdk.products.Price;
@@ -109,18 +108,25 @@ public class ProductDetailPageContent extends PageContent {
         return new CollectionData(cms.getOrEmpty("product.colorList.text"), colors);
     }
 
-    private SelectableData selectableColor(final Attribute attr, final AttributeAccess<LocalizedEnumValue> access) {
+    private SelectableData selectableColor(final Attribute color, final AttributeAccess<LocalizedEnumValue> access) {
         return new SelectableData(
-                withSuitableLanguage(attr.getValue(access).getLabel(), context), attr.getName(), "", "", false);
+                withSuitableLanguage(color.getValue(access).getLabel(), context), color.getName(), "", "", false);
     }
 
     private CollectionData buildSizeList() {
-        return new CollectionData(cms.getOrEmpty("product.sizeList.text"), asList(
-                new SelectableData(cms.getOrEmpty("product.sizeList.choose.text"), "none", "", "", true),
-                new SelectableData("l", "l", "", "", false),
-                new SelectableData("m", "m", "", "", false),
-                new SelectableData("s", "s", "", "", false)
-        ));
+        final AttributeAccess<String> access = AttributeAccess.ofText();
+        final List<SelectableData> sizes = product.getAllVariants().stream()
+                .map(variant -> variant.getAttribute("size")).filter(Optional::isPresent).map(Optional::get).distinct()
+                .map(size -> selectableSize(size, access))
+                .collect(Collectors.toList());
+
+        sizes.add(0, new SelectableData(cms.getOrEmpty("product.sizeList.choose.text"), "none", "", "", true));
+
+        return new CollectionData(cms.getOrEmpty("product.sizeList.text"), sizes);
+    }
+
+    private SelectableData selectableSize(final Attribute size, final AttributeAccess<String> access) {
+        return new SelectableData(size.getValue(access), size.getValue(access), "", "", false);
     }
 
     private CollectionData buildBagItemList() {
