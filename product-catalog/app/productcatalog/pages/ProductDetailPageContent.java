@@ -29,8 +29,7 @@ public class ProductDetailPageContent extends PageContent {
 
     @Override
     public String additionalTitle() {
-        // TODO Fill with category name?
-        return "";
+        return withSuitableLanguage(product.getName(), context);
     }
 
     public String getText() {
