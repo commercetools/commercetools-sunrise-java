@@ -2,10 +2,8 @@ package productcatalog.pages;
 
 import common.contexts.AppContext;
 import common.prices.PriceFinder;
-import common.utils.Languages;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.models.Image;
-import io.sphere.sdk.models.LocalizedStrings;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
@@ -33,11 +31,11 @@ public class ProductThumbnailData {
     }
 
     public String getText() {
-        return withSuitableLanguage(product.getName(), context);
+        return translate(product.getName(), context);
     }
 
     public String getDescription() {
-        return product.getDescription().map(description -> withSuitableLanguage(description, context))
+        return product.getDescription().map(description -> translate(description, context))
                 .orElse("");
     }
 

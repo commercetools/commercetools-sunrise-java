@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static common.utils.Languages.withSuitableLanguage;
+import static common.utils.Languages.translate;
 import static java.util.Arrays.asList;
 
 public class ProductDetailPageContent extends PageContent {
@@ -41,7 +41,7 @@ public class ProductDetailPageContent extends PageContent {
 
     @Override
     public String additionalTitle() {
-        return withSuitableLanguage(product.getName(), context);
+        return translate(product.getName(), context);
     }
 
     public String getText() {
@@ -56,10 +56,10 @@ public class ProductDetailPageContent extends PageContent {
 
     public ProductData getProduct() {
         return ProductDataBuilder.of()
-                .withText(withSuitableLanguage(product.getName(), context))
+                .withText(translate(product.getName(), context))
                 .withSku(product.getMasterVariant().getSku().orElse(""))
                 .withRatingList(buildRating())
-                .withDescription(product.getDescription().map(description -> withSuitableLanguage(description, context)).orElse(""))
+                .withDescription(product.getDescription().map(description -> translate(description, context)).orElse(""))
                 .withViewDetailsText(cms.getOrEmpty("product.viewDetails"))
                 .withPrice(getFormattedPrice())
                 .withPriceOld(getFormattedPriceOld())
@@ -110,7 +110,7 @@ public class ProductDetailPageContent extends PageContent {
 
     private SelectableData selectableColor(final Attribute color, final AttributeAccess<LocalizedEnumValue> access) {
         return new SelectableData(
-                withSuitableLanguage(color.getValue(access).getLabel(), context), color.getName(), "", "", false);
+                translate(color.getValue(access).getLabel(), context), color.getName(), "", "", false);
     }
 
     private CollectionData buildSizeList() {
