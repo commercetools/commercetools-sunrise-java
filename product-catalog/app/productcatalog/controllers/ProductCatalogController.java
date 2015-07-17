@@ -3,18 +3,11 @@ package productcatalog.controllers;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.utils.PriceFormatterImpl;
-import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.queries.CategoryQuery;
-import io.sphere.sdk.products.Product;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductProjectionType;
-import io.sphere.sdk.products.queries.ProductByIdFetch;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.queries.PagedResult;
-import io.sphere.sdk.search.SearchDsl;
-import play.api.mvc.Controller;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.pages.ProductCatalogView;
@@ -24,16 +17,15 @@ import productcatalog.pages.ProductOverviewPageContent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static io.sphere.sdk.products.ProductProjectionType.*;
 import static java.util.Locale.GERMAN;
 
 @Singleton
 public class ProductCatalogController extends SunriseController {
     private static final int PAGE_SIZE = 9;
+    private static final int NUM_SUGGESTIONS = 4;
 
     @Inject
     public ProductCatalogController(final ControllerDependency controllerDependency) {
@@ -68,7 +60,8 @@ public class ProductCatalogController extends SunriseController {
     }
 
     private F.Promise<List<ProductProjection>> getSuggestions() {
-        return searchProducts(1);
+        return sphere().execute(ProductProjectionSearch.ofCurrent().withLimit(NUM_SUGGESTIONS))
+                .map(PagedResult::getResults);
     }
 
     private F.Promise<Optional<ProductProjection>> searchProductBySlug(final String slug) {
