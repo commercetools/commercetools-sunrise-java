@@ -8,14 +8,14 @@ import common.utils.PriceFormatter;
 import io.sphere.sdk.attributes.Attribute;
 import io.sphere.sdk.attributes.AttributeAccess;
 import io.sphere.sdk.models.LocalizedEnumValue;
+import io.sphere.sdk.models.LocalizedStrings;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import javax.money.MonetaryAmount;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,15 +28,17 @@ public class ProductDetailPageContent extends PageContent {
     private final PriceFormatter priceFormatter;
     private final ProductProjection product;
     private final List<ProductProjection> suggestionList;
+    private final List<ShippingMethod> shippingMethods;
     private final Optional<Price> priceOpt;
 
-    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final ProductProjection product, List<ProductProjection> suggestionList, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
+    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final ProductProjection product, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
         super(cms);
         this.context = context;
         this.priceFinder = priceFinder;
         this.priceFormatter = priceFormatter;
         this.product = product;
         this.suggestionList = suggestionList;
+        this.shippingMethods = shippingMethods;
         this.priceOpt = priceFinder.findPrice(product.getMasterVariant().getPrices());
     }
 
@@ -142,12 +144,22 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private DetailData buildProductDetails() {
-        return new DetailData(cms.getOrEmpty("product.productDetails.text"), "Some Description");
+        final Optional<Set<LocalizedStrings>> detailsOpt =
+                product.getMasterVariant().getAttribute("details", AttributeAccess.ofLocalizedStringsSet());
+
+        return new DetailData(cms.getOrEmpty("product.productDetails.text"), concatDetails(detailsOpt));
     }
 
+    private String concatDetails (final Optional<Set<LocalizedStrings>> detailsOpt) {
+        return detailsOpt.map(details -> String.join(", ", details.stream()
+                .map(detail -> translate(detail, context))
+                .collect(Collectors.toList())))
+                .orElse("");
+    }
 
     private DetailData buildDeliveryAndReturn() {
-        return new DetailData(cms.getOrEmpty("product.deliveryAndReturn.text"), "Some Description");
+        final String desc = shippingMethods.stream().findFirst().map(ShippingMethod::getName).orElse("");
+        return new DetailData(cms.getOrEmpty("product.deliveryAndReturn.text"), desc);
     }
 
     private String getFormattedPrice() {

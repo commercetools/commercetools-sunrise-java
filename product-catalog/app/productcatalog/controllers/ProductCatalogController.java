@@ -1,7 +1,5 @@
 package productcatalog.controllers;
 
-import common.contexts.AppContext;
-import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.prices.PriceFinder;
@@ -11,6 +9,8 @@ import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.queries.PagedResult;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
+import io.sphere.sdk.shippingmethods.queries.ShippingMethodQuery;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.pages.ProductCatalogView;
@@ -29,6 +29,7 @@ import static java.util.Locale.GERMAN;
 public class ProductCatalogController extends SunriseController {
     private static final int PAGE_SIZE = 9;
     private static final int NUM_SUGGESTIONS = 4;
+    private static final int DEFAULT_TIMEOUT = 10000;
 
     @Inject
     public ProductCatalogController(final ControllerDependency controllerDependency) {
@@ -46,22 +47,20 @@ public class ProductCatalogController extends SunriseController {
 
     public F.Promise<Result> pdp(final String slug) {
         final F.Promise<Optional<ProductProjection>> productOptPromise = searchProductBySlug(slug);
-        final F.Promise<List<ProductProjection>> suggestionsPromise = getSuggestions();
+        final List<ProductProjection> suggestions = getSuggestions().get(DEFAULT_TIMEOUT);
+        final List<ShippingMethod> shippingMethods = getShippingMethods().get(DEFAULT_TIMEOUT);
 
-        final F.Promise<F.Tuple<Optional<ProductProjection>, List<ProductProjection>>> zip = productOptPromise.zip(suggestionsPromise);
+        return withCms("pdp", cms -> productOptPromise.flatMap(
+                productOpt -> productOpt.map(product -> {
+                    final ProductDetailPageContent content = new ProductDetailPageContent(cms, context(), product, suggestions, shippingMethods, PriceFinder.of(context().user()), PriceFormatterImpl.of());
+                    return render(view -> ok(view.productDetailPage(content)));
+                }).orElse(F.Promise.pure(notFound()))
+        ));
+    }
 
-        return withCms("pdp", cms -> zip.flatMap(tuple -> {
-                    final Optional<ProductProjection> productOpt = tuple._1;
-                    final List<ProductProjection> suggestions = tuple._2;
-
-                    return productOpt.map(product -> {
-                        final ProductDetailPageContent content =
-                                new ProductDetailPageContent(cms, context(), product, suggestions,
-                                        PriceFinder.of(context().user()), PriceFormatterImpl.of());
-                        return render(view -> ok(view.productDetailPage(content)));
-                    }).orElse(F.Promise.pure(notFound()));
-                })
-        );
+    private F.Promise<List<ShippingMethod>> getShippingMethods() {
+        final ShippingMethodQuery shippingMethodQuery = ShippingMethodQuery.of();
+        return sphere().execute(shippingMethodQuery).map(PagedResult::getResults);
     }
 
     private F.Promise<List<ProductProjection>> getSuggestions() {
