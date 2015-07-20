@@ -59,6 +59,7 @@ public class ProductData {
     public String getDescription() {
         return description;
     }
+
     public String getAdditionalDescription() {
         return additionalDescription;
     }

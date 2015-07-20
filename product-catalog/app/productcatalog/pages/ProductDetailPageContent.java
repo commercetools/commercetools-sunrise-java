@@ -30,7 +30,6 @@ public class ProductDetailPageContent extends PageContent {
     private static final int SHORT_DESCRIPTION_MAX_CHARACTERS = 170;
 
     private final AppContext context;
-    private final PriceFinder priceFinder;
     private final PriceFormatter priceFormatter;
     private final ProductProjection product;
     private final List<ProductProjection> suggestionList;
@@ -40,7 +39,6 @@ public class ProductDetailPageContent extends PageContent {
     public ProductDetailPageContent(final CmsPage cms, final AppContext context, final ProductProjection product, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
         super(cms);
         this.context = context;
-        this.priceFinder = priceFinder;
         this.priceFormatter = priceFormatter;
         this.product = product;
         this.suggestionList = suggestionList;
@@ -59,7 +57,7 @@ public class ProductDetailPageContent extends PageContent {
 
     public List<ImageData> getGallery() {
         return product.getMasterVariant().getImages().stream()
-                .map(image -> ImageData.of(image))
+                .map(ImageData::of)
                 .collect(Collectors.toList());
     }
 
