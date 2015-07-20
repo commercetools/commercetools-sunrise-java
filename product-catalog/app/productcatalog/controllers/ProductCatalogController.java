@@ -20,6 +20,7 @@ import productcatalog.pages.ProductOverviewPageContent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -46,7 +47,7 @@ public class ProductCatalogController extends SunriseController {
     }
 
     public F.Promise<Result> pdp(final String slug) {
-        final F.Promise<Optional<ProductProjection>> productOptPromise = searchProductBySlug(slug);
+        final F.Promise<Optional<ProductProjection>> productOptPromise = searchProductBySlug(GERMAN, slug);
         final List<ProductProjection> suggestions = getSuggestions().get(DEFAULT_TIMEOUT);
         final List<ShippingMethod> shippingMethods = getShippingMethods().get(DEFAULT_TIMEOUT);
 
@@ -68,8 +69,8 @@ public class ProductCatalogController extends SunriseController {
                 .map(PagedResult::getResults);
     }
 
-    private F.Promise<Optional<ProductProjection>> searchProductBySlug(final String slug) {
-        return sphere().execute(ProductProjectionQuery.ofCurrent().bySlug(GERMAN, slug)).map(PagedQueryResult::head);
+    private F.Promise<Optional<ProductProjection>> searchProductBySlug(final Locale locale, final String slug) {
+        return sphere().execute(ProductProjectionQuery.ofCurrent().bySlug(locale, slug)).map(PagedQueryResult::head);
     }
 
     private F.Promise<List<ProductProjection>> searchProducts(final int page) {
