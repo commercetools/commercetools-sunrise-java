@@ -3,6 +3,8 @@ package common.utils;
 import common.contexts.AppContext;
 
 import javax.money.MonetaryAmount;
+import javax.money.format.MonetaryAmountFormat;
+import javax.money.format.MonetaryFormats;
 
 public class PriceFormatterImpl implements PriceFormatter {
 
@@ -14,6 +16,7 @@ public class PriceFormatterImpl implements PriceFormatter {
 
     @Override
     public String format(MonetaryAmount price, AppContext context) {
-        return price.getNumber().toString();
+        final MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(context.user().country().toLocale());
+        return format.format(price);
     }
 }
