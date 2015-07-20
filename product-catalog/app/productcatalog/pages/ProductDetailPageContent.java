@@ -15,7 +15,10 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import javax.money.MonetaryAmount;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -23,6 +26,9 @@ import static common.utils.Languages.translate;
 import static java.util.Arrays.asList;
 
 public class ProductDetailPageContent extends PageContent {
+
+    private static final int SHORT_DESCRIPTION_MAX_CHARACTERS = 170;
+
     private final AppContext context;
     private final PriceFinder priceFinder;
     private final PriceFormatter priceFormatter;
@@ -62,7 +68,7 @@ public class ProductDetailPageContent extends PageContent {
                 .withText(translate(product.getName(), context))
                 .withSku(product.getMasterVariant().getSku().orElse(""))
                 .withRatingList(buildRating())
-                .withDescription(product.getDescription().map(description -> translate(description, context).substring(0, 160)).orElse(""))
+                .withDescription(product.getDescription().map(description -> shorten(translate(description, context))).orElse(""))
                 .withAdditionalDescription(product.getDescription().map(description -> translate(description, context)).orElse(""))
                 .withViewDetailsText(cms.getOrEmpty("product.viewDetails"))
                 .withPrice(getFormattedPrice())
@@ -175,5 +181,9 @@ public class ProductDetailPageContent extends PageContent {
                 .map(d -> price.getValue()));
 
         return oldPrice.map(price -> priceFormatter.format(price, context)).orElse("");
+    }
+
+    private String shorten(final String text) {
+        return text.substring(0, SHORT_DESCRIPTION_MAX_CHARACTERS);
     }
 }
