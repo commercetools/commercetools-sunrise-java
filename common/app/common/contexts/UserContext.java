@@ -4,11 +4,9 @@ import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
-import org.javamoney.moneta.CurrencyUnitBuilder;
 
-import javax.money.CurrencyContext;
-import javax.money.CurrencyContextBuilder;
 import javax.money.CurrencyUnit;
+import javax.money.Monetary;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Locale;
@@ -61,8 +59,7 @@ public class UserContext {
     }
 
     public CurrencyUnit currency() {
-        final CurrencyContext currencyContext = CurrencyContextBuilder.of("").build();
-        return CurrencyUnitBuilder.of(country.getCurrency().getCurrencyCode(), currencyContext).build();
+        return Monetary.getCurrency("EUR");
     }
 
     public static UserContext of(final Locale language, final List<Locale> fallbackLanguages,
