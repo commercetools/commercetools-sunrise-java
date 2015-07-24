@@ -23,10 +23,6 @@ public final class ProductCatalogView {
         return templateService.renderToHtml("pop", pageData(content));
     }
 
-    public Html productDetailPage(final ProductDetailPageContent content) {
-        return templateService.renderToHtml("pdp", pageData(content));
-    }
-
     private PageData pageData(final PageContent pageContent) {
         return SunrisePageData.of(commonCms, context,  pageContent);
     }

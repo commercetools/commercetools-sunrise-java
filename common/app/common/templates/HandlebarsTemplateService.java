@@ -8,6 +8,7 @@ import common.pages.PageData;
 import play.Logger;
 
 import java.io.IOException;
+import java.util.List;
 
 public final class HandlebarsTemplateService implements TemplateService {
     private final Handlebars handlebars;
@@ -49,4 +50,9 @@ public final class HandlebarsTemplateService implements TemplateService {
     }
 
 
+    public static TemplateService of(final List<TemplateLoader> templateLoaders) {
+        final TemplateLoader[] templateLoadersArray =
+                templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
+        return of(templateLoadersArray);
+    }
 }
