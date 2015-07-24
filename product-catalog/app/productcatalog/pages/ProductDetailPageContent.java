@@ -12,6 +12,7 @@ import io.sphere.sdk.models.LocalizedStrings;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import javax.money.MonetaryAmount;
@@ -32,15 +33,17 @@ public class ProductDetailPageContent extends PageContent {
     private final AppContext context;
     private final PriceFormatter priceFormatter;
     private final ProductProjection product;
+    private final ProductVariant variant;
     private final List<ProductProjection> suggestionList;
     private final List<ShippingMethod> shippingMethods;
     private final Optional<Price> priceOpt;
 
-    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final ProductProjection product, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
+    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
         super(cms);
         this.context = context;
         this.priceFormatter = priceFormatter;
         this.product = product;
+        this.variant = variant;
         this.suggestionList = suggestionList;
         this.shippingMethods = shippingMethods;
         this.priceOpt = priceFinder.findPrice(product.getMasterVariant().getPrices());
@@ -56,7 +59,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public List<ImageData> getGallery() {
-        return product.getMasterVariant().getImages().stream()
+        return variant.getImages().stream()
                 .map(ImageData::of)
                 .collect(Collectors.toList());
     }
@@ -64,7 +67,7 @@ public class ProductDetailPageContent extends PageContent {
     public ProductData getProduct() {
         return ProductDataBuilder.of()
                 .withText(translate(product.getName(), context))
-                .withSku(product.getMasterVariant().getSku().orElse(""))
+                .withSku(variant.getSku().orElse(""))
                 .withRatingList(buildRating())
                 .withDescription(product.getDescription().map(description -> shorten(translate(description, context))).orElse(""))
                 .withAdditionalDescription(product.getDescription().map(description -> translate(description, context)).orElse(""))
@@ -149,7 +152,7 @@ public class ProductDetailPageContent extends PageContent {
 
     private DetailData buildProductDetails() {
         final Optional<Set<LocalizedStrings>> detailsOpt =
-                product.getMasterVariant().getAttribute("details", AttributeAccess.ofLocalizedStringsSet());
+                variant.getAttribute("details", AttributeAccess.ofLocalizedStringsSet());
 
         return new DetailData(cms.getOrEmpty("product.productDetails.text"), concatDetails(detailsOpt));
     }

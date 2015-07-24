@@ -5,6 +5,7 @@ import common.controllers.SunriseController;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatterImpl;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.queries.PagedQueryResult;
@@ -46,14 +47,19 @@ public class ProductCatalogController extends SunriseController {
         );
     }
 
-    public F.Promise<Result> pdp(final String slug) {
+    public F.Promise<Result> pdp(final String slug, final String sku) {
         final F.Promise<Optional<ProductProjection>> productOptPromise = searchProductBySlug(GERMAN, slug);
         final List<ProductProjection> suggestions = getSuggestions().get(DEFAULT_TIMEOUT);
         final List<ShippingMethod> shippingMethods = getShippingMethods().get(DEFAULT_TIMEOUT);
 
         return withCms("pdp", cms -> productOptPromise.flatMap(
                 productOpt -> productOpt.map(product -> {
-                    final ProductDetailPageContent content = new ProductDetailPageContent(cms, context(), product, suggestions, shippingMethods, PriceFinder.of(context().user()), PriceFormatterImpl.of());
+                    final ProductVariant variant = product.getAllVariants().stream()
+                            .filter(v -> v.getSku().map(variantSku -> variantSku.equals(sku)).orElse(false))
+                            .findFirst()
+                            .orElse(product.getMasterVariant()); // rather redirect
+
+                    final ProductDetailPageContent content = new ProductDetailPageContent(cms, context(), product, variant, suggestions, shippingMethods, PriceFinder.of(context().user()), PriceFormatterImpl.of());
                     return render(view -> ok(view.productDetailPage(content)));
                 }).orElse(F.Promise.pure(notFound()))
         ));
