@@ -14,6 +14,7 @@ import io.sphere.sdk.shippingmethods.queries.ShippingMethodQuery;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.pages.ProductCatalogView;
+import productcatalog.pages.ProductDetailPageContent;
 import productcatalog.pages.ProductOverviewPageContent;
 
 import javax.inject.Inject;
