@@ -141,7 +141,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private CollectionData buildBagItemList() {
-        final List<SelectableData> items = IntStream.range(2, 10)
+        final List<SelectableData> items = IntStream.range(2, 100)
                 .mapToObj(n -> new SelectableData(Integer.toString(n), "", "", "", false))
                 .collect(Collectors.toList());
 
