@@ -35,6 +35,11 @@ public final class SunrisePageData implements PageData {
         return new SeoData();
     }
 
+    @Override
+    public PageMeta getMeta() {
+        return new PageMeta();
+    }
+
     public static SunrisePageData of(final CmsPage cms, final AppContext context, final PageContent pageContent) {
         return new SunrisePageData(cms, context, pageContent);
     }

@@ -9,4 +9,6 @@ public interface PageData {
     PageFooter getFooter();
 
     SeoData getSeo();
+
+    PageMeta getMeta();
 }
