@@ -3,9 +3,11 @@ package productcatalog.controllers;
 import common.cms.CmsPage;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
+import common.pages.LinkData;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatterImpl;
 import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
@@ -28,8 +30,12 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
 import static java.util.Locale.GERMAN;
+import static java.util.stream.Collectors.*;
 
 @Singleton
 public class ProductCatalogController extends SunriseController {
@@ -63,15 +69,18 @@ public class ProductCatalogController extends SunriseController {
     private F.Promise<Result> pdpx(final ProductProjection product, final ProductVariant variant) {
         final F.Promise<List<ProductProjection>> suggestionPromise = getSuggestions(product, NUM_SUGGESTIONS);
         final F.Promise<List<ShippingMethod>> shippingMethodsPromise = getShippingMethods();
+        final List<Category> breadcrumbs = getBreadCrumbCategories(product);
 
         return combine(suggestionPromise, shippingMethodsPromise, (List<ProductProjection> suggestions, List<ShippingMethod> shippingMethods) -> withCms("pdp", cms -> {
-            final ProductDetailPageContent content = getPdpPageData(cms, product, variant, suggestions, shippingMethods);
+            final ProductDetailPageContent content = getPdpPageData(cms, product, variant, suggestions, shippingMethods, breadcrumbs);
             return render(view -> ok(view.productDetailPage(content)));
         }));
     }
 
-    private ProductDetailPageContent getPdpPageData(final CmsPage cms, final ProductProjection product, final ProductVariant variant, final List<ProductProjection> suggestions, final List<ShippingMethod> shippingMethods) {
-            return new ProductDetailPageContent(cms, context(), PriceFinder.of(context().user()), categories(), product, variant, suggestions, shippingMethods);
+    private ProductDetailPageContent getPdpPageData(final CmsPage cms, final ProductProjection product, final ProductVariant variant,
+                                                    final List<ProductProjection> suggestions, final List<ShippingMethod> shippingMethods,
+                                                    final List<Category> breadcrumbs) {
+            return new ProductDetailPageContent(cms, context(), PriceFinder.of(context().user()), product, variant, suggestions, shippingMethods, breadcrumbs);
     }
 
     private Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku) {
@@ -124,5 +133,21 @@ public class ProductCatalogController extends SunriseController {
             final ProductCatalogView view = new ProductCatalogView(templateService(), context(), cms);
             return pageRenderer.apply(view);
         });
+    }
+
+    private List<Category> getBreadCrumbCategories(final ProductProjection product) {
+        final Optional<Reference<Category>> referenceOptional = product.getCategories().stream().findFirst();
+
+        return referenceOptional.flatMap(categoryRef -> expandCategory(categoryRef).map(category ->
+                Stream.concat(category.getAncestors().stream(), Stream.of(categoryRef))
+                        .map(this::expandCategory)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(toList())
+        )).orElse(emptyList());
+    }
+
+    private Optional<Category> expandCategory(final Reference<Category> categoryRef) {
+        return categories().findById(categoryRef.getId());
     }
 }
