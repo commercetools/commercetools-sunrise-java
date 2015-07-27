@@ -28,27 +28,28 @@ import java.util.stream.IntStream;
 import static common.utils.Languages.translate;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.*;
 
 public class ProductDetailPageContent extends PageContent {
 
     private static final int SHORT_DESCRIPTION_MAX_CHARACTERS = 170;
 
     private final AppContext context;
-    final CategoryTree categories;
     private final ProductProjection product;
     private final ProductVariant variant;
     private final List<ProductProjection> suggestionList;
     private final List<ShippingMethod> shippingMethods;
+    private final List<Category> breadcrubs;
     private final Optional<Price> priceOpt;
 
-    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final PriceFinder priceFinder, final CategoryTree categories, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods) {
+    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final PriceFinder priceFinder, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final List<Category> breadcrumbs) {
         super(cms);
         this.context = context;
-        this.categories = categories;
         this.product = product;
         this.variant = variant;
         this.suggestionList = suggestionList;
         this.shippingMethods = shippingMethods;
+        this.breadcrubs = breadcrumbs;
         this.priceOpt = priceFinder.findPrice(product.getMasterVariant().getPrices());
     }
 
@@ -61,22 +62,16 @@ public class ProductDetailPageContent extends PageContent {
         return cms.getOrEmpty("content.text");
     }
 
-    public List<LinkData> getBreadcrumb() {
-        return product.getCategories().stream().findFirst().flatMap(productCategoryReference -> {
-            return categories.findById(productCategoryReference.getId())
-                    .map(productCategory -> listWith(productCategory.getAncestors(), productCategoryReference).stream()
-                            .map(reference -> categories.findById(reference.getId()))
-                            .filter(Optional::isPresent)
-                            .map(Optional::get)
-                            .map(this::categoryToLinkData)
-                            .collect(Collectors.toList()));
-        }).orElse(emptyList());
-    }
-
     private <T> List<T> listWith(final List<T> old, final T elem) {
         final List<T> merged = new ArrayList<>(old);
         merged.add(elem);
         return merged;
+    }
+
+    public List<LinkData> getBreadcrumbs() {
+        return breadcrubs.stream()
+                .map(this::categoryToLinkData)
+                .collect(toList());
     }
 
     private LinkData categoryToLinkData(final Category category) {
@@ -86,7 +81,7 @@ public class ProductDetailPageContent extends PageContent {
     public List<ImageData> getGallery() {
         return variant.getImages().stream()
                 .map(ImageData::of)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public ProductData getProduct() {
@@ -137,7 +132,7 @@ public class ProductDetailPageContent extends PageContent {
         final List<SelectableData> colors = product.getAllVariants().stream()
                 .map(variant -> variant.getAttribute("color")).filter(Optional::isPresent).map(Optional::get).distinct()
                 .map(color -> selectableColor(color, access))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         colors.add(0, new SelectableData(cms.getOrEmpty("product.colorList.choose.text"), "none", "", "", true));
 
@@ -154,7 +149,7 @@ public class ProductDetailPageContent extends PageContent {
         final List<SelectableData> sizes = product.getAllVariants().stream()
                 .map(variant -> variant.getAttribute("size")).filter(Optional::isPresent).map(Optional::get).distinct()
                 .map(size -> selectableSize(size, access))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         sizes.add(0, new SelectableData(cms.getOrEmpty("product.sizeList.choose.text"), "none", "", "", true));
 
@@ -168,7 +163,7 @@ public class ProductDetailPageContent extends PageContent {
     private CollectionData buildBagItemList() {
         final List<SelectableData> items = IntStream.range(2, 100)
                 .mapToObj(n -> new SelectableData(Integer.toString(n), "", "", "", false))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         items.add(0, new SelectableData("1", "", "", "", true));
 
@@ -185,7 +180,7 @@ public class ProductDetailPageContent extends PageContent {
     private String concatDetails (final Optional<Set<LocalizedStrings>> detailsOpt) {
         return detailsOpt.map(details -> String.join(", ", details.stream()
                 .map(detail -> translate(detail, context))
-                .collect(Collectors.toList())))
+                .collect(toList())))
                 .orElse("");
     }
 
