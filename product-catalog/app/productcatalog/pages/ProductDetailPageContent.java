@@ -6,6 +6,7 @@ import common.contexts.AppContext;
 import common.pages.*;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
+import common.utils.PriceFormatterImpl;
 import io.sphere.sdk.attributes.Attribute;
 import io.sphere.sdk.attributes.AttributeAccess;
 import io.sphere.sdk.categories.Category;
@@ -38,10 +39,9 @@ public class ProductDetailPageContent extends PageContent {
     private final ProductVariant variant;
     private final List<ProductProjection> suggestionList;
     private final List<ShippingMethod> shippingMethods;
-    private final PriceFormatter priceFormatter;
     private final Optional<Price> priceOpt;
 
-    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final CategoryTree categories, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods,  final PriceFormatter priceFormatter, final PriceFinder priceFinder) {
+    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final PriceFinder priceFinder, final CategoryTree categories, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods) {
         super(cms);
         this.context = context;
         this.categories = categories;
@@ -49,7 +49,6 @@ public class ProductDetailPageContent extends PageContent {
         this.variant = variant;
         this.suggestionList = suggestionList;
         this.shippingMethods = shippingMethods;
-        this.priceFormatter = priceFormatter;
         this.priceOpt = priceFinder.findPrice(product.getMasterVariant().getPrices());
     }
 
@@ -113,7 +112,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public ProductListData getSuggestions() {
-        return new ProductListData(suggestionList, context, priceFormatter,
+        return new ProductListData(suggestionList, context, PriceFormatterImpl.of(),
                 cms.getOrEmpty("suggestions.text"), cms.getOrEmpty("suggestions.sale"),
                 cms.getOrEmpty("suggestions.new"), cms.getOrEmpty("suggestions.quickView"),
                 cms.getOrEmpty("suggestions.wishlist"), cms.getOrEmpty("suggestions.moreColors"));
@@ -200,14 +199,14 @@ public class ProductDetailPageContent extends PageContent {
                 .map(DiscountedPrice::getValue)
                 .orElse(price.getValue()));
 
-        return currentPrice.map(price -> priceFormatter.format(price, context)).orElse("");
+        return currentPrice.map(price -> PriceFormatterImpl.of().format(price, context)).orElse("");
     }
 
     private String getFormattedPriceOld() {
         final Optional<MonetaryAmount> oldPrice = priceOpt.flatMap(price -> price.getDiscounted()
                 .map(d -> price.getValue()));
 
-        return oldPrice.map(price -> priceFormatter.format(price, context)).orElse("");
+        return oldPrice.map(price -> PriceFormatterImpl.of().format(price, context)).orElse("");
     }
 
     private String shorten(final String text) {

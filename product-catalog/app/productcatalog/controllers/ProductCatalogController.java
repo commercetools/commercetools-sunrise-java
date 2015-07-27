@@ -71,7 +71,7 @@ public class ProductCatalogController extends SunriseController {
     }
 
     private ProductDetailPageContent getPdpPageData(final CmsPage cms, final ProductProjection product, final ProductVariant variant, final List<ProductProjection> suggestions, final List<ShippingMethod> shippingMethods) {
-            return new ProductDetailPageContent(cms, context(), categories(), product, variant, suggestions, shippingMethods, PriceFormatterImpl.of(), PriceFinder.of(context().user()));
+            return new ProductDetailPageContent(cms, context(), PriceFinder.of(context().user()), categories(), product, variant, suggestions, shippingMethods);
     }
 
     private Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku) {
