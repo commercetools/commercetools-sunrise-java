@@ -1,5 +1,6 @@
 package productcatalog.pages;
 
+import com.google.common.collect.ImmutableList;
 import common.cms.CmsPage;
 import common.contexts.AppContext;
 import common.pages.*;
@@ -11,6 +12,7 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.models.LocalizedStrings;
+import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
@@ -18,15 +20,13 @@ import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import javax.money.MonetaryAmount;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static common.utils.Languages.translate;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 public class ProductDetailPageContent extends PageContent {
 
@@ -66,15 +66,20 @@ public class ProductDetailPageContent extends PageContent {
         return product.getCategories().stream().findFirst().map(productCategoryReference -> {
             return categories.findById(productCategoryReference.getId())
                     .map(productCategory -> {
-                        productCategory.getAncestors().add(productCategoryReference);
-                        return productCategory.getAncestors().stream()
+                        return listWith(productCategory.getAncestors(), productCategoryReference).stream()
                                 .map(reference -> categories.findById(reference.getId()))
                                 .filter(Optional::isPresent)
                                 .map(Optional::get)
                                 .map(this::categoryToLinkData)
                                 .collect(Collectors.toList());
-            }).orElse(Collections.emptyList());
-        }).orElse(Collections.emptyList());
+            }).orElse(emptyList());
+        }).orElse(emptyList());
+    }
+
+    private <T> List<T> listWith(final List<T> old, final T elem) {
+        final List<T> newe = new ArrayList<>(old);
+        newe.add(elem);
+        return newe;
     }
 
     private LinkData categoryToLinkData(final Category category) {
