@@ -4,6 +4,7 @@ import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatterImpl;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
@@ -59,7 +60,7 @@ public class ProductCatalogController extends SunriseController {
                             .findFirst()
                             .orElse(product.getMasterVariant()); // rather redirect
 
-                    final ProductDetailPageContent content = new ProductDetailPageContent(cms, context(), product, variant, suggestions, shippingMethods, PriceFinder.of(context().user()), PriceFormatterImpl.of());
+                    final ProductDetailPageContent content = new ProductDetailPageContent(cms, context(), categories(), product, variant, suggestions, shippingMethods, PriceFormatterImpl.of(), PriceFinder.of(context().user()));
                     return render(view -> ok(view.productDetailPage(content)));
                 }).orElse(F.Promise.pure(notFound()))
         ));

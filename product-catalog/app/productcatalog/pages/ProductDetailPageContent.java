@@ -7,6 +7,8 @@ import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.attributes.Attribute;
 import io.sphere.sdk.attributes.AttributeAccess;
+import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.models.LocalizedStrings;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
@@ -31,21 +33,23 @@ public class ProductDetailPageContent extends PageContent {
     private static final int SHORT_DESCRIPTION_MAX_CHARACTERS = 170;
 
     private final AppContext context;
-    private final PriceFormatter priceFormatter;
+    final CategoryTree categories;
     private final ProductProjection product;
     private final ProductVariant variant;
     private final List<ProductProjection> suggestionList;
     private final List<ShippingMethod> shippingMethods;
+    private final PriceFormatter priceFormatter;
     private final Optional<Price> priceOpt;
 
-    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
+    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final CategoryTree categories, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods,  final PriceFormatter priceFormatter, final PriceFinder priceFinder) {
         super(cms);
         this.context = context;
-        this.priceFormatter = priceFormatter;
+        this.categories = categories;
         this.product = product;
         this.variant = variant;
         this.suggestionList = suggestionList;
         this.shippingMethods = shippingMethods;
+        this.priceFormatter = priceFormatter;
         this.priceOpt = priceFinder.findPrice(product.getMasterVariant().getPrices());
     }
 
@@ -56,6 +60,25 @@ public class ProductDetailPageContent extends PageContent {
 
     public String getText() {
         return cms.getOrEmpty("content.text");
+    }
+
+    public List<LinkData> getBreadcrumb() {
+        return product.getCategories().stream().findFirst().map(productCategoryReference -> {
+            return categories.findById(productCategoryReference.getId())
+                    .map(productCategory -> {
+                        productCategory.getAncestors().add(productCategoryReference);
+                        return productCategory.getAncestors().stream()
+                                .map(reference -> categories.findById(reference.getId()))
+                                .filter(Optional::isPresent)
+                                .map(Optional::get)
+                                .map(this::categoryToLinkData)
+                                .collect(Collectors.toList());
+            }).orElse(Collections.emptyList());
+        }).orElse(Collections.emptyList());
+    }
+
+    private LinkData categoryToLinkData(final Category category) {
+      return new LinkData(translate(category.getName(), context), "");
     }
 
     public List<ImageData> getGallery() {
