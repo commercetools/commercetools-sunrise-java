@@ -63,23 +63,21 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public List<LinkData> getBreadcrumb() {
-        return product.getCategories().stream().findFirst().map(productCategoryReference -> {
+        return product.getCategories().stream().findFirst().flatMap(productCategoryReference -> {
             return categories.findById(productCategoryReference.getId())
-                    .map(productCategory -> {
-                        return listWith(productCategory.getAncestors(), productCategoryReference).stream()
-                                .map(reference -> categories.findById(reference.getId()))
-                                .filter(Optional::isPresent)
-                                .map(Optional::get)
-                                .map(this::categoryToLinkData)
-                                .collect(Collectors.toList());
-            }).orElse(emptyList());
+                    .map(productCategory -> listWith(productCategory.getAncestors(), productCategoryReference).stream()
+                            .map(reference -> categories.findById(reference.getId()))
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .map(this::categoryToLinkData)
+                            .collect(Collectors.toList()));
         }).orElse(emptyList());
     }
 
     private <T> List<T> listWith(final List<T> old, final T elem) {
-        final List<T> newe = new ArrayList<>(old);
-        newe.add(elem);
-        return newe;
+        final List<T> merged = new ArrayList<>(old);
+        merged.add(elem);
+        return merged;
     }
 
     private LinkData categoryToLinkData(final Category category) {
