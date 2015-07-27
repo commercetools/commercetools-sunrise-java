@@ -4,6 +4,7 @@ import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatterImpl;
+import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -11,6 +12,7 @@ import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.queries.PagedResult;
+import io.sphere.sdk.queries.QuerySort;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.shippingmethods.queries.ShippingMethodQuery;
 import play.libs.F;
@@ -21,6 +23,7 @@ import productcatalog.pages.ProductOverviewPageContent;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -50,11 +53,12 @@ public class ProductCatalogController extends SunriseController {
 
     public F.Promise<Result> pdp(final String slug, final String sku) {
         final F.Promise<Optional<ProductProjection>> productOptPromise = searchProductBySlug(GERMAN, slug);
-        final List<ProductProjection> suggestions = getSuggestions().get(DEFAULT_TIMEOUT);
         final List<ShippingMethod> shippingMethods = getShippingMethods().get(DEFAULT_TIMEOUT);
 
         return withCms("pdp", cms -> productOptPromise.flatMap(
                 productOpt -> productOpt.map(product -> {
+                    final List<ProductProjection> suggestions = getSuggestions(product).get(DEFAULT_TIMEOUT);
+
                     final ProductVariant variant = product.getAllVariants().stream()
                             .filter(v -> v.getSku().map(variantSku -> variantSku.equals(sku)).orElse(false))
                             .findFirst()
@@ -71,9 +75,17 @@ public class ProductCatalogController extends SunriseController {
         return sphere().execute(shippingMethodQuery).map(PagedResult::getResults);
     }
 
-    private F.Promise<List<ProductProjection>> getSuggestions() {
-        return sphere().execute(ProductProjectionSearch.ofCurrent().withLimit(NUM_SUGGESTIONS))
-                .map(PagedResult::getResults);
+    private F.Promise<List<ProductProjection>> getSuggestions(final ProductProjection product) {
+        final Optional<Category> categoryOpt = product.getCategories().stream().findFirst().flatMap(ref -> categories().findById(ref.getId()));
+
+        final Optional<ProductProjectionQuery> queryOpt = categoryOpt.flatMap(category -> category.getParent().map(parentRef -> {
+            final List<Category> siblings = categories().findByParent(parentRef);
+            return ProductProjectionQuery.ofCurrent().withPredicate(p -> p.categories().isIn(siblings));
+        }));
+
+        return queryOpt.map(query -> sphere().execute(query.withLimit(NUM_SUGGESTIONS))
+                .map(PagedQueryResult::getResults))
+                .orElse(F.Promise.pure(Collections.emptyList()));
     }
 
     private F.Promise<Optional<ProductProjection>> searchProductBySlug(final Locale locale, final String slug) {
