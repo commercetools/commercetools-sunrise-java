@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import static common.utils.Languages.translate;
 import static java.lang.String.join;
 import static java.util.Arrays.asList;
+import static java.util.Arrays.toString;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.concat;
@@ -193,15 +194,15 @@ public class ProductDetailPageContent extends PageContent {
     private DetailData buildProductDetails() {
         final Set<LocalizedStrings> details =
                 variant.getAttribute("details", AttributeAccess.ofLocalizedStringsSet()).orElse(Collections.emptySet());
-
         final String joined = join(", ", details.stream().map(elem -> translate(elem, context)).collect(toSet()));
 
         return new DetailData(cms.getOrEmpty("product.productDetails.text"), joined);
     }
 
     private DetailData buildDeliveryAndReturn() {
-        final String desc = shippingMethods.stream().findFirst().map(ShippingMethod::getName).orElse("");
-        return new DetailData(cms.getOrEmpty("product.deliveryAndReturn.text"), desc);
+        final String joined = join(", ", shippingMethods.stream().map(ShippingMethod::getName).collect(toList()));
+
+        return new DetailData(cms.getOrEmpty("product.deliveryAndReturn.text"), joined);
     }
 
     private String getFormattedPrice() {
