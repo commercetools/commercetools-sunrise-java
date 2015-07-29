@@ -6,6 +6,7 @@ import common.controllers.SunriseController;
 import common.pages.LinkData;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatterImpl;
+import common.utils.PromiseUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductProjection;
@@ -33,6 +34,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static common.utils.PromiseUtils.*;
+import static java.util.Collections.*;
 import static java.util.Collections.emptyList;
 import static java.util.Locale.GERMAN;
 import static java.util.stream.Collectors.*;
@@ -77,8 +80,10 @@ public class ProductCatalogController extends SunriseController {
         }));
     }
 
-    private ProductDetailPageContent getPdpPageData(final CmsPage cms, final ProductProjection product, final ProductVariant variant,
-                                                    final List<ProductProjection> suggestions, final List<ShippingMethod> shippingMethods,
+    private ProductDetailPageContent getPdpPageData(final CmsPage cms, final ProductProjection product,
+                                                    final ProductVariant variant,
+                                                    final List<ProductProjection> suggestions,
+                                                    final List<ShippingMethod> shippingMethods,
                                                     final List<Category> breadcrumbs) {
             return new ProductDetailPageContent(cms, context(), PriceFinder.of(context().user()), product, variant, suggestions, shippingMethods, breadcrumbs);
     }
@@ -93,17 +98,15 @@ public class ProductCatalogController extends SunriseController {
         return variant.getSku().map(variantSku -> variantSku.equals(sku)).orElse(false);
     }
 
-    private static <A, B, R> F.Promise<R> combine(final F.Promise<A> aPromise, final F.Promise<B> bPromise, final BiFunction<A, B, F.Promise<R>> function) {
-        return aPromise.zip(bPromise).flatMap(tuple -> function.apply(tuple._1, tuple._2));
-    }
-
     private F.Promise<List<ShippingMethod>> getShippingMethods() {
         final ShippingMethodQuery shippingMethodQuery = ShippingMethodQuery.of();
         return sphere().execute(shippingMethodQuery).map(PagedResult::getResults);
     }
 
     private F.Promise<List<ProductProjection>> getSuggestions(final ProductProjection product, final int num) {
-        final Optional<Category> categoryOpt = product.getCategories().stream().findFirst().flatMap(ref -> categories().findById(ref.getId()));
+        final Optional<Category> categoryOpt = product.getCategories().stream()
+                .findFirst()
+                .flatMap(this::expandCategory);
 
         final Optional<ProductProjectionQuery> queryOpt = categoryOpt.flatMap(category -> category.getParent().map(parentRef -> {
             final List<Category> siblings = categories().findByParent(parentRef);
@@ -112,7 +115,7 @@ public class ProductCatalogController extends SunriseController {
 
         return queryOpt.map(query -> sphere().execute(query.withLimit(num))
                 .map(PagedQueryResult::getResults))
-                .orElse(F.Promise.pure(Collections.emptyList()));
+                .orElse(F.Promise.pure(emptyList()));
     }
 
     private F.Promise<Optional<ProductProjection>> searchProductBySlug(final Locale locale, final String slug) {
