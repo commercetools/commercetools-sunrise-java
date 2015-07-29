@@ -3,10 +3,8 @@ package productcatalog.controllers;
 import common.cms.CmsPage;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
-import common.pages.LinkData;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatterImpl;
-import common.utils.PromiseUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductProjection;
@@ -25,20 +23,16 @@ import productcatalog.pages.ProductOverviewPageContent;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static common.utils.PromiseUtils.*;
-import static java.util.Collections.*;
+import static common.utils.PromiseUtils.combine;
 import static java.util.Collections.emptyList;
 import static java.util.Locale.GERMAN;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductCatalogController extends SunriseController {
