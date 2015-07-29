@@ -29,6 +29,7 @@ import static java.util.stream.Stream.concat;
 public class ProductDetailPageContent extends PageContent {
 
     private static final AttributeAccess<String> TEXT_ATTR_ACCESS = AttributeAccess.ofText();
+    private static final AttributeAccess<LocalizedEnumValue> LENUM_ATTR_ACCESS = AttributeAccess.ofLocalizedEnumValue();
     private static final int SHORT_DESCRIPTION_MAX_CHARACTERS = 170;
 
     private final AppContext context;
@@ -126,20 +127,32 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private CollectionData buildColorList() {
-        final AttributeAccess<LocalizedEnumValue> access = AttributeAccess.ofLocalizedEnumValue();
-        final List<SelectableData> colors = product.getAllVariants().stream()
-                .map(variant -> variant.getAttribute("color")).filter(Optional::isPresent).map(Optional::get).distinct()
-                .map(color -> selectableColor(color, access))
-                .collect(toList());
+        final SelectableData defaultItem =
+                new SelectableData(cms.getOrEmpty("product.colorList.choose.text"), "none", "", "", true);
 
-        colors.add(0, new SelectableData(cms.getOrEmpty("product.colorList.choose.text"), "none", "", "", true));
+        final List<SelectableData> colors =
+                concat(Stream.of(defaultItem), getColorsinAllVariants().stream().map(this::selectableColor))
+                        .collect(toList());
 
         return new CollectionData(cms.getOrEmpty("product.colorList.text"), colors);
     }
 
-    private SelectableData selectableColor(final Attribute color, final AttributeAccess<LocalizedEnumValue> access) {
-        return new SelectableData(
-                translate(color.getValue(access).getLabel(), context), color.getName(), "", "", false);
+    private SelectableData selectableColor(final Attribute color) {
+        final String colorLabel = translate(color.getValue(LENUM_ATTR_ACCESS).getLabel(), context);
+        return new SelectableData(colorLabel, color.getName(), "", "", false);
+    }
+
+    private List<Attribute> getColorsinAllVariants() {
+        return getAttributeInAllVariants("color");
+    }
+
+    private List<Attribute> getAttributeInAllVariants(final String attributeName) {
+        return product.getAllVariants().stream()
+                .map(variant -> variant.getAttribute(attributeName))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(toList());
     }
 
     private CollectionData buildSizeList() {
@@ -147,7 +160,7 @@ public class ProductDetailPageContent extends PageContent {
                 new SelectableData(cms.getOrEmpty("product.sizeList.choose.text"), "none", "", "", true);
 
         final List<SelectableData> sizes =
-                concat(Stream.of(defaultItem), getSizes().stream().map(this::selectableSize))
+                concat(Stream.of(defaultItem), getSizesinAllVariants().stream().map(this::selectableSize))
                         .collect(toList());
 
         return new CollectionData(cms.getOrEmpty("product.sizeList.text"), sizes);
@@ -157,13 +170,8 @@ public class ProductDetailPageContent extends PageContent {
         return new SelectableData(size.getValue(TEXT_ATTR_ACCESS), size.getValue(TEXT_ATTR_ACCESS), "", "", false);
     }
 
-    private List<Attribute> getSizes() {
-        return product.getAllVariants().stream()
-                .map(variant -> variant.getAttribute("size"))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .distinct()
-                .collect(toList());
+    private List<Attribute> getSizesinAllVariants() {
+        return getAttributeInAllVariants("size");
     }
 
     private CollectionData buildBagItemList() {
