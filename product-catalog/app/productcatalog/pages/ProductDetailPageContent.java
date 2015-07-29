@@ -146,8 +146,9 @@ public class ProductDetailPageContent extends PageContent {
         final SelectableData defaultItem =
                 new SelectableData(cms.getOrEmpty("product.sizeList.choose.text"), "none", "", "", true);
 
-        final List<SelectableData> sizes = concat(getSizes().stream().map(this::selectableSize), Stream.of(defaultItem))
-                .collect(toList());
+        final List<SelectableData> sizes =
+                concat(Stream.of(defaultItem), getSizes().stream().map(this::selectableSize))
+                        .collect(toList());
 
         return new CollectionData(cms.getOrEmpty("product.sizeList.text"), sizes);
     }
@@ -166,13 +167,17 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private CollectionData buildBagItemList() {
-        final List<SelectableData> items = IntStream.range(2, 100)
-                .mapToObj(n -> new SelectableData(Integer.toString(n), "", "", "", false))
-                .collect(toList());
+        final SelectableData defaultItem = new SelectableData("1", "", "", "", true);
 
-        items.add(0, new SelectableData("1", "", "", "", true));
+        final List<SelectableData> bagItems =
+                concat(Stream.of(defaultItem), IntStream.range(2, 100).mapToObj(this::selectableBagItem))
+                        .collect(toList());
 
-        return new CollectionData("", items);
+        return new CollectionData("", bagItems);
+    }
+
+    private SelectableData selectableBagItem(final int number) {
+        return new SelectableData(Integer.toString(number), "", "", "", false);
     }
 
     private DetailData buildProductDetails() {
