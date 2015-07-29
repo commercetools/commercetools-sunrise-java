@@ -33,6 +33,7 @@ import static common.utils.PromiseUtils.combine;
 import static java.util.Collections.emptyList;
 import static java.util.Locale.GERMAN;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 
 @Singleton
@@ -48,7 +49,8 @@ public class ProductCatalogController extends SunriseController {
     public F.Promise<Result> pop(int page) {
         return withCms("pop", cms ->
                         searchProducts(page).flatMap(result -> {
-                            final ProductOverviewPageContent content = new ProductOverviewPageContent(cms, context(), result, PriceFormatterImpl.of());
+                            final ProductOverviewPageContent content =
+                                    new ProductOverviewPageContent(cms, context(), result, PriceFormatterImpl.of());
                             return render(view -> ok(view.productOverviewPage(content)));
                         })
         );
@@ -69,9 +71,11 @@ public class ProductCatalogController extends SunriseController {
         final F.Promise<List<ShippingMethod>> shippingMethodsPromise = getShippingMethods();
         final List<Category> breadcrumbs = getBreadCrumbCategories(product);
 
-        return combine(suggestionPromise, shippingMethodsPromise, (List<ProductProjection> suggestions, List<ShippingMethod> shippingMethods) -> withCms("pdp", cms -> {
-            final ProductDetailPageContent content = getPdpPageData(cms, product, variant, suggestions, shippingMethods, breadcrumbs);
-            return render(view -> ok(view.productDetailPage(content)));
+        return combine(suggestionPromise, shippingMethodsPromise, (suggestions, shippingMethods) ->
+                withCms("pdp", cms -> {
+                    final ProductDetailPageContent content =
+                            getPdpPageData(cms, product, variant, suggestions, shippingMethods, breadcrumbs);
+                    return render(view -> ok(view.productDetailPage(content)));
         }));
     }
 
@@ -80,7 +84,9 @@ public class ProductCatalogController extends SunriseController {
                                                     final List<ProductProjection> suggestions,
                                                     final List<ShippingMethod> shippingMethods,
                                                     final List<Category> breadcrumbs) {
-            return new ProductDetailPageContent(cms, context(), PriceFinder.of(context().user()), product, variant, suggestions, shippingMethods, breadcrumbs);
+
+            return new ProductDetailPageContent(cms, context(), PriceFinder.of(context().user()), product, variant,
+                    suggestions, shippingMethods, breadcrumbs);
     }
 
     private Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku) {
@@ -109,7 +115,6 @@ public class ProductCatalogController extends SunriseController {
                 .orElse(F.Promise.pure(emptyList()));
     }
 
-
     private Optional<List<Category>> getSiblingCategories(final Category category) {
         return category.getParent().map(parentRef -> categories().findByParent(parentRef));
     }
@@ -135,13 +140,14 @@ public class ProductCatalogController extends SunriseController {
     }
 
     private List<Category> getBreadCrumbCategories(final ProductProjection product) {
-        final Optional<Category> categoryOptional = product.getCategories().stream().findFirst().flatMap(this::expandCategory);
+        final Optional<Category> categoryOptional = product.getCategories().stream().findFirst()
+                .flatMap(this::expandCategory);
 
         return categoryOptional.map(this::getCategoryWithAncestors).orElse(emptyList());
     }
 
     private List<Category> getCategoryWithAncestors(final Category category) {
-        return Stream.concat(category.getAncestors().stream().map(this::expandCategory), Stream.of(Optional.of(category)))
+        return concat(category.getAncestors().stream().map(this::expandCategory), Stream.of(Optional.of(category)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toList());
