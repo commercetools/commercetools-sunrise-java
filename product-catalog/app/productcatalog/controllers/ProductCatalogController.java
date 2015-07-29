@@ -74,7 +74,7 @@ public class ProductCatalogController extends SunriseController {
             return render(view -> ok(view.productDetailPage(content)));
         }));
     }
-    
+
     private ProductDetailPageContent getPdpPageData(final CmsPage cms, final ProductProjection product,
                                                     final ProductVariant variant,
                                                     final List<ProductProjection> suggestions,
@@ -135,15 +135,16 @@ public class ProductCatalogController extends SunriseController {
     }
 
     private List<Category> getBreadCrumbCategories(final ProductProjection product) {
-        final Optional<Reference<Category>> referenceOptional = product.getCategories().stream().findFirst();
+        final Optional<Category> categoryOptional = product.getCategories().stream().findFirst().flatMap(this::expandCategory);
 
-        return referenceOptional.flatMap(categoryRef -> expandCategory(categoryRef).map(category ->
-                Stream.concat(category.getAncestors().stream(), Stream.of(categoryRef))
-                        .map(this::expandCategory)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(toList())
-        )).orElse(emptyList());
+        return categoryOptional.map(this::getCategoryWithAncestors).orElse(emptyList());
+    }
+
+    private List<Category> getCategoryWithAncestors(final Category category) {
+        return Stream.concat(category.getAncestors().stream().map(this::expandCategory), Stream.of(Optional.of(category)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toList());
     }
 
     private Optional<Category> expandCategory(final Reference<Category> categoryRef) {
