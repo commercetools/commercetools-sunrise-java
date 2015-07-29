@@ -1,6 +1,5 @@
 package common.utils;
 
-import common.contexts.AppContext;
 import io.sphere.sdk.models.LocalizedStrings;
 
 import java.util.List;
