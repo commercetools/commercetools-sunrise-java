@@ -104,18 +104,19 @@ public class ProductCatalogController extends SunriseController {
     }
 
     private F.Promise<List<ProductProjection>> getSuggestions(final ProductProjection product, final int num) {
-        final Optional<Category> categoryOpt = product.getCategories().stream()
-                .findFirst()
-                .flatMap(this::expandCategory);
+        final Optional<ProductProjectionQuery> queryOptional = product.getCategories().stream().findFirst()
+                .flatMap(this::expandCategory)
+                .flatMap(this::getSiblingCategories)
+                .map(siblings -> ProductProjectionQuery.ofCurrent().withPredicate(p -> p.categories().isIn(siblings)));
 
-        final Optional<ProductProjectionQuery> queryOpt = categoryOpt.flatMap(category -> category.getParent().map(parentRef -> {
-            final List<Category> siblings = categories().findByParent(parentRef);
-            return ProductProjectionQuery.ofCurrent().withPredicate(p -> p.categories().isIn(siblings));
-        }));
-
-        return queryOpt.map(query -> sphere().execute(query.withLimit(num))
-                .map(PagedQueryResult::getResults))
+        return queryOptional
+                .map(query -> sphere().execute(query.withLimit(num)).map(PagedQueryResult::getResults))
                 .orElse(F.Promise.pure(emptyList()));
+    }
+
+
+    private Optional<List<Category>> getSiblingCategories(final Category category) {
+        return category.getParent().map(parentRef -> categories().findByParent(parentRef));
     }
 
     private F.Promise<Optional<ProductProjection>> searchProductBySlug(final Locale locale, final String slug) {
