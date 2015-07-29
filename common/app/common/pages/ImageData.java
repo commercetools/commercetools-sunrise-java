@@ -15,14 +15,21 @@ public class ImageData {
     }
 
     public String getThumbImage() {
-        return image.getUrl();
+        return nullIfEmpty(image.getUrl());
     }
 
     public String getBigImage() {
-        return image.getUrl();
+        return nullIfEmpty(image.getUrl());
     }
 
     public String getPlaceholderImage() {
         return "http://placehold.it/350x150";
+    }
+
+    private String nullIfEmpty(final String s) {
+        if(s.isEmpty())
+            return null;
+        else
+            return s;
     }
 }

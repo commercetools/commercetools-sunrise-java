@@ -35,7 +35,7 @@ public class ProductThumbnailData {
     }
 
     public String getImage() {
-        return variant.getImages().stream().findFirst().map(Image::getUrl).orElse("http://sphereio.github.io/nodejs/assets/img/sphere_logo_rgb_big.png");
+        return variant.getImages().stream().findFirst().map(Image::getUrl).orElse(null);
     }
 
     public String getPrice() {
