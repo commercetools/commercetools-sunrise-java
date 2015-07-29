@@ -34,6 +34,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Locale.GERMAN;
 import static java.util.stream.Collectors.toList;
 
+
 @Singleton
 public class ProductCatalogController extends SunriseController {
     private static final int PAGE_SIZE = 9;
@@ -73,7 +74,7 @@ public class ProductCatalogController extends SunriseController {
             return render(view -> ok(view.productDetailPage(content)));
         }));
     }
-
+    
     private ProductDetailPageContent getPdpPageData(final CmsPage cms, final ProductProjection product,
                                                     final ProductVariant variant,
                                                     final List<ProductProjection> suggestions,

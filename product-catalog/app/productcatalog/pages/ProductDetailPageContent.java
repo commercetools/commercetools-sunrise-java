@@ -1,19 +1,15 @@
 package productcatalog.pages;
 
-import com.google.common.collect.ImmutableList;
 import common.cms.CmsPage;
 import common.contexts.AppContext;
 import common.pages.*;
 import common.prices.PriceFinder;
-import common.utils.PriceFormatter;
 import common.utils.PriceFormatterImpl;
 import io.sphere.sdk.attributes.Attribute;
 import io.sphere.sdk.attributes.AttributeAccess;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.models.LocalizedStrings;
-import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
@@ -22,13 +18,11 @@ import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import javax.money.MonetaryAmount;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static common.utils.Languages.translate;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 public class ProductDetailPageContent extends PageContent {
 
