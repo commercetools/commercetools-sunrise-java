@@ -206,18 +206,32 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private String getFormattedPrice() {
-        final Optional<MonetaryAmount> currentPrice = priceOpt.map(price -> price.getDiscounted()
-                .map(DiscountedPrice::getValue)
-                .orElse(price.getValue()));
-
-        return currentPrice.map(price -> PriceFormatterImpl.of().format(price, context)).orElse("");
+        return priceOpt
+                .map(this::getPriceOrDiscounted)
+                .map(price -> PriceFormatterImpl.of().format(price, context))
+                .orElse("");
     }
 
     private String getFormattedPriceOld() {
-        final Optional<MonetaryAmount> oldPrice = priceOpt.flatMap(price -> price.getDiscounted()
-                .map(d -> price.getValue()));
+        final Optional<MonetaryAmount> priceOld = priceOpt.flatMap(this::getOldPrice);
 
-        return oldPrice.map(price -> PriceFormatterImpl.of().format(price, context)).orElse("");
+        return priceOld
+                .map(price -> PriceFormatterImpl.of().format(price, context))
+                .orElse("");
+
+    }
+
+    private Optional<MonetaryAmount> getOldPrice(final Price price) {
+        if (priceOpt.flatMap(Price::getDiscounted).isPresent())
+            return priceOpt.map(Price::getValue);
+        else
+            return  Optional.empty();
+    }
+
+    private  MonetaryAmount getPriceOrDiscounted(final Price price) {
+        return price.getDiscounted()
+                .map(DiscountedPrice::getValue)
+                .orElse(price.getValue());
     }
 
     private String shorten(final String text) {
