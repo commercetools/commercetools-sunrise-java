@@ -65,12 +65,6 @@ public class ProductDetailPageContent extends PageContent {
         return cms.getOrEmpty("content.text");
     }
 
-    private <T> List<T> listWith(final List<T> old, final T elem) {
-        final List<T> merged = new ArrayList<>(old);
-        merged.add(elem);
-        return merged;
-    }
-
     public List<LinkData> getBreadcrumb() {
         return breadcrubs.stream()
                 .map(this::categoryToLinkData)
@@ -219,13 +213,11 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private Optional<MonetaryAmount> getOldPrice(final Price price) {
-       return price.getDiscounted().map(discountedPrice -> price.getValue());
+        return price.getDiscounted().map(discountedPrice -> price.getValue());
     }
 
     private  MonetaryAmount getPriceOrDiscounted(final Price price) {
-        return price.getDiscounted()
-                .map(DiscountedPrice::getValue)
-                .orElse(price.getValue());
+        return price.getDiscounted().map(DiscountedPrice::getValue).orElse(price.getValue());
     }
 
     private String shorten(final String text) {
