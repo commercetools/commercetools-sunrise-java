@@ -45,7 +45,7 @@ public class ProductThumbnailData {
 
     public String getPrice() {
         return priceFinder.findPrice(variant.getPrices())
-                .map(price -> priceFormatter.format(price.getValue(), context))
+                .map(price -> priceFormatter.format(price.getValue()))
                 .orElse("");
     }
 }

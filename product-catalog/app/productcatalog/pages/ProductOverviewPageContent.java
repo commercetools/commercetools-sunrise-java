@@ -5,7 +5,6 @@ import common.contexts.AppContext;
 import common.pages.PageContent;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.search.PagedSearchResult;
 
 import java.util.List;
 

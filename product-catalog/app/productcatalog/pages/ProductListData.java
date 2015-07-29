@@ -3,7 +3,6 @@ package productcatalog.pages;
 import common.contexts.AppContext;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.products.ProductProjection;
-import play.i18n.Messages;
 
 import java.util.List;
 

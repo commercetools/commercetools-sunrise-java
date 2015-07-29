@@ -4,7 +4,7 @@ import common.cms.CmsPage;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.prices.PriceFinder;
-import common.utils.PriceFormatterImpl;
+import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductProjection;
@@ -49,8 +49,9 @@ public class ProductCatalogController extends SunriseController {
     public F.Promise<Result> pop(int page) {
         return withCms("pop", cms ->
                         searchProducts(page).flatMap(result -> {
+                            final PriceFormatter formatter = PriceFormatter.of(context().user().country().toLocale());
                             final ProductOverviewPageContent content =
-                                    new ProductOverviewPageContent(cms, context(), result, PriceFormatterImpl.of());
+                                    new ProductOverviewPageContent(cms, context(), result, formatter);
                             return render(view -> ok(view.productOverviewPage(content)));
                         })
         );
@@ -85,8 +86,9 @@ public class ProductCatalogController extends SunriseController {
                                                     final List<ShippingMethod> shippingMethods,
                                                     final List<Category> breadcrumbs) {
 
-            return new ProductDetailPageContent(cms, context(), PriceFinder.of(context().user()), product, variant,
-                    suggestions, shippingMethods, breadcrumbs);
+            return new ProductDetailPageContent(cms, context(), PriceFinder.of(context().user()),
+                    PriceFormatter.of(context().user().country().toLocale()), product, variant, suggestions,
+                    shippingMethods, breadcrumbs);
     }
 
     private Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku) {
