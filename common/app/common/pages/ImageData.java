@@ -21,4 +21,8 @@ public class ImageData {
     public String getBigImage() {
         return image.getUrl();
     }
+
+    public String getPlaceholderImage() {
+        return "http://placehold.it/350x150";
+    }
 }
