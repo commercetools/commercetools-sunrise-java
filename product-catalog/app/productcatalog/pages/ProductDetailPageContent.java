@@ -22,8 +22,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static common.utils.Languages.translate;
+import static java.lang.String.join;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.concat;
 
 public class ProductDetailPageContent extends PageContent {
@@ -189,17 +191,12 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private DetailData buildProductDetails() {
-        final Optional<Set<LocalizedStrings>> detailsOpt =
-                variant.getAttribute("details", AttributeAccess.ofLocalizedStringsSet());
+        final Set<LocalizedStrings> details =
+                variant.getAttribute("details", AttributeAccess.ofLocalizedStringsSet()).orElse(Collections.emptySet());
 
-        return new DetailData(cms.getOrEmpty("product.productDetails.text"), concatDetails(detailsOpt));
-    }
+        final String joined = join(", ", details.stream().map(elem -> translate(elem, context)).collect(toSet()));
 
-    private String concatDetails (final Optional<Set<LocalizedStrings>> detailsOpt) {
-        return detailsOpt.map(details -> String.join(", ", details.stream()
-                .map(detail -> translate(detail, context))
-                .collect(toList())))
-                .orElse("");
+        return new DetailData(cms.getOrEmpty("product.productDetails.text"), joined);
     }
 
     private DetailData buildDeliveryAndReturn() {
