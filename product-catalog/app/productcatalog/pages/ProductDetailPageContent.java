@@ -19,13 +19,16 @@ import io.sphere.sdk.shippingmethods.ShippingMethod;
 import javax.money.MonetaryAmount;
 import java.util.*;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static common.utils.Languages.translate;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 public class ProductDetailPageContent extends PageContent {
 
+    private static final AttributeAccess<String> TEXT_ATTR_ACCESS = AttributeAccess.ofText();
     private static final int SHORT_DESCRIPTION_MAX_CHARACTERS = 170;
 
     private final AppContext context;
@@ -34,6 +37,7 @@ public class ProductDetailPageContent extends PageContent {
     private final List<ProductProjection> suggestionList;
     private final List<ShippingMethod> shippingMethods;
     private final List<Category> breadcrubs;
+
     private final Optional<Price> priceOpt;
 
     public ProductDetailPageContent(final CmsPage cms, final AppContext context, final PriceFinder priceFinder, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final List<Category> breadcrumbs) {
@@ -112,7 +116,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private CollectionData buildRating() {
-        return new CollectionData("4/5", asList(
+        return new CollectionData("", asList(
                 new SelectableData("5 Stars", "5", cms.getOrEmpty("product.ratingList.five.text"), "", false),
                 new SelectableData("4 Stars", "4", cms.getOrEmpty("product.ratingList.four.text"), "", false),
                 new SelectableData("3 Stars", "3", cms.getOrEmpty("product.ratingList.three.text"), "", false),
@@ -139,19 +143,26 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private CollectionData buildSizeList() {
-        final AttributeAccess<String> access = AttributeAccess.ofText();
-        final List<SelectableData> sizes = product.getAllVariants().stream()
-                .map(variant -> variant.getAttribute("size")).filter(Optional::isPresent).map(Optional::get).distinct()
-                .map(size -> selectableSize(size, access))
-                .collect(toList());
+        final SelectableData defaultItem =
+                new SelectableData(cms.getOrEmpty("product.sizeList.choose.text"), "none", "", "", true);
 
-        sizes.add(0, new SelectableData(cms.getOrEmpty("product.sizeList.choose.text"), "none", "", "", true));
+        final List<SelectableData> sizes = concat(getSizes().stream().map(this::selectableSize), Stream.of(defaultItem))
+                .collect(toList());
 
         return new CollectionData(cms.getOrEmpty("product.sizeList.text"), sizes);
     }
 
-    private SelectableData selectableSize(final Attribute size, final AttributeAccess<String> access) {
-        return new SelectableData(size.getValue(access), size.getValue(access), "", "", false);
+    private SelectableData selectableSize(final Attribute size) {
+        return new SelectableData(size.getValue(TEXT_ATTR_ACCESS), size.getValue(TEXT_ATTR_ACCESS), "", "", false);
+    }
+
+    private List<Attribute> getSizes() {
+        return product.getAllVariants().stream()
+                .map(variant -> variant.getAttribute("size"))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(toList());
     }
 
     private CollectionData buildBagItemList() {
