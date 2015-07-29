@@ -43,8 +43,6 @@ public class ProductDetailPageContent extends PageContent {
     private final List<ShippingMethod> shippingMethods;
     private final List<Category> breadcrubs;
 
-    private final Optional<Price> priceOpt;
-
     public ProductDetailPageContent(final CmsPage cms, final Translator translator, final PriceFormatter priceFormatter, final PriceFinder priceFinder, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final List<Category> breadcrumbs) {
         super(cms);
         this.translator = translator;
@@ -56,8 +54,6 @@ public class ProductDetailPageContent extends PageContent {
         this.suggestionList = suggestionList;
         this.shippingMethods = shippingMethods;
         this.breadcrubs = breadcrumbs;
-
-        this.priceOpt = priceFinder.findPrice(product.getMasterVariant().getPrices());
     }
 
     @Override
@@ -92,6 +88,8 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public ProductData getProduct() {
+        final Optional<Price> priceOpt = priceFinder.findPrice(product.getMasterVariant().getPrices());
+
         return ProductDataBuilder.of()
                 .withText(translator.translate(product.getName()))
                 .withSku(variant.getSku().orElse(""))
@@ -99,8 +97,8 @@ public class ProductDetailPageContent extends PageContent {
                 .withDescription(product.getDescription().map(description -> shorten(translator.translate(description))).orElse(""))
                 .withAdditionalDescription(product.getDescription().map(translator::translate).orElse(""))
                 .withViewDetailsText(cms.getOrEmpty("product.viewDetails"))
-                .withPrice(getFormattedPrice())
-                .withPriceOld(getFormattedPriceOld())
+                .withPrice(priceOpt.map(this::getFormattedPrice).orElse(""))
+                .withPriceOld(priceOpt.map(this::getFormattedPriceOld).orElse(""))
                 .withColorList(buildColorList())
                 .withSizeList(buildSizeList())
                 .withSizeGuideText(cms.getOrEmpty("product.sizeGuide"))
@@ -210,27 +208,18 @@ public class ProductDetailPageContent extends PageContent {
         return new DetailData(cms.getOrEmpty("product.deliveryAndReturn.text"), joined);
     }
 
-    private String getFormattedPrice() {
-        return priceOpt
-                .map(this::getPriceOrDiscounted)
-                .map(priceFormatter::format)
-                .orElse("");
+    private String getFormattedPrice(final Price price) {
+        return priceFormatter.format(getPriceOrDiscounted(price));
     }
 
-    private String getFormattedPriceOld() {
-        final Optional<MonetaryAmount> priceOld = priceOpt.flatMap(this::getOldPrice);
+    private String getFormattedPriceOld(final Price price) {
+        final Optional<MonetaryAmount> priceOld = getOldPrice(price);
 
-        return priceOld
-                .map(priceFormatter::format)
-                .orElse("");
-
+        return priceOld.map(priceFormatter::format).orElse("");
     }
 
     private Optional<MonetaryAmount> getOldPrice(final Price price) {
-        if (priceOpt.flatMap(Price::getDiscounted).isPresent())
-            return priceOpt.map(Price::getValue);
-        else
-            return  Optional.empty();
+       return price.getDiscounted().map(discountedPrice -> price.getValue());
     }
 
     private  MonetaryAmount getPriceOrDiscounted(final Price price) {
