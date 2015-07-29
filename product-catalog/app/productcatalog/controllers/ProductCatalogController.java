@@ -24,13 +24,12 @@ import productcatalog.pages.ProductOverviewPageContent;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static common.utils.PromiseUtils.combine;
+import static java.util.Collections.*;
 import static java.util.Collections.emptyList;
 import static java.util.Locale.GERMAN;
 import static java.util.stream.Collectors.toList;
@@ -75,16 +74,17 @@ public class ProductCatalogController extends SunriseController {
     }
 
     private F.Promise<Result> pdpx(final ProductProjection product, final ProductVariant variant) {
-        final F.Promise<List<ProductProjection>> suggestionPromise = getSuggestions(product, NUM_SUGGESTIONS);
+        final F.Promise<List<ProductProjection>> suggestionPromise = getSuggestions(product);
         final F.Promise<List<ShippingMethod>> shippingMethodsPromise = getShippingMethods();
         final List<Category> breadcrumbs = getBreadCrumbCategories(product);
 
         return combine(suggestionPromise, shippingMethodsPromise, (suggestions, shippingMethods) ->
                 withCms("pdp", cms -> {
+                    final List<ProductProjection> a = pickNRandom(suggestions, NUM_SUGGESTIONS);
                     final ProductDetailPageContent content =
-                            getPdpPageData(cms, product, variant, suggestions, shippingMethods, breadcrumbs);
+                            getPdpPageData(cms, product, variant, a, shippingMethods, breadcrumbs);
                     return render(view -> ok(view.productDetailPage(content)));
-        }));
+                }));
     }
 
     private ProductDetailPageContent getPdpPageData(final CmsPage cms, final ProductProjection product,
@@ -117,15 +117,33 @@ public class ProductCatalogController extends SunriseController {
         return sphere().execute(shippingMethodQuery).map(PagedResult::getResults);
     }
 
-    private F.Promise<List<ProductProjection>> getSuggestions(final ProductProjection product, final int num) {
+    private F.Promise<List<ProductProjection>> getSuggestions(final ProductProjection product) {
         final Optional<ProductProjectionQuery> queryOptional = product.getCategories().stream().findFirst()
                 .flatMap(this::expandCategory)
                 .flatMap(this::getSiblingCategories)
                 .map(siblings -> ProductProjectionQuery.ofCurrent().withPredicate(p -> p.categories().isIn(siblings)));
 
         return queryOptional
-                .map(query -> sphere().execute(query.withLimit(num)).map(PagedQueryResult::getResults))
+                .map(query -> sphere().execute(query).map(PagedQueryResult::getResults))
                 .orElse(F.Promise.pure(emptyList()));
+    }
+
+    private <T> List<T> pickNRandom(final List<T> elements, final int n) {
+        if(elements.size() < n)
+            return pickNRandom(elements, elements.size());
+
+        final List<T> picked = new ArrayList<>();
+        final Random random = new Random();
+
+        for(int i = 0; i < n; i++)
+            pick(elements, picked, random.nextInt(elements.size()));
+
+        return picked;
+    }
+
+    private <T> void pick(final List<T> elements, final List<T> picked, int index) {
+        picked.add(elements.get(index));
+        elements.remove(index);
     }
 
     private Optional<List<Category>> getSiblingCategories(final Category category) {
