@@ -1,41 +1,36 @@
 package productcatalog.pages;
 
-import common.contexts.AppContext;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
+import common.utils.Translator;
 import io.sphere.sdk.models.Image;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-
-import static common.utils.Languages.*;
-
 public class ProductThumbnailData {
-    private final ProductProjection product;
-    private final ProductVariant variant;
-    private final AppContext context;
+    private final Translator translator;
     private final PriceFormatter priceFormatter;
     private final PriceFinder priceFinder;
 
-    public ProductThumbnailData(final ProductProjection product, final ProductVariant variant,
-                                final AppContext context, final PriceFormatter priceFormatter) {
+    private final ProductProjection product;
+    private final ProductVariant variant;
+
+
+    public ProductThumbnailData(final Translator translator, final PriceFormatter priceFormatter, final PriceFinder priceFinder, final ProductProjection product, final ProductVariant variant) {
+        this.translator = translator;
+        this.priceFormatter = priceFormatter;
+        this.priceFinder = priceFinder;
+
         this.product = product;
         this.variant = variant;
-        this.context = context;
-        this.priceFormatter = priceFormatter;
-        this.priceFinder = PriceFinder.of(
-                context.user().currency(), context.user().country(), context.user().customerGroup(),
-                context.user().channel(), ZonedDateTime.of(LocalDateTime.now(), context.user().zoneId()));
     }
 
     public String getText() {
-        return translate(product.getName(), context);
+        return translator.translate(product.getName());
     }
 
     public String getDescription() {
-        return product.getDescription().map(description -> translate(description, context))
+        return product.getDescription().map(translator::translate)
                 .orElse("");
     }
 

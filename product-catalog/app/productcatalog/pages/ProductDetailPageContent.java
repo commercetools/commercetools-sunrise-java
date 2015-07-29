@@ -1,10 +1,10 @@
 package productcatalog.pages;
 
 import common.cms.CmsPage;
-import common.contexts.AppContext;
 import common.pages.*;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
+import common.utils.Translator;
 import io.sphere.sdk.attributes.Attribute;
 import io.sphere.sdk.attributes.AttributeAccess;
 import io.sphere.sdk.categories.Category;
@@ -21,7 +21,6 @@ import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static common.utils.Languages.translate;
 import static java.lang.String.join;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
@@ -34,7 +33,10 @@ public class ProductDetailPageContent extends PageContent {
     private static final AttributeAccess<LocalizedEnumValue> LENUM_ATTR_ACCESS = AttributeAccess.ofLocalizedEnumValue();
     private static final int SHORT_DESCRIPTION_MAX_CHARACTERS = 170;
 
-    private final AppContext context;
+    private final Translator translator;
+    private final PriceFormatter priceFormatter;
+    private final PriceFinder priceFinder;
+
     private final ProductProjection product;
     private final ProductVariant variant;
     private final List<ProductProjection> suggestionList;
@@ -42,23 +44,25 @@ public class ProductDetailPageContent extends PageContent {
     private final List<Category> breadcrubs;
 
     private final Optional<Price> priceOpt;
-    private final PriceFormatter priceFormatter;
 
-    public ProductDetailPageContent(final CmsPage cms, final AppContext context, final PriceFinder priceFinder, final PriceFormatter priceFormatter, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final List<Category> breadcrumbs) {
+    public ProductDetailPageContent(final CmsPage cms, final Translator translator, final PriceFormatter priceFormatter, final PriceFinder priceFinder, final ProductProjection product, final ProductVariant variant, List<ProductProjection> suggestionList, final List<ShippingMethod> shippingMethods, final List<Category> breadcrumbs) {
         super(cms);
-        this.context = context;
+        this.translator = translator;
         this.priceFormatter = priceFormatter;
+        this.priceFinder = priceFinder;
+
         this.product = product;
         this.variant = variant;
         this.suggestionList = suggestionList;
         this.shippingMethods = shippingMethods;
         this.breadcrubs = breadcrumbs;
+
         this.priceOpt = priceFinder.findPrice(product.getMasterVariant().getPrices());
     }
 
     @Override
     public String additionalTitle() {
-        return translate(product.getName(), context);
+        return translator.translate(product.getName());
     }
 
     public String getText() {
@@ -78,7 +82,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private LinkData categoryToLinkData(final Category category) {
-      return new LinkData(translate(category.getName(), context), "");
+      return new LinkData(translator.translate(category.getName()), "");
     }
 
     public List<ImageData> getGallery() {
@@ -89,11 +93,11 @@ public class ProductDetailPageContent extends PageContent {
 
     public ProductData getProduct() {
         return ProductDataBuilder.of()
-                .withText(translate(product.getName(), context))
+                .withText(translator.translate(product.getName()))
                 .withSku(variant.getSku().orElse(""))
                 .withRatingList(buildRating())
-                .withDescription(product.getDescription().map(description -> shorten(translate(description, context))).orElse(""))
-                .withAdditionalDescription(product.getDescription().map(description -> translate(description, context)).orElse(""))
+                .withDescription(product.getDescription().map(description -> shorten(translator.translate(description))).orElse(""))
+                .withAdditionalDescription(product.getDescription().map(translator::translate).orElse(""))
                 .withViewDetailsText(cms.getOrEmpty("product.viewDetails"))
                 .withPrice(getFormattedPrice())
                 .withPriceOld(getFormattedPriceOld())
@@ -110,7 +114,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public ProductListData getSuggestions() {
-        return new ProductListData(suggestionList, context, priceFormatter,
+        return new ProductListData(translator, priceFormatter, priceFinder, suggestionList,
                 cms.getOrEmpty("suggestions.text"), cms.getOrEmpty("suggestions.sale"),
                 cms.getOrEmpty("suggestions.new"), cms.getOrEmpty("suggestions.quickView"),
                 cms.getOrEmpty("suggestions.wishlist"), cms.getOrEmpty("suggestions.moreColors"));
@@ -142,7 +146,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     private SelectableData selectableColor(final Attribute color) {
-        final String colorLabel = translate(color.getValue(LENUM_ATTR_ACCESS).getLabel(), context);
+        final String colorLabel = translator.translate(color.getValue(LENUM_ATTR_ACCESS).getLabel());
         return new SelectableData(colorLabel, color.getName(), "", "", false);
     }
 
@@ -195,7 +199,7 @@ public class ProductDetailPageContent extends PageContent {
     private DetailData buildProductDetails() {
         final Set<LocalizedStrings> details =
                 variant.getAttribute("details", AttributeAccess.ofLocalizedStringsSet()).orElse(Collections.emptySet());
-        final String joined = join(", ", details.stream().map(elem -> translate(elem, context)).collect(toSet()));
+        final String joined = join(", ", details.stream().map(translator::translate).collect(toSet()));
 
         return new DetailData(cms.getOrEmpty("product.productDetails.text"), joined);
     }
