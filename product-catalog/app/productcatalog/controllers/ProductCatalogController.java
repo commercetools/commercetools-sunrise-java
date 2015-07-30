@@ -9,9 +9,7 @@ import common.utils.Translator;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import io.sphere.sdk.queries.PagedResult;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
-import io.sphere.sdk.shippingmethods.queries.ShippingMethodQuery;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.pages.ProductCatalogView;
@@ -19,6 +17,7 @@ import productcatalog.pages.ProductDetailPageContent;
 import productcatalog.pages.ProductOverviewPageContent;
 import productcatalog.services.CategoryService;
 import productcatalog.services.ProductProjectionService;
+import productcatalog.services.ShippingMethodService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -36,12 +35,14 @@ public class ProductCatalogController extends SunriseController {
 
     private final ProductProjectionService productProjectionService;
     private final CategoryService categoryService;
+    private final ShippingMethodService shippingMethodService;
 
     @Inject
-    public ProductCatalogController(final ControllerDependency controllerDependency, final ProductProjectionService productProjectionService, final CategoryService categoryService) {
+    public ProductCatalogController(final ControllerDependency controllerDependency, final ProductProjectionService productProjectionService, final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
         super(controllerDependency);
         this.productProjectionService = productProjectionService;
         this.categoryService = categoryService;
+        this.shippingMethodService = shippingMethodService;
     }
 
     public F.Promise<Result> pop(int page) {
@@ -51,14 +52,6 @@ public class ProductCatalogController extends SunriseController {
                             return render(view -> ok(view.productOverviewPage(content)));
                         })
         );
-    }
-
-    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final List<ProductProjection> products) {
-        final Translator translator = Translator.of(context().user().language(), context().user().fallbackLanguages(),
-                context().project().languages());
-        final PriceFormatter priceFormatter = PriceFormatter.of(context().user().country().toLocale());
-        final PriceFinder priceFinder = PriceFinder.of(context().user());
-        return new ProductOverviewPageContent(cms, translator, priceFormatter, priceFinder, products);
     }
 
     public F.Promise<Result> pdp(final String slug, final String sku) {
@@ -71,18 +64,12 @@ public class ProductCatalogController extends SunriseController {
         });
     }
 
-    private F.Promise<Result> pdpx(final ProductProjection product, final ProductVariant variant) {
-        final F.Promise<List<ProductProjection>> suggestionPromise = productProjectionService.getSuggestions(categoryService.getSiblingCategories(product));
-        final F.Promise<List<ShippingMethod>> shippingMethodsPromise = getShippingMethods();
-        final List<Category> breadcrumbs = categoryService.getBreadCrumbCategories(product);
-
-        return combine(suggestionPromise, shippingMethodsPromise, (suggestions, shippingMethods) ->
-                withCms("pdp", cms -> {
-                    final List<ProductProjection> a = productProjectionService.pickNRandom(suggestions, NUM_SUGGESTIONS);
-                    final ProductDetailPageContent content =
-                            getPdpPageData(cms, product, variant, a, shippingMethods, breadcrumbs);
-                    return render(view -> ok(view.productDetailPage(content)));
-                }));
+    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final List<ProductProjection> products) {
+        final Translator translator = Translator.of(context().user().language(), context().user().fallbackLanguages(),
+                context().project().languages());
+        final PriceFormatter priceFormatter = PriceFormatter.of(context().user().country().toLocale());
+        final PriceFinder priceFinder = PriceFinder.of(context().user());
+        return new ProductOverviewPageContent(cms, translator, priceFormatter, priceFinder, products);
     }
 
     private ProductDetailPageContent getPdpPageData(final CmsPage cms, final ProductProjection product,
@@ -100,9 +87,18 @@ public class ProductCatalogController extends SunriseController {
                 suggestions, shippingMethods, breadcrumbs);
     }
 
-    private F.Promise<List<ShippingMethod>> getShippingMethods() {
-        final ShippingMethodQuery shippingMethodQuery = ShippingMethodQuery.of();
-        return sphere().execute(shippingMethodQuery).map(PagedResult::getResults);
+    private F.Promise<Result> pdpx(final ProductProjection product, final ProductVariant variant) {
+        final F.Promise<List<ProductProjection>> suggestionPromise = productProjectionService.getSuggestions(categoryService.getSiblingCategories(product));
+        final F.Promise<List<ShippingMethod>> shippingMethodsPromise = shippingMethodService.getShippingMethods();
+        final List<Category> breadcrumbs = categoryService.getBreadCrumbCategories(product);
+
+        return combine(suggestionPromise, shippingMethodsPromise, (suggestions, shippingMethods) ->
+                withCms("pdp", cms -> {
+                    final List<ProductProjection> a = productProjectionService.pickNRandom(suggestions, NUM_SUGGESTIONS);
+                    final ProductDetailPageContent content =
+                            getPdpPageData(cms, product, variant, a, shippingMethods, breadcrumbs);
+                    return render(view -> ok(view.productDetailPage(content)));
+                }));
     }
 
     private F.Promise<Result> render(final Function<ProductCatalogView, Result> pageRenderer) {
