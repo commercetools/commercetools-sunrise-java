@@ -52,7 +52,7 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   libraryDependencies ++= Seq (
     "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
     "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % sphereJvmSdkVersion,
-    "io.sphere" % "sphere-sunrise-design" % "0.5.0",
+    "io.sphere" % "sphere-sunrise-design" % "0.6.0",
     "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "2.2.1"
   ),
