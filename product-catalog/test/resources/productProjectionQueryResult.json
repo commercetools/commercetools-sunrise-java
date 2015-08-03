@@ -4,6 +4,513 @@
   "total": 5413,
   "results": [
     {
+      "id": "2a439c1c-1687-4499-9d5a-8d5e3e6620a4",
+      "version": 2,
+      "productType": {
+        "typeId": "product-type",
+        "id": "dd53c13f-baf6-4466-87cf-ff138fa8c040"
+      },
+      "name": {
+        "de": "#maximilianlook 16",
+        "en": "#maximilianlook 16",
+        "it": "#maximilianlook 16"
+      },
+      "categories": [
+        {
+          "typeId": "category",
+          "id": "5e1eba68-2513-463b-8b1a-014323d69439"
+        }
+      ],
+      "slug": {
+        "it": "maximilian-look-fashion-WOMEN-s15-16",
+        "en": "maximilian-look-fashion-women-s15-16",
+        "de": "maximilian-look-fashion-damen-s15-16"
+      },
+      "masterVariant": {
+        "id": 1,
+        "sku": "s15look30",
+        "prices": [],
+        "images": [
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/s15lookd16_1_medium.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "name": "baseId",
+            "value": "s15lookd16"
+          },
+          {
+            "name": "style",
+            "value": {
+              "key": "sporty",
+              "label": "sporty"
+            }
+          },
+          {
+            "name": "gender",
+            "value": {
+              "key": "women",
+              "label": "Damen"
+            }
+          },
+          {
+            "name": "season",
+            "value": "s15"
+          },
+          {
+            "name": "isOnStock",
+            "value": true
+          },
+          {
+            "name": "isLook",
+            "value": true
+          },
+          {
+            "name": "lookProducts",
+            "value": [
+              "082364",
+              "079454"
+            ]
+          }
+        ]
+      },
+      "variants": [],
+      "searchKeywords": {},
+      "hasStagedChanges": false,
+      "published": true,
+      "createdAt": "2015-07-03T11:55:20.487Z",
+      "lastModifiedAt": "2015-07-15T17:02:32.280Z"
+    },
+    {
+      "id": "5a87ff7b-4922-436f-8a4a-cef79d126bb2",
+      "version": 2,
+      "productType": {
+        "typeId": "product-type",
+        "id": "dd53c13f-baf6-4466-87cf-ff138fa8c040"
+      },
+      "name": {
+        "de": "#maximilianlook 10",
+        "en": "#maximilianlook 10",
+        "it": "#maximilianlook 10"
+      },
+      "categories": [
+        {
+          "typeId": "category",
+          "id": "f62b28a3-0605-4a00-977f-5270d46baceb"
+        }
+      ],
+      "slug": {
+        "it": "maximilian-look-fashion-MEN-s15-10",
+        "en": "maximilian-look-fashion-men-s15-10",
+        "de": "maximilian-look-fashion-herren-s15-10"
+      },
+      "masterVariant": {
+        "id": 1,
+        "sku": "s15look20",
+        "prices": [],
+        "images": [
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/s15looku10_1_medium.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "name": "baseId",
+            "value": "s15looku10"
+          },
+          {
+            "name": "style",
+            "value": {
+              "key": "sporty",
+              "label": "sporty"
+            }
+          },
+          {
+            "name": "gender",
+            "value": {
+              "label": "Herren",
+              "key": "men"
+            }
+          },
+          {
+            "name": "season",
+            "value": "s15"
+          },
+          {
+            "name": "isOnStock",
+            "value": true
+          },
+          {
+            "name": "isLook",
+            "value": true
+          },
+          {
+            "name": "lookProducts",
+            "value": [
+              "081501",
+              "078757",
+              "081511",
+              "079463",
+              "080833"
+            ]
+          }
+        ]
+      },
+      "variants": [],
+      "searchKeywords": {},
+      "hasStagedChanges": false,
+      "published": true,
+      "createdAt": "2015-07-03T11:55:39.667Z",
+      "lastModifiedAt": "2015-07-15T17:02:07.538Z"
+    },
+    {
+      "id": "679bbd7a-c28d-48c6-b8bd-1eea76a68032",
+      "version": 2,
+      "productType": {
+        "typeId": "product-type",
+        "id": "dd53c13f-baf6-4466-87cf-ff138fa8c040"
+      },
+      "name": {
+        "it": "#maximilianlook 6",
+        "en": "#maximilianlook 6",
+        "de": "#maximilianlook 6"
+      },
+      "categories": [
+        {
+          "typeId": "category",
+          "id": "f62b28a3-0605-4a00-977f-5270d46baceb"
+        }
+      ],
+      "slug": {
+        "it": "maximilian-look-fashion-MEN-s15-6",
+        "de": "maximilian-look-fashion-herren-s15-6",
+        "en": "maximilian-look-fashion-men-s15-6"
+      },
+      "masterVariant": {
+        "id": 1,
+        "sku": "s15look12",
+        "prices": [],
+        "images": [
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/s15looku6_1_medium.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "name": "baseId",
+            "value": "s15looku6"
+          },
+          {
+            "name": "style",
+            "value": {
+              "key": "sporty",
+              "label": "sporty"
+            }
+          },
+          {
+            "name": "gender",
+            "value": {
+              "label": "Herren",
+              "key": "men"
+            }
+          },
+          {
+            "name": "season",
+            "value": "s15"
+          },
+          {
+            "name": "isOnStock",
+            "value": true
+          },
+          {
+            "name": "isLook",
+            "value": true
+          },
+          {
+            "name": "lookProducts",
+            "value": [
+              "080177",
+              "078689",
+              "072055",
+              "079104"
+            ]
+          }
+        ]
+      },
+      "variants": [],
+      "searchKeywords": {},
+      "hasStagedChanges": false,
+      "published": true,
+      "createdAt": "2015-07-03T11:55:41.216Z",
+      "lastModifiedAt": "2015-07-15T17:02:58.512Z"
+    },
+    {
+      "id": "a6c0bc59-b2f7-428b-ab2e-585d9af9b673",
+      "version": 2,
+      "productType": {
+        "typeId": "product-type",
+        "id": "dd53c13f-baf6-4466-87cf-ff138fa8c040"
+      },
+      "name": {
+        "de": "#maximilianlook 43",
+        "it": "#maximilianlook 43",
+        "en": "#maximilianlook 43"
+      },
+      "categories": [
+        {
+          "typeId": "category",
+          "id": "5e1eba68-2513-463b-8b1a-014323d69439"
+        }
+      ],
+      "slug": {
+        "de": "maximilian-look-fashion-damen-s15-43",
+        "it": "maximilian-look-fashion-WOMEN-s15-43",
+        "en": "maximilian-look-fashion-women-s15-43"
+      },
+      "masterVariant": {
+        "id": 1,
+        "sku": "s15look86",
+        "prices": [],
+        "images": [
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/s15lookd43_1_medium.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "name": "baseId",
+            "value": "s15lookd43"
+          },
+          {
+            "name": "style",
+            "value": {
+              "key": "sporty",
+              "label": "sporty"
+            }
+          },
+          {
+            "name": "gender",
+            "value": {
+              "key": "women",
+              "label": "Damen"
+            }
+          },
+          {
+            "name": "season",
+            "value": "s15"
+          },
+          {
+            "name": "isOnStock",
+            "value": true
+          },
+          {
+            "name": "isLook",
+            "value": true
+          },
+          {
+            "name": "lookProducts",
+            "value": [
+              "082352",
+              "080670",
+              "080557"
+            ]
+          }
+        ]
+      },
+      "variants": [],
+      "searchKeywords": {},
+      "hasStagedChanges": false,
+      "published": true,
+      "createdAt": "2015-07-03T11:55:41.739Z",
+      "lastModifiedAt": "2015-07-15T17:02:22.605Z"
+    },
+    {
+      "id": "3573cea3-65b2-411e-958e-a9dd022e9ac9",
+      "version": 2,
+      "productType": {
+        "typeId": "product-type",
+        "id": "dd53c13f-baf6-4466-87cf-ff138fa8c040"
+      },
+      "name": {
+        "en": "#maximilianlook 12",
+        "it": "#maximilianlook 12",
+        "de": "#maximilianlook 12"
+      },
+      "categories": [
+        {
+          "typeId": "category",
+          "id": "5e1eba68-2513-463b-8b1a-014323d69439"
+        }
+      ],
+      "slug": {
+        "it": "maximilian-look-fashion-WOMEN-s15-12",
+        "en": "maximilian-look-fashion-women-s15-12",
+        "de": "maximilian-look-fashion-damen-s15-12"
+      },
+      "masterVariant": {
+        "id": 1,
+        "sku": "s15look22",
+        "prices": [],
+        "images": [
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/s15lookd12_1_medium.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "name": "baseId",
+            "value": "s15lookd12"
+          },
+          {
+            "name": "style",
+            "value": {
+              "key": "sporty",
+              "label": "sporty"
+            }
+          },
+          {
+            "name": "gender",
+            "value": {
+              "key": "women",
+              "label": "Damen"
+            }
+          },
+          {
+            "name": "season",
+            "value": "s15"
+          },
+          {
+            "name": "isOnStock",
+            "value": true
+          },
+          {
+            "name": "isLook",
+            "value": true
+          },
+          {
+            "name": "lookProducts",
+            "value": [
+              "081376",
+              "082188",
+              "080643",
+              "080639"
+            ]
+          }
+        ]
+      },
+      "variants": [],
+      "searchKeywords": {},
+      "hasStagedChanges": false,
+      "published": true,
+      "createdAt": "2015-07-03T11:55:42.621Z",
+      "lastModifiedAt": "2015-07-15T17:01:22.828Z"
+    },
+    {
+      "id": "892cad68-4f41-448a-9624-8c2858c8cb41",
+      "version": 2,
+      "productType": {
+        "typeId": "product-type",
+        "id": "dd53c13f-baf6-4466-87cf-ff138fa8c040"
+      },
+      "name": {
+        "en": "#maximilianlook 26",
+        "it": "#maximilianlook 26",
+        "de": "#maximilianlook 26"
+      },
+      "categories": [
+        {
+          "typeId": "category",
+          "id": "5e1eba68-2513-463b-8b1a-014323d69439"
+        }
+      ],
+      "slug": {
+        "de": "maximilian-look-fashion-damen-s15-26",
+        "it": "maximilian-look-fashion-WOMEN-s15-26",
+        "en": "maximilian-look-fashion-women-s15-26"
+      },
+      "masterVariant": {
+        "id": 1,
+        "sku": "s15look46",
+        "prices": [],
+        "images": [
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/s15lookd26_1_medium.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "name": "baseId",
+            "value": "s15lookd26"
+          },
+          {
+            "name": "style",
+            "value": {
+              "key": "sporty",
+              "label": "sporty"
+            }
+          },
+          {
+            "name": "gender",
+            "value": {
+              "key": "women",
+              "label": "Damen"
+            }
+          },
+          {
+            "name": "season",
+            "value": "s15"
+          },
+          {
+            "name": "isOnStock",
+            "value": true
+          },
+          {
+            "name": "isLook",
+            "value": true
+          },
+          {
+            "name": "lookProducts",
+            "value": [
+              "082652",
+              "081660",
+              "073311"
+            ]
+          }
+        ]
+      },
+      "variants": [],
+      "searchKeywords": {},
+      "hasStagedChanges": false,
+      "published": true,
+      "createdAt": "2015-07-03T11:55:43.988Z",
+      "lastModifiedAt": "2015-07-15T17:02:22.339Z"
+    },
+    {
       "id": "254f1c0e-67bc-4aa6-992d-9a0fea1846b5",
       "version": 3,
       "productType": {
@@ -18,7 +525,11 @@
       "categories": [
         {
           "typeId": "category",
-          "id": "32952779-d916-4f2b-b1d5-9efd7f7b9f58"
+          "id": "30d79426-a17a-4e63-867e-ec31a1a33416"
+        },
+        {
+          "typeId": "category",
+          "id": "9a584ee8-a45a-44e8-b9ec-e11439084687"
         }
       ],
       "slug": {
@@ -273,29 +784,7 @@
             "country": "CY"
           }
         ],
-        "images": [
-          {
-            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/086652_1_large.jpg",
-            "dimensions": {
-              "w": 0,
-              "h": 0
-            }
-          },
-          {
-            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/086652_2_large.jpg",
-            "dimensions": {
-              "w": 0,
-              "h": 0
-            }
-          },
-          {
-            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/086652_3_large.jpg",
-            "dimensions": {
-              "w": 0,
-              "h": 0
-            }
-          }
-        ],
+        "images": [],
         "attributes": [
           {
             "name": "articleNumberManufacturer",
