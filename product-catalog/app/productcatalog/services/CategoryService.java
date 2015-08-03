@@ -47,4 +47,6 @@ public class CategoryService {
     private Optional<Category> expandCategory(final Reference<Category> categoryRef) {
         return categories.findById(categoryRef.getId());
     }
+
+
 }
