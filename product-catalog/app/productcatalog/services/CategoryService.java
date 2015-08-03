@@ -37,7 +37,7 @@ public class CategoryService {
         return categoryOptional.map(this::getCategoryWithAncestors).orElse(emptyList());
     }
 
-    public List<Category> getCategoryWithAncestors(final Category category) {
+    private List<Category> getCategoryWithAncestors(final Category category) {
         return concat(category.getAncestors().stream().map(this::expandCategory), Stream.of(Optional.of(category)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -47,6 +47,4 @@ public class CategoryService {
     private Optional<Category> expandCategory(final Reference<Category> categoryRef) {
         return categories.findById(categoryRef.getId());
     }
-
-
 }
