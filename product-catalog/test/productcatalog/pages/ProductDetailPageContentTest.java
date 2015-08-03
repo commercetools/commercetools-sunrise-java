@@ -21,6 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductDetailPageContentTest {
 
+    private static final int SUTTON_BAG_IDX = 6;
+    private static final int MAXIMILIAN_16_IDX = 0;
+
     private final Translator translator = Translator.of(Locale.ENGLISH, emptyList(), emptyList());
 
     private final List<ProductProjection> products = ProductTestData.of().getProducts();
@@ -28,7 +31,7 @@ public class ProductDetailPageContentTest {
 
     @Test
     public void additionalTitle() throws Exception {
-        final ProductProjection suttonBag = products.get(6);
+        final ProductProjection suttonBag = products.get(SUTTON_BAG_IDX);
         final ProductDetailPageContent content = new ProductDetailPageContent(null, translator, null, null, suttonBag, null, null, null, null);
 
         assertThat(suttonBag.getId()).isEqualTo("254f1c0e-67bc-4aa6-992d-9a0fea1846b5");
@@ -50,7 +53,7 @@ public class ProductDetailPageContentTest {
 
     @Test
     public void getGallery() throws Exception {
-        final ProductProjection maximilian16 = products.get(0);
+        final ProductProjection maximilian16 = products.get(MAXIMILIAN_16_IDX);
         final Image image1 = Image.of("https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/s15lookd16_1_medium.jpg", ImageDimensions.of(0, 0));
         final Image image2 = Image.of("https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/s15lookd16_2_medium.jpg", ImageDimensions.of(0, 0));
         final Image image3 = Image.of("https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/s15lookd16_3_medium.jpg", ImageDimensions.of(0, 0));
