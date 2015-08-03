@@ -8,12 +8,13 @@ import productcatalog.common.CategoryTestData;
 import productcatalog.common.ProductTestData;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CategoryServiceTest {
+
+    private static final int SUTTON_BAG_IDX = 6;
 
     private final CategoryTree categories = CategoryTree.of(CategoryTestData.of().getCategories());
     private final List<ProductProjection> products = ProductTestData.of().getProducts();
@@ -21,7 +22,7 @@ public class CategoryServiceTest {
 
     @Test
     public void getSiblingCategories() {
-        final ProductProjection suttonBag = products.get(6);
+        final ProductProjection suttonBag = products.get(SUTTON_BAG_IDX);
         final Category clutches = categories.findById("a9c9ebd8-e6ff-41a6-be8e-baa07888c9bd").get();
         final Category satchels = categories.findById("30d79426-a17a-4e63-867e-ec31a1a33416").get();
         final Category shoppers = categories.findById("bd83e288-77de-4c3a-a26c-8384af715bbb").get();
@@ -39,7 +40,7 @@ public class CategoryServiceTest {
 
     @Test
     public void getBreadCrumbCategories() {
-        final ProductProjection suttonBag = products.get(6);
+        final ProductProjection suttonBag = products.get(SUTTON_BAG_IDX);
         final Category woman = categories.findById("33339d11-0e7b-406b-899b-60f4c34c2948").get();
         final Category bags = categories.findById("32952779-d916-4f2b-b1d5-9efd7f7b9f58").get();
         final Category handBags = categories.findById("9a584ee8-a45a-44e8-b9ec-e11439084687").get();
