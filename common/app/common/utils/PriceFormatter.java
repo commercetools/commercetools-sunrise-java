@@ -1,7 +1,6 @@
 package common.utils;
 
 import javax.money.MonetaryAmount;
-import javax.money.format.MonetaryAmountFormat;
 import javax.money.format.MonetaryFormats;
 import java.util.Locale;
 
@@ -18,7 +17,6 @@ public class PriceFormatter {
     }
 
     public String format(MonetaryAmount price) {
-        final MonetaryAmountFormat format = MonetaryFormats.getAmountFormat(locale);
-        return format.format(price);
+        return MonetaryFormats.getAmountFormat(locale).format(price);
     }
 }
