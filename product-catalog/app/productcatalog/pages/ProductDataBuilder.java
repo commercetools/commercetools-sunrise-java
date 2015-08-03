@@ -2,28 +2,31 @@ package productcatalog.pages;
 
 import common.pages.CollectionData;
 import common.pages.DetailData;
+import common.pages.SelectableData;
 
 import java.util.Collections;
+
+import static java.util.Collections.*;
 
 public class ProductDataBuilder {
 
     String text = "";
     String sku = "";
-    CollectionData ratingList = new CollectionData("", Collections.emptyList());
+    CollectionData<SelectableData> ratingList = new CollectionData<>("", emptyList());
     String description = "";
     String additionalDescription = "";
     String viewDetailsText = "";
     String price = "";
     String priceOld = "";
-    CollectionData colorList = new CollectionData("", Collections.emptyList());
-    CollectionData sizeList = new CollectionData("", Collections.emptyList());
+    CollectionData<SelectableData> colorList = new CollectionData<>("", emptyList());
+    CollectionData<SelectableData> sizeList = new CollectionData<>("", emptyList());
     String sizeGuideText = "";
-    CollectionData bagItemList = new CollectionData("", Collections.emptyList());
+    CollectionData<SelectableData> bagItemList = new CollectionData<>("", emptyList());
     String addToBagText = "";
     String addToWishlistText = "";
     String availableText = "";
-    DetailData productDetails = new DetailData("", "");
-    DetailData deliveryAndReturn = new DetailData("", "");
+    CollectionData<DetailData> productDetails = new CollectionData<>("", emptyList());
+    CollectionData<DetailData> deliveryAndReturn = new CollectionData<>("", emptyList());
 
     private ProductDataBuilder() {
 
@@ -43,7 +46,7 @@ public class ProductDataBuilder {
         return this;
     }
 
-    public ProductDataBuilder withRatingList(final CollectionData ratingList) {
+    public ProductDataBuilder withRatingList(final CollectionData<SelectableData> ratingList) {
         this.ratingList = ratingList;
         return this;
     }
@@ -73,12 +76,12 @@ public class ProductDataBuilder {
         return this;
     }
 
-    public ProductDataBuilder withColorList(final CollectionData colorList) {
+    public ProductDataBuilder withColorList(final CollectionData<SelectableData> colorList) {
         this.colorList = colorList;
         return this;
     }
 
-    public ProductDataBuilder withSizeList(final CollectionData sizeList) {
+    public ProductDataBuilder withSizeList(final CollectionData<SelectableData> sizeList) {
         this.sizeList = sizeList;
         return this;
     }
@@ -88,7 +91,7 @@ public class ProductDataBuilder {
         return this;
     }
 
-    public ProductDataBuilder withBagItemList(final CollectionData bagItemList) {
+    public ProductDataBuilder withBagItemList(final CollectionData<SelectableData> bagItemList) {
         this.bagItemList = bagItemList;
         return this;
     }
@@ -108,12 +111,12 @@ public class ProductDataBuilder {
         return this;
     }
 
-    public ProductDataBuilder withProductDetails(final DetailData productDetails) {
+    public ProductDataBuilder withProductDetails(final CollectionData<DetailData> productDetails) {
         this.productDetails = productDetails;
         return this;
     }
 
-    public ProductDataBuilder withDeliveryAndReturn(final DetailData deliveryAndReturn) {
+    public ProductDataBuilder withDeliveryAndReturn(final CollectionData<DetailData> deliveryAndReturn) {
         this.deliveryAndReturn = deliveryAndReturn;
         return this;
     }

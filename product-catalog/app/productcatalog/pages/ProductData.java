@@ -2,27 +2,30 @@ package productcatalog.pages;
 
 import common.pages.CollectionData;
 import common.pages.DetailData;
+import common.pages.SelectableData;
+
+import javax.swing.event.ListDataEvent;
 
 public class ProductData {
     private static final String SKU_PREFIX = "SUNRISE #";
 
     private final String text;
     private final String sku;
-    private final CollectionData ratingList;
+    private final CollectionData<SelectableData> ratingList;
     private final String description;
     private final String additionalDescription;
     private final String viewDetailsText;
     private final String price;
     private final String priceOld;
-    private final CollectionData colorList;
-    private final CollectionData sizeList;
+    private final CollectionData<SelectableData> colorList;
+    private final CollectionData<SelectableData> sizeList;
     private final String sizeGuideText;
-    private final CollectionData bagItemList;
+    private final CollectionData<SelectableData> bagItemList;
     private final String addToBagText;
     private final String addToWishlistText;
     private final String availableText;
-    private final DetailData productDetails;
-    private final DetailData deliveryAndReturn;
+    private final CollectionData<DetailData> productDetails;
+    private final CollectionData<DetailData> deliveryAndReturn;
 
     ProductData (ProductDataBuilder builder) {
         this.text = builder.text;
@@ -52,7 +55,7 @@ public class ProductData {
         return SKU_PREFIX + sku;
     }
 
-    public CollectionData getRating() {
+    public CollectionData<SelectableData> getRating() {
         return ratingList;
     }
 
@@ -76,11 +79,11 @@ public class ProductData {
         return priceOld;
     }
 
-    public CollectionData getColor() {
+    public CollectionData<SelectableData> getColor() {
         return colorList;
     }
 
-    public CollectionData getSize() {
+    public CollectionData<SelectableData> getSize() {
         return sizeList;
     }
 
@@ -88,7 +91,7 @@ public class ProductData {
         return sizeGuideText;
     }
 
-    public CollectionData getBagItems() {
+    public CollectionData<SelectableData> getBagItems() {
         return bagItemList;
     }
 
@@ -104,11 +107,11 @@ public class ProductData {
         return availableText;
     }
 
-    public DetailData getProductDetails() {
+    public CollectionData<DetailData> getProductDetails() {
         return productDetails;
     }
 
-    public DetailData getDeliveryAndReturn() {
+    public CollectionData<DetailData> getDeliveryAndReturn() {
         return deliveryAndReturn;
     }
 }

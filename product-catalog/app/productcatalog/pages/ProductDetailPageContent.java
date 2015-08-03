@@ -113,11 +113,11 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public CollectionData getReviews() {
-        return new CollectionData(cms.getOrEmpty("reviews.text"), Collections.<SelectableData>emptyList());
+        return new CollectionData<>(cms.getOrEmpty("reviews.text"), Collections.<SelectableData>emptyList());
     }
 
-    private CollectionData buildRating() {
-        return new CollectionData("", asList(
+    private CollectionData<SelectableData> buildRating() {
+        return new CollectionData<>("", asList(
                 new SelectableData("5 Stars", "5", cms.getOrEmpty("product.ratingList.five.text"), "", false),
                 new SelectableData("4 Stars", "4", cms.getOrEmpty("product.ratingList.four.text"), "", false),
                 new SelectableData("3 Stars", "3", cms.getOrEmpty("product.ratingList.three.text"), "", false),
@@ -126,7 +126,7 @@ public class ProductDetailPageContent extends PageContent {
         ));
     }
 
-    private CollectionData buildColorList() {
+    private CollectionData<SelectableData> buildColorList() {
         final SelectableData defaultItem =
                 new SelectableData(cms.getOrEmpty("product.colorList.choose.text"), "none", "", "", true);
 
@@ -134,7 +134,7 @@ public class ProductDetailPageContent extends PageContent {
                 concat(Stream.of(defaultItem), getColorsinAllVariants().stream().map(this::selectableColor))
                         .collect(toList());
 
-        return new CollectionData(cms.getOrEmpty("product.colorList.text"), colors);
+        return new CollectionData<>(cms.getOrEmpty("product.colorList.text"), colors);
     }
 
     private SelectableData selectableColor(final Attribute color) {
@@ -155,7 +155,7 @@ public class ProductDetailPageContent extends PageContent {
                 .collect(toList());
     }
 
-    private CollectionData buildSizeList() {
+    private CollectionData<SelectableData> buildSizeList() {
         final SelectableData defaultItem =
                 new SelectableData(cms.getOrEmpty("product.sizeList.choose.text"), "none", "", "", true);
 
@@ -163,7 +163,7 @@ public class ProductDetailPageContent extends PageContent {
                 concat(Stream.of(defaultItem), getSizesinAllVariants().stream().map(this::selectableSize))
                         .collect(toList());
 
-        return new CollectionData(cms.getOrEmpty("product.sizeList.text"), sizes);
+        return new CollectionData<>(cms.getOrEmpty("product.sizeList.text"), sizes);
     }
 
     private SelectableData selectableSize(final Attribute size) {
@@ -174,32 +174,42 @@ public class ProductDetailPageContent extends PageContent {
         return getAttributeInAllVariants("size");
     }
 
-    private CollectionData buildBagItemList() {
+    private CollectionData<SelectableData> buildBagItemList() {
         final SelectableData defaultItem = new SelectableData("1", "", "", "", true);
 
         final List<SelectableData> bagItems =
                 concat(Stream.of(defaultItem), IntStream.range(2, 100).mapToObj(this::selectableBagItem))
                         .collect(toList());
 
-        return new CollectionData("", bagItems);
+        return new CollectionData<>("", bagItems);
     }
 
     private SelectableData selectableBagItem(final int number) {
         return new SelectableData(Integer.toString(number), "", "", "", false);
     }
 
-    private DetailData buildProductDetails() {
-        final Set<LocalizedStrings> details =
-                variant.getAttribute("details", AttributeAccess.ofLocalizedStringsSet()).orElse(Collections.emptySet());
-        final String joined = join(", ", details.stream().map(translator::translate).collect(toSet()));
+    private CollectionData<DetailData> buildProductDetails() {
+        final List<DetailData> details = variant.getAttribute("details", AttributeAccess.ofLocalizedStringsSet())
+                .map(d -> d.stream().map(this::localizedStringToDetailData).collect(toList()))
+                .orElse(Collections.emptyList());
 
-        return new DetailData(cms.getOrEmpty("product.productDetails.text"), joined);
+        return new CollectionData<>(cms.getOrEmpty("product.productDetails.text"), details);
     }
 
-    private DetailData buildDeliveryAndReturn() {
-        final String joined = join(", ", shippingMethods.stream().map(ShippingMethod::getName).collect(toList()));
+    private DetailData localizedStringToDetailData(final LocalizedStrings localizedStrings) {
+        return new DetailData(translator.translate(localizedStrings), "");
+    }
 
-        return new DetailData(cms.getOrEmpty("product.deliveryAndReturn.text"), joined);
+    private CollectionData<DetailData> buildDeliveryAndReturn() {
+        final List<DetailData> methods = shippingMethods.stream()
+                .map(this::shippingMethodToDetailData)
+                .collect(toList());
+
+        return new CollectionData<>(cms.getOrEmpty("product.deliveryAndReturn.text"), methods);
+    }
+
+    private DetailData shippingMethodToDetailData(final ShippingMethod shippingMethod) {
+        return new DetailData(shippingMethod.getName(), "");
     }
 
     private String getFormattedPrice(final Price price) {
