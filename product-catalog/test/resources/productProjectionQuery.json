@@ -277,7 +277,29 @@
             "country": "CY"
           }
         ],
-        "images": [],
+        "images": [
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/086652_1_large.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/086652_2_large.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          },
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/086652_3_large.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          }
+        ],
         "attributes": [
           {
             "name": "articleNumberManufacturer",

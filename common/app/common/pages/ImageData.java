@@ -1,8 +1,9 @@
 package common.pages;
 
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Image;
 
-public class ImageData {
+public class ImageData extends Base {
 
     private final Image image;
 
