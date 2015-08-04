@@ -25,7 +25,9 @@ public class ProductData {
     private final String addToWishlistText;
     private final String availableText;
     private final CollectionData<DetailData> productDetails;
-    private final CollectionData<DetailData> deliveryAndReturn;
+    private final String deliveryAndReturns;
+    private final CollectionData<DetailData> delivery;
+    private final CollectionData<DetailData> returns;
 
     ProductData (ProductDataBuilder builder) {
         this.text = builder.text;
@@ -44,7 +46,9 @@ public class ProductData {
         this.addToWishlistText = builder.addToWishlistText;
         this.availableText = builder.availableText;
         this.productDetails = builder.productDetails;
-        this.deliveryAndReturn = builder.deliveryAndReturn;
+        this.deliveryAndReturns = builder.deliveryAndReturns;
+        this.delivery = builder.delivery;
+        this.returns = builder.returns;
     }
 
     public String getText() {
@@ -111,7 +115,15 @@ public class ProductData {
         return productDetails;
     }
 
-    public CollectionData<DetailData> getDeliveryAndReturn() {
-        return deliveryAndReturn;
+    public String getDeliveryAndReturns() {
+        return deliveryAndReturns;
+    }
+
+    public CollectionData<DetailData> getDelivery() {
+        return delivery;
+    }
+
+    public CollectionData<DetailData> getReturns() {
+        return returns;
     }
 }

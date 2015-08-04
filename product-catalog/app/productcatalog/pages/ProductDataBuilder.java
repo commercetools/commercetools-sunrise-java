@@ -26,7 +26,9 @@ public class ProductDataBuilder {
     String addToWishlistText = "";
     String availableText = "";
     CollectionData<DetailData> productDetails = new CollectionData<>("", emptyList());
-    CollectionData<DetailData> deliveryAndReturn = new CollectionData<>("", emptyList());
+    String deliveryAndReturns = "";
+    CollectionData<DetailData> delivery = new CollectionData<>("", emptyList());
+    CollectionData<DetailData> returns = new CollectionData<>("", emptyList());
 
     private ProductDataBuilder() {
 
@@ -116,8 +118,18 @@ public class ProductDataBuilder {
         return this;
     }
 
-    public ProductDataBuilder withDeliveryAndReturn(final CollectionData<DetailData> deliveryAndReturn) {
-        this.deliveryAndReturn = deliveryAndReturn;
+    public ProductDataBuilder withDeliveryAndReturns(final String deliveryAndReturns) {
+        this.deliveryAndReturns = deliveryAndReturns;
+        return this;
+    }
+
+    public ProductDataBuilder withDelivery(final CollectionData<DetailData> delivery) {
+        this.delivery= delivery;
+        return this;
+    }
+
+    public ProductDataBuilder withReturns(final CollectionData<DetailData> returns) {
+        this.returns = returns;
         return this;
     }
 
