@@ -25,6 +25,8 @@ pdp.product.addToWishlist = Add To Wishlist
 pdp.product.available = Available
 pdp.product.productDetails.text = Product Details
 pdp.product.deliveryAndReturn.text = Delivery & Returns
+pdp.product.delivery.text = Delivery
+pdp.product.returns.text = Returns
 
 pdp.suggestions.text = You may also like
 pdp.suggestions.sale = Sale

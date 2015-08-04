@@ -24,7 +24,9 @@ pdp.product.addToBag = In die Einkaufstasche
 pdp.product.addToWishlist = Auf die Wunschliste
 pdp.product.available = Verfügbar
 pdp.product.productDetails.text = Produkt Details
-pdp.product.deliveryAndReturn.text = Versand
+pdp.product.deliveryAndReturn.text = Versand und Retour
+pdp.product.delivery.text = Versand
+pdp.product.returns.text = Retour
 
 pdp.suggestions.text = Das könnte Ihnen auch gefallen
 pdp.suggestions.sale = Angebot
