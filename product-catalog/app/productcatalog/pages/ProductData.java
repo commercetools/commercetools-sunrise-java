@@ -13,7 +13,6 @@ public class ProductData {
     private final String sku;
     private final CollectionData<SelectableData> ratingList;
     private final String description;
-    private final String additionalDescription;
     private final String viewDetailsText;
     private final String price;
     private final String priceOld;
@@ -34,7 +33,6 @@ public class ProductData {
         this.sku = builder.sku;
         this.ratingList = builder.ratingList;
         this.description = builder.description;
-        this.additionalDescription = builder.additionalDescription;
         this.viewDetailsText = builder.viewDetailsText;
         this.price = builder.price;
         this.priceOld = builder.priceOld;
@@ -65,10 +63,6 @@ public class ProductData {
 
     public String getDescription() {
         return description;
-    }
-
-    public String getAdditionalDescription() {
-        return additionalDescription;
     }
 
     public String getViewDetails() {

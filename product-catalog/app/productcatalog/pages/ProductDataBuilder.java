@@ -14,7 +14,6 @@ public class ProductDataBuilder {
     String sku = "";
     CollectionData<SelectableData> ratingList = new CollectionData<>("", emptyList());
     String description = "";
-    String additionalDescription = "";
     String viewDetailsText = "";
     String price = "";
     String priceOld = "";
@@ -55,11 +54,6 @@ public class ProductDataBuilder {
 
     public ProductDataBuilder withDescription(final String description) {
         this.description = description;
-        return this;
-    }
-
-    public ProductDataBuilder withAdditionalDescription(final String additionalDescription) {
-        this.additionalDescription = additionalDescription;
         return this;
     }
 
