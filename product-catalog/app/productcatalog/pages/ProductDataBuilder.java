@@ -3,10 +3,9 @@ package productcatalog.pages;
 import common.pages.CollectionData;
 import common.pages.DetailData;
 import common.pages.SelectableData;
+import common.pages.ShippingData;
 
-import java.util.Collections;
-
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
 
 public class ProductDataBuilder {
 
@@ -26,8 +25,8 @@ public class ProductDataBuilder {
     String availableText = "";
     CollectionData<DetailData> productDetails = new CollectionData<>("", emptyList());
     String deliveryAndReturns = "";
-    CollectionData<DetailData> delivery = new CollectionData<>("", emptyList());
-    CollectionData<DetailData> returns = new CollectionData<>("", emptyList());
+    CollectionData<ShippingData> delivery = new CollectionData<>("", emptyList());
+    CollectionData<ShippingData> returns = new CollectionData<>("", emptyList());
 
     private ProductDataBuilder() {
 
@@ -117,12 +116,12 @@ public class ProductDataBuilder {
         return this;
     }
 
-    public ProductDataBuilder withDelivery(final CollectionData<DetailData> delivery) {
-        this.delivery= delivery;
+    public ProductDataBuilder withDelivery(final CollectionData<ShippingData> delivery) {
+        this.delivery = delivery;
         return this;
     }
 
-    public ProductDataBuilder withReturns(final CollectionData<DetailData> returns) {
+    public ProductDataBuilder withReturns(final CollectionData<ShippingData> returns) {
         this.returns = returns;
         return this;
     }
