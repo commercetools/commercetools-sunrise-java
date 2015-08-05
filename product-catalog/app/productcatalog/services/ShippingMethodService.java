@@ -19,7 +19,7 @@ public class ShippingMethodService {
     }
 
     public F.Promise<List<ShippingMethod>> getShippingMethods() {
-        final ShippingMethodQuery shippingMethodQuery = ShippingMethodQuery.of();
-        return sphere.execute(shippingMethodQuery).map(PagedResult::getResults);
+        return sphere.execute(ShippingMethodQuery.of())
+                .map(PagedResult::getResults);
     }
 }

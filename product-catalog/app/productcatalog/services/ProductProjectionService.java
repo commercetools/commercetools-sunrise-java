@@ -22,17 +22,27 @@ public class ProductProjectionService {
         this.sphere = sphere;
     }
 
-    public F.Promise<Optional<ProductProjection>> searchProductBySlug(final Locale locale, final String slug) {
-        return sphere.execute(ProductProjectionQuery.ofCurrent().bySlug(locale, slug))
-                .map(PagedQueryResult::head);
-    }
-
     public F.Promise<List<ProductProjection>> searchProducts(final int page, final int pageSize) {
         final int offset = (page - 1) * pageSize;
         return sphere.execute(ProductProjectionSearch.ofCurrent()
                 .withOffset(offset)
                 .withLimit(pageSize))
                 .map(PagedResult::getResults);
+    }
+
+    public F.Promise<Optional<ProductProjection>> searchProductBySlug(final Locale locale, final String slug) {
+        return sphere.execute(ProductProjectionQuery.ofCurrent().bySlug(locale, slug))
+                .map(PagedQueryResult::head);
+    }
+
+    public Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku) {
+        return product.getAllVariants().stream()
+                .filter(variant -> variantHasSku(variant, sku))
+                .findFirst();
+    }
+
+    private boolean variantHasSku(final ProductVariant variant, final String sku) {
+        return variant.getSku().map(variantSku -> variantSku.equals(sku)).orElse(false);
     }
 
     public F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories) {
@@ -57,15 +67,5 @@ public class ProductProjectionService {
     private <T> void pick(final List<T> elements, final List<T> picked, int index) {
         picked.add(elements.get(index));
         elements.remove(index);
-    }
-
-    public Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku) {
-        return product.getAllVariants().stream()
-                .filter(variant -> variantHasSku(variant, sku))
-                .findFirst();
-    }
-
-    public boolean variantHasSku(final ProductVariant variant, final String sku) {
-        return variant.getSku().map(variantSku -> variantSku.equals(sku)).orElse(false);
     }
 }
