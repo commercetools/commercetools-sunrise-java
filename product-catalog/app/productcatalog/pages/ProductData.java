@@ -3,8 +3,7 @@ package productcatalog.pages;
 import common.pages.CollectionData;
 import common.pages.DetailData;
 import common.pages.SelectableData;
-
-import javax.swing.event.ListDataEvent;
+import common.pages.ShippingData;
 
 public class ProductData {
     private static final String SKU_PREFIX = "SUNRISE #";
@@ -25,8 +24,8 @@ public class ProductData {
     private final String availableText;
     private final CollectionData<DetailData> productDetails;
     private final String deliveryAndReturns;
-    private final CollectionData<DetailData> delivery;
-    private final CollectionData<DetailData> returns;
+    private final CollectionData<ShippingData> delivery;
+    private final CollectionData<ShippingData> returns;
 
     ProductData (ProductDataBuilder builder) {
         this.text = builder.text;
@@ -113,11 +112,11 @@ public class ProductData {
         return deliveryAndReturns;
     }
 
-    public CollectionData<DetailData> getDelivery() {
+    public CollectionData<ShippingData> getDelivery() {
         return delivery;
     }
 
-    public CollectionData<DetailData> getReturns() {
+    public CollectionData<ShippingData> getReturns() {
         return returns;
     }
 }
