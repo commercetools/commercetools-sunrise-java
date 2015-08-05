@@ -1,40 +1,25 @@
 package productcatalog.pages;
 
-import common.prices.PriceFinder;
-import common.utils.PriceFormatter;
-import common.utils.Translator;
-import io.sphere.sdk.products.ProductProjection;
-
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 public class ProductListData {
 
-    private final Translator translator;
-    private final PriceFormatter priceFormatter;
-    private final PriceFinder priceFinder;
-
-    private final List<ProductProjection> productList;
     private final String text;
     private final String sale;
-    private final String newx;
+    private final String isNew;
     private final String quickView;
     private final String wishlist;
     private final String moreColors;
+    private final List<ProductThumbnailData> thumbnails;
 
-    public ProductListData(final Translator translator, final PriceFormatter priceFormatter, final PriceFinder priceFinder, final List<ProductProjection> productList,  final String text, final String sale, final String newx, final String quickView, final String wishlist, final String moreColors) {
-        this.translator = translator;
-        this.priceFormatter = priceFormatter;
-        this.priceFinder = priceFinder;
-
-        this.productList = productList;
+    public ProductListData(final String text, final String sale, final String isNew, final String quickView, final String wishlist, final String moreColors, final List<ProductThumbnailData> thumbnails) {
         this.text = text;
         this.sale = sale;
-        this.newx = newx;
+        this.isNew = isNew;
         this.quickView = quickView;
         this.wishlist = wishlist;
         this.moreColors = moreColors;
+        this.thumbnails = thumbnails;
     }
 
     public String getText() {
@@ -46,7 +31,7 @@ public class ProductListData {
     }
 
     public String getNew() {
-        return newx;
+        return isNew;
     }
 
     public String quickView() {
@@ -62,7 +47,6 @@ public class ProductListData {
     }
 
     public List<ProductThumbnailData> getList() {
-        return productList.stream().map(product ->
-                new ProductThumbnailData(translator, priceFormatter, priceFinder, product, product.getMasterVariant())).collect(toList());
+        return thumbnails;
     }
 }
