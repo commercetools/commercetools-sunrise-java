@@ -1,0 +1,13 @@
+{
+  "some":{
+    "unknown":"fallback unknown"
+  },
+  "deep":{
+    "deeper":{
+      "deepest":[
+        "fallback foo",
+        "fallback bar"
+      ]
+    }
+  }
+}
