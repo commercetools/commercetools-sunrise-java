@@ -3,13 +3,14 @@ package productcatalog.pages;
 import common.contexts.AppContext;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
-import io.sphere.sdk.models.Image;
-import io.sphere.sdk.models.LocalizedStrings;
+import io.sphere.sdk.models.LocalizedString;
+import io.sphere.sdk.products.Image;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 public class ProductThumbnailData {
     private final ProductProjection product;
@@ -34,7 +35,7 @@ public class ProductThumbnailData {
     }
 
     public String getDescription() {
-        return product.getDescription().map(this::findSuitableLanguage).orElse("");
+        return Optional.ofNullable(product.getDescription()).map(this::findSuitableLanguage).orElse("");
     }
 
     public String getImage() {
@@ -47,9 +48,9 @@ public class ProductThumbnailData {
                 .orElse("");
     }
 
-    public String findSuitableLanguage(final LocalizedStrings localizedStrings) {
-        return localizedStrings.get(context.user().language())
-                .orElse(localizedStrings.get(context.user().fallbackLanguages())
-                        .orElse(localizedStrings.get(context.project().languages()).orElse("")));
+    public String findSuitableLanguage(final LocalizedString localizedStrings) {
+        return Optional.ofNullable(localizedStrings.get(context.user().language()))
+                .orElse(Optional.ofNullable(localizedStrings.get(context.user().fallbackLanguages()))
+                        .orElse(Optional.ofNullable(localizedStrings.get(context.project().languages())).orElse("")));
     }
 }

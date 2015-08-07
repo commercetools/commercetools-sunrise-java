@@ -3,9 +3,7 @@ package productcatalog.controllers;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.utils.PriceFormatterImpl;
-import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
-import io.sphere.sdk.search.SearchDsl;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.pages.ProductCatalogView;
@@ -33,7 +31,7 @@ public class ProductCatalogController extends SunriseController {
         );
     }
 
-    private SearchDsl<ProductProjection> searchProducts(final int page) {
+    private ProductProjectionSearch searchProducts(final int page) {
         final int offset = (page - 1) * PAGE_SIZE;
         return ProductProjectionSearch.ofCurrent().withOffset(offset).withLimit(PAGE_SIZE);
     }

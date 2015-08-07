@@ -11,6 +11,7 @@ import play.mvc.Result;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.String.*;
 import static java.util.stream.Collectors.joining;
@@ -44,6 +45,7 @@ public class MetricAction extends play.mvc.Action.Simple {
     }
 
     private Integer calculateTotalSize(final List<ReportRawData> rawDatas) {
-        return rawDatas.stream().map(elem -> elem.getHttpResponse().getResponseBody().map(b -> b.length).orElse(0)).reduce(0, (a, b) -> a + b);
+        return rawDatas.stream().map(elem -> Optional.ofNullable(elem.getHttpResponse().getResponseBody())
+                .map(b -> b.length).orElse(0)).reduce(0, (a, b) -> a + b);
     }
 }
