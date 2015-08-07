@@ -39,7 +39,7 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val sphereJvmSdkVersion = "1.0.0-M15"
+lazy val sphereJvmSdkVersion = "1.0.0-M16"
 
 lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   scalaVersion := "2.10.5",
@@ -58,7 +58,9 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   ),
   dependencyOverrides ++= Set (
     "com.google.guava" % "guava" % "18.0",
-    "commons-io" % "commons-io" % "2.4"
+    "commons-io" % "commons-io" % "2.4",
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % "2.6.0",
+    "com.fasterxml.jackson.core" % "jackson-annotations" % "2.6.0"
   )
 )
 
