@@ -64,14 +64,14 @@ public class QueryAllTest {
         return client(totalResults, 0, true);
     }
 
-    private <C> SphereClient client(final int totalResults, final int deviation, final boolean withDelays) {
+    private SphereClient client(final int totalResults, final int deviation, final boolean withDelays) {
         return new SphereClient() {
 
             @SuppressWarnings("unchecked")
             @Override
             public <T> CompletionStage<T> execute(final SphereRequest<T> request) {
-                final QueryDsl<T, C> query = (QueryDsl<T, C>) request;
-                final int offset = query.offset().get().intValue();
+                final QueryDsl query = (QueryDsl) request;
+                final int offset = query.offset().intValue();
                 return CompletableFuture.supplyAsync(() -> {
                     if (withDelays) {
                         try {
