@@ -3,13 +3,14 @@ package productcatalog.controllers;
 import common.cms.CmsPage;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
+import common.pages.*;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
+import productcatalog.models.RichShippingRate;
 import common.utils.Translator;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import io.sphere.sdk.shippingmethods.ShippingMethod;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.pages.*;
@@ -20,12 +21,11 @@ import productcatalog.services.ShippingMethodService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static common.utils.PromiseUtils.combine;
 import static java.util.Locale.GERMAN;
+import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductCatalogController extends SunriseController {
@@ -59,8 +59,13 @@ public class ProductCatalogController extends SunriseController {
                 context().project().languages());
         final PriceFormatter priceFormatter = PriceFormatter.of(context().user().country().toLocale());
         final PriceFinder priceFinder = PriceFinder.of(context().user());
-        return ProductOverviewPageContentAssembler.of(cms, translator, priceFinder, priceFormatter)
-                .assemblePopContent(products);
+
+        final ProductThumbnailDataBuilder thumbnailDataBuilder = ProductThumbnailDataBuilder.of(translator, priceFinder, priceFormatter);
+
+        final String additionalTitle = "";
+        final List<ProductThumbnailData> productList = products.stream().map(thumbnailDataBuilder::build).collect(toList());
+
+        return new ProductOverviewPageContent(additionalTitle, productList);
     }
 
     public F.Promise<Result> pdp(final String slug, final String sku) {
@@ -74,24 +79,31 @@ public class ProductCatalogController extends SunriseController {
     }
 
     private F.Promise<Result> pdpx(final ProductProjection product, final ProductVariant variant) {
-        final F.Promise<List<ProductProjection>> suggestionPromise = productService.getSuggestions(categoryService.getSiblingCategories(product));
-        final F.Promise<List<ShippingMethod>> shippingMethodsPromise = shippingMethodService.getShippingMethods();
+        final F.Promise<List<ProductProjection>> suggestionPromise = productService.getSuggestions(categoryService.getSiblingCategories(product), NUM_SUGGESTIONS);
+        final List<RichShippingRate> shippingRates = shippingMethodService.getShippingRates(context().user().zone());
         final List<Category> breadcrumbs = categoryService.getBreadCrumbCategories(product);
 
-        return combine(suggestionPromise, shippingMethodsPromise, (suggestions, shippingMethods) ->
-                withCms("pdp", cms -> {
-                    final ProductDetailPageContent content = getPageAssembler(cms)
-                            .assemblePdpContent(product, variant, productService.pickNRandom(suggestions, NUM_SUGGESTIONS), shippingMethods, breadcrumbs);
-                    return render(view -> ok(view.productDetailPage(content)));
-                }));
-    }
+        return suggestionPromise.flatMap(suggestions -> withCms("pdp", cms -> {
+            final Translator translator = Translator.of(context().user().language(), context().user().fallbackLanguages(), context().project().languages());
+            final PriceFinder priceFinder = PriceFinder.of(context().user());
+            final PriceFormatter priceFormatter = PriceFormatter.of(GERMAN);
 
-    private ProductDetailPageConentAssembler getPageAssembler(final CmsPage cms) {
-        final Translator translator = Translator.of(context().user().language(), context().user().fallbackLanguages(), context().project().languages());
-        final PriceFinder priceFinder = PriceFinder.of(context().user());
-        final PriceFormatter priceFormatter = PriceFormatter.of(Locale.GERMAN);
+            final ProductThumbnailDataBuilder thumbnailDataBuilder = ProductThumbnailDataBuilder.of(translator, priceFinder, priceFormatter);
+            final ShippingRateDataBuilder shippingRateDataBuilder = ShippingRateDataBuilder.of(priceFormatter);
+            final CategoryLinkDataBuilder categoryLinkDataBuilder = CategoryLinkDataBuilder.of(translator);
 
-        return ProductDetailPageConentAssembler.of(cms, translator, priceFinder, priceFormatter);
+            final String additionalTitle = translator.translate(product.getName());
+            final PdpStaticData staticData = new PdpStaticData(cms);
+            final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataBuilder::build).collect(toList());
+            final List<ImageData> galleryData = variant.getImages().stream().map(ImageData::of).collect(toList());
+            final ProductData productData = ProductDataBuilder.of(translator, priceFinder, priceFormatter).build(product, variant);
+            final List<ShippingRateData> deliveryData = shippingRates.stream().map(shippingRateDataBuilder::build).collect(toList());
+            final List<ProductThumbnailData> suggestionData = suggestions.stream().map(thumbnailDataBuilder::build).collect(toList());
+
+            final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
+
+            return render(view -> ok(view.productDetailPage(content)));
+        }));
     }
 
     private F.Promise<Result> render(final Function<ProductCatalogView, Result> pageRenderer) {
