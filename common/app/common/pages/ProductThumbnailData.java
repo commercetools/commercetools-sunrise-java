@@ -1,4 +1,4 @@
-package productcatalog.pages;
+package common.pages;
 
 public class ProductThumbnailData {
 
