@@ -1,0 +1,35 @@
+package productcatalog.services;
+
+import io.sphere.sdk.models.Reference;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
+import io.sphere.sdk.shippingmethods.ShippingRate;
+import io.sphere.sdk.zones.Zone;
+import org.javamoney.moneta.Money;
+import org.junit.Test;
+import productcatalog.common.ShippingMethodTestData;
+import productcatalog.models.RichShippingRate;
+import productcatalog.models.ShippingMethods;
+
+import javax.money.Monetary;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ShippingMethodServiceTest {
+    private final List<ShippingMethod> shippingMethods = ShippingMethodTestData.of().getShippingMethods();
+    private final ShippingMethodService service = new ShippingMethodService(ShippingMethods.of(shippingMethods));
+
+    @Test
+    public void testGetShippingRates() {
+        final Reference<Zone> europe = Reference.of(Zone.typeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88");
+        final Reference<Zone> usa = Reference.of(Zone.typeId(), "67a107d7-e485-4802-a1bd-a475b4394124");
+        final Reference<Zone> notExistend = Reference.of(Zone.typeId(), "...");
+
+        final RichShippingRate euRate = new RichShippingRate("DHL", ShippingRate.of(Money.of(570, Monetary.getCurrency("EUR"))));
+        final RichShippingRate usRate = new RichShippingRate("DHL", ShippingRate.of(Money.of(990, Monetary.getCurrency("USD"))));
+
+        assertThat(service.getShippingRates(europe)).containsExactly(euRate);
+        assertThat(service.getShippingRates(usa)).containsExactly(usRate);
+        assertThat(service.getShippingRates(notExistend)).isEmpty();
+    }
+}
