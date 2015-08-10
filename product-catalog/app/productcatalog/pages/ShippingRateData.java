@@ -1,13 +1,13 @@
-package common.pages;
+package productcatalog.pages;
 
-public class ShippingData {
+public class ShippingRateData {
 
     private final String shippingMethod;
     private final String zone;
     private final String shippingRate;
     private final String freeAbove;
 
-    public ShippingData(final String shippingMethod, final String zone, final String shippingRate, final String freeAbove) {
+    public ShippingRateData(final String shippingMethod, final String zone, final String shippingRate, final String freeAbove) {
         this. shippingMethod = shippingMethod;
         this.zone = zone;
         this.shippingRate = shippingRate;
