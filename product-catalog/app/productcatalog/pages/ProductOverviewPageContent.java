@@ -1,15 +1,16 @@
 package productcatalog.pages;
 
-import common.cms.CmsPage;
 import common.pages.PageContent;
+import common.pages.ProductThumbnailData;
+
+import java.util.List;
 
 public class ProductOverviewPageContent extends PageContent {
 
     private final String additionalTitle;
-    private final ProductListData productList;
+    private final List<ProductThumbnailData>  productList;
 
-    public ProductOverviewPageContent(final CmsPage cms, final String additionalTitle, final ProductListData productList) {
-        super(cms);
+    public ProductOverviewPageContent(final String additionalTitle, final List<ProductThumbnailData> productList) {
         this.additionalTitle = additionalTitle;
         this.productList = productList;
     }
@@ -19,7 +20,7 @@ public class ProductOverviewPageContent extends PageContent {
         return additionalTitle;
     }
 
-    public ProductListData getProducts() {
+    public List<ProductThumbnailData>  getProducts() {
         return productList;
     }
 }

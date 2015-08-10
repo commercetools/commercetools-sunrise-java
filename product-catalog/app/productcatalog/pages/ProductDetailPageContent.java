@@ -1,42 +1,39 @@
 package productcatalog.pages;
 
-import common.cms.CmsPage;
-import common.pages.ImageData;
-import common.pages.LinkData;
-import common.pages.PageContent;
+import common.pages.*;
 
 import java.util.List;
 
 public class ProductDetailPageContent extends PageContent {
 
     private final String additionalTitle;
-    private final String text;
-    private final List<LinkData> breadcrumb;
+    private final PdpStaticData staticData;
+    private final List<LinkData> breadcrumbs;
     private final List<ImageData> gallery;
-    private final ProductData product;
-    private final ProductListData suggestions;
+    private final ProductData productData;
+    private final List<ShippingRateData> deliveryData;
+    private final List<ProductThumbnailData> suggestions;
 
-    public ProductDetailPageContent(final CmsPage cms, final String additionalTitle, final String text, final List<LinkData> breadcrumb, final List<ImageData> gallery, final ProductData product, final ProductListData suggestions) {
-        super(cms);
+    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<LinkData> breadcrumbs, final List<ImageData> gallery, final ProductData productData, final List<ShippingRateData> deliveryData, final List<ProductThumbnailData> suggestions) {
         this.additionalTitle = additionalTitle;
-        this.text = text;
-        this.breadcrumb = breadcrumb;
+        this.staticData = staticData;
+        this.breadcrumbs = breadcrumbs;
         this.gallery = gallery;
-        this.product = product;
+        this.productData = productData;
+        this.deliveryData = deliveryData;
         this.suggestions = suggestions;
     }
 
-    @Override
+    public PdpStaticData getStatic() {
+        return staticData;
+    }
+
     public String additionalTitle() {
         return additionalTitle;
     }
 
-    public String getText() {
-        return text;
-    }
-
     public List<LinkData> getBreadcrumb() {
-        return breadcrumb;
+        return breadcrumbs;
     }
 
     public List<ImageData> getGallery() {
@@ -44,10 +41,14 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public ProductData getProduct() {
-        return product;
+        return productData;
     }
 
-    public ProductListData getSuggestions() {
+    public List<ProductThumbnailData> getSuggestions() {
         return suggestions;
+    }
+
+    public List<ShippingRateData> getDelivery() {
+        return deliveryData;
     }
 }
