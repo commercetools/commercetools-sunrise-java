@@ -7,8 +7,10 @@ import common.contexts.UserContext;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
+import io.sphere.sdk.zones.Zone;
 import play.libs.F;
 import play.mvc.Result;
 import play.mvc.With;
@@ -32,7 +34,7 @@ public abstract class SunriseController extends ShopController {
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
         // TODO Fill it properly
-        final UserContext userContext = UserContext.of(GERMAN, emptyList(), DE, ZoneId.of("Europe/Berlin"));
+        final UserContext userContext = UserContext.of(DE, GERMAN, emptyList(), ZoneId.of("Europe/Berlin"), Reference.of(Zone.typeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88"));
         this.context = AppContext.of(userContext, controllerDependency.projectContext());
         this.controllerDependency = controllerDependency;
     }
