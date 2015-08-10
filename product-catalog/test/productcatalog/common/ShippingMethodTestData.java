@@ -21,7 +21,7 @@ public class ShippingMethodTestData {
         return new ShippingMethodTestData();
     }
 
-    public List<ShippingMethod> getProducts() {
+    public List<ShippingMethod> getShippingMethods() {
         return queryResult.getResults();
     }
 }
