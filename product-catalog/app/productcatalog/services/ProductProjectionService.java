@@ -41,17 +41,20 @@ public class ProductProjectionService {
                 .findFirst();
     }
 
+    public F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories, final int numSuggestions) {
+        final ProductProjectionQuery productProjectionQuery = ProductProjectionQuery.ofCurrent()
+                .withPredicate(p -> p.categories().isIn(categories));
+
+        return sphere.execute(productProjectionQuery)
+                .map(PagedQueryResult::getResults)
+                .map(results -> pickNRandom(results, numSuggestions));
+    }
+
     private boolean variantHasSku(final ProductVariant variant, final String sku) {
         return variant.getSku().map(variantSku -> variantSku.equals(sku)).orElse(false);
     }
 
-    public F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories) {
-        final ProductProjectionQuery productProjectionQuery =
-                ProductProjectionQuery.ofCurrent().withPredicate(p -> p.categories().isIn(categories));
-        return sphere.execute(productProjectionQuery).map(PagedQueryResult::getResults);
-    }
-
-    public <T> List<T> pickNRandom(final List<T> elements, final int n) {
+    private <T> List<T> pickNRandom(final List<T> elements, final int n) {
         if(elements.size() < n)
             return pickNRandom(elements, elements.size());
 
