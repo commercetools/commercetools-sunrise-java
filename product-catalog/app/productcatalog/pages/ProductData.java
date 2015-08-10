@@ -1,51 +1,30 @@
 package productcatalog.pages;
 
-import common.pages.CollectionData;
 import common.pages.DetailData;
 import common.pages.SelectableData;
-import common.pages.ShippingData;
+
+import java.util.List;
 
 public class ProductData {
-    private static final String SKU_PREFIX = "SUNRISE #";
 
     private final String text;
     private final String sku;
-    private final CollectionData<SelectableData> ratingList;
     private final String description;
-    private final String viewDetailsText;
     private final String price;
     private final String priceOld;
-    private final CollectionData<SelectableData> colorList;
-    private final CollectionData<SelectableData> sizeList;
-    private final String sizeGuideText;
-    private final CollectionData<SelectableData> bagItemList;
-    private final String addToBagText;
-    private final String addToWishlistText;
-    private final String availableText;
-    private final CollectionData<DetailData> productDetails;
-    private final String deliveryAndReturns;
-    private final CollectionData<ShippingData> delivery;
-    private final CollectionData<ShippingData> returns;
+    private final List<SelectableData> colorList;
+    private final List<SelectableData> sizeList;
+    private final List<DetailData> productDetails;
 
-    ProductData (ProductDataBuilder builder) {
-        this.text = builder.text;
-        this.sku = builder.sku;
-        this.ratingList = builder.ratingList;
-        this.description = builder.description;
-        this.viewDetailsText = builder.viewDetailsText;
-        this.price = builder.price;
-        this.priceOld = builder.priceOld;
-        this.colorList = builder.colorList;
-        this.sizeList = builder.sizeList;
-        this.sizeGuideText = builder.sizeGuideText;
-        this.bagItemList = builder.bagItemList;
-        this.addToBagText = builder.addToBagText;
-        this.addToWishlistText = builder.addToWishlistText;
-        this.availableText = builder.availableText;
-        this.productDetails = builder.productDetails;
-        this.deliveryAndReturns = builder.deliveryAndReturns;
-        this.delivery = builder.delivery;
-        this.returns = builder.returns;
+    public ProductData (final String text, final String sku, final String description, final String price, final String priceOld, final List<SelectableData> colorList, final List<SelectableData> sizeList, final List<DetailData> productDetails) {
+        this.text = text;
+        this.sku = sku;
+        this.description = description;
+        this.price = price;
+        this.priceOld = priceOld;
+        this.colorList = colorList;
+        this.sizeList = sizeList;
+        this.productDetails = productDetails;
     }
 
     public String getText() {
@@ -53,19 +32,11 @@ public class ProductData {
     }
 
     public String getSku() {
-        return SKU_PREFIX + sku;
-    }
-
-    public CollectionData<SelectableData> getRating() {
-        return ratingList;
+        return sku;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public String getViewDetails() {
-        return viewDetailsText;
     }
 
     public String getPrice() {
@@ -76,47 +47,15 @@ public class ProductData {
         return priceOld;
     }
 
-    public CollectionData<SelectableData> getColor() {
+    public List<SelectableData> getColor() {
         return colorList;
     }
 
-    public CollectionData<SelectableData> getSize() {
+    public List<SelectableData> getSize() {
         return sizeList;
     }
 
-    public String getSizeGuide() {
-        return sizeGuideText;
-    }
-
-    public CollectionData<SelectableData> getBagItems() {
-        return bagItemList;
-    }
-
-    public String getAddToBag() {
-        return addToBagText;
-    }
-
-    public String getAddToWishlist() {
-        return addToWishlistText;
-    }
-
-    public String getAvailable() {
-        return availableText;
-    }
-
-    public CollectionData<DetailData> getProductDetails() {
+    public List<DetailData> getProductDetails() {
         return productDetails;
-    }
-
-    public String getDeliveryAndReturns() {
-        return deliveryAndReturns;
-    }
-
-    public CollectionData<ShippingData> getDelivery() {
-        return delivery;
-    }
-
-    public CollectionData<ShippingData> getReturns() {
-        return returns;
     }
 }

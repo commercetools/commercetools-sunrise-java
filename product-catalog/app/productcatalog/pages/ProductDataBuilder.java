@@ -1,132 +1,111 @@
 package productcatalog.pages;
 
-import common.pages.CollectionData;
 import common.pages.DetailData;
 import common.pages.SelectableData;
-import common.pages.ShippingData;
+import common.prices.PriceFinder;
+import common.utils.PriceFormatter;
+import common.utils.Translator;
+import io.sphere.sdk.attributes.Attribute;
+import io.sphere.sdk.attributes.AttributeAccess;
+import io.sphere.sdk.models.LocalizedEnumValue;
+import io.sphere.sdk.models.LocalizedStrings;
+import io.sphere.sdk.products.Price;
+import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.ProductVariant;
 
-import static java.util.Collections.emptyList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toList;
 
 public class ProductDataBuilder {
 
-    String text = "";
-    String sku = "";
-    CollectionData<SelectableData> ratingList = new CollectionData<>("", emptyList());
-    String description = "";
-    String viewDetailsText = "";
-    String price = "";
-    String priceOld = "";
-    CollectionData<SelectableData> colorList = new CollectionData<>("", emptyList());
-    CollectionData<SelectableData> sizeList = new CollectionData<>("", emptyList());
-    String sizeGuideText = "";
-    CollectionData<SelectableData> bagItemList = new CollectionData<>("", emptyList());
-    String addToBagText = "";
-    String addToWishlistText = "";
-    String availableText = "";
-    CollectionData<DetailData> productDetails = new CollectionData<>("", emptyList());
-    String deliveryAndReturns = "";
-    CollectionData<ShippingData> delivery = new CollectionData<>("", emptyList());
-    CollectionData<ShippingData> returns = new CollectionData<>("", emptyList());
+    private static final AttributeAccess<String> TEXT_ATTR_ACCESS = AttributeAccess.ofText();
+    private static final AttributeAccess<LocalizedEnumValue> LENUM_ATTR_ACCESS = AttributeAccess.ofLocalizedEnumValue();
+    private static final AttributeAccess<Set<LocalizedStrings>> LENUM_SET_ATTR_ACCESS = AttributeAccess.ofLocalizedStringsSet();
 
-    private ProductDataBuilder() {
+    private final Translator translator;
+    private final PriceFinder priceFinder;
+    private final PriceFormatter priceFormatter;
 
+    private ProductDataBuilder(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
+        this.translator = translator;
+        this.priceFinder = priceFinder;
+        this.priceFormatter = priceFormatter;
     }
 
-    public static ProductDataBuilder of() {
-        return new ProductDataBuilder();
+    public static ProductDataBuilder of(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
+        return new ProductDataBuilder(translator, priceFinder, priceFormatter);
     }
 
-    public ProductDataBuilder withText(final String text) {
-        this.text = text;
-        return this;
+    public ProductData build(final ProductProjection product, final ProductVariant variant) {
+        final Optional<Price> priceOpt = priceFinder.findPrice(variant.getPrices());
+
+        return new ProductData(
+                translator.translate(product.getName()),
+                variant.getSku().orElse(""),
+                product.getDescription().map(translator::translate).orElse(""),
+                priceOpt.map(price -> priceFormatter.format(price.getValue())).orElse(""),
+                getPriceOld(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
+                getColors(product),
+                getSizes(product),
+                getProductDetails(variant)
+        );
     }
 
-    public ProductDataBuilder withSku(final String sku) {
-        this.sku = sku;
-        return this;
+    private List<SelectableData> getColors(final ProductProjection product) {
+        return getColorInAllVariants(product).stream()
+                .map(this::colorToSelectableItem)
+                .collect(toList());
     }
 
-    public ProductDataBuilder withRatingList(final CollectionData<SelectableData> ratingList) {
-        this.ratingList = ratingList;
-        return this;
+    private List<SelectableData> getSizes(final ProductProjection product) {
+        return getSizeInAllVariants(product).stream()
+                .map(this::sizeToSelectableItem)
+                .collect(toList());
     }
 
-    public ProductDataBuilder withDescription(final String description) {
-        this.description = description;
-        return this;
+    private List<DetailData> getProductDetails(final ProductVariant variant) {
+        return variant.getAttribute("details", LENUM_SET_ATTR_ACCESS).orElse(emptySet()).stream()
+                .map(this::localizedStringsToDetailData)
+                .collect(toList());
     }
 
-    public ProductDataBuilder withViewDetailsText(final String viewDetailsText) {
-        this.viewDetailsText = viewDetailsText;
-        return this;
+    private List<Attribute> getColorInAllVariants(final ProductProjection product) {
+        return getAttributeInAllVariants(product, "color");
     }
 
-    public ProductDataBuilder withPrice(final String price) {
-        this.price = price;
-        return this;
+    private List<Attribute> getSizeInAllVariants(final ProductProjection product) {
+        return getAttributeInAllVariants(product, "size");
     }
 
-    public ProductDataBuilder withPriceOld(final String priceOld) {
-        this.priceOld = priceOld;
-        return this;
+    private List<Attribute> getAttributeInAllVariants(final ProductProjection product, final String attributeName) {
+        return product.getAllVariants().stream()
+                .map(variant -> variant.getAttribute(attributeName))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(toList());
     }
 
-    public ProductDataBuilder withColorList(final CollectionData<SelectableData> colorList) {
-        this.colorList = colorList;
-        return this;
+    private SelectableData colorToSelectableItem(final Attribute color) {
+        final String colorLabel = translator.translate(color.getValue(LENUM_ATTR_ACCESS).getLabel());
+        return new SelectableData(colorLabel, color.getName(), "", "", false);
     }
 
-    public ProductDataBuilder withSizeList(final CollectionData<SelectableData> sizeList) {
-        this.sizeList = sizeList;
-        return this;
+    private SelectableData sizeToSelectableItem(final Attribute size) {
+        final String sizeLabel = size.getValue(TEXT_ATTR_ACCESS);
+        return new SelectableData(sizeLabel, sizeLabel, "", "", false);
     }
 
-    public ProductDataBuilder withSizeGuideText(final String sizeGuideText) {
-        this.sizeGuideText = sizeGuideText;
-        return this;
+    private DetailData localizedStringsToDetailData(final LocalizedStrings localizedStrings) {
+        final String label = translator.translate(localizedStrings);
+        return new DetailData(label, "");
     }
 
-    public ProductDataBuilder withBagItemList(final CollectionData<SelectableData> bagItemList) {
-        this.bagItemList = bagItemList;
-        return this;
-    }
-
-    public ProductDataBuilder withAddToBagText(final String addToBagText) {
-        this.addToBagText = addToBagText;
-        return this;
-    }
-
-    public ProductDataBuilder withAddToWishlistText(final String addToWishlistText) {
-        this.addToWishlistText = addToWishlistText;
-        return this;
-    }
-
-    public ProductDataBuilder withAvailableText(final String availableText) {
-        this.availableText = availableText;
-        return this;
-    }
-
-    public ProductDataBuilder withProductDetails(final CollectionData<DetailData> productDetails) {
-        this.productDetails = productDetails;
-        return this;
-    }
-
-    public ProductDataBuilder withDeliveryAndReturns(final String deliveryAndReturns) {
-        this.deliveryAndReturns = deliveryAndReturns;
-        return this;
-    }
-
-    public ProductDataBuilder withDelivery(final CollectionData<ShippingData> delivery) {
-        this.delivery = delivery;
-        return this;
-    }
-
-    public ProductDataBuilder withReturns(final CollectionData<ShippingData> returns) {
-        this.returns = returns;
-        return this;
-    }
-
-    public ProductData build() {
-        return new ProductData(this);
+    private Optional<Price> getPriceOld(final Optional<Price> priceOpt) {
+        return priceOpt.flatMap(price -> price.getDiscounted().map(discountedPrice -> price));
     }
 }
