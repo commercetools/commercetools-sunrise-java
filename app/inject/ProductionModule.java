@@ -6,6 +6,7 @@ import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.client.SphereClient;
+import productcatalog.models.ShippingMethods;
 import play.api.Environment;
 import play.api.inject.Binding;
 import play.api.inject.Module;
@@ -27,7 +28,8 @@ public class ProductionModule extends Module {
                 bind(ProjectContext.class).toProvider(ProjectContextProvider.class).in(Singleton.class),
                 bind(CategoryTree.class).toProvider(CategoryTreeProvider.class).in(Singleton.class),
                 bind(TemplateService.class).toProvider(TemplateServiceProvider.class).in(Singleton.class),
-                bind(CmsService.class).toProvider(CmsServiceProvider.class).in(Singleton.class)
+                bind(CmsService.class).toProvider(CmsServiceProvider.class).in(Singleton.class),
+                bind(ShippingMethods.class).toProvider(ShippingMethodProvider.class).in(Singleton.class)
         );
     }
 }

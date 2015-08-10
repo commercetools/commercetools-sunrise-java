@@ -1,25 +1,28 @@
 package productcatalog.services;
 
-import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.queries.PagedResult;
+import productcatalog.models.RichShippingRate;
+import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
-import io.sphere.sdk.shippingmethods.queries.ShippingMethodQuery;
-import play.libs.F;
+import io.sphere.sdk.zones.Zone;
+import productcatalog.models.ShippingMethods;
 
 import javax.inject.Inject;
 import java.util.List;
 
-public class ShippingMethodService {
+import static java.util.stream.Collectors.toList;
 
-    private final PlayJavaSphereClient sphere;
+public class ShippingMethodService {
+    private final List<ShippingMethod> shippingMethods;
 
     @Inject
-    public ShippingMethodService(final PlayJavaSphereClient sphere) {
-        this.sphere = sphere;
+    public ShippingMethodService(final ShippingMethods shippingMethods) {
+        this.shippingMethods = shippingMethods.shippingMethods;
     }
 
-    public F.Promise<List<ShippingMethod>> getShippingMethods() {
-        return sphere.execute(ShippingMethodQuery.of())
-                .map(PagedResult::getResults);
+    public List<RichShippingRate> getShippingRates(final Reference<Zone> zone) {
+        return shippingMethods.stream()
+                .flatMap(shippingMethod -> shippingMethod.getShippingRatesForZone(zone).stream()
+                        .map(shippingRate -> new RichShippingRate(shippingMethod.getName(), shippingRate)))
+                .collect(toList());
     }
 }
