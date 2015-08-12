@@ -25,8 +25,8 @@ public class ShippingMethodServiceTest {
         final Reference<Zone> usa = Reference.of(Zone.typeId(), "67a107d7-e485-4802-a1bd-a475b4394124");
         final Reference<Zone> notExistend = Reference.of(Zone.typeId(), "...");
 
-        final RichShippingRate euRate = new RichShippingRate("DHL", ShippingRate.of(Money.of(570, Monetary.getCurrency("EUR"))));
-        final RichShippingRate usRate = new RichShippingRate("DHL", ShippingRate.of(Money.of(990, Monetary.getCurrency("USD"))));
+        final RichShippingRate euRate = new RichShippingRate("DHL", ShippingRate.of(Money.of(5.70, Monetary.getCurrency("EUR"))));
+        final RichShippingRate usRate = new RichShippingRate("DHL", ShippingRate.of(Money.of(9.90, Monetary.getCurrency("USD"))));
 
         assertThat(service.getShippingRates(europe)).containsExactly(euRate);
         assertThat(service.getShippingRates(usa)).containsExactly(usRate);
