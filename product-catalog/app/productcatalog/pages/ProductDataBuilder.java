@@ -9,6 +9,7 @@ import io.sphere.sdk.attributes.Attribute;
 import io.sphere.sdk.attributes.AttributeAccess;
 import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.models.LocalizedStrings;
+import io.sphere.sdk.productdiscounts.DiscountedPrice;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -47,7 +48,7 @@ public class ProductDataBuilder {
                 translator.translate(product.getName()),
                 variant.getSku().orElse(""),
                 product.getDescription().map(translator::translate).orElse(""),
-                priceOpt.map(price -> priceFormatter.format(price.getValue())).orElse(""),
+                getPriceCurrent(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
                 getPriceOld(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
                 getColors(product),
                 getSizes(product),
@@ -107,5 +108,11 @@ public class ProductDataBuilder {
 
     private Optional<Price> getPriceOld(final Optional<Price> priceOpt) {
         return priceOpt.flatMap(price -> price.getDiscounted().map(discountedPrice -> price));
+    }
+
+    private Optional<Price> getPriceCurrent(final Optional<Price> priceOpt) {
+        return priceOpt.map(price -> price.getDiscounted().map(DiscountedPrice::getValue)
+                .orElse(price.getValue()))
+                .map(Price::of);
     }
 }
