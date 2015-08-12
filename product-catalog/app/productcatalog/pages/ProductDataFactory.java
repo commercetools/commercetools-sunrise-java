@@ -21,7 +21,7 @@ import java.util.Set;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 
-public class ProductDataBuilder {
+public class ProductDataFactory {
 
     private static final AttributeAccess<String> TEXT_ATTR_ACCESS = AttributeAccess.ofText();
     private static final AttributeAccess<LocalizedEnumValue> LENUM_ATTR_ACCESS = AttributeAccess.ofLocalizedEnumValue();
@@ -31,17 +31,17 @@ public class ProductDataBuilder {
     private final PriceFinder priceFinder;
     private final PriceFormatter priceFormatter;
 
-    private ProductDataBuilder(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
+    private ProductDataFactory(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
         this.translator = translator;
         this.priceFinder = priceFinder;
         this.priceFormatter = priceFormatter;
     }
 
-    public static ProductDataBuilder of(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
-        return new ProductDataBuilder(translator, priceFinder, priceFormatter);
+    public static ProductDataFactory of(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
+        return new ProductDataFactory(translator, priceFinder, priceFormatter);
     }
 
-    public ProductData build(final ProductProjection product, final ProductVariant variant) {
+    public ProductData create(final ProductProjection product, final ProductVariant variant) {
         final Optional<Price> priceOpt = priceFinder.findPrice(variant.getPrices());
 
         return new ProductData(

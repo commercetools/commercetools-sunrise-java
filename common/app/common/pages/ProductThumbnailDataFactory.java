@@ -7,23 +7,23 @@ import io.sphere.sdk.models.Image;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
-public class ProductThumbnailDataBuilder {
+public class ProductThumbnailDataFactory {
 
     private final Translator translator;
     private final PriceFinder priceFinder;
     private final PriceFormatter priceFormatter;
 
-    private ProductThumbnailDataBuilder(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
+    private ProductThumbnailDataFactory(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
         this.translator = translator;
         this.priceFinder = priceFinder;
         this.priceFormatter = priceFormatter;
     }
 
-    public static ProductThumbnailDataBuilder of(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
-        return new ProductThumbnailDataBuilder(translator, priceFinder, priceFormatter);
+    public static ProductThumbnailDataFactory of(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
+        return new ProductThumbnailDataFactory(translator, priceFinder, priceFormatter);
     }
 
-    public ProductThumbnailData build(final ProductProjection product) {
+    public ProductThumbnailData create(final ProductProjection product) {
         final ProductVariant variant = product.getMasterVariant();
         final String text = translator.translate(product.getName());
         final String description = product.getDescription().map(translator::translate).orElse("");

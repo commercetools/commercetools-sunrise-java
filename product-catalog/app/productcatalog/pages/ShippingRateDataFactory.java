@@ -3,19 +3,19 @@ package productcatalog.pages;
 import common.utils.PriceFormatter;
 import productcatalog.models.RichShippingRate;
 
-public class ShippingRateDataBuilder {
+public class ShippingRateDataFactory {
 
     private final PriceFormatter priceFormatter;
 
-    private ShippingRateDataBuilder(final PriceFormatter priceFormatter) {
+    private ShippingRateDataFactory(final PriceFormatter priceFormatter) {
         this.priceFormatter = priceFormatter;
     }
 
-    public static ShippingRateDataBuilder of(final PriceFormatter priceFormatter) {
-        return new ShippingRateDataBuilder(priceFormatter);
+    public static ShippingRateDataFactory of(final PriceFormatter priceFormatter) {
+        return new ShippingRateDataFactory(priceFormatter);
     }
 
-    public ShippingRateData build(final RichShippingRate richShippingRate) {
+    public ShippingRateData create(final RichShippingRate richShippingRate) {
         return new ShippingRateData(
                 richShippingRate.shippingMethodName,
                 "",

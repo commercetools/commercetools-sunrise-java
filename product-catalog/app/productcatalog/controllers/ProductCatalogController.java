@@ -60,10 +60,10 @@ public class ProductCatalogController extends SunriseController {
         final PriceFormatter priceFormatter = PriceFormatter.of(context().user().country().toLocale());
         final PriceFinder priceFinder = PriceFinder.of(context().user());
 
-        final ProductThumbnailDataBuilder thumbnailDataBuilder = ProductThumbnailDataBuilder.of(translator, priceFinder, priceFormatter);
+        final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator, priceFinder, priceFormatter);
 
         final String additionalTitle = "";
-        final List<ProductThumbnailData> productList = products.stream().map(thumbnailDataBuilder::build).collect(toList());
+        final List<ProductThumbnailData> productList = products.stream().map(thumbnailDataFactory::create).collect(toList());
 
         return new ProductOverviewPageContent(additionalTitle, productList);
     }
@@ -88,17 +88,17 @@ public class ProductCatalogController extends SunriseController {
             final PriceFinder priceFinder = PriceFinder.of(context().user());
             final PriceFormatter priceFormatter = PriceFormatter.of(GERMAN);
 
-            final ProductThumbnailDataBuilder thumbnailDataBuilder = ProductThumbnailDataBuilder.of(translator, priceFinder, priceFormatter);
-            final ShippingRateDataBuilder shippingRateDataBuilder = ShippingRateDataBuilder.of(priceFormatter);
-            final CategoryLinkDataBuilder categoryLinkDataBuilder = CategoryLinkDataBuilder.of(translator);
+            final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator, priceFinder, priceFormatter);
+            final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(priceFormatter);
+            final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(translator);
 
             final String additionalTitle = translator.translate(product.getName());
             final PdpStaticData staticData = new PdpStaticData(cms);
-            final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataBuilder::build).collect(toList());
+            final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
             final List<ImageData> galleryData = variant.getImages().stream().map(ImageData::of).collect(toList());
-            final ProductData productData = ProductDataBuilder.of(translator, priceFinder, priceFormatter).build(product, variant);
-            final List<ShippingRateData> deliveryData = shippingRates.stream().map(shippingRateDataBuilder::build).collect(toList());
-            final List<ProductThumbnailData> suggestionData = suggestions.stream().map(thumbnailDataBuilder::build).collect(toList());
+            final ProductData productData = ProductDataFactory.of(translator, priceFinder, priceFormatter).create(product, variant);
+            final List<ShippingRateData> deliveryData = shippingRates.stream().map(shippingRateDataFactory::create).collect(toList());
+            final List<ProductThumbnailData> suggestionData = suggestions.stream().map(thumbnailDataFactory::create).collect(toList());
 
             final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
 
