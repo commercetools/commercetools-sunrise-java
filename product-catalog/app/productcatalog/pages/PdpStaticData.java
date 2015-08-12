@@ -19,7 +19,7 @@ public class PdpStaticData {
         return cms.getOrEmpty("writeFirstRatingText");
     }
 
-    public String getViewDetails() {
+    public String getViewDetailsText() {
         return cms.getOrEmpty("viewDetailsText");
     }
 
@@ -61,6 +61,34 @@ public class PdpStaticData {
 
     public String getReturnsText() {
         return cms.getOrEmpty("returnsText");
+    }
+
+    public String getYouMayLikeText() {
+        return cms.getOrEmpty("youMayLikeText");
+    }
+
+    public String getSaleText() {
+        return cms.getOrEmpty("saleText");
+    }
+
+    public String getNewText() {
+        return cms.getOrEmpty("newText");
+    }
+
+    public String getQuickViewText() {
+        return cms.getOrEmpty("quickViewText");
+    }
+
+    public String getWishlistText() {
+        return cms.getOrEmpty("wishlistText");
+    }
+
+    public String getMoreColorsText() {
+        return cms.getOrEmpty("moreColorsText");
+    }
+
+    public String getReviewsText() {
+        return cms.getOrEmpty("reviewsText");
     }
 
     public SelectableData getColorDefaultItem() {
