@@ -20,7 +20,7 @@ public class ShippingRateDataBuilder {
                 richShippingRate.shippingMethodName,
                 "",
                 priceFormatter.format(richShippingRate.shippingRate.getPrice()),
-                richShippingRate.shippingRate.getFreeAbove().map(amount -> "Free above" + priceFormatter.format(amount)).orElse("")
+                richShippingRate.shippingRate.getFreeAbove().map(priceFormatter::format).orElse("")
         );
     }
 }
