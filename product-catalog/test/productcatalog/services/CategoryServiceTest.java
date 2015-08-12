@@ -23,7 +23,7 @@ public class CategoryServiceTest {
     public void getSiblingCategories() throws ProductNotFoundException {
         final ProductProjection suttonBag = products.stream()
                 .filter(projection -> projection.getId().equals("254f1c0e-67bc-4aa6-992d-9a0fea1846b5"))
-                .findFirst().orElseThrow(ProductNotFoundException::new);
+                .findFirst().get();
 
         final Category clutches = categories.findById("a9c9ebd8-e6ff-41a6-be8e-baa07888c9bd").get();
         final Category satchels = categories.findById("30d79426-a17a-4e63-867e-ec31a1a33416").get();
@@ -39,10 +39,10 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void getBreadCrumbCategories() throws ProductNotFoundException {
+    public void getBreadCrumbCategories() {
         final ProductProjection suttonBag = products.stream()
                 .filter(projection -> projection.getId().equals("254f1c0e-67bc-4aa6-992d-9a0fea1846b5"))
-                .findFirst().orElseThrow(ProductNotFoundException::new);
+                .findFirst().get();
 
         final Category woman = categories.findById("33339d11-0e7b-406b-899b-60f4c34c2948").get();
         final Category bags = categories.findById("32952779-d916-4f2b-b1d5-9efd7f7b9f58").get();
