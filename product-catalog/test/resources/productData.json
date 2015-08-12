@@ -1,0 +1,84 @@
+{
+  "text":"Freizeitjacke Save the Duck oliv",
+  "sku":"M0E20000000DSB9",
+  "description":"german test description",
+  "price":"EUR 100,00",
+  "priceOld":"EUR 129,00",
+  "productDetails":[
+    {
+      "text":"detail de 2",
+      "description":""
+    },
+    {
+      "text":"detail de 1",
+      "description":""
+    }
+  ],
+  "size":[
+    {
+      "text":"XXS",
+      "value":"XXS",
+      "description":"",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"XS",
+      "value":"XS",
+      "description":"",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"S",
+      "value":"S",
+      "description":"",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"M",
+      "value":"M",
+      "description":"",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"L",
+      "value":"L",
+      "description":"",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"XL",
+      "value":"XL",
+      "description":"",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"XXL",
+      "value":"XXL",
+      "description":"",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"XXXL",
+      "value":"XXXL",
+      "description":"",
+      "image":"",
+      "selected":false
+    }
+  ],
+  "color":[
+    {
+      "text":"oliv",
+      "value":"color",
+      "description":"",
+      "image":"",
+      "selected":false
+    }
+  ]
+}
