@@ -34,6 +34,4 @@ public class ProductThumbnailDataBuilder {
 
         return new ProductThumbnailData(text, description, imageUrl, price);
     }
-
-
 }
