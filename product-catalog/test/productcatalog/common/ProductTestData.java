@@ -21,6 +21,10 @@ public class ProductTestData {
         return new ProductTestData();
     }
 
+    public PagedQueryResult<ProductProjection> getQueryResult() {
+        return queryResult;
+    }
+
     public List<ProductProjection> getProducts() {
         return queryResult.getResults();
     }
