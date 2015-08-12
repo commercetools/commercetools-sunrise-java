@@ -1,22 +1,21 @@
 package productcatalog.services;
 
+import common.categories.CategoryUtils;
+import common.products.ProductUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import org.junit.Test;
-import productcatalog.common.CategoryTestData;
-import productcatalog.common.ProductTestData;
 import productcatalog.exceptions.ProductNotFoundException;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CategoryServiceTest {
 
-    private final CategoryTree categories = CategoryTree.of(CategoryTestData.of().getCategories());
-    private final List<ProductProjection> products = ProductTestData.of().getProducts();
+    private final CategoryTree categories = CategoryTree.of(CategoryUtils.getQueryResult("categoryQueryResult.json").getResults());
+    private final List<ProductProjection> products = ProductUtils.getQueryResult("productProjectionQueryResult.json").getResults();
     private final CategoryService categrieService = new CategoryService(categories);
 
     @Test

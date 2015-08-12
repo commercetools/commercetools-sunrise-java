@@ -3,20 +3,21 @@ package productcatalog.services;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.shippingmethods.ShippingRate;
+import io.sphere.sdk.shippingmethods.queries.ShippingMethodQuery;
 import io.sphere.sdk.zones.Zone;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
-import productcatalog.common.ShippingMethodTestData;
 import productcatalog.models.RichShippingRate;
 import productcatalog.models.ShippingMethods;
 
 import javax.money.Monetary;
 import java.util.List;
 
+import static io.sphere.sdk.json.JsonUtils.readObjectFromResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShippingMethodServiceTest {
-    private final List<ShippingMethod> shippingMethods = ShippingMethodTestData.of().getShippingMethods();
+    private final List<ShippingMethod> shippingMethods = readObjectFromResource("shippingMethodQueryResult.json", ShippingMethodQuery.resultTypeReference()).getResults();
     private final ShippingMethodService service = new ShippingMethodService(ShippingMethods.of(shippingMethods));
 
     @Test
