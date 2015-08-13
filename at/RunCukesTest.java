@@ -1,3 +1,4 @@
+import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereClientConfig;
@@ -21,6 +22,7 @@ import java.util.Map;
 import static play.inject.Bindings.bind;
 
 @RunWith(Cucumber.class)
+@CucumberOptions(format={"junit:target/reports/junit/junit.xml", "html:target/reports/html"})
 public class RunCukesTest {
 
     private static Application application;
