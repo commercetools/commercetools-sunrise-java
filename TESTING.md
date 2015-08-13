@@ -9,3 +9,8 @@
 
 * require a started play application
 * sbt task `pt:test` in `pt` folder
+
+### Acceptance Tests
+
+* require a running application and external services
+* sbt task `at:test` in `at` folder

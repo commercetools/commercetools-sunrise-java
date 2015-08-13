@@ -20,6 +20,6 @@ public final class ApplicationController extends SunriseController {
     }
 
     public F.Promise<Result> index() {
-        return F.Promise.pure(ok("Sunrise Home"));
+        return F.Promise.pure(ok("Sunrise Home").as("text/html"));
     }
 }
