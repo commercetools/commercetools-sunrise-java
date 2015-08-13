@@ -1,6 +1,8 @@
-Feature: edit customer data
+Feature: editing customer data
 
   Scenario: editing customer data
-    Given that I login with username:szilvia.szegedi@commercetools.de on "https://sunrise.sphere.io/login"
-  And change my password
-  Then I get informed that my password was change
+    Given that I go to the website: "https://sunrise.sphere.io/login" 
+    And login with username: "sun-test@commercetools.de/pw:sunrise" 
+    And login with password: "sunrise" 
+    And change my password
+    Then I get informed that my password was change
