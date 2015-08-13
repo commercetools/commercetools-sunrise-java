@@ -12,26 +12,26 @@ version := "1.0-SNAPSHOT"
  * SUB-PROJECT DEFINITIONS
  */
 
-lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;test->test;it->it"
+lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;test->test;it->it;pt->pt"
 
 lazy val `sphere-sunrise` = (project in file("."))
-  .enablePlugins(PlayJava).configs(IntegrationTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
   .dependsOn(commonWithTests, `product-catalog`, `setup-widget`)
   .aggregate(common, `product-catalog`, `setup-widget`, `move-to-sdk`)
 
 lazy val common = project
-  .enablePlugins(PlayJava).configs(IntegrationTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
   .dependsOn(`move-to-sdk`)
 
 lazy val `product-catalog` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
   .dependsOn(commonWithTests)
 
 lazy val `setup-widget` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
 
 lazy val `move-to-sdk` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
 
 /**
  * COMMON SETTINGS
@@ -65,21 +65,25 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
 /**
  * TEST SETTINGS
  */
+lazy val PlayTest = config("pt") extend(Test)
 
-lazy val testScopes = "test,it"
+lazy val testScopes = "test,it,pt"
 
-lazy val testSettings = Defaults.itSettings ++ Seq (
-  javaSource in IntegrationTest := baseDirectory.value / "it",
-  scalaSource in IntegrationTest := baseDirectory.value / "it",
-  resourceDirectory in IntegrationTest := baseDirectory.value / "it/resources",
+lazy val testSettings = Defaults.itSettings ++ inConfig(PlayTest)(Defaults.testSettings) ++ testDirConfigs(IntegrationTest, "it") ++ testDirConfigs(PlayTest, "pt") ++ Seq (
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
   libraryDependencies ++= Seq (
     "org.assertj" % "assertj-core" % "3.0.0" % testScopes,
-    PlayImport.component("play-test") % "it"
+    PlayImport.component("play-test") % "it,pt"
   ),
   dependencyOverrides ++= Set (
     "junit" % "junit" % "4.12" % testScopes
   )
+)
+
+def testDirConfigs(config: Configuration, folderName: String) = Seq(
+  javaSource in config := baseDirectory.value / folderName,
+    scalaSource in config := baseDirectory.value / folderName,
+    resourceDirectory in config := baseDirectory.value / s"$folderName/resources"
 )
 
 /**
