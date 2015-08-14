@@ -4,7 +4,8 @@
     </head>
     <body>
         <h1>{{message}}</h1>
-        <h2>{{unknown}}</h2>
+        <h2>{{some.unknown}}</h2>
         <p>{{>partial}} partial</p>
+        <ul>{{#each deep.deeper.deepest}}<li>{{this}}</li>{{/each}}</ul>
     </body>
 </html>
