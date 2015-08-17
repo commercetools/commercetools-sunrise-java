@@ -16,6 +16,7 @@ import java.util.*;
 public class ProductProjectionService {
 
     private final PlayJavaSphereClient sphere;
+    private static final Random RANDOM = new Random();
 
     @Inject
     public ProductProjectionService(final PlayJavaSphereClient sphere) {
@@ -55,13 +56,15 @@ public class ProductProjectionService {
     }
 
     private <T> List<T> pickNRandom(final List<T> elements, final int n) {
+        return pickNRandom(RANDOM, elements, n);
+    }
+
+    private <T> List<T> pickNRandom(final Random random, final List<T> elements, final int n) {
         if(elements.size() < n) {
             return pickNRandom(elements, elements.size());
         }
 
-        final List<T> picked = new ArrayList<>();
-        final Random random = new Random();
-
+        final List<T> picked = new ArrayList<>(n);
         for(int i = 0; i < n; i++) {
             final int index = random.nextInt(elements.size());
             picked.add(elements.get(index));
