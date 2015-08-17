@@ -10,10 +10,11 @@ import java.nio.charset.StandardCharsets;
 
 public class JsonUtils {
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     public static JsonNode readJsonNodeFromResource(final String resourcePath) throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
         try(final InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath)) {
-            return mapper.readTree(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8.name()));
+            return MAPPER.readTree(new InputStreamReader(resourceAsStream, StandardCharsets.UTF_8.name()));
         }
     }
 }
