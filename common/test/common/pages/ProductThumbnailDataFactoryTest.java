@@ -1,4 +1,4 @@
-package productcatalog.pages;
+package common.pages;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.pages.ProductThumbnailData;
