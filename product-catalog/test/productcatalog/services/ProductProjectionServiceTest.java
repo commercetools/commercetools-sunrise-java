@@ -20,7 +20,7 @@ public class ProductProjectionServiceTest {
     private static final int DEFAULT_TIMEOUT = 1000;
 
     @Test
-    public void testFindVariantBySku() throws Exception {
+    public void findVariantBySku() throws Exception {
         final ProductProjectionService service = new ProductProjectionService(null);
         final ProductProjection product = JsonUtils.readObjectFromResource("product.json", ProductProjection.typeReference());
         final String masterSku = "M0E20000000DSB9";
@@ -32,7 +32,7 @@ public class ProductProjectionServiceTest {
     }
 
     @Test
-    public void testGetSuggestions() {
+    public void getSuggestions() {
         final PlayJavaSphereClient sphereClient = getSphereClientReturningAllProducts();
         final ProductProjectionService service = new ProductProjectionService(sphereClient);
         final List<Category> categories = CategoryUtils.getQueryResult("categoryQueryResult.json").getResults();

@@ -53,7 +53,7 @@ public class ProductDetailPageContentTest {
     private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
 
     @Test
-    public void testStaticJson() throws IOException {
+    public void staticJson() throws IOException {
         final CmsPage cms = (messageKey, args) -> Optional.of(messageKey);
         final PdpStaticData pdpStaticData = new PdpStaticData(cms, BagItemDataFactory.of().create(100), new RatingData(cms));
 
@@ -64,7 +64,7 @@ public class ProductDetailPageContentTest {
     }
 
     @Test
-    public void testBreadcrumbJson() throws IOException {
+    public void breadcrumbJson() throws IOException {
         final Category woman = categories.findById("33339d11-0e7b-406b-899b-60f4c34c2948").get();
         final Category bags = categories.findById("32952779-d916-4f2b-b1d5-9efd7f7b9f58").get();
         final Category handBags = categories.findById("9a584ee8-a45a-44e8-b9ec-e11439084687").get();
@@ -79,7 +79,7 @@ public class ProductDetailPageContentTest {
     }
 
     @Test
-    public void testGalleryJson() throws IOException {
+    public void galleryJson() throws IOException {
         final ImageData firstImage = ImageData.of(Image.of("firstImage", ImageDimensions.of(100, 200)));
         final ImageData secondImage = ImageData.of(Image.of("secondImage", ImageDimensions.of(200, 300)));
         final ImageData thirdImage = ImageData.of(Image.of("thirdImage", ImageDimensions.of(300, 400)));
@@ -92,7 +92,7 @@ public class ProductDetailPageContentTest {
     }
 
     @Test
-    public void testProductJson() throws IOException {
+    public void productJson() throws IOException {
         final ProductProjection product = readObjectFromResource("product.json", ProductProjection.typeReference());
         final ProductVariant variant = product.getMasterVariant();
         final ProductData productData = ProductDataFactory.of(translator, priceFinder, priceFormatter).create(product, variant);
@@ -104,7 +104,7 @@ public class ProductDetailPageContentTest {
     }
 
     @Test
-    public void testDeliveryJson() throws IOException {
+    public void deliveryJson() throws IOException {
         final ShopShippingRate dhl = new ShopShippingRate("DHL", ShippingRate.of(Money.of(10, "EUR")));
         final ShopShippingRate dhlFreeAbove = new ShopShippingRate("DHL", ShippingRate.of(Money.of(10, "EUR"), Money.of(50, "EUR")));
         final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(priceFormatter);
@@ -117,7 +117,7 @@ public class ProductDetailPageContentTest {
     }
 
     @Test
-    public void testSuggestionJson() throws IOException {
+    public void suggestionJson() throws IOException {
         final ProductProjection selma = getProductById(products, "4f643a44-5bed-415e-ae60-64c46bfb26f5");
         final ProductProjection dkny = getProductById(products, "a3f4588e-fcfe-41de-bd09-a071d76d697d");
         final ProductProjection miabag = getProductById(products, "dc9a4460-491c-48b4-bcf6-1d802bb7e164");

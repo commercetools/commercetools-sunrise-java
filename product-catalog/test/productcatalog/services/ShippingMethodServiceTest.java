@@ -7,8 +7,8 @@ import io.sphere.sdk.shippingmethods.queries.ShippingMethodQuery;
 import io.sphere.sdk.zones.Zone;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
-import productcatalog.models.ShopShippingRate;
 import productcatalog.models.ShippingMethods;
+import productcatalog.models.ShopShippingRate;
 
 import javax.money.Monetary;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ShippingMethodServiceTest {
     private final ShippingMethodService service = new ShippingMethodService(ShippingMethods.of(shippingMethods));
 
     @Test
-    public void testGetShippingRates() {
+    public void getShippingRates() {
         final Reference<Zone> europe = Reference.of(Zone.typeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88");
         final Reference<Zone> usa = Reference.of(Zone.typeId(), "67a107d7-e485-4802-a1bd-a475b4394124");
         final Reference<Zone> notExistend = Reference.of(Zone.typeId(), "...");
