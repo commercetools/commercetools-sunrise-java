@@ -12,7 +12,7 @@ public class BagItemDataFactory {
     private BagItemDataFactory() {
 
     }
-    
+
     public static BagItemDataFactory of() {
         return new BagItemDataFactory();
     }

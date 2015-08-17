@@ -6,13 +6,13 @@ import common.controllers.SunriseController;
 import common.pages.*;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
-import productcatalog.models.RichShippingRate;
 import common.utils.Translator;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.libs.F;
 import play.mvc.Result;
+import productcatalog.models.RichShippingRate;
 import productcatalog.pages.*;
 import productcatalog.services.CategoryService;
 import productcatalog.services.ProductProjectionService;
@@ -93,7 +93,7 @@ public class ProductCatalogController extends SunriseController {
             final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(translator);
 
             final String additionalTitle = translator.translate(product.getName());
-            final PdpStaticData staticData = new PdpStaticData(cms);
+            final PdpStaticData staticData = new PdpStaticData(cms, BagItemDataFactory.of().create(100), new RatingData(cms));
             final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
             final List<ImageData> galleryData = variant.getImages().stream().map(ImageData::of).collect(toList());
             final ProductData productData = ProductDataFactory.of(translator, priceFinder, priceFormatter).create(product, variant);

@@ -1,18 +1,23 @@
 package productcatalog.pages;
 
 import common.cms.CmsPage;
-import common.pages.SelectableData;
 import common.pages.BagItemData;
 import common.pages.RatingData;
+import common.pages.SelectableData;
 
 import java.util.List;
 
 public class PdpStaticData {
 
+    private final List<SelectableData> bagItems;
+    private final List<SelectableData> rating;
+
     private final CmsPage cms;
 
-    public PdpStaticData(final CmsPage cms) {
+    public PdpStaticData(final CmsPage cms, final BagItemData bagItems, final RatingData rating) {
         this.cms = cms;
+        this.bagItems = bagItems.getBagItems();
+        this.rating = rating.getRating();
     }
 
     public String getRatingText() {
@@ -100,10 +105,10 @@ public class PdpStaticData {
     }
 
     public List<SelectableData> getRating() {
-        return (new RatingData(cms)).getRating();
+        return rating;
     }
 
     public List<SelectableData> getBagItems() {
-        return (new BagItemData(100)).getBagItems();
+        return bagItems;
     }
 }
