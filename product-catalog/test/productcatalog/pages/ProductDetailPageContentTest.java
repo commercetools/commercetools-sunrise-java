@@ -55,7 +55,7 @@ public class ProductDetailPageContentTest {
     @Test
     public void staticJson() throws IOException {
         final CmsPage cms = (messageKey, args) -> Optional.of(messageKey);
-        final PdpStaticData pdpStaticData = new PdpStaticData(cms, BagItemDataFactory.of().create(100), new RatingData(cms));
+        final PdpStaticData pdpStaticData = new PdpStaticData(cms, BagItemDataFactory.of().create(100), RatingDataFactory.of(cms).create());
 
         final JsonNode expected = readJsonNodeFromResource("pdpStaticData.json");
         final JsonNode result = toJsonNode(pdpStaticData);

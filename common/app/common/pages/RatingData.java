@@ -1,25 +1,17 @@
 package common.pages;
 
-import common.cms.CmsPage;
 import io.sphere.sdk.models.Base;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
-
 public class RatingData extends Base {
-    private final CmsPage cms;
+    private final List<SelectableData> rating;
 
-    public RatingData(final CmsPage cms) {
-        this.cms = cms;
+    public  RatingData(final List<SelectableData> rating) {
+        this.rating = rating;
     }
 
     public List<SelectableData> getRating() {
-        return asList(
-                new SelectableData("5 Stars", "5", cms.getOrEmpty("ratingFiveStarText"), "", false),
-                new SelectableData("4 Stars", "4", cms.getOrEmpty("ratingFourStarText"), "", false),
-                new SelectableData("3 Stars", "3", cms.getOrEmpty("ratingThreeStarText"), "", false),
-                new SelectableData("2 Stars", "2", cms.getOrEmpty("ratingTwoStarText"), "", false),
-                new SelectableData("1 Stars", "1", cms.getOrEmpty("ratingOneStarText"), "", false));
+        return rating;
     }
 }
