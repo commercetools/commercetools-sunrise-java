@@ -55,14 +55,16 @@ public class ProductProjectionService {
     }
 
     private <T> List<T> pickNRandom(final List<T> elements, final int n) {
-        if(elements.size() < n)
+        if(elements.size() < n) {
             return pickNRandom(elements, elements.size());
+        }
 
         final List<T> picked = new ArrayList<>();
         final Random random = new Random();
 
-        for(int i = 0; i < n; i++)
+        for(int i = 0; i < n; i++) {
             pick(elements, picked, random.nextInt(elements.size()));
+        }
 
         return picked;
     }
