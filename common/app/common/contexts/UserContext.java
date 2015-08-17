@@ -35,7 +35,7 @@ public class UserContext {
         this.channel = Optional.ofNullable(channel);
     }
 
-    public static UserContext of( final CountryCode country, final Locale language, final List<Locale> fallbackLanguages, final ZoneId zoneId, final Reference<Zone> zone) {
+    public static UserContext of(final CountryCode country, final Locale language, final List<Locale> fallbackLanguages, final ZoneId zoneId, final Reference<Zone> zone) {
         return new UserContext(country, language, fallbackLanguages, zoneId, zone, null, null);
     }
 
