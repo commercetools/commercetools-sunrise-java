@@ -33,7 +33,16 @@ public class ProductProjectionServiceTest {
 
     @Test
     public void testGetSuggestions() {
-        final PlayJavaSphereClient sphereClient = new PlayJavaSphereClient() {
+        final PlayJavaSphereClient sphereClient = getSphereClientReturningAllProducts();
+        final ProductProjectionService service = new ProductProjectionService(sphereClient);
+        final List<Category> categories = CategoryUtils.getQueryResult("categoryQueryResult.json").getResults();
+
+        assertThat(service.getSuggestions(categories, 4).get(DEFAULT_TIMEOUT)).hasSize(4).doesNotHaveDuplicates();
+        assertThat(service.getSuggestions(categories, 5).get(DEFAULT_TIMEOUT)).hasSize(5).doesNotHaveDuplicates();
+    }
+
+    private PlayJavaSphereClient getSphereClientReturningAllProducts() {
+        return new PlayJavaSphereClient() {
             @Override
             public void close() {
 
@@ -46,10 +55,5 @@ public class ProductProjectionServiceTest {
                 return (F.Promise<T>) F.Promise.pure(queryResult);
             }
         };
-        final ProductProjectionService service = new ProductProjectionService(sphereClient);
-        final List<Category> categories = CategoryUtils.getQueryResult("categoryQueryResult.json").getResults();
-
-        assertThat(service.getSuggestions(categories, 4).get(DEFAULT_TIMEOUT)).hasSize(4).doesNotHaveDuplicates();
-        assertThat(service.getSuggestions(categories, 5).get(DEFAULT_TIMEOUT)).hasSize(5).doesNotHaveDuplicates();
     }
 }
