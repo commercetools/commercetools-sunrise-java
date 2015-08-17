@@ -31,7 +31,7 @@ public class BagItemDataFactory {
         final List<SelectableData> bagItems = new ArrayList<>(numItems);
         bagItems.add(bagItemDefaultItem());
 
-        for(int i = 0; i < (numItems - 1); i++) {
+        for(int i = 2; i <= numItems; i++) {
             bagItems.add(this.bagItemToSelectableItem(i));
         }
 

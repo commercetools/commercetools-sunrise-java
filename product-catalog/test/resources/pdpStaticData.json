@@ -762,6 +762,13 @@
       "description":"",
       "image":"",
       "selected":false
+    },
+    {
+      "text":"100",
+      "value":"",
+      "description":"",
+      "image":"",
+      "selected":false
     }
   ]
 }
