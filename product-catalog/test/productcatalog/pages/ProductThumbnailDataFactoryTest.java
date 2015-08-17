@@ -10,11 +10,9 @@ import io.sphere.sdk.products.ProductProjection;
 import org.junit.Test;
 
 import javax.money.Monetary;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static common.products.ProductUtils.getQueryResult;
 import static io.sphere.sdk.json.JsonUtils.readObjectFromResource;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,7 +21,6 @@ public class ProductThumbnailDataFactoryTest {
     private final Translator translator = Translator.of(Locale.GERMAN, emptyList(), emptyList());
     private final PriceFinder priceFinder = PriceFinder.of(Monetary.getCurrency("EUR"), CountryCode.DE, Optional.empty(), Optional.empty());
     private final PriceFormatter priceFormatter = PriceFormatter.of(Locale.GERMAN);
-    private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
 
     @Test
     public void create() {
