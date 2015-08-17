@@ -1,31 +1,20 @@
 package common.pages;
 
 import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
-
+/**
+ * Represents a list of selectable items to select the quantity for a LineItem.
+ * The Bag is thereby the equivalent to a Cart.
+ */
 public class BagItemData {
 
-    private final int numItems;
+    private final List<SelectableData> bagItems;
 
-    public BagItemData(final int numItems) {
-        this.numItems = numItems;
+    public BagItemData(final List<SelectableData> bagItems) {
+        this.bagItems = bagItems;
     }
 
     public List<SelectableData> getBagItems() {
-        final Stream<SelectableData> defaultItemStream = Stream.of(bagItemDefaultItem());
-        final Stream<SelectableData> bla = IntStream.range(2, numItems).mapToObj(this::bagItemToSelectableItem);
-
-        return Stream.concat(defaultItemStream, bla).collect(toList());
-    }
-
-    private SelectableData bagItemDefaultItem() {
-        return new SelectableData("1", "", "", "", true);
-    }
-
-    private SelectableData bagItemToSelectableItem(final int number) {
-        return new SelectableData(Integer.toString(number), "", "", "", false);
+        return bagItems;
     }
 }
