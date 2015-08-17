@@ -10,6 +10,8 @@ import productcatalog.models.ShippingMethods;
 import play.api.Environment;
 import play.api.inject.Binding;
 import play.api.inject.Module;
+import productcatalog.services.CategoryService;
+import productcatalog.services.CategoryServiceImpl;
 import scala.collection.Seq;
 
 import javax.inject.Singleton;
@@ -29,7 +31,8 @@ public class ProductionModule extends Module {
                 bind(CategoryTree.class).toProvider(CategoryTreeProvider.class).in(Singleton.class),
                 bind(TemplateService.class).toProvider(TemplateServiceProvider.class).in(Singleton.class),
                 bind(CmsService.class).toProvider(CmsServiceProvider.class).in(Singleton.class),
-                bind(ShippingMethods.class).toProvider(ShippingMethodProvider.class).in(Singleton.class)
+                bind(ShippingMethods.class).toProvider(ShippingMethodProvider.class).in(Singleton.class),
+                bind(CategoryService.class).toProvider(CategoryServiceProvider.class).in(Singleton.class)
         );
     }
 }

@@ -12,11 +12,11 @@ import static common.products.ProductUtils.getProductById;
 import static common.products.ProductUtils.getQueryResult;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CategoryServiceTest {
+public class CategoryServiceImplTest {
 
     private final CategoryTree categories = CategoryTree.of(CategoryUtils.getQueryResult("categoryQueryResult.json").getResults());
     private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
-    private final CategoryService categrieService = new CategoryService(categories);
+    private final CategoryService categrieService = new CategoryServiceImpl(categories);
 
     @Test
     public void getSiblingCategories() throws Exception {
