@@ -35,7 +35,7 @@ public class TemplateServiceProvider implements Provider<TemplateService> {
                     } else if ("file".equals(type)) {
                         return new FileTemplateLoader(path);
                     } else {
-                        throw new RuntimeException("cannot create template loader for " + loaderConfig);
+                        throw new RuntimeException("cannot build template loader for " + loaderConfig);
                     }
                 })
                 .collect(toList());
