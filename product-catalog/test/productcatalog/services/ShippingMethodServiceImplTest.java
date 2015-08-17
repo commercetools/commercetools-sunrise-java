@@ -16,9 +16,9 @@ import java.util.List;
 import static io.sphere.sdk.json.JsonUtils.readObjectFromResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ShippingMethodServiceTest {
+public class ShippingMethodServiceImplTest {
     private final List<ShippingMethod> shippingMethods = readObjectFromResource("shippingMethodQueryResult.json", ShippingMethodQuery.resultTypeReference()).getResults();
-    private final ShippingMethodService service = new ShippingMethodService(ShippingMethods.of(shippingMethods));
+    private final ShippingMethodService service = new ShippingMethodServiceImpl(ShippingMethods.of(shippingMethods));
 
     @Test
     public void getShippingRates() {

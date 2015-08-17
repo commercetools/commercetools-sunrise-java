@@ -11,18 +11,12 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class ShippingMethodService {
-    private final List<ShippingMethod> shippingMethods;
+public interface ShippingMethodService {
 
-    @Inject
-    public ShippingMethodService(final ShippingMethods shippingMethods) {
-        this.shippingMethods = shippingMethods.shippingMethods;
-    }
-
-    public List<ShopShippingRate> getShippingRates(final Reference<Zone> zone) {
-        return shippingMethods.stream()
-                .flatMap(shippingMethod -> shippingMethod.getShippingRatesForZone(zone).stream()
-                        .map(shippingRate -> new ShopShippingRate(shippingMethod.getName(), shippingRate)))
-                .collect(toList());
-    }
+    /**
+     * Gets all shipping rates available for a zone
+     * @param zone the zone
+     * @return the list of shipping rates
+     * */
+    public List<ShopShippingRate> getShippingRates(final Reference<Zone> zone);
 }

@@ -26,7 +26,7 @@ public class ShippingMethodProvider implements Provider<ShippingMethods> {
     public ShippingMethods get() {
         try {
             final List<ShippingMethod> shippingMethods = client.execute(ShippingMethodQuery.of()).toCompletableFuture().get().getResults();
-            Logger.debug("Provide"  + shippingMethods.size() + " ShippingMethods");
+            Logger.debug("Provide "  + shippingMethods.size() + " ShippingMethods");
             return ShippingMethods.of(shippingMethods);
         } catch (InterruptedException | ExecutionException e) {
             throw new SunriseInitializationException("Could not fetch shippingMethods", e);
