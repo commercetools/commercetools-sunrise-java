@@ -55,10 +55,9 @@ public class ProductCatalogController extends SunriseController {
     }
 
     private ProductOverviewPageContent getPopPageData(final CmsPage cms, final List<ProductProjection> products) {
-        final Translator translator = Translator.of(context().user().language(), context().user().fallbackLanguages(),
-                context().project().languages());
-        final PriceFormatter priceFormatter = PriceFormatter.of(context().user().country().toLocale());
-        final PriceFinder priceFinder = PriceFinder.of(context().user());
+        final Translator translator = context().translator();
+        final PriceFormatter priceFormatter = context().user().priceFormatter();
+        final PriceFinder priceFinder = context().user().priceFinder();
 
         final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator, priceFinder, priceFormatter);
 
@@ -84,9 +83,9 @@ public class ProductCatalogController extends SunriseController {
         final List<Category> breadcrumbs = categoryService.getBreadCrumbCategories(product);
 
         return suggestionPromise.flatMap(suggestions -> withCms("pdp", cms -> {
-            final Translator translator = Translator.of(context().user().language(), context().user().fallbackLanguages(), context().project().languages());
-            final PriceFinder priceFinder = PriceFinder.of(context().user());
-            final PriceFormatter priceFormatter = PriceFormatter.of(GERMAN);
+            final Translator translator = context().translator();
+            final PriceFormatter priceFormatter = context().user().priceFormatter();
+            final PriceFinder priceFinder = context().user().priceFinder();
 
             final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator, priceFinder, priceFormatter);
             final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(priceFormatter);
