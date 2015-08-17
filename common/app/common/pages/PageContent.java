@@ -1,6 +1,8 @@
 package common.pages;
 
-public abstract class PageContent {
+import io.sphere.sdk.models.Base;
+
+public abstract class PageContent extends Base {
 
     public abstract String additionalTitle();
 }

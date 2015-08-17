@@ -2,10 +2,11 @@ package productcatalog.pages;
 
 import common.pages.DetailData;
 import common.pages.SelectableData;
+import io.sphere.sdk.models.Base;
 
 import java.util.List;
 
-public class ProductData {
+public class ProductData extends Base {
 
     private final String text;
     private final String sku;

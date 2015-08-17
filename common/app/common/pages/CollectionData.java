@@ -1,8 +1,10 @@
 package common.pages;
 
+import io.sphere.sdk.models.Base;
+
 import java.util.List;
 
-public class CollectionData<T> {
+public class CollectionData<T> extends Base {
     private final String text;
     private final List<T> list;
 

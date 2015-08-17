@@ -4,10 +4,11 @@ import common.cms.CmsPage;
 import common.pages.BagItemData;
 import common.pages.RatingData;
 import common.pages.SelectableData;
+import io.sphere.sdk.models.Base;
 
 import java.util.List;
 
-public class PdpStaticData {
+public class PdpStaticData extends Base {
 
     private final List<SelectableData> bagItems;
     private final List<SelectableData> rating;

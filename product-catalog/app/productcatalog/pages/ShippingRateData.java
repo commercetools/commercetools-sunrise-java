@@ -1,6 +1,8 @@
 package productcatalog.pages;
 
-public class ShippingRateData {
+import io.sphere.sdk.models.Base;
+
+public class ShippingRateData extends Base {
 
     private final String shippingMethod;
     private final String zone;

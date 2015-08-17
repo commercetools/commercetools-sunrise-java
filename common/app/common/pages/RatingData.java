@@ -1,12 +1,13 @@
 package common.pages;
 
 import common.cms.CmsPage;
+import io.sphere.sdk.models.Base;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
 
-public class RatingData {
+public class RatingData extends Base {
     private final CmsPage cms;
 
     public RatingData(final CmsPage cms) {

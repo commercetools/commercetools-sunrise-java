@@ -1,6 +1,8 @@
 package common.pages;
 
-public class DetailData {
+import io.sphere.sdk.models.Base;
+
+public class DetailData extends Base {
 
     private final String text;
     private final String description;

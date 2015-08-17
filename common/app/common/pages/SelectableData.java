@@ -1,6 +1,8 @@
 package common.pages;
 
-public class SelectableData {
+import io.sphere.sdk.models.Base;
+
+public class SelectableData extends Base {
     private final String text;
     private final String value;
     private final String description;

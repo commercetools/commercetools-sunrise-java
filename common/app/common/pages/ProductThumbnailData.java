@@ -1,6 +1,8 @@
 package common.pages;
 
-public class ProductThumbnailData {
+import io.sphere.sdk.models.Base;
+
+public class ProductThumbnailData extends Base {
 
     private final String text;
     private final String description;
