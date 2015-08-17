@@ -1,8 +1,6 @@
 package common.pages;
 
 import com.neovisionaries.i18n.CountryCode;
-import common.pages.ProductThumbnailData;
-import common.pages.ProductThumbnailDataFactory;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import common.utils.Translator;
