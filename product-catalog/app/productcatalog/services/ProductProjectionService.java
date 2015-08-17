@@ -13,64 +13,39 @@ import play.libs.F;
 import javax.inject.Inject;
 import java.util.*;
 
-public class ProductProjectionService {
+public interface ProductProjectionService {
 
-    private final PlayJavaSphereClient sphere;
-    private static final Random RANDOM = new Random();
+    /**
+     * Gets a list of Products from a PagedQueryResult
+     * @param page the page
+     * @param pageSize number of products per page
+     * @return A Promise of the list of ProductProjections
+     */
+    public F.Promise<List<ProductProjection>> searchProducts(final int page, final int pageSize);
 
-    @Inject
-    public ProductProjectionService(final PlayJavaSphereClient sphere) {
-        this.sphere = sphere;
-    }
+    /**
+     * Gets a product, uniquely identified by a locale and a slug
+     * @param locale the locale in which you provide the slug
+     * @param slug the slug
+     * @return A Promise of an optionally found ProductProjection
+     */
+    public F.Promise<Optional<ProductProjection>> searchProductBySlug(final Locale locale, final String slug);
 
-    public F.Promise<List<ProductProjection>> searchProducts(final int page, final int pageSize) {
-        final int offset = (page - 1) * pageSize;
-        return sphere.execute(ProductProjectionSearch.ofCurrent()
-                .withOffset(offset)
-                .withLimit(pageSize))
-                .map(PagedResult::getResults);
-    }
+    /**
+     * Finds a variant of a given product by sku or None if nothing was found
+     * @param product the product to find the variant from
+     * @param sku the sku of the variant
+     * @return A Promise of an optionally founf variant
+     */
+    public Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku);
 
-    public F.Promise<Optional<ProductProjection>> searchProductBySlug(final Locale locale, final String slug) {
-        return sphere.execute(ProductProjectionQuery.ofCurrent().bySlug(locale, slug))
-                .map(PagedQueryResult::head);
-    }
-
-    public Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku) {
-        return product.getAllVariants().stream()
-                .filter(variant -> variantHasSku(variant, sku))
-                .findFirst();
-    }
-
-    public F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories, final int numSuggestions) {
-        final ProductProjectionQuery productProjectionQuery = ProductProjectionQuery.ofCurrent()
-                .withPredicate(p -> p.categories().isIn(categories));
-
-        return sphere.execute(productProjectionQuery)
-                .map(PagedQueryResult::getResults)
-                .map(results -> pickNRandom(results, numSuggestions));
-    }
-
-    private boolean variantHasSku(final ProductVariant variant, final String sku) {
-        return variant.getSku().map(variantSku -> variantSku.equals(sku)).orElse(false);
-    }
-
-    private <T> List<T> pickNRandom(final List<T> elements, final int n) {
-        return pickNRandom(RANDOM, elements, n);
-    }
-
-    private <T> List<T> pickNRandom(final Random random, final List<T> elements, final int n) {
-        if(elements.size() < n) {
-            return pickNRandom(elements, elements.size());
-        }
-
-        final List<T> picked = new ArrayList<>(n);
-        for(int i = 0; i < n; i++) {
-            final int index = random.nextInt(elements.size());
-            picked.add(elements.get(index));
-            elements.remove(index);
-        }
-
-        return picked;
-    }
+    /**
+     * Gets a List of length numSuggestions of Products from the given categories
+     * @param categories a list of categories to get the products out of
+     * @param numSuggestions the number of products the returned list should contain.
+     *                       It might contain less if the requested number is greater
+     *                       than the number of available products.
+     * @return A Promise of the list of products without duplicates
+     */
+    public F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories, final int numSuggestions);
 }

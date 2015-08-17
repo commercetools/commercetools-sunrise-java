@@ -15,13 +15,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ProductProjectionServiceTest {
+public class ProductProjectionServiceImplTest {
 
     private static final int DEFAULT_TIMEOUT = 1000;
 
     @Test
     public void findVariantBySku() throws Exception {
-        final ProductProjectionService service = new ProductProjectionService(null);
+        final ProductProjectionService service = new ProductProjectionServiceImpl(null);
         final ProductProjection product = JsonUtils.readObjectFromResource("product.json", ProductProjection.typeReference());
         final String masterSku = "M0E20000000DSB9";
         final String otherSku = "M0E20000000DSBA";
@@ -34,7 +34,7 @@ public class ProductProjectionServiceTest {
     @Test
     public void getSuggestions() {
         final PlayJavaSphereClient sphereClient = getSphereClientReturningAllProducts();
-        final ProductProjectionService service = new ProductProjectionService(sphereClient);
+        final ProductProjectionService service = new ProductProjectionServiceImpl(sphereClient);
         final List<Category> categories = CategoryUtils.getQueryResult("categoryQueryResult.json").getResults();
 
         assertThat(service.getSuggestions(categories, 4).get(DEFAULT_TIMEOUT)).hasSize(4).doesNotHaveDuplicates();
