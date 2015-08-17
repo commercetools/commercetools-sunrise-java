@@ -63,14 +63,11 @@ public class ProductProjectionService {
         final Random random = new Random();
 
         for(int i = 0; i < n; i++) {
-            pick(elements, picked, random.nextInt(elements.size()));
+            final int index = random.nextInt(elements.size());
+            picked.add(elements.get(index));
+            elements.remove(index);
         }
 
         return picked;
-    }
-
-    private <T> void pick(final List<T> elements, final List<T> picked, int index) {
-        picked.add(elements.get(index));
-        elements.remove(index);
     }
 }
