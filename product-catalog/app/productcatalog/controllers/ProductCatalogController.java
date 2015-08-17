@@ -20,6 +20,7 @@ import productcatalog.services.ShippingMethodService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -78,9 +79,13 @@ public class ProductCatalogController extends SunriseController {
     }
 
     private F.Promise<Result> pdpx(final ProductProjection product, final ProductVariant variant) {
-        final F.Promise<List<ProductProjection>> suggestionPromise = productService.getSuggestions(categoryService.getSiblingCategories(product), NUM_SUGGESTIONS);
+
+        final F.Promise<List<ProductProjection>> suggestionPromise =
+                productService.getSuggestions(categoryService.getSiblingCategories(product.getCategories()), NUM_SUGGESTIONS);
         final List<ShopShippingRate> shippingRates = shippingMethodService.getShippingRates(context().user().zone());
-        final List<Category> breadcrumbs = categoryService.getBreadCrumbCategories(product);
+        final List<Category> breadcrumbs = product.getCategories().stream().findFirst()
+                .map(categoryService::getBreadCrumbCategories)
+                .orElse(Collections.<Category>emptyList());
 
         return suggestionPromise.flatMap(suggestions -> withCms("pdp", cms -> {
             final Translator translator = context().translator();

@@ -3,9 +3,9 @@ package productcatalog.services;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Reference;
-import io.sphere.sdk.products.ProductProjection;
 
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -22,17 +22,17 @@ public class CategoryServiceImpl implements CategoryService {
         this.categories = categories;
     }
 
-    public List<Category> getSiblingCategories(final ProductProjection product) {
-        return product.getCategories().stream().findFirst()
-                .flatMap(this::expandCategory)
-                .flatMap(category -> category.getParent().map(categories::findByParent))
-                .orElse(emptyList());
+    public List<Category> getSiblingCategories(final Collection<Reference<Category>> categoryRefs) {
+        return categoryRefs.stream()
+            .map(this::expandCategory).filter(Optional::isPresent).map(Optional::get)
+            .map(Category::getParent).filter(Optional::isPresent).map(Optional::get)
+            .flatMap(parent -> categories.findByParent(parent).stream())
+            .distinct()
+            .collect(toList());
     }
 
-    public List<Category> getBreadCrumbCategories(final ProductProjection product) {
-        final Optional<Category> categoryOptional = product.getCategories().stream().findFirst()
-                .flatMap(this::expandCategory);
-
+    public List<Category> getBreadCrumbCategories(final Reference<Category> categoryRef) {
+        final Optional<Category> categoryOptional = expandCategory(categoryRef);
         return categoryOptional.map(this::getCategoryWithAncestors).orElse(emptyList());
     }
 
