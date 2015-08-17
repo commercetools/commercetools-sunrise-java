@@ -49,3 +49,8 @@ export SPHERE_SUNRISE_IT_CLIENT_ID="your-client-id"
 For an easy and fast deployment of your application we recommend [heroku](https://www.heroku.com):
 
 <a href="https://heroku.com/deploy?template=https://github.com/sphereio/sphere-sunrise"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a>
+
+## Related projects
+* https://github.com/sphereio/sphere-sunrise-scenarios
+* https://github.com/sphereio/sphere-sunrise-design
+* https://github.com/sphereio/sphere-jvm-sdk
