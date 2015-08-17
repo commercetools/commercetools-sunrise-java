@@ -1,7 +1,7 @@
 package productcatalog.pages;
 
 import common.utils.PriceFormatter;
-import productcatalog.models.RichShippingRate;
+import productcatalog.models.ShopShippingRate;
 
 public class ShippingRateDataFactory {
 
@@ -15,12 +15,12 @@ public class ShippingRateDataFactory {
         return new ShippingRateDataFactory(priceFormatter);
     }
 
-    public ShippingRateData create(final RichShippingRate richShippingRate) {
+    public ShippingRateData create(final ShopShippingRate shopShippingRate) {
         return new ShippingRateData(
-                richShippingRate.shippingMethodName,
+                shopShippingRate.shippingMethodName,
                 "",
-                priceFormatter.format(richShippingRate.shippingRate.getPrice()),
-                richShippingRate.shippingRate.getFreeAbove().map(priceFormatter::format).orElse("")
+                priceFormatter.format(shopShippingRate.shippingRate.getPrice()),
+                shopShippingRate.shippingRate.getFreeAbove().map(priceFormatter::format).orElse("")
         );
     }
 }

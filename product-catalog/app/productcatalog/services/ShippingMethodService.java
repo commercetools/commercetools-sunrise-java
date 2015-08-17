@@ -1,6 +1,6 @@
 package productcatalog.services;
 
-import productcatalog.models.RichShippingRate;
+import productcatalog.models.ShopShippingRate;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.zones.Zone;
@@ -19,10 +19,10 @@ public class ShippingMethodService {
         this.shippingMethods = shippingMethods.shippingMethods;
     }
 
-    public List<RichShippingRate> getShippingRates(final Reference<Zone> zone) {
+    public List<ShopShippingRate> getShippingRates(final Reference<Zone> zone) {
         return shippingMethods.stream()
                 .flatMap(shippingMethod -> shippingMethod.getShippingRatesForZone(zone).stream()
-                        .map(shippingRate -> new RichShippingRate(shippingMethod.getName(), shippingRate)))
+                        .map(shippingRate -> new ShopShippingRate(shippingMethod.getName(), shippingRate)))
                 .collect(toList());
     }
 }

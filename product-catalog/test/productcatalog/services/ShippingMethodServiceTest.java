@@ -7,7 +7,7 @@ import io.sphere.sdk.shippingmethods.queries.ShippingMethodQuery;
 import io.sphere.sdk.zones.Zone;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
-import productcatalog.models.RichShippingRate;
+import productcatalog.models.ShopShippingRate;
 import productcatalog.models.ShippingMethods;
 
 import javax.money.Monetary;
@@ -26,8 +26,8 @@ public class ShippingMethodServiceTest {
         final Reference<Zone> usa = Reference.of(Zone.typeId(), "67a107d7-e485-4802-a1bd-a475b4394124");
         final Reference<Zone> notExistend = Reference.of(Zone.typeId(), "...");
 
-        final RichShippingRate euRate = new RichShippingRate("DHL", ShippingRate.of(Money.of(5.70, Monetary.getCurrency("EUR"))));
-        final RichShippingRate usRate = new RichShippingRate("DHL", ShippingRate.of(Money.of(9.90, Monetary.getCurrency("USD"))));
+        final ShopShippingRate euRate = new ShopShippingRate("DHL", ShippingRate.of(Money.of(5.70, Monetary.getCurrency("EUR"))));
+        final ShopShippingRate usRate = new ShopShippingRate("DHL", ShippingRate.of(Money.of(9.90, Monetary.getCurrency("USD"))));
 
         assertThat(service.getShippingRates(europe)).containsExactly(euRate);
         assertThat(service.getShippingRates(usa)).containsExactly(usRate);

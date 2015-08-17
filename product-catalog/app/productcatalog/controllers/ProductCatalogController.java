@@ -12,7 +12,7 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.libs.F;
 import play.mvc.Result;
-import productcatalog.models.RichShippingRate;
+import productcatalog.models.ShopShippingRate;
 import productcatalog.pages.*;
 import productcatalog.services.CategoryService;
 import productcatalog.services.ProductProjectionService;
@@ -79,7 +79,7 @@ public class ProductCatalogController extends SunriseController {
 
     private F.Promise<Result> pdpx(final ProductProjection product, final ProductVariant variant) {
         final F.Promise<List<ProductProjection>> suggestionPromise = productService.getSuggestions(categoryService.getSiblingCategories(product), NUM_SUGGESTIONS);
-        final List<RichShippingRate> shippingRates = shippingMethodService.getShippingRates(context().user().zone());
+        final List<ShopShippingRate> shippingRates = shippingMethodService.getShippingRates(context().user().zone());
         final List<Category> breadcrumbs = categoryService.getBreadCrumbCategories(product);
 
         return suggestionPromise.flatMap(suggestions -> withCms("pdp", cms -> {

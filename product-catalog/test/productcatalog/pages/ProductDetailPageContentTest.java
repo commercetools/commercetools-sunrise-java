@@ -17,7 +17,7 @@ import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
-import productcatalog.models.RichShippingRate;
+import productcatalog.models.ShopShippingRate;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -105,8 +105,8 @@ public class ProductDetailPageContentTest {
 
     @Test
     public void testDeliveryJson() throws IOException {
-        final RichShippingRate dhl = new RichShippingRate("DHL", ShippingRate.of(Money.of(10, "EUR")));
-        final RichShippingRate dhlFreeAbove = new RichShippingRate("DHL", ShippingRate.of(Money.of(10, "EUR"), Money.of(50, "EUR")));
+        final ShopShippingRate dhl = new ShopShippingRate("DHL", ShippingRate.of(Money.of(10, "EUR")));
+        final ShopShippingRate dhlFreeAbove = new ShopShippingRate("DHL", ShippingRate.of(Money.of(10, "EUR"), Money.of(50, "EUR")));
         final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(priceFormatter);
         final List<ShippingRateData> deliveryData = asList(dhl, dhlFreeAbove).stream().map(shippingRateDataFactory::create).collect(toList());
 
