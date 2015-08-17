@@ -57,13 +57,12 @@ public class PriceFinderTest {
     // values that might be in users scope
     private final Optional<Reference<CustomerGroup>> customerGroup = Optional.of(group1);
     private final Optional<Reference<Channel>> channel = Optional.of(channel1);
-    private final ZonedDateTime userTime = todayDe;
 
     private final Optional<Reference<CustomerGroup>> emptyCustomerGroup = Optional.empty();
     private final Optional<Reference<Channel>> emptyChannel = Optional.empty();
 
-    private final PriceFinder priceFinder = PriceFinder.of(eur, de, customerGroup, channel, userTime);
-    private final PriceFinder priceFinderIncompleteScope = PriceFinder.of(eur, de, emptyCustomerGroup, emptyChannel, userTime);
+    private final PriceFinder priceFinder = PriceFinder.of(eur, de, customerGroup, channel);
+    private final PriceFinder priceFinderIncompleteScope = PriceFinder.of(eur, de, emptyCustomerGroup, emptyChannel);
 
     @Test
     public void findWithCurrencyAndEmptyDate() throws Exception {

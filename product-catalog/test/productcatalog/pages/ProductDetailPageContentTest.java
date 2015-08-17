@@ -46,7 +46,7 @@ public class ProductDetailPageContentTest {
     private final ZonedDateTime todayDe = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Europe/Berlin"));
 
     private final Translator translator = Translator.of(german, emptyList(), emptyList());
-    private final PriceFinder priceFinder = PriceFinder.of(eur, de, Optional.empty(), Optional.empty(), todayDe);
+    private final PriceFinder priceFinder = PriceFinder.of(eur, de, Optional.empty(), Optional.empty());
     private final PriceFormatter priceFormatter = PriceFormatter.of(german);
 
     private final CategoryTree categories = CategoryTree.of(CategoryUtils.getQueryResult("categoryQueryResult.json").getResults());
