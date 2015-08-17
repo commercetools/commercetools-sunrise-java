@@ -13,4 +13,4 @@
 ### Acceptance Tests
 
 * require a running application and external services
-* sbt task `at:test` in `at` folder
+* see https://github.com/sphereio/sphere-sunrise-scenarios
