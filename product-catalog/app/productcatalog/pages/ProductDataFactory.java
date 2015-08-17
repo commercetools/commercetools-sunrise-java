@@ -45,9 +45,9 @@ public class ProductDataFactory {
         final Optional<Price> priceOpt = priceFinder.findPrice(variant.getPrices());
 
         return new ProductData(
-                translator.translate(product.getName()),
+                translator.findTranslation(product.getName()),
                 variant.getSku().orElse(""),
-                product.getDescription().map(translator::translate).orElse(""),
+                product.getDescription().map(translator::findTranslation).orElse(""),
                 getPriceCurrent(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
                 getPriceOld(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
                 getColors(product),
@@ -92,7 +92,7 @@ public class ProductDataFactory {
     }
 
     private SelectableData colorToSelectableItem(final Attribute color) {
-        final String colorLabel = translator.translate(color.getValue(LENUM_ATTR_ACCESS).getLabel());
+        final String colorLabel = translator.findTranslation(color.getValue(LENUM_ATTR_ACCESS).getLabel());
         return new SelectableData(colorLabel, color.getName(), "", "", false);
     }
 
@@ -102,7 +102,7 @@ public class ProductDataFactory {
     }
 
     private DetailData localizedStringsToDetailData(final LocalizedStrings localizedStrings) {
-        final String label = translator.translate(localizedStrings);
+        final String label = translator.findTranslation(localizedStrings);
         return new DetailData(label, "");
     }
 

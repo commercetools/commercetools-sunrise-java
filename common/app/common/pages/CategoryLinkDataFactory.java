@@ -16,7 +16,7 @@ public class CategoryLinkDataFactory {
     }
 
     public LinkData create(final Category category) {
-        final String label = translator.translate(category.getName());
+        final String label = translator.findTranslation(category.getName());
         return new LinkData(label, "");
     }
 }

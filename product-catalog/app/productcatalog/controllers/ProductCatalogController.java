@@ -92,7 +92,7 @@ public class ProductCatalogController extends SunriseController {
             final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(priceFormatter);
             final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(translator);
 
-            final String additionalTitle = translator.translate(product.getName());
+            final String additionalTitle = translator.findTranslation(product.getName());
             final PdpStaticData staticData = new PdpStaticData(cms, BagItemDataFactory.of().create(100), new RatingData(cms));
             final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
             final List<ImageData> galleryData = variant.getImages().stream().map(ImageData::of).collect(toList());

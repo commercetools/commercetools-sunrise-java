@@ -25,8 +25,8 @@ public class ProductThumbnailDataFactory {
 
     public ProductThumbnailData create(final ProductProjection product) {
         final ProductVariant variant = product.getMasterVariant();
-        final String text = translator.translate(product.getName());
-        final String description = product.getDescription().map(translator::translate).orElse("");
+        final String text = translator.findTranslation(product.getName());
+        final String description = product.getDescription().map(translator::findTranslation).orElse("");
         final String imageUrl = variant.getImages().stream().findFirst().map(Image::getUrl).orElse("");
         final String price = priceFinder.findPrice(variant.getPrices())
                 .map(foundPrice -> priceFormatter.format(foundPrice.getValue()))

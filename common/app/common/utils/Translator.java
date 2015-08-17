@@ -21,7 +21,17 @@ public class Translator {
         return new Translator(userLanguage, userFallbackLanguages, projectLanguages);
     }
 
-    public String translate(final LocalizedStrings localizedStrings) {
+    /**
+     * Finds the best fitting translation trying the following languages in that order:
+     *  - the users preferred language
+     *  - one of the users fallback languages
+     *  - one of the projects languages
+     *
+     *  Falls back to an empty String if none is found in the former
+     * @param localizedStrings the source to find the translation
+     * @return the found translation or an empty String
+     */
+    public String findTranslation(final LocalizedStrings localizedStrings) {
         return localizedStrings.get(userLanguage)
                 .orElse(localizedStrings.get(userFallbackLanguages)
                         .orElse(localizedStrings.get(projectLanguages).orElse("")));
