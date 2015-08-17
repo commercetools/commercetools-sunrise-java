@@ -3,6 +3,8 @@ package common.pages;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Image;
 
+import static org.apache.commons.lang3.StringUtils.trimToNull;
+
 public class ImageData extends Base {
 
     private final Image image;
@@ -16,21 +18,14 @@ public class ImageData extends Base {
     }
 
     public String getThumbImage() {
-        return nullIfEmpty(image.getUrl());
+        return trimToNull(image.getUrl());
     }
 
     public String getBigImage() {
-        return nullIfEmpty(image.getUrl());
+        return trimToNull(image.getUrl());
     }
 
     public String getPlaceholderImage() {
         return "http://placehold.it/350x150";
-    }
-
-    private String nullIfEmpty(final String s) {
-        if(s.isEmpty())
-            return null;
-        else
-            return s;
     }
 }
