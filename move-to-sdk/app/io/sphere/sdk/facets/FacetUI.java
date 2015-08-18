@@ -1,8 +1,8 @@
 package io.sphere.sdk.facets;
 
-import io.sphere.sdk.search.FacetExpression;
+import io.sphere.sdk.search.FacetResult;
 
-public interface FacetUI<T> {
+public interface FacetUI {
 
     /**
      * Gets the string identifying this facet UI representation.
@@ -17,10 +17,10 @@ public interface FacetUI<T> {
     String getLabel();
 
     /**
-     * Gets the expression that generates the facet data.
-     * @return the facet expression for this UI representation
+     * Gets the facet result concerning a particular attribute for this facet UI representation
+     * @return the facet result for this facet UI
      */
-    FacetExpression<T> getExpression();
+    FacetResult getFacetResult();
 
     /**
      * Whether the facet can be displayed or not.

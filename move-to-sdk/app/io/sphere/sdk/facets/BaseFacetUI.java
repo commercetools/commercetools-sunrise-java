@@ -1,16 +1,14 @@
 package io.sphere.sdk.facets;
 
-import io.sphere.sdk.search.FacetExpression;
+import io.sphere.sdk.models.Base;
 
-abstract class BaseFacetUI<T> implements FacetUI<T> {
+abstract class BaseFacetUI extends Base implements FacetUI {
     private final String key;
     private final String label;
-    private final FacetExpression<T> expression;
 
-    protected BaseFacetUI(final String key, final String label, final FacetExpression<T> expression) {
+    public BaseFacetUI(final String key, final String label) {
         this.key = key;
         this.label = label;
-        this.expression = expression;
     }
 
     @Override
@@ -21,10 +19,5 @@ abstract class BaseFacetUI<T> implements FacetUI<T> {
     @Override
     public String getLabel() {
         return label;
-    }
-
-    @Override
-    public FacetExpression<T> getExpression() {
-        return expression;
     }
 }
