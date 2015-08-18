@@ -1,0 +1,35 @@
+
+common.header.title = Sunrise -
+common.header.stores = FILIALEN
+common.header.help = HILFE
+common.header.callUs = KONTAKT +44 123 456 000
+common.header.countries = REGION
+
+pdp.writeFirstRatingText = Erste Rezension schreiben
+
+pdp.ratingFiveStarText = Hervorragend
+pdp.ratingFourStarText = Ziehmlich gut
+pdp.ratingThreeStarText = Geht so
+pdp.ratingTwoStarText = Nicht so toll
+pdp.ratingOneStarText = Schlecht
+
+pdp.viewDetailsText = Details anzeigen
+pdp.colorsText = Farbe
+pdp.chooseColorText = Farbe wählen
+pdp.sizesText = Größe
+pdp.chooseSizeText = Größe wählen
+pdp.sizeGuideText = Größen Assistent
+pdp.addToBagText = In die Einkaufstasche
+pdp.addToWishlistText = Auf die Wunschliste
+pdp.availableText = Verfügbar
+pdp.productDetailsText = Produkt Details
+pdp.deliveryAndReturnsText = Versand & Retour
+pdp.deliveryText = Versand
+pdp.returnsText = Retour
+pdp.youMayLikeText = Das könnte Ihnen auch gefallen
+pdp.saleText = Angebot
+pdp.newText = Neu
+pdp.quickViewText = Vorschau
+pdp.wishlistText = Auf die Wunschliste
+pdp.moreColorsText = Mehr Farben
+pdp.reviewsText = Rezensionen

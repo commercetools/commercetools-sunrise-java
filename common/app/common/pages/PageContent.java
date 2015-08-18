@@ -1,13 +1,8 @@
 package common.pages;
 
-import common.cms.CmsPage;
+import io.sphere.sdk.models.Base;
 
-public abstract class PageContent {
-    protected final CmsPage cms;
-
-    public PageContent(final CmsPage cms) {
-        this.cms = cms;
-    }
+public abstract class PageContent extends Base {
 
     public abstract String additionalTitle();
 }

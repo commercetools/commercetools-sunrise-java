@@ -20,18 +20,16 @@ public class PriceFinder {
     final CountryCode country;
     final java.util.Optional<Reference<CustomerGroup>> customerGroup;
     final java.util.Optional<Reference<Channel>> channel;
-    final ZonedDateTime userTime;
 
-    private PriceFinder(final CurrencyUnit currency, final CountryCode country, final java.util.Optional<Reference<CustomerGroup>> customerGroup, final java.util.Optional<Reference<Channel>> channel, final ZonedDateTime userTime) {
+    private PriceFinder(final CurrencyUnit currency, final CountryCode country, final Optional<Reference<CustomerGroup>> customerGroup, final Optional<Reference<Channel>> channel) {
         this.currency = currency;
         this.country = country;
         this.customerGroup = customerGroup;
         this.channel = channel;
-        this.userTime = userTime;
     }
 
-    public static PriceFinder of(final CurrencyUnit currency, final CountryCode country, final java.util.Optional<Reference<CustomerGroup>> customerGroup, final java.util.Optional<Reference<Channel>> channel, final ZonedDateTime userTime) {
-        return new PriceFinder(currency, country, customerGroup, channel, userTime);
+    public static PriceFinder of(final CurrencyUnit currency, final CountryCode country, final Optional<Reference<CustomerGroup>> customerGroup, final Optional<Reference<Channel>> channel) {
+        return new PriceFinder(currency, country, customerGroup, channel);
     }
 
     /**
@@ -46,7 +44,7 @@ public class PriceFinder {
      any left
      */
     public Optional<Price> findPrice(final List<Price> prices) {
-        final PriceScope base = PriceScopeBuilder.of().currency(currency).date(userTime).build();
+        final PriceScope base = PriceScopeBuilder.of().currency(currency).date(ZonedDateTime.now()).build();
         final List<PriceScope> scopes = asList(
                 PriceScopeBuilder.of(base).country(country).customerGroup(customerGroup).channel(channel).build(),
                 PriceScopeBuilder.of(base).customerGroup(customerGroup).channel(channel).build(),
@@ -112,5 +110,4 @@ public class PriceFinder {
     private boolean priceHasNoDate(Price price) {
         return !price.getValidFrom().isPresent() && !price.getValidUntil().isPresent();
     }
-
 }

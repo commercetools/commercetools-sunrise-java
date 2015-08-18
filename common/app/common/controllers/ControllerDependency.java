@@ -18,8 +18,7 @@ public class ControllerDependency {
     private final CmsService cmsService;
 
     @Inject
-    public ControllerDependency(final PlayJavaSphereClient sphere, final CategoryTree categoryTree,
-                                final ProjectContext projectContext, final TemplateService templateService, final CmsService cmsService) {
+    public ControllerDependency(final PlayJavaSphereClient sphere, final CategoryTree categoryTree, final ProjectContext projectContext, final TemplateService templateService, final CmsService cmsService) {
         this.sphere = sphere;
         this.categoryTree = categoryTree;
         this.projectContext = projectContext;

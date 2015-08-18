@@ -109,6 +109,11 @@ public class HandlebarsTemplateServiceTest {
             public SeoData getSeo() {
                 return null;
             }
+
+            @Override
+            public PageMeta getMeta() {
+                return null;
+            }
         };
     }
 }

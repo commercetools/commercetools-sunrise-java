@@ -1,4 +1,6 @@
 package common.pages;
 
-public class SeoData {
+import io.sphere.sdk.models.Base;
+
+public class SeoData extends Base {
 }

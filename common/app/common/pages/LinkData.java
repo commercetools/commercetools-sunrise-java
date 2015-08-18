@@ -1,6 +1,8 @@
 package common.pages;
 
-public class LinkData {
+import io.sphere.sdk.models.Base;
+
+public class LinkData extends Base {
     private final String text;
     private final String url;
 

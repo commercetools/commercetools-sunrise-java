@@ -1,10 +1,22 @@
 package common.utils;
 
-import common.contexts.AppContext;
-
 import javax.money.MonetaryAmount;
+import javax.money.format.MonetaryFormats;
+import java.util.Locale;
 
-public interface PriceFormatter {
+public class PriceFormatter {
 
-    String format(final MonetaryAmount price, final AppContext context);
+    private final Locale locale;
+
+    private PriceFormatter(final Locale locale) {
+        this.locale = locale;
+    }
+
+    public static PriceFormatter of(final Locale locale) {
+        return new PriceFormatter(locale);
+    }
+
+    public String format(MonetaryAmount price) {
+        return MonetaryFormats.getAmountFormat(locale).format(price);
+    }
 }

@@ -1,31 +1,26 @@
 package productcatalog.pages;
 
-import common.cms.CmsPage;
-import common.contexts.AppContext;
 import common.pages.PageContent;
-import common.utils.PriceFormatter;
-import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.search.PagedSearchResult;
+import common.pages.ProductThumbnailData;
+
+import java.util.List;
 
 public class ProductOverviewPageContent extends PageContent {
-    private final AppContext context;
-    private final PriceFormatter priceFormatter;
-    private final PagedSearchResult<ProductProjection> productList;
 
-    public ProductOverviewPageContent(final CmsPage cms, final AppContext context, final PagedSearchResult<ProductProjection> productList, final PriceFormatter priceFormatter) {
-        super(cms);
-        this.context = context;
-        this.priceFormatter = priceFormatter;
+    private final String additionalTitle;
+    private final List<ProductThumbnailData>  productList;
+
+    public ProductOverviewPageContent(final String additionalTitle, final List<ProductThumbnailData> productList) {
+        this.additionalTitle = additionalTitle;
         this.productList = productList;
     }
 
     @Override
     public String additionalTitle() {
-        // TODO Fill with category name?
-        return "";
+        return additionalTitle;
     }
 
-    public ProductListData getProducts() {
-        return new ProductListData(productList.getResults(), context, priceFormatter);
+    public List<ProductThumbnailData>  getProducts() {
+        return productList;
     }
 }
