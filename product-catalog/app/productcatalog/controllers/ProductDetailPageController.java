@@ -12,6 +12,9 @@ import io.sphere.sdk.products.ProductVariant;
 import play.Configuration;
 import play.libs.F;
 import play.mvc.Result;
+import play.mvc.Results;
+import productcatalog.models.ProductNotFoundException;
+import productcatalog.models.ProductVariantNotFoundException;
 import productcatalog.models.ShopShippingRate;
 import productcatalog.pages.*;
 import productcatalog.services.CategoryService;
@@ -22,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -46,12 +50,41 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     public F.Promise<Result> pdp(final String slug, final String sku) {
-        final F.Promise<Optional<ProductProjection>> productOptPromise = productService.searchProductBySlug(GERMAN, slug);
+        final Locale locale = GERMAN;
+        final F.Promise<ProductProjection> productProjectionPromise = fetchProduct(slug, locale);
+        final F.Promise<Result> resultPromise = productProjectionPromise.flatMap(productProjection -> {
+            final ProductVariant productVariant = obtainProductVariantBySku(sku, productProjection);
+            return pdpx(productProjection, productVariant);
+        });
+        return resultPromise.recover(exception -> {
+            if (exception instanceof ProductNotFoundException || exception instanceof ProductVariantNotFoundException) {
+                return notFoundAction();
+            } else {
+                throw exception;
+            }
+        });
+    }
 
-        return productOptPromise.flatMap(productOptional -> {
-            final Optional<F.Promise<Result>> resultPromise = productOptional.flatMap(product ->
-                    productService.findVariantBySku(product, sku).map(variant -> pdpx(product, variant)));
-            return resultPromise.orElse(F.Promise.pure(notFound()));
+    private ProductVariant obtainProductVariantBySku(final String sku, final ProductProjection productProjection) {
+        final Optional<ProductVariant> variantOptional = productService.findVariantBySku(productProjection, sku);
+        if (variantOptional.isPresent()) {
+            return variantOptional.get();
+        } else {
+            throw ProductVariantNotFoundException.bySku(sku);
+        }
+    }
+
+    private Result notFoundAction() {
+        return notFound();
+    }
+
+    private F.Promise<ProductProjection> fetchProduct(final String slug, final Locale locale) {
+        return productService.searchProductBySlug(locale, slug).map(productOptional -> {
+            if (productOptional.isPresent()) {
+                return productOptional.get();
+            } else {
+                throw ProductNotFoundException.bySlug(locale, slug);
+            }
         });
     }
 

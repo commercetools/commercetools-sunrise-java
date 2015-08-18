@@ -11,6 +11,7 @@ import io.sphere.sdk.queries.PagedResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.F;
+import productcatalog.models.ProductNotFoundException;
 
 import javax.inject.Inject;
 import java.util.*;
