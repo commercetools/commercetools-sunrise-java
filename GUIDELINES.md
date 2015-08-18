@@ -104,3 +104,27 @@ Util classes hold common re-used methods among different classes.
 - Do not hesitate to use `*` for imports, especially for `import static play.test.Helpers.*;`.
 - Java 8 streams.
 
+## Hints
+
+### Use config instead of hard coded values
+
+before:
+
+```
+public class XController extends SunriseController {
+    private static final int PAGE_SIZE = 9;
+}
+```
+
+after:
+
+```
+public class XController extends SunriseController {
+    private final int pageSize;
+
+        @Inject
+        public ProductCatalogController(final Configuration configuration) {
+            this.pageSize = configuration.getInt("pop.pageSize");
+        }
+}
+```

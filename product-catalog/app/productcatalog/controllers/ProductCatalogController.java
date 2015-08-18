@@ -10,6 +10,7 @@ import common.utils.Translator;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
+import play.Configuration;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.models.ShopShippingRate;
@@ -31,24 +32,26 @@ import static java.util.stream.Collectors.toList;
 @Singleton
 public class ProductCatalogController extends SunriseController {
 
-    private static final int PAGE_SIZE = 9;
-    private static final int NUM_SUGGESTIONS = 4;
+    private final int pageSize;
+    private final int numberOfSuggestions;
 
     private final ProductProjectionService productService;
     private final CategoryService categoryService;
     private final ShippingMethodService shippingMethodService;
 
     @Inject
-    public ProductCatalogController(final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
+    public ProductCatalogController(final Configuration configuration, final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
         super(controllerDependency);
         this.productService = productService;
         this.categoryService = categoryService;
         this.shippingMethodService = shippingMethodService;
+        this.pageSize = configuration.getInt("pop.pageSize");
+        this.numberOfSuggestions = configuration.getInt("pdp.productSuggestions.count");
     }
 
     public F.Promise<Result> pop(int page) {
         return withCms("pop", cms ->
-                        productService.searchProducts(page, PAGE_SIZE).flatMap(result -> {
+                        productService.searchProducts(page, pageSize).flatMap(result -> {
                             final ProductOverviewPageContent content = getPopPageData(cms, result);
                             return render(view -> ok(view.productOverviewPage(content)));
                         })
@@ -81,7 +84,7 @@ public class ProductCatalogController extends SunriseController {
     private F.Promise<Result> pdpx(final ProductProjection product, final ProductVariant variant) {
 
         final F.Promise<List<ProductProjection>> suggestionPromise =
-                productService.getSuggestions(categoryService.getSiblingCategories(product.getCategories()), NUM_SUGGESTIONS);
+                productService.getSuggestions(categoryService.getSiblingCategories(product.getCategories()), numberOfSuggestions);
         final List<ShopShippingRate> shippingRates = shippingMethodService.getShippingRates(context().user().zone());
         final List<Category> breadcrumbs = product.getCategories().stream().findFirst()
                 .map(categoryService::getBreadCrumbCategories)
