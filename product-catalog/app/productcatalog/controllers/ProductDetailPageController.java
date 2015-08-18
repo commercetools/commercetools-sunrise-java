@@ -31,9 +31,7 @@ import static java.util.stream.Collectors.toList;
 @Singleton
 public class ProductDetailPageController extends SunriseController {
 
-    private final int pageSize;
     private final int numberOfSuggestions;
-
     private final ProductProjectionService productService;
     private final CategoryService categoryService;
     private final ShippingMethodService shippingMethodService;
@@ -44,7 +42,6 @@ public class ProductDetailPageController extends SunriseController {
         this.productService = productService;
         this.categoryService = categoryService;
         this.shippingMethodService = shippingMethodService;
-        this.pageSize = configuration.getInt("pop.pageSize");
         this.numberOfSuggestions = configuration.getInt("pdp.productSuggestions.count");
     }
 
