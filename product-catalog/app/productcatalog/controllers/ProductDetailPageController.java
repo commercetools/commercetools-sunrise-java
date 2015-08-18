@@ -1,5 +1,6 @@
 package productcatalog.controllers;
 
+import common.cms.CmsPage;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.*;
@@ -12,7 +13,6 @@ import io.sphere.sdk.products.ProductVariant;
 import play.Configuration;
 import play.libs.F;
 import play.mvc.Result;
-import play.mvc.Results;
 import productcatalog.models.ProductNotFoundException;
 import productcatalog.models.ProductVariantNotFoundException;
 import productcatalog.models.ShopShippingRate;
@@ -49,13 +49,31 @@ public class ProductDetailPageController extends SunriseController {
         this.numberOfSuggestions = configuration.getInt("pdp.productSuggestions.count");
     }
 
+    private List<ProductThumbnailData> suggestionsToViewData(final List<ProductProjection> suggestions) {
+        return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(getTranslator(),  getPriceFinder(), getPriceFormatter()).create(product)).collect(toList());
+    }
+
+
+
     public F.Promise<Result> pdp(final String slug, final String sku) {
-        final Locale locale = GERMAN;
+        //step 1 get all parameters from header/url
+        final Locale locale = GERMAN;//TODO get from URL
+
+        //step 2 create a chain/parallelize external calls
         final F.Promise<ProductProjection> productProjectionPromise = fetchProduct(slug, locale);
+        final F.Promise<List<ProductProjection>> suggestionPromise = productProjectionPromise.flatMap(productProjection -> productService.getSuggestions(categoryService.getSiblingCategories(productProjection.getCategories()), numberOfSuggestions));
+        final F.Promise<CmsPage> cmsPagePromise = getPage("pdp");
+
+        //step 3 call method that does not need to call external systems
         final F.Promise<Result> resultPromise = productProjectionPromise.flatMap(productProjection -> {
-            final ProductVariant productVariant = obtainProductVariantBySku(sku, productProjection);
-            return pdpx(productProjection, productVariant);
+            return cmsPagePromise.flatMap(cms -> {
+                return suggestionPromise.flatMap(suggestions -> {
+                    return getPdpResult(cms, suggestions, productProjection, sku);
+                });
+            });
         });
+
+        //step 4 recover centrally for exceptions
         return resultPromise.recover(exception -> {
             if (exception instanceof ProductNotFoundException || exception instanceof ProductVariantNotFoundException) {
                 return notFoundAction();
@@ -63,6 +81,42 @@ public class ProductDetailPageController extends SunriseController {
                 throw exception;
             }
         });
+    }
+
+    //TODO the promise needs to be removed
+    private F.Promise<Result> getPdpResult(final CmsPage cms, final List<ProductProjection> suggestions, final ProductProjection productProjection, final String sku) {
+        final Translator translator = getTranslator();
+        final PriceFormatter priceFormatter = getPriceFormatter();
+        final PriceFinder priceFinder = getPriceFinder();
+
+        final ProductVariant productVariant = obtainProductVariantBySku(sku, productProjection);
+        final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(priceFormatter);
+        final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(translator);
+
+        final String additionalTitle = translator.findTranslation(productProjection.getName());
+        final PdpStaticData staticData = new PdpStaticData(cms, BagItemDataFactory.of().create(100), RatingDataFactory.of(cms).create());
+        final List<Category> breadcrumbs = getBreadcrumbsForProduct(productProjection);
+        final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
+        final List<ImageData> galleryData = productVariant.getImages().stream().map(ImageData::of).collect(toList());
+        final ProductData productData = ProductDataFactory.of(translator, priceFinder, priceFormatter).create(productProjection, productVariant);
+        final List<ShippingRateData> deliveryData = getShippingRates().stream().map(shippingRateDataFactory::create).collect(toList());
+        final List<ProductThumbnailData> suggestionData = suggestionsToViewData(suggestions);
+
+        final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
+
+        return render(view -> ok(view.productDetailPage(content)));
+    }
+
+    private PriceFinder getPriceFinder() {
+        return context().user().priceFinder();
+    }
+
+    private PriceFormatter getPriceFormatter() {
+        return context().user().priceFormatter();
+    }
+
+    private Translator getTranslator() {
+        return context().translator();
     }
 
     private ProductVariant obtainProductVariantBySku(final String sku, final ProductProjection productProjection) {
@@ -88,36 +142,14 @@ public class ProductDetailPageController extends SunriseController {
         });
     }
 
-    private F.Promise<Result> pdpx(final ProductProjection product, final ProductVariant variant) {
+    private List<ShopShippingRate> getShippingRates() {
+        return shippingMethodService.getShippingRates(context().user().zone());
+    }
 
-        final F.Promise<List<ProductProjection>> suggestionPromise =
-                productService.getSuggestions(categoryService.getSiblingCategories(product.getCategories()), numberOfSuggestions);
-        final List<ShopShippingRate> shippingRates = shippingMethodService.getShippingRates(context().user().zone());
-        final List<Category> breadcrumbs = product.getCategories().stream().findFirst()
-                .map(categoryService::getBreadCrumbCategories)
-                .orElse(Collections.<Category>emptyList());
-
-        return suggestionPromise.flatMap(suggestions -> withCms("pdp", cms -> {
-            final Translator translator = context().translator();
-            final PriceFormatter priceFormatter = context().user().priceFormatter();
-            final PriceFinder priceFinder = context().user().priceFinder();
-
-            final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator, priceFinder, priceFormatter);
-            final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(priceFormatter);
-            final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(translator);
-
-            final String additionalTitle = translator.findTranslation(product.getName());
-            final PdpStaticData staticData = new PdpStaticData(cms, BagItemDataFactory.of().create(100), RatingDataFactory.of(cms).create());
-            final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
-            final List<ImageData> galleryData = variant.getImages().stream().map(ImageData::of).collect(toList());
-            final ProductData productData = ProductDataFactory.of(translator, priceFinder, priceFormatter).create(product, variant);
-            final List<ShippingRateData> deliveryData = shippingRates.stream().map(shippingRateDataFactory::create).collect(toList());
-            final List<ProductThumbnailData> suggestionData = suggestions.stream().map(thumbnailDataFactory::create).collect(toList());
-
-            final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
-
-            return render(view -> ok(view.productDetailPage(content)));
-        }));
+    private List<Category> getBreadcrumbsForProduct(final ProductProjection product) {
+        return product.getCategories().stream().findFirst()
+                    .map(categoryService::getBreadCrumbCategories)
+                    .orElse(Collections.<Category>emptyList());
     }
 
     private F.Promise<Result> render(final Function<ProductCatalogView, Result> pageRenderer) {
