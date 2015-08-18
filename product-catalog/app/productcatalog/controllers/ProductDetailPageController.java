@@ -1,6 +1,5 @@
 package productcatalog.controllers;
 
-import common.cms.CmsPage;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.*;
@@ -30,7 +29,7 @@ import static java.util.Locale.GERMAN;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
-public class ProductCatalogController extends SunriseController {
+public class ProductDetailPageController extends SunriseController {
 
     private final int pageSize;
     private final int numberOfSuggestions;
@@ -40,35 +39,13 @@ public class ProductCatalogController extends SunriseController {
     private final ShippingMethodService shippingMethodService;
 
     @Inject
-    public ProductCatalogController(final Configuration configuration, final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
+    public ProductDetailPageController(final Configuration configuration, final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
         super(controllerDependency);
         this.productService = productService;
         this.categoryService = categoryService;
         this.shippingMethodService = shippingMethodService;
         this.pageSize = configuration.getInt("pop.pageSize");
         this.numberOfSuggestions = configuration.getInt("pdp.productSuggestions.count");
-    }
-
-    public F.Promise<Result> pop(int page) {
-        return withCms("pop", cms ->
-                        productService.searchProducts(page, pageSize).flatMap(result -> {
-                            final ProductOverviewPageContent content = getPopPageData(cms, result);
-                            return render(view -> ok(view.productOverviewPage(content)));
-                        })
-        );
-    }
-
-    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final List<ProductProjection> products) {
-        final Translator translator = context().translator();
-        final PriceFormatter priceFormatter = context().user().priceFormatter();
-        final PriceFinder priceFinder = context().user().priceFinder();
-
-        final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator, priceFinder, priceFormatter);
-
-        final String additionalTitle = "";
-        final List<ProductThumbnailData> productList = products.stream().map(thumbnailDataFactory::create).collect(toList());
-
-        return new ProductOverviewPageContent(additionalTitle, productList);
     }
 
     public F.Promise<Result> pdp(final String slug, final String sku) {
