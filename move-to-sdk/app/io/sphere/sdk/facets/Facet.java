@@ -1,16 +1,16 @@
 package io.sphere.sdk.facets;
 
-public interface FacetUiData {
+public interface Facet {
 
     /**
-     * Gets the string identifying this facet UI representation.
-     * @return the key that identifies this facet UI data
+     * Gets the string identifying this facet representation.
+     * @return the key that identifies this facet
      */
     String getKey();
 
     /**
-     * Gets the label displayed in the facet UI representation.
-     * @return the label displayed in this facet UI data
+     * Gets the label displayed in the facet representation.
+     * @return the label displayed in this facet
      */
     String getLabel();
 

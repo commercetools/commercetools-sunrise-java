@@ -2,11 +2,11 @@ package io.sphere.sdk.facets;
 
 import io.sphere.sdk.models.Base;
 
-abstract class BaseFacetUiData extends Base implements FacetUiData {
+abstract class BaseFacet extends Base implements Facet {
     private final String key;
     private final String label;
 
-    public BaseFacetUiData(final String key, final String label) {
+    public BaseFacet(final String key, final String label) {
         this.key = key;
         this.label = label;
     }

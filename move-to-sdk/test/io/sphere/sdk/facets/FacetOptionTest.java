@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static io.sphere.sdk.facets.BaseSelectFacetUiDataTest.termUI;
+import static io.sphere.sdk.facets.BaseSelectFacetTest.termUI;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 

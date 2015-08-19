@@ -3,11 +3,11 @@ package io.sphere.sdk.facets;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public final class MultiSelectFacetUiData<T> extends BaseSelectFacetUiData<T> {
+public final class MultiSelectFacet<T> extends BaseSelectFacet<T> {
     private final boolean matchesAll;
 
-    MultiSelectFacetUiData(final String key, final String label, final List<FacetOption<T>> options,
-                           @Nullable final Long threshold, @Nullable final Long limit, final boolean matchesAll) {
+    MultiSelectFacet(final String key, final String label, final List<FacetOption<T>> options,
+                     @Nullable final Long threshold, @Nullable final Long limit, final boolean matchesAll) {
         super(key, label, options, threshold, limit);
         this.matchesAll = matchesAll;
     }

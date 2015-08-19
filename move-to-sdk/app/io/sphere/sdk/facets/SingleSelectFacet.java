@@ -3,10 +3,10 @@ package io.sphere.sdk.facets;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public final class SingleSelectFacetUiData<T> extends BaseSelectFacetUiData<T> {
+public final class SingleSelectFacet<T> extends BaseSelectFacet<T> {
 
-    SingleSelectFacetUiData(final String key, final String label, final List<FacetOption<T>> options,
-                            @Nullable final Long threshold, @Nullable final Long limit) {
+    SingleSelectFacet(final String key, final String label, final List<FacetOption<T>> options,
+                      @Nullable final Long threshold, @Nullable final Long limit) {
         super(key, label, options, threshold, limit);
     }
 

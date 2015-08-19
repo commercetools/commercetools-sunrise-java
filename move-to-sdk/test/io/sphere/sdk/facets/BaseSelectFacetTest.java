@@ -9,7 +9,7 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class BaseSelectFacetUiDataTest {
+public class BaseSelectFacetTest {
     private static final String KEY = "single-select-facet";
     private static final String LABEL = "Select one option";
     private static final List<FacetOption<String>> OPTIONS = asList(
@@ -19,7 +19,7 @@ public class BaseSelectFacetUiDataTest {
 
     @Test
     public void canBeDisplayedIfOverThreshold() throws Exception {
-        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiDataBuilder.of(KEY, LABEL, OPTIONS)
+        final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
                 .setThreshold(3L)
                 .build();
         assertThat(facet.canBeDisplayed()).isTrue();
@@ -27,7 +27,7 @@ public class BaseSelectFacetUiDataTest {
 
     @Test
     public void canNotBeDisplayedIfBelowThreshold() throws Exception {
-        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiDataBuilder.of(KEY, LABEL, OPTIONS)
+        final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
                 .setThreshold(4L)
                 .build();
         assertThat(facet.canBeDisplayed()).isFalse();
@@ -35,7 +35,7 @@ public class BaseSelectFacetUiDataTest {
 
     @Test
     public void termListIsTruncatedIfOverLimit() throws Exception {
-        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiDataBuilder.of(KEY, LABEL, OPTIONS)
+        final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
                 .setLimit(2L)
                 .build();
         assertThat(facet.getLimitedOptions()).containsExactlyElementsOf(asList(OPTIONS.get(0), OPTIONS.get(1)));
@@ -44,7 +44,7 @@ public class BaseSelectFacetUiDataTest {
 
     @Test
     public void termListIsNotTruncatedIfBelowLimit() throws Exception {
-        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiDataBuilder.of(KEY, LABEL, OPTIONS)
+        final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
                 .setLimit(3L)
                 .build();
         assertThat(facet.getLimitedOptions()).containsExactlyElementsOf(OPTIONS);
@@ -53,7 +53,7 @@ public class BaseSelectFacetUiDataTest {
 
     @Test
     public void throwsExceptionOnWrongThresholdAndLimit() throws Exception {
-        final SingleSelectFacetUiDataBuilder<String> builder = SingleSelectFacetUiDataBuilder.of(KEY, LABEL, OPTIONS).setThreshold(10L);
+        final SingleSelectFacetBuilder<String> builder = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS).setThreshold(10L);
         assertThatThrownBy(() -> {
             builder.setLimit(10L).build();
             builder.setLimit(3L).build();

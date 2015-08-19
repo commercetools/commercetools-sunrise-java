@@ -7,35 +7,33 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MultiSelectFacetUiDataTest {
-    private static final String KEY = "multi-select-facet";
-    private static final String LABEL = "Select options";
+public class SingleSelectFacetTest {
+    private static final String KEY = "single-select-facet";
+    private static final String LABEL = "Select one option";
     private static final List<FacetOption<String>> OPTIONS = asList(
-            FacetOption.of("one", 30, true),
+            FacetOption.of("one", 30, false),
             FacetOption.of("two", 20, true),
             FacetOption.of("three", 10, false));
 
     @Test
     public void createsInstance() throws Exception {
-        final MultiSelectFacetUiData<String> facet = MultiSelectFacetUiDataBuilder.of(KEY, LABEL, OPTIONS, true)
+        final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
                 .setThreshold(3L)
                 .setLimit(10L)
                 .build();
         assertThat(facet.getKey()).isEqualTo(KEY);
         assertThat(facet.getLabel()).isEqualTo(LABEL);
         assertThat(facet.getAllOptions()).isEqualTo(OPTIONS);
-        assertThat(facet.matchesAll()).isTrue();
         assertThat(facet.getThreshold()).contains(3L);
         assertThat(facet.getLimit()).contains(10L);
     }
 
     @Test
     public void createsInstanceWithOptionalValues() throws Exception {
-        final MultiSelectFacetUiData<String> facet = MultiSelectFacetUiDataBuilder.of(KEY, LABEL, OPTIONS, false).build();
+        final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS).build();
         assertThat(facet.getKey()).isEqualTo(KEY);
         assertThat(facet.getLabel()).isEqualTo(LABEL);
         assertThat(facet.getAllOptions()).isEqualTo(OPTIONS);
-        assertThat(facet.matchesAll()).isFalse();
         assertThat(facet.getThreshold()).isEmpty();
         assertThat(facet.getLimit()).isEmpty();
     }
