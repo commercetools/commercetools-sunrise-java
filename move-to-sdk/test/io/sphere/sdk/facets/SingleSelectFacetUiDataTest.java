@@ -24,8 +24,8 @@ public class SingleSelectFacetUiDataTest {
         assertThat(facetUI.getLabel()).isEqualTo(LABEL);
         assertThat(facetUI.getFacetResult()).isEqualTo(FACET_RESULT);
         assertThat(facetUI.getSelectedValue()).contains(SELECTED_VALUE);
-        assertThat(facetUI.getTermsThreshold()).contains(3L);
-        assertThat(facetUI.getTermsLimit()).contains(10L);
+        assertThat(facetUI.getThreshold()).contains(3L);
+        assertThat(facetUI.getLimit()).contains(10L);
     }
 
     @Test
@@ -35,8 +35,8 @@ public class SingleSelectFacetUiDataTest {
         assertThat(facetUI.getLabel()).isEqualTo(LABEL);
         assertThat(facetUI.getFacetResult()).isEqualTo(FACET_RESULT);
         assertThat(facetUI.getSelectedValue()).isEmpty();
-        assertThat(facetUI.getTermsLimit()).isEmpty();
-        assertThat(facetUI.getTermsThreshold()).isEmpty();
+        assertThat(facetUI.getLimit()).isEmpty();
+        assertThat(facetUI.getThreshold()).isEmpty();
     }
 
     @Test

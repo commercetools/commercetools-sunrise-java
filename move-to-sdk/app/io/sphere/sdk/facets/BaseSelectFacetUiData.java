@@ -11,19 +11,19 @@ import static java.util.stream.Collectors.toList;
 abstract class BaseSelectFacetUiData<T> extends BaseFacetUiData {
     protected final List<T> selectedValues;
     private final TermFacetResult<T> facetResult;
-    private final Optional<Long> termsThreshold;
-    private final Optional<Long> termsLimit;
+    private final Optional<Long> threshold;
+    private final Optional<Long> limit;
 
     protected BaseSelectFacetUiData(final String key, final String label, final TermFacetResult<T> facetResult, final List<T> selectedValues,
-                                    @Nullable final Long termsThreshold, @Nullable final Long termsLimit) {
+                                    @Nullable final Long threshold, @Nullable final Long limit) {
         super(key, label);
-        if (termsThreshold != null && termsLimit != null && termsThreshold > termsLimit) {
-            throw new InvalidSelectFacetConstraintsException(termsThreshold, termsLimit);
+        if (threshold != null && limit != null && threshold > limit) {
+            throw new InvalidSelectFacetConstraintsException(threshold, limit);
         }
         this.facetResult = facetResult;
         this.selectedValues = selectedValues;
-        this.termsThreshold = Optional.ofNullable(termsThreshold);
-        this.termsLimit = Optional.ofNullable(termsLimit);
+        this.threshold = Optional.ofNullable(threshold);
+        this.limit = Optional.ofNullable(limit);
     }
 
     @Override
@@ -33,7 +33,7 @@ abstract class BaseSelectFacetUiData<T> extends BaseFacetUiData {
 
     @Override
     public boolean canBeDisplayed() {
-        return termsThreshold.map(threshold -> getAllTermsUiData().size() >= threshold).orElse(true);
+        return threshold.map(threshold -> getAllTermsUiData().size() >= threshold).orElse(true);
     }
 
     /**
@@ -47,7 +47,7 @@ abstract class BaseSelectFacetUiData<T> extends BaseFacetUiData {
      * @return the truncated term list if the limit is defined, the whole term list otherwise
      */
     public List<TermUiData<T>> getLimitedTermsUiData() {
-        return termsLimit
+        return limit
                 .map(limit -> getAllTermsUiData().stream().limit(limit).collect(toList()))
                 .orElse(getAllTermsUiData());
     }
@@ -56,16 +56,16 @@ abstract class BaseSelectFacetUiData<T> extends BaseFacetUiData {
      * Gets the threshold indicating the minimum amount of terms allowed to be displayed in the facet UI data.
      * @return the threshold for the amount of terms that can be displayed, or absent if it has no threshold
      */
-    public Optional<Long> getTermsThreshold() {
-        return termsThreshold;
+    public Optional<Long> getThreshold() {
+        return threshold;
     }
 
     /**
      * Gets the limit for the maximum amount of terms allowed to be displayed in the facet UI data.
      * @return the limit for the amount of terms that can be displayed, or absent if it has no limit
      */
-    public Optional<Long> getTermsLimit() {
-        return termsLimit;
+    public Optional<Long> getLimit() {
+        return limit;
     }
 
     protected static <T> List<TermUiData<T>> toTermsUiData(final TermFacetResult<T> facetResult, final List<T> selectedValues) {

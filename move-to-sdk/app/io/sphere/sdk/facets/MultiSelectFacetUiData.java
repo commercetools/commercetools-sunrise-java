@@ -12,9 +12,9 @@ public final class MultiSelectFacetUiData<T> extends BaseSelectFacetUiData<T> {
     private final boolean matchesAll;
 
     private MultiSelectFacetUiData(final String key, final String label, final TermFacetResult<T> facetResult, final List<T> selectedValues,
-                                   @Nullable final Long termsThreshold, @Nullable final Long termsLimit,
+                                   @Nullable final Long threshold, @Nullable final Long limit,
                                    final List<TermUiData<T>> termsUiData, final boolean matchesAll) {
-        super(key, label, facetResult, selectedValues, termsThreshold, termsLimit);
+        super(key, label, facetResult, selectedValues, threshold, limit);
         this.termsUiData = termsUiData;
         this.matchesAll = matchesAll;
     }
@@ -38,10 +38,10 @@ public final class MultiSelectFacetUiData<T> extends BaseSelectFacetUiData<T> {
     }
 
     public static <T> MultiSelectFacetUiData<T> of(final String key, final String label, final TermFacetResult<T> facetResult,
-                                                   final List<T> selectedValues, @Nullable final Long termsThreshold,
-                                                   @Nullable final Long termsLimit, final boolean matchesAll) {
+                                                   final List<T> selectedValues, @Nullable final Long threshold,
+                                                   @Nullable final Long limit, final boolean matchesAll) {
         final List<TermUiData<T>> termsUiData = toTermsUiData(facetResult, selectedValues);
-        return new MultiSelectFacetUiData<>(key, label, facetResult, selectedValues, termsThreshold, termsLimit, termsUiData, matchesAll);
+        return new MultiSelectFacetUiData<>(key, label, facetResult, selectedValues, threshold, limit, termsUiData, matchesAll);
     }
 
     public static <T> MultiSelectFacetUiData<T> of(final String key, final String label, final TermFacetResult<T> facetResult,

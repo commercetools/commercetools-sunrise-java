@@ -26,8 +26,8 @@ public class MultiSelectFacetUiDataTest {
         assertThat(facet.getLabel()).isEqualTo(LABEL);
         assertThat(facet.getFacetResult()).isEqualTo(FACET_RESULT);
         assertThat(facet.getSelectedValues()).isEqualTo(SELECTED_VALUES);
-        assertThat(facet.getTermsThreshold()).contains(3L);
-        assertThat(facet.getTermsLimit()).contains(10L);
+        assertThat(facet.getThreshold()).contains(3L);
+        assertThat(facet.getLimit()).contains(10L);
         assertThat(facet.matchesAll()).isTrue();
     }
 
@@ -38,8 +38,8 @@ public class MultiSelectFacetUiDataTest {
         assertThat(facet.getLabel()).isEqualTo(LABEL);
         assertThat(facet.getFacetResult()).isEqualTo(FACET_RESULT);
         assertThat(facet.getSelectedValues()).isEmpty();
-        assertThat(facet.getTermsLimit()).isEmpty();
-        assertThat(facet.getTermsThreshold()).isEmpty();
+        assertThat(facet.getLimit()).isEmpty();
+        assertThat(facet.getThreshold()).isEmpty();
         assertThat(facet.matchesAll()).isFalse();
     }
 
