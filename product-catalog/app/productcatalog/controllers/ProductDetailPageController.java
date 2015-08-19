@@ -120,12 +120,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private ProductVariant obtainProductVariantBySku(final String sku, final ProductProjection productProjection) {
-        final Optional<ProductVariant> variantOptional = productService.findVariantBySku(productProjection, sku);
-        if (variantOptional.isPresent()) {
-            return variantOptional.get();
-        } else {
-            throw ProductVariantNotFoundException.bySku(sku);
-        }
+        return productService.findVariantBySku(productProjection, sku).orElseThrow(() -> ProductVariantNotFoundException.bySku(sku));
     }
 
     private Result notFoundAction() {
@@ -133,13 +128,9 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private F.Promise<ProductProjection> fetchProduct(final String slug, final Locale locale) {
-        return productService.searchProductBySlug(locale, slug).map(productOptional -> {
-            if (productOptional.isPresent()) {
-                return productOptional.get();
-            } else {
-                throw ProductNotFoundException.bySlug(locale, slug);
-            }
-        });
+        return productService.searchProductBySlug(locale, slug)
+                .map(productOptional -> productOptional.orElseThrow(() -> ProductNotFoundException.bySlug(locale, slug)));
+
     }
 
     private List<ShopShippingRate> getShippingRates() {
