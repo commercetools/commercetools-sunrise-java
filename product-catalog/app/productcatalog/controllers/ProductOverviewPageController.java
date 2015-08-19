@@ -46,9 +46,9 @@ public class ProductOverviewPageController extends SunriseController {
     }
 
     private ProductOverviewPageContent getPopPageData(final CmsPage cms, final List<ProductProjection> products) {
-        final Translator translator = context().translator();
-        final PriceFormatter priceFormatter = context().user().priceFormatter();
-        final PriceFinder priceFinder = context().user().priceFinder();
+        final Translator translator = userContext().translator();
+        final PriceFormatter priceFormatter = userContext().priceFormatter();
+        final PriceFinder priceFinder = userContext().priceFinder();
 
         final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator, priceFinder, priceFormatter);
 

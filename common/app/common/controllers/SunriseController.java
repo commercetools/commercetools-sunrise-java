@@ -33,8 +33,7 @@ public abstract class SunriseController extends ShopController {
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
         // TODO Fill it properly
-        final UserContext userContext = UserContext.of(DE, GERMAN, emptyList(), ZoneId.of("Europe/Berlin"), Reference.of(Zone.typeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88"));
-        this.context = AppContext.of(userContext, controllerDependency.projectContext());
+        this.context = AppContext.of(controllerDependency.projectContext());
         this.controllerDependency = controllerDependency;
     }
 
@@ -68,6 +67,10 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected F.Promise<CmsPage> getCmsPage(final String pageKey) {
-        return cmsService().getPage(context().user().language(), pageKey);
+        return cmsService().getPage(userContext().language(), pageKey);
+    }
+
+    protected UserContext userContext() {
+        return UserContext.of(DE, GERMAN, emptyList(), ZoneId.of("Europe/Berlin"), Reference.of(Zone.typeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88"));
     }
 }

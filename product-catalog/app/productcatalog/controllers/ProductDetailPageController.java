@@ -1,6 +1,7 @@
 package productcatalog.controllers;
 
 import common.cms.CmsPage;
+import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.*;
@@ -102,15 +103,15 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private PriceFinder getPriceFinder() {
-        return context().user().priceFinder();
+        return userContext().priceFinder();
     }
 
     private PriceFormatter getPriceFormatter() {
-        return context().user().priceFormatter();
+        return userContext().priceFormatter();
     }
 
     private Translator getTranslator() {
-        return context().translator();
+        return userContext().translator();
     }
 
     private ProductVariant obtainProductVariantBySku(final String sku, final ProductProjection productProjection) {
@@ -128,7 +129,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private List<ShopShippingRate> getShippingRates() {
-        return shippingMethodService.getShippingRates(context().user().zone());
+        return shippingMethodService.getShippingRates(userContext().zone());
     }
 
     private List<Category> getBreadcrumbsForProduct(final ProductProjection product) {
@@ -136,7 +137,6 @@ public class ProductDetailPageController extends SunriseController {
                     .map(categoryService::getBreadCrumbCategories)
                     .orElse(Collections.<Category>emptyList());
     }
-
 
     private List<ProductThumbnailData> suggestionsToViewData(final List<ProductProjection> suggestions) {
         return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(getTranslator(), getPriceFinder(), getPriceFormatter()).create(product)).collect(toList());
