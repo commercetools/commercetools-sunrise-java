@@ -46,10 +46,6 @@ public class ProductDetailPageController extends SunriseController {
         this.numberOfSuggestions = configuration.getInt("pdp.productSuggestions.count");
     }
 
-    private List<ProductThumbnailData> suggestionsToViewData(final List<ProductProjection> suggestions) {
-        return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(getTranslator(), getPriceFinder(), getPriceFormatter()).create(product)).collect(toList());
-    }
-
     public F.Promise<Result> pdp(final String language, final String slug, final String sku) {
         final Locale locale = new Locale(language);
 
@@ -68,7 +64,6 @@ public class ProductDetailPageController extends SunriseController {
             });
         });
 
-        //step 4 recover centrally for exceptions
         return resultPromise.recover(exception -> {
             if (exception instanceof ProductNotFoundException || exception instanceof ProductVariantNotFoundException) {
                 return notFoundAction();
@@ -136,5 +131,10 @@ public class ProductDetailPageController extends SunriseController {
         return product.getCategories().stream().findFirst()
                     .map(categoryService::getBreadCrumbCategories)
                     .orElse(Collections.<Category>emptyList());
+    }
+
+
+    private List<ProductThumbnailData> suggestionsToViewData(final List<ProductProjection> suggestions) {
+        return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(getTranslator(), getPriceFinder(), getPriceFormatter()).create(product)).collect(toList());
     }
 }
