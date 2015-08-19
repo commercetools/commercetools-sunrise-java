@@ -21,31 +21,31 @@ public class MultiSelectFacetUiDataTest {
 
     @Test
     public void createsInstance() throws Exception {
-        final MultiSelectFacetUiData<String> facetUI = MultiSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUES, 3L, 10L, true);
-        assertThat(facetUI.getKey()).isEqualTo(KEY);
-        assertThat(facetUI.getLabel()).isEqualTo(LABEL);
-        assertThat(facetUI.getFacetResult()).isEqualTo(FACET_RESULT);
-        assertThat(facetUI.getSelectedValues()).isEqualTo(SELECTED_VALUES);
-        assertThat(facetUI.getTermsThreshold()).contains(3L);
-        assertThat(facetUI.getTermsLimit()).contains(10L);
-        assertThat(facetUI.matchesAll()).isTrue();
+        final MultiSelectFacetUiData<String> facet = MultiSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUES, 3L, 10L, true);
+        assertThat(facet.getKey()).isEqualTo(KEY);
+        assertThat(facet.getLabel()).isEqualTo(LABEL);
+        assertThat(facet.getFacetResult()).isEqualTo(FACET_RESULT);
+        assertThat(facet.getSelectedValues()).isEqualTo(SELECTED_VALUES);
+        assertThat(facet.getTermsThreshold()).contains(3L);
+        assertThat(facet.getTermsLimit()).contains(10L);
+        assertThat(facet.matchesAll()).isTrue();
     }
 
     @Test
     public void createsInstanceWithoutOptionalValues() throws Exception {
-        final MultiSelectFacetUiData<String> facetUI = MultiSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, false);
-        assertThat(facetUI.getKey()).isEqualTo(KEY);
-        assertThat(facetUI.getLabel()).isEqualTo(LABEL);
-        assertThat(facetUI.getFacetResult()).isEqualTo(FACET_RESULT);
-        assertThat(facetUI.getSelectedValues()).isEmpty();
-        assertThat(facetUI.getTermsLimit()).isEmpty();
-        assertThat(facetUI.getTermsThreshold()).isEmpty();
-        assertThat(facetUI.matchesAll()).isFalse();
+        final MultiSelectFacetUiData<String> facet = MultiSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, false);
+        assertThat(facet.getKey()).isEqualTo(KEY);
+        assertThat(facet.getLabel()).isEqualTo(LABEL);
+        assertThat(facet.getFacetResult()).isEqualTo(FACET_RESULT);
+        assertThat(facet.getSelectedValues()).isEmpty();
+        assertThat(facet.getTermsLimit()).isEmpty();
+        assertThat(facet.getTermsThreshold()).isEmpty();
+        assertThat(facet.matchesAll()).isFalse();
     }
 
     @Test
     public void generatesTermsUI() throws Exception {
-        final MultiSelectFacetUiData<String> facetUI = MultiSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUES, null, null, true);
-        assertThat(facetUI.getAllTermsUI()).containsExactlyElementsOf(asList(termUI(TERM_ONE, false), termUI(TERM_TWO, true), termUI(TERM_THREE, true)));
+        final MultiSelectFacetUiData<String> facet = MultiSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUES, null, null, true);
+        assertThat(facet.getAllTermsUiData()).containsExactlyElementsOf(asList(termUI(TERM_ONE, false), termUI(TERM_TWO, true), termUI(TERM_THREE, true)));
     }
 }

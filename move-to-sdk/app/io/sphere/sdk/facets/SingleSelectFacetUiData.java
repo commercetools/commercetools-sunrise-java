@@ -10,17 +10,18 @@ import java.util.Optional;
 import static java.util.Collections.emptyList;
 
 public final class SingleSelectFacetUiData<T> extends BaseSelectFacetUiData<T> {
-    private final List<TermUiData<T>> termsUI;
+    private final List<TermUiData<T>> termsUiData;
 
-    private SingleSelectFacetUiData(final String key, final String label, final TermFacetResult<T> facetResult, final List<T> selectedValues,
-                                    @Nullable final Long termsThreshold, @Nullable final Long termsLimit, final List<TermUiData<T>> termsUI) {
+    private SingleSelectFacetUiData(final String key, final String label, final TermFacetResult<T> facetResult,
+                                    final List<T> selectedValues, @Nullable final Long termsThreshold,
+                                    @Nullable final Long termsLimit, final List<TermUiData<T>> termsUiData) {
         super(key, label, facetResult, selectedValues, termsThreshold, termsLimit);
-        this.termsUI = termsUI;
+        this.termsUiData = termsUiData;
     }
 
     @Override
-    public List<TermUiData<T>> getAllTermsUI() {
-        return termsUI;
+    public List<TermUiData<T>> getAllTermsUiData() {
+        return termsUiData;
     }
 
     public Optional<T> getSelectedValue() {
@@ -30,8 +31,8 @@ public final class SingleSelectFacetUiData<T> extends BaseSelectFacetUiData<T> {
     public static <T> SingleSelectFacetUiData<T> of(final String key, final String label, final TermFacetResult<T> facetResult,
                                                 @Nullable final T selectedValue, @Nullable final Long termsThreshold, @Nullable final Long termsLimit) {
         final List<T> selectedValues = Optional.ofNullable(selectedValue).map(Collections::singletonList).orElse(emptyList());
-        final List<TermUiData<T>> termsUI = toTermsUI(facetResult, selectedValues);
-        return new SingleSelectFacetUiData<>(key, label, facetResult, selectedValues, termsThreshold, termsLimit, termsUI);
+        final List<TermUiData<T>> termsUiData = toTermsUiData(facetResult, selectedValues);
+        return new SingleSelectFacetUiData<>(key, label, facetResult, selectedValues, termsThreshold, termsLimit, termsUiData);
     }
 
     public static <T> SingleSelectFacetUiData<T> of(final String key, final String label, final TermFacetResult<T> facetResult) {

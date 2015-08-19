@@ -42,6 +42,6 @@ public class SingleSelectFacetUiDataTest {
     @Test
     public void generatesTermsUI() throws Exception {
         final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, null, null);
-        assertThat(facetUI.getAllTermsUI()).containsExactlyElementsOf(asList(termUI(TERM_ONE, false), termUI(TERM_TWO, true), termUI(TERM_THREE, false)));
+        assertThat(facetUI.getAllTermsUiData()).containsExactlyElementsOf(asList(termUI(TERM_ONE, false), termUI(TERM_TWO, true), termUI(TERM_THREE, false)));
     }
 }

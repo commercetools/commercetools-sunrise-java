@@ -19,26 +19,26 @@ public class BaseSelectFacetUiDataTest {
 
     @Test
     public void canBeDisplayedIfOverThreshold() throws Exception {
-        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, 3L, null);
-        assertThat(facetUI.canBeDisplayed()).isTrue();
+        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, 3L, null);
+        assertThat(facet.canBeDisplayed()).isTrue();
     }
 
     @Test
     public void canNotBeDisplayedIfBelowThreshold() throws Exception {
-        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, 4L, null);
-        assertThat(facetUI.canBeDisplayed()).isFalse();
+        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, 4L, null);
+        assertThat(facet.canBeDisplayed()).isFalse();
     }
 
     @Test
     public void termListIsTruncatedIfOverLimit() throws Exception {
-        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, null, 2L);
-        assertThat(facetUI.getLimitedTermsUI()).containsExactlyElementsOf(asList(termUI(TERM_ONE, false), termUI(TERM_TWO, true)));
+        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, null, 2L);
+        assertThat(facet.getLimitedTermsUiData()).containsExactlyElementsOf(asList(termUI(TERM_ONE, false), termUI(TERM_TWO, true)));
     }
 
     @Test
     public void termListIsNotTruncatedIfBelowLimit() throws Exception {
-        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, null, 3L);
-        assertThat(facetUI.getLimitedTermsUI()).containsExactlyElementsOf(facetUI.getAllTermsUI());
+        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, null, 3L);
+        assertThat(facet.getLimitedTermsUiData()).containsExactlyElementsOf(facet.getAllTermsUiData());
     }
 
     @Test

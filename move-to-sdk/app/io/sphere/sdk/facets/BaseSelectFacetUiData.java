@@ -33,27 +33,27 @@ abstract class BaseSelectFacetUiData<T> extends BaseFacetUiData {
 
     @Override
     public boolean canBeDisplayed() {
-        return termsThreshold.map(threshold -> getAllTermsUI().size() >= threshold).orElse(true);
+        return termsThreshold.map(threshold -> getAllTermsUiData().size() >= threshold).orElse(true);
     }
 
     /**
-     * Gets the whole terms UI without restrictions.
-     * @return the term list UI
+     * Gets the whole terms UI data without restrictions.
+     * @return the term list UI data
      */
-    public abstract List<TermUiData<T>> getAllTermsUI();
+    public abstract List<TermUiData<T>> getAllTermsUiData();
 
     /**
-     * Obtains the truncated term UI list according to the defined term limit.
+     * Obtains the truncated term UI data list according to the defined term limit.
      * @return the truncated term list if the limit is defined, the whole term list otherwise
      */
-    public List<TermUiData<T>> getLimitedTermsUI() {
+    public List<TermUiData<T>> getLimitedTermsUiData() {
         return termsLimit
-                .map(limit -> getAllTermsUI().stream().limit(limit).collect(toList()))
-                .orElse(getAllTermsUI());
+                .map(limit -> getAllTermsUiData().stream().limit(limit).collect(toList()))
+                .orElse(getAllTermsUiData());
     }
 
     /**
-     * Gets the threshold indicating the minimum amount of terms allowed to be displayed in the facet UI
+     * Gets the threshold indicating the minimum amount of terms allowed to be displayed in the facet UI data.
      * @return the threshold for the amount of terms that can be displayed, or absent if it has no threshold
      */
     public Optional<Long> getTermsThreshold() {
@@ -61,14 +61,14 @@ abstract class BaseSelectFacetUiData<T> extends BaseFacetUiData {
     }
 
     /**
-     * Gets the limit for the maximum amount of terms allowed to be displayed in the facet UI
+     * Gets the limit for the maximum amount of terms allowed to be displayed in the facet UI data.
      * @return the limit for the amount of terms that can be displayed, or absent if it has no limit
      */
     public Optional<Long> getTermsLimit() {
         return termsLimit;
     }
 
-    protected static <T> List<TermUiData<T>> toTermsUI(final TermFacetResult<T> facetResult, final List<T> selectedValues) {
+    protected static <T> List<TermUiData<T>> toTermsUiData(final TermFacetResult<T> facetResult, final List<T> selectedValues) {
         return facetResult.getTerms().stream()
                 .map(termStat -> TermUiData.of(termStat, selectedValues))
                 .collect(toList());
