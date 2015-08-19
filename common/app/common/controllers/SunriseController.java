@@ -55,15 +55,19 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected F.Promise<Result> withCommonCms(final Function<CmsPage, Result> pageRenderer) {
-        final F.Promise<CmsPage> commonPage = getPage("common");
+        final F.Promise<CmsPage> commonPage = getCommonCmsPage();
         return commonPage.map(pageRenderer::apply);
     }
 
-    protected F.Promise<Result> withCms(final String pageKey, final Function<CmsPage, F.Promise<Result>> action) {
-        return getPage(pageKey).flatMap(action::apply);
+    protected F.Promise<CmsPage> getCommonCmsPage() {
+        return getCmsPage("common");
     }
 
-    protected F.Promise<CmsPage> getPage(final String pageKey) {
+    protected F.Promise<Result> withCms(final String pageKey, final Function<CmsPage, F.Promise<Result>> action) {
+        return getCmsPage(pageKey).flatMap(action::apply);
+    }
+
+    protected F.Promise<CmsPage> getCmsPage(final String pageKey) {
         return cmsService().getPage(context().user().language(), pageKey);
     }
 }

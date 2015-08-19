@@ -26,8 +26,6 @@ import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
-import java.util.function.Function;
 
 import static java.util.Locale.GERMAN;
 import static java.util.stream.Collectors.toList;
@@ -50,10 +48,8 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private List<ProductThumbnailData> suggestionsToViewData(final List<ProductProjection> suggestions) {
-        return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(getTranslator(),  getPriceFinder(), getPriceFormatter()).create(product)).collect(toList());
+        return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(getTranslator(), getPriceFinder(), getPriceFormatter()).create(product)).collect(toList());
     }
-
-
 
     public F.Promise<Result> pdp(final String slug, final String sku) {
         //step 1 get all parameters from header/url
@@ -62,13 +58,16 @@ public class ProductDetailPageController extends SunriseController {
         //step 2 create a chain/parallelize external calls
         final F.Promise<ProductProjection> productProjectionPromise = fetchProduct(slug, locale);
         final F.Promise<List<ProductProjection>> suggestionPromise = productProjectionPromise.flatMap(productProjection -> productService.getSuggestions(categoryService.getSiblingCategories(productProjection.getCategories()), numberOfSuggestions));
-        final F.Promise<CmsPage> cmsPagePromise = getPage("pdp");
+        final F.Promise<CmsPage> cmsPagePromise = getCmsPage("pdp");
+        final F.Promise<CmsPage> commonCmsPagePromise = getCommonCmsPage();
 
         //step 3 call method that does not need to call external systems
         final F.Promise<Result> resultPromise = productProjectionPromise.flatMap(productProjection -> {
             return cmsPagePromise.flatMap(cms -> {
-                return suggestionPromise.flatMap(suggestions -> {
-                    return getPdpResult(cms, suggestions, productProjection, sku);
+                return commonCmsPagePromise.flatMap(commonCmsPage -> {
+                    return suggestionPromise.map(suggestions -> {
+                        return getPdpResult(commonCmsPage, cms, suggestions, productProjection, sku);
+                    });
                 });
             });
         });
@@ -83,8 +82,7 @@ public class ProductDetailPageController extends SunriseController {
         });
     }
 
-    //TODO the promise needs to be removed
-    private F.Promise<Result> getPdpResult(final CmsPage cms, final List<ProductProjection> suggestions, final ProductProjection productProjection, final String sku) {
+    private Result getPdpResult(final CmsPage commonCmsPage, final CmsPage cms, final List<ProductProjection> suggestions, final ProductProjection productProjection, final String sku) {
         final Translator translator = getTranslator();
         final PriceFormatter priceFormatter = getPriceFormatter();
         final PriceFinder priceFinder = getPriceFinder();
@@ -104,7 +102,8 @@ public class ProductDetailPageController extends SunriseController {
 
         final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
 
-        return render(view -> ok(view.productDetailPage(content)));
+        final ProductCatalogView view1 = new ProductCatalogView(templateService(), context(), commonCmsPage);
+        return ok(view1.productDetailPage(content));
     }
 
     private PriceFinder getPriceFinder() {
@@ -141,12 +140,5 @@ public class ProductDetailPageController extends SunriseController {
         return product.getCategories().stream().findFirst()
                     .map(categoryService::getBreadCrumbCategories)
                     .orElse(Collections.<Category>emptyList());
-    }
-
-    private F.Promise<Result> render(final Function<ProductCatalogView, Result> pageRenderer) {
-        return withCommonCms(cms -> {
-            final ProductCatalogView view = new ProductCatalogView(templateService(), context(), cms);
-            return pageRenderer.apply(view);
-        });
     }
 }
