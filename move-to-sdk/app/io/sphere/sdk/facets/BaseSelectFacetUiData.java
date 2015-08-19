@@ -8,14 +8,14 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-abstract class BaseSelectFacetUI<T> extends BaseFacetUI {
+abstract class BaseSelectFacetUiData<T> extends BaseFacetUiData {
     protected final List<T> selectedValues;
     private final TermFacetResult<T> facetResult;
     private final Optional<Long> termsThreshold;
     private final Optional<Long> termsLimit;
 
-    protected BaseSelectFacetUI(final String key, final String label, final TermFacetResult<T> facetResult, final List<T> selectedValues,
-                                @Nullable final Long termsThreshold, @Nullable final Long termsLimit) {
+    protected BaseSelectFacetUiData(final String key, final String label, final TermFacetResult<T> facetResult, final List<T> selectedValues,
+                                    @Nullable final Long termsThreshold, @Nullable final Long termsLimit) {
         super(key, label);
         if (termsThreshold != null && termsLimit != null && termsThreshold > termsLimit) {
             throw new InvalidSelectFacetConstraintsException(termsThreshold, termsLimit);
@@ -40,13 +40,13 @@ abstract class BaseSelectFacetUI<T> extends BaseFacetUI {
      * Gets the whole terms UI without restrictions.
      * @return the term list UI
      */
-    public abstract List<TermUI<T>> getAllTermsUI();
+    public abstract List<TermUiData<T>> getAllTermsUI();
 
     /**
      * Obtains the truncated term UI list according to the defined term limit.
      * @return the truncated term list if the limit is defined, the whole term list otherwise
      */
-    public List<TermUI<T>> getLimitedTermsUI() {
+    public List<TermUiData<T>> getLimitedTermsUI() {
         return termsLimit
                 .map(limit -> getAllTermsUI().stream().limit(limit).collect(toList()))
                 .orElse(getAllTermsUI());
@@ -68,9 +68,9 @@ abstract class BaseSelectFacetUI<T> extends BaseFacetUI {
         return termsLimit;
     }
 
-    protected static <T> List<TermUI<T>> toTermsUI(final TermFacetResult<T> facetResult, final List<T> selectedValues) {
+    protected static <T> List<TermUiData<T>> toTermsUI(final TermFacetResult<T> facetResult, final List<T> selectedValues) {
         return facetResult.getTerms().stream()
-                .map(termStat -> TermUI.of(termStat, selectedValues))
+                .map(termStat -> TermUiData.of(termStat, selectedValues))
                 .collect(toList());
     }
 }

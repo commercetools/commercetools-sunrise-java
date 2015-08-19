@@ -4,11 +4,11 @@ import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
 
-import static io.sphere.sdk.facets.BaseSelectFacetUITest.termUI;
+import static io.sphere.sdk.facets.BaseSelectFacetUiDataTest.termUI;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SingleSelectFacetUITest {
+public class SingleSelectFacetUiDataTest {
     private static final String KEY = "single-select-facet";
     private static final String LABEL = "Select one option";
     private static final TermStats<String> TERM_ONE = TermStats.of("one", 30);
@@ -19,7 +19,7 @@ public class SingleSelectFacetUITest {
 
     @Test
     public void createsInstance() throws Exception {
-        final SingleSelectFacetUI<String> facetUI = SingleSelectFacetUI.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, 3L, 10L);
+        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, 3L, 10L);
         assertThat(facetUI.getKey()).isEqualTo(KEY);
         assertThat(facetUI.getLabel()).isEqualTo(LABEL);
         assertThat(facetUI.getFacetResult()).isEqualTo(FACET_RESULT);
@@ -30,7 +30,7 @@ public class SingleSelectFacetUITest {
 
     @Test
     public void createsInstanceWithoutOptionalValues() throws Exception {
-        final SingleSelectFacetUI<String> facetUI = SingleSelectFacetUI.of(KEY, LABEL, FACET_RESULT);
+        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT);
         assertThat(facetUI.getKey()).isEqualTo(KEY);
         assertThat(facetUI.getLabel()).isEqualTo(LABEL);
         assertThat(facetUI.getFacetResult()).isEqualTo(FACET_RESULT);
@@ -41,7 +41,7 @@ public class SingleSelectFacetUITest {
 
     @Test
     public void generatesTermsUI() throws Exception {
-        final SingleSelectFacetUI<String> facetUI = SingleSelectFacetUI.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, null, null);
+        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, null, null);
         assertThat(facetUI.getAllTermsUI()).containsExactlyElementsOf(asList(termUI(TERM_ONE, false), termUI(TERM_TWO, true), termUI(TERM_THREE, false)));
     }
 }

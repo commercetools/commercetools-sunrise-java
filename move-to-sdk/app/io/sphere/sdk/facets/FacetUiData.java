@@ -2,7 +2,7 @@ package io.sphere.sdk.facets;
 
 import io.sphere.sdk.search.FacetResult;
 
-public interface FacetUI {
+public interface FacetUiData {
 
     /**
      * Gets the string identifying this facet UI representation.
