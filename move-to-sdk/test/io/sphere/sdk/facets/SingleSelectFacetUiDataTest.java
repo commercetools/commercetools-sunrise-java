@@ -1,47 +1,40 @@
 package io.sphere.sdk.facets;
 
-import io.sphere.sdk.search.TermFacetResult;
-import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
 
-import static io.sphere.sdk.facets.BaseSelectFacetUiDataTest.termUI;
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SingleSelectFacetUiDataTest {
     private static final String KEY = "single-select-facet";
     private static final String LABEL = "Select one option";
-    private static final TermStats<String> TERM_ONE = TermStats.of("one", 30);
-    private static final TermStats<String> TERM_TWO = TermStats.of("two", 20);
-    private static final TermStats<String> TERM_THREE = TermStats.of("three", 10);
-    private static final TermFacetResult<String> FACET_RESULT = TermFacetResult.of(5L, 60L, 0L, asList(TERM_ONE, TERM_TWO, TERM_THREE));
-    private static final String SELECTED_VALUE = TERM_TWO.getTerm();
+    private static final List<FacetOption<String>> OPTIONS = asList(
+            FacetOption.of("one", 30, false),
+            FacetOption.of("two", 20, true),
+            FacetOption.of("three", 10, false));
 
     @Test
     public void createsInstance() throws Exception {
-        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, 3L, 10L);
-        assertThat(facetUI.getKey()).isEqualTo(KEY);
-        assertThat(facetUI.getLabel()).isEqualTo(LABEL);
-        assertThat(facetUI.getFacetResult()).isEqualTo(FACET_RESULT);
-        assertThat(facetUI.getSelectedValue()).contains(SELECTED_VALUE);
-        assertThat(facetUI.getThreshold()).contains(3L);
-        assertThat(facetUI.getLimit()).contains(10L);
+        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiDataBuilder.of(KEY, LABEL, OPTIONS)
+                .setThreshold(3L)
+                .setLimit(10L)
+                .build();
+        assertThat(facet.getKey()).isEqualTo(KEY);
+        assertThat(facet.getLabel()).isEqualTo(LABEL);
+        assertThat(facet.getAllOptions()).isEqualTo(OPTIONS);
+        assertThat(facet.getThreshold()).contains(3L);
+        assertThat(facet.getLimit()).contains(10L);
     }
 
     @Test
-    public void createsInstanceWithoutOptionalValues() throws Exception {
-        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT);
-        assertThat(facetUI.getKey()).isEqualTo(KEY);
-        assertThat(facetUI.getLabel()).isEqualTo(LABEL);
-        assertThat(facetUI.getFacetResult()).isEqualTo(FACET_RESULT);
-        assertThat(facetUI.getSelectedValue()).isEmpty();
-        assertThat(facetUI.getLimit()).isEmpty();
-        assertThat(facetUI.getThreshold()).isEmpty();
-    }
-
-    @Test
-    public void generatesTermsUI() throws Exception {
-        final SingleSelectFacetUiData<String> facetUI = SingleSelectFacetUiData.of(KEY, LABEL, FACET_RESULT, SELECTED_VALUE, null, null);
-        assertThat(facetUI.getAllTermsUiData()).containsExactlyElementsOf(asList(termUI(TERM_ONE, false), termUI(TERM_TWO, true), termUI(TERM_THREE, false)));
+    public void createsInstanceWithOptionalValues() throws Exception {
+        final SingleSelectFacetUiData<String> facet = SingleSelectFacetUiDataBuilder.of(KEY, LABEL, OPTIONS).build();
+        assertThat(facet.getKey()).isEqualTo(KEY);
+        assertThat(facet.getLabel()).isEqualTo(LABEL);
+        assertThat(facet.getAllOptions()).isEqualTo(OPTIONS);
+        assertThat(facet.getThreshold()).isEmpty();
+        assertThat(facet.getLimit()).isEmpty();
     }
 }
