@@ -17,13 +17,13 @@ public final class SingleSelectFacetBuilder<T> extends BaseSelectFacetBuilder<Si
     }
 
     @Override
-    public SingleSelectFacetBuilder<T> setThreshold(@Nullable final Long threshold) {
-        return super.setThreshold(threshold);
+    public SingleSelectFacetBuilder<T> threshold(@Nullable final Long threshold) {
+        return super.threshold(threshold);
     }
 
     @Override
-    public SingleSelectFacetBuilder<T> setLimit(@Nullable final Long limit) {
-        return super.setLimit(limit);
+    public SingleSelectFacetBuilder<T> limit(@Nullable final Long limit) {
+        return super.limit(limit);
     }
 
     public static <T> SingleSelectFacetBuilder<T> of(final String key, final String label, final List<FacetOption<T>> options) {

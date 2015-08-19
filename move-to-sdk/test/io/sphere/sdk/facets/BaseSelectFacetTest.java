@@ -20,7 +20,7 @@ public class BaseSelectFacetTest {
     @Test
     public void canBeDisplayedIfOverThreshold() throws Exception {
         final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
-                .setThreshold(3L)
+                .threshold(3L)
                 .build();
         assertThat(facet.canBeDisplayed()).isTrue();
     }
@@ -28,7 +28,7 @@ public class BaseSelectFacetTest {
     @Test
     public void canNotBeDisplayedIfBelowThreshold() throws Exception {
         final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
-                .setThreshold(4L)
+                .threshold(4L)
                 .build();
         assertThat(facet.canBeDisplayed()).isFalse();
     }
@@ -36,7 +36,7 @@ public class BaseSelectFacetTest {
     @Test
     public void termListIsTruncatedIfOverLimit() throws Exception {
         final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
-                .setLimit(2L)
+                .limit(2L)
                 .build();
         assertThat(facet.getLimitedOptions()).containsExactlyElementsOf(asList(OPTIONS.get(0), OPTIONS.get(1)));
         assertThat(facet.getAllOptions()).containsExactlyElementsOf(OPTIONS);
@@ -45,7 +45,7 @@ public class BaseSelectFacetTest {
     @Test
     public void termListIsNotTruncatedIfBelowLimit() throws Exception {
         final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
-                .setLimit(3L)
+                .limit(3L)
                 .build();
         assertThat(facet.getLimitedOptions()).containsExactlyElementsOf(OPTIONS);
         assertThat(facet.getAllOptions()).containsExactlyElementsOf(OPTIONS);
@@ -53,10 +53,10 @@ public class BaseSelectFacetTest {
 
     @Test
     public void throwsExceptionOnWrongThresholdAndLimit() throws Exception {
-        final SingleSelectFacetBuilder<String> builder = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS).setThreshold(10L);
+        final SingleSelectFacetBuilder<String> builder = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS).threshold(10L);
         assertThatThrownBy(() -> {
-            builder.setLimit(10L).build();
-            builder.setLimit(3L).build();
+            builder.limit(10L).build();
+            builder.limit(3L).build();
         }).isExactlyInstanceOf(InvalidSelectFacetConstraintsException.class)
                 .hasMessageContaining("Threshold: 10")
                 .hasMessageContaining("Limit: 3");

@@ -20,13 +20,13 @@ public final class MultiSelectFacetBuilder<T> extends BaseSelectFacetBuilder<Mul
     }
 
     @Override
-    public MultiSelectFacetBuilder<T> setThreshold(@Nullable final Long threshold) {
-        return super.setThreshold(threshold);
+    public MultiSelectFacetBuilder<T> threshold(@Nullable final Long threshold) {
+        return super.threshold(threshold);
     }
 
     @Override
-    public MultiSelectFacetBuilder<T> setLimit(@Nullable final Long limit) {
-        return super.setLimit(limit);
+    public MultiSelectFacetBuilder<T> limit(@Nullable final Long limit) {
+        return super.limit(limit);
     }
 
     public boolean matchesAll() {

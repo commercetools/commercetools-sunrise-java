@@ -18,8 +18,8 @@ public class MultiSelectFacetTest {
     @Test
     public void createsInstance() throws Exception {
         final MultiSelectFacet<String> facet = MultiSelectFacetBuilder.of(KEY, LABEL, OPTIONS, true)
-                .setThreshold(3L)
-                .setLimit(10L)
+                .threshold(3L)
+                .limit(10L)
                 .build();
         assertThat(facet.getKey()).isEqualTo(KEY);
         assertThat(facet.getLabel()).isEqualTo(LABEL);

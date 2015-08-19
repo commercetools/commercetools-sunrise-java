@@ -18,8 +18,8 @@ public class SingleSelectFacetTest {
     @Test
     public void createsInstance() throws Exception {
         final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
-                .setThreshold(3L)
-                .setLimit(10L)
+                .threshold(3L)
+                .limit(10L)
                 .build();
         assertThat(facet.getKey()).isEqualTo(KEY);
         assertThat(facet.getLabel()).isEqualTo(LABEL);

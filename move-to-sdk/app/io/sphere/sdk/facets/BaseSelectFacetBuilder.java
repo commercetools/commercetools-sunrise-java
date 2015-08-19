@@ -19,12 +19,12 @@ abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T, V>, V>
         this.options = options;
     }
 
-    public T setThreshold(@Nullable final Long threshold) {
+    public T threshold(@Nullable final Long threshold) {
         this.threshold = Optional.ofNullable(threshold);
         return getThis();
     }
 
-    public T setLimit(@Nullable final Long limit) {
+    public T limit(@Nullable final Long limit) {
         this.limit = Optional.ofNullable(limit);
         return getThis();
     }
