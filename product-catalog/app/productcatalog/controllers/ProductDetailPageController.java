@@ -64,6 +64,10 @@ public class ProductDetailPageController extends SunriseController {
             });
         });
 
+        return recover(resultPromise);
+    }
+
+    private F.Promise<Result> recover(final F.Promise<Result> resultPromise) {
         return resultPromise.recover(exception -> {
             if (exception instanceof ProductNotFoundException || exception instanceof ProductVariantNotFoundException) {
                 return notFoundAction();
