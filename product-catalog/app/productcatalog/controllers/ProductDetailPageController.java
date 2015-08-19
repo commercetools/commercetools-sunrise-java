@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static java.util.Locale.GERMAN;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
@@ -51,17 +50,14 @@ public class ProductDetailPageController extends SunriseController {
         return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(getTranslator(), getPriceFinder(), getPriceFormatter()).create(product)).collect(toList());
     }
 
-    public F.Promise<Result> pdp(final String slug, final String sku) {
-        //step 1 get all parameters from header/url
-        final Locale locale = GERMAN;//TODO get from URL
+    public F.Promise<Result> pdp(final String language, final String slug, final String sku) {
+        final Locale locale = new Locale(language);
 
-        //step 2 create a chain/parallelize external calls
         final F.Promise<ProductProjection> productProjectionPromise = fetchProduct(slug, locale);
         final F.Promise<List<ProductProjection>> suggestionPromise = productProjectionPromise.flatMap(productProjection -> productService.getSuggestions(categoryService.getSiblingCategories(productProjection.getCategories()), numberOfSuggestions));
         final F.Promise<CmsPage> cmsPagePromise = getCmsPage("pdp");
         final F.Promise<CmsPage> commonCmsPagePromise = getCommonCmsPage();
 
-        //step 3 call method that does not need to call external systems
         final F.Promise<Result> resultPromise = productProjectionPromise.flatMap(productProjection -> {
             return cmsPagePromise.flatMap(cms -> {
                 return commonCmsPagePromise.flatMap(commonCmsPage -> {
