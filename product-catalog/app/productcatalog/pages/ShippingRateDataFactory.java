@@ -3,6 +3,8 @@ package productcatalog.pages;
 import common.utils.PriceFormatter;
 import productcatalog.models.ShopShippingRate;
 
+import java.util.Optional;
+
 public class ShippingRateDataFactory {
 
     private final PriceFormatter priceFormatter;
@@ -20,7 +22,7 @@ public class ShippingRateDataFactory {
                 shopShippingRate.shippingMethodName,
                 "",
                 priceFormatter.format(shopShippingRate.shippingRate.getPrice()),
-                shopShippingRate.shippingRate.getFreeAbove().map(priceFormatter::format).orElse("")
+                Optional.ofNullable(shopShippingRate.shippingRate.getFreeAbove()).map(priceFormatter::format).orElse("")
         );
     }
 }

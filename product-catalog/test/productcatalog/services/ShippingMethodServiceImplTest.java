@@ -13,7 +13,7 @@ import productcatalog.models.ShopShippingRate;
 import javax.money.Monetary;
 import java.util.List;
 
-import static io.sphere.sdk.json.JsonUtils.readObjectFromResource;
+import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShippingMethodServiceImplTest {

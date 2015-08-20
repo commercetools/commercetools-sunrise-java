@@ -1,6 +1,6 @@
 package common.utils;
 
-import io.sphere.sdk.models.LocalizedStrings;
+import io.sphere.sdk.models.LocalizedString;
 import org.junit.Test;
 
 import java.util.*;
@@ -27,7 +27,7 @@ public class TranslatorTest {
 
     @Test
     public void findTranslationForPreferredLanguage() {
-        final LocalizedStrings localizedStrings = LocalizedStrings.of(translations);
+        final LocalizedString localizedStrings = LocalizedString.of(translations);
 
         final String foundTranslation = translator.findTranslation(localizedStrings);
 
@@ -43,7 +43,7 @@ public class TranslatorTest {
         localizedStringEntries.put(french, "french");
         localizedStringEntries.put(italian, "italian");
         localizedStringEntries.put(korean, "korean");
-        final LocalizedStrings localizedStrings = LocalizedStrings.of(localizedStringEntries);
+        final LocalizedString localizedStrings = LocalizedString.of(localizedStringEntries);
 
         final String foundTranslation = translator.findTranslation(localizedStrings);
 
@@ -57,7 +57,7 @@ public class TranslatorTest {
         final Map<Locale, String> localizedStringEntries = new HashMap<>(2);
         localizedStringEntries.put(italian, "italian");
         localizedStringEntries.put(korean, "korean");
-        final LocalizedStrings localizedStrings = LocalizedStrings.of(localizedStringEntries);
+        final LocalizedString localizedStrings = LocalizedString.of(localizedStringEntries);
 
         final String foundTranslation = translator.findTranslation(localizedStrings);
 
@@ -70,7 +70,7 @@ public class TranslatorTest {
     public void findNoTranslation() {
         final Map<Locale, String> localizedStringEntries = new HashMap<>(1);
         localizedStringEntries.put(Locale.CHINESE, "chinese");
-        final LocalizedStrings localizedStrings = LocalizedStrings.of(localizedStringEntries);
+        final LocalizedString localizedStrings = LocalizedString.of(localizedStringEntries);
 
         final String foundTranslation = translator.findTranslation(localizedStrings);
 

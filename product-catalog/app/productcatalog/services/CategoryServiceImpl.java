@@ -25,8 +25,8 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getSiblingCategories(final Collection<Reference<Category>> categoryRefs) {
         return categoryRefs.stream()
             .map(this::expandCategory).filter(Optional::isPresent).map(Optional::get)
-            .map(Category::getParent).filter(Optional::isPresent).map(Optional::get)
-            .flatMap(parent -> categories.findByParent(parent).stream())
+            .map(category -> Optional.ofNullable(category.getParent())).filter(Optional::isPresent).map(Optional::get)
+            .flatMap(parent -> categories.findChildren(parent).stream())
             .distinct()
             .collect(toList());
     }

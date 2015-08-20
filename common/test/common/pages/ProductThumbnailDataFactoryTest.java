@@ -11,7 +11,7 @@ import javax.money.Monetary;
 import java.util.Locale;
 import java.util.Optional;
 
-import static io.sphere.sdk.json.JsonUtils.readObjectFromResource;
+import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 

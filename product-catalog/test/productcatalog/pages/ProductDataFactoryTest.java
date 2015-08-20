@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static io.sphere.sdk.json.JsonUtils.readObjectFromResource;
+import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;

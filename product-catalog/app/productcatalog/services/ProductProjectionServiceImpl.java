@@ -44,7 +44,7 @@ public class ProductProjectionServiceImpl implements ProductProjectionService {
 
     public F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories, final int numSuggestions) {
         final ProductProjectionQuery productProjectionQuery = ProductProjectionQuery.ofCurrent()
-                .withPredicate(p -> p.categories().isIn(categories));
+                .withPredicates(p -> p.categories().isIn(categories));
 
         return sphere.execute(productProjectionQuery)
                 .map(PagedQueryResult::getResults)
@@ -52,7 +52,7 @@ public class ProductProjectionServiceImpl implements ProductProjectionService {
     }
 
     private boolean variantHasSku(final ProductVariant variant, final String sku) {
-        return variant.getSku().map(variantSku -> variantSku.equals(sku)).orElse(false);
+        return Optional.ofNullable(variant.getSku()).map(variantSku -> variantSku.equals(sku)).orElse(false);
     }
 
     private <T> List<T> pickNRandom(final List<T> elements, final int n) {

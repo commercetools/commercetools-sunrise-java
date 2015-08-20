@@ -4,7 +4,7 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
 
-import static io.sphere.sdk.json.JsonUtils.readObjectFromResource;
+import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 
 public class CategoryUtils {
 

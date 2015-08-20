@@ -1,7 +1,7 @@
 package common.pages;
 
 import io.sphere.sdk.models.Base;
-import io.sphere.sdk.models.Image;
+import io.sphere.sdk.products.Image;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
