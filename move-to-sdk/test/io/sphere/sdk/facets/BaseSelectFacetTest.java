@@ -34,7 +34,7 @@ public class BaseSelectFacetTest {
     }
 
     @Test
-    public void termListIsTruncatedIfOverLimit() throws Exception {
+    public void optionsListIsTruncatedIfOverLimit() throws Exception {
         final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
                 .limit(2L)
                 .build();
@@ -43,7 +43,7 @@ public class BaseSelectFacetTest {
     }
 
     @Test
-    public void termListIsNotTruncatedIfBelowLimit() throws Exception {
+    public void optionsListIsNotTruncatedIfBelowLimit() throws Exception {
         final SingleSelectFacet<String> facet = SingleSelectFacetBuilder.of(KEY, LABEL, OPTIONS)
                 .limit(3L)
                 .build();
