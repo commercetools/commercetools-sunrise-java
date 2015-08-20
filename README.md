@@ -51,6 +51,8 @@ For an easy and fast deployment of your application we recommend [heroku](https:
 <a href="https://heroku.com/deploy?template=https://github.com/sphereio/sphere-sunrise"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a>
 
 ## Related projects
+
+* https://github.com/sphereio/sphere-sunrise-data
 * https://github.com/sphereio/sphere-sunrise-scenarios
 * https://github.com/sphereio/sphere-sunrise-design
 * https://github.com/sphereio/sphere-jvm-sdk
