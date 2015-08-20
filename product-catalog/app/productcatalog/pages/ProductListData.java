@@ -5,10 +5,10 @@ import io.sphere.sdk.models.Base;
 
 import java.util.List;
 
-public class ProductList extends Base {
+public class ProductListData extends Base {
     final List<ProductThumbnailData> productList;
 
-    public ProductList(final List<ProductThumbnailData> productList) {
+    public ProductListData(final List<ProductThumbnailData> productList) {
         this.productList = productList;
     }
 

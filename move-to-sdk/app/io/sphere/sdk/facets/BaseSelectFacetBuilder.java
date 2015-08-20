@@ -6,14 +6,14 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T, V>, V> extends Base {
+abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T>> extends Base {
     private final String key;
     private final String label;
-    private final List<FacetOption<V>> options;
+    private final List<FacetOption> options;
     private Optional<Long> threshold = Optional.empty();
     private Optional<Long> limit = Optional.empty();
 
-    protected BaseSelectFacetBuilder(final String key, final String label, final List<FacetOption<V>> options) {
+    protected BaseSelectFacetBuilder(final String key, final String label, final List<FacetOption> options) {
         this.key = key;
         this.label = label;
         this.options = options;
@@ -37,7 +37,7 @@ abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T, V>, V>
         return label;
     }
 
-    public List<FacetOption<V>> getOptions() {
+    public List<FacetOption> getOptions() {
         return options;
     }
 
