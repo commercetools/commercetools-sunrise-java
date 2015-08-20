@@ -1,0 +1,16 @@
+{
+  "key": "imaginary-sunrise-test",
+  "name": "imaginary-sunrise-test",
+  "countries": [
+    "DE",
+    "AT"
+  ],
+  "currencies": [
+    "EUR"
+  ],
+  "languages": [
+    "de"
+  ],
+  "createdAt": "2014-12-04T17:39:54.410Z",
+  "trialUntil": "2015-03"
+}
