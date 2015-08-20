@@ -36,7 +36,7 @@ public class ProductOverviewPageController extends SunriseController {
         this.pageSize = configuration.getInt("pop.pageSize");
     }
 
-    public F.Promise<Result> pop(int page) {
+    public F.Promise<Result> show(int page) {
         return withCms("pop", cms ->
             productService.searchProducts(page, pageSize).flatMap(result -> {
                 final ProductOverviewPageContent content = getPopPageData(cms, result);

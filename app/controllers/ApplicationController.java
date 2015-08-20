@@ -20,6 +20,6 @@ public final class ApplicationController extends SunriseController {
     }
 
     public F.Promise<Result> index() {
-        return F.Promise.pure(redirect(productcatalog.controllers.routes.ProductOverviewPageController.pop(1)));
+        return F.Promise.pure(redirect(productcatalog.controllers.routes.ProductOverviewPageController.show(1)));
     }
 }

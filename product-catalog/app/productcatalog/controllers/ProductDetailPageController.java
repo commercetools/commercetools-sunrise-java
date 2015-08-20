@@ -47,7 +47,7 @@ public class ProductDetailPageController extends SunriseController {
         this.numberOfSuggestions = configuration.getInt("pdp.productSuggestions.count");
     }
 
-    public F.Promise<Result> pdp(final String language, final String slug, final String sku) {
+    public F.Promise<Result> show(final String language, final String slug, final String sku) {
         final Locale locale = new Locale(language);
 
         final F.Promise<ProductProjection> productProjectionPromise = fetchProduct(slug, locale);

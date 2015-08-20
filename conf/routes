@@ -5,8 +5,8 @@
 # Home page
 GET        /                           @controllers.HomeController.index()
 
-GET        /pop                        @productcatalog.controllers.ProductOverviewPageController.pop(page: Int ?= 1)
-GET        /:language/:slug-$sku<[^-]+>.html @productcatalog.controllers.ProductDetailPageController.pdp(language: String, slug: String, sku: String)
+GET        /pop                        @productcatalog.controllers.ProductOverviewPageController.show(page: Int ?= 1)
+GET        /:language/:slug-$sku<[^-]+>.html @productcatalog.controllers.ProductDetailPageController.show(language: String, slug: String, sku: String)
 
 ->         /setup                      setupwidget.Routes
 
