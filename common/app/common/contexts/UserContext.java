@@ -93,4 +93,8 @@ public class UserContext {
     public PriceFormatter priceFormatter() {
         return priceFormatter;
     }
+
+    public Translator translator() {
+        return Translator.of(language(), fallbackLanguages(), fallbackLanguages);
+    }
 }

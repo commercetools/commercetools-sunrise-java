@@ -6,7 +6,6 @@ import common.contexts.AppContext;
 import common.contexts.UserContext;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
@@ -34,8 +33,7 @@ public abstract class SunriseController extends ShopController {
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
         // TODO Fill it properly
-        final UserContext userContext = UserContext.of(DE, GERMAN, emptyList(), ZoneId.of("Europe/Berlin"), Reference.of(Zone.typeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88"));
-        this.context = AppContext.of(userContext, controllerDependency.projectContext());
+        this.context = AppContext.of(controllerDependency.projectContext());
         this.controllerDependency = controllerDependency;
     }
 
@@ -56,11 +54,23 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected F.Promise<Result> withCommonCms(final Function<CmsPage, Result> pageRenderer) {
-        final F.Promise<CmsPage> commonPage = cmsService().getPage(context().user().language(), "common");
+        final F.Promise<CmsPage> commonPage = getCommonCmsPage();
         return commonPage.map(pageRenderer::apply);
     }
 
+    protected F.Promise<CmsPage> getCommonCmsPage() {
+        return getCmsPage("common");
+    }
+
     protected F.Promise<Result> withCms(final String pageKey, final Function<CmsPage, F.Promise<Result>> action) {
-        return cmsService().getPage(context().user().language(), pageKey).flatMap(action::apply);
+        return getCmsPage(pageKey).flatMap(action::apply);
+    }
+
+    protected F.Promise<CmsPage> getCmsPage(final String pageKey) {
+        return cmsService().getPage(userContext().language(), pageKey);
+    }
+
+    protected UserContext userContext() {
+        return UserContext.of(DE, GERMAN, emptyList(), ZoneId.of("Europe/Berlin"), Reference.of(Zone.typeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88"));
     }
 }

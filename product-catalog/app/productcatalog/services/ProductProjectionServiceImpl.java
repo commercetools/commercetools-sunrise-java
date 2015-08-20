@@ -8,13 +8,17 @@ import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.queries.PagedResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.libs.F;
+import productcatalog.models.ProductNotFoundException;
 
 import javax.inject.Inject;
 import java.util.*;
 
 public class ProductProjectionServiceImpl implements ProductProjectionService {
     private static final Random RANDOM = new Random();
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductProjectionServiceImpl.class);
 
     private final PlayJavaSphereClient sphere;
 
@@ -32,8 +36,16 @@ public class ProductProjectionServiceImpl implements ProductProjectionService {
     }
 
     public F.Promise<Optional<ProductProjection>> searchProductBySlug(final Locale locale, final String slug) {
-        return sphere.execute(ProductProjectionQuery.ofCurrent().bySlug(locale, slug))
+        final F.Promise<Optional<ProductProjection>> productOptionalPromise = sphere.execute(ProductProjectionQuery.ofCurrent().bySlug(locale, slug))
                 .map(PagedQueryResult::head);
+        productOptionalPromise.onRedeem(productOptional -> {
+            if (productOptional.isPresent()) {
+                LOGGER.trace("Found product for slug {} in locale {} with ID {}.", slug, locale, productOptional.get().getId());
+            } else {
+                LOGGER.trace("No product found for slug {} in locale {}.", slug, locale);
+            }
+        });
+        return productOptionalPromise;
     }
 
     public Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku) {
