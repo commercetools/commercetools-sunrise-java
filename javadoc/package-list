@@ -8,6 +8,7 @@ common.templates
 common.utils
 controllers
 inject
+io.sphere.sdk.facets
 io.sphere.sdk.play.controllers
 io.sphere.sdk.play.metrics
 io.sphere.sdk.queries
