@@ -16,6 +16,12 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class TemplateServiceProvider implements Provider<TemplateService> {
+    private static final String CONFIG_TEMPLATE_LOADERS = "handlebars.templateLoaders";
+    private static final String CONFIG_FALLBACK_CONTEXTS = "handlebars.fallbackContexts";
+    private static final String CLASSPATH_TYPE = "classpath";
+    private static final String FILE_TYPE = "file";
+    private static final String TYPE_ATTR = "type";
+    private static final String PATH_ATTR = "path";
     private final Configuration configuration;
 
     @Inject
@@ -25,22 +31,29 @@ public class TemplateServiceProvider implements Provider<TemplateService> {
 
     @Override
     public TemplateService get() {
-        final List<TemplateLoader> templateLoaders = configuration.getConfigList("handlebars.templateLoaders")
-                .stream()
-                .map(loaderConfig -> {
-                    final String type = loaderConfig.getString("type");
-                    final String path = loaderConfig.getString("path");
-                    if ("classpath".equals(type)) {
-                        return new ClassPathTemplateLoader(path);
-                    } else if ("file".equals(type)) {
-                        return new FileTemplateLoader(path);
-                    } else {
-                        throw new RuntimeException("cannot build template loader for " + loaderConfig);
-                    }
-                })
-                .collect(toList());
+        final List<TemplateLoader> templateLoaders = initializeTemplateLoaders(CONFIG_TEMPLATE_LOADERS);
+        final List<TemplateLoader> fallbackContexts = initializeTemplateLoaders(CONFIG_FALLBACK_CONTEXTS);
         Logger.debug("Provide HandlebarsTemplateService: "
-                + templateLoaders.stream().map(loader -> loader.getPrefix()).collect(joining(", ")));
-        return HandlebarsTemplateService.of(templateLoaders);
+                + templateLoaders.stream().map(TemplateLoader::getPrefix).collect(joining(", ")));
+        return HandlebarsTemplateService.of(templateLoaders, fallbackContexts);
+    }
+
+    private List<TemplateLoader> initializeTemplateLoaders(final String configKey) {
+        return configuration.getConfigList(configKey)
+                .stream()
+                .map(this::initializeTemplateLoader)
+                .collect(toList());
+    }
+
+    private TemplateLoader initializeTemplateLoader(final Configuration loaderConfig) {
+        final String type = loaderConfig.getString(TYPE_ATTR);
+        final String path = loaderConfig.getString(PATH_ATTR);
+        if (CLASSPATH_TYPE.equals(type)) {
+            return new ClassPathTemplateLoader(path);
+        } else if (FILE_TYPE.equals(type)) {
+            return new FileTemplateLoader(path);
+        } else {
+            throw new RuntimeException("Cannot build template loader for " + loaderConfig);
+        }
     }
 }

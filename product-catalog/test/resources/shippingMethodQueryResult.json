@@ -1,0 +1,50 @@
+{
+  "offset": 0,
+  "count": 1,
+  "total": 1,
+  "results": [
+    {
+      "id": "721618c3-b9f4-460b-ae4b-4c238ad37ca7",
+      "version": 1,
+      "name": "DHL",
+      "description": "Standard delivery",
+      "taxCategory": {
+        "typeId": "tax-category",
+        "id": "e674c7bf-2cd6-4f4e-84b8-d6302670b635"
+      },
+      "zoneRates": [
+        {
+          "zone": {
+            "typeId": "zone",
+            "id": "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88"
+          },
+          "shippingRates": [
+            {
+              "price": {
+                "currencyCode": "EUR",
+                "centAmount": 570
+              }
+            }
+          ]
+        },
+        {
+          "zone": {
+            "typeId": "zone",
+            "id": "67a107d7-e485-4802-a1bd-a475b4394124"
+          },
+          "shippingRates": [
+            {
+              "price": {
+                "currencyCode": "USD",
+                "centAmount": 990
+              }
+            }
+          ]
+        }
+      ],
+      "isDefault": false,
+      "createdAt": "2015-04-10T07:58:01.686Z",
+      "lastModifiedAt": "2015-04-10T07:58:01.686Z"
+    }
+  ]
+}

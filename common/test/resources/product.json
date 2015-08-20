@@ -1,0 +1,2528 @@
+{
+  "masterVariant": {
+    "id": 1,
+    "sku": "M0E20000000DSB9",
+    "prices": [
+      {
+        "value": {
+          "currencyCode": "EUR",
+          "centAmount": 12900
+        },
+        "id": "0348dcab-c862-495a-93dd-bb5b6a6a7de7",
+        "country": "DE",
+        "discounted":{
+          "value":{
+            "centAmount":10000,
+            "currencyCode":"EUR"
+          },
+          "discount":{
+            "typeId":"product-discount",
+            "id":"id-abcdefghijklmnopqrstuvwxyz"
+          }
+        }
+      }
+    ],
+    "images": [
+      {
+        "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg",
+        "dimensions": {
+          "w": 0,
+          "h": 0
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "name": "articleNumberManufacturer",
+        "value": "3065 GIGA 05 19"
+      },
+      {
+        "name": "articleNumberMax",
+        "value": "078686"
+      },
+      {
+        "name": "matrixId",
+        "value": "M0E20000000DSB9"
+      },
+      {
+        "name": "baseId",
+        "value": "078686"
+      },
+      {
+        "name": "designer",
+        "value": {
+          "key": "savetheduck",
+          "label": "Save the duck"
+        }
+      },
+      {
+        "name": "madeInItaly",
+        "value": {
+          "label": "no",
+          "key": "no"
+        }
+      },
+      {
+        "name": "commonSize",
+        "value": {
+          "key": "xxs",
+          "label": "XXS"
+        }
+      },
+      {
+        "name": "size",
+        "value": "XXS"
+      },
+      {
+        "name": "color",
+        "value": {
+          "label": {
+            "it": "oliva",
+            "en": "oliv",
+            "de": "oliv"
+          },
+          "key": "oliv"
+        }
+      },
+      {
+        "name": "colorFreeDefinition",
+        "value": {
+          "it": "oliva",
+          "de": "oliv",
+          "en": "olive"
+        }
+      },
+      {
+        "name": "style",
+        "value": {
+          "key": "sporty",
+          "label": "sporty"
+        }
+      },
+      {
+        "name": "gender",
+        "value": {
+          "label": "Herren",
+          "key": "men"
+        }
+      },
+      {
+        "name": "season",
+        "value": "s15"
+      },
+      {
+        "name": "details",
+        "value": [
+          {
+            "en": "detail en 1",
+            "de": "detail de 1"
+          },
+          {
+            "en": "detail en 2",
+            "de": "detail de 2"
+          }
+        ]
+      }
+    ]
+  },
+  "id": "85c1c4db-e104-4593-b9fd-b444d7bf2d1c",
+  "version": 2,
+  "productType": {
+    "typeId": "product-type",
+    "id": "dd53c13f-baf6-4466-87cf-ff138fa8c040"
+  },
+  "name": {
+    "it": "Giacca Casual Save the Duck oliva",
+    "de": "Freizeitjacke Save the Duck oliv",
+    "en": "Casual Jacket Save the Duck olive"
+  },
+  "description": {
+    "en": "english test description",
+    "de": "german test description"
+  },
+  "categories": [
+    {
+      "typeId": "category",
+      "id": "136e6486-25b8-47cb-a632-a64cdca68f6a"
+    },
+    {
+      "typeId": "category",
+      "id": "34f746fc-08a5-40e2-b87b-a452ac1796ac"
+    }
+  ],
+  "slug": {
+    "en": "savetheduck-casualjacket-3065-olive",
+    "de": "savetheduck-freizeitjacke-3065-oliv",
+    "it": "savetheduck-giaccacasual-3065-oliva"
+  },
+  "variants": [
+    {
+      "id": 2,
+      "sku": "M0E20000000DSBA",
+      "prices": [
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 16125
+          },
+          "id": "877fed4f-51cd-487b-b9d7-60f809424b1e"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 10574
+          },
+          "id": "730d28f0-c6d9-496c-8c03-34c39922ac8b",
+          "customerGroup": {
+            "typeId": "customer-group",
+            "id": "ed3969eb-9ed7-4667-aa91-2d67e65b0b7a"
+          }
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "3b8a97b7-359a-4040-9617-e62fd6b67e18",
+          "country": "BE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9cce6f6e-ca03-40f8-9a6d-3e0fb2e58567",
+          "country": "BG"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9aed7ba1-d4fd-4c23-9bb0-5c6802ff81ba",
+          "country": "DK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "5a0951ca-def1-4bb0-be42-9c0628b80c95",
+          "country": "DE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "41917149-0969-49e3-9953-fb005cf60eed",
+          "country": "EE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "825d8f76-b0dc-4de3-a120-ab59069928b7",
+          "country": "FI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "cb4aa0b2-1f99-4c73-b82a-106577eb07b2",
+          "country": "FR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "10a1c7bc-5bb9-4ed7-9de6-e5e4c8a79ac4",
+          "country": "GR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "47d5189b-8ae1-40ee-ae35-e2269d931dfe",
+          "country": "IE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "dada348d-4dfb-4f9a-b83c-97988a1f602b",
+          "country": "IT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "bdc3df21-fcde-4883-a768-7c9f5b189ba5",
+          "country": "HR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "552c0aca-fbf8-4e50-aa7f-f36dd07871af",
+          "country": "LV"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e62ce711-8fec-4b39-8599-6a264f0caf3a",
+          "country": "LT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "3bf79512-5e7f-4edc-b6d1-2982e31645d7",
+          "country": "LU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d6dddf49-836c-42ed-8aee-645f3933e9af",
+          "country": "MT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "cebc50ff-7f1c-4020-9e4d-b6706669a855",
+          "country": "NL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "62edd2ed-755b-4964-8e8d-a4dc20ea13be",
+          "country": "AT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "4e5f4f71-a1ff-4e10-b05a-38ee726dee4c",
+          "country": "PL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "0e805a2d-a8df-40b4-829c-a54b0f127f1f",
+          "country": "PT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d098badc-1e7e-407a-ba76-f84f522c70a0",
+          "country": "RO"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "8882b602-46cd-4b71-b3fd-9056b67ed06c",
+          "country": "SE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "7238e77e-cb8d-4a38-b4ee-514b3b53d86e",
+          "country": "SK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "ca577060-7f45-4484-ae13-539019a3a71d",
+          "country": "SI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "8c8722e0-d234-4050-be1a-c0813a241a6a",
+          "country": "ES"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d9327811-230f-4a36-8f0d-6333eb1decc7",
+          "country": "CZ"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "fb8c002d-c0b9-4bc7-9ba6-ebcd16f2e0bf",
+          "country": "HU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "6f47bcfb-0ce6-4df4-905a-8ae64a8de44f",
+          "country": "GB"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "1f585456-eb49-4f6e-9d6d-537037776a69",
+          "country": "CY"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg",
+          "dimensions": {
+            "w": 0,
+            "h": 0
+          }
+        }
+      ],
+      "attributes": [
+        {
+          "name": "articleNumberManufacturer",
+          "value": "3065 GIGA 05 19"
+        },
+        {
+          "name": "articleNumberMax",
+          "value": "078686"
+        },
+        {
+          "name": "matrixId",
+          "value": "M0E20000000DSBA"
+        },
+        {
+          "name": "baseId",
+          "value": "078686"
+        },
+        {
+          "name": "designer",
+          "value": {
+            "key": "savetheduck",
+            "label": "Save the duck"
+          }
+        },
+        {
+          "name": "madeInItaly",
+          "value": {
+            "label": "no",
+            "key": "no"
+          }
+        },
+        {
+          "name": "commonSize",
+          "value": {
+            "key": "xs",
+            "label": "XS"
+          }
+        },
+        {
+          "name": "size",
+          "value": "XS"
+        },
+        {
+          "name": "color",
+          "value": {
+            "label": {
+              "it": "oliva",
+              "en": "oliv",
+              "de": "oliv"
+            },
+            "key": "oliv"
+          }
+        },
+        {
+          "name": "colorFreeDefinition",
+          "value": {
+            "it": "oliva",
+            "de": "oliv",
+            "en": "olive"
+          }
+        },
+        {
+          "name": "style",
+          "value": {
+            "key": "sporty",
+            "label": "sporty"
+          }
+        },
+        {
+          "name": "gender",
+          "value": {
+            "label": "Herren",
+            "key": "men"
+          }
+        },
+        {
+          "name": "season",
+          "value": "s15"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "sku": "M0E20000000DSBB",
+      "prices": [
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 16125
+          },
+          "id": "40feaa05-2686-431b-86cc-254ac02dbd66"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 10574
+          },
+          "id": "6f609b68-bad0-4577-9735-ea977be754ad",
+          "customerGroup": {
+            "typeId": "customer-group",
+            "id": "ed3969eb-9ed7-4667-aa91-2d67e65b0b7a"
+          }
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "a06c051e-7e6b-4328-ac31-217276608613",
+          "country": "BE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "2b2ed965-5985-4d5d-82ad-6c1d5f809794",
+          "country": "BG"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "ba041d6b-3267-4453-8b6f-334017c76795",
+          "country": "DK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "704d7d9c-c68e-413f-a8ca-a2b878ab47ad",
+          "country": "DE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "573149ae-783c-412f-a3b7-33f4455c6300",
+          "country": "EE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9ed01263-0bc7-4983-a91b-f0eab0e8a542",
+          "country": "FI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "202e1a6d-0172-4625-940a-5a0145a0d85a",
+          "country": "FR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "0cc734eb-f4fa-4b03-8b3d-e2a5d873c4b2",
+          "country": "GR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "06b06be4-eb95-439d-9405-936d1dc5cb88",
+          "country": "IE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d41189fd-d4d1-4fff-a455-1467322282d7",
+          "country": "IT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "6bfe0f82-1c5e-425a-a31e-b4a8dc49eb9d",
+          "country": "HR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "1dfc8f80-d80a-48f6-8411-5312f8dd1df9",
+          "country": "LV"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "637879a7-fc56-4d47-b3db-d0b1781adcc0",
+          "country": "LT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "48d55f04-b781-4787-afa2-e402e30b4d44",
+          "country": "LU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "55170ceb-7f68-4f48-a708-bb210cd782b0",
+          "country": "MT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "88b7038d-a32b-4e7c-bced-8aacfc971345",
+          "country": "NL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "b02eae83-0ef1-408b-917f-cd934bfccdcd",
+          "country": "AT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e73ae6c6-6472-4b0d-9b54-630a2957908b",
+          "country": "PL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9854d9b2-ecd5-413e-b858-75bb268df2e8",
+          "country": "PT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "c4ad1d17-ff17-4124-83f6-35736c3ff797",
+          "country": "RO"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "79955c83-ebcb-49de-b10c-561803f24985",
+          "country": "SE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "01a19c05-d3cb-4e33-a0d8-bc82773cbc53",
+          "country": "SK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "1f61b038-00b8-466b-aed2-6f033ca2e55c",
+          "country": "SI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "bb82cfde-d80d-412d-a5ef-a3337a983b1f",
+          "country": "ES"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "ba704737-3b59-44de-b546-5c09703fff6e",
+          "country": "CZ"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e397ad3e-e310-4de2-8131-3f22efa49839",
+          "country": "HU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "da384a87-1423-4838-8931-68d7aeb544ff",
+          "country": "GB"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "a39f3248-625d-4a17-b7cb-2232a4782546",
+          "country": "CY"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg",
+          "dimensions": {
+            "w": 0,
+            "h": 0
+          }
+        }
+      ],
+      "attributes": [
+        {
+          "name": "articleNumberManufacturer",
+          "value": "3065 GIGA 05 19"
+        },
+        {
+          "name": "articleNumberMax",
+          "value": "078686"
+        },
+        {
+          "name": "matrixId",
+          "value": "M0E20000000DSBB"
+        },
+        {
+          "name": "baseId",
+          "value": "078686"
+        },
+        {
+          "name": "designer",
+          "value": {
+            "key": "savetheduck",
+            "label": "Save the duck"
+          }
+        },
+        {
+          "name": "madeInItaly",
+          "value": {
+            "label": "no",
+            "key": "no"
+          }
+        },
+        {
+          "name": "commonSize",
+          "value": {
+            "key": "s",
+            "label": "S"
+          }
+        },
+        {
+          "name": "size",
+          "value": "S"
+        },
+        {
+          "name": "color",
+          "value": {
+            "label": {
+              "it": "oliva",
+              "en": "oliv",
+              "de": "oliv"
+            },
+            "key": "oliv"
+          }
+        },
+        {
+          "name": "colorFreeDefinition",
+          "value": {
+            "it": "oliva",
+            "de": "oliv",
+            "en": "olive"
+          }
+        },
+        {
+          "name": "style",
+          "value": {
+            "key": "sporty",
+            "label": "sporty"
+          }
+        },
+        {
+          "name": "gender",
+          "value": {
+            "label": "Herren",
+            "key": "men"
+          }
+        },
+        {
+          "name": "season",
+          "value": "s15"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "sku": "M0E20000000DSBC",
+      "prices": [
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 16125
+          },
+          "id": "89eb5b13-3d23-43ef-937c-93c3a49711d6"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 10574
+          },
+          "id": "2c16ac36-4819-4a35-bb74-c54223dcf611",
+          "customerGroup": {
+            "typeId": "customer-group",
+            "id": "ed3969eb-9ed7-4667-aa91-2d67e65b0b7a"
+          }
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "11d738d8-776a-4162-9faf-48307f3b1ebf",
+          "country": "BE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "cebce402-79db-4345-bc10-036fd1a581fa",
+          "country": "BG"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "93c3ac9e-30a5-4401-9b62-3adb532c3f98",
+          "country": "DK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "1e212dbf-43ff-4635-a705-cb5d629471ae",
+          "country": "DE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "29f668e6-0959-4f38-9b3b-3fb5a3189f19",
+          "country": "EE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f8317b66-e9dc-4dd1-9d74-39ff8109b831",
+          "country": "FI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "6b2dd80b-8854-4f7d-9860-8a037b1d9658",
+          "country": "FR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "85996f8e-f992-48f1-ad38-2d1f366fb1c5",
+          "country": "GR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "3802e829-025b-4a1a-ba70-6847b2fd7915",
+          "country": "IE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "cde06f70-d58f-4094-9f4a-f9ed54412436",
+          "country": "IT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d803c1f0-4cad-4f7a-a88d-b6baa1994c22",
+          "country": "HR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "5bbbe55a-35e2-4183-9aa4-184836d7d0a9",
+          "country": "LV"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "6d70adad-dd65-43f7-b30e-0218cca76095",
+          "country": "LT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9f28722e-0f59-440a-bb56-ecdd3c8ca5fd",
+          "country": "LU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "fa593f96-36b3-4171-85b4-3e670dcfd356",
+          "country": "MT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "432a92c0-1070-49d2-bf41-c2efec0d0932",
+          "country": "NL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "098daf92-42e8-4068-b945-ecbcebf26543",
+          "country": "AT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "578ea61a-5bdc-4730-81f4-19377631323e",
+          "country": "PL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "aaf2d51d-ff63-431f-9fab-7279deab4a38",
+          "country": "PT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "4264956a-c268-4be0-9eae-6a393be82cd0",
+          "country": "RO"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "900c98e7-ebb8-483b-9d89-c6a887fcf599",
+          "country": "SE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "281e4ad0-5892-430d-b652-b0fb3c3e31ab",
+          "country": "SK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "34033976-a1db-43de-b209-14558fa4c886",
+          "country": "SI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d89ecf2d-c1a2-47a4-9d75-cfde2d6e0958",
+          "country": "ES"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e5e37f77-44f1-4de0-a707-783f8061502b",
+          "country": "CZ"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9d4e8d42-6d01-499b-bf2c-bb0fb1afc66f",
+          "country": "HU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "56a364ed-bb8a-4b84-9f30-544ae35dc2f0",
+          "country": "GB"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e6f22b11-5ae1-401b-a193-c905a13fd004",
+          "country": "CY"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg",
+          "dimensions": {
+            "w": 0,
+            "h": 0
+          }
+        }
+      ],
+      "attributes": [
+        {
+          "name": "articleNumberManufacturer",
+          "value": "3065 GIGA 05 19"
+        },
+        {
+          "name": "articleNumberMax",
+          "value": "078686"
+        },
+        {
+          "name": "matrixId",
+          "value": "M0E20000000DSBC"
+        },
+        {
+          "name": "baseId",
+          "value": "078686"
+        },
+        {
+          "name": "designer",
+          "value": {
+            "key": "savetheduck",
+            "label": "Save the duck"
+          }
+        },
+        {
+          "name": "madeInItaly",
+          "value": {
+            "label": "no",
+            "key": "no"
+          }
+        },
+        {
+          "name": "commonSize",
+          "value": {
+            "key": "m",
+            "label": "M"
+          }
+        },
+        {
+          "name": "size",
+          "value": "M"
+        },
+        {
+          "name": "color",
+          "value": {
+            "label": {
+              "it": "oliva",
+              "en": "oliv",
+              "de": "oliv"
+            },
+            "key": "oliv"
+          }
+        },
+        {
+          "name": "colorFreeDefinition",
+          "value": {
+            "it": "oliva",
+            "de": "oliv",
+            "en": "olive"
+          }
+        },
+        {
+          "name": "style",
+          "value": {
+            "key": "sporty",
+            "label": "sporty"
+          }
+        },
+        {
+          "name": "gender",
+          "value": {
+            "label": "Herren",
+            "key": "men"
+          }
+        },
+        {
+          "name": "season",
+          "value": "s15"
+        },
+        {
+          "name": "isOnStock",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "sku": "M0E20000000DSBD",
+      "prices": [
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 16125
+          },
+          "id": "0e6fd41b-082f-4c08-8d65-126ea29a8a7f"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 10574
+          },
+          "id": "01dbe113-fb91-423b-a0fa-e876bbf03365",
+          "customerGroup": {
+            "typeId": "customer-group",
+            "id": "ed3969eb-9ed7-4667-aa91-2d67e65b0b7a"
+          }
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "a92a445b-a1e4-4554-bbf1-4f086d0baec8",
+          "country": "BE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "174a5634-ee15-4ded-95bb-da68903db4a8",
+          "country": "BG"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "bd35744f-b990-419b-a940-7c70568365b4",
+          "country": "DK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "4885691c-adc1-47d3-b55d-001219a5e8b5",
+          "country": "DE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "fa764e91-f8a3-497c-a64c-c8e93d646ee3",
+          "country": "EE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e3db87cb-f977-4177-a1d3-7d7d51c5296a",
+          "country": "FI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e6eb5290-1138-427d-8c1d-ba16c967b76a",
+          "country": "FR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "7e3eda2d-a94c-4a35-98be-5c17ade028eb",
+          "country": "GR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "a4ac558b-e3dd-4fd7-a0c2-4cc8f3e0de9e",
+          "country": "IE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "b74749ca-4ec9-4501-bd78-949b2f36c02c",
+          "country": "IT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "55cadb35-a20f-47bc-ae3f-9b75b115645b",
+          "country": "HR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "ff6598c9-051b-4ba8-8114-3571046113c2",
+          "country": "LV"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "2aa02b3f-1d67-4899-bb51-7f53dfca709c",
+          "country": "LT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "3686a14a-1931-4200-9dea-62fe9f43f6cd",
+          "country": "LU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "bb94a4ab-be83-488f-9a36-95ddf7e36987",
+          "country": "MT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "47cc5bc9-a552-4560-b7df-25105eac1044",
+          "country": "NL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f07acef6-34c3-480e-b96f-3f970bf3406a",
+          "country": "AT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "54effd42-f1c9-49f7-b162-4382c4b3bd10",
+          "country": "PL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f4608bab-9cf4-4c6e-a39a-a472f0a7b80e",
+          "country": "PT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "b8f55965-574b-4edd-acde-fc6d4f0cc31c",
+          "country": "RO"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "a585766e-b876-4fc7-819d-b8b2065b3b6f",
+          "country": "SE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "c7a4991b-d1d0-4e77-907f-6709e3858b35",
+          "country": "SK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "bc53c15d-6dcf-477a-9338-1fcdfb1cf2d0",
+          "country": "SI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d9e14edb-348c-4780-a9e6-10dfe161a3eb",
+          "country": "ES"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "52d49790-aa6f-4b1d-aafa-d0a07e28b0b7",
+          "country": "CZ"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "0b6785f3-8a9b-4572-83e4-f2b03841c495",
+          "country": "HU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "c43a471e-4fef-45c4-9fb2-7c947e6d9e01",
+          "country": "GB"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d5b93905-0862-4b66-88ef-935b96c53a5e",
+          "country": "CY"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg",
+          "dimensions": {
+            "w": 0,
+            "h": 0
+          }
+        }
+      ],
+      "attributes": [
+        {
+          "name": "articleNumberManufacturer",
+          "value": "3065 GIGA 05 19"
+        },
+        {
+          "name": "articleNumberMax",
+          "value": "078686"
+        },
+        {
+          "name": "matrixId",
+          "value": "M0E20000000DSBD"
+        },
+        {
+          "name": "baseId",
+          "value": "078686"
+        },
+        {
+          "name": "designer",
+          "value": {
+            "key": "savetheduck",
+            "label": "Save the duck"
+          }
+        },
+        {
+          "name": "madeInItaly",
+          "value": {
+            "label": "no",
+            "key": "no"
+          }
+        },
+        {
+          "name": "commonSize",
+          "value": {
+            "label": "L",
+            "key": "l"
+          }
+        },
+        {
+          "name": "size",
+          "value": "L"
+        },
+        {
+          "name": "color",
+          "value": {
+            "label": {
+              "it": "oliva",
+              "en": "oliv",
+              "de": "oliv"
+            },
+            "key": "oliv"
+          }
+        },
+        {
+          "name": "colorFreeDefinition",
+          "value": {
+            "it": "oliva",
+            "de": "oliv",
+            "en": "olive"
+          }
+        },
+        {
+          "name": "style",
+          "value": {
+            "key": "sporty",
+            "label": "sporty"
+          }
+        },
+        {
+          "name": "gender",
+          "value": {
+            "label": "Herren",
+            "key": "men"
+          }
+        },
+        {
+          "name": "season",
+          "value": "s15"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "sku": "M0E20000000DSBE",
+      "prices": [
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 16125
+          },
+          "id": "e0af46bc-e1ab-401a-9646-9031c5dc78b2"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 10574
+          },
+          "id": "b5e5597c-02ff-484c-bc80-67cc8bb9c329",
+          "customerGroup": {
+            "typeId": "customer-group",
+            "id": "ed3969eb-9ed7-4667-aa91-2d67e65b0b7a"
+          }
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f9b1d0a4-0232-407e-87ef-aaf59c04eaae",
+          "country": "BE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "5ccdb451-08cf-46df-85be-5a0718a92932",
+          "country": "BG"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9c783426-4fd4-47bf-a648-e5c6fe4450e4",
+          "country": "DK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9ae55a1a-4d60-4415-bf0d-d2f05acdfe53",
+          "country": "DE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "b88f3002-0d95-4dc7-a138-9592e081bd01",
+          "country": "EE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e13eccae-9cbc-4488-ba21-471ee77bfd97",
+          "country": "FI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "a8373670-3024-4512-bee9-a076de9bf09f",
+          "country": "FR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "465f3661-0da7-4534-891b-10515970c388",
+          "country": "GR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f84bb9e9-9447-45f8-a4a6-b615724d1a27",
+          "country": "IE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "dfdcfb75-6b2e-4f96-b0ee-a0cb64cc52a0",
+          "country": "IT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "07f4b5e0-0885-4661-b2a5-e4f42d44c335",
+          "country": "HR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9937ed45-1a46-423b-b3a6-6570946526e0",
+          "country": "LV"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f3df49b4-9e88-4b07-90b2-db2f435df1fb",
+          "country": "LT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "da132871-8962-4bd4-a220-c5f4fcf4ee4e",
+          "country": "LU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9de57ba3-c538-427f-9d4e-1222077ad081",
+          "country": "MT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "8120b017-7456-4606-b044-30eb4644dd22",
+          "country": "NL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "6a5eb7a1-ab0a-408f-9447-1e5620ae48b2",
+          "country": "AT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "2f787072-eb31-46a5-b489-ac9a6dea158e",
+          "country": "PL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "7ce3b932-7978-4338-bbd5-923c59e206cf",
+          "country": "PT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "beb65029-086f-4a2d-a6e4-41c9f8c4df34",
+          "country": "RO"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "79e169f9-1d33-4230-a727-a50d2ba1b03d",
+          "country": "SE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "19a685ce-23ec-4f9f-95ea-f5435784c353",
+          "country": "SK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "704ffa5c-bbff-4ffb-a13b-93f049e99c64",
+          "country": "SI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "2653aefc-ddd0-480f-87b4-092a5e7475e7",
+          "country": "ES"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f1c1d6bd-9b37-44bb-bd56-038956c5779e",
+          "country": "CZ"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e17250ce-e1a4-4d40-be1c-f4b216a54d6c",
+          "country": "HU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9f7feae9-6d4d-4c5c-ae51-017c43b7ed77",
+          "country": "GB"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "5c0124bf-3257-43b7-917e-fcc47f321e39",
+          "country": "CY"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg",
+          "dimensions": {
+            "w": 0,
+            "h": 0
+          }
+        }
+      ],
+      "attributes": [
+        {
+          "name": "articleNumberManufacturer",
+          "value": "3065 GIGA 05 19"
+        },
+        {
+          "name": "articleNumberMax",
+          "value": "078686"
+        },
+        {
+          "name": "matrixId",
+          "value": "M0E20000000DSBE"
+        },
+        {
+          "name": "baseId",
+          "value": "078686"
+        },
+        {
+          "name": "designer",
+          "value": {
+            "key": "savetheduck",
+            "label": "Save the duck"
+          }
+        },
+        {
+          "name": "madeInItaly",
+          "value": {
+            "label": "no",
+            "key": "no"
+          }
+        },
+        {
+          "name": "commonSize",
+          "value": {
+            "label": "XL",
+            "key": "xl"
+          }
+        },
+        {
+          "name": "size",
+          "value": "XL"
+        },
+        {
+          "name": "color",
+          "value": {
+            "label": {
+              "it": "oliva",
+              "en": "oliv",
+              "de": "oliv"
+            },
+            "key": "oliv"
+          }
+        },
+        {
+          "name": "colorFreeDefinition",
+          "value": {
+            "it": "oliva",
+            "de": "oliv",
+            "en": "olive"
+          }
+        },
+        {
+          "name": "style",
+          "value": {
+            "key": "sporty",
+            "label": "sporty"
+          }
+        },
+        {
+          "name": "gender",
+          "value": {
+            "label": "Herren",
+            "key": "men"
+          }
+        },
+        {
+          "name": "season",
+          "value": "s15"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "sku": "M0E20000000DSBF",
+      "prices": [
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 16125
+          },
+          "id": "f0d99f5b-df5c-4882-8188-0870a82e9695"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 10574
+          },
+          "id": "f2e146a5-83d7-46d5-9863-56cf1d808a81",
+          "customerGroup": {
+            "typeId": "customer-group",
+            "id": "ed3969eb-9ed7-4667-aa91-2d67e65b0b7a"
+          }
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "18390b90-3aaf-4dd0-a710-fa11f929c1d3",
+          "country": "BE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "eac2b71a-42c3-4fbe-9105-e575c61d1ae2",
+          "country": "BG"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9d066e97-5941-4287-99ab-d55af3ecdc35",
+          "country": "DK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e05307e8-8360-4e9b-915b-b210066b3be3",
+          "country": "DE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "5640e6aa-743f-41a3-8863-070355e5c390",
+          "country": "EE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "eb484399-6f0b-4dd2-8b6d-bbb748657720",
+          "country": "FI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "4965284f-1cd6-47bd-a76f-c1be88a7b2a1",
+          "country": "FR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d07aee5c-f1a4-49b1-805e-9eb64e4d72fc",
+          "country": "GR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "91c10790-1680-4923-84fc-f6267e92416e",
+          "country": "IE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "3e31b6ed-20bb-4698-99f6-e55d8374b8e0",
+          "country": "IT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "da4f2758-b330-466b-81e0-c1b1bc391700",
+          "country": "HR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d7088769-da89-4a13-a7ca-33bc6baf4303",
+          "country": "LV"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "2246e949-d189-4eb8-9154-74bd2e5f8a95",
+          "country": "LT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d9c374b9-3e61-42fc-a7e0-552ed32a28e5",
+          "country": "LU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "66f2bdbe-e604-4d8b-9b88-65a234bfc621",
+          "country": "MT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "8905955d-616b-4bf5-aba2-e736d17d7e13",
+          "country": "NL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "922b30d3-1232-461b-89cd-cacfda7efbbc",
+          "country": "AT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "cb71a3b2-5768-4cd7-8ef1-449a8c1b1da9",
+          "country": "PL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "6b9f5493-42f8-421e-9f81-b3efd996c7ad",
+          "country": "PT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "de61db72-c643-4112-b536-f6b8c79e36a2",
+          "country": "RO"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "ef95d126-70f0-40c5-bdb2-3b7d661fa6b0",
+          "country": "SE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "dc9ed9ad-866f-4ad8-ae18-8ee81b1e4248",
+          "country": "SK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "c8f2aaf2-c4ee-4ff9-ab72-86585080fa5d",
+          "country": "SI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "90612284-79b2-4686-aa86-87a5fc8b9fea",
+          "country": "ES"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "a1d4c3f0-3eaf-45e2-9c48-cec0055332fc",
+          "country": "CZ"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "ea475978-5108-4b94-9450-27255e7fb516",
+          "country": "HU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "8a647e8a-79fe-4128-bb3c-2054493f7278",
+          "country": "GB"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "84fef08b-1b29-4d70-af52-9d47d126957b",
+          "country": "CY"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg",
+          "dimensions": {
+            "w": 0,
+            "h": 0
+          }
+        }
+      ],
+      "attributes": [
+        {
+          "name": "articleNumberManufacturer",
+          "value": "3065 GIGA 05 19"
+        },
+        {
+          "name": "articleNumberMax",
+          "value": "078686"
+        },
+        {
+          "name": "matrixId",
+          "value": "M0E20000000DSBF"
+        },
+        {
+          "name": "baseId",
+          "value": "078686"
+        },
+        {
+          "name": "designer",
+          "value": {
+            "key": "savetheduck",
+            "label": "Save the duck"
+          }
+        },
+        {
+          "name": "madeInItaly",
+          "value": {
+            "label": "no",
+            "key": "no"
+          }
+        },
+        {
+          "name": "commonSize",
+          "value": {
+            "label": "XXL",
+            "key": "xxl"
+          }
+        },
+        {
+          "name": "size",
+          "value": "XXL"
+        },
+        {
+          "name": "color",
+          "value": {
+            "label": {
+              "it": "oliva",
+              "en": "oliv",
+              "de": "oliv"
+            },
+            "key": "oliv"
+          }
+        },
+        {
+          "name": "colorFreeDefinition",
+          "value": {
+            "it": "oliva",
+            "de": "oliv",
+            "en": "olive"
+          }
+        },
+        {
+          "name": "style",
+          "value": {
+            "key": "sporty",
+            "label": "sporty"
+          }
+        },
+        {
+          "name": "gender",
+          "value": {
+            "label": "Herren",
+            "key": "men"
+          }
+        },
+        {
+          "name": "season",
+          "value": "s15"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "sku": "M0E20000000DSBG",
+      "prices": [
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 16125
+          },
+          "id": "10757a6d-1118-47a0-a1ce-70e0c53448b5"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 10574
+          },
+          "id": "a0cd4aa3-4fc6-4304-8cfb-2043f6f2c3e5",
+          "customerGroup": {
+            "typeId": "customer-group",
+            "id": "ed3969eb-9ed7-4667-aa91-2d67e65b0b7a"
+          }
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "64438df8-b39f-4cdc-a8cb-378f5db529b4",
+          "country": "BE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "178a1d52-8475-4be6-8c34-3d950825c4d8",
+          "country": "BG"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "41b4bab8-7f92-43e6-92a2-f95835db8ad6",
+          "country": "DK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f58d8129-db95-4151-bf96-ce6294e60570",
+          "country": "DE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "26bce624-3c09-4581-aae0-3586bffdb44c",
+          "country": "EE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "2550b403-8b14-4941-b086-52d9b6037d25",
+          "country": "FI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "0d0f9e70-5b55-44e4-9c9d-b95d0ddb04d0",
+          "country": "FR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "c8d9733f-ed3d-4dd8-96d5-8c6fecb1e260",
+          "country": "GR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "14e5c156-f56d-4750-959a-fc6efa4954be",
+          "country": "IE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "81e67c6b-095a-4fe4-9cc3-01cf1a5d9528",
+          "country": "IT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d32a3e45-62fa-4ddd-ac56-45bde704d0fc",
+          "country": "HR"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "e10e4aca-6f35-4a35-84d5-f78b4af87c1d",
+          "country": "LV"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "a62c5394-fea6-4aff-a329-cd9f50821a79",
+          "country": "LT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f0d6a44d-5317-462b-bc35-b8cbe000a5d4",
+          "country": "LU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "3c13a067-42ab-42bd-af96-2b922b15afcb",
+          "country": "MT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "745be321-80f4-4b02-9274-7123bdf87ca2",
+          "country": "NL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "9f8a2bb4-711e-46d3-abd0-55a09154fee4",
+          "country": "AT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "f8db84b8-002e-4d3f-babd-72f8ae5501cc",
+          "country": "PL"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "469bbd06-fff7-4840-b032-295177d5a934",
+          "country": "PT"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "af9a5190-e1c4-4f4d-90a2-08e86702cb3b",
+          "country": "RO"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "0149d08d-c8e1-425b-8123-12369668ef90",
+          "country": "SE"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "d3d30d77-daaa-4420-8c98-a4c14a79252a",
+          "country": "SK"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "740a2170-4c05-4154-a28b-91a8aee142e5",
+          "country": "SI"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "1b32ab95-c445-4881-ad7c-82dd4b3b1fd0",
+          "country": "ES"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "1b11ca34-5d39-4f3c-aa9a-5420626e321a",
+          "country": "CZ"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "3ba476c2-d35c-4adf-a1fa-66db04b7083d",
+          "country": "HU"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "c134037f-efa1-4fe3-91fe-90fbbcf7291f",
+          "country": "GB"
+        },
+        {
+          "value": {
+            "currencyCode": "EUR",
+            "centAmount": 12900
+          },
+          "id": "bd528d91-728e-40f8-9dea-02460dce8f34",
+          "country": "CY"
+        }
+      ],
+      "images": [
+        {
+          "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg",
+          "dimensions": {
+            "w": 0,
+            "h": 0
+          }
+        }
+      ],
+      "attributes": [
+        {
+          "name": "articleNumberManufacturer",
+          "value": "3065 GIGA 05 19"
+        },
+        {
+          "name": "articleNumberMax",
+          "value": "078686"
+        },
+        {
+          "name": "matrixId",
+          "value": "M0E20000000DSBG"
+        },
+        {
+          "name": "baseId",
+          "value": "078686"
+        },
+        {
+          "name": "designer",
+          "value": {
+            "key": "savetheduck",
+            "label": "Save the duck"
+          }
+        },
+        {
+          "name": "madeInItaly",
+          "value": {
+            "label": "no",
+            "key": "no"
+          }
+        },
+        {
+          "name": "commonSize",
+          "value": {
+            "key": "xxxl",
+            "label": "XXXL"
+          }
+        },
+        {
+          "name": "size",
+          "value": "XXXL"
+        },
+        {
+          "name": "color",
+          "value": {
+            "label": {
+              "it": "oliva",
+              "en": "oliv",
+              "de": "oliv"
+            },
+            "key": "oliv"
+          }
+        },
+        {
+          "name": "colorFreeDefinition",
+          "value": {
+            "it": "oliva",
+            "de": "oliv",
+            "en": "olive"
+          }
+        },
+        {
+          "name": "style",
+          "value": {
+            "key": "sporty",
+            "label": "sporty"
+          }
+        },
+        {
+          "name": "gender",
+          "value": {
+            "label": "Herren",
+            "key": "men"
+          }
+        },
+        {
+          "name": "season",
+          "value": "s15"
+        }
+      ]
+    }
+  ],
+  "searchKeywords": {},
+  "hasStagedChanges": false,
+  "published": true,
+  "createdAt": "2015-07-06T14:50:29.856Z",
+  "lastModifiedAt": "2015-07-15T17:02:30.637Z"
+}

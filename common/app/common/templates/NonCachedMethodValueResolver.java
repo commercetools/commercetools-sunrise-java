@@ -21,7 +21,8 @@ public class NonCachedMethodValueResolver extends NonCachedMemberValueResolver<M
 
     @Override
     public boolean matches(final Method method, final String name) {
-        return isPublic(method) && method.getName().equals(name);
+        int parameterCount = method.getParameterTypes().length;
+        return isPublic(method) && method.getName().equals(name) && parameterCount == 0;
     }
 
     @Override
