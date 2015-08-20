@@ -6,7 +6,6 @@ import common.pages.ProductThumbnailData;
 import java.util.List;
 
 public class ProductOverviewPageContent extends PageContent {
-
     private final String additionalTitle;
     private final List<ProductThumbnailData>  productList;
 
@@ -20,7 +19,7 @@ public class ProductOverviewPageContent extends PageContent {
         return additionalTitle;
     }
 
-    public List<ProductThumbnailData>  getProducts() {
-        return productList;
+    public ProductList  getProducts() {
+        return new ProductList(productList);
     }
 }
