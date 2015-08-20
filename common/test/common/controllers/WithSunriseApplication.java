@@ -6,7 +6,6 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.HttpRequestIntent;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;
-import io.sphere.sdk.json.JsonUtils;
 import io.sphere.sdk.projects.Project;
 import io.sphere.sdk.projects.queries.ProjectGet;
 import io.sphere.sdk.queries.PagedQueryResult;
@@ -26,6 +25,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
+import static io.sphere.sdk.json.SphereJsonUtils.readObject;
 import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static play.inject.Bindings.bind;
 
@@ -71,7 +71,7 @@ public abstract class WithSunriseApplication extends WithApplication {
             private <T> Object getResult(final SphereRequest<T> sphereRequest) {
                 if (sphereRequest.httpRequestIntent().equals(ProjectGet.of().httpRequestIntent())) {
                     final String projectJsonString = stringFromResource("/ctp/project/project.json");
-                    return JsonUtils.readObjectFromJsonString(Project.typeReference(), projectJsonString);
+                    return readObject(projectJsonString, Project.typeReference());
                 } else {
                     return getTestDoubleBehavior().apply(sphereRequest.httpRequestIntent());
                 }
