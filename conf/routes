@@ -6,6 +6,7 @@
 GET        /                           @controllers.HomeController.index()
 
 GET        /pop                        @productcatalog.controllers.ProductOverviewPageController.show(page: Int ?= 1)
+GET        /products @controllers.TmpPopController.show
 GET        /:language/:slug-$sku<[^-]+>.html @productcatalog.controllers.ProductDetailPageController.show(language: String, slug: String, sku: String)
 
 ->         /setup                      setupwidget.Routes
