@@ -6,7 +6,7 @@ import io.sphere.sdk.queries.PagedQueryResult;
 
 import java.util.List;
 
-import static io.sphere.sdk.json.JsonUtils.readObjectFromResource;
+import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 
 public class ProductUtils {
 

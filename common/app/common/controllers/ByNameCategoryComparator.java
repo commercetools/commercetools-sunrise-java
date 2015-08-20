@@ -19,6 +19,6 @@ final class ByNameCategoryComparator implements Comparator<Category> {
     }
 
     private Optional<String> localizedName(final Category c1) {
-        return c1.getName().get(locale);
+        return Optional.ofNullable(c1.getName().get(locale));
     }
 }

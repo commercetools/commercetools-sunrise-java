@@ -5,7 +5,6 @@ import common.products.ProductUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.client.SphereRequest;
-import io.sphere.sdk.json.JsonUtils;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedQueryResult;
 import org.junit.Test;
@@ -13,6 +12,7 @@ import play.libs.F;
 
 import java.util.List;
 
+import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductProjectionServiceImplTest {
@@ -22,7 +22,7 @@ public class ProductProjectionServiceImplTest {
     @Test
     public void findVariantBySku() throws Exception {
         final ProductProjectionService service = new ProductProjectionServiceImpl(null);
-        final ProductProjection product = JsonUtils.readObjectFromResource("product.json", ProductProjection.typeReference());
+        final ProductProjection product = readObjectFromResource("product.json", ProductProjection.typeReference());
         final String masterSku = "M0E20000000DSB9";
         final String otherSku = "M0E20000000DSBA";
 

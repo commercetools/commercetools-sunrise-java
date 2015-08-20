@@ -1,8 +1,6 @@
 package common.controllers;
 
-import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.client.SphereClientFactory;
-import io.sphere.sdk.client.SphereRequest;
+import io.sphere.sdk.client.*;
 import org.junit.AfterClass;
 import play.libs.F;
 
@@ -42,7 +40,9 @@ public abstract class WithPlayJavaSphereClient {
 
     private synchronized static PlayJavaSphereClient sphereClient() {
         if (sphereClient == null) {
-            sphereClient = PlayJavaSphereClient.of(SphereClientFactory.of().createClient(projectKey(), clientId(), clientSecret()));
+            final SphereClient client = SphereClientFactory.of(SphereAsyncHttpClientFactory::create)
+                    .createClient(projectKey(), clientId(), clientSecret());
+            sphereClient = PlayJavaSphereClient.of(client);
         }
         return sphereClient;
     }

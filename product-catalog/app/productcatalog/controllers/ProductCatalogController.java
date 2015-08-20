@@ -4,6 +4,7 @@ import common.cms.CmsPage;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.*;
+import common.pages.ProductThumbnailData;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import common.utils.Translator;
@@ -20,11 +21,11 @@ import productcatalog.services.ShippingMethodService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Collections.emptyList;
 import static java.util.Locale.GERMAN;
 import static java.util.stream.Collectors.toList;
 
@@ -39,7 +40,8 @@ public class ProductCatalogController extends SunriseController {
     private final ShippingMethodService shippingMethodService;
 
     @Inject
-    public ProductCatalogController(final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
+    public ProductCatalogController(final ControllerDependency controllerDependency, final ProductProjectionService productService,
+                                    final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
         super(controllerDependency);
         this.productService = productService;
         this.categoryService = categoryService;
@@ -85,7 +87,7 @@ public class ProductCatalogController extends SunriseController {
         final List<ShopShippingRate> shippingRates = shippingMethodService.getShippingRates(context().user().zone());
         final List<Category> breadcrumbs = product.getCategories().stream().findFirst()
                 .map(categoryService::getBreadCrumbCategories)
-                .orElse(Collections.<Category>emptyList());
+                .orElse(emptyList());
 
         return suggestionPromise.flatMap(suggestions -> withCms("pdp", cms -> {
             final Translator translator = context().translator();

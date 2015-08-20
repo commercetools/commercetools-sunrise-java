@@ -1,11 +1,8 @@
 package inject;
 
 import com.google.inject.Provider;
-import io.sphere.sdk.client.SphereAccessTokenSupplier;
-import io.sphere.sdk.client.SphereAccessTokenSupplierFactory;
-import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.client.SphereClientConfig;
-import io.sphere.sdk.http.NingHttpClientAdapter;
+import io.sphere.sdk.client.*;
+import io.sphere.sdk.http.HttpClient;
 import io.sphere.sdk.play.metrics.MetricHttpClient;
 import play.Configuration;
 import play.Logger;
@@ -32,8 +29,9 @@ class SphereClientProvider implements Provider<SphereClient> {
     }
 
     private SphereClient createSphereClient(final SphereClientConfig config) {
-        final MetricHttpClient httpClient = MetricHttpClient.of(NingHttpClientAdapter.of());
-        final SphereAccessTokenSupplier tokenSupplier = SphereAccessTokenSupplierFactory.of().createSupplierOfAutoRefresh(config);
+        final HttpClient underlyingHttpClient = SphereAsyncHttpClientFactory.create();
+        final MetricHttpClient httpClient = MetricHttpClient.of(underlyingHttpClient);
+        final SphereAccessTokenSupplier tokenSupplier = SphereAccessTokenSupplierFactory.of(() -> httpClient).createSupplierOfAutoRefresh(config);
         return SphereClient.of(config, httpClient, tokenSupplier);
     }
 

@@ -9,7 +9,6 @@ import productcatalog.models.ShopShippingRate;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.util.Locale;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,7 +18,7 @@ public class ShippingRateDataFactoryTest {
 
     @Test
     public void create() {
-        final ShopShippingRate shippingRate = new ShopShippingRate("DHL", ShippingRate.of(Money.of(10.50, eur), Optional.of(Money.of(50.49, eur))));
+        final ShopShippingRate shippingRate = new ShopShippingRate("DHL", ShippingRate.of(Money.of(10.50, eur), Money.of(50.49, eur)));
 
         final ShippingRateData shippingRateData =
                 ShippingRateDataFactory.of(priceFormatter).create(shippingRate);

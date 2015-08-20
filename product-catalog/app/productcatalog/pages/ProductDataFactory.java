@@ -5,14 +5,14 @@ import common.pages.SelectableData;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import common.utils.Translator;
-import io.sphere.sdk.attributes.Attribute;
-import io.sphere.sdk.attributes.AttributeAccess;
 import io.sphere.sdk.models.LocalizedEnumValue;
-import io.sphere.sdk.models.LocalizedStrings;
+import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
+import io.sphere.sdk.products.attributes.Attribute;
+import io.sphere.sdk.products.attributes.AttributeAccess;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +25,7 @@ public class ProductDataFactory {
 
     private static final AttributeAccess<String> TEXT_ATTR_ACCESS = AttributeAccess.ofText();
     private static final AttributeAccess<LocalizedEnumValue> LENUM_ATTR_ACCESS = AttributeAccess.ofLocalizedEnumValue();
-    private static final AttributeAccess<Set<LocalizedStrings>> LENUM_SET_ATTR_ACCESS = AttributeAccess.ofLocalizedStringsSet();
+    private static final AttributeAccess<Set<LocalizedString>> LENUM_SET_ATTR_ACCESS = AttributeAccess.ofLocalizedStringSet();
 
     private final Translator translator;
     private final PriceFinder priceFinder;
@@ -46,8 +46,8 @@ public class ProductDataFactory {
 
         return new ProductData(
                 translator.findTranslation(product.getName()),
-                variant.getSku().orElse(""),
-                product.getDescription().map(translator::findTranslation).orElse(""),
+                Optional.ofNullable(variant.getSku()).orElse(""),
+                Optional.ofNullable(product.getDescription()).map(translator::findTranslation).orElse(""),
                 getPriceCurrent(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
                 getPriceOld(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
                 getColors(product),
@@ -69,7 +69,7 @@ public class ProductDataFactory {
     }
 
     private List<DetailData> getProductDetails(final ProductVariant variant) {
-        return variant.getAttribute("details", LENUM_SET_ATTR_ACCESS).orElse(emptySet()).stream()
+        return variant.findAttribute("details", LENUM_SET_ATTR_ACCESS).orElse(emptySet()).stream()
                 .map(this::localizedStringsToDetailData)
                 .collect(toList());
     }
@@ -84,7 +84,7 @@ public class ProductDataFactory {
 
     private List<Attribute> getAttributeInAllVariants(final ProductProjection product, final String attributeName) {
         return product.getAllVariants().stream()
-                .map(variant -> variant.getAttribute(attributeName))
+                .map(variant -> Optional.ofNullable(variant.getAttribute(attributeName)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .distinct()
@@ -101,17 +101,17 @@ public class ProductDataFactory {
         return new SelectableData(sizeLabel, sizeLabel, "", "", false);
     }
 
-    private DetailData localizedStringsToDetailData(final LocalizedStrings localizedStrings) {
+    private DetailData localizedStringsToDetailData(final LocalizedString localizedStrings) {
         final String label = translator.findTranslation(localizedStrings);
         return new DetailData(label, "");
     }
 
     private Optional<Price> getPriceOld(final Optional<Price> priceOpt) {
-        return priceOpt.flatMap(price -> price.getDiscounted().map(discountedPrice -> price));
+        return priceOpt.flatMap(price -> Optional.ofNullable(price.getDiscounted()).map(discountedPrice -> price));
     }
 
     private Optional<Price> getPriceCurrent(final Optional<Price> priceOpt) {
-        return priceOpt.map(price -> price.getDiscounted().map(DiscountedPrice::getValue)
+        return priceOpt.map(price -> Optional.ofNullable(price.getDiscounted()).map(DiscountedPrice::getValue)
                 .orElse(price.getValue()))
                 .map(Price::of);
     }

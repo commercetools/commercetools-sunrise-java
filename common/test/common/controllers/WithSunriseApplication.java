@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-import static io.sphere.sdk.json.JsonUtils.readObjectFromResource;
+import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static play.inject.Bindings.bind;
 
 public abstract class WithSunriseApplication extends WithApplication {

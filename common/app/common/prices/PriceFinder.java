@@ -18,10 +18,11 @@ public class PriceFinder {
 
     final CurrencyUnit currency;
     final CountryCode country;
-    final java.util.Optional<Reference<CustomerGroup>> customerGroup;
-    final java.util.Optional<Reference<Channel>> channel;
+    final Optional<Reference<CustomerGroup>> customerGroup;
+    final Optional<Reference<Channel>> channel;
 
-    private PriceFinder(final CurrencyUnit currency, final CountryCode country, final Optional<Reference<CustomerGroup>> customerGroup, final Optional<Reference<Channel>> channel) {
+    private PriceFinder(final CurrencyUnit currency, final CountryCode country, final Optional<Reference<CustomerGroup>> customerGroup,
+                        final Optional<Reference<Channel>> channel) {
         this.currency = currency;
         this.country = country;
         this.customerGroup = customerGroup;
@@ -89,25 +90,26 @@ public class PriceFinder {
     }
 
     private boolean priceHasCountry(Price price, CountryCode country) {
-        return price.getCountry().map(c -> c.compareTo(country) == 0).orElse(false);
+        return Optional.ofNullable(price.getCountry()).map(c -> c.compareTo(country) == 0).orElse(false);
     }
 
     private boolean priceHasCustomerGroup(Price price, Reference<CustomerGroup> customerGroup) {
-        return price.getCustomerGroup().map(c -> c.hasSameIdAs(customerGroup)).orElse(false);
+        return Optional.ofNullable(price.getCustomerGroup()).map(c -> c.hasSameIdAs(customerGroup)).orElse(false);
     }
 
     private boolean priceHasChannel(Price price, Reference<Channel> channel) {
-        return price.getChannel().map(c -> c.hasSameIdAs(channel)).orElse(false);
+        return Optional.ofNullable(price.getChannel()).map(c -> c.hasSameIdAs(channel)).orElse(false);
     }
 
     private boolean priceHasValidDate(Price price, ZonedDateTime date) {
-        final boolean toEarly = price.getValidFrom().map(from -> from.isAfter(date)).orElse(false);
-        final boolean toLate = price.getValidUntil().map(until -> until.isBefore(date)).orElse(false);
+        final boolean tooEarly = Optional.ofNullable(price.getValidFrom()).map(from -> from.isAfter(date)).orElse(false);
+        final boolean tooLate = Optional.ofNullable(price.getValidUntil()).map(until -> until.isBefore(date)).orElse(false);
 
-        return !toEarly && !toLate;
+        return !tooEarly && !tooLate;
     }
 
     private boolean priceHasNoDate(Price price) {
-        return !price.getValidFrom().isPresent() && !price.getValidUntil().isPresent();
+        return !Optional.ofNullable(price.getValidFrom()).isPresent()
+                && !Optional.ofNullable(price.getValidUntil()).isPresent();
     }
 }
