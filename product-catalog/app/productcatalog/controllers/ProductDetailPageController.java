@@ -1,7 +1,6 @@
 package productcatalog.controllers;
 
 import common.cms.CmsPage;
-import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.*;
@@ -48,24 +47,22 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     public F.Promise<Result> show(final String language, final String slug, final String sku) {
-        final Locale locale = new Locale(language);
-
-        final F.Promise<ProductProjection> productProjectionPromise = fetchProduct(slug, locale);
-        final F.Promise<List<ProductProjection>> suggestionPromise = productProjectionPromise.flatMap(productProjection -> productService.getSuggestions(categoryService.getSiblingCategories(productProjection.getCategories()), numberOfSuggestions));
+        final F.Promise<ProductProjection> productProjectionPromise = fetchProduct(language, slug);
+        final F.Promise<List<ProductProjection>> suggestionPromise = productProjectionPromise.flatMap(this::getSuggestions);
         final F.Promise<CmsPage> cmsPagePromise = getCmsPage("pdp");
         final F.Promise<CmsPage> commonCmsPagePromise = getCommonCmsPage();
 
-        final F.Promise<Result> resultPromise = productProjectionPromise.flatMap(productProjection -> {
-            return cmsPagePromise.flatMap(cms -> {
-                return commonCmsPagePromise.flatMap(commonCmsPage -> {
-                    return suggestionPromise.map(suggestions -> {
-                        return getPdpResult(commonCmsPage, cms, suggestions, productProjection, sku);
-                    });
-                });
-            });
-        });
+        final F.Promise<Result> resultPromise = productProjectionPromise.flatMap(productProjection ->
+                cmsPagePromise.flatMap(cms ->
+                        commonCmsPagePromise.flatMap(commonCmsPage ->
+                                suggestionPromise.map(suggestions ->
+                                        getPdpResult(commonCmsPage, cms, suggestions, productProjection, sku)))));
 
         return recover(resultPromise);
+    }
+
+    private F.Promise<List<ProductProjection>> getSuggestions(final ProductProjection productProjection) {
+        return productService.getSuggestions(categoryService.getSiblingCategories(productProjection.getCategories()), numberOfSuggestions);
     }
 
     private F.Promise<Result> recover(final F.Promise<Result> resultPromise) {
@@ -79,27 +76,45 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private Result getPdpResult(final CmsPage commonCmsPage, final CmsPage cms, final List<ProductProjection> suggestions, final ProductProjection productProjection, final String sku) {
-        final Translator translator = getTranslator();
-        final PriceFormatter priceFormatter = getPriceFormatter();
-        final PriceFinder priceFinder = getPriceFinder();
-
         final ProductVariant productVariant = obtainProductVariantBySku(sku, productProjection);
-        final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(priceFormatter);
-        final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(translator);
+        final ProductDetailPageContent content = getProductDetailPageContent(cms, suggestions, productProjection, productVariant);
+        final ProductCatalogView view = new ProductCatalogView(templateService(), context(), commonCmsPage);
+        return ok(view.productDetailPage(content));
+    }
 
-        final String additionalTitle = translator.findTranslation(productProjection.getName());
-        final PdpStaticData staticData = new PdpStaticData(cms, BagItemDataFactory.of().create(100), RatingDataFactory.of(cms).create());
-        final List<Category> breadcrumbs = getBreadcrumbsForProduct(productProjection);
-        final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
-        final List<ImageData> galleryData = productVariant.getImages().stream().map(ImageData::of).collect(toList());
-        final ProductData productData = ProductDataFactory.of(translator, priceFinder, priceFormatter).create(productProjection, productVariant);
-        final List<ShippingRateData> deliveryData = getShippingRates().stream().map(shippingRateDataFactory::create).collect(toList());
+    private ProductDetailPageContent getProductDetailPageContent(final CmsPage cms, final List<ProductProjection> suggestions, final ProductProjection productProjection, final ProductVariant productVariant) {
+        final String additionalTitle = getTranslator().findTranslation(productProjection.getName());
+        final PdpStaticData staticData = getStaticData(cms);
+        final List<LinkData> breadcrumbData = getBreadcrumbData(productProjection);
+        final List<ImageData> galleryData = getGalleryData(productVariant);
+        final ProductData productData = getProductData(productProjection, productVariant);
         final List<ProductThumbnailData> suggestionData = suggestionsToViewData(suggestions);
+        final List<ShippingRateData> deliveryData = getDeliveryData();
+        return new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
+    }
 
-        final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
+    private List<ShippingRateData> getDeliveryData() {
+        final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(getPriceFormatter());
+        return getShippingRates().stream().map(shippingRateDataFactory::create).collect(toList());
+    }
 
-        final ProductCatalogView productCatalogView = new ProductCatalogView(templateService(), context(), commonCmsPage);
-        return ok(productCatalogView.productDetailPage(content));
+    private ProductData getProductData(final ProductProjection productProjection, final ProductVariant productVariant) {
+        return ProductDataFactory.of(getTranslator(), getPriceFinder(), getPriceFormatter())
+                .create(productProjection, productVariant);
+    }
+
+    private PdpStaticData getStaticData(final CmsPage cms) {
+        return new PdpStaticData(cms, BagItemDataFactory.of().create(100), RatingDataFactory.of(cms).create());
+    }
+
+    private List<ImageData> getGalleryData(final ProductVariant productVariant) {
+        return productVariant.getImages().stream().map(ImageData::of).collect(toList());
+    }
+
+    private List<LinkData> getBreadcrumbData(final ProductProjection productProjection) {
+        final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(getTranslator());
+        final List<Category> breadcrumbs = getBreadcrumbsForProduct(productProjection);
+        return breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
     }
 
     private PriceFinder getPriceFinder() {
@@ -122,7 +137,8 @@ public class ProductDetailPageController extends SunriseController {
         return notFound();
     }
 
-    private F.Promise<ProductProjection> fetchProduct(final String slug, final Locale locale) {
+    private F.Promise<ProductProjection> fetchProduct(final String language, final String slug) {
+        final Locale locale = new Locale(language);
         return productService.searchProductBySlug(locale, slug)
                 .map(productOptional -> productOptional.orElseThrow(() -> ProductNotFoundException.bySlug(locale, slug)));
 
@@ -134,8 +150,8 @@ public class ProductDetailPageController extends SunriseController {
 
     private List<Category> getBreadcrumbsForProduct(final ProductProjection product) {
         return product.getCategories().stream().findFirst()
-                    .map(categoryService::getBreadCrumbCategories)
-                    .orElse(Collections.<Category>emptyList());
+                .map(categoryService::getBreadCrumbCategories)
+                .orElse(Collections.<Category>emptyList());
     }
 
     private List<ProductThumbnailData> suggestionsToViewData(final List<ProductProjection> suggestions) {
