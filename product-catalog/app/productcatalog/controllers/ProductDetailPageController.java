@@ -98,8 +98,8 @@ public class ProductDetailPageController extends SunriseController {
 
         final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
 
-        final ProductCatalogView view1 = new ProductCatalogView(templateService(), context(), commonCmsPage);
-        return ok(view1.productDetailPage(content));
+        final ProductCatalogView productCatalogView = new ProductCatalogView(templateService(), context(), commonCmsPage);
+        return ok(productCatalogView.productDetailPage(content));
     }
 
     private PriceFinder getPriceFinder() {
