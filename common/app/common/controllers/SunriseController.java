@@ -10,6 +10,7 @@ import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import io.sphere.sdk.zones.Zone;
+import play.Configuration;
 import play.libs.F;
 import play.mvc.Result;
 import play.mvc.With;
@@ -47,6 +48,10 @@ public abstract class SunriseController extends ShopController {
 
     protected final CmsService cmsService() {
         return controllerDependency.cmsService();
+    }
+
+    protected final Configuration configuration() {
+        return controllerDependency.configuration();
     }
 
     protected final AppContext context() {

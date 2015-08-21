@@ -38,12 +38,12 @@ public class ProductDetailPageController extends SunriseController {
     private final ShippingMethodService shippingMethodService;
 
     @Inject
-    public ProductDetailPageController(final Configuration configuration, final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
+    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
         super(controllerDependency);
         this.productService = productService;
         this.categoryService = categoryService;
         this.shippingMethodService = shippingMethodService;
-        this.numberOfSuggestions = configuration.getInt("pdp.productSuggestions.count");
+        this.numberOfSuggestions = configuration().getInt("pdp.productSuggestions.count");
     }
 
     public F.Promise<Result> show(final String language, final String slug, final String sku) {
