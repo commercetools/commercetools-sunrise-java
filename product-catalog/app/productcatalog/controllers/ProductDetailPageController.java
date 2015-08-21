@@ -130,7 +130,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private ProductVariant obtainProductVariantBySku(final String sku, final ProductProjection productProjection) {
-        return productService.findVariantBySku(productProjection, sku).orElseThrow(() -> ProductVariantNotFoundException.bySku(sku));
+        return productProjection.findVariantBySky(sku).orElseThrow(() -> ProductVariantNotFoundException.bySku(sku));
     }
 
     private Result notFoundAction() {

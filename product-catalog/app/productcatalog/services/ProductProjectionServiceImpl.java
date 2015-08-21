@@ -11,7 +11,6 @@ import io.sphere.sdk.queries.PagedResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.F;
-import productcatalog.models.ProductNotFoundException;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -46,12 +45,6 @@ public class ProductProjectionServiceImpl implements ProductProjectionService {
             }
         });
         return productOptionalPromise;
-    }
-
-    public Optional<ProductVariant> findVariantBySku(final ProductProjection product, final String sku) {
-        return product.getAllVariants().stream()
-                .filter(variant -> variantHasSku(variant, sku))
-                .findFirst();
     }
 
     public F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories, final int numSuggestions) {

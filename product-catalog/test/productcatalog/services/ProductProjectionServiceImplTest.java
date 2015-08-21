@@ -26,9 +26,9 @@ public class ProductProjectionServiceImplTest {
         final String masterSku = "M0E20000000DSB9";
         final String otherSku = "M0E20000000DSBA";
 
-        assertThat(service.findVariantBySku(product, masterSku).get().getSku()).contains(masterSku);
-        assertThat(service.findVariantBySku(product, otherSku).get().getSku()).contains(otherSku);
-        assertThat(service.findVariantBySku(product, "")).isEmpty();
+        assertThat(product.findVariantBySky(masterSku).get().getSku()).contains(masterSku);
+        assertThat(product.findVariantBySky(otherSku).get().getSku()).contains(otherSku);
+        assertThat(product.findVariantBySky("")).isEmpty();
     }
 
     @Test
