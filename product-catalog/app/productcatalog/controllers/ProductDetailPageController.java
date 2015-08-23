@@ -4,9 +4,7 @@ import common.cms.CmsPage;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.*;
-import common.prices.PriceFinder;
-import common.utils.PriceFormatter;
-import common.utils.Translator;
+import common.utils.PriceFormatterImpl;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -82,7 +80,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private ProductDetailPageContent getProductDetailPageContent(final CmsPage cms, final List<ProductProjection> suggestions, final ProductProjection productProjection, final ProductVariant productVariant) {
-        final String additionalTitle = getTranslator().findTranslation(productProjection.getName());
+        final String additionalTitle = userContext().getTranslation(productProjection.getName());
         final PdpStaticData staticData = getStaticData(cms);
         final List<LinkData> breadcrumbData = getBreadcrumbData(productProjection);
         final List<ImageData> galleryData = getGalleryData(productVariant);
@@ -93,12 +91,12 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private List<ShippingRateData> getDeliveryData() {
-        final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(getPriceFormatter());
+        final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(PriceFormatterImpl.of(userContext().language()));
         return getShippingRates().stream().map(shippingRateDataFactory::create).collect(toList());
     }
 
     private ProductData getProductData(final ProductProjection productProjection, final ProductVariant productVariant) {
-        return ProductDataFactory.of(getTranslator(), getPriceFinder(), getPriceFormatter())
+        return ProductDataFactory.of(userContext())
                 .create(productProjection, productVariant);
     }
 
@@ -111,21 +109,9 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private List<LinkData> getBreadcrumbData(final ProductProjection productProjection) {
-        final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(getTranslator());
+        final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(userContext());
         final List<Category> breadcrumbs = getBreadcrumbsForProduct(productProjection);
         return breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
-    }
-
-    private PriceFinder getPriceFinder() {
-        return userContext().priceFinder();
-    }
-
-    private PriceFormatter getPriceFormatter() {
-        return userContext().priceFormatter();
-    }
-
-    private Translator getTranslator() {
-        return userContext().translator();
     }
 
     private ProductVariant obtainProductVariantBySku(final String sku, final ProductProjection productProjection) {
@@ -144,7 +130,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private List<ShopShippingRate> getShippingRates() {
-        return shippingMethodService.getShippingRates(userContext().zone());
+        return Collections.emptyList();
     }
 
     private List<Category> getBreadcrumbsForProduct(final ProductProjection product) {
@@ -154,6 +140,6 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private List<ProductThumbnailData> suggestionsToViewData(final List<ProductProjection> suggestions) {
-        return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(getTranslator(), getPriceFinder(), getPriceFormatter()).create(product)).collect(toList());
+        return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(userContext()).create(product)).collect(toList());
     }
 }

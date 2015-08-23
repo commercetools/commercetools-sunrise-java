@@ -4,10 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.neovisionaries.i18n.CountryCode;
 import common.categories.CategoryUtils;
 import common.cms.CmsPage;
+import common.contexts.UserContext;
 import common.pages.*;
-import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
-import common.utils.Translator;
+import common.utils.PriceFormatterImpl;
+import common.utils.TranslationResolverImpl;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.Image;
@@ -22,9 +23,7 @@ import productcatalog.models.ShopShippingRate;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -40,14 +39,14 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductDetailPageContentTest {
+    public static final ZoneId ZONE_ID = ZoneId.of("Europe/Berlin");
     private final CurrencyUnit eur = Monetary.getCurrency("EUR");
     private final CountryCode de = CountryCode.DE;
     private final Locale german = Locale.GERMAN;
-    private final ZonedDateTime todayDe = ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("Europe/Berlin"));
 
-    private final Translator translator = Translator.of(german, emptyList(), emptyList());
-    private final PriceFinder priceFinder = PriceFinder.of(eur, de, Optional.empty(), Optional.empty());
-    private final PriceFormatter priceFormatter = PriceFormatter.of(german);
+    private final TranslationResolverImpl translator = TranslationResolverImpl.of(german, emptyList(), emptyList());
+    private final PriceFormatter priceFormatter = PriceFormatterImpl.of(german);
+    private final UserContext userContext = UserContext.of(de, german, emptyList(), ZONE_ID, eur, null, null);
 
     private final CategoryTree categories = CategoryTree.of(CategoryUtils.getQueryResult("categoryQueryResult.json").getResults());
     private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
@@ -95,7 +94,7 @@ public class ProductDetailPageContentTest {
     public void productJson() throws IOException {
         final ProductProjection product = readObjectFromResource("product.json", ProductProjection.typeReference());
         final ProductVariant variant = product.getMasterVariant();
-        final ProductData productData = ProductDataFactory.of(translator, priceFinder, priceFormatter).create(product, variant);
+        final ProductData productData = ProductDataFactory.of(userContext).create(product, variant);
 
         final JsonNode expected = readJsonNodeFromResource("productData.json");
         final JsonNode result = toJsonNode(productData);
@@ -122,7 +121,7 @@ public class ProductDetailPageContentTest {
         final ProductProjection dkny = getProductById(products, "a3f4588e-fcfe-41de-bd09-a071d76d697d");
         final ProductProjection miabag = getProductById(products, "dc9a4460-491c-48b4-bcf6-1d802bb7e164");
         final ProductProjection altea = getProductById(products, "4f643a44-5bed-415e-ae60-64c46bfb26f5");
-        final ProductThumbnailDataFactory thumbnailDataBuilder = ProductThumbnailDataFactory.of(translator, priceFinder, priceFormatter);
+        final ProductThumbnailDataFactory thumbnailDataBuilder = ProductThumbnailDataFactory.of(userContext);
         final List<ProductThumbnailData> suggestionData = asList(selma, dkny, miabag, altea).stream()
                 .map(thumbnailDataBuilder::create).collect(toList());
 

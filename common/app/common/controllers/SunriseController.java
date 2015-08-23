@@ -6,15 +6,14 @@ import common.contexts.AppContext;
 import common.contexts.UserContext;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
-import io.sphere.sdk.zones.Zone;
 import play.Configuration;
 import play.libs.F;
 import play.mvc.Result;
 import play.mvc.With;
 
+import javax.money.Monetary;
 import java.time.ZoneId;
 import java.util.function.Function;
 
@@ -76,6 +75,6 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected UserContext userContext() {
-        return UserContext.of(DE, GERMAN, emptyList(), ZoneId.of("Europe/Berlin"), Reference.of(Zone.typeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88"));
+        return UserContext.of(DE, GERMAN, emptyList(), ZoneId.of("Europe/Berlin"), Monetary.getCurrency("EUR"));
     }
 }

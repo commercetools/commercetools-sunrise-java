@@ -9,7 +9,7 @@ import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TranslatorTest {
+public class TranslationResolverTest {
 
     private final Locale english = Locale.ENGLISH;
     private final Locale german =  Locale.GERMAN;
@@ -23,13 +23,13 @@ public class TranslatorTest {
     private final List<Locale> fallbackLanguages = asList(german, french);
     private final List<Locale> projectLanguages = asList(italian, korean);
 
-    private final Translator translator = Translator.of(preferredLanguage, fallbackLanguages, projectLanguages);
+    private final TranslationResolver translationResolver = TranslationResolverImpl.of(preferredLanguage, fallbackLanguages, projectLanguages);
 
     @Test
     public void findTranslationForPreferredLanguage() {
         final LocalizedString localizedStrings = LocalizedString.of(translations);
 
-        final String foundTranslation = translator.findTranslation(localizedStrings);
+        final String foundTranslation = translationResolver.getTranslation(localizedStrings);
 
         assertThat(foundTranslation)
                 .overridingErrorMessage("A translation for the users preferred language should be found")
@@ -45,7 +45,7 @@ public class TranslatorTest {
         localizedStringEntries.put(korean, "korean");
         final LocalizedString localizedStrings = LocalizedString.of(localizedStringEntries);
 
-        final String foundTranslation = translator.findTranslation(localizedStrings);
+        final String foundTranslation = translationResolver.getTranslation(localizedStrings);
 
         assertThat(foundTranslation)
                 .overridingErrorMessage("A translation for the users fallback languages should be found")
@@ -59,7 +59,7 @@ public class TranslatorTest {
         localizedStringEntries.put(korean, "korean");
         final LocalizedString localizedStrings = LocalizedString.of(localizedStringEntries);
 
-        final String foundTranslation = translator.findTranslation(localizedStrings);
+        final String foundTranslation = translationResolver.getTranslation(localizedStrings);
 
         assertThat(foundTranslation)
                 .overridingErrorMessage("A translation for the users fallback project languages should be found")
@@ -72,7 +72,7 @@ public class TranslatorTest {
         localizedStringEntries.put(Locale.CHINESE, "chinese");
         final LocalizedString localizedStrings = LocalizedString.of(localizedStringEntries);
 
-        final String foundTranslation = translator.findTranslation(localizedStrings);
+        final String foundTranslation = translationResolver.getTranslation(localizedStrings);
 
         assertThat(foundTranslation)
                 .overridingErrorMessage("No translation should be found")

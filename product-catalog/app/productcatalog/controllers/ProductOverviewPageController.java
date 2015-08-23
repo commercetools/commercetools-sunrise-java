@@ -6,9 +6,6 @@ import common.controllers.SunriseController;
 import common.pages.ProductThumbnailData;
 import common.pages.ProductThumbnailDataFactory;
 import common.pages.SunrisePageData;
-import common.prices.PriceFinder;
-import common.utils.PriceFormatter;
-import common.utils.Translator;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
 import play.libs.F;
@@ -48,11 +45,7 @@ public class ProductOverviewPageController extends SunriseController {
     }
 
     private ProductOverviewPageContent getPopPageData(final CmsPage cms, final List<ProductProjection> products) {
-        final Translator translator = userContext().translator();
-        final PriceFormatter priceFormatter = userContext().priceFormatter();
-        final PriceFinder priceFinder = userContext().priceFinder();
-
-        final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator, priceFinder, priceFormatter);
+        final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(userContext());
 
         final String additionalTitle = "";
         final List<ProductThumbnailData> productList = products.stream().map(thumbnailDataFactory::create).collect(toList());
