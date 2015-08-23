@@ -5,6 +5,7 @@ import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.ProductThumbnailData;
 import common.pages.ProductThumbnailDataFactory;
+import common.pages.SunrisePageData;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import common.utils.Translator;
@@ -12,14 +13,12 @@ import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
 import play.libs.F;
 import play.mvc.Result;
-import productcatalog.pages.ProductCatalogView;
 import productcatalog.pages.ProductOverviewPageContent;
 import productcatalog.services.ProductProjectionService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -40,7 +39,10 @@ public class ProductOverviewPageController extends SunriseController {
         return withCms("pop", cms ->
             productService.searchProducts(page, pageSize).flatMap(result -> {
                 final ProductOverviewPageContent content = getPopPageData(cms, result);
-                return renderPdp(view -> ok(view.productOverviewPage(content)));
+                return withCommonCms(commonCmsPage -> {
+                    final SunrisePageData pageData = SunrisePageData.of(commonCmsPage, context(), content);
+                    return ok(templateService().renderToHtml("pop", pageData));
+                });
             })
         );
     }
@@ -58,10 +60,4 @@ public class ProductOverviewPageController extends SunriseController {
         return new ProductOverviewPageContent(additionalTitle, productList);
     }
 
-    private F.Promise<Result> renderPdp(final Function<ProductCatalogView, Result> pageRenderer) {
-        return withCommonCms(cms -> {
-            final ProductCatalogView view = new ProductCatalogView(templateService(), context(), cms);
-            return pageRenderer.apply(view);
-        });
-    }
 }

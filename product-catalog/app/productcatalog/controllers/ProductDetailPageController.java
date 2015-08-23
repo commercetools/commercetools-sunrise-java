@@ -10,7 +10,6 @@ import common.utils.Translator;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import play.Configuration;
 import play.libs.F;
 import play.mvc.Result;
 import productcatalog.models.ProductNotFoundException;
@@ -78,8 +77,8 @@ public class ProductDetailPageController extends SunriseController {
     private Result getPdpResult(final CmsPage commonCmsPage, final CmsPage cms, final List<ProductProjection> suggestions, final ProductProjection productProjection, final String sku) {
         final ProductVariant productVariant = obtainProductVariantBySku(sku, productProjection);
         final ProductDetailPageContent content = getProductDetailPageContent(cms, suggestions, productProjection, productVariant);
-        final ProductCatalogView view = new ProductCatalogView(templateService(), context(), commonCmsPage);
-        return ok(view.productDetailPage(content));
+        final SunrisePageData pageData = SunrisePageData.of(commonCmsPage, context(), content);
+        return ok(templateService().renderToHtml("pdp", pageData));
     }
 
     private ProductDetailPageContent getProductDetailPageContent(final CmsPage cms, final List<ProductProjection> suggestions, final ProductProjection productProjection, final ProductVariant productVariant) {
