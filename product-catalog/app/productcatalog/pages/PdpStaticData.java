@@ -29,11 +29,11 @@ public class PdpStaticData extends Base {
         return cms.getOrEmpty("viewDetailsText");
     }
 
-    public String getColorText() {
+    public String getColorsText() {
         return cms.getOrEmpty("colorsText");
     }
 
-    public String getSizeText() {
+    public String getSizesText() {
         return cms.getOrEmpty("sizesText");
     }
 
