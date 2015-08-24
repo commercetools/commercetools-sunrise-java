@@ -10,15 +10,15 @@ public class ProductDetailPageContent extends PageContent {
     private final PdpStaticData staticData;
     private final List<LinkData> breadcrumbs;
     private final ProductData productData;
-    private final List<ShippingRateData> deliveryData;
+    private final List<ShippingRateData> shippingRates;
     private final List<ProductData> suggestions;
 
-    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<LinkData> breadcrumbs, final ProductData productData, final List<ShippingRateData> deliveryData, final List<ProductData> suggestions) {
+    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<LinkData> breadcrumbs, final ProductData productData, final List<ShippingRateData> shippingRates, final List<ProductData> suggestions) {
         this.additionalTitle = additionalTitle;
         this.staticData = staticData;
         this.breadcrumbs = breadcrumbs;
         this.productData = productData;
-        this.deliveryData = deliveryData;
+        this.shippingRates = shippingRates;
         this.suggestions = suggestions;
     }
 
@@ -42,7 +42,7 @@ public class ProductDetailPageContent extends PageContent {
         return suggestions;
     }
 
-    public List<ShippingRateData> getDelivery() {
-        return deliveryData;
+    public List<ShippingRateData> getShippingRates() {
+        return shippingRates;
     }
 }

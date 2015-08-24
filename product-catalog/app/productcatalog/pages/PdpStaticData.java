@@ -61,7 +61,7 @@ public class PdpStaticData extends Base {
         return cms.getOrEmpty("deliveryAndReturnsText");
     }
 
-    public String getDeliveryText() {
+    public String getShippingRatesText() {
         return cms.getOrEmpty("deliveryText");
     }
 
