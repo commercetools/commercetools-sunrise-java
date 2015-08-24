@@ -9,9 +9,7 @@ import common.prices.PriceFinder;
 import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
-import io.sphere.sdk.products.Price;
-import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
+import io.sphere.sdk.products.*;
 import io.sphere.sdk.products.attributes.Attribute;
 import io.sphere.sdk.products.attributes.AttributeAccess;
 
@@ -57,7 +55,16 @@ public class ProductDataFactory {
     }
 
     private List<ImageData> getImages(final ProductVariant productVariant) {
-        return productVariant.getImages().stream().map(ImageData::of).collect(toList());
+        final List<ImageData> images = productVariant.getImages().stream().map(ImageData::of).collect(toList());
+        if(images.isEmpty()) {
+            images.add(getPlaceholderImage());
+        }
+
+        return images;
+    }
+
+    private ImageData getPlaceholderImage() {
+        return ImageData.of(Image.of("http://placehold.it/300x400", ImageDimensions.of(300, 400)));
     }
 
     private List<SelectableData> getColors(final ProductProjection product) {

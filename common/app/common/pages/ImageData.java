@@ -7,25 +7,21 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 public class ImageData extends Base {
 
-    private final Image image;
+    private final String imageUrl;
 
     private ImageData(final Image image) {
-        this.image = image;
+        this.imageUrl = trimToNull(image.getUrl());
     }
 
     public static ImageData of(final Image image) {
         return new ImageData(image);
     }
 
-    public String getThumbImage() {
-        return trimToNull(image.getUrl());
-    }
-
     public String getBigImage() {
-        return trimToNull(image.getUrl());
+        return imageUrl;
     }
 
-    public String getPlaceholderImage() {
-        return "http://placehold.it/350x150";
+    public String getThumbImage() {
+        return imageUrl;
     }
 }
