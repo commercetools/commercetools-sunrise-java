@@ -3,6 +3,7 @@ package productcatalog.pages;
 import common.contexts.PriceFinderFactory;
 import common.contexts.UserContext;
 import common.pages.DetailData;
+import common.pages.ImageData;
 import common.pages.SelectableData;
 import common.prices.PriceFinder;
 import io.sphere.sdk.models.LocalizedEnumValue;
@@ -48,10 +49,15 @@ public class ProductDataFactory {
                 Optional.ofNullable(product.getDescription()).map(userContext::getTranslation).orElse(""),
                 getPriceCurrent(priceOpt).map(price -> userContext.format(price.getValue())).orElse(""),
                 getPriceOld(priceOpt).map(price -> userContext.format(price.getValue())).orElse(""),
+                getImages(variant),
                 getColors(product),
                 getSizes(product),
-                getProductDetails(variant)
+                getDetails(variant)
         );
+    }
+
+    private List<ImageData> getImages(final ProductVariant productVariant) {
+        return productVariant.getImages().stream().map(ImageData::of).collect(toList());
     }
 
     private List<SelectableData> getColors(final ProductProjection product) {
@@ -66,7 +72,7 @@ public class ProductDataFactory {
                 .collect(toList());
     }
 
-    private List<DetailData> getProductDetails(final ProductVariant variant) {
+    private List<DetailData> getDetails(final ProductVariant variant) {
         return variant.findAttribute("details", LENUM_SET_ATTR_ACCESS).orElse(emptySet()).stream()
                 .map(this::localizedStringsToDetailData)
                 .collect(toList());

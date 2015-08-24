@@ -83,11 +83,10 @@ public class ProductDetailPageController extends SunriseController {
         final String additionalTitle = userContext().getTranslation(productProjection.getName());
         final PdpStaticData staticData = getStaticData(cms);
         final List<LinkData> breadcrumbData = getBreadcrumbData(productProjection);
-        final List<ImageData> galleryData = getGalleryData(productVariant);
         final ProductData productData = getProductData(productProjection, productVariant);
         final List<ProductData> suggestionData = suggestionsToViewData(suggestions);
         final List<ShippingRateData> deliveryData = getDeliveryData();
-        return new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
+        return new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, productData, deliveryData, suggestionData);
     }
 
     private List<ShippingRateData> getDeliveryData() {
@@ -102,10 +101,6 @@ public class ProductDetailPageController extends SunriseController {
 
     private PdpStaticData getStaticData(final CmsPage cms) {
         return new PdpStaticData(cms, BagItemDataFactory.of().create(100), RatingDataFactory.of(cms).create());
-    }
-
-    private List<ImageData> getGalleryData(final ProductVariant productVariant) {
-        return productVariant.getImages().stream().map(ImageData::of).collect(toList());
     }
 
     private List<LinkData> getBreadcrumbData(final ProductProjection productProjection) {
