@@ -12,9 +12,9 @@ public class ProductDetailPageContent extends PageContent {
     private final List<ImageData> gallery;
     private final ProductData productData;
     private final List<ShippingRateData> deliveryData;
-    private final List<ProductThumbnailData> suggestions;
+    private final List<ProductData> suggestions;
 
-    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<LinkData> breadcrumbs, final List<ImageData> gallery, final ProductData productData, final List<ShippingRateData> deliveryData, final List<ProductThumbnailData> suggestions) {
+    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<LinkData> breadcrumbs, final List<ImageData> gallery, final ProductData productData, final List<ShippingRateData> deliveryData, final List<ProductData> suggestions) {
         this.additionalTitle = additionalTitle;
         this.staticData = staticData;
         this.breadcrumbs = breadcrumbs;
@@ -44,7 +44,7 @@ public class ProductDetailPageContent extends PageContent {
         return productData;
     }
 
-    public List<ProductThumbnailData> getSuggestions() {
+    public List<ProductData> getSuggestions() {
         return suggestions;
     }
 

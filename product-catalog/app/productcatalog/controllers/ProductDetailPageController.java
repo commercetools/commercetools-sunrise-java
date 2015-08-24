@@ -85,7 +85,7 @@ public class ProductDetailPageController extends SunriseController {
         final List<LinkData> breadcrumbData = getBreadcrumbData(productProjection);
         final List<ImageData> galleryData = getGalleryData(productVariant);
         final ProductData productData = getProductData(productProjection, productVariant);
-        final List<ProductThumbnailData> suggestionData = suggestionsToViewData(suggestions);
+        final List<ProductData> suggestionData = suggestionsToViewData(suggestions);
         final List<ShippingRateData> deliveryData = getDeliveryData();
         return new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, galleryData, productData, deliveryData, suggestionData);
     }
@@ -139,7 +139,7 @@ public class ProductDetailPageController extends SunriseController {
                 .orElse(Collections.<Category>emptyList());
     }
 
-    private List<ProductThumbnailData> suggestionsToViewData(final List<ProductProjection> suggestions) {
-        return suggestions.stream().map((product) -> ProductThumbnailDataFactory.of(userContext()).create(product)).collect(toList());
+    private List<ProductData> suggestionsToViewData(final List<ProductProjection> suggestions) {
+        return suggestions.stream().map((product) -> ProductDataFactory.of(userContext()).create(product, product.getMasterVariant())).collect(toList());
     }
 }
