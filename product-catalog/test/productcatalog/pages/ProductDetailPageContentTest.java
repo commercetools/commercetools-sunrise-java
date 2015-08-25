@@ -5,14 +5,15 @@ import com.neovisionaries.i18n.CountryCode;
 import common.categories.CategoryUtils;
 import common.cms.CmsPage;
 import common.contexts.UserContext;
-import common.pages.*;
+import common.pages.BagItemDataFactory;
+import common.pages.CategoryLinkDataFactory;
+import common.pages.LinkData;
+import common.pages.RatingDataFactory;
 import common.utils.PriceFormatter;
 import common.utils.PriceFormatterImpl;
 import common.utils.TranslationResolverImpl;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.products.Image;
-import io.sphere.sdk.products.ImageDimensions;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.shippingmethods.ShippingRate;
@@ -78,19 +79,6 @@ public class ProductDetailPageContentTest {
     }
 
     @Test
-    public void galleryJson() throws IOException {
-        final ImageData firstImage = ImageData.of(Image.of("firstImage", ImageDimensions.of(100, 200)));
-        final ImageData secondImage = ImageData.of(Image.of("secondImage", ImageDimensions.of(200, 300)));
-        final ImageData thirdImage = ImageData.of(Image.of("thirdImage", ImageDimensions.of(300, 400)));
-        final List<ImageData> galleryData = asList(firstImage, secondImage, thirdImage);
-
-        final JsonNode expected = readJsonNodeFromResource("galleryData.json").get("gallery");
-        final JsonNode result = toJsonNode(galleryData);
-
-        assertThat(result).isEqualTo(expected);
-    }
-
-    @Test
     public void productJson() throws IOException {
         final ProductProjection product = readObjectFromResource("product.json", ProductProjection.typeReference());
         final ProductVariant variant = product.getMasterVariant();
@@ -121,9 +109,9 @@ public class ProductDetailPageContentTest {
         final ProductProjection dkny = getProductById(products, "a3f4588e-fcfe-41de-bd09-a071d76d697d");
         final ProductProjection miabag = getProductById(products, "dc9a4460-491c-48b4-bcf6-1d802bb7e164");
         final ProductProjection altea = getProductById(products, "4f643a44-5bed-415e-ae60-64c46bfb26f5");
-        final ProductThumbnailDataFactory thumbnailDataBuilder = ProductThumbnailDataFactory.of(userContext);
-        final List<ProductThumbnailData> suggestionData = asList(selma, dkny, miabag, altea).stream()
-                .map(thumbnailDataBuilder::create).collect(toList());
+        final ProductDataFactory productDataFactory = ProductDataFactory.of(userContext);
+        final List<ProductData> suggestionData = asList(selma, dkny, miabag, altea).stream()
+                .map(product -> productDataFactory.create(product, product.getMasterVariant())).collect(toList());
 
         final JsonNode expected = readJsonNodeFromResource("suggestionData.json").get("suggestions");
         final JsonNode result = toJsonNode(suggestionData);

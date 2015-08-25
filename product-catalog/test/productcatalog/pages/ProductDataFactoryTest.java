@@ -26,8 +26,8 @@ public class ProductDataFactoryTest {
         final ProductVariant variant = product.getMasterVariant();
 
         final ProductData productData = ProductDataFactory.of(USER_CONTEXT).create(product, variant);
-        final List<String> colors = productData.getColor().stream().map(SelectableData::getText).collect(toList());
-        final List<String> sizes = productData.getSize().stream().map(SelectableData::getText).collect(toList());
+        final List<String> colors = productData.getColors().stream().map(SelectableData::getText).collect(toList());
+        final List<String> sizes = productData.getSizes().stream().map(SelectableData::getText).collect(toList());
         final List<String> details = productData.getDetails().stream().map(DetailData::getText).collect(toList());
 
         assertThat(productData.getText()).isEqualTo("Freizeitjacke Save the Duck oliv");
