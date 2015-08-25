@@ -31,6 +31,10 @@ public class ProductData extends Base {
         this.details = details;
     }
 
+    public String getId() {
+        return Integer.toString(hashCode());
+    }
+
     public String getText() {
         return text;
     }
