@@ -1,22 +1,40 @@
 package io.sphere.sdk.facets;
 
 import io.sphere.sdk.models.Base;
+import io.sphere.sdk.search.TermFacetResult;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T>> extends Base {
     private final String key;
     private final String label;
-    private final List<FacetOption> options;
-    private Optional<Long> threshold = Optional.empty();
-    private Optional<Long> limit = Optional.empty();
+    protected SelectFacetType type = SelectFacetType.SMALL;
+    protected List<String> selectedValues = Collections.emptyList();
+    protected Optional<TermFacetResult> termFacetResult = Optional.empty();
+    protected Optional<Long> threshold = Optional.empty();
+    protected Optional<Long> limit = Optional.empty();
 
-    protected BaseSelectFacetBuilder(final String key, final String label, final List<FacetOption> options) {
+    protected BaseSelectFacetBuilder(final String key, final String label) {
         this.key = key;
         this.label = label;
-        this.options = options;
+    }
+
+    public T type(final SelectFacetType type) {
+        this.type = type;
+        return getThis();
+    }
+
+    public T selectedValues(final List<String> selectedValues) {
+        this.selectedValues = selectedValues;
+        return getThis();
+    }
+
+    public T termFacetResult(@Nullable final TermFacetResult termFacetResult) {
+        this.termFacetResult = Optional.ofNullable(termFacetResult);
+        return getThis();
     }
 
     public T threshold(@Nullable final Long threshold) {
@@ -37,8 +55,16 @@ abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T>> exten
         return label;
     }
 
-    public List<FacetOption> getOptions() {
-        return options;
+    public SelectFacetType getType() {
+        return type;
+    }
+
+    public List<String> getSelectedValues() {
+        return selectedValues;
+    }
+
+    public Optional<TermFacetResult> getTermFacetResult() {
+        return termFacetResult;
     }
 
     public Optional<Long> getThreshold() {

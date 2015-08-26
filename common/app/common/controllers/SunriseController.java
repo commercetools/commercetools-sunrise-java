@@ -25,7 +25,7 @@ import static java.util.Locale.GERMAN;
  * An application specific controller.
  * Since we want to show a standard web shop it contains categories.
  */
-@With(MetricAction.class)
+//@With(MetricAction.class)
 public abstract class SunriseController extends ShopController {
     private final AppContext context;
     private final ControllerDependency controllerDependency;

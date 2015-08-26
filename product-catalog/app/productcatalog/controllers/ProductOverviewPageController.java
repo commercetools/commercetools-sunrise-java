@@ -7,15 +7,11 @@ import common.pages.ProductThumbnailDataFactory;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import common.utils.Translator;
-import io.sphere.sdk.facets.FacetOption;
-import io.sphere.sdk.facets.MultiSelectFacet;
-import io.sphere.sdk.facets.MultiSelectFacetBuilder;
+import io.sphere.sdk.facets.*;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.products.search.ProductProjectionSearchModel;
-import io.sphere.sdk.search.PagedSearchResult;
-import io.sphere.sdk.search.TermFacetExpression;
-import io.sphere.sdk.search.TermFacetResult;
+import io.sphere.sdk.search.*;
 import play.Configuration;
 import play.Logger;
 import play.libs.F;
@@ -25,17 +21,19 @@ import productcatalog.services.ProductProjectionService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.function.Function;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductOverviewPageController extends SunriseController {
-    private static final TermFacetExpression<ProductProjection, String> FACET_EXPR_SIZE = ProductProjectionSearchModel.of().allVariants().attribute().ofString("size").faceted().byAllTerms();
-    private static final TermFacetExpression<ProductProjection, String> FACET_EXPR_COLOR = ProductProjectionSearchModel.of().allVariants().attribute().ofLocalizableEnum("color").label().locale(Locale.ENGLISH).faceted().byAllTerms();
+    public static final ProductProjectionSearchModel SEARCH_MODEL = ProductProjectionSearchModel.of();
+    private static final List<SelectFacet<ProductProjection>> FACET_LIST = asList(
+            MultiSelectFacetBuilder.of("size", "Size", SEARCH_MODEL.allVariants().attribute().ofEnum("commonSize").label()).build(),
+            MultiSelectFacetBuilder.of("color", "Color", SEARCH_MODEL.allVariants().attribute().ofLocalizableEnum("color").label().locale(Locale.ENGLISH)).build(),
+            MultiSelectFacetBuilder.of("brand", "Brands", SEARCH_MODEL.allVariants().attribute().ofEnum("designer").label()).type(SelectFacetType.LARGE).build());
     private final int pageSize;
     private final ProductProjectionService productService;
 
@@ -46,35 +44,39 @@ public class ProductOverviewPageController extends SunriseController {
         this.pageSize = configuration.getInt("pop.pageSize");
     }
 
-    public F.Promise<Result> show(int page) {
-        return getCmsPage("pop").flatMap(cms ->
-                searchProducts(page).flatMap(searchResult -> {
-                    final ProductOverviewPageContent content = getPopPageData(cms, searchResult);
+    public F.Promise<Result> show(final int page) {
+        final FacetedSearch<ProductProjection> facetedSearch = FacetedSearch.of(request(), FACET_LIST);
+        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(facetedSearch, page);
+        final F.Promise<CmsPage> cmsPromise = getCmsPage("pop");
+        return searchResultPromise.flatMap(searchResult ->
+                cmsPromise.flatMap(cms -> {
+                    final ProductOverviewPageContent content = getPopPageData(cms, facetedSearch, searchResult);
                     return renderPage(view -> ok(view.productOverviewPage(content)));
                 })
         );
     }
 
-    private F.Promise<PagedSearchResult<ProductProjection>> searchProducts(final int page) {
+    /* Move to product service */
+    private F.Promise<PagedSearchResult<ProductProjection>> searchProducts(final FacetedSearch<ProductProjection> facetedSearch, final int page) {
         final int offset = (page - 1) * pageSize;
-        final ProductProjectionSearch searchRequest = ProductProjectionSearch.ofCurrent()
+        final ProductProjectionSearch searchRequest = facetedSearch.applyRequest(ProductProjectionSearch.ofCurrent())
                 .withOffset(offset)
-                .withLimit(pageSize)
-                .plusFacets(FACET_EXPR_SIZE)
-                .plusFacets(FACET_EXPR_COLOR);
+                .withLimit(pageSize);
         final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = sphere().execute(searchRequest);
-        searchResultPromise.onRedeem(result -> Logger.trace("Found {} out of {} products with page {} and page size {}",
+        searchResultPromise.onRedeem(result -> Logger.debug("Fetched {} out of {} products with request {}",
                 result.size(),
                 result.getTotal(),
-                page,
-                pageSize));
+                searchRequest.httpRequestIntent().getPath()));
         return searchResultPromise;
     }
 
-    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final PagedSearchResult<ProductProjection> searchResult) {
+
+
+    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final FacetedSearch<ProductProjection> facetedSearch,
+                                                      final PagedSearchResult<ProductProjection> searchResult) {
         final String additionalTitle = "";
-        final ProductListData productListData = getProductListData(searchResult);
-        final FilterListData filterListData = getFilterListData(searchResult);
+        final ProductListData productListData = getProductListData(searchResult.getResults());
+        final FilterListData filterListData = getFilterListData(facetedSearch, searchResult);
         return new ProductOverviewPageContent(additionalTitle, productListData, filterListData);
     }
 
@@ -85,34 +87,20 @@ public class ProductOverviewPageController extends SunriseController {
         });
     }
 
-    /* This will be moved to some kind of factory classes */
+    /* This will probably be moved to some kind of factory classes */
 
-    private ProductListData getProductListData(final PagedSearchResult<ProductProjection> searchResult) {
+    private ProductListData getProductListData(final List<ProductProjection> productList) {
         final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator(), priceFinder(), priceFormatter());
-        return new ProductListData(searchResult.getResults().stream().map(thumbnailDataFactory::create).collect(toList()));
+        return new ProductListData(productList.stream().map(thumbnailDataFactory::create).collect(toList()));
     }
 
-    private FilterListData getFilterListData(final PagedSearchResult<ProductProjection> searchResult) {
-        final SelectFacetData sizeSelectFacetData = getSizeFacet(searchResult);
-        final SelectFacetData colorSelectFacetData = getColorFacet(searchResult);
-        return new FilterListData(sizeSelectFacetData, colorSelectFacetData);
-    }
-
-    private SelectFacetData getSizeFacet(final PagedSearchResult<ProductProjection> searchResult) {
-        final List<FacetOption> facetOptions = getSelectFacetData(searchResult, FACET_EXPR_SIZE);
-        final MultiSelectFacet facet = MultiSelectFacetBuilder.of("facet-size", "Size", facetOptions, false).build();
-        return new SelectFacetData(facet);
-    }
-
-    private SelectFacetData getColorFacet(final PagedSearchResult<ProductProjection> searchResult) {
-        final List<FacetOption> facetOptions = getSelectFacetData(searchResult, FACET_EXPR_COLOR);
-        final MultiSelectFacet facet = MultiSelectFacetBuilder.of("facet-color", "Color", facetOptions, false).build();
-        return new SelectFacetData(facet);
-    }
-
-    private <T> List<FacetOption> getSelectFacetData(final PagedSearchResult<ProductProjection> searchResult, final TermFacetExpression<ProductProjection, T> facetExpr) {
-        final TermFacetResult<T> facetResult = searchResult.getTermFacetResult(facetExpr);
-        return FacetOption.ofFacetResult(facetResult, Collections.<T>emptyList());
+    private FilterListData getFilterListData(final FacetedSearch<ProductProjection> facetedSearch,
+                                             final PagedSearchResult<ProductProjection> searchResult) {
+        final List<SelectFacet<ProductProjection>> selectFacets = facetedSearch.applyResult(searchResult);
+        final List<SelectFacetData> facetData = selectFacets.stream()
+                .map(SelectFacetData::new)
+                .collect(toList());
+        return new FilterListData(facetData);
     }
 
     /* Maybe move these convenient methods to SunriseController? */

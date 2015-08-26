@@ -1,15 +1,17 @@
 package io.sphere.sdk.facets;
 
+import io.sphere.sdk.search.TermFacetResult;
+import io.sphere.sdk.search.UntypedSearchModel;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
-public final class MultiSelectFacet extends BaseSelectFacet {
-    private final boolean matchesAll;
+public final class MultiSelectFacet<T> extends BaseSelectFacet<T> {
 
-    MultiSelectFacet(final String key, final String label, final List<FacetOption> options,
-                     @Nullable final Long threshold, @Nullable final Long limit, final boolean matchesAll) {
-        super(key, label, options, threshold, limit);
-        this.matchesAll = matchesAll;
+    MultiSelectFacet(final String key, final String label, final UntypedSearchModel<T> searchModel, final SelectFacetType type,
+                     final boolean matchingAll, final List<String> selectedValues, @Nullable final TermFacetResult termFacetResult,
+                     @Nullable final Long threshold, @Nullable final Long limit) {
+        super(key, label, searchModel, type, matchingAll, selectedValues, termFacetResult, threshold, limit);
     }
 
     @Override
@@ -22,12 +24,18 @@ public final class MultiSelectFacet extends BaseSelectFacet {
         return super.canBeDisplayed();
     }
 
-    /**
-     * Defines whether the results should match all selected values in the facet (AND operator effect)
-     * or just at least one selected value (OR operator effect)
-     * @return true if results should match all selected values, false otherwise
-     */
-    public boolean matchesAll() {
-        return matchesAll;
+    @Override
+    public boolean isMatchingAll() {
+        return super.isMatchingAll();
+    }
+
+    @Override
+    public MultiSelectFacet<T> withSelectedValues(final List<String> selectedValues) {
+        return MultiSelectFacetBuilder.of(this).selectedValues(selectedValues).build();
+    }
+
+    @Override
+    public MultiSelectFacet<T> withTermFacetResult(final TermFacetResult termFacetResult) {
+        return MultiSelectFacetBuilder.of(this).termFacetResult(termFacetResult).build();
     }
 }

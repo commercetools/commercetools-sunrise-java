@@ -1,25 +1,41 @@
 package io.sphere.sdk.facets;
 
+import io.sphere.sdk.search.TermFacetResult;
+import io.sphere.sdk.search.UntypedSearchModel;
+
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-abstract class BaseSelectFacet extends BaseFacet implements SelectFacet {
-    private final List<FacetOption> options;
+abstract class BaseSelectFacet<T> extends BaseFacet<T> implements SelectFacet<T> {
+    private final SelectFacetType type;
+    private final boolean matchingAll;
+    private final List<String> selectedValues;
+    private final Optional<TermFacetResult> termFacetResult;
     private final Optional<Long> threshold;
     private final Optional<Long> limit;
 
-    protected BaseSelectFacet(final String key, final String label, final List<FacetOption> options,
+    protected BaseSelectFacet(final String key, final String label, final UntypedSearchModel<T> searchModel, final SelectFacetType type,
+                              final boolean matchingAll, final List<String> selectedValues, @Nullable final TermFacetResult termFacetResult,
                               @Nullable final Long threshold, @Nullable final Long limit) {
-        super(key, label);
+        super(key, label, searchModel);
         if (threshold != null && limit != null && threshold > limit) {
             throw new InvalidSelectFacetConstraintsException(threshold, limit);
         }
-        this.options = options;
+        this.type = type;
+        this.matchingAll = matchingAll;
+        this.selectedValues = selectedValues;
+        this.termFacetResult = Optional.ofNullable(termFacetResult);
         this.threshold = Optional.ofNullable(threshold);
         this.limit = Optional.ofNullable(limit);
+    }
+
+    @Override
+    public SelectFacetType getType() {
+        return type;
     }
 
     @Override
@@ -27,40 +43,41 @@ abstract class BaseSelectFacet extends BaseFacet implements SelectFacet {
         return threshold.map(threshold -> getAllOptions().size() >= threshold).orElse(true);
     }
 
-    /**
-     * Gets the complete options without limitations.
-     * @return the complete possible options
-     */
     @Override
     public List<FacetOption> getAllOptions() {
-        return options;
+        return termFacetResult.map(result -> FacetOption.ofFacetResult(result, selectedValues)).orElse(emptyList());
     }
 
-    /**
-     * Obtains the truncated options list according to the defined limit.
-     * @return the truncated options if the limit is defined, the whole list otherwise
-     */
     @Override
     public List<FacetOption> getLimitedOptions() {
         return limit.map(limit -> getAllOptions().stream().limit(limit).collect(toList()))
                 .orElse(getAllOptions());
     }
 
-    /**
-     * Gets the threshold indicating the minimum amount of options allowed to be displayed in the facet.
-     * @return the threshold for the amount of options that can be displayed, or absent if it has no threshold
-     */
+    @Override
+    public boolean isMatchingAll() {
+        return matchingAll;
+    }
+
+    @Override
+    public List<String> getSelectedValues() {
+        return selectedValues;
+    }
+
+    @Override
+    public Optional<TermFacetResult> getTermFacetResult() {
+        return termFacetResult;
+    }
+
     @Override
     public Optional<Long> getThreshold() {
         return threshold;
     }
 
-    /**
-     * Gets the limit for the maximum amount of options allowed to be displayed in the facet.
-     * @return the limit for the amount of options that can be displayed, or absent if it has no limit
-     */
     @Override
     public Optional<Long> getLimit() {
         return limit;
     }
+
+
 }

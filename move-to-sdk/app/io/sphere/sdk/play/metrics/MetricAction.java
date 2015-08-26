@@ -30,19 +30,19 @@ public class MetricAction extends play.mvc.Action.Simple {
     }
 
     private void logRequestDataOnComplete(final Http.Context ctx, final List<ReportRawData> rawDatas, final F.Promise<Result> resultPromise) {
-        resultPromise.onRedeem(r -> {
-            final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
-            final List<ReportRawData> queries = queryCommandPair.getLeft();
-            final List<ReportRawData> commands = queryCommandPair.getRight();
-            final int size = calculateTotalSize(rawDatas);
-            final String durations = rawDatas.stream().map(data -> data.getStopTimestamp() - data.getStartTimestamp()).map(l -> Long.toString(l) + " ms").collect(joining(", "));
-            LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %d bytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
-        });
+//        resultPromise.onRedeem(r -> {
+//            final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
+//            final List<ReportRawData> queries = queryCommandPair.getLeft();
+//            final List<ReportRawData> commands = queryCommandPair.getRight();
+//            final int size = calculateTotalSize(rawDatas);
+//            final String durations = rawDatas.stream().map(data -> data.getStopTimestamp() - data.getStartTimestamp()).map(l -> Long.toString(l) + " ms").collect(joining(", "));
+//            LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %d bytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
+//        });
     }
 
-    private Pair<List<ReportRawData>, List<ReportRawData>> splitByQueriesAndCommands(final List<ReportRawData> rawDatas) {
-        return ListUtils.partition(rawDatas, data -> data.getHttpRequest().getHttpMethod() == HttpMethod.GET);
-    }
+//    private Pair<List<ReportRawData>, List<ReportRawData>> splitByQueriesAndCommands(final List<ReportRawData> rawDatas) {
+//        return ListUtils.partition(rawDatas, data -> data.getHttpRequest().getHttpMethod() == HttpMethod.GET);
+//    }
 
     private Integer calculateTotalSize(final List<ReportRawData> rawDatas) {
         return rawDatas.stream().map(elem -> Optional.ofNullable(elem.getHttpResponse().getResponseBody())

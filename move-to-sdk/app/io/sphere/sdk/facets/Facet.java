@@ -1,6 +1,8 @@
 package io.sphere.sdk.facets;
 
-public interface Facet {
+import io.sphere.sdk.search.UntypedSearchModel;
+
+public interface Facet<T> {
 
     /**
      * Gets the string identifying this facet representation.
@@ -13,6 +15,8 @@ public interface Facet {
      * @return the label displayed in this facet
      */
     String getLabel();
+
+    UntypedSearchModel<T> getSearchModel();
 
     /**
      * Whether the facet can be displayed or not.

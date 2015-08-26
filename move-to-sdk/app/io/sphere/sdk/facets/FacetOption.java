@@ -35,11 +35,11 @@ public class FacetOption extends Base {
         return new FacetOption(term, count, selected);
     }
 
-    public static <T> FacetOption ofTermStats(final TermStats<T> termStats, final List<T> selectedValues) {
-        return FacetOption.of(termStats.getTerm().toString(), termStats.getCount(), selectedValues.contains(termStats.getTerm()));
+    public static FacetOption ofTermStats(final TermStats termStats, final List<String> selectedValues) {
+        return FacetOption.of(termStats.getTerm(), termStats.getCount(), selectedValues.contains(termStats.getTerm()));
     }
 
-    public static <T> List<FacetOption> ofFacetResult(final TermFacetResult<T> facetResult, final List<T> selectedValues) {
+    public static List<FacetOption> ofFacetResult(final TermFacetResult facetResult, final List<String> selectedValues) {
         return facetResult.getTerms().stream()
                 .map(termStats -> ofTermStats(termStats, selectedValues))
                 .collect(toList());

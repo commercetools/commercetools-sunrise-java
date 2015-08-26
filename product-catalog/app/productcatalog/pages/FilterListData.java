@@ -1,19 +1,15 @@
 package productcatalog.pages;
 
+import java.util.List;
+
 public class FilterListData {
-    private final SelectFacetData sizeFacetData;
-    private final SelectFacetData colorFacetData;
+    private final List<SelectFacetData> facetData;
 
-    public FilterListData(final SelectFacetData sizeFacetData, final SelectFacetData colorFacetData) {
-        this.sizeFacetData = sizeFacetData;
-        this.colorFacetData = colorFacetData;
+    public FilterListData(final List<SelectFacetData> facetData) {
+        this.facetData = facetData;
     }
 
-    public SelectFacetData getSize() {
-        return sizeFacetData;
-    }
-
-    public SelectFacetData getColor() {
-        return colorFacetData;
+    public List<SelectFacetData> getList() {
+        return facetData;
     }
 }
