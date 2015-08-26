@@ -5,6 +5,7 @@ import common.contexts.ProjectContext;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
+import play.Configuration;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,14 +17,16 @@ public class ControllerDependency {
     private final ProjectContext projectContext;
     private final TemplateService templateService;
     private final CmsService cmsService;
+    private Configuration configuration;
 
     @Inject
-    public ControllerDependency(final PlayJavaSphereClient sphere, final CategoryTree categoryTree, final ProjectContext projectContext, final TemplateService templateService, final CmsService cmsService) {
+    public ControllerDependency(final PlayJavaSphereClient sphere, final CategoryTree categoryTree, final ProjectContext projectContext, final TemplateService templateService, final CmsService cmsService, final Configuration configuration) {
         this.sphere = sphere;
         this.categoryTree = categoryTree;
         this.projectContext = projectContext;
         this.templateService = templateService;
         this.cmsService = cmsService;
+        this.configuration = configuration;
     }
 
     public PlayJavaSphereClient sphere() {
@@ -44,5 +47,9 @@ public class ControllerDependency {
 
     public CmsService cmsService() {
         return cmsService;
+    }
+
+    public Configuration configuration() {
+        return configuration;
     }
 }

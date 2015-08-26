@@ -1,74 +1,4 @@
 {
-  "ratingText":"writeFirstRatingText",
-  "viewDetailsText":"viewDetailsText",
-  "colorText":"colorsText",
-  "sizeText":"sizesText",
-  "sizeGuideText":"sizeGuideText",
-  "addToBagText":"addToBagText",
-  "addToWishlistText":"addToWishlistText",
-  "availableText":"availableText",
-  "productDetailsText":"productDetailsText",
-  "deliveryAndReturnsText":"deliveryAndReturnsText",
-  "deliveryText":"deliveryText",
-  "returnsText":"returnsText",
-  "youMayLikeText":"youMayLikeText",
-  "saleText":"saleText",
-  "newText":"newText",
-  "quickViewText":"quickViewText",
-  "wishlistText":"wishlistText",
-  "moreColorsText":"moreColorsText",
-  "reviewsText":"reviewsText",
-  "colorDefaultItem":{
-    "text":"chooseColorText",
-    "value":"none",
-    "description":"",
-    "image":"",
-    "selected":true
-  },
-  "sizeDefaultItem":{
-    "text":"chooseSizeText",
-    "value":"none",
-    "description":"",
-    "image":"",
-    "selected":true
-  },
-  "rating":[
-    {
-      "text":"5 Stars",
-      "value":"5",
-      "description":"ratingFiveStarText",
-      "image":"",
-      "selected":false
-    },
-    {
-      "text":"4 Stars",
-      "value":"4",
-      "description":"ratingFourStarText",
-      "image":"",
-      "selected":false
-    },
-    {
-      "text":"3 Stars",
-      "value":"3",
-      "description":"ratingThreeStarText",
-      "image":"",
-      "selected":false
-    },
-    {
-      "text":"2 Stars",
-      "value":"2",
-      "description":"ratingTwoStarText",
-      "image":"",
-      "selected":false
-    },
-    {
-      "text":"1 Stars",
-      "value":"1",
-      "description":"ratingOneStarText",
-      "image":"",
-      "selected":false
-    }
-  ],
   "bagItems":[
     {
       "text":"1",
@@ -770,5 +700,75 @@
       "image":"",
       "selected":false
     }
-  ]
+  ],
+  "rating":[
+    {
+      "text":"5 Stars",
+      "value":"5",
+      "description":"ratingFiveStarText",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"4 Stars",
+      "value":"4",
+      "description":"ratingFourStarText",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"3 Stars",
+      "value":"3",
+      "description":"ratingThreeStarText",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"2 Stars",
+      "value":"2",
+      "description":"ratingTwoStarText",
+      "image":"",
+      "selected":false
+    },
+    {
+      "text":"1 Stars",
+      "value":"1",
+      "description":"ratingOneStarText",
+      "image":"",
+      "selected":false
+    }
+  ],
+  "ratingText":"writeFirstRatingText",
+  "viewDetailsText":"viewDetailsText",
+  "colorsText":"colorsText",
+  "sizesText":"sizesText",
+  "sizeGuideText":"sizeGuideText",
+  "addToBagText":"addToBagText",
+  "addToWishlistText":"addToWishlistText",
+  "availableText":"availableText",
+  "productDetailsText":"productDetailsText",
+  "deliveryAndReturnsText":"deliveryAndReturnsText",
+  "shippingRatesText":"deliveryText",
+  "returnsText":"returnsText",
+  "youMayLikeText":"youMayLikeText",
+  "saleText":"saleText",
+  "newText":"newText",
+  "quickViewText":"quickViewText",
+  "wishlistText":"wishlistText",
+  "moreColorsText":"moreColorsText",
+  "reviewsText":"reviewsText",
+  "colorDefaultItem":{
+    "text":"chooseColorText",
+    "value":"none",
+    "description":"",
+    "image":"",
+    "selected":true
+  },
+  "sizeDefaultItem":{
+    "text":"chooseSizeText",
+    "value":"none",
+    "description":"",
+    "image":"",
+    "selected":true
+  }
 }
