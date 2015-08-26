@@ -8,5 +8,5 @@ RUN cd $APPDIR && ./activator stage
 EXPOSE 9000
 
 WORKDIR $APPDIR
-ENTRYPOINT ["/app/target/bin/spher-sunrise"]
+ENTRYPOINT ["/app/target/universal/stage/bin/sphere-sunrise"]
 CMD ["-Dconfig.resource=prod.conf"]
