@@ -25,7 +25,7 @@ public final class HierarchicalSelectFacet<T> extends BaseSelectFacet<T> {
 
     @Override
     public List<FacetOption> getLimitedOptions() {
-        return mapperFunction.apply(super.getLimitedOptions());
+        return super.getLimitedOptions();
     }
 
     @Override
