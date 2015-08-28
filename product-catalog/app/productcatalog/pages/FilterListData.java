@@ -3,13 +3,13 @@ package productcatalog.pages;
 import java.util.List;
 
 public class FilterListData {
-    private final List<SelectFacetData> facetData;
+    private final List<FacetData> facetData;
 
-    public FilterListData(final List<SelectFacetData> facetData) {
+    public FilterListData(final List<FacetData> facetData) {
         this.facetData = facetData;
     }
 
-    public List<SelectFacetData> getList() {
+    public List<FacetData> getList() {
         return facetData;
     }
 }

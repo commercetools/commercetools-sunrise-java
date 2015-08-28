@@ -7,6 +7,8 @@ import common.pages.ProductThumbnailDataFactory;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import common.utils.Translator;
+import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -25,15 +27,12 @@ import java.util.*;
 import java.util.function.Function;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductOverviewPageController extends SunriseController {
-    public static final ProductProjectionSearchModel SEARCH_MODEL = ProductProjectionSearchModel.of();
-    private static final List<SelectFacet<ProductProjection>> FACET_LIST = asList(
-            MultiSelectFacetBuilder.of("size", "Size", SEARCH_MODEL.allVariants().attribute().ofEnum("commonSize").label()).build(),
-            MultiSelectFacetBuilder.of("color", "Color", SEARCH_MODEL.allVariants().attribute().ofLocalizableEnum("color").label().locale(Locale.ENGLISH)).build(),
-            MultiSelectFacetBuilder.of("brand", "Brands", SEARCH_MODEL.allVariants().attribute().ofEnum("designer").label()).type(SelectFacetType.LARGE).build());
+    private static final ProductProjectionSearchModel SEARCH_MODEL = ProductProjectionSearchModel.of();
     private final int pageSize;
     private final ProductProjectionService productService;
 
@@ -44,22 +43,63 @@ public class ProductOverviewPageController extends SunriseController {
         this.pageSize = configuration.getInt("pop.pageSize");
     }
 
-    public F.Promise<Result> show(final int page) {
-        final FacetedSearch<ProductProjection> facetedSearch = FacetedSearch.of(request(), FACET_LIST);
-        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(facetedSearch, page);
+    public F.Promise<Result> showSubcategory(final String language, final String categorySlug1, final String categorySlug2, final int page) {
+        final Locale locale = Locale.forLanguageTag(language);
+        final Optional<Category> category1 = categories().findBySlug(locale, categorySlug1);
+        final Optional<Category> category2 = categories().findBySlug(locale, categorySlug2);
+        if (category1.isPresent() && category2.isPresent()) {
+            final List<Category> category1Children = categories().findChildren(category1.get());
+            if (isRootCategory(category1.get()) && category1Children.contains(category2.get())) {
+                return show(locale, category2.get(), page);
+            }
+        }
+        return F.Promise.pure(notFound("Categories not found: " + categorySlug1 + "/" + categorySlug2));
+    }
+
+    public F.Promise<Result> showCategory(final String language, final String categorySlug, final int page) {
+        final Locale locale = Locale.forLanguageTag(language);
+        final Optional<Category> category = categories().findBySlug(locale, categorySlug);
+        if (category.isPresent()) {
+            if (isRootCategory(category.get())) {
+                return show(locale, category.get(), page);
+            }
+        }
+        return F.Promise.pure(notFound("Category not found: " + categorySlug));
+    }
+
+    private F.Promise<Result> show(final Locale locale, final Category category, final int page) {
+        final List<Category> childrenCategories = categories().findChildren(category);
+        final FacetedSearch<ProductProjection> facetedSearch = FacetedSearch.of(request(), facetList(locale, childrenCategories));
+        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(category, facetedSearch, page);
         final F.Promise<CmsPage> cmsPromise = getCmsPage("pop");
         return searchResultPromise.flatMap(searchResult ->
-                cmsPromise.flatMap(cms -> {
-                    final ProductOverviewPageContent content = getPopPageData(cms, facetedSearch, searchResult);
-                    return renderPage(view -> ok(view.productOverviewPage(content)));
-                })
+                        cmsPromise.flatMap(cms -> {
+                            final ProductOverviewPageContent content = getPopPageData(cms, facetedSearch, searchResult);
+                            return renderPage(view -> ok(view.productOverviewPage(content)));
+                        })
         );
     }
 
+    private boolean isRootCategory(final Category category) {
+        return categories().getRoots().contains(category);
+    }
+
+    private List<SelectFacet<ProductProjection>> facetList(final Locale locale, final List<Category> childrenCategories) {
+        final List<Category> categoriesAsFlatList = getCategoriesAsFlatList(categories(), childrenCategories);
+        final CategoryTree subCategoryTree = CategoryTree.of(categoriesAsFlatList);
+        return asList(
+                HierarchicalSelectFacetBuilder.ofCategories("productType", "Product Type", categories(), childrenCategories, singletonList(locale)).build(),
+                SelectFacetBuilder.of("size", "Size", SEARCH_MODEL.allVariants().attribute().ofEnum("commonSize").label()).build(),
+                SelectFacetBuilder.of("color", "Color", SEARCH_MODEL.allVariants().attribute().ofLocalizableEnum("color").label().locale(locale)).build(),
+                FlexibleSelectFacetBuilder.of("brands", "Brands", SEARCH_MODEL.allVariants().attribute().ofEnum("designer").label()).build());
+    }
+
     /* Move to product service */
-    private F.Promise<PagedSearchResult<ProductProjection>> searchProducts(final FacetedSearch<ProductProjection> facetedSearch, final int page) {
+    private F.Promise<PagedSearchResult<ProductProjection>> searchProducts(final Category category, final FacetedSearch<ProductProjection> facetedSearch, final int page) {
         final int offset = (page - 1) * pageSize;
+        final List<String> categoriesId = getCategoriesAsFlatList(categories(), singletonList(category)).stream().map(Category::getId).collect(toList());
         final ProductProjectionSearch searchRequest = facetedSearch.applyRequest(ProductProjectionSearch.ofCurrent())
+                .withQueryFilters(model -> model.categories().id().filtered().by(categoriesId))
                 .withOffset(offset)
                 .withLimit(pageSize);
         final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = sphere().execute(searchRequest);
@@ -70,7 +110,15 @@ public class ProductOverviewPageController extends SunriseController {
         return searchResultPromise;
     }
 
-
+    private static List<Category> getCategoriesAsFlatList(final CategoryTree categoryTree, final List<Category> parentCategories) {
+        final List<Category> categories = new ArrayList<>();
+        parentCategories.stream().forEach(parent -> {
+            categories.add(parent);
+            final List<Category> children = categoryTree.findChildren(parent);
+            categories.addAll(getCategoriesAsFlatList(categoryTree, children));
+        });
+        return categories;
+    }
 
     private ProductOverviewPageContent getPopPageData(final CmsPage cms, final FacetedSearch<ProductProjection> facetedSearch,
                                                       final PagedSearchResult<ProductProjection> searchResult) {
@@ -96,11 +144,11 @@ public class ProductOverviewPageController extends SunriseController {
 
     private FilterListData getFilterListData(final FacetedSearch<ProductProjection> facetedSearch,
                                              final PagedSearchResult<ProductProjection> searchResult) {
-        final List<SelectFacet<ProductProjection>> selectFacets = facetedSearch.applyResult(searchResult);
-        final List<SelectFacetData> facetData = selectFacets.stream()
-                .map(SelectFacetData::new)
+
+        final List<FacetData> facets = facetedSearch.applyResult(searchResult).stream()
+                .map(FacetData::new)
                 .collect(toList());
-        return new FilterListData(facetData);
+        return new FilterListData(facets);
     }
 
     /* Maybe move these convenient methods to SunriseController? */

@@ -1,17 +1,36 @@
 package productcatalog.pages;
 
 import io.sphere.sdk.facets.Facet;
-import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.facets.FacetType;
 
-import java.util.List;
+public class FacetData<T> {
+    private Facet facet;
 
-public abstract class FacetData<T> {
-
-    public String getText() {
-        return getSelectFacet().getLabel();
+    public FacetData(final Facet<?> facet) {
+        this.facet = facet;
     }
 
-    public abstract List<T> getList();
+    public Facet getFacet() {
+        return facet;
+    }
 
-    protected abstract Facet<ProductProjection> getSelectFacet();
+    public boolean isFlexibleSelectFacet() {
+        return facet.getType().equals(FacetType.FLEXIBLE_SELECT);
+    }
+
+    public boolean isSelectFacet() {
+        return facet.getType().equals(FacetType.SELECT);
+    }
+
+    public boolean isSliderRangeFacet() {
+        return facet.getType().equals(FacetType.SLIDER_RANGE);
+    }
+
+    public boolean isBucketRangeFacet() {
+        return facet.getType().equals(FacetType.BUCKET_RANGE);
+    }
+
+    public boolean isHierarchicalSelectFacet() {
+        return facet.getType().equals(FacetType.HIERARCHICAL_SELECT);
+    }
 }
