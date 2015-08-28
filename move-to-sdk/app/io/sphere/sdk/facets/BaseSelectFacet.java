@@ -11,21 +11,21 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 abstract class BaseSelectFacet<T> extends BaseFacet<T> implements SelectFacet<T> {
-    private final SelectFacetType type;
+    private final boolean multiSelect;
     private final boolean matchingAll;
     private final List<String> selectedValues;
     private final Optional<TermFacetResult> termFacetResult;
     private final Optional<Long> threshold;
     private final Optional<Long> limit;
 
-    protected BaseSelectFacet(final String key, final String label, final UntypedSearchModel<T> searchModel, final SelectFacetType type,
-                              final boolean matchingAll, final List<String> selectedValues, @Nullable final TermFacetResult termFacetResult,
-                              @Nullable final Long threshold, @Nullable final Long limit) {
-        super(key, label, searchModel);
+    protected BaseSelectFacet(final String key, final String label, final FacetType type, final UntypedSearchModel<T> searchModel,
+                              final boolean multiSelect, final boolean matchingAll, final List<String> selectedValues,
+                              @Nullable final TermFacetResult termFacetResult, @Nullable final Long threshold, @Nullable final Long limit) {
+        super(key, label, type, searchModel);
         if (threshold != null && limit != null && threshold > limit) {
             throw new InvalidSelectFacetConstraintsException(threshold, limit);
         }
-        this.type = type;
+        this.multiSelect = multiSelect;
         this.matchingAll = matchingAll;
         this.selectedValues = selectedValues;
         this.termFacetResult = Optional.ofNullable(termFacetResult);
@@ -34,12 +34,7 @@ abstract class BaseSelectFacet<T> extends BaseFacet<T> implements SelectFacet<T>
     }
 
     @Override
-    public SelectFacetType getType() {
-        return type;
-    }
-
-    @Override
-    public boolean canBeDisplayed() {
+    public boolean isAvailable() {
         return threshold.map(threshold -> getAllOptions().size() >= threshold).orElse(true);
     }
 
@@ -52,6 +47,11 @@ abstract class BaseSelectFacet<T> extends BaseFacet<T> implements SelectFacet<T>
     public List<FacetOption> getLimitedOptions() {
         return limit.map(limit -> getAllOptions().stream().limit(limit).collect(toList()))
                 .orElse(getAllOptions());
+    }
+
+    @Override
+    public boolean isMultiSelect() {
+        return multiSelect;
     }
 
     @Override

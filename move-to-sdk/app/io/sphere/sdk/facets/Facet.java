@@ -16,11 +16,13 @@ public interface Facet<T> {
      */
     String getLabel();
 
+    FacetType getType();
+
     UntypedSearchModel<T> getSearchModel();
 
     /**
      * Whether the facet can be displayed or not.
      * @return true if the facet can be displayed, false otherwise
      */
-    boolean canBeDisplayed();
+    boolean isAvailable();
 }

@@ -40,7 +40,7 @@ public class FacetedSearch<T>  {
         return baseSearchRequest;
     }
 
-    public List<SelectFacet<T>> applyResult(final PagedSearchResult<T> searchResult) {
+    public List<Facet<T>> applyResult(final PagedSearchResult<T> searchResult) {
         return boundSelectFacets.stream().map(facet -> {
             final TermFacetResult result = searchResult.getTermFacetResult(facetExpression(facet));
             return facet.withTermFacetResult(result);

@@ -7,8 +7,6 @@ import java.util.Optional;
 
 public interface SelectFacet<T> extends Facet<T> {
 
-    SelectFacetType getType();
-
     List<String> getSelectedValues();
 
     Optional<TermFacetResult> getTermFacetResult();
@@ -36,6 +34,12 @@ public interface SelectFacet<T> extends Facet<T> {
      * @return the limit for the amount of options that can be displayed, or absent if it has no limit
      */
     Optional<Long> getLimit();
+
+    /**
+     * Defines whether multiple options can be selected or only one.
+     * @return true if multiple values can be selected, false otherwise
+     */
+    boolean isMultiSelect();
 
     /**
      * Defines whether the results should match all selected values in the facet (AND operator effect)

@@ -11,19 +11,27 @@ import java.util.Optional;
 abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T>> extends Base {
     private final String key;
     private final String label;
-    protected SelectFacetType type = SelectFacetType.SMALL;
+    private final FacetType type;
+    protected boolean multiSelect = true;
+    protected boolean matchingAll = false;
     protected List<String> selectedValues = Collections.emptyList();
     protected Optional<TermFacetResult> termFacetResult = Optional.empty();
     protected Optional<Long> threshold = Optional.empty();
     protected Optional<Long> limit = Optional.empty();
 
-    protected BaseSelectFacetBuilder(final String key, final String label) {
+    protected BaseSelectFacetBuilder(final String key, final String label, final FacetType type) {
         this.key = key;
         this.label = label;
+        this.type = type;
     }
 
-    public T type(final SelectFacetType type) {
-        this.type = type;
+    public T multiSelect(final boolean multiSelect) {
+        this.multiSelect = multiSelect;
+        return getThis();
+    }
+
+    public T matchingAll(final boolean matchingAll) {
+        this.matchingAll = matchingAll;
         return getThis();
     }
 
@@ -55,8 +63,16 @@ abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T>> exten
         return label;
     }
 
-    public SelectFacetType getType() {
+    public FacetType getType() {
         return type;
+    }
+
+    public boolean isMultiSelect() {
+        return multiSelect;
+    }
+
+    public boolean isMatchingAll() {
+        return matchingAll;
     }
 
     public List<String> getSelectedValues() {
