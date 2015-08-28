@@ -29,7 +29,7 @@
                       <div class="panel-heading" id="heading-one" role="tab">
                         <h4 class="panel-title">
                           <a aria-controls="collapse-one" aria-expanded="true" class="" data-parent="#accordion" data-toggle="collapse" href="#{{value}}">
-                            {{value}}
+                            {{value}} ({{count}})
                           </a>
                         </h4>
                       </div>
@@ -39,7 +39,7 @@
                             <div class="checkbox">
                               <label for="filter-{{key}}-{{value}}">
                                 <input id="filter-{{key}}-{{value}}" type="checkbox" value="{{value}}" {{#if selected}}checked{{/if}}>
-                                {{value}}
+                                {{value}} ({{count}})
                               </label>
                             </div>
                           {{/each}}
@@ -72,7 +72,7 @@
                         {{#each facet.limitedOptions}}
                             <div class="checkbox">
                                 <input id="filter-{{key}}-{{value}}" class="{{key}}-checkbox" type="checkbox" value="{{value}}" {{#if selected}}checked{{/if}}/>
-                                <label for="filter-{{key}}-{{value}}">{{value}}</label>
+                                <label for="filter-{{key}}-{{value}}">{{value}} ({{count}})</label>
                             </div>
                         {{/each}}
                       </div>
@@ -84,7 +84,7 @@
               <div class="pop-filter-select">
               {{#each facet.limitedOptions}}
                   <input id="filter-{{key}}-{{value}}" class="{{key}}-checkbox" type="checkbox" value="{{value}}" {{#if selected}}checked{{/if}}/>
-                  <label for="filter-{{key}}-{{value}}">{{value}}</label><br>
+                  <label for="filter-{{key}}-{{value}}">{{value}} ({{count}})</label><br>
               {{/each}}
             </div>
           {{/if}}
