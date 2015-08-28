@@ -2,8 +2,9 @@ package productcatalog.pages;
 
 import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.facets.FacetType;
+import io.sphere.sdk.models.Base;
 
-public class FacetData<T> {
+public class FacetData extends Base {
     private Facet facet;
 
     public FacetData(final Facet<?> facet) {

@@ -1,8 +1,10 @@
 package productcatalog.pages;
 
+import io.sphere.sdk.models.Base;
+
 import java.util.List;
 
-public class FilterListData {
+public class FilterListData extends Base {
     private final List<FacetData> facetData;
 
     public FilterListData(final List<FacetData> facetData) {
