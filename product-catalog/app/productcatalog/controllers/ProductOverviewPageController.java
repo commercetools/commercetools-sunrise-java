@@ -85,10 +85,10 @@ public class ProductOverviewPageController extends SunriseController {
     }
 
     private List<SelectFacet<ProductProjection>> facetList(final Locale locale, final List<Category> childrenCategories) {
-        final List<Category> categoriesAsFlatList = getCategoriesAsFlatList(categories(), childrenCategories);
-        final CategoryTree subCategoryTree = CategoryTree.of(categoriesAsFlatList);
+        final List<Category> subcategories = getCategoriesAsFlatList(categories(), childrenCategories);
+        final CategoryHierarchyMapper categoryHierarchyMapper = CategoryHierarchyMapper.of(subcategories, singletonList(locale));
         return asList(
-                HierarchicalSelectFacetBuilder.ofCategories("productType", "Product Type", categories(), childrenCategories, singletonList(locale)).build(),
+                HierarchicalSelectFacetBuilder.of("productType", "Product Type", SEARCH_MODEL.categories().id(), categoryHierarchyMapper).build(),
                 SelectFacetBuilder.of("size", "Size", SEARCH_MODEL.allVariants().attribute().ofEnum("commonSize").label()).build(),
                 SelectFacetBuilder.of("color", "Color", SEARCH_MODEL.allVariants().attribute().ofLocalizableEnum("color").label().locale(locale)).build(),
                 FlexibleSelectFacetBuilder.of("brands", "Brands", SEARCH_MODEL.allVariants().attribute().ofEnum("designer").label()).build());

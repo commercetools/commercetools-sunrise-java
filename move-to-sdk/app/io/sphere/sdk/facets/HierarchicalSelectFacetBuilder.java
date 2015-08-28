@@ -64,10 +64,9 @@ public final class HierarchicalSelectFacetBuilder<T> extends BaseSelectFacetBuil
         return new HierarchicalSelectFacetBuilder<>(key, label, searchModel.untyped(), mapperFunction);
     }
 
-    public static HierarchicalSelectFacetBuilder<ProductProjection> ofCategories(final String key, final String label, final CategoryTree categoryTree,
-                                                                                 final List<Category> parentCategories, final List<Locale> locales) {
-        final UnaryOperator<List<FacetOption>> mapperFunction = options -> CategoryHierarchyMapper.of(options, categoryTree, parentCategories, locales).build();
-        return of(key, label, ProductProjectionSearchModel.of().categories().id(), mapperFunction);
+    public static <T, V> HierarchicalSelectFacetBuilder<T> of(final String key, final String label, final TermModel<T, ?> searchModel,
+                                                                           final HierarchyMapper<V> hierarchyMapper) {
+        return of(key, label, searchModel, hierarchyMapper::build);
     }
 
     public static <T> HierarchicalSelectFacetBuilder<T> of(final HierarchicalSelectFacet<T> facet) {

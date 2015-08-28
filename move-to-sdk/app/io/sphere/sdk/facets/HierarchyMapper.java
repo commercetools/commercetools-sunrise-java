@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface HierarchyMapper<T> {
 
-    List<FacetOption> build();
+    List<FacetOption> build(final List<FacetOption> facetOptions);
 
-    Optional<FacetOption> buildFacetOption(T element);
+    Optional<FacetOption> buildFacetOption(final List<FacetOption> facetOptions, final T element);
 }

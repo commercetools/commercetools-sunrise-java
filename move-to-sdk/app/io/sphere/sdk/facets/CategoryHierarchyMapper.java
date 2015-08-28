@@ -2,6 +2,7 @@ package io.sphere.sdk.facets;
 
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.models.Reference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,50 +12,53 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 public class CategoryHierarchyMapper implements HierarchyMapper<Category> {
-    private final List<FacetOption> facetOptions;
-    private final CategoryTree categoryTree;
-    private final List<Category> parentCategories;
+    private final CategoryTree subcategoryTree;
     private final List<Locale> locales;
 
-    private CategoryHierarchyMapper(final List<FacetOption> facetOptions, final CategoryTree subcategoryTree,
-                                   final List<Category> parentCategories, final List<Locale> locales) {
-        this.facetOptions = facetOptions;
-        this.categoryTree = subcategoryTree;
-        this.parentCategories = parentCategories;
+    private CategoryHierarchyMapper(final CategoryTree subcategoryTree, final List<Locale> locales) {
+        this.subcategoryTree = subcategoryTree;
         this.locales = locales;
     }
 
     @Override
-    public List<FacetOption> build() {
-        return parentCategories.stream()
-                .map(this::buildFacetOption)
+    public List<FacetOption> build(final List<FacetOption> facetOptions) {
+        return getRootCategories().stream()
+                .map(root -> buildFacetOption(facetOptions, root))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toList());
     }
 
     @Override
-    public Optional<FacetOption> buildFacetOption(final Category category) {
-        Optional<FacetOption> facetOption = findFacetOption(category);
-        final List<Category> children = categoryTree.findChildren(category);
+    public Optional<FacetOption> buildFacetOption(final List<FacetOption> facetOptions, final Category category) {
+        Optional<FacetOption> facetOption = findFacetOption(facetOptions, category);
+        final List<Category> children = subcategoryTree.findChildren(category);
         if (!children.isEmpty()) {
-            facetOption = addChildrenToFacetOption(facetOption, children);
+            facetOption = addChildrenToFacetOption(facetOptions, facetOption, children);
         }
         return setNameToFacetOption(facetOption, category, locales);
     }
 
-    public static CategoryHierarchyMapper of(final List<FacetOption> facetOptions, final CategoryTree categoryTree,
-                                             final List<Category> rootCategories, final List<Locale> locales) {
-        return new CategoryHierarchyMapper(facetOptions, categoryTree, rootCategories, locales);
+    public static CategoryHierarchyMapper of(final List<Category> subcategories, final List<Locale> locales) {
+        final CategoryTree subcategoryTree = CategoryTree.of(subcategories);
+        return new CategoryHierarchyMapper(subcategoryTree, locales);
     }
 
-    private Optional<FacetOption> addChildrenToFacetOption(final Optional<FacetOption> facetOption, final List<Category> children) {
+    private List<Category> getRootCategories() {
+        return subcategoryTree.getAllAsFlatList().stream().filter(category -> {
+            final Optional<Reference<Category>> parentRef = Optional.ofNullable(category.getParent());
+            return parentRef.map(parent -> !subcategoryTree.findById(parent.getId()).isPresent()).orElse(true);
+        }).collect(toList());
+    }
+
+    private Optional<FacetOption> addChildrenToFacetOption(final List<FacetOption> facetOptions,
+                                                           final Optional<FacetOption> facetOption, final List<Category> children) {
         boolean selected = facetOption.map(FacetOption::isSelected).orElse(false);
         long count = facetOption.map(FacetOption::getCount).orElse(0L);
         List<FacetOption> childrenFacetOption = new ArrayList<>();
 
         for (final Category child : children) {
-            final Optional<FacetOption> childFacetOption = buildFacetOption(child);
+            final Optional<FacetOption> childFacetOption = buildFacetOption(facetOptions, child);
             if (childFacetOption.isPresent()) {
                 selected |= childFacetOption.get().isSelected();
                 count += childFacetOption.get().getCount();
@@ -86,7 +90,7 @@ public class CategoryHierarchyMapper implements HierarchyMapper<Category> {
         });
     }
 
-    private Optional<FacetOption> findFacetOption(final Category category) {
+    private Optional<FacetOption> findFacetOption(final List<FacetOption> facetOptions, final Category category) {
         return facetOptions.stream()
                 .filter(facetOption -> facetOption.getValue().equals(category.getId()))
                 .findFirst();
