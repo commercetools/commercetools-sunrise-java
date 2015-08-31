@@ -1,5 +1,6 @@
 package io.sphere.sdk.facets;
 
+import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.UntypedSearchModel;
 
@@ -40,7 +41,8 @@ public final class SelectFacetImpl<T> extends BaseSelectFacet<T> {
     }
 
     @Override
-    public SelectFacet<T> withTermFacetResult(final TermFacetResult termFacetResult) {
-        return SelectFacetBuilder.of(this).termFacetResult(termFacetResult).build();
+    public SelectFacet<T> withSearchResult(final PagedSearchResult<T> searchResult) {
+        final TermFacetResult termFacetResult = searchResult.getTermFacetResult(searchModel.faceted().byAllTerms());
+        return SelectFacetBuilder.of(this).facetResult(termFacetResult).build();
     }
 }
