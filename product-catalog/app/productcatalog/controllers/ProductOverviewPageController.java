@@ -26,25 +26,32 @@ import javax.inject.Singleton;
 import java.util.*;
 import java.util.function.Function;
 
+import static io.sphere.sdk.facets.DefaultFacetType.HIERARCHICAL_SELECT;
+import static io.sphere.sdk.facets.DefaultFacetType.SORTED_SELECT;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductOverviewPageController extends SunriseController {
-    private static final ProductProjectionSearchModel SEARCH_MODEL = ProductProjectionSearchModel.of();
+    private static final StringSearchModel<ProductProjection, ?> BRAND_SEARCH_MODEL = ProductProjectionSearchModel.of().allVariants().attribute().ofEnum("designer").label();
+    private static final StringSearchModel<ProductProjection, ?> COLOR_SEARCH_MODEL = ProductProjectionSearchModel.of().allVariants().attribute().ofLocalizableEnum("color").key();
+    private static final StringSearchModel<ProductProjection, ?> SIZE_SEARCH_MODEL = ProductProjectionSearchModel.of().allVariants().attribute().ofEnum("commonSize").label();
+    private static final StringSearchModel<ProductProjection, ?> CATEGORY_SEARCH_MODEL = ProductProjectionSearchModel.of().categories().id();
     private final int pageSize;
     private final ProductProjectionService productService;
 
     @Inject
-    public ProductOverviewPageController(final Configuration configuration, final ControllerDependency controllerDependency, final ProductProjectionService productService) {
+    public ProductOverviewPageController(final Configuration configuration, final ControllerDependency controllerDependency,
+                                         final ProductProjectionService productService) {
         super(controllerDependency);
         this.productService = productService;
         this.pageSize = configuration.getInt("pop.pageSize");
     }
 
     public F.Promise<Result> showSubcategory(final String language, final String categorySlug1, final String categorySlug2, final int page) {
-        final Locale locale = Locale.forLanguageTag(language);
+        final Locale locale = locale(language);
         final Optional<Category> category1 = categories().findBySlug(locale, categorySlug1);
         final Optional<Category> category2 = categories().findBySlug(locale, categorySlug2);
         if (category1.isPresent() && category2.isPresent()) {
@@ -57,7 +64,7 @@ public class ProductOverviewPageController extends SunriseController {
     }
 
     public F.Promise<Result> showCategory(final String language, final String categorySlug, final int page) {
-        final Locale locale = Locale.forLanguageTag(language);
+        final Locale locale = locale(language);
         final Optional<Category> category = categories().findBySlug(locale, categorySlug);
         if (category.isPresent()) {
             if (isRootCategory(category.get())) {
@@ -69,40 +76,73 @@ public class ProductOverviewPageController extends SunriseController {
 
     private F.Promise<Result> show(final Locale locale, final Category category, final int page) {
         final List<Category> childrenCategories = categories().findChildren(category);
-        final FacetedSearch<ProductProjection> facetedSearch = FacetedSearch.of(request(), facetList(locale, childrenCategories));
-        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(category, facetedSearch, page);
+        final List<Facet<ProductProjection>> boundFacets = boundFacetList(locale, childrenCategories);
+        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(category, boundFacets, page);
         final F.Promise<CmsPage> cmsPromise = getCmsPage("pop");
         return searchResultPromise.flatMap(searchResult ->
                         cmsPromise.flatMap(cms -> {
-                            final ProductOverviewPageContent content = getPopPageData(cms, facetedSearch, searchResult);
+                            final ProductOverviewPageContent content = getPopPageData(cms, searchResult, boundFacets);
                             return renderPage(view -> ok(view.productOverviewPage(content)));
                         })
         );
     }
 
+    private List<Facet<ProductProjection>> boundFacetList(final Locale locale, final List<Category> childrenCategories) {
+        final List<Category> subcategories = getCategoriesAsFlatList(categories(), childrenCategories);
+        final FacetOptionMapper categoryHierarchyMapper = HierarchicalCategoryFacetOptionMapper.of(subcategories, singletonList(locale));
+        final FacetOptionMapper sortedColorFacetOptionMapper = SortedFacetOptionMapper.of(emptyList());
+        final FacetOptionMapper sortedSizeFacetOptionMapper = SortedFacetOptionMapper.of(emptyList());
+        final List<Facet<ProductProjection>> facets = asList(
+                FlexibleSelectFacetBuilder.of("productType", "Product Type", HIERARCHICAL_SELECT, CATEGORY_SEARCH_MODEL, categoryHierarchyMapper).build(),
+                FlexibleSelectFacetBuilder.of("size", "Size", SORTED_SELECT, SIZE_SEARCH_MODEL, sortedSizeFacetOptionMapper).build(),
+                FlexibleSelectFacetBuilder.of("color", "Color", SORTED_SELECT, COLOR_SEARCH_MODEL, sortedColorFacetOptionMapper).build(),
+                SelectFacetBuilder.of("brands", "Brands", BRAND_SEARCH_MODEL).build());
+        return bindFacetsWithRequest(facets);
+    }
+
+    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final PagedSearchResult<ProductProjection> searchResult,
+                                                      final List<Facet<ProductProjection>> boundFacets) {
+        final String additionalTitle = "";
+        final ProductListData productListData = getProductListData(searchResult.getResults());
+        final FilterListData filterListData = getFilterListData(searchResult, boundFacets);
+        return new ProductOverviewPageContent(additionalTitle, productListData, filterListData);
+    }
+
+    private F.Promise<Result> renderPage(final Function<ProductCatalogView, Result> pageRenderer) {
+        return getCommonCmsPage().map(cms -> {
+            final ProductCatalogView view = new ProductCatalogView(templateService(), context(), cms);
+            return pageRenderer.apply(view);
+        });
+    }
+
+    /* Maybe move to some common controller class */
+
     private boolean isRootCategory(final Category category) {
         return categories().getRoots().contains(category);
     }
 
-    private List<SelectFacet<ProductProjection>> facetList(final Locale locale, final List<Category> childrenCategories) {
-        final List<Category> subcategories = getCategoriesAsFlatList(categories(), childrenCategories);
-        final CategoryHierarchyMapper categoryHierarchyMapper = CategoryHierarchyMapper.of(subcategories, singletonList(locale));
-        return asList(
-                HierarchicalSelectFacetBuilder.of("productType", "Product Type", SEARCH_MODEL.categories().id(), categoryHierarchyMapper).build(),
-                SelectFacetBuilder.of("size", "Size", SEARCH_MODEL.allVariants().attribute().ofEnum("commonSize").label()).build(),
-                SelectFacetBuilder.of("color", "Color", SEARCH_MODEL.allVariants().attribute().ofLocalizableEnum("color").label().locale(locale)).build(),
-                FlexibleSelectFacetBuilder.of("brands", "Brands", SEARCH_MODEL.allVariants().attribute().ofEnum("designer").label()).build());
+    private Locale locale(final String language) {
+        return Locale.forLanguageTag(language);
+    }
+
+    private static <T> List<Facet<T>> bindFacetsWithRequest(final List<Facet<T>> facets) {
+        return facets.stream().map(facet -> {
+            final List<String> selectedValues = asList(request().queryString().getOrDefault(facet.getKey(), new String[0]));
+            return facet.withSelectedValues(selectedValues);
+        }).collect(toList());
     }
 
     /* Move to product service */
-    private F.Promise<PagedSearchResult<ProductProjection>> searchProducts(final Category category, final FacetedSearch<ProductProjection> facetedSearch, final int page) {
+
+    private F.Promise<PagedSearchResult<ProductProjection>> searchProducts(final Category category, final List<Facet<ProductProjection>> boundFacets, final int page) {
         final int offset = (page - 1) * pageSize;
         final List<String> categoriesId = getCategoriesAsFlatList(categories(), singletonList(category)).stream().map(Category::getId).collect(toList());
-        final ProductProjectionSearch searchRequest = facetedSearch.applyRequest(ProductProjectionSearch.ofCurrent())
+        final ProductProjectionSearch searchRequest = ProductProjectionSearch.ofCurrent()
                 .withQueryFilters(model -> model.categories().id().filtered().by(categoriesId))
                 .withOffset(offset)
                 .withLimit(pageSize);
-        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = sphere().execute(searchRequest);
+        final ProductProjectionSearch facetedSearchRequest = getFacetedSearchRequest(searchRequest, boundFacets);
+        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = sphere().execute(facetedSearchRequest);
         searchResultPromise.onRedeem(result -> Logger.debug("Fetched {} out of {} products with request {}",
                 result.size(),
                 result.getTotal(),
@@ -120,19 +160,22 @@ public class ProductOverviewPageController extends SunriseController {
         return categories;
     }
 
-    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final FacetedSearch<ProductProjection> facetedSearch,
-                                                      final PagedSearchResult<ProductProjection> searchResult) {
-        final String additionalTitle = "";
-        final ProductListData productListData = getProductListData(searchResult.getResults());
-        final FilterListData filterListData = getFilterListData(facetedSearch, searchResult);
-        return new ProductOverviewPageContent(additionalTitle, productListData, filterListData);
+    /* Maybe export it to generic FacetedSearch class */
+
+    private static <T, S extends MetaModelSearchDsl<T, S, M, E>, M, E> S getFacetedSearchRequest(final S baseSearchRequest, final List<Facet<T>> facets) {
+        S searchRequest = baseSearchRequest;
+        for (final Facet<T> facet : facets) {
+            searchRequest = getFacetedSearchRequest(searchRequest, facet);
+        }
+        return searchRequest;
     }
 
-    private F.Promise<Result> renderPage(final Function<ProductCatalogView, Result> pageRenderer) {
-        return getCommonCmsPage().map(cms -> {
-            final ProductCatalogView view = new ProductCatalogView(templateService(), context(), cms);
-            return pageRenderer.apply(view);
-        });
+    private static <T, S extends MetaModelSearchDsl<T, S, M, E>, M, E> S getFacetedSearchRequest(final S baseSearchRequest, final Facet<T> facet) {
+        final List<FilterExpression<T>> filterExpressions = facet.getFilterExpressions();
+        return baseSearchRequest
+                .plusFacets(facet.getFacetExpression())
+                .plusFacetFilters(filterExpressions)
+                .plusResultFilters(filterExpressions);
     }
 
     /* This will probably be moved to some kind of factory classes */
@@ -142,10 +185,9 @@ public class ProductOverviewPageController extends SunriseController {
         return new ProductListData(productList.stream().map(thumbnailDataFactory::create).collect(toList()));
     }
 
-    private FilterListData getFilterListData(final FacetedSearch<ProductProjection> facetedSearch,
-                                             final PagedSearchResult<ProductProjection> searchResult) {
-
-        final List<FacetData> facets = facetedSearch.applyResult(searchResult).stream()
+    private <T> FilterListData getFilterListData(final PagedSearchResult<T> searchResult, final List<Facet<T>> boundFacets) {
+        final List<FacetData> facets = boundFacets.stream()
+                .map(facet -> facet.withSearchResult(searchResult))
                 .map(FacetData::new)
                 .collect(toList());
         return new FilterListData(facets);

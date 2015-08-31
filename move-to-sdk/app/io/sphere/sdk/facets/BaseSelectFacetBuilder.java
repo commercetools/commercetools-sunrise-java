@@ -15,7 +15,7 @@ abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T>> exten
     protected boolean multiSelect = true;
     protected boolean matchingAll = false;
     protected List<String> selectedValues = Collections.emptyList();
-    protected Optional<TermFacetResult> termFacetResult = Optional.empty();
+    protected Optional<TermFacetResult> facetResult = Optional.empty();
     protected Optional<Long> threshold = Optional.empty();
     protected Optional<Long> limit = Optional.empty();
 
@@ -40,8 +40,8 @@ abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T>> exten
         return getThis();
     }
 
-    public T termFacetResult(@Nullable final TermFacetResult termFacetResult) {
-        this.termFacetResult = Optional.ofNullable(termFacetResult);
+    public T facetResult(@Nullable final TermFacetResult facetResult) {
+        this.facetResult = Optional.ofNullable(facetResult);
         return getThis();
     }
 
@@ -79,8 +79,8 @@ abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T>> exten
         return selectedValues;
     }
 
-    public Optional<TermFacetResult> getTermFacetResult() {
-        return termFacetResult;
+    public Optional<TermFacetResult> getFacetResult() {
+        return facetResult;
     }
 
     public Optional<Long> getThreshold() {
