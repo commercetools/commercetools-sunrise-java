@@ -10,14 +10,14 @@ public final class SelectFacetBuilder<T> extends BaseSelectFacetBuilder<SelectFa
     private final UntypedSearchModel<T> searchModel;
 
     private SelectFacetBuilder(final String key, final String label, final UntypedSearchModel<T> searchModel) {
-        super(key, label, FacetType.SELECT);
+        super(key, label, DefaultFacetType.SELECT);
         this.searchModel = searchModel;
     }
 
     @Override
     public SelectFacet<T> build() {
         return new SelectFacetImpl<>(getKey(), getLabel(), getType(), searchModel, multiSelect, matchingAll, selectedValues,
-                termFacetResult.orElse(null), threshold.orElse(null), limit.orElse(null));
+                facetResult.orElse(null), threshold.orElse(null), limit.orElse(null));
     }
 
     @Override
@@ -36,8 +36,8 @@ public final class SelectFacetBuilder<T> extends BaseSelectFacetBuilder<SelectFa
     }
 
     @Override
-    public SelectFacetBuilder<T> termFacetResult(@Nullable final TermFacetResult termFacetResult) {
-        return super.termFacetResult(termFacetResult);
+    public SelectFacetBuilder<T> facetResult(@Nullable final TermFacetResult facetResult) {
+        return super.facetResult(facetResult);
     }
 
     @Override
@@ -60,7 +60,7 @@ public final class SelectFacetBuilder<T> extends BaseSelectFacetBuilder<SelectFa
         builder.matchingAll = facet.isMatchingAll();
         builder.threshold = facet.getThreshold();
         builder.limit = facet.getLimit();
-        builder.termFacetResult = facet.getTermFacetResult();
+        builder.facetResult = facet.getFacetResult();
         builder.selectedValues = facet.getSelectedValues();
         builder.matchingAll = facet.isMatchingAll();
         return builder;

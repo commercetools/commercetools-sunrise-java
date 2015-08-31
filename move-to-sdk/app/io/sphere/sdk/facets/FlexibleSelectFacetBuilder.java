@@ -10,16 +10,19 @@ import java.util.List;
 
 public final class FlexibleSelectFacetBuilder<T> extends BaseSelectFacetBuilder<FlexibleSelectFacetBuilder<T>> implements Builder<FlexibleSelectFacet<T>> {
     private final UntypedSearchModel<T> searchModel;
+    private FacetOptionMapper mapper;
 
-    private FlexibleSelectFacetBuilder(final String key, final String label, final UntypedSearchModel<T> searchModel) {
-        super(key, label, FacetType.FLEXIBLE_SELECT);
+    private FlexibleSelectFacetBuilder(final String key, final String label, final FacetType type,
+                                       final UntypedSearchModel<T> searchModel, final FacetOptionMapper mapper) {
+        super(key, label, type);
         this.searchModel = searchModel;
+        this.mapper = mapper;
     }
 
     @Override
     public FlexibleSelectFacet<T> build() {
         return new FlexibleSelectFacet<>(getKey(), getLabel(), getType(), searchModel, multiSelect, matchingAll, selectedValues,
-                termFacetResult.orElse(null), threshold.orElse(null), limit.orElse(null));
+                facetResult.orElse(null), threshold.orElse(null), limit.orElse(null), mapper);
     }
 
     @Override
@@ -38,8 +41,8 @@ public final class FlexibleSelectFacetBuilder<T> extends BaseSelectFacetBuilder<
     }
 
     @Override
-    public FlexibleSelectFacetBuilder<T> termFacetResult(@Nullable final TermFacetResult termFacetResult) {
-        return super.termFacetResult(termFacetResult);
+    public FlexibleSelectFacetBuilder<T> facetResult(@Nullable final TermFacetResult termFacetResult) {
+        return super.facetResult(termFacetResult);
     }
 
     @Override
@@ -52,17 +55,23 @@ public final class FlexibleSelectFacetBuilder<T> extends BaseSelectFacetBuilder<
         return super.limit(limit);
     }
 
-    public static <T> FlexibleSelectFacetBuilder<T> of(final String key, final String label, final TermModel<T, ?> searchModel) {
-        return new FlexibleSelectFacetBuilder<>(key, label, searchModel.untyped());
+    public FacetOptionMapper getMapper() {
+        return mapper;
+    }
+
+    public static <T> FlexibleSelectFacetBuilder<T> of(final String key, final String label, final FacetType type,
+                                                     final TermModel<T, ?> searchModel, final FacetOptionMapper mapper) {
+        return new FlexibleSelectFacetBuilder<>(key, label, type, searchModel.untyped(), mapper);
     }
 
     public static <T> FlexibleSelectFacetBuilder<T> of(final FlexibleSelectFacet<T> facet) {
-        final FlexibleSelectFacetBuilder<T> builder = new FlexibleSelectFacetBuilder<>(facet.getKey(), facet.getLabel(), facet.getSearchModel());
+        final FlexibleSelectFacetBuilder<T> builder = new FlexibleSelectFacetBuilder<>(facet.getKey(), facet.getLabel(),
+                facet.getType(), facet.getSearchModel(), facet.getMapper());
         builder.multiSelect = facet.isMultiSelect();
         builder.matchingAll = facet.isMatchingAll();
         builder.threshold = facet.getThreshold();
         builder.limit = facet.getLimit();
-        builder.termFacetResult = facet.getTermFacetResult();
+        builder.facetResult = facet.getFacetResult();
         builder.selectedValues = facet.getSelectedValues();
         builder.matchingAll = facet.isMatchingAll();
         return builder;
