@@ -65,7 +65,7 @@
             </div>
           {{/if}}
 
-          {{#if flexibleSelectFacet}}
+          {{#if selectFacet}}
               <div class="row">
                   <div class="col-sm-12">
                       <div class="pop-filter-list">
@@ -80,7 +80,7 @@
               </div>
           {{/if}}
 
-          {{#if selectFacet}}
+          {{#if sortedSelectFacet}}
               <div class="pop-filter-select">
               {{#each facet.limitedOptions}}
                   <input id="filter-{{key}}-{{value}}" class="{{key}}-checkbox" type="checkbox" value="{{value}}" {{#if selected}}checked{{/if}}/>

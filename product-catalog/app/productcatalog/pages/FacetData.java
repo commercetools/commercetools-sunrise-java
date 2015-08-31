@@ -1,8 +1,9 @@
 package productcatalog.pages;
 
 import io.sphere.sdk.facets.Facet;
-import io.sphere.sdk.facets.FacetType;
 import io.sphere.sdk.models.Base;
+
+import static io.sphere.sdk.facets.DefaultFacetType.*;
 
 public class FacetData extends Base {
     private Facet facet;
@@ -15,23 +16,23 @@ public class FacetData extends Base {
         return facet;
     }
 
-    public boolean isFlexibleSelectFacet() {
-        return facet.getType().equals(FacetType.FLEXIBLE_SELECT);
+    public boolean isSortedSelectFacet() {
+        return facet.getType().equals(SORTED_SELECT);
     }
 
     public boolean isSelectFacet() {
-        return facet.getType().equals(FacetType.SELECT);
+        return facet.getType().equals(SELECT);
     }
 
     public boolean isSliderRangeFacet() {
-        return facet.getType().equals(FacetType.SLIDER_RANGE);
+        return facet.getType().equals(SLIDER_RANGE);
     }
 
     public boolean isBucketRangeFacet() {
-        return facet.getType().equals(FacetType.BUCKET_RANGE);
+        return facet.getType().equals(BUCKET_RANGE);
     }
 
     public boolean isHierarchicalSelectFacet() {
-        return facet.getType().equals(FacetType.HIERARCHICAL_SELECT);
+        return facet.getType().equals(HIERARCHICAL_SELECT);
     }
 }
