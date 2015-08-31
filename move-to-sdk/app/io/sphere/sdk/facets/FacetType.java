@@ -1,5 +1,9 @@
 package io.sphere.sdk.facets;
 
-public enum FacetType {
-    SELECT, FLEXIBLE_SELECT, HIERARCHICAL_SELECT, SLIDER_RANGE, BUCKET_RANGE
+/**
+ * Type of the facet.
+ * Useful to help the view engine to display the facet correctly.
+ */
+public interface FacetType {
+
 }
