@@ -1,7 +1,6 @@
 package io.sphere.sdk.play.metrics;
 
 import io.sphere.sdk.http.HttpMethod;
-import io.sphere.sdk.utils.ListUtils;
 import io.sphere.sdk.utils.SphereInternalLogger;
 import org.apache.commons.lang3.tuple.Pair;
 import play.libs.F;
