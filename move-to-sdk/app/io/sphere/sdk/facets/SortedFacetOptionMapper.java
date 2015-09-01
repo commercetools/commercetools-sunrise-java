@@ -22,11 +22,21 @@ public class SortedFacetOptionMapper implements FacetOptionMapper {
         return sortedFacetOptions;
     }
 
+    public static SortedFacetOptionMapper of(final List<String> sortedFacetValues) {
+        return new SortedFacetOptionMapper(sortedFacetValues);
+    }
+
     private int comparePositions(final FacetOption left, final FacetOption right) {
         final int leftPosition = sortedFacetValues.indexOf(left.getValue());
         final int rightPosition = sortedFacetValues.indexOf(right.getValue());
+        return comparePositions(leftPosition, rightPosition);
+    }
+
+    static int comparePositions(final int leftPosition, final int rightPosition) {
         final int comparison;
-        if (leftPosition < 0) {
+        if (leftPosition == rightPosition) {
+            comparison = 0;
+        } else if (leftPosition < 0) {
             comparison = 1;
         } else if (rightPosition < 0) {
             comparison = -1;
@@ -34,9 +44,5 @@ public class SortedFacetOptionMapper implements FacetOptionMapper {
             comparison = Integer.compare(leftPosition, rightPosition);
         }
         return comparison;
-    }
-
-    public static SortedFacetOptionMapper of(final List<String> sortedFacetValues) {
-        return new SortedFacetOptionMapper(sortedFacetValues);
     }
 }
