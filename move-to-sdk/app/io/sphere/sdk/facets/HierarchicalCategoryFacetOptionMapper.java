@@ -27,7 +27,7 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
     }
 
     @Override
-    public List<FacetOption> map(final List<FacetOption> facetOptions) {
+    public List<FacetOption> apply(final List<FacetOption> facetOptions) {
         return getRootCategories().stream()
                 .map(root -> buildFacetOption(root, facetOptionFinder(facetOptions)))
                 .filter(Optional::isPresent)

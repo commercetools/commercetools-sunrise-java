@@ -42,49 +42,49 @@ public class HierarchicalCategoryFacetOptionMapperTest {
 
     @Test
     public void replacesIdForName() throws Exception {
-        List<FacetOption> facetOptions = singletonList(OPTION_D);
         final List<Category> subcategories = singletonList(CAT_D);
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES).map(facetOptions);
+        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
+                .apply(singletonList(OPTION_D));
         assertThat(hierarchicalOptions).containsExactly(OPTION_D.withValue("D"));
     }
 
     @Test
     public void keepsOrderFromCategoryTree() throws Exception {
-        List<FacetOption> facetOptions = asList(OPTION_D, OPTION_C);
         final List<Category> subcategories = asList(CAT_C, CAT_D);
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES).map(facetOptions);
+        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
+                .apply(asList(OPTION_D, OPTION_C));
         assertThat(hierarchicalOptions).containsExactly(OPTION_C.withValue("C"), OPTION_D.withValue("D"));
     }
 
     @Test
     public void discardsOnMissingLocale() throws Exception {
-        List<FacetOption> facetOptions = singletonList(OPTION_D);
         final List<Category> subcategories = singletonList(CAT_D);
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, singletonList(GERMAN)).map(facetOptions);
+        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, singletonList(GERMAN))
+                .apply(singletonList(OPTION_D));
         assertThat(hierarchicalOptions).isEmpty();
     }
 
     @Test
     public void discardsWithEmptyCategoryTree() throws Exception {
-        List<FacetOption> facetOptions = asList(OPTION_D, OPTION_C);
         final List<Category> subcategories = emptyList();
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES).map(facetOptions);
+        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
+                .apply(asList(OPTION_D, OPTION_C));
         assertThat(hierarchicalOptions).isEmpty();
     }
 
     @Test
     public void worksWithEmptyFacetOptions() throws Exception {
-        List<FacetOption> facetOptions = emptyList();
         final List<Category> subcategories = singletonList(CAT_D);
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES).map(facetOptions);
+        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
+                .apply(emptyList());
         assertThat(hierarchicalOptions).isEmpty();
     }
 
     @Test
     public void inheritsInformationFromLeaves() throws Exception {
-        List<FacetOption> facetOptions = asList(OPTION_D, OPTION_C, OPTION_B);
         final List<Category> subcategories = asList(CAT_B, CAT_C, CAT_D);
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES).map(facetOptions);
+        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
+                .apply(asList(OPTION_D, OPTION_C, OPTION_B));
         final FacetOption expectedOptions = OPTION_B
                 .withValue("B")
                 .withCount(sumCount(OPTION_B, OPTION_C, OPTION_D))
@@ -95,9 +95,9 @@ public class HierarchicalCategoryFacetOptionMapperTest {
 
     @Test
     public void discardsEmptyBranches() throws Exception {
-        List<FacetOption> facetOptions = asList(OPTION_D, OPTION_C, OPTION_B);
         final List<Category> subcategories = asList(CAT_A, CAT_B, CAT_C, CAT_D, CAT_E);
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES).map(facetOptions);
+        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
+                .apply(asList(OPTION_D, OPTION_C, OPTION_B));
         final FacetOption expectedOptions = OPTION_A
                 .withValue("A")
                 .withCount(sumCount(OPTION_A, OPTION_B, OPTION_C, OPTION_D))

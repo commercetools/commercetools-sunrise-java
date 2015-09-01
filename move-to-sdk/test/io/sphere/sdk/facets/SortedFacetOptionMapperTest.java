@@ -19,21 +19,21 @@ public class SortedFacetOptionMapperTest {
     @Test
     public void sortsOptionsAsGivenList() throws Exception {
         final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(asList("A", "B", "C"))
-                .map(asList(OPTION_B, OPTION_A, OPTION_C));
+                .apply(asList(OPTION_B, OPTION_A, OPTION_C));
         assertThat(sortedFacetOptions).containsExactly(OPTION_A, OPTION_B, OPTION_C);
     }
 
     @Test
     public void leavesUnknownOptionsAtTheEnd() throws Exception {
         final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(asList("A", "B", "C"))
-                .map(asList(OPTION_B, OPTION_D, OPTION_A, OPTION_C, OPTION_E));
+                .apply(asList(OPTION_B, OPTION_D, OPTION_A, OPTION_C, OPTION_E));
         assertThat(sortedFacetOptions).containsExactly(OPTION_A, OPTION_B, OPTION_C, OPTION_D, OPTION_E);
     }
 
     @Test
     public void onEmptyListKeepsSameOrder() throws Exception {
         final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(emptyList())
-                .map(asList(OPTION_B, OPTION_D, OPTION_A, OPTION_C, OPTION_E));
+                .apply(asList(OPTION_B, OPTION_D, OPTION_A, OPTION_C, OPTION_E));
         assertThat(sortedFacetOptions).containsExactly(OPTION_B, OPTION_D, OPTION_A, OPTION_C, OPTION_E);
     }
 
@@ -41,7 +41,7 @@ public class SortedFacetOptionMapperTest {
     public void givenUnsortedFacetOptionsAreNotSorted() throws Exception {
         final List<FacetOption> unsortedFacetOptions = asList(OPTION_B, OPTION_A, OPTION_C);
         final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(asList("A", "B", "C"))
-                .map(unsortedFacetOptions);
+                .apply(unsortedFacetOptions);
         assertThat(unsortedFacetOptions).containsExactly(OPTION_B, OPTION_A, OPTION_C);
         assertThat(sortedFacetOptions).containsExactly(OPTION_A, OPTION_B, OPTION_C);
     }
@@ -49,7 +49,7 @@ public class SortedFacetOptionMapperTest {
     @Test
     public void worksWithEmptyFacetOptions() throws Exception {
         final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(asList("A", "B", "C"))
-                .map(emptyList());
+                .apply(emptyList());
         assertThat(sortedFacetOptions).isEmpty();
     }
 

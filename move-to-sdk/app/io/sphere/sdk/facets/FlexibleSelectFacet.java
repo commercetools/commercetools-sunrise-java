@@ -27,7 +27,7 @@ public final class FlexibleSelectFacet<T> extends BaseSelectFacet<T> {
 
     @Override
     protected List<FacetOption> getOptions() {
-        return mapper.map(super.getOptions());
+        return mapper.apply(super.getOptions());
     }
 
     @Override

@@ -16,7 +16,7 @@ public class SortedFacetOptionMapper implements FacetOptionMapper {
     }
 
     @Override
-    public List<FacetOption> map(final List<FacetOption> facetOptions) {
+    public List<FacetOption> apply(final List<FacetOption> facetOptions) {
         final List<FacetOption> sortedFacetOptions = new ArrayList<>(facetOptions);
         Collections.sort(sortedFacetOptions, this::comparePositions);
         return sortedFacetOptions;
