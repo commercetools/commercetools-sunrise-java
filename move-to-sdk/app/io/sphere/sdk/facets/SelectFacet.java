@@ -6,6 +6,10 @@ import io.sphere.sdk.search.TermFacetResult;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Facet that contains a list of selectable options.
+ * @param <T> type of the resource for this facet (e.g. ProductProjection)
+ */
 public interface SelectFacet<T> extends Facet<T> {
 
     /**

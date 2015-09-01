@@ -7,6 +7,13 @@ import io.sphere.sdk.search.UntypedSearchModel;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * Select facet that allows to manipulate the facet options via a FacetOptionMapper. This enables any desired behaviour,
+ * such as replacing the values for its localized names or building hierarchies out of the flat list of options received
+ * from the search result.
+ * As this facet has no particular type, it is required to also provide the associated facet type.
+ * @param <T> type of the resource for this facet (e.g. ProductProjection)
+ */
 public final class FlexibleSelectFacet<T> extends BaseSelectFacet<T> {
     private final FacetOptionMapper mapper;
 
