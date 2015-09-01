@@ -1,7 +1,6 @@
 package io.sphere.sdk.facets;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.sphere.sdk.json.SphereJsonUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearchModel;
 import io.sphere.sdk.search.PagedSearchResult;
@@ -9,11 +8,11 @@ import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermModel;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
-import play.libs.Json;
 
 import java.util.List;
 
 import static io.sphere.sdk.facets.DefaultFacetType.SORTED_SELECT;
+import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
