@@ -104,33 +104,7 @@ public class FlexibleSelectFacetTest {
         assertThat(facet.withSearchResult(searchResult()).getFacetResult()).contains(FACET_RESULT_WITH_THREE_TERMS);
     }
 
-    @SuppressWarnings("unchecked")
     private PagedSearchResult<ProductProjection> searchResult() {
-        final String json = "{" +
-                        "  \"facets\": {" +
-                        "    \"categories.id\": {" +
-                        "      \"type\": \"terms\"," +
-                        "      \"missing\": 5," +
-                        "      \"total\": 60," +
-                        "      \"other\": 0," +
-                        "      \"terms\": [" +
-                        "        { " +
-                        "          \"term\": \"one\", " +
-                        "          \"count\": 30 " +
-                        "        }," +
-                        "        { " +
-                        "          \"term\": \"two\", " +
-                        "          \"count\": 20 " +
-                        "        }," +
-                        "        { " +
-                        "          \"term\": \"three\", " +
-                        "          \"count\": 10 " +
-                        "        }" +
-                        "      ]" +
-                        "    }" +
-                        "  }" +
-                        "}";
-        final JsonNode node = Json.parse(json);
-        return SphereJsonUtils.readObject(node, PagedSearchResult.class);
+        return readObjectFromResource("pagedSearchResult.json", new TypeReference<PagedSearchResult<ProductProjection>>() {});
     }
 }
