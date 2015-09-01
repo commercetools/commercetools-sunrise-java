@@ -15,7 +15,6 @@ public class FacetOptionTest {
     private static final TermStats TERM_ONE = TermStats.of("one", 30);
     private static final TermStats TERM_TWO = TermStats.of("two", 20);
     private static final TermStats TERM_THREE = TermStats.of("three", 10);
-    private static final TermFacetResult FACET_RESULT = TermFacetResult.of(5L, 60L, 0L, asList(TERM_ONE, TERM_TWO, TERM_THREE));
 
     @Test
     public void createsInstance() throws Exception {
