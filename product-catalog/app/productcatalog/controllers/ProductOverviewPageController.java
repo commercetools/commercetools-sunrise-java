@@ -1,12 +1,11 @@
 package productcatalog.controllers;
 
 import common.cms.CmsPage;
+import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.ProductThumbnailDataFactory;
-import common.prices.PriceFinder;
-import common.utils.PriceFormatter;
-import common.utils.Translator;
+import common.pages.SunrisePageData;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
@@ -24,7 +23,6 @@ import productcatalog.services.ProductProjectionService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
-import java.util.function.Function;
 
 import static io.sphere.sdk.facets.DefaultFacetType.HIERARCHICAL_SELECT;
 import static io.sphere.sdk.facets.DefaultFacetType.SORTED_SELECT;
@@ -80,9 +78,9 @@ public class ProductOverviewPageController extends SunriseController {
         final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(category, boundFacets, page);
         final F.Promise<CmsPage> cmsPromise = getCmsPage("pop");
         return searchResultPromise.flatMap(searchResult ->
-                        cmsPromise.flatMap(cms -> {
-                            final ProductOverviewPageContent content = getPopPageData(cms, searchResult, boundFacets);
-                            return renderPage(view -> ok(view.productOverviewPage(content)));
+                        cmsPromise.map(cms -> {
+                            final ProductOverviewPageContent content = getPopPageData(cms, userContext(), searchResult, boundFacets);
+                            return ok(templateService().renderToHtml("pop", SunrisePageData.of(cms, context(), content)));
                         })
         );
     }
@@ -100,19 +98,13 @@ public class ProductOverviewPageController extends SunriseController {
         return bindFacetsWithRequest(facets);
     }
 
-    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final PagedSearchResult<ProductProjection> searchResult,
+    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final UserContext userContext,
+                                                      final PagedSearchResult<ProductProjection> searchResult,
                                                       final List<Facet<ProductProjection>> boundFacets) {
         final String additionalTitle = "";
-        final ProductListData productListData = getProductListData(searchResult.getResults());
+        final ProductListData productListData = getProductListData(searchResult.getResults(), userContext);
         final FilterListData filterListData = getFilterListData(searchResult, boundFacets);
         return new ProductOverviewPageContent(additionalTitle, productListData, filterListData);
-    }
-
-    private F.Promise<Result> renderPage(final Function<ProductCatalogView, Result> pageRenderer) {
-        return getCommonCmsPage().map(cms -> {
-            final ProductCatalogView view = new ProductCatalogView(templateService(), context(), cms);
-            return pageRenderer.apply(view);
-        });
     }
 
     /* Maybe move to some common controller class */
@@ -180,8 +172,8 @@ public class ProductOverviewPageController extends SunriseController {
 
     /* This will probably be moved to some kind of factory classes */
 
-    private ProductListData getProductListData(final List<ProductProjection> productList) {
-        final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(translator(), priceFinder(), priceFormatter());
+    private ProductListData getProductListData(final List<ProductProjection> productList, final UserContext userContext) {
+        final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(userContext);
         return new ProductListData(productList.stream().map(thumbnailDataFactory::create).collect(toList()));
     }
 
@@ -191,19 +183,5 @@ public class ProductOverviewPageController extends SunriseController {
                 .map(FacetData::new)
                 .collect(toList());
         return new FilterListData(facets);
-    }
-
-    /* Maybe move these convenient methods to SunriseController? */
-
-    private PriceFinder priceFinder() {
-        return userContext().priceFinder();
-    }
-
-    private PriceFormatter priceFormatter() {
-        return userContext().priceFormatter();
-    }
-
-    private Translator translator() {
-        return userContext().translator();
     }
 }

@@ -24,7 +24,7 @@ public class ProductThumbnailData extends Base {
         return description;
     }
 
-    public String getImage() {
+    public String getImageUrl() {
         return imageUrl;
     }
 

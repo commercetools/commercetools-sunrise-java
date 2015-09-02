@@ -1,16 +1,15 @@
 package productcatalog.pages;
 
+import common.contexts.PriceFinderFactory;
+import common.contexts.UserContext;
 import common.pages.DetailData;
+import common.pages.ImageData;
 import common.pages.SelectableData;
 import common.prices.PriceFinder;
-import common.utils.PriceFormatter;
-import common.utils.Translator;
 import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
-import io.sphere.sdk.products.Price;
-import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
+import io.sphere.sdk.products.*;
 import io.sphere.sdk.products.attributes.Attribute;
 import io.sphere.sdk.products.attributes.AttributeAccess;
 
@@ -27,33 +26,45 @@ public class ProductDataFactory {
     private static final AttributeAccess<LocalizedEnumValue> LENUM_ATTR_ACCESS = AttributeAccess.ofLocalizedEnumValue();
     private static final AttributeAccess<Set<LocalizedString>> LENUM_SET_ATTR_ACCESS = AttributeAccess.ofLocalizedStringSet();
 
-    private final Translator translator;
+    private final UserContext userContext;
     private final PriceFinder priceFinder;
-    private final PriceFormatter priceFormatter;
 
-    private ProductDataFactory(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
-        this.translator = translator;
-        this.priceFinder = priceFinder;
-        this.priceFormatter = priceFormatter;
+    private ProductDataFactory(final UserContext userContext) {
+        this.userContext = userContext;
+        priceFinder = PriceFinderFactory.create(userContext);
     }
 
-    public static ProductDataFactory of(final Translator translator, final PriceFinder priceFinder, final PriceFormatter priceFormatter) {
-        return new ProductDataFactory(translator, priceFinder, priceFormatter);
+    public static ProductDataFactory of(final UserContext userContext) {
+        return new ProductDataFactory(userContext);
     }
 
     public ProductData create(final ProductProjection product, final ProductVariant variant) {
         final Optional<Price> priceOpt = priceFinder.findPrice(variant.getPrices());
 
         return new ProductData(
-                translator.findTranslation(product.getName()),
+                userContext.getTranslation(product.getName()),
                 Optional.ofNullable(variant.getSku()).orElse(""),
-                Optional.ofNullable(product.getDescription()).map(translator::findTranslation).orElse(""),
-                getPriceCurrent(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
-                getPriceOld(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
+                Optional.ofNullable(product.getDescription()).map(userContext::getTranslation).orElse(""),
+                getPriceCurrent(priceOpt).map(price -> userContext.format(price.getValue())).orElse(""),
+                getPriceOld(priceOpt).map(price -> userContext.format(price.getValue())).orElse(""),
+                getImages(variant),
                 getColors(product),
                 getSizes(product),
-                getProductDetails(variant)
+                getDetails(variant)
         );
+    }
+
+    private List<ImageData> getImages(final ProductVariant productVariant) {
+        final List<ImageData> images = productVariant.getImages().stream().map(ImageData::of).collect(toList());
+        if(images.isEmpty()) {
+            images.add(getPlaceholderImage());
+        }
+
+        return images;
+    }
+
+    private ImageData getPlaceholderImage() {
+        return ImageData.of(Image.of("http://placehold.it/300x400", ImageDimensions.of(300, 400)));
     }
 
     private List<SelectableData> getColors(final ProductProjection product) {
@@ -68,7 +79,7 @@ public class ProductDataFactory {
                 .collect(toList());
     }
 
-    private List<DetailData> getProductDetails(final ProductVariant variant) {
+    private List<DetailData> getDetails(final ProductVariant variant) {
         return variant.findAttribute("details", LENUM_SET_ATTR_ACCESS).orElse(emptySet()).stream()
                 .map(this::localizedStringsToDetailData)
                 .collect(toList());
@@ -92,7 +103,7 @@ public class ProductDataFactory {
     }
 
     private SelectableData colorToSelectableItem(final Attribute color) {
-        final String colorLabel = translator.findTranslation(color.getValue(LENUM_ATTR_ACCESS).getLabel());
+        final String colorLabel = userContext.getTranslation(color.getValue(LENUM_ATTR_ACCESS).getLabel());
         return new SelectableData(colorLabel, color.getName(), "", "", false);
     }
 
@@ -102,7 +113,7 @@ public class ProductDataFactory {
     }
 
     private DetailData localizedStringsToDetailData(final LocalizedString localizedStrings) {
-        final String label = translator.findTranslation(localizedStrings);
+        final String label = userContext.getTranslation(localizedStrings);
         return new DetailData(label, "");
     }
 

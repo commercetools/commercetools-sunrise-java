@@ -1,28 +1,144 @@
 {
   "suggestions": [
     {
-      "text":"Tasche „Selma” medium Michael Kors rot",
-      "description":"",
-      "price":"EUR 295,00",
-      "image":""
+      "text": "Tasche \u201eSelma\u201d medium Michael Kors rot",
+      "sku": "A0E200000001YLW",
+      "description": "",
+      "price": "EUR 295,00",
+      "priceOld": "",
+      "images": [
+        {
+          "bigImage": "http:\/\/placehold.it\/300x400",
+          "thumbImage": "http:\/\/placehold.it\/300x400"
+        }
+      ],
+      "colors": [
+        {
+          "text": "rot",
+          "value": "color",
+          "description": "",
+          "image": "",
+          "selected": false
+        }
+      ],
+      "sizes": [
+        {
+          "text": "one size",
+          "value": "one size",
+          "description": "",
+          "image": "",
+          "selected": false
+        }
+      ],
+      "details": [
+
+      ],
+      "id": "-402631881"
     },
     {
-      "text":"Brieftasche DKNY rot",
-      "description":"",
-      "price":"EUR 85,00",
-      "image":""
+      "text": "Brieftasche DKNY rot",
+      "sku": "A0E2000000026IK",
+      "description": "",
+      "price": "EUR 85,00",
+      "priceOld": "",
+      "images": [
+        {
+          "bigImage": "http:\/\/placehold.it\/300x400",
+          "thumbImage": "http:\/\/placehold.it\/300x400"
+        }
+      ],
+      "colors": [
+        {
+          "text": "rot",
+          "value": "color",
+          "description": "",
+          "image": "",
+          "selected": false
+        }
+      ],
+      "sizes": [
+        {
+          "text": "one size",
+          "value": "one size",
+          "description": "",
+          "image": "",
+          "selected": false
+        }
+      ],
+      "details": [
+
+      ],
+      "id": "-154547371"
     },
     {
-      "text":"Schal Altea blau",
-      "description":"",
-      "price":"EUR 92,00",
-      "image":""
+      "text": "Schal Altea blau",
+      "sku": "A0E20000000251R",
+      "description": "",
+      "price": "EUR 92,00",
+      "priceOld": "",
+      "images": [
+        {
+          "bigImage": "http:\/\/placehold.it\/300x400",
+          "thumbImage": "http:\/\/placehold.it\/300x400"
+        }
+      ],
+      "colors": [
+        {
+          "text": "blau",
+          "value": "color",
+          "description": "",
+          "image": "",
+          "selected": false
+        }
+      ],
+      "sizes": [
+        {
+          "text": "one size",
+          "value": "one size",
+          "description": "",
+          "image": "",
+          "selected": false
+        }
+      ],
+      "details": [
+
+      ],
+      "id": "-1732864657"
     },
     {
-      "text":"Tasche „Selma” medium Michael Kors rot",
-      "description":"",
-      "price":"EUR 295,00",
-      "image":""
+      "text": "Tasche \u201eSelma\u201d medium Michael Kors rot",
+      "sku": "A0E200000001YLW",
+      "description": "",
+      "price": "EUR 295,00",
+      "priceOld": "",
+      "images": [
+        {
+          "bigImage": "http:\/\/placehold.it\/300x400",
+          "thumbImage": "http:\/\/placehold.it\/300x400"
+        }
+      ],
+      "colors": [
+        {
+          "text": "rot",
+          "value": "color",
+          "description": "",
+          "image": "",
+          "selected": false
+        }
+      ],
+      "sizes": [
+        {
+          "text": "one size",
+          "value": "one size",
+          "description": "",
+          "image": "",
+          "selected": false
+        }
+      ],
+      "details": [
+
+      ],
+      "id": "-402631881"
     }
   ]
 }

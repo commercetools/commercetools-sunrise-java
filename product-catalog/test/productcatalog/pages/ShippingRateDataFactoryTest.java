@@ -1,6 +1,7 @@
 package productcatalog.pages;
 
 import common.utils.PriceFormatter;
+import common.utils.PriceFormatterImpl;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShippingRateDataFactoryTest {
     private final CurrencyUnit eur = Monetary.getCurrency("EUR");
-    private final PriceFormatter priceFormatter = PriceFormatter.of(Locale.GERMAN);
+    private final PriceFormatter priceFormatter = PriceFormatterImpl.of(Locale.GERMAN);
 
     @Test
     public void create() {

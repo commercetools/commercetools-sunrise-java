@@ -1,22 +1,22 @@
 package common.pages;
 
-import common.utils.Translator;
+import common.utils.TranslationResolver;
 import io.sphere.sdk.categories.Category;
 
 public class CategoryLinkDataFactory {
 
-    private final Translator translator;
+    private final TranslationResolver translationResolver;
 
-    private CategoryLinkDataFactory(final Translator translator) {
-        this.translator = translator;
+    private CategoryLinkDataFactory(final TranslationResolver translationResolver) {
+        this.translationResolver = translationResolver;
     }
 
-    public static CategoryLinkDataFactory of(final Translator translator) {
-        return new CategoryLinkDataFactory(translator);
+    public static CategoryLinkDataFactory of(final TranslationResolver translationResolver) {
+        return new CategoryLinkDataFactory(translationResolver);
     }
 
     public LinkData create(final Category category) {
-        final String label = translator.findTranslation(category.getName());
+        final String label = translationResolver.getTranslation(category.getName());
         return new LinkData(label, "");
     }
 }

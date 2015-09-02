@@ -50,6 +50,16 @@ For an easy and fast deployment of your application we recommend [heroku](https:
 
 <a href="https://heroku.com/deploy?template=https://github.com/sphereio/sphere-sunrise"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a>
 
+## Docker
+
+[![Docker build](http://dockeri.co/image/sphereio/sunrise)](https://registry.hub.docker.com/u/sphereio/sunrise/)
+
+You can also use a ready-to-run docker container.
+
+```bash
+$ docker run -it --rm -p 9000:9000 sphereio/sunrise
+```
+
 ## Related projects
 
 * https://github.com/sphereio/sphere-sunrise-data
