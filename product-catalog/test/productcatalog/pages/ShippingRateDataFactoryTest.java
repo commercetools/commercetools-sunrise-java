@@ -1,7 +1,6 @@
 package productcatalog.pages;
 
 import common.utils.PriceFormatter;
-import common.utils.PriceFormatterImpl;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
@@ -9,20 +8,20 @@ import productcatalog.models.ShopShippingRate;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import java.util.Locale;
 
+import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ShippingRateDataFactoryTest {
-    private final CurrencyUnit eur = Monetary.getCurrency("EUR");
-    private final PriceFormatter priceFormatter = PriceFormatterImpl.of(Locale.GERMAN);
+    private static final CurrencyUnit EUR = Monetary.getCurrency("EUR");
+    private static final PriceFormatter PRICE_FORMATTER = PriceFormatter.of(GERMAN);
 
     @Test
     public void create() {
-        final ShopShippingRate shippingRate = new ShopShippingRate("DHL", ShippingRate.of(Money.of(10.50, eur), Money.of(50.49, eur)));
+        final ShopShippingRate shippingRate = new ShopShippingRate("DHL", ShippingRate.of(Money.of(10.50, EUR), Money.of(50.49, EUR)));
 
         final ShippingRateData shippingRateData =
-                ShippingRateDataFactory.of(priceFormatter).create(shippingRate);
+                ShippingRateDataFactory.of(PRICE_FORMATTER).create(shippingRate);
 
         assertThat(shippingRateData.getShippingMethod()).isEqualTo("DHL");
         assertThat(shippingRateData.getZone()).isEqualTo("");

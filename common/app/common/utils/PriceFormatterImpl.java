@@ -8,12 +8,8 @@ public class PriceFormatterImpl implements PriceFormatter {
 
     private final Locale locale;
 
-    private PriceFormatterImpl(final Locale locale) {
+    PriceFormatterImpl(final Locale locale) {
         this.locale = locale;
-    }
-
-    public static PriceFormatter of(final Locale locale) {
-        return new PriceFormatterImpl(locale);
     }
 
     @Override

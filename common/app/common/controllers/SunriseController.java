@@ -1,25 +1,28 @@
 package common.controllers;
 
-import common.cms.CmsPage;
 import common.cms.CmsService;
 import common.contexts.AppContext;
 import common.contexts.UserContext;
+import common.pages.PageContent;
+import common.pages.SunrisePageData;
+import common.pages.SunrisePageDataFactory;
 import common.templates.TemplateService;
+import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import play.Configuration;
-import play.libs.F;
-import play.mvc.Result;
+import play.i18n.Lang;
+import play.i18n.Messages;
 import play.mvc.With;
 
 import javax.money.Monetary;
 import java.time.ZoneId;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.neovisionaries.i18n.CountryCode.DE;
-import static java.util.Collections.emptyList;
-import static java.util.Locale.GERMAN;
+import static java.util.stream.Collectors.toList;
 
 /**
  * An application specific controller.
@@ -57,24 +60,28 @@ public abstract class SunriseController extends ShopController {
         return context;
     }
 
-    protected F.Promise<Result> withCommonCms(final Function<CmsPage, Result> pageRenderer) {
-        final F.Promise<CmsPage> commonPage = getCommonCmsPage();
-        return commonPage.map(pageRenderer::apply);
+    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content) {
+        final Messages messages = messages(userContext);
+        final String saleCategoryExtId = configuration().getString("common.saleCategoryExternalId");
+        return new SunrisePageDataFactory(messages, userContext, context().project(), categories(),
+                controllerDependency.getReverseRouter(), saleCategoryExtId).create(content);
     }
 
-    protected F.Promise<CmsPage> getCommonCmsPage() {
-        return getCmsPage("common");
+    protected final Messages messages(final UserContext userContext) {
+        final Lang lang = Lang.forCode(userContext.locale().toLanguageTag());
+        return new Messages(lang, controllerDependency.messagesApi());
     }
 
-    protected F.Promise<Result> withCms(final String pageKey, final Function<CmsPage, F.Promise<Result>> action) {
-        return getCmsPage(pageKey).flatMap(action::apply);
+    protected PriceFormatter priceFormatter(final UserContext userContext) {
+        return PriceFormatter.of(userContext.locale());
     }
 
-    protected F.Promise<CmsPage> getCmsPage(final String pageKey) {
-        return cmsService().getPage(userContext().language(), pageKey);
-    }
-
-    protected UserContext userContext() {
-        return UserContext.of(DE, GERMAN, emptyList(), ZoneId.of("Europe/Berlin"), Monetary.getCurrency("EUR"));
+    protected UserContext userContext(final String language) {
+        final ArrayList<Locale> locales = new ArrayList<>();
+        locales.add(Locale.forLanguageTag(language));
+        locales.addAll(request().acceptLanguages().stream()
+                .map(lang -> Locale.forLanguageTag(lang.code()))
+                .collect(toList()));
+        return UserContext.of(DE, locales, ZoneId.of("Europe/Berlin"), Monetary.getCurrency("EUR"));
     }
 }

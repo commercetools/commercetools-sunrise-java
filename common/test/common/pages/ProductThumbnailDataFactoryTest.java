@@ -6,10 +6,10 @@ import io.sphere.sdk.products.ProductProjection;
 import org.junit.Test;
 
 import javax.money.Monetary;
-import java.util.Locale;
 
 import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
-import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductThumbnailDataFactoryTest {
@@ -17,7 +17,7 @@ public class ProductThumbnailDataFactoryTest {
     public void create() {
         final ProductProjection jacket = readObjectFromResource("product.json", ProductProjection.typeReference());
 
-        final UserContext userContext = UserContext.of(CountryCode.DE, Locale.GERMAN, emptyList(), null, Monetary.getCurrency("EUR"), null, null);
+        final UserContext userContext = UserContext.of(CountryCode.DE, singletonList(GERMAN), null, Monetary.getCurrency("EUR"), null, null);
 
         final ProductThumbnailData thumbnailData =
                 ProductThumbnailDataFactory.of(userContext).create(jacket);

@@ -6,13 +6,10 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Locale;
 
-import static com.neovisionaries.i18n.CountryCode.CN;
-import static com.neovisionaries.i18n.CountryCode.DE;
+import static com.neovisionaries.i18n.CountryCode.*;
 import static com.neovisionaries.i18n.CountryCode.UK;
 import static java.util.Arrays.asList;
-import static java.util.Locale.CHINESE;
-import static java.util.Locale.ENGLISH;
-import static java.util.Locale.GERMAN;
+import static java.util.Locale.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProjectContextTest {

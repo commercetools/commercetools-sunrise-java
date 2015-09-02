@@ -8,8 +8,8 @@ import play.test.WithBrowser;
 
 import java.io.File;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static controllers.EnvironmentKeys.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SetupControllerIntegrationTest extends WithBrowser {
 

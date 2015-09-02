@@ -1,23 +1,26 @@
 package common.pages;
 
-import common.cms.CmsPage;
-import common.contexts.AppContext;
+import io.sphere.sdk.models.Base;
 
-public final class SunrisePageData implements PageData {
-    private final CmsPage cms;
-    private final AppContext context;
+public final class SunrisePageData extends Base implements PageData {
+    private final PageHeader pageHeader;
+    private final PageFooter pageFooter;
     private final PageContent pageContent;
+    private final SeoData seoData;
+    private final PageMeta pageMeta;
 
-    private SunrisePageData(final CmsPage cms, final AppContext context, final PageContent pageContent) {
-        this.cms = cms;
-        this.context = context;
+    SunrisePageData(final PageHeader pageHeader, final PageFooter pageFooter, final PageContent pageContent,
+                    final SeoData seoData, final PageMeta pageMeta) {
+        this.pageHeader = pageHeader;
+        this.pageFooter = pageFooter;
         this.pageContent = pageContent;
+        this.seoData = seoData;
+        this.pageMeta = pageMeta;
     }
 
     @Override
     public PageHeader getHeader() {
-        final String title = cms.getOrEmpty("header.title") + pageContent.additionalTitle();
-        return new PageHeader(cms, context, title);
+        return pageHeader;
     }
 
     @Override
@@ -27,20 +30,16 @@ public final class SunrisePageData implements PageData {
 
     @Override
     public PageFooter getFooter() {
-        return new PageFooter();
+        return pageFooter;
     }
 
     @Override
     public SeoData getSeo() {
-        return new SeoData();
+        return seoData;
     }
 
     @Override
     public PageMeta getMeta() {
-        return new PageMeta();
-    }
-
-    public static SunrisePageData of(final CmsPage cms, final AppContext context, final PageContent pageContent) {
-        return new SunrisePageData(cms, context, pageContent);
+        return pageMeta;
     }
 }

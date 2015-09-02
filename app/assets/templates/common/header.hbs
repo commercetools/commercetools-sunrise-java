@@ -1,0 +1,120 @@
+
+<div class="navbar navbar-fixed-top">
+
+    <div class="header">
+        <header class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul class="nav-list">
+                        <!-- Toggle the menu on mobile -->
+                        <li class="list-item-nav-toggle">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </li>
+                        <!-- Toggles the search field on mobile / not visible on desktop -->
+                        <li class="list-item-search"><button type="button" class="search-toggle icon-magnifying-glass"><span class="sr-only">{{header.search.textToggle}}</span></button></li>
+
+                        <li class="list-item-store"><a href="{{header.stores.url}}" class="store-select icon-marker"><span class="hidden-xs">{{header.stores.text}}</span></a></li>
+
+                        <li class="list-item-help"><a href="{{header.help.url}}" class="link-help">{{header.help.text}}</a></li>
+
+                        <li class="list-item-call"><a href="{{header.callUs.url}}" class="link-hotline">{{header.callUs.text}}</a></li>
+                        <!-- Add or remove class "not-emtpy" to change styling of shopping bag -->
+                        <li class="list-item-bag"><a href="{{header.miniCart.url}}" class="not-empty link-your-bag icon-hand-bag"><span class="hidden-xs hidden-sm">{{header.miniCart.text}}</span> <span class="cart-item-number">{{header.miniCart.numItems}}</span></a></li>
+
+                        <li class="list-item-user"><a href="{{header.user.signIn.url}}" class="link-user icon-user"><span class="hidden-xs hidden-sm">{{header.user.signIn.text}}</span></a></li>
+
+                        <li class="list-item-location clearfix">
+                            <button id="{{header.location.locationDropdownToggleBtnId}}"><img class="pull-right location-dropdown-toggle" src="{{meta.assetsPath}}img/globe-2.png" alt="Location"></button>
+                            <div class="location-dropdown">
+                                <span class="location-dropdown-label">Language</span>
+                                <select id="{{header.location.languageSelectId}}" class="select location-select" name="language">
+                                    {{#each header.location.language}}
+                                        <option id="{{languageOptionId}}" value="{{value}}" {{#if selected}}selected{{/if}}>{{text}}</option>
+                                    {{/each}}
+                                </select>
+                                <span class="location-dropdown-label">Country</span>
+                                <select id="{{header.location.countrySelectId}}" class="select location-select" name="country">
+                                    {{#each header.location.country}}
+                                        <option id="{{countryOptionId}}" value="{{value}}">{{text}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <div id="navigation" class="container">
+        <div class="row logo-search">
+            <div class="col-sm-8">
+                <a href="#" class="brand-logo">
+                    <img class="img-responsive" src="{{meta.assetsPath}}img/logo.svg" alt="SUNRISE Logo">
+                </a>
+            </div>
+            <div class="col-sm-4">
+                <form class="search-box text-right" action="{{header.search.url}}">
+                    <input id="{{header.search.inputId}}" class="search-field" type="search" placeholder="Search" />
+                    <button type="submit" id="{{header.search.buttonId}}" class="search-button"><span class="icon-font icon-magnifying-glass"></span><span class="sr-only">{{header.search.text}}</span></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="dropdown-megamenu navbar navbar-default">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        {{#each header.navMenu.categories}}
+                            <li class="dropdown menu-large">
+                                <a href="{{url}}" class="dropdown-toggle {{#if sale}}sale icon-ribbon{{/if}}" data-toggle="dropdown">{{text}}<img class="mobile-plus-content visible-xs" src="{{../meta.assetsPath}}img/plus79.png" alt="plus content"></a>
+                                <ul class="dropdown-menu megamenu row dropdown-submenu">
+                                    <li class="col-sm-8">
+                                        <div class="nav-accordion">
+                                            {{#each children}}
+                                                <h3>{{text}}</h3>
+                                                <ul>
+                                                    {{#each children}}
+                                                        <li><a href="{{url}}">{{text}}</a></li>
+                                                    {{/each}}
+                                                </ul>
+                                            {{/each}}
+                                        </div>
+                                    </li>
+                                    <li class="col-sm-4 hidden-xs">
+                                        <img src="{{../meta.assetsPath}}img/menu-teaser.jpg" alt="Summer 2015 – What inspires you?" class="img-responsive megamenu-img">
+                                    </li>
+                                </ul>
+                            </li>
+                        {{/each}}
+                        <li class="visible-xs location-xs">
+                            <div class="location-dropdown-xs">
+                                <ul>
+                                    <li>
+                                        <select class="select location-select" name="language">
+                                            {{#each header.location.language}}
+                                                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{text}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <select class="select location-select" name="country">
+                                            {{#each header.location.country}}
+                                                <option value="{{value}}">{{text}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

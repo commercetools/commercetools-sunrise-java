@@ -1,6 +1,7 @@
 package productcatalog.controllers;
 
 import common.cms.CmsPage;
+import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.ProductThumbnailData;
@@ -33,19 +34,21 @@ public class ProductOverviewPageController extends SunriseController {
     }
 
     public F.Promise<Result> show(int page) {
-        return withCms("pop", cms ->
-            productService.searchProducts(page, pageSize).flatMap(result -> {
-                final ProductOverviewPageContent content = getPopPageData(cms, result);
-                return withCommonCms(commonCmsPage -> {
-                    final SunrisePageData pageData = SunrisePageData.of(commonCmsPage, context(), content);
-                    return ok(templateService().renderToHtml("pop", pageData));
-                });
-            })
+        final UserContext userContext = userContext("en");
+        final F.Promise<CmsPage> cmsPagePromise = cmsService().getPage(userContext.locale(), "pdp");
+        final F.Promise<List<ProductProjection>> productListPromise = productService.searchProducts(page, pageSize);
+
+        return productListPromise.flatMap(result ->
+                        cmsPagePromise.map(cms -> {
+                            final ProductOverviewPageContent content = getPopPageData(userContext, result);
+                            final SunrisePageData pageData = pageData(userContext, content);
+                            return ok(templateService().renderToHtml("pop", pageData));
+                        })
         );
     }
 
-    private ProductOverviewPageContent getPopPageData(final CmsPage cms, final List<ProductProjection> products) {
-        final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(userContext());
+    private ProductOverviewPageContent getPopPageData(final UserContext userContext, final List<ProductProjection> products) {
+        final ProductThumbnailDataFactory thumbnailDataFactory = ProductThumbnailDataFactory.of(userContext);
 
         final String additionalTitle = "";
         final List<ProductThumbnailData> productList = products.stream().map(thumbnailDataFactory::create).collect(toList());

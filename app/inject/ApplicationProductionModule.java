@@ -2,8 +2,10 @@ package inject;
 
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
+import common.pages.ReverseRouter;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
+import pages.ReverseRouterImpl;
 import play.api.Environment;
 import play.api.inject.Binding;
 import play.api.inject.Module;
@@ -29,7 +31,8 @@ public class ApplicationProductionModule extends Module {
                 bind(CmsService.class).toProvider(CmsServiceProvider.class).in(Singleton.class),
                 bind(CategoryService.class).toProvider(CategoryServiceProvider.class).in(Singleton.class),
                 bind(ProductProjectionService.class).toProvider(ProductProjectionServiceProvider.class).in(Singleton.class),
-                bind(ShippingMethodService.class).toProvider(ShippingMethodServiceProvider.class).in(Singleton.class)
+                bind(ShippingMethodService.class).toProvider(ShippingMethodServiceProvider.class).in(Singleton.class),
+                bind(ReverseRouter.class).toInstance(new ReverseRouterImpl())
         );
     }
 }

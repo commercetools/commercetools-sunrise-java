@@ -1,10 +1,9 @@
 package inject;
 
+import com.google.inject.Provider;
 import io.sphere.sdk.categories.CategoryTree;
 import productcatalog.services.CategoryService;
 import productcatalog.services.CategoryServiceImpl;
-
-import com.google.inject.Provider;
 
 import javax.inject.Inject;
 
