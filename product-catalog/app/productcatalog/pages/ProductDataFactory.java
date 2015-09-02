@@ -6,6 +6,7 @@ import common.pages.DetailData;
 import common.pages.ImageData;
 import common.pages.SelectableData;
 import common.prices.PriceFinder;
+import common.utils.PriceFormatter;
 import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
@@ -14,6 +15,7 @@ import io.sphere.sdk.products.attributes.Attribute;
 import io.sphere.sdk.products.attributes.AttributeAccess;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,12 +28,14 @@ public class ProductDataFactory {
     private static final AttributeAccess<LocalizedEnumValue> LENUM_ATTR_ACCESS = AttributeAccess.ofLocalizedEnumValue();
     private static final AttributeAccess<Set<LocalizedString>> LENUM_SET_ATTR_ACCESS = AttributeAccess.ofLocalizedStringSet();
 
-    private final UserContext userContext;
+    private final List<Locale> locales;
+    private final PriceFormatter priceFormatter;
     private final PriceFinder priceFinder;
 
     private ProductDataFactory(final UserContext userContext) {
-        this.userContext = userContext;
-        priceFinder = PriceFinderFactory.create(userContext);
+        this.locales = userContext.locales();
+        this.priceFormatter = PriceFormatter.of(userContext.locale());
+        this.priceFinder = PriceFinderFactory.create(userContext);
     }
 
     public static ProductDataFactory of(final UserContext userContext) {
@@ -42,11 +46,11 @@ public class ProductDataFactory {
         final Optional<Price> priceOpt = priceFinder.findPrice(variant.getPrices());
 
         return new ProductData(
-                userContext.getTranslation(product.getName()),
+                product.getName().find(locales).orElse(""),
                 Optional.ofNullable(variant.getSku()).orElse(""),
-                Optional.ofNullable(product.getDescription()).map(userContext::getTranslation).orElse(""),
-                getPriceCurrent(priceOpt).map(price -> userContext.format(price.getValue())).orElse(""),
-                getPriceOld(priceOpt).map(price -> userContext.format(price.getValue())).orElse(""),
+                Optional.ofNullable(product.getDescription()).flatMap(description -> description.find(locales)).orElse(""),
+                getPriceCurrent(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
+                getPriceOld(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
                 getImages(variant),
                 getColors(product),
                 getSizes(product),
@@ -103,7 +107,7 @@ public class ProductDataFactory {
     }
 
     private SelectableData colorToSelectableItem(final Attribute color) {
-        final String colorLabel = userContext.getTranslation(color.getValue(LENUM_ATTR_ACCESS).getLabel());
+        final String colorLabel = color.getValue(LENUM_ATTR_ACCESS).getLabel().find(locales).orElse("");
         return new SelectableData(colorLabel, color.getName(), "", "", false);
     }
 
@@ -113,7 +117,7 @@ public class ProductDataFactory {
     }
 
     private DetailData localizedStringsToDetailData(final LocalizedString localizedStrings) {
-        final String label = userContext.getTranslation(localizedStrings);
+        final String label = localizedStrings.find(locales).orElse("");
         return new DetailData(label, "");
     }
 

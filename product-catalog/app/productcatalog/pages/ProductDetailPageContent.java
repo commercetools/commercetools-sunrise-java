@@ -5,18 +5,19 @@ import common.pages.*;
 import java.util.List;
 
 public class ProductDetailPageContent extends PageContent {
-
     private final String additionalTitle;
     private final PdpStaticData staticData;
-    private final List<LinkData> breadcrumbs;
+    private final List<LinkData> breadcrumb;
     private final ProductData productData;
     private final List<ShippingRateData> shippingRates;
     private final List<ProductData> suggestions;
 
-    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<LinkData> breadcrumbs, final ProductData productData, final List<ShippingRateData> shippingRates, final List<ProductData> suggestions) {
+    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<LinkData> breadcrumb,
+                                    final ProductData productData, final List<ShippingRateData> shippingRates,
+                                    final List<ProductData> suggestions) {
         this.additionalTitle = additionalTitle;
         this.staticData = staticData;
-        this.breadcrumbs = breadcrumbs;
+        this.breadcrumb = breadcrumb;
         this.productData = productData;
         this.shippingRates = shippingRates;
         this.suggestions = suggestions;
@@ -31,7 +32,7 @@ public class ProductDetailPageContent extends PageContent {
     }
 
     public List<LinkData> getBreadcrumb() {
-        return breadcrumbs;
+        return breadcrumb;
     }
 
     public ProductData getProduct() {

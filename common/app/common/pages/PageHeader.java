@@ -1,21 +1,19 @@
 package common.pages;
 
-import common.cms.CmsPage;
-import common.contexts.AppContext;
+import io.sphere.sdk.models.Base;
+import play.i18n.Messages;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-
-public class PageHeader {
-    private final CmsPage cms;
-    private final AppContext context;
+public class PageHeader extends Base {
+    private final Messages messages;
     private final String title;
+    private final CollectionData<SelectableData> countries;
+    private final NavMenuData navMenuData;
 
-    public PageHeader(final CmsPage cms, final AppContext context, final String title) {
-        this.cms = cms;
-        this.context = context;
+    public PageHeader(final Messages messages, final String title, final CollectionData<SelectableData> countries, final NavMenuData navMenuData) {
+        this.messages = messages;
+        this.countries = countries;
         this.title = title;
+        this.navMenuData = navMenuData;
     }
 
     public String getTitle() {
@@ -23,25 +21,22 @@ public class PageHeader {
     }
 
     public LinkData getStores() {
-        return new LinkData(cms.getOrEmpty("header.stores"), "");
+        return new LinkData(messages.at("header.stores"), "");
     }
 
     public LinkData getHelp() {
-        return new LinkData(cms.getOrEmpty("header.help"), "");
+        return new LinkData(messages.at("header.help"), "");
     }
 
     public LinkData getCallUs() {
-        return new LinkData(cms.getOrEmpty("header.callUs"), "");
+        return new LinkData(messages.at("header.callUs"), "");
+    }
+
+    public NavMenuData getNavMenu() {
+        return navMenuData;
     }
 
     public CollectionData getCountries() {
-        final List<SelectableData> countries = context.project().countries().stream().map(country -> {
-            final String name = country.getName();
-            final String value = country.getAlpha2();
-            final String currency = country.getCurrency().getCurrencyCode();
-            final String image = String.format("assets/img/flags/%s.svg", value.toLowerCase());
-            return new SelectableData(name, value, currency, image, false);
-        }).collect(toList());
-        return new CollectionData(cms.getOrEmpty("header.countries"), countries);
+        return countries;
     }
 }

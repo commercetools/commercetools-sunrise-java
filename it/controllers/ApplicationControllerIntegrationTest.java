@@ -7,8 +7,6 @@ import io.sphere.sdk.queries.PagedQueryResult;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.toList;

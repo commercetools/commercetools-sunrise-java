@@ -9,7 +9,7 @@ import play.i18n.MessagesApi;
 import play.inject.guice.GuiceApplicationBuilder;
 import play.test.WithApplication;
 
-import java.util.*;
+import java.util.Locale;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;

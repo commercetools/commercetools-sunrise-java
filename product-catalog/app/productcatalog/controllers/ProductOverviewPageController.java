@@ -5,7 +5,6 @@ import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.ProductThumbnailDataFactory;
-import common.pages.SunrisePageData;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
@@ -48,41 +47,22 @@ public class ProductOverviewPageController extends SunriseController {
         this.pageSize = configuration.getInt("pop.pageSize");
     }
 
-    public F.Promise<Result> showSubcategory(final String language, final String categorySlug1, final String categorySlug2, final int page) {
-        final Locale locale = locale(language);
-        final Optional<Category> category1 = categories().findBySlug(locale, categorySlug1);
-        final Optional<Category> category2 = categories().findBySlug(locale, categorySlug2);
-        if (category1.isPresent() && category2.isPresent()) {
-            final List<Category> category1Children = categories().findChildren(category1.get());
-            if (isRootCategory(category1.get()) && category1Children.contains(category2.get())) {
-                return show(locale, category2.get(), page);
-            }
-        }
-        return F.Promise.pure(notFound("Categories not found: " + categorySlug1 + "/" + categorySlug2));
-    }
-
-    public F.Promise<Result> showCategory(final String language, final String categorySlug, final int page) {
-        final Locale locale = locale(language);
-        final Optional<Category> category = categories().findBySlug(locale, categorySlug);
+    public F.Promise<Result> show(final String language, final String categorySlug, final int page) {
+        final UserContext userContext = userContext(language);
+        final Optional<Category> category = categories().findBySlug(userContext.locale(), categorySlug);
         if (category.isPresent()) {
-            if (isRootCategory(category.get())) {
-                return show(locale, category.get(), page);
-            }
+            final List<Category> childrenCategories = categories().findChildren(category.get());
+            final List<Facet<ProductProjection>> boundFacets = boundFacetList(userContext.locale(), childrenCategories);
+            final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(category.get(), boundFacets, page);
+            final F.Promise<CmsPage> cmsPromise = cmsService().getPage(userContext.locale(), "pop");
+            return searchResultPromise.flatMap(searchResult ->
+                            cmsPromise.map(cms -> {
+                                final ProductOverviewPageContent content = getPopPageData(cms, userContext, searchResult, boundFacets);
+                                return ok(templateService().renderToHtml("pop", pageData(userContext, content)));
+                            })
+            );
         }
         return F.Promise.pure(notFound("Category not found: " + categorySlug));
-    }
-
-    private F.Promise<Result> show(final Locale locale, final Category category, final int page) {
-        final List<Category> childrenCategories = categories().findChildren(category);
-        final List<Facet<ProductProjection>> boundFacets = boundFacetList(locale, childrenCategories);
-        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(category, boundFacets, page);
-        final F.Promise<CmsPage> cmsPromise = getCmsPage("pop");
-        return searchResultPromise.flatMap(searchResult ->
-                        cmsPromise.map(cms -> {
-                            final ProductOverviewPageContent content = getPopPageData(cms, userContext(), searchResult, boundFacets);
-                            return ok(templateService().renderToHtml("pop", SunrisePageData.of(cms, context(), content)));
-                        })
-        );
     }
 
     private List<Facet<ProductProjection>> boundFacetList(final Locale locale, final List<Category> childrenCategories) {

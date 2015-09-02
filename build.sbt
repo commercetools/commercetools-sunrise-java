@@ -1,6 +1,6 @@
-import play.sbt.PlayImport
-import de.johoop.jacoco4sbt._
 import de.johoop.jacoco4sbt.JacocoPlugin._
+import de.johoop.jacoco4sbt._
+import play.sbt.PlayImport
 
 name := "sphere-sunrise"
 

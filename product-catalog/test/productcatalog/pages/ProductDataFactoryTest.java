@@ -10,15 +10,15 @@ import org.junit.Test;
 
 import javax.money.Monetary;
 import java.util.List;
-import java.util.Locale;
 
 import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
-import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.Locale.GERMAN;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductDataFactoryTest {
-    public static final UserContext USER_CONTEXT =  UserContext.of(CountryCode.DE, Locale.GERMAN, emptyList(), null, Monetary.getCurrency("EUR"));
+    public static final UserContext USER_CONTEXT =  UserContext.of(CountryCode.DE, singletonList(GERMAN), null, Monetary.getCurrency("EUR"));
 
     @Test
     public void create() {

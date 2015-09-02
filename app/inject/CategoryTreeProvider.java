@@ -10,7 +10,6 @@ import play.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
