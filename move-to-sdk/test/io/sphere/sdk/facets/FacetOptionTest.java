@@ -6,44 +6,70 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static io.sphere.sdk.facets.BaseSelectFacetTest.termUI;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FacetOptionTest {
-    private static final TermStats<String> TERM_ONE = TermStats.of("one", 30);
-    private static final TermStats<String> TERM_TWO = TermStats.of("two", 20);
-    private static final TermStats<String> TERM_THREE = TermStats.of("three", 10);
-    private static final TermFacetResult<String> FACET_RESULT = TermFacetResult.of(5L, 60L, 0L, asList(TERM_ONE, TERM_TWO, TERM_THREE));
+    private static final TermStats TERM_ONE = TermStats.of("one", 30);
+    private static final TermStats TERM_TWO = TermStats.of("two", 20);
+    private static final TermStats TERM_THREE = TermStats.of("three", 10);
 
     @Test
     public void createsInstance() throws Exception {
-        final FacetOption<String> option = FacetOption.of("foo", 5, true);
-        assertThat(option.getTerm()).isEqualTo("foo");
+        final FacetOption option = FacetOption.of("foo", 5, true);
+        assertThat(option.getValue()).isEqualTo("foo");
         assertThat(option.getCount()).isEqualTo(5);
         assertThat(option.isSelected()).isTrue();
     }
 
     @Test
     public void createsInstanceFromTermStats() throws Exception {
-        final FacetOption<String> option = FacetOption.ofTermStats(TERM_TWO, asList(TERM_ONE.getTerm(), TERM_TWO.getTerm()));
-        assertThat(option.getTerm()).isEqualTo(TERM_TWO.getTerm());
+        final FacetOption option = FacetOption.ofTermStats(TERM_TWO, asList(TERM_ONE.getTerm(), TERM_TWO.getTerm()));
+        assertThat(option.getValue()).isEqualTo(TERM_TWO.getTerm());
         assertThat(option.getCount()).isEqualTo(TERM_TWO.getCount());
         assertThat(option.isSelected()).isTrue();
     }
 
     @Test
     public void createsInstanceFromTermStatsWithUnselectedValue() throws Exception {
-        final FacetOption<String> option = FacetOption.ofTermStats(TERM_THREE, asList(TERM_ONE.getTerm(), TERM_TWO.getTerm()));
-        assertThat(option.getTerm()).isEqualTo(TERM_THREE.getTerm());
+        final FacetOption option = FacetOption.ofTermStats(TERM_THREE, asList(TERM_ONE.getTerm(), TERM_TWO.getTerm()));
+        assertThat(option.getValue()).isEqualTo(TERM_THREE.getTerm());
         assertThat(option.getCount()).isEqualTo(TERM_THREE.getCount());
         assertThat(option.isSelected()).isFalse();
     }
 
     @Test
-    public void createsInstanceFromFacetResult() throws Exception {
-        final List<FacetOption<String>> options = FacetOption.ofFacetResult(FACET_RESULT, asList(TERM_ONE.getTerm(), TERM_TWO.getTerm()));
-        assertThat(options).containsExactlyElementsOf(asList(termUI(TERM_ONE, true), termUI(TERM_TWO, true), termUI(TERM_THREE, false)));
+    public void createsInstanceWithDifferentValue() throws Exception {
+        final FacetOption option = FacetOption.ofTermStats(TERM_ONE, emptyList());
+        assertThat(option.getValue()).isNotEqualTo("foo");
+        assertThat(option.withValue("foo").getValue()).isEqualTo("foo");
+    }
+
+    @Test
+    public void createsInstanceWithDifferentCount() throws Exception {
+        final FacetOption option = FacetOption.ofTermStats(TERM_ONE, emptyList());
+        assertThat(option.getCount()).isNotEqualTo(100);
+        assertThat(option.withCount(100).getCount()).isEqualTo(100);
+    }
+
+    @Test
+    public void createsInstanceWithDifferentSelected() throws Exception {
+        final FacetOption option = FacetOption.ofTermStats(TERM_ONE, emptyList());
+        assertThat(option.isSelected()).isFalse();
+        assertThat(option.withSelected(true).isSelected()).isTrue();
+    }
+
+    @Test
+    public void createsInstanceWithDifferentChildren() throws Exception {
+        final List<FacetOption> childrenOptions = asList(
+                FacetOption.of("foo", 2, true),
+                FacetOption.of("bar", 6, false).withChildren(singletonList(FacetOption.of("bar2", 4, true))));
+
+        final FacetOption option = FacetOption.ofTermStats(TERM_ONE, emptyList());
+        assertThat(option.getChildren()).isEmpty();
+        assertThat(option.withChildren(childrenOptions).getChildren()).containsExactlyElementsOf(childrenOptions);
     }
 
 }

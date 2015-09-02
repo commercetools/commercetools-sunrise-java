@@ -3,8 +3,10 @@ package common.controllers;
 import io.sphere.sdk.categories.Category;
 import org.junit.Test;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,13 +20,13 @@ public class ByNameCategoryComparatorTest {
 
     @Test
     public void sortsAccordingToTheProvidedLocale() {
-        List<Category> categories = asList(category(PANTS), category(SHIRTS), category(DRESSES));
+        List<Category> categories = asList(category("Pants", "Hose"), category("Shirts", "Hemden"), category("Dresses", "Kleider"));
         sort(categories, ENGLISH, (sortedNames) -> assertThat(sortedNames).containsExactly("Dresses", "Pants", "Shirts"));
     }
 
     @Test
     public void sortsWhenTheLocalizedNameForTheProvidedLocaleIsMissing() {
-        List<Category> categories = asList(category(PANTS), category(SHIRTS_WITHOUT_ENGLISH), category(DRESSES));
+        List<Category> categories = asList(category("Pants", "Hose"), category(null, "Hemden"), category("Dresses", "Kleider"));
         sort(categories, ENGLISH, (sortedNames) -> assertThat(sortedNames).containsExactly(null, "Dresses", "Pants"));
     }
 
@@ -34,38 +36,15 @@ public class ByNameCategoryComparatorTest {
         test.accept(sortedNames.collect(Collectors.toList()));
     }
 
-    private static Category category(final String jsonAsString) {
-        return readObject(jsonAsString, Category.typeReference());
+    private static Category category(@Nullable final String englishName, final String germanName) {
+        final String englishNameJson = Optional.ofNullable(englishName).map(e -> "\"en\": \""+ e +"\",").orElse("");
+        final String json =
+                "{" +
+                "  \"name\": {" +
+                    englishNameJson +
+                "    \"de\" : \""+ germanName + "\"" +
+                "  }" +
+                "}";
+        return readObject(json, Category.typeReference());
     }
-
-    private static final String PANTS =
-            "{" +
-            "  \"name\": {" +
-            "    \"en\": \"Pants\"," +
-            "    \"de\" : \"Hose\"" +
-            "  }" +
-            "}";
-
-    private static final String SHIRTS =
-            "{" +
-            "  \"name\": {" +
-            "    \"en\": \"Shirts\"," +
-            "    \"de\" : \"Hemden\"" +
-            "  }" +
-            "}";
-
-    private static final String DRESSES =
-            "{" +
-            "  \"name\": {" +
-            "    \"en\": \"Dresses\"," +
-            "    \"de\" : \"Kleider\"" +
-            "  }" +
-            "}";
-
-    private static final String SHIRTS_WITHOUT_ENGLISH =
-            "{" +
-            "  \"name\": {" +
-            "    \"de\" : \"Hemden\"" +
-            "  }" +
-            "}";
 }

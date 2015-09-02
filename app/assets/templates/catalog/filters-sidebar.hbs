@@ -1,0 +1,97 @@
+<div class="col-sm-3 filter-options sidebar-offcanvas" id="sidebar">
+  <button class="offcanvas-btn offcanvas-btn-close icon-close" data-toggle="offcanvas" type="button"><span class="sr-only">{{content.filters.close}}</span></button>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="row">
+        <div class="col-sm-12 ">
+          <p class="filter-products"><b>{{content.filters.text}}</b></p>
+        </div>
+      </div>
+
+      {{#each content.filters.list}}
+        {{#if facet.available}}
+          <hr class="hr">
+          <div id="filter-{{facet.key}}" class="row {{facet.key}}-box">
+              <div class="col-xs-8 text-left">
+                {{facet.label}}
+              </div>
+              <div class="col-xs-4">
+                  <a class="text-right clear-btn" href="#">{{../clear}}</a>
+              </div>
+          </div>
+
+          {{#if hierarchicalSelectFacet}}
+            <div class="row">
+              <div class="col-sm-12">
+                <div aria-multiselectable="true" class="panel-group" id="accordion" role="tablist">
+                  {{#each facet.limitedOptions}}
+                    <div class="panel panel-default">
+                      <div class="panel-heading" id="heading-one" role="tab">
+                        <h4 class="panel-title">
+                          <a aria-controls="collapse-one" aria-expanded="true" class="" data-parent="#accordion" data-toggle="collapse" href="#{{value}}">
+                            {{value}} ({{count}})
+                          </a>
+                        </h4>
+                      </div>
+                      <div aria-labelledby="heading-one" class="panel-collapse collapse {{#if selected}}in{{/if}}" id="{{value}}" role="tabpanel">
+                        <div class="panel-body">
+                          {{#each children}}
+                            <div class="checkbox">
+                              <label for="filter-{{key}}-{{value}}">
+                                <input id="filter-{{key}}-{{value}}" type="checkbox" value="{{value}}" {{#if selected}}checked{{/if}}>
+                                {{value}} ({{count}})
+                              </label>
+                            </div>
+                          {{/each}}
+                        </div>
+                      </div>
+                    </div>
+                  {{/each}}
+                </div>
+              </div>
+            </div>
+          {{/if}}
+
+          {{#if sliderRangeFacet}}
+            <div class="row">
+              <div class="col-sm-12 text-center slider-col">
+                <p>
+                  <input class="amount" readonly style="border:0; color:black; background: transparent; text-align: center;" type="text" />
+                  <input class="s1" name="s1" type="hidden" />
+                  <input class="s2" name="s2" type="hidden" />
+                </p>
+                <div class="slider-range"></div>
+              </div>
+            </div>
+          {{/if}}
+
+          {{#if selectFacet}}
+              <div class="row">
+                  <div class="col-sm-12">
+                      <div class="pop-filter-list">
+                        {{#each facet.limitedOptions}}
+                            <div class="checkbox">
+                                <input id="filter-{{key}}-{{value}}" class="{{key}}-checkbox" type="checkbox" value="{{value}}" {{#if selected}}checked{{/if}}/>
+                                <label for="filter-{{key}}-{{value}}">{{value}} ({{count}})</label>
+                            </div>
+                        {{/each}}
+                      </div>
+                  </div>
+              </div>
+          {{/if}}
+
+          {{#if sortedSelectFacet}}
+              <div class="pop-filter-select">
+              {{#each facet.limitedOptions}}
+                  <input id="filter-{{key}}-{{value}}" class="{{key}}-checkbox" type="checkbox" value="{{value}}" {{#if selected}}checked{{/if}}/>
+                  <label for="filter-{{key}}-{{value}}">{{value}} ({{count}})</label><br>
+              {{/each}}
+            </div>
+          {{/if}}
+
+        {{/if}}
+      {{/each}}
+
+    </div>
+  </div>
+</div>

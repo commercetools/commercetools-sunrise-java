@@ -1,22 +1,48 @@
 package io.sphere.sdk.facets;
 
 import io.sphere.sdk.models.Base;
+import io.sphere.sdk.search.TermFacetResult;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T, V>, V> extends Base {
+abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T>> extends Base {
     private final String key;
     private final String label;
-    private final List<FacetOption<V>> options;
-    private Optional<Long> threshold = Optional.empty();
-    private Optional<Long> limit = Optional.empty();
+    private final FacetType type;
+    protected boolean multiSelect = true;
+    protected boolean matchingAll = false;
+    protected List<String> selectedValues = Collections.emptyList();
+    protected Optional<TermFacetResult> facetResult = Optional.empty();
+    protected Optional<Long> threshold = Optional.empty();
+    protected Optional<Long> limit = Optional.empty();
 
-    protected BaseSelectFacetBuilder(final String key, final String label, final List<FacetOption<V>> options) {
+    protected BaseSelectFacetBuilder(final String key, final String label, final FacetType type) {
         this.key = key;
         this.label = label;
-        this.options = options;
+        this.type = type;
+    }
+
+    public T multiSelect(final boolean multiSelect) {
+        this.multiSelect = multiSelect;
+        return getThis();
+    }
+
+    public T matchingAll(final boolean matchingAll) {
+        this.matchingAll = matchingAll;
+        return getThis();
+    }
+
+    public T selectedValues(final List<String> selectedValues) {
+        this.selectedValues = selectedValues;
+        return getThis();
+    }
+
+    public T facetResult(@Nullable final TermFacetResult facetResult) {
+        this.facetResult = Optional.ofNullable(facetResult);
+        return getThis();
     }
 
     public T threshold(@Nullable final Long threshold) {
@@ -37,8 +63,24 @@ abstract class BaseSelectFacetBuilder<T extends BaseSelectFacetBuilder<T, V>, V>
         return label;
     }
 
-    public List<FacetOption<V>> getOptions() {
-        return options;
+    public FacetType getType() {
+        return type;
+    }
+
+    public boolean isMultiSelect() {
+        return multiSelect;
+    }
+
+    public boolean isMatchingAll() {
+        return matchingAll;
+    }
+
+    public List<String> getSelectedValues() {
+        return selectedValues;
+    }
+
+    public Optional<TermFacetResult> getFacetResult() {
+        return facetResult;
     }
 
     public Optional<Long> getThreshold() {
