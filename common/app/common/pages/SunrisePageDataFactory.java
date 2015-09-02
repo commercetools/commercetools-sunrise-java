@@ -49,22 +49,17 @@ public class SunrisePageDataFactory {
 
     private NavMenuData getNavMenuData() {
         final List<CategoryData> categoryDataList = new ArrayList<>();
-        categoryTree.getRoots().forEach(root -> categoryDataList.add(getCategoryData(root, null)));
+        categoryTree.getRoots().forEach(root -> categoryDataList.add(getCategoryData(root)));
         return new NavMenuData(categoryDataList);
     }
 
-    private CategoryData getCategoryData(final Category category, @Nullable String rootSlug) {
+    private CategoryData getCategoryData(final Category category) {
         final String name = category.getName().find(userContext.locales()).orElse("");
         final String slug = category.getSlug().find(userContext.locale()).orElse("");
         final String language = userContext.locale().toLanguageTag();
-        final String url;
-        if (rootSlug != null) {
-            url = reverseRouter.subCategory(language, rootSlug, slug, 1).url();
-        } else {
-            url = reverseRouter.category(language, slug, 1).url();
-        }
+        final String url = reverseRouter.category(language, slug, 1).url();
         final List<CategoryData> childrenCategoryData = categoryTree.findChildren(category).stream()
-                .map(child -> getCategoryData(child, Optional.ofNullable(rootSlug).orElse(slug)))
+                .map(this::getCategoryData)
                 .collect(toList());
         final Optional<String> externalId = Optional.ofNullable(category.getExternalId());
         final boolean isSale = externalId.isPresent() && externalId.equals(saleCategoryExternalId);

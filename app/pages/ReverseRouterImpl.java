@@ -6,13 +6,9 @@ import play.mvc.Call;
 import productcatalog.controllers.routes;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
-    @Override
-    public Call subCategory(final String language, final String rootSlug, final String slug, final int page) {
-        return routes.ProductOverviewPageController.show(page);
-    }
 
     @Override
     public Call category(final String language, final String slug, final int page) {
-        return routes.ProductOverviewPageController.show(page);
+        return routes.ProductOverviewPageController.show(language, slug, page);
     }
 }

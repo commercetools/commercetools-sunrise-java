@@ -1,18 +1,16 @@
 package productcatalog.pages;
 
 import common.pages.PageContent;
-import common.pages.ProductThumbnailData;
-
-import java.util.List;
 
 public class ProductOverviewPageContent extends PageContent {
-
     private final String additionalTitle;
-    private final List<ProductThumbnailData>  productList;
+    private final ProductListData productListData;
+    private final FilterListData filterListData;
 
-    public ProductOverviewPageContent(final String additionalTitle, final List<ProductThumbnailData> productList) {
+    public ProductOverviewPageContent(final String additionalTitle, final ProductListData productListData, final FilterListData filterListData) {
         this.additionalTitle = additionalTitle;
-        this.productList = productList;
+        this.productListData = productListData;
+        this.filterListData = filterListData;
     }
 
     @Override
@@ -20,7 +18,11 @@ public class ProductOverviewPageContent extends PageContent {
         return additionalTitle;
     }
 
-    public List<ProductThumbnailData>  getProducts() {
-        return productList;
+    public FilterListData getFilters() {
+        return filterListData;
+    }
+
+    public ProductListData getProducts() {
+        return productListData;
     }
 }

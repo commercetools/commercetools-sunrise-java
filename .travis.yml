@@ -1,3 +1,8 @@
+sudo: false
+cache:
+  directories:
+  - $HOME/.ivy2
+  - $HOME/.sbt
 language: scala
 scala:
 - 2.10.5

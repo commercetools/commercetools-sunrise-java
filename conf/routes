@@ -3,16 +3,19 @@
 # ~~~~
 
 # Home page
-GET        /                           @controllers.HomeController.index()
+GET        /                                                @controllers.HomeController.index()
 
-GET        /pop                        @productcatalog.controllers.ProductOverviewPageController.show(page: Int ?= 1)
-GET        /products @controllers.TmpPopController.show
-GET        /:language/:slug-$sku<[^-]+>.html @productcatalog.controllers.ProductDetailPageController.show(language: String, slug: String, sku: String)
+GET        /products                                        @controllers.TmpPopController.show
 
-->         /setup                      setupwidget.Routes
+->         /setup                                           setupwidget.Routes
 
 # Map static resources from the /public folder to the /assets/public URL path
-GET        /assets/public/*file        controllers.Assets.at(path="/public", file)
+GET        /assets/public/*file                             controllers.Assets.at(path="/public", file)
 
 # Map static resources from webjars to the /assets URL path
-GET        /assets/*file               controllers.WebJarAssets.at(file)
+GET        /assets/*file                                    controllers.WebJarAssets.at(file)
+
+
+GET        /:language/:productSlug-$sku<[^-]+>.html         @productcatalog.controllers.ProductDetailPageController.show(language: String, productSlug: String, sku: String)
+
+GET        /:language/:categorySlug/                        @productcatalog.controllers.ProductOverviewPageController.show(language: String, categorySlug: String, page: Int ?= 1)

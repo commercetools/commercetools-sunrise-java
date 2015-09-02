@@ -1,47 +1,73 @@
 package io.sphere.sdk.facets;
 
-import io.sphere.sdk.models.Base;
-import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.Collections.emptyList;
 
-public class FacetOption<T> extends Base {
-    private final T term;
-    private final long count;
-    private final boolean selected;
+/**
+ * Interface that represents an option from a facet, as used in a faceted search.
+ */
+public interface FacetOption {
 
-    FacetOption(final T term, final long count, final boolean selected) {
-        this.term = term;
-        this.count = count;
-        this.selected = selected;
+    /**
+     * Gets the value for this facet option.
+     * @return the option value
+     */
+    String getValue();
+
+    /**
+     * Gets the amount of results present in this facet option.
+     * @return the option count
+     */
+    long getCount();
+
+    /**
+     * Whether this facet option is selected or not.
+     * @return true if the option is selected, false otherwise
+     */
+    boolean isSelected();
+
+    /**
+     * Gets the children options of this facet option.
+     * @return the children options
+     */
+    List<FacetOption> getChildren();
+
+    /**
+     * Gets a new instance of FacetOption with the same attributes as this, but with the given value.
+     * @param value the new value
+     * @return a new instance with same attributes, but with the given value
+     */
+    FacetOption withValue(String value);
+
+    /**
+     * Gets a new instance of FacetOption with the same attributes as this, but with the given count.
+     * @param count the new count
+     * @return a new instance with same attributes, but with the given count
+     */
+    FacetOption withCount(long count);
+
+    /**
+     * Gets a new instance of FacetOption with the same attributes as this, but with the given selected.
+     * @param selected the new selected
+     * @return a new instance with same attributes, but with the given selected
+     */
+    FacetOption withSelected(boolean selected);
+
+    /**
+     * Gets a new instance of FacetOption with the same attributes as this, but with the given children.
+     * @param children the new children
+     * @return a new instance with same attributes, but with the given children
+     */
+    FacetOption withChildren(List<FacetOption> children);
+
+    static FacetOption of(final String value, final long count, final boolean selected) {
+        return new FacetOptionImpl(value, count, selected, emptyList());
     }
 
-    public T getTerm() {
-        return term;
-    }
-
-    public long getCount() {
-        return count;
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public static <T> FacetOption<T> of(final T term, final long count, final boolean selected) {
-        return new FacetOption<>(term, count, selected);
-    }
-
-    public static <T> FacetOption<T> ofTermStats(final TermStats<T> termStats, final List<T> selectedValues) {
+    static FacetOption ofTermStats(final TermStats termStats, final List<String> selectedValues) {
         return FacetOption.of(termStats.getTerm(), termStats.getCount(), selectedValues.contains(termStats.getTerm()));
-    }
-
-    public static <T> List<FacetOption<T>> ofFacetResult(final TermFacetResult<T> facetResult, final List<T> selectedValues) {
-        return facetResult.getTerms().stream()
-                .map(termStats -> ofTermStats(termStats, selectedValues))
-                .collect(toList());
     }
 }
