@@ -1,6 +1,7 @@
 package io.sphere.sdk.facets;
 
 import io.sphere.sdk.search.*;
+import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
 
 import java.util.List;
 
@@ -35,6 +36,12 @@ public interface Facet<T> {
     boolean isAvailable();
 
     /**
+     * Whether the facet count should be hidden or not.
+     * @return true if the count should be hidden, false otherwise
+     */
+    boolean isCountHidden();
+
+    /**
      * Gets the selected values for this facet.
      * @return the selected values
      */
@@ -45,19 +52,13 @@ public interface Facet<T> {
      * With this search model you can build facet and filter expressions for this attribute.
      * @return the untyped search model for this facet
      */
-    UntypedSearchModel<T> getSearchModel();
-
-    /**
-     * Gets the facet expression associated to this facet, as needed to obtain a faceted search.
-     * @return the facet expression for this facet
-     */
-    FacetExpression<T> getFacetExpression();
+    TermFacetAndFilterSearchModel<T, ?> getSearchModel();
 
     /**
      * Gets the filter expressions associated to this facet, according to the selected values, as needed to obtain a faceted search.
      * @return the filter expressions for this facet
      */
-    List<FilterExpression<T>> getFilterExpressions();
+    FacetAndFilterExpression<T> getFacetedSearchExpression();
 
     /**
      * Gets a new instance of Facet with the same attributes as this, but with the given list of selected values.

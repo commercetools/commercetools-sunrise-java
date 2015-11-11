@@ -1,26 +1,19 @@
 package io.sphere.sdk.facets;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearchModel;
-import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.TermFacetResult;
-import io.sphere.sdk.search.TermModel;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
 
 import java.util.List;
 
-import static io.sphere.sdk.facets.DefaultFacetType.SELECT;
-import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SelectFacetTest {
-    private static final String KEY = "single-select-facet";
-    private static final String LABEL = "Select one option";
-    private static final TermModel<ProductProjection, ?> SEARCH_MODEL = ProductProjectionSearchModel.of().categories().id();
     private static final TermFacetResult FACET_RESULT_WITH_THREE_TERMS = TermFacetResult.of(5L, 60L, 0L, asList(
             TermStats.of("one", 30),
             TermStats.of("two", 20),
@@ -32,63 +25,50 @@ public class SelectFacetTest {
             FacetOption.of("three", 10, false));
 
     @Test
-    public void createsInstance() throws Exception {
-        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL)
-                .facetResult(FACET_RESULT_WITH_THREE_TERMS)
-                .selectedValues(SELECTED_VALUE_TWO)
-                .matchingAll(true)
-                .multiSelect(false)
-                .threshold(4L)
-                .limit(10L)
-                .build();
-        assertThat(facet.getKey()).isEqualTo(KEY);
-        assertThat(facet.getLabel()).isEqualTo(LABEL);
-        assertThat(facet.getType()).isEqualTo(SELECT);
-        assertThat(facet.getSearchModel()).isEqualTo(SEARCH_MODEL.untyped());
-        assertThat(facet.getFacetResult()).contains(FACET_RESULT_WITH_THREE_TERMS);
-        assertThat(facet.getSelectedValues()).containsExactlyElementsOf(SELECTED_VALUE_TWO);
-        assertThat(facet.isMatchingAll()).isTrue();
-        assertThat(facet.isMultiSelect()).isFalse();
-        assertThat(facet.getThreshold()).contains(4L);
-        assertThat(facet.getLimit()).contains(10L);
-        assertThat(facet.isAvailable()).isFalse();
-        assertThat(facet.getAllOptions()).containsExactlyElementsOf(OPTIONS);
-        assertThat(facet.getLimitedOptions()).containsExactlyElementsOf(OPTIONS);
-    }
-
-    @Test
-    public void createsInstanceWithOptionalValues() throws Exception {
-        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL).build();
-        assertThat(facet.getKey()).isEqualTo(KEY);
-        assertThat(facet.getLabel()).isEqualTo(LABEL);
-        assertThat(facet.getType()).isEqualTo(SELECT);
-        assertThat(facet.getSearchModel()).isEqualTo(SEARCH_MODEL.untyped());
-        assertThat(facet.getFacetResult()).isEmpty();
-        assertThat(facet.getSelectedValues()).isEmpty();
-        assertThat(facet.isMatchingAll()).isFalse();
-        assertThat(facet.isMultiSelect()).isTrue();
-        assertThat(facet.getThreshold()).isEmpty();
-        assertThat(facet.getLimit()).isEmpty();
+    public void canBeDisplayedIfOverThreshold() throws Exception {
+        final SelectFacet<ProductProjection> facet = selectFacetWithThreeOptions().threshold(3L).build();
         assertThat(facet.isAvailable()).isTrue();
-        assertThat(facet.getAllOptions()).isEmpty();
-        assertThat(facet.getLimitedOptions()).isEmpty();
     }
 
     @Test
-    public void createsInstanceWithDifferentSelectedValues() throws Exception {
-        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL).build();
-        assertThat(facet.getSelectedValues()).isEmpty();
-        assertThat(facet.withSelectedValues(SELECTED_VALUE_TWO).getSelectedValues()).containsExactlyElementsOf(SELECTED_VALUE_TWO);
+    public void canNotBeDisplayedIfBelowThreshold() throws Exception {
+        final SelectFacet<ProductProjection> facet = selectFacetWithThreeOptions().threshold(4L).build();
+        assertThat(facet.isAvailable()).isFalse();
     }
 
     @Test
-    public void createsInstanceWithDifferentFacetResult() throws Exception {
-        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL).build();
-        assertThat(facet.getFacetResult()).isEmpty();
-        assertThat(facet.withSearchResult(searchResult()).getFacetResult()).contains(FACET_RESULT_WITH_THREE_TERMS);
+    public void optionsListIsTruncatedIfOverLimit() throws Exception {
+        final SelectFacet<ProductProjection> facet = selectFacetWithThreeOptions()
+                .selectedValues(SELECTED_VALUE_TWO)
+                .limit(2L)
+                .build();
+        assertThat(facet.getLimitedOptions()).containsExactlyElementsOf(asList(OPTIONS.get(0), OPTIONS.get(1)));
+        assertThat(facet.getAllOptions()).containsExactlyElementsOf(OPTIONS);
     }
 
-    private PagedSearchResult<ProductProjection> searchResult() {
-        return readObjectFromResource("pagedSearchResult.json", new TypeReference<PagedSearchResult<ProductProjection>>() {});
+    @Test
+    public void optionsListIsNotTruncatedIfBelowLimit() throws Exception {
+        final SelectFacet<ProductProjection> facet = selectFacetWithThreeOptions()
+                .selectedValues(SELECTED_VALUE_TWO)
+                .limit(3L)
+                .build();
+        assertThat(facet.getLimitedOptions()).containsExactlyElementsOf(OPTIONS);
+        assertThat(facet.getAllOptions()).containsExactlyElementsOf(OPTIONS);
+    }
+
+    @Test
+    public void throwsExceptionOnWrongThresholdAndLimit() throws Exception {
+        final SelectFacetBuilder<ProductProjection> builder = selectFacetWithThreeOptions().threshold(10L);
+        assertThatThrownBy(() -> {
+            builder.limit(10L).build();
+            builder.limit(3L).build();
+        }).isExactlyInstanceOf(InvalidSelectFacetConstraintsException.class)
+                .hasMessageContaining("Threshold: 10")
+                .hasMessageContaining("Limit: 3");
+    }
+
+    private SelectFacetBuilder<ProductProjection> selectFacetWithThreeOptions() {
+        return SelectFacetBuilder.of("foo", "bar", ProductProjectionSearchModel.of().facetedSearch().categories().id())
+                .facetResult(FACET_RESULT_WITH_THREE_TERMS);
     }
 }

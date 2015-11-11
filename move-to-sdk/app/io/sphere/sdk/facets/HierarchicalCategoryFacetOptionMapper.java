@@ -51,12 +51,13 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
         Optional<FacetOption> facetOption = facetOptionFinder.apply(category);
         final List<Category> children = subcategoryTree.findChildren(category);
         if (!children.isEmpty()) {
-            facetOption = addChildrenToFacetOption(facetOption, children, facetOptionFinder);
+            facetOption = addChildrenToFacetOption(facetOption, category, children, facetOptionFinder);
         }
-        return setNameToFacetOption(facetOption, category, locales);
+        return setNameToFacetOptionLabel(facetOption, category, locales);
     }
 
-    private Optional<FacetOption> addChildrenToFacetOption(final Optional<FacetOption> facetOption, final List<Category> children,
+    private Optional<FacetOption> addChildrenToFacetOption(final Optional<FacetOption> facetOption,
+                                                           final Category category, final List<Category> children,
                                                            final Function<Category, Optional<FacetOption>> facetOptionFinder) {
         boolean selected = facetOption.map(FacetOption::isSelected).orElse(false);
         long count = facetOption.map(FacetOption::getCount).orElse(0L);
@@ -70,11 +71,11 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
                 childrenFacetOption.add(childFacetOption.get());
             }
         }
-        return updateFacetOption(facetOption, selected, count, childrenFacetOption);
+        return updateFacetOption(facetOption, category, selected, count, childrenFacetOption);
     }
 
-    private Optional<FacetOption> updateFacetOption(final Optional<FacetOption> facetOption, final boolean selected,
-                                                    final long count, final List<FacetOption> childrenFacetOption) {
+    private Optional<FacetOption> updateFacetOption(final Optional<FacetOption> facetOption, final Category category,
+                                                    final boolean selected, final long count, final List<FacetOption> childrenFacetOption) {
         FacetOption updatedFacetOption = null;
         if (facetOption.isPresent()) {
             updatedFacetOption = facetOption.get()
@@ -82,17 +83,16 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
                     .withSelected(selected)
                     .withChildren(childrenFacetOption);
         } else if (!childrenFacetOption.isEmpty()) {
-            updatedFacetOption = FacetOption.of("", count, selected).withChildren(childrenFacetOption);
+            updatedFacetOption = FacetOption.of(category.getId(), count, selected).withChildren(childrenFacetOption);
         }
         return Optional.ofNullable(updatedFacetOption);
     }
 
-    private Optional<FacetOption> setNameToFacetOption(final Optional<FacetOption> facetOptionOptional,
-                                                       final Category category, final List<Locale> locales) {
-        return facetOptionOptional.flatMap(facetOption -> {
-            final String name = category.getName().get(locales);
-            return Optional.ofNullable(name).map(facetOption::withValue);
-        });
+    private Optional<FacetOption> setNameToFacetOptionLabel(final Optional<FacetOption> facetOptionOptional,
+                                                            final Category category, final List<Locale> locales) {
+        return facetOptionOptional.flatMap(facetOption ->
+                category.getName().find(locales)
+                        .map(facetOption::withLabel));
     }
 
     private Function<Category, Optional<FacetOption>> facetOptionFinder(final List<FacetOption> facetOptions) {

@@ -55,6 +55,12 @@ public interface SelectFacet<T> extends Facet<T> {
      */
     Optional<TermFacetResult> getFacetResult();
 
+    /**
+     * Gets the mapper for this facet.
+     * @return the facet option mapper
+     */
+    FacetOptionMapper getMapper();
+
     SelectFacet<T> withSelectedValues(final List<String> selectedValues);
 
     SelectFacet<T> withSearchResult(final PagedSearchResult<T> searchResult);

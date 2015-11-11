@@ -43,7 +43,8 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val sphereJvmSdkVersion = "1.0.0-RC1-1db2b40e940d0fca60579e6fe7c7e6c3a982607c-SNAPSHOT"
+lazy val sphereJvmSdkVersion = "1.0.0-M21-2015-11-11-14-46-23-8ca92a5-SNAPSHOT"
+lazy val jacksonVersion = "2.6.0"
 
 lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   scalaVersion := "2.10.5",
@@ -56,7 +57,7 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   ),
   libraryDependencies ++= Seq (
     "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
-    "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % "1.0.0-M16", // % sphereJvmSdkVersion,
+    "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % "1.0.0-M20", // % sphereJvmSdkVersion,
     "io.sphere" % "sphere-sunrise-design" % "0.15.0",
     "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "2.2.3"
@@ -64,11 +65,12 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   dependencyOverrides ++= Set (
     "com.google.guava" % "guava" % "18.0",
     "commons-io" % "commons-io" % "2.4",
-    "com.fasterxml.jackson.core" % "jackson-annotations" % "2.6.0",
-    "com.fasterxml.jackson.core" % "jackson-core" % "2.6.0",
-    "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.0",
-    "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % "2.6.0",
-    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % "2.6.0"
+    "io.netty" % "netty" % "3.10.4.Final",
+    "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+    "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
+    "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+    "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
   )
 )
 

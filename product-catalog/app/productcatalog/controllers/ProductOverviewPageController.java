@@ -9,9 +9,11 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.search.ProductProjectionFacetAndFilterSearchModel;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.products.search.ProductProjectionSearchModel;
 import io.sphere.sdk.search.*;
+import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
 import play.Configuration;
 import play.Logger;
 import play.libs.F;
@@ -32,10 +34,11 @@ import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductOverviewPageController extends SunriseController {
-    private static final StringSearchModel<ProductProjection, ?> BRAND_SEARCH_MODEL = ProductProjectionSearchModel.of().allVariants().attribute().ofEnum("designer").label();
-    private static final StringSearchModel<ProductProjection, ?> COLOR_SEARCH_MODEL = ProductProjectionSearchModel.of().allVariants().attribute().ofLocalizableEnum("color").key();
-    private static final StringSearchModel<ProductProjection, ?> SIZE_SEARCH_MODEL = ProductProjectionSearchModel.of().allVariants().attribute().ofEnum("commonSize").label();
-    private static final StringSearchModel<ProductProjection, ?> CATEGORY_SEARCH_MODEL = ProductProjectionSearchModel.of().categories().id();
+    public static final ProductProjectionFacetAndFilterSearchModel FACETED_SEARCH = ProductProjectionSearchModel.of().facetedSearch();
+    private static final TermFacetAndFilterSearchModel<ProductProjection, ?> BRAND_SEARCH_MODEL = FACETED_SEARCH.allVariants().attribute().ofEnum("designer").label();
+    private static final TermFacetAndFilterSearchModel<ProductProjection, ?> COLOR_SEARCH_MODEL = FACETED_SEARCH.allVariants().attribute().ofLocalizableEnum("color").key();
+    private static final TermFacetAndFilterSearchModel<ProductProjection, ?> SIZE_SEARCH_MODEL = FACETED_SEARCH.allVariants().attribute().ofEnum("commonSize").label();
+//    private static final TermFacetAndFilterSearchModel<ProductProjection, ?> CATEGORY_SEARCH_MODEL = TermFacetAndFilterExpression.of(TermFacetExpression.of("variants.categories.id"), singletonList(FilterExpression.of("variants.categories.id")));
     private final int pageSize;
     private final ProductProjectionService productService;
 
@@ -71,9 +74,9 @@ public class ProductOverviewPageController extends SunriseController {
         final FacetOptionMapper sortedColorFacetOptionMapper = SortedFacetOptionMapper.of(emptyList());
         final FacetOptionMapper sortedSizeFacetOptionMapper = SortedFacetOptionMapper.of(emptyList());
         final List<Facet<ProductProjection>> facets = asList(
-                FlexibleSelectFacetBuilder.of("productType", "Product Type", HIERARCHICAL_SELECT, CATEGORY_SEARCH_MODEL, categoryHierarchyMapper).build(),
-                FlexibleSelectFacetBuilder.of("size", "Size", SORTED_SELECT, SIZE_SEARCH_MODEL, sortedSizeFacetOptionMapper).build(),
-                FlexibleSelectFacetBuilder.of("color", "Color", SORTED_SELECT, COLOR_SEARCH_MODEL, sortedColorFacetOptionMapper).build(),
+//                SelectFacetBuilder.of("productType", "Product Type", HIERARCHICAL_SELECT, CATEGORY_SEARCH_MODEL, categoryHierarchyMapper).build(),
+                SelectFacetBuilder.of("size", "Size", SORTED_SELECT, SIZE_SEARCH_MODEL, sortedSizeFacetOptionMapper).build(),
+                SelectFacetBuilder.of("color", "Color", SORTED_SELECT, COLOR_SEARCH_MODEL, sortedColorFacetOptionMapper).build(),
                 SelectFacetBuilder.of("brands", "Brands", BRAND_SEARCH_MODEL).build());
         return bindFacetsWithRequest(facets);
     }
@@ -109,12 +112,13 @@ public class ProductOverviewPageController extends SunriseController {
     private F.Promise<PagedSearchResult<ProductProjection>> searchProducts(final Category category, final List<Facet<ProductProjection>> boundFacets, final int page) {
         final int offset = (page - 1) * pageSize;
         final List<String> categoriesId = getCategoriesAsFlatList(categories(), singletonList(category)).stream().map(Category::getId).collect(toList());
+        final List<FacetAndFilterExpression<ProductProjection>> facetedSearch = boundFacets.stream().map(Facet::getFacetedSearchExpression).collect(toList());
         final ProductProjectionSearch searchRequest = ProductProjectionSearch.ofCurrent()
-                .withQueryFilters(model -> model.categories().id().filtered().by(categoriesId))
+                .withQueryFilters(filter -> filter.categories().id().byAny(categoriesId))
+                .withFacetedSearch(facetedSearch)
                 .withOffset(offset)
                 .withLimit(pageSize);
-        final ProductProjectionSearch facetedSearchRequest = getFacetedSearchRequest(searchRequest, boundFacets);
-        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = sphere().execute(facetedSearchRequest);
+        final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = sphere().execute(searchRequest);
         searchResultPromise.onRedeem(result -> Logger.debug("Fetched {} out of {} products with request {}",
                 result.size(),
                 result.getTotal(),
@@ -130,24 +134,6 @@ public class ProductOverviewPageController extends SunriseController {
             categories.addAll(getCategoriesAsFlatList(categoryTree, children));
         });
         return categories;
-    }
-
-    /* Maybe export it to generic FacetedSearch class */
-
-    private static <T, S extends MetaModelSearchDsl<T, S, M, E>, M, E> S getFacetedSearchRequest(final S baseSearchRequest, final List<Facet<T>> facets) {
-        S searchRequest = baseSearchRequest;
-        for (final Facet<T> facet : facets) {
-            searchRequest = getFacetedSearchRequest(searchRequest, facet);
-        }
-        return searchRequest;
-    }
-
-    private static <T, S extends MetaModelSearchDsl<T, S, M, E>, M, E> S getFacetedSearchRequest(final S baseSearchRequest, final Facet<T> facet) {
-        final List<FilterExpression<T>> filterExpressions = facet.getFilterExpressions();
-        return baseSearchRequest
-                .plusFacets(facet.getFacetExpression())
-                .plusFacetFilters(filterExpressions)
-                .plusResultFilters(filterExpressions);
     }
 
     /* This will probably be moved to some kind of factory classes */
