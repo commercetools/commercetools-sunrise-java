@@ -17,5 +17,6 @@ productcatalog.controllers
 productcatalog.models
 productcatalog.pages
 productcatalog.services
+purchase
 setupwidget.controllers
 setupwidget.models
