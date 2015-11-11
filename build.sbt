@@ -16,14 +16,18 @@ lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;tes
 
 lazy val `sphere-sunrise` = (project in file("."))
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
-  .dependsOn(commonWithTests, `product-catalog`, `setup-widget`)
-  .aggregate(common, `product-catalog`, `setup-widget`, `move-to-sdk`)
+  .dependsOn(commonWithTests, `product-catalog`, `setup-widget`, purchase)
+  .aggregate(common, `product-catalog`, `setup-widget`, `move-to-sdk`, purchase)
 
 lazy val common = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
   .dependsOn(`move-to-sdk`)
 
 lazy val `product-catalog` = project
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
+  .dependsOn(commonWithTests)
+
+lazy val purchase = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
   .dependsOn(commonWithTests)
 
@@ -47,12 +51,13 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   resolvers ++= Seq (
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots"),
-    Resolver.bintrayRepo("commercetools", "maven")
+    Resolver.bintrayRepo("commercetools", "maven"),
+    Resolver.mavenLocal
   ),
   libraryDependencies ++= Seq (
     "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
     "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % "1.0.0-M16", // % sphereJvmSdkVersion,
-    "io.sphere" % "sphere-sunrise-design" % "0.7.0",
+    "io.sphere" % "sphere-sunrise-design" % "0.15.0",
     "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "2.2.3"
   ),

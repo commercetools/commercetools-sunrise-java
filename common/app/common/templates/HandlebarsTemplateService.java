@@ -5,6 +5,8 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.context.MapValueResolver;
+import com.github.jknack.handlebars.helper.I18nHelper;
+import com.github.jknack.handlebars.helper.I18nSource;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.pages.PageData;
@@ -12,10 +14,7 @@ import play.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Collections.emptyList;
 
@@ -47,6 +46,22 @@ public final class HandlebarsTemplateService implements TemplateService {
     public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars().with(loaders);
+
+
+        I18nHelper.i18n.setSource(new I18nSource() {
+            @Override
+            public String[] keys(final String baseName, final Locale locale) {
+                return new String[0];
+            }
+
+            @Override
+            public String message(final String key, final Locale locale, final Object... args) {
+                System.err.println(locale);
+                return "TODO";
+            }
+        });
+
+
         return new HandlebarsTemplateService(handlebars, fallbackContexts);
     }
 

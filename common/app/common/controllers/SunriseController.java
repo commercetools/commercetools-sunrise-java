@@ -4,6 +4,7 @@ import common.cms.CmsService;
 import common.contexts.AppContext;
 import common.contexts.UserContext;
 import common.pages.PageContent;
+import common.pages.ReverseRouter;
 import common.pages.SunrisePageData;
 import common.pages.SunrisePageDataFactory;
 import common.templates.TemplateService;
@@ -54,6 +55,10 @@ public abstract class SunriseController extends ShopController {
 
     protected final Configuration configuration() {
         return controllerDependency.configuration();
+    }
+
+    protected final ReverseRouter reverseRouter() {
+        return controllerDependency.getReverseRouter();
     }
 
     protected final AppContext context() {
