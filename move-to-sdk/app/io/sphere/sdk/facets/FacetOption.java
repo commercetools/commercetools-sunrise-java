@@ -12,6 +12,12 @@ import static java.util.Collections.emptyList;
 public interface FacetOption {
 
     /**
+     * Gets the label for this facet option.
+     * @return the option label
+     */
+    String getLabel();
+
+    /**
      * Gets the value for this facet option.
      * @return the option value
      */
@@ -34,6 +40,13 @@ public interface FacetOption {
      * @return the children options
      */
     List<FacetOption> getChildren();
+
+    /**
+     * Gets a new instance of FacetOption with the same attributes as this, but with the given label.
+     * @param label the new label
+     * @return a new instance with same attributes, but with the given label
+     */
+    FacetOption withLabel(String label);
 
     /**
      * Gets a new instance of FacetOption with the same attributes as this, but with the given value.
@@ -64,7 +77,11 @@ public interface FacetOption {
     FacetOption withChildren(List<FacetOption> children);
 
     static FacetOption of(final String value, final long count, final boolean selected) {
-        return new FacetOptionImpl(value, count, selected, emptyList());
+        return new FacetOptionImpl(value, value, count, selected, emptyList());
+    }
+
+    static FacetOption of(final String label, final String value, final long count, final boolean selected) {
+        return new FacetOptionImpl(label, value, count, selected, emptyList());
     }
 
     static FacetOption ofTermStats(final TermStats termStats, final List<String> selectedValues) {

@@ -45,7 +45,7 @@ public class HierarchicalCategoryFacetOptionMapperTest {
         final List<Category> subcategories = singletonList(CAT_D);
         final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
                 .apply(singletonList(OPTION_D));
-        assertThat(hierarchicalOptions).containsExactly(OPTION_D.withValue("D"));
+        assertThat(hierarchicalOptions).containsExactly(OPTION_D.withLabel("D"));
     }
 
     @Test
@@ -53,7 +53,7 @@ public class HierarchicalCategoryFacetOptionMapperTest {
         final List<Category> subcategories = asList(CAT_C, CAT_D);
         final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
                 .apply(asList(OPTION_D, OPTION_C));
-        assertThat(hierarchicalOptions).containsExactly(OPTION_C.withValue("C"), OPTION_D.withValue("D"));
+        assertThat(hierarchicalOptions).containsExactly(OPTION_C.withLabel("C"), OPTION_D.withLabel("D"));
     }
 
     @Test
@@ -86,10 +86,10 @@ public class HierarchicalCategoryFacetOptionMapperTest {
         final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
                 .apply(asList(OPTION_D, OPTION_C, OPTION_B));
         final FacetOption expectedOptions = OPTION_B
-                .withValue("B")
+                .withLabel("B")
                 .withCount(sumCount(OPTION_B, OPTION_C, OPTION_D))
                 .withSelected(isAnySelected(OPTION_B, OPTION_C, OPTION_D))
-                .withChildren(asList(OPTION_C.withValue("C"), OPTION_D.withValue("D")));
+                .withChildren(asList(OPTION_C.withLabel("C"), OPTION_D.withLabel("D")));
         assertThat(hierarchicalOptions).containsExactly(expectedOptions);
     }
 
@@ -99,14 +99,14 @@ public class HierarchicalCategoryFacetOptionMapperTest {
         final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(subcategories, LOCALES)
                 .apply(asList(OPTION_D, OPTION_C, OPTION_B));
         final FacetOption expectedOptions = OPTION_A
-                .withValue("A")
+                .withLabel("A")
                 .withCount(sumCount(OPTION_A, OPTION_B, OPTION_C, OPTION_D))
                 .withSelected(isAnySelected(OPTION_A, OPTION_B, OPTION_C, OPTION_D))
                 .withChildren(singletonList(OPTION_B
-                        .withValue("B")
+                        .withLabel("B")
                         .withCount(sumCount(OPTION_B, OPTION_C, OPTION_D))
                         .withSelected(isAnySelected(OPTION_B, OPTION_C, OPTION_D))
-                        .withChildren(asList(OPTION_C.withValue("C"), OPTION_D.withValue("D")))));
+                        .withChildren(asList(OPTION_C.withLabel("C"), OPTION_D.withLabel("D")))));
         assertThat(hierarchicalOptions).containsExactly(expectedOptions);
     }
 
