@@ -58,7 +58,7 @@ public class ProductOverviewPageController extends SunriseController {
             return searchResultPromise.flatMap(searchResult ->
                             cmsPromise.map(cms -> {
                                 final ProductOverviewPageContent content = getPopPageData(cms, userContext, searchResult, boundFacets);
-                                return ok(templateService().renderToHtml("pop", pageData(userContext, content)));
+                                return ok(templateService().renderToHtml("pop", pageData(userContext, content), userContext.locales()));
                             })
             );
         }
