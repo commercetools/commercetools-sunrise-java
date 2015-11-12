@@ -4,11 +4,17 @@ import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.pages.SunrisePageData;
 import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.carts.commands.CartUpdateCommand;
+import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
+import io.sphere.sdk.json.SphereJsonUtils;
 import play.i18n.Messages;
 import play.libs.F;
+import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+
+import static java.util.Arrays.asList;
 
 /**
  * Shows the contents of the cart.
@@ -17,6 +23,18 @@ public final class CartDetailPageController extends CartController {
     @Inject
     public CartDetailPageController(final ControllerDependency controllerDependency) {
         super(controllerDependency);
+    }
+
+    public F.Promise<Result> setItemsToCart(final String languageTag) {
+        final UserContext userContext = userContext(languageTag);
+        final Http.Session session = session();
+        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session);
+        return cartPromise.flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart,
+                asList(AddLineItem.of("421f1414-1b30-46eb-821d-d0f2d10f8135", 1, 5), AddLineItem.of("dfefae16-f1e9-4b8f-b94b-051aaa255115", 1, 25)))))
+        .map(cart -> {
+            CartSessionUtils.overwriteCartSessionData(cart, session);
+            return ok(SphereJsonUtils.toJsonNode(cart));
+        });
     }
 
     public F.Promise<Result> show(final String languageTag) {
