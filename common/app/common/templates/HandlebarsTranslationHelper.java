@@ -43,29 +43,39 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
     public CharSequence apply(final String context, final Options options) throws IOException {
         final List<String> languageTags = getLocales(options);
         final String language = languageTags.get(0);//TODO improve
-
         final String[] parts = StringUtils.split(context, ':');
         final boolean usingDefaultBundle = parts.length == 1;
         final String bundle = usingDefaultBundle ? "translations" : parts[0];
+        final boolean containsPlural = containsPlural(options);
         final String key = usingDefaultBundle ? context : parts[1];
-
-        final Map<String, Object> yamlContent = languageBundleToYamlMap.getOrDefault(language + "/" + bundle, Collections.emptyMap());
-        final String[] pathSegments = StringUtils.split(key, '.');
-        final String resolvedValue = resolve(yamlContent, pathSegments, 0);
-
+        final String resolvedValue = containsPlural ? Optional.ofNullable(resolve(language, bundle, key + "_plural")).orElseGet(() -> resolve(language, bundle, key)) : resolve(language, bundle, key);
         String parametersReplaced = StringUtils.defaultString(resolvedValue);
         for (final Map.Entry<String, Object> entry : options.hash.entrySet()) {
             parametersReplaced = parametersReplaced.replace("__" + entry.getKey() + "__", entry.getValue().toString());
         }
-
         return parametersReplaced;
+    }
+
+    private String resolve(final String language, final String bundle, final String key) {
+        final Map<String, Object> yamlContent = languageBundleToYamlMap.getOrDefault(language + "/" + bundle, Collections.emptyMap());
+        return resolve(key, yamlContent);
+    }
+
+    private String resolve(final String key, final Map<String, Object> yamlContent) {
+        final String[] pathSegments = StringUtils.split(key, '.');
+        return resolve(yamlContent, pathSegments, 0);
+    }
+
+    private boolean containsPlural(final Options options) {
+        return options.hash.entrySet().stream()
+                .anyMatch(entry -> entry.getValue() instanceof Integer && !((entry.getValue().equals(1))));
     }
 
     @Nullable
     private static String resolve(final Map<String, Object> yamlContent, final String[] pathSegments, final int index) {
         return Optional.ofNullable(yamlContent.get(pathSegments[index]))
                 .map(resolved -> {
-                    if (/*pathSegments.length == index - 1 && TODO */resolved instanceof String) {
+                    if (resolved instanceof String) {
                         return (String) resolved;
                     } else if (pathSegments.length == index) {
                         return null;
