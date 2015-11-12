@@ -27,7 +27,13 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
         final Map<String, Object> yamlContent = loadYamlForTranslationAndBundle(languageTag, bundle);
         final String[] pathSegments = StringUtils.split(key, '.');
         final String resolvedValue = resolve(yamlContent, pathSegments, 0);
-        return resolvedValue;
+
+        String parametersReplaced = resolvedValue;
+        for (final Map.Entry<String, Object> entry : options.hash.entrySet()) {
+            parametersReplaced = parametersReplaced.replace("__" + entry.getKey() + "__", entry.getValue().toString());
+        }
+
+        return parametersReplaced;
     }
 
     @Nullable

@@ -73,14 +73,38 @@ public class HandlebarsTemplateTest {
 
     @Test
     public void simpleTranslation() throws Exception {
-        final String html = handlebarsWithFallbackContext(WRONG_LOADER).render("translations/simple", pageDataWithTitleAndMessage(), LOCALES);
+        final String html = handlebarsWithFallbackContext(DEFAULT_LOADER).render("translations/simple", pageDataWithTitleAndMessage(), LOCALES);
         assertThat(html).contains("Sales Tax");
     }
 
     @Test
     public void simpleTranslationWithBundle() throws Exception {
-        final String html = handlebarsWithFallbackContext(WRONG_LOADER).render("translations/simpleBundle", pageDataWithTitleAndMessage(), LOCALES);
+        final String html = handlebarsWithFallbackContext(DEFAULT_LOADER).render("translations/simpleBundle", pageDataWithTitleAndMessage(), LOCALES);
         assertThat(html).contains("Secure Checkout - Confirmation");
+    }
+
+    @Test
+    public void translationWithParameter() throws Exception {
+        final String html = handlebarsWithFallbackContext(DEFAULT_LOADER).render("translations/parameter", pageDataWithTitleAndMessage(), LOCALES);
+        assertThat(html).contains("I agree to the <a id=\"confirmation-termsandconditions-link\" href=\"http://www.commercetools.com/de/\"> <span class=\"terms-link\">Terms and Conditions</span></a>");
+    }
+
+    @Test
+    public void notFound() throws Exception {
+        final String html = handlebarsWithFallbackContext(DEFAULT_LOADER).render("translations/missing", pageDataWithTitleAndMessage(), LOCALES);
+        assertThat(html).isEqualTo("");
+    }
+
+    @Test
+    public void notFoundInBundle() throws Exception {
+        final String html = handlebarsWithFallbackContext(DEFAULT_LOADER).render("translations/missingKeyInBundle", pageDataWithTitleAndMessage(), LOCALES);
+        assertThat(html).isEqualTo("");
+    }
+
+    @Test
+    public void bundleNotFound() throws Exception {
+        final String html = handlebarsWithFallbackContext(DEFAULT_LOADER).render("translations/missingBundle", pageDataWithTitleAndMessage(), LOCALES);
+        assertThat(html).isEqualTo("");
     }
 
     private TemplateService handlebars() {
