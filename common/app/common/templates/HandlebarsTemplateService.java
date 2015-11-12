@@ -46,7 +46,7 @@ public final class HandlebarsTemplateService implements TemplateService {
     public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars().with(loaders);
-        handlebars.registerHelper("i18n", new PlayHandlebarsTranslationHelper());
+        handlebars.registerHelper("i18n", new HandlebarsTranslationHelper());
         return new HandlebarsTemplateService(handlebars, fallbackContexts);
     }
 
