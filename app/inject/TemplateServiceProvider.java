@@ -35,7 +35,7 @@ public class TemplateServiceProvider implements Provider<TemplateService> {
         final List<TemplateLoader> fallbackContexts = initializeTemplateLoaders(CONFIG_FALLBACK_CONTEXTS);
         Logger.debug("Provide HandlebarsTemplateService: "
                 + templateLoaders.stream().map(TemplateLoader::getPrefix).collect(joining(", ")));
-        return HandlebarsTemplateService.of(templateLoaders, fallbackContexts);
+        return HandlebarsTemplateService.of(templateLoaders, fallbackContexts, configuration);
     }
 
     private List<TemplateLoader> initializeTemplateLoaders(final String configKey) {

@@ -8,6 +8,7 @@ import com.github.jknack.handlebars.context.MapValueResolver;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.pages.PageData;
+import play.Configuration;
 import play.Logger;
 
 import java.io.IOException;
@@ -39,14 +40,16 @@ public final class HandlebarsTemplateService implements TemplateService {
         }
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders) {
-        return of(templateLoaders, emptyList());
+    public static TemplateService of(final List<TemplateLoader> templateLoaders, final Configuration configuration) {
+        return of(templateLoaders, emptyList(), configuration);
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts) {
+    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts, final Configuration configuration) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars().with(loaders);
-        handlebars.registerHelper("i18n", new HandlebarsTranslationHelper());
+        final List<String> languages = configuration.getStringList("handlebars.i18n.langs", emptyList());
+        final List<String> bundles = configuration.getStringList("handlebars.i18n.bundles", emptyList());
+        handlebars.registerHelper("i18n", new HandlebarsTranslationHelper(languages, bundles));
         return new HandlebarsTemplateService(handlebars, fallbackContexts);
     }
 
