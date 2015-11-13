@@ -16,13 +16,11 @@ import java.util.*;
 import static java.util.Objects.requireNonNull;
 
 final class HandlebarsTranslationHelper extends Base implements Helper<String> {
-    private final List<String> languages;
-    private final List<String> bundles;
     private final Map<String, Map<String, Object>> languageBundleToYamlMap = new HashMap<>();
 
     public HandlebarsTranslationHelper(final List<String> languages, final List<String> bundles) {
-        this.languages = requireNonNull(languages);
-        this.bundles = requireNonNull(bundles);
+        requireNonNull(languages);
+        requireNonNull(bundles);
         for (final String language : languages) {
             final List<String> foundBundles = new LinkedList<>();
             final List<String> notFoundBundles = new LinkedList<>();
@@ -114,7 +112,7 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
 
     private boolean containsPlural(final Options options) {
         return options.hash.entrySet().stream()
-                .anyMatch(entry -> entry.getValue() instanceof Integer && !((entry.getValue().equals(1))));
+                .anyMatch(entry -> entry.getValue() instanceof Integer || entry.getValue() instanceof Long && ((((Number) entry.getValue()).longValue() != 1L)));
     }
 
     private static List<String> getLocales(final Options options) {
