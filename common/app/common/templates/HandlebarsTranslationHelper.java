@@ -76,7 +76,9 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
     private String replaceParameters(final Options options, final String resolvedValue) {
         String parametersReplaced = StringUtils.defaultString(resolvedValue);
         for (final Map.Entry<String, Object> entry : options.hash.entrySet()) {
-            parametersReplaced = parametersReplaced.replace("__" + entry.getKey() + "__", entry.getValue().toString());
+            if (entry.getValue() != null) {
+                parametersReplaced = parametersReplaced.replace("__" + entry.getKey() + "__", entry.getValue().toString());
+            }
         }
         return parametersReplaced;
     }
