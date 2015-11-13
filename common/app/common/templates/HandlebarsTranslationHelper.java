@@ -81,19 +81,16 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
         return parametersReplaced;
     }
 
+    @Nullable
     private String resolve(final String language, final String bundle, final String key) {
         final Map<String, Object> yamlContent = languageBundleToYamlMap.getOrDefault(language + "/" + bundle, Collections.emptyMap());
         return resolve(key, yamlContent);
     }
 
+    @Nullable
     private String resolve(final String key, final Map<String, Object> yamlContent) {
         final String[] pathSegments = StringUtils.split(key, '.');
         return resolve(yamlContent, pathSegments, 0);
-    }
-
-    private boolean containsPlural(final Options options) {
-        return options.hash.entrySet().stream()
-                .anyMatch(entry -> entry.getValue() instanceof Integer && !((entry.getValue().equals(1))));
     }
 
     @Nullable
@@ -111,6 +108,11 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
                     }
                 })
                 .orElse(null);
+    }
+
+    private boolean containsPlural(final Options options) {
+        return options.hash.entrySet().stream()
+                .anyMatch(entry -> entry.getValue() instanceof Integer && !((entry.getValue().equals(1))));
     }
 
     private static List<String> getLocales(final Options options) {
