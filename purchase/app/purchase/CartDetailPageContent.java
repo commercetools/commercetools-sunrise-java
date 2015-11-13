@@ -10,7 +10,7 @@ public class CartDetailPageContent extends PageContent {
     private final CartOrderBean cart;
 
     public CartDetailPageContent(final Cart cart, final UserContext userContext, final Messages messages, final ReverseRouter reverseRouter) {
-        this.cart = new CartOrderBean(cart);
+        this.cart = new CartOrderBean(cart, userContext);
     }
 
     public CartOrderBean getCart() {
