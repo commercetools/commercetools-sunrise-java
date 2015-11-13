@@ -43,12 +43,37 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
     public CharSequence apply(final String context, final Options options) throws IOException {
         final List<String> languageTags = getLocales(options);
         final String language = languageTags.get(0);//TODO improve
+        final TranslationIdentifier translationIdentifier = obtainTranslationIdentifier(context);
+        final String bundle = translationIdentifier.bundle;
+        final String key = translationIdentifier.key;
+        final String resolvedValue = pluralize(options, language, bundle, key);
+        return replaceParameters(options, resolvedValue);
+    }
+
+    private String pluralize(final Options options, final String language, final String bundle, final String key) {
+        final boolean containsPlural = containsPlural(options);
+        return (containsPlural)
+                ? Optional.ofNullable(resolve(language, bundle, key + "_plural")).orElseGet(() -> resolve(language, bundle, key))
+                : resolve(language, bundle, key);
+    }
+
+    private TranslationIdentifier obtainTranslationIdentifier(final String context) {
         final String[] parts = StringUtils.split(context, ':');
         final boolean usingDefaultBundle = parts.length == 1;
-        final String bundle = usingDefaultBundle ? "translations" : parts[0];
-        final boolean containsPlural = containsPlural(options);
-        final String key = usingDefaultBundle ? context : parts[1];
-        final String resolvedValue = containsPlural ? Optional.ofNullable(resolve(language, bundle, key + "_plural")).orElseGet(() -> resolve(language, bundle, key)) : resolve(language, bundle, key);
+        return new TranslationIdentifier(usingDefaultBundle ? "translations" : parts[0], usingDefaultBundle ? context : parts[1]);
+    }
+
+    private static class TranslationIdentifier {
+        private final String key;
+        private final String bundle;
+
+        public TranslationIdentifier(final String bundle, final String key) {
+            this.bundle = bundle;
+            this.key = key;
+        }
+    }
+
+    private String replaceParameters(final Options options, final String resolvedValue) {
         String parametersReplaced = StringUtils.defaultString(resolvedValue);
         for (final Map.Entry<String, Object> entry : options.hash.entrySet()) {
             parametersReplaced = parametersReplaced.replace("__" + entry.getKey() + "__", entry.getValue().toString());
