@@ -4,18 +4,18 @@ import common.contexts.PriceFinderFactory;
 import common.contexts.UserContext;
 import common.pages.DetailData;
 import common.pages.ImageData;
+import common.pages.ReverseRouter;
 import common.pages.SelectableData;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.models.LocalizedEnumValue;
-import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.productdiscounts.DiscountedPrice;
 import io.sphere.sdk.products.*;
-import io.sphere.sdk.products.attributes.Attribute;
 import io.sphere.sdk.products.attributes.AttributeAccess;
+import io.sphere.sdk.products.attributes.NamedAttributeAccess;
+import productcatalog.services.CategoryService;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,38 +24,42 @@ import static java.util.stream.Collectors.toList;
 
 public class ProductDataFactory {
 
-    private static final AttributeAccess<String> TEXT_ATTR_ACCESS = AttributeAccess.ofText();
-    private static final AttributeAccess<LocalizedEnumValue> LENUM_ATTR_ACCESS = AttributeAccess.ofLocalizedEnumValue();
-    private static final AttributeAccess<Set<LocalizedString>> LENUM_SET_ATTR_ACCESS = AttributeAccess.ofLocalizedStringSet();
+    private static final NamedAttributeAccess<LocalizedEnumValue> COLOR_ATTRIBUTE = AttributeAccess.ofLocalizedEnumValue().ofName("color");
+    private static final NamedAttributeAccess<String> SIZE_ATTRIBUTE = AttributeAccess.ofText().ofName("size");
+    private static final NamedAttributeAccess<Set<LocalizedEnumValue>> DETAILS_ATTRIBUTE = AttributeAccess.ofLocalizedEnumValueSet().ofName("details");
 
-    private final List<Locale> locales;
+    private final UserContext userContext;
     private final PriceFormatter priceFormatter;
     private final PriceFinder priceFinder;
+    private final ReverseRouter reverseRouter;
+    private final CategoryService categoryService;
 
-    private ProductDataFactory(final UserContext userContext) {
-        this.locales = userContext.locales();
+    private ProductDataFactory(final UserContext userContext, final ReverseRouter reverseRouter, final CategoryService categoryService) {
+        this.userContext = userContext;
         this.priceFormatter = PriceFormatter.of(userContext.locale());
         this.priceFinder = PriceFinderFactory.create(userContext);
+        this.reverseRouter = reverseRouter;
+        this.categoryService = categoryService;
     }
 
-    public static ProductDataFactory of(final UserContext userContext) {
-        return new ProductDataFactory(userContext);
+    public static ProductDataFactory of(final UserContext userContext, final ReverseRouter reverseRouter, final CategoryService categoryService) {
+        return new ProductDataFactory(userContext, reverseRouter, categoryService);
     }
 
     public ProductData create(final ProductProjection product, final ProductVariant variant) {
-        final Optional<Price> priceOpt = priceFinder.findPrice(variant.getPrices());
-
-        return new ProductData(
-                product.getName().find(locales).orElse(""),
-                Optional.ofNullable(variant.getSku()).orElse(""),
-                Optional.ofNullable(product.getDescription()).flatMap(description -> description.find(locales)).orElse(""),
-                getPriceCurrent(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
-                getPriceOld(priceOpt).map(price -> priceFormatter.format(price.getValue())).orElse(""),
-                getImages(variant),
-                getColors(product),
-                getSizes(product),
-                getDetails(variant)
-        );
+        final String name = product.getName().find(userContext.locales()).orElse("");
+        final String sku = Optional.ofNullable(variant.getSku()).orElse("");
+        final String slug = product.getSlug().find(userContext.locales()).orElse("");
+        final String url = reverseRouter.product(userContext.locale().getLanguage(), slug, sku).url();
+        final String description = Optional.ofNullable(product.getDescription()).flatMap(d -> d.find(userContext.locales())).orElse("");
+        final Optional<Price> foundPrice = priceFinder.findPrice(variant.getPrices());
+        final Optional<Price> price = foundPrice.map(this::getCurrentPrice);
+        final Optional<Price> priceOld = foundPrice.flatMap(this::getOldPrice);
+        final Integer variantId = variant.getId();
+        final String id = product.getId();
+        final boolean isSale = priceOld.isPresent();
+        final boolean isNew = productIsNew(product);
+        return new ProductData(name, sku, description, formatPriceOpt(price), formatPriceOpt(priceOld), getImages(variant), getColors(product), getSizes(product, variant, slug), getDetails(variant));
     }
 
     private List<ImageData> getImages(final ProductVariant productVariant) {
@@ -68,7 +72,7 @@ public class ProductDataFactory {
     }
 
     private ImageData getPlaceholderImage() {
-        return ImageData.of(Image.of("http://placehold.it/300x400", ImageDimensions.of(300, 400)));
+        return ImageData.of(Image.of("//placehold.it/300x400", ImageDimensions.of(300, 400)));
     }
 
     private List<SelectableData> getColors(final ProductProjection product) {
@@ -77,57 +81,65 @@ public class ProductDataFactory {
                 .collect(toList());
     }
 
-    private List<SelectableData> getSizes(final ProductProjection product) {
-        return getSizeInAllVariants(product).stream()
-                .map(this::sizeToSelectableItem)
-                .collect(toList());
-    }
-
-    private List<DetailData> getDetails(final ProductVariant variant) {
-        return variant.findAttribute("details", LENUM_SET_ATTR_ACCESS).orElse(emptySet()).stream()
-                .map(this::localizedStringsToDetailData)
-                .collect(toList());
-    }
-
-    private List<Attribute> getColorInAllVariants(final ProductProjection product) {
-        return getAttributeInAllVariants(product, "color");
-    }
-
-    private List<Attribute> getSizeInAllVariants(final ProductProjection product) {
-        return getAttributeInAllVariants(product, "size");
-    }
-
-    private List<Attribute> getAttributeInAllVariants(final ProductProjection product, final String attributeName) {
+    private List<SelectableData> getSizes(final ProductProjection product, final ProductVariant currentVariant, final String slug) {
+        final String currentSize = currentVariant.findAttribute(SIZE_ATTRIBUTE).orElse("");
         return product.getAllVariants().stream()
-                .map(variant -> Optional.ofNullable(variant.getAttribute(attributeName)))
+                .map(variant -> sizeToSelectableItem(variant, slug, currentSize))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .distinct()
                 .collect(toList());
     }
 
-    private SelectableData colorToSelectableItem(final Attribute color) {
-        final String colorLabel = color.getValue(LENUM_ATTR_ACCESS).getLabel().find(locales).orElse("");
-        return new SelectableData(colorLabel, color.getName(), "", "", false);
+    private List<DetailData> getDetails(final ProductVariant variant) {
+        return variant.findAttribute(DETAILS_ATTRIBUTE).orElse(emptySet()).stream()
+                .map(this::localizedStringsToDetailData)
+                .collect(toList());
     }
 
-    private SelectableData sizeToSelectableItem(final Attribute size) {
-        final String sizeLabel = size.getValue(TEXT_ATTR_ACCESS);
-        return new SelectableData(sizeLabel, sizeLabel, "", "", false);
+    private List<LocalizedEnumValue> getColorInAllVariants(final ProductProjection product) {
+        return getAttributeInAllVariants(product, COLOR_ATTRIBUTE);
     }
 
-    private DetailData localizedStringsToDetailData(final LocalizedString localizedStrings) {
-        final String label = localizedStrings.find(locales).orElse("");
+    private <T> List<T> getAttributeInAllVariants(final ProductProjection product, final NamedAttributeAccess<T> accessor) {
+        return product.getAllVariants().stream()
+                .map(variant -> variant.findAttribute(accessor))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .distinct()
+                .collect(toList());
+    }
+
+    private SelectableData colorToSelectableItem(final LocalizedEnumValue color) {
+        final String colorLabel = color.getLabel().find(userContext.locales()).orElse("");
+        return new SelectableData(colorLabel, COLOR_ATTRIBUTE.getName(), "", "", false);
+    }
+
+    private Optional<SelectableData> sizeToSelectableItem(final ProductVariant variant, final String slug, final String currentSize) {
+        return variant.findAttribute(SIZE_ATTRIBUTE).map(size -> {
+            final String url = reverseRouter.product(userContext.locale().getLanguage(), slug, variant.getSku()).url();
+            return new SelectableData(size, url, "", "", size.equals(currentSize));
+        });
+    }
+
+    private DetailData localizedStringsToDetailData(final LocalizedEnumValue localizedStrings) {
+        final String label = localizedStrings.getLabel().find(userContext.locales()).orElse("");
         return new DetailData(label, "");
     }
 
-    private Optional<Price> getPriceOld(final Optional<Price> priceOpt) {
-        return priceOpt.flatMap(price -> Optional.ofNullable(price.getDiscounted()).map(discountedPrice -> price));
+    private Optional<Price> getOldPrice(final Price price) {
+        return Optional.ofNullable(price.getDiscounted()).map(discountedPrice -> price);
     }
 
-    private Optional<Price> getPriceCurrent(final Optional<Price> priceOpt) {
-        return priceOpt.map(price -> Optional.ofNullable(price.getDiscounted()).map(DiscountedPrice::getValue)
-                .orElse(price.getValue()))
-                .map(Price::of);
+    private Price getCurrentPrice(final Price price) {
+        return Price.of(Optional.ofNullable(price.getDiscounted()).map(DiscountedPrice::getValue).orElse((price.getValue())));
+    }
+
+    private String formatPriceOpt(final Optional<Price> price) {
+        return price.map(Price::getValue).map(priceFormatter::format).orElse("");
+    }
+
+    private boolean productIsNew(final ProductProjection product) {
+        return product.getCategories().stream().anyMatch(categoryService::categoryIsInNew);
     }
 }

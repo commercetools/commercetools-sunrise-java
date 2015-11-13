@@ -6,6 +6,7 @@ import common.pages.ReverseRouter;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import pages.ReverseRouterImpl;
+import play.Configuration;
 import play.api.Environment;
 import play.api.inject.Binding;
 import play.api.inject.Module;
@@ -32,7 +33,7 @@ public class ApplicationProductionModule extends Module {
                 bind(CategoryService.class).toProvider(CategoryServiceProvider.class).in(Singleton.class),
                 bind(ProductProjectionService.class).toProvider(ProductProjectionServiceProvider.class).in(Singleton.class),
                 bind(ShippingMethodService.class).toProvider(ShippingMethodServiceProvider.class).in(Singleton.class),
-                bind(ReverseRouter.class).toInstance(new ReverseRouterImpl())
+                bind(ReverseRouter.class).toInstance(new ReverseRouterImpl(new Configuration(configuration)))
         );
     }
 }

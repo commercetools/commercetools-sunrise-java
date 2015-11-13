@@ -61,13 +61,6 @@ public interface Facet<T> {
     FacetAndFilterExpression<T> getFacetedSearchExpression();
 
     /**
-     * Gets a new instance of Facet with the same attributes as this, but with the given list of selected values.
-     * @param selectedValues the new list of selected values
-     * @return a new instance with same attributes, but with the given list of selected values
-     */
-    Facet<T> withSelectedValues(final List<String> selectedValues);
-
-    /**
      * Gets a new instance of Facet with the same attributes as this, but with the facet result extracted from the given search result.
      * @param searchResult the search result containing the new facet result
      * @return a new instance with same attributes, but with the given facet result

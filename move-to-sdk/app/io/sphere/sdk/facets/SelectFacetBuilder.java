@@ -13,7 +13,7 @@ import java.util.Optional;
 public final class SelectFacetBuilder<T> extends Base implements Builder<SelectFacet<T>> {
     private final String key;
     private final String label;
-    private final FacetType type;
+    private FacetType type = DefaultFacetType.SELECT;
     private final TermFacetAndFilterSearchModel<T> searchModel;
     private boolean countHidden = false;
     private boolean multiSelect = true;
@@ -22,21 +22,28 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
     private Optional<TermFacetResult> facetResult = Optional.empty();
     private Optional<Long> threshold = Optional.of(1L);
     private Optional<Long> limit = Optional.empty();
-    private FacetOptionMapper mapper;
+    private FacetOptionMapper mapper = v -> v;
 
-    private SelectFacetBuilder(final String key, final String label, final FacetType type,
-                               final TermFacetAndFilterSearchModel<T> searchModel, final FacetOptionMapper mapper) {
+    private SelectFacetBuilder(final String key, final String label, final TermFacetAndFilterSearchModel<T> searchModel) {
         this.key = key;
         this.label = label;
-        this.type = type;
         this.searchModel = searchModel;
-        this.mapper = mapper;
     }
 
     @Override
     public SelectFacet<T> build() {
         return new SelectFacetImpl<>(getKey(), getLabel(), countHidden, getType(), searchModel, multiSelect, matchingAll,
                 selectedValues, facetResult.orElse(null), threshold.orElse(null), limit.orElse(null), mapper);
+    }
+
+    public SelectFacetBuilder<T> mapper(final FacetOptionMapper mapper) {
+        this.mapper = mapper;
+        return this;
+    }
+
+    public SelectFacetBuilder<T> type(final FacetType type) {
+        this.type = type;
+        return this;
     }
 
     public SelectFacetBuilder<T> countHidden(final boolean countHidden) {
@@ -123,17 +130,13 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
     }
 
     public static <T> SelectFacetBuilder<T> of(final String key, final String label, final TermFacetAndFilterSearchModel<T> searchModel) {
-        return of(key, label, DefaultFacetType.SELECT, searchModel, o -> o);
-    }
-
-    public static <T> SelectFacetBuilder<T> of(final String key, final String label, final FacetType type,
-                                               final TermFacetAndFilterSearchModel<T> searchModel, final FacetOptionMapper mapper) {
-        return new SelectFacetBuilder<>(key, label, type, searchModel, mapper);
+        return new SelectFacetBuilder<>(key, label, searchModel);
     }
 
     public static <T> SelectFacetBuilder<T> of(final SelectFacet<T> facet) {
-        final SelectFacetBuilder<T> builder = new SelectFacetBuilder<>(facet.getKey(), facet.getLabel(),
-                facet.getType(), facet.getSearchModel(), facet.getMapper());
+        final SelectFacetBuilder<T> builder = new SelectFacetBuilder<>(facet.getKey(), facet.getLabel(), facet.getSearchModel());
+        builder.type = facet.getType();
+        builder.mapper = facet.getMapper();
         builder.countHidden = facet.isCountHidden();
         builder.multiSelect = facet.isMultiSelect();
         builder.matchingAll = facet.isMatchingAll();

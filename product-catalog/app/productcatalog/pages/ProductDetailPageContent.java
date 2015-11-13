@@ -7,20 +7,22 @@ import java.util.List;
 public class ProductDetailPageContent extends PageContent {
     private final String additionalTitle;
     private final PdpStaticData staticData;
-    private final List<LinkData> breadcrumb;
+    private final List<SelectableLinkData> breadcrumb;
     private final ProductData productData;
     private final List<ShippingRateData> shippingRates;
     private final List<ProductData> suggestions;
+    private final String addToCartFormUrl;
 
-    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<LinkData> breadcrumb,
+    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<SelectableLinkData> breadcrumb,
                                     final ProductData productData, final List<ShippingRateData> shippingRates,
-                                    final List<ProductData> suggestions) {
+                                    final List<ProductData> suggestions, final String addToCartFormUrl) {
         this.additionalTitle = additionalTitle;
         this.staticData = staticData;
         this.breadcrumb = breadcrumb;
         this.productData = productData;
         this.shippingRates = shippingRates;
         this.suggestions = suggestions;
+        this.addToCartFormUrl = addToCartFormUrl;
     }
 
     public PdpStaticData getStatic() {
@@ -31,7 +33,7 @@ public class ProductDetailPageContent extends PageContent {
         return additionalTitle;
     }
 
-    public List<LinkData> getBreadcrumb() {
+    public List<SelectableLinkData> getBreadcrumb() {
         return breadcrumb;
     }
 
@@ -45,5 +47,9 @@ public class ProductDetailPageContent extends PageContent {
 
     public List<ShippingRateData> getShippingRates() {
         return shippingRates;
+    }
+
+    public String getAddToCartFormUrl() {
+        return addToCartFormUrl;
     }
 }

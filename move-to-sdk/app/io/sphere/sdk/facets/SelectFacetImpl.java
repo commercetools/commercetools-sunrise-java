@@ -121,11 +121,6 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     }
 
     @Override
-    public SelectFacet<T> withSelectedValues(final List<String> selectedValues) {
-        return SelectFacetBuilder.of(this).selectedValues(selectedValues).build();
-    }
-
-    @Override
     public SelectFacet<T> withSearchResult(final PagedSearchResult<T> searchResult) {
         final TermFacetResult termFacetResult = searchResult.getTermFacetResult(searchModel.allTerms().facetExpression());
         return SelectFacetBuilder.of(this).facetResult(termFacetResult).build();
