@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SelectFacetBuilderTest {
     private static final String KEY = "single-select-facet";
     private static final String LABEL = "Select one option";
-    private static final TermFacetAndFilterSearchModel<ProductProjection, ?> SEARCH_MODEL = ProductProjectionSearchModel.of().facetedSearch().categories().id();
+    private static final TermFacetAndFilterSearchModel<ProductProjection> SEARCH_MODEL = ProductProjectionSearchModel.of().facetedSearch().categories().id();
     private static final TermFacetResult FACET_RESULT_WITH_THREE_TERMS = TermFacetResult.of(5L, 60L, 0L, asList(
             TermStats.of("one", 30),
             TermStats.of("two", 20),

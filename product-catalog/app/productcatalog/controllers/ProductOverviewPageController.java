@@ -35,10 +35,10 @@ import static java.util.stream.Collectors.toList;
 @Singleton
 public class ProductOverviewPageController extends SunriseController {
     public static final ProductProjectionFacetAndFilterSearchModel FACETED_SEARCH = ProductProjectionSearchModel.of().facetedSearch();
-    private static final TermFacetAndFilterSearchModel<ProductProjection, ?> BRAND_SEARCH_MODEL = FACETED_SEARCH.allVariants().attribute().ofEnum("designer").label();
-    private static final TermFacetAndFilterSearchModel<ProductProjection, ?> COLOR_SEARCH_MODEL = FACETED_SEARCH.allVariants().attribute().ofLocalizableEnum("color").key();
-    private static final TermFacetAndFilterSearchModel<ProductProjection, ?> SIZE_SEARCH_MODEL = FACETED_SEARCH.allVariants().attribute().ofEnum("commonSize").label();
-//    private static final TermFacetAndFilterSearchModel<ProductProjection, ?> CATEGORY_SEARCH_MODEL = TermFacetAndFilterExpression.of(TermFacetExpression.of("variants.categories.id"), singletonList(FilterExpression.of("variants.categories.id")));
+    private static final TermFacetAndFilterSearchModel<ProductProjection> BRAND_SEARCH_MODEL = FACETED_SEARCH.allVariants().attribute().ofEnum("designer").label();
+    private static final TermFacetAndFilterSearchModel<ProductProjection> COLOR_SEARCH_MODEL = FACETED_SEARCH.allVariants().attribute().ofLocalizableEnum("color").key();
+    private static final TermFacetAndFilterSearchModel<ProductProjection> SIZE_SEARCH_MODEL = FACETED_SEARCH.allVariants().attribute().ofEnum("commonSize").label();
+    private static final TermFacetAndFilterSearchModel<ProductProjection> CATEGORY_SEARCH_MODEL = TermFacetAndFilterSearchModel.of("variants.categories.id");
     private final int pageSize;
     private final ProductProjectionService productService;
 
@@ -74,7 +74,7 @@ public class ProductOverviewPageController extends SunriseController {
         final FacetOptionMapper sortedColorFacetOptionMapper = SortedFacetOptionMapper.of(emptyList());
         final FacetOptionMapper sortedSizeFacetOptionMapper = SortedFacetOptionMapper.of(emptyList());
         final List<Facet<ProductProjection>> facets = asList(
-//                SelectFacetBuilder.of("productType", "Product Type", HIERARCHICAL_SELECT, CATEGORY_SEARCH_MODEL, categoryHierarchyMapper).build(),
+                SelectFacetBuilder.of("productType", "Product Type", HIERARCHICAL_SELECT, CATEGORY_SEARCH_MODEL, categoryHierarchyMapper).build(),
                 SelectFacetBuilder.of("size", "Size", SORTED_SELECT, SIZE_SEARCH_MODEL, sortedSizeFacetOptionMapper).build(),
                 SelectFacetBuilder.of("color", "Color", SORTED_SELECT, COLOR_SEARCH_MODEL, sortedColorFacetOptionMapper).build(),
                 SelectFacetBuilder.of("brands", "Brands", BRAND_SEARCH_MODEL).build());

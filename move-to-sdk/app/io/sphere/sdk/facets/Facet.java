@@ -52,7 +52,7 @@ public interface Facet<T> {
      * With this search model you can build facet and filter expressions for this attribute.
      * @return the untyped search model for this facet
      */
-    TermFacetAndFilterSearchModel<T, ?> getSearchModel();
+    TermFacetAndFilterSearchModel<T> getSearchModel();
 
     /**
      * Gets the filter expressions associated to this facet, according to the selected values, as needed to obtain a faceted search.

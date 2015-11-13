@@ -14,7 +14,7 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
     private final String key;
     private final String label;
     private final FacetType type;
-    private final TermFacetAndFilterSearchModel<T, ?> searchModel;
+    private final TermFacetAndFilterSearchModel<T> searchModel;
     private boolean countHidden = false;
     private boolean multiSelect = true;
     private boolean matchingAll = false;
@@ -25,7 +25,7 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
     private FacetOptionMapper mapper;
 
     private SelectFacetBuilder(final String key, final String label, final FacetType type,
-                               final TermFacetAndFilterSearchModel<T, ?> searchModel, final FacetOptionMapper mapper) {
+                               final TermFacetAndFilterSearchModel<T> searchModel, final FacetOptionMapper mapper) {
         this.key = key;
         this.label = label;
         this.type = type;
@@ -118,16 +118,16 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
         return mapper;
     }
 
-    public TermFacetAndFilterSearchModel<T, ?> getSearchModel() {
+    public TermFacetAndFilterSearchModel<T> getSearchModel() {
         return searchModel;
     }
 
-    public static <T> SelectFacetBuilder<T> of(final String key, final String label, final TermFacetAndFilterSearchModel<T, ?> searchModel) {
+    public static <T> SelectFacetBuilder<T> of(final String key, final String label, final TermFacetAndFilterSearchModel<T> searchModel) {
         return of(key, label, DefaultFacetType.SELECT, searchModel, o -> o);
     }
 
     public static <T> SelectFacetBuilder<T> of(final String key, final String label, final FacetType type,
-                                               final TermFacetAndFilterSearchModel<T, ?> searchModel, final FacetOptionMapper mapper) {
+                                               final TermFacetAndFilterSearchModel<T> searchModel, final FacetOptionMapper mapper) {
         return new SelectFacetBuilder<>(key, label, type, searchModel, mapper);
     }
 
