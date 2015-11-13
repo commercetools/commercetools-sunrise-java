@@ -2,6 +2,7 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
+import common.models.ProductDataConfig;
 import common.pages.SunrisePageData;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -20,9 +21,12 @@ import static java.util.Arrays.asList;
  * Shows the contents of the cart.
  */
 public final class CartDetailPageController extends CartController {
+    private final ProductDataConfig productDataConfig;
+
     @Inject
-    public CartDetailPageController(final ControllerDependency controllerDependency) {
+    public CartDetailPageController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
         super(controllerDependency);
+        this.productDataConfig = productDataConfig;
     }
 
     public F.Promise<Result> setItemsToCart(final String languageTag) {
@@ -42,7 +46,7 @@ public final class CartDetailPageController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
-            final CartDetailPageContent content = new CartDetailPageContent(cart, userContext, messages, reverseRouter());
+            final CartDetailPageContent content = new CartDetailPageContent(cart, userContext, messages, reverseRouter(), productDataConfig);
             final SunrisePageData pageData = pageData(userContext, content);
             return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
         });

@@ -1,6 +1,7 @@
 package purchase;
 
 import common.contexts.UserContext;
+import common.models.*;
 import common.utils.PriceFormatter;
 import common.utils.ZeroPriceFormatter;
 import io.sphere.sdk.carts.CartLike;
@@ -22,7 +23,7 @@ public class CartOrderBean {
     public CartOrderBean() {
     }
 
-    public CartOrderBean(final CartLike<?> cartLike, final UserContext userContext) {
+    public CartOrderBean(final CartLike<?> cartLike, final UserContext userContext, final ProductDataConfig productDataConfig) {
         this();
         setItemsTotal(cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum());
         final ZeroPriceFormatter priceFormatter = PriceFormatter.of(userContext.locale(), userContext.currency());
@@ -37,7 +38,7 @@ public class CartOrderBean {
         final MonetaryAmount subTotal = calculateSubTotal(cartLike.getLineItems(), totalPrice);
         setSubtotal(priceFormatter.format(subTotal));
 
-        setLineItems(new LineItemsBean(cartLike, userContext));
+        setLineItems(new LineItemsBean(cartLike, userContext, productDataConfig));
     }
 
     private static MonetaryAmount calculateTax(final TaxedPrice taxedPrice) {
@@ -50,24 +51,14 @@ public class CartOrderBean {
         return lineItems
                 .stream()
                 .map(lineItem -> {
-                    final MonetaryAmount amount = calculateAmountForOneLineItem(lineItem);
+                    final MonetaryAmount amount = common.models.ProductVariantBean.calculateAmountForOneLineItem(lineItem);
                     final Long quantity = lineItem.getQuantity();
                     return amount.multiply(quantity);
                 })
                 .reduce(zeroAmount, (left, right) -> left.add(right));
     }
 
-    static MonetaryAmount calculateAmountForOneLineItem(final LineItem lineItem) {
-        final MonetaryAmount amount;
-        final boolean hasProductDiscount = lineItem.getPrice().getDiscounted() != null;
-        if (hasProductDiscount) {
-            amount = lineItem.getPrice().getDiscounted().getValue();
-        } else {
-            amount = lineItem.getPrice().getValue();
-        }
 
-        return amount;
-    }
 
     public Long getItemsTotal() {
         return itemsTotal;

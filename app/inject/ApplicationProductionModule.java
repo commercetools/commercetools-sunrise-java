@@ -2,6 +2,7 @@ package inject;
 
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
+import common.models.ProductDataConfig;
 import common.pages.ReverseRouter;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
@@ -27,6 +28,7 @@ public class ApplicationProductionModule extends Module {
         return seq(
                 bind(ProjectContext.class).toProvider(ProjectContextProvider.class).in(Singleton.class),
                 bind(CategoryTree.class).toProvider(CategoryTreeProvider.class).in(Singleton.class),
+                bind(ProductDataConfig.class).toProvider(ProductDataConfigProvider.class).in(Singleton.class),
                 bind(TemplateService.class).toProvider(TemplateServiceProvider.class).in(Singleton.class),
                 bind(CmsService.class).toProvider(CmsServiceProvider.class).in(Singleton.class),
                 bind(CategoryService.class).toProvider(CategoryServiceProvider.class).in(Singleton.class),

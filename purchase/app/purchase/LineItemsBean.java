@@ -1,6 +1,8 @@
 package purchase;
 
 import common.contexts.UserContext;
+import common.models.ProductDataConfig;
+import common.models.ProductVariantBean;
 import io.sphere.sdk.carts.CartLike;
 
 import java.util.List;
@@ -13,8 +15,8 @@ public class LineItemsBean {
         this.list = list;
     }
 
-    public LineItemsBean(final CartLike<?> cartLike, final UserContext userContext) {
-        this(cartLike.getLineItems().stream().map((lineItem) -> new ProductVariantBean(lineItem, userContext)).collect(Collectors.toList()));
+    public LineItemsBean(final CartLike<?> cartLike, final UserContext userContext, final ProductDataConfig productDataConfig) {
+        this(cartLike.getLineItems().stream().map((lineItem) -> new ProductVariantBean(lineItem, userContext, productDataConfig)).collect(Collectors.toList()));
     }
 
     public List<ProductVariantBean> getList() {
