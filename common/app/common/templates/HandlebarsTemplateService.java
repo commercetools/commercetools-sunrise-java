@@ -5,11 +5,10 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.context.MapValueResolver;
-import com.github.jknack.handlebars.helper.I18nHelper;
-import com.github.jknack.handlebars.helper.I18nSource;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.pages.PageData;
+import play.Configuration;
 import play.Logger;
 
 import java.io.IOException;
@@ -17,6 +16,7 @@ import java.io.InputStream;
 import java.util.*;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 public final class HandlebarsTemplateService implements TemplateService {
     private final Handlebars handlebars;
@@ -28,9 +28,10 @@ public final class HandlebarsTemplateService implements TemplateService {
     }
 
     @Override
-    public String render(final String templateName, final PageData pageData) {
+    public String render(final String templateName, final PageData pageData, final List<Locale> locales) {
         final Template template = compileTemplate(templateName);
         final Context context = buildContext(pageData, templateName);
+        context.data("locales", locales.stream().map(locale -> locale.toLanguageTag()).collect(toList()));
         try {
             Logger.debug("Rendering template " + templateName);
             return template.apply(context);
@@ -39,29 +40,16 @@ public final class HandlebarsTemplateService implements TemplateService {
         }
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders) {
-        return of(templateLoaders, emptyList());
+    public static TemplateService of(final List<TemplateLoader> templateLoaders, final Configuration configuration) {
+        return of(templateLoaders, emptyList(), configuration);
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts) {
+    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts, final Configuration configuration) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars().with(loaders);
-
-
-        I18nHelper.i18n.setSource(new I18nSource() {
-            @Override
-            public String[] keys(final String baseName, final Locale locale) {
-                return new String[0];
-            }
-
-            @Override
-            public String message(final String key, final Locale locale, final Object... args) {
-                System.err.println(locale);
-                return "TODO";
-            }
-        });
-
-
+        final List<String> languages = configuration.getStringList("handlebars.i18n.langs", emptyList());
+        final List<String> bundles = configuration.getStringList("handlebars.i18n.bundles", emptyList());
+        handlebars.registerHelper("i18n", new HandlebarsTranslationHelper(languages, bundles));
         return new HandlebarsTemplateService(handlebars, fallbackContexts);
     }
 
