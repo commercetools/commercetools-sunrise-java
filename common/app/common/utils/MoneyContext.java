@@ -24,7 +24,7 @@ public interface MoneyContext {
     String formatOrZero(@Nullable final MonetaryAmount monetaryAmount);
 
     static MoneyContext of(final LineItem lineItem, final UserContext userContext) {
-        return of(lineItem.getPrice().getValue().getCurrency(), userContext.locale());
+        return of(lineItem.getPrice().getValue().getCurrency(), userContext.country().toLocale());
     }
 
     String formatOrNull(@Nullable final Price price);
