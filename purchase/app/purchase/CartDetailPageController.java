@@ -34,7 +34,7 @@ public final class CartDetailPageController extends CartController {
         final Http.Session session = session();
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session);
         return cartPromise.flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart,
-                asList(AddLineItem.of("421f1414-1b30-46eb-821d-d0f2d10f8135", 1, 5), AddLineItem.of("dfefae16-f1e9-4b8f-b94b-051aaa255115", 1, 25)))))
+                asList(AddLineItem.of("421f1414-1b30-46eb-821d-d0f2d10f8135", 1, 5), AddLineItem.of("766936c7-f525-42ab-851d-f6b40a7bfa20", 1, 3)))))
         .map(cart -> {
             CartSessionUtils.overwriteCartSessionData(cart, session);
             return ok(SphereJsonUtils.toJsonNode(cart));
