@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.*;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 final class HandlebarsTranslationHelper extends Base implements Helper<String> {
     private final Map<String, Map<String, Object>> languageBundleToYamlMap = new HashMap<>();
@@ -112,7 +113,9 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
 
     private boolean containsPlural(final Options options) {
         return options.hash.entrySet().stream()
-                .anyMatch(entry -> entry.getValue() instanceof Integer || entry.getValue() instanceof Long && ((((Number) entry.getValue()).longValue() != 1L)));
+                .anyMatch(entry ->
+                        (entry.getValue() instanceof Integer && ((((Number) entry.getValue()).intValue() != 1)))
+                                || (entry.getValue() instanceof Long && ((((Number) entry.getValue()).longValue() != 1L))));
     }
 
     private static List<String> getLocales(final Options options) {
