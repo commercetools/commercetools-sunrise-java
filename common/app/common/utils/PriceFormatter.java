@@ -8,13 +8,11 @@ public interface PriceFormatter {
 
     String format(MonetaryAmount monetaryAmount);
 
-    String formatOrEmpty(MonetaryAmount monetaryAmount);
-
     static PriceFormatter of(final Locale locale) {
         return new PriceFormatterImpl(locale);
     }
 
-    static ZeroPriceFormatter of(final Locale locale, final CurrencyUnit currencyUnit) {
+    static PriceFormatter of(final Locale locale, final CurrencyUnit currencyUnit) {
         return new PriceFormatterImpl(locale);
     }
 }

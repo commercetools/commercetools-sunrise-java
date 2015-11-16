@@ -1,8 +1,8 @@
 package common.models;
 
 import common.contexts.UserContext;
+import common.utils.MoneyContext;
 import common.utils.PriceFormatter;
-import common.utils.ZeroPriceFormatter;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.ProductVariant;
@@ -33,14 +33,16 @@ public class ProductVariantBean {
         //no description available in line item
         fillProductVariantFields(lineItem.getVariant(), productDataConfig, userContext);
         final MonetaryAmount amountForOneLineItem = calculateAmountForOneLineItem(lineItem);
-        final ZeroPriceFormatter priceFormatter = PriceFormatter.of(userContext.locale(), userContext.currency());
+        final MoneyContext moneyContext = MoneyContext.of(lineItem, userContext);
+
+
         final boolean hasDiscount = amountForOneLineItem.isLessThan(lineItem.getPrice().getValue());
         if (hasDiscount) {
-            setPriceOld(priceFormatter.format(lineItem.getPrice().getValue()));
+            setPriceOld(moneyContext.formatOrNull(lineItem.getPrice()));
         }
-        setPrice(priceFormatter.format(amountForOneLineItem));
+        setPrice(moneyContext.formatOrNull(amountForOneLineItem));
         setQuantity(lineItem.getQuantity());
-        setTotal(priceFormatter.format(lineItem.getTotalPrice()));
+        setTotal(moneyContext.formatOrZero(lineItem.getTotalPrice()));
         setProductId(lineItem.getProductId());
     }
 

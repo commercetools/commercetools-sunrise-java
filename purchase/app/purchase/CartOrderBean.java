@@ -1,9 +1,8 @@
 package purchase;
 
 import common.contexts.UserContext;
-import common.models.*;
-import common.utils.PriceFormatter;
-import common.utils.ZeroPriceFormatter;
+import common.models.ProductDataConfig;
+import common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.carts.TaxedPrice;
@@ -25,18 +24,20 @@ public class CartOrderBean {
 
     public CartOrderBean(final CartLike<?> cartLike, final UserContext userContext, final ProductDataConfig productDataConfig) {
         this();
-        setItemsTotal(cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum());
-        final ZeroPriceFormatter priceFormatter = PriceFormatter.of(userContext.locale(), userContext.currency());
+        final MoneyContext moneyContext = MoneyContext.of(cartLike, userContext);
+
+        final long itemsTotal = cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
+        setItemsTotal(itemsTotal);
         final Optional<TaxedPrice> taxedPriceOptional = Optional.ofNullable(cartLike.getTaxedPrice());
-        final MonetaryAmount tax = taxedPriceOptional.map(CartOrderBean::calculateTax).orElse(null);
-        setSalesTax(priceFormatter.formatOrZero(tax));
+        final MonetaryAmount tax = taxedPriceOptional.map(CartOrderBean::calculateTax).orElse(moneyContext.zero());
+        setSalesTax(moneyContext.formatOrZero(tax));
 
         final MonetaryAmount totalPrice = cartLike.getTotalPrice();
         final MonetaryAmount orderTotal = taxedPriceOptional.map(TaxedPrice::getTotalGross).orElse(totalPrice);
-        setTotal(priceFormatter.format(orderTotal));
+        setTotal(moneyContext.formatOrZero(orderTotal));
 
         final MonetaryAmount subTotal = calculateSubTotal(cartLike.getLineItems(), totalPrice);
-        setSubtotal(priceFormatter.format(subTotal));
+        setSubtotal(moneyContext.formatOrZero(subTotal));
 
         setLineItems(new LineItemsBean(cartLike, userContext, productDataConfig));
     }
