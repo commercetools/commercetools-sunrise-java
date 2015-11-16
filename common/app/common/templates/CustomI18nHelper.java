@@ -14,12 +14,11 @@ import java.io.InputStream;
 import java.util.*;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
-final class HandlebarsTranslationHelper extends Base implements Helper<String> {
+final class CustomI18nHelper extends Base implements Helper<String> {
     private final Map<String, Map<String, Object>> languageBundleToYamlMap = new HashMap<>();
 
-    public HandlebarsTranslationHelper(final List<String> languages, final List<String> bundles) {
+    public CustomI18nHelper(final List<String> languages, final List<String> bundles) {
         requireNonNull(languages);
         requireNonNull(bundles);
         for (final String language : languages) {
