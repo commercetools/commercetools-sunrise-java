@@ -2,9 +2,9 @@
   "text":"Freizeitjacke Save the Duck oliv",
   "sku":"M0E20000000DSB9",
   "description":"german test description",
-  "id":"-1553330817",
-  "price":"EUR 100,00",
-  "priceOld":"EUR 129,00",
+  "id":"1688956179",
+  "price":"100,00 €",
+  "priceOld":"129,00 €",
   "images": [
     {
       "bigImage":"https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg",
