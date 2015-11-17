@@ -82,6 +82,7 @@ public class ProductDetailPageContentTest {
 
         final JsonNode expected = readJsonNodeFromResource("productData.json");
         final JsonNode result = toJsonNode(productData);
+
         assertThat(result).isEqualTo(expected);
     }
 

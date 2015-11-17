@@ -25,7 +25,7 @@ public class ShippingRateDataFactoryTest {
 
         assertThat(shippingRateData.getShippingMethod()).isEqualTo("DHL");
         assertThat(shippingRateData.getZone()).isEqualTo("");
-        assertThat(shippingRateData.getShippingRate()).isEqualTo("10,50 €");
-        assertThat(shippingRateData.getFreeAbove()).isEqualTo("50,49 €");
+        assertThat(shippingRateData.getShippingRate()).isEqualTo("EUR 10,50");
+        assertThat(shippingRateData.getFreeAbove()).isEqualTo("EUR 50,49");
     }
 }
