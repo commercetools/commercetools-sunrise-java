@@ -5,6 +5,8 @@ import common.controllers.ControllerDependency;
 import common.models.ProductDataConfig;
 import common.pages.SunrisePageData;
 import io.sphere.sdk.carts.Cart;
+import play.data.DynamicForm;
+import play.data.Form;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.i18n.Messages;
@@ -12,6 +14,14 @@ import play.libs.F;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 public class CheckoutShippingController extends CartController {
 
@@ -26,14 +36,12 @@ public class CheckoutShippingController extends CartController {
         this.productDataConfig = productDataConfig;
     }
 
-    @AddCSRFToken
     public F.Promise<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
-            final String csrfToken = session("csrfToken");
-            final CheckoutShippingContent content = new CheckoutShippingContent(cart, messages, configuration(), reverseRouter(), userContext, flash(), csrfToken, shippingMethods, productDataConfig);
+            final CheckoutShippingContent content = new CheckoutShippingContent(cart, messages, configuration(), reverseRouter(), userContext, flash(), getCsrfToken(), shippingMethods, productDataConfig);
             final SunrisePageData pageData = pageData(userContext, content);
             return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
         });
@@ -41,7 +49,18 @@ public class CheckoutShippingController extends CartController {
 
     @RequireCSRFCheck
     public F.Promise<Result> process(final String languageTag) {
-        return F.Promise.pure(TODO);
+        final UserContext userContext = userContext(languageTag);
+        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
+        return cartPromise.map(cart -> {
+            final Form<CheckoutShippingFormData> filledForm = Form.form(CheckoutShippingFormData.class).bindFromRequest(request());
+            if (filledForm.hasErrors()) {
+                final Messages messages = messages(userContext);
+                final CheckoutShippingContent content = new CheckoutShippingContent(filledForm, cart, messages, configuration(), reverseRouter(), userContext, flash(), getCsrfToken(), shippingMethods, productDataConfig);
+                final SunrisePageData pageData = pageData(userContext, content);
+                return badRequest(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
+            } else {
+                return TODO;
+            }
+        });
     }
-
 }

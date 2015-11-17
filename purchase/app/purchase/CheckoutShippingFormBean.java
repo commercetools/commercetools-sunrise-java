@@ -5,6 +5,7 @@ import common.pages.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
 import play.Configuration;
+import play.data.Form;
 import play.i18n.Messages;
 
 import java.util.Optional;
@@ -22,8 +23,7 @@ public class CheckoutShippingFormBean {
     }
 
     public CheckoutShippingFormBean(final Cart cart, final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
-        setActionUrl(reverseRouter.processCheckoutShippingForm(userContext.locale().getLanguage()).url());
-        setCsrfToken(csrfToken);
+        fillDefaults(reverseRouter, csrfToken, userContext);
         final boolean billingAddressDifferentToBillingAddress = Optional.ofNullable(cart.getBillingAddress())
                 .map(Address::getLastName)
                 .map(lastName -> lastName != null)
@@ -32,6 +32,14 @@ public class CheckoutShippingFormBean {
         setShippingAddress(new AddressFormBean(cart.getShippingAddress(), userContext, messages, configuration));
         setBillingAddress(new AddressFormBean(cart.getBillingAddress(), userContext, messages, configuration));
         setShippingMethods(new ShippingMethodsFormBean(cart, shippingMethods));
+    }
+
+    public CheckoutShippingFormBean(final Form<CheckoutShippingFormData> filledForm, final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
+    }
+
+    private void fillDefaults(final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext) {
+        setActionUrl(reverseRouter.processCheckoutShippingForm(userContext.locale().getLanguage()).url());
+        setCsrfToken(csrfToken);
     }
 
     public String getActionUrl() {
