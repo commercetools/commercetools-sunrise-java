@@ -1,10 +1,46 @@
 package purchase;
 
+import common.contexts.UserContext;
 import common.pages.PageContent;
+import common.pages.ReverseRouter;
+import io.sphere.sdk.carts.Cart;
+import play.Configuration;
+import play.i18n.Messages;
+import play.mvc.Http;
 
 public class CheckoutShippingContent extends PageContent {
+    private StepWidgetBean stepWidget;
+    private CheckoutShippingFormBean shippingForm;
+
+
+    public CheckoutShippingContent() {
+    }
+
+    public CheckoutShippingContent(final Cart cart, final Messages messages, final Configuration configuration, final ReverseRouter reverseRouter, final UserContext userContext, final Http.Flash flash, final String csrfToken, final ShippingMethods shippingMethods) {
+        final StepWidgetBean stepWidget = new StepWidgetBean();
+        stepWidget.setShippingStepActive(true);
+        setStepWidget(stepWidget);
+        setShippingForm(new CheckoutShippingFormBean(cart, reverseRouter, csrfToken, userContext, shippingMethods, messages, configuration));
+    }
+
+    public StepWidgetBean getStepWidget() {
+        return stepWidget;
+    }
+
+    public void setStepWidget(final StepWidgetBean stepWidget) {
+        this.stepWidget = stepWidget;
+    }
+
+    public CheckoutShippingFormBean getShippingForm() {
+        return shippingForm;
+    }
+
+    public void setShippingForm(final CheckoutShippingFormBean shippingForm) {
+        this.shippingForm = shippingForm;
+    }
+
     @Override
     public String additionalTitle() {
-        return null;
+        return "checkout shipping";
     }
 }
