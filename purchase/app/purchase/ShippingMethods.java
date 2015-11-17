@@ -1,4 +1,4 @@
-package productcatalog.models;
+package purchase;
 
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
