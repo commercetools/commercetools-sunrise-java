@@ -7,6 +7,7 @@ public class SelectableData extends Base {
     private String value;
     private String description;
     private String image;
+    private String name;
     private boolean selected;
 
     public SelectableData() {
@@ -58,5 +59,13 @@ public class SelectableData extends Base {
 
     public void setValue(final String value) {
         this.value = value;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
     }
 }
