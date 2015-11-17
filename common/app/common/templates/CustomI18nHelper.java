@@ -4,6 +4,7 @@ import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 import play.Logger;
@@ -141,5 +142,12 @@ final class CustomI18nHelper extends Base implements Helper<String> {
 
     private static InputStream getResourceAsStream(final String path) {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("supportedLanguagesAndBundles", languageBundleToYamlMap.keySet())
+                .toString();
     }
 }
