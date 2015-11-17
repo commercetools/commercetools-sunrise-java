@@ -2,6 +2,7 @@ common.cms
 common.contexts
 common.controllers
 common.countries
+common.models
 common.pages
 common.prices
 common.templates
