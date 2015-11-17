@@ -25,6 +25,6 @@ public class ProductThumbnailDataFactoryTest {
         assertThat(thumbnailData.getText()).isEqualTo("Freizeitjacke Save the Duck oliv");
         assertThat(thumbnailData.getDescription()).isEqualTo("german test description");
         assertThat(thumbnailData.getImageUrl()).isEqualTo("https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/078686_1_large.jpg");
-        assertThat(thumbnailData.getPrice()).isEqualTo("EUR 129,00");
+        assertThat(thumbnailData.getPrice()).isEqualTo("EUR 129,-");
     }
 }

@@ -21,3 +21,4 @@ GET        /:language/:productSlug-$sku<[^-]+>.html        @productcatalog.contr
 GET        /:language/:categorySlug/                       @productcatalog.controllers.ProductOverviewPageController.show(language: String, categorySlug: String, page: Int ?= 1)
 
 GET /:languageTag/cart                                     @purchase.CartDetailPageController.show(languageTag: String)
+GET /:languageTag/cart/fixtures                            @purchase.CartDetailPageController.setItemsToCart(languageTag: String)

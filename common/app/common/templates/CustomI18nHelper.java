@@ -4,6 +4,7 @@ import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 import play.Logger;
@@ -15,14 +16,12 @@ import java.util.*;
 
 import static java.util.Objects.requireNonNull;
 
-final class HandlebarsTranslationHelper extends Base implements Helper<String> {
-    private final List<String> languages;
-    private final List<String> bundles;
+final class CustomI18nHelper extends Base implements Helper<String> {
     private final Map<String, Map<String, Object>> languageBundleToYamlMap = new HashMap<>();
 
-    public HandlebarsTranslationHelper(final List<String> languages, final List<String> bundles) {
-        this.languages = requireNonNull(languages);
-        this.bundles = requireNonNull(bundles);
+    public CustomI18nHelper(final List<String> languages, final List<String> bundles) {
+        requireNonNull(languages);
+        requireNonNull(bundles);
         for (final String language : languages) {
             final List<String> foundBundles = new LinkedList<>();
             final List<String> notFoundBundles = new LinkedList<>();
@@ -114,7 +113,9 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
 
     private boolean containsPlural(final Options options) {
         return options.hash.entrySet().stream()
-                .anyMatch(entry -> entry.getValue() instanceof Integer && !((entry.getValue().equals(1))));
+                .anyMatch(entry ->
+                        (entry.getValue() instanceof Integer && ((((Number) entry.getValue()).intValue() != 1)))
+                                || (entry.getValue() instanceof Long && ((((Number) entry.getValue()).longValue() != 1L))));
     }
 
     private static List<String> getLocales(final Options options) {
@@ -141,5 +142,12 @@ final class HandlebarsTranslationHelper extends Base implements Helper<String> {
 
     private static InputStream getResourceAsStream(final String path) {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("supportedLanguagesAndBundles", languageBundleToYamlMap.keySet())
+                .toString();
     }
 }

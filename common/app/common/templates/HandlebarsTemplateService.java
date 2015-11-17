@@ -49,7 +49,7 @@ public final class HandlebarsTemplateService implements TemplateService {
         final Handlebars handlebars = new Handlebars().with(loaders);
         final List<String> languages = configuration.getStringList("handlebars.i18n.langs", emptyList());
         final List<String> bundles = configuration.getStringList("handlebars.i18n.bundles", emptyList());
-        handlebars.registerHelper("i18n", new HandlebarsTranslationHelper(languages, bundles));
+        handlebars.registerHelper("i18n", new CustomI18nHelper(languages, bundles));
         return new HandlebarsTemplateService(handlebars, fallbackContexts);
     }
 

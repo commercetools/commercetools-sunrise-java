@@ -4,7 +4,7 @@
       "text": "Tasche \u201eSelma\u201d medium Michael Kors rot",
       "sku": "A0E200000001YLW",
       "description": "",
-      "price": "EUR 295,00",
+      "price": "EUR 295,-",
       "priceOld": "",
       "images": [
         {
@@ -33,13 +33,13 @@
       "details": [
 
       ],
-      "id": "-402631881"
+      "id": "1321080592"
     },
     {
       "text": "Brieftasche DKNY rot",
       "sku": "A0E2000000026IK",
       "description": "",
-      "price": "EUR 85,00",
+      "price": "EUR 85,-",
       "priceOld": "",
       "images": [
         {
@@ -68,13 +68,13 @@
       "details": [
 
       ],
-      "id": "-154547371"
+      "id": "-697953828"
     },
     {
       "text": "Schal Altea blau",
       "sku": "A0E20000000251R",
       "description": "",
-      "price": "EUR 92,00",
+      "price": "EUR 92,-",
       "priceOld": "",
       "images": [
         {
@@ -103,13 +103,13 @@
       "details": [
 
       ],
-      "id": "-1732864657"
+      "id": "1111616270"
     },
     {
       "text": "Tasche \u201eSelma\u201d medium Michael Kors rot",
       "sku": "A0E200000001YLW",
       "description": "",
-      "price": "EUR 295,00",
+      "price": "EUR 295,-",
       "priceOld": "",
       "images": [
         {
@@ -138,7 +138,7 @@
       "details": [
 
       ],
-      "id": "-402631881"
+      "id": "1321080592"
     }
   ]
 }
