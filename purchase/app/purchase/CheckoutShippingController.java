@@ -11,6 +11,7 @@ import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.i18n.Messages;
 import play.libs.F;
+import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -47,20 +48,27 @@ public class CheckoutShippingController extends CartController {
         });
     }
 
+    @AddCSRFToken
     @RequireCSRFCheck
     public F.Promise<Result> process(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
-            final Form<CheckoutShippingFormData> filledForm = Form.form(CheckoutShippingFormData.class).bindFromRequest(request());
+            final Form<CheckoutShippingFormData> filledForm = Form.form(CheckoutShippingFormData.class, CheckoutShippingFormData.Validation.class).bindFromRequest(request());
+            final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
             if (filledForm.hasErrors()) {
                 final Messages messages = messages(userContext);
-                final CheckoutShippingContent content = new CheckoutShippingContent(filledForm, cart, messages, configuration(), reverseRouter(), userContext, flash(), getCsrfToken(), shippingMethods, productDataConfig);
+                final String csrfToken = getCsrfToken();
+                final CheckoutShippingContent content = new CheckoutShippingContent(checkoutShippingFormData, cart, messages, configuration(), reverseRouter(), userContext, flash(), csrfToken, shippingMethods, productDataConfig);
                 final SunrisePageData pageData = pageData(userContext, content);
                 return badRequest(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
             } else {
                 return TODO;
             }
         });
+    }
+
+    private static <T> T extractBean(final Http.Request request, final Class<T> clazz) {
+        return DynamicForm.form(clazz, null).bindFromRequest(request).get();
     }
 }

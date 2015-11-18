@@ -34,7 +34,40 @@ public class CheckoutShippingFormBean {
         setShippingMethods(new ShippingMethodsFormBean(cart, shippingMethods));
     }
 
-    public CheckoutShippingFormBean(final Form<CheckoutShippingFormData> filledForm, final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
+    public CheckoutShippingFormBean(final CheckoutShippingFormData checkoutShippingFormData, final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
+        fillDefaults(reverseRouter, csrfToken, userContext);
+        setBillingAddressDifferentToBillingAddress(checkoutShippingFormData.isBillingAddressDifferentToBillingAddress());
+
+        final AddressFormBean shippingAddress = new AddressFormBean();
+        shippingAddress.setSalutations(new SalutationsFieldsBean(checkoutShippingFormData.getTitleShipping(), messages, configuration));
+        shippingAddress.setCountries(new CountriesFieldsBean(checkoutShippingFormData.getCountryShipping(), userContext, configuration));
+        shippingAddress.setFirstName(checkoutShippingFormData.getFirstNameShipping());
+        shippingAddress.setLastName(checkoutShippingFormData.getLastNameShipping());
+        shippingAddress.setStreetName(checkoutShippingFormData.getStreetNameShipping());
+        shippingAddress.setStreetNumber(checkoutShippingFormData.getStreetNameShipping());
+        shippingAddress.setAdditionalStreetInfo(checkoutShippingFormData.getAdditionalStreetInfoShipping());
+        shippingAddress.setCity(checkoutShippingFormData.getCityShipping());
+        shippingAddress.setRegion(checkoutShippingFormData.getRegionShipping());
+        shippingAddress.setPostalCode(checkoutShippingFormData.getPostalCodeShipping());
+        shippingAddress.setPhone(checkoutShippingFormData.getPhoneShipping());
+        shippingAddress.setEmail(checkoutShippingFormData.getEmailShipping());
+        setShippingAddress(shippingAddress);
+
+        final AddressFormBean billingAddress = new AddressFormBean();
+        billingAddress.setSalutations(new SalutationsFieldsBean(checkoutShippingFormData.getTitleBilling(), messages, configuration));
+        billingAddress.setCountries(new CountriesFieldsBean(checkoutShippingFormData.getCountryBilling(), userContext, configuration));
+        billingAddress.setFirstName(checkoutShippingFormData.getFirstNameBilling());
+        billingAddress.setLastName(checkoutShippingFormData.getLastNameBilling());
+        billingAddress.setStreetName(checkoutShippingFormData.getStreetNameBilling());
+        billingAddress.setStreetNumber(checkoutShippingFormData.getStreetNameBilling());
+        billingAddress.setAdditionalStreetInfo(checkoutShippingFormData.getAdditionalStreetInfoBilling());
+        billingAddress.setCity(checkoutShippingFormData.getCityBilling());
+        billingAddress.setRegion(checkoutShippingFormData.getRegionBilling());
+        billingAddress.setPostalCode(checkoutShippingFormData.getPostalCodeBilling());
+        billingAddress.setPhone(checkoutShippingFormData.getPhoneBilling());
+        billingAddress.setEmail(checkoutShippingFormData.getEmailBilling());
+        setBillingAddress(billingAddress);
+//        setShippingMethods(new ShippingMethodsFormBean(cart, shippingMethods));
     }
 
     private void fillDefaults(final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext) {

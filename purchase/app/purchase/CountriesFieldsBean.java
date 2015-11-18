@@ -22,6 +22,10 @@ public class CountriesFieldsBean {
 
     public CountriesFieldsBean(@Nullable final Address address, final UserContext userContext, final Messages messages, final Configuration configuration) {
         final String selectedCountry = Optional.ofNullable(address).map(Address::getCountry).map(CountryCode::getAlpha2).orElse(null);
+        fill(userContext, configuration, selectedCountry);
+    }
+
+    private void fill(final UserContext userContext, final Configuration configuration, final String selectedCountry) {
         final List<SelectableData> selectableDataList = configuration.getStringList("checkout.allowedCountries").stream().map(countryCode -> {
             final SelectableData selectableData = new SelectableData();
             selectableData.setText(CountryCode.valueOf(countryCode).toLocale().getDisplayCountry(userContext.locale()));
@@ -30,6 +34,10 @@ public class CountriesFieldsBean {
             return selectableData;
         }).collect(toList());
         setList(selectableDataList);
+    }
+
+    public CountriesFieldsBean(@Nullable final String country, final UserContext userContext, final Configuration configuration) {
+        fill(userContext, configuration, country);
     }
 
 

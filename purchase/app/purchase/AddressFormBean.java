@@ -13,6 +13,7 @@ public class AddressFormBean {
     private String lastName;
     private String streetName;
     private String streetNumber;
+    private String additionalStreetInfo;
     private String city;
     private String region;
     private String postalCode;
@@ -116,5 +117,13 @@ public class AddressFormBean {
 
     public void setStreetNumber(final String streetNumber) {
         this.streetNumber = streetNumber;
+    }
+
+    public String getAdditionalStreetInfo() {
+        return additionalStreetInfo;
+    }
+
+    public void setAdditionalStreetInfo(final String additionalStreetInfo) {
+        this.additionalStreetInfo = additionalStreetInfo;
     }
 }

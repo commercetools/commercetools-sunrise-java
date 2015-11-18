@@ -1,21 +1,27 @@
 package purchase;
 
+import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-public class CheckoutShippingFormData {
+public class CheckoutShippingFormData extends Base {
+    public interface Validation {}
+
     private String csrfToken;
+
+    private boolean billingAddressDifferentToBillingAddress;
 
     private String additionalStreetInfoShipping;
     private String cityShipping;
     private String countryShipping;
     private String emailShipping;
     private String firstNameShipping;
-    @Constraints.Required
+    @Constraints.Required(groups = Validation.class)
     private String lastNameShipping;
     private String phoneShipping;
     private String postalCodeShipping;
     private String regionShipping;
     private String streetNameShipping;
+    private String titleShipping;
 
     private String additionalStreetInfoBilling;
     private String cityBilling;
@@ -27,6 +33,7 @@ public class CheckoutShippingFormData {
     private String postalCodeBilling;
     private String regionBilling;
     private String streetNameBilling;
+    private String titleBilling;
 
     public CheckoutShippingFormData() {
     }
@@ -197,5 +204,29 @@ public class CheckoutShippingFormData {
 
     public void setStreetNameShipping(final String streetNameShipping) {
         this.streetNameShipping = streetNameShipping;
+    }
+
+    public boolean isBillingAddressDifferentToBillingAddress() {
+        return billingAddressDifferentToBillingAddress;
+    }
+
+    public void setBillingAddressDifferentToBillingAddress(final boolean billingAddressDifferentToBillingAddress) {
+        this.billingAddressDifferentToBillingAddress = billingAddressDifferentToBillingAddress;
+    }
+
+    public String getTitleBilling() {
+        return titleBilling;
+    }
+
+    public void setTitleBilling(final String titleBilling) {
+        this.titleBilling = titleBilling;
+    }
+
+    public String getTitleShipping() {
+        return titleShipping;
+    }
+
+    public void setTitleShipping(final String titleShipping) {
+        this.titleShipping = titleShipping;
     }
 }

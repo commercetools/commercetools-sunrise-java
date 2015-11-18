@@ -20,16 +20,21 @@ public class SalutationsFieldsBean {
     private List<SelectableData> list;
 
 
-    public SalutationsFieldsBean() {
+    public SalutationsFieldsBean(final String title, final Messages messages, final Configuration configuration) {
+        fill(messages, configuration, title);
     }
 
     public SalutationsFieldsBean(@Nullable final Address address, final UserContext userContext, final Messages messages, final Configuration configuration) {
         final String title = address == null ? null : address.getTitle();
+        fill(messages, configuration, title);
+    }
 
+    private void fill(final Messages messages, final Configuration configuration, @Nullable final String title) {
         final List<SelectableData> selectableDataList = configuration.getObjectList(ALLOWED_TITLES_CONFIG_KEY).stream().map(map -> {
             final SelectableData selectableData = new SelectableData();
-            selectableData.setText(messages.at(map.get(MESSAGE_CONFIG_KEY).toString()));
-            selectableData.setValue(map.get(VALUE_CONFIG_KEY).toString());
+            final String shownTitle = messages.at(map.get(MESSAGE_CONFIG_KEY).toString());
+            selectableData.setText(shownTitle);
+            selectableData.setValue(shownTitle);
             selectableData.setSelected(selectableData.getValue().equals(title));
             return selectableData;
         }).collect(toList());
