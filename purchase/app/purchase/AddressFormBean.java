@@ -1,11 +1,15 @@
 package purchase;
 
+import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.AddressBuilder;
+import org.apache.commons.beanutils.BeanUtils;
 import play.Configuration;
 import play.i18n.Messages;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
 
 public class AddressFormBean {
     private SalutationsFieldsBean salutations;
@@ -29,6 +33,13 @@ public class AddressFormBean {
         setSalutations(salutationsFieldsBean);
         final CountriesFieldsBean countriesFieldsBean = new CountriesFieldsBean(address, userContext, messages, configuration);
         setCountries(countriesFieldsBean);
+        if (address != null) {
+            try {
+                BeanUtils.copyProperties(this, address);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public String getCity() {
@@ -125,5 +136,21 @@ public class AddressFormBean {
 
     public void setAdditionalStreetInfo(final String additionalStreetInfo) {
         this.additionalStreetInfo = additionalStreetInfo;
+    }
+
+    public Address toAddress() {
+        return AddressBuilder.of(CountryCode.valueOf(getCountries().getSelectedCountryCode()))
+                .salutation(getSalutations().getSelected())
+                .firstName(getFirstName())
+                .lastName(getLastName())
+                .streetName(getStreetName())
+                .streetNumber(getStreetNumber())
+                .additionalStreetInfo(getAdditionalStreetInfo())
+                .city(getCity())
+                .region(getRegion())
+                .postalCode(getPostalCode())
+                .phone(getPhone())
+                .email(getEmail())
+                .build();
     }
 }

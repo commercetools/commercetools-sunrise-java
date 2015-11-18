@@ -8,14 +8,12 @@ import play.i18n.Messages;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
 public class SalutationsFieldsBean {
     private static final String ALLOWED_TITLES_CONFIG_KEY = "checkout.allowedTitles";
     private static final String MESSAGE_CONFIG_KEY = "message";
-    private static final String VALUE_CONFIG_KEY = "value";
 
     private List<SelectableData> list;
 
@@ -48,5 +46,13 @@ public class SalutationsFieldsBean {
 
     public void setList(final List<SelectableData> list) {
         this.list = list;
+    }
+
+    public String getSelected() {
+        return getList().stream()
+                .filter(c -> c.isSelected())
+                .map(c -> c.getValue())
+                .findFirst()
+                .orElse(null);
     }
 }

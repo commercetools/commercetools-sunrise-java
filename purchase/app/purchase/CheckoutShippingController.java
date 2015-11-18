@@ -5,6 +5,12 @@ import common.controllers.ControllerDependency;
 import common.models.ProductDataConfig;
 import common.pages.SunrisePageData;
 import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.carts.commands.CartUpdateCommand;
+import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
+import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
+import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.models.Address;
+import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.filters.csrf.AddCSRFToken;
@@ -16,13 +22,8 @@ import play.mvc.Result;
 
 import javax.inject.Inject;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class CheckoutShippingController extends CartController {
 
@@ -52,20 +53,38 @@ public class CheckoutShippingController extends CartController {
     @RequireCSRFCheck
     public F.Promise<Result> process(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
+        final PlayJavaSphereClient sphere = sphere();
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
-        return cartPromise.map(cart -> {
+        return cartPromise.flatMap(cart -> {
             final Form<CheckoutShippingFormData> filledForm = Form.form(CheckoutShippingFormData.class, CheckoutShippingFormData.Validation.class).bindFromRequest(request());
             final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
+            final Messages messages = messages(userContext);
+            final String csrfToken = getCsrfToken();
+            final CheckoutShippingContent content = new CheckoutShippingContent(checkoutShippingFormData, cart, messages, configuration(), reverseRouter(), userContext, flash(), csrfToken, shippingMethods, productDataConfig);
+            additionalValidations(filledForm, checkoutShippingFormData);
             if (filledForm.hasErrors()) {
-                final Messages messages = messages(userContext);
-                final String csrfToken = getCsrfToken();
-                final CheckoutShippingContent content = new CheckoutShippingContent(checkoutShippingFormData, cart, messages, configuration(), reverseRouter(), userContext, flash(), csrfToken, shippingMethods, productDataConfig);
+                Logger.info("cart not valid");
                 final SunrisePageData pageData = pageData(userContext, content);
-                return badRequest(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
+                return F.Promise.pure(badRequest(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales())));
             } else {
-                return TODO;
+                final Address shippingAddress = content.getShippingForm().getShippingAddress().toAddress();
+                final Address nullableBillingAddress = content.getShippingForm().isBillingAddressDifferentToBillingAddress()
+                        ? content.getShippingForm().getBillingAddress().toAddress()
+                        : null;
+                return sphere.execute(CartUpdateCommand.of(cart, asList(SetShippingAddress.of(shippingAddress), SetBillingAddress.of(nullableBillingAddress))))
+                        .map(updatedCart -> {
+                            Logger.info("cart updated " + updatedCart);
+                            final Result redirect = redirect(reverseRouter().showCheckoutShippingForm(languageTag));
+                            return redirect;
+                        });
             }
         });
+    }
+
+    private void additionalValidations(final Form<CheckoutShippingFormData> filledForm, final CheckoutShippingFormData checkoutShippingFormData) {
+        if (checkoutShippingFormData.isBillingAddressDifferentToBillingAddress() && isBlank(checkoutShippingFormData.getCountryBilling())) {
+            filledForm.reject("countryBilling", "form.required");
+        }
     }
 
     private static <T> T extractBean(final Http.Request request, final Class<T> clazz) {

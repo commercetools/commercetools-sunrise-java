@@ -12,6 +12,7 @@ public class CheckoutShippingFormData extends Base {
 
     private String additionalStreetInfoShipping;
     private String cityShipping;
+    @Constraints.Required(groups = Validation.class)
     private String countryShipping;
     private String emailShipping;
     private String firstNameShipping;

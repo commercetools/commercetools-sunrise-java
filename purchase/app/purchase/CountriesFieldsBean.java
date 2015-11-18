@@ -48,4 +48,12 @@ public class CountriesFieldsBean {
     public void setList(final List<SelectableData> list) {
         this.list = list;
     }
+
+    public String getSelectedCountryCode() {
+        return getList().stream()
+                .filter(c -> c.isSelected())
+                .map(c -> c.getValue())
+                .findFirst()
+                .orElse(null);
+    }
 }

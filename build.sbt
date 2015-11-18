@@ -61,7 +61,8 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
     "io.sphere" % "sphere-sunrise-design" % "0.23.0",
     "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "2.2.3",
-    filters
+    filters,
+    "commons-beanutils" % "commons-beanutils" % "1.9.2"
   ),
   dependencyOverrides ++= Set (
     "com.google.guava" % "guava" % "18.0",
