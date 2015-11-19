@@ -2,7 +2,6 @@ package common.models;
 
 import common.contexts.UserContext;
 import common.utils.MoneyContext;
-import common.utils.PriceFormatter;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.ProductVariant;
@@ -20,7 +19,7 @@ public class ProductVariantBean {
     private long quantity;
     private String priceOld;
     private String price;
-    private String total;
+    private String totalPrice;
     private String variantId;
     private String productId;
     private List<ProductAttributeBean> attributes;
@@ -42,7 +41,7 @@ public class ProductVariantBean {
         }
         setPrice(moneyContext.formatOrNull(amountForOneLineItem));
         setQuantity(lineItem.getQuantity());
-        setTotal(moneyContext.formatOrZero(lineItem.getTotalPrice()));
+        setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
         setProductId(lineItem.getProductId());
     }
 
@@ -125,12 +124,12 @@ public class ProductVariantBean {
         this.sku = sku;
     }
 
-    public String getTotal() {
-        return total;
+    public String getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setTotal(final String total) {
-        this.total = total;
+    public void setTotalPrice(final String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getProductId() {

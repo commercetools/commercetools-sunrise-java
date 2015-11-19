@@ -48,7 +48,7 @@ public class CheckoutShippingController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
-            final CheckoutShippingContent content = new CheckoutShippingContent(cart, messages, configuration(), reverseRouter(), userContext, getCsrfToken(), shippingMethods, productDataConfig);
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, messages, configuration(), reverseRouter(), userContext, getCsrfToken(), shippingMethods, productDataConfig);
             final SunrisePageData pageData = pageData(userContext, content);
             return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
         });
@@ -62,17 +62,17 @@ public class CheckoutShippingController extends CartController {
             final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
             final Form<CheckoutShippingFormData> filledForm = obtainFilledForm(checkoutShippingFormData);
             final Messages messages = messages(userContext);
-            final CheckoutShippingContent content = new CheckoutShippingContent(checkoutShippingFormData, cart, messages, configuration(), reverseRouter(), userContext, getCsrfToken(), shippingMethods, productDataConfig);
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(checkoutShippingFormData, cart, messages, configuration(), reverseRouter(), userContext, getCsrfToken(), shippingMethods, productDataConfig);
             if (filledForm.hasErrors()) {
                 return F.Promise.pure(badRequest(userContext, filledForm, content));
             } else {
                 return updateCart(sphere(), cart, checkoutShippingFormData, content)
-                        .map(updatedCart -> redirect(reverseRouter().showCheckoutShippingForm(languageTag)));
+                        .map(updatedCart -> redirect(reverseRouter().showCheckoutPaymentForm(languageTag)));
             }
         });
     }
 
-    private F.Promise<Cart> updateCart(final PlayJavaSphereClient sphere, final Cart cart, final CheckoutShippingFormData checkoutShippingFormData, final CheckoutShippingContent content) {
+    private F.Promise<Cart> updateCart(final PlayJavaSphereClient sphere, final Cart cart, final CheckoutShippingFormData checkoutShippingFormData, final CheckoutShippingPageContent content) {
         final Address shippingAddress = content.getShippingForm().getShippingAddress().toAddress();
         final Address nullableBillingAddress = content.getShippingForm().isBillingAddressDifferentToBillingAddress()
                 ? content.getShippingForm().getBillingAddress().toAddress()
@@ -86,7 +86,7 @@ public class CheckoutShippingController extends CartController {
         return sphere.execute(CartUpdateCommand.of(cart, updateActions));
     }
 
-    private Result badRequest(final UserContext userContext, final Form<CheckoutShippingFormData> filledForm, final CheckoutShippingContent content) {
+    private Result badRequest(final UserContext userContext, final Form<CheckoutShippingFormData> filledForm, final CheckoutShippingPageContent content) {
         Logger.info("cart not valid");
         content.getShippingForm().setErrors(new ErrorsBean(filledForm));
         final SunrisePageData pageData = pageData(userContext, content);

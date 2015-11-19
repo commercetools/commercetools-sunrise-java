@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class CartOrderBean {
-    private Long itemsTotal;
+    private Long totalItems;
     private String salesTax;
-    private String total;
-    private String subtotal;
+    private String totalPrice;
+    private String subtotalPrice;
     private LineItemsBean lineItems;
 
     public CartOrderBean() {
@@ -27,17 +27,17 @@ public class CartOrderBean {
         final MoneyContext moneyContext = MoneyContext.of(cartLike, userContext);
 
         final long itemsTotal = cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
-        setItemsTotal(itemsTotal);
+        setTotalItems(itemsTotal);
         final Optional<TaxedPrice> taxedPriceOptional = Optional.ofNullable(cartLike.getTaxedPrice());
         final MonetaryAmount tax = taxedPriceOptional.map(CartOrderBean::calculateTax).orElse(moneyContext.zero());
         setSalesTax(moneyContext.formatOrZero(tax));
 
         final MonetaryAmount totalPrice = cartLike.getTotalPrice();
         final MonetaryAmount orderTotal = taxedPriceOptional.map(TaxedPrice::getTotalGross).orElse(totalPrice);
-        setTotal(moneyContext.formatOrZero(orderTotal));
+        setTotalPrice(moneyContext.formatOrZero(orderTotal));
 
         final MonetaryAmount subTotal = calculateSubTotal(cartLike.getLineItems(), totalPrice);
-        setSubtotal(moneyContext.formatOrZero(subTotal));
+        setSubtotalPrice(moneyContext.formatOrZero(subTotal));
 
         setLineItems(new LineItemsBean(cartLike, userContext, productDataConfig));
     }
@@ -61,12 +61,12 @@ public class CartOrderBean {
 
 
 
-    public Long getItemsTotal() {
-        return itemsTotal;
+    public Long getTotalItems() {
+        return totalItems;
     }
 
-    public void setItemsTotal(final Long itemsTotal) {
-        this.itemsTotal = itemsTotal;
+    public void setTotalItems(final Long totalItems) {
+        this.totalItems = totalItems;
     }
 
     public LineItemsBean getLineItems() {
@@ -85,19 +85,19 @@ public class CartOrderBean {
         this.salesTax = salesTax;
     }
 
-    public String getSubtotal() {
-        return subtotal;
+    public String getSubtotalPrice() {
+        return subtotalPrice;
     }
 
-    public void setSubtotal(final String subtotal) {
-        this.subtotal = subtotal;
+    public void setSubtotalPrice(final String subtotalPrice) {
+        this.subtotalPrice = subtotalPrice;
     }
 
-    public String getTotal() {
-        return total;
+    public String getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setTotal(final String total) {
-        this.total = total;
+    public void setTotalPrice(final String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
