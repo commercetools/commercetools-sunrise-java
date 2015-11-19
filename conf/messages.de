@@ -5,6 +5,30 @@ common.header.help = HILFE
 common.header.callUs = KONTAKT +44 123 456 000
 common.header.countries = REGION
 
+form.apply = Senden
+form.addressOne.label = Adresse 1
+form.addressTwo.label = Adresse 2
+form.city.label = Stadt
+form.choose = Bitte wählen
+form.country.label = Land
+form.edit = Editieren
+form.email.label = Email
+form.email.required = Bitte geben Sie Ihre E-Mail-Adresse an, damit wir Sie über den Status und Versand Ihrer Bestellung informieren können.
+form.delete = Entfernen
+form.firstName.label = Vorname
+form.formHasErrorsFlash = Das Formular enthält Fehler.
+form.lastName.label = Nachname
+form.personTitles.mr = Herr
+form.personTitles.mrs = Frau
+form.personTitles.ms = Fräulein
+form.personTitles.dr = Dr.
+form.phone.label = Telefonnummer
+form.phone.required = Bitte geben Sie Ihre Telefonnummer an, damit unser Lieferant Sie über den Liefertermin informieren kann.
+form.postCode.label = PLZ
+form.region.label = Region
+form.required = Pflichtfeld
+form.title.label = Anrede
+
 pdp.writeFirstRatingText = Erste Rezension schreiben
 
 pdp.ratingFiveStarText = Hervorragend

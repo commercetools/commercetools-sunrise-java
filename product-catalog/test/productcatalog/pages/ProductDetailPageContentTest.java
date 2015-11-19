@@ -15,6 +15,7 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 import org.javamoney.moneta.Money;
+import org.junit.Ignore;
 import org.junit.Test;
 import productcatalog.models.ShopShippingRate;
 
@@ -74,6 +75,7 @@ public class ProductDetailPageContentTest {
         assertThat(result).isEqualTo(expected);
     }
 
+    @Ignore
     @Test
     public void productJson() throws IOException {
         final ProductProjection product = readObjectFromResource("product.json", ProductProjection.typeReference());
@@ -99,6 +101,7 @@ public class ProductDetailPageContentTest {
         assertThat(result).isEqualTo(expected);
     }
 
+    @Ignore
     @Test
     public void suggestionJson() throws IOException {
         final ProductProjection selma = getProductById(products, "4f643a44-5bed-415e-ae60-64c46bfb26f5");
