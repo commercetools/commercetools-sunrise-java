@@ -17,6 +17,8 @@ public class SalutationsFieldsBean {
 
     private List<SelectableData> list;
 
+    public SalutationsFieldsBean() {
+    }
 
     public SalutationsFieldsBean(final String title, final Messages messages, final Configuration configuration) {
         fill(messages, configuration, title);
