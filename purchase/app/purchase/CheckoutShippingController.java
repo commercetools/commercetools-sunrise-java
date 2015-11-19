@@ -48,7 +48,7 @@ public class CheckoutShippingController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
-            final CheckoutShippingContent content = new CheckoutShippingContent(cart, messages, configuration(), reverseRouter(), userContext, flash(), getCsrfToken(), shippingMethods, productDataConfig);
+            final CheckoutShippingContent content = new CheckoutShippingContent(cart, messages, configuration(), reverseRouter(), userContext, getCsrfToken(), shippingMethods, productDataConfig);
             final SunrisePageData pageData = pageData(userContext, content);
             return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
         });
@@ -58,39 +58,45 @@ public class CheckoutShippingController extends CartController {
     @RequireCSRFCheck
     public F.Promise<Result> process(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final PlayJavaSphereClient sphere = sphere();
-        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
-        return cartPromise.flatMap(cart -> {
-            final Form<CheckoutShippingFormData> filledForm = Form.form(CheckoutShippingFormData.class, CheckoutShippingFormData.Validation.class).bindFromRequest(request());
+        return getOrCreateCart(userContext, session()).flatMap(cart -> {
             final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
+            final Form<CheckoutShippingFormData> filledForm = obtainFilledForm(checkoutShippingFormData);
             final Messages messages = messages(userContext);
-            final String csrfToken = getCsrfToken();
-            final CheckoutShippingContent content = new CheckoutShippingContent(checkoutShippingFormData, cart, messages, configuration(), reverseRouter(), userContext, flash(), csrfToken, shippingMethods, productDataConfig);
-            additionalValidations(filledForm, checkoutShippingFormData);
+            final CheckoutShippingContent content = new CheckoutShippingContent(checkoutShippingFormData, cart, messages, configuration(), reverseRouter(), userContext, getCsrfToken(), shippingMethods, productDataConfig);
             if (filledForm.hasErrors()) {
-                Logger.info("cart not valid");
-                content.getShippingForm().setErrors(new ErrorsBean(filledForm));
-                final SunrisePageData pageData = pageData(userContext, content);
-                return F.Promise.pure(badRequest(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales())));
+                return F.Promise.pure(badRequest(userContext, filledForm, content));
             } else {
-                final Address shippingAddress = content.getShippingForm().getShippingAddress().toAddress();
-                final Address nullableBillingAddress = content.getShippingForm().isBillingAddressDifferentToBillingAddress()
-                        ? content.getShippingForm().getBillingAddress().toAddress()
-                        : null;
-                final String shippingMethodId = checkoutShippingFormData.getShippingMethodId();
-                final List<UpdateAction<Cart>> updateActions = asList(
-                        SetShippingAddress.of(shippingAddress),
-                        SetBillingAddress.of(nullableBillingAddress),
-                        SetShippingMethod.of(Reference.of(ShippingMethod.referenceTypeId(), shippingMethodId))
-                );
-                return sphere.execute(CartUpdateCommand.of(cart, updateActions))
-                        .map(updatedCart -> {
-                            Logger.info("cart updated " + updatedCart);
-                            final Result redirect = redirect(reverseRouter().showCheckoutShippingForm(languageTag));
-                            return redirect;
-                        });
+                return updateCart(sphere(), cart, checkoutShippingFormData, content)
+                        .map(updatedCart -> redirect(reverseRouter().showCheckoutShippingForm(languageTag)));
             }
         });
+    }
+
+    private F.Promise<Cart> updateCart(final PlayJavaSphereClient sphere, final Cart cart, final CheckoutShippingFormData checkoutShippingFormData, final CheckoutShippingContent content) {
+        final Address shippingAddress = content.getShippingForm().getShippingAddress().toAddress();
+        final Address nullableBillingAddress = content.getShippingForm().isBillingAddressDifferentToBillingAddress()
+                ? content.getShippingForm().getBillingAddress().toAddress()
+                : null;
+        final String shippingMethodId = checkoutShippingFormData.getShippingMethodId();
+        final List<UpdateAction<Cart>> updateActions = asList(
+                SetShippingAddress.of(shippingAddress),
+                SetBillingAddress.of(nullableBillingAddress),
+                SetShippingMethod.of(Reference.of(ShippingMethod.referenceTypeId(), shippingMethodId))
+        );
+        return sphere.execute(CartUpdateCommand.of(cart, updateActions));
+    }
+
+    private Result badRequest(final UserContext userContext, final Form<CheckoutShippingFormData> filledForm, final CheckoutShippingContent content) {
+        Logger.info("cart not valid");
+        content.getShippingForm().setErrors(new ErrorsBean(filledForm));
+        final SunrisePageData pageData = pageData(userContext, content);
+        return badRequest(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
+    }
+
+    private Form<CheckoutShippingFormData> obtainFilledForm(final CheckoutShippingFormData checkoutShippingFormData) {
+        final Form<CheckoutShippingFormData> filledForm = Form.form(CheckoutShippingFormData.class, CheckoutShippingFormData.Validation.class).bindFromRequest(request());
+        additionalValidations(filledForm, checkoutShippingFormData);
+        return filledForm;
     }
 
     private void additionalValidations(final Form<CheckoutShippingFormData> filledForm, final CheckoutShippingFormData checkoutShippingFormData) {
