@@ -10,6 +10,9 @@ public class CheckoutShippingFormData extends Base {
 
     private boolean billingAddressDifferentToBillingAddress;
 
+    @Constraints.Required(groups = Validation.class)
+    private String shippingMethodId;
+
     private String additionalStreetInfoShipping;
     private String cityShipping;
     @Constraints.Required(groups = Validation.class)
@@ -229,5 +232,13 @@ public class CheckoutShippingFormData extends Base {
 
     public void setTitleShipping(final String titleShipping) {
         this.titleShipping = titleShipping;
+    }
+
+    public String getShippingMethodId() {
+        return shippingMethodId;
+    }
+
+    public void setShippingMethodId(final String shippingMethodId) {
+        this.shippingMethodId = shippingMethodId;
     }
 }

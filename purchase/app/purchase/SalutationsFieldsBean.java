@@ -23,7 +23,7 @@ public class SalutationsFieldsBean {
     }
 
     public SalutationsFieldsBean(@Nullable final Address address, final UserContext userContext, final Messages messages, final Configuration configuration) {
-        final String title = address == null ? null : address.getTitle();
+        final String title = address == null ? null : address.getSalutation();
         fill(messages, configuration, title);
     }
 

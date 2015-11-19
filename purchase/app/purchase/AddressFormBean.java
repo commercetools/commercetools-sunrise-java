@@ -29,10 +29,6 @@ public class AddressFormBean {
     }
 
     public AddressFormBean(@Nullable final Address address, final UserContext userContext, final Messages messages, final Configuration configuration) {
-        final SalutationsFieldsBean salutationsFieldsBean = new SalutationsFieldsBean(address, userContext, messages, configuration);
-        setSalutations(salutationsFieldsBean);
-        final CountriesFieldsBean countriesFieldsBean = new CountriesFieldsBean(address, userContext, messages, configuration);
-        setCountries(countriesFieldsBean);
         if (address != null) {
             try {
                 BeanUtils.copyProperties(this, address);
@@ -40,6 +36,10 @@ public class AddressFormBean {
                 throw new RuntimeException(e);
             }
         }
+        final SalutationsFieldsBean salutationsFieldsBean = new SalutationsFieldsBean(address, userContext, messages, configuration);
+        setSalutations(salutationsFieldsBean);
+        final CountriesFieldsBean countriesFieldsBean = new CountriesFieldsBean(address, userContext, messages, configuration);
+        setCountries(countriesFieldsBean);
     }
 
     public String getCity() {

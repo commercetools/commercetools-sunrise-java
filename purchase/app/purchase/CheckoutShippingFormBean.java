@@ -5,7 +5,6 @@ import common.pages.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
 import play.Configuration;
-import play.data.Form;
 import play.i18n.Messages;
 
 import java.util.Optional;
@@ -17,6 +16,7 @@ public class CheckoutShippingFormBean {
     private AddressFormBean shippingAddress;
     private AddressFormBean billingAddress;
     private ShippingMethodsFormBean shippingMethods;
+    private ErrorsBean errors;
 
 
     public CheckoutShippingFormBean() {
@@ -67,7 +67,8 @@ public class CheckoutShippingFormBean {
         billingAddress.setPhone(checkoutShippingFormData.getPhoneBilling());
         billingAddress.setEmail(checkoutShippingFormData.getEmailBilling());
         setBillingAddress(billingAddress);
-//        setShippingMethods(new ShippingMethodsFormBean(cart, shippingMethods));
+
+        setShippingMethods(new ShippingMethodsFormBean(checkoutShippingFormData, shippingMethods));
     }
 
     private void fillDefaults(final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext) {
@@ -121,5 +122,13 @@ public class CheckoutShippingFormBean {
 
     public void setShippingMethods(final ShippingMethodsFormBean shippingMethods) {
         this.shippingMethods = shippingMethods;
+    }
+
+    public ErrorsBean getErrors() {
+        return errors;
+    }
+
+    public void setErrors(final ErrorsBean errors) {
+        this.errors = errors;
     }
 }

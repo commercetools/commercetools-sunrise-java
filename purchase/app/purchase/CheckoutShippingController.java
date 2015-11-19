@@ -8,8 +8,12 @@ import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
+import io.sphere.sdk.carts.commands.updateactions.SetShippingMethod;
 import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.Reference;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
 import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -21,6 +25,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -64,6 +69,7 @@ public class CheckoutShippingController extends CartController {
             additionalValidations(filledForm, checkoutShippingFormData);
             if (filledForm.hasErrors()) {
                 Logger.info("cart not valid");
+                content.getShippingForm().setErrors(new ErrorsBean(filledForm));
                 final SunrisePageData pageData = pageData(userContext, content);
                 return F.Promise.pure(badRequest(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales())));
             } else {
@@ -71,7 +77,13 @@ public class CheckoutShippingController extends CartController {
                 final Address nullableBillingAddress = content.getShippingForm().isBillingAddressDifferentToBillingAddress()
                         ? content.getShippingForm().getBillingAddress().toAddress()
                         : null;
-                return sphere.execute(CartUpdateCommand.of(cart, asList(SetShippingAddress.of(shippingAddress), SetBillingAddress.of(nullableBillingAddress))))
+                final String shippingMethodId = checkoutShippingFormData.getShippingMethodId();
+                final List<UpdateAction<Cart>> updateActions = asList(
+                        SetShippingAddress.of(shippingAddress),
+                        SetBillingAddress.of(nullableBillingAddress),
+                        SetShippingMethod.of(Reference.of(ShippingMethod.referenceTypeId(), shippingMethodId))
+                );
+                return sphere.execute(CartUpdateCommand.of(cart, updateActions))
                         .map(updatedCart -> {
                             Logger.info("cart updated " + updatedCart);
                             final Result redirect = redirect(reverseRouter().showCheckoutShippingForm(languageTag));

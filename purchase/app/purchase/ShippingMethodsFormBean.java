@@ -15,21 +15,30 @@ public class ShippingMethodsFormBean {
     }
 
     public ShippingMethodsFormBean(final Cart cart, final ShippingMethods shippingMethods) {
+        final String nullableSelectedShippingMethodId = Optional.ofNullable(cart.getShippingInfo())
+                .map(s -> s.getShippingMethod().getId())
+                .orElse(null);
+
+        fill(shippingMethods, nullableSelectedShippingMethodId);
+    }
+
+    private void fill(final ShippingMethods shippingMethods, final String nullableSelectedShippingMethodId) {
         final List<SelectableShippingMethodBean> shippingMethodBeanList = shippingMethods.shippingMethods.stream()
                 .map(shippingMethod -> {
                     final SelectableShippingMethodBean bean = new SelectableShippingMethodBean();
                     bean.setText(shippingMethod.getName());
                     bean.setName(shippingMethod.getName());
                     bean.setValue(shippingMethod.getId());
-                    final Boolean selected = Optional.ofNullable(cart.getShippingInfo())
-                            .map(s -> s.getShippingMethod())
-                            .map(r -> r.getId().equals(shippingMethod.getId()))
-                            .orElse(false);
+                    final Boolean selected = shippingMethod.getId().equals(nullableSelectedShippingMethodId);
                     bean.setSelected(selected);
                     return bean;
                 })
                 .collect(toList());
         setList(shippingMethodBeanList);
+    }
+
+    public ShippingMethodsFormBean(final CheckoutShippingFormData checkoutShippingFormData, final ShippingMethods shippingMethods) {
+        fill(shippingMethods, checkoutShippingFormData.getShippingMethodId());
     }
 
     public List<SelectableShippingMethodBean> getList() {
