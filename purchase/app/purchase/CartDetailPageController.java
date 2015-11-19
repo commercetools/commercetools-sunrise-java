@@ -7,13 +7,19 @@ import common.pages.SunrisePageData;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
+import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.json.SphereJsonUtils;
+import io.sphere.sdk.products.queries.ProductProjectionQuery;
+import io.sphere.sdk.queries.PagedQueryResult;
 import play.i18n.Messages;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
@@ -33,9 +39,19 @@ public final class CartDetailPageController extends CartController {
         final UserContext userContext = userContext(languageTag);
         final Http.Session session = session();
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session);
-        return cartPromise.flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart,
-                asList(AddLineItem.of("421f1414-1b30-46eb-821d-d0f2d10f8135", 1, 5), AddLineItem.of("766936c7-f525-42ab-851d-f6b40a7bfa20", 1, 3)))))
-        .map(cart -> {
+
+        final F.Promise<List<UpdateAction<Cart>>> updateActionsPromise = sphere().execute(ProductProjectionQuery.ofCurrent()
+                .withPredicates(m -> m.slug().lang(Locale.ENGLISH).isIn(asList("dondup-jeans-george-UP232DS107UG61-blue", "mu-shirt-david-F10216-lightblue"))))
+                .map(PagedQueryResult::getResults)
+                .map(products -> products.stream().map(product -> AddLineItem.of(product.getId(), 1, 3)).collect(Collectors.toList()));
+
+        final F.Promise<Cart> updatedCart = cartPromise.flatMap(cart ->
+                updateActionsPromise.flatMap(updateActions ->
+                        sphere().execute(CartUpdateCommand.of(cart, updateActions))
+                ));
+
+
+        return updatedCart.map(cart -> {
             CartSessionUtils.overwriteCartSessionData(cart, session);
             return ok(SphereJsonUtils.toJsonNode(cart));
         });
