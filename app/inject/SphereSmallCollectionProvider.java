@@ -3,6 +3,7 @@ package inject;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.MetaModelQueryDsl;
+import io.sphere.sdk.queries.QueryAll;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -21,8 +22,7 @@ public abstract class SphereSmallCollectionProvider<R, E> extends Base implement
 
     @Override
     public R get() {
-        final MetaModelQueryDsl<E, ?, ?, ?> of = query();
-        final List<E> elements = client.execute(of.withLimit(500)).toCompletableFuture().join().getResults();
+        final List<E> elements = QueryAll.of(query()).run(client).toCompletableFuture().join();
         return transform(elements);
     }
 }
