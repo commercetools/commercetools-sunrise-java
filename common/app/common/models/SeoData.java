@@ -1,4 +1,4 @@
-package common.pages;
+package common.models;
 
 import io.sphere.sdk.models.Base;
 

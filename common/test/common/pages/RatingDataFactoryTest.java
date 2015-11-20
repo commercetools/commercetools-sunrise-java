@@ -1,6 +1,9 @@
 package common.pages;
 
 import common.cms.CmsPage;
+import common.models.RatingData;
+import common.models.RatingDataFactory;
+import common.models.SelectableData;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

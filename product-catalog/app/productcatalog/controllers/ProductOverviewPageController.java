@@ -3,12 +3,10 @@ package productcatalog.controllers;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
-import common.pages.SelectableData;
-import common.pages.SelectableLinkData;
+import common.models.SelectableData;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
-import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.*;
@@ -44,7 +42,7 @@ public class ProductOverviewPageController extends SunriseController {
         super(controllerDependency);
         this.productService = productService;
         this.categoryService = categoryService;
-        this.displayedPages = configuration.getInt("pop.displayedPages");
+        this.displayedPages = configuration.getInt("pop.displayedPages", 9);
     }
 
     public F.Promise<Result> show(final String languageTag, final int page, final int pageSize, final String categorySlug) {
@@ -86,13 +84,15 @@ public class ProductOverviewPageController extends SunriseController {
                                                       final List<SortOption<ProductProjection>> sortOptions,
                                                       final int currentPage, final int pageSize, final Category category) {
         final String additionalTitle = category.getName().find(userContext.locales()).orElse("");
-        final List<SelectableLinkData> breadcrumbData = getBreadcrumbData(userContext, category.toReference());
-        final ProductListData productListData = getProductListData(searchResult.getResults(), userContext);
-        final FilterListData filterListData = getFilterListData(searchResult, facets, null);
-        final PaginationData paginationData = getPaginationData(searchResult, currentPage, pageSize);
-        final List<SelectableData> displayOptions = getDisplayOptions(pageSize);
-        final JumbotronData jumbotronData = getJumbotronData(userContext, category);
-        return new ProductOverviewPageContent(additionalTitle, breadcrumbData, productListData, filterListData, sortOptions, paginationData, displayOptions, jumbotronData);
+        final ProductOverviewPageContent content = new ProductOverviewPageContent(additionalTitle);
+        content.setBreadcrumb(new BreadcrumbData(category, categories(), userContext, reverseRouter()));
+        content.setProductListData(getProductListData(searchResult.getResults(), userContext));
+        content.setFilterListData(getFilterListData(searchResult, facets, null));
+        content.setPaginationData(new PaginationData(requestContext(), searchResult, currentPage, pageSize, displayedPages));
+        content.setSortOptions(sortOptions);
+        content.setDisplayOptions(getDisplayOptions(pageSize));
+        content.setJumbotronData(new JumbotronData(category, userContext, categories()));
+        return content;
     }
 
     private ProductOverviewPageContent getPopPageData(final UserContext userContext, final Messages messages,
@@ -101,12 +101,14 @@ public class ProductOverviewPageController extends SunriseController {
                                                       final List<SortOption<ProductProjection>> sortOptions,
                                                       final int currentPage, final int pageSize, final String searchTerm) {
         final String additionalTitle = messages.at("pop.searchText", searchTerm);
-        final List<SelectableLinkData> breadcrumbData = getSearchBreadCrumbData(messages(userContext), userContext.locale().getLanguage(), searchTerm);
-        final ProductListData productListData = getProductListData(searchResult.getResults(), userContext);
-        final FilterListData filterListData = getFilterListData(searchResult, facets, searchTerm);
-        final PaginationData paginationData = getPaginationData(searchResult, currentPage, pageSize);
-        final List<SelectableData> displayOptions = getDisplayOptions(pageSize);
-        return new ProductOverviewPageContent(additionalTitle, breadcrumbData, productListData, filterListData, sortOptions, paginationData, displayOptions, null);
+        final ProductOverviewPageContent content = new ProductOverviewPageContent(additionalTitle);
+        content.setBreadcrumb(new BreadcrumbData(searchTerm, userContext, reverseRouter()));
+        content.setProductListData(getProductListData(searchResult.getResults(), userContext));
+        content.setFilterListData(getFilterListData(searchResult, facets, searchTerm));
+        content.setPaginationData(new PaginationData(requestContext(), searchResult, currentPage, pageSize, displayedPages));
+        content.setSortOptions(sortOptions);
+        content.setDisplayOptions(getDisplayOptions(pageSize));
+        return content;
     }
 
     /* Move to product service */
@@ -176,19 +178,6 @@ public class ProductOverviewPageController extends SunriseController {
 
     /* This will probably be moved to some kind of factory classes */
 
-    private List<SelectableLinkData> getBreadcrumbData(final UserContext userContext, final Reference<Category> category) {
-        final BreadcrumbDataFactory breadcrumbDataFactory = BreadcrumbDataFactory.of(reverseRouter(), userContext.locale());
-        final List<Category> breadcrumbCategories = categoryService.getBreadCrumbCategories(category);
-        return breadcrumbDataFactory.create(breadcrumbCategories);
-    }
-
-    private List<SelectableLinkData> getSearchBreadCrumbData(final Messages messages, final String languageTag, final String searchTerm) {
-        return asList(
-                new SelectableLinkData(messages.at("home.pageName"), reverseRouter().home(languageTag).url(), false),
-                new SelectableLinkData(messages.at("search.resultsForText", searchTerm), reverseRouter().search(languageTag, searchTerm, 1).url(), true)
-        );
-    }
-
     private ProductListData getProductListData(final List<ProductProjection> productList, final UserContext userContext) {
         final ProductDataFactory productDataFactory = ProductDataFactory.of(userContext, reverseRouter(), categoryService);
         final List<ProductData> productDataList = productList.stream()
@@ -199,27 +188,14 @@ public class ProductOverviewPageController extends SunriseController {
 
     private FilterListData getFilterListData(final PagedSearchResult<ProductProjection> searchResult,
                                              final List<Facet<ProductProjection>> facets, @Nullable final String searchTerm) {
-        final List<FacetData> facetData = facets.stream()
+        final FilterListData filterListData = new FilterListData();
+        filterListData.setUrl(request().path());
+        filterListData.setSearchTerm(searchTerm);
+        filterListData.setFacetData(facets.stream()
                 .map(facet -> facet.withSearchResult(searchResult))
                 .map(FacetData::new)
-                .collect(toList());
-        return new FilterListData(request().path(), facetData, searchTerm);
-    }
-
-    private PaginationData getPaginationData(final PagedSearchResult<ProductProjection> searchResult, int currentPage, int pageSize) {
-        return new PaginationDataFactory(request(), searchResult, currentPage, pageSize, displayedPages).create();
-    }
-
-    private JumbotronData getJumbotronData(final UserContext userContext, final Category category) {
-        final String parentName = Optional.ofNullable(category.getParent())
-                .flatMap(parentRef -> categories().findById(parentRef.getId())
-                        .flatMap(parent -> parent.getName().find(userContext.locales())))
-                .orElse("");
-        final String name = category.getName().find(userContext.locales()).orElse("");
-        final String description = Optional.ofNullable(category.getDescription())
-                .flatMap(d -> d.find(userContext.locales()))
-                .orElse("");
-        return new JumbotronData(parentName, name, description);
+                .collect(toList()));
+        return filterListData;
     }
 
     private List<SelectableData> getDisplayOptions(final int pageSize) {
@@ -230,6 +206,10 @@ public class ProductOverviewPageController extends SunriseController {
     }
 
     private SelectableData getDisplayOption(final int pageSize, final int currentPageSize) {
-        return new SelectableData(String.valueOf(pageSize), String.valueOf(pageSize), null, null, currentPageSize == pageSize);
+        final SelectableData selectableData = new SelectableData(String.valueOf(pageSize), String.valueOf(pageSize));
+        if (currentPageSize == pageSize) {
+            selectableData.setSelected(true);
+        }
+        return selectableData;
     }
 }

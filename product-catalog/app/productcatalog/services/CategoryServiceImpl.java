@@ -41,12 +41,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getBreadCrumbCategories(final Reference<Category> categoryRef) {
-        final Optional<Category> categoryOptional = expandCategory(categoryRef);
-        return categoryOptional.map(this::getCategoryWithAncestors).orElse(emptyList());
-    }
-
-    @Override
     public Optional<Category> getNewCategory() {
         return newCategory;
     }
@@ -63,12 +57,6 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryTree.of(subTreeCategories);
     }
 
-    private List<Category> getCategoryWithAncestors(final Category category) {
-        return concat(category.getAncestors().stream().map(this::expandCategory), Stream.of(Optional.of(category)))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(toList());
-    }
 
     private Optional<Category> expandCategory(final Reference<Category> categoryRef) {
         return categories.findById(categoryRef.getId());

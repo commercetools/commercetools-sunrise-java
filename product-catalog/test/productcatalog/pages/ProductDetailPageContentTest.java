@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import common.categories.CategoryUtils;
 import common.cms.CmsPage;
 import common.contexts.UserContext;
-import common.pages.BagItemDataFactory;
-import common.pages.CategoryLinkDataFactory;
-import common.pages.LinkData;
-import common.pages.RatingDataFactory;
+import common.models.BagItemDataFactory;
+import common.pages.CategoryDataFactory;
+import common.models.LinkData;
+import common.models.RatingDataFactory;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
@@ -65,7 +65,7 @@ public class ProductDetailPageContentTest {
         final Category bags = categories.findById("32952779-d916-4f2b-b1d5-9efd7f7b9f58").get();
         final Category handBags = categories.findById("9a584ee8-a45a-44e8-b9ec-e11439084687").get();
         final List<Category> breadcrumbs = asList(woman, bags, handBags);
-        final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(LOCALES);
+        final CategoryDataFactory categoryLinkDataFactory = CategoryDataFactory.of(LOCALES);
         final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
 
         final JsonNode expected = readJsonNodeFromResource("breadcrumbData.json").get("breadcrumbs");

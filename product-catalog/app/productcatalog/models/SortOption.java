@@ -30,11 +30,4 @@ public interface SortOption<T> {
      */
     List<SortExpression<T>> getSortExpressions();
 
-    /**
-     * Gets a new instance of SortOption with the same attributes as this, but with the given selected.
-     * @param selected the new selected
-     * @return a new instance with same attributes, but with the given selected
-     */
-    SortOption<T> withSelected(boolean selected);
-
 }

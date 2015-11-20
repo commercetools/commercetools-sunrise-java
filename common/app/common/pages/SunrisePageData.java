@@ -3,43 +3,54 @@ package common.pages;
 import io.sphere.sdk.models.Base;
 
 public final class SunrisePageData extends Base implements PageData {
-    private final PageHeader pageHeader;
-    private final PageFooter pageFooter;
-    private final PageContent pageContent;
-    private final SeoData seoData;
-    private final PageMeta pageMeta;
+    private PageHeader header;
+    private PageFooter footer;
+    private PageContent content;
+    private PageMeta meta;
 
-    SunrisePageData(final PageHeader pageHeader, final PageFooter pageFooter, final PageContent pageContent,
-                    final SeoData seoData, final PageMeta pageMeta) {
-        this.pageHeader = pageHeader;
-        this.pageFooter = pageFooter;
-        this.pageContent = pageContent;
-        this.seoData = seoData;
-        this.pageMeta = pageMeta;
+    public SunrisePageData() {
+    }
+
+    public SunrisePageData(final PageHeader header, final PageFooter footer, final PageContent content, final PageMeta meta) {
+        this.header = header;
+        this.footer = footer;
+        this.content = content;
+        this.meta = meta;
     }
 
     @Override
     public PageHeader getHeader() {
-        return pageHeader;
+        return header;
     }
 
-    @Override
-    public PageContent getContent() {
-        return pageContent;
+    public void setHeader(final PageHeader header) {
+        this.header = header;
     }
 
     @Override
     public PageFooter getFooter() {
-        return pageFooter;
+        return footer;
+    }
+
+    public void setFooter(final PageFooter footer) {
+        this.footer = footer;
     }
 
     @Override
-    public SeoData getSeo() {
-        return seoData;
+    public PageContent getContent() {
+        return content;
+    }
+
+    public void setContent(final PageContent content) {
+        this.content = content;
     }
 
     @Override
     public PageMeta getMeta() {
-        return pageMeta;
+        return meta;
+    }
+
+    public void setMeta(final PageMeta meta) {
+        this.meta = meta;
     }
 }

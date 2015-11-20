@@ -5,25 +5,34 @@ import io.sphere.sdk.models.Base;
 import java.util.List;
 
 public class FilterListData extends Base {
-    private final List<FacetData> facetData;
-    private final String url;
-    private final String searchTerm;
+    private List<FacetData> facetData;
+    private String url;
+    private String searchTerm;
 
-    public FilterListData(final String url, final List<FacetData> facetData, final String searchTerm) {
-        this.url = url;
+    public FilterListData() {
+    }
+
+    public List<FacetData> getFacetData() {
+        return facetData;
+    }
+
+    public void setFacetData(final List<FacetData> facetData) {
         this.facetData = facetData;
-        this.searchTerm = searchTerm;
     }
 
     public String getUrl() {
         return url;
     }
 
+    public void setUrl(final String url) {
+        this.url = url;
+    }
+
     public String getSearchTerm() {
         return searchTerm;
     }
 
-    public List<FacetData> getList() {
-        return facetData;
+    public void setSearchTerm(final String searchTerm) {
+        this.searchTerm = searchTerm;
     }
 }

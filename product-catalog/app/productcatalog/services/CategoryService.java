@@ -19,13 +19,6 @@ public interface CategoryService {
     List<Category> getSiblingCategories(final Collection<Reference<Category>> categoryRefs);
 
     /**
-     * Gets a list containing the given category itself, and all its ancestors.
-     * @param categoryRef A Reference to the category to fetch the breadcrumb categories for
-     * @return  the list of breadcrumb categories
-     */
-    List<Category> getBreadCrumbCategories(final Reference<Category> categoryRef);
-
-    /**
      * Gets the 'New' category, if any.
      * @return the 'New' category, or absent if it does not exists
      */

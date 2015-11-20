@@ -1,11 +1,11 @@
 package productcatalog.controllers;
 
 import common.actions.LanguageFiltered;
-import common.cms.CmsPage;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.*;
+import common.models.LinkData;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
@@ -48,13 +48,10 @@ public class ProductDetailPageController extends SunriseController {
 
     public F.Promise<Result> show(final String locale, final String slug, final String sku) {
         final UserContext userContext = userContext(locale);
-        final F.Promise<CmsPage> cmsPagePromise = cmsService().getPage(userContext.locale(), "pdp");
-        final F.Promise<ProductProjection> productProjectionPromise = fetchProduct(userContext.locale(), slug);
-        final F.Promise<List<ProductProjection>> suggestionPromise = productProjectionPromise.flatMap(this::fetchSuggestions);
-        final F.Promise<Result> resultPromise = productProjectionPromise.flatMap(productProjection ->
-                cmsPagePromise.flatMap(cms ->
-                        suggestionPromise.map(suggestions ->
-                                getPdpResult(userContext, cms, suggestions, productProjection, sku))));
+        final F.Promise<ProductProjection> productPromise = fetchProduct(userContext.locale(), slug);
+        final F.Promise<List<ProductProjection>> suggestionPromise = productPromise.flatMap(this::fetchSuggestions);
+        final F.Promise<Result> resultPromise = productPromise.flatMap(productProjection ->
+                suggestionPromise.map(suggestions -> getPdpResult(userContext, suggestions, productProjection, sku)));
         return recover(resultPromise);
     }
 
@@ -83,10 +80,10 @@ public class ProductDetailPageController extends SunriseController {
         return notFound();
     }
 
-    private Result getPdpResult(final UserContext userContext, final CmsPage cms, final List<ProductProjection> suggestions,
+    private Result getPdpResult(final UserContext userContext, final List<ProductProjection> suggestions,
                                 final ProductProjection productProjection, final String sku) {
         final ProductVariant productVariant = getProductVariantBySku(sku, productProjection);
-        final ProductDetailPageContent content = getProductDetailPageContent(userContext, cms, suggestions, productProjection, productVariant);
+        final ProductDetailPageContent content = getProductDetailPageContent(userContext, suggestions, productProjection, productVariant);
         final SunrisePageData pageData = pageData(userContext, content);
         return ok(templateService().renderToHtml("pdp", pageData, userContext.locales()));
     }
@@ -97,34 +94,18 @@ public class ProductDetailPageController extends SunriseController {
 
     /* Methods to build page content */
 
-    private ProductDetailPageContent getProductDetailPageContent(final UserContext userContext, final CmsPage cms,
+    private ProductDetailPageContent getProductDetailPageContent(final UserContext userContext,
                                                                  final List<ProductProjection> suggestions,
-                                                                 final ProductProjection productProjection,
-                                                                 final ProductVariant productVariant) {
-        final String additionalTitle = productProjection.getName().find(userContext.locales()).orElse("");
-        final PdpStaticData staticData = getStaticData(cms);
-        final List<SelectableLinkData> breadcrumbData = getBreadcrumbData(userContext, productProjection);
-        final ProductData productData = getProductData(userContext, productProjection, productVariant);
-        final List<ShippingRateData> deliveryData = getDeliveryData(userContext);
-        final List<ProductData> suggestionData = getSuggestionData(userContext, suggestions);
-        final String formAction = reverseRouter().productVariantToCartForm(userContext.locale().getLanguage()).url();
-        return new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, productData, deliveryData, suggestionData, formAction);
-    }
-
-    private PdpStaticData getStaticData(final CmsPage cms) {
-        return new PdpStaticData(cms, BagItemDataFactory.of().create(100), RatingDataFactory.of(cms).create());
-    }
-
-    private List<SelectableLinkData> getBreadcrumbData(final UserContext userContext, final ProductProjection productProjection) {
-        final BreadcrumbDataFactory breadcrumbDataFactory = BreadcrumbDataFactory.of(reverseRouter(), userContext.locale());
-        final List<Category> breadcrumbCategories = getBreadcrumbsForProduct(productProjection);
-        return breadcrumbDataFactory.create(breadcrumbCategories);
-    }
-
-    private List<Category> getBreadcrumbsForProduct(final ProductProjection product) {
-        return product.getCategories().stream().findFirst()
-                .map(categoryService::getBreadCrumbCategories)
-                .orElse(emptyList());
+                                                                 final ProductProjection product,
+                                                                 final ProductVariant variant) {
+        final String additionalTitle = product.getName().find(userContext.locales()).orElse("");
+        final ProductData productData = getProductData(userContext, product, variant);
+        final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle, productData);
+        content.setBreadcrumb(new BreadcrumbData(product, variant.getSku(), categories(), userContext, reverseRouter()));
+        content.setShippingRates(getDeliveryData(userContext));
+        content.setSuggestions(getSuggestionData(userContext, suggestions));
+        content.setAddToCartFormUrl(reverseRouter().productVariantToCartForm(userContext.locale().getLanguage()).url());
+        return content;
     }
 
     private ProductData getProductData(final UserContext userContext, final ProductProjection productProjection,

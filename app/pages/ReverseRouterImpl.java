@@ -20,18 +20,28 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
-    public Call category(final String language, final String slug, final int page) {
-        return routes.ProductOverviewPageController.show(language, page, pageSize, slug);
+    public Call category(final String languageTag, final String categorySlug, final int page) {
+        return routes.ProductOverviewPageController.show(languageTag, page, pageSize, categorySlug);
     }
 
     @Override
-    public Call product(final String languageTag, final String productSlug, final String sku) {
-        return productcatalog.controllers.routes.ProductDetailPageController.show(languageTag, productSlug, sku);
+    public Call category(final String languageTag, final String categorySlug) {
+        return category(languageTag, categorySlug, 1);
     }
 
     @Override
     public Call search(final String languageTag, final String searchTerm, final int page) {
         return productcatalog.controllers.routes.ProductOverviewPageController.search(languageTag, page, pageSize, searchTerm);
+    }
+
+    @Override
+    public Call search(final String languageTag, final String searchTerm) {
+        return search(languageTag, searchTerm, 1);
+    }
+
+    @Override
+    public Call product(final String languageTag, final String productSlug, final String sku) {
+        return productcatalog.controllers.routes.ProductDetailPageController.show(languageTag, productSlug, sku);
     }
 
     @Override

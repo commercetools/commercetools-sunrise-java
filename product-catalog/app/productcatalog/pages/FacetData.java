@@ -9,12 +9,19 @@ import static io.sphere.sdk.facets.DefaultFacetType.*;
 public class FacetData extends Base {
     private Facet facet;
 
-    public FacetData(final Facet<?> facet) {
+    public FacetData() {
+    }
+
+    public FacetData(final Facet facet) {
         this.facet = facet;
     }
 
     public Facet getFacet() {
         return facet;
+    }
+
+    public void setFacet(final Facet facet) {
+        this.facet = facet;
     }
 
     public boolean isSortedSelectFacet() {

@@ -1,5 +1,6 @@
 package common.utils;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -10,7 +11,7 @@ public final class UrlUtils {
     private UrlUtils() {
     }
 
-    public static String buildUrl(final String path, final Map<String, String[]> queryString) {
+    public static String buildUrl(final String path, final Map<String, List<String>> queryString) {
         return buildUrl(path, buildQueryString(queryString));
     }
 
@@ -18,13 +19,13 @@ public final class UrlUtils {
         return path + (queryString.isEmpty() ? "" : "?" + queryString);
     }
 
-    public static String buildQueryString(final Map<String, String[]> queryString) {
+    public static String buildQueryString(final Map<String, List<String>> queryString) {
         return queryString.entrySet().stream()
                 .map(parameter -> buildQueryStringOfParameter(parameter.getKey(), parameter.getValue()))
                 .collect(joining("&"));
     }
 
-    private static String buildQueryStringOfParameter(final String key, final String[] values) {
-        return Stream.of(values).collect(joining("&" + key + "=", key + "=", ""));
+    private static String buildQueryStringOfParameter(final String key, final List<String> values) {
+        return values.stream().collect(joining("&" + key + "=", key + "=", ""));
     }
 }

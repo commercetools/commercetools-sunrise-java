@@ -2,8 +2,8 @@ package productcatalog.pages;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
-import common.pages.DetailData;
-import common.pages.SelectableData;
+import common.models.DetailData;
+import common.models.SelectableData;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import org.junit.Test;

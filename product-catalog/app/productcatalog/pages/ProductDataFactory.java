@@ -2,10 +2,10 @@ package productcatalog.pages;
 
 import common.contexts.PriceFinderFactory;
 import common.contexts.UserContext;
-import common.pages.DetailData;
-import common.pages.ImageData;
+import common.models.DetailData;
+import common.models.ImageData;
 import common.pages.ReverseRouter;
-import common.pages.SelectableData;
+import common.models.SelectableData;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.models.LocalizedEnumValue;
@@ -63,7 +63,7 @@ public class ProductDataFactory {
     }
 
     private List<ImageData> getImages(final ProductVariant productVariant) {
-        final List<ImageData> images = productVariant.getImages().stream().map(ImageData::of).collect(toList());
+        final List<ImageData> images = productVariant.getImages().stream().map(ImageData::new).collect(toList());
         if(images.isEmpty()) {
             images.add(getPlaceholderImage());
         }
@@ -72,7 +72,7 @@ public class ProductDataFactory {
     }
 
     private ImageData getPlaceholderImage() {
-        return ImageData.of(Image.of("//placehold.it/300x400", ImageDimensions.of(300, 400)));
+        return new ImageData(Image.of("//placehold.it/300x400", ImageDimensions.of(300, 400)));
     }
 
     private List<SelectableData> getColors(final ProductProjection product) {
@@ -112,19 +112,23 @@ public class ProductDataFactory {
 
     private SelectableData colorToSelectableItem(final LocalizedEnumValue color) {
         final String colorLabel = color.getLabel().find(userContext.locales()).orElse("");
-        return new SelectableData(colorLabel, COLOR_ATTRIBUTE.getName(), "", "", false);
+        return new SelectableData(colorLabel, COLOR_ATTRIBUTE.getName());
     }
 
     private Optional<SelectableData> sizeToSelectableItem(final ProductVariant variant, final String slug, final String currentSize) {
         return variant.findAttribute(SIZE_ATTRIBUTE).map(size -> {
             final String url = reverseRouter.product(userContext.locale().getLanguage(), slug, variant.getSku()).url();
-            return new SelectableData(size, url, "", "", size.equals(currentSize));
+            final SelectableData selectableData = new SelectableData(size, url);
+            if (size.equals(currentSize)) {
+                selectableData.setSelected(true);
+            }
+            return selectableData;
         });
     }
 
     private DetailData localizedStringsToDetailData(final LocalizedEnumValue localizedStrings) {
         final String label = localizedStrings.getLabel().find(userContext.locales()).orElse("");
-        return new DetailData(label, "");
+        return new DetailData(label);
     }
 
     private Optional<Price> getOldPrice(final Price price) {

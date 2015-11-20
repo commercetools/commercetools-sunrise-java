@@ -1,42 +1,42 @@
 package common.pages;
 
+import common.models.LocationSelector;
+import common.models.NavMenuData;
 import io.sphere.sdk.models.Base;
-import play.i18n.Messages;
 
 public class PageHeader extends Base {
-    private final Messages messages;
-    private final String title;
-    private final CollectionData<SelectableData> countries;
-    private final NavMenuData navMenuData;
+    private String title;
+    private LocationSelector location;
+    private NavMenuData navMenu;
 
-    public PageHeader(final Messages messages, final String title, final CollectionData<SelectableData> countries, final NavMenuData navMenuData) {
-        this.messages = messages;
-        this.countries = countries;
+    public PageHeader() {
+    }
+
+    public PageHeader(final String title) {
         this.title = title;
-        this.navMenuData = navMenuData;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public LinkData getStores() {
-        return new LinkData(messages.at("header.stores"), "");
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
-    public LinkData getHelp() {
-        return new LinkData(messages.at("header.help"), "");
+    public LocationSelector getLocation() {
+        return location;
     }
 
-    public LinkData getCallUs() {
-        return new LinkData(messages.at("header.callUs"), "");
+    public void setLocation(final LocationSelector location) {
+        this.location = location;
     }
 
     public NavMenuData getNavMenu() {
-        return navMenuData;
+        return navMenu;
     }
 
-    public CollectionData getCountries() {
-        return countries;
+    public void setNavMenu(final NavMenuData navMenu) {
+        this.navMenu = navMenu;
     }
 }

@@ -1,5 +1,7 @@
 package common.pages;
 
+import common.models.BagItemDataFactory;
+import common.models.SelectableData;
 import org.junit.Test;
 
 import java.util.ArrayList;

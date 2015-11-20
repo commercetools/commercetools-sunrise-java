@@ -1,8 +1,8 @@
 package productcatalog.pages;
 
-import common.pages.DetailData;
-import common.pages.ImageData;
-import common.pages.SelectableData;
+import common.models.DetailData;
+import common.models.ImageData;
+import common.models.SelectableData;
 import io.sphere.sdk.models.Base;
 
 import java.util.List;

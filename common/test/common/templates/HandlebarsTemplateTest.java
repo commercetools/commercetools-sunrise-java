@@ -3,9 +3,9 @@ package common.templates;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.pages.*;
+import common.models.SeoData;
 import org.junit.Test;
 import play.Configuration;
-import play.Environment;
 
 import java.util.List;
 import java.util.Locale;

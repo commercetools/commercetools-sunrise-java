@@ -2,6 +2,8 @@ package common.pages;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
+import common.models.ProductThumbnailData;
+import common.models.ProductThumbnailDataFactory;
 import io.sphere.sdk.products.ProductProjection;
 import org.junit.Test;
 

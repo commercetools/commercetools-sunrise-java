@@ -1,55 +1,68 @@
 package productcatalog.pages;
 
 import common.pages.*;
+import common.models.LinkData;
 
 import java.util.List;
 
 public class ProductDetailPageContent extends PageContent {
-    private final String additionalTitle;
-    private final PdpStaticData staticData;
-    private final List<SelectableLinkData> breadcrumb;
-    private final ProductData productData;
-    private final List<ShippingRateData> shippingRates;
-    private final List<ProductData> suggestions;
-    private final String addToCartFormUrl;
+    private String additionalTitle;
+    private BreadcrumbData breadcrumb;
+    private ProductData productData;
+    private List<ShippingRateData> shippingRates;
+    private List<ProductData> suggestions;
+    private String addToCartFormUrl;
 
-    public ProductDetailPageContent(final String additionalTitle, final PdpStaticData staticData, final List<SelectableLinkData> breadcrumb,
-                                    final ProductData productData, final List<ShippingRateData> shippingRates,
-                                    final List<ProductData> suggestions, final String addToCartFormUrl) {
+    public ProductDetailPageContent() {
+    }
+
+    public ProductDetailPageContent(final String additionalTitle, final ProductData productData) {
         this.additionalTitle = additionalTitle;
-        this.staticData = staticData;
-        this.breadcrumb = breadcrumb;
         this.productData = productData;
-        this.shippingRates = shippingRates;
-        this.suggestions = suggestions;
-        this.addToCartFormUrl = addToCartFormUrl;
     }
 
-    public PdpStaticData getStatic() {
-        return staticData;
-    }
-
+    @Override
     public String additionalTitle() {
         return additionalTitle;
     }
 
-    public List<SelectableLinkData> getBreadcrumb() {
+    public BreadcrumbData getBreadcrumb() {
         return breadcrumb;
     }
 
-    public ProductData getProduct() {
+    public void setBreadcrumb(final BreadcrumbData breadcrumb) {
+        this.breadcrumb = breadcrumb;
+    }
+
+    public ProductData getProductData() {
         return productData;
     }
 
-    public List<ProductData> getSuggestions() {
-        return suggestions;
+    public void setProductData(final ProductData productData) {
+        this.productData = productData;
     }
 
     public List<ShippingRateData> getShippingRates() {
         return shippingRates;
     }
 
+    public void setShippingRates(final List<ShippingRateData> shippingRates) {
+        this.shippingRates = shippingRates;
+    }
+
+    public List<ProductData> getSuggestions() {
+        return suggestions;
+    }
+
+    public void setSuggestions(final List<ProductData> suggestions) {
+        this.suggestions = suggestions;
+    }
+
     public String getAddToCartFormUrl() {
         return addToCartFormUrl;
+    }
+
+    public void setAddToCartFormUrl(final String addToCartFormUrl) {
+        this.addToCartFormUrl = addToCartFormUrl;
     }
 }

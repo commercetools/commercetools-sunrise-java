@@ -38,11 +38,6 @@ public class SortOptionImpl<T> extends Base implements SortOption<T> {
         return expressions;
     }
 
-    @Override
-    public SortOption<T> withSelected(final boolean selected) {
-        return new SortOptionImpl<>(value, label, selected, expressions);
-    }
-
     public static <T> SortOption<T> of(final String value, final String label, final boolean selected, final List<SortExpression<T>> searchExpressions) {
         return new SortOptionImpl<>(value, label, selected, searchExpressions);
     }
