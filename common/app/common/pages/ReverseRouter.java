@@ -9,4 +9,10 @@ public interface ReverseRouter {
     Call processCheckoutShippingForm(final String language);
 
     Call showCheckoutShippingForm(final String language);
+
+    Call processCheckoutPaymentForm(String language);
+
+    Call showCheckoutPaymentForm(String language);
+
+    Call showCheckoutConfirmationForm(final String language);
 }
