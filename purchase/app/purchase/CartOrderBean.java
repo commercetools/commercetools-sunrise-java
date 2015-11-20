@@ -51,6 +51,8 @@ public class CartOrderBean {
         final PaymentsBean paymentDetails = new PaymentsBean();
         paymentDetails.setType("prepaid");
         setPaymentDetails(paymentDetails);
+
+        setShippingMethod(new SelectableShippingMethodBean(cartLike, moneyContext));
     }
 
     private static MonetaryAmount calculateTax(final TaxedPrice taxedPrice) {

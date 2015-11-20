@@ -23,6 +23,6 @@ public class ShippingMethodsProvider extends SphereSmallCollectionProvider<Shipp
 
     @Override
     protected ShippingMethods transform(final List<ShippingMethod> list) {
-        return ShippingMethods.of(list);
+        return  new ShippingMethods(list);
     }
 }

@@ -1,6 +1,7 @@
 package purchase;
 
 import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +24,11 @@ public class ShippingMethodsFormBean {
     }
 
     private void fill(final ShippingMethods shippingMethods, final String nullableSelectedShippingMethodId) {
-        final List<SelectableShippingMethodBean> shippingMethodBeanList = shippingMethods.shippingMethods.stream()
+        fill(shippingMethods.getShippingMethods(), nullableSelectedShippingMethodId);
+    }
+
+    private void fill(final List<ShippingMethod> sphereShippingMethods, final String nullableSelectedShippingMethodId) {
+        final List<SelectableShippingMethodBean> shippingMethodBeanList = sphereShippingMethods.stream()
                 .map(shippingMethod -> {
                     final SelectableShippingMethodBean bean = new SelectableShippingMethodBean();
                     bean.setText(shippingMethod.getName());

@@ -9,6 +9,7 @@ import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.carts.queries.CartByIdGet;
+import io.sphere.sdk.expansion.ExpansionPath;
 import io.sphere.sdk.models.Address;
 import play.libs.F;
 import play.mvc.Http;
@@ -24,7 +25,8 @@ public abstract class CartController extends SunriseController {
 
     protected F.Promise<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
         return Optional.ofNullable(session(CartSessionKeys.CART_ID))
-                .map(cartId -> sphere().execute(CartByIdGet.of(cartId)))
+                .map(cartId -> sphere().execute(CartByIdGet.of(cartId)
+                        .withExpansionPaths(ExpansionPath.of("shippingInfo.shippingMethod"))))
                 .orElseGet(() -> sphere().execute(CartCreateCommand.of(CartDraft.of(userContext.currency()).withCountry(userContext.country())))
                         .flatMap(cart -> {
                             //required to show the taxes
