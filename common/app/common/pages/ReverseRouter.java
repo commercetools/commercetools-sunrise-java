@@ -15,4 +15,6 @@ public interface ReverseRouter {
     Call showCheckoutPaymentForm(String language);
 
     Call showCheckoutConfirmationForm(final String language);
+
+    Call processCheckoutConfirmationForm(final String language);
 }

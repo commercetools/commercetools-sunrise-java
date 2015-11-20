@@ -15,4 +15,6 @@ public class SelectableShippingMethodBean extends SelectableData {
     public void setDeliveryDays(final String deliveryDays) {
         this.deliveryDays = deliveryDays;
     }
+
+
 }

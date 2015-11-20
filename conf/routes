@@ -26,3 +26,5 @@ POST        /:languageTag/checkout/shipping                @purchase.CheckoutShi
 GET         /:languageTag/checkout/shipping                @purchase.CheckoutShippingController.show(languageTag: String)
 POST        /:languageTag/checkout/payment                 @purchase.CheckoutPaymentController.process(languageTag: String)
 GET         /:languageTag/checkout/payment                 @purchase.CheckoutPaymentController.show(languageTag: String)
+GET         /:languageTag/checkout/confirmation            @purchase.CheckoutConfirmationController.show(languageTag: String)
+POST        /:languageTag/checkout/confirmation            @purchase.CheckoutConfirmationController.process(languageTag: String)

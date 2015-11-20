@@ -3,6 +3,7 @@ package purchase;
 public class StepWidgetBean {
     private boolean shippingStepActive;
     private boolean paymentStepActive;
+    private boolean confirmationStepActive;
 
     public StepWidgetBean() {
     }
@@ -21,5 +22,13 @@ public class StepWidgetBean {
 
     public void setPaymentStepActive(final boolean paymentStepActive) {
         this.paymentStepActive = paymentStepActive;
+    }
+
+    public boolean isConfirmationStepActive() {
+        return confirmationStepActive;
+    }
+
+    public void setConfirmationStepActive(final boolean confirmationStepActive) {
+        this.confirmationStepActive = confirmationStepActive;
     }
 }
