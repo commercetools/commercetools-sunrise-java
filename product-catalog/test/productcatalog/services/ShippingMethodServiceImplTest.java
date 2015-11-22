@@ -22,9 +22,9 @@ public class ShippingMethodServiceImplTest {
 
     @Test
     public void getShippingRates() {
-        final Reference<Zone> europe = Reference.of(Zone.typeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88");
-        final Reference<Zone> usa = Reference.of(Zone.typeId(), "67a107d7-e485-4802-a1bd-a475b4394124");
-        final Reference<Zone> notExistend = Reference.of(Zone.typeId(), "...");
+        final Reference<Zone> europe = Reference.of(Zone.referenceTypeId(), "f77ddfd4-af5b-471a-89c5-9a40d8a7ab88");
+        final Reference<Zone> usa = Reference.of(Zone.referenceTypeId(), "67a107d7-e485-4802-a1bd-a475b4394124");
+        final Reference<Zone> notExistend = Reference.of(Zone.referenceTypeId(), "...");
 
         final ShopShippingRate euRate = new ShopShippingRate("DHL", ShippingRate.of(Money.of(5.70, Monetary.getCurrency("EUR"))));
         final ShopShippingRate usRate = new ShopShippingRate("DHL", ShippingRate.of(Money.of(9.90, Monetary.getCurrency("USD"))));

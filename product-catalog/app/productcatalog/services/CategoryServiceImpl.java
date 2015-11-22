@@ -3,67 +3,59 @@ package productcatalog.services;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Reference;
-import play.Configuration;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
 
 public class CategoryServiceImpl implements CategoryService {
-    private static final String CONFIG_NEW_CATEGORY_EXTERNAL_ID = "common.newCategoryExternalId";
-    private final Optional<CategoryTree> newSubcategoryTree;
-    private final Optional<Category> newCategory;
-    private final CategoryTree categories;
+    private final CategoryTree categoryTree;
 
     @Inject
-    public CategoryServiceImpl(final CategoryTree categories, final Configuration configuration) {
-        this.categories = categories;
-        final String newExternalId = configuration.getString(CONFIG_NEW_CATEGORY_EXTERNAL_ID);
-        this.newCategory = categories.findByExternalId(newExternalId);
-        this.newSubcategoryTree = newCategory.map(c -> getSubtree(categories, c));
+    public CategoryServiceImpl(final CategoryTree categoryTree) {
+        this.categoryTree = categoryTree;
     }
 
     @Override
-    public List<Category> getSiblingCategories(final Collection<Reference<Category>> categoryRefs) {
+    public List<Category> getSiblings(final Collection<Reference<Category>> categoryRefs) {
         return categoryRefs.stream()
-                .map(this::expandCategory).filter(Optional::isPresent).map(Optional::get)
-                .map(category -> Optional.ofNullable(category.getParent())).filter(Optional::isPresent).map(Optional::get)
-                .flatMap(parent -> categories.findChildren(parent).stream())
+                .map(this::refToCategory)
+                .filter(Optional::isPresent)
+                .flatMap(category -> getSiblings(category.get()).stream())
                 .distinct()
                 .collect(toList());
     }
 
     @Override
-    public Optional<Category> getNewCategory() {
-        return newCategory;
+    public CategoryTree getSubtree(final Collection<Category> parentCategories) {
+        return CategoryTree.of(getSubtreeAsFlatList(parentCategories));
     }
 
-    @Override
-    public boolean categoryIsInNew(Reference<Category> category) {
-        return newSubcategoryTree.map(subtree -> subtree.findById(category.getId()).isPresent()).orElse(false);
+    public Category getRootAncestor(final Category category) {
+        return category.getAncestors().stream().findFirst()
+                .flatMap(root -> categoryTree.findById(root.getId()))
+                .orElse(category);
     }
 
-    @Override
-    public CategoryTree getSubtree(final CategoryTree categoryTree, final Category category) {
-        final List<Category> subTreeCategories = new ArrayList<>();
-        addSubtreeCategories(categoryTree, subTreeCategories, category);
-        return CategoryTree.of(subTreeCategories);
+    private List<Category> getSiblings(final Category category) {
+        return Optional.ofNullable(category.getParent())
+                .map(categoryTree::findChildren)
+                .orElse(emptyList());
     }
 
-
-    private Optional<Category> expandCategory(final Reference<Category> categoryRef) {
-        return categories.findById(categoryRef.getId());
+    private List<Category> getSubtreeAsFlatList(final Collection<Category> parentCategories) {
+        final List<Category> categories = new ArrayList<>();
+        parentCategories.stream().forEach(parent -> {
+            categories.add(parent);
+            final List<Category> children = categoryTree.findChildren(parent);
+            categories.addAll(getSubtreeAsFlatList(children));
+        });
+        return categories;
     }
 
-    private void addSubtreeCategories(final CategoryTree categoryTree, final List<Category> acc, final Category category) {
-        acc.add(category);
-        categoryTree.findChildren(category).stream().forEach(child -> addSubtreeCategories(categoryTree, acc, child));
+    private Optional<Category> refToCategory(final Reference<Category> ref) {
+        return categoryTree.findById(ref.getId());
     }
 }

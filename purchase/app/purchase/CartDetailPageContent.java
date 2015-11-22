@@ -12,7 +12,7 @@ public class CartDetailPageContent extends PageContent {
     }
 
     @Override
-    public String additionalTitle() {
+    public String getAdditionalTitle() {
         return "TODO ADDITIONAL TITLE";
     }
 }

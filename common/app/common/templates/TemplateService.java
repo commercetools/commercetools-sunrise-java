@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Service that provides HTML pages, using some kind of template system.
+ * Service that provides HTML pages, using some kind of template engine.
  */
 public interface TemplateService {
 

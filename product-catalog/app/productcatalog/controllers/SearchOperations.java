@@ -1,6 +1,6 @@
 package productcatalog.controllers;
 
-import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionFacetAndFilterSearchModel;
@@ -12,19 +12,22 @@ import play.Configuration;
 import play.i18n.Messages;
 import play.mvc.Http;
 import productcatalog.models.SortOption;
-import productcatalog.models.SortOptionImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import static io.sphere.sdk.facets.DefaultFacetType.HIERARCHICAL_SELECT;
 import static io.sphere.sdk.facets.DefaultFacetType.SORTED_SELECT;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 public class SearchOperations {
     private static final ProductProjectionSortSearchModel SORT = ProductProjectionSearchModel.of().sort();
     private static final ProductProjectionFacetAndFilterSearchModel FACET = ProductProjectionSearchModel.of().facetedSearch();
+    private static final SortExpression<ProductProjection> DEFAULT_SORT = SORT.createdAt().byDesc();
+    private static final String SORT_KEY = "sort";
     private final Http.Request request;
     private final Messages messages;
     private final Locale locale;
@@ -34,22 +37,20 @@ public class SearchOperations {
         this.request = request;
         this.messages = messages;
         this.locale = locale;
-        this.sortedSizes = configuration.getStringList("pop.sizeFacet");
+        this.sortedSizes = configuration.getStringList("pop.facet.size", emptyList());
     }
 
-    public List<Facet<ProductProjection>> boundFacets(final List<Category> categories) {
-        return asList(categoryFacet(categories), colorFacet(), sizeFacet(), brandFacet());
+    public List<Facet<ProductProjection>> boundFacets(final CategoryTree subcategoryTree) {
+        return asList(categoryFacet(subcategoryTree), colorFacet(), sizeFacet(), brandFacet());
     }
 
     public List<SortOption<ProductProjection>> boundSortOptions() {
-        final String key = "sort";
-        final SortExpression<ProductProjection> newestFirst = SORT.createdAt().byDesc();
-        return asList(newestSortOption(key, newestFirst), priceAscSortOption(key, newestFirst), priceDescSortOption(key, newestFirst));
+        return asList(newestSortOption(), priceAscSortOption(), priceDescSortOption());
     }
 
     private Facet<ProductProjection> brandFacet() {
         final String key = "brands";
-        return SelectFacetBuilder.of(key, messages.at("pop.facetBrand"), FACET.allVariants().attribute().ofEnum("designer").label())
+        return SelectFacetBuilder.of(key, messages.at("pop.facet.brand"), FACET.allVariants().attribute().ofEnum("designer").label())
                 .selectedValues(getSelectedValues(key))
                 .countHidden(true)
                 .build();
@@ -57,7 +58,7 @@ public class SearchOperations {
 
     private Facet<ProductProjection> sizeFacet() {
         final String key = "size";
-        return SelectFacetBuilder.of(key, messages.at("pop.facetSize"), FACET.allVariants().attribute().ofEnum("commonSize").label())
+        return SelectFacetBuilder.of(key, messages.at("pop.facet.size"), FACET.allVariants().attribute().ofEnum("commonSize").label())
                 .mapper(SortedFacetOptionMapper.of(sortedSizes))
                 .selectedValues(getSelectedValues(key))
                 .type(SORTED_SELECT)
@@ -67,37 +68,48 @@ public class SearchOperations {
 
     private Facet<ProductProjection> colorFacet() {
         final String key = "color";
-        return SelectFacetBuilder.of(key, messages.at("pop.facetColor"), FACET.allVariants().attribute().ofLocalizableEnum("color").label().locale(locale))
+        return SelectFacetBuilder.of(key, messages.at("pop.facet.color"), FACET.allVariants().attribute().ofLocalizableEnum("color").label().locale(locale))
                 .selectedValues(getSelectedValues(key))
                 .countHidden(true)
                 .build();
     }
 
-    private Facet<ProductProjection> categoryFacet(final List<Category> categories) {
-        final String key = "product-type";
+    private Facet<ProductProjection> categoryFacet(final CategoryTree subcategoryTree) {
         final TermFacetAndFilterSearchModel<ProductProjection> model = TermFacetAndFilterSearchModel.of("variants.categories.id");
-        return SelectFacetBuilder.of(key, messages.at("pop.facetProductType"), model)
-                .selectedValues(getSelectedValues(key))
-                .mapper(HierarchicalCategoryFacetOptionMapper.of(categories, singletonList(locale)))
+        return SelectFacetBuilder.of("", messages.at("pop.facet.productType"), model)
+                .mapper(HierarchicalCategoryFacetOptionMapper.of(subcategoryTree, singletonList(locale)))
                 .type(HIERARCHICAL_SELECT)
                 .countHidden(true)
                 .multiSelect(false)
                 .build();
     }
 
-    private SortOption<ProductProjection> newestSortOption(final String key, final SortExpression<ProductProjection> newestFirst) {
+    private SortOption<ProductProjection> newestSortOption() {
         final String value = "";
-        return SortOptionImpl.of(value, messages.at("pop.sortNew"), isSelected(key, value), singletonList(newestFirst));
+        return sortOption(value, messages.at("pop.sort.new"), SORT.createdAt().byDesc());
     }
 
-    private SortOption<ProductProjection> priceAscSortOption(final String key, final SortExpression<ProductProjection> newestFirst) {
+    private SortOption<ProductProjection> priceAscSortOption() {
         final String value = "price-asc";
-        return SortOptionImpl.of(value, messages.at("pop.sortPriceAsc"), isSelected(key, value), asList(newestFirst, SORT.allVariants().price().byAsc()));
+        return sortOption(value, messages.at("pop.sort.priceAsc"), SORT.allVariants().price().byAsc());
     }
 
-    private SortOption<ProductProjection> priceDescSortOption(final String key, final SortExpression<ProductProjection> newestFirst) {
+    private SortOption<ProductProjection> priceDescSortOption() {
         final String value = "price-desc";
-        return SortOptionImpl.of(value, messages.at("pop.sortPriceDesc"), isSelected(key, value), asList(newestFirst, SORT.allVariants().price().byDesc()));
+        return sortOption(value, messages.at("pop.sort.priceDesc"), SORT.allVariants().price().byDesc());
+    }
+
+    private SortOption<ProductProjection> sortOption(final String value, final String label, final SortExpression<ProductProjection> sortExpression) {
+        final List<SortExpression<ProductProjection>> sortExpressionList = new ArrayList<>();
+        sortExpressionList.add(sortExpression);
+        if (!DEFAULT_SORT.equals(sortExpression)) {
+            sortExpressionList.add(DEFAULT_SORT);
+        }
+        final SortOption<ProductProjection> option = new SortOption<>(label, value, sortExpressionList);
+        if (isSelected(SORT_KEY, value)) {
+            option.setSelected(true);
+        }
+        return option;
     }
 
     private boolean isSelected(final String key, final String value) {

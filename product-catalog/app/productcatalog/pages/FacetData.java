@@ -24,12 +24,8 @@ public class FacetData extends Base {
         this.facet = facet;
     }
 
-    public boolean isSortedSelectFacet() {
-        return isFacetType(SORTED_SELECT);
-    }
-
     public boolean isSelectFacet() {
-        return isFacetType(SELECT);
+        return isFacetType(SELECT) || isFacetType(SORTED_SELECT);
     }
 
     public boolean isSliderRangeFacet() {

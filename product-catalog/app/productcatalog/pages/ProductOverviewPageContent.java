@@ -1,32 +1,79 @@
 package productcatalog.pages;
 
+import common.models.DetailData;
 import common.pages.PageContent;
-import common.models.SelectableData;
-import io.sphere.sdk.products.ProductProjection;
-import productcatalog.models.SortOption;
-
-import java.util.List;
 
 public class ProductOverviewPageContent extends PageContent {
     private String additionalTitle;
+    private String filterProductsUrl;
+    private String searchTerm;
+    private BannerData banner;
+    private JumbotronData jumbotron;
+    // TODO searchResult
+    private DetailData seo;
     private BreadcrumbData breadcrumb;
-    private ProductListData productListData;
-    private FilterListData filterListData;
-    private List<SortOption<ProductProjection>> sortOptions;
-    private PaginationData paginationData;
-    private JumbotronData jumbotronData;
-    private List<SelectableData> displayOptions;
+    private FacetListData facets;
+    private PaginationData pagination;
+    private DisplaySelector displaySelector;
+    private SortSelector sortSelector;
+    private ProductListData products;
+    // TODO wishlist
 
     public ProductOverviewPageContent() {
     }
 
     public ProductOverviewPageContent(final String additionalTitle) {
         this.additionalTitle = additionalTitle;
+        this.searchTerm = searchTerm;
     }
 
     @Override
-    public String additionalTitle() {
+    public String getAdditionalTitle() {
         return additionalTitle;
+    }
+
+    public void setAdditionalTitle(final String additionalTitle) {
+        this.additionalTitle = additionalTitle;
+    }
+
+    public String getFilterProductsUrl() {
+        return filterProductsUrl;
+    }
+
+    public void setFilterProductsUrl(final String filterProductsUrl) {
+        this.filterProductsUrl = filterProductsUrl;
+    }
+
+    public String getSearchTerm() {
+        return searchTerm;
+    }
+
+    public void setSearchTerm(final String searchTerm) {
+        this.searchTerm = searchTerm;
+    }
+
+    public BannerData getBanner() {
+        return banner;
+    }
+
+    public void setBanner(final BannerData banner) {
+        this.banner = banner;
+    }
+
+    public JumbotronData getJumbotron() {
+        return jumbotron;
+    }
+
+    public void setJumbotron(final JumbotronData jumbotron) {
+        this.jumbotron = jumbotron;
+    }
+
+    public DetailData getSeo() {
+        return seo;
+    }
+
+    public void setSeo(final DetailData seo) {
+        this.seo = seo;
     }
 
     public BreadcrumbData getBreadcrumb() {
@@ -37,51 +84,43 @@ public class ProductOverviewPageContent extends PageContent {
         this.breadcrumb = breadcrumb;
     }
 
-    public ProductListData getProductListData() {
-        return productListData;
+    public FacetListData getFacets() {
+        return facets;
     }
 
-    public void setProductListData(final ProductListData productListData) {
-        this.productListData = productListData;
+    public void setFacets(final FacetListData facets) {
+        this.facets = facets;
     }
 
-    public FilterListData getFilterListData() {
-        return filterListData;
+    public PaginationData getPagination() {
+        return pagination;
     }
 
-    public void setFilterListData(final FilterListData filterListData) {
-        this.filterListData = filterListData;
+    public void setPagination(final PaginationData pagination) {
+        this.pagination = pagination;
     }
 
-    public List<SortOption<ProductProjection>> getSortOptions() {
-        return sortOptions;
+    public DisplaySelector getDisplaySelector() {
+        return displaySelector;
     }
 
-    public void setSortOptions(final List<SortOption<ProductProjection>> sortOptions) {
-        this.sortOptions = sortOptions;
+    public void setDisplaySelector(final DisplaySelector displaySelector) {
+        this.displaySelector = displaySelector;
     }
 
-    public PaginationData getPaginationData() {
-        return paginationData;
+    public SortSelector getSortSelector() {
+        return sortSelector;
     }
 
-    public void setPaginationData(final PaginationData paginationData) {
-        this.paginationData = paginationData;
+    public void setSortSelector(final SortSelector sortSelector) {
+        this.sortSelector = sortSelector;
     }
 
-    public JumbotronData getJumbotronData() {
-        return jumbotronData;
+    public ProductListData getProducts() {
+        return products;
     }
 
-    public void setJumbotronData(final JumbotronData jumbotronData) {
-        this.jumbotronData = jumbotronData;
-    }
-
-    public List<SelectableData> getDisplayOptions() {
-        return displayOptions;
-    }
-
-    public void setDisplayOptions(final List<SelectableData> displayOptions) {
-        this.displayOptions = displayOptions;
+    public void setProducts(final ProductListData products) {
+        this.products = products;
     }
 }

@@ -32,9 +32,12 @@ import static java.util.stream.Collectors.toList;
 @With(MetricAction.class)
 public abstract class SunriseController extends ShopController {
     private final ControllerDependency controllerDependency;
+    private final String saleCategoryExtId;
 
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
+        this.saleCategoryExtId = controllerDependency.configuration().getString("common.saleCategoryExternalId", "");
+
         // TODO Fill it properly
         this.controllerDependency = controllerDependency;
     }
@@ -64,8 +67,7 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected final SunrisePageData pageData(final UserContext userContext, final PageContent content) {
-        final String saleCategoryExtId = configuration().getString("common.saleCategoryExternalId");
-        final PageHeader pageHeader = new PageHeader(content.additionalTitle());
+        final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categories(), userContext, reverseRouter(), saleCategoryExtId));
         return new SunrisePageData(pageHeader, new PageFooter(), content, new PageMeta());

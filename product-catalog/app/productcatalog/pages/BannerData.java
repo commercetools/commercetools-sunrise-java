@@ -1,12 +1,19 @@
 package productcatalog.pages;
 
+import common.contexts.UserContext;
 import common.models.DetailData;
+import io.sphere.sdk.categories.Category;
+
+import java.util.Optional;
 
 public class BannerData extends DetailData {
     private String imageMobile;
     private String imageDesktop;
 
-    public BannerData() {
+    public BannerData(final UserContext userContext, final Category category) {
+        setTitle(category.getName().find(userContext.locales()).orElse(""));
+        Optional.ofNullable(category.getDescription())
+                .ifPresent(description -> setDescription(description.find(userContext.locales()).orElse("")));
     }
 
     public String getImageMobile() {

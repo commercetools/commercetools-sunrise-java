@@ -33,9 +33,9 @@ public class CategoryServiceImplTest {
         final Category backpacks = categories.findById("46249239-8f0f-48a9-b0a0-d29b37fc617f").get();
         final Category slingBags = categories.findById("8e052705-7810-4528-ba77-00094b87a69a").get();
 
-        final List<Category> shoulderBagSiblings = categrieService.getSiblingCategories(singletonList(shoulderBags.toReference()));
-        final List<Category> handBagSiblings = categrieService.getSiblingCategories(singletonList(handBags.toReference()));
-        final List<Category> combinedsiblings = categrieService.getSiblingCategories(asList(shoulderBags.toReference(), handBags.toReference()));
+        final List<Category> shoulderBagSiblings = categrieService.getSiblings(singletonList(shoulderBags.toReference()));
+        final List<Category> handBagSiblings = categrieService.getSiblings(singletonList(handBags.toReference()));
+        final List<Category> combinedsiblings = categrieService.getSiblings(asList(shoulderBags.toReference(), handBags.toReference()));
 
         assertThat(shoulderBagSiblings)
                 .containsExactly(clutches, satchels, shoppers, handBags, wallets, backpacks, slingBags);
@@ -45,17 +45,5 @@ public class CategoryServiceImplTest {
                 .containsExactly(clutches, satchels, shoppers, handBags, wallets, backpacks, slingBags);
     }
 
-    @Test
-    public void getBreadCrumbCategories() {
-        final ProductProjection suttonBag = getProductById(products, "254f1c0e-67bc-4aa6-992d-9a0fea1846b5");
-        final Category woman = categories.findById("33339d11-0e7b-406b-899b-60f4c34c2948").get();
-        final Category bags = categories.findById("32952779-d916-4f2b-b1d5-9efd7f7b9f58").get();
-        final Category handBags = categories.findById("9a584ee8-a45a-44e8-b9ec-e11439084687").get();
 
-        final List<Category> result = suttonBag.getCategories().stream().findFirst()
-                .map(categrieService::getBreadCrumbCategories)
-                .orElse(Collections.<Category>emptyList());
-
-        assertThat(result).containsExactly(woman, bags, handBags);
-    }
 }

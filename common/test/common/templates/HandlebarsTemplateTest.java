@@ -3,7 +3,6 @@ package common.templates;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.pages.*;
-import common.models.SeoData;
 import org.junit.Test;
 import play.Configuration;
 
@@ -157,11 +156,6 @@ public class HandlebarsTemplateTest {
 
             @Override
             public PageFooter getFooter() {
-                return null;
-            }
-
-            @Override
-            public SeoData getSeo() {
                 return null;
             }
 

@@ -6,7 +6,6 @@ import io.sphere.sdk.models.Reference;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 public interface CategoryService {
 
@@ -16,26 +15,19 @@ public interface CategoryService {
      * @param categoryRefs References to the categories for which the sibling categories should be fetched
      * @return a list of sibling categories
      */
-    List<Category> getSiblingCategories(final Collection<Reference<Category>> categoryRefs);
+    List<Category> getSiblings(final Collection<Reference<Category>> categoryRefs);
 
     /**
-     * Gets the 'New' category, if any.
-     * @return the 'New' category, or absent if it does not exists
+     * Gets the subtree of the given parent categories.
+     * @param parentCategories the list of parent categories to use as a starting point
+     * @return the subtree with the subcategories including the parent categories
      */
-    Optional<Category> getNewCategory();
+    CategoryTree getSubtree(final Collection<Category> parentCategories);
 
     /**
-     * Finds out whether a category is a successor of the 'New' category
-     * @param category the category that might be a successor of 'New'
-     * @return if the category is a successor
+     * Gets the ancestor of the given category that is in root level.
+     * @param category the category which to find the root ancestor
+     * @return the root ancestor of the category or the same category in case it is a root itself
      */
-    boolean categoryIsInNew(final Reference<Category> category);
-
-    /**
-     * Gets a subtree from the given CategoryTree with the given Category as root.
-     * If the given Category is not in the given CategoryTree the returned CategoryTree will be empty.
-     * @param category
-     * @return The Subtree starting at the given Category
-     */
-    CategoryTree getSubtree(final CategoryTree categoryTree, final Category category);
+    Category getRootAncestor(final Category category);
 }

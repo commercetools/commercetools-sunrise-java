@@ -7,10 +7,10 @@ import play.mvc.Call;
 import productcatalog.controllers.routes;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
-    private final int pageSize;
+    private final int pageSizeDefault;
 
     public ReverseRouterImpl(final Configuration configuration) {
-        this.pageSize = configuration.getInt("pop.pageSize");
+        this.pageSizeDefault = configuration.getInt("pop.pageSize.default");
     }
 
     @Override
@@ -21,7 +21,7 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call category(final String languageTag, final String categorySlug, final int page) {
-        return routes.ProductOverviewPageController.show(languageTag, page, pageSize, categorySlug);
+        return routes.ProductOverviewPageController.show(languageTag, page, pageSizeDefault, categorySlug);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call search(final String languageTag, final String searchTerm, final int page) {
-        return productcatalog.controllers.routes.ProductOverviewPageController.search(languageTag, page, pageSize, searchTerm);
+        return productcatalog.controllers.routes.ProductOverviewPageController.search(languageTag, page, pageSizeDefault, searchTerm);
     }
 
     @Override

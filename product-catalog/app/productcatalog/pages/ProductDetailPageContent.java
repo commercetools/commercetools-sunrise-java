@@ -1,7 +1,6 @@
 package productcatalog.pages;
 
 import common.pages.*;
-import common.models.LinkData;
 
 import java.util.List;
 
@@ -16,13 +15,13 @@ public class ProductDetailPageContent extends PageContent {
     public ProductDetailPageContent() {
     }
 
-    public ProductDetailPageContent(final String additionalTitle, final ProductData productData) {
+    public ProductDetailPageContent(final String additionalTitle) {
         this.additionalTitle = additionalTitle;
         this.productData = productData;
     }
 
     @Override
-    public String additionalTitle() {
+    public String getAdditionalTitle() {
         return additionalTitle;
     }
 

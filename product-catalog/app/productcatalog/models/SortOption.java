@@ -1,33 +1,27 @@
 package productcatalog.models;
 
+import common.models.SelectableData;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.search.SortExpression;
 
 import java.util.List;
 
-public interface SortOption<T> {
+public class SortOption<T> extends SelectableData {
+    private List<SortExpression<T>> expressions;
 
-    /**
-     * Gets the label displayed in the sort option.
-     * @return the label displayed in this sort option
-     */
-    String getLabel();
+    public SortOption() {
+    }
 
-    /**
-     * Gets the value for this sort option.
-     * @return the option value
-     */
-    String getValue();
-
-    /**
-     * Whether this sort option is selected or not.
-     * @return true if the option is selected, false otherwise
-     */
-    boolean isSelected();
+    public SortOption(final String label, final String value, final List<SortExpression<T>> expressions) {
+        super(label, value);
+        this.expressions = expressions;
+    }
 
     /**
      * Gets the sort model associated with this option, representing the attribute path and sorting direction.
      * @return the sort model for this option
      */
-    List<SortExpression<T>> getSortExpressions();
-
+    public List<SortExpression<T>> getSortExpressions() {
+        return expressions;
+    }
 }

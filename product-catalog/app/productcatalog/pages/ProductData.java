@@ -1,73 +1,31 @@
 package productcatalog.pages;
 
-import common.models.DetailData;
-import common.models.ImageData;
-import common.models.SelectableData;
+import common.contexts.UserContext;
+import common.pages.ReverseRouter;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
-
-import java.util.List;
+import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.ProductVariant;
 
 public class ProductData extends Base {
+    private String url;
+    // TODO ratingX
+    private boolean sale;
+    private boolean _new;
+    private boolean moreColors;
 
-    private final String text;
-    private final String sku;
-    private final String description;
-    private final String price;
-    private final String priceOld;
-    private final List<ImageData> images;
-    private final List<SelectableData> colors;
-    private final List<SelectableData> sizes;
-    private final List<DetailData> details;
-
-    public ProductData (final String text, final String sku, final String description, final String price, final String priceOld, final List<ImageData> images, final List<SelectableData> colors, final List<SelectableData> sizes, final List<DetailData> details) {
-        this.text = text;
-        this.sku = sku;
-        this.description = description;
-        this.price = price;
-        this.priceOld = priceOld;
-        this.images = images;
-        this.colors = colors;
-        this.sizes = sizes;
-        this.details = details;
+    public ProductData() {
     }
 
-    public String getId() {
-        return Integer.toString(hashCode());
+    public ProductData(final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew,
+                       final ProductProjection product, final ProductVariant variant) {
+        final String slug = product.getSlug().find(userContext.locale()).orElse("");
+        this.url = reverseRouter.product(userContext.locale().toLanguageTag(), slug, variant.getSku()).url();
+        this._new = product.getCategories().stream()
+                .anyMatch(category -> categoryTreeNew.findById(category.getId()).isPresent());
+        //this.sale = TODO get from variant if there is old price
+        //this.moreColors = TODO get distinct from variant
     }
 
-    public String getText() {
-        return text;
-    }
 
-    public String getSku() {
-        return sku;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public String getPriceOld() {
-        return priceOld;
-    }
-
-    public List<ImageData> getImages() {
-        return images;
-    }
-
-    public List<SelectableData> getColors() {
-        return colors;
-    }
-
-    public List<SelectableData> getSizes() {
-        return sizes;
-    }
-
-    public List<DetailData> getDetails() {
-        return details;
-    }
 }

@@ -5,7 +5,6 @@ import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.pages.*;
-import common.models.LinkData;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
@@ -62,7 +61,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private F.Promise<List<ProductProjection>> fetchSuggestions(final ProductProjection productProjection) {
-        final List<Category> siblingCategories = categoryService.getSiblingCategories(productProjection.getCategories());
+        final List<Category> siblingCategories = categoryService.getSiblings(productProjection.getCategories());
         return productService.getSuggestions(siblingCategories, numberOfSuggestions);
     }
 
@@ -99,19 +98,13 @@ public class ProductDetailPageController extends SunriseController {
                                                                  final ProductProjection product,
                                                                  final ProductVariant variant) {
         final String additionalTitle = product.getName().find(userContext.locales()).orElse("");
-        final ProductData productData = getProductData(userContext, product, variant);
-        final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle, productData);
+        final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle);
+        content.setProductData(new ProductData(userContext, reverseRouter(), categories(), product, variant));
         content.setBreadcrumb(new BreadcrumbData(product, variant.getSku(), categories(), userContext, reverseRouter()));
         content.setShippingRates(getDeliveryData(userContext));
         content.setSuggestions(getSuggestionData(userContext, suggestions));
         content.setAddToCartFormUrl(reverseRouter().productVariantToCartForm(userContext.locale().getLanguage()).url());
         return content;
-    }
-
-    private ProductData getProductData(final UserContext userContext, final ProductProjection productProjection,
-                                       final ProductVariant productVariant) {
-        final ProductDataFactory productDataFactory = ProductDataFactory.of(userContext, reverseRouter(), categoryService);
-        return productDataFactory.create(productProjection, productVariant);
     }
 
     private List<ShippingRateData> getDeliveryData(final UserContext userContext) {
@@ -123,10 +116,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private List<ProductData> getSuggestionData(final UserContext userContext, final List<ProductProjection> suggestions) {
-        final ProductDataFactory productDataFactory = ProductDataFactory.of(userContext, reverseRouter(), categoryService);
-        return suggestions.stream()
-                .map((product) -> productDataFactory.create(product, product.getMasterVariant()))
-                .collect(toList());
+        return new ProductListData(userContext, reverseRouter(), categories(), suggestions).getList();
     }
 
     private List<ShopShippingRate> getShippingRates() {

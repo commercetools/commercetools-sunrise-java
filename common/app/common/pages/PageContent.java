@@ -4,5 +4,5 @@ import io.sphere.sdk.models.Base;
 
 public abstract class PageContent extends Base {
 
-    public abstract String additionalTitle();
+    public abstract String getAdditionalTitle();
 }

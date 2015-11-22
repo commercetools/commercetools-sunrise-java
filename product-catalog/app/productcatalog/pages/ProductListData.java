@@ -1,17 +1,19 @@
 package productcatalog.pages;
 
+import common.contexts.UserContext;
+import common.pages.ReverseRouter;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
+import io.sphere.sdk.products.ProductProjection;
 
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class ProductListData extends Base {
     private List<ProductData> list;
 
     public ProductListData() {
-    }
-
-    public ProductListData(final List<ProductData> list) {
-        this.list = list;
     }
 
     public List<ProductData> getList() {
@@ -20,5 +22,12 @@ public class ProductListData extends Base {
 
     public void setList(final List<ProductData> list) {
         this.list = list;
+    }
+
+    public ProductListData(final UserContext userContext, final ReverseRouter reverseRouter,
+                           final CategoryTree categoryTree, final List<ProductProjection> productList) {
+        this.list = productList.stream()
+                .map(product -> new ProductData(userContext, reverseRouter, categoryTree, product, product.getMasterVariant()))
+                .collect(toList());
     }
 }

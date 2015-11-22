@@ -1,9 +1,7 @@
 package common.templates;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jknack.handlebars.Context;
-import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.*;
 import com.github.jknack.handlebars.context.MapValueResolver;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
@@ -31,7 +29,7 @@ public final class HandlebarsTemplateService implements TemplateService {
     public String render(final String templateName, final PageData pageData, final List<Locale> locales) {
         final Template template = compileTemplate(templateName);
         final Context context = buildContext(pageData, templateName);
-        context.data("locales", locales.stream().map(locale -> locale.toLanguageTag()).collect(toList()));
+        context.data("locales", locales.stream().map(Locale::toLanguageTag).collect(toList()));
         try {
             Logger.debug("Rendering template " + templateName);
             return template.apply(context);
@@ -46,10 +44,11 @@ public final class HandlebarsTemplateService implements TemplateService {
 
     public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts, final Configuration configuration) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
-        final Handlebars handlebars = new Handlebars().with(loaders);
+        final Handlebars handlebars = new Handlebars().with(loaders).infiniteLoops(true);
         final List<String> languages = configuration.getStringList("handlebars.i18n.langs", emptyList());
         final List<String> bundles = configuration.getStringList("handlebars.i18n.bundles", emptyList());
         handlebars.registerHelper("i18n", new HandlebarsTranslationHelper(languages, bundles));
+        handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
         return new HandlebarsTemplateService(handlebars, fallbackContexts);
     }
 

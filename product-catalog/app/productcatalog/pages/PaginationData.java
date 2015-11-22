@@ -12,13 +12,11 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 public class PaginationData extends Base {
-    private int totalProducts;
-    private int productsCount;
-    private List<LinkData> pages;
-    private LinkData prevPage;
-    private LinkData nextPage;
+    private String previousUrl;
+    private String nextUrl;
     private LinkData firstPage;
     private LinkData lastPage;
+    private List<LinkData> pages;
 
     public PaginationData() {
     }
@@ -28,8 +26,6 @@ public class PaginationData extends Base {
         final int totalPages = calculateTotalPages(searchResult, pageSize);
         final int thresholdLeft = displayedPages - 1;
         final int thresholdRight = totalPages - displayedPages + 2;
-        this.totalProducts = searchResult.getTotal();
-        this.productsCount = searchResult.getOffset() + searchResult.size();
 
         if (totalPages <= displayedPages) {
             this.pages = createPages(1, totalPages, currentPage, requestContext);
@@ -45,19 +41,11 @@ public class PaginationData extends Base {
             this.lastPage = createLinkData(totalPages, currentPage, requestContext);
         }
         if (!searchResult.isFirst()) {
-            this.prevPage = createLinkData(currentPage - 1, currentPage, requestContext);
+            this.previousUrl = buildRequestUrlWithPage(currentPage - 1, requestContext);
         }
         if (!searchResult.isLast()) {
-            this.nextPage = createLinkData(currentPage + 1, currentPage, requestContext);
+            this.nextUrl = buildRequestUrlWithPage(currentPage + 1, requestContext);
         }
-    }
-
-    public int getProductsCount() {
-        return productsCount;
-    }
-
-    public int getTotalProducts() {
-        return totalProducts;
     }
 
     public List<LinkData> getPages() {
@@ -66,22 +54,6 @@ public class PaginationData extends Base {
 
     public void setPages(final List<LinkData> pages) {
         this.pages = pages;
-    }
-
-    public LinkData getPrevPage() {
-        return prevPage;
-    }
-
-    public void setPrevPage(final LinkData prevPage) {
-        this.prevPage = prevPage;
-    }
-
-    public LinkData getNextPage() {
-        return nextPage;
-    }
-
-    public void setNextPage(final LinkData nextPage) {
-        this.nextPage = nextPage;
     }
 
     public LinkData getFirstPage() {
@@ -98,6 +70,22 @@ public class PaginationData extends Base {
 
     public void setLastPage(final LinkData lastPage) {
         this.lastPage = lastPage;
+    }
+
+    public String getPreviousUrl() {
+        return previousUrl;
+    }
+
+    public void setPreviousUrl(final String previousUrl) {
+        this.previousUrl = previousUrl;
+    }
+
+    public String getNextUrl() {
+        return nextUrl;
+    }
+
+    public void setNextUrl(final String nextUrl) {
+        this.nextUrl = nextUrl;
     }
 
     private static int calculateTotalPages(final PagedResult<?> searchResult, final int pageSize) {

@@ -1,29 +1,40 @@
 package controllers;
 
-import play.inject.Injector;
+import common.contexts.UserContext;
+import common.controllers.ControllerDependency;
+import common.controllers.SunriseController;
+import common.pages.PageContent;
 import play.libs.F;
-import play.mvc.Controller;
 import play.mvc.Result;
-import setupwidget.controllers.SetupController;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Front controller for the {@link ApplicationController} to enable a widget to set the SPHERE.IO credentials.
+ * Controller for the home page.
  */
 @Singleton
-public class HomeController extends Controller {
-    private final Injector injector;
-    private final SetupController setupController;
+public class HomeController extends SunriseController {
 
     @Inject
-    public HomeController(final Injector injector, final SetupController setupController) {
-        this.injector = injector;
-        this.setupController = setupController;
+    public HomeController(final ControllerDependency controllerDependency) {
+        super(controllerDependency);
     }
 
-    public F.Promise<Result> index() {
-        return setupController.handleOrFallback(() -> injector.instanceOf(ApplicationController.class).index());
+    public F.Promise<Result> show(final String languageTag) {
+        final UserContext userContext = userContext(languageTag);
+        final PageContent pageContent = new HomeContent();
+        return F.Promise.pure(ok(templateService().renderToHtml("home", pageData(userContext, pageContent), userContext.locales())));
+    }
+
+    private static class HomeContent extends PageContent {
+        public HomeContent() {
+
+        }
+
+        @Override
+        public String getAdditionalTitle() {
+            return null;
+        }
     }
 }
