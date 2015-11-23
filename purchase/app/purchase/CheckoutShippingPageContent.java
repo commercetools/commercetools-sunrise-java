@@ -2,7 +2,6 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.models.ProductDataConfig;
-import common.pages.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
 import play.Configuration;
 import play.i18n.Messages;
@@ -14,12 +13,12 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
     public CheckoutShippingPageContent() {
     }
 
-    public CheckoutShippingPageContent(final Cart cart, final Messages messages, final Configuration configuration, final ReverseRouter reverseRouter, final UserContext userContext, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig) {
+    public CheckoutShippingPageContent(final Cart cart, final Messages messages, final Configuration configuration, final UserContext userContext, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig) {
         fillDefaults(cart, userContext, productDataConfig);
         setShippingForm(new CheckoutShippingFormBean(cart, userContext, shippingMethods, messages, configuration));
     }
 
-    public CheckoutShippingPageContent(final CheckoutShippingFormData filledForm, final Cart cart, final Messages messages, final Configuration configuration, final ReverseRouter reverseRouter, final UserContext userContext, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig) {
+    public CheckoutShippingPageContent(final CheckoutShippingFormData filledForm, final Cart cart, final Messages messages, final Configuration configuration, final UserContext userContext, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig) {
         fillDefaults(cart, userContext, productDataConfig);
         setShippingForm(new CheckoutShippingFormBean(filledForm, userContext, shippingMethods, messages, configuration));
     }

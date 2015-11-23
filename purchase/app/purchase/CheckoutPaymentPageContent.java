@@ -2,14 +2,13 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.models.ProductDataConfig;
-import common.pages.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
 
 public class CheckoutPaymentPageContent extends CheckoutPageContent {
 
     private PaymentFormBean paymentForm;
 
-    public CheckoutPaymentPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
+    public CheckoutPaymentPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig) {
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setPaymentStepActive(true);
         setStepWidget(stepWidget);
