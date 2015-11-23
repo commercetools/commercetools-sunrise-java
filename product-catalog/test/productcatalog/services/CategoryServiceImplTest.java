@@ -1,15 +1,14 @@
 package productcatalog.services;
 
-import common.categories.CategoryUtils;
+import common.categories.JsonUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.products.ProductProjection;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.List;
 
-import static common.products.ProductUtils.getProductById;
 import static common.products.ProductUtils.getQueryResult;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -17,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CategoryServiceImplTest {
 
-    private final CategoryTree categories = CategoryTree.of(CategoryUtils.getQueryResult("categoryQueryResult.json").getResults());
+    private final CategoryTree categories = CategoryTree.of(JsonUtils.readJson("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
     private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
     private final CategoryService categrieService = new CategoryServiceImpl(categories);
 

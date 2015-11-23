@@ -4,17 +4,14 @@ import common.actions.LanguageFiltered;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
-import common.pages.*;
+import common.controllers.SunrisePageData;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.libs.F;
 import play.mvc.Result;
-import productcatalog.models.ProductNotFoundException;
-import productcatalog.models.ProductVariantNotFoundException;
-import productcatalog.models.ShopShippingRate;
-import productcatalog.pages.*;
+import productcatalog.models.*;
 import productcatalog.services.CategoryService;
 import productcatalog.services.ProductProjectionService;
 
@@ -97,7 +94,7 @@ public class ProductDetailPageController extends SunriseController {
         final String additionalTitle = product.getName().find(userContext.locales()).orElse("");
         final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle);
         content.setProductData(new ProductData(userContext, reverseRouter(), categories(), product, variant));
-        content.setBreadcrumb(new BreadcrumbData(product, variant.getSku(), categories(), userContext, reverseRouter()));
+        content.setBreadcrumb(new BreadcrumbData(product, variant, categories(), userContext, reverseRouter()));
         content.setShippingRates(getDeliveryData(userContext));
         content.setSuggestions(getSuggestionData(userContext, suggestions));
         content.setAddToCartFormUrl(reverseRouter().productVariantToCartForm(userContext.locale().getLanguage()).url());

@@ -1,8 +1,9 @@
 package productcatalog.services;
 
-import common.categories.CategoryUtils;
+import common.categories.JsonUtils;
 import common.products.ProductUtils;
 import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.client.SphereRequest;
 import io.sphere.sdk.products.ProductProjection;
@@ -35,7 +36,7 @@ public class ProductProjectionServiceImplTest {
     public void getSuggestions() {
         final PlayJavaSphereClient sphereClient = getSphereClientReturningAllProducts();
         final ProductProjectionService service = new ProductProjectionServiceImpl(sphereClient);
-        final List<Category> categories = CategoryUtils.getQueryResult("categoryQueryResult.json").getResults();
+        final List<Category> categories = JsonUtils.readJson("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults();
 
         assertThat(service.getSuggestions(categories, 4).get(DEFAULT_TIMEOUT)).hasSize(4).doesNotHaveDuplicates();
         assertThat(service.getSuggestions(categories, 5).get(DEFAULT_TIMEOUT)).hasSize(5).doesNotHaveDuplicates();

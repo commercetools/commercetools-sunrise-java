@@ -1,11 +1,12 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import common.contexts.UserContext;
 import common.models.LinkData;
-import common.pages.ReverseRouter;
+import common.controllers.ReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.ProductVariant;
 
 import java.util.List;
 import java.util.Locale;
@@ -30,20 +31,16 @@ public class BreadcrumbData {
 
     public BreadcrumbData(final Category currentCategory, final CategoryTree categoryTree, final UserContext userContext,
                           final ReverseRouter reverseRouter) {
-        final List<Category> categoryWithAncestors = getCategoryWithAncestors(currentCategory, categoryTree);
-        this.links = createCategoryBreadcrumb(categoryWithAncestors, categoryTree, userContext, reverseRouter);
+        this.links = createCategoryBreadcrumb(currentCategory, categoryTree, userContext, reverseRouter);
     }
 
-    public BreadcrumbData(final ProductProjection currentProduct, final String sku, final CategoryTree categoryTree,
-                          final UserContext userContext, final ReverseRouter reverseRouter) {
+    public BreadcrumbData(final ProductProjection currentProduct, final ProductVariant currentVariant,
+                          final CategoryTree categoryTree, final UserContext userContext, final ReverseRouter reverseRouter) {
         this.links = currentProduct.getCategories().stream().findFirst()
                 .flatMap(ref -> categoryTree.findById(ref.getId())
-                        .map(category -> {
-                            final List<Category> categoryWithAncestors = getCategoryWithAncestors(category, categoryTree);
-                            return createCategoryBreadcrumb(categoryWithAncestors, categoryTree, userContext, reverseRouter);
-                        })
+                                .map(currentCategory -> createCategoryBreadcrumb(currentCategory, categoryTree, userContext, reverseRouter))
                 ).orElse(emptyList());
-        this.links.add(createProductLinkData(currentProduct, sku, userContext, reverseRouter));
+        this.links.add(createProductLinkData(currentProduct, currentVariant, userContext, reverseRouter));
     }
 
     public List<LinkData> getLinks() {
@@ -52,6 +49,14 @@ public class BreadcrumbData {
 
     public void setLinks(final List<LinkData> links) {
         this.links = links;
+    }
+
+    private static List<LinkData> createCategoryBreadcrumb(final Category currentCategory, final CategoryTree categoryTree,
+                                                           final UserContext userContext, final ReverseRouter reverseRouter) {
+        final List<Category> categoryWithAncestors = getCategoryWithAncestors(currentCategory, categoryTree);
+        return categoryWithAncestors.stream()
+                .map(category -> createCategoryLinkData(category, userContext, reverseRouter))
+                .collect(toList());
     }
 
     private static List<Category> getCategoryWithAncestors(final Category category, final CategoryTree categoryTree) {
@@ -64,13 +69,6 @@ public class BreadcrumbData {
         return ancestors;
     }
 
-    private static List<LinkData> createCategoryBreadcrumb(final List<Category> categoryWithAncestors, final CategoryTree categoryTree,
-                                                           final UserContext userContext, final ReverseRouter reverseRouter) {
-        return categoryWithAncestors.stream()
-                .map(category -> createCategoryLinkData(category, userContext, reverseRouter))
-                .collect(toList());
-    }
-
     private static LinkData createCategoryLinkData(final Category category, final UserContext userContext,
                                                    final ReverseRouter reverseRouter) {
         final LinkData linkData = new LinkData();
@@ -79,11 +77,11 @@ public class BreadcrumbData {
         return linkData;
     }
 
-    private static LinkData createProductLinkData(final ProductProjection currentProduct, final String sku,
+    private static LinkData createProductLinkData(final ProductProjection currentProduct, final ProductVariant variant,
                                                   final UserContext userContext, final ReverseRouter reverseRouter) {
         final LinkData linkData = new LinkData();
         linkData.setText(currentProduct.getName().find(userContext.locales()).orElse(""));
-        linkData.setUrl(getProductUrl(currentProduct, sku, userContext.locale(), reverseRouter));
+        linkData.setUrl(getProductUrl(currentProduct, variant, userContext.locale(), reverseRouter));
         return linkData;
     }
 
@@ -92,8 +90,9 @@ public class BreadcrumbData {
         return reverseRouter.category(locale.toLanguageTag(), slug).url();
     }
 
-    private static String getProductUrl(final ProductProjection product, final String sku, final Locale locale, final ReverseRouter reverseRouter) {
+    private static String getProductUrl(final ProductProjection product, final ProductVariant variant,
+                                        final Locale locale, final ReverseRouter reverseRouter) {
         final String slug = product.getSlug().find(locale).orElse("");
-        return reverseRouter.product(locale.toLanguageTag(), slug, sku).url();
+        return reverseRouter.product(locale.toLanguageTag(), slug, variant.getSku()).url();
     }
 }
