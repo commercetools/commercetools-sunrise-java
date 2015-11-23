@@ -11,9 +11,10 @@ GET         /assets/public/*file                               controllers.Asset
 # Map static resources from webjars (only CSS, JS, fonts and images) to the /assets URL path
 GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJarAssets.at(file)
 
+# Main entry point that decides whether to go to home page or to setup wizard
+GET         /                                                  @controllers.ApplicationController.index()
 
 # Home page
-GET         /                                                  @controllers.HomeController.show(languageTag = "en")
 GET         /:languageTag/home                                 @controllers.HomeController.show(languageTag:String)
 
 
