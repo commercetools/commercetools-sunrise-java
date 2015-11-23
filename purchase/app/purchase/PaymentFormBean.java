@@ -8,16 +8,14 @@ import java.util.Collections;
 
 public class PaymentFormBean {
     private String actionUrl;
-    private String csrfToken;
     private PaymentOptionsBean paymentOptions;
 
 
     public PaymentFormBean() {
     }
 
-    public PaymentFormBean(final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext) {
+    public PaymentFormBean(final ReverseRouter reverseRouter, final UserContext userContext) {
         setActionUrl(reverseRouter.processCheckoutPaymentForm(userContext.locale().getLanguage()).url());
-        setCsrfToken(csrfToken);
         final PaymentOptionsBean paymentOptions = new PaymentOptionsBean();
         final SelectableData o = new SelectableData();
         o.setText("prepaid");
@@ -32,14 +30,6 @@ public class PaymentFormBean {
 
     public void setActionUrl(final String actionUrl) {
         this.actionUrl = actionUrl;
-    }
-
-    public String getCsrfToken() {
-        return csrfToken;
-    }
-
-    public void setCsrfToken(final String csrfToken) {
-        this.csrfToken = csrfToken;
     }
 
     public PaymentOptionsBean getPaymentOptions() {

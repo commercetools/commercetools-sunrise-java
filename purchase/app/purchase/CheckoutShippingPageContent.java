@@ -14,14 +14,14 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
     public CheckoutShippingPageContent() {
     }
 
-    public CheckoutShippingPageContent(final Cart cart, final Messages messages, final Configuration configuration, final ReverseRouter reverseRouter, final UserContext userContext, final String csrfToken, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig) {
+    public CheckoutShippingPageContent(final Cart cart, final Messages messages, final Configuration configuration, final ReverseRouter reverseRouter, final UserContext userContext, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig) {
         fillDefaults(cart, userContext, productDataConfig);
-        setShippingForm(new CheckoutShippingFormBean(cart, reverseRouter, csrfToken, userContext, shippingMethods, messages, configuration));
+        setShippingForm(new CheckoutShippingFormBean(cart, reverseRouter, userContext, shippingMethods, messages, configuration));
     }
 
-    public CheckoutShippingPageContent(final CheckoutShippingFormData filledForm, final Cart cart, final Messages messages, final Configuration configuration, final ReverseRouter reverseRouter, final UserContext userContext, final String csrfToken, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig) {
+    public CheckoutShippingPageContent(final CheckoutShippingFormData filledForm, final Cart cart, final Messages messages, final Configuration configuration, final ReverseRouter reverseRouter, final UserContext userContext, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig) {
         fillDefaults(cart, userContext, productDataConfig);
-        setShippingForm(new CheckoutShippingFormBean(filledForm, reverseRouter, csrfToken, userContext, shippingMethods, messages, configuration));
+        setShippingForm(new CheckoutShippingFormBean(filledForm, reverseRouter, userContext, shippingMethods, messages, configuration));
     }
 
     private void fillDefaults(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig) {

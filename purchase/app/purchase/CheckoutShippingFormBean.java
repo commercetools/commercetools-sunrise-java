@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public class CheckoutShippingFormBean {
     private String actionUrl;
-    private String csrfToken;
     private boolean billingAddressDifferentToBillingAddress;
     private AddressFormBean shippingAddress;
     private AddressFormBean billingAddress;
@@ -22,8 +21,8 @@ public class CheckoutShippingFormBean {
     public CheckoutShippingFormBean() {
     }
 
-    public CheckoutShippingFormBean(final Cart cart, final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
-        fillDefaults(reverseRouter, csrfToken, userContext);
+    public CheckoutShippingFormBean(final Cart cart, final ReverseRouter reverseRouter, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
+        fillDefaults(reverseRouter, userContext);
         final boolean billingAddressDifferentToBillingAddress = Optional.ofNullable(cart.getBillingAddress())
                 .map(Address::getLastName)
                 .map(lastName -> lastName != null)
@@ -34,8 +33,8 @@ public class CheckoutShippingFormBean {
         setShippingMethods(new ShippingMethodsFormBean(cart, shippingMethods));
     }
 
-    public CheckoutShippingFormBean(final CheckoutShippingFormData checkoutShippingFormData, final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
-        fillDefaults(reverseRouter, csrfToken, userContext);
+    public CheckoutShippingFormBean(final CheckoutShippingFormData checkoutShippingFormData, final ReverseRouter reverseRouter, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
+        fillDefaults(reverseRouter, userContext);
         setBillingAddressDifferentToBillingAddress(checkoutShippingFormData.isBillingAddressDifferentToBillingAddress());
 
         final AddressFormBean shippingAddress = createShippingAddressFormBean(checkoutShippingFormData, userContext, messages, configuration);
@@ -81,9 +80,8 @@ public class CheckoutShippingFormBean {
         return billingAddress;
     }
 
-    private void fillDefaults(final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext) {
+    private void fillDefaults(final ReverseRouter reverseRouter, final UserContext userContext) {
         setActionUrl(reverseRouter.processCheckoutShippingForm(userContext.locale().getLanguage()).url());
-        setCsrfToken(csrfToken);
     }
 
     public String getActionUrl() {
@@ -92,14 +90,6 @@ public class CheckoutShippingFormBean {
 
     public void setActionUrl(final String actionUrl) {
         this.actionUrl = actionUrl;
-    }
-
-    public String getCsrfToken() {
-        return csrfToken;
-    }
-
-    public void setCsrfToken(final String csrfToken) {
-        this.csrfToken = csrfToken;
     }
 
     public AddressFormBean getBillingAddress() {
