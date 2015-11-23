@@ -45,7 +45,7 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val sphereJvmSdkVersion = "1.0.0-M21-2015-11-11-14-46-23-8ca92a5-SNAPSHOT"
+lazy val sphereJvmSdkVersion = "1.0.0-M21-2015-11-13-11-39-45-facets-SNAPSHOT"
 lazy val jacksonVersion = "2.6.0"
 
 lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (

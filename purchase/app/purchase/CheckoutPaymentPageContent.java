@@ -2,6 +2,7 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.models.ProductDataConfig;
+import common.controllers.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
 
 public class CheckoutPaymentPageContent extends CheckoutPageContent {
@@ -25,7 +26,7 @@ public class CheckoutPaymentPageContent extends CheckoutPageContent {
     }
 
     @Override
-    public String additionalTitle() {
+    public String getAdditionalTitle() {
         return null;
     }
 }

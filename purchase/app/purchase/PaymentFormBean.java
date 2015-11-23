@@ -15,7 +15,7 @@ public class PaymentFormBean {
         final PaymentFormBean paymentFormBean = new PaymentFormBean();
         final PaymentOptionsBean paymentOptions = new PaymentOptionsBean();
         final SelectableData o = new SelectableData();
-        o.setText("prepaid");
+        o.setLabel("prepaid");
         o.setSelected(true);
         paymentOptions.setList(Collections.singletonList(o));
         paymentFormBean.setPaymentOptions(paymentOptions);

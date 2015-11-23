@@ -45,7 +45,7 @@ public abstract class WithSunriseApplication extends WithApplication {
 
     protected CategoryTree injectedCategoryTree() {
         final TypeReference<PagedQueryResult<Category>> typeReference = new TypeReference<PagedQueryResult<Category>>() {};
-        final PagedQueryResult<Category> categoryPagedQueryResult = readObjectFromResource("categories.json", typeReference);
+        final PagedQueryResult<Category> categoryPagedQueryResult = readObjectFromResource("controllers/categories.json", typeReference);
         return CategoryTree.of(categoryPagedQueryResult.getResults());
     }
 

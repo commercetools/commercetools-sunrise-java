@@ -1,6 +1,6 @@
 package purchase;
 
-import common.pages.SelectableData;
+import common.models.SelectableData;
 
 import java.util.List;
 

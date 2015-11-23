@@ -1,6 +1,6 @@
 package purchase;
 
-import common.pages.SelectableData;
+import common.models.SelectableData;
 import common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.CartShippingInfo;

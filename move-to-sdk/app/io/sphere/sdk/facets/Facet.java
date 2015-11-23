@@ -52,20 +52,13 @@ public interface Facet<T> {
      * With this search model you can build facet and filter expressions for this attribute.
      * @return the untyped search model for this facet
      */
-    TermFacetAndFilterSearchModel<T, ?> getSearchModel();
+    TermFacetAndFilterSearchModel<T> getSearchModel();
 
     /**
      * Gets the filter expressions associated to this facet, according to the selected values, as needed to obtain a faceted search.
      * @return the filter expressions for this facet
      */
     FacetAndFilterExpression<T> getFacetedSearchExpression();
-
-    /**
-     * Gets a new instance of Facet with the same attributes as this, but with the given list of selected values.
-     * @param selectedValues the new list of selected values
-     * @return a new instance with same attributes, but with the given list of selected values
-     */
-    Facet<T> withSelectedValues(final List<String> selectedValues);
 
     /**
      * Gets a new instance of Facet with the same attributes as this, but with the facet result extracted from the given search result.

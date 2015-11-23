@@ -2,10 +2,10 @@ package common.controllers;
 
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
-import common.pages.ReverseRouter;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.models.Base;
 import play.Configuration;
 import play.i18n.MessagesApi;
 
@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class ControllerDependency {
+public class ControllerDependency extends Base {
     private final PlayJavaSphereClient sphere;
     private final CategoryTree categoryTree;
     private final ProjectContext projectContext;

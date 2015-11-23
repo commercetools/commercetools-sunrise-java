@@ -2,6 +2,7 @@ package inject;
 
 import com.google.inject.Provider;
 import io.sphere.sdk.categories.CategoryTree;
+import play.Logger;
 import productcatalog.services.CategoryService;
 import productcatalog.services.CategoryServiceImpl;
 
@@ -17,6 +18,7 @@ public class CategoryServiceProvider implements Provider<CategoryService> {
 
     @Override
     public CategoryService get() {
+        Logger.debug("Provide CategoryService");
         return new CategoryServiceImpl(categories);
     }
 }

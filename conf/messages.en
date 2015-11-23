@@ -1,9 +1,11 @@
+pop.facet.productType = Product Type
+pop.facet.color = Color
+pop.facet.size = Size
+pop.facet.brand = Brand
 
-common.header.title = Sunrise -
-common.header.stores = STORES
-common.header.help = HELP
-common.header.callUs = CALL US ON +44 123 456 000
-common.header.countries = Location
+pop.sort.new = New first
+pop.sort.priceDesc = Price: Descending
+pop.sort.priceAsc = Price: Ascending
 
 form.apply = Apply
 form.addressOne.label = Address 1
@@ -28,32 +30,3 @@ form.postCode.label = Post Code
 form.region.label = Region
 form.required = Required
 form.title.label = Title
-
-pdp.writeFirstRatingText = Write first review
-
-pdp.ratingFiveStarText = Rocks
-pdp.ratingFourStarText = Pretty good
-pdp.ratingThreeStarText = Meh
-pdp.ratingTwoStarText = Kinda bad
-pdp.ratingOneStarText = Sucks big time
-
-pdp.viewDetailsText = View Details
-pdp.colorsText = Color
-pdp.chooseColorText = Choose Color
-pdp.sizesText = Size
-pdp.chooseSizeText = Choose Size
-pdp.sizeGuideText = Size Guide
-pdp.addToBagText = Add To Bag
-pdp.addToWishlistText = Add To Wishlist
-pdp.availableText = Available
-pdp.productDetailsText = Product Details
-pdp.deliveryAndReturnsText = Delivery & Returns
-pdp.deliveryText = Delivery
-pdp.returnsText = Returns
-pdp.youMayLikeText = You may also like
-pdp.saleText = Sale
-pdp.newText = New
-pdp.quickViewText = Quick View
-pdp.wishlistText = Add item to wishlist
-pdp.moreColorsText = More Colors
-pdp.reviewsText = Reviews

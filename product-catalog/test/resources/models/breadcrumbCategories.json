@@ -1,0 +1,126 @@
+{
+    "offset": 0,
+    "count": 4,
+    "total": 4,
+    "results": [
+        {
+            "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf",
+            "version": 5,
+            "name": {
+                "en": "1st Level"
+            },
+            "slug": {
+                "fr": "root-1448275521915",
+                "en": "1st-level",
+                "de": "root-1448275521915"
+            },
+            "description": {
+                "en": "<p>1st-level category</p>"
+            },
+            "ancestors": [],
+            "orderHint": "0.000014482755315751697271913",
+            "createdAt": "2015-11-23T10:45:31.575Z",
+            "lastModifiedAt": "2015-11-23T10:55:43.625Z",
+            "externalId": "1stLevel",
+            "lastMessageSequenceNumber": 2
+        },
+        {
+            "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e",
+            "version": 3,
+            "name": {
+                "en": "2nd Level"
+            },
+            "slug": {
+                "en": "2nd-level",
+                "fr": "2nd-level-1448275551784",
+                "de": "2nd-level-1448275551784"
+            },
+            "description": {
+                "en": "<p>2nd-level category</p>"
+            },
+            "ancestors": [
+                {
+                    "typeId": "category",
+                    "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf"
+                }
+            ],
+            "parent": {
+                "typeId": "category",
+                "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf"
+            },
+            "orderHint": "0.000014482755573631702989662",
+            "createdAt": "2015-11-23T10:45:57.363Z",
+            "lastModifiedAt": "2015-11-23T10:55:51.149Z",
+            "externalId": "2ndLevel",
+            "lastMessageSequenceNumber": 2
+        },
+        {
+            "id": "6043642c-2a75-4be7-9817-a611aad5711a",
+            "version": 3,
+            "name": {
+                "en": "3rd Level"
+            },
+            "slug": {
+                "en": "3rd-level",
+                "de": "3rd-level-1448275584241",
+                "fr": "3rd-level-1448275584241"
+            },
+            "description": {
+                "en": "<p>3rd-level category</p>"
+            },
+            "ancestors": [
+                {
+                    "typeId": "category",
+                    "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf"
+                },
+                {
+                    "typeId": "category",
+                    "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e"
+                }
+            ],
+            "parent": {
+                "typeId": "category",
+                "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e"
+            },
+            "orderHint": "0.000014482755893701838050132",
+            "createdAt": "2015-11-23T10:46:29.370Z",
+            "lastModifiedAt": "2015-11-23T10:55:58.576Z",
+            "externalId": "3rdLevel",
+            "lastMessageSequenceNumber": 2
+        },
+        {
+            "id": "7e06b4a0-d9d9-436e-beb6-3cdaaeccdef8",
+            "version": 5,
+            "name": {
+                "en": "3rd Level Sibling"
+            },
+            "slug": {
+                "fr": "2nd-level-sibling-1448275621978",
+                "en": "2nd-level-sibling",
+                "de": "2nd-level-sibling-1448275621978"
+            },
+            "description": {
+                "en": "<p>Sibling of the 3rd-level category</p>"
+            },
+            "ancestors": [
+                {
+                    "typeId": "category",
+                    "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf"
+                },
+                {
+                    "typeId": "category",
+                    "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e"
+                }
+            ],
+            "parent": {
+                "typeId": "category",
+                "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e"
+            },
+            "orderHint": "0.000014482756280411677827979",
+            "createdAt": "2015-11-23T10:47:08.041Z",
+            "lastModifiedAt": "2015-11-23T10:55:32.914Z",
+            "externalId": "3rdLevelSibling",
+            "lastMessageSequenceNumber": 2
+        }
+    ]
+}

@@ -27,7 +27,7 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     private final FacetOptionMapper mapper;
 
     protected SelectFacetImpl(final String key, final String label, final boolean countHidden, final FacetType type,
-                              final TermFacetAndFilterSearchModel<T, ?> searchModel, final boolean multiSelect, final boolean matchingAll,
+                              final TermFacetAndFilterSearchModel<T> searchModel, final boolean multiSelect, final boolean matchingAll,
                               final List<String> selectedValues, @Nullable final TermFacetResult facetResult,
                               @Nullable final Long threshold, @Nullable final Long limit, final FacetOptionMapper mapper) {
         super(key, label, countHidden, type, searchModel);
@@ -110,22 +110,19 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     @Override
     public TermFacetAndFilterExpression<T> getFacetedSearchExpression() {
         final TermFacetAndFilterExpression<T> facetedSearchExpr;
-        if (matchingAll) {
-            facetedSearchExpr = searchModel.byAllAsString(selectedValues);
+        if (selectedValues.isEmpty()) {
+            facetedSearchExpr = searchModel.allTerms();
+        } else if (matchingAll) {
+            facetedSearchExpr = searchModel.byAll(selectedValues);
         } else {
-            facetedSearchExpr = searchModel.byAnyAsString(selectedValues);
+            facetedSearchExpr = searchModel.byAny(selectedValues);
         }
         return facetedSearchExpr;
     }
 
     @Override
-    public SelectFacet<T> withSelectedValues(final List<String> selectedValues) {
-        return SelectFacetBuilder.of(this).selectedValues(selectedValues).build();
-    }
-
-    @Override
     public SelectFacet<T> withSearchResult(final PagedSearchResult<T> searchResult) {
-        final TermFacetResult termFacetResult = searchResult.getTermFacetResult(searchModel.byAny(emptyList()).facetExpression());
+        final TermFacetResult termFacetResult = searchResult.getTermFacetResult(searchModel.allTerms().facetExpression());
         return SelectFacetBuilder.of(this).facetResult(termFacetResult).build();
     }
 }

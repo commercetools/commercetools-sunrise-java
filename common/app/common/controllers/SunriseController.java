@@ -1,12 +1,11 @@
 package common.controllers;
 
 import common.cms.CmsService;
-import common.contexts.AppContext;
+import common.contexts.ProjectContext;
+import common.contexts.RequestContext;
 import common.contexts.UserContext;
-import common.pages.PageContent;
-import common.pages.ReverseRouter;
-import common.pages.SunrisePageData;
-import common.pages.SunrisePageDataFactory;
+import common.models.LocationSelector;
+import common.models.NavMenuData;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.CategoryTree;
@@ -35,13 +34,14 @@ import static java.util.stream.Collectors.toList;
 @With(MetricAction.class)
 @AddCSRFToken
 public abstract class SunriseController extends ShopController {
-    private final AppContext context;
     private final ControllerDependency controllerDependency;
+    private final String saleCategoryExtId;
 
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
+        this.saleCategoryExtId = controllerDependency.configuration().getString("common.saleCategoryExternalId", "");
+
         // TODO Fill it properly
-        this.context = AppContext.of(controllerDependency.projectContext());
         this.controllerDependency = controllerDependency;
     }
 
@@ -65,13 +65,16 @@ public abstract class SunriseController extends ShopController {
         return controllerDependency.getReverseRouter();
     }
 
-    protected final AppContext context() {
-        return context;
+    protected ProjectContext projectContext() {
+        return controllerDependency.projectContext();
     }
 
     protected final SunrisePageData pageData(final UserContext userContext, final PageContent content, final Http.Context ctx) {
         final Messages messages = messages(userContext);
-        final String saleCategoryExtId = configuration().getString("common.saleCategoryExternalId");
+        final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
+        pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
+        pageHeader.setNavMenu(new NavMenuData(categories(), userContext, reverseRouter(), saleCategoryExtId));
+
         return new SunrisePageDataFactory(messages, userContext, context().project(), categories(),
                 controllerDependency.getReverseRouter(), saleCategoryExtId, ctx).create(content);
     }
@@ -92,6 +95,10 @@ public abstract class SunriseController extends ShopController {
                 .map(lang -> Locale.forLanguageTag(lang.code()))
                 .collect(toList()));
         return UserContext.of(DE, locales, ZoneId.of("Europe/Berlin"), Monetary.getCurrency("EUR"));
+    }
+
+    protected RequestContext requestContext() {
+        return RequestContext.of(request().queryString(), request().path());
     }
 
     @Nullable
