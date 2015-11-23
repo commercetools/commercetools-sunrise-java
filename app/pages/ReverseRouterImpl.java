@@ -102,12 +102,12 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call showCheckoutConfirmationForm(final String language) {
-        return routes.CheckoutConfirmationController.show(language);
+        return CheckoutConfirmationController.show(language);
     }
 
     @Override
     public Call processCheckoutConfirmationForm(final String language) {
-        return routes.CheckoutConfirmationController.process(language);
+        return CheckoutConfirmationController.process(language);
     }
 
     @Override
@@ -117,6 +117,6 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call showCart(final String language) {
-        return routes.CartDetailPageController.show(language);
+        return CartDetailPageController.show(language);
     }
 }

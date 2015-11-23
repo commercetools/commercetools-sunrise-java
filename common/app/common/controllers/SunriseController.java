@@ -74,9 +74,23 @@ public abstract class SunriseController extends ShopController {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categories(), userContext, reverseRouter(), saleCategoryExtId));
+        return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
+    }
 
-        return new SunrisePageDataFactory(messages, userContext, context().project(), categories(),
-                controllerDependency.getReverseRouter(), saleCategoryExtId, ctx).create(content);
+    private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
+        final PageMeta pageMeta = new PageMeta();
+        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());
+        pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
+        final String language = userContext.locale().getLanguage();
+        pageMeta.addHalLink(reverseRouter().showCart(language), "cart")
+                .addHalLink(reverseRouter().showCheckoutShippingForm(language), "checkout", "editShippingAddress", "editBillingAddress", "editShippingMethod")
+                .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
+                .addHalLink(reverseRouter().home(language), "continueShopping", "home")
+                .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutAddressesSubmit")
+                .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
+                .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
+                .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
+        return pageMeta;
     }
 
     protected final Messages messages(final UserContext userContext) {

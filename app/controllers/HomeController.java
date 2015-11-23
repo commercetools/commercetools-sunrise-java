@@ -24,7 +24,7 @@ public class HomeController extends SunriseController {
     public F.Promise<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final PageContent pageContent = new HomeContent();
-        return F.Promise.pure(ok(templateService().renderToHtml("home", pageData(userContext, pageContent), userContext.locales())));
+        return F.Promise.pure(ok(templateService().renderToHtml("home", pageData(userContext, pageContent, ctx()), userContext.locales())));
     }
 
     private static class HomeContent extends PageContent {

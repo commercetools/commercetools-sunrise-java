@@ -2,8 +2,8 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
+import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
-import common.pages.SunrisePageData;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.orders.OrderFromCartDraft;
 import io.sphere.sdk.orders.PaymentState;

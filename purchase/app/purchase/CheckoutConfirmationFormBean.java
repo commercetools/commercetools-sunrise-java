@@ -1,6 +1,6 @@
 package purchase;
 
-import common.pages.SelectableData;
+import common.models.SelectableData;
 import io.sphere.sdk.models.Base;
 
 public class CheckoutConfirmationFormBean extends Base {

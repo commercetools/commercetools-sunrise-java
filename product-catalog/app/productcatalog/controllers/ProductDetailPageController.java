@@ -10,6 +10,7 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.libs.F;
+import play.mvc.Http;
 import play.mvc.Result;
 import productcatalog.models.*;
 import productcatalog.services.CategoryService;
@@ -41,10 +42,11 @@ public class ProductDetailPageController extends SunriseController {
 
     public F.Promise<Result> show(final String locale, final String slug, final String sku) {
         final UserContext userContext = userContext(locale);
+        final Http.Context ctx = ctx();
         final F.Promise<ProductProjection> productPromise = fetchProduct(userContext.locale(), slug);
         final F.Promise<List<ProductProjection>> suggestionPromise = productPromise.flatMap(this::fetchSuggestions);
         final F.Promise<Result> resultPromise = productPromise.flatMap(productProjection ->
-                suggestionPromise.map(suggestions -> getPdpResult(userContext, suggestions, productProjection, sku)));
+                suggestionPromise.map(suggestions -> getPdpResult(userContext, suggestions, productProjection, sku, ctx)));
         return recover(resultPromise);
     }
 
@@ -74,10 +76,10 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private Result getPdpResult(final UserContext userContext, final List<ProductProjection> suggestions,
-                                final ProductProjection productProjection, final String sku) {
+                                final ProductProjection productProjection, final String sku, final Http.Context ctx) {
         final ProductVariant productVariant = getProductVariantBySku(sku, productProjection);
         final ProductDetailPageContent content = getProductDetailPageContent(userContext, suggestions, productProjection, productVariant);
-        final SunrisePageData pageData = pageData(userContext, content);
+        final SunrisePageData pageData = pageData(userContext, content, ctx);
         return ok(templateService().renderToHtml("pdp", pageData, userContext.locales()));
     }
 

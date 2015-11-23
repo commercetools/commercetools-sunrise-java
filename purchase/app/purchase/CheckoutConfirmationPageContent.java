@@ -2,7 +2,7 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.models.ProductDataConfig;
-import common.pages.SelectableData;
+import common.models.SelectableData;
 import io.sphere.sdk.carts.Cart;
 
 public class CheckoutConfirmationPageContent extends CheckoutPageContent {
@@ -23,7 +23,7 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
     private void fillForm() {
         final CheckoutConfirmationFormBean checkoutConfirmationFormBean = new CheckoutConfirmationFormBean();
         final SelectableData newsletter = new SelectableData();
-        newsletter.setName("SUNRISE Newsletter");
+        newsletter.setLabel("SUNRISE Newsletter");
         checkoutConfirmationFormBean.setNewsletter(newsletter);
         final SelectableData termsConditions = new SelectableData();
         checkoutConfirmationFormBean.setTermsConditions(termsConditions);
@@ -31,7 +31,7 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
     }
 
     @Override
-    public String additionalTitle() {
+    public String getAdditionalTitle() {
         return null;
     }
 

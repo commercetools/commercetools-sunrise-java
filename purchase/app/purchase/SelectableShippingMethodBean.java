@@ -20,7 +20,7 @@ public class SelectableShippingMethodBean extends SelectableData {
                 .map(CartShippingInfo::getShippingMethod)
                 .map(Reference::getObj)
                 .ifPresent(shippingMethod -> {
-                    setName(shippingMethod.getName());
+                    setLabel(shippingMethod.getName());
                     setSelected(true);
                     setDescription(shippingMethod.getDescription());
                     setPrice(moneyContext.formatOrNull(cartLike.getShippingInfo().getPrice()));

@@ -3,6 +3,7 @@ package productcatalog.controllers;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
+import play.mvc.Http;
 import productcatalog.models.*;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
@@ -50,13 +51,14 @@ public class ProductOverviewPageController extends SunriseController {
         final UserContext userContext = userContext(languageTag);
         final Messages messages = messages(userContext);
         final Optional<Category> category = categories().findBySlug(userContext.locale(), categorySlug);
+        final Http.Context ctx = ctx();
         if (category.isPresent()) {
             final SearchOperations searchOps = new SearchOperations(configuration(), request(), messages, userContext.locale());
             final List<Facet<ProductProjection>> facets = searchOps.boundFacets(getCategoriesInFacet(category));
             final List<SortOption<ProductProjection>> sortOptions = searchOps.boundSortOptions();
             return searchProducts(page, pageSize, facets, sortOptions, category.get()).map(searchResult -> {
                 final ProductOverviewPageContent content = getPopPageData(userContext, searchResult, facets, sortOptions, page, pageSize, category.get());
-                return ok(templateService().renderToHtml("pop", pageData(userContext, content), userContext.locales()));
+                return ok(templateService().renderToHtml("pop", pageData(userContext, content, ctx), userContext.locales()));
             });
         }
         return F.Promise.pure(notFound("Category not found: " + categorySlug));
@@ -69,9 +71,10 @@ public class ProductOverviewPageController extends SunriseController {
         final List<Facet<ProductProjection>> facets = searchOps.boundFacets(CategoryTree.of(emptyList()));
         final List<SortOption<ProductProjection>> sortOptions = searchOps.boundSortOptions();
         final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(page, pageSize, facets, sortOptions, userContext.locale(), searchTerm);
+        final Http.Context ctx = ctx();
         return searchResultPromise.map(searchResult -> {
             final ProductOverviewPageContent content = getPopPageData(userContext, searchResult, facets, sortOptions, page, pageSize, searchTerm);
-            return ok(templateService().renderToHtml("pop", pageData(userContext, content), userContext.locales()));
+            return ok(templateService().renderToHtml("pop", pageData(userContext, content, ctx), userContext.locales()));
         });
     }
 
