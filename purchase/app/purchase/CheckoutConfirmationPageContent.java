@@ -2,11 +2,8 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.models.ProductDataConfig;
-import common.pages.ReverseRouter;
 import common.pages.SelectableData;
 import io.sphere.sdk.carts.Cart;
-import play.Configuration;
-import play.i18n.Messages;
 
 public class CheckoutConfirmationPageContent extends CheckoutPageContent {
 
@@ -15,17 +12,16 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
     public CheckoutConfirmationPageContent() {
     }
 
-    public CheckoutConfirmationPageContent(final Cart cart, final Messages messages, final Configuration configuration, final ReverseRouter reverseRouter, final UserContext userContext, final ProductDataConfig productDataConfig) {
+    public CheckoutConfirmationPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig) {
         setCart(new CartOrderBean(cart, userContext, productDataConfig));
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setConfirmationStepActive(true);
         setStepWidget(stepWidget);
-        fillForm(reverseRouter, userContext);
+        fillForm();
     }
 
-    private void fillForm(final ReverseRouter reverseRouter, final UserContext userContext) {
+    private void fillForm() {
         final CheckoutConfirmationFormBean checkoutConfirmationFormBean = new CheckoutConfirmationFormBean();
-        checkoutConfirmationFormBean.setActionUrl(reverseRouter.processCheckoutConfirmationForm(userContext.locale().getLanguage()).url());
         final SelectableData newsletter = new SelectableData();
         newsletter.setName("SUNRISE Newsletter");
         checkoutConfirmationFormBean.setNewsletter(newsletter);

@@ -32,7 +32,7 @@ public class CheckoutConfirmationController extends CartController {
         final Http.Context ctx = ctx();
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
-            final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, messages, configuration(), reverseRouter(), userContext, productDataConfig);
+            final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig);
             final SunrisePageData pageData = pageData(userContext, content, ctx);
             return ok(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales()));
         });

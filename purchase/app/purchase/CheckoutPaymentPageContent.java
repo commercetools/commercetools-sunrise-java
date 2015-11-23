@@ -14,7 +14,7 @@ public class CheckoutPaymentPageContent extends CheckoutPageContent {
         stepWidget.setPaymentStepActive(true);
         setStepWidget(stepWidget);
         setCart(new CartOrderBean(cart, userContext, productDataConfig));
-        setPaymentForm(new PaymentFormBean(reverseRouter, userContext));
+        setPaymentForm(PaymentFormBean.ofDummyData());
     }
 
     public PaymentFormBean getPaymentForm() {

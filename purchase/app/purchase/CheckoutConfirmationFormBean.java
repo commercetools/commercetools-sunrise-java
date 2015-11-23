@@ -3,20 +3,11 @@ package purchase;
 import common.pages.SelectableData;
 
 public class CheckoutConfirmationFormBean {
-    private String actionUrl;
     private SelectableData newsletter;
     private SelectableData termsConditions;
     private SelectableData remember;
 
     public CheckoutConfirmationFormBean() {
-    }
-
-    public String getActionUrl() {
-        return actionUrl;
-    }
-
-    public void setActionUrl(final String actionUrl) {
-        this.actionUrl = actionUrl;
     }
 
     public SelectableData getNewsletter() {

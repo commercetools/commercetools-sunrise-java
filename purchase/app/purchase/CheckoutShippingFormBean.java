@@ -10,7 +10,6 @@ import play.i18n.Messages;
 import java.util.Optional;
 
 public class CheckoutShippingFormBean {
-    private String actionUrl;
     private boolean billingAddressDifferentToBillingAddress;
     private AddressFormBean shippingAddress;
     private AddressFormBean billingAddress;
@@ -21,8 +20,7 @@ public class CheckoutShippingFormBean {
     public CheckoutShippingFormBean() {
     }
 
-    public CheckoutShippingFormBean(final Cart cart, final ReverseRouter reverseRouter, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
-        fillDefaults(reverseRouter, userContext);
+    public CheckoutShippingFormBean(final Cart cart, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
         final boolean billingAddressDifferentToBillingAddress = Optional.ofNullable(cart.getBillingAddress())
                 .map(Address::getLastName)
                 .map(lastName -> lastName != null)
@@ -33,8 +31,7 @@ public class CheckoutShippingFormBean {
         setShippingMethods(new ShippingMethodsFormBean(cart, shippingMethods));
     }
 
-    public CheckoutShippingFormBean(final CheckoutShippingFormData checkoutShippingFormData, final ReverseRouter reverseRouter, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
-        fillDefaults(reverseRouter, userContext);
+    public CheckoutShippingFormBean(final CheckoutShippingFormData checkoutShippingFormData, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
         setBillingAddressDifferentToBillingAddress(checkoutShippingFormData.isBillingAddressDifferentToBillingAddress());
 
         final AddressFormBean shippingAddress = createShippingAddressFormBean(checkoutShippingFormData, userContext, messages, configuration);
@@ -78,18 +75,6 @@ public class CheckoutShippingFormBean {
         billingAddress.setPhone(checkoutShippingFormData.getPhoneBilling());
         billingAddress.setEmail(checkoutShippingFormData.getEmailBilling());
         return billingAddress;
-    }
-
-    private void fillDefaults(final ReverseRouter reverseRouter, final UserContext userContext) {
-        setActionUrl(reverseRouter.processCheckoutShippingForm(userContext.locale().getLanguage()).url());
-    }
-
-    public String getActionUrl() {
-        return actionUrl;
-    }
-
-    public void setActionUrl(final String actionUrl) {
-        this.actionUrl = actionUrl;
     }
 
     public AddressFormBean getBillingAddress() {

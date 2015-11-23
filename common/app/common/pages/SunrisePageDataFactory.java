@@ -99,6 +99,9 @@ public class SunrisePageDataFactory {
                 .addHalLink(reverseRouter.showCheckoutShippingForm(language), "checkout", "editShippingAddress", "editBillingAddress", "editShippingMethod")
                 .addHalLink(reverseRouter.showCheckoutPaymentForm(language), "editPaymentInfo")
                 .addHalLink(reverseRouter.home(language), "continueShopping", "home")
+                .addHalLink(reverseRouter.processCheckoutShippingForm(language), "checkoutAddressesSubmit")
+                .addHalLink(reverseRouter.processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
+                .addHalLink(reverseRouter.processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         return pageMeta;
     }
