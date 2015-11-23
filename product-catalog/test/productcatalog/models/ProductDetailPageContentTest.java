@@ -1,39 +1,25 @@
-package productcatalog.pages;
+package productcatalog.models;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import common.categories.CategoryUtils;
-import common.cms.CmsPage;
+import common.categories.JsonUtils;
 import common.contexts.UserContext;
 
 import common.utils.PriceFormatter;
-import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
-import io.sphere.sdk.shippingmethods.ShippingRate;
-import org.javamoney.moneta.Money;
-import org.junit.Ignore;
-import org.junit.Test;
-import productcatalog.models.ShopShippingRate;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import java.io.IOException;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 import static com.neovisionaries.i18n.CountryCode.DE;
-import static common.JsonUtils.readJsonNodeFromResource;
-import static common.products.ProductUtils.getProductById;
+import static common.categories.JsonUtils.readJson;
 import static common.products.ProductUtils.getQueryResult;
 import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
-import static io.sphere.sdk.json.SphereJsonUtils.toJsonNode;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Locale.GERMAN;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductDetailPageContentTest {
@@ -43,7 +29,7 @@ public class ProductDetailPageContentTest {
     private static final PriceFormatter PRICE_FORMATTER = PriceFormatter.of(GERMAN);
     private static final UserContext USER_CONTEXT = UserContext.of(DE, LOCALES, ZONE_ID, EUR, null, null);
 
-    private final CategoryTree categories = CategoryTree.of(CategoryUtils.getQueryResult("categoryQueryResult.json").getResults());
+    private final CategoryTree categories = CategoryTree.of(readJson("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
     private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
 
 //    @Test

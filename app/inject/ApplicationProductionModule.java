@@ -3,7 +3,7 @@ package inject;
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
 import common.models.ProductDataConfig;
-import common.pages.ReverseRouter;
+import common.controllers.ReverseRouter;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import pages.ReverseRouterImpl;

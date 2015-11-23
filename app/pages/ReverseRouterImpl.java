@@ -1,6 +1,6 @@
 package pages;
 
-import common.pages.ReverseRouter;
+import common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
 import play.mvc.Call;
@@ -53,23 +53,23 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
+    public Call showCheckoutShippingForm(final String language) {
+        return CheckoutShippingController.show(language);
+    }
+
+    @Override
     public Call processCheckoutShippingForm(final String language) {
         return CheckoutShippingController.process(language);
     }
 
     @Override
-    public Call showCheckoutShippingForm(final String language) {
-        return CheckoutShippingController.show(language);
-    }
-    
-    @Override
-    public Call processCheckoutPaymentForm(final String language) {
-        return CheckoutPaymentController.process(language);
+    public Call showCheckoutPaymentForm(final String language) {
+        return CheckoutPaymentController.show(language);
     }
 
     @Override
-    public Call showCheckoutPaymentForm(final String language) {
-        return CheckoutPaymentController.show(language);
+    public Call processCheckoutPaymentForm(final String language) {
+        return CheckoutPaymentController.process(language);
     }
 
     @Override

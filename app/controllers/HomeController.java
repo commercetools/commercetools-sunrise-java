@@ -3,7 +3,7 @@ package controllers;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
-import common.pages.PageContent;
+import common.controllers.PageContent;
 import play.libs.F;
 import play.mvc.Result;
 

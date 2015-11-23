@@ -2,7 +2,7 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.models.SelectableData;
-import common.pages.ReverseRouter;
+import common.controllers.ReverseRouter;
 
 import java.util.Collections;
 

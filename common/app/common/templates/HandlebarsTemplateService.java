@@ -5,7 +5,7 @@ import com.github.jknack.handlebars.*;
 import com.github.jknack.handlebars.context.MapValueResolver;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import common.pages.PageData;
+import common.controllers.PageData;
 import play.Configuration;
 import play.Logger;
 

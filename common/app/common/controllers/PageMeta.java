@@ -1,4 +1,4 @@
-package common.pages;
+package common.controllers;
 
 public class PageMeta {
     private final String assetsPath = "/assets/";

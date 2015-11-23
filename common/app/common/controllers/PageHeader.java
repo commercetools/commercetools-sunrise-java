@@ -1,4 +1,4 @@
-package common.pages;
+package common.controllers;
 
 import common.models.LocationSelector;
 import common.models.NavMenuData;

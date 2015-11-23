@@ -1,4 +1,4 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import common.models.SelectableData;
 import io.sphere.sdk.models.Base;

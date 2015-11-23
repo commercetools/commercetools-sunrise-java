@@ -2,7 +2,6 @@ package common.controllers;
 
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
-import common.pages.ReverseRouter;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;

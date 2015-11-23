@@ -1,4 +1,4 @@
-package common.pages;
+package common.controllers;
 
 import play.mvc.Call;
 
@@ -18,13 +18,13 @@ public interface ReverseRouter {
 
     Call productVariantToCartForm(final String languageTag);
 
-    Call processCheckoutShippingForm(final String language);
-
     Call showCheckoutShippingForm(final String language);
 
-    Call processCheckoutPaymentForm(String language);
+    Call processCheckoutShippingForm(final String language);
 
     Call showCheckoutPaymentForm(String language);
+
+    Call processCheckoutPaymentForm(String language);
 
     Call showCheckoutConfirmationForm(final String language);
 }

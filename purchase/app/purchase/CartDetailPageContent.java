@@ -2,8 +2,8 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.models.ProductDataConfig;
-import common.pages.PageContent;
-import common.pages.ReverseRouter;
+import common.controllers.PageContent;
+import common.controllers.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
 import play.i18n.Messages;
 

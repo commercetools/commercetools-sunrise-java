@@ -1,4 +1,4 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;

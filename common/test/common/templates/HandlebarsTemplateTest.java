@@ -2,7 +2,7 @@ package common.templates;
 
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import common.pages.*;
+import common.controllers.*;
 import org.junit.Test;
 import play.Configuration;
 

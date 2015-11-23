@@ -1,4 +1,4 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import common.contexts.RequestContext;
 import common.models.LinkData;

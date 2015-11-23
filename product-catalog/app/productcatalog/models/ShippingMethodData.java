@@ -1,4 +1,4 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 public class ShippingMethodData {
     private String name;

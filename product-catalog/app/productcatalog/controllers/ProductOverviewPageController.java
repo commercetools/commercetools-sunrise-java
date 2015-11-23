@@ -3,8 +3,7 @@ package productcatalog.controllers;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
-import productcatalog.pages.DisplaySelector;
-import productcatalog.pages.SortSelector;
+import productcatalog.models.*;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
@@ -16,8 +15,6 @@ import play.Logger;
 import play.i18n.Messages;
 import play.libs.F;
 import play.mvc.Result;
-import productcatalog.models.SortOption;
-import productcatalog.pages.*;
 import productcatalog.services.CategoryService;
 import productcatalog.services.ProductProjectionService;
 

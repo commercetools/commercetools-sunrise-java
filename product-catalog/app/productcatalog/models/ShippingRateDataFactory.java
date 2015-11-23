@@ -1,7 +1,6 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import common.utils.PriceFormatter;
-import productcatalog.models.ShopShippingRate;
 
 import java.util.Optional;
 

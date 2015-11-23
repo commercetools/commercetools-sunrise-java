@@ -3,7 +3,7 @@ package purchase;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.models.ProductDataConfig;
-import common.pages.SunrisePageData;
+import common.controllers.SunrisePageData;
 import io.sphere.sdk.carts.Cart;
 import play.i18n.Messages;
 import play.libs.F;

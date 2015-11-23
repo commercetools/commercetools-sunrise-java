@@ -1,4 +1,4 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import java.util.List;
 

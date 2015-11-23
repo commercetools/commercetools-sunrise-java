@@ -1,9 +1,11 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import common.utils.PriceFormatter;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
+import productcatalog.models.ShippingRateData;
+import productcatalog.models.ShippingRateDataFactory;
 import productcatalog.models.ShopShippingRate;
 
 import javax.money.CurrencyUnit;

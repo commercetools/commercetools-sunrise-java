@@ -1,27 +1,16 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import common.contexts.PriceFinderFactory;
 import common.contexts.UserContext;
-import common.models.DetailData;
-import common.models.ImageData;
-import common.pages.ReverseRouter;
-import common.models.SelectableData;
+import common.controllers.ReverseRouter;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
-import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.LocalizedEnumValue;
-import io.sphere.sdk.productdiscounts.DiscountedPrice;
-import io.sphere.sdk.products.*;
 import io.sphere.sdk.products.attributes.AttributeAccess;
 import io.sphere.sdk.products.attributes.NamedAttributeAccess;
 import productcatalog.services.CategoryService;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-
-import static java.util.Collections.emptySet;
-import static java.util.stream.Collectors.toList;
 
 public class ProductDataFactory {
 

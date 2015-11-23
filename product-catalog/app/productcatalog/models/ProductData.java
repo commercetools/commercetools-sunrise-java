@@ -1,7 +1,7 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import common.contexts.UserContext;
-import common.pages.ReverseRouter;
+import common.controllers.ReverseRouter;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;

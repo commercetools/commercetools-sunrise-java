@@ -1,4 +1,4 @@
-package productcatalog.pages;
+package productcatalog.models;
 
 import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.models.Base;

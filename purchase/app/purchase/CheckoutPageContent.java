@@ -1,6 +1,6 @@
 package purchase;
 
-import common.pages.PageContent;
+import common.controllers.PageContent;
 
 public abstract class CheckoutPageContent extends PageContent {
     private StepWidgetBean stepWidget;

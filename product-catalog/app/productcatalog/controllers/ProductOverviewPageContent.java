@@ -1,7 +1,8 @@
-package productcatalog.pages;
+package productcatalog.controllers;
 
 import common.models.DetailData;
-import common.pages.PageContent;
+import common.controllers.PageContent;
+import productcatalog.models.*;
 
 public class ProductOverviewPageContent extends PageContent {
     private String additionalTitle;

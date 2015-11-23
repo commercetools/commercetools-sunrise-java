@@ -6,7 +6,6 @@ import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.models.LocationSelector;
 import common.models.NavMenuData;
-import common.pages.*;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.CategoryTree;

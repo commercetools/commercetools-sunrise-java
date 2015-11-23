@@ -1,4 +1,4 @@
-package common.pages;
+package common.models;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
