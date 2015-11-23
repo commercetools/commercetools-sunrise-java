@@ -2,7 +2,7 @@ package productcatalog.controllers;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
-import common.controllers.SunriseController;
+import common.models.ProductDataConfig;
 import play.mvc.Http;
 import productcatalog.models.*;
 import io.sphere.sdk.categories.Category;
@@ -29,22 +29,16 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
-public class ProductOverviewPageController extends SunriseController {
-    private final ProductProjectionService productService;
-    private final CategoryService categoryService;
+public class ProductOverviewPageController extends ProductCatalogController {
     private final List<Integer> pageSizeOptions;
     private final int paginationDisplayedPages;
-    private final String newCategoryExtId;
 
     @Inject
-    public ProductOverviewPageController(final Configuration configuration, final ControllerDependency controllerDependency,
-                                         final ProductProjectionService productService, final CategoryService categoryService) {
-        super(controllerDependency);
-        this.productService = productService;
-        this.categoryService = categoryService;
-        this.pageSizeOptions = configuration.getIntList("pop.pageSize.options", asList(9, 24, 99));
-        this.paginationDisplayedPages = configuration.getInt("pop.pagination.displayedPages", 6);
-        this.newCategoryExtId = configuration().getString("common.newCategoryExternalId", "");
+    public ProductOverviewPageController(final ControllerDependency controllerDependency, final ProductProjectionService productService,
+                                         final CategoryService categoryService, final ProductDataConfig productDataConfig) {
+        super(controllerDependency, categoryService, productService, productDataConfig);
+        this.pageSizeOptions = controllerDependency.configuration().getIntList("pop.pageSize.options", asList(9, 24, 99));
+        this.paginationDisplayedPages = controllerDependency.configuration().getInt("pop.pagination.displayedPages", 6);
     }
 
     public F.Promise<Result> show(final String languageTag, final int page, final int pageSize, final String categorySlug) {
@@ -110,7 +104,7 @@ public class ProductOverviewPageController extends SunriseController {
                                                          final List<Facet<ProductProjection>> facets,
                                                          final int page, final int pageSize) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent(title);
-        content.setProducts(new ProductListData(userContext, reverseRouter(), categories(), searchResult.getResults()));
+        content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()));
         content.setPagination(new PaginationData(requestContext(), searchResult, page, pageSize, paginationDisplayedPages));
         content.setSortSelector(new SortSelector(sortOptions));
         content.setDisplaySelector(new DisplaySelector(pageSizeOptions, pageSize));
@@ -191,7 +185,7 @@ public class ProductOverviewPageController extends SunriseController {
     }
 
     private CategoryTree getCategoriesInFacet(final Optional<Category> category) {
-        final Category rootAncestor = categoryService.getRootAncestor(category.get());
-        return categoryService.getSubtree(singletonList(rootAncestor));
+        final Category rootAncestor = categoryService().getRootAncestor(category.get());
+        return categoryService().getSubtree(singletonList(rootAncestor));
     }
 }

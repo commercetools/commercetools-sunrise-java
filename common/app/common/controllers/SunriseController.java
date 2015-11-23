@@ -40,8 +40,6 @@ public abstract class SunriseController extends ShopController {
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
         this.saleCategoryExtId = controllerDependency.configuration().getString("common.saleCategoryExternalId", "");
-
-        // TODO Fill it properly
         this.controllerDependency = controllerDependency;
     }
 
@@ -70,7 +68,6 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected final SunrisePageData pageData(final UserContext userContext, final PageContent content, final Http.Context ctx) {
-        final Messages messages = messages(userContext);
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categories(), userContext, reverseRouter(), saleCategoryExtId));

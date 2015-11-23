@@ -3,8 +3,8 @@ package productcatalog.controllers;
 import common.actions.LanguageFiltered;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
-import common.controllers.SunriseController;
 import common.controllers.SunrisePageData;
+import common.models.ProductDataConfig;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
@@ -26,17 +26,13 @@ import static java.util.stream.Collectors.toList;
 
 @Singleton
 @LanguageFiltered
-public class ProductDetailPageController extends SunriseController {
-
+public class ProductDetailPageController extends ProductCatalogController {
     private final int numberOfSuggestions;
-    private final ProductProjectionService productService;
-    private final CategoryService categoryService;
 
     @Inject
-    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService) {
-        super(controllerDependency);
-        this.productService = productService;
-        this.categoryService = categoryService;
+    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductProjectionService productService,
+                                       final CategoryService categoryService, final ProductDataConfig productDataConfig) {
+        super(controllerDependency, categoryService, productService, productDataConfig);
         this.numberOfSuggestions = configuration().getInt("pdp.productSuggestions.count");
     }
 
@@ -51,14 +47,14 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private F.Promise<ProductProjection> fetchProduct(final Locale locale, final String slug) {
-        return productService.searchProductBySlug(locale, slug)
+        return productService().searchProductBySlug(locale, slug)
                 .map(productOptional -> productOptional
                         .orElseThrow(() -> ProductNotFoundException.bySlug(locale, slug)));
     }
 
     private F.Promise<List<ProductProjection>> fetchSuggestions(final ProductProjection productProjection) {
-        final List<Category> siblingCategories = categoryService.getSiblings(productProjection.getCategories());
-        return productService.getSuggestions(siblingCategories, numberOfSuggestions);
+        final List<Category> siblingCategories = categoryService().getSiblings(productProjection.getCategories());
+        return productService().getSuggestions(siblingCategories, numberOfSuggestions);
     }
 
     private F.Promise<Result> recover(final F.Promise<Result> resultPromise) {
@@ -95,7 +91,7 @@ public class ProductDetailPageController extends SunriseController {
                                                                  final ProductVariant variant) {
         final String additionalTitle = product.getName().find(userContext.locales()).orElse("");
         final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle);
-        content.setProductData(new ProductData(userContext, reverseRouter(), categories(), product, variant));
+        //content.setProductData(new ProductData(userContext, reverseRouter(), categories(), product, variant));
         content.setBreadcrumb(new BreadcrumbData(product, variant, categories(), userContext, reverseRouter()));
         content.setShippingRates(getDeliveryData(userContext));
         content.setSuggestions(getSuggestionData(userContext, suggestions));
@@ -112,7 +108,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private List<ProductData> getSuggestionData(final UserContext userContext, final List<ProductProjection> suggestions) {
-        return new ProductListData(userContext, reverseRouter(), categories(), suggestions).getList();
+        return new ProductListData(suggestions, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()).getList();
     }
 
     private List<ShopShippingRate> getShippingRates() {

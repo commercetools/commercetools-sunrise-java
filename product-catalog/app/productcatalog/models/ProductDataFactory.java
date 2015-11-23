@@ -32,37 +32,14 @@ public class ProductDataFactory {
         this.categoryService = categoryService;
     }
 
-    public static ProductDataFactory of(final UserContext userContext, final ReverseRouter reverseRouter, final CategoryService categoryService) {
-        return new ProductDataFactory(userContext, reverseRouter, categoryService);
-    }
-
+//    public static ProductDataFactory of(final UserContext userContext, final ReverseRouter reverseRouter, final CategoryService categoryService) {
+//        return new ProductDataFactory(userContext, reverseRouter, categoryService);
+//    }
+//
 //    public ProductData create(final ProductProjection product, final ProductVariant variant) {
-//        final String name = product.getName().find(userContext.locales()).orElse("");
-//        final String sku = Optional.ofNullable(variant.getSku()).orElse("");
-//        final String slug = product.getSlug().find(userContext.locales()).orElse("");
-//        final String url = reverseRouter.product(userContext.locale().getLanguage(), slug, sku).url();
-//        final String description = Optional.ofNullable(product.getDescription()).flatMap(d -> d.find(userContext.locales())).orElse("");
-//        final Optional<Price> foundPrice = priceFinder.findPrice(variant.getPrices());
-//        final Optional<Price> price = foundPrice.map(this::getCurrentPrice);
-//        final Optional<Price> priceOld = foundPrice.flatMap(this::getOldPrice);
-//        final Integer variantId = variant.getId();
-//        final String id = product.getId();
 //        final boolean isSale = priceOld.isPresent();
 //        final boolean isNew = productIsNew(product);
 //        return new ProductData(name, sku, description, formatPriceOpt(price), formatPriceOpt(priceOld), getImages(variant), getColors(product), getSizes(product, variant, slug), getDetails(variant));
-//    }
-//
-//    private List<ImageData> getImages(final ProductVariant productVariant) {
-//        final List<ImageData> images = productVariant.getImages().stream().map(ImageData::new).collect(toList());
-//        if(images.isEmpty()) {
-//            images.add(getPlaceholderImage());
-//        }
-//
-//        return images;
-//    }
-//
-//    private ImageData getPlaceholderImage() {
-//        return new ImageData(Image.of("//placehold.it/300x400", ImageDimensions.of(300, 400)));
 //    }
 //
 //    private List<SelectableData> getColors(final ProductProjection product) {
@@ -119,18 +96,6 @@ public class ProductDataFactory {
 //    private DetailData localizedStringsToDetailData(final LocalizedEnumValue localizedStrings) {
 //        final String label = localizedStrings.getLabel().find(userContext.locales()).orElse("");
 //        return new DetailData(label);
-//    }
-//
-//    private Optional<Price> getOldPrice(final Price price) {
-//        return Optional.ofNullable(price.getDiscounted()).map(discountedPrice -> price);
-//    }
-//
-//    private Price getCurrentPrice(final Price price) {
-//        return Price.of(Optional.ofNullable(price.getDiscounted()).map(DiscountedPrice::getValue).orElse((price.getValue())));
-//    }
-//
-//    private String formatPriceOpt(final Optional<Price> price) {
-//        return price.map(Price::getValue).map(priceFormatter::format).orElse("");
 //    }
 //
 //    private boolean productIsNew(final ProductProjection product, final CategoryTree categoryTreeNew) {
