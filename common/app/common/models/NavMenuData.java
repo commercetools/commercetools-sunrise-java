@@ -15,26 +15,26 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 public class NavMenuData extends Base {
-    private List<CategoryData> categoryData;
+    private List<CategoryData> categories;
 
     public NavMenuData() {
     }
 
     public NavMenuData(final CategoryTree categoryTree, final UserContext userContext, final ReverseRouter reverseRouter,
                        @Nullable final String saleCategoryExtId) {
-        this.categoryData = new ArrayList<>();
+        this.categories = new ArrayList<>();
         categoryTree.getRoots().forEach(root -> {
             final CategoryData categoryData = createCategoryData(root, categoryTree, userContext, reverseRouter, saleCategoryExtId);
-            this.categoryData.add(categoryData);
+            this.categories.add(categoryData);
         });
     }
 
-    public List<CategoryData> getCategoryData() {
-        return categoryData;
+    public List<CategoryData> getCategories() {
+        return categories;
     }
 
-    public void setCategoryData(final List<CategoryData> categoryData) {
-        this.categoryData = categoryData;
+    public void setCategories(final List<CategoryData> categories) {
+        this.categories = categories;
     }
 
     private static CategoryData createCategoryData(final Category category, final CategoryTree categoryTree,

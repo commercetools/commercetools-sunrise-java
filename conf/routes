@@ -14,6 +14,9 @@ GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJa
 # Main entry point that decides whether to go to home page or to setup wizard
 GET         /                                                  @controllers.ApplicationController.index()
 
+# Endpoint to manually refresh category tree (otherwise an app restart is required)
+GET         /categories/refresh                                @controllers.CategoriesRefreshController.refresh()
+
 # Home page
 GET         /:languageTag/home                                 @controllers.HomeController.show(languageTag:String)
 
