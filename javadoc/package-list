@@ -1,9 +1,9 @@
+common.actions
 common.cms
 common.contexts
 common.controllers
 common.countries
 common.models
-common.pages
 common.prices
 common.templates
 common.utils
@@ -16,7 +16,6 @@ io.sphere.sdk.queries
 pages
 productcatalog.controllers
 productcatalog.models
-productcatalog.pages
 productcatalog.services
 purchase
 setupwidget.controllers
