@@ -57,9 +57,6 @@ public class CheckoutConfirmationController extends CartController {
     private F.Promise<Result> renderErrorResponse(final UserContext userContext, final Cart cart, final Http.Context ctx, final Form<CheckoutConfirmationFormData> filledForm) {
         final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig);
         content.getCheckoutForm().setErrors(new ErrorsBean(filledForm));
-
-        System.err.println(content.getCheckoutForm());
-
         final SunrisePageData pageData = pageData(userContext, content, ctx);
         return F.Promise.pure(badRequest(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales())));
     }
