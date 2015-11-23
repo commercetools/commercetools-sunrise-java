@@ -28,6 +28,8 @@ GET         /:languageTag/checkout/shipping                    @purchase.Checkou
 POST        /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.process(languageTag: String)
 GET         /:languageTag/checkout/payment                     @purchase.CheckoutPaymentController.show(languageTag: String)
 POST        /:languageTag/checkout/payment                     @purchase.CheckoutPaymentController.process(languageTag: String)
+GET         /:languageTag/checkout/confirmation                @purchase.CheckoutConfirmationController.show(languageTag: String)
+POST        /:languageTag/checkout/confirmation                @purchase.CheckoutConfirmationController.process(languageTag: String)
 
 
 GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.controllers.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)

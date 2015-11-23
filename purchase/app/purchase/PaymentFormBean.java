@@ -1,45 +1,25 @@
 package purchase;
 
-import common.contexts.UserContext;
 import common.models.SelectableData;
-import common.controllers.ReverseRouter;
 
 import java.util.Collections;
 
 public class PaymentFormBean {
-    private String actionUrl;
-    private String csrfToken;
     private PaymentOptionsBean paymentOptions;
 
 
     public PaymentFormBean() {
     }
 
-    public PaymentFormBean(final ReverseRouter reverseRouter, final String csrfToken, final UserContext userContext) {
-        setActionUrl(reverseRouter.processCheckoutPaymentForm(userContext.locale().getLanguage()).url());
-        setCsrfToken(csrfToken);
+    public static PaymentFormBean ofDummyData() {
+        final PaymentFormBean paymentFormBean = new PaymentFormBean();
         final PaymentOptionsBean paymentOptions = new PaymentOptionsBean();
         final SelectableData o = new SelectableData();
         o.setLabel("prepaid");
         o.setSelected(true);
         paymentOptions.setList(Collections.singletonList(o));
-        setPaymentOptions(paymentOptions);
-    }
-
-    public String getActionUrl() {
-        return actionUrl;
-    }
-
-    public void setActionUrl(final String actionUrl) {
-        this.actionUrl = actionUrl;
-    }
-
-    public String getCsrfToken() {
-        return csrfToken;
-    }
-
-    public void setCsrfToken(final String csrfToken) {
-        this.csrfToken = csrfToken;
+        paymentFormBean.setPaymentOptions(paymentOptions);
+        return paymentFormBean;
     }
 
     public PaymentOptionsBean getPaymentOptions() {

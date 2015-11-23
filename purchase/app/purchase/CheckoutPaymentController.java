@@ -26,13 +26,13 @@ public class CheckoutPaymentController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
-            final CheckoutPaymentPageContent content = new CheckoutPaymentPageContent(cart, userContext, productDataConfig, reverseRouter(), getCsrfToken());
-            final SunrisePageData pageData = pageData(userContext, content);
+            final CheckoutPaymentPageContent content = new CheckoutPaymentPageContent(cart, userContext, productDataConfig);
+            final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-payment", pageData, userContext.locales()));
         });
     }
 
     public Result process(final String language) {
-        return redirect(reverseRouter().showCheckoutPaymentForm(language));
+        return redirect(reverseRouter().showCheckoutConfirmationForm(language));
     }
 }

@@ -62,8 +62,8 @@ public final class CartDetailPageController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
-            final CartDetailPageContent content = new CartDetailPageContent(cart, userContext, messages, reverseRouter(), productDataConfig);
-            final SunrisePageData pageData = pageData(userContext, content);
+            final CartDetailPageContent content = new CartDetailPageContent(cart, userContext, productDataConfig);
+            final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
         });
     }

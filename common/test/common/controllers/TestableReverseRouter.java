@@ -132,4 +132,19 @@ public class TestableReverseRouter implements ReverseRouter {
             }
         };
     }
+
+    @Override
+    public Call designAssets(final String file) {
+        return null;
+    }
+
+    @Override
+    public Call processCheckoutConfirmationForm(final String language) {
+        return null;
+    }
+
+    @Override
+    public Call showCart(final String language) {
+        return null;
+    }
 }

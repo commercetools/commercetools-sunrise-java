@@ -5,12 +5,11 @@ import common.models.ProductDataConfig;
 import common.controllers.PageContent;
 import common.controllers.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
-import play.i18n.Messages;
 
 public class CartDetailPageContent extends PageContent {
     private final CartOrderBean cart;
 
-    public CartDetailPageContent(final Cart cart, final UserContext userContext, final Messages messages, final ReverseRouter reverseRouter, final ProductDataConfig productDataConfig) {
+    public CartDetailPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig) {
         this.cart = new CartOrderBean(cart, userContext, productDataConfig);
     }
 

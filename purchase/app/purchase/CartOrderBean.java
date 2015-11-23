@@ -18,6 +18,10 @@ public class CartOrderBean {
     private String totalPrice;
     private String subtotalPrice;
     private LineItemsBean lineItems;
+    private AddressBean shippingAddress;
+    private AddressBean billingAddress;
+    private SelectableShippingMethodBean shippingMethod;
+    private PaymentsBean paymentDetails;
 
     public CartOrderBean() {
     }
@@ -40,6 +44,15 @@ public class CartOrderBean {
         setSubtotalPrice(moneyContext.formatOrZero(subTotal));
 
         setLineItems(new LineItemsBean(cartLike, userContext, productDataConfig));
+
+        setShippingAddress(new AddressBean(cartLike.getShippingAddress(), userContext.locale()));
+        setBillingAddress(new AddressBean(cartLike.getBillingAddress(), userContext.locale()));
+
+        final PaymentsBean paymentDetails = new PaymentsBean();
+        paymentDetails.setType("prepaid");
+        setPaymentDetails(paymentDetails);
+
+        setShippingMethod(new SelectableShippingMethodBean(cartLike, moneyContext));
     }
 
     private static MonetaryAmount calculateTax(final TaxedPrice taxedPrice) {
@@ -99,5 +112,37 @@ public class CartOrderBean {
 
     public void setTotalPrice(final String totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public AddressBean getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(final AddressBean billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    public AddressBean getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(final AddressBean shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public SelectableShippingMethodBean getShippingMethod() {
+        return shippingMethod;
+    }
+
+    public void setShippingMethod(final SelectableShippingMethodBean shippingMethod) {
+        this.shippingMethod = shippingMethod;
+    }
+
+    public PaymentsBean getPaymentDetails() {
+        return paymentDetails;
+    }
+
+    public void setPaymentDetails(final PaymentsBean paymentDetails) {
+        this.paymentDetails = paymentDetails;
     }
 }

@@ -17,8 +17,22 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call home(final String languageTag) {
-        //return HomeController.show(languageTag);
-        return null;
+        return new Call() {
+            @Override
+            public String url() {
+                return "/";
+            }
+
+            @Override
+            public String method() {
+                return "GET";
+            }
+
+            @Override
+            public String fragment() {
+                return null;
+            }
+        };
     }
 
     @Override
@@ -88,6 +102,21 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call showCheckoutConfirmationForm(final String language) {
-        return CheckoutPaymentController.show(language);
+        return CheckoutConfirmationController.show(language);
+    }
+
+    @Override
+    public Call processCheckoutConfirmationForm(final String language) {
+        return CheckoutConfirmationController.process(language);
+    }
+
+    @Override
+    public Call designAssets(final String file) {
+        return controllers.routes.WebJarAssets.at(file);
+    }
+
+    @Override
+    public Call showCart(final String language) {
+        return CartDetailPageController.show(language);
     }
 }

@@ -15,8 +15,10 @@ import play.Configuration;
 import play.filters.csrf.AddCSRFToken;
 import play.i18n.Lang;
 import play.i18n.Messages;
+import play.mvc.Http;
 import play.mvc.With;
 
+import javax.annotation.Nullable;
 import javax.money.Monetary;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -67,11 +69,28 @@ public abstract class SunriseController extends ShopController {
         return controllerDependency.projectContext();
     }
 
-    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content) {
+    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content, final Http.Context ctx) {
+        final Messages messages = messages(userContext);
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categories(), userContext, reverseRouter(), saleCategoryExtId));
-        return new SunrisePageData(pageHeader, new PageFooter(), content, new PageMeta());
+        return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
+    }
+
+    private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
+        final PageMeta pageMeta = new PageMeta();
+        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());
+        pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
+        final String language = userContext.locale().getLanguage();
+        pageMeta.addHalLink(reverseRouter().showCart(language), "cart")
+                .addHalLink(reverseRouter().showCheckoutShippingForm(language), "checkout", "editShippingAddress", "editBillingAddress", "editShippingMethod")
+                .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
+                .addHalLink(reverseRouter().home(language), "continueShopping", "home")
+                .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutAddressesSubmit")
+                .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
+                .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
+                .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
+        return pageMeta;
     }
 
     protected final Messages messages(final UserContext userContext) {
@@ -96,7 +115,8 @@ public abstract class SunriseController extends ShopController {
         return RequestContext.of(request().queryString(), request().path());
     }
 
-    protected String getCsrfToken() {
-        return session("csrfToken");
+    @Nullable
+    public static String getCsrfToken(final Http.Session session) {
+        return session.get("csrfToken");
     }
 }
