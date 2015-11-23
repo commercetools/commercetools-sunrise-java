@@ -1,11 +1,13 @@
 package purchase;
 
 import common.pages.SelectableData;
+import io.sphere.sdk.models.Base;
 
-public class CheckoutConfirmationFormBean {
+public class CheckoutConfirmationFormBean extends Base {
     private SelectableData newsletter;
     private SelectableData termsConditions;
     private SelectableData remember;
+    private ErrorsBean errors;
 
     public CheckoutConfirmationFormBean() {
     }
@@ -32,5 +34,13 @@ public class CheckoutConfirmationFormBean {
 
     public void setTermsConditions(final SelectableData termsConditions) {
         this.termsConditions = termsConditions;
+    }
+
+    public ErrorsBean getErrors() {
+        return errors;
+    }
+
+    public void setErrors(final ErrorsBean errors) {
+        this.errors = errors;
     }
 }

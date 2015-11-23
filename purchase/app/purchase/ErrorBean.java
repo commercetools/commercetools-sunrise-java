@@ -1,6 +1,8 @@
 package purchase;
 
-public class ErrorBean {
+import io.sphere.sdk.models.Base;
+
+public class ErrorBean extends Base {
     private String message;
 
     public ErrorBean() {

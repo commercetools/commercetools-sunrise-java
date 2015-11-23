@@ -3,12 +3,13 @@ package purchase;
 import common.contexts.UserContext;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.Base;
 import play.Configuration;
 import play.i18n.Messages;
 
 import java.util.Optional;
 
-public class CheckoutShippingFormBean {
+public class CheckoutShippingFormBean extends Base {
     private boolean billingAddressDifferentToBillingAddress;
     private AddressFormBean shippingAddress;
     private AddressFormBean billingAddress;
