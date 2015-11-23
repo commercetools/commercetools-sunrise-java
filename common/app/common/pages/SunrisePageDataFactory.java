@@ -2,6 +2,7 @@ package common.pages;
 
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;
+import common.controllers.SunriseController;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import play.i18n.Messages;
@@ -92,6 +93,7 @@ public class SunrisePageDataFactory {
     private PageMeta getPageMeta() {
         final PageMeta pageMeta = new PageMeta();
         pageMeta.setAssetsPath(reverseRouter.designAssets("").url());
+        pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         return pageMeta;
     }
 }
