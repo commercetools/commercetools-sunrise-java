@@ -12,7 +12,7 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     private final int pageSizeDefault;
 
     public ReverseRouterImpl(final Configuration configuration) {
-        this.pageSizeDefault = configuration.getInt("pop.pageSize.default");
+        this.pageSizeDefault = configuration.getInt("pop.pageSize.default", 9);
     }
 
     @Override
