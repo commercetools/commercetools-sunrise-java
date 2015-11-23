@@ -1,7 +1,7 @@
 package io.sphere.sdk.facets;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.products.search.ProductProjectionSearchModel;
 import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.TermFacetResult;
@@ -31,13 +31,12 @@ public class SelectFacetBuilderTest {
             FacetOption.of("one", 30, false),
             FacetOption.of("two", 20, true),
             FacetOption.of("three", 10, false));
-    public static final FacetOptionMapper NULL_MAPPER = list -> null;
-    public static final FacetOptionMapper MAPPER = list -> list;
+    public static final FacetOptionMapper IDENTITY_MAPPER = v -> v;
 
     @Test
     public void createsInstance() throws Exception {
         final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL)
-                .mapper(NULL_MAPPER)
+                .mapper(IDENTITY_MAPPER)
                 .type(SORTED_SELECT)
                 .facetResult(FACET_RESULT_WITH_THREE_TERMS)
                 .selectedValues(SELECTED_VALUE_TWO)
@@ -49,7 +48,7 @@ public class SelectFacetBuilderTest {
         assertThat(facet.getKey()).isEqualTo(KEY);
         assertThat(facet.getLabel()).isEqualTo(LABEL);
         assertThat(facet.getType()).isEqualTo(SORTED_SELECT);
-        assertThat(facet.getMapper()).isEqualTo(NULL_MAPPER);
+        assertThat(facet.getMapper()).isEqualTo(IDENTITY_MAPPER);
         assertThat(facet.getSearchModel()).isEqualTo(SEARCH_MODEL);
         assertThat(facet.getFacetResult()).contains(FACET_RESULT_WITH_THREE_TERMS);
         assertThat(facet.getSelectedValues()).containsExactlyElementsOf(SELECTED_VALUE_TWO);
@@ -69,7 +68,7 @@ public class SelectFacetBuilderTest {
         assertThat(facet.getLabel()).isEqualTo(LABEL);
         assertThat(facet.getType()).isEqualTo(SELECT);
         assertThat(facet.getSearchModel()).isEqualTo(SEARCH_MODEL);
-        assertThat(facet.getMapper()).isEqualTo(MAPPER);
+        assertThat(facet.getMapper()).isNotNull();
         assertThat(facet.getFacetResult()).isEmpty();
         assertThat(facet.getSelectedValues()).isEmpty();
         assertThat(facet.isMatchingAll()).isFalse();
@@ -102,6 +101,6 @@ public class SelectFacetBuilderTest {
     }
 
     private PagedSearchResult<ProductProjection> searchResult() {
-        return readObjectFromResource("pagedSearchResult.json", new TypeReference<PagedSearchResult<ProductProjection>>() {});
+        return readObjectFromResource("pagedSearchResult.json", ProductProjectionSearch.resultTypeReference());
     }
 }

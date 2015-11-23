@@ -9,5 +9,4 @@ public class JsonUtils {
     public static <T> T readJson(final String resourceName, final TypeReference<T> typeReference) {
         return readObjectFromResource(resourceName, typeReference);
     }
-
 }
