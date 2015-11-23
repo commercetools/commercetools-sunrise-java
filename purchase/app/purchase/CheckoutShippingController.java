@@ -49,7 +49,7 @@ public class CheckoutShippingController extends CartController {
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
             final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, messages, configuration(), reverseRouter(), userContext, getCsrfToken(), shippingMethods, productDataConfig);
-            final SunrisePageData pageData = pageData(userContext, content);
+            final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
         });
     }
@@ -89,7 +89,7 @@ public class CheckoutShippingController extends CartController {
     private Result badRequest(final UserContext userContext, final Form<CheckoutShippingFormData> filledForm, final CheckoutShippingPageContent content) {
         Logger.info("cart not valid");
         content.getShippingForm().setErrors(new ErrorsBean(filledForm));
-        final SunrisePageData pageData = pageData(userContext, content);
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
         return badRequest(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
     }
 

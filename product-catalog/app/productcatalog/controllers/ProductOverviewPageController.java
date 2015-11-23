@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
 
-import static io.sphere.sdk.facets.DefaultFacetType.HIERARCHICAL_SELECT;
 import static io.sphere.sdk.facets.DefaultFacetType.SORTED_SELECT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -61,7 +60,7 @@ public class ProductOverviewPageController extends SunriseController {
             return searchResultPromise.flatMap(searchResult ->
                             cmsPromise.map(cms -> {
                                 final ProductOverviewPageContent content = getPopPageData(cms, userContext, searchResult, boundFacets);
-                                return ok(templateService().renderToHtml("pop", pageData(userContext, content), userContext.locales()));
+                                return ok(templateService().renderToHtml("pop", pageData(userContext, content, ctx()), userContext.locales()));
                             })
             );
         }

@@ -27,7 +27,7 @@ public class CheckoutPaymentController extends CartController {
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
             final CheckoutPaymentPageContent content = new CheckoutPaymentPageContent(cart, userContext, productDataConfig, reverseRouter(), getCsrfToken());
-            final SunrisePageData pageData = pageData(userContext, content);
+            final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-payment", pageData, userContext.locales()));
         });
     }

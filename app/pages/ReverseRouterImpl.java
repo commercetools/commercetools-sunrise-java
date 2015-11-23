@@ -41,4 +41,9 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     public Call processCheckoutConfirmationForm(final String language) {
         return routes.CheckoutConfirmationController.process(language);
     }
+
+    @Override
+    public Call designAssets(final String file) {
+        return controllers.routes.WebJarAssets.at(file);
+    }
 }

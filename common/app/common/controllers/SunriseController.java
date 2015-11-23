@@ -16,8 +16,10 @@ import play.Configuration;
 import play.filters.csrf.AddCSRFToken;
 import play.i18n.Lang;
 import play.i18n.Messages;
+import play.mvc.Http;
 import play.mvc.With;
 
+import javax.annotation.Nullable;
 import javax.money.Monetary;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -67,11 +69,11 @@ public abstract class SunriseController extends ShopController {
         return context;
     }
 
-    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content) {
+    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content, final Http.Context ctx) {
         final Messages messages = messages(userContext);
         final String saleCategoryExtId = configuration().getString("common.saleCategoryExternalId");
         return new SunrisePageDataFactory(messages, userContext, context().project(), categories(),
-                controllerDependency.getReverseRouter(), saleCategoryExtId).create(content);
+                controllerDependency.getReverseRouter(), saleCategoryExtId, ctx).create(content);
     }
 
     protected final Messages messages(final UserContext userContext) {
@@ -93,6 +95,12 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected String getCsrfToken() {
-        return session("csrfToken");
+        final Http.Session session = session();
+        return getCsrfToken(session);
+    }
+
+    @Nullable
+    public static String getCsrfToken(final Http.Session session) {
+        return session.get("csrfToken");
     }
 }

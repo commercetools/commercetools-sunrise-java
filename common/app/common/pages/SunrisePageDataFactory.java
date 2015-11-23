@@ -5,6 +5,7 @@ import common.contexts.UserContext;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import play.i18n.Messages;
+import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -19,16 +20,18 @@ public class SunrisePageDataFactory {
     private final ProjectContext projectContext;
     private final CategoryTree categoryTree;
     private ReverseRouter reverseRouter;
+    private final Http.Context ctx;
     private final Optional<String> saleCategoryExternalId;
 
     public SunrisePageDataFactory(final Messages messages, final UserContext userContext, final ProjectContext projectContext,
                                   final CategoryTree categoryTree, final ReverseRouter reverseRouter,
-                                  @Nullable final String saleCategoryExternalId) {
+                                  @Nullable final String saleCategoryExternalId, final Http.Context ctx) {
         this.messages = messages;
         this.userContext = userContext;
         this.projectContext = projectContext;
         this.categoryTree = categoryTree;
         this.reverseRouter = reverseRouter;
+        this.ctx = ctx;
         this.saleCategoryExternalId = Optional.ofNullable(saleCategoryExternalId);
     }
 
@@ -87,6 +90,8 @@ public class SunrisePageDataFactory {
     }
 
     private PageMeta getPageMeta() {
-        return new PageMeta();
+        final PageMeta pageMeta = new PageMeta();
+        pageMeta.setAssetsPath(reverseRouter.designAssets("").url());
+        return pageMeta;
     }
 }

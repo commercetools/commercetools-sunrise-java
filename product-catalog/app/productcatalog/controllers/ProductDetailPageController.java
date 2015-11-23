@@ -82,7 +82,7 @@ public class ProductDetailPageController extends SunriseController {
                                 final ProductProjection productProjection, final String sku) {
         final ProductVariant productVariant = getProductVariantBySku(sku, productProjection);
         final ProductDetailPageContent content = getProductDetailPageContent(userContext, cms, suggestions, productProjection, productVariant);
-        final SunrisePageData pageData = pageData(userContext, content);
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
         return ok(templateService().renderToHtml("pdp", pageData, userContext.locales()));
     }
 
