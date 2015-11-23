@@ -26,7 +26,7 @@ public class CheckoutPaymentPageContent extends CheckoutPageContent {
     }
 
     @Override
-    public String additionalTitle() {
+    public String getAdditionalTitle() {
         return null;
     }
 }

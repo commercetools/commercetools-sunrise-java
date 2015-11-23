@@ -1,7 +1,7 @@
 package purchase;
 
 import common.contexts.UserContext;
-import common.pages.SelectableData;
+import common.models.SelectableData;
 import io.sphere.sdk.models.Address;
 import play.Configuration;
 import play.i18n.Messages;
@@ -31,10 +31,8 @@ public class SalutationsFieldsBean {
 
     private void fill(final Messages messages, final Configuration configuration, @Nullable final String title) {
         final List<SelectableData> selectableDataList = configuration.getObjectList(ALLOWED_TITLES_CONFIG_KEY).stream().map(map -> {
-            final SelectableData selectableData = new SelectableData();
             final String shownTitle = messages.at(map.get(MESSAGE_CONFIG_KEY).toString());
-            selectableData.setLabel(shownTitle);
-            selectableData.setValue(shownTitle);
+            final SelectableData selectableData = new SelectableData(shownTitle, shownTitle);
             selectableData.setSelected(selectableData.getValue().equals(title));
             return selectableData;
         }).collect(toList());

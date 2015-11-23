@@ -2,7 +2,7 @@ package purchase;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
-import common.pages.SelectableData;
+import common.models.SelectableData;
 import io.sphere.sdk.models.Address;
 import play.Configuration;
 import play.i18n.Messages;

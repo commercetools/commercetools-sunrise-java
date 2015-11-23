@@ -40,7 +40,7 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
     }
 
     @Override
-    public String additionalTitle() {
+    public String getAdditionalTitle() {
         return "checkout shipping";
     }
 }
