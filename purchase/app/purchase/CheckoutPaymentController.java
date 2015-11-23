@@ -33,6 +33,6 @@ public class CheckoutPaymentController extends CartController {
     }
 
     public Result process(final String language) {
-        return redirect(reverseRouter().showCheckoutPaymentForm(language));
+        return redirect(reverseRouter().showCheckoutConfirmationForm(language));
     }
 }
