@@ -12,6 +12,7 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 import org.javamoney.moneta.Money;
+import org.junit.Ignore;
 import org.junit.Test;
 import productcatalog.models.ShopShippingRate;
 
@@ -36,15 +37,15 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductDetailPageContentTest {
-//    private static final ZoneId ZONE_ID = ZoneId.of("Europe/Berlin");
-//    private static final CurrencyUnit EUR = Monetary.getCurrency("EUR");
-//    private static final List<Locale> LOCALES = singletonList(GERMAN);
-//    private static final PriceFormatter PRICE_FORMATTER = PriceFormatter.of(GERMAN);
-//    private static final UserContext USER_CONTEXT = UserContext.of(DE, LOCALES, ZONE_ID, EUR, null, null);
-//
-//    private final CategoryTree categories = CategoryTree.of(CategoryUtils.getQueryResult("categoryQueryResult.json").getResults());
-//    private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
-//
+    private static final ZoneId ZONE_ID = ZoneId.of("Europe/Berlin");
+    private static final CurrencyUnit EUR = Monetary.getCurrency("EUR");
+    private static final List<Locale> LOCALES = singletonList(GERMAN);
+    private static final PriceFormatter PRICE_FORMATTER = PriceFormatter.of(GERMAN);
+    private static final UserContext USER_CONTEXT = UserContext.of(DE, LOCALES, ZONE_ID, EUR, null, null);
+
+    private final CategoryTree categories = CategoryTree.of(CategoryUtils.getQueryResult("categoryQueryResult.json").getResults());
+    private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
+
 //    @Test
 //    public void staticJson() throws IOException {
 //        final CmsPage cms = (messageKey, args) -> Optional.of(messageKey);
@@ -62,7 +63,7 @@ public class ProductDetailPageContentTest {
 //        final Category bags = categories.findById("32952779-d916-4f2b-b1d5-9efd7f7b9f58").get();
 //        final Category handBags = categories.findById("9a584ee8-a45a-44e8-b9ec-e11439084687").get();
 //        final List<Category> breadcrumbs = asList(woman, bags, handBags);
-//        final CategoryDataFactory categoryLinkDataFactory = CategoryDataFactory.of(LOCALES);
+//        final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(LOCALES);
 //        final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
 //
 //        final JsonNode expected = readJsonNodeFromResource("breadcrumbData.json").get("breadcrumbs");
@@ -71,6 +72,7 @@ public class ProductDetailPageContentTest {
 //        assertThat(result).isEqualTo(expected);
 //    }
 //
+//    @Ignore
 //    @Test
 //    public void productJson() throws IOException {
 //        final ProductProjection product = readObjectFromResource("product.json", ProductProjection.typeReference());
@@ -96,6 +98,7 @@ public class ProductDetailPageContentTest {
 //        assertThat(result).isEqualTo(expected);
 //    }
 //
+//    @Ignore
 //    @Test
 //    public void suggestionJson() throws IOException {
 //        final ProductProjection selma = getProductById(products, "4f643a44-5bed-415e-ae60-64c46bfb26f5");

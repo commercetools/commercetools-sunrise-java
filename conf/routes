@@ -3,27 +3,33 @@
 # ~~~~
 
 # Untrail url
-GET        /*path/                                            @controllers.ApplicationController.untrail(path: String)
+GET         /*path/                                            @controllers.ApplicationController.untrail(path: String)
 
 # Map static resources from the /public folder to the /assets/public URL path
-GET        /assets/public/*file                               controllers.Assets.at(path="/public", file)
+GET         /assets/public/*file                               controllers.Assets.at(path="/public", file)
 
 # Map static resources from webjars (only CSS, JS, fonts and images) to the /assets URL path
-GET        /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJarAssets.at(file)
+GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJarAssets.at(file)
 
 
 # Home page
-GET        /                                                  @controllers.HomeController.show(languageTag = "en")
-GET        /:languageTag/home                                 @controllers.HomeController.show(languageTag:String)
+GET         /                                                  @controllers.HomeController.show(languageTag = "en")
+GET         /:languageTag/home                                 @controllers.HomeController.show(languageTag:String)
 
 
-->         /setup                                             setupwidget.Routes
+->          /setup                                             setupwidget.Routes
 
 
+GET         /:languageTag/cart                                 @purchase.CartDetailPageController.show(languageTag: String)
+GET         /:languageTag/cart/fixtures                        @purchase.CartDetailPageController.setItemsToCart(languageTag: String)
 
-GET        /:languageTag/cart                                 @purchase.CartDetailPageController.show(languageTag: String)
+GET         /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.show(languageTag: String)
+POST        /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.process(languageTag: String)
+GET         /:languageTag/checkout/payment                     @purchase.CheckoutPaymentController.show(languageTag: String)
+POST        /:languageTag/checkout/payment                     @purchase.CheckoutPaymentController.process(languageTag: String)
 
-GET        /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.controllers.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)
 
-GET        /:languageTag/search                               @productcatalog.controllers.ProductOverviewPageController.search(languageTag: String, page: Int ?= 1, pageSize: Int ?= 9, q: String ?= "")
-GET        /:languageTag/:categorySlug                        @productcatalog.controllers.ProductOverviewPageController.show(languageTag: String, page: Int ?= 1, pageSize: Int ?= 9, categorySlug: String)
+GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.controllers.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)
+
+GET         /:languageTag/search                               @productcatalog.controllers.ProductOverviewPageController.search(languageTag: String, page: Int ?= 1, pageSize: Int ?= 9, q: String ?= "")
+GET         /:languageTag/:categorySlug                        @productcatalog.controllers.ProductOverviewPageController.show(languageTag: String, page: Int ?= 1, pageSize: Int ?= 9, categorySlug: String)

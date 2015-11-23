@@ -13,6 +13,7 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import play.Configuration;
+import play.filters.csrf.AddCSRFToken;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.With;
@@ -30,6 +31,7 @@ import static java.util.stream.Collectors.toList;
  * Since we want to show a standard web shop it contains categories.
  */
 @With(MetricAction.class)
+@AddCSRFToken
 public abstract class SunriseController extends ShopController {
     private final ControllerDependency controllerDependency;
     private final String saleCategoryExtId;
@@ -93,5 +95,9 @@ public abstract class SunriseController extends ShopController {
 
     protected RequestContext requestContext() {
         return RequestContext.of(request().queryString(), request().path());
+    }
+
+    protected String getCsrfToken() {
+        return session("csrfToken");
     }
 }

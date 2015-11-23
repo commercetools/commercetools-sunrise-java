@@ -4,7 +4,7 @@ import common.pages.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
 import play.mvc.Call;
-import productcatalog.controllers.routes;
+import purchase.routes;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
     private final int pageSizeDefault;
@@ -48,5 +48,30 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     public Call productVariantToCartForm(final String languageTag) {
         //return cart.routes.LineItemAddController.process(languageTag);
         return null;
+    }
+
+    @Override
+    public Call processCheckoutShippingForm(final String language) {
+        return routes.CheckoutShippingController.process(language);
+    }
+
+    @Override
+    public Call showCheckoutShippingForm(final String language) {
+        return routes.CheckoutShippingController.show(language);
+    }
+    
+    @Override
+    public Call processCheckoutPaymentForm(final String language) {
+        return routes.CheckoutPaymentController.process(language);
+    }
+
+    @Override
+    public Call showCheckoutPaymentForm(final String language) {
+        return routes.CheckoutPaymentController.show(language);
+    }
+
+    @Override
+    public Call showCheckoutConfirmationForm(final String language) {
+        return routes.CheckoutPaymentController.show(language);
     }
 }

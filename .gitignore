@@ -13,4 +13,5 @@ dist
 /.project
 /RUNNING_PID
 /.settings
-dev.conf    
+dev.conf
+*.log

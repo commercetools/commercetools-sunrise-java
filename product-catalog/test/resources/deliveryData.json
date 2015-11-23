@@ -3,16 +3,16 @@
     {
       "shippingMethod":"DHL",
       "zone":"",
-      "shippingRate":"EUR 10,00",
+      "shippingRate":"EUR 10,-",
       "freeAbove":"",
-      "text":"DHL  EUR 10,00 "
+      "text":"DHL  EUR 10,- "
     },
     {
       "shippingMethod":"DHL",
       "zone":"",
-      "shippingRate":"EUR 10,00",
-      "freeAbove":"EUR 50,00",
-      "text":"DHL  EUR 10,00 EUR 50,00"
+      "shippingRate":"EUR 10,-",
+      "freeAbove":"EUR 50,-",
+      "text":"DHL  EUR 10,- EUR 50,-"
     }
   ]
 }

@@ -2,6 +2,7 @@ package inject;
 
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
+import common.models.ProductDataConfig;
 import common.pages.ReverseRouter;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
@@ -12,7 +13,7 @@ import play.api.inject.Binding;
 import play.api.inject.Module;
 import productcatalog.services.CategoryService;
 import productcatalog.services.ProductProjectionService;
-import productcatalog.services.ShippingMethodService;
+import purchase.ShippingMethods;
 import scala.collection.Seq;
 
 import javax.inject.Singleton;
@@ -28,11 +29,12 @@ public class ApplicationProductionModule extends Module {
         return seq(
                 bind(ProjectContext.class).toProvider(ProjectContextProvider.class).in(Singleton.class),
                 bind(CategoryTree.class).toProvider(CategoryTreeProvider.class).in(Singleton.class),
+                bind(ProductDataConfig.class).toProvider(ProductDataConfigProvider.class).in(Singleton.class),
                 bind(TemplateService.class).toProvider(TemplateServiceProvider.class).in(Singleton.class),
                 bind(CmsService.class).toProvider(CmsServiceProvider.class).in(Singleton.class),
                 bind(CategoryService.class).toProvider(CategoryServiceProvider.class).in(Singleton.class),
                 bind(ProductProjectionService.class).toProvider(ProductProjectionServiceProvider.class).in(Singleton.class),
-                bind(ShippingMethodService.class).toProvider(ShippingMethodServiceProvider.class).in(Singleton.class),
+                bind(ShippingMethods.class).toProvider(ShippingMethodsProvider.class).in(Singleton.class),
                 bind(ReverseRouter.class).toInstance(new ReverseRouterImpl(new Configuration(configuration)))
         );
     }

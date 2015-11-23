@@ -17,7 +17,6 @@ import productcatalog.models.ShopShippingRate;
 import productcatalog.pages.*;
 import productcatalog.services.CategoryService;
 import productcatalog.services.ProductProjectionService;
-import productcatalog.services.ShippingMethodService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -34,14 +33,12 @@ public class ProductDetailPageController extends SunriseController {
     private final int numberOfSuggestions;
     private final ProductProjectionService productService;
     private final CategoryService categoryService;
-    private final ShippingMethodService shippingMethodService;
 
     @Inject
-    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService, final ShippingMethodService shippingMethodService) {
+    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductProjectionService productService, final CategoryService categoryService) {
         super(controllerDependency);
         this.productService = productService;
         this.categoryService = categoryService;
-        this.shippingMethodService = shippingMethodService;
         this.numberOfSuggestions = configuration().getInt("pdp.productSuggestions.count");
     }
 
