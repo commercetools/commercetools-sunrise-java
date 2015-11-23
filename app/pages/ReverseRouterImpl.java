@@ -6,6 +6,25 @@ import play.mvc.Call;
 import purchase.routes;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
+    @Override
+    public Call home(final String languageTag) {
+        return new Call() {
+            @Override
+            public String url() {
+                return "/";
+            }
+
+            @Override
+            public String method() {
+                return "GET";
+            }
+
+            @Override
+            public String fragment() {
+                return null;
+            }
+        };
+    }
 
     @Override
     public Call category(final String language, final String slug, final int page) {
@@ -45,5 +64,10 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     @Override
     public Call designAssets(final String file) {
         return controllers.routes.WebJarAssets.at(file);
+    }
+
+    @Override
+    public Call showCart(final String language) {
+        return routes.CartDetailPageController.show(language);
     }
 }

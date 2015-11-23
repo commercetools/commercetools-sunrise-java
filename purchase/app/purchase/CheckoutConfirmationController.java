@@ -11,6 +11,7 @@ import io.sphere.sdk.orders.commands.OrderFromCartCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
 import play.i18n.Messages;
 import play.libs.F;
+import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -28,10 +29,11 @@ public class CheckoutConfirmationController extends CartController {
     public F.Promise<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
+        final Http.Context ctx = ctx();
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
             final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, messages, configuration(), reverseRouter(), userContext, productDataConfig);
-            final SunrisePageData pageData = pageData(userContext, content, ctx());
+            final SunrisePageData pageData = pageData(userContext, content, ctx);
             return ok(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales()));
         });
     }

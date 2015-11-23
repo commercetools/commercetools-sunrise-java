@@ -4,6 +4,8 @@ import play.mvc.Call;
 
 public interface ReverseRouter {
 
+    Call home(String languageTag);
+
     Call category(final String language, final String slug, final int page);
 
     Call processCheckoutShippingForm(final String language);
@@ -19,4 +21,6 @@ public interface ReverseRouter {
     Call processCheckoutConfirmationForm(final String language);
 
     Call designAssets(final String file);
+
+    Call showCart(final String language);
 }

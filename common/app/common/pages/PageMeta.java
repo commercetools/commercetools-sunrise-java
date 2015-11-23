@@ -1,8 +1,15 @@
 package common.pages;
 
+import common.models.HalLink;
+import play.mvc.Call;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class PageMeta {
     private String assetsPath;
     private String csrfToken;
+    private Map<String, HalLink> _links = new HashMap<>();
 
     public PageMeta() {
     }
@@ -21,5 +28,25 @@ public class PageMeta {
 
     public void setCsrfToken(final String csrfToken) {
         this.csrfToken = csrfToken;
+    }
+
+    public Map<String, HalLink> get_links() {
+        return _links;
+    }
+
+    public void set_links(final Map<String, HalLink> _links) {
+        this._links = _links;
+    }
+
+    public PageMeta addHalLink(final Call call, final String rel, final String ... moreRel) {
+        return addHalLinkOfHrefAndRel(call.url(), rel, moreRel);
+    }
+
+    public PageMeta addHalLinkOfHrefAndRel(final String href, final String rel,  final String ... moreRel) {
+        _links.put(rel, new HalLink(href));
+        for (int i = 0; i < moreRel.length; i++) {
+            addHalLinkOfHrefAndRel(href, moreRel[i]);
+        }
+        return this;
     }
 }

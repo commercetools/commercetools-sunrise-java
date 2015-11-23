@@ -94,11 +94,6 @@ public abstract class SunriseController extends ShopController {
         return UserContext.of(DE, locales, ZoneId.of("Europe/Berlin"), Monetary.getCurrency("EUR"));
     }
 
-    protected String getCsrfToken() {
-        final Http.Session session = session();
-        return getCsrfToken(session);
-    }
-
     @Nullable
     public static String getCsrfToken(final Http.Session session) {
         return session.get("csrfToken");

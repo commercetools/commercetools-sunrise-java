@@ -94,6 +94,12 @@ public class SunrisePageDataFactory {
         final PageMeta pageMeta = new PageMeta();
         pageMeta.setAssetsPath(reverseRouter.designAssets("").url());
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
+        final String language = userContext.locale().getLanguage();
+        pageMeta.addHalLink(reverseRouter.showCart(language), "cart")
+                .addHalLink(reverseRouter.showCheckoutShippingForm(language), "checkout", "editShippingAddress", "editBillingAddress", "editShippingMethod")
+                .addHalLink(reverseRouter.showCheckoutPaymentForm(language), "editPaymentInfo")
+                .addHalLink(reverseRouter.home(language), "continueShopping", "home")
+                .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         return pageMeta;
     }
 }
