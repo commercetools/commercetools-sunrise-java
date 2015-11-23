@@ -1,6 +1,6 @@
 package common.templates;
 
-import common.pages.PageData;
+import common.controllers.PageData;
 import org.junit.Test;
 import play.twirl.api.Html;
 

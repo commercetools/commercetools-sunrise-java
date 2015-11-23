@@ -1,13 +1,13 @@
 package common.templates;
 
-import common.pages.PageData;
+import common.controllers.PageData;
 import play.twirl.api.Html;
 
 import java.util.List;
 import java.util.Locale;
 
 /**
- * Service that provides HTML pages, using some kind of template system.
+ * Service that provides HTML pages, using some kind of template engine.
  */
 public interface TemplateService {
 

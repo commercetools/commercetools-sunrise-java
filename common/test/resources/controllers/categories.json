@@ -1,0 +1,102 @@
+{
+    "offset": 0,
+    "count": 4,
+    "total": 4,
+    "results": [
+        {
+            "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf",
+            "version": 3,
+            "name": {
+                "en": "1st Level"
+            },
+            "slug": {
+                "de": "root-1448275521915",
+                "en": "root-1448275521915"
+            },
+            "description": {
+                "en": "<p>1st-level category</p>"
+            },
+            "ancestors": []
+        },
+        {
+            "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e",
+            "version": 1,
+            "name": {
+                "en": "2nd Level"
+            },
+            "slug": {
+                "en": "2nd-level-1448275551784",
+                "de": "2nd-level-1448275551784"
+            },
+            "description": {
+                "en": "<p>2nd-level category</p>"
+            },
+            "ancestors": [
+                {
+                    "typeId": "category",
+                    "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf"
+                }
+            ],
+            "parent": {
+                "typeId": "category",
+                "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf"
+            }
+        },
+        {
+            "id": "6043642c-2a75-4be7-9817-a611aad5711a",
+            "version": 1,
+            "name": {
+                "en": "3rd Level"
+            },
+            "slug": {
+                "en": "3rd-level-1448275584241",
+                "de": "3rd-level-1448275584241",
+            },
+            "description": {
+                "en": "<p>3rd-level category</p>"
+            },
+            "ancestors": [
+                {
+                    "typeId": "category",
+                    "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf"
+                },
+                {
+                    "typeId": "category",
+                    "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e"
+                }
+            ],
+            "parent": {
+                "typeId": "category",
+                "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e"
+            }
+        },
+        {
+            "id": "7e06b4a0-d9d9-436e-beb6-3cdaaeccdef8",
+            "version": 1,
+            "name": {
+                "en": "2nd Level Sibling"
+            },
+            "slug": {
+                "de": "2nd-level-sibling-1448275621978",
+                "en": "2nd-level-sibling-1448275621978"
+            },
+            "description": {
+                "en": "<p>Sibling of the 2nd-level category</p>"
+            },
+            "ancestors": [
+                {
+                    "typeId": "category",
+                    "id": "ebca0e07-ffc7-4a59-ba8a-57338f9d34bf"
+                },
+                {
+                    "typeId": "category",
+                    "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e"
+                }
+            ],
+            "parent": {
+                "typeId": "category",
+                "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e"
+            }
+        }
+    ]
+}

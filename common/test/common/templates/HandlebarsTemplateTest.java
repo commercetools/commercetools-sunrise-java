@@ -2,10 +2,9 @@ package common.templates;
 
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import common.pages.*;
+import common.controllers.*;
 import org.junit.Test;
 import play.Configuration;
-import play.Environment;
 
 import java.util.List;
 import java.util.Locale;
@@ -157,11 +156,6 @@ public class HandlebarsTemplateTest {
 
             @Override
             public PageFooter getFooter() {
-                return null;
-            }
-
-            @Override
-            public SeoData getSeo() {
                 return null;
             }
 

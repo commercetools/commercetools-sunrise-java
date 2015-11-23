@@ -1,20 +1,17 @@
 package productcatalog.controllers;
 
-import common.cms.CmsPage;
+import common.actions.LanguageFiltered;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
-import common.pages.*;
+import common.controllers.SunrisePageData;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.libs.F;
 import play.mvc.Result;
-import productcatalog.models.ProductNotFoundException;
-import productcatalog.models.ProductVariantNotFoundException;
-import productcatalog.models.ShopShippingRate;
-import productcatalog.pages.*;
+import productcatalog.models.*;
 import productcatalog.services.CategoryService;
 import productcatalog.services.ProductProjectionService;
 
@@ -27,6 +24,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
+@LanguageFiltered
 public class ProductDetailPageController extends SunriseController {
 
     private final int numberOfSuggestions;
@@ -41,15 +39,12 @@ public class ProductDetailPageController extends SunriseController {
         this.numberOfSuggestions = configuration().getInt("pdp.productSuggestions.count");
     }
 
-    public F.Promise<Result> show(final String language, final String slug, final String sku) {
-        final UserContext userContext = userContext(language);
-        final F.Promise<CmsPage> cmsPagePromise = cmsService().getPage(userContext.locale(), "pdp");
-        final F.Promise<ProductProjection> productProjectionPromise = fetchProduct(userContext.locale(), slug);
-        final F.Promise<List<ProductProjection>> suggestionPromise = productProjectionPromise.flatMap(this::fetchSuggestions);
-        final F.Promise<Result> resultPromise = productProjectionPromise.flatMap(productProjection ->
-                cmsPagePromise.flatMap(cms ->
-                        suggestionPromise.map(suggestions ->
-                                getPdpResult(userContext, cms, suggestions, productProjection, sku))));
+    public F.Promise<Result> show(final String locale, final String slug, final String sku) {
+        final UserContext userContext = userContext(locale);
+        final F.Promise<ProductProjection> productPromise = fetchProduct(userContext.locale(), slug);
+        final F.Promise<List<ProductProjection>> suggestionPromise = productPromise.flatMap(this::fetchSuggestions);
+        final F.Promise<Result> resultPromise = productPromise.flatMap(productProjection ->
+                suggestionPromise.map(suggestions -> getPdpResult(userContext, suggestions, productProjection, sku)));
         return recover(resultPromise);
     }
 
@@ -60,7 +55,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private F.Promise<List<ProductProjection>> fetchSuggestions(final ProductProjection productProjection) {
-        final List<Category> siblingCategories = categoryService.getSiblingCategories(productProjection.getCategories());
+        final List<Category> siblingCategories = categoryService.getSiblings(productProjection.getCategories());
         return productService.getSuggestions(siblingCategories, numberOfSuggestions);
     }
 
@@ -78,10 +73,10 @@ public class ProductDetailPageController extends SunriseController {
         return notFound();
     }
 
-    private Result getPdpResult(final UserContext userContext, final CmsPage cms, final List<ProductProjection> suggestions,
+    private Result getPdpResult(final UserContext userContext, final List<ProductProjection> suggestions,
                                 final ProductProjection productProjection, final String sku) {
         final ProductVariant productVariant = getProductVariantBySku(sku, productProjection);
-        final ProductDetailPageContent content = getProductDetailPageContent(userContext, cms, suggestions, productProjection, productVariant);
+        final ProductDetailPageContent content = getProductDetailPageContent(userContext, suggestions, productProjection, productVariant);
         final SunrisePageData pageData = pageData(userContext, content);
         return ok(templateService().renderToHtml("pdp", pageData, userContext.locales()));
     }
@@ -92,41 +87,18 @@ public class ProductDetailPageController extends SunriseController {
 
     /* Methods to build page content */
 
-    private ProductDetailPageContent getProductDetailPageContent(final UserContext userContext, final CmsPage cms,
+    private ProductDetailPageContent getProductDetailPageContent(final UserContext userContext,
                                                                  final List<ProductProjection> suggestions,
-                                                                 final ProductProjection productProjection,
-                                                                 final ProductVariant productVariant) {
-        final String additionalTitle = productProjection.getName().find(userContext.locales()).orElse("");
-        final PdpStaticData staticData = getStaticData(cms);
-        final List<LinkData> breadcrumbData = getBreadcrumbData(userContext, productProjection);
-        final ProductData productData = getProductData(userContext, productProjection, productVariant);
-        final List<ShippingRateData> deliveryData = getDeliveryData(userContext);
-        final List<ProductData> suggestionData = getSuggestionData(userContext, suggestions);
-        return new ProductDetailPageContent(additionalTitle, staticData, breadcrumbData, productData, deliveryData, suggestionData);
-    }
-
-    private PdpStaticData getStaticData(final CmsPage cms) {
-        return new PdpStaticData(cms, BagItemDataFactory.of().create(100), RatingDataFactory.of(cms).create());
-    }
-
-    private List<LinkData> getBreadcrumbData(final UserContext userContext, final ProductProjection productProjection) {
-        final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(userContext.locales());
-        final List<Category> breadcrumbs = getBreadcrumbsForProduct(productProjection);
-        return breadcrumbs.stream()
-                .map(categoryLinkDataFactory::create)
-                .collect(toList());
-    }
-
-    private List<Category> getBreadcrumbsForProduct(final ProductProjection product) {
-        return product.getCategories().stream().findFirst()
-                .map(categoryService::getBreadCrumbCategories)
-                .orElse(emptyList());
-    }
-
-    private ProductData getProductData(final UserContext userContext, final ProductProjection productProjection,
-                                       final ProductVariant productVariant) {
-        final ProductDataFactory productDataFactory = ProductDataFactory.of(userContext);
-        return productDataFactory.create(productProjection, productVariant);
+                                                                 final ProductProjection product,
+                                                                 final ProductVariant variant) {
+        final String additionalTitle = product.getName().find(userContext.locales()).orElse("");
+        final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle);
+        content.setProductData(new ProductData(userContext, reverseRouter(), categories(), product, variant));
+        content.setBreadcrumb(new BreadcrumbData(product, variant, categories(), userContext, reverseRouter()));
+        content.setShippingRates(getDeliveryData(userContext));
+        content.setSuggestions(getSuggestionData(userContext, suggestions));
+        content.setAddToCartFormUrl(reverseRouter().productVariantToCartForm(userContext.locale().getLanguage()).url());
+        return content;
     }
 
     private List<ShippingRateData> getDeliveryData(final UserContext userContext) {
@@ -138,10 +110,7 @@ public class ProductDetailPageController extends SunriseController {
     }
 
     private List<ProductData> getSuggestionData(final UserContext userContext, final List<ProductProjection> suggestions) {
-        final ProductDataFactory productDataFactory = ProductDataFactory.of(userContext);
-        return suggestions.stream()
-                .map((product) -> productDataFactory.create(product, product.getMasterVariant()))
-                .collect(toList());
+        return new ProductListData(userContext, reverseRouter(), categories(), suggestions).getList();
     }
 
     private List<ShopShippingRate> getShippingRates() {

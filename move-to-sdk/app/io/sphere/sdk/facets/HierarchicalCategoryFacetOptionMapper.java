@@ -35,8 +35,7 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
                 .collect(toList());
     }
 
-    public static HierarchicalCategoryFacetOptionMapper of(final List<Category> subcategories, final List<Locale> locales) {
-        final CategoryTree subcategoryTree = CategoryTree.of(subcategories);
+    public static HierarchicalCategoryFacetOptionMapper of(final CategoryTree subcategoryTree, final List<Locale> locales) {
         return new HierarchicalCategoryFacetOptionMapper(subcategoryTree, locales);
     }
 
@@ -53,7 +52,8 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
         if (!children.isEmpty()) {
             facetOption = addChildrenToFacetOption(facetOption, category, children, facetOptionFinder);
         }
-        return setNameToFacetOptionLabel(facetOption, category, locales);
+        final Optional<FacetOption> labelledOption = setNameToFacetOptionLabel(facetOption, category, locales);
+        return setLinkToFacetOptionValue(labelledOption, category, locales);
     }
 
     private Optional<FacetOption> addChildrenToFacetOption(final Optional<FacetOption> facetOption,
@@ -93,6 +93,13 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
         return facetOptionOptional.flatMap(facetOption ->
                 category.getName().find(locales)
                         .map(facetOption::withLabel));
+    }
+
+    private Optional<FacetOption> setLinkToFacetOptionValue(final Optional<FacetOption> facetOptionOptional,
+                                                            final Category category, final List<Locale> locales) {
+        return facetOptionOptional.flatMap(facetOption ->
+                category.getSlug().find(locales)
+                        .map(facetOption::withValue));
     }
 
     private Function<Category, Optional<FacetOption>> facetOptionFinder(final List<FacetOption> facetOptions) {

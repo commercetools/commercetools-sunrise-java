@@ -12,6 +12,7 @@ import play.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -39,7 +40,7 @@ public class TemplateServiceProvider implements Provider<TemplateService> {
     }
 
     private List<TemplateLoader> initializeTemplateLoaders(final String configKey) {
-        return configuration.getConfigList(configKey)
+        return configuration.getConfigList(configKey, emptyList())
                 .stream()
                 .map(this::initializeTemplateLoader)
                 .collect(toList());

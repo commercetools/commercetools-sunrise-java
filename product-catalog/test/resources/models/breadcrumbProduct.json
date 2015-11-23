@@ -1,0 +1,36 @@
+{
+  "id": "ee89e986-93cf-4332-9e2e-1a95383daf83",
+  "version": 4,
+  "productType": {
+    "typeId": "product-type",
+    "id": "81096c4c-cc77-4a02-ac22-7a2db252cb3d"
+  },
+  "name": {
+    "en": "Some product"
+  },
+  "categories": [
+    {
+      "typeId": "category",
+      "id": "38429a3d-0cea-4a90-9e72-60ce3681e14e"
+    }
+  ],
+  "categoryOrderHints": {},
+  "slug": {
+    "de": "some-product-1448278883849",
+    "en": "some-product-",
+    "fr": "some-product-1448278883849"
+  },
+  "masterVariant": {
+    "id": 1,
+    "sku": "some-sku",
+    "prices": [],
+    "images": [],
+    "attributes": []
+  },
+  "variants": [],
+  "searchKeywords": {},
+  "hasStagedChanges": false,
+  "published": true,
+  "createdAt": "2015-11-23T11:41:32.207Z",
+  "lastModifiedAt": "2015-11-23T11:41:49.338Z"
+}

@@ -26,8 +26,7 @@ public class ShippingMethodsFormBean {
         final List<SelectableShippingMethodBean> shippingMethodBeanList = shippingMethods.shippingMethods.stream()
                 .map(shippingMethod -> {
                     final SelectableShippingMethodBean bean = new SelectableShippingMethodBean();
-                    bean.setText(shippingMethod.getName());
-                    bean.setName(shippingMethod.getName());
+                    bean.setLabel(shippingMethod.getName());
                     bean.setValue(shippingMethod.getId());
                     final Boolean selected = shippingMethod.getId().equals(nullableSelectedShippingMethodId);
                     bean.setSelected(selected);

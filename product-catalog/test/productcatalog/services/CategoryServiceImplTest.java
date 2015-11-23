@@ -1,28 +1,23 @@
 package productcatalog.services;
 
-import common.categories.CategoryUtils;
+import common.categories.JsonUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.categories.queries.CategoryQuery;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.List;
 
-import static common.products.ProductUtils.getProductById;
-import static common.products.ProductUtils.getQueryResult;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CategoryServiceImplTest {
 
-    private final CategoryTree categories = CategoryTree.of(CategoryUtils.getQueryResult("categoryQueryResult.json").getResults());
-    private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
-    private final CategoryService categrieService = new CategoryServiceImpl(categories);
+    private static final CategoryTree categories = CategoryTree.of(JsonUtils.readJson("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
+    private static final CategoryService categoryService = new CategoryServiceImpl(categories);
 
     @Test
-    @SuppressWarnings("unchecked")
     public void getSiblingCategories() throws Exception {
         final Category shoulderBags = categories.findById("30d79426-a17a-4e63-867e-ec31a1a33416").get();
         final Category handBags = categories.findById("9a584ee8-a45a-44e8-b9ec-e11439084687").get();
@@ -33,29 +28,17 @@ public class CategoryServiceImplTest {
         final Category backpacks = categories.findById("46249239-8f0f-48a9-b0a0-d29b37fc617f").get();
         final Category slingBags = categories.findById("8e052705-7810-4528-ba77-00094b87a69a").get();
 
-        final List<Category> shoulderBagSiblings = categrieService.getSiblingCategories(singletonList(shoulderBags.toReference()));
-        final List<Category> handBagSiblings = categrieService.getSiblingCategories(singletonList(handBags.toReference()));
-        final List<Category> combinedsiblings = categrieService.getSiblingCategories(asList(shoulderBags.toReference(), handBags.toReference()));
+        final List<Category> shoulderBagSiblings = categoryService.getSiblings(singletonList(shoulderBags.toReference()));
+        final List<Category> handBagSiblings = categoryService.getSiblings(singletonList(handBags.toReference()));
+        final List<Category> combinedSiblings = categoryService.getSiblings(asList(shoulderBags.toReference(), handBags.toReference()));
 
         assertThat(shoulderBagSiblings)
                 .containsExactly(clutches, satchels, shoppers, handBags, wallets, backpacks, slingBags);
         assertThat(handBagSiblings)
                 .containsExactly(clutches, satchels, shoppers, handBags, wallets, backpacks, slingBags);
-        assertThat(combinedsiblings)
+        assertThat(combinedSiblings)
                 .containsExactly(clutches, satchels, shoppers, handBags, wallets, backpacks, slingBags);
     }
 
-    @Test
-    public void getBreadCrumbCategories() {
-        final ProductProjection suttonBag = getProductById(products, "254f1c0e-67bc-4aa6-992d-9a0fea1846b5");
-        final Category woman = categories.findById("33339d11-0e7b-406b-899b-60f4c34c2948").get();
-        final Category bags = categories.findById("32952779-d916-4f2b-b1d5-9efd7f7b9f58").get();
-        final Category handBags = categories.findById("9a584ee8-a45a-44e8-b9ec-e11439084687").get();
 
-        final List<Category> result = suttonBag.getCategories().stream().findFirst()
-                .map(categrieService::getBreadCrumbCategories)
-                .orElse(Collections.<Category>emptyList());
-
-        assertThat(result).containsExactly(woman, bags, handBags);
-    }
 }

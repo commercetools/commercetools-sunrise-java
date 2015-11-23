@@ -5,45 +5,57 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Reference;
 
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
 
 public class CategoryServiceImpl implements CategoryService {
-    private final CategoryTree categories;
+    private final CategoryTree categoryTree;
 
     @Inject
-    public CategoryServiceImpl(final CategoryTree categories) {
-        this.categories = categories;
+    public CategoryServiceImpl(final CategoryTree categoryTree) {
+        this.categoryTree = categoryTree;
     }
 
-    public List<Category> getSiblingCategories(final Collection<Reference<Category>> categoryRefs) {
+    @Override
+    public List<Category> getSiblings(final Collection<Reference<Category>> categoryRefs) {
         return categoryRefs.stream()
-            .map(this::expandCategory).filter(Optional::isPresent).map(Optional::get)
-            .map(category -> Optional.ofNullable(category.getParent())).filter(Optional::isPresent).map(Optional::get)
-            .flatMap(parent -> categories.findChildren(parent).stream())
-            .distinct()
-            .collect(toList());
-    }
-
-    public List<Category> getBreadCrumbCategories(final Reference<Category> categoryRef) {
-        final Optional<Category> categoryOptional = expandCategory(categoryRef);
-        return categoryOptional.map(this::getCategoryWithAncestors).orElse(emptyList());
-    }
-
-    private List<Category> getCategoryWithAncestors(final Category category) {
-        return concat(category.getAncestors().stream().map(this::expandCategory), Stream.of(Optional.of(category)))
+                .map(this::refToCategory)
                 .filter(Optional::isPresent)
-                .map(Optional::get)
+                .flatMap(category -> getSiblings(category.get()).stream())
+                .distinct()
                 .collect(toList());
     }
 
-    private Optional<Category> expandCategory(final Reference<Category> categoryRef) {
-        return categories.findById(categoryRef.getId());
+    @Override
+    public CategoryTree getSubtree(final Collection<Category> parentCategories) {
+        return CategoryTree.of(getSubtreeAsFlatList(parentCategories));
+    }
+
+    public Category getRootAncestor(final Category category) {
+        return category.getAncestors().stream().findFirst()
+                .flatMap(root -> categoryTree.findById(root.getId()))
+                .orElse(category);
+    }
+
+    private List<Category> getSiblings(final Category category) {
+        return Optional.ofNullable(category.getParent())
+                .map(categoryTree::findChildren)
+                .orElse(emptyList());
+    }
+
+    private List<Category> getSubtreeAsFlatList(final Collection<Category> parentCategories) {
+        final List<Category> categories = new ArrayList<>();
+        parentCategories.stream().forEach(parent -> {
+            categories.add(parent);
+            final List<Category> children = categoryTree.findChildren(parent);
+            categories.addAll(getSubtreeAsFlatList(children));
+        });
+        return categories;
+    }
+
+    private Optional<Category> refToCategory(final Reference<Category> ref) {
+        return categoryTree.findById(ref.getId());
     }
 }

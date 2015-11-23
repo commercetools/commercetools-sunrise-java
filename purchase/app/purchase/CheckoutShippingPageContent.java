@@ -2,7 +2,7 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.models.ProductDataConfig;
-import common.pages.ReverseRouter;
+import common.controllers.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
 import play.Configuration;
 import play.i18n.Messages;
@@ -40,7 +40,7 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
     }
 
     @Override
-    public String additionalTitle() {
+    public String getAdditionalTitle() {
         return "checkout shipping";
     }
 }

@@ -57,10 +57,10 @@ public class UserContextTest {
     }
 
     private Reference<CustomerGroup> customerGroup() {
-        return Reference.of(CustomerGroup.typeId(), "foo");
+        return Reference.of(CustomerGroup.referenceTypeId(), "foo");
     }
 
     private Reference<Channel> channel() {
-        return Reference.of(Channel.typeId(), "foo");
+        return Reference.of(Channel.referenceTypeId(), "foo");
     }
 }

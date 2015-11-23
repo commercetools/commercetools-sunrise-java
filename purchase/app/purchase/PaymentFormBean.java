@@ -1,8 +1,8 @@
 package purchase;
 
 import common.contexts.UserContext;
-import common.pages.ReverseRouter;
-import common.pages.SelectableData;
+import common.models.SelectableData;
+import common.controllers.ReverseRouter;
 
 import java.util.Collections;
 
@@ -20,7 +20,7 @@ public class PaymentFormBean {
         setCsrfToken(csrfToken);
         final PaymentOptionsBean paymentOptions = new PaymentOptionsBean();
         final SelectableData o = new SelectableData();
-        o.setText("prepaid");
+        o.setLabel("prepaid");
         o.setSelected(true);
         paymentOptions.setList(Collections.singletonList(o));
         setPaymentOptions(paymentOptions);

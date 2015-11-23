@@ -2,6 +2,7 @@ package inject;
 
 import com.google.inject.Provider;
 import io.sphere.sdk.client.PlayJavaSphereClient;
+import play.Logger;
 import productcatalog.services.ProductProjectionService;
 import productcatalog.services.ProductProjectionServiceImpl;
 
@@ -17,6 +18,7 @@ public class ProductProjectionServiceProvider implements Provider<ProductProject
 
     @Override
     public ProductProjectionService get() {
+        Logger.debug("Provide ProductProjectionService");
         return new ProductProjectionServiceImpl(sphere);
     }
 }
