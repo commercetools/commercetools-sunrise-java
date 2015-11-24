@@ -1,9 +1,8 @@
 package purchase;
 
 import common.contexts.UserContext;
-import common.models.ProductDataConfig;
 import common.controllers.PageContent;
-import common.controllers.ReverseRouter;
+import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 
 public class CartDetailPageContent extends PageContent {

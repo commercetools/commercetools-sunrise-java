@@ -28,6 +28,8 @@ public class SelectableShippingMethodBean extends SelectableData {
             if (shippingMethodReference != null && shippingMethodReference.getObj() != null) {
                 setDescription(shippingMethodReference.getObj().getDescription());
             }
+        } else {
+            setPrice(moneyContext.formatOrZero(null));
         }
     }
 
