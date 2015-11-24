@@ -11,7 +11,9 @@ import play.libs.F;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class CheckoutPaymentController extends CartController {
 
     private final ProductDataConfig productDataConfig;

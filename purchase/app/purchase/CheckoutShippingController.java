@@ -25,11 +25,13 @@ import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@Singleton
 public class CheckoutShippingController extends CartController {
 
 

@@ -24,6 +24,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ import static java.util.Arrays.asList;
 /**
  * Shows the contents of the cart.
  */
+@Singleton
 public final class CartDetailPageController extends CartController {
     private final ProductDataConfig productDataConfig;
 

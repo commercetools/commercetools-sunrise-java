@@ -10,10 +10,12 @@ import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static purchase.CartSessionKeys.LAST_ORDER_ID_KEY;
 
+@Singleton
 public class CheckoutThankyouController extends CartController {
     private final ProductDataConfig productDataConfig;
 

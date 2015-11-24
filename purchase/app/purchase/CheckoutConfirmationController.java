@@ -16,9 +16,11 @@ import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import static purchase.CartSessionKeys.LAST_ORDER_ID_KEY;
 
+@Singleton
 public class CheckoutConfirmationController extends CartController {
     private final ProductDataConfig productDataConfig;
 
