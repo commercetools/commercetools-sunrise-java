@@ -7,7 +7,7 @@ import io.sphere.sdk.carts.CartShippingInfo;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
-import java.util.Optional;
+import javax.money.MonetaryAmount;
 
 public class SelectableShippingMethodBean extends SelectableData {
     private String deliveryDays;
@@ -17,17 +17,17 @@ public class SelectableShippingMethodBean extends SelectableData {
     }
 
     public SelectableShippingMethodBean(final CartLike<?> cartLike, final MoneyContext moneyContext) {
-        final Optional<ShippingMethod> shippingMethodOptional = Optional.ofNullable(cartLike.getShippingInfo())
-                .map(CartShippingInfo::getShippingMethod)
-                .map(Reference::getObj);
-        if (shippingMethodOptional.isPresent()) {
-            final ShippingMethod shippingMethod = shippingMethodOptional.get();
-            setLabel(shippingMethod.getName());
+        final CartShippingInfo shippingInfo = cartLike.getShippingInfo();
+        if (shippingInfo != null) {
+            final String label = shippingInfo.getShippingMethodName();
+            setLabel(label);
+            final MonetaryAmount price = shippingInfo.getPrice();
+            setPrice(moneyContext.formatOrZero(price));
             setSelected(true);
-            setDescription(shippingMethod.getDescription());
-            setPrice(moneyContext.formatOrNull(cartLike.getShippingInfo().getPrice()));
-        } else {
-            setPrice(moneyContext.formatOrZero(null));
+            final Reference<ShippingMethod> shippingMethodReference = shippingInfo.getShippingMethod();
+            if (shippingMethodReference != null && shippingMethodReference.getObj() != null) {
+                setDescription(shippingMethodReference.getObj().getDescription());
+            }
         }
     }
 

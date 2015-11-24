@@ -8,7 +8,7 @@ organization := "io.sphere"
 
 version := "1.0-SNAPSHOT"
 
-val sunriseDesignVersion = "0.31.0"
+val sunriseDesignVersion = "0.33.0"
 
 /**
  * SUB-PROJECT DEFINITIONS
@@ -45,7 +45,7 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val sphereJvmSdkVersion = "1.0.0-M21-2015-11-13-11-39-45-facets-SNAPSHOT"
+lazy val sphereJvmSdkVersion = "1.0.0-M21-SNAPSHOT"
 lazy val jacksonVersion = "2.6.0"
 
 lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (

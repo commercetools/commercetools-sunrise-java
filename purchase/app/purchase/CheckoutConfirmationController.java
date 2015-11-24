@@ -17,8 +17,9 @@ import play.mvc.Result;
 
 import javax.inject.Inject;
 
+import static purchase.CartSessionKeys.LAST_ORDER_ID_KEY;
+
 public class CheckoutConfirmationController extends CartController {
-    public static final String LAST_ORDER_ID_KEY = "lastOrderId";
     private final ProductDataConfig productDataConfig;
 
     @Inject
