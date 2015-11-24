@@ -10,9 +10,9 @@ public interface ReverseRouter {
 
     Call category(final String languageTag, final String categorySlug);
 
-    Call search(final String languageTag, final String searchTerm, final int page);
+    Call search(final String languageTag, final int page);
 
-    Call search(final String languageTag, final String searchTerm);
+    Call search(final String languageTag);
 
     Call product(final String locale, final String productSlug, final String sku);
 

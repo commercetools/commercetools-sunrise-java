@@ -35,7 +35,7 @@ public class ApplicationProductionModule extends Module {
                 bind(CategoryService.class).toProvider(CategoryServiceProvider.class).in(Singleton.class),
                 bind(ProductProjectionService.class).toProvider(ProductProjectionServiceProvider.class).in(Singleton.class),
                 bind(ShippingMethods.class).toProvider(ShippingMethodsProvider.class).in(Singleton.class),
-                bind(ReverseRouter.class).toInstance(new ReverseRouterImpl(new Configuration(configuration)))
+                bind(ReverseRouter.class).toInstance(new ReverseRouterImpl())
         );
     }
 }

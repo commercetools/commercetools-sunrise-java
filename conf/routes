@@ -37,5 +37,5 @@ POST        /:languageTag/checkout/confirmation                @purchase.Checkou
 
 GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.controllers.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)
 
-GET         /:languageTag/search                               @productcatalog.controllers.ProductOverviewPageController.search(languageTag: String, page: Int ?= 1, pageSize: Int ?= 9, q: String ?= "")
-GET         /:languageTag/:categorySlug                        @productcatalog.controllers.ProductOverviewPageController.show(languageTag: String, page: Int ?= 1, pageSize: Int ?= 9, categorySlug: String)
+GET         /:languageTag/search                               @productcatalog.controllers.ProductOverviewPageController.search(languageTag: String, page: Int ?= 1)
+GET         /:languageTag/:categorySlug                        @productcatalog.controllers.ProductOverviewPageController.show(languageTag: String, page: Int ?= 1, categorySlug: String)

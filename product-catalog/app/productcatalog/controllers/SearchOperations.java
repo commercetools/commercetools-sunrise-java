@@ -2,49 +2,98 @@ package productcatalog.controllers;
 
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
+import io.sphere.sdk.models.LocalizedStringEntry;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionFacetAndFilterSearchModel;
 import io.sphere.sdk.products.search.ProductProjectionSearchModel;
 import io.sphere.sdk.products.search.ProductProjectionSortSearchModel;
+import io.sphere.sdk.search.FacetAndFilterExpression;
 import io.sphere.sdk.search.SortExpression;
 import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
 import play.Configuration;
 import play.i18n.Messages;
 import play.mvc.Http;
+import productcatalog.models.DisplaySelector;
 import productcatalog.models.SortOption;
+import productcatalog.models.SortSelector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 import static productcatalog.models.SunriseFacetType.*;
 
 public class SearchOperations {
     private static final ProductProjectionSortSearchModel SORT = ProductProjectionSearchModel.of().sort();
     private static final ProductProjectionFacetAndFilterSearchModel FACET = ProductProjectionSearchModel.of().facetedSearch();
     private static final SortExpression<ProductProjection> DEFAULT_SORT = SORT.createdAt().byDesc();
-    private static final String SORT_KEY = "sort";
     private final Http.Request request;
     private final Messages messages;
     private final Locale locale;
+    private final CategoryTree subcategoryTreeFacet;
     private final List<String> sortedSizes;
+    private final String fulltextKey;
+    private final String sortKey;
+    private final String displayKey;
+    private final List<Integer> pageSizeOptions;
+    private final int pageSizeDefault;
 
-    public SearchOperations(final Configuration configuration, final Http.Request request, final Messages messages, final Locale locale) {
+    public SearchOperations(final Configuration configuration, final Http.Request request, final Messages messages,
+                            final Locale locale, final CategoryTree subcategoryTreeFacet) {
         this.request = request;
         this.messages = messages;
         this.locale = locale;
+        this.subcategoryTreeFacet = subcategoryTreeFacet;
         this.sortedSizes = configuration.getStringList("pop.facet.size", emptyList());
+        this.fulltextKey = configuration.getString("pop.fulltext.key", "q");
+        this.sortKey = configuration.getString("pop.sort.key", "sort");
+        this.displayKey = configuration.getString("pop.pageSize.key", "display");
+        this.pageSizeOptions = configuration.getIntList("pop.pageSize.options", asList(9, 24, 99));
+        this.pageSizeDefault = configuration.getInt("pop.pageSize.default", 9);
+        // TODO Move more keys/values to configuration
     }
 
-    public List<Facet<ProductProjection>> boundFacets(final CategoryTree subcategoryTree) {
-        return asList(categoryFacet(subcategoryTree), colorFacet(), sizeFacet(), brandFacet());
+    public List<Facet<ProductProjection>> boundFacets() {
+        return asList(categoryFacet(subcategoryTreeFacet), colorFacet(), sizeFacet(), brandFacet());
     }
 
-    public List<SortOption<ProductProjection>> boundSortOptions() {
-        return asList(newestSortOption(), priceAscSortOption(), priceDescSortOption());
+    public SortSelector boundSortSelector() {
+        return new SortSelector(sortKey, asList(newestSortOption(), priceAscSortOption(), priceDescSortOption()));
+    }
+
+    public DisplaySelector boundDisplaySelector() {
+        return new DisplaySelector(displayKey, pageSizeOptions, selectedDisplay());
+    }
+
+    public List<FacetAndFilterExpression<ProductProjection>> selectedFacets() {
+        return boundFacets().stream()
+                .map(Facet::getFacetedSearchExpression)
+                .collect(toList());
+    }
+
+    public int selectedDisplay() {
+        return pageSizeOptions.stream()
+                .filter(option -> isSelected(displayKey, option.toString()))
+                .findFirst()
+                .orElse(pageSizeDefault);
+    }
+
+    public List<SortExpression<ProductProjection>> selectedSort() {
+        return boundSortSelector().getList().stream()
+                .filter(SortOption::isSelected)
+                .map(SortOption::getSortExpressions)
+                .findFirst()
+                .orElse(emptyList());
+    }
+
+    public Optional<LocalizedStringEntry> searchTerm() {
+        return Optional.ofNullable(request.getQueryString(fulltextKey))
+                .map(text -> LocalizedStringEntry.of(locale, text));
     }
 
     private Facet<ProductProjection> brandFacet() {
@@ -87,7 +136,7 @@ public class SearchOperations {
     }
 
     private SortOption<ProductProjection> newestSortOption() {
-        final String value = "";
+        final String value = "new";
         return sortOption(value, messages.at("pop.sort.new"), SORT.createdAt().byDesc());
     }
 
@@ -108,14 +157,14 @@ public class SearchOperations {
             sortExpressionList.add(DEFAULT_SORT);
         }
         final SortOption<ProductProjection> option = new SortOption<>(label, value, sortExpressionList);
-        if (isSelected(SORT_KEY, value)) {
+        if (isSelected(sortKey, value)) {
             option.setSelected(true);
         }
         return option;
     }
 
     private boolean isSelected(final String key, final String value) {
-        return key.equals(request.getQueryString(value));
+        return value.equals(request.getQueryString(key));
     }
 
     private List<String> getSelectedValues(final String key) {

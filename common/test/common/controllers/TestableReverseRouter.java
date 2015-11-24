@@ -70,13 +70,13 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     @Override
-    public Call search(final String languageTag, final String searchTerm, final int page) {
-        return createCall(searchUrl + searchTerm);
+    public Call search(final String languageTag, final int page) {
+        return createCall(searchUrl);
     }
 
     @Override
-    public Call search(final String languageTag, final String searchTerm) {
-        return createCall(searchUrl + searchTerm);
+    public Call search(final String languageTag) {
+        return createCall(searchUrl);
     }
 
     @Override
