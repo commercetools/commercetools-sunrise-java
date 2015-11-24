@@ -5,21 +5,24 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 public class CategoriesRefreshController extends Controller {
-    private final RefreshableCategoryTree refreshableCategoryTree;
+    private final Optional<RefreshableCategoryTree> refreshableCategoryTree;
 
     @Inject
     public CategoriesRefreshController(final CategoryTree categoryTree) {
         if (categoryTree instanceof RefreshableCategoryTree) {
-            this.refreshableCategoryTree = (RefreshableCategoryTree) categoryTree;
+            this.refreshableCategoryTree = Optional.of((RefreshableCategoryTree) categoryTree);
         } else {
-            this.refreshableCategoryTree = null;
+            this.refreshableCategoryTree = Optional.empty();
         }
     }
 
     public Result refresh() {
-        refreshableCategoryTree.refresh();
-        return ok("Fetched " + refreshableCategoryTree.getAllAsFlatList().size() + " categories");
+        return refreshableCategoryTree.map(tree -> {
+            tree.refresh();
+            return ok("Fetched " + tree.getAllAsFlatList().size() + " categories");
+        }).orElseThrow(() -> new RuntimeException("Not found refreshable category tree"));
     }
 }
