@@ -8,6 +8,7 @@ import io.sphere.sdk.categories.CategoryTree;
 import productcatalog.services.CategoryService;
 import productcatalog.services.ProductProjectionService;
 
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -30,10 +31,10 @@ public class ProductCatalogController extends SunriseController {
     }
 
     protected CategoryTree categoryTreeInNew() {
-        final List<Category> categoriesInNew = categories().findById(categoryNewExtId)
-                .map(categoryNew -> singletonList(categoryNew))
+        final List<Category> categoriesInNew = categories().findByExternalId(categoryNewExtId)
+                .map(Collections::singletonList)
                 .orElse(emptyList());
-        return CategoryTree.of(categoriesInNew);
+        return categoryService.getSubtree(categoriesInNew);
     }
 
     protected CategoryService categoryService() {

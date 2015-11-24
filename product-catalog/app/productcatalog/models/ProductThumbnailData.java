@@ -18,7 +18,7 @@ public class ProductThumbnailData {
 
     public ProductThumbnailData(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
                                 final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
-        final String slug = product.getSlug().find(userContext.locale()).orElse("");
+//        final String slug = product.getSlug().find(userContext.locale()).orElse("");
         this._new = product.getCategories().stream()
                 .anyMatch(category -> categoryTreeNew.findById(category.getId()).isPresent());
         this.product = new ProductData(product, variant, productDataConfig, userContext, reverseRouter);

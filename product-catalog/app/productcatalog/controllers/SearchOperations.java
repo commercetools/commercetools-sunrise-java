@@ -17,11 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static io.sphere.sdk.facets.DefaultFacetType.HIERARCHICAL_SELECT;
-import static io.sphere.sdk.facets.DefaultFacetType.SORTED_SELECT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static productcatalog.models.SunriseFacetType.*;
 
 public class SearchOperations {
     private static final ProductProjectionSortSearchModel SORT = ProductProjectionSearchModel.of().sort();
@@ -52,6 +51,7 @@ public class SearchOperations {
         final String key = "brands";
         return SelectFacetBuilder.of(key, messages.at("pop.facet.brand"), FACET.allVariants().attribute().ofEnum("designer").label())
                 .selectedValues(getSelectedValues(key))
+                .type(SELECT_LIST_DISPLAY)
                 .countHidden(true)
                 .build();
     }
@@ -61,7 +61,7 @@ public class SearchOperations {
         return SelectFacetBuilder.of(key, messages.at("pop.facet.size"), FACET.allVariants().attribute().ofEnum("commonSize").label())
                 .mapper(SortedFacetOptionMapper.of(sortedSizes))
                 .selectedValues(getSelectedValues(key))
-                .type(SORTED_SELECT)
+                .type(SELECT_TWO_COLUMNS_DISPLAY)
                 .countHidden(true)
                 .build();
     }
@@ -69,7 +69,9 @@ public class SearchOperations {
     private Facet<ProductProjection> colorFacet() {
         final String key = "color";
         return SelectFacetBuilder.of(key, messages.at("pop.facet.color"), FACET.allVariants().attribute().ofLocalizableEnum("color").label().locale(locale))
+                .mapper(AlphabeticallySortedFacetOptionMapper.of())
                 .selectedValues(getSelectedValues(key))
+                .type(SELECT_TWO_COLUMNS_DISPLAY)
                 .countHidden(true)
                 .build();
     }
@@ -78,8 +80,8 @@ public class SearchOperations {
         final TermFacetAndFilterSearchModel<ProductProjection> model = TermFacetAndFilterSearchModel.of("variants.categories.id");
         return SelectFacetBuilder.of("", messages.at("pop.facet.productType"), model)
                 .mapper(HierarchicalCategoryFacetOptionMapper.of(subcategoryTree, singletonList(locale)))
-                .type(HIERARCHICAL_SELECT)
-                .countHidden(true)
+                .type(SELECT_CATEGORY_HIERARCHICAL_DISPLAY)
+                .countHidden(false)
                 .multiSelect(false)
                 .build();
     }

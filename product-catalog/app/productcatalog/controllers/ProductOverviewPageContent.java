@@ -25,7 +25,6 @@ public class ProductOverviewPageContent extends PageContent {
 
     public ProductOverviewPageContent(final String additionalTitle) {
         this.additionalTitle = additionalTitle;
-        this.searchTerm = searchTerm;
     }
 
     @Override

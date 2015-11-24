@@ -104,6 +104,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
                                                          final List<Facet<ProductProjection>> facets,
                                                          final int page, final int pageSize) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent(title);
+        content.setFilterProductsUrl(request().path());
         content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()));
         content.setPagination(new PaginationData(requestContext(), searchResult, page, pageSize, paginationDisplayedPages));
         content.setSortSelector(new SortSelector(sortOptions));
