@@ -4,70 +4,54 @@ import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
 import common.models.ProductDataConfig;
 import common.models.ProductVariantBean;
-import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
+import java.util.List;
+import java.util.Map;
+
 public class ProductData extends Base {
-    private String url;
     // TODO ratingX
-    private boolean sale;
-    private boolean _new;
-    private boolean moreColors;
-    private ProductVariantBean data;
+    // TODO details
+    //private GalleryData gallery;
+    private ProductVariantBean variant;
+    private Map<String, String> variants;
+    private List<String> variantIdentifiers;
 
     public ProductData() {
     }
 
     public ProductData(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
-                       final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
+                       final UserContext userContext, final ReverseRouter reverseRouter) {
         final String slug = product.getSlug().find(userContext.locale()).orElse("");
-        this.url = reverseRouter.product(userContext.locale().toLanguageTag(), slug, variant.getSku()).url();
-        this._new = product.getCategories().stream()
-                .anyMatch(category -> categoryTreeNew.findById(category.getId()).isPresent());
-        //this.sale = TODO get from variant if there is old price
-        //this.moreColors = TODO get distinct from variant
-        this.data = new ProductVariantBean(product, variant, userContext, productDataConfig);
+        //this.url = reverseRouter.product(userContext.locale().toLanguageTag(), slug, variant.getSku()).url();
+        this.variant = new ProductVariantBean(product, variant, userContext, productDataConfig);
+        this.variantIdentifiers = productDataConfig.getAttributeWhiteList();
+        // TODO variants
     }
 
-    public String getUrl() {
-        return url;
+    public ProductVariantBean getVariant() {
+        return variant;
     }
 
-    public void setUrl(final String url) {
-        this.url = url;
+    public void setVariant(final ProductVariantBean variant) {
+        this.variant = variant;
     }
 
-    public boolean isSale() {
-        return sale;
+    public Map<String, String> getVariants() {
+        return variants;
     }
 
-    public void setSale(final boolean sale) {
-        this.sale = sale;
+    public void setVariants(final Map<String, String> variants) {
+        this.variants = variants;
     }
 
-    public boolean isNew() {
-        return _new;
+    public List<String> getVariantIdentifiers() {
+        return variantIdentifiers;
     }
 
-    public void setNew(final boolean _new) {
-        this._new = _new;
-    }
-
-    public boolean isMoreColors() {
-        return moreColors;
-    }
-
-    public void setMoreColors(final boolean moreColors) {
-        this.moreColors = moreColors;
-    }
-
-    public ProductVariantBean getData() {
-        return data;
-    }
-
-    public void setData(final ProductVariantBean data) {
-        this.data = data;
+    public void setVariantIdentifiers(final List<String> variantIdentifiers) {
+        this.variantIdentifiers = variantIdentifiers;
     }
 }

@@ -107,7 +107,7 @@ public class ProductDetailPageController extends ProductCatalogController {
                 .collect(toList());
     }
 
-    private List<ProductData> getSuggestionData(final UserContext userContext, final List<ProductProjection> suggestions) {
+    private List<ProductThumbnailData> getSuggestionData(final UserContext userContext, final List<ProductProjection> suggestions) {
         return new ProductListData(suggestions, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()).getList();
     }
 

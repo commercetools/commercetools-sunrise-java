@@ -8,7 +8,12 @@ organization := "io.sphere"
 
 version := "1.0-SNAPSHOT"
 
-val sunriseDesignVersion = "0.31.0"
+lazy val sunriseDesignVersion = "0.32.0"
+
+lazy val sphereJvmSdkVersion = "1.0.0-M21-2015-11-13-11-39-45-facets-SNAPSHOT"
+
+lazy val jacksonVersion = "2.6.0"
+
 
 /**
  * SUB-PROJECT DEFINITIONS
@@ -45,9 +50,6 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val sphereJvmSdkVersion = "1.0.0-M21-2015-11-13-11-39-45-facets-SNAPSHOT"
-lazy val jacksonVersion = "2.6.0"
-
 lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   scalaVersion := "2.10.5",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
@@ -69,6 +71,7 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   dependencyOverrides ++= Set (
     "com.google.guava" % "guava" % "18.0",
     "commons-io" % "commons-io" % "2.4",
+    "commons-logging" % "commons-logging" % "1.1.3",
     "io.netty" % "netty" % "3.10.4.Final",
     "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,

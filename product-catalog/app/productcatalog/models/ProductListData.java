@@ -12,23 +12,23 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public class ProductListData extends Base {
-    private List<ProductData> list;
+    private List<ProductThumbnailData> list;
 
     public ProductListData() {
     }
 
-    public List<ProductData> getList() {
+    public List<ProductThumbnailData> getList() {
         return list;
     }
 
-    public void setList(final List<ProductData> list) {
+    public void setList(final List<ProductThumbnailData> list) {
         this.list = list;
     }
 
     public ProductListData(final List<ProductProjection> productList, final ProductDataConfig productDataConfig,
                            final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
         this.list = productList.stream()
-                .map(product -> new ProductData(product, product.getMasterVariant(), productDataConfig, userContext, reverseRouter, categoryTreeNew))
+                .map(product -> new ProductThumbnailData(product, product.getMasterVariant(), productDataConfig, userContext, reverseRouter, categoryTreeNew))
                 .collect(toList());
     }
 }
