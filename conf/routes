@@ -14,6 +14,11 @@ GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJa
 # Main entry point that decides whether to go to home page or to setup wizard
 GET         /                                                  @controllers.ApplicationController.index()
 
+# shows the deployed version, artifactId and GIT SHA
+GET         /version                                           @controllers.StatusController.version()
+# shows if the application is healthy
+GET         /health                                            @controllers.StatusController.health()
+
 # Home page
 GET         /:languageTag/home                                 @controllers.HomeController.show(languageTag:String)
 
