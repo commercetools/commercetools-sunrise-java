@@ -5,6 +5,7 @@ import common.controllers.ControllerDependency;
 import common.models.ProductDataConfig;
 import common.controllers.SunrisePageData;
 import io.sphere.sdk.carts.Cart;
+import play.filters.csrf.RequireCSRFCheck;
 import play.i18n.Messages;
 import play.libs.F;
 import play.mvc.Result;
@@ -32,6 +33,7 @@ public class CheckoutPaymentController extends CartController {
         });
     }
 
+    @RequireCSRFCheck
     public Result process(final String language) {
         return redirect(reverseRouter().showCheckoutConfirmationForm(language));
     }
