@@ -1,6 +1,7 @@
 package purchase;
 
 import common.contexts.UserContext;
+import common.controllers.ReverseRouter;
 import common.models.ProductDataConfig;
 import common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
@@ -31,7 +32,7 @@ public class CartOrderBean {
     public CartOrderBean() {
     }
 
-    public CartOrderBean(final CartLike<?> cartLike, final UserContext userContext, final ProductDataConfig productDataConfig) {
+    public CartOrderBean(final CartLike<?> cartLike, final UserContext userContext, final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
         this();
         final MoneyContext moneyContext = MoneyContext.of(cartLike, userContext);
 
@@ -48,7 +49,7 @@ public class CartOrderBean {
         final MonetaryAmount subTotal = calculateSubTotal(cartLike.getLineItems(), totalPrice);
         setSubtotalPrice(moneyContext.formatOrZero(subTotal));
 
-        setLineItems(new LineItemsBean(cartLike, userContext, productDataConfig));
+        setLineItems(new LineItemsBean(cartLike, userContext, productDataConfig, reverseRouter));
 
         setShippingAddress(new AddressBean(cartLike.getShippingAddress(), userContext.locale()));
         setBillingAddress(new AddressBean(cartLike.getBillingAddress(), userContext.locale()));

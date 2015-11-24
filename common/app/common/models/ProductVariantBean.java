@@ -1,6 +1,7 @@
 package common.models;
 
 import common.contexts.UserContext;
+import common.controllers.ReverseRouter;
 import common.utils.MoneyContext;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.LocalizedString;
@@ -26,7 +27,7 @@ public class ProductVariantBean {
     private String lineItemId;
     private String url;
 
-    public ProductVariantBean(final LineItem lineItem, final UserContext userContext, final ProductDataConfig productDataConfig) {
+    public ProductVariantBean(final LineItem lineItem, final UserContext userContext, final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
         this();
         final Function<LocalizedString, String> tr = ls -> ls != null ? ls.find(userContext.locales()).orElse("") : "";
         setName(tr.apply(lineItem.getName()));
@@ -46,6 +47,7 @@ public class ProductVariantBean {
         setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
         setProductId(lineItem.getProductId());
         setLineItemId(lineItem.getId());
+        setUrl(reverseRouter.product(userContext.locale().getLanguage(), getSlug(), getSku()).url());
     }
 
     public static MonetaryAmount calculateAmountForOneLineItem(final LineItem lineItem) {
