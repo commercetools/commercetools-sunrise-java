@@ -7,10 +7,12 @@ import common.controllers.SunrisePageData;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
+import io.sphere.sdk.carts.commands.updateactions.RemoveLineItem;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
+import play.data.DynamicForm;
 import play.i18n.Messages;
 import play.libs.F;
 import play.mvc.Http;
@@ -66,5 +68,16 @@ public final class CartDetailPageController extends CartController {
             final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
         });
+    }
+
+    public F.Promise<Result> removeLineItem(final String languageTag) {
+        final String lineItemId = DynamicForm.form().bindFromRequest().get("lineItemId");
+        final UserContext userContext = userContext(languageTag);
+        return getOrCreateCart(userContext, session())
+                .flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart, RemoveLineItem.of(lineItemId)))
+                .map(updatedCart -> {
+                    CartSessionUtils.overwriteCartSessionData(cart, session());
+                    return redirect(reverseRouter().showCart(languageTag));
+                }));
     }
 }

@@ -119,4 +119,9 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     public Call showCart(final String language) {
         return CartDetailPageController.show(language);
     }
+
+    @Override
+    public Call processDeleteLineItem(final String language) {
+        return CartDetailPageController.removeLineItem(language);
+    }
 }

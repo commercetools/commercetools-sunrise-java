@@ -23,6 +23,8 @@ public class ProductVariantBean {
     private String variantId;
     private String productId;
     private List<ProductAttributeBean> attributes;
+    private String lineItemId;
+    private String url;
 
     public ProductVariantBean(final LineItem lineItem, final UserContext userContext, final ProductDataConfig productDataConfig) {
         this();
@@ -43,6 +45,7 @@ public class ProductVariantBean {
         setQuantity(lineItem.getQuantity());
         setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
         setProductId(lineItem.getProductId());
+        setLineItemId(lineItem.getId());
     }
 
     public static MonetaryAmount calculateAmountForOneLineItem(final LineItem lineItem) {
@@ -162,5 +165,21 @@ public class ProductVariantBean {
 
     public void setAttributes(final List<ProductAttributeBean> attributes) {
         this.attributes = attributes;
+    }
+
+    public String getLineItemId() {
+        return lineItemId;
+    }
+
+    public void setLineItemId(final String lineItemId) {
+        this.lineItemId = lineItemId;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(final String url) {
+        this.url = url;
     }
 }

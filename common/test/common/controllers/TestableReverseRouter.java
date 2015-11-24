@@ -147,4 +147,9 @@ public class TestableReverseRouter implements ReverseRouter {
     public Call showCart(final String language) {
         return null;
     }
+
+    @Override
+    public Call processDeleteLineItem(final String language) {
+        return null;
+    }
 }
