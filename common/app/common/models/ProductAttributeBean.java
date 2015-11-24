@@ -4,19 +4,15 @@ import common.contexts.UserContext;
 import io.sphere.sdk.products.attributes.Attribute;
 import io.sphere.sdk.products.attributes.AttributeAccess;
 import io.sphere.sdk.products.attributes.AttributeExtraction;
-import io.sphere.sdk.products.attributes.StringType;
-import io.sphere.sdk.utils.functional.FunctionalUtils;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 public class ProductAttributeBean {
-    private String label;
+    private String name;
     private String key;
     private String value;
 
@@ -29,7 +25,7 @@ public class ProductAttributeBean {
                 .findAttribute(attr.getName())
                 .map(def -> def.getLabel().find(userContext.locales()).orElse(""))
                 .orElse(null);
-        setLabel(label);
+        setName(label);
         setKey(attr.getName());
         final String value = formatValue(attr, productDataConfig, userContext);
         setValue(value);
@@ -60,12 +56,12 @@ public class ProductAttributeBean {
         this.key = key;
     }
 
-    public String getLabel() {
-        return label;
+    public String getName() {
+        return name;
     }
 
-    public void setLabel(final String label) {
-        this.label = label;
+    public void setName(final String name) {
+        this.name = name;
     }
 
     public String getValue() {
