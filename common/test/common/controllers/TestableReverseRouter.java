@@ -152,4 +152,9 @@ public class TestableReverseRouter implements ReverseRouter {
     public Call processDeleteLineItem(final String language) {
         return null;
     }
+
+    @Override
+    public Call processChangeLineItemQuantity(final String language) {
+        return null;
+    }
 }

@@ -90,6 +90,7 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
                 .addHalLink(reverseRouter().processDeleteLineItem(language), "deleteLineItem")
+                .addHalLink(reverseRouter().processChangeLineItemQuantity(language), "changeLineItem")
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         return pageMeta;
     }

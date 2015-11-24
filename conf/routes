@@ -23,7 +23,9 @@ GET         /:languageTag/home                                 @controllers.Home
 # shows the details of the cart belonging to the current session
 GET         /:languageTag/cart                                 @purchase.CartDetailPageController.show(languageTag: String)
 # removes a selected line item from the cart of the current session
-POST        /:languageTag/cart/removeLineItem                  @purchase.CartDetailPageController.removeLineItem(languageTag: String)
+POST        /:languageTag/cart/remove-line-item                @purchase.CartDetailPageController.processRemoveLineItem(languageTag: String)
+# changes the quantity of a selected line item from the cart of the current session
+POST        /:languageTag/cart/change-line-item-quantity       @purchase.CartDetailPageController.processChangeLineItemQuantity(languageTag: String)
 # adds some products to the cart (should be removed in prod)
 GET         /:languageTag/cart/fixtures                        @purchase.CartDetailPageController.setItemsToCart(languageTag: String)
 
