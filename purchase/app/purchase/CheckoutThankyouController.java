@@ -5,7 +5,6 @@ import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.orders.queries.OrderByIdGet;
-import play.i18n.Messages;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -38,7 +37,7 @@ public class CheckoutThankyouController extends CartController {
         final Http.Context ctx = ctx();
         return sphere().execute(OrderByIdGet.of(lastOrderId))
                 .map(order -> {
-                    final OrderConfirmationContent content = new OrderConfirmationContent(order, userContext, productDataConfig);
+                    final CheckoutThankYouContent content = new CheckoutThankYouContent(order, userContext, productDataConfig, messages(userContext));
                     final SunrisePageData pageData = pageData(userContext, content, ctx);
                     return ok(templateService().renderToHtml("checkout-thankyou", pageData, userContext.locales()));
                 });

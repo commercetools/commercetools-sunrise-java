@@ -157,4 +157,9 @@ public class TestableReverseRouter implements ReverseRouter {
     public Call processChangeLineItemQuantity(final String language) {
         return null;
     }
+
+    @Override
+    public Call showCheckoutThankyou(final String language) {
+        return null;
+    }
 }

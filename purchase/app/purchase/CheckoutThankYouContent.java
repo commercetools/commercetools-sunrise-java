@@ -1,23 +1,20 @@
 package purchase;
 
+import common.PageContentBean;
 import common.contexts.UserContext;
-import common.controllers.PageContent;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.orders.Order;
+import play.i18n.Messages;
 
-public class OrderConfirmationContent extends PageContent {
+public class CheckoutThankYouContent extends PageContentBean {
     private CartOrderBean order;
 
-    public OrderConfirmationContent() {
+    public CheckoutThankYouContent() {
     }
 
-    public OrderConfirmationContent(final Order order, final UserContext userContext, final ProductDataConfig productDataConfig) {
+    public CheckoutThankYouContent(final Order order, final UserContext userContext, final ProductDataConfig productDataConfig, final Messages messages) {
         setOrder(new CartOrderBean(order, userContext, productDataConfig));
-    }
-
-    @Override
-    public String getAdditionalTitle() {
-        return null;
+        setAdditionalTitle(messages.at("checkoutThankyouPageTitle"));
     }
 
     public CartOrderBean getOrder() {

@@ -1,23 +1,27 @@
 package purchase;
 
+import common.PageContentBean;
 import common.contexts.UserContext;
-import common.controllers.PageContent;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
+import play.i18n.Messages;
 
-public class CartDetailPageContent extends PageContent {
-    private final CartOrderBean cart;
+public class CartDetailPageContent extends PageContentBean {
+    private CartOrderBean cart;
 
-    public CartDetailPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig) {
+    public CartDetailPageContent() {
+    }
+
+    public CartDetailPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig, final Messages messages) {
         this.cart = new CartOrderBean(cart, userContext, productDataConfig);
+        setAdditionalTitle(messages.at("cartDetailPageTitle"));
     }
 
     public CartOrderBean getCart() {
         return cart;
     }
 
-    @Override
-    public String getAdditionalTitle() {
-        return "TODO ADDITIONAL TITLE";
+    public void setCart(final CartOrderBean cart) {
+        this.cart = cart;
     }
 }

@@ -129,4 +129,9 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     public Call processChangeLineItemQuantity(final String language) {
         return CartDetailPageController.processChangeLineItemQuantity(language);
     }
+
+    @Override
+    public Call showCheckoutThankyou(final String language) {
+        return CheckoutThankyouController.show(language);
+    }
 }

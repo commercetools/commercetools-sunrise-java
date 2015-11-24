@@ -1,3 +1,8 @@
+cartDetailPageTitle = Dein Warenkorb
+checkoutConfirmationPageTitle = Bestätigung
+checkoutPaymentPageTitle = Bezahlung
+checkoutShippingPageTitle = Versand
+checkoutThankyouPageTitle = Vielen Dank für Ihre Bestellung
 
 common.header.title = Sunrise -
 common.header.stores = FILIALEN

@@ -1,3 +1,15 @@
+cartDetailPageTitle = Your Cart
+checkoutConfirmationPageTitle = Checkout - Confirmation
+checkoutPaymentPageTitle = Checkout - Payment
+checkoutShippingPageTitle = Checkout - Shipping
+checkoutThankyouPageTitle = Thank You For Your Order
+
+common.header.title = Sunrise -
+common.header.stores = STORES
+common.header.help = HELP
+common.header.callUs = CONTAC +44 123 456 000
+common.header.countries = REGION
+
 pop.facet.productType = Product Type
 pop.facet.color = Color
 pop.facet.size = Size
