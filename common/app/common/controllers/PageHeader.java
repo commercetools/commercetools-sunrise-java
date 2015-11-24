@@ -6,6 +6,7 @@ import io.sphere.sdk.models.Base;
 
 public class PageHeader extends Base {
     private String title;
+    private String customerServiceNumber;
     private LocationSelector location;
     private NavMenuData navMenu;
 
@@ -38,5 +39,13 @@ public class PageHeader extends Base {
 
     public void setNavMenu(final NavMenuData navMenu) {
         this.navMenu = navMenu;
+    }
+
+    public String getCustomerServiceNumber() {
+        return customerServiceNumber;
+    }
+
+    public void setCustomerServiceNumber(final String customerServiceNumber) {
+        this.customerServiceNumber = customerServiceNumber;
     }
 }
