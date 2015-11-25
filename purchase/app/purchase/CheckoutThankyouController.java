@@ -39,7 +39,7 @@ public class CheckoutThankyouController extends CartController {
         final Http.Context ctx = ctx();
         return sphere().execute(OrderByIdGet.of(lastOrderId))
                 .map(order -> {
-                    final CheckoutThankYouContent content = new CheckoutThankYouContent(order, userContext, productDataConfig, messages(userContext));
+                    final CheckoutThankYouContent content = new CheckoutThankYouContent(order, userContext, productDataConfig, messages(userContext), reverseRouter());
                     final SunrisePageData pageData = pageData(userContext, content, ctx);
                     return ok(templateService().renderToHtml("checkout-thankyou", pageData, userContext.locales()));
                 });

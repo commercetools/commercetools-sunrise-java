@@ -31,10 +31,5 @@ public class HomeController extends SunriseController {
         public HomeContent() {
 
         }
-
-        @Override
-        public String getAdditionalTitle() {
-            return null;
-        }
     }
 }

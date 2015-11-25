@@ -70,7 +70,6 @@ public class CheckoutConfirmationController extends CartController {
                 .map(order -> {
                     session(LAST_ORDER_ID_KEY, order.getId());
                     CartSessionUtils.removeCart(session());
-                    //TODO checkout-thankyou
                     return redirect(reverseRouter().showCheckoutThankyou(languageTag));
                 });
     }

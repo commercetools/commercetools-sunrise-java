@@ -1,13 +1,13 @@
 package purchase;
 
-import common.PageContentBean;
 import common.contexts.UserContext;
+import common.controllers.PageContent;
 import common.controllers.ReverseRouter;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import play.i18n.Messages;
 
-public class CartDetailPageContent extends PageContentBean {
+public class CartDetailPageContent extends PageContent {
     private CartOrderBean cart;
 
     public CartDetailPageContent() {

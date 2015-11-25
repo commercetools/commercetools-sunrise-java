@@ -13,7 +13,7 @@ organization := "io.sphere"
 
 version := "1.0-SNAPSHOT"
 
-val sunriseDesignVersion = "0.34.0-SNAPSHOT"
+val sunriseDesignVersion = "0.35.0"
 
 /**
  * SUB-PROJECT DEFINITIONS
