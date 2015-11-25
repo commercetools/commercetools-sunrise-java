@@ -25,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .filter(Optional::isPresent)
                 .flatMap(category -> getSiblings(category.get()).stream())
                 .distinct()
+                .filter(sibling -> !categoryRefs.stream().anyMatch(sibling::hasSameIdAs))
                 .collect(toList());
     }
 

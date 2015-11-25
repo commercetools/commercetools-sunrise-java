@@ -3,7 +3,6 @@ package productcatalog.controllers;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.models.ProductDataConfig;
-import io.sphere.sdk.models.LocalizedStringEntry;
 import productcatalog.models.*;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
@@ -40,8 +39,10 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final Messages messages = messages(userContext);
         final Optional<Category> category = categories().findBySlug(userContext.locale(), categorySlug);
         if (category.isPresent()) {
-            final SearchOperations searchOps = new SearchOperations(configuration(), request(), messages, userContext.locale(), getCategoriesInFacet(category));
-            return searchProductsByCategory(page, searchOps, category.get()).map(searchResult -> {
+            final CategoryTree categoriesInFacet = getCategoriesInFacet(category.get());
+            final List<String> selectedCategoryIds = getSelectedCategoryIds(category.get());
+            final SearchOperations searchOps = SearchOperations.of(configuration(), request(), messages, userContext, category.get(), selectedCategoryIds, categoriesInFacet);
+            return searchProducts(page, searchOps).map(searchResult -> {
                 final ProductOverviewPageContent content = getPopPageData(userContext, searchResult, page, searchOps, category.get());
                 return ok(templateService().renderToHtml("pop", pageData(userContext, content, ctx()), userContext.locales()));
             });
@@ -52,12 +53,11 @@ public class ProductOverviewPageController extends ProductCatalogController {
     public F.Promise<Result> search(final String languageTag, final int page) {
         final UserContext userContext = userContext(languageTag);
         final Messages messages = messages(userContext);
-        final SearchOperations searchOps = new SearchOperations(configuration(), request(), messages, userContext.locale(), categories());
+        final SearchOperations searchOps = SearchOperations.of(configuration(), request(), messages, userContext, categories());
         if (searchOps.searchTerm().isPresent()) {
-            final LocalizedStringEntry searchTerm = searchOps.searchTerm().get();
-            final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProductsWithFullText(page, searchOps, searchTerm);
+            final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = searchProducts(page, searchOps);
             return searchResultPromise.map(searchResult -> {
-                final ProductOverviewPageContent content = getPopPageData(userContext, searchResult, page, searchOps, searchTerm.getValue());
+                final ProductOverviewPageContent content = getPopPageData(userContext, searchResult, page, searchOps, searchOps.searchTerm().get().getValue());
                 return ok(templateService().renderToHtml("pop", pageData(userContext, content, ctx()), userContext.locales()));
             });
         } else {
@@ -100,32 +100,17 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     /* Move to product service */
 
-    private F.Promise<PagedSearchResult<ProductProjection>> searchProductsByCategory(final int page, final SearchOperations searchOps,
-                                                                                     final Category category) {
-        final List<String> categoriesId = categoryService().getSubtree(singletonList(category)).getAllAsFlatList().stream()
-                .map(Category::getId)
-                .collect(toList());
-        final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
-                .withQueryFilters(filter -> filter.categories().id().byAny(categoriesId));
-        return searchProducts(request, page, searchOps);
-    }
-
-    private F.Promise<PagedSearchResult<ProductProjection>> searchProductsWithFullText(final int page, final SearchOperations searchOps,
-                                                                                       final LocalizedStringEntry searchTerm) {
-        final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
-                .withText(searchTerm);
-        return searchProducts(request, page, searchOps);
-    }
-
-    private F.Promise<PagedSearchResult<ProductProjection>> searchProducts(final ProductProjectionSearch baseSearchRequest,
-                                                                           final int page, final SearchOperations searchOps) {
+    private F.Promise<PagedSearchResult<ProductProjection>> searchProducts(final int page, final SearchOperations searchOps) {
         final int pageSize = searchOps.selectedDisplay();
         final int offset = (page - 1) * pageSize;
-        final ProductProjectionSearch searchRequest = baseSearchRequest
+        final ProductProjectionSearch baseSearchRequest = ProductProjectionSearch.ofCurrent()
                 .withFacetedSearch(searchOps.selectedFacets())
                 .withSort(searchOps.selectedSort())
                 .withOffset(offset)
                 .withLimit(pageSize);
+        final ProductProjectionSearch searchRequest = searchOps.searchTerm()
+                .map(baseSearchRequest::withText)
+                .orElse(baseSearchRequest);
         final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = sphere().execute(searchRequest);
         searchResultPromise.onRedeem(result -> Logger.debug("Fetched {} out of {} products with request {}",
                 result.size(),
@@ -141,8 +126,25 @@ public class ProductOverviewPageController extends ProductCatalogController {
         return bannerData;
     }
 
-    private CategoryTree getCategoriesInFacet(final Optional<Category> category) {
-        final Category rootAncestor = categoryService().getRootAncestor(category.get());
-        return categoryService().getSubtree(singletonList(rootAncestor));
+    private CategoryTree getCategoriesInFacet(final Category category) {
+        final List<Category> ancestors = category.getAncestors().stream()
+                .map(c -> categories().findById(c.getId()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toList());
+        final List<Category> siblings = categoryService().getSiblings(singletonList(category.toReference()));
+        final List<Category> children = categories().findChildren(category);
+        final List<Category> relatives = new ArrayList<>();
+        relatives.add(category);
+        relatives.addAll(ancestors);
+        relatives.addAll(siblings);
+        relatives.addAll(children);
+        return CategoryTree.of(relatives);
+    }
+
+    private List<String> getSelectedCategoryIds(final Category category) {
+        return categoryService().getSubtree(singletonList(category)).getAllAsFlatList().stream()
+                .map(Category::getId)
+                .collect(toList());
     }
 }

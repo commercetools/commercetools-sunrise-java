@@ -42,7 +42,7 @@ public interface Facet<T> {
     boolean isCountHidden();
 
     /**
-     * Gets the selected values for this facet.
+     * Gets the selected values for this facet used to filter.
      * @return the selected values
      */
     List<String> getSelectedValues();

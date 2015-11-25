@@ -50,10 +50,10 @@ public class BreadcrumbDataTest {
 
     @Test
     public void createSearchBreadcrumb() throws Exception {
-        final BreadcrumbData breadcrumb = new BreadcrumbData("foo", USER_CONTEXT, REVERSE_ROUTER);
+        final BreadcrumbData breadcrumb = new BreadcrumbData("foo");
         testBreadcrumb(breadcrumb,
                 texts -> assertThat(texts).containsExactly("foo"),
-                urls -> assertThat(urls).containsExactly("search-foo"));
+                urls -> assertThat(urls).containsNull());
     }
 
     private static ReverseRouter reverseRouter() {

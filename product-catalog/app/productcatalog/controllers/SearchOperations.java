@@ -1,5 +1,7 @@
 package productcatalog.controllers;
 
+import common.contexts.UserContext;
+import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
 import io.sphere.sdk.models.LocalizedStringEntry;
@@ -17,10 +19,8 @@ import productcatalog.models.DisplaySelector;
 import productcatalog.models.SortOption;
 import productcatalog.models.SortSelector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import javax.annotation.Nullable;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -35,6 +35,8 @@ public class SearchOperations {
     private final Http.Request request;
     private final Messages messages;
     private final Locale locale;
+    private final Optional<Category> selectedCategory;
+    private final List<String> selectedCategoryIds;
     private final CategoryTree subcategoryTreeFacet;
     private final List<String> sortedSizes;
     private final String fulltextKey;
@@ -43,11 +45,13 @@ public class SearchOperations {
     private final List<Integer> pageSizeOptions;
     private final int pageSizeDefault;
 
-    public SearchOperations(final Configuration configuration, final Http.Request request, final Messages messages,
-                            final Locale locale, final CategoryTree subcategoryTreeFacet) {
+    private SearchOperations(final Configuration configuration, final Http.Request request, final Messages messages, final Locale locale,
+                             @Nullable final Category selectedCategory, final List<String> selectedCategoryIds, final CategoryTree subcategoryTreeFacet) {
         this.request = request;
         this.messages = messages;
         this.locale = locale;
+        this.selectedCategory = Optional.ofNullable(selectedCategory);
+        this.selectedCategoryIds = selectedCategoryIds;
         this.subcategoryTreeFacet = subcategoryTreeFacet;
         this.sortedSizes = configuration.getStringList("pop.facet.size", emptyList());
         this.fulltextKey = configuration.getString("pop.fulltext.key", "q");
@@ -59,7 +63,7 @@ public class SearchOperations {
     }
 
     public List<Facet<ProductProjection>> boundFacets() {
-        return asList(categoryFacet(subcategoryTreeFacet), colorFacet(), sizeFacet(), brandFacet());
+        return asList(categoryFacet().orElse(null), colorFacet(), sizeFacet(), brandFacet());
     }
 
     public SortSelector boundSortSelector() {
@@ -96,6 +100,16 @@ public class SearchOperations {
                 .map(text -> LocalizedStringEntry.of(locale, text));
     }
 
+    public static SearchOperations of(final Configuration configuration, final Http.Request request, final Messages messages, final UserContext userContext,
+                                      final Category selectedCategory, final List<String> selectedCategoryIds, final CategoryTree subcategoryTreeFacet) {
+        return new SearchOperations(configuration, request, messages, userContext.locale(), selectedCategory, selectedCategoryIds, subcategoryTreeFacet);
+    }
+
+    public static SearchOperations of(final Configuration configuration, final Http.Request request, final Messages messages, final UserContext userContext,
+                                      final CategoryTree categoryTree) {
+        return of(configuration, request, messages, userContext, null, emptyList(), categoryTree);
+    }
+
     private Facet<ProductProjection> brandFacet() {
         final String key = "brands";
         return SelectFacetBuilder.of(key, messages.at("pop.facet.brand"), FACET.allVariants().attribute().ofEnum("designer").label())
@@ -125,14 +139,18 @@ public class SearchOperations {
                 .build();
     }
 
-    private Facet<ProductProjection> categoryFacet(final CategoryTree subcategoryTree) {
-        final TermFacetAndFilterSearchModel<ProductProjection> model = TermFacetAndFilterSearchModel.of("variants.categories.id");
-        return SelectFacetBuilder.of("", messages.at("pop.facet.productType"), model)
-                .mapper(HierarchicalCategoryFacetOptionMapper.of(subcategoryTree, singletonList(locale)))
-                .type(SELECT_CATEGORY_HIERARCHICAL_DISPLAY)
-                .countHidden(false)
-                .multiSelect(false)
-                .build();
+    private Optional<Facet<ProductProjection>> categoryFacet() {
+        return selectedCategory.map(category -> {
+            final String key = "productType";
+            final TermFacetAndFilterSearchModel<ProductProjection> model = TermFacetAndFilterSearchModel.of("variants.categories.id");
+            return SelectFacetBuilder.of(key, messages.at("pop.facet.productType"), model)
+                    .mapper(HierarchicalCategoryFacetOptionMapper.of(singletonList(category), subcategoryTreeFacet, singletonList(locale)))
+                    .selectedValues(selectedCategoryIds)
+                    .type(SELECT_CATEGORY_HIERARCHICAL_DISPLAY)
+                    .countHidden(true)
+                    .multiSelect(false)
+                    .build();
+        });
     }
 
     private SortOption<ProductProjection> newestSortOption() {
