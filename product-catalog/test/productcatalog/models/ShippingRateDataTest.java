@@ -11,7 +11,7 @@ import javax.money.Monetary;
 import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ShippingRateDataFactoryTest {
+public class ShippingRateDataTest {
     private static final CurrencyUnit EUR = Monetary.getCurrency("EUR");
     private static final PriceFormatter PRICE_FORMATTER = PriceFormatter.of(GERMAN);
 
@@ -23,7 +23,7 @@ public class ShippingRateDataFactoryTest {
                 new ShippingRateData(PRICE_FORMATTER, shippingRate);
 
         assertThat(shippingRateData.getShippingMethod()).isEqualTo("DHL");
-        assertThat(shippingRateData.getZone()).isEqualTo("");
+        assertThat(shippingRateData.getZone()).isNullOrEmpty();
         assertThat(shippingRateData.getShippingRate()).isEqualTo("EUR 10,50");
         assertThat(shippingRateData.getFreeAbove()).isEqualTo("EUR 50,49");
     }
