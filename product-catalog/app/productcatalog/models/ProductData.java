@@ -24,11 +24,8 @@ public class ProductData extends Base {
 
     public ProductData(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
                        final UserContext userContext, final ReverseRouter reverseRouter) {
-        final String slug = product.getSlug().find(userContext.locale()).orElse("");
-        //this.url = reverseRouter.product(userContext.locale().toLanguageTag(), slug, variant.getSku()).url();
-        this.variant = new ProductVariantBean(product, variant, userContext, productDataConfig);
+        this.variant = new ProductVariantBean(product, variant, productDataConfig, userContext, reverseRouter);
         this.variantIdentifiers = productDataConfig.getAttributeWhiteList();
-        // TODO variants
     }
 
     public ProductVariantBean getVariant() {

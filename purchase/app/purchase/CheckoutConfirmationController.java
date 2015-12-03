@@ -32,7 +32,7 @@ public class CheckoutConfirmationController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         final Http.Context ctx = ctx();
         return cartPromise.map(cart -> {
-            final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig);
+            final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, productDataConfig, userContext, reverseRouter());
             final SunrisePageData pageData = pageData(userContext, content, ctx);
             return ok(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales()));
         });
@@ -55,7 +55,7 @@ public class CheckoutConfirmationController extends CartController {
     }
 
     private F.Promise<Result> renderErrorResponse(final UserContext userContext, final Cart cart, final Http.Context ctx, final Form<CheckoutConfirmationFormData> filledForm) {
-        final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig);
+        final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, productDataConfig, userContext, reverseRouter());
         content.getCheckoutForm().setErrors(new ErrorsBean(filledForm));
         final SunrisePageData pageData = pageData(userContext, content, ctx);
         return F.Promise.pure(badRequest(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales())));

@@ -48,7 +48,7 @@ public class CheckoutShippingController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
-            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, messages, configuration(), userContext, shippingMethods, productDataConfig);
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, messages, configuration(), shippingMethods, productDataConfig, userContext, reverseRouter());
             final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
         });
@@ -62,7 +62,7 @@ public class CheckoutShippingController extends CartController {
             final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
             final Form<CheckoutShippingFormData> filledForm = obtainFilledForm(checkoutShippingFormData);
             final Messages messages = messages(userContext);
-            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(checkoutShippingFormData, cart, messages, configuration(), userContext, shippingMethods, productDataConfig);
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(checkoutShippingFormData, cart, messages, configuration(), shippingMethods, productDataConfig, userContext, reverseRouter());
             if (filledForm.hasErrors()) {
                 return F.Promise.pure(badRequest(userContext, filledForm, content));
             } else {

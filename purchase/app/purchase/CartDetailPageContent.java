@@ -9,8 +9,9 @@ import io.sphere.sdk.carts.Cart;
 public class CartDetailPageContent extends PageContent {
     private final CartOrderBean cart;
 
-    public CartDetailPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig) {
-        this.cart = new CartOrderBean(cart, userContext, productDataConfig);
+    public CartDetailPageContent(final Cart cart, final ProductDataConfig productDataConfig,
+                                 final UserContext userContext, final ReverseRouter reverseRouter) {
+        this.cart = new CartOrderBean(cart, productDataConfig, userContext, reverseRouter);
     }
 
     public CartOrderBean getCart() {

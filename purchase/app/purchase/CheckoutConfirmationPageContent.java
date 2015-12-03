@@ -1,6 +1,7 @@
 package purchase;
 
 import common.contexts.UserContext;
+import common.controllers.ReverseRouter;
 import common.models.ProductDataConfig;
 import common.models.SelectableData;
 import io.sphere.sdk.carts.Cart;
@@ -12,8 +13,9 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
     public CheckoutConfirmationPageContent() {
     }
 
-    public CheckoutConfirmationPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig) {
-        setCart(new CartOrderBean(cart, userContext, productDataConfig));
+    public CheckoutConfirmationPageContent(final Cart cart, final ProductDataConfig productDataConfig,
+                                           final UserContext userContext, final ReverseRouter reverseRouter) {
+        setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setConfirmationStepActive(true);
         setStepWidget(stepWidget);

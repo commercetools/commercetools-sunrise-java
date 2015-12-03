@@ -1,6 +1,7 @@
 package common.models;
 
 import common.contexts.UserContext;
+import common.controllers.ReverseRouter;
 import common.prices.PriceFinder;
 import common.utils.MoneyContext;
 import io.sphere.sdk.carts.LineItem;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public class ProductVariantBean {
+    private String url;
     private String name;
     private String slug;
     private String description;
@@ -29,13 +31,14 @@ public class ProductVariantBean {
     public ProductVariantBean() {
     }
 
-    public ProductVariantBean(final LineItem lineItem, final UserContext userContext, final ProductDataConfig productDataConfig) {
+    public ProductVariantBean(final LineItem lineItem, final ProductDataConfig productDataConfig,
+                              final UserContext userContext, final ReverseRouter reverseRouter) {
         this();
         final Function<LocalizedString, String> translator = translate(userContext);
         setName(translator.apply(lineItem.getName()));
         setSlug(translator.apply(lineItem.getProductSlug()));
         //no description available in line item
-        fillProductVariantFields(lineItem.getVariant(), productDataConfig, userContext);
+        fillProductVariantFields(lineItem.getVariant(), productDataConfig, userContext, reverseRouter);
         final MonetaryAmount amountForOneLineItem = calculateAmountForOneLineItem(lineItem);
         final MoneyContext moneyContext = MoneyContext.of(lineItem, userContext);
 
@@ -50,8 +53,8 @@ public class ProductVariantBean {
         setProductId(lineItem.getProductId());
     }
 
-    public ProductVariantBean(final ProductProjection product, final ProductVariant variant, final UserContext userContext,
-                              final ProductDataConfig productDataConfig) {
+    public ProductVariantBean(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
+                              final UserContext userContext, final ReverseRouter reverseRouter) {
         this();
         final Function<LocalizedString, String> translator = translate(userContext);
         setName(translator.apply(product.getName()));
@@ -59,7 +62,7 @@ public class ProductVariantBean {
         setDescription(translator.apply(product.getDescription()));
         setProductId(product.getId());
 
-        fillProductVariantFields(variant, productDataConfig, userContext);
+        fillProductVariantFields(variant, productDataConfig, userContext, reverseRouter);
 
         PriceFinder.of(userContext).findPrice(variant.getPrices()).ifPresent(price -> {
             final MoneyContext moneyContext = MoneyContext.of(price.getValue().getCurrency(), userContext.locale());
@@ -95,6 +98,14 @@ public class ProductVariantBean {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(final String url) {
+        this.url = url;
     }
 
     public String getPrice() {
@@ -185,10 +196,12 @@ public class ProductVariantBean {
         return localizedString -> localizedString != null ? localizedString.find(userContext.locales()).orElse("") : "";
     }
 
-    private void fillProductVariantFields(final ProductVariant variant, final ProductDataConfig productDataConfig, final UserContext userContext) {
+    private void fillProductVariantFields(final ProductVariant variant, final ProductDataConfig productDataConfig,
+                                          final UserContext userContext, final ReverseRouter reverseRouter) {
         variant.getImages().stream().findFirst().ifPresent(image -> setImage(image.getUrl()));
         setSku(variant.getSku());
         setVariantId(variant.getId().toString());
+        setUrl(reverseRouter.product(userContext.locale().toLanguageTag(), slug, variant.getSku()).url());
         setAttributes(ProductAttributeBean.collect(variant.getAttributes(), productDataConfig, userContext));
     }
 }
