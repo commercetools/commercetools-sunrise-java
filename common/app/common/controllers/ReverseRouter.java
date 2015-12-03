@@ -16,9 +16,7 @@ public interface ReverseRouter {
 
     Call product(final String locale, final String productSlug, final String sku);
 
-    Call addProductToCart(final String languageTag);
-
-    Call productVariantToCartForm(final String languageTag);
+    Call productToCartForm(final String languageTag);
 
     Call showCheckoutShippingForm(final String language);
 

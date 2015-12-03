@@ -85,7 +85,7 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     @Override
-    public Call productVariantToCartForm(final String languageTag) {
+    public Call productToCartForm(final String languageTag) {
         return createCall(addToCartFormUrl);
     }
 

@@ -85,7 +85,7 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().showCheckoutShippingForm(language), "checkout", "editShippingAddress", "editBillingAddress", "editShippingMethod")
                 .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
                 .addHalLink(reverseRouter().home(language), "continueShopping", "home")
-                .addHalLink(reverseRouter().addProductToCart(language), "addToCart")
+                .addHalLink(reverseRouter().productToCartForm(language), "addToCart")
                 .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutAddressesSubmit")
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
