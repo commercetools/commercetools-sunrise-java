@@ -14,18 +14,19 @@ import java.util.List;
 import java.util.function.Function;
 
 public class ProductVariantBean {
-    private String url;
-    private String name;
+    private String variantId;
+    private String productId;
+    // TODO lineItemId
     private String slug;
+    private String name;
     private String description;
     private String image;
+    private String url;
     private String sku;
     private long quantity;
     private String priceOld;
     private String price;
     private String totalPrice;
-    private String variantId;
-    private String productId;
     private List<ProductAttributeBean> attributes;
 
     public ProductVariantBean() {

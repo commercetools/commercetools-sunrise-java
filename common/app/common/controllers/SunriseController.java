@@ -23,6 +23,7 @@ import javax.money.Monetary;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.stream.IntStream;
 
 import static com.neovisionaries.i18n.CountryCode.DE;
 import static java.util.stream.Collectors.toList;
@@ -76,7 +77,8 @@ public abstract class SunriseController extends ShopController {
 
     private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
         final PageMeta pageMeta = new PageMeta();
-        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());
+        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());;
+        pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(reverseRouter().showCart(language), "cart")

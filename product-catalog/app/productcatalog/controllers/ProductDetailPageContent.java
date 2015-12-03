@@ -11,7 +11,7 @@ import java.util.List;
 public class ProductDetailPageContent extends PageContent {
     private String additionalTitle;
     private BreadcrumbData breadcrumb;
-    private ProductData productData;
+    private ProductData product;
     private List<ShippingRateData> shippingRates;
     private List<ProductThumbnailData> suggestions;
     private String addToCartFormUrl;
@@ -40,12 +40,12 @@ public class ProductDetailPageContent extends PageContent {
         this.breadcrumb = breadcrumb;
     }
 
-    public ProductData getProductData() {
-        return productData;
+    public ProductData getProduct() {
+        return product;
     }
 
-    public void setProductData(final ProductData productData) {
-        this.productData = productData;
+    public void setProduct(final ProductData product) {
+        this.product = product;
     }
 
     public List<ShippingRateData> getShippingRates() {

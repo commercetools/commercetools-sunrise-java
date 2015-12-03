@@ -8,7 +8,7 @@ organization := "io.sphere"
 
 version := "1.0-SNAPSHOT"
 
-lazy val sunriseDesignVersion = "0.34.0"
+lazy val sunriseDesignVersion = "0.35.0"
 
 lazy val sphereJvmSdkVersion = "1.0.0-M21-2015-11-13-11-39-45-facets-SNAPSHOT"
 

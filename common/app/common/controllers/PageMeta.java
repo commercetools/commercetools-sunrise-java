@@ -4,11 +4,13 @@ import common.models.HalLink;
 import play.mvc.Call;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PageMeta {
     private String assetsPath;
     private String csrfToken;
+    private List<Integer> bagQuantityOptions;
     private Map<String, HalLink> _links = new HashMap<>();
 
     public PageMeta() {
@@ -20,6 +22,14 @@ public class PageMeta {
 
     public void setAssetsPath(final String assetsPath) {
         this.assetsPath = assetsPath;
+    }
+
+    public List<Integer> getBagQuantityOptions() {
+        return bagQuantityOptions;
+    }
+
+    public void setBagQuantityOptions(final List<Integer> bagQuantityOptions) {
+        this.bagQuantityOptions = bagQuantityOptions;
     }
 
     public String getCsrfToken() {

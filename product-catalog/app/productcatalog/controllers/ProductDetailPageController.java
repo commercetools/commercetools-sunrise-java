@@ -71,7 +71,7 @@ public class ProductDetailPageController extends ProductCatalogController {
                                                        final ProductVariant variant, final List<ProductProjection> suggestions) {
         final ProductDetailPageContent content = new ProductDetailPageContent();
         content.setAdditionalTitle(product.getName().find(userContext.locales()).orElse(""));
-        //content.setProductData(new ProductData(userContext, reverseRouter(), categories(), product, variant));
+        content.setProduct(new ProductData(product, variant, productDataConfig(), userContext, reverseRouter()));
         content.setBreadcrumb(new BreadcrumbData(product, variant, categoryTree(), userContext, reverseRouter()));
         content.setShippingRates(createDeliveryData(userContext));
         content.setSuggestions(new ProductListData(suggestions, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()).getList());
