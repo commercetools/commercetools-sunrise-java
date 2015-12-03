@@ -1,0 +1,1317 @@
+{
+  "offset": 0,
+  "count": 2,
+  "total": 2,
+  "results": [
+    {
+      "id": "dd53c13f-baf6-4466-87cf-ff138fa8c040",
+      "version": 14,
+      "name": "main",
+      "description": "main producttype sunrise",
+      "classifier": "Complex",
+      "attributes": [
+        {
+          "name": "creationDate",
+          "label": {
+            "en": "Date of Creation",
+            "it": "Date of Creation",
+            "de": "Erstelldatum"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "datetime"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "articleNumberManufacturer",
+          "label": {
+            "de": "Herstellernummer",
+            "it": "Manufacturer AID",
+            "en": "Manufacturer AID"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "text"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "articleNumberMax",
+          "label": {
+            "en": "AID Maximilian",
+            "de": "Artikelnummer Maximilian",
+            "it": "AID Maximilian"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "text"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "matrixId",
+          "label": {
+            "it": "Matrix ID",
+            "de": "Matrix ID",
+            "en": "Matrix ID"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "text"
+          },
+          "attributeConstraint": "Unique",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "baseId",
+          "label": {
+            "de": "BasisID",
+            "en": "BaseID",
+            "it": "BaseID"
+          },
+          "isRequired": true,
+          "type": {
+            "name": "text"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "designer",
+          "label": {
+            "it": "Designer",
+            "de": "Designer",
+            "en": "Designer"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "enum",
+            "values": [
+              {
+                "key": "7forallmankind",
+                "label": "7 for all mankind"
+              },
+              {
+                "key": "8pm",
+                "label": "8PM"
+              },
+              {
+                "key": "acquarama",
+                "label": "Acquarama"
+              },
+              {
+                "key": "albertoguardiani",
+                "label": "Alberto Guardiani"
+              },
+              {
+                "key": "alden",
+                "label": "Alden"
+              },
+              {
+                "key": "allude",
+                "label": "Allude"
+              },
+              {
+                "key": "altea",
+                "label": "Altea"
+              },
+              {
+                "key": "arsuk",
+                "label": "Arsuk"
+              },
+              {
+                "key": "aspesi",
+                "label": "Aspesi"
+              },
+              {
+                "key": "barbour",
+                "label": "Barbour"
+              },
+              {
+                "key": "bark",
+                "label": "Bark"
+              },
+              {
+                "key": "bernardo",
+                "label": "Bernardo"
+              },
+              {
+                "key": "bettacorradi",
+                "label": "Betta Corradi"
+              },
+              {
+                "key": "betterrich",
+                "label": "Better Rich"
+              },
+              {
+                "key": "blauer",
+                "label": "Blauer"
+              },
+              {
+                "key": "bonfanti",
+                "label": "Bonfanti"
+              },
+              {
+                "key": "brunobordese",
+                "label": "Bruno Bordese"
+              },
+              {
+                "key": "bully",
+                "label": "Bully"
+              },
+              {
+                "key": "canadagoose",
+                "label": "Canada Goose"
+              },
+              {
+                "key": "cantarelli",
+                "label": "Cantarelli"
+              },
+              {
+                "key": "circolo1901",
+                "label": "Circolo1901"
+              },
+              {
+                "key": "crime",
+                "label": "Crime"
+              },
+              {
+                "key": "cycle",
+                "label": "Cycle"
+              },
+              {
+                "key": "dkny",
+                "label": "DKNY"
+              },
+              {
+                "key": "drows",
+                "label": "D.R.O.W.S."
+              },
+              {
+                "key": "danielealessandrini",
+                "label": "Daniele Alessandrini"
+              },
+              {
+                "key": "dondup",
+                "label": "Dondup"
+              },
+              {
+                "key": "doucals",
+                "label": "Doucals"
+              },
+              {
+                "key": "drmartens",
+                "label": "Dr. Martens"
+              },
+              {
+                "key": "duvetica",
+                "label": "Duvetica"
+              },
+              {
+                "key": "elisabettafranchi",
+                "label": "Elisabetta Franchi"
+              },
+              {
+                "key": "entreamis",
+                "label": "Entre Amis"
+              },
+              {
+                "key": "etro",
+                "label": "Etro"
+              },
+              {
+                "key": "futuro",
+                "label": "Futuro"
+              },
+              {
+                "key": "gabs",
+                "label": "Gabs"
+              },
+              {
+                "key": "gms75",
+                "label": "GMS-75"
+              },
+              {
+                "key": "gum",
+                "label": "GUM"
+              },
+              {
+                "key": "harriswharf",
+                "label": "Harris Wharf"
+              },
+              {
+                "key": "herno",
+                "label": "Herno"
+              },
+              {
+                "key": "himons",
+                "label": "Himons"
+              },
+              {
+                "key": "hogan",
+                "label": "Hogan"
+              },
+              {
+                "key": "hosio",
+                "label": "Hosio"
+              },
+              {
+                "key": "ikkii",
+                "label": "Ikkii"
+              },
+              {
+                "key": "imperfect",
+                "label": "Imperfect"
+              },
+              {
+                "key": "invicta",
+                "label": "Invicta"
+              },
+              {
+                "key": "jacobcohen",
+                "label": "Jacob Cohen"
+              },
+              {
+                "key": "jeffreycampbell",
+                "label": "Jeffrey Campbell"
+              },
+              {
+                "key": "jijil",
+                "label": "Jijil"
+              },
+              {
+                "key": "kangra",
+                "label": "Kangra"
+              },
+              {
+                "key": "karllagerfeld",
+                "label": "Karl Lagerfeld"
+              },
+              {
+                "key": "lamartina",
+                "label": "La Martina"
+              },
+              {
+                "key": "lardini",
+                "label": "Lardini"
+              },
+              {
+                "key": "leahtercrown",
+                "label": "Leahter Crown"
+              },
+              {
+                "key": "lepandorine",
+                "label": "Le Pandorine"
+              },
+              {
+                "key": "levoliere",
+                "label": "Le Volière"
+              },
+              {
+                "key": "lemare",
+                "label": "Lemaré"
+              },
+              {
+                "key": "lerew",
+                "label": "Lerew"
+              },
+              {
+                "key": "liebeskindberlin",
+                "label": "Liebeskind Berlin"
+              },
+              {
+                "key": "liujo",
+                "label": "Liu Jo"
+              },
+              {
+                "key": "lotto",
+                "label": "Lotto"
+              },
+              {
+                "key": "luistrenker",
+                "label": "Luis Trenker"
+              },
+              {
+                "key": "majesticfilatures",
+                "label": "Majestic Filatures"
+              },
+              {
+                "key": "manilagrace",
+                "label": "Manila Grace"
+              },
+              {
+                "key": "marceloburlon",
+                "label": "Marcelo Burlon"
+              },
+              {
+                "key": "miabag",
+                "label": "Mia Bag"
+              },
+              {
+                "key": "michaelkors",
+                "label": "Michael Kors"
+              },
+              {
+                "key": "moncler",
+                "label": "Moncler"
+              },
+              {
+                "key": "moorer",
+                "label": "Moorer"
+              },
+              {
+                "key": "mou",
+                "label": "Mou"
+              },
+              {
+                "key": "mu",
+                "label": "MU"
+              },
+              {
+                "key": "museum",
+                "label": "Museum"
+              },
+              {
+                "key": "newbalance",
+                "label": "New Balance"
+              },
+              {
+                "key": "nike",
+                "label": "Nike"
+              },
+              {
+                "key": "oakwood",
+                "label": "Oakwood"
+              },
+              {
+                "key": "orciani",
+                "label": "Orciani"
+              },
+              {
+                "key": "palomabarcelo",
+                "label": "Paloma Barcelò"
+              },
+              {
+                "key": "paolopecora",
+                "label": "Paolo Pecora"
+              },
+              {
+                "key": "people",
+                "label": "People"
+              },
+              {
+                "key": "peuterey",
+                "label": "Peuterey"
+              },
+              {
+                "key": "philippemodel",
+                "label": "Philippe Model"
+              },
+              {
+                "key": "pinko",
+                "label": "Pinko"
+              },
+              {
+                "key": "poloralphlauren",
+                "label": "Polo Ralph Lauren"
+              },
+              {
+                "key": "redwings",
+                "label": "Red Wings"
+              },
+              {
+                "key": "refrigue",
+                "label": "Refrigue"
+              },
+              {
+                "key": "regia",
+                "label": "Regi A."
+              },
+              {
+                "key": "robertfriedman",
+                "label": "Robert Friedman"
+              },
+              {
+                "key": "savetheduck",
+                "label": "Save the duck"
+              },
+              {
+                "key": "semicouture",
+                "label": "Semi Couture"
+              },
+              {
+                "key": "serafini",
+                "label": "Serafini"
+              },
+              {
+                "key": "siviglia",
+                "label": "Siviglia"
+              },
+              {
+                "key": "spiewak",
+                "label": "Spiewak"
+              },
+              {
+                "key": "stoneisland",
+                "label": "Stone Island"
+              },
+              {
+                "key": "sun67",
+                "label": "Sun 68"
+              },
+              {
+                "key": "swisschriss",
+                "label": "Swiss Chriss"
+              },
+              {
+                "key": "tagliatore",
+                "label": "Tagliatore"
+              },
+              {
+                "key": "thomkrom",
+                "label": "Thom Krom"
+              },
+              {
+                "key": "tods",
+                "label": "Tod´s"
+              },
+              {
+                "key": "truenyc",
+                "label": "True Nyc"
+              },
+              {
+                "key": "uspolo",
+                "label": "U.S. Polo"
+              },
+              {
+                "key": "ugg",
+                "label": "UGG"
+              },
+              {
+                "key": "victoriabeckham",
+                "label": "Victoria Beckham"
+              },
+              {
+                "key": "wollrich",
+                "label": "Wollrich"
+              },
+              {
+                "key": "twinset",
+                "label": "Twin-Set"
+              },
+              {
+                "key": "whoareyou",
+                "label": "Who are you?"
+              },
+              {
+                "key": "zanellato",
+                "label": "Zanellato"
+              },
+              {
+                "key": "samedelman",
+                "label": "Sam Edelman"
+              },
+              {
+                "key": "maison",
+                "label": "Maison Scotch"
+              },
+              {
+                "key": "saucony",
+                "label": "Saucony"
+              },
+              {
+                "key": "moschinolove",
+                "label": "Moschino Love"
+              },
+              {
+                "key": "guess",
+                "label": "Guess"
+              },
+              {
+                "key": "jucca",
+                "label": "Jucca"
+              },
+              {
+                "key": "brunello",
+                "label": "Brunello"
+              },
+              {
+                "key": "ana",
+                "label": "Ana Alcazar"
+              },
+              {
+                "key": "moschinocheap",
+                "label": "Moschino Cheap"
+              },
+              {
+                "key": "stefanocalmonte",
+                "label": "Stefano Calmonte"
+              },
+              {
+                "key": "closed",
+                "label": "Closed"
+              },
+              {
+                "key": "aereonautica",
+                "label": "Aeronautica Militare"
+              },
+              {
+                "key": "mauro",
+                "label": "Mauro Grifoni"
+              },
+              {
+                "key": "converse",
+                "label": "Converse"
+              },
+              {
+                "key": "crossley",
+                "label": "Crossley"
+              },
+              {
+                "key": "frankie",
+                "label": "Frankie Morello"
+              },
+              {
+                "key": "weg",
+                "label": "Weg"
+              },
+              {
+                "key": "valentino",
+                "label": "Valentino"
+              },
+              {
+                "key": "palomitas",
+                "label": "Palomitas"
+              },
+              {
+                "key": "lacarrie",
+                "label": "La Carrie"
+              },
+              {
+                "key": "barba",
+                "label": "Barba"
+              },
+              {
+                "key": "freedomday",
+                "label": "Freedomday"
+              },
+              {
+                "key": "rebel",
+                "label": "Hogan Rebel"
+              },
+              {
+                "key": "springa",
+                "label": "Springa"
+              },
+              {
+                "key": "mirko",
+                "label": "Mirko Buffini"
+              },
+              {
+                "key": "sunboo",
+                "label": "SUNBOO"
+              },
+              {
+                "key": "jacob100",
+                "label": "Jacob100"
+              },
+              {
+                "key": "360sweater",
+                "label": "360 Sweater"
+              },
+              {
+                "key": "havaianas",
+                "label": "Havaianas"
+              },
+              {
+                "key": "amico",
+                "label": "Amico"
+              },
+              {
+                "key": "happiness",
+                "label": "Happiness"
+              },
+              {
+                "key": "fuck",
+                "label": "F**k Project"
+              },
+              {
+                "key": "sartorialist",
+                "label": "Sartorialist"
+              },
+              {
+                "key": "molecules",
+                "label": "Molecules"
+              },
+              {
+                "key": "spektre",
+                "label": "Spektre"
+              },
+              {
+                "key": "kaos",
+                "label": "Kaos"
+              },
+              {
+                "key": "annaeffe",
+                "label": "AnnaEffe"
+              },
+              {
+                "key": "kanna",
+                "label": "Kanna"
+              },
+              {
+                "key": "regi",
+                "label": "Regi.A"
+              },
+              {
+                "key": "mood",
+                "label": "Mood"
+              },
+              {
+                "key": "amar",
+                "label": "Amar"
+              }
+            ]
+          },
+          "attributeConstraint": "SameForAll",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "madeInItaly",
+          "label": {
+            "de": "Made in Italy",
+            "en": "Made in Italy",
+            "it": "Made in Italy"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "enum",
+            "values": [
+              {
+                "key": "yes",
+                "label": "yes"
+              },
+              {
+                "key": "no",
+                "label": "no"
+              }
+            ]
+          },
+          "attributeConstraint": "SameForAll",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "completeTheLook",
+          "label": {
+            "en": "Crosselling",
+            "it": "Crosselling",
+            "de": "Crosselling"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "text"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "commonSize",
+          "label": {
+            "en": "Filtersize",
+            "it": "Filtersize",
+            "de": "Filtergröße"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "enum",
+            "values": [
+              {
+                "key": "oneSize",
+                "label": "one Size"
+              },
+              {
+                "key": "xxs",
+                "label": "XXS"
+              },
+              {
+                "key": "xs",
+                "label": "XS"
+              },
+              {
+                "key": "s",
+                "label": "S"
+              },
+              {
+                "key": "m",
+                "label": "M"
+              },
+              {
+                "key": "l",
+                "label": "L"
+              },
+              {
+                "key": "xl",
+                "label": "XL"
+              },
+              {
+                "key": "xxl",
+                "label": "XXL"
+              },
+              {
+                "key": "xxxl",
+                "label": "XXXL"
+              },
+              {
+                "key": "34",
+                "label": "34"
+              },
+              {
+                "key": "34.5",
+                "label": "34.5"
+              },
+              {
+                "key": "35",
+                "label": "35"
+              },
+              {
+                "key": "35.5",
+                "label": "35.5"
+              },
+              {
+                "key": "36",
+                "label": "36"
+              },
+              {
+                "key": "36.5",
+                "label": "36.5"
+              },
+              {
+                "key": "37",
+                "label": "37"
+              },
+              {
+                "key": "37.5",
+                "label": "37.5"
+              },
+              {
+                "key": "38",
+                "label": "38"
+              },
+              {
+                "key": "38.5",
+                "label": "38.5"
+              },
+              {
+                "key": "39",
+                "label": "39"
+              },
+              {
+                "key": "39.5",
+                "label": "39.5"
+              },
+              {
+                "key": "40",
+                "label": "40"
+              },
+              {
+                "key": "40.5",
+                "label": "40.5"
+              },
+              {
+                "key": "41",
+                "label": "41"
+              },
+              {
+                "key": "41.5",
+                "label": "41.5"
+              },
+              {
+                "key": "42",
+                "label": "42"
+              },
+              {
+                "key": "42.5",
+                "label": "42.5"
+              },
+              {
+                "key": "43",
+                "label": "43"
+              },
+              {
+                "key": "43.5",
+                "label": "43.5"
+              },
+              {
+                "key": "44",
+                "label": "44"
+              },
+              {
+                "key": "44.5",
+                "label": "44.5"
+              },
+              {
+                "key": "45",
+                "label": "45"
+              },
+              {
+                "key": "45.5",
+                "label": "45.5"
+              },
+              {
+                "key": "46",
+                "label": "46"
+              },
+              {
+                "key": "46.5",
+                "label": "46.5"
+              },
+              {
+                "key": "47",
+                "label": "47"
+              },
+              {
+                "key": "47.5",
+                "label": "47.5"
+              },
+              {
+                "key": "70",
+                "label": "70"
+              },
+              {
+                "key": "75",
+                "label": "75"
+              },
+              {
+                "key": "80",
+                "label": "80"
+              },
+              {
+                "key": "85",
+                "label": "85"
+              },
+              {
+                "key": "90",
+                "label": "90"
+              },
+              {
+                "key": "95",
+                "label": "95"
+              },
+              {
+                "key": "100",
+                "label": "100"
+              },
+              {
+                "key": "105",
+                "label": "105"
+              },
+              {
+                "key": "110",
+                "label": "110"
+              },
+              {
+                "key": "115",
+                "label": "115"
+              },
+              {
+                "key": "120",
+                "label": "120"
+              }
+            ]
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "size",
+          "label": {
+            "it": "Size",
+            "de": "Größe",
+            "en": "Size"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "text"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "color",
+          "label": {
+            "de": "Filterfarbe",
+            "it": "Filtercolor",
+            "en": "Filtercolor"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "lenum",
+            "values": [
+              {
+                "key": "black",
+                "label": {
+                  "en": "black",
+                  "it": "nero",
+                  "de": "schwarz"
+                }
+              },
+              {
+                "key": "grey",
+                "label": {
+                  "de": "grau",
+                  "en": "grey",
+                  "it": "grigio"
+                }
+              },
+              {
+                "key": "beige",
+                "label": {
+                  "it": "beige",
+                  "de": "beige",
+                  "en": "beige"
+                }
+              },
+              {
+                "key": "white",
+                "label": {
+                  "it": "blanco",
+                  "de": "weiss",
+                  "en": "white"
+                }
+              },
+              {
+                "key": "blue",
+                "label": {
+                  "de": "blau",
+                  "it": "blu",
+                  "en": "blue"
+                }
+              },
+              {
+                "key": "brown",
+                "label": {
+                  "it": "marrone",
+                  "de": "braun",
+                  "en": "brown"
+                }
+              },
+              {
+                "key": "turquoise",
+                "label": {
+                  "de": "türkis",
+                  "en": "turquoise",
+                  "it": "turchese"
+                }
+              },
+              {
+                "key": "petrol",
+                "label": {
+                  "en": "petrol",
+                  "de": "petrol",
+                  "it": "petrol"
+                }
+              },
+              {
+                "key": "green",
+                "label": {
+                  "it": "verde",
+                  "en": "green",
+                  "de": "grün"
+                }
+              },
+              {
+                "key": "red",
+                "label": {
+                  "it": "rosso",
+                  "en": "red",
+                  "de": "rot"
+                }
+              },
+              {
+                "key": "purple",
+                "label": {
+                  "it": "porpora",
+                  "de": "lila",
+                  "en": "purple"
+                }
+              },
+              {
+                "key": "pink",
+                "label": {
+                  "de": "rosa",
+                  "en": "pink",
+                  "it": "rosa"
+                }
+              },
+              {
+                "key": "orange",
+                "label": {
+                  "en": "orange",
+                  "it": "arancione",
+                  "de": "orange"
+                }
+              },
+              {
+                "key": "yellow",
+                "label": {
+                  "it": "giallo",
+                  "en": "yellow",
+                  "de": "gelb"
+                }
+              },
+              {
+                "key": "oliv",
+                "label": {
+                  "it": "oliva",
+                  "en": "oliv",
+                  "de": "oliv"
+                }
+              },
+              {
+                "key": "gold",
+                "label": {
+                  "en": "gold",
+                  "de": "gold",
+                  "it": "oro"
+                }
+              },
+              {
+                "key": "silver",
+                "label": {
+                  "it": "argento",
+                  "en": "silver",
+                  "de": "silber"
+                }
+              },
+              {
+                "key": "multicolored",
+                "label": {
+                  "de": "mehrfarbig",
+                  "en": "multicolored",
+                  "it": "policromo"
+                }
+              }
+            ]
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "colorFreeDefinition",
+          "label": {
+            "de": "Farbbezeichnung",
+            "en": "Color Description",
+            "it": "Color Description"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "ltext"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "details",
+          "label": {
+            "it": "Details",
+            "de": "Details",
+            "en": "Details"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "ltext"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "style",
+          "label": {
+            "en": "Style",
+            "it": "Style",
+            "de": "Stil"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "enum",
+            "values": [
+              {
+                "key": "business",
+                "label": "business"
+              },
+              {
+                "key": "sporty",
+                "label": "sporty"
+              },
+              {
+                "key": "evening",
+                "label": "evening"
+              }
+            ]
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "gender",
+          "label": {
+            "en": "Gender",
+            "it": "Gender",
+            "de": "Zielgruppe"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "enum",
+            "values": [
+              {
+                "key": "men",
+                "label": "Herren"
+              },
+              {
+                "key": "women",
+                "label": "Damen"
+              }
+            ]
+          },
+          "attributeConstraint": "SameForAll",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "season",
+          "label": {
+            "en": "Season",
+            "de": "Saison",
+            "it": "Season"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "text"
+          },
+          "attributeConstraint": "SameForAll",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "isOnStock",
+          "label": {
+            "it": "isOnStock",
+            "de": "isOnStock",
+            "en": "isOnStock"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "boolean"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "isLook",
+          "label": {
+            "de": "Lookprodukt",
+            "en": "lookproduct",
+            "it": "lookproduct"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "boolean"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "lookProducts",
+          "label": {
+            "de": "Lookprodukte",
+            "it": "lookproducts",
+            "en": "lookproducts"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "text"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "seasonNew",
+          "label": {
+            "en": "Season",
+            "de": "Saison",
+            "it": "Season"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "text"
+          },
+          "attributeConstraint": "SameForAll",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        }
+      ],
+      "createdAt": "2015-06-11T11:48:25.008Z",
+      "lastModifiedAt": "2015-06-11T12:47:43.722Z"
+    },
+    {
+      "id": "67d05af6-51e6-409b-bcd4-3be24ec0c6e0",
+      "version": 1,
+      "name": "Geschenkgutschein",
+      "description": "Wertgutscheine zu verkuafen",
+      "classifier": "Complex",
+      "attributes": [],
+      "createdAt": "2015-10-29T16:45:02.303Z",
+      "lastModifiedAt": "2015-10-29T16:45:02.303Z"
+    }
+  ]
+}

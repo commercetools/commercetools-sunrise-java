@@ -21,12 +21,15 @@ public class ProductDetailPageContent extends PageContent {
 
     public ProductDetailPageContent(final String additionalTitle) {
         this.additionalTitle = additionalTitle;
-        this.productData = productData;
     }
 
     @Override
     public String getAdditionalTitle() {
         return additionalTitle;
+    }
+
+    public void setAdditionalTitle(final String additionalTitle) {
+        this.additionalTitle = additionalTitle;
     }
 
     public BreadcrumbData getBreadcrumb() {
