@@ -8,7 +8,6 @@ import common.utils.PriceFormatter;
 import io.sphere.sdk.models.LocalizedEnumValue;
 import io.sphere.sdk.products.attributes.AttributeAccess;
 import io.sphere.sdk.products.attributes.NamedAttributeAccess;
-import productcatalog.services.CategoryService;
 
 import java.util.Set;
 
@@ -22,14 +21,12 @@ public class ProductDataFactory {
     private final PriceFormatter priceFormatter;
     private final PriceFinder priceFinder;
     private final ReverseRouter reverseRouter;
-    private final CategoryService categoryService;
 
-    private ProductDataFactory(final UserContext userContext, final ReverseRouter reverseRouter, final CategoryService categoryService) {
+    private ProductDataFactory(final UserContext userContext, final ReverseRouter reverseRouter) {
         this.userContext = userContext;
         this.priceFormatter = PriceFormatter.of(userContext.locale());
         this.priceFinder = PriceFinderFactory.create(userContext);
         this.reverseRouter = reverseRouter;
-        this.categoryService = categoryService;
     }
 
 //    public static ProductDataFactory of(final UserContext userContext, final ReverseRouter reverseRouter, final CategoryService categoryService) {

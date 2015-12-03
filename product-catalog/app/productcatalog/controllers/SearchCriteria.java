@@ -28,7 +28,7 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static productcatalog.models.SunriseFacetType.*;
 
-public class SearchOperations {
+public class SearchCriteria {
     private static final ProductProjectionSortSearchModel SORT = ProductProjectionSearchModel.of().sort();
     private static final ProductProjectionFacetAndFilterSearchModel FACET = ProductProjectionSearchModel.of().facetedSearch();
     private static final SortExpression<ProductProjection> DEFAULT_SORT = SORT.createdAt().byDesc();
@@ -45,8 +45,8 @@ public class SearchOperations {
     private final List<Integer> pageSizeOptions;
     private final int pageSizeDefault;
 
-    private SearchOperations(final Configuration configuration, final Http.Request request, final Messages messages, final Locale locale,
-                             @Nullable final Category selectedCategory, final List<String> selectedCategoryIds, final CategoryTree subcategoryTreeFacet) {
+    private SearchCriteria(final Configuration configuration, final Http.Request request, final Messages messages, final Locale locale,
+                           @Nullable final Category selectedCategory, final List<String> selectedCategoryIds, final CategoryTree subcategoryTreeFacet) {
         this.request = request;
         this.messages = messages;
         this.locale = locale;
@@ -100,12 +100,12 @@ public class SearchOperations {
                 .map(text -> LocalizedStringEntry.of(locale, text));
     }
 
-    public static SearchOperations of(final Configuration configuration, final Http.Request request, final Messages messages, final UserContext userContext,
+    public static SearchCriteria of(final Configuration configuration, final Http.Request request, final Messages messages, final UserContext userContext,
                                       final Category selectedCategory, final List<String> selectedCategoryIds, final CategoryTree subcategoryTreeFacet) {
-        return new SearchOperations(configuration, request, messages, userContext.locale(), selectedCategory, selectedCategoryIds, subcategoryTreeFacet);
+        return new SearchCriteria(configuration, request, messages, userContext.locale(), selectedCategory, selectedCategoryIds, subcategoryTreeFacet);
     }
 
-    public static SearchOperations of(final Configuration configuration, final Http.Request request, final Messages messages, final UserContext userContext,
+    public static SearchCriteria of(final Configuration configuration, final Http.Request request, final Messages messages, final UserContext userContext,
                                       final CategoryTree categoryTree) {
         return of(configuration, request, messages, userContext, null, emptyList(), categoryTree);
     }

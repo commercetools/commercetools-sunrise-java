@@ -2,7 +2,7 @@ package inject;
 
 import com.google.inject.Provider;
 import controllers.RefreshableCategoryTree;
-import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.client.SphereClient;
 import play.Logger;
 
@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-class CategoryTreeProvider implements Provider<CategoryTree> {
+class CategoryTreeProvider implements Provider<CategoryTreeExtended> {
     private final SphereClient client;
 
     @Inject
@@ -19,7 +19,7 @@ class CategoryTreeProvider implements Provider<CategoryTree> {
     }
 
     @Override
-    public CategoryTree get() {
+    public CategoryTreeExtended get() {
         try {
             final RefreshableCategoryTree categoryTree = RefreshableCategoryTree.of(client);
             Logger.debug("Provide RefreshableCategoryTree with " + categoryTree.getAllAsFlatList().size() + " categories");

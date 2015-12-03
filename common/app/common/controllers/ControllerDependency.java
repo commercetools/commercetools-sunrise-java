@@ -3,7 +3,7 @@ package common.controllers;
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
 import common.templates.TemplateService;
-import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
@@ -15,7 +15,7 @@ import javax.inject.Singleton;
 @Singleton
 public class ControllerDependency extends Base {
     private final PlayJavaSphereClient sphere;
-    private final CategoryTree categoryTree;
+    private final CategoryTreeExtended categoryTree;
     private final ProjectContext projectContext;
     private final TemplateService templateService;
     private final CmsService cmsService;
@@ -24,7 +24,7 @@ public class ControllerDependency extends Base {
     private final ReverseRouter reverseRouter;
 
     @Inject
-    public ControllerDependency(final PlayJavaSphereClient sphere, final CategoryTree categoryTree, final ProjectContext projectContext,
+    public ControllerDependency(final PlayJavaSphereClient sphere, final CategoryTreeExtended categoryTree, final ProjectContext projectContext,
                                 final TemplateService templateService, final CmsService cmsService, final Configuration configuration,
                                 final MessagesApi messagesApi, final ReverseRouter reverseRouter) {
         this.sphere = sphere;
@@ -41,7 +41,7 @@ public class ControllerDependency extends Base {
         return sphere;
     }
 
-    public CategoryTree categoryTree() {
+    public CategoryTreeExtended categoryTree() {
         return categoryTree;
     }
 

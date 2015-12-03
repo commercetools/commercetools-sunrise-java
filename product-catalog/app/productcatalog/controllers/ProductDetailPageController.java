@@ -6,20 +6,17 @@ import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
 import common.utils.PriceFormatter;
-import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.libs.F;
-import play.mvc.Http;
 import play.mvc.Result;
+import play.twirl.api.Html;
 import productcatalog.models.*;
-import productcatalog.services.CategoryService;
-import productcatalog.services.ProductProjectionService;
+import productcatalog.services.ProductService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
-import java.util.Locale;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -27,91 +24,69 @@ import static java.util.stream.Collectors.toList;
 @Singleton
 @LanguageFiltered
 public class ProductDetailPageController extends ProductCatalogController {
-    private final int numberOfSuggestions;
+    private final int numSuggestions;
 
     @Inject
-    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductProjectionService productService,
-                                       final CategoryService categoryService, final ProductDataConfig productDataConfig) {
-        super(controllerDependency, categoryService, productService, productDataConfig);
-        this.numberOfSuggestions = configuration().getInt("pdp.productSuggestions.count");
+    public ProductDetailPageController(final ControllerDependency controllerDependency,
+                                       final ProductService productService, final ProductDataConfig productDataConfig) {
+        super(controllerDependency, productService, productDataConfig);
+        this.numSuggestions = configuration().getInt("pdp.productSuggestions.count");
     }
+
+    /* Controller actions */
 
     public F.Promise<Result> show(final String locale, final String slug, final String sku) {
         final UserContext userContext = userContext(locale);
-        final Http.Context ctx = ctx();
-        final F.Promise<ProductProjection> productPromise = fetchProduct(userContext.locale(), slug);
-        final F.Promise<List<ProductProjection>> suggestionPromise = productPromise.flatMap(this::fetchSuggestions);
-        final F.Promise<Result> resultPromise = productPromise.flatMap(productProjection ->
-                suggestionPromise.map(suggestions -> getPdpResult(userContext, suggestions, productProjection, sku, ctx)));
-        return recover(resultPromise);
+        return productService().findProductBySlug(userContext.locale(), slug)
+                .flatMap(productOpt -> productOpt
+                        .map(product -> renderProduct(userContext, slug, product, sku))
+                        .orElse(F.Promise.pure(notFound())));
     }
 
-    private F.Promise<ProductProjection> fetchProduct(final Locale locale, final String slug) {
-        return productService().searchProductBySlug(locale, slug)
-                .map(productOptional -> productOptional
-                        .orElseThrow(() -> ProductNotFoundException.bySlug(locale, slug)));
+    private F.Promise<Result> renderProduct(final UserContext userContext, final String slug, final ProductProjection product, final String sku) {
+        return product.findVariantBySky(sku)
+                .map(variant ->
+                    productService().getSuggestions(product, categoryTree(), numSuggestions).map(suggestions -> {
+                        final ProductDetailPageContent content = createPageContent(userContext, product, variant, suggestions);
+                        return (Result) ok(renderPage(userContext, content));
+                    })
+                ).orElse(redirectToMasterVariant(userContext, slug, product));
     }
 
-    private F.Promise<List<ProductProjection>> fetchSuggestions(final ProductProjection productProjection) {
-        final List<Category> siblingCategories = categoryService().getSiblings(productProjection.getCategories());
-        return productService().getSuggestions(siblingCategories, numberOfSuggestions);
+    private F.Promise<Result> redirectToMasterVariant(final UserContext userContext, final String slug,
+                                                      final ProductProjection product) {
+        final String masterVariantSku = product.getMasterVariant().getSku();
+        final String languageTag = userContext.locale().toLanguageTag();
+        return F.Promise.pure(redirect(reverseRouter().product(languageTag, slug, masterVariantSku)));
     }
 
-    private F.Promise<Result> recover(final F.Promise<Result> resultPromise) {
-        return resultPromise.recover(exception -> {
-            if (exception instanceof ProductNotFoundException || exception instanceof ProductVariantNotFoundException) {
-                return notFoundAction();
-            } else {
-                throw exception;
-            }
-        });
+    /* Methods to render the page */
+
+    private Html renderPage(final UserContext userContext, final ProductDetailPageContent content) {
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        return templateService().renderToHtml("pdp", pageData, userContext.locales());
     }
 
-    private Result notFoundAction() {
-        return notFound();
-    }
-
-    private Result getPdpResult(final UserContext userContext, final List<ProductProjection> suggestions,
-                                final ProductProjection productProjection, final String sku, final Http.Context ctx) {
-        final ProductVariant productVariant = getProductVariantBySku(sku, productProjection);
-        final ProductDetailPageContent content = getProductDetailPageContent(userContext, suggestions, productProjection, productVariant);
-        final SunrisePageData pageData = pageData(userContext, content, ctx);
-        return ok(templateService().renderToHtml("pdp", pageData, userContext.locales()));
-    }
-
-    private ProductVariant getProductVariantBySku(final String sku, final ProductProjection productProjection) {
-        return productProjection.findVariantBySky(sku).orElseThrow(() -> ProductVariantNotFoundException.bySku(sku));
-    }
-
-    /* Methods to build page content */
-
-    private ProductDetailPageContent getProductDetailPageContent(final UserContext userContext,
-                                                                 final List<ProductProjection> suggestions,
-                                                                 final ProductProjection product,
-                                                                 final ProductVariant variant) {
-        final String additionalTitle = product.getName().find(userContext.locales()).orElse("");
-        final ProductDetailPageContent content = new ProductDetailPageContent(additionalTitle);
+    private ProductDetailPageContent createPageContent(final UserContext userContext, final ProductProjection product,
+                                                       final ProductVariant variant, final List<ProductProjection> suggestions) {
+        final ProductDetailPageContent content = new ProductDetailPageContent();
+        content.setAdditionalTitle(product.getName().find(userContext.locales()).orElse(""));
         //content.setProductData(new ProductData(userContext, reverseRouter(), categories(), product, variant));
-        content.setBreadcrumb(new BreadcrumbData(product, variant, categories(), userContext, reverseRouter()));
-        content.setShippingRates(getDeliveryData(userContext));
-        content.setSuggestions(getSuggestionData(userContext, suggestions));
+        content.setBreadcrumb(new BreadcrumbData(product, variant, categoryTree(), userContext, reverseRouter()));
+        content.setShippingRates(createDeliveryData(userContext));
+        content.setSuggestions(new ProductListData(suggestions, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()).getList());
         content.setAddToCartFormUrl(reverseRouter().productVariantToCartForm(userContext.locale().getLanguage()).url());
         return content;
     }
 
-    private List<ShippingRateData> getDeliveryData(final UserContext userContext) {
+    private List<ShippingRateData> createDeliveryData(final UserContext userContext) {
         final PriceFormatter priceFormatter = priceFormatter(userContext);
-        final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(priceFormatter);
         return getShippingRates().stream()
-                .map(shippingRateDataFactory::create)
+                .map(rate -> new ShippingRateData(priceFormatter, rate))
                 .collect(toList());
     }
 
-    private List<ProductThumbnailData> getSuggestionData(final UserContext userContext, final List<ProductProjection> suggestions) {
-        return new ProductListData(suggestions, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()).getList();
-    }
-
     private List<ShopShippingRate> getShippingRates() {
-        return emptyList();
+        return emptyList(); // TODO get shipping rates for this product
     }
 }

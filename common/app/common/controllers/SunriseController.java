@@ -8,7 +8,7 @@ import common.models.LocationSelector;
 import common.models.NavMenuData;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
-import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import play.Configuration;
@@ -43,7 +43,7 @@ public abstract class SunriseController extends ShopController {
         this.controllerDependency = controllerDependency;
     }
 
-    protected final CategoryTree categories() {
+    protected final CategoryTreeExtended categoryTree() {
         return controllerDependency.categoryTree();
     }
 
@@ -70,7 +70,7 @@ public abstract class SunriseController extends ShopController {
     protected final SunrisePageData pageData(final UserContext userContext, final PageContent content, final Http.Context ctx) {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
-        pageHeader.setNavMenu(new NavMenuData(categories(), userContext, reverseRouter(), saleCategoryExtId));
+        pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId));
         return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
     }
 
