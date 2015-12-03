@@ -25,7 +25,7 @@ GET         /:languageTag/home                                 @controllers.Home
 
 
 GET         /:languageTag/cart                                 @purchase.CartDetailPageController.show(languageTag: String)
-GET         /:languageTag/cart/fixtures                        @purchase.CartDetailPageController.setItemsToCart(languageTag: String)
+POST        /:languageTag/cart                                 @purchase.CartDetailPageController.setItemsToCart(languageTag: String)
 
 GET         /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.show(languageTag: String)
 POST        /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.process(languageTag: String)

@@ -40,6 +40,8 @@ public class ProductVariantBean {
         setSlug(translator.apply(lineItem.getProductSlug()));
         //no description available in line item
         fillProductVariantFields(lineItem.getVariant(), productDataConfig, userContext, reverseRouter);
+        setAttributes(ProductAttributeBean.collect(lineItem.getVariant().getAttributes(), productDataConfig, userContext));
+
         final MonetaryAmount amountForOneLineItem = calculateAmountForOneLineItem(lineItem);
         final MoneyContext moneyContext = MoneyContext.of(lineItem, userContext);
 
@@ -64,6 +66,8 @@ public class ProductVariantBean {
         setProductId(product.getId());
 
         fillProductVariantFields(variant, productDataConfig, userContext, reverseRouter);
+        setAttributes(ProductAttributeBean.collect(product, variant.getAttributes(), productDataConfig, userContext));
+
 
         PriceFinder.of(userContext).findPrice(variant.getPrices()).ifPresent(price -> {
             final MoneyContext moneyContext = MoneyContext.of(price.getValue().getCurrency(), userContext.locale());
@@ -203,6 +207,5 @@ public class ProductVariantBean {
         setSku(variant.getSku());
         setVariantId(variant.getId().toString());
         setUrl(reverseRouter.product(userContext.locale().toLanguageTag(), slug, variant.getSku()).url());
-        setAttributes(ProductAttributeBean.collect(variant.getAttributes(), productDataConfig, userContext));
     }
 }

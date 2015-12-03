@@ -58,6 +58,11 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
+    public Call addProductToCart(final String languageTag) {
+        return CartDetailPageController.setItemsToCart(languageTag);
+    }
+
+    @Override
     public Call productVariantToCartForm(final String languageTag) {
         return new Call() {
             @Override
