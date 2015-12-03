@@ -2,7 +2,7 @@ package productcatalog.services;
 
 import common.categories.JsonUtils;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.models.Reference;
 import org.junit.Test;
@@ -12,12 +12,12 @@ import java.util.function.Consumer;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CategoryServiceImplTest {
+public class CategoryTreeExtendedTest {
 
-    private static final CategoryTree CATEGORY_TREE = CategoryTree.of(JsonUtils.readJson("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
-    private static final CategoryService CATEGORY_SERVICE = new CategoryServiceImpl(CATEGORY_TREE);
+    private static final CategoryTreeExtended CATEGORY_TREE = CategoryTreeExtended.of(JsonUtils.readJson("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
     private static final Category handBags = CATEGORY_TREE.findById("9a584ee8-a45a-44e8-b9ec-e11439084687").get();
     private static final Category clutches = CATEGORY_TREE.findById("a9c9ebd8-e6ff-41a6-be8e-baa07888c9bd").get();
     private static final Category satchels = CATEGORY_TREE.findById("30d79426-a17a-4e63-867e-ec31a1a33416").get();
@@ -44,8 +44,11 @@ public class CategoryServiceImplTest {
                 siblings -> assertThat(siblings).containsExactly(clutches, shoppers, wallets, backpacks, slingBags));
     }
 
-    private void test(final List<Reference<Category>> categories, final Consumer<List<Category>> test) {
-        final List<Category> siblings = CATEGORY_SERVICE.getSiblings(categories);
+    private void test(final List<Reference<Category>> categoryRefs, final Consumer<List<Category>> test) {
+        final List<Category> categories = categoryRefs.stream()
+                .map(c -> CATEGORY_TREE.findById(c.getId()).get())
+                .collect(toList());
+        final List<Category> siblings = CATEGORY_TREE.getSiblings(categories);
         test.accept(siblings);
     }
 }
