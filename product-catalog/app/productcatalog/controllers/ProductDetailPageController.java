@@ -74,9 +74,14 @@ public class ProductDetailPageController extends ProductCatalogController {
         content.setProduct(new ProductData(product, variant, productDataConfig(), userContext, reverseRouter()));
         content.setBreadcrumb(new BreadcrumbData(product, variant, categoryTree(), userContext, reverseRouter()));
         content.setShippingRates(createDeliveryData(userContext));
-        content.setSuggestions(new ProductListData(suggestions, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()).getList());
+        content.setSuggestions(createSuggestions(userContext, suggestions));
         content.setAddToCartFormUrl(reverseRouter().productToCartForm(userContext.locale().getLanguage()).url());
         return content;
+    }
+
+    private SuggestionsData createSuggestions(final UserContext userContext, final List<ProductProjection> suggestions) {
+        final ProductListData productListData = new ProductListData(suggestions, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew());
+        return new SuggestionsData(productListData);
     }
 
     private List<ShippingRateData> createDeliveryData(final UserContext userContext) {

@@ -48,7 +48,7 @@ public abstract class SunriseController extends ShopController {
         return controllerDependency.categoryTree();
     }
 
-    public TemplateService templateService() {
+    protected TemplateService templateService() {
         return controllerDependency.templateService();
     }
 

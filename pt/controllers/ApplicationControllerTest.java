@@ -1,7 +1,7 @@
 package controllers;
 
 import common.controllers.WithSunriseApplication;
-import controllers.HomeController;
+import productcatalog.controllers.HomeController;
 import io.sphere.sdk.client.HttpRequestIntent;
 import org.junit.Test;
 import org.junit.Ignore;

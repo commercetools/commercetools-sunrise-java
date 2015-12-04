@@ -26,33 +26,37 @@ public final class CartDetailPageController extends CartController {
         this.productDataConfig = productDataConfig;
     }
 
-    public F.Promise<Result> setItemsToCart(final String languageTag) {
+    public F.Promise<Result> show(final String languageTag) {
+        final UserContext userContext = userContext(languageTag);
+        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
+        return cartPromise.map(cart -> renderCartPage(cart, userContext));
+    }
+
+    public F.Promise<Result> addToCart(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final Http.Session session = session();
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session);
-
         final Form<AddToCartFormData> filledForm = obtainFilledForm();
         if (filledForm.hasErrors()) {
             return F.Promise.pure(badRequest());
         } else {
-            final AddLineItem updateAction = AddLineItem.of(filledForm.get().getProductId(), filledForm.get().getVariantId(), filledForm.get().getQuantity());
-            return cartPromise.flatMap(cart -> {
-                return sphere().execute(CartUpdateCommand.of(cart, updateAction)).map(updatedCart -> {
+            final String productId = filledForm.get().getProductId();
+            final int variantId = filledForm.get().getVariantId();
+            final long quantity = filledForm.get().getQuantity();
+            final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
+            return cartPromise.flatMap(cart ->
+                sphere().execute(CartUpdateCommand.of(cart, updateAction)).map(updatedCart -> {
                     CartSessionUtils.overwriteCartSessionData(updatedCart, session);
-                    return ok();
-                });
-            });
+                    return renderCartPage(updatedCart, userContext);
+                })
+            );
         }
     }
 
-    public F.Promise<Result> show(final String languageTag) {
-        final UserContext userContext = userContext(languageTag);
-        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
-        return cartPromise.map(cart -> {
-            final CartDetailPageContent content = new CartDetailPageContent(cart, productDataConfig, userContext, reverseRouter());
-            final SunrisePageData pageData = pageData(userContext, content, ctx());
-            return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
-        });
+    private Result renderCartPage(final Cart cart, final UserContext userContext) {
+        final CartDetailPageContent content = new CartDetailPageContent(cart, productDataConfig, userContext, reverseRouter());
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
     }
 
     private Form<AddToCartFormData> obtainFilledForm() {

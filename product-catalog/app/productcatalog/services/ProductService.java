@@ -1,5 +1,6 @@
 package productcatalog.services;
 
+import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
@@ -29,7 +30,7 @@ public interface ProductService {
     F.Promise<Optional<ProductProjection>> findProductBySlug(final Locale locale, final String slug);
 
     /**
-     * Gets a List of length numSuggestions of Products from the given categories
+     * Gets a List of length numSuggestions of Products related somehow with the given product.
      * @param product the product to get suggestions for
      * @param numSuggestions the number of products the returned list should contain.
      *                       It might contain less if the requested number is greater
@@ -38,4 +39,14 @@ public interface ProductService {
      */
     F.Promise<List<ProductProjection>> getSuggestions(final ProductProjection product, final CategoryTreeExtended categoryTree,
                                                       final int numSuggestions);
+
+    /**
+     * Gets a List of length numSuggestions of Products from the given categories
+     * @param categories the categories to get suggestions from
+     * @param numSuggestions the number of products the returned list should contain.
+     *                       It might contain less if the requested number is greater
+     *                       than the number of available products.
+     * @return A Promise of the list of products without duplicates
+     */
+    F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories, final int numSuggestions);
 }
