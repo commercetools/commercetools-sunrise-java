@@ -1,12 +1,14 @@
 package common.controllers;
 
 import common.models.LocationSelector;
+import common.models.MiniCart;
 import common.models.NavMenuData;
 import io.sphere.sdk.models.Base;
 
 public class PageHeader extends Base {
     private String title;
     private LocationSelector location;
+    private MiniCart miniCart;
     private NavMenuData navMenu;
 
     public PageHeader() {
@@ -30,6 +32,14 @@ public class PageHeader extends Base {
 
     public void setLocation(final LocationSelector location) {
         this.location = location;
+    }
+
+    public MiniCart getMiniCart() {
+        return miniCart;
+    }
+
+    public void setMiniCart(final MiniCart miniCart) {
+        this.miniCart = miniCart;
     }
 
     public NavMenuData getNavMenu() {

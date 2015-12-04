@@ -5,6 +5,7 @@ import common.contexts.ProjectContext;
 import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.models.LocationSelector;
+import common.models.MiniCart;
 import common.models.NavMenuData;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
@@ -17,6 +18,7 @@ import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.Http;
 import play.mvc.With;
+import purchase.CartSessionUtils;
 
 import javax.annotation.Nullable;
 import javax.money.Monetary;
@@ -72,6 +74,7 @@ public abstract class SunriseController extends ShopController {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId));
+        pageHeader.setMiniCart(new MiniCart(CartSessionUtils.getCartItemCount(session())));
         return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
     }
 
