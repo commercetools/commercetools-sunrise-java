@@ -9,11 +9,12 @@ public class CheckoutPaymentPageContent extends CheckoutPageContent {
 
     private PaymentFormBean paymentForm;
 
-    public CheckoutPaymentPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig) {
+    public CheckoutPaymentPageContent(final Cart cart, final ProductDataConfig productDataConfig,
+                                      final UserContext userContext, final ReverseRouter reverseRouter) {
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setPaymentStepActive(true);
         setStepWidget(stepWidget);
-        setCart(new CartOrderBean(cart, userContext, productDataConfig));
+        setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
         setPaymentForm(PaymentFormBean.ofDummyData());
     }
 

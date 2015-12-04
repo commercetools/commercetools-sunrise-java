@@ -14,7 +14,7 @@ import java.util.Map;
 public class ProductData extends Base {
     // TODO ratingX
     // TODO details
-    //private GalleryData gallery;
+    private GalleryData gallery;
     private ProductVariantBean variant;
     private Map<String, String> variants;
     private List<String> variantIdentifiers;
@@ -24,11 +24,17 @@ public class ProductData extends Base {
 
     public ProductData(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
                        final UserContext userContext, final ReverseRouter reverseRouter) {
-        final String slug = product.getSlug().find(userContext.locale()).orElse("");
-        //this.url = reverseRouter.product(userContext.locale().toLanguageTag(), slug, variant.getSku()).url();
-        this.variant = new ProductVariantBean(product, variant, userContext, productDataConfig);
+        this.gallery = new GalleryData(variant);
+        this.variant = new ProductVariantBean(product, variant, productDataConfig, userContext, reverseRouter);
         this.variantIdentifiers = productDataConfig.getAttributeWhiteList();
-        // TODO variants
+    }
+
+    public GalleryData getGallery() {
+        return gallery;
+    }
+
+    public void setGallery(final GalleryData gallery) {
+        this.gallery = gallery;
     }
 
     public ProductVariantBean getVariant() {

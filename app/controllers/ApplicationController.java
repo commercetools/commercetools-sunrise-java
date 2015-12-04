@@ -1,11 +1,10 @@
 package controllers;
 
-import common.controllers.ControllerDependency;
-import common.controllers.SunriseController;
 import play.inject.Injector;
 import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
+import productcatalog.controllers.HomeController;
 import setupwidget.controllers.SetupController;
 
 import javax.inject.Inject;

@@ -1,19 +1,16 @@
 package productcatalog.controllers;
 
 import common.controllers.PageContent;
-import productcatalog.models.BreadcrumbData;
-import productcatalog.models.ProductData;
-import productcatalog.models.ProductThumbnailData;
-import productcatalog.models.ShippingRateData;
+import productcatalog.models.*;
 
 import java.util.List;
 
 public class ProductDetailPageContent extends PageContent {
     private String additionalTitle;
     private BreadcrumbData breadcrumb;
-    private ProductData productData;
+    private ProductData product;
     private List<ShippingRateData> shippingRates;
-    private List<ProductThumbnailData> suggestions;
+    private SuggestionsData suggestions;
     private String addToCartFormUrl;
 
     public ProductDetailPageContent() {
@@ -40,12 +37,12 @@ public class ProductDetailPageContent extends PageContent {
         this.breadcrumb = breadcrumb;
     }
 
-    public ProductData getProductData() {
-        return productData;
+    public ProductData getProduct() {
+        return product;
     }
 
-    public void setProductData(final ProductData productData) {
-        this.productData = productData;
+    public void setProduct(final ProductData product) {
+        this.product = product;
     }
 
     public List<ShippingRateData> getShippingRates() {
@@ -56,11 +53,11 @@ public class ProductDetailPageContent extends PageContent {
         this.shippingRates = shippingRates;
     }
 
-    public List<ProductThumbnailData> getSuggestions() {
+    public SuggestionsData getSuggestions() {
         return suggestions;
     }
 
-    public void setSuggestions(final List<ProductThumbnailData> suggestions) {
+    public void setSuggestions(final SuggestionsData suggestions) {
         this.suggestions = suggestions;
     }
 

@@ -18,14 +18,14 @@ GET         /                                                  @controllers.Appl
 GET         /categories/refresh                                @controllers.CategoriesRefreshController.refresh()
 
 # Home page
-GET         /:languageTag/home                                 @controllers.HomeController.show(languageTag:String)
+GET         /:languageTag/home                                 @productcatalog.controllers.HomeController.show(languageTag:String)
 
 
 ->          /setup                                             setupwidget.Routes
 
 
 GET         /:languageTag/cart                                 @purchase.CartDetailPageController.show(languageTag: String)
-GET         /:languageTag/cart/fixtures                        @purchase.CartDetailPageController.setItemsToCart(languageTag: String)
+POST        /:languageTag/cart                                 @purchase.CartDetailPageController.addToCart(languageTag: String)
 
 GET         /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.show(languageTag: String)
 POST        /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.process(languageTag: String)

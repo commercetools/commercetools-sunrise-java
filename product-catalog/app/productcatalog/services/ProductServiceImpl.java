@@ -69,14 +69,21 @@ public class ProductServiceImpl implements ProductService {
                 .map(Optional::get)
                 .collect(toList());
         final List<Category> siblingCategories = categoryTree.getSiblings(categories);
-        return getSuggestions(siblingCategories, numSuggestions);
+        final F.Promise<List<ProductProjection>> suggestions;
+        if (siblingCategories.isEmpty()) {
+            suggestions = getSuggestions(categories, numSuggestions);
+        } else {
+            suggestions = getSuggestions(siblingCategories, numSuggestions);
+        }
+        return suggestions;
     }
 
-    private F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories, final int numSuggestions) {
+    @Override
+    public F.Promise<List<ProductProjection>> getSuggestions(final List<Category> categories, final int numSuggestions) {
         final List<String> categoryIds = categories.stream()
                 .map(Category::getId)
                 .collect(toList());
-        final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
+        ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
                 .withQueryFilters(filter -> filter.categories().id().byAny(categoryIds));
         final F.Promise<PagedSearchResult<ProductProjection>> resultPromise = sphere.execute(request);
         logRequest(request, resultPromise);

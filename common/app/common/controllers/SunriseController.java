@@ -5,6 +5,7 @@ import common.contexts.ProjectContext;
 import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.models.LocationSelector;
+import common.models.MiniCart;
 import common.models.NavMenuData;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
@@ -17,12 +18,14 @@ import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.Http;
 import play.mvc.With;
+import purchase.CartSessionUtils;
 
 import javax.annotation.Nullable;
 import javax.money.Monetary;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.stream.IntStream;
 
 import static com.neovisionaries.i18n.CountryCode.DE;
 import static java.util.stream.Collectors.toList;
@@ -47,7 +50,7 @@ public abstract class SunriseController extends ShopController {
         return controllerDependency.categoryTree();
     }
 
-    public TemplateService templateService() {
+    protected TemplateService templateService() {
         return controllerDependency.templateService();
     }
 
@@ -71,18 +74,21 @@ public abstract class SunriseController extends ShopController {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId));
+        pageHeader.setMiniCart(new MiniCart(CartSessionUtils.getCartItemCount(session())));
         return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
     }
 
     private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
         final PageMeta pageMeta = new PageMeta();
-        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());
+        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());;
+        pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(reverseRouter().showCart(language), "cart")
                 .addHalLink(reverseRouter().showCheckoutShippingForm(language), "checkout", "editShippingAddress", "editBillingAddress", "editShippingMethod")
                 .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
                 .addHalLink(reverseRouter().home(language), "continueShopping", "home")
+                .addHalLink(reverseRouter().productToCartForm(language), "addToCart")
                 .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutAddressesSubmit")
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
