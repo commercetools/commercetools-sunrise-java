@@ -15,7 +15,6 @@ import static java.util.Collections.emptyList;
 public class ProductCatalogController extends SunriseController {
     private final ProductService productService;
     private final ProductDataConfig productDataConfig;
-    private final String categoryNewExtId;
 
 
     public ProductCatalogController(final ControllerDependency controllerDependency,
@@ -23,11 +22,10 @@ public class ProductCatalogController extends SunriseController {
         super(controllerDependency);
         this.productService = productService;
         this.productDataConfig = productDataConfig;
-        this.categoryNewExtId = controllerDependency.configuration().getString("common.newCategoryExternalId", "");
     }
 
     protected CategoryTree categoryTreeInNew() {
-        final List<Category> categoriesInNew = categoryTree().findByExternalId(categoryNewExtId)
+        final List<Category> categoriesInNew = newCategory()
                 .map(Collections::singletonList)
                 .orElse(emptyList());
         return categoryTree().getSubtree(categoriesInNew);

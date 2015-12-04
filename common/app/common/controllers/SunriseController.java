@@ -9,6 +9,7 @@ import common.models.MiniCart;
 import common.models.NavMenuData;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
+import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
@@ -25,6 +26,7 @@ import javax.money.Monetary;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static com.neovisionaries.i18n.CountryCode.DE;
@@ -38,12 +40,14 @@ import static java.util.stream.Collectors.toList;
 @AddCSRFToken
 public abstract class SunriseController extends ShopController {
     private final ControllerDependency controllerDependency;
-    private final String saleCategoryExtId;
+    private final Optional<String> saleCategoryExtId;
+    private final Optional<String> categoryNewExtId;
 
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
-        this.saleCategoryExtId = controllerDependency.configuration().getString("common.saleCategoryExternalId", "");
         this.controllerDependency = controllerDependency;
+        this.saleCategoryExtId = Optional.ofNullable(controllerDependency.configuration().getString("common.saleCategoryExternalId"));
+        this.categoryNewExtId = Optional.ofNullable(controllerDependency.configuration().getString("common.newCategoryExternalId"));
     }
 
     protected final CategoryTreeExtended categoryTree() {
@@ -73,7 +77,7 @@ public abstract class SunriseController extends ShopController {
     protected final SunrisePageData pageData(final UserContext userContext, final PageContent content, final Http.Context ctx) {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
-        pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId));
+        pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
         pageHeader.setMiniCart(new MiniCart(CartSessionUtils.getCartItemCount(session())));
         return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
     }
@@ -116,6 +120,10 @@ public abstract class SunriseController extends ShopController {
 
     protected RequestContext requestContext() {
         return RequestContext.of(request().queryString(), request().path());
+    }
+
+    protected Optional<Category> newCategory() {
+        return categoryNewExtId.flatMap(extId -> categoryTree().findByExternalId(extId));
     }
 
     @Nullable
