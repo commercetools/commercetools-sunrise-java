@@ -81,10 +81,20 @@ public final class RefreshableCategoryTree extends Base implements CategoryTreeE
     }
 
     private static CategoryTreeExtended fetchFreshCategoryTree(final SphereClient client) {
-        final QueryAll<Category, CategoryQuery> query = QueryAll.of(CategoryQuery.of());
-        final List<Category> categories = query.run(client).toCompletableFuture().join().stream()
-                .sorted((c1, c2) -> ObjectUtils.compare(c1.getOrderHint(), c2.getOrderHint())).collect(toList());
+        final List<Category> categories = fetchCategories(client);
         Logger.debug("Provide CategoryTree with " + categories.size() + " categories");
         return CategoryTreeExtended.of(categories);
+    }
+
+    private static List<Category> fetchCategories(final SphereClient client) {
+        final QueryAll<Category, CategoryQuery> query = QueryAll.of(CategoryQuery.of());
+        final List<Category> categories = query.run(client).toCompletableFuture().join();
+        return sortCategories(categories);
+    }
+
+    private static List<Category> sortCategories(final List<Category> categories) {
+        return categories.stream()
+                .sorted((c1, c2) -> ObjectUtils.compare(c1.getOrderHint(), c2.getOrderHint()))
+                .collect(toList());
     }
 }
