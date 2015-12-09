@@ -22,10 +22,9 @@ public class BreadcrumbData {
     public BreadcrumbData() {
     }
 
-    public BreadcrumbData(final String searchTerm, final UserContext userContext, final ReverseRouter reverseRouter) {
+    public BreadcrumbData(final String searchTerm) {
         final LinkData linkData = new LinkData();
         linkData.setText(searchTerm);
-        linkData.setUrl(reverseRouter.search(userContext.locale().toLanguageTag(), searchTerm).url());
         this.links = singletonList(linkData);
     }
 

@@ -13,7 +13,12 @@ organization := "io.sphere"
 
 version := "1.0-SNAPSHOT"
 
-val sunriseDesignVersion = "0.35.0"
+lazy val sunriseDesignVersion = "0.35.0"
+
+lazy val sphereJvmSdkVersion = "1.0.0-M21"
+
+lazy val jacksonVersion = "2.6.0"
+
 
 /**
  * SUB-PROJECT DEFINITIONS
@@ -50,11 +55,8 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val sphereJvmSdkVersion = "1.0.0-M21-SNAPSHOT"
-lazy val jacksonVersion = "2.6.0"
-
 lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
-  scalaVersion := "2.10.5",
+  scalaVersion := "2.10.6",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   resolvers ++= Seq (
     Resolver.sonatypeRepo("releases"),
@@ -64,7 +66,7 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   ),
   libraryDependencies ++= Seq (
     "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
-    "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % "1.0.0-M20", // % sphereJvmSdkVersion,
+    "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % sphereJvmSdkVersion,
     "io.sphere" % "sphere-sunrise-design" % sunriseDesignVersion,
     "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "2.2.3",
@@ -75,6 +77,7 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   dependencyOverrides ++= Set (
     "com.google.guava" % "guava" % "18.0",
     "commons-io" % "commons-io" % "2.4",
+    "commons-logging" % "commons-logging" % "1.1.3",
     "io.netty" % "netty" % "3.10.4.Final",
     "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,

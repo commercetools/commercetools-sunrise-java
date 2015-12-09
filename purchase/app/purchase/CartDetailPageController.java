@@ -9,27 +9,17 @@ import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
 import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
 import io.sphere.sdk.carts.commands.updateactions.RemoveLineItem;
-import io.sphere.sdk.commands.UpdateAction;
-import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.models.Base;
-import io.sphere.sdk.products.queries.ProductProjectionQuery;
-import io.sphere.sdk.queries.PagedQueryResult;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.filters.csrf.RequireCSRFCheck;
-import play.i18n.Messages;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
-
-import static java.util.Arrays.asList;
 
 /**
  * Shows the contents of the cart.
@@ -44,37 +34,41 @@ public final class CartDetailPageController extends CartController {
         this.productDataConfig = productDataConfig;
     }
 
-    public F.Promise<Result> setItemsToCart(final String languageTag) {
-        final UserContext userContext = userContext(languageTag);
-        final Http.Session session = session();
-        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session);
-
-        final F.Promise<List<UpdateAction<Cart>>> updateActionsPromise = sphere().execute(ProductProjectionQuery.ofCurrent()
-                .withPredicates(m -> m.slug().lang(Locale.ENGLISH).isIn(asList("dondup-jeans-george-UP232DS107UG61-blue", "mu-shirt-david-F10216-lightblue"))))
-                .map(PagedQueryResult::getResults)
-                .map(products -> products.stream().map(product -> AddLineItem.of(product.getId(), 1, 3)).collect(Collectors.toList()));
-
-        final F.Promise<Cart> updatedCart = cartPromise.flatMap(cart ->
-                updateActionsPromise.flatMap(updateActions ->
-                        sphere().execute(CartUpdateCommand.of(cart, updateActions))
-                ));
-
-
-        return updatedCart.map(cart -> {
-            CartSessionUtils.overwriteCartSessionData(cart, session);
-            return ok(SphereJsonUtils.toJsonNode(cart));
-        });
-    }
-
     public F.Promise<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
-        return cartPromise.map(cart -> {
-            final Messages messages = messages(userContext);
-            final CartDetailPageContent content = new CartDetailPageContent(cart, userContext, productDataConfig, messages, reverseRouter());
-            final SunrisePageData pageData = pageData(userContext, content, ctx());
-            return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
-        });
+        return cartPromise.map(cart -> renderCartPage(cart, userContext));
+    }
+
+    public F.Promise<Result> addToCart(final String languageTag) {
+        final UserContext userContext = userContext(languageTag);
+        final Http.Session session = session();
+        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session);
+        final Form<AddToCartFormData> filledForm = obtainFilledForm();
+        if (filledForm.hasErrors()) {
+            return F.Promise.pure(badRequest());
+        } else {
+            final String productId = filledForm.get().getProductId();
+            final int variantId = filledForm.get().getVariantId();
+            final long quantity = filledForm.get().getQuantity();
+            final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
+            return cartPromise.flatMap(cart ->
+                sphere().execute(CartUpdateCommand.of(cart, updateAction)).map(updatedCart -> {
+                    CartSessionUtils.overwriteCartSessionData(updatedCart, session);
+                    return renderCartPage(updatedCart, userContext);
+                })
+            );
+        }
+    }
+
+    private Result renderCartPage(final Cart cart, final UserContext userContext) {
+        final CartDetailPageContent content = new CartDetailPageContent(cart, productDataConfig, userContext, reverseRouter(), messages(userContext));
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
+    }
+
+    private Form<AddToCartFormData> obtainFilledForm() {
+        return Form.form(AddToCartFormData.class, AddToCartFormData.Validation.class).bindFromRequest(request());
     }
 
     @RequireCSRFCheck

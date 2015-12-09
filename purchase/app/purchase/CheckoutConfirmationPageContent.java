@@ -14,8 +14,9 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
     public CheckoutConfirmationPageContent() {
     }
 
-    public CheckoutConfirmationPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig, final Messages messages, final ReverseRouter reverseRouter) {
-        setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter));
+    public CheckoutConfirmationPageContent(final Cart cart, final ProductDataConfig productDataConfig,
+                                           final UserContext userContext, final ReverseRouter reverseRouter, final Messages messages) {
+        setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setConfirmationStepActive(true);
         setStepWidget(stepWidget);

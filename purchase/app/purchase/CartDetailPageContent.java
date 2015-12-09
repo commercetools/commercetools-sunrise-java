@@ -13,8 +13,9 @@ public class CartDetailPageContent extends PageContent {
     public CartDetailPageContent() {
     }
 
-    public CartDetailPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig, final Messages messages, final ReverseRouter reverseRouter) {
-        this.cart = new CartOrderBean(cart, userContext, productDataConfig, reverseRouter);
+    public CartDetailPageContent(final Cart cart, final ProductDataConfig productDataConfig, final UserContext userContext,
+                                 final ReverseRouter reverseRouter, final Messages messages) {
+        this.cart = new CartOrderBean(cart, productDataConfig, userContext, reverseRouter);
         setAdditionalTitle(messages.at("cartDetailPageTitle"));
     }
 

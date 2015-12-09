@@ -2,6 +2,7 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
+import common.controllers.ReverseRouter;
 import common.models.ProductDataConfig;
 import common.models.ProductVariantBean;
 import io.sphere.sdk.carts.CartLike;
@@ -16,8 +17,11 @@ public class LineItemsBean {
         this.list = list;
     }
 
-    public LineItemsBean(final CartLike<?> cartLike, final UserContext userContext, final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
-        this(cartLike.getLineItems().stream().map((lineItem) -> new ProductVariantBean(lineItem, userContext, productDataConfig, reverseRouter)).collect(Collectors.toList()));
+    public LineItemsBean(final CartLike<?> cartLike, final ProductDataConfig productDataConfig,
+                         final UserContext userContext, final ReverseRouter reverseRouter) {
+        this(cartLike.getLineItems().stream()
+                .map((lineItem) -> new ProductVariantBean(lineItem, productDataConfig, userContext, reverseRouter))
+                .collect(Collectors.toList()));
     }
 
     public List<ProductVariantBean> getList() {

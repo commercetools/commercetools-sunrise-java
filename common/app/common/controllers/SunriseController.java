@@ -5,10 +5,12 @@ import common.contexts.ProjectContext;
 import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.models.LocationSelector;
+import common.models.MiniCart;
 import common.models.NavMenuData;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
-import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import play.Configuration;
@@ -17,12 +19,15 @@ import play.i18n.Lang;
 import play.i18n.Messages;
 import play.mvc.Http;
 import play.mvc.With;
+import purchase.CartSessionUtils;
 
 import javax.annotation.Nullable;
 import javax.money.Monetary;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 import static com.neovisionaries.i18n.CountryCode.DE;
 import static java.util.stream.Collectors.toList;
@@ -35,21 +40,21 @@ import static java.util.stream.Collectors.toList;
 @AddCSRFToken
 public abstract class SunriseController extends ShopController {
     private final ControllerDependency controllerDependency;
-    private final String saleCategoryExtId;
+    private final Optional<String> saleCategoryExtId;
+    private final Optional<String> categoryNewExtId;
 
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
-        this.saleCategoryExtId = controllerDependency.configuration().getString("common.saleCategoryExternalId", "");
-
-        // TODO Fill it properly
         this.controllerDependency = controllerDependency;
+        this.saleCategoryExtId = Optional.ofNullable(controllerDependency.configuration().getString("common.saleCategoryExternalId"));
+        this.categoryNewExtId = Optional.ofNullable(controllerDependency.configuration().getString("common.newCategoryExternalId"));
     }
 
-    protected final CategoryTree categories() {
+    protected final CategoryTreeExtended categoryTree() {
         return controllerDependency.categoryTree();
     }
 
-    public TemplateService templateService() {
+    protected TemplateService templateService() {
         return controllerDependency.templateService();
     }
 
@@ -70,23 +75,25 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected final SunrisePageData pageData(final UserContext userContext, final PageContent content, final Http.Context ctx) {
-        final Messages messages = messages(userContext);
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
-        pageHeader.setNavMenu(new NavMenuData(categories(), userContext, reverseRouter(), saleCategoryExtId));
+        pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
+        pageHeader.setMiniCart(new MiniCart(CartSessionUtils.getCartItemCount(session())));
         pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));
         return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
     }
 
     private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
         final PageMeta pageMeta = new PageMeta();
-        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());
+        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());;
+        pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(reverseRouter().showCart(language), "cart")
                 .addHalLink(reverseRouter().showCheckoutShippingForm(language), "checkout", "editShippingAddress", "editBillingAddress", "editShippingMethod")
                 .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
                 .addHalLink(reverseRouter().home(language), "continueShopping", "home")
+                .addHalLink(reverseRouter().productToCartForm(language), "addToCart")
                 .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutAddressesSubmit")
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
@@ -116,6 +123,10 @@ public abstract class SunriseController extends ShopController {
 
     protected RequestContext requestContext() {
         return RequestContext.of(request().queryString(), request().path());
+    }
+
+    protected Optional<Category> newCategory() {
+        return categoryNewExtId.flatMap(extId -> categoryTree().findByExternalId(extId));
     }
 
     @Nullable

@@ -4,7 +4,7 @@ import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.facets.FacetType;
 import io.sphere.sdk.models.Base;
 
-import static io.sphere.sdk.facets.DefaultFacetType.*;
+import static productcatalog.models.SunriseFacetType.*;
 
 public class FacetData extends Base {
     private Facet facet;
@@ -24,20 +24,24 @@ public class FacetData extends Base {
         this.facet = facet;
     }
 
+    public boolean isDisplayList() {
+        return isFacetType(SELECT_LIST_DISPLAY);
+    }
+
     public boolean isSelectFacet() {
-        return isFacetType(SELECT) || isFacetType(SORTED_SELECT);
+        return isFacetType(SELECT_LIST_DISPLAY) || isFacetType(SELECT_TWO_COLUMNS_DISPLAY);
     }
 
     public boolean isSliderRangeFacet() {
-        return isFacetType(SLIDER_RANGE);
+        return false; //TODO implement
     }
 
     public boolean isBucketRangeFacet() {
-        return isFacetType(BUCKET_RANGE);
+        return false; //TODO implement
     }
 
     public boolean isHierarchicalSelectFacet() {
-        return isFacetType(HIERARCHICAL_SELECT);
+        return isFacetType(SELECT_CATEGORY_HIERARCHICAL_DISPLAY);
     }
 
     private boolean isFacetType(final FacetType type) {

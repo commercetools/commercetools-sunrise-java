@@ -1,8 +1,8 @@
 package io.sphere.sdk.facets;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Mapper that sorts the options according to the given list of values.
@@ -17,9 +17,9 @@ public class SortedFacetOptionMapper implements FacetOptionMapper {
 
     @Override
     public List<FacetOption> apply(final List<FacetOption> facetOptions) {
-        final List<FacetOption> sortedFacetOptions = new ArrayList<>(facetOptions);
-        Collections.sort(sortedFacetOptions, this::comparePositions);
-        return sortedFacetOptions;
+        return facetOptions.stream()
+                .sorted(this::comparePositions)
+                .collect(toList());
     }
 
     public static SortedFacetOptionMapper of(final List<String> sortedFacetValues) {

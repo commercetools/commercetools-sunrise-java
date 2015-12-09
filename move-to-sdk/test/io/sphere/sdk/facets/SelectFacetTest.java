@@ -2,8 +2,11 @@ package io.sphere.sdk.facets;
 
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearchModel;
+import io.sphere.sdk.search.FacetAndFilterExpression;
+import io.sphere.sdk.search.TermFacetAndFilterExpression;
 import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
+import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
 import org.junit.Test;
 
 import java.util.List;
@@ -23,6 +26,7 @@ public class SelectFacetTest {
             FacetOption.of("one", 30, false),
             FacetOption.of("two", 20, true),
             FacetOption.of("three", 10, false));
+    private static final TermFacetAndFilterSearchModel<ProductProjection> SEARCH_MODEL = ProductProjectionSearchModel.of().facetedSearch().categories().id();
 
     @Test
     public void canBeDisplayedIfOverThreshold() throws Exception {
@@ -57,6 +61,41 @@ public class SelectFacetTest {
     }
 
     @Test
+    public void filtersByAnyFilterValues() throws Exception {
+        final SelectFacet<ProductProjection> facet = selectFacet()
+                .selectedValues(SELECTED_VALUE_TWO)
+                .matchingAll(false)
+                .build();
+        final FacetAndFilterExpression<ProductProjection> expr = facet.getFacetedSearchExpression();
+        final TermFacetAndFilterExpression<ProductProjection> expectedExpr = SEARCH_MODEL.byAny(SELECTED_VALUE_TWO);
+        assertThat(expr.facetExpression()).isEqualTo(expectedExpr.facetExpression());
+        assertThat(expr.filterExpressions()).isEqualTo(expectedExpr.filterExpressions());
+    }
+
+    @Test
+    public void filtersByAllFilterValues() throws Exception {
+        final SelectFacet<ProductProjection> facet = selectFacet()
+                .selectedValues(SELECTED_VALUE_TWO)
+                .matchingAll(true)
+                .build();
+        final FacetAndFilterExpression<ProductProjection> expr = facet.getFacetedSearchExpression();
+        final TermFacetAndFilterExpression<ProductProjection> expectedExpr = SEARCH_MODEL.byAll(SELECTED_VALUE_TWO);
+        assertThat(expr.facetExpression()).isEqualTo(expectedExpr.facetExpression());
+        assertThat(expr.filterExpressions()).isEqualTo(expectedExpr.filterExpressions());
+    }
+
+    @Test
+    public void doesNotFilter() throws Exception {
+        final SelectFacet<ProductProjection> facet = selectFacet()
+                .matchingAll(true)
+                .build();
+        final FacetAndFilterExpression<ProductProjection> expr = facet.getFacetedSearchExpression();
+        final TermFacetAndFilterExpression<ProductProjection> expectedExpr = SEARCH_MODEL.allTerms();
+        assertThat(expr.facetExpression()).isEqualTo(expectedExpr.facetExpression());
+        assertThat(expr.filterExpressions()).isEqualTo(expectedExpr.filterExpressions());
+    }
+
+    @Test
     public void throwsExceptionOnWrongThresholdAndLimit() throws Exception {
         final SelectFacetBuilder<ProductProjection> builder = selectFacetWithThreeOptions().threshold(10L);
         assertThatThrownBy(() -> {
@@ -68,7 +107,10 @@ public class SelectFacetTest {
     }
 
     private SelectFacetBuilder<ProductProjection> selectFacetWithThreeOptions() {
-        return SelectFacetBuilder.of("foo", "bar", ProductProjectionSearchModel.of().facetedSearch().categories().id())
-                .facetResult(FACET_RESULT_WITH_THREE_TERMS);
+        return selectFacet().facetResult(FACET_RESULT_WITH_THREE_TERMS);
+    }
+
+    private SelectFacetBuilder<ProductProjection> selectFacet() {
+        return SelectFacetBuilder.of("foo", "bar", SEARCH_MODEL);
     }
 }

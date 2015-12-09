@@ -18,10 +18,13 @@ import static java.util.stream.Collectors.toList;
  * Any facet option that is not represented in the list of categories or doesn't contain a name for the locales, is discarded.
  */
 public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper {
+    private final List<Category> selectedCategories;
     private final CategoryTree subcategoryTree;
     private final List<Locale> locales;
 
-    private HierarchicalCategoryFacetOptionMapper(final CategoryTree subcategoryTree, final List<Locale> locales) {
+    private HierarchicalCategoryFacetOptionMapper(final List<Category> selectedCategories,
+                                                  final CategoryTree subcategoryTree, final List<Locale> locales) {
+        this.selectedCategories = selectedCategories;
         this.subcategoryTree = subcategoryTree;
         this.locales = locales;
     }
@@ -35,8 +38,9 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
                 .collect(toList());
     }
 
-    public static HierarchicalCategoryFacetOptionMapper of(final CategoryTree subcategoryTree, final List<Locale> locales) {
-        return new HierarchicalCategoryFacetOptionMapper(subcategoryTree, locales);
+    public static HierarchicalCategoryFacetOptionMapper of(final List<Category> selectedCategories,
+                                                           final CategoryTree subcategoryTree, final List<Locale> locales) {
+        return new HierarchicalCategoryFacetOptionMapper(selectedCategories, subcategoryTree, locales);
     }
 
     private List<Category> getRootCategories() {
@@ -59,14 +63,13 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
     private Optional<FacetOption> addChildrenToFacetOption(final Optional<FacetOption> facetOption,
                                                            final Category category, final List<Category> children,
                                                            final Function<Category, Optional<FacetOption>> facetOptionFinder) {
-        boolean selected = facetOption.map(FacetOption::isSelected).orElse(false);
+        boolean selected = selectedCategories.contains(category) || facetOption.map(FacetOption::isSelected).orElse(false);
         long count = facetOption.map(FacetOption::getCount).orElse(0L);
         List<FacetOption> childrenFacetOption = new ArrayList<>();
 
         for (final Category child : children) {
             final Optional<FacetOption> childFacetOption = buildFacetOption(child, facetOptionFinder);
             if (childFacetOption.isPresent()) {
-                selected |= childFacetOption.get().isSelected();
                 count += childFacetOption.get().getCount();
                 childrenFacetOption.add(childFacetOption.get());
             }

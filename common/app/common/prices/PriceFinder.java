@@ -1,6 +1,7 @@
 package common.prices;
 
 import com.neovisionaries.i18n.CountryCode;
+import common.contexts.UserContext;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
@@ -31,6 +32,10 @@ public class PriceFinder {
 
     public static PriceFinder of(final CurrencyUnit currency, final CountryCode country, final Optional<Reference<CustomerGroup>> customerGroup, final Optional<Reference<Channel>> channel) {
         return new PriceFinder(currency, country, customerGroup, channel);
+    }
+
+    public static PriceFinder of(final UserContext userContext) {
+        return of(userContext.currency(), userContext.country(), userContext.customerGroup(), userContext.channel());
     }
 
     /**
