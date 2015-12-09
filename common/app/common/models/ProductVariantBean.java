@@ -28,6 +28,7 @@ public class ProductVariantBean {
     private String price;
     private String totalPrice;
     private List<ProductAttributeBean> attributes;
+    private String lineItemId;
 
     public ProductVariantBean() {
     }
@@ -54,6 +55,8 @@ public class ProductVariantBean {
         setQuantity(lineItem.getQuantity());
         setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
         setProductId(lineItem.getProductId());
+        setLineItemId(lineItem.getId());
+        setUrl(reverseRouter.product(userContext.locale().getLanguage(), getSlug(), getSku()).url());
     }
 
     public ProductVariantBean(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
@@ -185,6 +188,14 @@ public class ProductVariantBean {
         this.attributes = attributes;
     }
 
+    public String getLineItemId() {
+        return lineItemId;
+    }
+
+    public void setLineItemId(final String lineItemId) {
+        this.lineItemId = lineItemId;
+    }
+
     public static MonetaryAmount calculateAmountForOneLineItem(final LineItem lineItem) {
         final MonetaryAmount amount;
         final boolean hasProductDiscount = lineItem.getPrice().getDiscounted() != null;
@@ -208,4 +219,5 @@ public class ProductVariantBean {
         setVariantId(variant.getId().toString());
         setUrl(reverseRouter.product(userContext.locale().toLanguageTag(), slug, variant.getSku()).url());
     }
+
 }

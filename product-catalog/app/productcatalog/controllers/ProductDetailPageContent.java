@@ -6,7 +6,6 @@ import productcatalog.models.*;
 import java.util.List;
 
 public class ProductDetailPageContent extends PageContent {
-    private String additionalTitle;
     private BreadcrumbData breadcrumb;
     private ProductData product;
     private List<ShippingRateData> shippingRates;
@@ -14,19 +13,6 @@ public class ProductDetailPageContent extends PageContent {
     private String addToCartFormUrl;
 
     public ProductDetailPageContent() {
-    }
-
-    public ProductDetailPageContent(final String additionalTitle) {
-        this.additionalTitle = additionalTitle;
-    }
-
-    @Override
-    public String getAdditionalTitle() {
-        return additionalTitle;
-    }
-
-    public void setAdditionalTitle(final String additionalTitle) {
-        this.additionalTitle = additionalTitle;
     }
 
     public BreadcrumbData getBreadcrumb() {

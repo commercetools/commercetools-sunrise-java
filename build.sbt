@@ -1,6 +1,11 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import de.johoop.jacoco4sbt.JacocoPlugin._
 import de.johoop.jacoco4sbt._
 import play.sbt.PlayImport
+
+import scala.util.{Success, Try}
 
 name := "sphere-sunrise"
 
@@ -10,7 +15,7 @@ version := "1.0-SNAPSHOT"
 
 lazy val sunriseDesignVersion = "0.35.0"
 
-lazy val sphereJvmSdkVersion = "1.0.0-M21-2015-11-13-11-39-45-facets-SNAPSHOT"
+lazy val sphereJvmSdkVersion = "1.0.0-M21"
 
 lazy val jacksonVersion = "2.6.0"
 
@@ -51,7 +56,7 @@ lazy val `move-to-sdk` = project
 javaUnidocSettings
 
 lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
-  scalaVersion := "2.10.5",
+  scalaVersion := "2.10.6",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   resolvers ++= Seq (
     Resolver.sonatypeRepo("releases"),
@@ -61,12 +66,13 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
   ),
   libraryDependencies ++= Seq (
     "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
-    "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % "1.0.0-M20", // % sphereJvmSdkVersion,
+    "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % sphereJvmSdkVersion,
     "io.sphere" % "sphere-sunrise-design" % sunriseDesignVersion,
     "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "2.2.3",
     filters,
-    "commons-beanutils" % "commons-beanutils" % "1.9.2"
+    "commons-beanutils" % "commons-beanutils" % "1.9.2",
+    "commons-io" % "commons-io" % "2.4"
   ),
   dependencyOverrides ++= Set (
     "com.google.guava" % "guava" % "18.0",
@@ -128,3 +134,24 @@ lazy val testCoverageSettings =  jacoco.settings ++ itJacoco.settings ++ Seq (
     "com.novocode" % "junit-interface" % "0.11" % "it"
   )
 )
+
+resourceGenerators in Compile += Def.task {
+  val file = (resourceManaged in Compile).value / "internal" / "version.json"
+  val date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ").format(new Date)
+
+  val gitCommit = Try(Process("git rev-parse HEAD").lines.head) match {
+    case Success(sha) => sha
+    case _ => "unknown"
+  }
+  val buildNumber = Option(System.getenv("BUILD_NUMBER")).getOrElse("unknown")
+  val contents = s"""{
+                     |  "version" : "${version.value}",
+                     |  "build" : {
+                     |    "date" : "$date",
+                     |    "number" : "$buildNumber",
+                     |    "gitCommit" : "$gitCommit"
+                     |  }
+                     |}""".stripMargin
+  IO.write(file, contents)
+  Seq(file)
+}.taskValue

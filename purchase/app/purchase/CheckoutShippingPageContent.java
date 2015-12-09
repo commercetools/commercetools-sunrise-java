@@ -1,8 +1,8 @@
 package purchase;
 
 import common.contexts.UserContext;
-import common.models.ProductDataConfig;
 import common.controllers.ReverseRouter;
+import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import play.Configuration;
 import play.i18n.Messages;
@@ -15,25 +15,26 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
     }
 
     public CheckoutShippingPageContent(final Cart cart, final Messages messages, final Configuration configuration,
-                                       final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig,
-                                       final UserContext userContext, final ReverseRouter reverseRouter) {
-        fillDefaults(cart, productDataConfig, userContext, reverseRouter);
+                                       final UserContext userContext, final ShippingMethods shippingMethods,
+                                       final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
+        fillDefaults(cart, userContext, productDataConfig, messages, reverseRouter);
         setShippingForm(new CheckoutShippingFormBean(cart, userContext, shippingMethods, messages, configuration));
     }
 
     public CheckoutShippingPageContent(final CheckoutShippingFormData filledForm, final Cart cart, final Messages messages,
-                                       final Configuration configuration, final ShippingMethods shippingMethods,
-                                       final ProductDataConfig productDataConfig, final UserContext userContext, final ReverseRouter reverseRouter) {
-        fillDefaults(cart, productDataConfig, userContext, reverseRouter);
+                                       final Configuration configuration, final UserContext userContext,
+                                       final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig,
+                                       final ReverseRouter reverseRouter) {
+        fillDefaults(cart, userContext, productDataConfig, messages, reverseRouter);
         setShippingForm(new CheckoutShippingFormBean(filledForm, userContext, shippingMethods, messages, configuration));
     }
 
-    private void fillDefaults(final Cart cart, final ProductDataConfig productDataConfig,
-                              final UserContext userContext, final ReverseRouter reverseRouter) {
+    private void fillDefaults(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig, final Messages messages, final ReverseRouter reverseRouter) {
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setShippingStepActive(true);
         setStepWidget(stepWidget);
         setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
+        setAdditionalTitle(messages.at("checkoutShippingPageTitle"));
     }
 
     public CheckoutShippingFormBean getShippingForm() {
@@ -42,10 +43,5 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
 
     public void setShippingForm(final CheckoutShippingFormBean shippingForm) {
         this.shippingForm = shippingForm;
-    }
-
-    @Override
-    public String getAdditionalTitle() {
-        return "checkout shipping";
     }
 }

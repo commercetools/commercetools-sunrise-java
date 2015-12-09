@@ -5,7 +5,6 @@ import common.controllers.PageContent;
 import productcatalog.models.*;
 
 public class ProductOverviewPageContent extends PageContent {
-    private String additionalTitle;
     private String filterProductsUrl;
     private String searchTerm;
     private BannerData banner;
@@ -21,19 +20,6 @@ public class ProductOverviewPageContent extends PageContent {
     // TODO wishlist
 
     public ProductOverviewPageContent() {
-    }
-
-    public ProductOverviewPageContent(final String additionalTitle) {
-        this.additionalTitle = additionalTitle;
-    }
-
-    @Override
-    public String getAdditionalTitle() {
-        return additionalTitle;
-    }
-
-    public void setAdditionalTitle(final String additionalTitle) {
-        this.additionalTitle = additionalTitle;
     }
 
     public String getFilterProductsUrl() {

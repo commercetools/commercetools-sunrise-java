@@ -5,6 +5,7 @@ import common.controllers.ReverseRouter;
 import common.models.ProductDataConfig;
 import common.models.SelectableData;
 import io.sphere.sdk.carts.Cart;
+import play.i18n.Messages;
 
 public class CheckoutConfirmationPageContent extends CheckoutPageContent {
 
@@ -14,12 +15,13 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
     }
 
     public CheckoutConfirmationPageContent(final Cart cart, final ProductDataConfig productDataConfig,
-                                           final UserContext userContext, final ReverseRouter reverseRouter) {
+                                           final UserContext userContext, final ReverseRouter reverseRouter, final Messages messages) {
         setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setConfirmationStepActive(true);
         setStepWidget(stepWidget);
         fillForm();
+        setAdditionalTitle(messages.at("checkoutConfirmationPageTitle"));
     }
 
     private void fillForm() {
@@ -30,11 +32,6 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
         final SelectableData termsConditions = new SelectableData();
         checkoutConfirmationFormBean.setTermsConditions(termsConditions);
         setCheckoutForm(checkoutConfirmationFormBean);
-    }
-
-    @Override
-    public String getAdditionalTitle() {
-        return null;
     }
 
     public CheckoutConfirmationFormBean getCheckoutForm() {

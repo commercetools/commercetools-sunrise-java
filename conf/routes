@@ -17,22 +17,40 @@ GET         /                                                  @controllers.Appl
 # Endpoint to manually refresh category tree (otherwise an app restart is required)
 GET         /categories/refresh                                @controllers.CategoriesRefreshController.refresh()
 
+# shows the deployed version, artifactId and GIT SHA
+GET         /version                                           @controllers.StatusController.version()
+# shows if the application is healthy
+GET         /health                                            @controllers.StatusController.health()
+
 # Home page
 GET         /:languageTag/home                                 @productcatalog.controllers.HomeController.show(languageTag:String)
 
 
 ->          /setup                                             setupwidget.Routes
 
-
+# shows the details of the cart belonging to the current session
 GET         /:languageTag/cart                                 @purchase.CartDetailPageController.show(languageTag: String)
+# adds the selected product to the cart
 POST        /:languageTag/cart                                 @purchase.CartDetailPageController.addToCart(languageTag: String)
+# removes a selected line item from the cart of the current session
+POST        /:languageTag/cart/remove-line-item                @purchase.CartDetailPageController.processRemoveLineItem(languageTag: String)
+# changes the quantity of a selected line item from the cart of the current session
+POST        /:languageTag/cart/change-line-item-quantity       @purchase.CartDetailPageController.processChangeLineItemQuantity(languageTag: String)
 
+# shows the form to enter shipping address and billing address
 GET         /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.show(languageTag: String)
+# processes the form of the shipping address and billing address
 POST        /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.process(languageTag: String)
+# shows a form to select the payment method
 GET         /:languageTag/checkout/payment                     @purchase.CheckoutPaymentController.show(languageTag: String)
+# processes the form for selecting a payment method
 POST        /:languageTag/checkout/payment                     @purchase.CheckoutPaymentController.process(languageTag: String)
+# shows the form to create an order out of the cart of the session
 GET         /:languageTag/checkout/confirmation                @purchase.CheckoutConfirmationController.show(languageTag: String)
+# processes the order creation
 POST        /:languageTag/checkout/confirmation                @purchase.CheckoutConfirmationController.process(languageTag: String)
+# shows the customer a confirmation for the created order
+GET         /:languageTag/checkout/thankyou                    @purchase.CheckoutThankyouController.show(languageTag: String)
 
 
 GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.controllers.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)

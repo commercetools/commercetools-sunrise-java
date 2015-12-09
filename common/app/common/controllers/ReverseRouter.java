@@ -33,4 +33,10 @@ public interface ReverseRouter {
     Call designAssets(final String file);
 
     Call showCart(final String language);
+
+    Call showCheckoutThankyou(final String language);
+
+    Call processDeleteLineItem(String language);
+
+    Call processChangeLineItemQuantity(String language);
 }

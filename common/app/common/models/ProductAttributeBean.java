@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 public class ProductAttributeBean {
-    private String label;
+    private String name;
     private String key;
     private String value;
     private List<SelectableData> list;
@@ -20,19 +20,25 @@ public class ProductAttributeBean {
     public ProductAttributeBean() {
     }
 
-    public ProductAttributeBean(final ProductProjection product, final Attribute attribute,
-                                final ProductDataConfig productDataConfig, final UserContext userContext) {
+    public ProductAttributeBean(final Attribute attribute, final ProductDataConfig productDataConfig,
+                                final UserContext userContext) {
         this();
         final MetaProductType metaProductType = productDataConfig.getMetaProductType();
         final AttributeExtraction<String> attributeExtraction = AttributeExtraction.of(metaProductType, attribute);
-        final String label = metaProductType
+        final String name = metaProductType
                 .findAttribute(attribute.getName())
                 .map(def -> def.getLabel().find(userContext.locales()).orElse(""))
                 .orElse(null);
-        setLabel(label);
+        setName(name);
         setKey(attribute.getName());
         final String value = formatValue(attributeExtraction, userContext);
         setValue(value);
+    }
+
+    public ProductAttributeBean(final Attribute attribute, final ProductProjection product,
+                                final ProductDataConfig productDataConfig, final UserContext userContext) {
+        this(attribute, productDataConfig, userContext);
+        final MetaProductType metaProductType = productDataConfig.getMetaProductType();
         setList(product.getAllVariants().stream()
                 .map(v -> v.getAttribute(attribute.getName()))
                 .filter(v -> v != null)
@@ -40,21 +46,6 @@ public class ProductAttributeBean {
                 .distinct()
                 .map(a -> new SelectableData(a, a))
                 .collect(toList()));
-    }
-
-    public ProductAttributeBean(final Attribute attribute, final ProductDataConfig productDataConfig,
-                                final UserContext userContext) {
-        this();
-        final MetaProductType metaProductType = productDataConfig.getMetaProductType();
-        final AttributeExtraction<String> attributeExtraction = AttributeExtraction.of(metaProductType, attribute);
-        final String label = metaProductType
-                .findAttribute(attribute.getName())
-                .map(def -> def.getLabel().find(userContext.locales()).orElse(""))
-                .orElse(null);
-        setLabel(label);
-        setKey(attribute.getName());
-        final String value = formatValue(attributeExtraction, userContext);
-        setValue(value);
     }
 
     private String formatValue(final AttributeExtraction<String> attributeExtraction, final UserContext userContext) {
@@ -71,7 +62,7 @@ public class ProductAttributeBean {
                                                      final ProductDataConfig productDataConfig, final UserContext userContext) {
         return firstNonNull(attributes, Collections.<Attribute>emptyList()).stream()
                 .filter(attr -> productDataConfig.getAttributeWhiteList().contains(attr.getName()))
-                .map(attr -> new ProductAttributeBean(product, attr, productDataConfig, userContext))
+                .map(attr -> new ProductAttributeBean(attr, product, productDataConfig, userContext))
                 .collect(toList());
     }
 
@@ -91,12 +82,12 @@ public class ProductAttributeBean {
         this.key = key;
     }
 
-    public String getLabel() {
-        return label;
+    public String getName() {
+        return name;
     }
 
-    public void setLabel(final String label) {
-        this.label = label;
+    public void setName(final String name) {
+        this.name = name;
     }
 
     public String getValue() {

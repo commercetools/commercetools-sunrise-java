@@ -79,6 +79,7 @@ public abstract class SunriseController extends ShopController {
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
         pageHeader.setMiniCart(new MiniCart(CartSessionUtils.getCartItemCount(session())));
+        pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));
         return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
     }
 
@@ -96,6 +97,8 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutAddressesSubmit")
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
+                .addHalLink(reverseRouter().processDeleteLineItem(language), "deleteLineItem")
+                .addHalLink(reverseRouter().processChangeLineItemQuantity(language), "changeLineItem")
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         return pageMeta;
     }

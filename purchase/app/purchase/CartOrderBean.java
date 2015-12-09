@@ -7,9 +7,11 @@ import common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.carts.TaxedPrice;
+import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.utils.MoneyImpl;
 
 import javax.money.MonetaryAmount;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,9 @@ public class CartOrderBean {
     private AddressBean billingAddress;
     private SelectableShippingMethodBean shippingMethod;
     private PaymentsBean paymentDetails;
+    private String orderNumber;
+    private String orderDate;
+    private String customerEmail;
 
     public CartOrderBean() {
     }
@@ -55,6 +60,21 @@ public class CartOrderBean {
         setPaymentDetails(paymentDetails);
 
         setShippingMethod(new SelectableShippingMethodBean(cartLike, moneyContext));
+
+        if (cartLike instanceof Order) {
+            fillOrderStuff((Order) cartLike, userContext);
+        }
+    }
+
+    private void fillOrderStuff(final Order order, final UserContext userContext) {
+        final String email = Optional.ofNullable(order.getCustomerEmail())
+                .orElseGet(() -> order.getShippingAddress().getEmail());
+        setCustomerEmail(email);
+
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", userContext.locale());
+        setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
+
+        setOrderNumber(order.getOrderNumber());
     }
 
     private static MonetaryAmount calculateTax(final TaxedPrice taxedPrice) {
@@ -146,5 +166,29 @@ public class CartOrderBean {
 
     public void setPaymentDetails(final PaymentsBean paymentDetails) {
         this.paymentDetails = paymentDetails;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(final String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(final String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(final String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 }

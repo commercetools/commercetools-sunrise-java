@@ -26,7 +26,7 @@ public abstract class CartController extends SunriseController {
     protected F.Promise<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
         return Optional.ofNullable(session(CartSessionKeys.CART_ID))
                 .map(cartId -> sphere().execute(CartByIdGet.of(cartId)
-                        .withExpansionPaths(ExpansionPath.of("shippingInfo.shippingMethod"))))
+                        .withExpansionPaths(m -> m.shippingInfo().shippingMethod())))
                 .orElseGet(() -> sphere().execute(CartCreateCommand.of(CartDraft.of(userContext.currency()).withCountry(userContext.country())))
                         .flatMap(cart -> {
                             //required to show the taxes
