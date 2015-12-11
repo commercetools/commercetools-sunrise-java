@@ -9,7 +9,7 @@ import play.libs.F;
 
 import javax.inject.Inject;
 
-public class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
+class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
     private final ApplicationLifecycle applicationLifecycle;
     private final SphereClient sphereClient;
 

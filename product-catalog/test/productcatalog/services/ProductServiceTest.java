@@ -13,12 +13,12 @@ import play.libs.F;
 
 import java.util.List;
 
-import static common.categories.JsonUtils.readJson;
+import static common.JsonUtils.readCtpObject;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductServiceTest {
-    private static final PagedSearchResult<ProductProjection> PRODUCTS = readJson("productProjectionQueryResult.json", ProductProjectionSearch.resultTypeReference());
-    private static final List<Category> CATEGORIES = readJson("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults();
+    private static final PagedSearchResult<ProductProjection> PRODUCTS = readCtpObject("productProjectionQueryResult.json", ProductProjectionSearch.resultTypeReference());
+    private static final List<Category> CATEGORIES = readCtpObject("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults();
     private static final int DEFAULT_TIMEOUT = 1000;
 
     @Test

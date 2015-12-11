@@ -87,8 +87,7 @@ public final class RefreshableCategoryTree extends Base implements CategoryTreeE
     }
 
     private static List<Category> fetchCategories(final SphereClient client) {
-        final QueryAll<Category, CategoryQuery> query = QueryAll.of(CategoryQuery.of());
-        final List<Category> categories = query.run(client).toCompletableFuture().join();
+        final List<Category> categories = QueryAll.of(CategoryQuery.of()).run(client).toCompletableFuture().join();
         return sortCategories(categories);
     }
 

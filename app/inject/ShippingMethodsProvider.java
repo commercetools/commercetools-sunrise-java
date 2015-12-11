@@ -9,7 +9,7 @@ import purchase.ShippingMethods;
 import javax.inject.Inject;
 import java.util.List;
 
-public class ShippingMethodsProvider extends SphereSmallCollectionProvider<ShippingMethods, ShippingMethod> {
+class ShippingMethodsProvider extends SphereSmallCollectionProvider<ShippingMethods, ShippingMethod> {
 
     @Inject
     public ShippingMethodsProvider(final SphereClient client) {

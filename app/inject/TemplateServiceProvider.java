@@ -16,7 +16,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public class TemplateServiceProvider implements Provider<TemplateService> {
+class TemplateServiceProvider implements Provider<TemplateService> {
     private static final String CONFIG_TEMPLATE_LOADERS = "handlebars.templateLoaders";
     private static final String CONFIG_FALLBACK_CONTEXTS = "handlebars.fallbackContexts";
     private static final String CLASSPATH_TYPE = "classpath";

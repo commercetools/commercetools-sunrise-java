@@ -1,92 +1,112 @@
 package common.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.neovisionaries.i18n.CountryCode;
+import common.cms.CmsService;
+import common.contexts.ProjectContext;
+import common.models.ProductDataConfig;
+import common.templates.TemplateService;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.client.HttpRequestIntent;
+import io.sphere.sdk.categories.CategoryTreeExtended;
+import io.sphere.sdk.categories.queries.CategoryQuery;
+import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;
-import io.sphere.sdk.projects.Project;
-import io.sphere.sdk.projects.queries.ProjectGet;
+import io.sphere.sdk.producttypes.MetaProductType;
+import io.sphere.sdk.producttypes.ProductType;
+import io.sphere.sdk.producttypes.queries.ProductTypeQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
-import org.apache.commons.io.IOUtils;
 import play.Application;
 import play.Configuration;
 import play.Environment;
 import play.Mode;
 import play.inject.guice.GuiceApplicationBuilder;
+import play.libs.F;
 import play.test.WithApplication;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
-import static io.sphere.sdk.json.SphereJsonUtils.readObject;
-import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
+import static common.JsonUtils.readCtpObject;
+import static java.util.Arrays.asList;
 import static play.inject.Bindings.bind;
 
 public abstract class WithSunriseApplication extends WithApplication {
 
     @Override
     protected Application provideApplication() {
-        final Map<String, Object> additionalSettings = new HashMap<>();
-        additionalSettings.put("application.settingsWidget.enabled", false);
-
+        final Configuration configuration = baseConfiguration();
+        final SphereClient sphereClient = injectedSphereClient();
+        final PlayJavaSphereClient playJavaSphereClient = PlayJavaSphereClient.of(sphereClient);
         return new GuiceApplicationBuilder()
-                .overrides(bind(SphereClient.class).toInstance(injectedClientInstance()))
-                .overrides(bind(CategoryTree.class).toInstance(injectedCategoryTree()))
-                .loadConfig(new Configuration(additionalSettings).withFallback(Configuration.load(new Environment(Mode.TEST))))
+                .loadConfig(injectedConfiguration(configuration))
+                .overrides(bind(SphereClient.class).toInstance(sphereClient))
+                .overrides(bind(PlayJavaSphereClient.class).toInstance(playJavaSphereClient))
+                .overrides(bind(TemplateService.class).toInstance(injectedTemplateService()))
+                .overrides(bind(CmsService.class).toInstance(injectedCmsService()))
+                .overrides(bind(ReverseRouter.class).toInstance(injectedReverseRouter()))
+                .overrides(bind(ProjectContext.class).toInstance(injectedProjectContext()))
+                .overrides(bind(CategoryTreeExtended.class).toInstance(injectedCategoryTree()))
+                .overrides(bind(ProductDataConfig.class).toInstance(injectedProductDataConfig()))
                 .build();
     }
 
-    protected CategoryTree injectedCategoryTree() {
-        final TypeReference<PagedQueryResult<Category>> typeReference = new TypeReference<PagedQueryResult<Category>>() {};
-        final PagedQueryResult<Category> categoryPagedQueryResult = readObjectFromResource("controllers/categories.json", typeReference);
-        return CategoryTree.of(categoryPagedQueryResult.getResults());
+    protected TemplateService injectedTemplateService() {
+        return ((templateName, pageData, locales) -> "");
     }
 
-    private static String stringFromResource(final String resourcePath) {
-        try {
-            return IOUtils.toString(WithSunriseApplication.class.getResourceAsStream(resourcePath), "UTF-8");
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+    protected CmsService injectedCmsService() {
+        return ((locale, pageKey) -> F.Promise.pure((messageKey, args) -> Optional.empty()));
     }
 
+    protected ReverseRouter injectedReverseRouter() {
+        return new TestableReverseRouter();
+    }
 
-    protected final SphereClient injectedClientInstance() {
+    protected ProjectContext injectedProjectContext() {
+        return ProjectContext.of(asList(Locale.ENGLISH, Locale.GERMAN), asList(CountryCode.DE, CountryCode.US));
+    }
+
+    protected CategoryTreeExtended injectedCategoryTree() {
+        final PagedQueryResult<Category> result = readCtpObject("data/categories.json", CategoryQuery.resultTypeReference());
+        return CategoryTreeExtended.of(result.getResults());
+    }
+
+    protected ProductDataConfig injectedProductDataConfig() {
+        final PagedQueryResult<ProductType> result = readCtpObject("data/product-types.json", ProductTypeQuery.resultTypeReference());
+        final MetaProductType metaProductType = MetaProductType.of(result.getResults());
+        return ProductDataConfig.of(metaProductType, asList("foo", "bar"));
+    }
+
+    protected Configuration injectedConfiguration(final Configuration configuration) {
+        final Configuration testConfiguration = Configuration.load(new Environment(Mode.TEST));
+        return configuration.withFallback(testConfiguration);
+    }
+
+    protected abstract <T> CompletionStage<T> fakeSphereClientResponse(final SphereRequest<T> request);
+
+    protected final SphereClient injectedSphereClient() {
         return new SphereClient() {
 
-            @SuppressWarnings("unchecked")
             @Override
             public <T> CompletionStage<T> execute(final SphereRequest<T> sphereRequest) {
-                final T result = (T) getResult(sphereRequest);
-                return CompletableFuture.completedFuture(result);
-            }
-
-            private <T> Object getResult(final SphereRequest<T> sphereRequest) {
-                if (sphereRequest.httpRequestIntent().equals(ProjectGet.of().httpRequestIntent())) {
-                    final String projectJsonString = stringFromResource("/ctp/project/project.json");
-                    return readObject(projectJsonString, Project.typeReference());
-                } else {
-                    return getTestDoubleBehavior().apply(sphereRequest.httpRequestIntent());
-                }
+                return fakeSphereClientResponse(sphereRequest);
             }
 
             @Override
             public void close() {
+
             }
 
             @Override
             public String toString() {
-                return "SphereClientObjectTestDouble";
+                return "SphereClientTestDouble";
             }
         };
     }
 
-    protected abstract Function<HttpRequestIntent, Object> getTestDoubleBehavior();
+    private Configuration baseConfiguration() {
+        final Map<String, Object> additionalSettings = new HashMap<>();
+        additionalSettings.put("application.settingsWidget.enabled", false);
+        return new Configuration(additionalSettings);
+    }
 }

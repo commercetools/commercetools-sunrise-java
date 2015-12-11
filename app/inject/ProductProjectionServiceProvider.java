@@ -8,7 +8,7 @@ import productcatalog.services.ProductServiceImpl;
 
 import javax.inject.Inject;
 
-public class ProductProjectionServiceProvider implements Provider<ProductService> {
+class ProductProjectionServiceProvider implements Provider<ProductService> {
     private final PlayJavaSphereClient sphere;
 
     @Inject

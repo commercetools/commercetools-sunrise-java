@@ -1,13 +1,13 @@
 package controllers;
 
 import common.controllers.WithSunriseApplication;
+import io.sphere.sdk.client.SphereRequest;
 import productcatalog.controllers.HomeController;
-import io.sphere.sdk.client.HttpRequestIntent;
 import org.junit.Test;
 import org.junit.Ignore;
 import play.mvc.Result;
 
-import java.util.function.Function;
+import java.util.concurrent.CompletionStage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static play.test.Helpers.contentAsString;
@@ -15,7 +15,7 @@ import static play.test.Helpers.contentAsString;
 public class ApplicationControllerTest extends WithSunriseApplication {
 
     @Override
-    protected Function<HttpRequestIntent, Object> getTestDoubleBehavior() {
+    protected <T> CompletionStage<T> fakeSphereClientResponse(final SphereRequest<T> request) {
         return null;
     }
 

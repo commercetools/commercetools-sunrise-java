@@ -1,0 +1,435 @@
+{
+  "offset": 0,
+  "count": 2,
+  "total": 2,
+  "results": [
+    {
+      "id": "b31d2588-5d03-4d66-ad87-7293ac8bdb95",
+      "version": 24,
+      "name": "Sample Product Type",
+      "description": "A demo product type",
+      "classifier": "Complex",
+      "attributes": [
+        {
+          "name": "booleanAttribute",
+          "label": {
+            "en": "Boolean"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "boolean"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "textAttribute",
+          "label": {
+            "en": "Text"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "text"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "locTextAttribute",
+          "label": {
+            "en": "Localized Text"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "ltext"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "enumAttribute",
+          "label": {
+            "en": "Enumeration"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "enum",
+            "values": [
+              {
+                "key": "one-key",
+                "label": "one-label"
+              },
+              {
+                "key": "two-key",
+                "label": "two-label"
+              },
+              {
+                "key": "three-key",
+                "label": "three-label"
+              }
+            ]
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "enumLocAttribute",
+          "label": {
+            "en": "Enumeration Localized"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "lenum",
+            "values": [
+              {
+                "key": "one-key",
+                "label": {
+                  "en": "one-label"
+                }
+              },
+              {
+                "key": "two-key",
+                "label": {
+                  "en": "two-label"
+                }
+              },
+              {
+                "key": "three-key",
+                "label": {
+                  "en": "three-label"
+                }
+              }
+            ]
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "numberAttribute",
+          "label": {
+            "en": "Number"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "number"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "moneyAttribute",
+          "label": {
+            "en": "Money"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "money"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "dateAttribute",
+          "label": {
+            "en": "Date"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "date"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "timeAttribute",
+          "label": {
+            "en": "Time"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "time"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "dateTimeAttribute",
+          "label": {
+            "en": "Date Time"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "datetime"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "booleanSet",
+          "label": {
+            "en": "Boolean Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "boolean"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "textSet",
+          "label": {
+            "en": "Text Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "text"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "locTextSet",
+          "label": {
+            "en": "Localizable Text Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "ltext"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "enumSet",
+          "label": {
+            "en": "Enumeration Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "enum",
+              "values": [
+                {
+                  "key": "one-key",
+                  "label": "one-label"
+                },
+                {
+                  "key": "two-key",
+                  "label": "two-label"
+                },
+                {
+                  "key": "three-key",
+                  "label": "three-label"
+                }
+              ]
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "enumLocSet",
+          "label": {
+            "en": "Enumeration Localized Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "lenum",
+              "values": [
+                {
+                  "key": "one-key",
+                  "label": {
+                    "en": "one-label"
+                  }
+                },
+                {
+                  "key": "two-key",
+                  "label": {
+                    "en": "two-label"
+                  }
+                },
+                {
+                  "key": "three-key",
+                  "label": {
+                    "en": "three-label"
+                  }
+                }
+              ]
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "numberSet",
+          "label": {
+            "en": "Number Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "number"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "moneySet",
+          "label": {
+            "en": "Money Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "money"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "dateSet",
+          "label": {
+            "en": "Date Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "date"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "timeSet",
+          "label": {
+            "en": "Time Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "time"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "dateTimeSet",
+          "label": {
+            "en": "Date Time Set"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "set",
+            "elementType": {
+              "name": "datetime"
+            }
+          },
+          "attributeConstraint": "None",
+          "isSearchable": false,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        }
+      ],
+      "createdAt": "2015-02-03T08:38:16.427Z",
+      "lastModifiedAt": "2015-02-03T08:52:15.551Z"
+    },
+    {
+      "id": "9933e22f-c35e-47cf-bc59-9ca641c0331a",
+      "version": 3,
+      "name": "Another Sample Product Type",
+      "description": "Another demo product type",
+      "classifier": "Complex",
+      "attributes": [
+        {
+          "name": "foo",
+          "label": {
+            "en": "Foo"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "ltext"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        },
+        {
+          "name": "bar",
+          "label": {
+            "en": "Bar"
+          },
+          "isRequired": false,
+          "type": {
+            "name": "boolean"
+          },
+          "attributeConstraint": "None",
+          "isSearchable": true,
+          "inputHint": "SingleLine",
+          "displayGroup": "Other"
+        }
+      ],
+      "createdAt": "2015-12-03T20:13:09.942Z",
+      "lastModifiedAt": "2015-12-03T20:19:19.593Z"
+    }
+  ]
+}

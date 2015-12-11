@@ -114,25 +114,6 @@ public class TestableReverseRouter implements ReverseRouter {
         return createCall(showCheckoutConfirmationFormUrl);
     }
 
-    private Call createCall(final String url) {
-        return new Call() {
-            @Override
-            public String url() {
-                return url;
-            }
-
-            @Override
-            public String method() {
-                return null;
-            }
-
-            @Override
-            public String fragment() {
-                return null;
-            }
-        };
-    }
-
     @Override
     public Call designAssets(final String file) {
         return null;
@@ -161,5 +142,24 @@ public class TestableReverseRouter implements ReverseRouter {
     @Override
     public Call showCheckoutThankyou(final String language) {
         return null;
+    }
+
+    private Call createCall(final String url) {
+        return new Call() {
+            @Override
+            public String url() {
+                return url;
+            }
+
+            @Override
+            public String method() {
+                return null;
+            }
+
+            @Override
+            public String fragment() {
+                return null;
+            }
+        };
     }
 }
