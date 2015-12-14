@@ -7,6 +7,7 @@ import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
 import org.apache.commons.io.IOUtils;
 import play.Application;
+import play.Logger;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -41,19 +42,20 @@ public class StatusController extends SunriseController {
         final ProductProjectionSearch productRequest = ProductProjectionSearch.ofCurrent().withLimit(1);
         return sphere().execute(productRequest)
                 .map(this::renderGoodHealthStatus)
-                .recover(e -> renderBadHealthStatus())
+                .recover(this::renderBadHealthStatus)
                 .map(r -> r.as(Http.MimeTypes.JSON));
     }
 
     private Results.Status renderGoodHealthStatus(final PagedSearchResult<ProductProjection> productResult) {
         final boolean containsProducts = !productResult.getResults().isEmpty();
         if (!containsProducts) {
-            throw new RuntimeException("Cannot fetch any product!");
+            throw new RuntimeException("Cannot find any product!");
         }
         return ok(healthJson(true));
     }
 
-    private Status renderBadHealthStatus() {
+    private Status renderBadHealthStatus(final Throwable t) {
+        Logger.error("Could not fetch products", t);
         return status(Http.Status.SERVICE_UNAVAILABLE, healthJson(false));
     }
 

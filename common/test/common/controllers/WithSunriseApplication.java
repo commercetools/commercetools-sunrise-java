@@ -21,24 +21,34 @@ import play.Environment;
 import play.Mode;
 import play.inject.guice.GuiceApplicationBuilder;
 import play.libs.F;
+import play.mvc.Controller;
 import play.test.WithApplication;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
 
 import static common.JsonUtils.readCtpObject;
 import static java.util.Arrays.asList;
 import static play.inject.Bindings.bind;
+import static play.test.Helpers.running;
 
 public abstract class WithSunriseApplication extends WithApplication {
 
     @Override
     protected Application provideApplication() {
-        final Configuration configuration = baseConfiguration();
-        final SphereClient sphereClient = injectedSphereClient();
+        return applicationBuilder(injectedSphereClient()).build();
+    }
+
+    protected <T> CompletionStage<T> fakeSphereClientResponse(final SphereRequest<T> sphereRequest) {
+        return CompletableFuture.completedFuture(null);
+    }
+
+    protected GuiceApplicationBuilder applicationBuilder(final SphereClient sphereClient) {
         final PlayJavaSphereClient playJavaSphereClient = PlayJavaSphereClient.of(sphereClient);
         return new GuiceApplicationBuilder()
-                .loadConfig(injectedConfiguration(configuration))
+                .loadConfig(injectedConfiguration(baseConfiguration()))
                 .overrides(bind(SphereClient.class).toInstance(sphereClient))
                 .overrides(bind(PlayJavaSphereClient.class).toInstance(playJavaSphereClient))
                 .overrides(bind(TemplateService.class).toInstance(injectedTemplateService()))
@@ -46,8 +56,18 @@ public abstract class WithSunriseApplication extends WithApplication {
                 .overrides(bind(ReverseRouter.class).toInstance(injectedReverseRouter()))
                 .overrides(bind(ProjectContext.class).toInstance(injectedProjectContext()))
                 .overrides(bind(CategoryTreeExtended.class).toInstance(injectedCategoryTree()))
-                .overrides(bind(ProductDataConfig.class).toInstance(injectedProductDataConfig()))
-                .build();
+                .overrides(bind(ProductDataConfig.class).toInstance(injectedProductDataConfig()));
+    }
+
+    protected Configuration baseConfiguration() {
+        final Map<String, Object> additionalSettings = new HashMap<>();
+        additionalSettings.put("application.settingsWidget.enabled", false);
+        return new Configuration(additionalSettings);
+    }
+
+    protected Configuration injectedConfiguration(final Configuration configuration) {
+        final Configuration testConfiguration = Configuration.load(new Environment(Mode.TEST));
+        return configuration.withFallback(testConfiguration);
     }
 
     protected TemplateService injectedTemplateService() {
@@ -77,13 +97,6 @@ public abstract class WithSunriseApplication extends WithApplication {
         return ProductDataConfig.of(metaProductType, asList("foo", "bar"));
     }
 
-    protected Configuration injectedConfiguration(final Configuration configuration) {
-        final Configuration testConfiguration = Configuration.load(new Environment(Mode.TEST));
-        return configuration.withFallback(testConfiguration);
-    }
-
-    protected abstract <T> CompletionStage<T> fakeSphereClientResponse(final SphereRequest<T> request);
-
     protected final SphereClient injectedSphereClient() {
         return new SphereClient() {
 
@@ -104,9 +117,7 @@ public abstract class WithSunriseApplication extends WithApplication {
         };
     }
 
-    private Configuration baseConfiguration() {
-        final Map<String, Object> additionalSettings = new HashMap<>();
-        additionalSettings.put("application.settingsWidget.enabled", false);
-        return new Configuration(additionalSettings);
+    protected final <C extends Controller> void run(final Application app, final Class<C> controllerClass, final Consumer<C> test) {
+        running(app, () -> test.accept(app.injector().instanceOf(controllerClass)));
     }
 }
