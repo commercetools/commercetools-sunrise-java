@@ -5,6 +5,8 @@ import play.sbt.PlayImport
 
 import scala.util.{Success, Try}
 
+import ReleaseTransformations._
+
 name := "sphere-sunrise"
 
 organization := "io.sphere"
@@ -51,7 +53,7 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val commonSettings = testSettings ++ Seq (
+lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
   scalaVersion := "2.10.6",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   resolvers ++= Seq (
@@ -129,3 +131,20 @@ resourceGenerators in Compile += Def.task {
   IO.write(file, contents)
   Seq(file)
 }.taskValue
+
+/**
+ * RELEASE SETTINGS
+ */
+lazy val releaseSettings = Seq(
+  releaseProcess := Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    setNextVersion,
+    commitNextVersion,
+    pushChanges
+  )
+)
