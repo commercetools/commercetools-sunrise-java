@@ -13,6 +13,12 @@ public class TestableReverseRouter implements ReverseRouter {
     private String showCheckoutPaymentFormUrl;
     private String processCheckoutPaymentFormUrl;
     private String showCheckoutConfirmationFormUrl;
+    private String designAssets;
+    private String processCheckoutConfirmationForm;
+    private String showCart;
+    private String processDeleteLineItem;
+    private String processChangeLineItemQuantity;
+    private String showCheckoutThankyou;
 
     public void setHomeUrl(final String homeUrl) {
         this.homeUrl = homeUrl;
@@ -52,6 +58,30 @@ public class TestableReverseRouter implements ReverseRouter {
 
     public void setShowCheckoutConfirmationFormUrl(final String showCheckoutConfirmationFormUrl) {
         this.showCheckoutConfirmationFormUrl = showCheckoutConfirmationFormUrl;
+    }
+
+    public void setDesignAssets(final String designAssets) {
+        this.designAssets = designAssets;
+    }
+
+    public void setProcessCheckoutConfirmationForm(final String processCheckoutConfirmationForm) {
+        this.processCheckoutConfirmationForm = processCheckoutConfirmationForm;
+    }
+
+    public void setShowCart(final String showCart) {
+        this.showCart = showCart;
+    }
+
+    public void setProcessDeleteLineItem(final String processDeleteLineItem) {
+        this.processDeleteLineItem = processDeleteLineItem;
+    }
+
+    public void setProcessChangeLineItemQuantity(final String processChangeLineItemQuantity) {
+        this.processChangeLineItemQuantity = processChangeLineItemQuantity;
+    }
+
+    public void setShowCheckoutThankyou(final String showCheckoutThankyou) {
+        this.showCheckoutThankyou = showCheckoutThankyou;
     }
 
     @Override
@@ -116,32 +146,32 @@ public class TestableReverseRouter implements ReverseRouter {
 
     @Override
     public Call designAssets(final String file) {
-        return null;
+        return createCall(designAssets);
     }
 
     @Override
     public Call processCheckoutConfirmationForm(final String language) {
-        return null;
+        return createCall(processCheckoutConfirmationForm);
     }
 
     @Override
     public Call showCart(final String language) {
-        return null;
+        return createCall(showCart);
     }
 
     @Override
     public Call processDeleteLineItem(final String language) {
-        return null;
+        return createCall(processDeleteLineItem);
     }
 
     @Override
     public Call processChangeLineItemQuantity(final String language) {
-        return null;
+        return createCall(processChangeLineItemQuantity);
     }
 
     @Override
     public Call showCheckoutThankyou(final String language) {
-        return null;
+        return createCall(showCheckoutThankyou);
     }
 
     private Call createCall(final String url) {
