@@ -12,6 +12,6 @@ public class SeoData extends DetailData {
         Optional.ofNullable(category.getMetaTitle())
                 .ifPresent(title -> setTitle(title.find(userContext.locales()).orElse("")));
         Optional.ofNullable(category.getMetaDescription())
-                .ifPresent(description -> setTitle(description.find(userContext.locales()).orElse("")));
+                .ifPresent(description -> setDescription(description.find(userContext.locales()).orElse("")));
     }
 }
