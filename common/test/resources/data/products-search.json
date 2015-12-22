@@ -1,0 +1,181 @@
+{
+  "offset": 0,
+  "count": 1,
+  "total": 2970,
+  "results": [
+    {
+      "masterVariant": {
+        "id": 1,
+        "sku": "M0E20000000DKJV",
+        "prices": [
+          {
+            "value": {
+              "currencyCode": "EUR",
+              "centAmount": 21250
+            },
+            "id": "ff231fee-4f2a-4854-8d85-81d6fcf2d620"
+          },
+          {
+            "value": {
+              "currencyCode": "EUR",
+              "centAmount": 13934
+            },
+            "id": "e1bfdc3d-eea0-4ca9-a81f-eacd4f6d277a",
+            "customerGroup": {
+              "typeId": "customer-group",
+              "id": "ed3969eb-9ed7-4667-aa91-2d67e65b0b7a"
+            }
+          },
+          {
+            "value": {
+              "currencyCode": "EUR",
+              "centAmount": 17000
+            },
+            "id": "cf36f6a2-0e38-4a66-b039-1c27897953ac",
+            "country": "DE"
+          },
+          {
+            "value": {
+              "currencyCode": "EUR",
+              "centAmount": 17000
+            },
+            "id": "4d9bb734-237a-4388-bd79-79f41dd4397c",
+            "country": "IT"
+          },
+          {
+            "value": {
+              "currencyCode": "EUR",
+              "centAmount": 17000
+            },
+            "id": "7727441e-23c9-4e0d-9304-2931a24a95a4",
+            "country": "GB"
+          }
+        ],
+        "images": [
+          {
+            "url": "https://s3-eu-west-1.amazonaws.com/commercetools-maximilian/products/072657_1_large.jpg",
+            "dimensions": {
+              "w": 0,
+              "h": 0
+            }
+          }
+        ],
+        "attributes": [
+          {
+            "name": "articleNumberManufacturer",
+            "value": "1B10ZL 4385 Z04"
+          },
+          {
+            "name": "articleNumberMax",
+            "value": "72657"
+          },
+          {
+            "name": "matrixId",
+            "value": "M0E20000000DKJV"
+          },
+          {
+            "name": "baseId",
+            "value": "72657"
+          },
+          {
+            "name": "designer",
+            "value": {
+              "label": "Pinko",
+              "key": "pinko"
+            }
+          },
+          {
+            "name": "madeInItaly",
+            "value": {
+              "label": "no",
+              "key": "no"
+            }
+          },
+          {
+            "name": "commonSize",
+            "value": {
+              "key": "xxs",
+              "label": "XXS"
+            }
+          },
+          {
+            "name": "size",
+            "value": "34"
+          },
+          {
+            "name": "color",
+            "value": {
+              "key": "white",
+              "label": {
+                "it": "blanco",
+                "de": "weiss",
+                "en": "white"
+              }
+            }
+          },
+          {
+            "name": "colorFreeDefinition",
+            "value": {
+              "it": "bianco",
+              "de": "weiß",
+              "en": "white"
+            }
+          },
+          {
+            "name": "style",
+            "value": {
+              "key": "sporty",
+              "label": "sporty"
+            }
+          },
+          {
+            "name": "gender",
+            "value": {
+              "key": "women",
+              "label": "Damen"
+            }
+          },
+          {
+            "name": "season",
+            "value": "s15"
+          }
+        ],
+        "isMatchingVariant": true
+      },
+      "id": "0d11a55e-a270-43cd-8364-7f027db2191b",
+      "version": 496,
+      "productType": {
+        "typeId": "product-type",
+        "id": "dd53c13f-baf6-4466-87cf-ff138fa8c040"
+      },
+      "name": {
+        "it": "Pantaloni Pinko bianco",
+        "de": "Hose Pinko weiß",
+        "en": "Trousers Pinko white"
+      },
+      "categories": [
+        {
+          "typeId": "category",
+          "id": "148b7bf6-b6b8-449b-8b9a-919c4ef3765f"
+        }
+      ],
+      "categoryOrderHints": {},
+      "slug": {
+        "en": "pinko-trousers-1B10ZL-white",
+        "de": "pinko-hose-1B10ZL-weiss",
+        "it": "pinko-pantaloni-1B10ZL-bianco"
+      },
+      "variants": [],
+      "searchKeywords": {},
+      "hasStagedChanges": false,
+      "published": true,
+      "taxCategory": {
+        "typeId": "tax-category",
+        "id": "e674c7bf-2cd6-4f4e-84b8-d6302670b635"
+      },
+      "createdAt": "2015-06-23T17:28:01.323Z",
+      "lastModifiedAt": "2015-09-08T07:45:04.899Z"
+    }
+  ],
+  "facets": {}
+}

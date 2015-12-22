@@ -85,7 +85,7 @@ public abstract class SunriseController extends ShopController {
 
     private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
         final PageMeta pageMeta = new PageMeta();
-        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());;
+        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();

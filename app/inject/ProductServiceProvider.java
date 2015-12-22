@@ -8,17 +8,17 @@ import productcatalog.services.ProductServiceImpl;
 
 import javax.inject.Inject;
 
-public class ProductProjectionServiceProvider implements Provider<ProductService> {
+class ProductServiceProvider implements Provider<ProductService> {
     private final PlayJavaSphereClient sphere;
 
     @Inject
-    public ProductProjectionServiceProvider(final PlayJavaSphereClient sphere) {
+    public ProductServiceProvider(final PlayJavaSphereClient sphere) {
         this.sphere = sphere;
     }
 
     @Override
     public ProductService get() {
-        Logger.debug("Provide ProductProjectionService");
+        Logger.debug("Provide ProductService");
         return new ProductServiceImpl(sphere);
     }
 }

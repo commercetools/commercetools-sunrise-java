@@ -8,14 +8,12 @@ import io.sphere.sdk.projects.queries.ProjectGet;
 import play.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import static java.util.stream.Collectors.toList;
 
-@Singleton
 class ProjectContextProvider implements Provider<ProjectContext> {
     private final SphereClient client;
 
