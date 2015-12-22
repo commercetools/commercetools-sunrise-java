@@ -57,8 +57,8 @@ public class SearchCriteria {
         this.fulltextKey = configuration.getString("pop.fulltext.key", "q");
         this.sortKey = configuration.getString("pop.sort.key", "sort");
         this.displayKey = configuration.getString("pop.pageSize.key", "display");
-        this.pageSizeOptions = configuration.getIntList("pop.pageSize.options", asList(9, 24, 99));
-        this.pageSizeDefault = configuration.getInt("pop.pageSize.default", 9);
+        this.pageSizeOptions = configuration.getIntList("pop.pageSize.options", asList(24, 48));
+        this.pageSizeDefault = configuration.getInt("pop.pageSize.default", 24);
         // TODO Move more keys/values to configuration
     }
 
