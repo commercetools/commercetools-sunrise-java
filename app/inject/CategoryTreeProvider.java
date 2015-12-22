@@ -7,9 +7,7 @@ import io.sphere.sdk.client.SphereClient;
 import play.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 class CategoryTreeProvider implements Provider<CategoryTreeExtended> {
     private final SphereClient client;
 

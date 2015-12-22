@@ -7,9 +7,7 @@ import play.Logger;
 import play.i18n.MessagesApi;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-@Singleton
 class CmsServiceProvider implements Provider<CmsService> {
     private final MessagesApi messagesApi;
 

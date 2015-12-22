@@ -6,13 +6,14 @@ import io.sphere.sdk.models.Base;
 import io.sphere.sdk.producttypes.MetaProductType;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.queries.ProductTypeQuery;
+import io.sphere.sdk.queries.QueryAll;
 import play.Configuration;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
 
-public class ProductDataConfigProvider extends Base implements Provider<ProductDataConfig> {
+class ProductDataConfigProvider extends Base implements Provider<ProductDataConfig> {
     private final Configuration configuration;
     private final SphereClient client;
 
@@ -24,9 +25,9 @@ public class ProductDataConfigProvider extends Base implements Provider<ProductD
 
     @Override
     public ProductDataConfig get() {
-        final List<ProductType> productTypes = client.execute(ProductTypeQuery.of().withLimit(500)).toCompletableFuture().join().getResults();
+        final List<ProductType> productTypes =  QueryAll.of(ProductTypeQuery.of()).run(client).toCompletableFuture().join();
         final MetaProductType metaProductType = MetaProductType.of(productTypes);
         final List<String> attributesWhitelist = configuration.getStringList("productData.enabledAttributes");
-        return new ProductDataConfig(metaProductType, attributesWhitelist);
+        return ProductDataConfig.of(metaProductType, attributesWhitelist);
     }
 }

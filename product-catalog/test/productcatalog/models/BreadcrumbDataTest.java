@@ -15,15 +15,15 @@ import org.junit.Test;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static common.categories.JsonUtils.readJson;
+import static common.JsonUtils.readCtpObject;
 import static java.util.Collections.singletonList;
 import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BreadcrumbDataTest {
-    private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readJson("models/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
-    private static final ProductProjection PRODUCT = readJson("models/breadcrumbProduct.json", ProductProjection.typeReference());
+    private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("models/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
+    private static final ProductProjection PRODUCT = readCtpObject("models/breadcrumbProduct.json", ProductProjection.typeReference());
     private static final UserContext USER_CONTEXT = UserContext.of(CountryCode.UK, singletonList(ENGLISH), null, null);
     private static final ReverseRouter REVERSE_ROUTER = reverseRouter();
 

@@ -25,10 +25,14 @@ public final class ApplicationController extends Controller {
     }
 
     public F.Promise<Result> index() {
-        return setupController.handleOrFallback(() -> injector.instanceOf(HomeController.class).show("en"));
+        return setupController.handleOrFallback(() -> {
+            final HomeController homeController = injector.instanceOf(HomeController.class);
+            final String languageTag = lang().code();
+            return homeController.show(languageTag);
+        });
     }
 
-    public Result untrail(String path) {
+    public Result untrail(final String path) {
         return movedPermanently("/" + path);
     }
 }

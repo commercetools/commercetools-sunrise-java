@@ -8,11 +8,9 @@ import play.Configuration;
 import play.Logger;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import static java.util.Objects.requireNonNull;
 
-@Singleton
 class SphereClientProvider implements Provider<SphereClient> {
     private final Configuration configuration;
 

@@ -1,8 +1,6 @@
 package productcatalog.models;
 
-import common.categories.JsonUtils;
 import common.contexts.UserContext;
-
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
@@ -15,12 +13,10 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.neovisionaries.i18n.CountryCode.DE;
-import static common.categories.JsonUtils.readJson;
+import static common.JsonUtils.readCtpObject;
 import static common.products.ProductUtils.getQueryResult;
-import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static java.util.Collections.singletonList;
 import static java.util.Locale.GERMAN;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductDetailPageContentTest {
     private static final ZoneId ZONE_ID = ZoneId.of("Europe/Berlin");
@@ -29,7 +25,7 @@ public class ProductDetailPageContentTest {
     private static final PriceFormatter PRICE_FORMATTER = PriceFormatter.of(GERMAN);
     private static final UserContext USER_CONTEXT = UserContext.of(DE, LOCALES, ZONE_ID, EUR, null, null);
 
-    private final CategoryTree categories = CategoryTree.of(readJson("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
+    private final CategoryTree categories = CategoryTree.of(readCtpObject("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
     private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();
 
 //    @Test
@@ -37,7 +33,7 @@ public class ProductDetailPageContentTest {
 //        final CmsPage cms = (messageKey, args) -> Optional.of(messageKey);
 //        final PdpStaticData pdpStaticData = new PdpStaticData(cms, BagItemDataFactory.of().create(100), RatingDataFactory.of(cms).create());
 //
-//        final JsonNode expected = readJsonNodeFromResource("pdpStaticData.json");
+//        final JsonNode expected = readJsonNode("pdpStaticData.json");
 //        final JsonNode result = toJsonNode(pdpStaticData);
 //
 //        assertThat(result).isEqualTo(expected);
@@ -52,7 +48,7 @@ public class ProductDetailPageContentTest {
 //        final CategoryLinkDataFactory categoryLinkDataFactory = CategoryLinkDataFactory.of(LOCALES);
 //        final List<LinkData> breadcrumbData = breadcrumbs.stream().map(categoryLinkDataFactory::create).collect(toList());
 //
-//        final JsonNode expected = readJsonNodeFromResource("breadcrumbData.json").get("breadcrumbs");
+//        final JsonNode expected = readJsonNode("breadcrumbData.json").get("breadcrumbs");
 //        final JsonNode result = toJsonNode(breadcrumbData);
 //
 //        assertThat(result).isEqualTo(expected);
@@ -65,7 +61,7 @@ public class ProductDetailPageContentTest {
 //        final ProductVariant variant = product.getMasterVariant();
 //        final ProductData productData = ProductDataFactory.of(USER_CONTEXT).create(product, variant);
 //
-//        final JsonNode expected = readJsonNodeFromResource("productData.json");
+//        final JsonNode expected = readJsonNode("productData.json");
 //        final JsonNode result = toJsonNode(productData);
 //
 //        assertThat(result).isEqualTo(expected);
@@ -78,7 +74,7 @@ public class ProductDetailPageContentTest {
 //        final ShippingRateDataFactory shippingRateDataFactory = ShippingRateDataFactory.of(PRICE_FORMATTER);
 //        final List<ShippingRateData> deliveryData = asList(dhl, dhlFreeAbove).stream().map(shippingRateDataFactory::create).collect(toList());
 //
-//        final JsonNode expected = readJsonNodeFromResource("deliveryData.json").get("deliveries");
+//        final JsonNode expected = readJsonNode("deliveryData.json").get("deliveries");
 //        final JsonNode result = toJsonNode(deliveryData);
 //
 //        assertThat(result).isEqualTo(expected);
@@ -95,7 +91,7 @@ public class ProductDetailPageContentTest {
 //        final List<ProductData> suggestionData = asList(selma, dkny, miabag, altea).stream()
 //                .map(product -> productDataFactory.create(product, product.getMasterVariant())).collect(toList());
 //
-//        final JsonNode expected = readJsonNodeFromResource("suggestionData.json").get("suggestions");
+//        final JsonNode expected = readJsonNode("suggestionData.json").get("suggestions");
 //        final JsonNode result = toJsonNode(suggestionData);
 //
 //        assertThat(result).isEqualTo(expected);

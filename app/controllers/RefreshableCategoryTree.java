@@ -19,7 +19,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 public final class RefreshableCategoryTree extends Base implements CategoryTreeExtended {
-    private CategoryTreeExtended currentCategoryTree;
+    private CategoryTreeExtended categoryTree;
     private SphereClient sphereClient;
 
     private RefreshableCategoryTree(final SphereClient sphereClient) {
@@ -27,64 +27,73 @@ public final class RefreshableCategoryTree extends Base implements CategoryTreeE
         refresh();
     }
 
-    public static RefreshableCategoryTree of(final SphereClient sphereClient) {
-        return new RefreshableCategoryTree(sphereClient);
+    public synchronized void refresh() {
+        this.categoryTree = fetchFreshCategoryTree(sphereClient);
     }
 
     @Override
     public List<Category> getRoots() {
-        return currentCategoryTree.getRoots();
+        return categoryTree.getRoots();
     }
 
     @Override
     public Optional<Category> findById(final String id) {
-        return currentCategoryTree.findById(id);
+        return categoryTree.findById(id);
     }
 
     @Override
     public Optional<Category> findByExternalId(final String externalId) {
-        return currentCategoryTree.findByExternalId(externalId);
+        return categoryTree.findByExternalId(externalId);
     }
 
     @Override
     public Optional<Category> findBySlug(final Locale locale, final String slug) {
-        return currentCategoryTree.findBySlug(locale, slug);
+        return categoryTree.findBySlug(locale, slug);
     }
 
     @Override
     public List<Category> getAllAsFlatList() {
-        return currentCategoryTree.getAllAsFlatList();
+        return categoryTree.getAllAsFlatList();
     }
 
     @Override
     public List<Category> findChildren(final Identifiable<Category> category) {
-        return currentCategoryTree.findChildren(category);
+        return categoryTree.findChildren(category);
     }
 
     @Override
-    public List<Category> getSiblings(final Collection<Category> categories) {
-        return currentCategoryTree.getSiblings(categories);
+    public List<Category> getSiblings(final Collection<Category> categoryIds) {
+        return categoryTree.getSiblings(categoryIds);
     }
 
     @Override
     public CategoryTree getSubtree(final Collection<Category> parentCategories) {
-        return currentCategoryTree.getSubtree(parentCategories);
+        return categoryTree.getSubtree(parentCategories);
     }
 
     @Override
     public Category getRootAncestor(final Category category) {
-        return currentCategoryTree.getRootAncestor(category);
+        return categoryTree.getRootAncestor(category);
     }
 
-    public synchronized void refresh() {
-        this.currentCategoryTree = fetchFreshCategoryTree(sphereClient);
+    public static RefreshableCategoryTree of(final SphereClient sphereClient) {
+        return new RefreshableCategoryTree(sphereClient);
     }
 
     private static CategoryTreeExtended fetchFreshCategoryTree(final SphereClient client) {
-        final QueryAll<Category, CategoryQuery> query = QueryAll.of(CategoryQuery.of());
-        final List<Category> categories = query.run(client).toCompletableFuture().join().stream()
-                .sorted((c1, c2) -> ObjectUtils.compare(c1.getOrderHint(), c2.getOrderHint())).collect(toList());
+        final List<Category> categories = fetchCategories(client);
         Logger.debug("Provide CategoryTree with " + categories.size() + " categories");
         return CategoryTreeExtended.of(categories);
+    }
+
+    private static List<Category> fetchCategories(final SphereClient client) {
+        final List<Category> categories = QueryAll.of(CategoryQuery.of()).run(client).toCompletableFuture().join();
+        return sortCategories(categories);
+    }
+
+    private static List<Category> sortCategories(final List<Category> categories) {
+        return categories.stream()
+                .sorted((c1, c2) -> ObjectUtils.compare(c1.getOrderHint(), c2.getOrderHint()))
+                .collect(toList());
     }
 }

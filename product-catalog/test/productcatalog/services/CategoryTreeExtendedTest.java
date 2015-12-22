@@ -1,6 +1,5 @@
 package productcatalog.services;
 
-import common.categories.JsonUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.categories.queries.CategoryQuery;
@@ -10,6 +9,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static common.JsonUtils.readCtpObject;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CategoryTreeExtendedTest {
 
-    private static final CategoryTreeExtended CATEGORY_TREE = CategoryTreeExtended.of(JsonUtils.readJson("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
+    private static final CategoryTreeExtended CATEGORY_TREE = CategoryTreeExtended.of(readCtpObject("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
     private static final Category handBags = CATEGORY_TREE.findById("9a584ee8-a45a-44e8-b9ec-e11439084687").get();
     private static final Category clutches = CATEGORY_TREE.findById("a9c9ebd8-e6ff-41a6-be8e-baa07888c9bd").get();
     private static final Category satchels = CATEGORY_TREE.findById("30d79426-a17a-4e63-867e-ec31a1a33416").get();

@@ -2,16 +2,21 @@ package controllers;
 
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
+import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
+import io.sphere.sdk.search.PagedSearchResult;
 import org.apache.commons.io.IOUtils;
 import play.Application;
+import play.Logger;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.mvc.Results;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -28,29 +33,37 @@ public class StatusController extends SunriseController {
     }
 
     public Result version() throws IOException {
-        final String jsonString =
-                IOUtils.toString(application.resourceAsStream("internal/version.json"), StandardCharsets.UTF_8);
-        return ok(jsonString).as(Http.MimeTypes.JSON);
+        final InputStream versionAsStream = application.resourceAsStream("internal/version.json");
+        final String versionAsString = IOUtils.toString(versionAsStream, StandardCharsets.UTF_8);
+        return ok(versionAsString).as(Http.MimeTypes.JSON);
     }
 
     public F.Promise<Result> health() throws IOException {
-        return sphere().execute(ProductProjectionSearch.ofCurrent().withLimit(1))
-                .map(result -> {
-                    final boolean ok = !result.getResults().isEmpty();
-                    if (!ok) {
-                        throw new RuntimeException("cannot fetch any product");
-                    }
-                    return ok("{\n" +
-                            "  \"self\" : {\n" +
-                            "    \"healthy\" : true\n" +
-                            "  }\n" +
-                            "}");
-                })
-                .recover(e -> status(Http.Status.SERVICE_UNAVAILABLE, "{\n" +
-                        "  \"self\" : {\n" +
-                        "    \"healthy\" : false\n" +
-                        "  }\n" +
-                        "}"))
+        final ProductProjectionSearch productRequest = ProductProjectionSearch.ofCurrent().withLimit(1);
+        return sphere().execute(productRequest)
+                .map(this::renderGoodHealthStatus)
+                .recover(this::renderBadHealthStatus)
                 .map(r -> r.as(Http.MimeTypes.JSON));
+    }
+
+    private Results.Status renderGoodHealthStatus(final PagedSearchResult<ProductProjection> productResult) {
+        final boolean containsProducts = !productResult.getResults().isEmpty();
+        if (!containsProducts) {
+            throw new RuntimeException("Cannot find any product!");
+        }
+        return ok(healthJson(true));
+    }
+
+    private Status renderBadHealthStatus(final Throwable t) {
+        Logger.error("Could not fetch products", t);
+        return status(Http.Status.SERVICE_UNAVAILABLE, healthJson(false));
+    }
+
+    private String healthJson(final boolean healthy) {
+        return "{\n" +
+                "  \"self\" : {\n" +
+                "    \"healthy\" : " + healthy + "\n" +
+                "  }\n" +
+                "}";
     }
 }
