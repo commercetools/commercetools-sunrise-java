@@ -4,7 +4,6 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.controllers.*;
 import org.junit.Test;
-import play.Configuration;
 
 import java.util.List;
 import java.util.Locale;
@@ -19,10 +18,8 @@ public class HandlebarsTemplateTest {
     private static final TemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
     private static final TemplateLoader WRONG_LOADER = new ClassPathTemplateLoader("/templates/wrong");
     private static final List<Locale> LOCALES = singletonList(Locale.ENGLISH);
-    private static final Configuration CONFIGURATION = new Configuration("handlebars.i18n {\n" +
-            "  langs=[\"en\", \"de\"]\n" +
-            "  bundles=[\"translations\", \"home\", \"catalog\", \"checkout\", \"foo\"]\n" +
-            "}");
+    private static final List<String> LANGUAGES = asList("en", "de");
+    private static final List<String> BUNDLES = asList("translations", "home", "catalog", "checkout", "foo");
 
     @Test
     public void rendersTemplateWithPartial() throws Exception {
@@ -122,15 +119,15 @@ public class HandlebarsTemplateTest {
     }
 
     private TemplateService handlebars() {
-        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), CONFIGURATION);
+        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), LANGUAGES, BUNDLES, false);
     }
 
     private TemplateService handlebarsWithOverride() {
-        return HandlebarsTemplateService.of(asList(OVERRIDE_LOADER, DEFAULT_LOADER), CONFIGURATION);
+        return HandlebarsTemplateService.of(asList(OVERRIDE_LOADER, DEFAULT_LOADER), LANGUAGES, BUNDLES, false);
     }
 
     private TemplateService handlebarsWithFallbackContext(final TemplateLoader fallbackContextLoader) {
-        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), singletonList(fallbackContextLoader), CONFIGURATION);
+        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), singletonList(fallbackContextLoader), LANGUAGES, BUNDLES, false);
     }
 
     private PageData pageDataWithTitleAndMessage() {

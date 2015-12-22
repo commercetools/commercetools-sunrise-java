@@ -17,8 +17,12 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 class TemplateServiceProvider implements Provider<TemplateService> {
+    private static final String CONFIG_CACHE_ENABLED = "handlebars.chache.enabled";
     private static final String CONFIG_TEMPLATE_LOADERS = "handlebars.templateLoaders";
     private static final String CONFIG_FALLBACK_CONTEXTS = "handlebars.fallbackContexts";
+    private static final String CONFIG_LANGUAGES = "handlebars.i18n.langs";
+    private static final String CONFIG_BUNDLES = "handlebars.i18n.bundles";
+
     private static final String CLASSPATH_TYPE = "classpath";
     private static final String FILE_TYPE = "file";
     private static final String TYPE_ATTR = "type";
@@ -36,7 +40,15 @@ class TemplateServiceProvider implements Provider<TemplateService> {
         final List<TemplateLoader> fallbackContexts = initializeTemplateLoaders(CONFIG_FALLBACK_CONTEXTS);
         Logger.debug("Provide HandlebarsTemplateService: "
                 + templateLoaders.stream().map(TemplateLoader::getPrefix).collect(joining(", ")));
-        return HandlebarsTemplateService.of(templateLoaders, fallbackContexts, configuration);
+
+        final boolean cacheIsEnabled = configuration.getBoolean(CONFIG_CACHE_ENABLED, false);
+        Logger.debug(" with cache enabled: {}", cacheIsEnabled);
+
+        final List<String> languages = configuration.getStringList(CONFIG_LANGUAGES, emptyList());
+        final List<String> bundles = configuration.getStringList(CONFIG_BUNDLES, emptyList());
+        Logger.debug(" for languages {} and bundles {}", languages, bundles);
+
+        return HandlebarsTemplateService.of(templateLoaders, fallbackContexts, languages, bundles, cacheIsEnabled);
     }
 
     private List<TemplateLoader> initializeTemplateLoaders(final String configKey) {

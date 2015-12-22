@@ -1,12 +1,15 @@
 package common.templates;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jknack.handlebars.*;
+import com.github.jknack.handlebars.Context;
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.ValueResolver;
+import com.github.jknack.handlebars.context.JavaBeanValueResolver;
 import com.github.jknack.handlebars.context.MapValueResolver;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.controllers.PageData;
-import play.Configuration;
 import play.Logger;
 
 import java.io.IOException;
@@ -19,10 +22,13 @@ import static java.util.stream.Collectors.toList;
 public final class HandlebarsTemplateService implements TemplateService {
     private final Handlebars handlebars;
     private final List<TemplateLoader> fallbackContexts;
+    private final boolean cachingIsEnabled;
 
-    private HandlebarsTemplateService(final Handlebars handlebars, final List<TemplateLoader> fallbackContexts) {
+    private HandlebarsTemplateService(final Handlebars handlebars, final List<TemplateLoader> fallbackContexts,
+                                      final boolean cachingIsEnabled) {
         this.handlebars = handlebars;
         this.fallbackContexts = fallbackContexts;
+        this.cachingIsEnabled = cachingIsEnabled;
     }
 
     @Override
@@ -38,18 +44,18 @@ public final class HandlebarsTemplateService implements TemplateService {
         }
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders, final Configuration configuration) {
-        return of(templateLoaders, emptyList(), configuration);
+    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<String> languages,
+                                     final List<String> bundles, final boolean cachingIsEnabled) {
+        return of(templateLoaders, emptyList(), languages, bundles, cachingIsEnabled);
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts, final Configuration configuration) {
+    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts,
+                                     final List<String> languages, final List<String> bundles, final boolean cachingIsEnabled) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars().with(loaders).infiniteLoops(true);
-        final List<String> languages = configuration.getStringList("handlebars.i18n.langs", emptyList());
-        final List<String> bundles = configuration.getStringList("handlebars.i18n.bundles", emptyList());
         handlebars.registerHelper("i18n", new CustomI18nHelper(languages, bundles));
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
-        return new HandlebarsTemplateService(handlebars, fallbackContexts);
+        return new HandlebarsTemplateService(handlebars, fallbackContexts, cachingIsEnabled);
     }
 
     private Template compileTemplate(final String templateName) {
@@ -61,9 +67,8 @@ public final class HandlebarsTemplateService implements TemplateService {
     }
 
     private Context buildContext(final PageData pageData, final String templateName) {
-        // TODO Use resolver with cache on production
         Context.Builder builder = Context.newBuilder(pageData)
-                .resolver(NonCachedJavaBeanValueResolver.INSTANCE, MapValueResolver.INSTANCE);
+                .resolver(valueResolver(), MapValueResolver.INSTANCE);
         for (final TemplateLoader fallbackContext : fallbackContexts) {
             final Optional<Map<String, ?>> map = buildFallbackContext(fallbackContext, templateName);
             if (map.isPresent()) {
@@ -71,6 +76,10 @@ public final class HandlebarsTemplateService implements TemplateService {
             }
         }
         return builder.build();
+    }
+
+    private ValueResolver valueResolver() {
+        return cachingIsEnabled ? JavaBeanValueResolver.INSTANCE : NonCachedJavaBeanValueResolver.INSTANCE;
     }
 
     private Optional<Map<String, ?>> buildFallbackContext(final TemplateLoader fallbackLoader, final String templateName) {
