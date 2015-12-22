@@ -1,17 +1,15 @@
 import java.text.SimpleDateFormat
 import java.util.Date
 
-import de.johoop.jacoco4sbt.JacocoPlugin._
-import de.johoop.jacoco4sbt._
 import play.sbt.PlayImport
 
 import scala.util.{Success, Try}
 
+import ReleaseTransformations._
+
 name := "sphere-sunrise"
 
 organization := "io.sphere"
-
-version := "1.0-SNAPSHOT"
 
 lazy val sunriseDesignVersion = "0.35.0"
 
@@ -55,7 +53,7 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
+lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
   scalaVersion := "2.10.6",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   resolvers ++= Seq (
@@ -83,7 +81,9 @@ lazy val commonSettings = testSettings ++ /*testCoverageSettings ++ */Seq (
     "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
     "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
-    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
+    "org.scala-lang" % "scala-library" % "2.10.6",
+    "org.scala-lang" % "scala-reflect" % "2.10.6"
   )
 )
 
@@ -111,30 +111,6 @@ def testDirConfigs(config: Configuration, folderName: String) = Seq(
     resourceDirectory in config := baseDirectory.value / s"$folderName/resources"
 )
 
-/**
- * TEST COVERAGE SETTINGS
- */
-
-lazy val testCoverageTask = TaskKey[Unit]("cover", "Creates the JaCoCo reports for unit and integration tests.")
-
-lazy val testCoverageExcludes = Seq ( )// "*views*", "*Routes*", "*controllers*routes*", "*controllers*Reverse*", "*controllers*javascript*", "*controller*ref*" )
-
-lazy val testCoverageThresholds = Thresholds(instruction = 50, method = 50, branch = 50, complexity = 35, line = 50, clazz = 50)
-
-lazy val testCoverageSettings =  jacoco.settings ++ itJacoco.settings ++ Seq (
-  parallelExecution in jacoco.Config := false,
-  jacoco.excludes in jacoco.Config := testCoverageExcludes,
-  jacoco.excludes in itJacoco.Config := testCoverageExcludes,
-  jacoco.thresholds in jacoco.Config := testCoverageThresholds,
-  jacoco.thresholds in itJacoco.Config := testCoverageThresholds,
-  testCoverageTask := { (itJacoco.cover in itJacoco.Config).value },
-  testCoverageTask <<= testCoverageTask.dependsOn(jacoco.check in jacoco.Config),
-  libraryDependencies ++= Seq (
-    "junit" % "junit-dep" % "4.11" % "it",
-    "com.novocode" % "junit-interface" % "0.11" % "it"
-  )
-)
-
 resourceGenerators in Compile += Def.task {
   val file = (resourceManaged in Compile).value / "internal" / "version.json"
   val date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ").format(new Date)
@@ -155,3 +131,20 @@ resourceGenerators in Compile += Def.task {
   IO.write(file, contents)
   Seq(file)
 }.taskValue
+
+/**
+ * RELEASE SETTINGS
+ */
+lazy val releaseSettings = Seq(
+  releaseProcess := Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    setNextVersion,
+    commitNextVersion,
+    pushChanges
+  )
+)
