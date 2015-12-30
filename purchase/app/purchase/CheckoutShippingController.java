@@ -59,7 +59,6 @@ public class CheckoutShippingController extends CartController {
     @AddCSRFToken
     @RequireCSRFCheck
     public F.Promise<Result> process(final String languageTag) {
-        System.out.println("A");
         final UserContext userContext = userContext(languageTag);
         return getOrCreateCart(userContext, session()).flatMap(cart -> {
             final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
