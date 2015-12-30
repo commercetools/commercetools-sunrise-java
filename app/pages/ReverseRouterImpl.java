@@ -3,6 +3,7 @@ package pages;
 import common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
+import purchase.CheckoutAddressController;
 
 import static productcatalog.controllers.routes.*;
 import static purchase.routes.*;
@@ -60,6 +61,16 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     @Override
     public Call productToCartForm(final String languageTag) {
         return CartDetailPageController.addToCart(languageTag);
+    }
+
+    @Override
+    public Call showCheckoutAddressesForm(final String language) {
+        return CheckoutAddressController.show(language);
+    }
+
+    @Override
+    public Call processCheckoutAddressesForm(final String language) {
+        return CheckoutAddressController.process(language);
     }
 
     @Override

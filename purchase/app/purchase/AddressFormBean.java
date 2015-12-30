@@ -4,6 +4,7 @@ import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
+import io.sphere.sdk.models.Base;
 import org.apache.commons.beanutils.BeanUtils;
 import play.Configuration;
 import play.i18n.Messages;
@@ -11,7 +12,7 @@ import play.i18n.Messages;
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
 
-public class AddressFormBean {
+public class AddressFormBean extends Base {
     private SalutationsFieldsBean salutations;
     private String firstName;
     private String lastName;

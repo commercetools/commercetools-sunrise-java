@@ -38,6 +38,10 @@ POST        /:languageTag/cart/remove-line-item                @purchase.CartDet
 POST        /:languageTag/cart/change-line-item-quantity       @purchase.CartDetailPageController.processChangeLineItemQuantity(languageTag: String)
 
 # shows the form to enter shipping address and billing address
+GET         /:languageTag/checkout/address                     @purchase.CheckoutAddressController.show(languageTag: String)
+# processes the form of the shipping address and billing address
+POST        /:languageTag/checkout/address                     @purchase.CheckoutAddressController.process(languageTag: String)
+# shows the form to enter shipping address and billing address
 GET         /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.show(languageTag: String)
 # processes the form of the shipping address and billing address
 POST        /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.process(languageTag: String)

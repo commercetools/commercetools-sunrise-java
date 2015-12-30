@@ -90,11 +90,13 @@ public abstract class SunriseController extends ShopController {
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(reverseRouter().showCart(language), "cart")
-                .addHalLink(reverseRouter().showCheckoutShippingForm(language), "checkout", "editShippingAddress", "editBillingAddress", "editShippingMethod")
+                .addHalLink(reverseRouter().showCheckoutAddressesForm(language), "checkout", "editShippingAddress", "editBillingAddress")
+                .addHalLink(reverseRouter().showCheckoutShippingForm(language), "editShippingMethod")
                 .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
                 .addHalLink(reverseRouter().home(language), "continueShopping", "home")
                 .addHalLink(reverseRouter().productToCartForm(language), "addToCart")
-                .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutAddressesSubmit")
+                .addHalLink(reverseRouter().processCheckoutAddressesForm(language), "checkoutAddressSubmit")
+                .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutShippingSubmit")
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
                 .addHalLink(reverseRouter().processDeleteLineItem(language), "deleteLineItem")

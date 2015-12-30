@@ -8,6 +8,8 @@ public class TestableReverseRouter implements ReverseRouter {
     private String searchUrl;
     private String productUrl;
     private String addToCartFormUrl;
+    private String showCheckoutAddressesFormUrl;
+    private String processCheckoutAddressesFormUrl;
     private String showCheckoutShippingFormUrl;
     private String processCheckoutShippingFormUrl;
     private String showCheckoutPaymentFormUrl;
@@ -38,6 +40,14 @@ public class TestableReverseRouter implements ReverseRouter {
 
     public void setAddToCartFormUrl(final String addToCartFormUrl) {
         this.addToCartFormUrl = addToCartFormUrl;
+    }
+
+    public void setShowCheckoutAddressesFormUrl(final String showCheckoutAddressesFormUrl) {
+        this.showCheckoutAddressesFormUrl = showCheckoutAddressesFormUrl;
+    }
+
+    public void setProcessCheckoutAddressesFormUrl(final String processCheckoutAddressesFormUrl) {
+        this.processCheckoutAddressesFormUrl = processCheckoutAddressesFormUrl;
     }
 
     public void setShowCheckoutShippingFormUrl(final String showCheckoutShippingFormUrl) {
@@ -117,6 +127,16 @@ public class TestableReverseRouter implements ReverseRouter {
     @Override
     public Call productToCartForm(final String languageTag) {
         return createCall(addToCartFormUrl);
+    }
+
+    @Override
+    public Call showCheckoutAddressesForm(final String language) {
+        return createCall(showCheckoutAddressesFormUrl);
+    }
+
+    @Override
+    public Call processCheckoutAddressesForm(final String language) {
+        return createCall(processCheckoutAddressesFormUrl);
     }
 
     @Override
