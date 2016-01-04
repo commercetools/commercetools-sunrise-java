@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 class TemplateServiceProvider implements Provider<TemplateService> {
-    private static final String CONFIG_CACHE_ENABLED = "handlebars.chache.enabled";
+    private static final String CONFIG_CACHE_ENABLED = "handlebars.cache.enabled";
     private static final String CONFIG_TEMPLATE_LOADERS = "handlebars.templateLoaders";
     private static final String CONFIG_FALLBACK_CONTEXTS = "handlebars.fallbackContexts";
     private static final String CONFIG_LANGUAGES = "handlebars.i18n.langs";
