@@ -5,15 +5,15 @@
   "logo": "http://www.commercetools.com/assets/img/ct_logo_farbe.gif",
   "keywords": ["sphere", "ecommerce", "shopping"],
   "env": {
-    "SPHERE_SUNRISE_PROJECT": {
+    "SPHERE_PROJECT_KEY": {
       "description": "The project key for your SPHERE.IO project.",
       "required": true
     },
-    "SPHERE_SUNRISE_CLIENT_ID": {
+    "SPHERE_CLIENT_ID": {
       "description": "The client ID of your SPHERE.IO project.",
       "required": true
     },
-    "SPHERE_SUNRISE_CLIENT_SECRET": {
+    "SPHERE_CLIENT_SECRET": {
       "description": "The client secret of your SPHERE.IO project.",
       "required": true
     }
