@@ -18,19 +18,17 @@ import javax.inject.Singleton;
 public final class ApplicationController extends Controller {
     private final Injector injector;
     private final SetupController setupController;
-    private final ProjectContext projectContext;
-
 
     @Inject
-    public ApplicationController(final Injector injector, final SetupController setupController, final ProjectContext projectContext) {
+    public ApplicationController(final Injector injector, final SetupController setupController) {
         this.injector = injector;
         this.setupController = setupController;
-        this.projectContext = projectContext;
     }
 
     public F.Promise<Result> index() {
         return setupController.handleOrFallback(() -> {
             final HomeController homeController = injector.instanceOf(HomeController.class);
+            final ProjectContext projectContext = injector.instanceOf(ProjectContext.class);
             final String defaultLanguage = projectContext.defaultLanguage().toLanguageTag();
             return homeController.show(defaultLanguage);
         });
