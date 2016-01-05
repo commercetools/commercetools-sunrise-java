@@ -17,8 +17,7 @@ public class HandlebarsTemplateTest {
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
     private static final TemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
     private static final TemplateLoader WRONG_LOADER = new ClassPathTemplateLoader("/templates/wrong");
-    private static final List<Locale> LOCALES = singletonList(Locale.ENGLISH);
-    private static final List<String> LANGUAGES = asList("en", "de");
+    private static final List<Locale> LOCALES = asList(Locale.ENGLISH, Locale.GERMAN);
     private static final List<String> BUNDLES = asList("translations", "home", "catalog", "checkout", "foo");
 
     @Test
@@ -119,15 +118,15 @@ public class HandlebarsTemplateTest {
     }
 
     private TemplateService handlebars() {
-        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), LANGUAGES, BUNDLES, false);
+        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), LOCALES, BUNDLES, false);
     }
 
     private TemplateService handlebarsWithOverride() {
-        return HandlebarsTemplateService.of(asList(OVERRIDE_LOADER, DEFAULT_LOADER), LANGUAGES, BUNDLES, false);
+        return HandlebarsTemplateService.of(asList(OVERRIDE_LOADER, DEFAULT_LOADER), LOCALES, BUNDLES, false);
     }
 
     private TemplateService handlebarsWithFallbackContext(final TemplateLoader fallbackContextLoader) {
-        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), singletonList(fallbackContextLoader), LANGUAGES, BUNDLES, false);
+        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), singletonList(fallbackContextLoader), LOCALES, BUNDLES, false);
     }
 
     private PageData pageDataWithTitleAndMessage() {

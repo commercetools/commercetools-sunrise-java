@@ -1,7 +1,7 @@
 package purchase;
 
+import common.contexts.ProjectContext;
 import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;
@@ -21,33 +21,38 @@ public class CheckoutShippingFormBean extends Base {
     public CheckoutShippingFormBean() {
     }
 
-    public CheckoutShippingFormBean(final Cart cart, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
+    public CheckoutShippingFormBean(final Cart cart, final UserContext userContext, final ProjectContext projectContext,
+                                    final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
         final boolean billingAddressDifferentToBillingAddress = Optional.ofNullable(cart.getBillingAddress())
                 .map(Address::getLastName)
                 .map(lastName -> lastName != null)
                 .orElse(false);
         setBillingAddressDifferentToBillingAddress(billingAddressDifferentToBillingAddress);
-        setShippingAddress(new AddressFormBean(cart.getShippingAddress(), userContext, messages, configuration));
-        setBillingAddress(new AddressFormBean(cart.getBillingAddress(), userContext, messages, configuration));
+        setShippingAddress(new AddressFormBean(cart.getShippingAddress(), userContext, projectContext, messages, configuration));
+        setBillingAddress(new AddressFormBean(cart.getBillingAddress(), userContext, projectContext, messages, configuration));
         setShippingMethods(new ShippingMethodsFormBean(cart, shippingMethods));
     }
 
-    public CheckoutShippingFormBean(final CheckoutShippingFormData checkoutShippingFormData, final UserContext userContext, final ShippingMethods shippingMethods, final Messages messages, final Configuration configuration) {
+    public CheckoutShippingFormBean(final CheckoutShippingFormData checkoutShippingFormData, final UserContext userContext,
+                                    final ProjectContext projectContext, final ShippingMethods shippingMethods,
+                                    final Messages messages, final Configuration configuration) {
         setBillingAddressDifferentToBillingAddress(checkoutShippingFormData.isBillingAddressDifferentToBillingAddress());
 
-        final AddressFormBean shippingAddress = createShippingAddressFormBean(checkoutShippingFormData, userContext, messages, configuration);
+        final AddressFormBean shippingAddress = createShippingAddressFormBean(checkoutShippingFormData, userContext, projectContext, messages, configuration);
         setShippingAddress(shippingAddress);
 
-        final AddressFormBean billingAddress = createBillingAddressFormBean(checkoutShippingFormData, userContext, messages, configuration);
+        final AddressFormBean billingAddress = createBillingAddressFormBean(checkoutShippingFormData, userContext, projectContext, messages, configuration);
         setBillingAddress(billingAddress);
 
         setShippingMethods(new ShippingMethodsFormBean(checkoutShippingFormData, shippingMethods));
     }
 
-    private AddressFormBean createShippingAddressFormBean(final CheckoutShippingFormData checkoutShippingFormData, final UserContext userContext, final Messages messages, final Configuration configuration) {
+    private AddressFormBean createShippingAddressFormBean(final CheckoutShippingFormData checkoutShippingFormData,
+                                                          final UserContext userContext, final ProjectContext projectContext,
+                                                          final Messages messages, final Configuration configuration) {
         final AddressFormBean shippingAddress = new AddressFormBean();
         shippingAddress.setSalutations(new SalutationsFieldsBean(checkoutShippingFormData.getTitleShipping(), messages, configuration));
-        shippingAddress.setCountries(new CountriesFieldsBean(checkoutShippingFormData.getCountryShipping(), userContext, configuration));
+        shippingAddress.setCountries(new CountriesFieldsBean(checkoutShippingFormData.getCountryShipping(), userContext, projectContext));
         shippingAddress.setFirstName(checkoutShippingFormData.getFirstNameShipping());
         shippingAddress.setLastName(checkoutShippingFormData.getLastNameShipping());
         shippingAddress.setStreetName(checkoutShippingFormData.getStreetNameShipping());
@@ -61,10 +66,12 @@ public class CheckoutShippingFormBean extends Base {
         return shippingAddress;
     }
 
-    private AddressFormBean createBillingAddressFormBean(final CheckoutShippingFormData checkoutShippingFormData, final UserContext userContext, final Messages messages, final Configuration configuration) {
+    private AddressFormBean createBillingAddressFormBean(final CheckoutShippingFormData checkoutShippingFormData,
+                                                         final UserContext userContext, final ProjectContext projectContext,
+                                                         final Messages messages, final Configuration configuration) {
         final AddressFormBean billingAddress = new AddressFormBean();
         billingAddress.setSalutations(new SalutationsFieldsBean(checkoutShippingFormData.getTitleBilling(), messages, configuration));
-        billingAddress.setCountries(new CountriesFieldsBean(checkoutShippingFormData.getCountryBilling(), userContext, configuration));
+        billingAddress.setCountries(new CountriesFieldsBean(checkoutShippingFormData.getCountryBilling(), userContext, projectContext));
         billingAddress.setFirstName(checkoutShippingFormData.getFirstNameBilling());
         billingAddress.setLastName(checkoutShippingFormData.getLastNameBilling());
         billingAddress.setStreetName(checkoutShippingFormData.getStreetNameBilling());

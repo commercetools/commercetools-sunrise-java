@@ -1,5 +1,6 @@
 package controllers;
 
+import common.contexts.ProjectContext;
 import play.inject.Injector;
 import play.libs.F;
 import play.mvc.Controller;
@@ -27,8 +28,9 @@ public final class ApplicationController extends Controller {
     public F.Promise<Result> index() {
         return setupController.handleOrFallback(() -> {
             final HomeController homeController = injector.instanceOf(HomeController.class);
-            final String languageTag = lang().code();
-            return homeController.show(languageTag);
+            final ProjectContext projectContext = injector.instanceOf(ProjectContext.class);
+            final String defaultLanguage = projectContext.defaultLanguage().toLanguageTag();
+            return homeController.show(defaultLanguage);
         });
     }
 
