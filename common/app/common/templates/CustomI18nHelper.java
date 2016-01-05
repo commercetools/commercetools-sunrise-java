@@ -19,22 +19,22 @@ import static java.util.Objects.requireNonNull;
 final class CustomI18nHelper extends Base implements Helper<String> {
     private final Map<String, Map<String, Object>> languageBundleToYamlMap = new HashMap<>();
 
-    public CustomI18nHelper(final List<String> languages, final List<String> bundles) {
-        requireNonNull(languages);
+    public CustomI18nHelper(final List<Locale> locales, final List<String> bundles) {
+        requireNonNull(locales);
         requireNonNull(bundles);
-        for (final String language : languages) {
+        for (final Locale locale : locales) {
             final List<String> foundBundles = new LinkedList<>();
             final List<String> notFoundBundles = new LinkedList<>();
             for (final String bundle : bundles) {
                 try {
-                    final Map<String, Object> yamlContent = loadYamlForTranslationAndBundle(language, bundle);
-                    languageBundleToYamlMap.put(language + "/" + bundle, yamlContent);
+                    final Map<String, Object> yamlContent = loadYamlForTranslationAndBundle(locale, bundle);
+                    languageBundleToYamlMap.put(locale.toLanguageTag() + "/" + bundle, yamlContent);
                     foundBundles.add(bundle);
                 } catch (final IOException e){
                     notFoundBundles.add(bundle);
                 }
             }
-            Logger.info("handlebars-i18n: {}: loaded: '{}' failed: {}", language, foundBundles, notFoundBundles);
+            Logger.info("handlebars-i18n: {}: loaded: '{}' failed: {}", locale, foundBundles, notFoundBundles);
         }
     }
 
@@ -122,14 +122,14 @@ final class CustomI18nHelper extends Base implements Helper<String> {
         return (List<String>) options.context.get("locales");
     }
 
-    private static Map<String, Object> loadYamlForTranslationAndBundle(final String languageTag, final String bundle) throws IOException {
-        final String path = buildYamlPath(languageTag, bundle);
+    private static Map<String, Object> loadYamlForTranslationAndBundle(final Locale locale, final String bundle) throws IOException {
+        final String path = buildYamlPath(locale, bundle);
         final InputStream inputStream = getResourceAsStream(path);
         return loadYamlData(inputStream);
     }
 
-    private static String buildYamlPath(final String languageTag, final String bundle) {
-        return "META-INF/resources/webjars/locales/" + languageTag + "/" + bundle + ".yaml";
+    private static String buildYamlPath(final Locale locale, final String bundle) {
+        return "META-INF/resources/webjars/locales/" + locale.toLanguageTag() + "/" + bundle + ".yaml";
     }
 
     private static Map<String, Object> loadYamlData(final InputStream inputStream) throws IOException {

@@ -1,5 +1,6 @@
 package purchase;
 
+import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
 import common.models.ProductDataConfig;
@@ -15,18 +16,18 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
     }
 
     public CheckoutShippingPageContent(final Cart cart, final Messages messages, final Configuration configuration,
-                                       final UserContext userContext, final ShippingMethods shippingMethods,
+                                       final UserContext userContext, final ProjectContext projectContext, final ShippingMethods shippingMethods,
                                        final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
         fillDefaults(cart, userContext, productDataConfig, messages, reverseRouter);
-        setShippingForm(new CheckoutShippingFormBean(cart, userContext, shippingMethods, messages, configuration));
+        setShippingForm(new CheckoutShippingFormBean(cart, userContext, projectContext, shippingMethods, messages, configuration));
     }
 
     public CheckoutShippingPageContent(final CheckoutShippingFormData filledForm, final Cart cart, final Messages messages,
-                                       final Configuration configuration, final UserContext userContext,
+                                       final Configuration configuration, final UserContext userContext, final ProjectContext projectContext,
                                        final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig,
                                        final ReverseRouter reverseRouter) {
         fillDefaults(cart, userContext, productDataConfig, messages, reverseRouter);
-        setShippingForm(new CheckoutShippingFormBean(filledForm, userContext, shippingMethods, messages, configuration));
+        setShippingForm(new CheckoutShippingFormBean(filledForm, userContext, projectContext, shippingMethods, messages, configuration));
     }
 
     private void fillDefaults(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig, final Messages messages, final ReverseRouter reverseRouter) {

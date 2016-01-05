@@ -1,5 +1,6 @@
 package controllers;
 
+import common.contexts.ProjectContext;
 import play.inject.Injector;
 import play.libs.F;
 import play.mvc.Controller;
@@ -17,18 +18,21 @@ import javax.inject.Singleton;
 public final class ApplicationController extends Controller {
     private final Injector injector;
     private final SetupController setupController;
+    private final ProjectContext projectContext;
+
 
     @Inject
-    public ApplicationController(final Injector injector, final SetupController setupController) {
+    public ApplicationController(final Injector injector, final SetupController setupController, final ProjectContext projectContext) {
         this.injector = injector;
         this.setupController = setupController;
+        this.projectContext = projectContext;
     }
 
     public F.Promise<Result> index() {
         return setupController.handleOrFallback(() -> {
             final HomeController homeController = injector.instanceOf(HomeController.class);
-            final String languageTag = lang().code();
-            return homeController.show(languageTag);
+            final String defaultLanguage = projectContext.defaultLanguage().toLanguageTag();
+            return homeController.show(defaultLanguage);
         });
     }
 
