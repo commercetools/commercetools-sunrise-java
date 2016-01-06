@@ -44,16 +44,16 @@ public final class HandlebarsTemplateService implements TemplateService {
         }
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<String> languages,
+    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<Locale> locales,
                                      final List<String> bundles, final boolean cachingIsEnabled) {
-        return of(templateLoaders, emptyList(), languages, bundles, cachingIsEnabled);
+        return of(templateLoaders, emptyList(), locales, bundles, cachingIsEnabled);
     }
 
     public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts,
-                                     final List<String> languages, final List<String> bundles, final boolean cachingIsEnabled) {
+                                     final List<Locale> locales, final List<String> bundles, final boolean cachingIsEnabled) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars().with(loaders).infiniteLoops(true);
-        handlebars.registerHelper("i18n", new CustomI18nHelper(languages, bundles));
+        handlebars.registerHelper("i18n", new CustomI18nHelper(locales, bundles));
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
         return new HandlebarsTemplateService(handlebars, fallbackContexts, cachingIsEnabled);
     }

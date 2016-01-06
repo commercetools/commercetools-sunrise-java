@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/sphere-sunrise -Dapplication.settingsWidget.enabled=false -Dhttp.port=${PORT} -Dsphere.project=${SPHERE_SUNRISE_PROJECT} -Dsphere.clientId=${SPHERE_SUNRISE_CLIENT_ID} -Dsphere.clientSecret=${SPHERE_SUNRISE_CLIENT_SECRET}
+web: target/universal/stage/bin/sphere-sunrise -Dconfig.resource=prod.conf -Dhttp.port=${PORT}

@@ -1,6 +1,7 @@
 package purchase;
 
 import com.neovisionaries.i18n.CountryCode;
+import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
@@ -29,7 +30,8 @@ public class AddressFormBean extends Base {
     public AddressFormBean() {
     }
 
-    public AddressFormBean(@Nullable final Address address, final UserContext userContext, final Messages messages, final Configuration configuration) {
+    public AddressFormBean(@Nullable final Address address, final UserContext userContext, final ProjectContext projectContext,
+                           final Messages messages, final Configuration configuration) {
         if (address != null) {
             try {
                 BeanUtils.copyProperties(this, address);
@@ -39,7 +41,7 @@ public class AddressFormBean extends Base {
         }
         final SalutationsFieldsBean salutationsFieldsBean = new SalutationsFieldsBean(address, userContext, messages, configuration);
         setSalutations(salutationsFieldsBean);
-        final CountriesFieldsBean countriesFieldsBean = new CountriesFieldsBean(address, userContext, messages, configuration);
+        final CountriesFieldsBean countriesFieldsBean = new CountriesFieldsBean(address, userContext, projectContext, messages);
         setCountries(countriesFieldsBean);
     }
 

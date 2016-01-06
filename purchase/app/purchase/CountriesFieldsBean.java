@@ -1,10 +1,10 @@
 package purchase;
 
 import com.neovisionaries.i18n.CountryCode;
+import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.models.SelectableData;
 import io.sphere.sdk.models.Address;
-import play.Configuration;
 import play.i18n.Messages;
 
 import javax.annotation.Nullable;
@@ -20,24 +20,24 @@ public class CountriesFieldsBean {
     public CountriesFieldsBean() {
     }
 
-    public CountriesFieldsBean(@Nullable final Address address, final UserContext userContext, final Messages messages, final Configuration configuration) {
+    public CountriesFieldsBean(@Nullable final Address address, final UserContext userContext, final ProjectContext projectContext, final Messages messages) {
         final String selectedCountry = Optional.ofNullable(address).map(Address::getCountry).map(CountryCode::getAlpha2).orElse(null);
-        fill(userContext, configuration, selectedCountry);
+        fill(userContext, projectContext, selectedCountry);
     }
 
-    private void fill(final UserContext userContext, final Configuration configuration, final String selectedCountry) {
-        final List<SelectableData> selectableDataList = configuration.getStringList("checkout.allowedCountries").stream().map(countryCode -> {
+    private void fill(final UserContext userContext, final ProjectContext projectContext, final String selectedCountry) {
+        final List<SelectableData> selectableDataList = projectContext.countries().stream().map(countryCode -> {
             final SelectableData selectableData = new SelectableData();
-            selectableData.setLabel(CountryCode.valueOf(countryCode).toLocale().getDisplayCountry(userContext.locale()));
-            selectableData.setValue(countryCode);
-            selectableData.setSelected(countryCode.equals(selectedCountry));
+            selectableData.setLabel(countryCode.toLocale().getDisplayCountry(userContext.locale()));
+            selectableData.setValue(countryCode.getAlpha2());
+            selectableData.setSelected(countryCode.getAlpha2().equals(selectedCountry));
             return selectableData;
         }).collect(toList());
         setList(selectableDataList);
     }
 
-    public CountriesFieldsBean(@Nullable final String country, final UserContext userContext, final Configuration configuration) {
-        fill(userContext, configuration, country);
+    public CountriesFieldsBean(@Nullable final String country, final UserContext userContext, final ProjectContext projectContext) {
+        fill(userContext, projectContext, country);
     }
 
 

@@ -44,7 +44,7 @@ public class CheckoutAddressController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
             final Messages messages = messages(userContext);
-            final CheckoutAddressPageContent content = new CheckoutAddressPageContent(cart, messages, configuration(), userContext, productDataConfig, reverseRouter());
+            final CheckoutAddressPageContent content = new CheckoutAddressPageContent(cart, messages, configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
             final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-address", pageData, userContext.locales()));
         });
@@ -58,7 +58,7 @@ public class CheckoutAddressController extends CartController {
             final CheckoutAddressFormData checkoutAddressFormData = extractBean(request(), CheckoutAddressFormData.class);
             final Form<CheckoutAddressFormData> filledForm = obtainFilledForm(checkoutAddressFormData);
             final Messages messages = messages(userContext);
-            final CheckoutAddressPageContent content = new CheckoutAddressPageContent(checkoutAddressFormData, cart, messages, configuration(), userContext, productDataConfig, reverseRouter());
+            final CheckoutAddressPageContent content = new CheckoutAddressPageContent(checkoutAddressFormData, cart, messages, configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
             if (filledForm.hasErrors()) {
                 return F.Promise.pure(badRequest(userContext, filledForm, content));
             } else {

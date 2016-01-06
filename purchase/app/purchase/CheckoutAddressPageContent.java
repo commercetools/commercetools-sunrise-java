@@ -1,5 +1,6 @@
 package purchase;
 
+import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
 import common.models.ProductDataConfig;
@@ -15,17 +16,17 @@ public class CheckoutAddressPageContent extends CheckoutPageContent {
     }
 
     public CheckoutAddressPageContent(final Cart cart, final Messages messages, final Configuration configuration,
-                                      final UserContext userContext, final ProductDataConfig productDataConfig,
-                                      final ReverseRouter reverseRouter) {
+                                      final UserContext userContext, final ProjectContext projectContext,
+                                      final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
         fillDefaults(cart, userContext, productDataConfig, messages, reverseRouter);
-        setAddressForm(new CheckoutAddressFormBean(cart, userContext, messages, configuration));
+        setAddressForm(new CheckoutAddressFormBean(cart, userContext, projectContext, messages, configuration));
     }
 
     public CheckoutAddressPageContent(final CheckoutAddressFormData filledForm, final Cart cart, final Messages messages,
-                                      final Configuration configuration, final UserContext userContext,
+                                      final Configuration configuration, final UserContext userContext, final ProjectContext projectContext,
                                       final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
         fillDefaults(cart, userContext, productDataConfig, messages, reverseRouter);
-        setAddressForm(new CheckoutAddressFormBean(filledForm, userContext, messages, configuration));
+        setAddressForm(new CheckoutAddressFormBean(filledForm, userContext, projectContext, messages, configuration));
     }
 
     private void fillDefaults(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig,

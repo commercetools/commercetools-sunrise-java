@@ -2,16 +2,12 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
-import common.models.ProductDataConfig;
 import common.controllers.SunrisePageData;
+import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
-import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
-import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingMethod;
 import io.sphere.sdk.client.PlayJavaSphereClient;
-import io.sphere.sdk.commands.UpdateAction;
-import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import play.Logger;
@@ -26,10 +22,6 @@ import play.mvc.Result;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Singleton
 public class CheckoutShippingController extends CartController {

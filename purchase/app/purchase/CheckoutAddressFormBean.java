@@ -1,5 +1,6 @@
 package purchase;
 
+import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
@@ -19,32 +20,34 @@ public class CheckoutAddressFormBean extends Base {
     public CheckoutAddressFormBean() {
     }
 
-    public CheckoutAddressFormBean(final Cart cart, final UserContext userContext, final Messages messages, final Configuration configuration) {
+    public CheckoutAddressFormBean(final Cart cart, final UserContext userContext, final ProjectContext projectContext,
+                                   final Messages messages, final Configuration configuration) {
         final boolean billingAddressDifferentToBillingAddress = Optional.ofNullable(cart.getBillingAddress())
                 .map(Address::getLastName)
                 .map(lastName -> lastName != null)
                 .orElse(false);
         setBillingAddressDifferentToBillingAddress(billingAddressDifferentToBillingAddress);
-        setShippingAddress(new AddressFormBean(cart.getShippingAddress(), userContext, messages, configuration));
-        setBillingAddress(new AddressFormBean(cart.getBillingAddress(), userContext, messages, configuration));
+        setShippingAddress(new AddressFormBean(cart.getShippingAddress(), userContext, projectContext, messages, configuration));
+        setBillingAddress(new AddressFormBean(cart.getBillingAddress(), userContext, projectContext, messages, configuration));
     }
 
     public CheckoutAddressFormBean(final CheckoutAddressFormData checkoutAddressFormData, final UserContext userContext,
-                                   final Messages messages, final Configuration configuration) {
+                                   final ProjectContext projectContext, final Messages messages, final Configuration configuration) {
         setBillingAddressDifferentToBillingAddress(checkoutAddressFormData.isBillingAddressDifferentToBillingAddress());
 
-        final AddressFormBean shippingAddress = createShippingAddressFormBean(checkoutAddressFormData, userContext, messages, configuration);
+        final AddressFormBean shippingAddress = createShippingAddressFormBean(checkoutAddressFormData, userContext, projectContext, messages, configuration);
         setShippingAddress(shippingAddress);
 
-        final AddressFormBean billingAddress = createBillingAddressFormBean(checkoutAddressFormData, userContext, messages, configuration);
+        final AddressFormBean billingAddress = createBillingAddressFormBean(checkoutAddressFormData, userContext, projectContext, messages, configuration);
         setBillingAddress(billingAddress);
     }
 
     private AddressFormBean createShippingAddressFormBean(final CheckoutAddressFormData checkoutAddressFormData,
-                                                          final UserContext userContext, final Messages messages, final Configuration configuration) {
+                                                          final UserContext userContext, final ProjectContext projectContext,
+                                                          final Messages messages, final Configuration configuration) {
         final AddressFormBean shippingAddress = new AddressFormBean();
         shippingAddress.setSalutations(new SalutationsFieldsBean(checkoutAddressFormData.getTitleShipping(), messages, configuration));
-        shippingAddress.setCountries(new CountriesFieldsBean(checkoutAddressFormData.getCountryShipping(), userContext, configuration));
+        shippingAddress.setCountries(new CountriesFieldsBean(checkoutAddressFormData.getCountryShipping(), userContext, projectContext));
         shippingAddress.setFirstName(checkoutAddressFormData.getFirstNameShipping());
         shippingAddress.setLastName(checkoutAddressFormData.getLastNameShipping());
         shippingAddress.setStreetName(checkoutAddressFormData.getStreetNameShipping());
@@ -59,10 +62,11 @@ public class CheckoutAddressFormBean extends Base {
     }
 
     private AddressFormBean createBillingAddressFormBean(final CheckoutAddressFormData checkoutAddressFormData,
-                                                         final UserContext userContext, final Messages messages, final Configuration configuration) {
+                                                         final UserContext userContext, final ProjectContext projectContext,
+                                                         final Messages messages, final Configuration configuration) {
         final AddressFormBean billingAddress = new AddressFormBean();
         billingAddress.setSalutations(new SalutationsFieldsBean(checkoutAddressFormData.getTitleBilling(), messages, configuration));
-        billingAddress.setCountries(new CountriesFieldsBean(checkoutAddressFormData.getCountryBilling(), userContext, configuration));
+        billingAddress.setCountries(new CountriesFieldsBean(checkoutAddressFormData.getCountryBilling(), userContext, projectContext));
         billingAddress.setFirstName(checkoutAddressFormData.getFirstNameBilling());
         billingAddress.setLastName(checkoutAddressFormData.getLastNameBilling());
         billingAddress.setStreetName(checkoutAddressFormData.getStreetNameBilling());
