@@ -32,36 +32,33 @@ final class CustomI18nHelper extends Base implements Helper<String> {
 
     private String resolveMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
         return resolvePluralMessage(options, i18nIdentifier, locales)
-                .orElseGet(() -> messages.get(i18nIdentifier.bundle, i18nIdentifier.key, locales).orElse(null));
+                .orElse(messages.get(i18nIdentifier.bundle, i18nIdentifier.key, locales).orElse(null));
     }
 
     private Optional<String> resolvePluralMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
         if (containsPlural(options)) {
-            return messages.get(i18nIdentifier.bundle, pluralizedKey(i18nIdentifier.key), locales);
+            final String pluralizedKey = i18nIdentifier.key + "_plural";
+            return messages.get(i18nIdentifier.bundle, pluralizedKey, locales);
         } else {
             return Optional.empty();
         }
     }
 
-    private String pluralizedKey(final String key) {
-        return key + "_plural";
+    private boolean containsPlural(final Options options) {
+        return options.hash.entrySet().stream()
+                .filter(entry -> entry.getKey().equals("count") && entry.getValue() instanceof Number)
+                .anyMatch(entry -> ((Number) entry.getValue()).doubleValue() != 1);
     }
 
     private String replaceParameters(final Options options, final String resolvedValue) {
-        String parametersReplaced = StringUtils.defaultString(resolvedValue);
+        String message = StringUtils.defaultString(resolvedValue);
         for (final Map.Entry<String, Object> entry : options.hash.entrySet()) {
             if (entry.getValue() != null) {
-                parametersReplaced = parametersReplaced.replace("__" + entry.getKey() + "__", entry.getValue().toString());
+                final String parameter = "__" + entry.getKey() + "__";
+                message = message.replace(parameter, entry.getValue().toString());
             }
         }
-        return parametersReplaced;
-    }
-
-    private boolean containsPlural(final Options options) {
-        return options.hash.entrySet().stream()
-                .anyMatch(entry ->
-                        (entry.getValue() instanceof Integer && ((((Number) entry.getValue()).intValue() != 1)))
-                                || (entry.getValue() instanceof Long && ((((Number) entry.getValue()).longValue() != 1L))));
+        return message;
     }
 
     @SuppressWarnings("unchecked")
