@@ -2,7 +2,8 @@ package common.templates;
 
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
-import common.utils.I18nUtils;
+import common.i18n.Messages;
+import common.i18n.MessagesImpl;
 import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,29 +13,31 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 final class CustomI18nHelper extends Base implements Helper<String> {
-    private final I18nUtils i18nUtils;
+    private final Messages messages;
 
     public CustomI18nHelper(final List<Locale> locales, final List<String> bundles) {
-        this.i18nUtils = new I18nUtils(locales, bundles);
+        this.messages = new MessagesImpl(locales, bundles);
     }
 
     @Override
     public CharSequence apply(final String context, final Options options) throws IOException {
-        final String languageTag = getLocales(options).get(0); // TODO improve for multiple languages
+        final List<Locale> locales = getLocales(options);
         final I18nIdentifier i18nIdentifier = new I18nIdentifier(context);
-        final String message = resolveMessage(options, languageTag, i18nIdentifier);
+        final String message = resolveMessage(options, i18nIdentifier, locales);
         return replaceParameters(options, message);
     }
 
-    private String resolveMessage(final Options options, final String languageTag, final I18nIdentifier i18nIdentifier) {
-        return resolvePluralMessage(options, languageTag, i18nIdentifier)
-                .orElseGet(() -> i18nUtils.resolve(languageTag, i18nIdentifier.bundle, i18nIdentifier.key).orElse(null));
+    private String resolveMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
+        return resolvePluralMessage(options, i18nIdentifier, locales)
+                .orElseGet(() -> messages.get(i18nIdentifier.bundle, i18nIdentifier.key, locales).orElse(null));
     }
 
-    private Optional<String> resolvePluralMessage(final Options options, final String languageTag, final I18nIdentifier i18nIdentifier) {
+    private Optional<String> resolvePluralMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
         if (containsPlural(options)) {
-            return i18nUtils.resolve(languageTag, i18nIdentifier.bundle, pluralizedKey(i18nIdentifier.key));
+            return messages.get(i18nIdentifier.bundle, pluralizedKey(i18nIdentifier.key), locales);
         } else {
             return Optional.empty();
         }
@@ -62,8 +65,11 @@ final class CustomI18nHelper extends Base implements Helper<String> {
     }
 
     @SuppressWarnings("unchecked")
-    private static List<String> getLocales(final Options options) {
-        return (List<String>) options.context.get("locales");
+    private static List<Locale> getLocales(final Options options) {
+        final List<String> languageTags = (List<String>) options.context.get("locales");
+        return languageTags.stream()
+                .map(Locale::forLanguageTag)
+                .collect(toList());
     }
 
     private static class I18nIdentifier {
