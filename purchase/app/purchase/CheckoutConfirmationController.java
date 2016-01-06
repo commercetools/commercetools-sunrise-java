@@ -47,9 +47,10 @@ public class CheckoutConfirmationController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         final Form<CheckoutConfirmationFormData> filledForm = Form.form(CheckoutConfirmationFormData.class).bindFromRequest(request());
         final CheckoutConfirmationFormData data = filledForm.get();
-        if (!data.isAgreeTerms()) {
-            filledForm.reject("terms need to be agreed");
-        }
+        // TODO Enable back agreed terms
+//        if (!data.isAgreeTerms()) {
+//            filledForm.reject("terms need to be agreed");
+//        }
         if (filledForm.hasErrors()) {
             return cartPromise.flatMap(cart -> renderErrorResponse(userContext, cart, ctx(), filledForm));
         } else {
