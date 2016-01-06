@@ -10,29 +10,20 @@ import java.util.*;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 
-public class MessagesImpl implements Messages {
+/**
+ * Resolves the i18n messages using YAML files defined in a webjar located in the classpath.
+ */
+final class I18nMessagesYaml implements I18nMessages {
     private static final String I18N_FILEPATH = "META-INF/resources/webjars/locales";
     private final Map<String, Map> yamlMap = new HashMap<>();
 
-    public MessagesImpl(final List<Locale> locales, final List<String> bundles) {
+    I18nMessagesYaml(final List<Locale> locales, final List<String> bundles) {
         requireNonNull(locales);
         requireNonNull(bundles);
         for (final Locale locale : locales) {
             buildYamlMap(bundles, locale);
         }
         Logger.debug("i18n - Loaded {}", yamlMap.keySet());
-    }
-
-    private void buildYamlMap(final List<String> bundles, final Locale locale) {
-        for (final String bundle : bundles) {
-            try {
-                final String yamlKey = buildYamlKey(locale.toLanguageTag(), bundle);
-                final Map yamlContent = loadYamlContent(locale, bundle);
-                yamlMap.put(yamlKey, yamlContent);
-            } catch (final YAMLException e){
-                Logger.error("i18n - Failed to load bundle '{}' for locale '{}'", bundle, locale);
-            }
-        }
     }
 
     @Override
@@ -53,6 +44,18 @@ public class MessagesImpl implements Messages {
             message = Optional.empty();
         }
         return message;
+    }
+
+    private void buildYamlMap(final List<String> bundles, final Locale locale) {
+        for (final String bundle : bundles) {
+            try {
+                final String yamlKey = buildYamlKey(locale.toLanguageTag(), bundle);
+                final Map yamlContent = loadYamlContent(locale, bundle);
+                yamlMap.put(yamlKey, yamlContent);
+            } catch (final YAMLException e){
+                Logger.error("i18n - Failed to load bundle '{}' for locale '{}'", bundle, locale);
+            }
+        }
     }
 
     private Map getYamlContent(final String bundle, final Locale locale) {
@@ -76,7 +79,7 @@ public class MessagesImpl implements Messages {
     @Override
     public String toString() {
         return "I18nUtils{" +
-                "supportedLanguages=" + yamlMap.keySet() +
+                "supportedLanguageBundles=" + yamlMap.keySet() +
                 '}';
     }
 }

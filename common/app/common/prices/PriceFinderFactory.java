@@ -1,6 +1,6 @@
-package common.contexts;
+package common.prices;
 
-import common.prices.PriceFinder;
+import common.contexts.UserContext;
 
 public final class PriceFinderFactory {
     private PriceFinderFactory() {

@@ -10,25 +10,25 @@ import com.github.jknack.handlebars.context.MapValueResolver;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.controllers.PageData;
+import common.i18n.I18nMessages;
 import play.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public final class HandlebarsTemplateService implements TemplateService {
     private final Handlebars handlebars;
     private final List<TemplateLoader> fallbackContexts;
-    private final boolean cachingIsEnabled;
+    private final boolean cacheEnabled;
 
     private HandlebarsTemplateService(final Handlebars handlebars, final List<TemplateLoader> fallbackContexts,
-                                      final boolean cachingIsEnabled) {
+                                      final boolean cacheEnabled) {
         this.handlebars = handlebars;
         this.fallbackContexts = fallbackContexts;
-        this.cachingIsEnabled = cachingIsEnabled;
+        this.cacheEnabled = cacheEnabled;
     }
 
     @Override
@@ -44,18 +44,13 @@ public final class HandlebarsTemplateService implements TemplateService {
         }
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<Locale> locales,
-                                     final List<String> bundles, final boolean cachingIsEnabled) {
-        return of(templateLoaders, emptyList(), locales, bundles, cachingIsEnabled);
-    }
-
     public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts,
-                                     final List<Locale> locales, final List<String> bundles, final boolean cachingIsEnabled) {
+                                     final I18nMessages i18nMessages, final boolean cacheEnabled) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars().with(loaders).infiniteLoops(true);
-        handlebars.registerHelper("i18n", new CustomI18nHelper(locales, bundles));
+        handlebars.registerHelper("i18n", new CustomI18nHelper(i18nMessages));
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
-        return new HandlebarsTemplateService(handlebars, fallbackContexts, cachingIsEnabled);
+        return new HandlebarsTemplateService(handlebars, fallbackContexts, cacheEnabled);
     }
 
     private Template compileTemplate(final String templateName) {
@@ -79,7 +74,7 @@ public final class HandlebarsTemplateService implements TemplateService {
     }
 
     private ValueResolver valueResolver() {
-        return cachingIsEnabled ? JavaBeanValueResolver.INSTANCE : NonCachedJavaBeanValueResolver.INSTANCE;
+        return cacheEnabled ? JavaBeanValueResolver.INSTANCE : NonCachedJavaBeanValueResolver.INSTANCE;
     }
 
     private Optional<Map<String, ?>> buildFallbackContext(final TemplateLoader fallbackLoader, final String templateName) {

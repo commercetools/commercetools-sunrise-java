@@ -1,6 +1,6 @@
 package productcatalog.models;
 
-import common.contexts.PriceFinderFactory;
+import common.prices.PriceFinderFactory;
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
 import common.prices.PriceFinder;
