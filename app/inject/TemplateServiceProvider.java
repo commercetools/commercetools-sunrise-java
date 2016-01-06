@@ -4,7 +4,7 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import com.google.inject.Provider;
-import common.i18n.I18nMessages;
+import common.i18n.I18nResolver;
 import common.templates.HandlebarsTemplateService;
 import common.templates.TemplateService;
 import play.Configuration;
@@ -26,12 +26,12 @@ class TemplateServiceProvider implements Provider<TemplateService> {
     private static final String TYPE_ATTR = "type";
     private static final String PATH_ATTR = "path";
     private final Configuration configuration;
-    private final I18nMessages i18nMessages;
+    private final I18nResolver i18NResolver;
 
     @Inject
-    public TemplateServiceProvider(final Configuration configuration, final I18nMessages i18nMessages) {
+    public TemplateServiceProvider(final Configuration configuration, final I18nResolver i18NResolver) {
         this.configuration = configuration;
-        this.i18nMessages = i18nMessages;
+        this.i18NResolver = i18NResolver;
     }
 
     @Override
@@ -44,7 +44,7 @@ class TemplateServiceProvider implements Provider<TemplateService> {
                 templateLoaders.stream().map(TemplateLoader::getPrefix).collect(joining(", ")),
                 cacheIsEnabled);
 
-        return HandlebarsTemplateService.of(templateLoaders, fallbackContexts, i18nMessages, cacheIsEnabled);
+        return HandlebarsTemplateService.of(templateLoaders, fallbackContexts, i18NResolver, cacheIsEnabled);
     }
 
     private List<TemplateLoader> initializeTemplateLoaders(final String configKey) {

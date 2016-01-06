@@ -1,10 +1,11 @@
 package common.i18n;
 
 import org.apache.commons.lang3.StringUtils;
+import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 import play.Logger;
-import play.libs.Yaml;
 
+import java.io.InputStream;
 import java.util.*;
 
 import static java.util.Collections.emptyMap;
@@ -13,21 +14,21 @@ import static java.util.Objects.requireNonNull;
 /**
  * Resolves the i18n messages using YAML files defined in a webjar located in the classpath.
  */
-final class I18nMessagesYaml implements I18nMessages {
-    private static final String I18N_FILEPATH = "META-INF/resources/webjars/locales";
+final class YamlI18NResolver implements I18nResolver {
     private final Map<String, Map> yamlMap = new HashMap<>();
 
-    I18nMessagesYaml(final List<Locale> locales, final List<String> bundles) {
+    YamlI18NResolver(final String filepath, final List<Locale> locales, final List<String> bundles) {
+        requireNonNull(filepath);
         requireNonNull(locales);
         requireNonNull(bundles);
         for (final Locale locale : locales) {
-            buildYamlMap(bundles, locale);
+            buildYamlMap(filepath, bundles, locale);
         }
         Logger.debug("i18n - Loaded {}", yamlMap.keySet());
     }
 
     @Override
-    public Optional<String> get(final String bundle, final String key, final Locale locale) {
+    public Optional<String> resolve(final String bundle, final String key, final Locale locale) {
         final Map yamlContent = getYamlContent(bundle, locale);
         final String[] pathSegments = StringUtils.split(key, '.');
         return resolve(yamlContent, pathSegments, 0);
@@ -46,11 +47,11 @@ final class I18nMessagesYaml implements I18nMessages {
         return message;
     }
 
-    private void buildYamlMap(final List<String> bundles, final Locale locale) {
+    private void buildYamlMap(final String filepath, final List<String> bundles, final Locale locale) {
         for (final String bundle : bundles) {
             try {
                 final String yamlKey = buildYamlKey(locale.toLanguageTag(), bundle);
-                final Map yamlContent = loadYamlContent(locale, bundle);
+                final Map yamlContent = loadYamlContent(filepath, locale, bundle);
                 yamlMap.put(yamlKey, yamlContent);
             } catch (final YAMLException e){
                 Logger.error("i18n - Failed to load bundle '{}' for locale '{}'", bundle, locale);
@@ -63,13 +64,10 @@ final class I18nMessagesYaml implements I18nMessages {
         return yamlMap.getOrDefault(yamlKey, emptyMap());
     }
 
-    private static Map loadYamlContent(final Locale locale, final String bundle) throws YAMLException {
-        final String path = obtainYamlPath(locale, bundle);
-        return (Map) Yaml.load(path);
-    }
-
-    private static String obtainYamlPath(final Locale locale, final String bundle) {
-        return String.format("%s/%s/%s.yaml", I18N_FILEPATH, locale.toLanguageTag(), bundle);
+    private static Map loadYamlContent(final String filepath, final Locale locale, final String bundle) throws YAMLException {
+        final String path = String.format("%s/%s/%s.yaml", filepath, locale.toLanguageTag(), bundle);
+        final InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+        return (Map) new Yaml().load(resourceAsStream);
     }
 
     private static String buildYamlKey(final String languageTag, final String bundle) {

@@ -10,7 +10,7 @@ import com.github.jknack.handlebars.context.MapValueResolver;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.controllers.PageData;
-import common.i18n.I18nMessages;
+import common.i18n.I18nResolver;
 import play.Logger;
 
 import java.io.IOException;
@@ -45,10 +45,10 @@ public final class HandlebarsTemplateService implements TemplateService {
     }
 
     public static TemplateService of(final List<TemplateLoader> templateLoaders, final List<TemplateLoader> fallbackContexts,
-                                     final I18nMessages i18nMessages, final boolean cacheEnabled) {
+                                     final I18nResolver i18NResolver, final boolean cacheEnabled) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars().with(loaders).infiniteLoops(true);
-        handlebars.registerHelper("i18n", new CustomI18nHelper(i18nMessages));
+        handlebars.registerHelper("i18n", new CustomI18nHelper(i18NResolver));
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
         return new HandlebarsTemplateService(handlebars, fallbackContexts, cacheEnabled);
     }

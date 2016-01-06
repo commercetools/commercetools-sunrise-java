@@ -3,7 +3,7 @@ package common.templates;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.controllers.PageData;
-import common.i18n.I18nMessages;
+import common.i18n.I18nResolver;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -75,7 +75,7 @@ public class CustomI18nHelperTest {
 
     private static void testTemplate(final String templateName, final Locale locale, final Map<String, String> i18nMap,
                                      final Consumer<String> test) {
-        final TemplateService templateService = HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), emptyList(), i18nMessages(i18nMap), false);
+        final TemplateService templateService = HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), emptyList(), i18nResolver(i18nMap), false);
         final String html = renderTemplate(templateName, templateService, locale);
         test.accept(html);
     }
@@ -84,7 +84,7 @@ public class CustomI18nHelperTest {
         return templateService.render(templateName, SOME_PAGE_DATA, singletonList(locale));
     }
 
-    private static I18nMessages i18nMessages(final Map<String, String> i18nMap) {
+    private static I18nResolver i18nResolver(final Map<String, String> i18nMap) {
         return (bundle, key, locale) -> {
             final String mapKey = String.format("%s/%s:%s", locale.toLanguageTag(), bundle, key);
             final String message = i18nMap.get(mapKey);

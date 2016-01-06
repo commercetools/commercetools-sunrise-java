@@ -3,7 +3,7 @@ package common.templates;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.controllers.PageData;
-import common.i18n.I18nMessages;
+import common.i18n.I18nResolver;
 import org.junit.Test;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class HandlebarsTemplateTest {
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
     private static final TemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
     private static final TemplateLoader WRONG_LOADER = new ClassPathTemplateLoader("/templates/wrong");
-    private static final I18nMessages I18N_MESSAGES = (bundle, key, locale) -> Optional.empty();
+    private static final I18nResolver I18N_MESSAGES = (bundle, key, locale) -> Optional.empty();
     private static final List<Locale> LOCALES = emptyList();
     private static final PageData SOME_PAGE_DATA = new TestablePageData();
 

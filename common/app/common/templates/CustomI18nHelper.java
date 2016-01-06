@@ -2,7 +2,7 @@ package common.templates;
 
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
-import common.i18n.I18nMessages;
+import common.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,10 +15,10 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 final class CustomI18nHelper extends Base implements Helper<String> {
-    private final I18nMessages i18nMessages;
+    private final I18nResolver i18n;
 
-    public CustomI18nHelper(final I18nMessages i18nMessages) {
-        this.i18nMessages = i18nMessages;
+    public CustomI18nHelper(final I18nResolver i18n) {
+        this.i18n = i18n;
     }
 
     @Override
@@ -31,14 +31,14 @@ final class CustomI18nHelper extends Base implements Helper<String> {
 
     private String resolveMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
         return resolvePluralMessage(options, i18nIdentifier, locales)
-                .orElse(i18nMessages.get(i18nIdentifier.bundle, i18nIdentifier.key, locales)
+                .orElse(i18n.resolve(i18nIdentifier.bundle, i18nIdentifier.key, locales)
                         .orElse(null));
     }
 
     private Optional<String> resolvePluralMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
         if (containsPlural(options)) {
             final String pluralizedKey = i18nIdentifier.key + "_plural";
-            return i18nMessages.get(i18nIdentifier.bundle, pluralizedKey, locales);
+            return i18n.resolve(i18nIdentifier.bundle, pluralizedKey, locales);
         } else {
             return Optional.empty();
         }

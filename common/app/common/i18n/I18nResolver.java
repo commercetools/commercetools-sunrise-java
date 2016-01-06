@@ -8,7 +8,7 @@ import java.util.Optional;
  * Resolves i18n messages.
  */
 @FunctionalInterface
-public interface I18nMessages {
+public interface I18nResolver {
 
     /**
      * Resolves i18n message identified by a bundle and a key for the given locale.
@@ -17,7 +17,7 @@ public interface I18nMessages {
      * @param locale the locale used to translate the message
      * @return the resolved message in the given language
      */
-    Optional<String> get(final String bundle, final String key, final Locale locale);
+    Optional<String> resolve(final String bundle, final String key, final Locale locale);
 
     /**
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
@@ -26,9 +26,9 @@ public interface I18nMessages {
      * @param locales the list of locales used to translate the message
      * @return the resolved message in the first found given language
      */
-    default Optional<String> get(final String bundle, final String key, final List<Locale> locales) {
+    default Optional<String> resolve(final String bundle, final String key, final List<Locale> locales) {
         for (final Locale locale : locales) {
-            final Optional<String> message = get(bundle, key, locale);
+            final Optional<String> message = resolve(bundle, key, locale);
             if (message.isPresent()) {
                 return message;
             }
@@ -36,7 +36,7 @@ public interface I18nMessages {
         return Optional.empty();
     }
 
-    static I18nMessages of(final List<Locale> locales, final List<String> bundles) {
-        return new I18nMessagesYaml(locales, bundles);
+    static I18nResolver of(final String filepath, final List<Locale> locales, final List<String> bundles) {
+        return new YamlI18NResolver(filepath, locales, bundles);
     }
 }
