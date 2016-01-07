@@ -4,20 +4,21 @@ import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
-import play.twirl.api.Html;
-import productcatalog.models.*;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.search.*;
-import play.i18n.Messages;
+import io.sphere.sdk.search.PagedSearchResult;
 import play.libs.F;
 import play.mvc.Result;
+import play.twirl.api.Html;
+import productcatalog.models.*;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -37,12 +38,11 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     public F.Promise<Result> show(final String languageTag, final int page, final String categorySlug) {
         final UserContext userContext = userContext(languageTag);
-        final Messages messages = messages(userContext);
         final Optional<Category> category = categoryTree().findBySlug(userContext.locale(), categorySlug);
         if (category.isPresent()) {
             final CategoryTree categoriesInFacet = getCategoriesInFacet(category.get());
             final List<String> selectedCategoryIds = getSelectedCategoryIds(category.get());
-            final SearchCriteria searchCriteria = SearchCriteria.of(configuration(), request(), messages, userContext, category.get(), selectedCategoryIds, categoriesInFacet);
+            final SearchCriteria searchCriteria = SearchCriteria.of(configuration(), request(), i18nResolver(), userContext, category.get(), selectedCategoryIds, categoriesInFacet);
             return productService().searchProducts(page, searchCriteria).map(searchResult -> {
                 final ProductOverviewPageContent content = createPageContent(userContext, searchResult, page, searchCriteria);
                 return ok(renderPage(userContext, fillPageContent(content, userContext, category.get())));
@@ -53,8 +53,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     public F.Promise<Result> search(final String languageTag, final int page) {
         final UserContext userContext = userContext(languageTag);
-        final Messages messages = messages(userContext);
-        final SearchCriteria searchCriteria = SearchCriteria.of(configuration(), request(), messages, userContext, categoryTree());
+        final SearchCriteria searchCriteria = SearchCriteria.of(configuration(), request(), i18nResolver(), userContext, categoryTree());
         if (searchCriteria.searchTerm().isPresent()) {
             final F.Promise<PagedSearchResult<ProductProjection>> searchResultPromise = productService().searchProducts(page, searchCriteria);
             return searchResultPromise.map(searchResult -> {

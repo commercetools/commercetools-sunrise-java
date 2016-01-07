@@ -2,8 +2,8 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
-import common.models.ProductDataConfig;
 import common.controllers.SunrisePageData;
+import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
@@ -19,7 +19,6 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
-import play.i18n.Messages;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -49,8 +48,7 @@ public class CheckoutShippingController extends CartController {
         final UserContext userContext = userContext(languageTag);
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
-            final Messages messages = messages(userContext);
-            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, messages, configuration(), userContext, projectContext(), shippingMethods, productDataConfig, reverseRouter());
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, i18nResolver(), configuration(), userContext, projectContext(), shippingMethods, productDataConfig, reverseRouter());
             final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
         });
@@ -63,8 +61,7 @@ public class CheckoutShippingController extends CartController {
         return getOrCreateCart(userContext, session()).flatMap(cart -> {
             final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
             final Form<CheckoutShippingFormData> filledForm = obtainFilledForm(checkoutShippingFormData);
-            final Messages messages = messages(userContext);
-            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(checkoutShippingFormData, cart, messages, configuration(), userContext, projectContext(), shippingMethods, productDataConfig, reverseRouter());
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(checkoutShippingFormData, cart, i18nResolver(), configuration(), userContext, projectContext(), shippingMethods, productDataConfig, reverseRouter());
             if (filledForm.hasErrors()) {
                 return F.Promise.pure(badRequest(userContext, filledForm, content));
             } else {

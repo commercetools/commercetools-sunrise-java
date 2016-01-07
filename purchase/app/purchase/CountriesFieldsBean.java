@@ -5,7 +5,6 @@ import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.models.SelectableData;
 import io.sphere.sdk.models.Address;
-import play.i18n.Messages;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -20,7 +19,7 @@ public class CountriesFieldsBean {
     public CountriesFieldsBean() {
     }
 
-    public CountriesFieldsBean(@Nullable final Address address, final UserContext userContext, final ProjectContext projectContext, final Messages messages) {
+    public CountriesFieldsBean(@Nullable final Address address, final UserContext userContext, final ProjectContext projectContext) {
         final String selectedCountry = Optional.ofNullable(address).map(Address::getCountry).map(CountryCode::getAlpha2).orElse(null);
         fill(userContext, projectContext, selectedCountry);
     }

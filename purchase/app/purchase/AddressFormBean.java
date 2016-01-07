@@ -3,11 +3,11 @@ package purchase;
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;
+import common.i18n.I18nResolver;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
 import org.apache.commons.beanutils.BeanUtils;
 import play.Configuration;
-import play.i18n.Messages;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.InvocationTargetException;
@@ -30,7 +30,7 @@ public class AddressFormBean {
     }
 
     public AddressFormBean(@Nullable final Address address, final UserContext userContext, final ProjectContext projectContext,
-                           final Messages messages, final Configuration configuration) {
+                           final I18nResolver i18nResolver, final Configuration configuration) {
         if (address != null) {
             try {
                 BeanUtils.copyProperties(this, address);
@@ -38,9 +38,9 @@ public class AddressFormBean {
                 throw new RuntimeException(e);
             }
         }
-        final SalutationsFieldsBean salutationsFieldsBean = new SalutationsFieldsBean(address, userContext, messages, configuration);
+        final SalutationsFieldsBean salutationsFieldsBean = new SalutationsFieldsBean(address, userContext, i18nResolver, configuration);
         setSalutations(salutationsFieldsBean);
-        final CountriesFieldsBean countriesFieldsBean = new CountriesFieldsBean(address, userContext, projectContext, messages);
+        final CountriesFieldsBean countriesFieldsBean = new CountriesFieldsBean(address, userContext, projectContext);
         setCountries(countriesFieldsBean);
     }
 

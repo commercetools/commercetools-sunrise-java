@@ -1,10 +1,10 @@
 package purchase;
 
 import common.contexts.UserContext;
+import common.i18n.I18nResolver;
 import common.models.SelectableData;
 import io.sphere.sdk.models.Address;
 import play.Configuration;
-import play.i18n.Messages;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -20,18 +20,22 @@ public class SalutationsFieldsBean {
     public SalutationsFieldsBean() {
     }
 
-    public SalutationsFieldsBean(final String title, final Messages messages, final Configuration configuration) {
-        fill(messages, configuration, title);
+    public SalutationsFieldsBean(final String title, final UserContext userContext, final I18nResolver i18nResolver,
+                                 final Configuration configuration) {
+        fill(userContext, i18nResolver, configuration, title);
     }
 
-    public SalutationsFieldsBean(@Nullable final Address address, final UserContext userContext, final Messages messages, final Configuration configuration) {
+    public SalutationsFieldsBean(@Nullable final Address address, final UserContext userContext,
+                                 final I18nResolver i18nResolver, final Configuration configuration) {
         final String title = address == null ? null : address.getSalutation();
-        fill(messages, configuration, title);
+        fill(userContext, i18nResolver, configuration, title);
     }
 
-    private void fill(final Messages messages, final Configuration configuration, @Nullable final String title) {
+    private void fill(final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration,
+                      @Nullable final String title) {
         final List<SelectableData> selectableDataList = configuration.getObjectList(ALLOWED_TITLES_CONFIG_KEY).stream().map(map -> {
-            final String shownTitle = messages.at(map.get(MESSAGE_CONFIG_KEY).toString());
+            final String key = map.get(MESSAGE_CONFIG_KEY).toString();
+            final String shownTitle = i18nResolver.resolve("checkout", key, userContext.locales()).orElse("");
             final SelectableData selectableData = new SelectableData(shownTitle, shownTitle);
             selectableData.setSelected(selectableData.getValue().equals(title));
             return selectableData;
