@@ -63,7 +63,9 @@ public class SearchCriteria {
     }
 
     public List<Facet<ProductProjection>> boundFacets() {
-        return asList(categoryFacet().orElse(null), colorFacet(), sizeFacet(), brandFacet());
+        return categoryFacet()
+                .map(categoryFacet -> asList(categoryFacet, colorFacet(), sizeFacet(), brandFacet()))
+                .orElse(asList(colorFacet(), sizeFacet(), brandFacet()));
     }
 
     public SortSelector boundSortSelector() {

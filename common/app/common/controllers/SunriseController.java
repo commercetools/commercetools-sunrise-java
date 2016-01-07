@@ -89,18 +89,22 @@ public abstract class SunriseController extends ShopController {
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
-        pageMeta.addHalLink(reverseRouter().showCart(language), "cart")
-                .addHalLink(reverseRouter().showCheckoutAddressesForm(language), "checkout", "editShippingAddress", "editBillingAddress")
-                .addHalLink(reverseRouter().showCheckoutShippingForm(language), "editShippingMethod")
-                .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
-                .addHalLink(reverseRouter().home(language), "continueShopping", "home")
+        pageMeta.addHalLink(reverseRouter().home(language), "home", "continueShopping")
+                .addHalLink(reverseRouter().search(language), "search")
+
+                .addHalLink(reverseRouter().showCart(language), "cart")
                 .addHalLink(reverseRouter().productToCartForm(language), "addToCart")
+                .addHalLink(reverseRouter().processChangeLineItemQuantity(language), "changeLineItem")
+                .addHalLink(reverseRouter().processDeleteLineItem(language), "deleteLineItem")
+
+                .addHalLink(reverseRouter().showCheckoutAddressesForm(language), "checkout", "editShippingAddress", "editBillingAddress")
                 .addHalLink(reverseRouter().processCheckoutAddressesForm(language), "checkoutAddressSubmit")
+                .addHalLink(reverseRouter().showCheckoutShippingForm(language), "editShippingMethod")
                 .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutShippingSubmit")
+                .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
-                .addHalLink(reverseRouter().processDeleteLineItem(language), "deleteLineItem")
-                .addHalLink(reverseRouter().processChangeLineItemQuantity(language), "changeLineItem")
+
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         return pageMeta;
     }
