@@ -100,18 +100,8 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     @Override
-    public Call category(final String languageTag, final String categorySlug, final int page) {
-        return createCall(categoryUrl + categorySlug);
-    }
-
-    @Override
     public Call category(final String languageTag, final String categorySlug) {
         return createCall(categoryUrl + categorySlug);
-    }
-
-    @Override
-    public Call search(final String languageTag, final int page) {
-        return createCall(searchUrl);
     }
 
     @Override
