@@ -40,7 +40,7 @@ class TemplateServiceProvider implements Provider<TemplateService> {
         final List<TemplateLoader> fallbackContexts = initializeTemplateLoaders(CONFIG_FALLBACK_CONTEXTS);
         final boolean cacheIsEnabled = configuration.getBoolean(CONFIG_CACHE_ENABLED, false);
 
-        Logger.debug("Provide HandlebarsTemplateService: template loaders {}, cache enabled {}",
+        Logger.debug("Provide HandlebarsTemplateService: template loaders [{}], cache enabled {}",
                 templateLoaders.stream().map(TemplateLoader::getPrefix).collect(joining(", ")),
                 cacheIsEnabled);
 
@@ -62,7 +62,7 @@ class TemplateServiceProvider implements Provider<TemplateService> {
         } else if (FILE_TYPE.equals(type)) {
             return new FileTemplateLoader(path);
         } else {
-            throw new RuntimeException("Cannot build template loader for " + loaderConfig);
+            throw new SunriseInitializationException("Not recognized template loader: " + type);
         }
     }
 }

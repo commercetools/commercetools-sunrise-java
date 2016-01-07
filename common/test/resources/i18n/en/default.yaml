@@ -2,3 +2,6 @@ baz: this
 foo:
   bar:
     qux: that
+too:
+  long:
+    path: wrong

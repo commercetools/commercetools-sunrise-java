@@ -1,10 +1,12 @@
 package common.i18n;
 
+import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
 import play.Logger;
 
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.util.*;
 
@@ -14,17 +16,17 @@ import static java.util.Objects.requireNonNull;
 /**
  * Resolves the i18n messages using YAML files defined in a webjar located in the classpath.
  */
-final class YamlI18nResolver implements I18nResolver {
+public final class YamlI18nResolver extends Base implements I18nResolver {
     private final Map<String, Map> yamlMap = new HashMap<>();
 
-    YamlI18nResolver(final String filepath, final List<Locale> locales, final List<String> bundles) {
+    private YamlI18nResolver(final String filepath, final List<Locale> locales, final List<String> bundles) {
         requireNonNull(filepath);
         requireNonNull(locales);
         requireNonNull(bundles);
         for (final Locale locale : locales) {
             buildYamlMap(filepath, bundles, locale);
         }
-        Logger.debug("i18n - Loaded {}", yamlMap.keySet());
+        Logger.debug("Yaml i18n resolver: Loaded {} from filepath '{}'", yamlMap.keySet(), filepath);
     }
 
     @Override
@@ -34,15 +36,26 @@ final class YamlI18nResolver implements I18nResolver {
         return get(yamlContent, pathSegments, 0);
     }
 
+    @Override
+    public String toString() {
+        return "YamlI18nResolver{" +
+                "supportedLanguageBundles=" + yamlMap.keySet() +
+                '}';
+    }
+
+    public static YamlI18nResolver of(final String filepath, final List<Locale> locales, final List<String> bundles) {
+        return new YamlI18nResolver(filepath, locales, bundles);
+    }
+
     private Optional<String> get(final Map yamlContent, final String[] pathSegments, final int index) {
-        final Object yamlEntry = yamlContent.get(pathSegments[index]);
-        final Optional<String> message;
-        if (yamlEntry instanceof String) {
-            message = Optional.of((String) yamlEntry);
-        } else if (yamlEntry instanceof Map && index < pathSegments.length) {
-            message = get((Map) yamlEntry, pathSegments, index + 1);
-        } else {
-            message = Optional.empty();
+        Optional<String> message = Optional.empty();
+        if (index < pathSegments.length) {
+            final Object yamlEntry = yamlContent.get(pathSegments[index]);
+            if (yamlEntry instanceof String) {
+                message = Optional.of((String) yamlEntry);
+            } else if (yamlEntry instanceof Map) {
+                message = get((Map) yamlEntry, pathSegments, index + 1);
+            }
         }
         return message;
     }
@@ -52,9 +65,11 @@ final class YamlI18nResolver implements I18nResolver {
             try {
                 final String yamlKey = buildYamlKey(locale.toLanguageTag(), bundle);
                 final Map yamlContent = loadYamlContent(filepath, locale, bundle);
-                yamlMap.put(yamlKey, yamlContent);
+                if (yamlContent != null) {
+                    yamlMap.put(yamlKey, yamlContent);
+                }
             } catch (final YAMLException e){
-                Logger.error("i18n - Failed to load bundle '{}' for locale '{}'", bundle, locale);
+                Logger.warn("Yaml i18n resolver: Failed to load bundle '{}' for locale '{}' in filepath '{}'", bundle, locale, filepath);
             }
         }
     }
@@ -64,6 +79,7 @@ final class YamlI18nResolver implements I18nResolver {
         return yamlMap.getOrDefault(yamlKey, emptyMap());
     }
 
+    @Nullable
     private static Map loadYamlContent(final String filepath, final Locale locale, final String bundle) throws YAMLException {
         final String path = String.format("%s/%s/%s.yaml", filepath, locale.toLanguageTag(), bundle);
         final InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
@@ -72,12 +88,5 @@ final class YamlI18nResolver implements I18nResolver {
 
     private static String buildYamlKey(final String languageTag, final String bundle) {
         return languageTag + "/" + bundle;
-    }
-
-    @Override
-    public String toString() {
-        return "I18nUtils{" +
-                "supportedLanguageBundles=" + yamlMap.keySet() +
-                '}';
     }
 }

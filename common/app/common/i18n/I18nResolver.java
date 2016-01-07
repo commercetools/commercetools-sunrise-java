@@ -43,8 +43,4 @@ public interface I18nResolver {
     default String getOrEmpty(final String bundle, final String key, final List<Locale> locales) {
         return get(bundle, key, locales).orElse("");
     }
-
-    static I18nResolver of(final String filepath, final List<Locale> locales, final List<String> bundles) {
-        return new YamlI18nResolver(filepath, locales, bundles);
-    }
 }
