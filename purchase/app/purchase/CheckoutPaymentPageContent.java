@@ -5,7 +5,6 @@ import common.controllers.ReverseRouter;
 import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
-import play.i18n.Messages;
 
 public class CheckoutPaymentPageContent extends CheckoutPageContent {
 
@@ -18,7 +17,7 @@ public class CheckoutPaymentPageContent extends CheckoutPageContent {
         setStepWidget(stepWidget);
         setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
         setPaymentForm(PaymentFormBean.ofDummyData());
-        setAdditionalTitle(i18nResolver.resolve("checkout", "paymentPageTitle", userContext.locales()).orElse(""));
+        setAdditionalTitle(i18nResolver.getOrEmpty("checkout", "paymentPageTitle", userContext.locales()));
     }
 
     public PaymentFormBean getPaymentForm() {

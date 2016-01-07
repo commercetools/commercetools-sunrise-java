@@ -36,7 +36,7 @@ public class SalutationsFieldsBean extends Base {
                       @Nullable final String title) {
         final List<SelectableData> selectableDataList = configuration.getObjectList(ALLOWED_TITLES_CONFIG_KEY).stream().map(map -> {
             final String key = map.get(MESSAGE_CONFIG_KEY).toString();
-            final String shownTitle = i18nResolver.resolve("checkout", key, userContext.locales()).orElse("");
+            final String shownTitle = i18nResolver.getOrEmpty("checkout", key, userContext.locales());
             final SelectableData selectableData = new SelectableData(shownTitle, shownTitle);
             selectableData.setSelected(selectableData.getValue().equals(title));
             return selectableData;

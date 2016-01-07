@@ -35,7 +35,7 @@ public class CheckoutAddressPageContent extends CheckoutPageContent {
         stepWidget.setShippingStepActive(true);
         setStepWidget(stepWidget);
         setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
-        setAdditionalTitle(i18nResolver.resolve("checkout", "shippingPageTitle", userContext.locales()).orElse(""));
+        setAdditionalTitle(i18nResolver.getOrEmpty("checkout", "shippingPageTitle", userContext.locales()));
     }
 
     public CheckoutAddressFormBean getAddressForm() {

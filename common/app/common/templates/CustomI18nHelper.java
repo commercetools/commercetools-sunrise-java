@@ -31,14 +31,14 @@ final class CustomI18nHelper extends Base implements Helper<String> {
 
     private String resolveMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
         return resolvePluralMessage(options, i18nIdentifier, locales)
-                .orElse(i18n.resolve(i18nIdentifier.bundle, i18nIdentifier.key, locales)
+                .orElse(i18n.get(i18nIdentifier.bundle, i18nIdentifier.key, locales)
                         .orElse(null));
     }
 
     private Optional<String> resolvePluralMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
         if (containsPlural(options)) {
             final String pluralizedKey = i18nIdentifier.key + "_plural";
-            return i18n.resolve(i18nIdentifier.bundle, pluralizedKey, locales);
+            return i18n.get(i18nIdentifier.bundle, pluralizedKey, locales);
         } else {
             return Optional.empty();
         }

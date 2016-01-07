@@ -17,7 +17,7 @@ public interface I18nResolver {
      * @param locale the locale used to translate the message
      * @return the resolved message in the given language
      */
-    Optional<String> resolve(final String bundle, final String key, final Locale locale);
+    Optional<String> get(final String bundle, final String key, final Locale locale);
 
     /**
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
@@ -26,9 +26,9 @@ public interface I18nResolver {
      * @param locales the list of locales used to translate the message
      * @return the resolved message in the first found given language
      */
-    default Optional<String> resolve(final String bundle, final String key, final List<Locale> locales) {
+    default Optional<String> get(final String bundle, final String key, final List<Locale> locales) {
         for (final Locale locale : locales) {
-            final Optional<String> message = resolve(bundle, key, locale);
+            final Optional<String> message = get(bundle, key, locale);
             if (message.isPresent()) {
                 return message;
             }
@@ -36,7 +36,15 @@ public interface I18nResolver {
         return Optional.empty();
     }
 
+    default String getOrEmpty(final String bundle, final String key, final Locale locale) {
+        return get(bundle, key, locale).orElse("");
+    }
+
+    default String getOrEmpty(final String bundle, final String key, final List<Locale> locales) {
+        return get(bundle, key, locales).orElse("");
+    }
+
     static I18nResolver of(final String filepath, final List<Locale> locales, final List<String> bundles) {
-        return new YamlI18NResolver(filepath, locales, bundles);
+        return new YamlI18nResolver(filepath, locales, bundles);
     }
 }

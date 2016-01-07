@@ -6,7 +6,6 @@ import common.controllers.ReverseRouter;
 import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
-import play.i18n.Messages;
 
 public class CartDetailPageContent extends PageContent {
     private CartOrderBean cart;
@@ -17,7 +16,7 @@ public class CartDetailPageContent extends PageContent {
     public CartDetailPageContent(final Cart cart, final ProductDataConfig productDataConfig, final UserContext userContext,
                                  final ReverseRouter reverseRouter, final I18nResolver i18nResolver) {
         this.cart = new CartOrderBean(cart, productDataConfig, userContext, reverseRouter);
-        setAdditionalTitle(i18nResolver.resolve("cart", "cartPageTitle", userContext.locales()).orElse(""));
+        setAdditionalTitle(i18nResolver.getOrEmpty("cart", "cartPageTitle", userContext.locales()));
     }
 
     public CartOrderBean getCart() {

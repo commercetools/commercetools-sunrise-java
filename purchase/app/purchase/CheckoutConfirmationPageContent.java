@@ -6,7 +6,6 @@ import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import common.models.SelectableData;
 import io.sphere.sdk.carts.Cart;
-import play.i18n.Messages;
 
 public class CheckoutConfirmationPageContent extends CheckoutPageContent {
 
@@ -22,7 +21,7 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
         stepWidget.setConfirmationStepActive(true);
         setStepWidget(stepWidget);
         fillForm();
-        setAdditionalTitle(i18nResolver.resolve("checkout", "confirmationPageTitle", userContext.locales()).orElse(""));
+        setAdditionalTitle(i18nResolver.getOrEmpty("checkout", "confirmationPageTitle", userContext.locales()));
     }
 
     private void fillForm() {
