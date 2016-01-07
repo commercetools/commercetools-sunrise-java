@@ -15,7 +15,7 @@ public class I18nResolverTest {
 
     @Test
     public void returnsFirstFoundTranslation() throws Exception {
-        final I18nResolver i18nResolver = (bundle, key, locale) ->
+        final I18nResolver i18nResolver = (bundle, key, locale, args) ->
                 locale.equals(Locale.GERMAN) ? Optional.of("some sentence") : Optional.empty();
         final Optional<String> message = i18nResolver.get("foo", "bar", SOME_LOCALES);
         assertThat(message).contains("some sentence");
@@ -23,28 +23,28 @@ public class I18nResolverTest {
 
     @Test
     public void emptyWhenNoLanguageFound() throws Exception {
-        final I18nResolver i18nResolver = (bundle, key, locale) -> Optional.empty();
+        final I18nResolver i18nResolver = (bundle, key, locale, args) -> Optional.empty();
         final Optional<String> message = i18nResolver.get("foo", "bar", SOME_LOCALES);
         assertThat(message).isEmpty();
     }
 
     @Test
     public void emptyWhenNoLanguageDefined() throws Exception {
-        final I18nResolver i18nResolver = (bundle, key, locale) -> Optional.of("some sentence");
+        final I18nResolver i18nResolver = (bundle, key, locale, args) -> Optional.of("some sentence");
         final Optional<String> message = i18nResolver.get("foo", "bar", emptyList());
         assertThat(message).isEmpty();
     }
 
     @Test
     public void nullWhenLanguageNotFound() throws Exception {
-        final I18nResolver i18nResolver = (bundle, key, locale) -> Optional.empty();
+        final I18nResolver i18nResolver = (bundle, key, locale, args) -> Optional.empty();
         final String message = i18nResolver.getOrEmpty("foo", "bar", Locale.ENGLISH);
         assertThat(message).isEmpty();
     }
 
     @Test
     public void nullWhenNoLanguageFound() throws Exception {
-        final I18nResolver i18nResolver = (bundle, key, locale) -> Optional.empty();
+        final I18nResolver i18nResolver = (bundle, key, locale, args) -> Optional.empty();
         final String message = i18nResolver.getOrEmpty("foo", "bar", SOME_LOCALES);
         assertThat(message).isEmpty();
     }
