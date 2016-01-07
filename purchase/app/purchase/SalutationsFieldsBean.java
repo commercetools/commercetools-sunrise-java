@@ -4,6 +4,7 @@ import common.contexts.UserContext;
 import common.i18n.I18nResolver;
 import common.models.SelectableData;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.Base;
 import play.Configuration;
 
 import javax.annotation.Nullable;
@@ -11,7 +12,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class SalutationsFieldsBean {
+public class SalutationsFieldsBean extends Base {
     private static final String ALLOWED_TITLES_CONFIG_KEY = "checkout.allowedTitles";
     private static final String MESSAGE_CONFIG_KEY = "message";
 

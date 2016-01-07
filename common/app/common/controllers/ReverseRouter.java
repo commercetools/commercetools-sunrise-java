@@ -18,6 +18,10 @@ public interface ReverseRouter {
 
     Call productToCartForm(final String languageTag);
 
+    Call showCheckoutAddressesForm(final String language);
+
+    Call processCheckoutAddressesForm(final String language);
+
     Call showCheckoutShippingForm(final String language);
 
     Call processCheckoutShippingForm(final String language);
