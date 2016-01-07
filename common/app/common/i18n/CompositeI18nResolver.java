@@ -18,9 +18,9 @@ public final class CompositeI18nResolver extends Base implements I18nResolver {
     }
 
     @Override
-    public Optional<String> get(final String bundle, final String key, final Locale locale) {
+    public Optional<String> get(final String bundle, final String key, final Locale locale, final Object... args) {
         for (I18nResolver i18nResolver : i18nResolvers) {
-            final Optional<String> message = i18nResolver.get(bundle, key, locale);
+            final Optional<String> message = i18nResolver.get(bundle, key, locale, args);
             if (message.isPresent()) {
                 return message;
             }

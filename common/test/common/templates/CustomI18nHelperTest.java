@@ -85,7 +85,7 @@ public class CustomI18nHelperTest {
     }
 
     private static I18nResolver i18nResolver(final Map<String, String> i18nMap) {
-        return (bundle, key, locale) -> {
+        return (bundle, key, locale, args) -> {
             final String mapKey = String.format("%s/%s:%s", locale.toLanguageTag(), bundle, key);
             final String message = i18nMap.get(mapKey);
             return Optional.ofNullable(message);

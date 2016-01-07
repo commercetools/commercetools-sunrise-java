@@ -15,24 +15,24 @@ public class CompositeI18nResolverTest {
     @Test
     public void resolvesWithFirstResolver() throws Exception {
         final List<I18nResolver> i18nResolverList = asList(
-                (bundle, key, locale) -> Optional.of("foo"),
-                (bundle, key, locale) -> Optional.of("bar"));
+                (bundle, key, locale, args) -> Optional.of("foo"),
+                (bundle, key, locale, args) -> Optional.of("bar"));
         testCompositeResolver(i18nResolverList, message -> assertThat(message).contains("foo"));
     }
 
     @Test
     public void fallbacksToSecondResolver() throws Exception {
         final List<I18nResolver> i18nResolverList = asList(
-                (bundle, key, locale) -> Optional.empty(),
-                (bundle, key, locale) -> Optional.of("bar"));
+                (bundle, key, locale, args) -> Optional.empty(),
+                (bundle, key, locale, args) -> Optional.of("bar"));
         testCompositeResolver(i18nResolverList, message -> assertThat(message).contains("bar"));
     }
 
     @Test
     public void emptyWhenNotFoundInAnyResolver() throws Exception {
         final List<I18nResolver> i18nResolverList = asList(
-                (bundle, key, locale) -> Optional.empty(),
-                (bundle, key, locale) -> Optional.empty());
+                (bundle, key, locale, args) -> Optional.empty(),
+                (bundle, key, locale, args) -> Optional.empty());
         testCompositeResolver(i18nResolverList, message -> assertThat(message).isEmpty());
     }
 
