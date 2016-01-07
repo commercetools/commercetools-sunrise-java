@@ -21,7 +21,7 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
         stepWidget.setConfirmationStepActive(true);
         setStepWidget(stepWidget);
         fillForm();
-        setAdditionalTitle(i18nResolver.getOrEmpty("checkout", "confirmationPageTitle", userContext.locales()));
+        setAdditionalTitle(i18nResolver.getOrEmpty("checkout", "confirmationPage.title", userContext.locales()));
     }
 
     private void fillForm() {

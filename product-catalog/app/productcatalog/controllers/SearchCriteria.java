@@ -118,7 +118,7 @@ public class SearchCriteria {
 
     private Facet<ProductProjection> brandFacet() {
         final String key = "brands";
-        final String label = i18nResolver.getOrEmpty("catalog", "facet.brand", userContext.locales());
+        final String label = i18nResolver.getOrEmpty("catalog", "filters.brand", userContext.locales());
         return SelectFacetBuilder.of(key, label, FACET.allVariants().attribute().ofEnum("designer").label())
                 .selectedValues(getSelectedValues(key))
                 .type(SELECT_LIST_DISPLAY)
@@ -128,7 +128,7 @@ public class SearchCriteria {
 
     private Facet<ProductProjection> sizeFacet() {
         final String key = "size";
-        final String label = i18nResolver.getOrEmpty("catalog", "facet.size", userContext.locales());
+        final String label = i18nResolver.getOrEmpty("catalog", "filters.size", userContext.locales());
         return SelectFacetBuilder.of(key, label, FACET.allVariants().attribute().ofEnum("commonSize").label())
                 .mapper(SortedFacetOptionMapper.of(sortedSizes))
                 .selectedValues(getSelectedValues(key))
@@ -139,7 +139,7 @@ public class SearchCriteria {
 
     private Facet<ProductProjection> colorFacet() {
         final String key = "color";
-        final String label = i18nResolver.getOrEmpty("catalog", "facet.color", userContext.locales());
+        final String label = i18nResolver.getOrEmpty("catalog", "filters.color", userContext.locales());
         return SelectFacetBuilder.of(key, label, FACET.allVariants().attribute().ofLocalizableEnum("color").label().locale(userContext.locale()))
                 .mapper(AlphabeticallySortedFacetOptionMapper.of())
                 .selectedValues(getSelectedValues(key))
@@ -151,7 +151,7 @@ public class SearchCriteria {
     private Optional<Facet<ProductProjection>> categoryFacet() {
         return selectedCategory.map(category -> {
             final String key = "productType";
-            final String label = i18nResolver.getOrEmpty("catalog", "facet.productType", userContext.locales());
+            final String label = i18nResolver.getOrEmpty("catalog", "filters.productType", userContext.locales());
             final TermFacetAndFilterSearchModel<ProductProjection> model = TermFacetAndFilterSearchModel.of("variants.categories.id");
             return SelectFacetBuilder.of(key, label, model)
                     .mapper(HierarchicalCategoryFacetOptionMapper.of(singletonList(category), subcategoryTreeFacet, userContext.locales()))
@@ -165,19 +165,19 @@ public class SearchCriteria {
 
     private SortOption<ProductProjection> newestSortOption() {
         final String value = "new";
-        final String label = i18nResolver.getOrEmpty("catalog", "sort.new", userContext.locales());
+        final String label = i18nResolver.getOrEmpty("catalog", "sortSelector.new", userContext.locales());
         return sortOption(value, label, SORT.createdAt().byDesc());
     }
 
     private SortOption<ProductProjection> priceAscSortOption() {
         final String value = "price-asc";
-        final String label = i18nResolver.getOrEmpty("catalog", "sort.priceAsc", userContext.locales());
+        final String label = i18nResolver.getOrEmpty("catalog", "sortSelector.priceAsc", userContext.locales());
         return sortOption(value, label, SORT.allVariants().price().byAsc());
     }
 
     private SortOption<ProductProjection> priceDescSortOption() {
         final String value = "price-desc";
-        final String label = i18nResolver.getOrEmpty("catalog", "sort.priceDesc", userContext.locales());
+        final String label = i18nResolver.getOrEmpty("catalog", "sortSelector.priceDesc", userContext.locales());
         return sortOption(value, label, SORT.allVariants().price().byDesc());
     }
 
