@@ -3,6 +3,7 @@ package common.controllers;
 import com.neovisionaries.i18n.CountryCode;
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
+import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.Category;
@@ -62,6 +63,7 @@ public abstract class WithSunriseApplication {
                 .loadConfig(injectedConfiguration(baseConfiguration()))
                 .overrides(bind(SphereClient.class).toInstance(sphereClient))
                 .overrides(bind(PlayJavaSphereClient.class).toInstance(playJavaSphereClient))
+                .overrides(bind(I18nResolver.class).toInstance(injectedI18nResolver()))
                 .overrides(bind(TemplateService.class).toInstance(injectedTemplateService()))
                 .overrides(bind(CmsService.class).toInstance(injectedCmsService()))
                 .overrides(bind(ReverseRouter.class).toInstance(injectedReverseRouter()))
@@ -84,6 +86,10 @@ public abstract class WithSunriseApplication {
     protected Configuration injectedConfiguration(final Configuration configuration) {
         final Configuration testConfiguration = Configuration.load(new Environment(Mode.TEST));
         return configuration.withFallback(testConfiguration);
+    }
+
+    private I18nResolver injectedI18nResolver() {
+        return ((bundle, key, locale, args) -> Optional.empty());
     }
 
     protected TemplateService injectedTemplateService() {
