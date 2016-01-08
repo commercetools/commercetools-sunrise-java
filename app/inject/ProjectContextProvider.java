@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 
 class ProjectContextProvider implements Provider<ProjectContext> {
     private static final String CONFIG_COUNTRIES = "application.countries";
-    private static final String CONFIG_LANGUAGES = "application.languages";
+    private static final String CONFIG_LANGUAGES = "application.i18n.languages";
     private final Configuration configuration;
     private final SphereClient client;
 

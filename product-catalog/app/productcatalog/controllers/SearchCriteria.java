@@ -1,6 +1,7 @@
 package productcatalog.controllers;
 
 import common.contexts.UserContext;
+import common.i18n.I18nResolver;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
@@ -13,14 +14,15 @@ import io.sphere.sdk.search.FacetAndFilterExpression;
 import io.sphere.sdk.search.SortExpression;
 import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
 import play.Configuration;
-import play.i18n.Messages;
 import play.mvc.Http;
 import productcatalog.models.DisplaySelector;
 import productcatalog.models.SortOption;
 import productcatalog.models.SortSelector;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -33,8 +35,8 @@ public class SearchCriteria {
     private static final ProductProjectionFacetAndFilterSearchModel FACET = ProductProjectionSearchModel.of().facetedSearch();
     private static final SortExpression<ProductProjection> DEFAULT_SORT = SORT.createdAt().byDesc();
     private final Http.Request request;
-    private final Messages messages;
-    private final Locale locale;
+    private final I18nResolver i18nResolver;
+    private final UserContext userContext;
     private final Optional<Category> selectedCategory;
     private final List<String> selectedCategoryIds;
     private final CategoryTree subcategoryTreeFacet;
@@ -45,11 +47,12 @@ public class SearchCriteria {
     private final List<Integer> pageSizeOptions;
     private final int pageSizeDefault;
 
-    private SearchCriteria(final Configuration configuration, final Http.Request request, final Messages messages, final Locale locale,
-                           @Nullable final Category selectedCategory, final List<String> selectedCategoryIds, final CategoryTree subcategoryTreeFacet) {
+    private SearchCriteria(final Configuration configuration, final Http.Request request, final I18nResolver i18nResolver,
+                           final UserContext userContext, @Nullable final Category selectedCategory,
+                           final List<String> selectedCategoryIds, final CategoryTree subcategoryTreeFacet) {
         this.request = request;
-        this.messages = messages;
-        this.locale = locale;
+        this.i18nResolver = i18nResolver;
+        this.userContext = userContext;
         this.selectedCategory = Optional.ofNullable(selectedCategory);
         this.selectedCategoryIds = selectedCategoryIds;
         this.subcategoryTreeFacet = subcategoryTreeFacet;
@@ -99,22 +102,26 @@ public class SearchCriteria {
 
     public Optional<LocalizedStringEntry> searchTerm() {
         return Optional.ofNullable(request.getQueryString(fulltextKey))
-                .map(text -> LocalizedStringEntry.of(locale, text));
+                .map(text -> LocalizedStringEntry.of(userContext.locale(), text));
     }
 
-    public static SearchCriteria of(final Configuration configuration, final Http.Request request, final Messages messages, final UserContext userContext,
-                                      final Category selectedCategory, final List<String> selectedCategoryIds, final CategoryTree subcategoryTreeFacet) {
-        return new SearchCriteria(configuration, request, messages, userContext.locale(), selectedCategory, selectedCategoryIds, subcategoryTreeFacet);
+    public static SearchCriteria of(final Configuration configuration, final Http.Request request,
+                                    final I18nResolver i18nResolver, final UserContext userContext,
+                                    final Category selectedCategory, final List<String> selectedCategoryIds,
+                                    final CategoryTree subcategoryTreeFacet) {
+        return new SearchCriteria(configuration, request, i18nResolver, userContext, selectedCategory, selectedCategoryIds, subcategoryTreeFacet);
     }
 
-    public static SearchCriteria of(final Configuration configuration, final Http.Request request, final Messages messages, final UserContext userContext,
+    public static SearchCriteria of(final Configuration configuration, final Http.Request request,
+                                    final I18nResolver i18nResolver, final UserContext userContext,
                                       final CategoryTree categoryTree) {
-        return of(configuration, request, messages, userContext, null, emptyList(), categoryTree);
+        return of(configuration, request, i18nResolver, userContext, null, emptyList(), categoryTree);
     }
 
     private Facet<ProductProjection> brandFacet() {
         final String key = "brands";
-        return SelectFacetBuilder.of(key, messages.at("pop.facet.brand"), FACET.allVariants().attribute().ofEnum("designer").label())
+        final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "filters.brand");
+        return SelectFacetBuilder.of(key, label, FACET.allVariants().attribute().ofEnum("designer").label())
                 .selectedValues(getSelectedValues(key))
                 .type(SELECT_LIST_DISPLAY)
                 .countHidden(true)
@@ -123,7 +130,8 @@ public class SearchCriteria {
 
     private Facet<ProductProjection> sizeFacet() {
         final String key = "size";
-        return SelectFacetBuilder.of(key, messages.at("pop.facet.size"), FACET.allVariants().attribute().ofEnum("commonSize").label())
+        final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "filters.size");
+        return SelectFacetBuilder.of(key, label, FACET.allVariants().attribute().ofEnum("commonSize").label())
                 .mapper(SortedFacetOptionMapper.of(sortedSizes))
                 .selectedValues(getSelectedValues(key))
                 .type(SELECT_TWO_COLUMNS_DISPLAY)
@@ -133,7 +141,8 @@ public class SearchCriteria {
 
     private Facet<ProductProjection> colorFacet() {
         final String key = "color";
-        return SelectFacetBuilder.of(key, messages.at("pop.facet.color"), FACET.allVariants().attribute().ofLocalizableEnum("color").label().locale(locale))
+        final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "filters.color");
+        return SelectFacetBuilder.of(key, label, FACET.allVariants().attribute().ofLocalizableEnum("color").label().locale(userContext.locale()))
                 .mapper(AlphabeticallySortedFacetOptionMapper.of())
                 .selectedValues(getSelectedValues(key))
                 .type(SELECT_TWO_COLUMNS_DISPLAY)
@@ -144,9 +153,10 @@ public class SearchCriteria {
     private Optional<Facet<ProductProjection>> categoryFacet() {
         return selectedCategory.map(category -> {
             final String key = "productType";
+            final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "filters.productType");
             final TermFacetAndFilterSearchModel<ProductProjection> model = TermFacetAndFilterSearchModel.of("variants.categories.id");
-            return SelectFacetBuilder.of(key, messages.at("pop.facet.productType"), model)
-                    .mapper(HierarchicalCategoryFacetOptionMapper.of(singletonList(category), subcategoryTreeFacet, singletonList(locale)))
+            return SelectFacetBuilder.of(key, label, model)
+                    .mapper(HierarchicalCategoryFacetOptionMapper.of(singletonList(category), subcategoryTreeFacet, userContext.locales()))
                     .selectedValues(selectedCategoryIds)
                     .type(SELECT_CATEGORY_HIERARCHICAL_DISPLAY)
                     .countHidden(true)
@@ -157,17 +167,20 @@ public class SearchCriteria {
 
     private SortOption<ProductProjection> newestSortOption() {
         final String value = "new";
-        return sortOption(value, messages.at("pop.sort.new"), SORT.createdAt().byDesc());
+        final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "sortSelector.new");
+        return sortOption(value, label, SORT.createdAt().byDesc());
     }
 
     private SortOption<ProductProjection> priceAscSortOption() {
         final String value = "price-asc";
-        return sortOption(value, messages.at("pop.sort.priceAsc"), SORT.allVariants().price().byAsc());
+        final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "sortSelector.priceAsc");
+        return sortOption(value, label, SORT.allVariants().price().byAsc());
     }
 
     private SortOption<ProductProjection> priceDescSortOption() {
         final String value = "price-desc";
-        return sortOption(value, messages.at("pop.sort.priceDesc"), SORT.allVariants().price().byDesc());
+        final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "sortSelector.priceDesc");
+        return sortOption(value, label, SORT.allVariants().price().byDesc());
     }
 
     private SortOption<ProductProjection> sortOption(final String value, final String label, final SortExpression<ProductProjection> sortExpression) {

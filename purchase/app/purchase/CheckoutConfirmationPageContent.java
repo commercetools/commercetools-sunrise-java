@@ -2,10 +2,10 @@ package purchase;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
+import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import common.models.SelectableData;
 import io.sphere.sdk.carts.Cart;
-import play.i18n.Messages;
 
 public class CheckoutConfirmationPageContent extends CheckoutPageContent {
 
@@ -15,13 +15,13 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
     }
 
     public CheckoutConfirmationPageContent(final Cart cart, final ProductDataConfig productDataConfig,
-                                           final UserContext userContext, final ReverseRouter reverseRouter, final Messages messages) {
+                                           final UserContext userContext, final ReverseRouter reverseRouter, final I18nResolver i18nResolver) {
         setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setConfirmationStepActive(true);
         setStepWidget(stepWidget);
         fillForm();
-        setAdditionalTitle(messages.at("checkoutConfirmationPageTitle"));
+        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "confirmationPage.title"));
     }
 
     private void fillForm() {

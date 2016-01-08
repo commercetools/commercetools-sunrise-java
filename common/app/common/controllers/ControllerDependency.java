@@ -2,12 +2,12 @@ package common.controllers;
 
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
+import common.i18n.I18nResolver;
 import common.templates.TemplateService;
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
-import play.i18n.MessagesApi;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -20,20 +20,20 @@ public class ControllerDependency extends Base {
     private final TemplateService templateService;
     private final CmsService cmsService;
     private final Configuration configuration;
-    private final MessagesApi messagesApi;
+    private final I18nResolver i18nResolver;
     private final ReverseRouter reverseRouter;
 
     @Inject
     public ControllerDependency(final PlayJavaSphereClient sphere, final CategoryTreeExtended categoryTree, final ProjectContext projectContext,
                                 final TemplateService templateService, final CmsService cmsService, final Configuration configuration,
-                                final MessagesApi messagesApi, final ReverseRouter reverseRouter) {
+                                final I18nResolver i18nResolver, final ReverseRouter reverseRouter) {
         this.sphere = sphere;
         this.categoryTree = categoryTree;
         this.projectContext = projectContext;
         this.templateService = templateService;
         this.cmsService = cmsService;
         this.configuration = configuration;
-        this.messagesApi = messagesApi;
+        this.i18nResolver = i18nResolver;
         this.reverseRouter = reverseRouter;
     }
 
@@ -61,8 +61,8 @@ public class ControllerDependency extends Base {
         return configuration;
     }
 
-    public MessagesApi messagesApi() {
-        return messagesApi;
+    public I18nResolver i18nResolver() {
+        return i18nResolver;
     }
 
     public ReverseRouter getReverseRouter() {

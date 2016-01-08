@@ -1,6 +1,6 @@
 package common.models;
 
-import common.contexts.PriceFinderFactory;
+import common.prices.PriceFinderFactory;
 import common.contexts.UserContext;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;

@@ -62,7 +62,7 @@ public final class CartDetailPageController extends CartController {
     }
 
     private Result renderCartPage(final Cart cart, final UserContext userContext) {
-        final CartDetailPageContent content = new CartDetailPageContent(cart, productDataConfig, userContext, reverseRouter(), messages(userContext));
+        final CartDetailPageContent content = new CartDetailPageContent(cart, productDataConfig, userContext, reverseRouter(), i18nResolver());
         final SunrisePageData pageData = pageData(userContext, content, ctx());
         return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
     }

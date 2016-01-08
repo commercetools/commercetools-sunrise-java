@@ -4,6 +4,7 @@ import common.cms.CmsService;
 import common.contexts.ProjectContext;
 import common.contexts.RequestContext;
 import common.contexts.UserContext;
+import common.i18n.I18nResolver;
 import common.models.LocationSelector;
 import common.models.MiniCart;
 import common.models.NavMenuData;
@@ -15,8 +16,6 @@ import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import play.Configuration;
 import play.filters.csrf.AddCSRFToken;
-import play.i18n.Lang;
-import play.i18n.Messages;
 import play.mvc.Http;
 import play.mvc.With;
 import purchase.CartSessionUtils;
@@ -60,6 +59,10 @@ public abstract class SunriseController extends ShopController {
 
     protected final CmsService cmsService() {
         return controllerDependency.cmsService();
+    }
+
+    protected final I18nResolver i18nResolver() {
+        return controllerDependency.i18nResolver();
     }
 
     protected final Configuration configuration() {
@@ -107,11 +110,6 @@ public abstract class SunriseController extends ShopController {
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         return pageMeta;
-    }
-
-    protected final Messages messages(final UserContext userContext) {
-        final Lang lang = Lang.forCode(userContext.locale().toLanguageTag());
-        return new Messages(lang, controllerDependency.messagesApi());
     }
 
     protected PriceFormatter priceFormatter(final UserContext userContext) {

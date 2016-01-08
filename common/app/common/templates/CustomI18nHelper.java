@@ -2,152 +2,82 @@ package common.templates;
 
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
+import common.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.error.YAMLException;
-import play.Logger;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
-import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 final class CustomI18nHelper extends Base implements Helper<String> {
-    private final Map<String, Map<String, Object>> languageBundleToYamlMap = new HashMap<>();
+    private final I18nResolver i18n;
 
-    public CustomI18nHelper(final List<Locale> locales, final List<String> bundles) {
-        requireNonNull(locales);
-        requireNonNull(bundles);
-        for (final Locale locale : locales) {
-            final List<String> foundBundles = new LinkedList<>();
-            final List<String> notFoundBundles = new LinkedList<>();
-            for (final String bundle : bundles) {
-                try {
-                    final Map<String, Object> yamlContent = loadYamlForTranslationAndBundle(locale, bundle);
-                    languageBundleToYamlMap.put(locale.toLanguageTag() + "/" + bundle, yamlContent);
-                    foundBundles.add(bundle);
-                } catch (final IOException e){
-                    notFoundBundles.add(bundle);
-                }
-            }
-            Logger.info("handlebars-i18n: {}: loaded: '{}' failed: {}", locale, foundBundles, notFoundBundles);
-        }
+    public CustomI18nHelper(final I18nResolver i18n) {
+        this.i18n = i18n;
     }
 
     @Override
     public CharSequence apply(final String context, final Options options) throws IOException {
-        final List<String> languageTags = getLocales(options);
-        final String language = languageTags.get(0);//TODO improve
-        final TranslationIdentifier translationIdentifier = obtainTranslationIdentifier(context);
-        final String bundle = translationIdentifier.bundle;
-        final String key = translationIdentifier.key;
-        final String resolvedValue = pluralize(options, language, bundle, key);
-        return replaceParameters(options, resolvedValue);
+        final List<Locale> locales = getLocales(options);
+        final I18nIdentifier i18nIdentifier = new I18nIdentifier(context);
+        final String message = resolveMessage(options, i18nIdentifier, locales);
+        return replaceParameters(options, message);
     }
 
-    private String pluralize(final Options options, final String language, final String bundle, final String key) {
-        final boolean containsPlural = containsPlural(options);
-        return (containsPlural)
-                ? Optional.ofNullable(resolve(language, bundle, key + "_plural")).orElseGet(() -> resolve(language, bundle, key))
-                : resolve(language, bundle, key);
+    private String resolveMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
+        return resolvePluralMessage(options, i18nIdentifier, locales)
+                .orElse(i18n.get(locales, i18nIdentifier.bundle, i18nIdentifier.key)
+                        .orElse(null));
     }
 
-    private TranslationIdentifier obtainTranslationIdentifier(final String context) {
-        final String[] parts = StringUtils.split(context, ':');
-        final boolean usingDefaultBundle = parts.length == 1;
-        return new TranslationIdentifier(usingDefaultBundle ? "translations" : parts[0], usingDefaultBundle ? context : parts[1]);
-    }
-
-    private static class TranslationIdentifier {
-        private final String key;
-        private final String bundle;
-
-        public TranslationIdentifier(final String bundle, final String key) {
-            this.bundle = bundle;
-            this.key = key;
+    private Optional<String> resolvePluralMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
+        if (containsPlural(options)) {
+            final String pluralizedKey = i18nIdentifier.key + "_plural";
+            return i18n.get(locales, i18nIdentifier.bundle, pluralizedKey);
+        } else {
+            return Optional.empty();
         }
-    }
-
-    private String replaceParameters(final Options options, final String resolvedValue) {
-        String parametersReplaced = StringUtils.defaultString(resolvedValue);
-        for (final Map.Entry<String, Object> entry : options.hash.entrySet()) {
-            if (entry.getValue() != null) {
-                parametersReplaced = parametersReplaced.replace("__" + entry.getKey() + "__", entry.getValue().toString());
-            }
-        }
-        return parametersReplaced;
-    }
-
-    @Nullable
-    private String resolve(final String language, final String bundle, final String key) {
-        final Map<String, Object> yamlContent = languageBundleToYamlMap.getOrDefault(language + "/" + bundle, Collections.emptyMap());
-        return resolve(key, yamlContent);
-    }
-
-    @Nullable
-    private String resolve(final String key, final Map<String, Object> yamlContent) {
-        final String[] pathSegments = StringUtils.split(key, '.');
-        return resolve(yamlContent, pathSegments, 0);
-    }
-
-    @Nullable
-    private static String resolve(final Map<String, Object> yamlContent, final String[] pathSegments, final int index) {
-        return Optional.ofNullable(yamlContent.get(pathSegments[index]))
-                .map(resolved -> {
-                    if (resolved instanceof String) {
-                        return (String) resolved;
-                    } else if (pathSegments.length == index) {
-                        return null;
-                    } else if (resolved instanceof Map) {
-                        return resolve((Map<String, Object>) resolved, pathSegments, index + 1);
-                    } else {
-                        return null;
-                    }
-                })
-                .orElse(null);
     }
 
     private boolean containsPlural(final Options options) {
         return options.hash.entrySet().stream()
-                .anyMatch(entry ->
-                        (entry.getValue() instanceof Integer && ((((Number) entry.getValue()).intValue() != 1)))
-                                || (entry.getValue() instanceof Long && ((((Number) entry.getValue()).longValue() != 1L))));
+                .filter(entry -> entry.getKey().equals("count") && entry.getValue() instanceof Number)
+                .anyMatch(entry -> ((Number) entry.getValue()).doubleValue() != 1);
     }
 
-    private static List<String> getLocales(final Options options) {
-        return (List<String>) options.context.get("locales");
-    }
-
-    private static Map<String, Object> loadYamlForTranslationAndBundle(final Locale locale, final String bundle) throws IOException {
-        final String path = buildYamlPath(locale, bundle);
-        final InputStream inputStream = getResourceAsStream(path);
-        return loadYamlData(inputStream);
-    }
-
-    private static String buildYamlPath(final Locale locale, final String bundle) {
-        return "META-INF/resources/webjars/locales/" + locale.toLanguageTag() + "/" + bundle + ".yaml";
-    }
-
-    private static Map<String, Object> loadYamlData(final InputStream inputStream) throws IOException {
-        try {
-            return (Map<String, Object>) new Yaml().load(inputStream);
-        } catch (final YAMLException e) {
-            throw new IOException(e);
+    private String replaceParameters(final Options options, final String resolvedValue) {
+        String message = StringUtils.defaultString(resolvedValue);
+        for (final Map.Entry<String, Object> entry : options.hash.entrySet()) {
+            if (entry.getValue() != null) {
+                final String parameter = "__" + entry.getKey() + "__";
+                message = message.replace(parameter, entry.getValue().toString());
+            }
         }
+        return message;
     }
 
-    private static InputStream getResourceAsStream(final String path) {
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+    @SuppressWarnings("unchecked")
+    private static List<Locale> getLocales(final Options options) {
+        final List<String> languageTags = (List<String>) options.context.get("locales");
+        return languageTags.stream()
+                .map(Locale::forLanguageTag)
+                .collect(toList());
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("supportedLanguagesAndBundles", languageBundleToYamlMap.keySet())
-                .toString();
+    private static class I18nIdentifier {
+        private final String key;
+        private final String bundle;
+
+        public I18nIdentifier(final String context) {
+            final String[] parts = StringUtils.split(context, ':');
+            final boolean usingDefaultBundle = parts.length == 1;
+            this.bundle = usingDefaultBundle ? "translations" : parts[0];
+            this.key = usingDefaultBundle ? context : parts[1];
+        }
     }
 }

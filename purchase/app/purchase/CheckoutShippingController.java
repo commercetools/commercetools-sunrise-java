@@ -15,7 +15,6 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
-import play.i18n.Messages;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -41,8 +40,7 @@ public class CheckoutShippingController extends CartController {
         final UserContext userContext = userContext(languageTag);
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
-            final Messages messages = messages(userContext);
-            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, messages, userContext, shippingMethods, productDataConfig, reverseRouter());
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, i18nResolver(), userContext, shippingMethods, productDataConfig, reverseRouter());
             final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
         });
@@ -55,8 +53,7 @@ public class CheckoutShippingController extends CartController {
         return getOrCreateCart(userContext, session()).flatMap(cart -> {
             final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
             final Form<CheckoutShippingFormData> filledForm = obtainFilledForm();
-            final Messages messages = messages(userContext);
-            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(checkoutShippingFormData, cart, messages, userContext, shippingMethods, productDataConfig, reverseRouter());
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(checkoutShippingFormData, cart, i18nResolver(), userContext, shippingMethods, productDataConfig, reverseRouter());
             if (filledForm.hasErrors()) {
                 return F.Promise.pure(badRequest(userContext, filledForm, content));
             } else {

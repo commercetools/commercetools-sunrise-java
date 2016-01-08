@@ -3,6 +3,7 @@ package inject;
 import com.google.inject.AbstractModule;
 import common.cms.CmsService;
 import common.controllers.ReverseRouter;
+import common.i18n.I18nResolver;
 import common.templates.TemplateService;
 import pages.ReverseRouterImpl;
 
@@ -16,6 +17,7 @@ public class ApplicationProductionModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        bind(I18nResolver.class).toProvider(I18nResolverProvider.class).in(Singleton.class);
         bind(TemplateService.class).toProvider(TemplateServiceProvider.class).in(Singleton.class);
         bind(CmsService.class).toProvider(CmsServiceProvider.class).in(Singleton.class);
         bind(ReverseRouter.class).toInstance(new ReverseRouterImpl());

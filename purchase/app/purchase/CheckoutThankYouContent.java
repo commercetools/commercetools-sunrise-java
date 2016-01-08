@@ -3,9 +3,9 @@ package purchase;
 import common.contexts.UserContext;
 import common.controllers.PageContent;
 import common.controllers.ReverseRouter;
+import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.orders.Order;
-import play.i18n.Messages;
 
 public class CheckoutThankYouContent extends PageContent {
     private CartOrderBean order;
@@ -13,10 +13,10 @@ public class CheckoutThankYouContent extends PageContent {
     public CheckoutThankYouContent() {
     }
 
-    public CheckoutThankYouContent(final Order order, final ProductDataConfig productDataConfig,
-                                   final UserContext userContext, final ReverseRouter reverseRouter, final Messages messages) {
+    public CheckoutThankYouContent(final Order order, final ProductDataConfig productDataConfig, final UserContext userContext,
+                                   final ReverseRouter reverseRouter, final I18nResolver i18nResolver) {
         setOrder(new CartOrderBean(order, productDataConfig, userContext, reverseRouter));
-        setAdditionalTitle(messages.at("checkoutThankyouPageTitle"));
+        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "thankYouPage.title"));
     }
 
     public CartOrderBean getOrder() {
