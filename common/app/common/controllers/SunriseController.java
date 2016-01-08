@@ -1,5 +1,6 @@
 package common.controllers;
 
+import com.neovisionaries.i18n.CountryCode;
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
 import common.contexts.RequestContext;
@@ -21,6 +22,7 @@ import play.mvc.With;
 import purchase.CartSessionUtils;
 
 import javax.annotation.Nullable;
+import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -28,7 +30,6 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static com.neovisionaries.i18n.CountryCode.DE;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -117,13 +118,17 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected UserContext userContext(final String languageTag) {
+        // TODO when locale is not supported by app
+        final Locale currentLocale = Locale.forLanguageTag(languageTag);
+        final CountryCode country = CountryCode.getByLocale(currentLocale);
+        final CurrencyUnit currency = Monetary.getCurrency(country.getCurrency().getCurrencyCode());
         final ArrayList<Locale> locales = new ArrayList<>();
-        locales.add(Locale.forLanguageTag(languageTag));
+        locales.add(currentLocale);
         locales.addAll(request().acceptLanguages().stream()
                 .map(lang -> Locale.forLanguageTag(lang.code()))
                 .collect(toList()));
         locales.addAll(projectContext().languages());
-        return UserContext.of(DE, locales, ZoneId.of("Europe/Berlin"), Monetary.getCurrency("EUR"));
+        return UserContext.of(country, locales, ZoneId.of("Europe/Berlin"), currency);
     }
 
     protected RequestContext requestContext() {
