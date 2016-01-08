@@ -110,7 +110,7 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     @Override
-    public Call product(final String locale, final String productSlug, final String sku) {
+    public Call product(final String languageTag, final String productSlug, final String sku) {
         return createCall(productUrl + productSlug + sku);
     }
 
@@ -120,37 +120,37 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     @Override
-    public Call showCheckoutAddressesForm(final String language) {
+    public Call showCheckoutAddressesForm(final String languageTag) {
         return createCall(showCheckoutAddressesFormUrl);
     }
 
     @Override
-    public Call processCheckoutAddressesForm(final String language) {
+    public Call processCheckoutAddressesForm(final String languageTag) {
         return createCall(processCheckoutAddressesFormUrl);
     }
 
     @Override
-    public Call showCheckoutShippingForm(final String language) {
+    public Call showCheckoutShippingForm(final String languageTag) {
         return createCall(showCheckoutShippingFormUrl);
     }
 
     @Override
-    public Call processCheckoutShippingForm(final String language) {
+    public Call processCheckoutShippingForm(final String languageTag) {
         return createCall(processCheckoutShippingFormUrl);
     }
 
     @Override
-    public Call showCheckoutPaymentForm(final String language) {
+    public Call showCheckoutPaymentForm(final String languageTag) {
         return createCall(showCheckoutPaymentFormUrl);
     }
 
     @Override
-    public Call processCheckoutPaymentForm(final String language) {
+    public Call processCheckoutPaymentForm(final String languageTag) {
         return createCall(processCheckoutPaymentFormUrl);
     }
 
     @Override
-    public Call showCheckoutConfirmationForm(final String language) {
+    public Call showCheckoutConfirmationForm(final String languageTag) {
         return createCall(showCheckoutConfirmationFormUrl);
     }
 
@@ -160,27 +160,27 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     @Override
-    public Call processCheckoutConfirmationForm(final String language) {
+    public Call processCheckoutConfirmationForm(final String languageTag) {
         return createCall(processCheckoutConfirmationForm);
     }
 
     @Override
-    public Call showCart(final String language) {
+    public Call showCart(final String languageTag) {
         return createCall(showCart);
     }
 
     @Override
-    public Call processDeleteLineItem(final String language) {
+    public Call processDeleteLineItem(final String languageTag) {
         return createCall(processDeleteLineItem);
     }
 
     @Override
-    public Call processChangeLineItemQuantity(final String language) {
+    public Call processChangeLineItemQuantity(final String languageTag) {
         return createCall(processChangeLineItemQuantity);
     }
 
     @Override
-    public Call showCheckoutThankyou(final String language) {
+    public Call showCheckoutThankyou(final String languageTag) {
         return createCall(showCheckoutThankyou);
     }
 

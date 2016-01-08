@@ -9,7 +9,6 @@ import io.sphere.sdk.models.Base;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
@@ -42,7 +41,7 @@ public class NavMenuData extends Base {
                                                    @Nullable final String saleCategoryExtId) {
         final CategoryData categoryData = new CategoryData();
         categoryData.setText(category.getName().find(userContext.locales()).orElse(""));
-        categoryData.setUrl(getCategoryUrl(category, userContext.locale(), reverseRouter));
+        categoryData.setUrl(reverseRouter.categoryUrlOrEmpty(userContext.locale(), category));
         categoryData.setSale(Optional.ofNullable(category.getExternalId())
                 .map(id -> id.equals(saleCategoryExtId))
                 .orElse(false));
@@ -50,10 +49,5 @@ public class NavMenuData extends Base {
                 .map(child -> createCategoryData(child, categoryTree, userContext, reverseRouter, saleCategoryExtId))
                 .collect(toList()));
         return categoryData;
-    }
-
-    private static String getCategoryUrl(final Category category, final Locale locale, final ReverseRouter reverseRouter) {
-        final String slug = category.getSlug().find(locale).orElse("");
-        return reverseRouter.category(locale.toLanguageTag(), slug).url();
     }
 }

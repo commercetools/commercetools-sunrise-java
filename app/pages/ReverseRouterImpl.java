@@ -54,43 +54,43 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
-    public Call showCheckoutAddressesForm(final String language) {
-        return CheckoutAddressController.show(language);
+    public Call showCheckoutAddressesForm(final String languageTag) {
+        return CheckoutAddressController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutAddressesForm(final String language) {
-        return CheckoutAddressController.process(language);
+    public Call processCheckoutAddressesForm(final String languageTag) {
+        return CheckoutAddressController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutShippingForm(final String language) {
-        return CheckoutShippingController.show(language);
+    public Call showCheckoutShippingForm(final String languageTag) {
+        return CheckoutShippingController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutShippingForm(final String language) {
-        return CheckoutShippingController.process(language);
+    public Call processCheckoutShippingForm(final String languageTag) {
+        return CheckoutShippingController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutPaymentForm(final String language) {
-        return CheckoutPaymentController.show(language);
+    public Call showCheckoutPaymentForm(final String languageTag) {
+        return CheckoutPaymentController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutPaymentForm(final String language) {
-        return CheckoutPaymentController.process(language);
+    public Call processCheckoutPaymentForm(final String languageTag) {
+        return CheckoutPaymentController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutConfirmationForm(final String language) {
-        return CheckoutConfirmationController.show(language);
+    public Call showCheckoutConfirmationForm(final String languageTag) {
+        return CheckoutConfirmationController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutConfirmationForm(final String language) {
-        return CheckoutConfirmationController.process(language);
+    public Call processCheckoutConfirmationForm(final String languageTag) {
+        return CheckoutConfirmationController.process(languageTag);
     }
 
     @Override
@@ -99,22 +99,22 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
-    public Call showCart(final String language) {
-        return CartDetailPageController.show(language);
+    public Call showCart(final String languageTag) {
+        return CartDetailPageController.show(languageTag);
     }
 
     @Override
-    public Call processDeleteLineItem(final String language) {
-        return CartDetailPageController.processRemoveLineItem(language);
+    public Call processDeleteLineItem(final String languageTag) {
+        return CartDetailPageController.processRemoveLineItem(languageTag);
     }
 
     @Override
-    public Call processChangeLineItemQuantity(final String language) {
-        return CartDetailPageController.processChangeLineItemQuantity(language);
+    public Call processChangeLineItemQuantity(final String languageTag) {
+        return CartDetailPageController.processChangeLineItemQuantity(languageTag);
     }
 
     @Override
-    public Call showCheckoutThankyou(final String language) {
-        return CheckoutThankyouController.show(language);
+    public Call showCheckoutThankyou(final String languageTag) {
+        return CheckoutThankyouController.show(languageTag);
     }
 }
