@@ -3,7 +3,7 @@
 sphere-sunrise :sunrise:
 ==============
 
-[![Build Status](https://travis-ci.org/sphereio/sphere-sunrise.png?branch=master)](https://travis-ci.org/sphereio/sphere-sunrise) [![Stories in Ready](https://badge.waffle.io/sphereio/sphere-sunrise.png?label=ready&title=Ready)](https://waffle.io/sphereio/sphere-sunrise)
+[![Build Status](https://travis-ci.org/sphereio/sphere-sunrise.png?branch=master)](https://travis-ci.org/sphereio/sphere-sunrise) [![Stories in Ready](https://badge.waffle.io/sphereio/sphere-sunrise.png?label=ready&title=Ready)](https://waffle.io/sphereio/sphere-sunrise?source=sphereio%2Fsphere-sunrise)
 
 The next generation shop template.
 
