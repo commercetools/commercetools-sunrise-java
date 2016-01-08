@@ -116,12 +116,13 @@ public abstract class SunriseController extends ShopController {
         return PriceFormatter.of(userContext.locale());
     }
 
-    protected UserContext userContext(final String language) {
+    protected UserContext userContext(final String languageTag) {
         final ArrayList<Locale> locales = new ArrayList<>();
-        locales.add(Locale.forLanguageTag(language));
+        locales.add(Locale.forLanguageTag(languageTag));
         locales.addAll(request().acceptLanguages().stream()
                 .map(lang -> Locale.forLanguageTag(lang.code()))
                 .collect(toList()));
+        locales.addAll(projectContext().languages());
         return UserContext.of(DE, locales, ZoneId.of("Europe/Berlin"), Monetary.getCurrency("EUR"));
     }
 
