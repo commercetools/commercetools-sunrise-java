@@ -39,6 +39,7 @@ public class ProductVariantBean {
         final Function<LocalizedString, String> translator = translate(userContext);
         setName(translator.apply(lineItem.getName()));
         setSlug(translator.apply(lineItem.getProductSlug()));
+        setUrl(reverseRouter.lineItemUrlOrEmpty(userContext.locale(), lineItem));
         //no description available in line item
         fillProductVariantFields(lineItem.getVariant(), productDataConfig, userContext, reverseRouter);
         setAttributes(ProductAttributeBean.collect(lineItem.getVariant().getAttributes(), productDataConfig, userContext));
@@ -56,7 +57,6 @@ public class ProductVariantBean {
         setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
         setProductId(lineItem.getProductId());
         setLineItemId(lineItem.getId());
-        setUrl(reverseRouter.product(userContext.locale().getLanguage(), getSlug(), getSku()).url());
     }
 
     public ProductVariantBean(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
@@ -65,6 +65,7 @@ public class ProductVariantBean {
         final Function<LocalizedString, String> translator = translate(userContext);
         setName(translator.apply(product.getName()));
         setSlug(translator.apply(product.getSlug()));
+        setUrl(reverseRouter.productUrlOrEmpty(userContext.locale(), product, variant));
         setDescription(translator.apply(product.getDescription()));
         setProductId(product.getId());
 
@@ -217,7 +218,6 @@ public class ProductVariantBean {
         variant.getImages().stream().findFirst().ifPresent(image -> setImage(image.getUrl()));
         setSku(variant.getSku());
         setVariantId(variant.getId().toString());
-        setUrl(reverseRouter.product(userContext.locale().toLanguageTag(), slug, variant.getSku()).url());
     }
 
 }

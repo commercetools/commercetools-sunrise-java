@@ -13,7 +13,6 @@ import java.util.Locale;
 import java.util.Optional;
 
 public class ProductThumbnailDataFactory {
-
     private final PriceFinder priceFinder;
     private final List<Locale> locales;
     private final PriceFormatter priceFormatter;
@@ -32,7 +31,6 @@ public class ProductThumbnailDataFactory {
         final String price = priceFinder.findPrice(variant.getPrices())
                 .map(foundPrice -> priceFormatter.format(foundPrice.getValue()))
                 .orElse("");
-
         return new ProductThumbnailData(text, description, imageUrl, price);
     }
 

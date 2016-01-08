@@ -1,5 +1,6 @@
 package common.controllers;
 
+import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -56,11 +57,21 @@ public interface ReverseRouter {
                 .map(slug -> product(locale.toLanguageTag(), slug, productVariant.getSku()));
     }
 
+    default Optional<Call> lineItem(final Locale locale, final LineItem lineItem) {
+        return Optional.ofNullable(lineItem.getProductSlug())
+                .flatMap(slugs -> slugs.find(locale)
+                        .map(slug -> product(locale.toLanguageTag(), slug, lineItem.getVariant().getSku())));
+    }
+
     default String categoryUrlOrEmpty(final Locale locale, final Category category) {
         return category(locale, category).map(Call::url).orElse("");
     }
 
     default String productUrlOrEmpty(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
         return product(locale, product, productVariant).map(Call::url).orElse("");
+    }
+
+    default String lineItemUrlOrEmpty(final Locale locale, final LineItem lineItem) {
+        return lineItem(locale, lineItem).map(Call::url).orElse("");
     }
 }

@@ -1,6 +1,5 @@
 package productcatalog.controllers;
 
-import common.actions.LanguageFiltered;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
@@ -22,7 +21,6 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
-@LanguageFiltered
 public class ProductDetailPageController extends ProductCatalogController {
     private final int numSuggestions;
 
