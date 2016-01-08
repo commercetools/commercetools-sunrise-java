@@ -89,7 +89,7 @@ public abstract class WithSunriseApplication {
     }
 
     private I18nResolver injectedI18nResolver() {
-        return ((bundle, key, locale, args) -> Optional.empty());
+        return ((locale, bundle, key, args) -> Optional.empty());
     }
 
     protected TemplateService injectedTemplateService() {

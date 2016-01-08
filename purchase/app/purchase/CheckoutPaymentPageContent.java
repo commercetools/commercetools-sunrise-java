@@ -17,7 +17,7 @@ public class CheckoutPaymentPageContent extends CheckoutPageContent {
         setStepWidget(stepWidget);
         setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
         setPaymentForm(PaymentFormBean.ofDummyData());
-        setAdditionalTitle(i18nResolver.getOrEmpty("checkout", "paymentPage.title", userContext.locales()));
+        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "paymentPage.title"));
     }
 
     public PaymentFormBean getPaymentForm() {

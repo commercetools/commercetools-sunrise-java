@@ -24,7 +24,9 @@ public class UserContext extends Base {
     private final Optional<Reference<Channel>> channel;
     private final CurrencyUnit currency;
 
-    private UserContext(final CountryCode country, final List<Locale> locales, final ZoneId zoneId, @Nullable final Reference<CustomerGroup> customerGroup, @Nullable final Reference<Channel> channel, final CurrencyUnit currency) {
+    private UserContext(final CountryCode country, final List<Locale> locales, final ZoneId zoneId,
+                        @Nullable final Reference<CustomerGroup> customerGroup, @Nullable final Reference<Channel> channel,
+                        final CurrencyUnit currency) {
         this.country = country;
         this.locales = locales;
         this.zoneId = zoneId;

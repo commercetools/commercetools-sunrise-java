@@ -30,7 +30,7 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
     }
 
     @Override
-    public Optional<String> get(final String bundle, final String key, final Locale locale, final Object... args) {
+    public Optional<String> get(final Locale locale, final String bundle, final String key, final Object... args) {
         // TODO Work with the arguments (replace arguments, pluralize)
         final Map yamlContent = getYamlContent(bundle, locale);
         final String[] pathSegments = StringUtils.split(key, '.');

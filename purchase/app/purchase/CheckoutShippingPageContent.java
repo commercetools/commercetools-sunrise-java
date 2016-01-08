@@ -33,7 +33,7 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
         stepWidget.setShippingStepActive(true);
         setStepWidget(stepWidget);
         setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
-        setAdditionalTitle(i18nResolver.getOrEmpty("checkout", "shippingPage.title", userContext.locales()));
+        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "shippingPage.title"));
     }
 
     public CheckoutShippingFormBean getShippingForm() {
