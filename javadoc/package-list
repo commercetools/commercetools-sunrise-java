@@ -3,6 +3,7 @@ common.cms
 common.contexts
 common.controllers
 common.countries
+common.i18n
 common.models
 common.prices
 common.templates
