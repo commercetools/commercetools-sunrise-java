@@ -1,4 +1,4 @@
-package shoppingcart.address;
+package shoppingcart.checkout.address;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.ProjectContext;

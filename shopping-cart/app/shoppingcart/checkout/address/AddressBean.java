@@ -1,4 +1,4 @@
-package shoppingcart.address;
+package shoppingcart.checkout.address;
 
 import io.sphere.sdk.models.Address;
 import org.apache.commons.beanutils.BeanUtils;

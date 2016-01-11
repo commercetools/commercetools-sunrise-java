@@ -1,4 +1,4 @@
-package shoppingcart.address;
+package shoppingcart.checkout.address;
 
 import common.contexts.UserContext;
 import common.i18n.I18nResolver;

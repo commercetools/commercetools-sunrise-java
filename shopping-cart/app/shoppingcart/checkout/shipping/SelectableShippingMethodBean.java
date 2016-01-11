@@ -1,4 +1,4 @@
-package shoppingcart.shipping;
+package shoppingcart.checkout.shipping;
 
 import common.models.SelectableData;
 import common.utils.MoneyContext;

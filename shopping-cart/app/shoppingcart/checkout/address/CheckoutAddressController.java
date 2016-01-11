@@ -1,4 +1,4 @@
-package shoppingcart.address;
+package shoppingcart.checkout.address;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
@@ -8,7 +8,6 @@ import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
-import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
 import play.Logger;

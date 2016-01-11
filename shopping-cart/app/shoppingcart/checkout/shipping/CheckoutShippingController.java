@@ -1,4 +1,4 @@
-package shoppingcart.shipping;
+package shoppingcart.checkout.shipping;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;

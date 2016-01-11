@@ -1,4 +1,4 @@
-package shoppingcart.shipping;
+package shoppingcart.checkout.shipping;
 
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.shippingmethods.ShippingMethod;

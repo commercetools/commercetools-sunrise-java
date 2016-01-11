@@ -1,4 +1,4 @@
-package shoppingcart.shipping;
+package shoppingcart.checkout.shipping;
 
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;

@@ -38,23 +38,23 @@ POST        /:languageTag/cart/remove-line-item                @shoppingcart.car
 POST        /:languageTag/cart/change-line-item-quantity       @shoppingcart.cartdetail.CartDetailPageController.processChangeLineItemQuantity(languageTag: String)
 
 # shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/address                     @shoppingcart.address.CheckoutAddressController.show(languageTag: String)
+GET         /:languageTag/checkout/address                     @shoppingcart.checkout.address.CheckoutAddressController.show(languageTag: String)
 # processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/address                     @shoppingcart.address.CheckoutAddressController.process(languageTag: String)
+POST        /:languageTag/checkout/address                     @shoppingcart.checkout.address.CheckoutAddressController.process(languageTag: String)
 # shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/shipping                    @shoppingcart.shipping.CheckoutShippingController.show(languageTag: String)
+GET         /:languageTag/checkout/shipping                    @shoppingcart.checkout.shipping.CheckoutShippingController.show(languageTag: String)
 # processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/shipping                    @shoppingcart.shipping.CheckoutShippingController.process(languageTag: String)
+POST        /:languageTag/checkout/shipping                    @shoppingcart.checkout.shipping.CheckoutShippingController.process(languageTag: String)
 # shows a form to select the payment method
-GET         /:languageTag/checkout/payment                     @shoppingcart.payment.CheckoutPaymentController.show(languageTag: String)
+GET         /:languageTag/checkout/payment                     @shoppingcart.checkout.payment.CheckoutPaymentController.show(languageTag: String)
 # processes the form for selecting a payment method
-POST        /:languageTag/checkout/payment                     @shoppingcart.payment.CheckoutPaymentController.process(languageTag: String)
+POST        /:languageTag/checkout/payment                     @shoppingcart.checkout.payment.CheckoutPaymentController.process(languageTag: String)
 # shows the form to create an order out of the cart of the session
-GET         /:languageTag/checkout/confirmation                @shoppingcart.confirmation.CheckoutConfirmationController.show(languageTag: String)
+GET         /:languageTag/checkout/confirmation                @shoppingcart.checkout.confirmation.CheckoutConfirmationController.show(languageTag: String)
 # processes the order creation
-POST        /:languageTag/checkout/confirmation                @shoppingcart.confirmation.CheckoutConfirmationController.process(languageTag: String)
+POST        /:languageTag/checkout/confirmation                @shoppingcart.checkout.confirmation.CheckoutConfirmationController.process(languageTag: String)
 # shows the customer a confirmation for the created order
-GET         /:languageTag/checkout/thankyou                    @shoppingcart.thankyou.CheckoutThankyouController.show(languageTag: String)
+GET         /:languageTag/checkout/thankyou                    @shoppingcart.checkout.thankyou.CheckoutThankyouController.show(languageTag: String)
 
 
 GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.controllers.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)

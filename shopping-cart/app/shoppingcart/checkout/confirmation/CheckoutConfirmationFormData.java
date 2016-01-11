@@ -1,4 +1,4 @@
-package shoppingcart.confirmation;
+package shoppingcart.checkout.confirmation;
 
 public class CheckoutConfirmationFormData {
     private boolean subscribeNewsletter;

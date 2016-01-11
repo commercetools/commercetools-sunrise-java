@@ -1,4 +1,4 @@
-package shoppingcart.address;
+package shoppingcart.checkout.address;
 
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;

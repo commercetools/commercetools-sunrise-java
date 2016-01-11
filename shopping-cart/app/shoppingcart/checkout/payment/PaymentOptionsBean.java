@@ -1,4 +1,4 @@
-package shoppingcart.payment;
+package shoppingcart.checkout.payment;
 
 import common.models.SelectableData;
 

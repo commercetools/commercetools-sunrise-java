@@ -1,4 +1,4 @@
-package shoppingcart.confirmation;
+package shoppingcart.checkout.confirmation;
 
 import common.models.SelectableData;
 import io.sphere.sdk.models.Base;

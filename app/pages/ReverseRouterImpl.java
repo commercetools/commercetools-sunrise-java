@@ -6,11 +6,11 @@ import play.mvc.Call;
 
 import static productcatalog.controllers.routes.*;
 import static shoppingcart.cartdetail.routes.*;
-import static shoppingcart.address.routes.*;
-import static shoppingcart.shipping.routes.*;
-import static shoppingcart.payment.routes.*;
-import static shoppingcart.confirmation.routes.*;
-import static shoppingcart.thankyou.routes.*;
+import static shoppingcart.checkout.address.routes.*;
+import static shoppingcart.checkout.shipping.routes.*;
+import static shoppingcart.checkout.payment.routes.*;
+import static shoppingcart.checkout.confirmation.routes.*;
+import static shoppingcart.checkout.thankyou.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
 

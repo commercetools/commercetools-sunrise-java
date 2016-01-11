@@ -9,9 +9,9 @@ import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.carts.TaxedPrice;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.utils.MoneyImpl;
-import shoppingcart.address.AddressBean;
-import shoppingcart.payment.PaymentsBean;
-import shoppingcart.shipping.SelectableShippingMethodBean;
+import shoppingcart.checkout.address.AddressBean;
+import shoppingcart.checkout.payment.PaymentsBean;
+import shoppingcart.checkout.shipping.SelectableShippingMethodBean;
 
 import javax.money.MonetaryAmount;
 import java.time.format.DateTimeFormatter;
