@@ -39,19 +39,21 @@ class TemplateServiceProvider implements Provider<TemplateService> {
         final List<TemplateLoader> templateLoaders = initializeTemplateLoaders(CONFIG_TEMPLATE_LOADERS);
         final List<TemplateLoader> fallbackContexts = initializeTemplateLoaders(CONFIG_FALLBACK_CONTEXTS);
         final boolean cacheIsEnabled = configuration.getBoolean(CONFIG_CACHE_ENABLED, false);
-
         Logger.debug("Provide HandlebarsTemplateService: template loaders [{}], cache enabled {}",
                 templateLoaders.stream().map(TemplateLoader::getPrefix).collect(joining(", ")),
                 cacheIsEnabled);
-
         return HandlebarsTemplateService.of(templateLoaders, fallbackContexts, i18NResolver, cacheIsEnabled);
     }
 
     private List<TemplateLoader> initializeTemplateLoaders(final String configKey) {
-        return configuration.getConfigList(configKey, emptyList())
+        final List<TemplateLoader> templateLoaders = configuration.getConfigList(configKey, emptyList())
                 .stream()
                 .map(this::initializeTemplateLoader)
                 .collect(toList());
+        if (templateLoaders.isEmpty()) {
+            throw new SunriseInitializationException("No Handlebars template loaders found in configuration '" + CONFIG_TEMPLATE_LOADERS + "'");
+        }
+        return templateLoaders;
     }
 
     private TemplateLoader initializeTemplateLoader(final Configuration loaderConfig) {

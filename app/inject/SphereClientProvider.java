@@ -12,6 +12,9 @@ import javax.inject.Inject;
 import static java.util.Objects.requireNonNull;
 
 class SphereClientProvider implements Provider<SphereClient> {
+    public static final String CONFIG_PROJECT_KEY = "sphere.project";
+    public static final String CONFIG_CLIENT_ID = "sphere.clientId";
+    public static final String CONFIG_CLIENT_SECRET = "sphere.clientSecret";
     private final Configuration configuration;
 
     @Inject
@@ -35,9 +38,12 @@ class SphereClientProvider implements Provider<SphereClient> {
     }
 
     private SphereClientConfig getSphereClientConfig() {
-        final String project = requireNonNull(configuration.getString("sphere.project"));
-        final String clientId = requireNonNull(configuration.getString("sphere.clientId"));
-        final String clientSecret = requireNonNull(configuration.getString("sphere.clientSecret"));
+        final String project = requireNonNull(configuration.getString(CONFIG_PROJECT_KEY),
+                "No CTP project key defined in configuration '" + CONFIG_PROJECT_KEY + "'");
+        final String clientId = requireNonNull(configuration.getString(CONFIG_CLIENT_ID),
+                "No CTP client ID defined in configuration '" + CONFIG_CLIENT_ID + "'");
+        final String clientSecret = requireNonNull(configuration.getString(CONFIG_CLIENT_SECRET),
+                "No CTP client secret defined in configuration '" + CONFIG_CLIENT_SECRET + "'");
         return SphereClientConfig.of(project, clientId, clientSecret);
     }
 }
