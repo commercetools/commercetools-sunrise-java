@@ -1,6 +1,5 @@
 package io.sphere.sdk.facets;
 
-import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
 
