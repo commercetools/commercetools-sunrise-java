@@ -97,8 +97,8 @@ public class PaginationDataTest {
 
     @SuppressWarnings("unchecked")
     private PagedResult<ProductProjection> pagedResult(final int page, final int totalPages) {
-        final int offset = (page - 1) * PAGE_SIZE;
-        final int totalProducts = totalPages * PAGE_SIZE;
+        final long offset = (page - 1) * PAGE_SIZE;
+        final long totalProducts = totalPages * PAGE_SIZE;
         final List<ProductProjection> products = Collections.nCopies(PAGE_SIZE, null);
         return new PagedResult(offset, totalProducts, products) {};
     }
