@@ -32,11 +32,10 @@ class I18nResolverProvider implements Provider<I18nResolver> {
 
     @Override
     public I18nResolver get() {
-        final List<Configuration> resolverLoaders = configuration.getConfigList(CONFIG_RESOLVER_LOADERS, emptyList());
         final List<Locale> locales = projectContext.languages();
         final List<String> bundles = getBundles();
         Logger.debug("Provide CompositeI18nResolver: languages {}, bundles {}", locales, bundles);
-        final List<I18nResolver> i18nResolvers = loadI18nResolvers(resolverLoaders, locales, bundles);
+        final List<I18nResolver> i18nResolvers = loadI18nResolvers(locales, bundles);
         return CompositeI18nResolver.of(i18nResolvers);
     }
 
@@ -48,7 +47,8 @@ class I18nResolverProvider implements Provider<I18nResolver> {
         return bundles;
     }
 
-    private static List<I18nResolver> loadI18nResolvers(final List<Configuration> resolverLoaders, final List<Locale> locales, final List<String> bundles) {
+    private List<I18nResolver> loadI18nResolvers(final List<Locale> locales, final List<String> bundles) {
+        final List<Configuration> resolverLoaders = configuration.getConfigList(CONFIG_RESOLVER_LOADERS, emptyList());
         if (resolverLoaders.isEmpty()) {
             throw new SunriseInitializationException("No i18n resolver loaders defined in configuration '" + CONFIG_RESOLVER_LOADERS + "'");
         }
