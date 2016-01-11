@@ -3,6 +3,7 @@ package shoppingcart.shipping;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,17 +24,17 @@ public class ShippingMethodsFormBean {
         fill(shippingMethods, nullableSelectedShippingMethodId);
     }
 
-    private void fill(final ShippingMethods shippingMethods, final String nullableSelectedShippingMethodId) {
-        fill(shippingMethods.getShippingMethods(), nullableSelectedShippingMethodId);
+    private void fill(final ShippingMethods shippingMethods, @Nullable final String selectedShippingMethodId) {
+        fill(shippingMethods.getShippingMethods(), selectedShippingMethodId);
     }
 
-    private void fill(final List<ShippingMethod> sphereShippingMethods, final String nullableSelectedShippingMethodId) {
-        final List<SelectableShippingMethodBean> shippingMethodBeanList = sphereShippingMethods.stream()
+    private void fill(final List<ShippingMethod> shippingMethods, @Nullable final String selectedShippingMethodId) {
+        final List<SelectableShippingMethodBean> shippingMethodBeanList = shippingMethods.stream()
                 .map(shippingMethod -> {
                     final SelectableShippingMethodBean bean = new SelectableShippingMethodBean();
                     bean.setLabel(shippingMethod.getName());
                     bean.setValue(shippingMethod.getId());
-                    final Boolean selected = shippingMethod.getId().equals(nullableSelectedShippingMethodId);
+                    final Boolean selected = shippingMethod.getId().equals(selectedShippingMethodId);
                     bean.setSelected(selected);
                     return bean;
                 })
@@ -41,7 +42,7 @@ public class ShippingMethodsFormBean {
         setList(shippingMethodBeanList);
     }
 
-    public ShippingMethodsFormBean(final CheckoutShippingFormData checkoutShippingFormData, final ShippingMethods shippingMethods) {
+    public ShippingMethodsFormBean(final ShippingMethods shippingMethods, final CheckoutShippingFormData checkoutShippingFormData) {
         fill(shippingMethods, checkoutShippingFormData.getShippingMethodId());
     }
 

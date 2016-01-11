@@ -23,17 +23,16 @@ public class SalutationsFieldsBean extends Base {
 
     public SalutationsFieldsBean(final String title, final UserContext userContext, final I18nResolver i18nResolver,
                                  final Configuration configuration) {
-        fill(userContext, i18nResolver, configuration, title);
+        fill(title, userContext, i18nResolver, configuration);
     }
 
     public SalutationsFieldsBean(@Nullable final Address address, final UserContext userContext,
                                  final I18nResolver i18nResolver, final Configuration configuration) {
         final String title = address == null ? null : address.getSalutation();
-        fill(userContext, i18nResolver, configuration, title);
+        fill(title, userContext, i18nResolver, configuration);
     }
 
-    private void fill(final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration,
-                      @Nullable final String title) {
+    private void fill(@Nullable final String title, final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration) {
         final List<SelectableData> selectableDataList = configuration.getObjectList(ALLOWED_TITLES_CONFIG_KEY).stream().map(map -> {
             final String key = map.get(MESSAGE_CONFIG_KEY).toString();
             final String shownTitle = i18nResolver.getOrEmpty(userContext.locales(), "translations", key);

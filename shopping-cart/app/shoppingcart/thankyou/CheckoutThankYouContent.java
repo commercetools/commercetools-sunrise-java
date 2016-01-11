@@ -14,9 +14,9 @@ public class CheckoutThankYouContent extends PageContent {
     public CheckoutThankYouContent() {
     }
 
-    public CheckoutThankYouContent(final Order order, final ProductDataConfig productDataConfig, final UserContext userContext,
-                                   final ReverseRouter reverseRouter, final I18nResolver i18nResolver) {
-        setOrder(new CartOrderBean(order, productDataConfig, userContext, reverseRouter));
+    public CheckoutThankYouContent(final Order order, final UserContext userContext, final ProductDataConfig productDataConfig,
+                                   final I18nResolver i18nResolver, final ReverseRouter reverseRouter) {
+        setOrder(new CartOrderBean(order, userContext, productDataConfig, reverseRouter));
         setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "thankYouPage.title"));
     }
 

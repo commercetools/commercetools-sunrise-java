@@ -7,7 +7,6 @@ import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingMethod;
-import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import play.Logger;
@@ -42,7 +41,7 @@ public class CheckoutShippingController extends CartController {
         final UserContext userContext = userContext(languageTag);
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         return cartPromise.map(cart -> {
-            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, i18nResolver(), userContext, shippingMethods, productDataConfig, reverseRouter());
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, shippingMethods, productDataConfig, userContext, i18nResolver(), reverseRouter());
             final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
         });
@@ -55,23 +54,23 @@ public class CheckoutShippingController extends CartController {
         return getOrCreateCart(userContext, session()).flatMap(cart -> {
             final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
             final Form<CheckoutShippingFormData> filledForm = obtainFilledForm();
-            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(checkoutShippingFormData, cart, i18nResolver(), userContext, shippingMethods, productDataConfig, reverseRouter());
+            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, checkoutShippingFormData, shippingMethods, userContext, productDataConfig, i18nResolver(), reverseRouter());
             if (filledForm.hasErrors()) {
-                return F.Promise.pure(badRequest(userContext, filledForm, content));
+                return F.Promise.pure(badRequest(content, filledForm, userContext));
             } else {
-                return updateCart(sphere(), cart, checkoutShippingFormData, content)
+                return updateCart(cart, checkoutShippingFormData)
                         .map(updatedCart -> redirect(reverseRouter().showCheckoutPaymentForm(languageTag)));
             }
         });
     }
 
-    private F.Promise<Cart> updateCart(final PlayJavaSphereClient sphere, final Cart cart, final CheckoutShippingFormData checkoutShippingFormData, final CheckoutShippingPageContent content) {
+    private F.Promise<Cart> updateCart(final Cart cart, final CheckoutShippingFormData checkoutShippingFormData) {
         final String shippingMethodId = checkoutShippingFormData.getShippingMethodId();
         final SetShippingMethod setShippingMethod = SetShippingMethod.of(Reference.of(ShippingMethod.referenceTypeId(), shippingMethodId));
-        return sphere.execute(CartUpdateCommand.of(cart, setShippingMethod));
+        return sphere().execute(CartUpdateCommand.of(cart, setShippingMethod));
     }
 
-    private Result badRequest(final UserContext userContext, final Form<CheckoutShippingFormData> filledForm, final CheckoutShippingPageContent content) {
+    private Result badRequest(final CheckoutShippingPageContent content, final Form<CheckoutShippingFormData> filledForm, final UserContext userContext) {
         Logger.info("cart not valid");
         content.getShippingForm().setErrors(new ErrorsBean(filledForm));
         final SunrisePageData pageData = pageData(userContext, content, ctx());

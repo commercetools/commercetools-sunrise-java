@@ -21,10 +21,10 @@ public class CountriesFieldsBean {
 
     public CountriesFieldsBean(@Nullable final Address address, final UserContext userContext, final ProjectContext projectContext) {
         final String selectedCountry = Optional.ofNullable(address).map(Address::getCountry).map(CountryCode::getAlpha2).orElse(null);
-        fill(userContext, projectContext, selectedCountry);
+        fill(selectedCountry, userContext, projectContext);
     }
 
-    private void fill(final UserContext userContext, final ProjectContext projectContext, final String selectedCountry) {
+    private void fill(final String selectedCountry, final UserContext userContext, final ProjectContext projectContext) {
         final List<SelectableData> selectableDataList = projectContext.countries().stream().map(countryCode -> {
             final SelectableData selectableData = new SelectableData();
             selectableData.setLabel(countryCode.toLocale().getDisplayCountry(userContext.locale()));
@@ -36,7 +36,7 @@ public class CountriesFieldsBean {
     }
 
     public CountriesFieldsBean(@Nullable final String country, final UserContext userContext, final ProjectContext projectContext) {
-        fill(userContext, projectContext, country);
+        fill(country, userContext, projectContext);
     }
 
 

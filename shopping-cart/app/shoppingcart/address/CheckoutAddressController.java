@@ -31,7 +31,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Singleton
 public class CheckoutAddressController extends CartController {
-
     private final ProductDataConfig productDataConfig;
 
     @Inject
@@ -61,13 +60,12 @@ public class CheckoutAddressController extends CartController {
             if (filledForm.hasErrors()) {
                 return F.Promise.pure(badRequest(userContext, filledForm, content));
             } else {
-                return updateCart(sphere(), cart, content)
-                        .map(updatedCart -> redirect(reverseRouter().showCheckoutShippingForm(languageTag)));
+                return updateCart(cart, content).map(updatedCart -> redirect(reverseRouter().showCheckoutShippingForm(languageTag)));
             }
         });
     }
 
-    private F.Promise<Cart> updateCart(final PlayJavaSphereClient sphere, final Cart cart, final CheckoutAddressPageContent content) {
+    private F.Promise<Cart> updateCart(final Cart cart, final CheckoutAddressPageContent content) {
         final Address shippingAddress = content.getAddressForm().getShippingAddress().toAddress();
         final Address nullableBillingAddress = content.getAddressForm().isBillingAddressDifferentToBillingAddress()
                 ? content.getAddressForm().getBillingAddress().toAddress()
@@ -76,7 +74,7 @@ public class CheckoutAddressController extends CartController {
                 SetShippingAddress.of(shippingAddress),
                 SetBillingAddress.of(nullableBillingAddress)
         );
-        return sphere.execute(CartUpdateCommand.of(cart, updateActions));
+        return sphere().execute(CartUpdateCommand.of(cart, updateActions));
     }
 
     private Result badRequest(final UserContext userContext, final Form<CheckoutAddressFormData> filledForm, final CheckoutAddressPageContent content) {

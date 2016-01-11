@@ -16,16 +16,16 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
     public CheckoutShippingPageContent() {
     }
 
-    public CheckoutShippingPageContent(final Cart cart, final I18nResolver i18nResolver, final UserContext userContext,
-                                       final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig,
-                                       final ReverseRouter reverseRouter) {
+    public CheckoutShippingPageContent(final Cart cart, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig,
+                                       final UserContext userContext, final I18nResolver i18nResolver, final ReverseRouter reverseRouter) {
         fillDefaults(cart, userContext, productDataConfig, i18nResolver, reverseRouter);
         setShippingForm(new CheckoutShippingFormBean(cart, shippingMethods));
     }
 
-    public CheckoutShippingPageContent(final CheckoutShippingFormData filledForm, final Cart cart, final I18nResolver i18nResolver,
-                                       final UserContext userContext, final ShippingMethods shippingMethods,
-                                       final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
+    public CheckoutShippingPageContent(final Cart cart, final CheckoutShippingFormData filledForm,
+                                       final ShippingMethods shippingMethods, final UserContext userContext,
+                                       final ProductDataConfig productDataConfig, final I18nResolver i18nResolver,
+                                       final ReverseRouter reverseRouter) {
         fillDefaults(cart, userContext, productDataConfig, i18nResolver, reverseRouter);
         setShippingForm(new CheckoutShippingFormBean(filledForm, shippingMethods));
     }
@@ -35,7 +35,7 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setShippingStepActive(true);
         setStepWidget(stepWidget);
-        setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
+        setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter));
         setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "shippingPage.title"));
     }
 

@@ -13,12 +13,12 @@ public class CheckoutPaymentPageContent extends CheckoutPageContent {
 
     private PaymentFormBean paymentForm;
 
-    public CheckoutPaymentPageContent(final Cart cart, final ProductDataConfig productDataConfig, final UserContext userContext,
+    public CheckoutPaymentPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig,
                                       final I18nResolver i18nResolver, final ReverseRouter reverseRouter) {
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setPaymentStepActive(true);
         setStepWidget(stepWidget);
-        setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
+        setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter));
         setPaymentForm(PaymentFormBean.ofDummyData());
         setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "paymentPage.title"));
     }

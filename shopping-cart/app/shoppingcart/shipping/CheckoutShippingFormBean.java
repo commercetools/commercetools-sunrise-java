@@ -17,7 +17,7 @@ public class CheckoutShippingFormBean extends Base {
     }
 
     public CheckoutShippingFormBean(final CheckoutShippingFormData checkoutShippingFormData, final ShippingMethods shippingMethods) {
-        setShippingMethods(new ShippingMethodsFormBean(checkoutShippingFormData, shippingMethods));
+        setShippingMethods(new ShippingMethodsFormBean(shippingMethods, checkoutShippingFormData));
     }
 
     public ShippingMethodsFormBean getShippingMethods() {

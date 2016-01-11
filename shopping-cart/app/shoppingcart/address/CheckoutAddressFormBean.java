@@ -17,7 +17,6 @@ public class CheckoutAddressFormBean extends Base {
     private AddressFormBean billingAddress;
     private ErrorsBean errors;
 
-
     public CheckoutAddressFormBean() {
     }
 

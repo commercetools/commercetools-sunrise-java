@@ -14,9 +14,9 @@ public class CartDetailPageContent extends PageContent {
     public CartDetailPageContent() {
     }
 
-    public CartDetailPageContent(final Cart cart, final ProductDataConfig productDataConfig, final UserContext userContext,
-                                 final ReverseRouter reverseRouter, final I18nResolver i18nResolver) {
-        this.cart = new CartOrderBean(cart, productDataConfig, userContext, reverseRouter);
+    public CartDetailPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig,
+                                 final I18nResolver i18nResolver, final ReverseRouter reverseRouter) {
+        this.cart = new CartOrderBean(cart, userContext, productDataConfig, reverseRouter);
         setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "cartDetailPage.title"));
     }
 

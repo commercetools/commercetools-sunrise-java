@@ -38,7 +38,7 @@ public class CheckoutConfirmationController extends CartController {
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
         final Http.Context ctx = ctx();
         return cartPromise.map(cart -> {
-            final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, productDataConfig, userContext, reverseRouter(), i18nResolver());
+            final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
             final SunrisePageData pageData = pageData(userContext, content, ctx);
             return ok(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales()));
         });
@@ -55,14 +55,14 @@ public class CheckoutConfirmationController extends CartController {
 //            filledForm.reject("terms need to be agreed");
 //        }
         if (filledForm.hasErrors()) {
-            return cartPromise.flatMap(cart -> renderErrorResponse(userContext, cart, ctx(), filledForm));
+            return cartPromise.flatMap(cart -> renderErrorResponse(cart, filledForm, ctx(), userContext));
         } else {
             return cartPromise.flatMap(cart -> createOrder(cart, languageTag));
         }
     }
 
-    private F.Promise<Result> renderErrorResponse(final UserContext userContext, final Cart cart, final Http.Context ctx, final Form<CheckoutConfirmationFormData> filledForm) {
-        final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, productDataConfig, userContext, reverseRouter(), i18nResolver());
+    private F.Promise<Result> renderErrorResponse(final Cart cart, final Form<CheckoutConfirmationFormData> filledForm, final Http.Context ctx, final UserContext userContext) {
+        final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
         content.getCheckoutForm().setErrors(new ErrorsBean(filledForm));
         final SunrisePageData pageData = pageData(userContext, content, ctx);
         return F.Promise.pure(badRequest(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales())));

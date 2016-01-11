@@ -16,8 +16,8 @@ public class LineItemsBean {
         this.list = list;
     }
 
-    public LineItemsBean(final CartLike<?> cartLike, final ProductDataConfig productDataConfig,
-                         final UserContext userContext, final ReverseRouter reverseRouter) {
+    public LineItemsBean(final CartLike<?> cartLike, final UserContext userContext, final ProductDataConfig productDataConfig,
+                         final ReverseRouter reverseRouter) {
         this(cartLike.getLineItems().stream()
                 .map((lineItem) -> new ProductVariantBean(lineItem, productDataConfig, userContext, reverseRouter))
                 .collect(Collectors.toList()));

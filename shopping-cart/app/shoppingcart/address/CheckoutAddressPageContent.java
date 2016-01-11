@@ -14,7 +14,6 @@ import shoppingcart.common.StepWidgetBean;
 public class CheckoutAddressPageContent extends CheckoutPageContent {
     private CheckoutAddressFormBean addressForm;
 
-
     public CheckoutAddressPageContent() {
     }
 
@@ -37,7 +36,7 @@ public class CheckoutAddressPageContent extends CheckoutPageContent {
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setShippingStepActive(true);
         setStepWidget(stepWidget);
-        setCart(new CartOrderBean(cart, productDataConfig, userContext, reverseRouter));
+        setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter));
         setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "shippingPage.title"));
     }
 
