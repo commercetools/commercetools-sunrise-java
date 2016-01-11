@@ -5,7 +5,12 @@ import io.sphere.sdk.models.Base;
 import play.mvc.Call;
 
 import static productcatalog.controllers.routes.*;
-import static shoppingcart.routes.*;
+import static shoppingcart.cartdetail.routes.*;
+import static shoppingcart.address.routes.*;
+import static shoppingcart.shipping.routes.*;
+import static shoppingcart.payment.routes.*;
+import static shoppingcart.confirmation.routes.*;
+import static shoppingcart.thankyou.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
 
