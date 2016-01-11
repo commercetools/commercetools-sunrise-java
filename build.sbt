@@ -13,7 +13,7 @@ organization := "io.sphere"
 
 lazy val sunriseDesignVersion = "0.42.0"
 
-lazy val sphereJvmSdkVersion = "1.0.0-M21"
+lazy val sphereJvmSdkVersion = "1.0.0-M25"
 
 lazy val jacksonVersion = "2.6.0"
 

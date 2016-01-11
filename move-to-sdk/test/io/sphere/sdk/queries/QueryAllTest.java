@@ -12,6 +12,7 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -90,15 +91,15 @@ public class QueryAllTest {
             }
 
             @SuppressWarnings("unchecked")
-            private <T> PagedQueryResult<T> generatePagedQueryResult(final int offset) {
-                final int total = totalResults + deviation;
-                final int count = min(PAGE_SIZE, max(totalResults - offset, 0));
+            private <T> PagedQueryResult<T> generatePagedQueryResult(final long offset) {
+                final long total = totalResults + deviation;
+                final long count = min(PAGE_SIZE, max(totalResults - offset, 0));
                 final List<T> results = (List<T>) generateSortedResultList(offset, count);
                 return PagedQueryResult.of(offset, total, results);
             }
 
-            private List<Integer> generateSortedResultList(final int offset, final int count) {
-                return IntStream.range(offset, offset + count)
+            private List<Long> generateSortedResultList(final long offset, final long count) {
+                return LongStream.range(offset, offset + count)
                         .boxed()
                         .collect(toList());
             }

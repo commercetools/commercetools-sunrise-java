@@ -12,9 +12,9 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FacetOptionTest {
-    private static final TermStats TERM_ONE = TermStats.of("one", 30);
-    private static final TermStats TERM_TWO = TermStats.of("two", 20);
-    private static final TermStats TERM_THREE = TermStats.of("three", 10);
+    private static final TermStats TERM_ONE = TermStats.of("one", 30L);
+    private static final TermStats TERM_TWO = TermStats.of("two", 20L);
+    private static final TermStats TERM_THREE = TermStats.of("three", 10L);
 
     @Test
     public void createsInstance() throws Exception {
