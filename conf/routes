@@ -29,32 +29,32 @@ GET         /:languageTag/home                                 @productcatalog.c
 ->          /setup                                             setupwidget.Routes
 
 # shows the details of the cart belonging to the current session
-GET         /:languageTag/cart                                 @purchase.CartDetailPageController.show(languageTag: String)
+GET         /:languageTag/cart                                 @shoppingcart.CartDetailPageController.show(languageTag: String)
 # adds the selected product to the cart
-POST        /:languageTag/cart                                 @purchase.CartDetailPageController.addToCart(languageTag: String)
+POST        /:languageTag/cart                                 @shoppingcart.CartDetailPageController.addToCart(languageTag: String)
 # removes a selected line item from the cart of the current session
-POST        /:languageTag/cart/remove-line-item                @purchase.CartDetailPageController.processRemoveLineItem(languageTag: String)
+POST        /:languageTag/cart/remove-line-item                @shoppingcart.CartDetailPageController.processRemoveLineItem(languageTag: String)
 # changes the quantity of a selected line item from the cart of the current session
-POST        /:languageTag/cart/change-line-item-quantity       @purchase.CartDetailPageController.processChangeLineItemQuantity(languageTag: String)
+POST        /:languageTag/cart/change-line-item-quantity       @shoppingcart.CartDetailPageController.processChangeLineItemQuantity(languageTag: String)
 
 # shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/address                     @purchase.CheckoutAddressController.show(languageTag: String)
+GET         /:languageTag/checkout/address                     @shoppingcart.CheckoutAddressController.show(languageTag: String)
 # processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/address                     @purchase.CheckoutAddressController.process(languageTag: String)
+POST        /:languageTag/checkout/address                     @shoppingcart.CheckoutAddressController.process(languageTag: String)
 # shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.show(languageTag: String)
+GET         /:languageTag/checkout/shipping                    @shoppingcart.CheckoutShippingController.show(languageTag: String)
 # processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/shipping                    @purchase.CheckoutShippingController.process(languageTag: String)
+POST        /:languageTag/checkout/shipping                    @shoppingcart.CheckoutShippingController.process(languageTag: String)
 # shows a form to select the payment method
-GET         /:languageTag/checkout/payment                     @purchase.CheckoutPaymentController.show(languageTag: String)
+GET         /:languageTag/checkout/payment                     @shoppingcart.CheckoutPaymentController.show(languageTag: String)
 # processes the form for selecting a payment method
-POST        /:languageTag/checkout/payment                     @purchase.CheckoutPaymentController.process(languageTag: String)
+POST        /:languageTag/checkout/payment                     @shoppingcart.CheckoutPaymentController.process(languageTag: String)
 # shows the form to create an order out of the cart of the session
-GET         /:languageTag/checkout/confirmation                @purchase.CheckoutConfirmationController.show(languageTag: String)
+GET         /:languageTag/checkout/confirmation                @shoppingcart.CheckoutConfirmationController.show(languageTag: String)
 # processes the order creation
-POST        /:languageTag/checkout/confirmation                @purchase.CheckoutConfirmationController.process(languageTag: String)
+POST        /:languageTag/checkout/confirmation                @shoppingcart.CheckoutConfirmationController.process(languageTag: String)
 # shows the customer a confirmation for the created order
-GET         /:languageTag/checkout/thankyou                    @purchase.CheckoutThankyouController.show(languageTag: String)
+GET         /:languageTag/checkout/thankyou                    @shoppingcart.CheckoutThankyouController.show(languageTag: String)
 
 
 GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.controllers.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)

@@ -5,7 +5,7 @@ import common.contexts.ProjectContext;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import productcatalog.services.ProductService;
-import purchase.ShippingMethods;
+import shoppingcart.ShippingMethods;
 
 import javax.inject.Singleton;
 
