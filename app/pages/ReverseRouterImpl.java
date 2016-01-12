@@ -4,7 +4,7 @@ import common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
 
-import static productcatalog.controllers.routes.*;
+import static productcatalog.common.routes.*;
 import static shoppingcart.cartdetail.routes.*;
 import static shoppingcart.checkout.address.routes.*;
 import static shoppingcart.checkout.shipping.routes.*;

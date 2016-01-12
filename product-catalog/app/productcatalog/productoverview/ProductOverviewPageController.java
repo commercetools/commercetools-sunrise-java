@@ -1,4 +1,4 @@
-package productcatalog.controllers;
+package productcatalog.productoverview;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
@@ -11,6 +11,8 @@ import io.sphere.sdk.search.PagedSearchResult;
 import play.libs.F;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import productcatalog.common.BreadcrumbData;
+import productcatalog.common.ProductCatalogController;
 import productcatalog.models.*;
 import productcatalog.services.ProductService;
 

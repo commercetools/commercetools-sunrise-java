@@ -1,4 +1,4 @@
-package productcatalog.controllers;
+package productcatalog.home;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
@@ -8,6 +8,7 @@ import io.sphere.sdk.products.ProductProjection;
 import play.libs.F;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import productcatalog.common.ProductCatalogController;
 import productcatalog.models.ProductListData;
 import productcatalog.models.SuggestionsData;
 import productcatalog.services.ProductService;

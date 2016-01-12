@@ -6,9 +6,9 @@ import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import common.models.SelectableData;
 import io.sphere.sdk.carts.Cart;
-import shoppingcart.common.CartOrderBean;
-import shoppingcart.common.CheckoutPageContent;
-import shoppingcart.common.StepWidgetBean;
+import shoppingcart.CartOrderBean;
+import shoppingcart.checkout.CheckoutPageContent;
+import shoppingcart.checkout.StepWidgetBean;
 
 public class CheckoutConfirmationPageContent extends CheckoutPageContent {
 

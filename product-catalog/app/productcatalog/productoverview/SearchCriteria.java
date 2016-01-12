@@ -1,4 +1,4 @@
-package productcatalog.controllers;
+package productcatalog.productoverview;
 
 import common.contexts.UserContext;
 import common.i18n.I18nResolver;
@@ -16,8 +16,6 @@ import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
 import play.Configuration;
 import play.mvc.Http;
 import productcatalog.models.DisplaySelector;
-import productcatalog.models.SortOption;
-import productcatalog.models.SortSelector;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

@@ -1,7 +1,8 @@
-package productcatalog.controllers;
+package productcatalog.productoverview;
 
 import common.models.DetailData;
 import common.controllers.PageContent;
+import productcatalog.common.BreadcrumbData;
 import productcatalog.models.*;
 
 public class ProductOverviewPageContent extends PageContent {

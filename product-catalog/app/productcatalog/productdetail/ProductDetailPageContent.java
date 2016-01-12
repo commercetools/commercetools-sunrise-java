@@ -1,6 +1,7 @@
-package productcatalog.controllers;
+package productcatalog.productdetail;
 
 import common.controllers.PageContent;
+import productcatalog.common.BreadcrumbData;
 import productcatalog.models.*;
 
 import java.util.List;

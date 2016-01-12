@@ -1,4 +1,4 @@
-package productcatalog.controllers;
+package productcatalog.common;
 
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
@@ -12,7 +12,7 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 
-public class ProductCatalogController extends SunriseController {
+public abstract class ProductCatalogController extends SunriseController {
     private final ProductService productService;
     private final ProductDataConfig productDataConfig;
 

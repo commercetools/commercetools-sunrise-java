@@ -7,7 +7,7 @@ import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import play.libs.F;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import productcatalog.controllers.routes;
+import productcatalog.common.routes;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -1,4 +1,4 @@
-package productcatalog.controllers;
+package productcatalog.home;
 
 import common.controllers.PageContent;
 import productcatalog.models.SuggestionsData;

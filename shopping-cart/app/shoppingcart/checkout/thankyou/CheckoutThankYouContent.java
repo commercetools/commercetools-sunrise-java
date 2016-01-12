@@ -6,7 +6,7 @@ import common.controllers.ReverseRouter;
 import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.orders.Order;
-import shoppingcart.common.CartOrderBean;
+import shoppingcart.CartOrderBean;
 
 public class CheckoutThankYouContent extends PageContent {
     private CartOrderBean order;

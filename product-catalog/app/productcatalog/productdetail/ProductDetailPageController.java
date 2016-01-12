@@ -1,4 +1,4 @@
-package productcatalog.controllers;
+package productcatalog.productdetail;
 
 import common.actions.LanguageFiltered;
 import common.contexts.UserContext;
@@ -11,6 +11,8 @@ import io.sphere.sdk.products.ProductVariant;
 import play.libs.F;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import productcatalog.common.BreadcrumbData;
+import productcatalog.common.ProductCatalogController;
 import productcatalog.models.*;
 import productcatalog.services.ProductService;
 

@@ -1,4 +1,4 @@
-package productcatalog.controllers;
+package productcatalog.common;
 
 import common.controllers.WithPlayJavaSphereClient;
 
