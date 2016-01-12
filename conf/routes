@@ -23,7 +23,7 @@ GET         /version                                           @controllers.Stat
 GET         /health                                            @controllers.StatusController.health()
 
 # Home page
-GET         /:languageTag/home                                 @HomeController.show(languageTag:String)
+GET         /:languageTag/home                                 @productcatalog.home.HomeController.show(languageTag:String)
 
 
 ->          /setup                                             setupwidget.Routes
@@ -57,7 +57,7 @@ POST        /:languageTag/checkout/confirmation                @shoppingcart.che
 GET         /:languageTag/checkout/thankyou                    @shoppingcart.checkout.thankyou.CheckoutThankyouController.show(languageTag: String)
 
 
-GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)
+GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.productdetail.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)
 
-GET         /:languageTag/search                               @productcatalog.common.ProductOverviewPageController.search(languageTag: String, page: Int ?= 1)
-GET         /:languageTag/:categorySlug                        @productcatalog.common.ProductOverviewPageController.show(languageTag: String, page: Int ?= 1, categorySlug: String)
+GET         /:languageTag/search                               @productcatalog.productoverview.ProductOverviewPageController.search(languageTag: String, page: Int ?= 1)
+GET         /:languageTag/:categorySlug                        @productcatalog.productoverview.ProductOverviewPageController.show(languageTag: String, page: Int ?= 1, categorySlug: String)
