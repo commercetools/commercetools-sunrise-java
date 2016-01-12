@@ -7,7 +7,7 @@ import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import play.Configuration;
-import shoppingcart.CartOrderBean;
+import shoppingcart.common.CartOrderBean;
 import shoppingcart.checkout.CheckoutPageContent;
 import shoppingcart.checkout.StepWidgetBean;
 

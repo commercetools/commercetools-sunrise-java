@@ -8,7 +8,7 @@ import io.sphere.sdk.orders.queries.OrderByIdGet;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
-import shoppingcart.CartController;
+import shoppingcart.common.CartController;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -1,4 +1,4 @@
-package productcatalog.models;
+package productcatalog.common;
 
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductVariant;

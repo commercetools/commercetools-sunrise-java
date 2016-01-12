@@ -1,4 +1,4 @@
-package productcatalog.models;
+package productcatalog.common;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
@@ -6,6 +6,7 @@ import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
+import productcatalog.common.ProductThumbnailData;
 
 import java.util.List;
 

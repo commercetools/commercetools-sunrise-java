@@ -3,7 +3,7 @@ package productcatalog.productoverview;
 import common.models.DetailData;
 import common.controllers.PageContent;
 import productcatalog.common.BreadcrumbData;
-import productcatalog.models.*;
+import productcatalog.common.ProductListData;
 
 public class ProductOverviewPageContent extends PageContent {
     private String filterProductsUrl;

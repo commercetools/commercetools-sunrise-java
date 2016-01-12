@@ -1,4 +1,4 @@
-package productcatalog.models;
+package productcatalog.common;
 
 import common.prices.PriceFinderFactory;
 import common.contexts.UserContext;

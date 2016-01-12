@@ -1,7 +1,7 @@
 package productcatalog.home;
 
 import common.controllers.PageContent;
-import productcatalog.models.SuggestionsData;
+import productcatalog.common.SuggestionsData;
 
 public class HomePageContent extends PageContent {
     private SuggestionsData suggestions;

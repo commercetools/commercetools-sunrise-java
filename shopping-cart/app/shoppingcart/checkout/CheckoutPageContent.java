@@ -1,7 +1,7 @@
 package shoppingcart.checkout;
 
 import common.controllers.PageContent;
-import shoppingcart.CartOrderBean;
+import shoppingcart.common.CartOrderBean;
 
 public abstract class CheckoutPageContent extends PageContent {
     private StepWidgetBean stepWidget;

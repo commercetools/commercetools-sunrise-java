@@ -1,4 +1,4 @@
-package productcatalog.models;
+package productcatalog.productdetail;
 
 import common.utils.PriceFormatter;
 import io.sphere.sdk.models.Base;

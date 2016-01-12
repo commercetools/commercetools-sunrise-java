@@ -17,7 +17,7 @@ import play.filters.csrf.RequireCSRFCheck;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
-import shoppingcart.CartController;
+import shoppingcart.common.CartController;
 import shoppingcart.CartSessionUtils;
 
 import javax.inject.Inject;

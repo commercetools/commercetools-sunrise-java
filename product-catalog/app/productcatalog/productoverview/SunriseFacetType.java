@@ -1,4 +1,4 @@
-package productcatalog.models;
+package productcatalog.productoverview;
 
 import io.sphere.sdk.facets.FacetType;
 

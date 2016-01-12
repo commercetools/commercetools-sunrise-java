@@ -1,6 +1,8 @@
-package productcatalog.models;
+package productcatalog.common;
 
 import io.sphere.sdk.models.Base;
+import productcatalog.common.ProductListData;
+import productcatalog.common.ProductThumbnailData;
 
 import java.util.List;
 

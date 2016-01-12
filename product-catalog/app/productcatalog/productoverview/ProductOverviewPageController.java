@@ -13,7 +13,7 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.common.BreadcrumbData;
 import productcatalog.common.ProductCatalogController;
-import productcatalog.models.*;
+import productcatalog.common.ProductListData;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-package shoppingcart;
+package shoppingcart.common;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;

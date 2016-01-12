@@ -9,8 +9,8 @@ import play.libs.F;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.common.ProductCatalogController;
-import productcatalog.models.ProductListData;
-import productcatalog.models.SuggestionsData;
+import productcatalog.common.ProductListData;
+import productcatalog.common.SuggestionsData;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;

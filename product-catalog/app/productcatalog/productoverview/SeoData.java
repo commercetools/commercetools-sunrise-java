@@ -1,4 +1,4 @@
-package productcatalog.models;
+package productcatalog.productoverview;
 
 import common.contexts.UserContext;
 import common.models.DetailData;

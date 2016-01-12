@@ -61,5 +61,3 @@ GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @ProductDetailPag
 
 GET         /:languageTag/search                               @productcatalog.common.ProductOverviewPageController.search(languageTag: String, page: Int ?= 1)
 GET         /:languageTag/:categorySlug                        @productcatalog.common.ProductOverviewPageController.show(languageTag: String, page: Int ?= 1, categorySlug: String)
-@import productcatalog.home.HomeController
-@import productcatalog.productdetail.ProductDetailPageController

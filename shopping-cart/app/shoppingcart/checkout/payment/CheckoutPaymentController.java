@@ -8,7 +8,7 @@ import io.sphere.sdk.carts.Cart;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.F;
 import play.mvc.Result;
-import shoppingcart.CartController;
+import shoppingcart.common.CartController;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

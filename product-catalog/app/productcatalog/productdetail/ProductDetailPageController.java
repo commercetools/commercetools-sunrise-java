@@ -11,9 +11,7 @@ import io.sphere.sdk.products.ProductVariant;
 import play.libs.F;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import productcatalog.common.BreadcrumbData;
-import productcatalog.common.ProductCatalogController;
-import productcatalog.models.*;
+import productcatalog.common.*;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;

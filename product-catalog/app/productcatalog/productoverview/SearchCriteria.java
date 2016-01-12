@@ -15,7 +15,6 @@ import io.sphere.sdk.search.SortExpression;
 import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
 import play.Configuration;
 import play.mvc.Http;
-import productcatalog.models.DisplaySelector;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
-import static productcatalog.models.SunriseFacetType.*;
+import static productcatalog.productoverview.SunriseFacetType.*;
 
 public class SearchCriteria {
     private static final ProductProjectionSortSearchModel SORT = ProductProjectionSearchModel.of().sort();
