@@ -50,7 +50,7 @@ class ProjectContextProvider implements Provider<ProjectContext> {
                 .map(Locale::forLanguageTag)
                 .collect(toList());
         if (locales.isEmpty()) {
-            throw new SunriseInitializationException("No language defined, neither in project nor in configuration");
+            throw new SunriseInitializationException("No language defined, neither in project nor in configuration '" + CONFIG_LANGUAGES + "'");
         }
         return locales;
     }
@@ -59,7 +59,7 @@ class ProjectContextProvider implements Provider<ProjectContext> {
         final List<CountryCode> countriesFromConfig = getCountriesFromConfig();
         final List<CountryCode> countries = countriesFromConfig.isEmpty() ? project.getCountries() : countriesFromConfig;
         if (countries.isEmpty()) {
-            throw new SunriseInitializationException("No country defined, neither in project nor in configuration");
+            throw new SunriseInitializationException("No country defined, neither in project nor in configuration '" + CONFIG_COUNTRIES + "'");
         }
         return countries;
     }

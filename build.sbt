@@ -13,7 +13,7 @@ organization := "io.sphere"
 
 lazy val sunriseDesignVersion = "0.42.0"
 
-lazy val sphereJvmSdkVersion = "1.0.0-M21"
+lazy val sphereJvmSdkVersion = "1.0.0-M25"
 
 lazy val jacksonVersion = "2.6.0"
 
@@ -26,8 +26,8 @@ lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;tes
 
 lazy val `sphere-sunrise` = (project in file("."))
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
-  .dependsOn(commonWithTests, `product-catalog`, `setup-widget`, purchase)
-  .aggregate(common, `product-catalog`, `setup-widget`, `move-to-sdk`, purchase)
+  .dependsOn(commonWithTests, `product-catalog`, `shopping-cart`, `setup-widget`)
+  .aggregate(common, `product-catalog`, `shopping-cart`, `setup-widget`, `move-to-sdk`)
 
 lazy val common = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
@@ -37,7 +37,7 @@ lazy val `product-catalog` = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
   .dependsOn(commonWithTests)
 
-lazy val purchase = project
+lazy val `shopping-cart` = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
   .dependsOn(commonWithTests)
 

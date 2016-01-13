@@ -5,7 +5,7 @@ import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 import play.libs.F;
-import productcatalog.controllers.SearchCriteria;
+import productcatalog.productoverview.SearchCriteria;
 
 import java.util.List;
 import java.util.Locale;

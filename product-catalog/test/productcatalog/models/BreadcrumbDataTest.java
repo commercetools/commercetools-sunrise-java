@@ -11,6 +11,7 @@ import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import org.junit.Test;
+import productcatalog.common.BreadcrumbData;
 
 import java.util.List;
 import java.util.function.Consumer;

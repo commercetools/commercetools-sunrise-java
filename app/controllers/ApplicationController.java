@@ -5,7 +5,7 @@ import play.inject.Injector;
 import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
-import productcatalog.controllers.HomeController;
+import productcatalog.home.HomeController;
 import setupwidget.controllers.SetupController;
 
 import javax.inject.Inject;

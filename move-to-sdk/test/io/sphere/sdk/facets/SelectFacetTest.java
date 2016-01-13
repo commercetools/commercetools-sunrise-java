@@ -18,9 +18,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class SelectFacetTest {
     private static final TermFacetResult FACET_RESULT_WITH_THREE_TERMS = TermFacetResult.of(5L, 60L, 0L, asList(
-            TermStats.of("one", 30),
-            TermStats.of("two", 20),
-            TermStats.of("three", 10)));
+            TermStats.of("one", 30L),
+            TermStats.of("two", 20L),
+            TermStats.of("three", 10L)));
     private static final List<String> SELECTED_VALUE_TWO = singletonList("two");
     private static final List<FacetOption> OPTIONS = asList(
             FacetOption.of("one", 30, false),

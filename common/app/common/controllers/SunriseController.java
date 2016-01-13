@@ -19,7 +19,7 @@ import play.Configuration;
 import play.filters.csrf.AddCSRFToken;
 import play.mvc.Http;
 import play.mvc.With;
-import purchase.CartSessionUtils;
+import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;

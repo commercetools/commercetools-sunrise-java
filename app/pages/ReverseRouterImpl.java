@@ -4,8 +4,14 @@ import common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
 
-import static productcatalog.controllers.routes.*;
-import static purchase.routes.*;
+import static productcatalog.productdetail.routes.*;
+import static productcatalog.productoverview.routes.*;
+import static shoppingcart.cartdetail.routes.*;
+import static shoppingcart.checkout.address.routes.*;
+import static shoppingcart.checkout.confirmation.routes.*;
+import static shoppingcart.checkout.payment.routes.*;
+import static shoppingcart.checkout.shipping.routes.*;
+import static shoppingcart.checkout.thankyou.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
 

@@ -5,6 +5,7 @@ import common.models.LinkData;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
 import org.junit.Test;
+import productcatalog.productoverview.PaginationData;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -97,8 +98,8 @@ public class PaginationDataTest {
 
     @SuppressWarnings("unchecked")
     private PagedResult<ProductProjection> pagedResult(final int page, final int totalPages) {
-        final int offset = (page - 1) * PAGE_SIZE;
-        final int totalProducts = totalPages * PAGE_SIZE;
+        final long offset = (page - 1) * PAGE_SIZE;
+        final long totalProducts = totalPages * PAGE_SIZE;
         final List<ProductProjection> products = Collections.nCopies(PAGE_SIZE, null);
         return new PagedResult(offset, totalProducts, products) {};
     }
