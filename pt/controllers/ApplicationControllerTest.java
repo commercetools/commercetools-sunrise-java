@@ -6,7 +6,7 @@ import org.junit.Test;
 import play.Application;
 import play.mvc.Http;
 import play.mvc.Result;
-import productcatalog.controllers.HomeController;
+import productcatalog.home.HomeController;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static play.test.Helpers.contentAsString;

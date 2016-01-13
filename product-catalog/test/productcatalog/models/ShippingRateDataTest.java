@@ -4,6 +4,8 @@ import common.utils.PriceFormatter;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
+import productcatalog.productdetail.ShippingRateData;
+import productcatalog.productdetail.ShopShippingRate;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;

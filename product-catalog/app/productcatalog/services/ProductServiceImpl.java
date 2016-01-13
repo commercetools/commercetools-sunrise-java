@@ -4,7 +4,6 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.queries.PagedQueryResult;
@@ -12,7 +11,7 @@ import io.sphere.sdk.search.PagedSearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.F;
-import productcatalog.controllers.SearchCriteria;
+import productcatalog.productoverview.SearchCriteria;
 
 import javax.inject.Inject;
 import java.util.*;
