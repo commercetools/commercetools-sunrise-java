@@ -19,7 +19,7 @@ public class ProjectContextTest {
     @Test
     public void createsProjectContext() throws Exception {
         final ProjectContext projectContext = ProjectContext.of(AVAILABLE_LANGUAGES, AVAILABLE_COUNTRIES);
-        assertThat(projectContext.languages()).containsExactlyElementsOf(AVAILABLE_LANGUAGES);
+        assertThat(projectContext.locales()).containsExactlyElementsOf(AVAILABLE_LANGUAGES);
         assertThat(projectContext.countries()).containsExactlyElementsOf(AVAILABLE_COUNTRIES);
     }
 }

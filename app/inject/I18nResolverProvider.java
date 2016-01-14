@@ -32,7 +32,7 @@ class I18nResolverProvider implements Provider<I18nResolver> {
 
     @Override
     public I18nResolver get() {
-        final List<Locale> locales = projectContext.languages();
+        final List<Locale> locales = projectContext.locales();
         final List<String> bundles = getBundles();
         Logger.debug("Provide CompositeI18nResolver: languages {}, bundles {}", locales, bundles);
         final List<I18nResolver> i18nResolvers = loadI18nResolvers(locales, bundles);

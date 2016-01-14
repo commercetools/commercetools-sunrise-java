@@ -29,7 +29,7 @@ public final class ApplicationController extends Controller {
         return setupController.handleOrFallback(() -> {
             final HomeController homeController = injector.instanceOf(HomeController.class);
             final ProjectContext projectContext = injector.instanceOf(ProjectContext.class);
-            final String defaultLanguage = projectContext.defaultLanguage().toLanguageTag();
+            final String defaultLanguage = projectContext.defaultLocale().toLanguageTag();
             return homeController.show(defaultLanguage);
         });
     }

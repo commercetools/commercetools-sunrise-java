@@ -24,8 +24,8 @@ import shoppingcart.CartSessionUtils;
 import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -118,17 +118,10 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected UserContext userContext(final String languageTag) {
-        // TODO when locale is not supported by app
-        final Locale currentLocale = Locale.forLanguageTag(languageTag);
-        final CountryCode country = CountryCode.getByLocale(currentLocale);
-        final CurrencyUnit currency = Monetary.getCurrency(country.getCurrency().getCurrencyCode());
-        final ArrayList<Locale> locales = new ArrayList<>();
-        locales.add(currentLocale);
-        locales.addAll(request().acceptLanguages().stream()
-                .map(lang -> Locale.forLanguageTag(lang.code()))
-                .collect(toList()));
-        locales.addAll(projectContext().languages());
-        return UserContext.of(country, locales, ZoneId.of("Europe/Berlin"), currency);
+        final List<Locale> acceptedLocales = acceptedLocales(languageTag, request(), projectContext());
+        final CountryCode currentCountry = currentCountry(session(), projectContext());
+        final CurrencyUnit currentCurrency = currentCurrency(currentCountry);
+        return UserContext.of(acceptedLocales, currentCountry, currentCurrency);
     }
 
     protected RequestContext requestContext() {
@@ -139,8 +132,34 @@ public abstract class SunriseController extends ShopController {
         return categoryNewExtId.flatMap(extId -> categoryTree().findByExternalId(extId));
     }
 
+    private static Locale currentLocale(final String languageTag, final ProjectContext projectContext) {
+        final Locale locale = Locale.forLanguageTag(languageTag);
+        return projectContext.isLocaleAccepted(locale) ? locale : projectContext.defaultLocale();
+    }
+
+    private static CountryCode currentCountry(final Http.Session session, final ProjectContext projectContext) {
+        final String countryCodeInSession = session.get("countryCode");
+        final CountryCode country = CountryCode.getByCode(countryCodeInSession, false);
+        return projectContext.isCountryAccepted(country) ? country : projectContext.defaultCountry();
+    }
+
+    private static CurrencyUnit currentCurrency(final CountryCode currentCountry) {
+        return Monetary.getCurrency(currentCountry.getCurrency().getCurrencyCode());
+    }
+
+    private static List<Locale> acceptedLocales(final String languageTag, final Http.Request request,
+                                                final ProjectContext projectContext) {
+        final ArrayList<Locale> acceptedLocales = new ArrayList<>();
+        acceptedLocales.add(currentLocale(languageTag, projectContext));
+        acceptedLocales.addAll(request.acceptLanguages().stream()
+                .map(lang -> Locale.forLanguageTag(lang.code()))
+                .collect(toList()));
+        acceptedLocales.addAll(projectContext.locales());
+        return acceptedLocales;
+    }
+
     @Nullable
-    public static String getCsrfToken(final Http.Session session) {
+    private static String getCsrfToken(final Http.Session session) {
         return session.get("csrfToken");
     }
 }

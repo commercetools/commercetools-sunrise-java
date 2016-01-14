@@ -8,33 +8,41 @@ import java.util.Locale;
 import static io.sphere.sdk.utils.IterableUtils.requireNonEmpty;
 
 public class ProjectContext {
-    private final List<Locale> languages;
-    private final List<CountryCode> countries;
+    private final List<Locale> locales;
+    private final List<CountryCode> countryCodes;
 
-    private ProjectContext(final List<Locale> languages, final List<CountryCode> countries) {
-        requireNonEmpty(languages);
-        requireNonEmpty(countries);
-        this.languages = languages;
-        this.countries = countries;
+    private ProjectContext(final List<Locale> locales, final List<CountryCode> countryCodes) {
+        requireNonEmpty(locales);
+        requireNonEmpty(countryCodes);
+        this.locales = locales;
+        this.countryCodes = countryCodes;
     }
 
-    public List<Locale> languages() {
-        return languages;
+    public List<Locale> locales() {
+        return locales;
     }
 
     public List<CountryCode> countries() {
-        return countries;
+        return countryCodes;
     }
 
-    public Locale defaultLanguage() {
-        return languages.stream().findFirst().get();
+    public Locale defaultLocale() {
+        return locales.stream().findFirst().get();
     }
 
     public CountryCode defaultCountry() {
-        return countries.stream().findFirst().get();
+        return countryCodes.stream().findFirst().get();
     }
 
-    public static ProjectContext of(final List<Locale> languages, final List<CountryCode> countries) {
-        return new ProjectContext(languages, countries);
+    public boolean isLocaleAccepted(final Locale locale) {
+        return locales.contains(locale);
+    }
+
+    public boolean isCountryAccepted(final CountryCode countryCode) {
+        return countryCodes.contains(countryCode);
+    }
+
+    public static ProjectContext of(final List<Locale> locales, final List<CountryCode> countries) {
+        return new ProjectContext(locales, countries);
     }
 }

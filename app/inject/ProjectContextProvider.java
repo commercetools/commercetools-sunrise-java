@@ -36,8 +36,8 @@ class ProjectContextProvider implements Provider<ProjectContext> {
             final List<Locale> languages = getLanguages(project);
             final List<CountryCode> countries = getCountries(project);
             Logger.debug("Provide ProjectContext:"
-                    + " Languages" + languages + ","
-                    + " Countries" + countries);
+                    + " Languages " + languages + ","
+                    + " Countries (truncated) " + countries);
             return ProjectContext.of(languages, countries);
         } catch (ExecutionException | InterruptedException e) {
             throw new SunriseInitializationException("Could not fetch project information", e);
@@ -61,7 +61,7 @@ class ProjectContextProvider implements Provider<ProjectContext> {
         if (countries.isEmpty()) {
             throw new SunriseInitializationException("No country defined, neither in project nor in configuration '" + CONFIG_COUNTRIES + "'");
         }
-        return countries;
+        return countries.subList(0, 1); // TODO temporarily forces to get only the first one to avoid changing the cart country
     }
 
     private List<CountryCode> getCountriesFromConfig() {
