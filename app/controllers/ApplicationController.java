@@ -1,11 +1,13 @@
 package controllers;
 
 import common.contexts.ProjectContext;
+import common.controllers.ReverseRouter;
+import io.sphere.sdk.models.Base;
+import play.data.Form;
+import play.data.validation.Constraints;
 import play.inject.Injector;
-import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
-import productcatalog.home.HomeController;
 import setupwidget.controllers.SetupController;
 
 import javax.inject.Inject;
@@ -25,16 +27,40 @@ public final class ApplicationController extends Controller {
         this.setupController = setupController;
     }
 
-    public F.Promise<Result> index() {
-        return setupController.handleOrFallback(() -> {
-            final HomeController homeController = injector.instanceOf(HomeController.class);
-            final ProjectContext projectContext = injector.instanceOf(ProjectContext.class);
-            final String defaultLanguage = projectContext.defaultLocale().toLanguageTag();
-            return homeController.show(defaultLanguage);
-        });
-    }
-
     public Result untrail(final String path) {
         return movedPermanently("/" + path);
+    }
+
+    public Result index() {
+        return setupController.handleOrFallback(() -> redirectToHomePage(defaultLanguage()));
+    }
+
+    public Result changeLanguage() {
+        final Form<LanguageFormData> languageFilledForm = Form.form(LanguageFormData.class).bindFromRequest();
+        final String languageTag = (languageFilledForm.hasErrors())? defaultLanguage() : languageFilledForm.get().getLanguage();
+        return redirectToHomePage(languageTag);
+    }
+
+    private Result redirectToHomePage(final String languageTag) {
+        final ReverseRouter reverseRouter = injector.instanceOf(ReverseRouter.class);
+        return redirect(reverseRouter.home(languageTag));
+    }
+
+    private String defaultLanguage() {
+        final ProjectContext projectContext = injector.instanceOf(ProjectContext.class);
+        return projectContext.defaultLocale().toLanguageTag();
+    }
+
+    public static class LanguageFormData extends Base {
+        @Constraints.Required
+        private String language;
+
+        public String getLanguage() {
+            return language;
+        }
+
+        public void setLanguage(final String language) {
+            this.language = language;
+        }
     }
 }

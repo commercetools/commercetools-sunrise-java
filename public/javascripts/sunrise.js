@@ -13,6 +13,10 @@ $("form#form-filter-products .facet-clear-btn, form#form-filter-products-mobile 
     input.closest("form").submit();
 });
 
+$("form#form-select-language, form#form-select-language-mobile").change(function() {
+    this.submit();
+});
+
 //function changeVariant(select) {
 //    var selectedOption = select.options[select.selectedIndex];
 //    if (selectedOption.value) {

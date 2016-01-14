@@ -34,9 +34,9 @@ public class SetupController extends Controller {
         this.setupComplete = doesConfigFileExist();
     }
 
-    public F.Promise<Result> handleOrFallback(final Supplier<F.Promise<Result>> fallback) {
+    public Result handleOrFallback(final Supplier<Result> fallback) {
         final boolean isWidgetActionsRequired = isSettingsWidgetEnabled() && !isSetupComplete();
-        return isWidgetActionsRequired ? pure(renderForm()) : fallback.get();
+        return isWidgetActionsRequired ? renderForm() : fallback.get();
     }
 
     public Result renderForm() {

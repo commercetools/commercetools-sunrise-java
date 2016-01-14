@@ -13,6 +13,8 @@ public interface ReverseRouter {
 
     Call home(final String languageTag);
 
+    Call changeLanguage();
+
     Call category(final String languageTag, final String categorySlug);
 
     Call search(final String languageTag);

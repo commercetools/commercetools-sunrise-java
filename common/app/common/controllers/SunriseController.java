@@ -95,6 +95,7 @@ public abstract class SunriseController extends ShopController {
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(reverseRouter().home(language), "home", "continueShopping")
                 .addHalLink(reverseRouter().search(language), "search")
+                .addHalLink(reverseRouter().changeLanguage(), "selectLanguage")
 
                 .addHalLink(reverseRouter().showCart(language), "cart")
                 .addHalLink(reverseRouter().productToCartForm(language), "addToCart")
