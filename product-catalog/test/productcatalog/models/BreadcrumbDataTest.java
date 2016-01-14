@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BreadcrumbDataTest {
     private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("models/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
     private static final ProductProjection PRODUCT = readCtpObject("models/breadcrumbProduct.json", ProductProjection.typeReference());
-    private static final UserContext USER_CONTEXT = UserContext.of(CountryCode.UK, singletonList(ENGLISH), null, null);
+    private static final UserContext USER_CONTEXT = UserContext.of(singletonList(ENGLISH), CountryCode.UK, null);
     private static final ReverseRouter REVERSE_ROUTER = reverseRouter();
 
     @Test

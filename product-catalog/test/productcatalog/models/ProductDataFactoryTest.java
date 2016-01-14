@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProductDataFactoryTest {
-    public static final UserContext USER_CONTEXT =  UserContext.of(CountryCode.DE, singletonList(GERMAN), null, Monetary.getCurrency("EUR"));
+    public static final UserContext USER_CONTEXT =  UserContext.of(singletonList(GERMAN), CountryCode.DE, Monetary.getCurrency("EUR"));
 
 //    @Test
 //    public void create() {

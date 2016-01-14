@@ -19,7 +19,7 @@ public class ProductThumbnailDataFactoryTest {
     public void create() {
         final ProductProjection jacket = readObjectFromResource("product.json", ProductProjection.typeReference());
 
-        final UserContext userContext = UserContext.of(CountryCode.DE, singletonList(GERMAN), null, Monetary.getCurrency("EUR"), null, null);
+        final UserContext userContext = UserContext.of(singletonList(GERMAN), CountryCode.DE, Monetary.getCurrency("EUR"), null, null);
 
         final ProductThumbnailData thumbnailData =
                 ProductThumbnailDataFactory.of(userContext).create(jacket);
