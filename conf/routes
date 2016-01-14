@@ -22,6 +22,8 @@ GET         /health                                            @controllers.Stat
 GET         /                                                  @controllers.ApplicationController.index()
 # Changes the language of the app
 POST        /changeLanguage                                    @controllers.ApplicationController.changeLanguage()
+# Changes the country of the app
+POST        /:languageTag/changeCountry                        @controllers.ApplicationController.changeCountry(languageTag: String)
 # Home page
 GET         /:languageTag/home                                 @productcatalog.home.HomeController.show(languageTag: String)
 

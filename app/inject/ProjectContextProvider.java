@@ -10,6 +10,9 @@ import play.Configuration;
 import play.Logger;
 
 import javax.inject.Inject;
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+import javax.money.MonetaryAmount;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -18,8 +21,9 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 class ProjectContextProvider implements Provider<ProjectContext> {
-    private static final String CONFIG_COUNTRIES = "application.countries";
     private static final String CONFIG_LANGUAGES = "application.i18n.languages";
+    private static final String CONFIG_COUNTRIES = "application.countries";
+    private static final String CONFIG_CURRENCIES = "application.currencies";
     private final Configuration configuration;
     private final SphereClient client;
 
@@ -35,10 +39,12 @@ class ProjectContextProvider implements Provider<ProjectContext> {
             final Project project = client.execute(ProjectGet.of()).toCompletableFuture().get();
             final List<Locale> languages = getLanguages(project);
             final List<CountryCode> countries = getCountries(project);
+            final List<CurrencyUnit> currencies = getCurrencies(project);
             Logger.debug("Provide ProjectContext:"
                     + " Languages " + languages + ","
-                    + " Countries (truncated) " + countries);
-            return ProjectContext.of(languages, countries);
+                    + " Countries " + countries + ","
+                    + " Currencies " + currencies);
+            return ProjectContext.of(languages, countries, currencies);
         } catch (ExecutionException | InterruptedException e) {
             throw new SunriseInitializationException("Could not fetch project information", e);
         }
@@ -61,7 +67,19 @@ class ProjectContextProvider implements Provider<ProjectContext> {
         if (countries.isEmpty()) {
             throw new SunriseInitializationException("No country defined, neither in project nor in configuration '" + CONFIG_COUNTRIES + "'");
         }
-        return countries.subList(0, 1); // TODO temporarily forces to get only the first one to avoid changing the cart country
+        return countries;
+    }
+
+    private List<CurrencyUnit> getCurrencies(final Project project) {
+        final List<CurrencyUnit> currencies = configuration.getStringList(CONFIG_CURRENCIES, emptyList())
+                .stream()
+                .map(Monetary::getCurrency)
+                .collect(toList());
+        // TODO Fallback to CTP currencies
+        if (currencies.isEmpty()) {
+            throw new SunriseInitializationException("No currency defined in configuration '" + CONFIG_CURRENCIES + "'");
+        }
+        return currencies;
     }
 
     private List<CountryCode> getCountriesFromConfig() {

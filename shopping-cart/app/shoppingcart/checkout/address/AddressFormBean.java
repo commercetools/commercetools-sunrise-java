@@ -30,6 +30,21 @@ public class AddressFormBean extends Base {
     public AddressFormBean() {
     }
 
+    public AddressFormBean(@Nullable final Address address, final UserContext userContext, final I18nResolver i18nResolver,
+                           final Configuration configuration) {
+        if (address != null) {
+            try {
+                BeanUtils.copyProperties(this, address);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        final SalutationsFieldsBean salutationsFieldsBean = new SalutationsFieldsBean(address, userContext, i18nResolver, configuration);
+        setSalutations(salutationsFieldsBean);
+        final CountriesFieldsBean countriesFieldsBean = new CountriesFieldsBean(address, userContext);
+        setCountries(countriesFieldsBean);
+    }
+
     public AddressFormBean(@Nullable final Address address, final UserContext userContext, final ProjectContext projectContext,
                            final I18nResolver i18nResolver, final Configuration configuration) {
         if (address != null) {

@@ -24,10 +24,7 @@ import shoppingcart.CartSessionUtils;
 import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -39,6 +36,7 @@ import static java.util.stream.Collectors.toList;
 @With(MetricAction.class)
 @AddCSRFToken
 public abstract class SunriseController extends ShopController {
+    public static final String SESSION_COUNTRY = "countryCode";
     private final ControllerDependency controllerDependency;
     private final Optional<String> saleCategoryExtId;
     private final Optional<String> categoryNewExtId;
@@ -96,6 +94,7 @@ public abstract class SunriseController extends ShopController {
         pageMeta.addHalLink(reverseRouter().home(language), "home", "continueShopping")
                 .addHalLink(reverseRouter().search(language), "search")
                 .addHalLink(reverseRouter().changeLanguage(), "selectLanguage")
+                .addHalLink(reverseRouter().changeCountry(language), "selectCountry")
 
                 .addHalLink(reverseRouter().showCart(language), "cart")
                 .addHalLink(reverseRouter().productToCartForm(language), "addToCart")
@@ -119,9 +118,10 @@ public abstract class SunriseController extends ShopController {
     }
 
     protected UserContext userContext(final String languageTag) {
-        final List<Locale> acceptedLocales = acceptedLocales(languageTag, request(), projectContext());
-        final CountryCode currentCountry = currentCountry(session(), projectContext());
-        final CurrencyUnit currentCurrency = currentCurrency(currentCountry);
+        final ProjectContext projectContext = projectContext();
+        final List<Locale> acceptedLocales = acceptedLocales(languageTag, request(), projectContext);
+        final CountryCode currentCountry = currentCountry(session(), projectContext);
+        final CurrencyUnit currentCurrency = currentCurrency(currentCountry, projectContext);
         return UserContext.of(acceptedLocales, currentCountry, currentCurrency);
     }
 
@@ -139,13 +139,17 @@ public abstract class SunriseController extends ShopController {
     }
 
     private static CountryCode currentCountry(final Http.Session session, final ProjectContext projectContext) {
-        final String countryCodeInSession = session.get("countryCode");
+        final String countryCodeInSession = session.get(SESSION_COUNTRY);
         final CountryCode country = CountryCode.getByCode(countryCodeInSession, false);
         return projectContext.isCountryAccepted(country) ? country : projectContext.defaultCountry();
     }
 
-    private static CurrencyUnit currentCurrency(final CountryCode currentCountry) {
-        return Monetary.getCurrency(currentCountry.getCurrency().getCurrencyCode());
+    private static CurrencyUnit currentCurrency(final CountryCode currentCountry, final ProjectContext projectContext) {
+        return Optional.ofNullable(currentCountry.getCurrency())
+                .map(countryCurrency -> {
+                    final CurrencyUnit currency = Monetary.getCurrency(countryCurrency.getCurrencyCode());
+                    return projectContext.isCurrencyAccepted(currency) ? currency : projectContext.defaultCurrency();
+                }).orElse(projectContext.defaultCurrency());
     }
 
     private static List<Locale> acceptedLocales(final String languageTag, final Http.Request request,

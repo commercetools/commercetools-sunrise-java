@@ -30,6 +30,11 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
+    public Call changeCountry(final String languageTag) {
+        return controllers.routes.ApplicationController.changeCountry(languageTag);
+    }
+
+    @Override
     public Call category(final String languageTag, final String categorySlug) {
         return ProductOverviewPageController.show(languageTag, 1, categorySlug);
     }

@@ -7,6 +7,7 @@ import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
+import io.sphere.sdk.carts.commands.updateactions.SetCountry;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
@@ -70,6 +71,7 @@ public class CheckoutAddressController extends CartController {
                 ? content.getAddressForm().getBillingAddress().toAddress()
                 : null;
         final List<UpdateAction<Cart>> updateActions = asList(
+                SetCountry.of(shippingAddress.getCountry()),
                 SetShippingAddress.of(shippingAddress),
                 SetBillingAddress.of(nullableBillingAddress)
         );

@@ -4,7 +4,8 @@ import play.mvc.Call;
 
 public class TestableReverseRouter implements ReverseRouter {
     private String homeUrl;
-    private String locationUrl;
+    private String changeLanguageUrl;
+    private String changeCountryUrl;
     private String categoryUrl;
     private String searchUrl;
     private String productUrl;
@@ -27,8 +28,12 @@ public class TestableReverseRouter implements ReverseRouter {
         this.homeUrl = homeUrl;
     }
 
-    public void setLocationUrl(final String locationUrl) {
-        this.locationUrl = locationUrl;
+    public void setChangeLanguageUrl(final String changeLanguageUrl) {
+        this.changeLanguageUrl = changeLanguageUrl;
+    }
+
+    public void setChangeCountryUrl(final String changeCountryUrl) {
+        this.changeCountryUrl = changeCountryUrl;
     }
 
     public void setCategoryUrl(final String categoryUrl) {
@@ -106,7 +111,12 @@ public class TestableReverseRouter implements ReverseRouter {
 
     @Override
     public Call changeLanguage() {
-        return createCall(locationUrl);
+        return createCall(changeLanguageUrl);
+    }
+
+    @Override
+    public Call changeCountry(final String languageTag) {
+        return createCall(changeCountryUrl);
     }
 
     @Override
