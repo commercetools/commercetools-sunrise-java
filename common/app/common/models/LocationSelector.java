@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public class LocationSelector extends Base {
@@ -20,7 +21,7 @@ public class LocationSelector extends Base {
 
     public LocationSelector(final ProjectContext projectContext, final UserContext userContext) {
         this.country = createCountry(projectContext.countries(), userContext.country());
-        this.language = createLanguage(projectContext.languages(), userContext.locale());
+        this.language = createLanguage(projectContext.locales(), userContext.locale());
     }
 
     public List<SelectableData> getLanguage() {
@@ -40,7 +41,7 @@ public class LocationSelector extends Base {
     }
 
     private static List<SelectableData> createCountry(final List<CountryCode> countryCodes, @Nullable final CountryCode selectedCountryCode) {
-        return countryCodes.stream()
+        final List<SelectableData> countrySelector = countryCodes.stream()
                 .map(countryCode -> {
                     final SelectableData selector = new SelectableData(countryCode.getName(), countryCode.getAlpha2());
                     if (countryCode.equals(selectedCountryCode)) {
@@ -48,10 +49,11 @@ public class LocationSelector extends Base {
                     }
                     return selector;
                 }).collect(toList());
+        return (countrySelector.size() > 1) ? countrySelector : emptyList();
     }
 
     private static List<SelectableData> createLanguage(final List<Locale> locales, @Nullable final Locale selectedLocale) {
-        return locales.stream()
+        final List<SelectableData> localeSelector = locales.stream()
                 .map(locale -> {
                     final SelectableData selector = new SelectableData(locale.getDisplayName(), locale.getLanguage());
                     if (locale.equals(selectedLocale)) {
@@ -59,5 +61,6 @@ public class LocationSelector extends Base {
                     }
                     return selector;
                 }).collect(toList());
+        return (localeSelector.size() > 1) ? localeSelector : emptyList();
     }
 }

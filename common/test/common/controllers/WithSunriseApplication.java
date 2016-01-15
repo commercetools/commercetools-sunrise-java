@@ -25,6 +25,7 @@ import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Http;
 
+import javax.money.Monetary;
 import java.util.*;
 
 import static common.JsonUtils.readCtpObject;
@@ -105,7 +106,10 @@ public abstract class WithSunriseApplication {
     }
 
     protected ProjectContext injectedProjectContext() {
-        return ProjectContext.of(asList(Locale.ENGLISH, Locale.GERMAN), asList(CountryCode.DE, CountryCode.US));
+        return ProjectContext.of(
+                asList(Locale.ENGLISH, Locale.GERMAN),
+                asList(CountryCode.US, CountryCode.DE),
+                asList(Monetary.getCurrency("USD"), Monetary.getCurrency("EUR")));
     }
 
     protected CategoryTreeExtended injectedCategoryTree() {

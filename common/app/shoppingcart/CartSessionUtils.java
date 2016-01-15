@@ -21,7 +21,7 @@ public final class CartSessionUtils {
         final long itemCount = cart.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
         session.put(CartSessionKeys.CART_ID, cart.getId());
         session.put(CartSessionKeys.CART_ITEM_COUNT, String.valueOf(itemCount));
-        Logger.debug(session.toString());
+        Logger.debug("Saved cart: " + session.toString());
     }
 
     public static void removeCart(final Session session) {

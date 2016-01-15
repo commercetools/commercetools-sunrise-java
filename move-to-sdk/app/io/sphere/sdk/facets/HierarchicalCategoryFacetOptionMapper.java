@@ -101,8 +101,9 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
     private Optional<FacetOption> setLinkToFacetOptionValue(final Optional<FacetOption> facetOptionOptional,
                                                             final Category category, final List<Locale> locales) {
         return facetOptionOptional.flatMap(facetOption ->
-                category.getSlug().find(locales)
-                        .map(facetOption::withValue));
+                locales.stream().findFirst()
+                        .flatMap(locale -> category.getSlug().find(locale)
+                                .map(facetOption::withValue)));
     }
 
     private Function<Category, Optional<FacetOption>> facetOptionFinder(final List<FacetOption> facetOptions) {

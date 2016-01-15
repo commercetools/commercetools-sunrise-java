@@ -19,11 +19,10 @@ import static java.util.Collections.singletonList;
 import static java.util.Locale.GERMAN;
 
 public class ProductDetailPageContentTest {
-    private static final ZoneId ZONE_ID = ZoneId.of("Europe/Berlin");
     private static final CurrencyUnit EUR = Monetary.getCurrency("EUR");
     private static final List<Locale> LOCALES = singletonList(GERMAN);
     private static final PriceFormatter PRICE_FORMATTER = PriceFormatter.of(GERMAN);
-    private static final UserContext USER_CONTEXT = UserContext.of(DE, LOCALES, ZONE_ID, EUR, null, null);
+    private static final UserContext USER_CONTEXT = UserContext.of(LOCALES, DE, EUR, null, null);
 
     private final CategoryTree categories = CategoryTree.of(readCtpObject("categoryQueryResult.json", CategoryQuery.resultTypeReference()).getResults());
     private final List<ProductProjection> products = getQueryResult("productProjectionQueryResult.json").getResults();

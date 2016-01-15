@@ -70,7 +70,7 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
                     yamlMap.put(yamlKey, yamlContent);
                 }
             } catch (final YAMLException e){
-                Logger.warn("Yaml i18n resolver: Failed to load bundle '{}' for locale '{}' in filepath '{}'", bundle, locale, filepath);
+                Logger.debug("Yaml i18n resolver: Failed to load bundle '{}' for locale '{}' in filepath '{}'", bundle, locale, filepath);
             }
         }
     }

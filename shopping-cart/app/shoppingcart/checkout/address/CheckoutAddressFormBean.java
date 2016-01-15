@@ -27,7 +27,7 @@ public class CheckoutAddressFormBean extends Base {
                 .map(lastName -> lastName != null)
                 .orElse(false);
         setBillingAddressDifferentToBillingAddress(billingAddressDifferentToBillingAddress);
-        setShippingAddress(new AddressFormBean(cart.getShippingAddress(), userContext, projectContext, i18nResolver, configuration));
+        setShippingAddress(new AddressFormBean(cart.getShippingAddress(), userContext, i18nResolver, configuration));
         setBillingAddress(new AddressFormBean(cart.getBillingAddress(), userContext, projectContext, i18nResolver, configuration));
     }
 
@@ -47,7 +47,7 @@ public class CheckoutAddressFormBean extends Base {
                                                           final I18nResolver i18nResolver, final Configuration configuration) {
         final AddressFormBean shippingAddress = new AddressFormBean();
         shippingAddress.setSalutations(new SalutationsFieldsBean(checkoutAddressFormData.getTitleShipping(), userContext, i18nResolver, configuration));
-        shippingAddress.setCountries(new CountriesFieldsBean(checkoutAddressFormData.getCountryShipping(), userContext, projectContext));
+        shippingAddress.setCountries(new CountriesFieldsBean(checkoutAddressFormData.getCountryShipping(), userContext));
         shippingAddress.setFirstName(checkoutAddressFormData.getFirstNameShipping());
         shippingAddress.setLastName(checkoutAddressFormData.getLastNameShipping());
         shippingAddress.setStreetName(checkoutAddressFormData.getStreetNameShipping());

@@ -72,7 +72,7 @@ public class BreadcrumbData {
                                                    final ReverseRouter reverseRouter) {
         final LinkData linkData = new LinkData();
         linkData.setText(category.getName().find(userContext.locales()).orElse(""));
-        linkData.setUrl(getCategoryUrl(category, userContext.locale(), reverseRouter));
+        linkData.setUrl(reverseRouter.categoryUrlOrEmpty(userContext.locale(), category));
         return linkData;
     }
 
@@ -80,18 +80,7 @@ public class BreadcrumbData {
                                                   final UserContext userContext, final ReverseRouter reverseRouter) {
         final LinkData linkData = new LinkData();
         linkData.setText(currentProduct.getName().find(userContext.locales()).orElse(""));
-        linkData.setUrl(getProductUrl(currentProduct, variant, userContext.locale(), reverseRouter));
+        linkData.setUrl(reverseRouter.productUrlOrEmpty(userContext.locale(), currentProduct, variant));
         return linkData;
-    }
-
-    private static String getCategoryUrl(final Category category, final Locale locale, final ReverseRouter reverseRouter) {
-        final String slug = category.getSlug().find(locale).orElse("");
-        return reverseRouter.category(locale.toLanguageTag(), slug).url();
-    }
-
-    private static String getProductUrl(final ProductProjection product, final ProductVariant variant,
-                                        final Locale locale, final ReverseRouter reverseRouter) {
-        final String slug = product.getSlug().find(locale).orElse("");
-        return reverseRouter.product(locale.toLanguageTag(), slug, variant.getSku()).url();
     }
 }

@@ -2,39 +2,63 @@ package common.contexts;
 
 import com.neovisionaries.i18n.CountryCode;
 
+import javax.money.CurrencyUnit;
 import java.util.List;
 import java.util.Locale;
 
 import static io.sphere.sdk.utils.IterableUtils.requireNonEmpty;
 
 public class ProjectContext {
-    private final List<Locale> languages;
-    private final List<CountryCode> countries;
+    private final List<Locale> locales;
+    private final List<CountryCode> countryCodes;
+    private final List<CurrencyUnit> currencies;
 
-    private ProjectContext(final List<Locale> languages, final List<CountryCode> countries) {
-        requireNonEmpty(languages);
-        requireNonEmpty(countries);
-        this.languages = languages;
-        this.countries = countries;
+    private ProjectContext(final List<Locale> locales, final List<CountryCode> countryCodes, final List<CurrencyUnit> currencies) {
+        requireNonEmpty(locales);
+        requireNonEmpty(countryCodes);
+        requireNonEmpty(currencies);
+        this.locales = locales;
+        this.countryCodes = countryCodes;
+        this.currencies = currencies;
     }
 
-    public List<Locale> languages() {
-        return languages;
+    public List<Locale> locales() {
+        return locales;
     }
 
     public List<CountryCode> countries() {
-        return countries;
+        return countryCodes;
     }
 
-    public Locale defaultLanguage() {
-        return languages.stream().findFirst().get();
+    public List<CurrencyUnit> currencies() {
+        return currencies;
+    }
+
+    public Locale defaultLocale() {
+        return locales.stream().findFirst().get();
     }
 
     public CountryCode defaultCountry() {
-        return countries.stream().findFirst().get();
+        return countryCodes.stream().findFirst().get();
     }
 
-    public static ProjectContext of(final List<Locale> languages, final List<CountryCode> countries) {
-        return new ProjectContext(languages, countries);
+    public CurrencyUnit defaultCurrency() {
+        return currencies.stream().findFirst().get();
+    }
+
+    public boolean isLocaleAccepted(final Locale locale) {
+        return locales.contains(locale);
+    }
+
+    public boolean isCountryAccepted(final CountryCode countryCode) {
+        return countryCodes.contains(countryCode);
+    }
+
+    public boolean isCurrencyAccepted(final CurrencyUnit currency) {
+        return currencies.contains(currency);
+    }
+
+    public static ProjectContext of(final List<Locale> locales, final List<CountryCode> countries, final List<CurrencyUnit> currencies) {
+        return new ProjectContext(locales, countries, currencies);
     }
 }

@@ -4,6 +4,16 @@ $("form#form-filter-products, form#form-filter-products-mobile").change(function
     this.submit();
 });
 
+// Submit language switcher on change
+$("form#form-select-language, form#form-select-language-mobile").change(function() {
+    this.submit();
+});
+
+// Submit country switcher on change
+$("form#form-select-country, form#form-select-country-mobile").change(function() {
+    this.submit();
+});
+
 // Clear all selected facet options when click on "clear"
 $("form#form-filter-products .facet-clear-btn, form#form-filter-products-mobile .facet-clear-btn").click(function(e) {
     e.stopPropagation();
