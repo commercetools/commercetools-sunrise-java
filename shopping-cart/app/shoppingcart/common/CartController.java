@@ -28,26 +28,23 @@ public abstract class CartController extends SunriseController {
 
     protected F.Promise<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
         return Optional.ofNullable(session(CartSessionKeys.CART_ID))
-                .map(cartId -> fetchCart(cartId, userContext))
+                .map(this::fetchCart)
                 .orElse(createCart(userContext))
-                .map(cart -> {
+                .flatMap(cart -> {
                     CartSessionUtils.overwriteCartSessionData(cart, session);
-                    return cart;
+                    final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
+                    return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : F.Promise.pure(cart);
                 });
     }
 
     private F.Promise<Cart> createCart(final UserContext userContext) {
         final CartDraft cartDraft = CartDraft.of(userContext.currency()).withCountry(userContext.country());
-        return sphere().execute(CartCreateCommand.of(cartDraft))
-                .flatMap(cart -> updateCartCountry(cart, userContext.country()));
+        return sphere().execute(CartCreateCommand.of(cartDraft));
     }
 
-    private F.Promise<Cart> fetchCart(final String cartId, final UserContext userContext) {
+    private F.Promise<Cart> fetchCart(final String cartId) {
         final CartByIdGet query = CartByIdGet.of(cartId).withExpansionPaths(m -> m.shippingInfo().shippingMethod());
-        return sphere().execute(query).flatMap(cart -> {
-            final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
-            return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : F.Promise.pure(cart);
-        });
+        return sphere().execute(query);
     }
 
     /**
