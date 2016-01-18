@@ -7,8 +7,6 @@ import io.sphere.sdk.carts.CartShippingInfo;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
-import javax.money.MonetaryAmount;
-
 public class SelectableShippingMethodBean extends SelectableData {
     private String deliveryDays;
     private String price;
@@ -19,17 +17,15 @@ public class SelectableShippingMethodBean extends SelectableData {
     public SelectableShippingMethodBean(final CartLike<?> cartLike, final MoneyContext moneyContext) {
         final CartShippingInfo shippingInfo = cartLike.getShippingInfo();
         if (shippingInfo != null) {
-            final String label = shippingInfo.getShippingMethodName();
-            setLabel(label);
-            final MonetaryAmount price = shippingInfo.getPrice();
-            setPrice(moneyContext.formatOrZero(price));
+            this.price = moneyContext.formatOrZero(shippingInfo.getPrice());
+            setLabel(shippingInfo.getShippingMethodName());
             setSelected(true);
             final Reference<ShippingMethod> shippingMethodReference = shippingInfo.getShippingMethod();
             if (shippingMethodReference != null && shippingMethodReference.getObj() != null) {
                 setDescription(shippingMethodReference.getObj().getDescription());
             }
         } else {
-            setPrice(moneyContext.formatOrZero(null));
+            this.price = moneyContext.formatOrZero(null);
         }
     }
 

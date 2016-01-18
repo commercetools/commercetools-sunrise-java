@@ -56,7 +56,7 @@ public final class CartDetailPageController extends CartController {
             final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
             return cartPromise.flatMap(cart ->
                 sphere().execute(CartUpdateCommand.of(cart, updateAction)).map(updatedCart -> {
-                    CartSessionUtils.overwriteCartSessionData(updatedCart, session);
+                    CartSessionUtils.overwriteCartSessionData(updatedCart, session, userContext, reverseRouter());
                     return renderCartPage(updatedCart, userContext);
                 })
             );
@@ -80,7 +80,7 @@ public final class CartDetailPageController extends CartController {
         return getOrCreateCart(userContext, session())
                 .flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart, RemoveLineItem.of(lineItemId)))
                 .map(updatedCart -> {
-                    CartSessionUtils.overwriteCartSessionData(cart, session());
+                    CartSessionUtils.overwriteCartSessionData(cart, session(), userContext, reverseRouter());
                     return redirect(reverseRouter().showCart(languageTag));
                 }));
     }
@@ -96,7 +96,7 @@ public final class CartDetailPageController extends CartController {
             return getOrCreateCart(userContext, session())
                     .flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart, ChangeLineItemQuantity.of(value.lineItemId, value.quantity)))
                             .map(updatedCart -> {
-                                CartSessionUtils.overwriteCartSessionData(cart, session());
+                                CartSessionUtils.overwriteCartSessionData(cart, session(), userContext, reverseRouter());
                                 return redirect(reverseRouter().showCart(languageTag));
                             }));
         }

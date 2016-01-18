@@ -80,7 +80,7 @@ public abstract class SunriseController extends ShopController {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
-        pageHeader.setMiniCart(new MiniCart(CartSessionUtils.getCartItemCount(session())));
+        pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session()));
         pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));
         return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
     }

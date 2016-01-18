@@ -6,17 +6,14 @@ import common.models.ProductDataConfig;
 import common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
-import io.sphere.sdk.carts.TaxedPrice;
 import io.sphere.sdk.orders.Order;
-import io.sphere.sdk.utils.MoneyImpl;
 import shoppingcart.checkout.address.AddressBean;
 import shoppingcart.checkout.payment.PaymentsBean;
 import shoppingcart.checkout.shipping.SelectableShippingMethodBean;
 
-import javax.money.MonetaryAmount;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
+
+import static common.utils.PriceUtils.*;
 
 public class CartOrderBean {
     private Long totalItems;
@@ -35,69 +32,30 @@ public class CartOrderBean {
     public CartOrderBean() {
     }
 
-    public CartOrderBean(final CartLike<?> cartLike, final UserContext userContext, final ProductDataConfig productDataConfig,
-                         final ReverseRouter reverseRouter) {
-        this();
-        final MoneyContext moneyContext = MoneyContext.of(cartLike, userContext);
-
-        final long itemsTotal = cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
-        setTotalItems(itemsTotal);
-        final Optional<TaxedPrice> taxedPriceOptional = Optional.ofNullable(cartLike.getTaxedPrice());
-        final MonetaryAmount tax = taxedPriceOptional.map(CartOrderBean::calculateTax).orElse(moneyContext.zero());
-        setSalesTax(moneyContext.formatOrZero(tax));
-
-        final MonetaryAmount totalPrice = cartLike.getTotalPrice();
-        final MonetaryAmount orderTotal = taxedPriceOptional.map(TaxedPrice::getTotalGross).orElse(totalPrice);
-        setTotalPrice(moneyContext.formatOrZero(orderTotal));
-
-        final MonetaryAmount subTotal = calculateSubTotal(cartLike.getLineItems(), totalPrice);
-        setSubtotalPrice(moneyContext.formatOrZero(subTotal));
-
-        setLineItems(new LineItemsBean(cartLike, userContext, productDataConfig, reverseRouter));
-
-        setShippingAddress(new AddressBean(cartLike.getShippingAddress(), userContext.locale()));
-        setBillingAddress(new AddressBean(cartLike.getBillingAddress(), userContext.locale()));
-
-        final PaymentsBean paymentDetails = new PaymentsBean();
-        paymentDetails.setType("prepaid");
-        setPaymentDetails(paymentDetails);
-
-        setShippingMethod(new SelectableShippingMethodBean(cartLike, moneyContext));
+    public CartOrderBean(final CartLike<?> cartLike, final UserContext userContext,
+                         final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
+        final MoneyContext moneyContext = MoneyContext.of(cartLike.getCurrency(), userContext.locale());
+        this.totalItems = cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
+        this.salesTax = moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null));
+        this.totalPrice = moneyContext.formatOrZero(calculateTotalPrice(cartLike));
+        this.subtotalPrice = moneyContext.formatOrZero(calculateSubTotal(cartLike));
+        this.lineItems = new LineItemsBean(cartLike, productDataConfig, userContext, reverseRouter);
+        this.shippingAddress = new AddressBean(cartLike.getShippingAddress(), userContext.locale());
+        this.billingAddress = new AddressBean(cartLike.getBillingAddress(), userContext.locale());
+        this.shippingMethod = new SelectableShippingMethodBean(cartLike, moneyContext);
+        this.paymentDetails = new PaymentsBean("prepaid");
 
         if (cartLike instanceof Order) {
-            fillOrderStuff((Order) cartLike, userContext);
+            fillOrder((Order) cartLike, userContext);
         }
     }
 
-    private void fillOrderStuff(final Order order, final UserContext userContext) {
-        final String email = Optional.ofNullable(order.getCustomerEmail())
-                .orElseGet(() -> order.getShippingAddress().getEmail());
-        setCustomerEmail(email);
-
+    private void fillOrder(final Order order, final UserContext userContext) {
         final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", userContext.locale());
-        setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
-
-        setOrderNumber(order.getOrderNumber());
+        this.orderDate = dateTimeFormatter.format(order.getCreatedAt());
+        this.orderNumber = order.getOrderNumber();
+        this.customerEmail = order.getCustomerEmail();
     }
-
-    private static MonetaryAmount calculateTax(final TaxedPrice taxedPrice) {
-        return taxedPrice.getTotalGross().subtract(taxedPrice.getTotalNet());
-    }
-
-    private static MonetaryAmount calculateSubTotal(final List<LineItem> lineItems, final MonetaryAmount totalPrice) {
-        final MonetaryAmount zeroAmount = MoneyImpl.ofCents(0, totalPrice.getCurrency());
-
-        return lineItems
-                .stream()
-                .map(lineItem -> {
-                    final MonetaryAmount amount = common.models.ProductVariantBean.calculateAmountForOneLineItem(lineItem);
-                    final Long quantity = lineItem.getQuantity();
-                    return amount.multiply(quantity);
-                })
-                .reduce(zeroAmount, (left, right) -> left.add(right));
-    }
-
-
 
     public Long getTotalItems() {
         return totalItems;

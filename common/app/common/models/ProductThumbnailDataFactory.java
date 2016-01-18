@@ -1,6 +1,5 @@
 package common.models;
 
-import common.prices.PriceFinderFactory;
 import common.contexts.UserContext;
 import common.prices.PriceFinder;
 import common.utils.PriceFormatter;
@@ -19,7 +18,7 @@ public class ProductThumbnailDataFactory {
 
     private ProductThumbnailDataFactory(final UserContext userContext) {
         this.locales = userContext.locales();
-        this.priceFinder = PriceFinderFactory.create(userContext);
+        this.priceFinder = PriceFinder.of(userContext);
         this.priceFormatter = PriceFormatter.of(userContext.locale());
     }
 

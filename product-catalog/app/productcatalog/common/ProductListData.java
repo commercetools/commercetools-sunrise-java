@@ -29,7 +29,7 @@ public class ProductListData extends Base {
     public ProductListData(final List<ProductProjection> productList, final ProductDataConfig productDataConfig,
                            final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
         this.list = productList.stream()
-                .map(product -> new ProductThumbnailData(product, product.getMasterVariant(), productDataConfig, userContext, reverseRouter, categoryTreeNew))
+                .map(product -> new ProductThumbnailData(product,  product.getMasterVariant(), productDataConfig, userContext, reverseRouter, categoryTreeNew))
                 .collect(toList());
     }
 }
