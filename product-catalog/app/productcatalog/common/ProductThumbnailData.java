@@ -10,7 +10,6 @@ import io.sphere.sdk.products.ProductVariant;
 public class ProductThumbnailData {
     private boolean sale;
     private boolean _new;
-    private boolean moreColors;
     private ProductData product;
 
     public ProductThumbnailData() {
@@ -18,12 +17,10 @@ public class ProductThumbnailData {
 
     public ProductThumbnailData(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
                                 final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
-//        final String slug = product.getSlug().find(userContext.locale()).orElse("");
+        this.sale = calculateIsSale(this.product);
         this._new = product.getCategories().stream()
                 .anyMatch(category -> categoryTreeNew.findById(category.getId()).isPresent());
         this.product = new ProductData(product, variant, productDataConfig, userContext, reverseRouter);
-        this.sale = calculateIsSale(this.product);
-//        this.moreColors = TODO get distinct from variant
     }
 
     private static boolean calculateIsSale(final ProductData productData) {
@@ -44,14 +41,6 @@ public class ProductThumbnailData {
 
     public void setNew(final boolean _new) {
         this._new = _new;
-    }
-
-    public boolean isMoreColors() {
-        return moreColors;
-    }
-
-    public void setMoreColors(final boolean moreColors) {
-        this.moreColors = moreColors;
     }
 
     public ProductData getProduct() {

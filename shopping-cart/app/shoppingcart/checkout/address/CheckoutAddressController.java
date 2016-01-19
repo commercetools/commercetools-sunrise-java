@@ -8,6 +8,7 @@ import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
+import io.sphere.sdk.carts.commands.updateactions.SetCustomerEmail;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
@@ -25,6 +26,7 @@ import shoppingcart.ErrorsBean;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -75,6 +77,8 @@ public class CheckoutAddressController extends CartController {
                 SetShippingAddress.of(shippingAddress),
                 SetBillingAddress.of(nullableBillingAddress)
         );
+        Optional.ofNullable(shippingAddress.getEmail())
+                .ifPresent(email -> updateActions.add(SetCustomerEmail.of(email)));
         return sphere().execute(CartUpdateCommand.of(cart, updateActions));
     }
 

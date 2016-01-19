@@ -8,6 +8,10 @@ public class PaymentsBean extends Base {
     public PaymentsBean() {
     }
 
+    public PaymentsBean(final String type) {
+        this.type = type;
+    }
+
     public String getType() {
         return type;
     }

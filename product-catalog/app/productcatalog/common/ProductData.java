@@ -10,11 +10,18 @@ import io.sphere.sdk.products.ProductVariant;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 public class ProductData extends Base {
     // TODO ratingX
     // TODO details
+    private String productId;
+    private int variantId;
+    private String description;
     private GalleryData gallery;
+    private List<SelectableProductAttributeBean> attributes;
     private ProductVariantBean variant;
     private Map<String, String> variants;
     private List<String> variantIdentifiers;
@@ -24,9 +31,43 @@ public class ProductData extends Base {
 
     public ProductData(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
                        final UserContext userContext, final ReverseRouter reverseRouter) {
+        this.productId = product.getId();
+        this.variantId = variant.getId();
+        this.description = Optional.ofNullable(product.getDescription())
+                .flatMap(locText -> locText.find(userContext.locales()))
+                .orElse("");
         this.gallery = new GalleryData(variant);
-        this.variant = new ProductVariantBean(product, variant, productDataConfig, userContext, reverseRouter);
+        this.attributes = variant.getAttributes().stream()
+                .filter(attr -> productDataConfig.getAttributeWhiteList().contains(attr.getName()))
+                .map(attr -> new SelectableProductAttributeBean(attr, product, productDataConfig.getMetaProductType(), userContext))
+                .collect(toList());
+        this.variant = new ProductVariantBean(product, variant, userContext, reverseRouter);
+        // TODO variants
         this.variantIdentifiers = productDataConfig.getAttributeWhiteList();
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(final String productId) {
+        this.productId = productId;
+    }
+
+    public int getVariantId() {
+        return variantId;
+    }
+
+    public void setVariantId(final int variantId) {
+        this.variantId = variantId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
     }
 
     public GalleryData getGallery() {
@@ -35,6 +76,14 @@ public class ProductData extends Base {
 
     public void setGallery(final GalleryData gallery) {
         this.gallery = gallery;
+    }
+
+    public List<SelectableProductAttributeBean> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(final List<SelectableProductAttributeBean> attributes) {
+        this.attributes = attributes;
     }
 
     public ProductVariantBean getVariant() {

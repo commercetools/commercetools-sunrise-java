@@ -31,7 +31,7 @@ public abstract class CartController extends SunriseController {
                 .map(this::fetchCart)
                 .orElse(createCart(userContext))
                 .flatMap(cart -> {
-                    CartSessionUtils.overwriteCartSessionData(cart, session);
+                    CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
                     final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
                     return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : F.Promise.pure(cart);
                 });
