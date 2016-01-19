@@ -1,7 +1,7 @@
 package productcatalog.common;
 
 import common.contexts.UserContext;
-import common.models.AttributeBean;
+import common.models.ProductAttributeBean;
 import common.models.SelectableData;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.attributes.Attribute;
@@ -12,15 +12,15 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
-public class SelectableAttributeBean extends AttributeBean {
+public class SelectableProductAttributeBean extends ProductAttributeBean {
     private List<SelectableData> list;
     private Map<String, List<String>> selectData;
 
-    public SelectableAttributeBean() {
+    public SelectableProductAttributeBean() {
     }
 
-    public SelectableAttributeBean(final Attribute attribute, final ProductProjection product,
-                                   final MetaProductType metaProductType, final UserContext userContext) {
+    public SelectableProductAttributeBean(final Attribute attribute, final ProductProjection product,
+                                          final MetaProductType metaProductType, final UserContext userContext) {
         super(attribute, metaProductType, userContext);
         this.list = product.getAllVariants().stream()
                 .map(variant -> variant.getAttribute(attribute.getName()))

@@ -7,15 +7,15 @@ import io.sphere.sdk.products.attributes.AttributeAccess;
 import io.sphere.sdk.products.attributes.AttributeExtraction;
 import io.sphere.sdk.producttypes.MetaProductType;
 
-public class AttributeBean extends Base {
+public class ProductAttributeBean extends Base {
     private String name;
     private String key;
     private String value;
 
-    public AttributeBean() {
+    public ProductAttributeBean() {
     }
 
-    public AttributeBean(final Attribute attribute, final MetaProductType metaProductType, final UserContext userContext) {
+    public ProductAttributeBean(final Attribute attribute, final MetaProductType metaProductType, final UserContext userContext) {
         this.name = metaProductType
                 .findAttribute(attribute.getName())
                 .map(def -> def.getLabel().find(userContext.locales()).orElse(""))

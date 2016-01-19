@@ -21,7 +21,7 @@ public class ProductData extends Base {
     private int variantId;
     private String description;
     private GalleryData gallery;
-    private List<SelectableAttributeBean> attributes;
+    private List<SelectableProductAttributeBean> attributes;
     private ProductVariantBean variant;
     private Map<String, String> variants;
     private List<String> variantIdentifiers;
@@ -39,7 +39,7 @@ public class ProductData extends Base {
         this.gallery = new GalleryData(variant);
         this.attributes = variant.getAttributes().stream()
                 .filter(attr -> productDataConfig.getAttributeWhiteList().contains(attr.getName()))
-                .map(attr -> new SelectableAttributeBean(attr, product, productDataConfig.getMetaProductType(), userContext))
+                .map(attr -> new SelectableProductAttributeBean(attr, product, productDataConfig.getMetaProductType(), userContext))
                 .collect(toList());
         this.variant = new ProductVariantBean(product, variant, userContext, reverseRouter);
         // TODO variants
@@ -78,11 +78,11 @@ public class ProductData extends Base {
         this.gallery = gallery;
     }
 
-    public List<SelectableAttributeBean> getAttributes() {
+    public List<SelectableProductAttributeBean> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(final List<SelectableAttributeBean> attributes) {
+    public void setAttributes(final List<SelectableProductAttributeBean> attributes) {
         this.attributes = attributes;
     }
 
