@@ -19,7 +19,7 @@ public class ProductAttributeBean extends Base {
         this.name = metaProductType
                 .findAttribute(attribute.getName())
                 .map(def -> def.getLabel().find(userContext.locales()).orElse(""))
-                .orElse(null);
+                .orElse("");
         this.key = attribute.getName();
         this.value = formatValue(metaProductType, attribute, userContext);
     }
