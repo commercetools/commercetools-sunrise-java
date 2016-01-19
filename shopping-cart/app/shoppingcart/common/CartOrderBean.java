@@ -20,7 +20,7 @@ public class CartOrderBean {
     private String salesTax;
     private String totalPrice;
     private String subtotalPrice;
-    private LineItemsBean lineItems;
+    private CartLineItemsBean lineItems;
     private AddressBean shippingAddress;
     private AddressBean billingAddress;
     private SelectableShippingMethodBean shippingMethod;
@@ -39,7 +39,7 @@ public class CartOrderBean {
         this.salesTax = moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null));
         this.totalPrice = moneyContext.formatOrZero(calculateTotalPrice(cartLike));
         this.subtotalPrice = moneyContext.formatOrZero(calculateSubTotal(cartLike));
-        this.lineItems = new LineItemsBean(cartLike, productDataConfig, userContext, reverseRouter);
+        this.lineItems = new CartLineItemsBean(cartLike, productDataConfig, userContext, reverseRouter);
         this.shippingAddress = new AddressBean(cartLike.getShippingAddress(), userContext.locale());
         this.billingAddress = new AddressBean(cartLike.getBillingAddress(), userContext.locale());
         this.shippingMethod = new SelectableShippingMethodBean(cartLike, moneyContext);
@@ -65,11 +65,11 @@ public class CartOrderBean {
         this.totalItems = totalItems;
     }
 
-    public LineItemsBean getLineItems() {
+    public CartLineItemsBean getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(final LineItemsBean lineItems) {
+    public void setLineItems(final CartLineItemsBean lineItems) {
         this.lineItems = lineItems;
     }
 

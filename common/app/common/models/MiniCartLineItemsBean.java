@@ -10,24 +10,24 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-public class MiniCartLineItems extends Base {
-    private List<LineItemBean> list;
+public class MiniCartLineItemsBean extends Base {
+    private List<MiniCartLineItemBean> list;
 
-    public MiniCartLineItems() {
+    public MiniCartLineItemsBean() {
         this.list = emptyList();
     }
 
-    public MiniCartLineItems(final Cart cart, final UserContext userContext, final ReverseRouter reverseRouter) {
+    public MiniCartLineItemsBean(final Cart cart, final UserContext userContext, final ReverseRouter reverseRouter) {
         this.list = cart.getLineItems().stream()
-                .map(lineItem -> new LineItemBean(lineItem, userContext, reverseRouter))
+                .map(lineItem -> new MiniCartLineItemBean(lineItem, userContext, reverseRouter))
                 .collect(toList());
     }
 
-    public List<LineItemBean> getList() {
+    public List<MiniCartLineItemBean> getList() {
         return list;
     }
 
-    public void setList(final List<LineItemBean> list) {
+    public void setList(final List<MiniCartLineItemBean> list) {
         this.list = list;
     }
 }

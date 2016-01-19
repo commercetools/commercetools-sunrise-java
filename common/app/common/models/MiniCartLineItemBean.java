@@ -6,16 +6,16 @@ import common.utils.MoneyContext;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
 
-public class  LineItemBean extends Base {
+public class MiniCartLineItemBean extends Base {
     private String lineItemId;
     private long quantity;
     private String totalPrice;
     private ProductVariantBean variant;
 
-    public LineItemBean() {
+    public MiniCartLineItemBean() {
     }
 
-    public LineItemBean(final LineItem lineItem, final UserContext userContext, final ReverseRouter reverseRouter) {
+    public MiniCartLineItemBean(final LineItem lineItem, final UserContext userContext, final ReverseRouter reverseRouter) {
         final MoneyContext moneyContext = MoneyContext.of(lineItem.getPrice().getValue().getCurrency(), userContext.locale());
         this.lineItemId = lineItem.getId();
         this.quantity = lineItem.getQuantity();

@@ -3,7 +3,7 @@ package shoppingcart.common;
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
 import common.models.ProductAttributeBean;
-import common.models.LineItemBean;
+import common.models.MiniCartLineItemBean;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.LineItem;
 
@@ -11,14 +11,14 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class ExtendedLineItemBean extends LineItemBean {
+public class CartLineItemBean extends MiniCartLineItemBean {
     private List<ProductAttributeBean> attributes;
 
-    public ExtendedLineItemBean() {
+    public CartLineItemBean() {
     }
 
-    public ExtendedLineItemBean(final LineItem lineItem, final ProductDataConfig productDataConfig,
-                                final UserContext userContext, final ReverseRouter reverseRouter) {
+    public CartLineItemBean(final LineItem lineItem, final ProductDataConfig productDataConfig,
+                            final UserContext userContext, final ReverseRouter reverseRouter) {
         super(lineItem, userContext, reverseRouter);
         this.attributes = lineItem.getVariant().getAttributes().stream()
                 .filter(attr -> productDataConfig.getAttributeWhiteList().contains(attr.getName()))

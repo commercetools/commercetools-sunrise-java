@@ -12,18 +12,18 @@ import static common.utils.PriceUtils.calculateTotalPrice;
 public class MiniCart extends Base {
     private Long totalItems;
     private String totalPrice;
-    private MiniCartLineItems lineItems;
+    private MiniCartLineItemsBean lineItems;
 
     public MiniCart() {
         this.totalItems = 0L;
-        this.lineItems = new MiniCartLineItems();
+        this.lineItems = new MiniCartLineItemsBean();
     }
 
     public MiniCart(final Cart cart, final UserContext userContext, final ReverseRouter reverseRouter) {
         final MoneyContext moneyContext = MoneyContext.of(cart.getCurrency(), userContext.locale());
         this.totalItems = cart.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
         this.totalPrice = moneyContext.formatOrZero(calculateTotalPrice(cart));
-        this.lineItems = new MiniCartLineItems(cart, userContext, reverseRouter);
+        this.lineItems = new MiniCartLineItemsBean(cart, userContext, reverseRouter);
     }
 
     public Long getTotalItems() {
@@ -42,11 +42,11 @@ public class MiniCart extends Base {
         this.totalPrice = totalPrice;
     }
 
-    public MiniCartLineItems getLineItems() {
+    public MiniCartLineItemsBean getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(final MiniCartLineItems lineItems) {
+    public void setLineItems(final MiniCartLineItemsBean lineItems) {
         this.lineItems = lineItems;
     }
 }
