@@ -6,7 +6,7 @@ import common.utils.MoneyContext;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
 
-public class LineItemBean extends Base {
+public class  LineItemBean extends Base {
     private String lineItemId;
     private long quantity;
     private String totalPrice;
