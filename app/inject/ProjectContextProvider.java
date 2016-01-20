@@ -12,10 +12,10 @@ import play.Logger;
 import javax.inject.Inject;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import javax.money.MonetaryAmount;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -51,40 +51,25 @@ class ProjectContextProvider implements Provider<ProjectContext> {
     }
 
     private List<Locale> getLanguages(final Project project) {
-        final List<Locale> locales = configuration.getStringList(CONFIG_LANGUAGES, project.getLanguages())
-                .stream()
-                .map(Locale::forLanguageTag)
-                .collect(toList());
-        if (locales.isEmpty()) {
-            throw new SunriseInitializationException("No language defined, neither in project nor in configuration '" + CONFIG_LANGUAGES + "'");
-        }
-        return locales;
+        return getValues(CONFIG_LANGUAGES, Locale::forLanguageTag, project.getLanguageLocales());
     }
 
     private List<CountryCode> getCountries(final Project project) {
-        final List<CountryCode> countriesFromConfig = getCountriesFromConfig();
-        final List<CountryCode> countries = countriesFromConfig.isEmpty() ? project.getCountries() : countriesFromConfig;
-        if (countries.isEmpty()) {
-            throw new SunriseInitializationException("No country defined, neither in project nor in configuration '" + CONFIG_COUNTRIES + "'");
-        }
-        return countries;
+        return getValues(CONFIG_COUNTRIES, CountryCode::getByCode, project.getCountries());
     }
 
     private List<CurrencyUnit> getCurrencies(final Project project) {
-        final List<CurrencyUnit> currencies = configuration.getStringList(CONFIG_CURRENCIES, emptyList())
-                .stream()
-                .map(Monetary::getCurrency)
-                .collect(toList());
-        // TODO Fallback to CTP currencies
-        if (currencies.isEmpty()) {
-            throw new SunriseInitializationException("No currency defined in configuration '" + CONFIG_CURRENCIES + "'");
-        }
-        return currencies;
+        return getValues(CONFIG_CURRENCIES, Monetary::getCurrency, project.getCurrencyUnits());
     }
 
-    private List<CountryCode> getCountriesFromConfig() {
-        return configuration.getStringList(CONFIG_COUNTRIES, emptyList()).stream()
-                .map(CountryCode::valueOf)
+    private <T> List<T> getValues(final String configKey, final Function<String, T> mapper, final List<T> fallbackValues) {
+        final List<T> valuesFromConfig = configuration.getStringList(configKey, emptyList()).stream()
+                .map(mapper)
                 .collect(toList());
+        final List<T> values = valuesFromConfig.isEmpty() ? fallbackValues : valuesFromConfig;
+        if (values.isEmpty()) {
+            throw new SunriseInitializationException("No '" + configKey + "' defined and CTP project information was empty");
+        }
+        return values;
     }
 }
