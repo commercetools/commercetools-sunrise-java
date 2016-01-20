@@ -8,10 +8,14 @@ import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static common.utils.ProductAttributeUtils.attributeValue;
+import static common.utils.ProductAttributeUtils.attributeValueAsKey;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class ProductData extends Base {
@@ -39,10 +43,10 @@ public class ProductData extends Base {
         this.gallery = new GalleryData(variant);
         this.attributes = variant.getAttributes().stream()
                 .filter(attr -> productDataConfig.getAttributeWhiteList().contains(attr.getName()))
-                .map(attr -> new SelectableProductAttributeBean(attr, product, productDataConfig.getMetaProductType(), userContext))
+                .map(attr -> new SelectableProductAttributeBean(attr, product, productDataConfig, userContext))
                 .collect(toList());
         this.variant = new ProductVariantBean(product, variant, userContext, reverseRouter);
-        // TODO variants
+        this.variants = createVariantsMap(product, productDataConfig, userContext);
         this.variantIdentifiers = productDataConfig.getAttributeWhiteList();
     }
 
@@ -108,5 +112,22 @@ public class ProductData extends Base {
 
     public void setVariantIdentifiers(final List<String> variantIdentifiers) {
         this.variantIdentifiers = variantIdentifiers;
+    }
+
+    private static Map<String, String> createVariantsMap(final ProductProjection product, final ProductDataConfig productDataConfig,
+                                                         final UserContext userContext) {
+        final Map<String, String> variantsMap = new HashMap<>();
+        product.getAllVariants().forEach(variant -> {
+            final String attrCombination = productDataConfig.getAttributeWhiteList().stream()
+                    .map(variant::getAttribute)
+                    .filter(enabledAttr -> enabledAttr != null)
+                    .map(enabledAttr -> {
+                        final String enabledAttrValue = attributeValue(enabledAttr, productDataConfig.getMetaProductType(), userContext);
+                        return attributeValueAsKey(enabledAttrValue);
+                    })
+                    .collect(joining("-"));
+            variantsMap.put(attrCombination, variant.getId().toString());
+        });
+        return variantsMap;
     }
 }

@@ -17,6 +17,12 @@ public class SelectableData extends Base {
         this.value = value;
     }
 
+    public SelectableData(final String label, final String value, final boolean selected) {
+        this.label = label;
+        this.value = value;
+        this.selected = selected;
+    }
+
     public String getLabel() {
         return label;
     }
