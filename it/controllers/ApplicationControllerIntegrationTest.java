@@ -16,7 +16,7 @@ public class ApplicationControllerIntegrationTest extends WithPlayJavaSphereClie
 
     @Test
     public void itFindsSomeCategories() throws Exception {
-        final PagedQueryResult<Category> result = execute(CategoryQuery.of()).get(4000);
+        final PagedQueryResult<Category> result = execute(CategoryQuery.of()).get(ALLOWED_TIMEOUT);
         final long count = result.size();
         assertThat(count).isGreaterThan(3);
         //this is a project specific assertion as example

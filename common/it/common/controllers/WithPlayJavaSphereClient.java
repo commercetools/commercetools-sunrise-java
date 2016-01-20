@@ -7,6 +7,7 @@ import play.libs.F;
 import java.util.Optional;
 
 public abstract class WithPlayJavaSphereClient {
+    protected static final int ALLOWED_TIMEOUT = 5000;
     private static final String IT_SPHERE_PREFIX = "SPHERE_SUNRISE_IT_";
     private static final String IT_SPHERE_PROJECT_KEY = IT_SPHERE_PREFIX + "PROJECT";
     private static final String IT_SPHERE_CLIENT_SECRET = IT_SPHERE_PREFIX + "CLIENT_SECRET";
