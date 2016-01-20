@@ -6,7 +6,7 @@ import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
-import productcatalog.common.ProductThumbnailData;
+import io.sphere.sdk.products.ProductVariant;
 
 import java.util.List;
 
@@ -18,18 +18,21 @@ public class ProductListData extends Base {
     public ProductListData() {
     }
 
+    public ProductListData(final List<ProductProjection> productList, final ProductDataConfig productDataConfig,
+                           final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
+        this.list = productList.stream()
+                .map(product -> {
+                    final ProductVariant matchingVariant = product.findFirstMatchingVariant().orElse(product.getMasterVariant());
+                    return new ProductThumbnailData(product, matchingVariant, productDataConfig, userContext, reverseRouter, categoryTreeNew);
+                })
+                .collect(toList());
+    }
+
     public List<ProductThumbnailData> getList() {
         return list;
     }
 
     public void setList(final List<ProductThumbnailData> list) {
         this.list = list;
-    }
-
-    public ProductListData(final List<ProductProjection> productList, final ProductDataConfig productDataConfig,
-                           final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
-        this.list = productList.stream()
-                .map(product -> new ProductThumbnailData(product,  product.getMasterVariant(), productDataConfig, userContext, reverseRouter, categoryTreeNew))
-                .collect(toList());
     }
 }

@@ -3,25 +3,23 @@ package common.models;
 import common.contexts.UserContext;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.attributes.Attribute;
-import io.sphere.sdk.products.attributes.AttributeAccess;
-import io.sphere.sdk.products.attributes.AttributeExtraction;
 import io.sphere.sdk.producttypes.MetaProductType;
 
+import static common.utils.ProductAttributeUtils.attributeLabel;
+import static common.utils.ProductAttributeUtils.attributeValue;
+
 public class ProductAttributeBean extends Base {
-    private String name;
     private String key;
+    private String name;
     private String value;
 
     public ProductAttributeBean() {
     }
 
     public ProductAttributeBean(final Attribute attribute, final MetaProductType metaProductType, final UserContext userContext) {
-        this.name = metaProductType
-                .findAttribute(attribute.getName())
-                .map(def -> def.getLabel().find(userContext.locales()).orElse(""))
-                .orElse("");
         this.key = attribute.getName();
-        this.value = formatValue(metaProductType, attribute, userContext);
+        this.name = attributeLabel(attribute, metaProductType, userContext);
+        this.value = attributeValue(attribute, metaProductType, userContext);
     }
 
     public String getKey() {
@@ -48,15 +46,5 @@ public class ProductAttributeBean extends Base {
         this.value = value;
     }
 
-    protected static String formatValue(final MetaProductType metaProductType, final Attribute attribute,
-                                        final UserContext userContext) {
-        final AttributeExtraction<String> attributeExtraction = AttributeExtraction.of(metaProductType, attribute);
-        return attributeExtraction
-                .ifIs(AttributeAccess.ofLocalizedString(), v -> v.find(userContext.locales()).orElse(""))
-                .ifIs(AttributeAccess.ofLocalizedEnumValue(), v -> v.getLabel().find(userContext.locales()).orElse(""))
-                .ifIs(AttributeAccess.ofEnumValue(), v -> v.getLabel())
-                .ifIs(AttributeAccess.ofString(), v -> v)
-                .findValue()
-                .orElse(null);
-    }
+
 }

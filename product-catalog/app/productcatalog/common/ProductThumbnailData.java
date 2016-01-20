@@ -4,10 +4,11 @@ import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
-public class ProductThumbnailData {
+public class ProductThumbnailData extends Base {
     private boolean sale;
     private boolean _new;
     private ProductData product;
