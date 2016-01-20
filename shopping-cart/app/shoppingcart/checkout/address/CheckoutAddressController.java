@@ -25,6 +25,7 @@ import shoppingcart.ErrorsBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,11 +73,10 @@ public class CheckoutAddressController extends CartController {
         final Address nullableBillingAddress = content.getAddressForm().isBillingAddressDifferentToBillingAddress()
                 ? content.getAddressForm().getBillingAddress().toAddress()
                 : null;
-        final List<UpdateAction<Cart>> updateActions = asList(
-                SetCountry.of(shippingAddress.getCountry()),
-                SetShippingAddress.of(shippingAddress),
-                SetBillingAddress.of(nullableBillingAddress)
-        );
+        final List<UpdateAction<Cart>> updateActions = new ArrayList<>();
+        updateActions.add(SetCountry.of(shippingAddress.getCountry()));
+        updateActions.add(SetShippingAddress.of(shippingAddress));
+        updateActions.add(SetBillingAddress.of(nullableBillingAddress));
         Optional.ofNullable(shippingAddress.getEmail())
                 .ifPresent(email -> updateActions.add(SetCustomerEmail.of(email)));
         return sphere().execute(CartUpdateCommand.of(cart, updateActions));

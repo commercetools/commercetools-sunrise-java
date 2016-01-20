@@ -38,7 +38,10 @@ public abstract class CartController extends SunriseController {
     }
 
     private F.Promise<Cart> createCart(final UserContext userContext) {
-        final CartDraft cartDraft = CartDraft.of(userContext.currency()).withCountry(userContext.country());
+        final Address address = Address.of(userContext.country());
+        final CartDraft cartDraft = CartDraft.of(userContext.currency())
+                .withCountry(address.getCountry())
+                .withShippingAddress(address);
         return sphere().execute(CartCreateCommand.of(cartDraft));
     }
 
