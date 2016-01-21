@@ -1,4 +1,4 @@
-These are the contribution guidelines for the SPHERE.IO JVM SDK 1.x and SPHERE.IO Sunrise shop template.
+These are the contribution guidelines for the SPHERE.IO JVM SDK 1.x and Sunrise Java shop template.
 
 Contributions are welcome!
 

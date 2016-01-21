@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/sphere-sunrise -Dconfig.resource=prod.conf -Dhttp.port=${PORT}
+web: target/universal/stage/bin/commercetools-sunrise -Dconfig.resource=prod.conf -Dhttp.port=${PORT}
