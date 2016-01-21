@@ -1,16 +1,12 @@
-![SPHERE.IO icon](https://admin.sphere.io/assets/images/sphere_logo_rgb_long.png)
-
-sphere-sunrise :sunrise:
+Sunrise :sunrise:
 ==============
 
-[![Build Status](https://travis-ci.org/sphereio/sphere-sunrise.png?branch=master)](https://travis-ci.org/sphereio/sphere-sunrise) [![Stories in Ready](https://badge.waffle.io/sphereio/sphere-sunrise.png?label=ready&title=Ready)](https://waffle.io/sphereio/sphere-sunrise?source=sphereio%2Fsphere-sunrise)
+[![Build Status](https://travis-ci.org/sphereio/commercetools-sunrise-java.png?branch=master)](https://travis-ci.org/sphereio/commercetools-sunrise-java) [![Stories in Ready](https://badge.waffle.io/sphereio/commercetools-sunrise-java.png?label=ready&title=Ready)](https://waffle.io/sphereio/commercetools-sunrise-java?source=sphereio%2Fcommercetools-sunrise-java)
 
 The next generation shop template.
 
-:warning: _**Notice this template is in an early stage of development.**_
-
 * Demo: https://sunrise.sphere.io
-* [Javadoc](https://sphereio.github.io/sphere-sunrise/javadoc/index.html)
+* [Javadoc](https://sphereio.github.io/commercetools-sunrise-java/javadoc/index.html)
 
 ## Preconditions
 
@@ -29,9 +25,9 @@ The output will be like
 (Server started, use Ctrl+D to stop and go back to the console...)
 ```
 
-* open <a href="http://localhost:9000">http://localhost:9000</a> in your browser and set the SPHERE.IO project credentials
+* open <a href="http://localhost:9000">http://localhost:9000</a> in your browser and set the commercetools platform project credentials
 
-## Integration tests against SPHERE.IO backend
+## Integration tests against commercetools platform
 
 * Setup your environment variables (use a test project), so you need not to put your shop credentials under version control:
 
@@ -46,7 +42,7 @@ export SPHERE_SUNRISE_IT_CLIENT_ID="your-client-id"
 
 For an easy and fast deployment of your application we recommend [heroku](https://www.heroku.com):
 
-<a href="https://heroku.com/deploy?template=https://github.com/sphereio/sphere-sunrise"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a>
+<a href="https://heroku.com/deploy?template=https://github.com/sphereio/commercetools-sunrise-java"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a>
 
 ## Docker
 
@@ -62,6 +58,6 @@ $ docker run -it --rm -p 9000:9000 sphereio/sunrise
 
 * https://github.com/sphereio/sphere-sunrise-data
 * https://github.com/sphereio/sphere-sunrise-scenarios
-* https://github.com/sphereio/sphere-sunrise-design
+* https://github.com/sphereio/commercetools-sunrise-design
 * https://github.com/sphereio/sphere-jvm-sdk
 
