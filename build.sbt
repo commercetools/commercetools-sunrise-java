@@ -7,11 +7,11 @@ import scala.util.{Success, Try}
 
 import ReleaseTransformations._
 
-name := "sphere-sunrise"
+name := "commercetools-sunrise-java"
 
-organization := "io.sphere"
+organization := "io.commercetools"
 
-lazy val sunriseDesignVersion = "0.45.0"
+lazy val sunriseDesignVersion = "0.46.0"
 
 lazy val sphereJvmSdkVersion = "1.0.0-M26"
 
@@ -24,7 +24,7 @@ lazy val jacksonVersion = "2.6.0"
 
 lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;test->test;it->it;pt->pt"
 
-lazy val `sphere-sunrise` = (project in file("."))
+lazy val `commercetools-sunrise` = (project in file("."))
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
   .dependsOn(commonWithTests, `product-catalog`, `shopping-cart`, `setup-widget`)
   .aggregate(common, `product-catalog`, `shopping-cart`, `setup-widget`, `move-to-sdk`)
@@ -63,9 +63,9 @@ lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
     Resolver.mavenLocal
   ),
   libraryDependencies ++= Seq (
+    "io.commercetools" % "commercetools-sunrise-design" % sunriseDesignVersion,
     "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
     "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % sphereJvmSdkVersion,
-    "io.sphere" % "sphere-sunrise-design" % sunriseDesignVersion,
     "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "2.2.3",
     filters,
