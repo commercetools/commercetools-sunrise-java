@@ -1,7 +1,7 @@
 Sunrise Java :sunrise:
 ==============
 
-[![Build Status](https://travis-ci.org/sphereio/commercetools-sunrise-java.png?branch=master)](https://travis-ci.org/sphereio/commercetools-sunrise-java) [![Stories in Ready](https://badge.waffle.io/sphereio/commercetools-sunrise-java.png?label=ready&title=Ready)](https://waffle.io/sphereio/commercetools-sunrise-java?source=sphereio%2Fcommercetools-sunrise-java)
+[![Build Status](https://travis-ci.org/sphereio/commercetools-sunrise-java.png?branch=master)](https://travis-ci.org/sphereio/commercetools-sunrise-java) [![Stories in Ready](https://badge.waffle.io/sphereio/commercetools-sunrise-java.png?label=ready&title=Ready)](https://waffle.io/sphereio/commercetools-sunrise-java)
 
 The next generation shop template.
 
