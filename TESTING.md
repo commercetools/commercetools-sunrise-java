@@ -13,4 +13,4 @@
 ### Acceptance Tests
 
 * require a running application and external services
-* see https://github.com/sphereio/sphere-sunrise-scenarios
+* see https://github.com/sphereio/commercetools-sunrise-scenarios
