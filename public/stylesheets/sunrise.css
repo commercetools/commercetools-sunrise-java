@@ -1,3 +1,7 @@
 .shop-item .pop-product-more-colors {
     visibility: hidden;
 }
+
+form[name=add-to-wishlist] {
+    display: none;
+}
