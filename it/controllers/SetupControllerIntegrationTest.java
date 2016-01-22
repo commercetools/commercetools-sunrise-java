@@ -32,7 +32,7 @@ public class SetupControllerIntegrationTest extends WithBrowser {
     }
 
     private void fillAndSubmitSetupForm() {
-        browser.fill("#projectKey").with(envVar(PROJECT));
+        browser.fill("#projectKey").with(envVar(PROJECT_KEY));
         browser.fill("#clientId").with(envVar(CLIENT_ID));
         browser.fill("#clientSecret").with(envVar(CLIENT_SECRET));
         browser.submit("#submit");

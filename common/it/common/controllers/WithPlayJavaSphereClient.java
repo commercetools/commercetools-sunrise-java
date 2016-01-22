@@ -8,10 +8,10 @@ import java.util.Optional;
 
 public abstract class WithPlayJavaSphereClient {
     protected static final int ALLOWED_TIMEOUT = 5000;
-    private static final String IT_SPHERE_PREFIX = "SPHERE_SUNRISE_IT_";
-    private static final String IT_SPHERE_PROJECT_KEY = IT_SPHERE_PREFIX + "PROJECT";
-    private static final String IT_SPHERE_CLIENT_SECRET = IT_SPHERE_PREFIX + "CLIENT_SECRET";
-    private static final String IT_SPHERE_CLIENT_ID = IT_SPHERE_PREFIX + "CLIENT_ID";
+    private static final String IT_PREFIX = "SUNRISE_IT_";
+    private static final String IT_CTP_PROJECT_KEY = IT_PREFIX + "CTP_PROJECT_KEY";
+    private static final String IT_CTP_CLIENT_SECRET = IT_PREFIX + "CTP_CLIENT_SECRET";
+    private static final String IT_CTP_CLIENT_ID = IT_PREFIX + "CTP_CLIENT_ID";
 
     private static volatile PlayJavaSphereClient sphereClient;
 
@@ -28,15 +28,15 @@ public abstract class WithPlayJavaSphereClient {
     }
 
     protected static String projectKey() {
-        return getValueForEnvVar(IT_SPHERE_PROJECT_KEY);
+        return getValueForEnvVar(IT_CTP_PROJECT_KEY);
     }
 
     protected static String clientId() {
-        return getValueForEnvVar(IT_SPHERE_CLIENT_ID);
+        return getValueForEnvVar(IT_CTP_CLIENT_ID);
     }
 
     protected static String clientSecret() {
-        return getValueForEnvVar(IT_SPHERE_CLIENT_SECRET);
+        return getValueForEnvVar(IT_CTP_CLIENT_SECRET);
     }
 
     private synchronized static PlayJavaSphereClient sphereClient() {
@@ -52,8 +52,8 @@ public abstract class WithPlayJavaSphereClient {
         return Optional.ofNullable(System.getenv(key))
                 .orElseThrow(() -> new RuntimeException(
                         "Missing environment variable " + key + ", please provide the following environment variables for the integration test:\n" +
-                                "export " + IT_SPHERE_PROJECT_KEY + "=\"Your SPHERE.IO project key\"\n" +
-                                "export " + IT_SPHERE_CLIENT_ID + "=\"Your SPHERE.IO client ID\"\n" +
-                                "export " + IT_SPHERE_CLIENT_SECRET + "=\"Your SPHERE.IO client secret\"\n"));
+                                "export " + IT_CTP_PROJECT_KEY + "=\"Your SPHERE.IO project key\"\n" +
+                                "export " + IT_CTP_CLIENT_ID + "=\"Your SPHERE.IO client ID\"\n" +
+                                "export " + IT_CTP_CLIENT_SECRET + "=\"Your SPHERE.IO client secret\"\n"));
     }
 }

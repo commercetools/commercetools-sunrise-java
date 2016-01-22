@@ -5,7 +5,7 @@ Sunrise Java :sunrise:
 
 The next generation shop template.
 
-* Demo: https://sunrise.sphere.io
+* Demo: https://sunrise.commercetools.com
 * [Javadoc](https://sphereio.github.io/commercetools-sunrise-java/javadoc/index.html)
 
 ## Preconditions
@@ -32,9 +32,9 @@ The output will be like
 * Setup your environment variables (use a test project), so you need not to put your shop credentials under version control:
 
 ```bash
-export SPHERE_SUNRISE_IT_PROJECT="your-project-key"
-export SPHERE_SUNRISE_IT_CLIENT_SECRET="your-the-client-secret"
-export SPHERE_SUNRISE_IT_CLIENT_ID="your-client-id"
+export SUNRISE_IT_CTP_PROJECT_KEY="your-CTP-project-key"
+export SUNRISE_IT_CTP_CLIENT_SECRET="your-CTP-client-secret"
+export SUNRISE_IT_CTP_CLIENT_ID="your-CTP-client-id"
 ```
 * `sbt it:test`
 
@@ -56,8 +56,8 @@ $ docker run -it --rm -p 9000:9000 sphereio/sunrise
 
 ## Related projects
 
-* https://github.com/sphereio/sphere-sunrise-data
-* https://github.com/sphereio/sphere-sunrise-scenarios
+* https://github.com/sphereio/commercetools-sunrise-data
+* https://github.com/sphereio/commercetools-sunrise-scenarios
 * https://github.com/sphereio/commercetools-sunrise-design
 * https://github.com/sphereio/sphere-jvm-sdk
 
