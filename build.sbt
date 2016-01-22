@@ -7,7 +7,7 @@ import scala.util.{Success, Try}
 
 import ReleaseTransformations._
 
-name := "commercetools-sunrise-java"
+name := "commercetools-sunrise"
 
 organization := "io.commercetools"
 
