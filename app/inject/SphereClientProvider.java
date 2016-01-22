@@ -12,9 +12,9 @@ import javax.inject.Inject;
 import static java.util.Objects.requireNonNull;
 
 class SphereClientProvider implements Provider<SphereClient> {
-    public static final String CONFIG_PROJECT_KEY = "sphere.project";
-    public static final String CONFIG_CLIENT_ID = "sphere.clientId";
-    public static final String CONFIG_CLIENT_SECRET = "sphere.clientSecret";
+    public static final String CONFIG_PROJECT_KEY = "ctp.projectKey";
+    public static final String CONFIG_CLIENT_ID = "ctp.clientId";
+    public static final String CONFIG_CLIENT_SECRET = "ctp.clientSecret";
     private final Configuration configuration;
 
     @Inject

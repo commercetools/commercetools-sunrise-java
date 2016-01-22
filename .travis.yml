@@ -1,27 +1,29 @@
 sudo: false
 cache:
   directories:
-  - $HOME/.ivy2
-  - $HOME/.sbt
+  - "$HOME/.ivy2"
+  - "$HOME/.sbt"
 language: scala
 scala:
 - 2.10.5
 script:
 - "./sbt test it:test pt:test unidoc"
 - rm conf/dev.conf
-- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git javadoc sphere-oss automation@commercetools.de"; fi
+- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt
+  "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git
+  javadoc sphere-oss automation@commercetools.de"; fi
 jdk:
 - oraclejdk8
 env:
   matrix:
   - SBT_OPTS="-XX:PermSize=512M -XX:MaxPermSize=1024M"
   global:
-  - secure: MGKwVKFrBHDPBKuyvDsvDreT+zoPbw0dKiWMoGxJfnJBwEL1DVqHeYkuK4sfBKD4LE2pze1nRURSP7+RcKCB2IhMcL2GkDBx0lIkq2s0YnDbI/b0WFNFv8yyT70LYSeHmme5EcPT0OlMeu8//UQu136yO6NLKXMl5H3LMj4v020=
-  - secure: AFCenTD52oSdFplohvf5z/eT8t5tLzpCAvbgA26zApeTkbl26fOKkCwiaR2lg0MUrlEnnWcCMHu9fuSB9hW6Q+BPOfuDeT4ZfUku2EVNiXqjW8S3Vux82gF3So9fZbBCmpt+/n7yAy3SOGX8cSahMN15XvN7rgy4yKSyPQFL0vs=
-  - secure: VSXOYdyfnBMdHyFuPzZMxYE94c7Afve3meKZXNs+h7YofW33tgP3PNQBMk8gMjD/taZX4dELmyJqZTJW1kKeC9KDkGtcDPhQnJ8kPaW2YX0WInq7n5/++TwYL5eFU/RPa34572cmz4bDLW5ONKuWU8X4b+tOpGk3Kzqz/RKB7QA=
-  - SPHERE_SUNRISE_PROJECT="dummysetting"
-  - SPHERE_SUNRISE_CLIENT_SECRET="dummysetting"
-  - SPHERE_SUNRISE_CLIENT_ID="dummysetting"
+  - secure: ImgB/rQbpWPHfRUbUtmVXfiXTgJvIlq1fzeX0KImZ83khxrRndCWiWiEjawezWPsgnoBbXzJ0jjppr5MBoM9EJkDm5S6RT3E88oFjsTsQqGM9gUdwqjHgkr3lQw7PhpbtgeP7zmRLuOdNYuvDp6ScZlkMvE3AamSIZt79ZoekNc=
+  - secure: B9qTzUYzP2+iuaQZbshCGsGNjz6ZFx/t//u8XrNzvL51gYFE1ah19qJcU4oYvCGKRzE2u5LzUH/bJPmfpFNihnA203KWFKxPUtTwbeSpuIrIuf3QZnOjq1u00Vs17LGnVzR+ylNYdOauuUkNb912dd7sbrV8FzyhmklWq28u3qA=
+  - secure: WwqJEpNqYyAhDAWNH/t8PaRZb8nqE2vCyqtRMfrrTN+/xVvzb8LAc4ePKPlPD1Ry1O58BbGz5PziuZn4As33dCF2rRE2BgwwGmBwrI2sY4wSYRzMvPfKgR2ymJhIilUNLNlmHC5r11PpQdxIMbnYDMOdYlWEINl2+APqwI0Q8fc=
+  - SUNRISE_CTP_PROJECT_KEY="dummysetting"
+  - SUNRISE_CTP_CLIENT_SECRET="dummysetting"
+  - SUNRISE_CTP_CLIENT_ID="dummysetting"
   - secure: ocKHAWZJhmxs6tqMXtRf5mtbo671DHll91nzk2yl+bFMvhxHt5/7Y50ReLhq8Y/gXBfwA/qBAQg/ql8/q6jElg4/5T1mUdK2U153kf7FaVhDEF5ZtFbfGl+LugZAwrNGSM1+18C0ctIq87P04NU9GKY+06ZLEi95v0SS7JaRJPg=
 notifications:
   email:

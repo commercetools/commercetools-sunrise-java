@@ -5,15 +5,15 @@
   "logo": "http://www.commercetools.com/assets/img/ct_logo_farbe.gif",
   "keywords": ["commercetools", "ecommerce", "shopping"],
   "env": {
-    "SPHERE_PROJECT_KEY": {
+    "CTP_PROJECT_KEY": {
       "description": "The project key for your commercetools platform project.",
       "required": true
     },
-    "SPHERE_CLIENT_ID": {
+    "CTP_CLIENT_ID": {
       "description": "The client ID of your commercetools platform project.",
       "required": true
     },
-    "SPHERE_CLIENT_SECRET": {
+    "CTP_CLIENT_SECRET": {
       "description": "The client secret of your commercetools platform project.",
       "required": true
     }

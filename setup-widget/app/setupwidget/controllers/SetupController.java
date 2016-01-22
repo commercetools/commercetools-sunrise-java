@@ -51,9 +51,9 @@ public class SetupController extends Controller {
                 result = badRequest(setup.render(boundForm));
             } else {
                 final SphereCredentials credentials = boundForm.get();
-                final String content = String.format("sphere.project=%s\n" +
-                                "sphere.clientId=%s\n" +
-                                "sphere.clientSecret=%s\n",
+                final String content = String.format("ctp.projectKey=%s\n" +
+                                "ctp.clientId=%s\n" +
+                                "ctp.clientSecret=%s\n",
                         credentials.getProjectKey(), credentials.getClientId(), credentials.getClientSecret());
                 writeSettingsFile(content);
                 result = ok(success.render(PATH.toString()));
@@ -69,7 +69,7 @@ public class SetupController extends Controller {
     private static void writeSettingsFile(String content) {
         try {
             Files.write(PATH, content.getBytes());
-            Logger.info("SPHERE.IO credentials saved in " + PATH.toString());
+            Logger.info("CTP credentials saved in " + PATH.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
