@@ -25,27 +25,27 @@ lazy val jacksonVersion = "2.6.0"
 lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;test->test;it->it;pt->pt"
 
 lazy val `commercetools-sunrise` = (project in file("."))
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava, DockerPlugin).configs(IntegrationTest, PlayTest).settings(commonSettings ++ dockerSettings: _*)
   .dependsOn(commonWithTests, `product-catalog`, `shopping-cart`, `setup-widget`)
   .aggregate(common, `product-catalog`, `shopping-cart`, `setup-widget`, `move-to-sdk`)
 
 lazy val common = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
   .dependsOn(`move-to-sdk`)
 
 lazy val `product-catalog` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
   .dependsOn(commonWithTests)
 
 lazy val `shopping-cart` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
   .dependsOn(commonWithTests)
 
 lazy val `setup-widget` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
 
 lazy val `move-to-sdk` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings:_*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
 
 /**
  * COMMON SETTINGS
@@ -85,6 +85,19 @@ lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
     "org.scala-lang" % "scala-library" % "2.10.6",
     "org.scala-lang" % "scala-reflect" % "2.10.6"
   )
+)
+
+lazy val dockerSettings = Seq(
+  version in Docker := "latest",
+  packageName in Docker := "sunrise",
+  dockerRepository := Some("sphereio"),
+  dockerExposedPorts := Seq(9000),
+  dockerCmd := Seq("-Dconfig.resource=prod.conf", "-Dlogger.resource=docker-logger.xml")
+)
+
+lazy val disableDockerPublish = Seq(
+  publish in Docker := {},
+  publishLocal in Docker := {}
 )
 
 /**
