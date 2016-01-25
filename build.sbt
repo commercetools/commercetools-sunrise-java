@@ -11,7 +11,7 @@ name := "commercetools-sunrise"
 
 organization := "io.commercetools"
 
-lazy val sunriseDesignVersion = "0.46.0"
+lazy val sunriseDesignVersion = "0.47.0"
 
 lazy val sphereJvmSdkVersion = "1.0.0-M26"
 

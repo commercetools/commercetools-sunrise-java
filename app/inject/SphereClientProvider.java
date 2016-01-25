@@ -3,6 +3,7 @@ package inject;
 import com.google.inject.Provider;
 import io.sphere.sdk.client.*;
 import io.sphere.sdk.http.HttpClient;
+import io.sphere.sdk.play.metrics.MetricAction;
 import io.sphere.sdk.play.metrics.MetricHttpClient;
 import play.Configuration;
 import play.Logger;
@@ -24,20 +25,26 @@ class SphereClientProvider implements Provider<SphereClient> {
 
     @Override
     public SphereClient get() {
-        Logger.debug("Provide SphereClient");
-        final SphereClientConfig config = getSphereClientConfig();
-        return createSphereClient(config);
+        final SphereClientConfig config = getClientConfig();
+        final boolean metricsEnabled = configuration.getBoolean(MetricAction.CONFIG_METRICS_ENABLED);
+        return metricsEnabled ? createClientWithMetrics(config) : createClient(config);
     }
 
-    private SphereClient createSphereClient(final SphereClientConfig config) {
+    private SphereClient createClient(final SphereClientConfig clientConfig) {
+        Logger.debug("Provide SphereClient");
+        return SphereClientFactory.of().createClient(clientConfig);
+    }
+
+    private SphereClient createClientWithMetrics(final SphereClientConfig clientConfig) {
         final HttpClient underlyingHttpClient = SphereAsyncHttpClientFactory.create();
         final MetricHttpClient httpClient = MetricHttpClient.of(underlyingHttpClient);
         final SphereAccessTokenSupplier tokenSupplier = SphereAccessTokenSupplierFactory.of(() -> httpClient)
-                .createSupplierOfAutoRefresh(config);
-        return SphereClient.of(config, httpClient, tokenSupplier);
+                .createSupplierOfAutoRefresh(clientConfig);
+        Logger.debug("Provide SphereClient with metrics");
+        return SphereClient.of(clientConfig, httpClient, tokenSupplier);
     }
 
-    private SphereClientConfig getSphereClientConfig() {
+    private SphereClientConfig getClientConfig() {
         final String project = requireNonNull(configuration.getString(CONFIG_PROJECT_KEY),
                 "No CTP project key defined in configuration '" + CONFIG_PROJECT_KEY + "'");
         final String clientId = requireNonNull(configuration.getString(CONFIG_CLIENT_ID),

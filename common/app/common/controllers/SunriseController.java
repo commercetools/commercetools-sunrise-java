@@ -31,7 +31,6 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * An application specific controller.
- * Since we want to show a standard web shop it contains categories.
  */
 @With(MetricAction.class)
 @AddCSRFToken

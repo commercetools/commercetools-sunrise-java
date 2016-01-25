@@ -3,27 +3,40 @@ package io.sphere.sdk.play.metrics;
 import io.sphere.sdk.http.HttpMethod;
 import io.sphere.sdk.utils.SphereInternalLogger;
 import org.apache.commons.lang3.tuple.Pair;
+import play.Configuration;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 
+import javax.inject.Inject;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 public class MetricAction extends play.mvc.Action.Simple {
-
+    public static final String CONFIG_METRICS_ENABLED = "application.metrics.enabled";
     public static final String KEY = "io.sphere.sdk.play.metrics.reportRawData";
     private static final SphereInternalLogger LOGGER = SphereInternalLogger.getLogger("metrics.simple");
 
+    private final boolean metricsEnabled;
+
+    @Inject
+    public MetricAction(final Configuration configuration) {
+        this.metricsEnabled = configuration.getBoolean(CONFIG_METRICS_ENABLED);
+    }
+
     public F.Promise<Result> call(final Http.Context ctx) throws Throwable {
-        final List<ReportRawData> rawDatas = Collections.synchronizedList(new LinkedList<>());
-        ctx.args.put(KEY, rawDatas);
-        final F.Promise<Result> resultPromise = delegate.call(ctx);
-        logRequestDataOnComplete(ctx, rawDatas, resultPromise);
-        return resultPromise;
+        if (metricsEnabled) {
+            final List<ReportRawData> rawData = Collections.synchronizedList(new LinkedList<>());
+            ctx.args.put(KEY, rawData);
+            final F.Promise<Result> resultPromise = delegate.call(ctx);
+            logRequestDataOnComplete(ctx, rawData, resultPromise);
+            return resultPromise;
+        } else {
+            return delegate.call(ctx);
+        }
     }
 
     private void logRequestDataOnComplete(final Http.Context ctx, final List<ReportRawData> rawDatas, final F.Promise<Result> resultPromise) {
@@ -37,12 +50,12 @@ public class MetricAction extends play.mvc.Action.Simple {
         });
     }
 
-    private Pair<List<ReportRawData>, List<ReportRawData>> splitByQueriesAndCommands(final List<ReportRawData> rawDatas) {
-        return partition(rawDatas, data -> data.getHttpRequest().getHttpMethod() == HttpMethod.GET);
+    private Pair<List<ReportRawData>, List<ReportRawData>> splitByQueriesAndCommands(final List<ReportRawData> rawData) {
+        return partition(rawData, data -> data.getHttpRequest().getHttpMethod() == HttpMethod.GET);
     }
 
-    private Integer calculateTotalSize(final List<ReportRawData> rawDatas) {
-        return rawDatas.stream().map(elem -> Optional.ofNullable(elem.getHttpResponse().getResponseBody())
+    private Integer calculateTotalSize(final List<ReportRawData> rawData) {
+        return rawData.stream().map(elem -> Optional.ofNullable(elem.getHttpResponse().getResponseBody())
                 .map(b -> b.length).orElse(0)).reduce(0, (a, b) -> a + b);
     }
 
