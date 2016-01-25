@@ -11,7 +11,7 @@ The next generation shop template.
 ## Preconditions
 
 * install [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* install [SBT](http://www.scala-sbt.org/release/tutorial/Setup.html), Mac/Linux users can use the SBT script in the base folder (use `./sbt` instead of `sbt` in commands)
+* install [SBT](http://www.scala-sbt.org/release/docs/Setup.html), Mac/Linux users can use the SBT script in the base folder (use `./sbt` instead of `sbt` in commands)
 
 ## Run it locally
 
