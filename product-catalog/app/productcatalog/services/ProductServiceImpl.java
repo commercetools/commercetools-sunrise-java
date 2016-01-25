@@ -82,26 +82,12 @@ public class ProductServiceImpl implements ProductService {
         final List<String> categoryIds = categories.stream()
                 .map(Category::getId)
                 .collect(toList());
-        ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
+        final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
+                .withLimit(numSuggestions)
                 .withQueryFilters(filter -> filter.categories().id().byAny(categoryIds));
         final F.Promise<PagedSearchResult<ProductProjection>> resultPromise = sphere.execute(request);
         logRequest(request, resultPromise);
-        return resultPromise.map(PagedSearchResult::getResults)
-                .map(results -> pickRandomElements(results, numSuggestions));
-    }
-
-    private <T> List<T> pickRandomElements(final List<T> elements, final int n) {
-        if (elements.size() < n) {
-            return pickRandomElements(elements, elements.size());
-        } else {
-            final List<T> picked = new ArrayList<>(n);
-            for (int i = 0; i < n; i++) {
-                final int index = RANDOM.nextInt(elements.size());
-                picked.add(elements.get(index));
-                elements.remove(index);
-            }
-            return picked;
-        }
+        return resultPromise.map(PagedSearchResult::getResults);
     }
 
     private void logRequest(final ProductProjectionSearch request, final F.Promise<PagedSearchResult<ProductProjection>> resultPromise) {
