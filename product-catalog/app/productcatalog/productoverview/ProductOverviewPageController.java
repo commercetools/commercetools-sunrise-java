@@ -49,8 +49,9 @@ public class ProductOverviewPageController extends ProductCatalogController {
                 final ProductOverviewPageContent content = createPageContent(userContext, searchResult, page, searchCriteria);
                 return ok(renderPage(userContext, fillPageContent(content, userContext, category.get())));
             });
+        } else {
+            return F.Promise.pure(notFound("Category not found: " + categorySlug));
         }
-        return F.Promise.pure(notFound("Category not found: " + categorySlug));
     }
 
     public F.Promise<Result> search(final String languageTag, final int page) {
