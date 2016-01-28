@@ -118,7 +118,7 @@ If you want to provide your own images, you just have to place them inside the `
 <!-- end common/logo.hbs -->
 ```
 
-Notice that the image path have been replaced to `assets/public/images/`.
+Notice that the image path have been replaced to `public/images/`.
 
 #####Customize CSS
 Sunrise comes with the file `public/stylesheets/sunrise.css` where you can add your own CSS rules. As this is the last CSS file loaded of the website, from here you can override any previous rule set by the template.
