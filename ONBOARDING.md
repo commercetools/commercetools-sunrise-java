@@ -108,7 +108,7 @@ There are two types of routes that serve web assets in Sunrise:
 ####Customize Web Assets
 
 #####Customize images
-If you want to provide your own images, you just have to place them inside the `public/images/` folder and modify the image source as explained in the section _[Customize HTML](#customize-html)_. Following the logo example used in that section, you should obtain:
+If you want to provide your own images, you just have to place them inside the `public/images/` folder and modify the HTML accordingly as explained in the section _[Customize HTML](#customize-html)_. Following the logo example used in that section, you should obtain:
 
 ```hbs
 <!-- start common/logo.hbs -->
