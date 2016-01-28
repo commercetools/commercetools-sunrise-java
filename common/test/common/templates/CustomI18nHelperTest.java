@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Locale.ENGLISH;
 import static java.util.Locale.GERMAN;
@@ -75,7 +74,7 @@ public class CustomI18nHelperTest {
 
     private static void testTemplate(final String templateName, final Locale locale, final Map<String, String> i18nMap,
                                      final Consumer<String> test) {
-        final TemplateService templateService = HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), emptyList(), i18nResolver(i18nMap), false);
+        final TemplateService templateService = HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), i18nResolver(i18nMap));
         final String html = renderTemplate(templateName, templateService, locale);
         test.accept(html);
     }

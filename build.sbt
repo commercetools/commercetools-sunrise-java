@@ -67,7 +67,7 @@ lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
     "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
     "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % sphereJvmSdkVersion,
     "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
-    "com.github.jknack" % "handlebars" % "2.2.3",
+    "com.github.jknack" % "handlebars" % "4.0.3",
     filters,
     "commons-beanutils" % "commons-beanutils" % "1.9.2",
     "commons-io" % "commons-io" % "2.4"

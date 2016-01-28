@@ -63,39 +63,12 @@ public class HandlebarsTemplateTest {
                 .isInstanceOf(TemplateNotFoundException.class);
     }
 
-    @Test
-    public void usesFallbackContextWhenMissingData() throws Exception {
-        testTemplate("template", handlebarsWithFallbackContext(DEFAULT_LOADER), html ->
-                assertThat(html)
-                        .contains("<title>foo</title>")
-                        .contains("<h1>bar</h1>")
-                        .contains("<h2>fallback unknown</h2>")
-                        .contains("<p>default partial</p>")
-                        .contains("<ul><li>fallback foo</li><li>fallback bar</li></ul>")
-        );
-    }
-
-    @Test
-    public void failsSilentlyWhenFallbackContextNotFound() throws Exception {
-        testTemplate("template", handlebarsWithFallbackContext(WRONG_LOADER), html ->
-                assertThat(html).contains("<title>foo</title>")
-                        .contains("<h1>bar</h1>")
-                        .contains("<h2></h2>")
-                        .contains("<p>default partial</p>")
-                        .contains("<ul></ul>")
-        );
-    }
-
     private static TemplateService defaultHandlebars() {
-        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), emptyList(), I18N_MESSAGES, false);
+        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), I18N_MESSAGES);
     }
 
     private static TemplateService handlebarsWithOverride() {
-        return HandlebarsTemplateService.of(asList(OVERRIDE_LOADER, DEFAULT_LOADER), emptyList(), I18N_MESSAGES, false);
-    }
-
-    private static TemplateService handlebarsWithFallbackContext(final TemplateLoader fallbackContextLoader) {
-        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), singletonList(fallbackContextLoader), I18N_MESSAGES, false);
+        return HandlebarsTemplateService.of(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES);
     }
 
     private static void testTemplate(final String templateName, final TemplateService templateService, final Consumer<String> test) {
