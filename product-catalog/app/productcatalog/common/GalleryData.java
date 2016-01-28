@@ -19,8 +19,8 @@ public class GalleryData extends Base {
                 .collect(toList());
     }
 
-    public List<ProductImageData> getList() {
-        return list;
+    public ProductImageData[] getList() {
+        return list.toArray(new ProductImageData[list.size()]);
     }
 
     public void setList(final List<ProductImageData> list) {

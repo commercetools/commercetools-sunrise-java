@@ -4,6 +4,9 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
+import com.github.jknack.handlebars.context.FieldValueResolver;
+import com.github.jknack.handlebars.context.JavaBeanValueResolver;
+import com.github.jknack.handlebars.context.MapValueResolver;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
@@ -25,7 +28,7 @@ public final class HandlebarsTemplateService implements TemplateService {
     @Override
     public String render(final String templateName, final PageData pageData, final List<Locale> locales) {
         final Template template = compileTemplate(templateName);
-        final Context context = Context.newContext(pageData);
+        final Context context = createContext(pageData);
         context.data("locales", locales.stream().map(Locale::toLanguageTag).collect(toList()));
         try {
             Logger.debug("Rendering template " + templateName);
@@ -44,6 +47,12 @@ public final class HandlebarsTemplateService implements TemplateService {
         handlebars.registerHelper("i18n", new CustomI18nHelper(i18NResolver));
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
         return new HandlebarsTemplateService(handlebars);
+    }
+
+    private Context createContext(final PageData pageData) {
+        return Context.newBuilder(pageData)
+                .resolver(MapValueResolver.INSTANCE, JavaBeanValueResolver.INSTANCE, FieldValueResolver.INSTANCE)
+                .build();
     }
 
     private Template compileTemplate(final String templateName) {
