@@ -75,7 +75,7 @@ After the execution, `conf/templates/common/logo.hbs` has been created with the 
 <!-- end common/logo.hbs -->
 ```
 
-With that, you are ready to start modifying the template. For example, let's replace the logo image for a simple text:
+With that, you are ready to start modifying the template. For example, let's replace the logo image with a simple text:
 
 ```hbs
 <!-- start common/logo.hbs -->
