@@ -107,6 +107,17 @@ There are two types of routes that serve web assets in Sunrise:
 
 ####Customize Web Assets
 
+#####Customize images
+If you want to provide your own images, you just have to place them inside the `public/images/` folder and modify the image source as explained in the section _[Customize HTML](#customize-html)_. Remember to replace the path to `assets/public/images/` to obtain:
+
+```hbs
+<!-- start common/logo.hbs -->
+<a href="{{@root.meta._links.home.href}}" class="brand-logo">
+    <img class="img-responsive" src="{{@root.meta.assetsPath}}public/images/yourlogo.png" alt="YOUR SITE">
+</a>
+<!-- end common/logo.hbs -->
+```
+
 #####Customize CSS
 Sunrise comes with the file `public/stylesheets/sunrise.css` where you can add your own CSS rules. As this is the last CSS file loaded of the website, from here you can override any previous rule set by the template.
 
