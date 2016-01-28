@@ -2,6 +2,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import play.sbt.PlayImport
+import complete.DefaultParsers._
 
 import scala.util.{Success, Try}
 
@@ -11,7 +12,7 @@ name := "commercetools-sunrise"
 
 organization := "io.commercetools"
 
-lazy val sunriseDesignVersion = "0.47.0"
+lazy val sunriseDesignVersion = "0.48.0"
 
 lazy val sphereJvmSdkVersion = "1.0.0-M26"
 
@@ -120,8 +121,8 @@ lazy val testSettings = Defaults.itSettings ++ inConfig(PlayTest)(Defaults.testS
 
 def testDirConfigs(config: Configuration, folderName: String) = Seq(
   javaSource in config := baseDirectory.value / folderName,
-    scalaSource in config := baseDirectory.value / folderName,
-    resourceDirectory in config := baseDirectory.value / s"$folderName/resources"
+  scalaSource in config := baseDirectory.value / folderName,
+  resourceDirectory in config := baseDirectory.value / s"$folderName/resources"
 )
 
 resourceGenerators in Compile += Def.task {
@@ -161,3 +162,20 @@ lazy val releaseSettings = Seq(
     pushChanges
   )
 )
+
+/**
+ * TEMPLATE SETTINGS
+ */
+
+val copyTemplateFiles = inputKey[Unit]("Copies given template files into the project to enable editing")
+
+copyTemplateFiles := Def.inputTaskDyn {
+  val args: Seq[String] = spaceDelimited("<arg>").parsed
+  val templatePaths: Seq[String] = args.map(filePath => "templates/" + filePath)
+  val confFolder: String = (resourceDirectory in Compile).value.getPath
+  runMainInCompile(confFolder, templatePaths)
+}.evaluated
+
+def runMainInCompile(dest: String, args: Seq[String]) = Def.taskDyn {
+  (runMain in Compile).toTask(s" tasks.TemplateFilesCopier $dest ${args.mkString(" ")}")
+}
