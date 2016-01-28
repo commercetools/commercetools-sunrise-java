@@ -25,7 +25,7 @@ public final class HandlebarsTemplateService implements TemplateService {
     @Override
     public String render(final String templateName, final PageData pageData, final List<Locale> locales) {
         final Template template = compileTemplate(templateName);
-        final Context context = Context.newContext(pageData);;
+        final Context context = Context.newContext(pageData);
         context.data("locales", locales.stream().map(Locale::toLanguageTag).collect(toList()));
         try {
             Logger.debug("Rendering template " + templateName);
