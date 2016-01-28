@@ -20,7 +20,7 @@ public class TemplateFilesCopier {
             final List<String> filesToCopy = Arrays.asList(args).subList(1, args.length);
             copyTemplateFiles(destBasePath, filesToCopy);
         } else {
-            throw new RuntimeException("Missing arguments, required at least one origin paths");
+            throw new RuntimeException("Missing arguments, required at least one origin path");
         }
     }
 
