@@ -127,7 +127,7 @@ If you want to provide your own JavaScript file instead, you just have to place 
 <script src="/assets/public/javascripts/yourfile.js"></script> <!-- your JS file -->
 ```
 
-#####Customize HTML `<head>`
+####Customize `<head>`
 You may need to provide additional HTML `<meta>` tags or other kind of information to the HTML `<head>`. To do so, just add them to the template source file `conf/templates/common/additional-html-head.hbs`, as shown in the example:
 
 ```hbs
