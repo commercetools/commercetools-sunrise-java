@@ -12,7 +12,7 @@ name := "commercetools-sunrise"
 
 organization := "io.commercetools"
 
-lazy val sunriseDesignVersion = "0.49.0"
+lazy val sunriseDesignVersion = "0.50.0"
 
 lazy val sphereJvmSdkVersion = "1.0.0-M26"
 
@@ -180,7 +180,7 @@ val copyI18nFiles = inputKey[Unit]("Copies the provided i18n files into the proj
 
 copyI18nFiles := Def.inputTaskDyn {
   val args: Seq[String] = spaceDelimited("<arg>").parsed
-  val templatePaths: Seq[String] = args.map(filePath => "locales/" + filePath)
+  val templatePaths: Seq[String] = args.map(filePath => "i18n/" + filePath)
   val confFolder: String = (resourceDirectory in Compile).value.getPath
   runMainInCompile(confFolder, templatePaths)
 }.evaluated
