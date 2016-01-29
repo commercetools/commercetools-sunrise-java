@@ -76,7 +76,7 @@ final class CustomI18nHelper extends Base implements Helper<String> {
         public I18nIdentifier(final String context) {
             final String[] parts = StringUtils.split(context, ':');
             final boolean usingDefaultBundle = parts.length == 1;
-            this.bundle = usingDefaultBundle ? "translations" : parts[0];
+            this.bundle = usingDefaultBundle ? "main" : parts[0];
             this.key = usingDefaultBundle ? context : parts[1];
         }
     }

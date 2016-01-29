@@ -5,3 +5,7 @@
 form[name=add-to-wishlist] {
     display: none;
 }
+
+#bzoom .bzoom_small_thumbs {
+    display: none;
+}
