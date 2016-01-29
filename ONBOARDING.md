@@ -148,6 +148,26 @@ You may need to provide additional HTML `<meta>` tags or other kind of informati
 <meta name="description" content="My description"> <!-- your meta tag -->
 ```
 
+##Internationalization
+Sunrise uses [YAML](http://www.yaml.org/) files by default to provide text in different languages. Translations are grouped according to the page or section they belong, which is known as bundles (e.g. `home`, `checkout`). Each YAML file contains the translated text for a particular language and bundle.
+
+The following structure would be used to have translations in German and English for the home and checkout bundles:
+
+```
+locales
++-- de
+|   +-- home.yaml
+|   +-- checkout.yaml
++-- en
+    +-- home.yaml
+    +-- checkout.yaml
+```
+
+Similarly as it works with templates, the application tries to find the translated text first inside the classpath `/locales`. If that particular translation is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/locales`).
+
+This enables a practical way to override a particular translation without the need of replacing them all, as it is explained in the section _[Customize Internationalization](#customize-internationalization)_.
+
+
 ##Miscellaneous
 
 Some related literature to fully understand Sunrise:
