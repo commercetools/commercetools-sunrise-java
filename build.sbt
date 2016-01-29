@@ -12,7 +12,7 @@ name := "commercetools-sunrise"
 
 organization := "io.commercetools"
 
-lazy val sunriseDesignVersion = "0.48.0"
+lazy val sunriseDesignVersion = "0.49.0"
 
 lazy val sphereJvmSdkVersion = "1.0.0-M26"
 
@@ -167,7 +167,7 @@ lazy val releaseSettings = Seq(
  * TEMPLATE SETTINGS
  */
 
-val copyTemplateFiles = inputKey[Unit]("Copies given template files into the project to enable editing")
+val copyTemplateFiles = inputKey[Unit]("Copies the provided template files into the project to enable editing, e.g.: 'copyTemplateFiles common/logo.hbs cart.hbs'")
 
 copyTemplateFiles := Def.inputTaskDyn {
   val args: Seq[String] = spaceDelimited("<arg>").parsed
@@ -175,6 +175,16 @@ copyTemplateFiles := Def.inputTaskDyn {
   val confFolder: String = (resourceDirectory in Compile).value.getPath
   runMainInCompile(confFolder, templatePaths)
 }.evaluated
+
+val copyI18nFiles = inputKey[Unit]("Copies the provided i18n files into the project to enable editing, e.g.: 'copyI18nFiles en/home.yaml de/home.yaml'")
+
+copyI18nFiles := Def.inputTaskDyn {
+  val args: Seq[String] = spaceDelimited("<arg>").parsed
+  val i18nPaths: Seq[String] = args.map(filePath => "locales/" + filePath)
+  val confFolder: String = (resourceDirectory in Compile).value.getPath
+  runMainInCompile(confFolder, i18nPaths)
+}.evaluated
+
 
 def runMainInCompile(dest: String, args: Seq[String]) = Def.taskDyn {
   (runMain in Compile).toTask(s" tasks.TemplateFilesCopier $dest ${args.mkString(" ")}")
