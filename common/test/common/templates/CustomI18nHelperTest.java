@@ -24,7 +24,7 @@ public class CustomI18nHelperTest {
     @Test
     public void resolvesMessage() throws Exception {
         final Map<String, String> i18nMap = new HashMap<>();
-        i18nMap.put("en/translations:foo", "bar");
+        i18nMap.put("en/main:foo", "bar");
         testTemplate("translations/simple", ENGLISH, i18nMap, html -> assertThat(html).contains("bar"));
     }
 
