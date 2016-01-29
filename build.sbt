@@ -180,11 +180,10 @@ val copyI18nFiles = inputKey[Unit]("Copies the provided i18n files into the proj
 
 copyI18nFiles := Def.inputTaskDyn {
   val args: Seq[String] = spaceDelimited("<arg>").parsed
-  val templatePaths: Seq[String] = args.map(filePath => "i18n/" + filePath)
+  val i18nPaths: Seq[String] = args.map(filePath => "i18n/" + filePath)
   val confFolder: String = (resourceDirectory in Compile).value.getPath
-  runMainInCompile(confFolder, templatePaths)
+  runMainInCompile(confFolder, i18nPaths)
 }.evaluated
-
 
 def runMainInCompile(dest: String, args: Seq[String]) = Def.taskDyn {
   (runMain in Compile).toTask(s" tasks.TemplateFilesCopier $dest ${args.mkString(" ")}")

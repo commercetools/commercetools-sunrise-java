@@ -26,8 +26,8 @@ public class PriceFinderTest {
 
     private final CountryCode de = CountryCode.DE;
 
-    private final Reference<CustomerGroup> group1 = Reference.of(CustomerGroup.typeId(), "group1");
-    private final Reference<Channel> channel1 = Reference.of(Channel.typeId(), "channel1");
+    private final Reference<CustomerGroup> group1 = Reference.of(CustomerGroup.referenceTypeId(), "group1");
+    private final Reference<Channel> channel1 = Reference.of(Channel.referenceTypeId(), "channel1");
 
     private final LocalDateTime today = LocalDateTime.now();
     private final LocalDateTime tomorrow = today.plusDays(1);
