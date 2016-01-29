@@ -24,7 +24,7 @@ public class ProductData extends Base {
     private String productId;
     private int variantId;
     private String description;
-    private GalleryData gallery;
+    private ProductGalleryData gallery;
     private List<SelectableProductAttributeBean> attributes;
     private ProductVariantBean variant;
     private Map<String, String> variants;
@@ -40,7 +40,7 @@ public class ProductData extends Base {
         this.description = Optional.ofNullable(product.getDescription())
                 .flatMap(locText -> locText.find(userContext.locales()))
                 .orElse("");
-        this.gallery = new GalleryData(variant);
+        this.gallery = new ProductGalleryData(variant);
         this.attributes = variant.getAttributes().stream()
                 .filter(attr -> productDataConfig.getAttributeWhiteList().contains(attr.getName()))
                 .map(attr -> new SelectableProductAttributeBean(attr, product, productDataConfig, userContext))
@@ -74,11 +74,11 @@ public class ProductData extends Base {
         this.description = description;
     }
 
-    public GalleryData getGallery() {
+    public ProductGalleryData getGallery() {
         return gallery;
     }
 
-    public void setGallery(final GalleryData gallery) {
+    public void setGallery(final ProductGalleryData gallery) {
         this.gallery = gallery;
     }
 

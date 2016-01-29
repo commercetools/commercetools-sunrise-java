@@ -4,9 +4,6 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
-import com.github.jknack.handlebars.context.FieldValueResolver;
-import com.github.jknack.handlebars.context.JavaBeanValueResolver;
-import com.github.jknack.handlebars.context.MapValueResolver;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
@@ -50,9 +47,7 @@ public final class HandlebarsTemplateService implements TemplateService {
     }
 
     private Context createContext(final PageData pageData) {
-        return Context.newBuilder(pageData)
-                .resolver(MapValueResolver.INSTANCE, JavaBeanValueResolver.INSTANCE, FieldValueResolver.INSTANCE)
-                .build();
+        return Context.newContext(pageData);
     }
 
     private Template compileTemplate(final String templateName) {
