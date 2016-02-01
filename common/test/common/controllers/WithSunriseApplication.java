@@ -79,6 +79,7 @@ public abstract class WithSunriseApplication {
 
     protected Configuration baseConfiguration() {
         final Map<String, Object> additionalSettings = new HashMap<>();
+        additionalSettings.put("application.metrics.enabled", false);
         additionalSettings.put("application.settingsWidget.enabled", false);
         additionalSettings.put("play.crypto.secret", RandomStringUtils.randomAlphanumeric(15));
         return new Configuration(additionalSettings);
