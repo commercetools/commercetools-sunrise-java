@@ -9,19 +9,19 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 public class ProductThumbnailData extends Base {
+    private ProductData product;
     private boolean sale;
     private boolean _new;
-    private ProductData product;
 
     public ProductThumbnailData() {
     }
 
     public ProductThumbnailData(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
                                 final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
-        this.sale = calculateIsSale(this.product);
+        this.product = new ProductData(product, variant, productDataConfig, userContext, reverseRouter);
         this._new = product.getCategories().stream()
                 .anyMatch(category -> categoryTreeNew.findById(category.getId()).isPresent());
-        this.product = new ProductData(product, variant, productDataConfig, userContext, reverseRouter);
+        this.sale = calculateIsSale(this.product);
     }
 
     private static boolean calculateIsSale(final ProductData productData) {
