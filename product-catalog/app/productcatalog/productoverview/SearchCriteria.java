@@ -18,6 +18,7 @@ import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +66,7 @@ public class SearchCriteria {
     public List<Facet<ProductProjection>> boundFacets() {
         return categoryFacet()
                 .map(categoryFacet -> asList(categoryFacet, colorFacet(), sizeFacet(), brandFacet()))
-                .orElse(asList(colorFacet(), sizeFacet(), brandFacet()));
+                .orElseGet(() -> asList(colorFacet(), sizeFacet(), brandFacet()));
     }
 
     public SortSelector boundSortSelector() {
@@ -94,7 +95,7 @@ public class SearchCriteria {
                 .filter(SortOption::isSelected)
                 .map(SortOption::getSortExpressions)
                 .findFirst()
-                .orElse(emptyList());
+                .orElseGet(Collections::emptyList);
     }
 
     public Optional<LocalizedStringEntry> searchTerm() {

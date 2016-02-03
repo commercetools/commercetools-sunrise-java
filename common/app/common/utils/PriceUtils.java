@@ -15,7 +15,7 @@ public final class PriceUtils {
 
     public static MonetaryAmount calculateTotalPrice(final CartLike<?> cartLike) {
         final Optional<TaxedPrice> taxedPriceOpt = Optional.ofNullable(cartLike.getTaxedPrice());
-        return taxedPriceOpt.map(TaxedPrice::getTotalGross).orElse(cartLike.getTotalPrice());
+        return taxedPriceOpt.map(TaxedPrice::getTotalGross).orElseGet(cartLike::getTotalPrice);
     }
 
     public static Optional<MonetaryAmount> calculateSalesTax(final CartLike<?> cartLike) {

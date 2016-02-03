@@ -10,8 +10,6 @@ import productcatalog.services.ProductService;
 import java.util.Collections;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
-
 public abstract class ProductCatalogController extends SunriseController {
     private final ProductService productService;
     private final ProductDataConfig productDataConfig;
@@ -27,7 +25,7 @@ public abstract class ProductCatalogController extends SunriseController {
     protected CategoryTree categoryTreeInNew() {
         final List<Category> categoriesInNew = newCategory()
                 .map(Collections::singletonList)
-                .orElse(emptyList());
+                .orElseGet(Collections::emptyList);
         return categoryTree().getSubtree(categoriesInNew);
     }
 

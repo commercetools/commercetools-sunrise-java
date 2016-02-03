@@ -29,7 +29,7 @@ public abstract class CartController extends SunriseController {
     protected F.Promise<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
         return Optional.ofNullable(session(CartSessionKeys.CART_ID))
                 .map(this::fetchCart)
-                .orElse(createCart(userContext))
+                .orElseGet(() -> createCart(userContext))
                 .flatMap(cart -> {
                     CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
                     final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
@@ -61,7 +61,7 @@ public abstract class CartController extends SunriseController {
         // TODO Handle case where some line items do not exist for this country
         final Address shippingAddress = Optional.ofNullable(cart.getShippingAddress())
                 .map(address -> address.withCountry(country))
-                .orElse(Address.of(country));
+                .orElseGet(() -> Address.of(country));
         final CartUpdateCommand updateCommand = CartUpdateCommand.of(cart,
                 asList(SetShippingAddress.of(shippingAddress), SetCountry.of(country)));
         return sphere().execute(updateCommand);

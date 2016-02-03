@@ -7,7 +7,6 @@ import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.i18n.I18nResolver;
 import common.models.LocationSelector;
-import common.models.MiniCart;
 import common.models.NavMenuData;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
@@ -24,7 +23,10 @@ import shoppingcart.CartSessionUtils;
 import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -150,7 +152,7 @@ public abstract class SunriseController extends ShopController {
                 .map(countryCurrency -> {
                     final CurrencyUnit currency = Monetary.getCurrency(countryCurrency.getCurrencyCode());
                     return projectContext.isCurrencyAccepted(currency) ? currency : projectContext.defaultCurrency();
-                }).orElse(projectContext.defaultCurrency());
+                }).orElseGet(projectContext::defaultCurrency);
     }
 
     private static List<Locale> acceptedLocales(final String languageTag, final Http.Request request,

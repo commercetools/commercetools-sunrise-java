@@ -27,6 +27,7 @@ public class MetricAction extends play.mvc.Action.Simple {
         this.metricsEnabled = configuration.getBoolean(CONFIG_METRICS_ENABLED);
     }
 
+    @Override
     public F.Promise<Result> call(final Http.Context ctx) throws Throwable {
         if (metricsEnabled) {
             final List<ReportRawData> rawData = Collections.synchronizedList(new LinkedList<>());
