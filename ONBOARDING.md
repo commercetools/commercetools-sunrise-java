@@ -10,32 +10,46 @@ META-INF
         +-- fonts
         +-- img
         +-- js
-        +-- locales
+        +-- i18n
         |   +-- de
         |   +-- en
         |   +-- ..
         +-- templates
 ```
 
-##Template
+###Template
 Sunrise uses [Handlebars.java](https://jknack.github.io/handlebars.java/) by default as a template engine.
 
-In order to find the corresponding template source file, it searches first inside the classpath `/templates`. If the file is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/templates`).
+In order to find the corresponding template source file, it searches first inside the classpath `/templates`. If the file is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/templates`). This behaviour can be modified as explained in _[Change template source loaders](#change-template-source-loaders)_.
 
-This enables a practical way to override parts of the template without the need of replacing it completely, as it is explained in the section _[Customize HTML](#customize-html)_.
+This mechanism enables a practical way to override parts of the template without the need of replacing it completely, as we will see in the section _[Customize HTML](#customize-html)_.
 
-####Change template source loaders
-If you want to change the way templates sources are loaded, you can change the list of template loaders you want to use with `handlebars.templateLoaders`.
+###Web Assets
+There are two types of routes that serve web assets in Sunrise:
+- `/assets/{css|js|fonts|img}/`: Serves files inside the `css`, `js`, `fonts` or `img` folder of the Template's Webjars. This route allows to access the web assets provided by the template.
+- `/assets/public/`: Serves files from the project's `public` folder. By placing web assets in this folder, you can easily extend Sunrise's functionality, as explained in _[Customize Web Assets](#customize-web-assets)_.
 
-Along with the `path`, you can also specify the `type` of path you are providing, which can be either `classpath` or `file`. Keep in mind that the list order determines the order in which the loaders are going to be invoked.
+###Internationalization
+Sunrise uses [YAML](http://www.yaml.org/) files by default to provide text in different languages. Translations are grouped according to the page or section they belong, which is known as bundles (e.g. `home`, `checkout`). Each YAML file contains the translated text for a particular language and bundle.
 
-```hocon
-handlebars.templateLoaders = [
-  {"type":"classpath", "path":"/path/to/files/on/classpath"}, # tries first
-  {"type":"file", "path":"relative/path/to/files"}, # tries second, if first failed
-  {"type":"file", "path":"/absolute/path/to/files"} # tries third, if all other failed
-]
+The following structure would be used to have translations in German and English for the home and checkout bundles:
+
 ```
+locales
++-- de
+|   +-- home.yaml
+|   +-- checkout.yaml
++-- en
+    +-- home.yaml
+    +-- checkout.yaml
+```
+
+Similarly as it works with templates, the application tries to find the translated text first inside the classpath `/locales`. If that particular translation is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/locales`).
+
+This enables a practical way to override a particular translation without the need of replacing them all, as it is explained in the section _[Customize Internationalization](#customize-internationalization)_.
+
+
+##Basic Customization
 
 ####Customize HTML
 
@@ -100,11 +114,6 @@ If you run Sunrise and reload the page, the image has been effectively replaced 
 To learn how to write Handlebars templates, please check the [Handlebars.js](http://handlebarsjs.com/) documentation. In particular, the sections about [Expressions](http://handlebarsjs.com/expressions.html), [Built-In Helpers](http://handlebarsjs.com/builtin_helpers.html) and [@data Variables](http://handlebarsjs.com/reference.html#data).
 
 
-##Web Assets
-There are two types of routes that serve web assets in Sunrise:
-- `/assets/{css|js|fonts|img}/`: Serves files inside the `css`, `js`, `fonts` or `img` folder of the Template's Webjars. This route allows to access the web assets provided by the template.
-- `/assets/public/`: Serves files from the project's `public` folder. By placing web assets in this folder, you can easily extend Sunrise's functionality, as explained in _[Customize Web Assets](#customize-web-assets)_.
-
 ####Customize Web Assets
 
 #####Customize images
@@ -148,25 +157,21 @@ You may need to provide additional HTML `<meta>` tags or other kind of informati
 <meta name="description" content="My description"> <!-- your meta tag -->
 ```
 
-##Internationalization
-Sunrise uses [YAML](http://www.yaml.org/) files by default to provide text in different languages. Translations are grouped according to the page or section they belong, which is known as bundles (e.g. `home`, `checkout`). Each YAML file contains the translated text for a particular language and bundle.
 
-The following structure would be used to have translations in German and English for the home and checkout bundles:
+##Advanced Customization
 
+####Change template source loaders
+If you want to change the way templates sources are loaded, you can change the list of template loaders you want to use with `handlebars.templateLoaders`.
+
+Along with the `path`, you can also specify the `type` of path you are providing, which can be either `classpath` or `file`. Keep in mind that the list order determines the order in which the loaders are going to be invoked.
+
+```hocon
+handlebars.templateLoaders = [
+  {"type":"classpath", "path":"/path/to/files/on/classpath"}, # tries first
+  {"type":"file", "path":"relative/path/to/files"}, # tries second, if first failed
+  {"type":"file", "path":"/absolute/path/to/files"} # tries third, if all other failed
+]
 ```
-locales
-+-- de
-|   +-- home.yaml
-|   +-- checkout.yaml
-+-- en
-    +-- home.yaml
-    +-- checkout.yaml
-```
-
-Similarly as it works with templates, the application tries to find the translated text first inside the classpath `/locales`. If that particular translation is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/locales`).
-
-This enables a practical way to override a particular translation without the need of replacing them all, as it is explained in the section _[Customize Internationalization](#customize-internationalization)_.
-
 
 ##Miscellaneous
 
