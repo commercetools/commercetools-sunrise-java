@@ -25,7 +25,6 @@ class BasicAuthProvider implements Provider<BasicAuth> {
         final String realm = configuration.getString(CONFIG_REALM, "Sunrise Authentication");
         final String credentials = configuration.getString(CONFIG_CREDENTIALS);
         if (credentials != null && !credentials.isEmpty()) {
-            System.out.println(credentials);
             if (credentials.matches(REGEX_CREDENTIALS)) {
                 Logger.debug("Basic authentication: enabled for realm \"{}\"", realm);
                 return BasicAuth.of(realm, credentials);
