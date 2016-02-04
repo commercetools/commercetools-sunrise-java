@@ -20,9 +20,9 @@ META-INF
 ###Template
 Sunrise uses [Handlebars.java](https://jknack.github.io/handlebars.java/) by default as a template engine.
 
-In order to find the corresponding template source file, it searches first inside the classpath `/templates`. If the file is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/templates`). This behaviour can be modified as explained in _[Change template source loaders](#change-template-source-loaders)_.
+In order to find the corresponding template source file, it searches first inside the classpath `/templates`. If the file is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/templates`). This enables a practical way to override parts of the template without the need of replacing it completely, as we will see in the section _[Customize HTML](#customize-html)_.
 
-This mechanism enables a practical way to override parts of the template without the need of replacing it completely, as we will see in the section _[Customize HTML](#customize-html)_.
+Learn how to modify this behaviour in _[Change template source loaders](#change-template-source-loaders)_.
 
 ###Web Assets
 There are two types of routes that serve web assets in Sunrise:
@@ -47,6 +47,8 @@ locales
 Similarly as it works with templates, the application tries to find the translated text first inside the classpath `/locales`. If that particular translation is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/locales`).
 
 This enables a practical way to override a particular translation without the need of replacing them all, as it is explained in the section _[Customize Internationalization](#customize-internationalization)_.
+
+Learn how to modify this behaviour in _[Change i18n resource loaders](#change-i18n-resource-loaders)_.
 
 
 ##Basic Customization
