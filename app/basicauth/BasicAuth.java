@@ -1,11 +1,13 @@
 package basicauth;
 
+import io.sphere.sdk.models.Base;
+
 import java.util.Base64;
 
 /**
  * Contains information related to the HTTP basic access authentication.
  */
-public class BasicAuth {
+public class BasicAuth extends Base {
     private final String realm;
     private final String encodedCredentials;
 

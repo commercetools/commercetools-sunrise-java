@@ -17,6 +17,8 @@ import play.Configuration;
 import play.Environment;
 import play.Mode;
 import play.inject.guice.GuiceApplicationBuilder;
+import play.libs.ws.WS;
+import play.libs.ws.WSRequest;
 import play.mvc.Controller;
 import play.mvc.Http;
 import reverserouter.ReverseRouterTestModule;
@@ -27,14 +29,25 @@ import java.util.Map;
 
 import static common.JsonUtils.readCtpObject;
 import static play.test.Helpers.running;
+import static play.test.Helpers.testServer;
 
 public abstract class WithSunriseApplication {
-    public static final int ALLOWED_TIMEOUT = 1000;
+    public static final int ALLOWED_TIMEOUT = 100000;
 
     @FunctionalInterface
     public interface CheckedConsumer<T> {
 
         void apply(T t) throws Exception;
+    }
+
+    protected final void run(final Application app, final String url, final CheckedConsumer<WSRequest> test) {
+        running(testServer(3333, app), () -> {
+            try {
+                test.apply(WS.url("http://localhost:3333" + url));
+            } catch (Throwable t) {
+                throw new RuntimeException(t);
+            }
+        });
     }
 
     protected final <C extends Controller> void run(final Application app, final Class<C> controllerClass,

@@ -1,33 +1,53 @@
 package basicauth;
 
-import controllers.ApplicationController;
+import common.controllers.TestableReverseRouter;
 import controllers.WithSunriseApplication;
-import org.junit.Ignore;
 import org.junit.Test;
 import play.Application;
+import play.libs.ws.WSAuthScheme;
+import play.libs.ws.WSRequest;
+import play.libs.ws.WSResponse;
 import play.mvc.Http;
-import play.mvc.Result;
+import reverserouter.ReverseRouterTestModule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
 
     @Test
-    public void allowsAccessWhenBasicAuthDisabled() throws Exception {
-        final Application app = appWithoutBasicAuth();
-        run(app, ApplicationController.class, controller -> {
-            final Result result = controller.index();
-            assertThat(result.status()).isLessThan(Http.Status.BAD_REQUEST);
+    public void allowsAccessWhenDisabled() throws Exception {
+        run(appWithoutBasicAuth(), "/", request -> {
+            final WSResponse response = request.get().get(ALLOWED_TIMEOUT);
+            assertThat(response.getStatus()).isEqualTo(Http.Status.OK);
         });
     }
 
-    @Ignore
     @Test
-    public void unauthorizedWhenBasicAuthEnabled() throws Exception {
-        final Application app = appWithBasicAuth(BasicAuth.of("My Realm", "username:password"));
-        run(app, ApplicationController.class, controller -> {
-            final Result result = controller.index();
-            assertThat(result.status()).isEqualTo(Http.Status.UNAUTHORIZED);
+    public void unauthorizedWhenEnabled() throws Exception {
+        final BasicAuth basicAuth = BasicAuth.of("My Realm", "username:password");
+        run(appWithBasicAuth(basicAuth), "/", request -> {
+            final WSResponse response = request.get().get(ALLOWED_TIMEOUT);
+            assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
+        });
+    }
+
+    @Test
+    public void authorizedWhenEnabledAndCredentialsProvided() throws Exception {
+        final BasicAuth basicAuth = BasicAuth.of("My Realm", "username:password");
+        run(appWithBasicAuth(basicAuth), "/", request -> {
+            final WSRequest authenticatedRequest = request.setAuth("username", "password", WSAuthScheme.BASIC);
+            final WSResponse response = authenticatedRequest.get().get(ALLOWED_TIMEOUT);
+            assertThat(response.getStatus()).isEqualTo(Http.Status.OK);
+        });
+    }
+
+    @Test
+    public void unauthorizedWhenEnabledAndWrongCredentialsProvided() throws Exception {
+        final BasicAuth basicAuth = BasicAuth.of("My Realm", "username:password");
+        run(appWithBasicAuth(basicAuth), "/", request -> {
+            final WSRequest authenticatedRequest = request.setAuth("username", "wrong", WSAuthScheme.BASIC);
+            final WSResponse response = authenticatedRequest.get().get(ALLOWED_TIMEOUT);
+            assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
         });
     }
 
@@ -36,6 +56,8 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
     }
 
     private Application appWithBasicAuth(final BasicAuth basicAuth) {
-        return app(new BasicAuthTestModule(basicAuth));
+        final TestableReverseRouter reverseRouter = new TestableReverseRouter();
+        reverseRouter.setHomeUrl("/en/home");
+        return app(new BasicAuthTestModule(basicAuth), new ReverseRouterTestModule(reverseRouter));
     }
 }
