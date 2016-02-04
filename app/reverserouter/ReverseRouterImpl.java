@@ -1,4 +1,4 @@
-package pages;
+package reverserouter;
 
 import common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;

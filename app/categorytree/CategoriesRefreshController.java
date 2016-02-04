@@ -1,4 +1,4 @@
-package controllers;
+package categorytree;
 
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import play.mvc.Controller;
