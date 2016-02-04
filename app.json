@@ -19,6 +19,13 @@
       "description": "The product attributes that allow to identify and select a product variant in your project. Enter the attribute keys separated by commas."
     },
 
+    "BASIC_AUTH_CREDENTIALS": {
+      "description": "Leave empty if you do not want to enable basic access authentication! If you only want authorized users to access your website, please enter here the required credentials separated by colon ':'. For example, for a username 'john' and password 'secret', enter 'john:secret'"
+    },
+    "BASIC_AUTH_REALM": {
+      "description": "Authentication realm that identifies your application. This is only necessary when basic authentication is enabled.",
+      "value": "Sunrise Demo"
+    },
     "APPLICATION_SECRET": {
       "description": "The secret key is used to secure cryptographics functions. Anyone that can get access to the application secret will be able to generate any session they please, effectively allowing them to log in to your system as any user they please. If you deploy your application to several instances be sure to use the same key.",
       "generator": "secret"
