@@ -55,10 +55,6 @@ public class StatusControllerTest extends WithSunriseApplication {
         });
     }
 
-    private Application app(final SphereClient sphereClient) {
-        return app(new CtpClientTestModule(sphereClient));
-    }
-
     private void rendersHealthyCtp(final StatusController controller) throws IOException {
         final Result result = controller.health().get(ALLOWED_TIMEOUT);
         assertThat(result.status()).isEqualTo(Http.Status.OK);
@@ -71,5 +67,9 @@ public class StatusControllerTest extends WithSunriseApplication {
         assertThat(result.status()).isEqualTo(Http.Status.SERVICE_UNAVAILABLE);
         assertThat(result.contentType()).isEqualTo(Http.MimeTypes.JSON);
         assertThat(contentAsString(result)).contains("\"healthy\" : false");
+    }
+
+    private static Application app(final SphereClient sphereClient) {
+        return app(new CtpClientTestModule(sphereClient));
     }
 }

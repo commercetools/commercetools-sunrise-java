@@ -40,7 +40,7 @@ public abstract class WithSunriseApplication {
         void apply(T t) throws Exception;
     }
 
-    protected final void run(final Application app, final String url, final CheckedConsumer<WSRequest> test) {
+    protected static void run(final Application app, final String url, final CheckedConsumer<WSRequest> test) {
         final int port = 3333;
         running(testServer(port, app), () -> {
             try {
@@ -51,7 +51,7 @@ public abstract class WithSunriseApplication {
         });
     }
 
-    protected final <C extends Controller> void run(final Application app, final Class<C> controllerClass,
+    protected static <C extends Controller> void run(final Application app, final Class<C> controllerClass,
                                                     final CheckedConsumer<C> test) {
         running(app, () -> {
             try {
@@ -62,26 +62,27 @@ public abstract class WithSunriseApplication {
         });
     }
 
-    protected final void setContext(final Http.Request request) {
+    protected static void setContext(final Http.Request request) {
         Http.Context.current.set(new Http.Context(request));
     }
 
-    protected Http.RequestBuilder requestBuilder() {
+    protected static Http.RequestBuilder requestBuilder() {
         return new Http.RequestBuilder().id(1L);
     }
 
-    protected Application app(final Module ... modules) {
-        final Module testModule = Modules.override(testModule()).with(modules);
-        return appBuilder().overrides(testModule).build();
+    protected static Application app(final Module ... modules) {
+        return appBuilder(modules).build();
     }
 
-    protected GuiceApplicationBuilder appBuilder() {
+    protected static GuiceApplicationBuilder appBuilder(final Module ... modules) {
+        final Module testModule = Modules.override(testModule()).with(modules);
         return new GuiceApplicationBuilder()
                 .in(Environment.simple())
-                .loadConfig(testConfiguration());
+                .loadConfig(testConfiguration())
+                .overrides(testModule);
     }
 
-    protected Module testModule() {
+    protected static Module testModule() {
         final List<Category> categories = readCtpObject("data/categories.json", CategoryQuery.resultTypeReference()).getResults();
         return Modules.combine(
                 new CtpClientTestModule(TestableSphereClient.ofEmptyResponse()),
@@ -92,11 +93,12 @@ public abstract class WithSunriseApplication {
                 new CategoryTreeTestModule(categories));
     }
 
-    protected Configuration testConfiguration() {
+    protected static Configuration testConfiguration() {
         final Configuration configuration = Configuration.load(new Environment(Mode.TEST));
         final Map<String, Object> additionalSettings = new HashMap<>();
         additionalSettings.put("application.metrics.enabled", false);
         additionalSettings.put("application.settingsWidget.enabled", false);
+        additionalSettings.put("application.auth.credentials", null);
         additionalSettings.put("play.crypto.secret", RandomStringUtils.randomAlphanumeric(5));
         return new Configuration(additionalSettings).withFallback(configuration);
     }
