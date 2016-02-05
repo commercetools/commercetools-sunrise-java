@@ -55,6 +55,8 @@ Learn how to modify this behaviour in _[Change i18n resource loaders](#change-i1
 
 This guide shows you how to modify the templates in an easy and convenient way. Note it is assuming the configuration has not been changed.
 
+######Modify a template
+
 Run Sunrise and open it in a browser to inspect the part of the code you want to change. In the website's source code you will find comments indicating the template source file containing each component. In the following example we can see that the template source file containing the logo is `common/logo.hbs`.
 
 ```html
@@ -113,6 +115,13 @@ If you run Sunrise and reload the page, the image has been effectively replaced 
 
 To learn how to write Handlebars templates, please check the [Handlebars.js](http://handlebarsjs.com/) documentation. In particular, the sections about [Expressions](http://handlebarsjs.com/expressions.html), [Built-In Helpers](http://handlebarsjs.com/builtin_helpers.html) and [@data Variables](http://handlebarsjs.com/reference.html#data).
 
+######Modify HTML `<head>`
+You may need to provide additional HTML `<meta>` tags or other kind of information to the HTML `<head>`. To do so, just add them to the template source file `conf/templates/common/additional-html-head.hbs`, as shown in the example:
+
+```hbs
+<link rel="stylesheet" href="/assets/public/stylesheets/sunrise.css"/> <!-- default sunrise CSS file -->
+<meta name="description" content="My description"> <!-- your meta tag -->
+```
 
 ####Customize Web Assets
 
@@ -148,15 +157,6 @@ If you want to provide your own JavaScript file instead, you just have to place 
 <script src="/assets/public/javascripts/sunrise.js"></script> <!-- default sunrise JS file -->
 <script src="/assets/public/javascripts/yourfile.js"></script> <!-- your JS file -->
 ```
-
-####Customize `<head>`
-You may need to provide additional HTML `<meta>` tags or other kind of information to the HTML `<head>`. To do so, just add them to the template source file `conf/templates/common/additional-html-head.hbs`, as shown in the example:
-
-```hbs
-<link rel="stylesheet" href="/assets/public/stylesheets/sunrise.css"/> <!-- default sunrise CSS file -->
-<meta name="description" content="My description"> <!-- your meta tag -->
-```
-
 
 ##Advanced Customization
 
