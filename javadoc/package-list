@@ -1,3 +1,5 @@
+basicauth
+categorytree
 common.cms
 common.contexts
 common.controllers
@@ -7,18 +9,19 @@ common.prices
 common.templates
 common.utils
 controllers
+ctpclient
 inject
 io.sphere.sdk.categories
 io.sphere.sdk.facets
 io.sphere.sdk.play.controllers
 io.sphere.sdk.play.metrics
 io.sphere.sdk.queries
-pages
 productcatalog.common
 productcatalog.home
 productcatalog.productdetail
 productcatalog.productoverview
 productcatalog.services
+reverserouter
 setupwidget.controllers
 setupwidget.models
 shoppingcart
