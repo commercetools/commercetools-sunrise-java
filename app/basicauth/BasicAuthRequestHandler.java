@@ -19,6 +19,7 @@ import static play.mvc.Http.HeaderNames.WWW_AUTHENTICATE;
  * Request handler that enables HTTP basic access authentication.
  */
 public class BasicAuthRequestHandler extends DefaultHttpRequestHandler {
+    private static final Logger.ALogger LOGGER = Logger.of(BasicAuthRequestHandler.class);
     private final Optional<BasicAuth> basicAuth;
 
     @Inject
@@ -53,10 +54,10 @@ public class BasicAuthRequestHandler extends DefaultHttpRequestHandler {
 
             private F.Promise<Result> authenticationResult(final Http.Context ctx, final boolean isAuthorized) throws Throwable {
                 if (isAuthorized) {
-                    Logger.debug("Authorized");
+                    LOGGER.debug("Authorized");
                     return delegate.call(ctx);
                 } else {
-                    Logger.debug("Unauthorized");
+                    LOGGER.info("Unauthorized");
                     return F.Promise.pure(unauthorized());
                 }
             }
