@@ -51,9 +51,9 @@ Learn how to modify this behaviour in _[Change i18n resource loaders](#change-i1
 
 ##Basic Customization
 
-####Customize HTML
+This guide shows you how to customize different parts of the template in an easy and convenient way. Note it is assuming the configuration has not been changed.
 
-This guide shows you how to modify the templates in an easy and convenient way. Note it is assuming the configuration has not been changed.
+####Customize HTML
 
 ######Modify a template
 
@@ -125,7 +125,7 @@ You may need to provide additional HTML `<meta>` tags or other kind of informati
 
 ####Customize Web Assets
 
-######Customize images
+######Change images
 If you want to provide your own images, you just have to place them inside the `public/images/` folder and modify the HTML accordingly as explained in the section _[Customize HTML](#customize-html)_. Following the logo example used in that section, you should obtain:
 
 ```hbs
@@ -138,7 +138,7 @@ If you want to provide your own images, you just have to place them inside the `
 
 Notice that the image path has been replaced to `public/images/`.
 
-######Customize CSS
+######Modify CSS
 Sunrise comes with the file `public/stylesheets/sunrise.css` where you can add your own CSS rules. As this is the last CSS file loaded of the website, from here you can override any previous rule set by the template.
 
 If you want to provide your own CSS file instead, you just have to place the file inside the `public/stylesheets/` folder and add the HTML `<link>` tag in the template source file `conf/templates/common/additional-html-head.hbs`, as shown in the example:
@@ -148,7 +148,7 @@ If you want to provide your own CSS file instead, you just have to place the fil
 <link rel="stylesheet" href="/assets/public/stylesheets/yourfile.css"/> <!-- your CSS file -->
 ```
 
-######Customize JavaScript
+######Modify JavaScript
 Sunrise comes with the file `public/javascripts/sunrise.js` where you can add your own JavaScript code.
 
 If you want to provide your own JavaScript file instead, you just have to place the file inside the `public/javascripts/` folder and add the HTML `<script>` tag in the template source file `conf/templates/common/additional-html-scripts.hbs`, as shown in the example:
