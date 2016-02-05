@@ -41,11 +41,12 @@ public abstract class WithSunriseApplication {
     }
 
     protected final void run(final Application app, final String url, final CheckedConsumer<WSRequest> test) {
-        running(testServer(3333, app), () -> {
+        final int port = 3333;
+        running(testServer(port, app), () -> {
             try {
-                test.apply(WS.url("http://localhost:3333" + url));
-            } catch (Throwable t) {
-                throw new RuntimeException(t);
+                test.apply(WS.url("http://localhost:" + port + url));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         });
     }
@@ -55,8 +56,8 @@ public abstract class WithSunriseApplication {
         running(app, () -> {
             try {
                 test.apply(app.injector().instanceOf(controllerClass));
-            } catch (Throwable t) {
-                throw new RuntimeException(t);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         });
     }
