@@ -14,6 +14,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
 
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+
     @Test
     public void allowsAccessWhenDisabled() throws Exception {
         run(appWithoutBasicAuth(), "/", request -> {
@@ -24,8 +27,7 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
 
     @Test
     public void unauthorizedWhenEnabled() throws Exception {
-        final BasicAuth basicAuth = BasicAuth.of("My Realm", "username:password");
-        run(appWithBasicAuth(basicAuth), "/", request -> {
+        run(appWithBasicAuth(), "/", request -> {
             final WSResponse response = request.get().get(ALLOWED_TIMEOUT);
             assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
         });
@@ -33,9 +35,8 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
 
     @Test
     public void authorizedWhenEnabledAndCredentialsProvided() throws Exception {
-        final BasicAuth basicAuth = BasicAuth.of("My Realm", "username:password");
-        run(appWithBasicAuth(basicAuth), "/", request -> {
-            final WSRequest authenticatedRequest = request.setAuth("username", "password", WSAuthScheme.BASIC);
+        run(appWithBasicAuth(), "/", request -> {
+            final WSRequest authenticatedRequest = request.setAuth(USERNAME, PASSWORD, WSAuthScheme.BASIC);
             final WSResponse response = authenticatedRequest.get().get(ALLOWED_TIMEOUT);
             assertThat(response.getStatus()).isEqualTo(Http.Status.OK);
         });
@@ -43,9 +44,8 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
 
     @Test
     public void unauthorizedWhenEnabledAndWrongCredentialsProvided() throws Exception {
-        final BasicAuth basicAuth = BasicAuth.of("My Realm", "username:password");
-        run(appWithBasicAuth(basicAuth), "/", request -> {
-            final WSRequest authenticatedRequest = request.setAuth("username", "wrong", WSAuthScheme.BASIC);
+        run(appWithBasicAuth(), "/", request -> {
+            final WSRequest authenticatedRequest = request.setAuth(USERNAME, "wrong", WSAuthScheme.BASIC);
             final WSResponse response = authenticatedRequest.get().get(ALLOWED_TIMEOUT);
             assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
         });
@@ -53,6 +53,10 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
 
     private Application appWithoutBasicAuth() {
         return appWithBasicAuth(null);
+    }
+
+    private Application appWithBasicAuth() {
+        return appWithBasicAuth(BasicAuth.of("My Realm", USERNAME + ":" + PASSWORD));
     }
 
     private Application appWithBasicAuth(final BasicAuth basicAuth) {
