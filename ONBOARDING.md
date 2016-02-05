@@ -17,19 +17,19 @@ META-INF
         +-- templates
 ```
 
-###Template
+####Template
 Sunrise uses [Handlebars.java](https://jknack.github.io/handlebars.java/) by default as a template engine.
 
 In order to find the corresponding template source file, it searches first inside the classpath `/templates`. If the file is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/templates`). This enables a practical way to override parts of the template without the need of replacing it completely, as we will see in the section _[Customize HTML](#customize-html)_.
 
 Learn how to modify this behaviour in _[Change template source loaders](#change-template-source-loaders)_.
 
-###Web Assets
+####Web Assets
 There are two types of routes that serve web assets in Sunrise:
 - `/assets/{css|js|fonts|img}/`: Serves files inside the `css`, `js`, `fonts` or `img` folder of the Template's Webjars. This route allows to access the web assets provided by the template.
 - `/assets/public/`: Serves files from the project's `public` folder. By placing web assets in this folder, you can easily extend Sunrise's functionality, as explained in _[Customize Web Assets](#customize-web-assets)_.
 
-###Internationalization
+####Internationalization
 Sunrise uses [YAML](http://www.yaml.org/) files by default to provide text in different languages. Translations are grouped according to the page or section they belong, which is known as bundles (e.g. `home`, `checkout`). Each YAML file contains the translated text for a particular language and bundle.
 
 The following structure would be used to have translations in German and English for the home and checkout bundles:
@@ -116,7 +116,7 @@ To learn how to write Handlebars templates, please check the [Handlebars.js](htt
 
 ####Customize Web Assets
 
-#####Customize images
+######Customize images
 If you want to provide your own images, you just have to place them inside the `public/images/` folder and modify the HTML accordingly as explained in the section _[Customize HTML](#customize-html)_. Following the logo example used in that section, you should obtain:
 
 ```hbs
@@ -129,7 +129,7 @@ If you want to provide your own images, you just have to place them inside the `
 
 Notice that the image path has been replaced to `public/images/`.
 
-#####Customize CSS
+######Customize CSS
 Sunrise comes with the file `public/stylesheets/sunrise.css` where you can add your own CSS rules. As this is the last CSS file loaded of the website, from here you can override any previous rule set by the template.
 
 If you want to provide your own CSS file instead, you just have to place the file inside the `public/stylesheets/` folder and add the HTML `<link>` tag in the template source file `conf/templates/common/additional-html-head.hbs`, as shown in the example:
@@ -139,7 +139,7 @@ If you want to provide your own CSS file instead, you just have to place the fil
 <link rel="stylesheet" href="/assets/public/stylesheets/yourfile.css"/> <!-- your CSS file -->
 ```
 
-#####Customize JavaScript
+######Customize JavaScript
 Sunrise comes with the file `public/javascripts/sunrise.js` where you can add your own JavaScript code.
 
 If you want to provide your own JavaScript file instead, you just have to place the file inside the `public/javascripts/` folder and add the HTML `<script>` tag in the template source file `conf/templates/common/additional-html-scripts.hbs`, as shown in the example:
