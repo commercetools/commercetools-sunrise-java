@@ -46,7 +46,7 @@ locales
 
 Similarly as it works with templates, the application tries to find the translated text first inside the classpath `/locales`. If that particular translation is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/locales`). This enables a practical way to override a particular translation without the need of replacing them all, as it is explained in the section _[Customize Internationalization](#customize-internationalization)_.
 
-Learn how to modify this behaviour in _[Change i18n resource loaders](#change-i18n-resource-loaders)_.
+Learn how to modify this behaviour in _[Change i18n resource loaders](#change-i18n-source-loaders)_.
 
 
 ##Basic Customization
