@@ -3,6 +3,7 @@ package inject;
 import com.google.inject.Provider;
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.ProjectContext;
+import inject.SunriseInitializationException;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.projects.Project;
 import io.sphere.sdk.projects.queries.ProjectGet;

@@ -1,7 +1,7 @@
-package inject;
+package categorytree;
 
 import com.google.inject.Provider;
-import controllers.RefreshableCategoryTree;
+import inject.SunriseInitializationException;
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.client.SphereClient;
 import play.Logger;

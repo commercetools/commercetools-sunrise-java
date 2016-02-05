@@ -64,12 +64,12 @@ lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
     Resolver.mavenLocal
   ),
   libraryDependencies ++= Seq (
+    filters,
     "io.commercetools" % "commercetools-sunrise-design" % sunriseDesignVersion,
     "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
     "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % sphereJvmSdkVersion,
     "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "4.0.3",
-    filters,
     "commons-beanutils" % "commons-beanutils" % "1.9.2",
     "commons-io" % "commons-io" % "2.4"
   ),
@@ -111,6 +111,7 @@ lazy val testScopes = "test,it,pt"
 lazy val testSettings = Defaults.itSettings ++ inConfig(PlayTest)(Defaults.testSettings) ++ testDirConfigs(IntegrationTest, "it") ++ testDirConfigs(PlayTest, "pt") ++ Seq (
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
   libraryDependencies ++= Seq (
+    javaWs % "pt",
     "org.assertj" % "assertj-core" % "3.0.0" % testScopes,
     PlayImport.component("play-test") % "it,pt"
   ),

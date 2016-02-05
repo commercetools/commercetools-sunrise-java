@@ -1,7 +1,8 @@
 package controllers;
 
 import common.controllers.TestableSphereClient;
-import common.controllers.WithSunriseApplication;
+import ctpclient.CtpClientTestModule;
+import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
@@ -21,33 +22,32 @@ public class StatusControllerTest extends WithSunriseApplication {
     @Test
     public void showsHealthyCtp() throws Exception {
         final PagedSearchResult<ProductProjection> result = readCtpObject("data/products-search.json", ProductProjectionSearch.resultTypeReference());
-        final Application app = applicationBuilder(TestableSphereClient.ofResponse(result)).build();
+        final Application app = app(TestableSphereClient.ofResponse(result));
         run(app, StatusController.class, this::rendersHealthyCtp);
     }
 
     @Test
     public void showsEmptyCtp() throws Exception {
         final PagedSearchResult<ProductProjection> result = readCtpObject("data/empty-products-search.json", ProductProjectionSearch.resultTypeReference());
-        final Application app = applicationBuilder(TestableSphereClient.ofResponse(result)).build();
+        final Application app = app(TestableSphereClient.ofResponse(result));
         run(app, StatusController.class, this::rendersUnhealthyCtp);
     }
 
     @Test
     public void showsUnhealthyCtp() throws Exception {
-        final Application app = applicationBuilder(TestableSphereClient.ofUnhealthyCtp()).build();
+        final Application app = app(TestableSphereClient.ofUnhealthyCtp());
         run(app, StatusController.class, this::rendersUnhealthyCtp);
     }
 
     @Test
     public void showsUnresponsiveCtp() throws Exception {
-        final Application app = applicationBuilder(TestableSphereClient.ofUnresponsiveCtp()).build();
+        final Application app = app(TestableSphereClient.ofUnresponsiveCtp());
         run(app, StatusController.class, this::rendersUnhealthyCtp);
     }
 
     @Test
     public void showsVersion() throws Exception {
-        final Application app = applicationBuilder(TestableSphereClient.ofEmptyResponse()).build();
-        run(app, StatusController.class, controller -> {
+        run(app(), StatusController.class, controller -> {
             final Result result = controller.version();
             assertThat(result.status()).isEqualTo(Http.Status.OK);
             assertThat(result.contentType()).isEqualTo(Http.MimeTypes.JSON);
@@ -67,5 +67,9 @@ public class StatusControllerTest extends WithSunriseApplication {
         assertThat(result.status()).isEqualTo(Http.Status.SERVICE_UNAVAILABLE);
         assertThat(result.contentType()).isEqualTo(Http.MimeTypes.JSON);
         assertThat(contentAsString(result)).contains("\"healthy\" : false");
+    }
+
+    private static Application app(final SphereClient sphereClient) {
+        return app(new CtpClientTestModule(sphereClient));
     }
 }

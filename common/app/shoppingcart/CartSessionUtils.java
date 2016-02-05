@@ -19,7 +19,7 @@ public final class CartSessionUtils {
     public static MiniCart getMiniCart(final Session session) {
         return Optional.ofNullable(session.get(CartSessionKeys.MINI_CART))
                 .map(miniCartAsJson -> SphereJsonUtils.readObject(miniCartAsJson, MiniCart.class))
-                .orElse(new MiniCart());
+                .orElseGet(MiniCart::new);
     }
 
     public static void overwriteCartSessionData(final Cart cart, final Session session, final UserContext userContext,

@@ -22,7 +22,8 @@ public class ProductListData extends Base {
                            final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
         this.list = productList.stream()
                 .map(product -> {
-                    final ProductVariant matchingVariant = product.findFirstMatchingVariant().orElse(product.getMasterVariant());
+                    final ProductVariant matchingVariant = product.findFirstMatchingVariant()
+                            .orElseGet(product::getMasterVariant);
                     return new ProductThumbnailData(product, matchingVariant, productDataConfig, userContext, reverseRouter, categoryTreeNew);
                 })
                 .collect(toList());

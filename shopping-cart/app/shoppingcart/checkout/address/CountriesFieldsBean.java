@@ -54,13 +54,13 @@ public class CountriesFieldsBean {
     private CountryCode selectedCountry(final @Nullable String countryCode, final UserContext userContext) {
         return Optional.ofNullable(countryCode)
                 .map(CountryCode::getByCode)
-                .orElse(userContext.country());
+                .orElseGet(userContext::country);
     }
 
     private CountryCode selectedCountry(final @Nullable Address address, final UserContext userContext) {
         return Optional.ofNullable(address)
                 .map(Address::getCountry)
-                .orElse(userContext.country());
+                .orElseGet(userContext::country);
     }
 
     private SelectableData selectableDataFromCountry(final CountryCode countryCode, final boolean isSelected, final Locale locale) {

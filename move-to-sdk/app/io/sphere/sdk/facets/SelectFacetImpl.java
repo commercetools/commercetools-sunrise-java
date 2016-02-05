@@ -1,13 +1,15 @@
 package io.sphere.sdk.facets;
 
-import io.sphere.sdk.search.*;
+import io.sphere.sdk.search.PagedSearchResult;
+import io.sphere.sdk.search.TermFacetAndFilterExpression;
+import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -52,7 +54,7 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
                 .map(result -> result.getTerms().stream()
                         .map(termStats -> FacetOption.ofTermStats(termStats, selectedValues))
                         .collect(toList()))
-                .orElse(emptyList());
+                .orElseGet(Collections::emptyList);
         return mapper.apply(facetOptions);
     }
 
@@ -69,7 +71,7 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     @Override
     public List<FacetOption> getLimitedOptions() {
         return limit.map(limit -> getOptions().stream().limit(limit).collect(toList()))
-                .orElse(getOptions());
+                .orElseGet(this::getOptions);
     }
 
     @Override

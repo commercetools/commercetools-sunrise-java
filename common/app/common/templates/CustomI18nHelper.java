@@ -31,7 +31,7 @@ final class CustomI18nHelper extends Base implements Helper<String> {
 
     private String resolveMessage(final Options options, final I18nIdentifier i18nIdentifier, final List<Locale> locales) {
         return resolvePluralMessage(options, i18nIdentifier, locales)
-                .orElse(i18n.get(locales, i18nIdentifier.bundle, i18nIdentifier.key)
+                .orElseGet(() -> i18n.get(locales, i18nIdentifier.bundle, i18nIdentifier.key)
                         .orElse(null));
     }
 

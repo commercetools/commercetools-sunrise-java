@@ -8,11 +8,10 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
@@ -38,7 +37,7 @@ public class BreadcrumbData {
         this.links = currentProduct.getCategories().stream().findFirst()
                 .flatMap(ref -> categoryTree.findById(ref.getId())
                                 .map(currentCategory -> createCategoryBreadcrumb(currentCategory, categoryTree, userContext, reverseRouter))
-                ).orElse(emptyList());
+                ).orElseGet(Collections::emptyList);
         this.links.add(createProductLinkData(currentProduct, currentVariant, userContext, reverseRouter));
     }
 

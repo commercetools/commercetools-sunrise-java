@@ -4,7 +4,6 @@ import io.sphere.sdk.models.Identifiable;
 
 import java.util.*;
 
-import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -70,7 +69,7 @@ public class CategoryTreeExtendedImpl implements CategoryTreeExtended {
     private List<Category> getSiblings(final Category category) {
         return Optional.ofNullable(category.getParent())
                 .map(categoryTree::findChildren)
-                .orElse(emptyList());
+                .orElseGet(Collections::emptyList);
     }
 
     private List<Category> getSubtreeAsFlatList(final Collection<Category> parentCategories) {

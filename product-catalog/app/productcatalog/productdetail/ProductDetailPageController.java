@@ -38,17 +38,17 @@ public class ProductDetailPageController extends ProductCatalogController {
         return productService().findProductBySlug(userContext.locale(), slug)
                 .flatMap(productOpt -> productOpt
                         .map(product -> renderProduct(userContext, slug, product, sku))
-                        .orElse(F.Promise.pure(notFound())));
+                        .orElseGet(() -> F.Promise.pure(notFound())));
     }
 
     private F.Promise<Result> renderProduct(final UserContext userContext, final String slug, final ProductProjection product, final String sku) {
-        return product.findVariantBySky(sku)
+        return product.findVariantBySku(sku)
                 .map(variant ->
                     productService().getSuggestions(product, categoryTree(), numSuggestions).map(suggestions -> {
                         final ProductDetailPageContent content = createPageContent(userContext, product, variant, suggestions);
                         return (Result) ok(renderPage(userContext, content));
                     })
-                ).orElse(redirectToMasterVariant(userContext, slug, product));
+                ).orElseGet(() -> redirectToMasterVariant(userContext, slug, product));
     }
 
     private F.Promise<Result> redirectToMasterVariant(final UserContext userContext, final String slug,

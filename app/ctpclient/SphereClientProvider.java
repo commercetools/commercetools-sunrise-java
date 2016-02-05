@@ -1,4 +1,4 @@
-package inject;
+package ctpclient;
 
 import com.google.inject.Provider;
 import io.sphere.sdk.client.*;

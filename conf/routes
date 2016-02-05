@@ -11,7 +11,7 @@ GET         /assets/public/*file                               controllers.Asset
 GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJarAssets.at(file)
 
 # Endpoint to manually refresh category tree (otherwise an app restart is required)
-GET         /categories/refresh                                @controllers.CategoriesRefreshController.refresh()
+GET         /categories/refresh                                @categorytree.CategoriesRefreshController.refresh()
 
 # Shows the deployed version, artifactId and GIT SHA
 GET         /version                                           @controllers.StatusController.version()
