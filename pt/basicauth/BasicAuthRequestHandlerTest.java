@@ -40,8 +40,8 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
     @Test
     public void authorizedWhenEnabledAndCredentialsProvided() throws Exception {
         run(appWithBasicAuth(), "/", request -> {
-            final WSRequest authenticatedRequest = request.setAuth(USERNAME, PASSWORD, WSAuthScheme.BASIC);
-            final WSResponse response = authenticatedRequest.get().get(ALLOWED_TIMEOUT);
+            final WSRequest authorizedRequest = request.setAuth(USERNAME, PASSWORD, WSAuthScheme.BASIC);
+            final WSResponse response = authorizedRequest.get().get(ALLOWED_TIMEOUT);
             assertThat(response.getStatus()).isEqualTo(Http.Status.OK);
         });
     }
@@ -49,8 +49,8 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
     @Test
     public void unauthorizedWhenEnabledAndWrongCredentialsProvided() throws Exception {
         run(appWithBasicAuth(), "/", request -> {
-            final WSRequest authenticatedRequest = request.setAuth(USERNAME, "wrong", WSAuthScheme.BASIC);
-            final WSResponse response = authenticatedRequest.get().get(ALLOWED_TIMEOUT);
+            final WSRequest unauthorizedRequest = request.setAuth(USERNAME, "wrong", WSAuthScheme.BASIC);
+            final WSResponse response = unauthorizedRequest.get().get(ALLOWED_TIMEOUT);
             assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
         });
     }
