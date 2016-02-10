@@ -140,7 +140,7 @@ public class SearchCriteria {
     private Facet<ProductProjection> colorFacet() {
         final String key = "color";
         final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "filters.color");
-        return SelectFacetBuilder.of(key, label, FACET.allVariants().attribute().ofLocalizableEnum("color").label().locale(userContext.locale()))
+        return SelectFacetBuilder.of(key, label, FACET.allVariants().attribute().ofLocalizedEnum("color").label().locale(userContext.locale()))
                 .mapper(AlphabeticallySortedFacetOptionMapper.of())
                 .selectedValues(getSelectedValues(key))
                 .type(SELECT_TWO_COLUMNS_DISPLAY)
