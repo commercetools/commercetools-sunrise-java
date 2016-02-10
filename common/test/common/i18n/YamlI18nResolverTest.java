@@ -51,7 +51,7 @@ public class YamlI18nResolverTest {
     }
 
     @Test
-    public void emptyWhenPathIsTooLong() throws Exception {
+    public void emptyWhenKeyIsNotALeaf() throws Exception {
         final Optional<String> message = YAML_I18N_RESOLVER.get(ENGLISH, "default", "too.long");
         assertThat(message).isEmpty();
     }
