@@ -110,6 +110,7 @@ lazy val testScopes = "test,it,pt"
 
 lazy val testSettings = Defaults.itSettings ++ inConfig(PlayTest)(Defaults.testSettings) ++ testDirConfigs(IntegrationTest, "it") ++ testDirConfigs(PlayTest, "pt") ++ Seq (
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
+  unmanagedBase in Test := baseDirectory.value / "test" / "lib",
   libraryDependencies ++= Seq (
     javaWs % "pt",
     "org.assertj" % "assertj-core" % "3.0.0" % testScopes,
@@ -187,5 +188,5 @@ copyI18nFiles := Def.inputTaskDyn {
 }.evaluated
 
 def runMainInCompile(dest: String, args: Seq[String]) = Def.taskDyn {
-  (runMain in Compile).toTask(s" tasks.TemplateFilesCopier $dest ${args.mkString(" ")}")
+  (runMain in Compile).toTask(s" tasks.WebjarsFilesCopier $dest ${args.mkString(" ")}")
 }
