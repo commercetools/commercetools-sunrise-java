@@ -2,6 +2,7 @@ package tasks;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 
 import java.io.File;
@@ -17,6 +18,7 @@ public class WebjarsFilesCopierTest {
     private static final String DEST_PATH = WebjarsFilesCopierTest.class.getClass().getResource("/tasks").getPath();
 
     @Before
+    @After
     public void setUp() throws Exception {
         FileUtils.cleanDirectory(new File(DEST_PATH));
     }
