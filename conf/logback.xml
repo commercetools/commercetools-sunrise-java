@@ -16,6 +16,7 @@
     <logger name="sphere" level="INFO" />
     <logger name="sphere.metrics.simple" level="DEBUG" />
     <logger name="productcatalog.services.ProductServiceImpl" level="TRACE" />
+    <logger name="tasks.WebjarsFilesCopier" level="INFO" />
 
     <root level="ERROR">
         <appender-ref ref="STDOUT" />

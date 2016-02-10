@@ -9,7 +9,7 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 public class ProductThumbnailData extends Base {
-    private ProductData product;
+    private ProductBean product;
     private boolean sale;
     private boolean _new;
 
@@ -18,14 +18,14 @@ public class ProductThumbnailData extends Base {
 
     public ProductThumbnailData(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
                                 final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
-        this.product = new ProductData(product, variant, productDataConfig, userContext, reverseRouter);
+        this.product = new ProductBean(product, variant, productDataConfig, userContext, reverseRouter);
         this._new = product.getCategories().stream()
                 .anyMatch(category -> categoryTreeNew.findById(category.getId()).isPresent());
         this.sale = calculateIsSale(this.product);
     }
 
-    private static boolean calculateIsSale(final ProductData productData) {
-        return productData != null && productData.getVariant() != null && productData.getVariant().getPriceOld() != null;
+    private static boolean calculateIsSale(final ProductBean productBean) {
+        return productBean != null && productBean.getVariant() != null && productBean.getVariant().getPriceOld() != null;
     }
 
     public boolean isSale() {
@@ -44,11 +44,11 @@ public class ProductThumbnailData extends Base {
         this._new = _new;
     }
 
-    public ProductData getProduct() {
+    public ProductBean getProduct() {
         return product;
     }
 
-    public void setProduct(final ProductData product) {
+    public void setProduct(final ProductBean product) {
         this.product = product;
     }
 }

@@ -21,7 +21,7 @@ public class CartLineItemBean extends MiniCartLineItemBean {
                             final UserContext userContext, final ReverseRouter reverseRouter) {
         super(lineItem, userContext, reverseRouter);
         this.attributes = lineItem.getVariant().getAttributes().stream()
-                .filter(attr -> productDataConfig.getAttributeWhiteList().contains(attr.getName()))
+                .filter(attr -> productDataConfig.getSelectableAttributes().contains(attr.getName()))
                 .map(attr -> new ProductAttributeBean(attr, productDataConfig.getMetaProductType(), userContext))
                 .collect(toList());
     }
