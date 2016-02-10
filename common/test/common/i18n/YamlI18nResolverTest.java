@@ -45,6 +45,12 @@ public class YamlI18nResolverTest {
     }
 
     @Test
+    public void resolvesLongSinglePath() throws Exception {
+        final Optional<String> message = YAML_I18N_RESOLVER.get(ENGLISH, "singlelong", "foo.bar.title");
+        assertThat(message).contains("correct");
+    }
+
+    @Test
     public void emptyWhenPathIsTooLong() throws Exception {
         final Optional<String> message = YAML_I18N_RESOLVER.get(ENGLISH, "default", "too.long");
         assertThat(message).isEmpty();
@@ -76,7 +82,7 @@ public class YamlI18nResolverTest {
 
     private static YamlI18nResolver yamlI18nResolver() {
         final List<Locale> supportedLocales = asList(ENGLISH, GERMAN);
-        final List<String> availableBundles = asList("default", "onlyenglish", "empty");
+        final List<String> availableBundles = asList("default", "onlyenglish", "empty", "singlelong");
         return YamlI18nResolver.of("i18n", supportedLocales, availableBundles);
     }
 }
