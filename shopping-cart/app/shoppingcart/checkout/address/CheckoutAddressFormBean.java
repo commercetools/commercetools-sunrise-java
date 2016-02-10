@@ -51,7 +51,6 @@ public class CheckoutAddressFormBean extends Base {
         shippingAddress.setFirstName(checkoutAddressFormData.getFirstNameShipping());
         shippingAddress.setLastName(checkoutAddressFormData.getLastNameShipping());
         shippingAddress.setStreetName(checkoutAddressFormData.getStreetNameShipping());
-        shippingAddress.setStreetNumber(checkoutAddressFormData.getStreetNameShipping());
         shippingAddress.setAdditionalStreetInfo(checkoutAddressFormData.getAdditionalStreetInfoShipping());
         shippingAddress.setCity(checkoutAddressFormData.getCityShipping());
         shippingAddress.setRegion(checkoutAddressFormData.getRegionShipping());
@@ -70,7 +69,6 @@ public class CheckoutAddressFormBean extends Base {
         billingAddress.setFirstName(checkoutAddressFormData.getFirstNameBilling());
         billingAddress.setLastName(checkoutAddressFormData.getLastNameBilling());
         billingAddress.setStreetName(checkoutAddressFormData.getStreetNameBilling());
-        billingAddress.setStreetNumber(checkoutAddressFormData.getStreetNameBilling());
         billingAddress.setAdditionalStreetInfo(checkoutAddressFormData.getAdditionalStreetInfoBilling());
         billingAddress.setCity(checkoutAddressFormData.getCityBilling());
         billingAddress.setRegion(checkoutAddressFormData.getRegionBilling());
