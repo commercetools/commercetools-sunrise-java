@@ -50,11 +50,14 @@ public class WebjarsFilesCopier {
     }
 
     private static void createDirectoryPath(final Path destPath) throws IOException {
-        final File parentDir = destPath.getParent().toFile();
-        if (!parentDir.exists()) {
-            final boolean mkdirsSucceeded = parentDir.mkdirs();
-            if (!mkdirsSucceeded) {
-                throw new IOException("Could not create missing directories in path \"" + destPath + "\"");
+        final Path parent = destPath.getParent();
+        if (parent != null) {
+            final File parentDir = parent.toFile();
+            if (!parentDir.exists()) {
+                final boolean mkdirsSucceeded = parentDir.mkdirs();
+                if (!mkdirsSucceeded) {
+                    throw new IOException("Could not create missing directories in path \"" + destPath + "\"");
+                }
             }
         }
     }
