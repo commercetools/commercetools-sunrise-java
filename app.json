@@ -15,8 +15,14 @@
       "description": "The client secret of your commercetools platform project."
     },
 
+    "DISPLAYED_ATTRIBUTES": {
+      "description": "The product attributes that are displayed. Enter the attribute keys separated by commas.",
+      "required": false
+    },
+
     "SELECTABLE_ATTRIBUTES": {
-      "description": "The product attributes that allow to identify and select a product variant in your project. Enter the attribute keys separated by commas."
+      "description": "The product attributes that allow to identify and select a product variant in your project (e.g. color, size). Enter the attribute keys separated by commas.",
+      "required" : false
     },
 
     "BASIC_AUTH_CREDENTIALS": {

@@ -18,9 +18,9 @@ import static common.utils.ProductAttributeUtils.attributeValueAsKey;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public class ProductData extends Base {
+public class ProductBean extends Base {
     // TODO ratingX
-    // TODO details
+    // TODO delivery
     private String productId;
     private int variantId;
     private String description;
@@ -29,11 +29,12 @@ public class ProductData extends Base {
     private ProductVariantBean variant;
     private Map<String, String> variants;
     private List<String> variantIdentifiers;
+    private ProductDetailsBean details;
 
-    public ProductData() {
+    public ProductBean() {
     }
 
-    public ProductData(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
+    public ProductBean(final ProductProjection product, final ProductVariant variant, final ProductDataConfig productDataConfig,
                        final UserContext userContext, final ReverseRouter reverseRouter) {
         this.productId = product.getId();
         this.variantId = variant.getId();
@@ -41,13 +42,15 @@ public class ProductData extends Base {
                 .flatMap(locText -> locText.find(userContext.locales()))
                 .orElse("");
         this.gallery = new ProductGalleryData(variant);
-        this.attributes = variant.getAttributes().stream()
-                .filter(attr -> productDataConfig.getAttributeWhiteList().contains(attr.getName()))
+        this.attributes = productDataConfig.getSelectableAttributes().stream()
+                .map(variant::getAttribute)
+                .filter(attr -> attr != null)
                 .map(attr -> new SelectableProductAttributeBean(attr, product, productDataConfig, userContext))
                 .collect(toList());
         this.variant = new ProductVariantBean(product, variant, userContext, reverseRouter);
         this.variants = createVariantsMap(product, productDataConfig, userContext);
-        this.variantIdentifiers = productDataConfig.getAttributeWhiteList();
+        this.variantIdentifiers = productDataConfig.getSelectableAttributes();
+        this.details = new ProductDetailsBean(variant, productDataConfig, userContext);
     }
 
     public String getProductId() {
@@ -114,11 +117,19 @@ public class ProductData extends Base {
         this.variantIdentifiers = variantIdentifiers;
     }
 
+    public ProductDetailsBean getDetails() {
+        return details;
+    }
+
+    public void setDetails(final ProductDetailsBean details) {
+        this.details = details;
+    }
+
     private static Map<String, String> createVariantsMap(final ProductProjection product, final ProductDataConfig productDataConfig,
                                                          final UserContext userContext) {
         final Map<String, String> variantsMap = new HashMap<>();
         product.getAllVariants().forEach(variant -> {
-            final String attrCombination = productDataConfig.getAttributeWhiteList().stream()
+            final String attrCombination = productDataConfig.getSelectableAttributes().stream()
                     .map(variant::getAttribute)
                     .filter(enabledAttr -> enabledAttr != null)
                     .map(enabledAttr -> {

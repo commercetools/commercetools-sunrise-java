@@ -60,7 +60,7 @@ public class SelectableProductAttributeBean extends ProductAttributeBean {
                                                                           final ProductDataConfig productDataConfig, final UserContext userContext) {
         final MetaProductType metaProductType = productDataConfig.getMetaProductType();
         final Map<String, List<String>> attrCombination = new HashMap<>();
-        productDataConfig.getAttributeWhiteList().stream()
+        productDataConfig.getSelectableAttributes().stream()
                 .filter(enabledAttrKey -> !fixedAttribute.getName().equals(enabledAttrKey))
                 .forEach(enabledAttrKey -> {
                     final List<String> allowedAttrValues = attributeCombination(enabledAttrKey, fixedAttribute, product, metaProductType, userContext);

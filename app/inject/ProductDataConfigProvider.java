@@ -17,7 +17,8 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 
 class ProductDataConfigProvider extends Base implements Provider<ProductDataConfig> {
-    private static final String CONFIG_ENABLED_ATTRS = "productData.enabledAttributes";
+    private static final String CONFIG_DISPLAYED_ATTRS = "productData.displayedAttributes";
+    private static final String CONFIG_SELECTABLE_ATTRS = "productData.selectableAttributes";
     private final Configuration configuration;
     private final SphereClient client;
 
@@ -29,9 +30,10 @@ class ProductDataConfigProvider extends Base implements Provider<ProductDataConf
 
     @Override
     public ProductDataConfig get() {
-        final List<String> attributesWhitelist = configuration.getStringList(CONFIG_ENABLED_ATTRS, emptyList());
-        Logger.debug("Provide ProductDataConfig: enabled attributes {}", attributesWhitelist);
-        return ProductDataConfig.of(getMetaProductType(), attributesWhitelist);
+        final List<String> displayedAttributes = configuration.getStringList(CONFIG_DISPLAYED_ATTRS, emptyList());
+        final List<String> selectableAttributes = configuration.getStringList(CONFIG_SELECTABLE_ATTRS, emptyList());
+        Logger.debug("Provide ProductDataConfig: displayed attributes {}, selectable attributes {}", displayedAttributes, selectableAttributes);
+        return ProductDataConfig.of(getMetaProductType(), displayedAttributes, selectableAttributes);
     }
 
     private MetaProductType getMetaProductType() {
