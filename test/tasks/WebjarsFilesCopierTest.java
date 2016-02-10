@@ -23,35 +23,40 @@ public class WebjarsFilesCopierTest {
 
     @Test
     public void copiesFile() throws Exception {
-        copy("file", copiedFile -> assertThat(copiedFile).exists().hasContent("level1"));
+        testCopy("file", copiedFile -> assertThat(copiedFile).exists().hasContent("level1"));
     }
 
     @Test
     public void copiesFileWithExistingDirectory() throws Exception {
-        copy("folder/file", copiedFile -> assertThat(copiedFile).exists().hasContent("level2"));
+        testCopy("folder/file", copiedFile -> assertThat(copiedFile).exists().hasContent("level2"));
     }
 
     @Test
     public void copiesFileWithNonExistingDirectory() throws Exception {
-        copy("folder/folder/file", copiedFile -> assertThat(copiedFile).exists().hasContent("level3"));
+        testCopy("folder/folder/file", copiedFile -> assertThat(copiedFile).exists().hasContent("level3"));
+    }
+
+    @Test
+    public void copiesFileFromAJarPackage() throws Exception {
+        testCopy("inside/file", copiedFile -> assertThat(copiedFile).exists().hasContent("inside jar"));
     }
 
     @Test
     public void failsSilentlyOnInvalidFile() throws Exception {
-        copy("wrong/file", copiedFile -> assertThat(copiedFile).doesNotExist());
+        testCopy("wrong/file", copiedFile -> assertThat(copiedFile).doesNotExist());
     }
 
     @Test
     public void copiesMultipleFiles() throws Exception {
-        copy(asList("file", "folder/file"), copiedFiles ->
+        testCopy(asList("file", "folder/file", "folder/folder/file"), copiedFiles ->
                 copiedFiles.forEach(copiedFile -> assertThat(copiedFile).exists()));
     }
 
-    private void copy(final String originPath, final Consumer<File> test) {
+    private void testCopy(final String originPath, final Consumer<File> test) {
         test.accept(copyFiles(singletonList(originPath)).get(0));
     }
 
-    private void copy(final List<String> originPaths, final Consumer<List<File>> test) {
+    private void testCopy(final List<String> originPaths, final Consumer<List<File>> test) {
         test.accept(copyFiles(originPaths));
     }
 
