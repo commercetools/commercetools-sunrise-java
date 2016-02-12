@@ -7,12 +7,12 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
 import io.sphere.sdk.models.LocalizedStringEntry;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.search.ProductProjectionFacetAndFilterSearchModel;
+import io.sphere.sdk.products.search.ProductProjectionFacetedSearchSearchModel;
 import io.sphere.sdk.products.search.ProductProjectionSearchModel;
 import io.sphere.sdk.products.search.ProductProjectionSortSearchModel;
-import io.sphere.sdk.search.FacetAndFilterExpression;
+import io.sphere.sdk.search.FacetedSearchExpression;
 import io.sphere.sdk.search.SortExpression;
-import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
+import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 import play.Configuration;
 import play.mvc.Http;
 
@@ -30,7 +30,7 @@ import static productcatalog.productoverview.SunriseFacetType.*;
 
 public class SearchCriteria {
     private static final ProductProjectionSortSearchModel SORT = ProductProjectionSearchModel.of().sort();
-    private static final ProductProjectionFacetAndFilterSearchModel FACET = ProductProjectionSearchModel.of().facetedSearch();
+    private static final ProductProjectionFacetedSearchSearchModel FACET = ProductProjectionSearchModel.of().facetedSearch();
     private static final SortExpression<ProductProjection> DEFAULT_SORT = SORT.createdAt().byDesc();
     private final Http.Request request;
     private final I18nResolver i18nResolver;
@@ -77,7 +77,7 @@ public class SearchCriteria {
         return new DisplaySelector(displayKey, pageSizeOptions, selectedDisplay());
     }
 
-    public List<FacetAndFilterExpression<ProductProjection>> selectedFacets() {
+    public List<FacetedSearchExpression<ProductProjection>> selectedFacets() {
         return boundFacets().stream()
                 .map(Facet::getFacetedSearchExpression)
                 .collect(toList());
@@ -152,7 +152,7 @@ public class SearchCriteria {
         return selectedCategory.map(category -> {
             final String key = "productType";
             final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "filters.productType");
-            final TermFacetAndFilterSearchModel<ProductProjection> model = TermFacetAndFilterSearchModel.of("variants.categories.id");
+            final TermFacetedSearchSearchModel<ProductProjection> model = TermFacetedSearchSearchModel.of("variants.categories.id");
             return SelectFacetBuilder.of(key, label, model)
                     .mapper(HierarchicalCategoryFacetOptionMapper.of(singletonList(category), subcategoryTreeFacet, userContext.locales()))
                     .selectedValues(selectedCategoryIds)
@@ -166,19 +166,19 @@ public class SearchCriteria {
     private SortOption<ProductProjection> newestSortOption() {
         final String value = "new";
         final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "sortSelector.new");
-        return sortOption(value, label, SORT.createdAt().byDesc());
+        return sortOption(value, label, SORT.createdAt().desc());
     }
 
     private SortOption<ProductProjection> priceAscSortOption() {
         final String value = "price-asc";
         final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "sortSelector.priceAsc");
-        return sortOption(value, label, SORT.allVariants().price().byAsc());
+        return sortOption(value, label, SORT.allVariants().price().asc());
     }
 
     private SortOption<ProductProjection> priceDescSortOption() {
         final String value = "price-desc";
         final String label = i18nResolver.getOrEmpty(userContext.locales(), "catalog", "sortSelector.priceDesc");
-        return sortOption(value, label, SORT.allVariants().price().byDesc());
+        return sortOption(value, label, SORT.allVariants().price().desc());
     }
 
     private SortOption<ProductProjection> sortOption(final String value, final String label, final SortExpression<ProductProjection> sortExpression) {

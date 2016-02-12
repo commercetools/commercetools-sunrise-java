@@ -6,7 +6,7 @@ import io.sphere.sdk.products.search.ProductProjectionSearchModel;
 import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
-import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
+import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 import org.junit.Test;
 
 import java.util.List;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SelectFacetBuilderTest {
     private static final String KEY = "single-select-facet";
     private static final String LABEL = "Select one option";
-    private static final TermFacetAndFilterSearchModel<ProductProjection> SEARCH_MODEL = ProductProjectionSearchModel.of().facetedSearch().categories().id();
+    private static final TermFacetedSearchSearchModel<ProductProjection> SEARCH_MODEL = ProductProjectionSearchModel.of().facetedSearch().categories().id();
     private static final TermFacetResult FACET_RESULT_WITH_THREE_TERMS = TermFacetResult.of(5L, 60L, 0L, asList(
             TermStats.of("one", 30L),
             TermStats.of("two", 20L),
