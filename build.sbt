@@ -14,7 +14,7 @@ organization := "io.commercetools"
 
 lazy val sunriseDesignVersion = "0.52.0"
 
-lazy val sphereJvmSdkVersion = "1.0.0-M26"
+lazy val jvmSdkVersion = "1.0.0-RC1"
 
 lazy val jacksonVersion = "2.6.0"
 
@@ -66,9 +66,9 @@ lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
   libraryDependencies ++= Seq (
     filters,
     "io.commercetools" % "commercetools-sunrise-design" % sunriseDesignVersion,
-    "io.sphere.sdk.jvm" % "sphere-models" % sphereJvmSdkVersion,
-    "io.sphere.sdk.jvm" % "sphere-play-2_4-java-client_2.10" % sphereJvmSdkVersion,
-    "org.webjars" % "webjars-play_2.10" % "2.4.0-1",
+    "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
+    "com.commercetools.sdk.jvm.scala-add-ons" %% "commercetools-play-2_4-java-client" % jvmSdkVersion,
+    "org.webjars" %% "webjars-play" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "2.3.2",
     "commons-beanutils" % "commons-beanutils" % "1.9.2",
     "commons-io" % "commons-io" % "2.4"

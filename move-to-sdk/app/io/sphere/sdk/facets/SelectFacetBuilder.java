@@ -3,7 +3,7 @@ package io.sphere.sdk.facets;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Builder;
 import io.sphere.sdk.search.TermFacetResult;
-import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
+import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -14,7 +14,7 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
     private final String key;
     private final String label;
     private FacetType type = DefaultFacetType.SELECT;
-    private final TermFacetAndFilterSearchModel<T> searchModel;
+    private final TermFacetedSearchSearchModel<T> searchModel;
     private boolean countHidden = false;
     private boolean multiSelect = true;
     private boolean matchingAll = false;
@@ -24,7 +24,7 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
     private Optional<Long> limit = Optional.empty();
     private FacetOptionMapper mapper = v -> v;
 
-    private SelectFacetBuilder(final String key, final String label, final TermFacetAndFilterSearchModel<T> searchModel) {
+    private SelectFacetBuilder(final String key, final String label, final TermFacetedSearchSearchModel<T> searchModel) {
         this.key = key;
         this.label = label;
         this.searchModel = searchModel;
@@ -125,11 +125,11 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
         return mapper;
     }
 
-    public TermFacetAndFilterSearchModel<T> getSearchModel() {
+    public TermFacetedSearchSearchModel<T> getSearchModel() {
         return searchModel;
     }
 
-    public static <T> SelectFacetBuilder<T> of(final String key, final String label, final TermFacetAndFilterSearchModel<T> searchModel) {
+    public static <T> SelectFacetBuilder<T> of(final String key, final String label, final TermFacetedSearchSearchModel<T> searchModel) {
         return new SelectFacetBuilder<>(key, label, searchModel);
     }
 

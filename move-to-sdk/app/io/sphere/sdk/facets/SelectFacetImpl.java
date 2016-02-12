@@ -1,9 +1,9 @@
 package io.sphere.sdk.facets;
 
 import io.sphere.sdk.search.PagedSearchResult;
-import io.sphere.sdk.search.TermFacetAndFilterExpression;
 import io.sphere.sdk.search.TermFacetResult;
-import io.sphere.sdk.search.model.TermFacetAndFilterSearchModel;
+import io.sphere.sdk.search.TermFacetedSearchExpression;
+import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -29,7 +29,7 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     private final FacetOptionMapper mapper;
 
     protected SelectFacetImpl(final String key, final String label, final boolean countHidden, final FacetType type,
-                              final TermFacetAndFilterSearchModel<T> searchModel, final boolean multiSelect, final boolean matchingAll,
+                              final TermFacetedSearchSearchModel<T> searchModel, final boolean multiSelect, final boolean matchingAll,
                               final List<String> selectedValues, @Nullable final TermFacetResult facetResult,
                               @Nullable final Long threshold, @Nullable final Long limit, final FacetOptionMapper mapper) {
         super(key, label, countHidden, type, searchModel);
@@ -110,14 +110,14 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     }
 
     @Override
-    public TermFacetAndFilterExpression<T> getFacetedSearchExpression() {
-        final TermFacetAndFilterExpression<T> facetedSearchExpr;
+    public TermFacetedSearchExpression<T> getFacetedSearchExpression() {
+        final TermFacetedSearchExpression<T> facetedSearchExpr;
         if (selectedValues.isEmpty()) {
             facetedSearchExpr = searchModel.allTerms();
         } else if (matchingAll) {
-            facetedSearchExpr = searchModel.byAll(selectedValues);
+            facetedSearchExpr = searchModel.containsAll(selectedValues);
         } else {
-            facetedSearchExpr = searchModel.byAny(selectedValues);
+            facetedSearchExpr = searchModel.containsAny(selectedValues);
         }
         return facetedSearchExpr;
     }
