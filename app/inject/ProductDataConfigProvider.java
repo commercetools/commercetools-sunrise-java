@@ -18,7 +18,8 @@ import static java.util.Collections.emptyList;
 
 class ProductDataConfigProvider extends Base implements Provider<ProductDataConfig> {
     private static final String CONFIG_DISPLAYED_ATTRS = "productData.displayedAttributes";
-    private static final String CONFIG_SELECTABLE_ATTRS = "productData.selectableAttributes";
+    private static final String CONFIG_SOFT_SELECTABLE_ATTRS = "productData.softSelectableAttributes";
+    private static final String CONFIG_HARD_SELECTABLE_ATTRS = "productData.hardSelectableAttributes";
     private final Configuration configuration;
     private final SphereClient client;
 
@@ -31,9 +32,11 @@ class ProductDataConfigProvider extends Base implements Provider<ProductDataConf
     @Override
     public ProductDataConfig get() {
         final List<String> displayedAttributes = configuration.getStringList(CONFIG_DISPLAYED_ATTRS, emptyList());
-        final List<String> selectableAttributes = configuration.getStringList(CONFIG_SELECTABLE_ATTRS, emptyList());
-        Logger.debug("Provide ProductDataConfig: displayed attributes {}, selectable attributes {}", displayedAttributes, selectableAttributes);
-        return ProductDataConfig.of(getMetaProductType(), displayedAttributes, selectableAttributes);
+        final List<String> softSelectableAttributes = configuration.getStringList(CONFIG_SOFT_SELECTABLE_ATTRS, emptyList());
+        final List<String> hardSelectableAttributes = configuration.getStringList(CONFIG_HARD_SELECTABLE_ATTRS, emptyList());
+        Logger.debug("Provide ProductDataConfig: displayed attributes {}, soft selectable attributes {}, hard selectable attributes {}",
+                displayedAttributes, softSelectableAttributes, hardSelectableAttributes);
+        return ProductDataConfig.of(getMetaProductType(), displayedAttributes, softSelectableAttributes, hardSelectableAttributes);
     }
 
     private MetaProductType getMetaProductType() {

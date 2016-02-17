@@ -23,14 +23,6 @@ $("form#form-filter-products .facet-clear-btn, form#form-filter-products-mobile 
     input.closest("form").submit();
 });
 
-//function changeVariant(select) {
-//    var selectedOption = select.options[select.selectedIndex];
-//    if (selectedOption.value) {
-//        window.location = selectedOption.value;
-//    }
-//}
-
-
 
 //$("img.pop-product-image").error(function(){
 //    $(this).attr('src', '/assets/public/images/empty-pop.jpg');

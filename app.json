@@ -16,12 +16,17 @@
     },
 
     "DISPLAYED_ATTRIBUTES": {
-      "description": "The product attributes that are displayed. Enter the attribute keys separated by commas.",
+      "description": "Product attribute list that is displayed for a specific product variant (this does not allow to select different product variants, please check soft/hard selectable attributes for that purpose). Enter the attribute keys separated by commas.",
       "required": false
     },
 
-    "SELECTABLE_ATTRIBUTES": {
-      "description": "The product attributes that allow to identify and select a product variant in your project (e.g. color, size). Enter the attribute keys separated by commas.",
+    "HARD_SELECTABLE_ATTRIBUTES": {
+      "description": "Product attribute list that allows to select a clearly different variant of your product, which requires to load the new product information associated with it (e.g. color). Enter the attribute keys separated by commas.",
+      "required" : false
+    },
+
+    "SOFT_SELECTABLE_ATTRIBUTES": {
+      "description": "Product attribute list that allows to select a specific variant, but does not require to change the displayed product information (e.g. size). Enter the attribute keys separated by commas.",
       "required" : false
     },
 
