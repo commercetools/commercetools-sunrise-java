@@ -10,7 +10,7 @@ import ReleaseTransformations._
 
 name := "commercetools-sunrise"
 
-organization := "io.commercetools"
+organization := "io.commercetools.sunrise"
 
 lazy val sunriseDesignVersion = "0.52.0"
 
