@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import static common.JsonUtils.readCtpObject;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 public class CtpModelsTestModule extends AbstractModule {
 
@@ -36,6 +37,6 @@ public class CtpModelsTestModule extends AbstractModule {
     protected ProductDataConfig injectedProductDataConfig() {
         final PagedQueryResult<ProductType> result = readCtpObject("data/product-types.json", ProductTypeQuery.resultTypeReference());
         final MetaProductType metaProductType = MetaProductType.of(result.getResults());
-        return ProductDataConfig.of(metaProductType, asList("foo", "bar"), asList("foo", "bar"));
+        return ProductDataConfig.of(metaProductType, asList("foo", "bar"), singletonList("foo"), singletonList("bar"));
     }
 }
