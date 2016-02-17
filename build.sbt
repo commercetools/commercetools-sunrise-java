@@ -12,7 +12,7 @@ name := "commercetools-sunrise"
 
 organization := "io.commercetools"
 
-lazy val sunriseDesignVersion = "0.52.0"
+lazy val sunriseDesignVersion = "0.54.0"
 
 lazy val jvmSdkVersion = "1.0.0-RC1"
 
@@ -59,13 +59,13 @@ lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   resolvers ++= Seq (
     Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots"),
-    Resolver.bintrayRepo("commercetools", "maven"),
-    Resolver.mavenLocal
+    Resolver.bintrayRepo("commercetools", "maven")
+    //,Resolver.sonatypeRepo("snapshots")
+    //,Resolver.mavenLocal
   ),
   libraryDependencies ++= Seq (
     filters,
-    "io.commercetools" % "commercetools-sunrise-design" % sunriseDesignVersion,
+    "io.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseDesignVersion,
     "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
     "com.commercetools.sdk.jvm.scala-add-ons" %% "commercetools-play-2_4-java-client" % jvmSdkVersion,
     "org.webjars" %% "webjars-play" % "2.4.0-1",
@@ -74,6 +74,7 @@ lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
     "commons-io" % "commons-io" % "2.4"
   ),
   dependencyOverrides ++= Set (
+    "org.slf4j" % "slf4j-api" % "1.7.15",
     "com.google.guava" % "guava" % "18.0",
     "commons-io" % "commons-io" % "2.4",
     "commons-logging" % "commons-logging" % "1.1.3",

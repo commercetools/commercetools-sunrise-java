@@ -27,7 +27,7 @@ public class ProductBean extends Base {
     private ProductGalleryData gallery;
     private List<SelectableProductAttributeBean> attributes;
     private ProductVariantBean variant;
-    private Map<String, String> variants;
+    private Map<String, ProductVariantReferenceBean> variants;
     private List<String> variantIdentifiers;
     private ProductDetailsBean details;
 
@@ -42,15 +42,15 @@ public class ProductBean extends Base {
                 .flatMap(locText -> locText.find(userContext.locales()))
                 .orElse("");
         this.gallery = new ProductGalleryData(variant);
+        this.variant = new ProductVariantBean(product, variant, userContext, reverseRouter);
+        this.details = new ProductDetailsBean(variant, productDataConfig, userContext);
+        this.variantIdentifiers = productDataConfig.getSelectableAttributes();
+        this.variants = createVariantsMap(product, productDataConfig, userContext, reverseRouter);
         this.attributes = productDataConfig.getSelectableAttributes().stream()
                 .map(variant::getAttribute)
                 .filter(attr -> attr != null)
                 .map(attr -> new SelectableProductAttributeBean(attr, product, productDataConfig, userContext))
                 .collect(toList());
-        this.variant = new ProductVariantBean(product, variant, userContext, reverseRouter);
-        this.variants = createVariantsMap(product, productDataConfig, userContext);
-        this.variantIdentifiers = productDataConfig.getSelectableAttributes();
-        this.details = new ProductDetailsBean(variant, productDataConfig, userContext);
     }
 
     public String getProductId() {
@@ -101,11 +101,11 @@ public class ProductBean extends Base {
         this.variant = variant;
     }
 
-    public Map<String, String> getVariants() {
+    public Map<String, ProductVariantReferenceBean> getVariants() {
         return variants;
     }
 
-    public void setVariants(final Map<String, String> variants) {
+    public void setVariants(final Map<String, ProductVariantReferenceBean> variants) {
         this.variants = variants;
     }
 
@@ -125,9 +125,11 @@ public class ProductBean extends Base {
         this.details = details;
     }
 
-    private static Map<String, String> createVariantsMap(final ProductProjection product, final ProductDataConfig productDataConfig,
-                                                         final UserContext userContext) {
-        final Map<String, String> variantsMap = new HashMap<>();
+    private static Map<String, ProductVariantReferenceBean> createVariantsMap(final ProductProjection product,
+                                                                              final ProductDataConfig productDataConfig,
+                                                                              final UserContext userContext,
+                                                                              final ReverseRouter reverseRouter) {
+        final Map<String, ProductVariantReferenceBean> variantsMap = new HashMap<>();
         product.getAllVariants().forEach(variant -> {
             final String attrCombination = productDataConfig.getSelectableAttributes().stream()
                     .map(variant::getAttribute)
@@ -137,7 +139,7 @@ public class ProductBean extends Base {
                         return attributeValueAsKey(enabledAttrValue);
                     })
                     .collect(joining("-"));
-            variantsMap.put(attrCombination, variant.getId().toString());
+            variantsMap.put(attrCombination, new ProductVariantReferenceBean(variant, product, userContext, reverseRouter));
         });
         return variantsMap;
     }

@@ -13,11 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static common.utils.ProductAttributeUtils.attributeValueAsKey;
 import static common.utils.ProductAttributeUtils.attributeValue;
+import static common.utils.ProductAttributeUtils.attributeValueAsKey;
 import static java.util.stream.Collectors.toList;
 
 public class SelectableProductAttributeBean extends ProductAttributeBean {
+    private boolean reload;
     private List<SelectableData> list = new ArrayList<>();
     private Map<String, Map<String, List<String>>> selectData = new HashMap<>();
 
@@ -27,6 +28,7 @@ public class SelectableProductAttributeBean extends ProductAttributeBean {
     public SelectableProductAttributeBean(final Attribute selectedAttribute, final ProductProjection product,
                                           final ProductDataConfig productDataConfig, final UserContext userContext) {
         super(selectedAttribute, productDataConfig.getMetaProductType(), userContext);
+        this.reload = productDataConfig.getHardSelectableAttributes().contains(selectedAttribute.getName());
         final MetaProductType metaProductType = productDataConfig.getMetaProductType();
         product.getAllVariants().stream()
                 .map(variant -> variant.getAttribute(selectedAttribute.getName()))
@@ -38,6 +40,14 @@ public class SelectableProductAttributeBean extends ProductAttributeBean {
                     this.list.add(new SelectableData(attrOptionValue, attrOptionValueKey, attrOption.equals(selectedAttribute)));
                     this.selectData.put(attrOptionValue, allowedAttributeCombinations(attrOption, product, productDataConfig, userContext));
                 });
+    }
+
+    public boolean isReload() {
+        return reload;
+    }
+
+    public void setReload(final boolean reload) {
+        this.reload = reload;
     }
 
     public List<SelectableData> getList() {
