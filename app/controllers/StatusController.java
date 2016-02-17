@@ -1,5 +1,6 @@
 package controllers;
 
+import common.actions.NoCache;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import io.sphere.sdk.products.ProductProjection;
@@ -22,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * Controller for health report.
  */
+@NoCache
 @Singleton
 public class StatusController extends SunriseController {
     private final Application application;

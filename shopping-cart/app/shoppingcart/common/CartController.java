@@ -1,6 +1,7 @@
 package shoppingcart.common;
 
 import com.neovisionaries.i18n.CountryCode;
+import common.actions.NoCache;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import static java.util.Arrays.asList;
 
+@NoCache
 public abstract class CartController extends SunriseController {
     public CartController(final ControllerDependency controllerDependency) {
         super(controllerDependency);

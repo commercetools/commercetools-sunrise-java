@@ -2,8 +2,8 @@ package shoppingcart.cartdetail;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
-import common.models.ProductDataConfig;
 import common.controllers.SunrisePageData;
+import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
@@ -17,8 +17,8 @@ import play.filters.csrf.RequireCSRFCheck;
 import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
-import shoppingcart.common.CartController;
 import shoppingcart.CartSessionUtils;
+import shoppingcart.common.CartController;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
