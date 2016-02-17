@@ -6,7 +6,7 @@
             <level>WARN</level>
         </filter>
         <encoder>
-            <pattern>%date %level [%thread] %logger %msg%n</pattern>
+            <pattern>%date %level [%thread] %logger - %msg%n%xException</pattern>
         </encoder>
     </appender>
 
