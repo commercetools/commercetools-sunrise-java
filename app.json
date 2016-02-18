@@ -82,15 +82,15 @@
     },
 
     "COUNTRIES": {
-      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE COUNTRIES DEFINED IN YOUR PROJECT. If you want to replace them, enter the countries as ISO country codes (e.g. DE) separated by commas. Default country first.",
+      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE COUNTRIES DEFINED IN YOUR COMMERCETOOLS PROJECT. If you want to replace them, enter the countries as ISO country codes (e.g. DE) separated by commas. Default country first.",
       "required": false
     },
     "CURRENCIES": {
-      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE CURRENCIES DEFINED IN YOUR PROJECT. If you want to replace them, enter the currencies as ISO currency codes (e.g. EUR) separated by commas. Default currency first.",
+      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE CURRENCIES DEFINED IN YOUR COMMERCETOOLS PROJECT. If you want to replace them, enter the currencies as ISO currency codes (e.g. EUR) separated by commas. Default currency first.",
       "required": false
     },
     "LANGUAGES": {
-      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE LANGUAGES DEFINED IN YOUR PROJECT. If you want to replace them, enter the languages as language tags (e.g. en-UK) separated by commas. Default language first.",
+      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE LANGUAGES DEFINED IN YOUR COMMERCETOOLS PROJECT. If you want to replace them, enter the languages as language tags (e.g. en-UK) separated by commas. Default language first.",
       "required": false
     },
 
