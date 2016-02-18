@@ -30,33 +30,6 @@
       "required" : false
     },
 
-    "BASIC_AUTH_CREDENTIALS": {
-      "description": "Leave empty if you do not want to enable basic access authentication! If you only want authorized users to access your website, please enter here the required credentials separated by colon ':'. For example, for a username 'john' and password 'secret', enter 'john:secret'",
-      "required": false
-    },
-    "BASIC_AUTH_REALM": {
-      "description": "Authentication realm that identifies your application. This is only necessary when basic authentication is enabled.",
-      "value": "Sunrise Demo",
-      "required": false
-    },
-    "APPLICATION_SECRET": {
-      "description": "The secret key is used to secure cryptographics functions. Anyone that can get access to the application secret will be able to generate any session they please, effectively allowing them to log in to your system as any user they please. If you deploy your application to several instances be sure to use the same key.",
-      "generator": "secret"
-    },
-
-    "COUNTRIES": {
-      "description": "The application uses the countries defined in your project. If you want to replace them, enter the list of countries as ISO country codes (e.g. DE). Default country first.",
-      "required": false
-    },
-    "CURRENCIES": {
-      "description": "The application uses the currencies defined in your project. If you want to replace them, enter the list of currencies as ISO currency codes (e.g. EUR). Default currency first.",
-      "required": false
-    },
-    "LANGUAGES": {
-      "description": "The application uses the languages defined in your project. If you want to replace them, enter the list of languages as language tags (e.g. en-UK). Default language first.",
-      "required": false
-    },
-
     "SALES_CATEGORY": {
       "description": "The sales category in your project. Enter the category external ID.",
       "required": false
@@ -73,32 +46,67 @@
 
     "HOME_SUGGESTIONS_SIZE": {
       "description": "The amount of products displayed in the home page suggestions.",
+      "value": 4,
       "required": false
     },
     "PRODUCT_SUGGESTIONS_SIZE": {
       "description": "The amount of products displayed for a product's suggestions.",
+      "value": 4,
       "required": false
     },
 
     "SEARCH_FIELD": {
       "description": "Field in the URL query string containing the searched term.",
-      "value": "q"
+      "value": "q",
+      "required": false
     },
     "SORT_FIELD": {
       "description": "Field in the URL query string containing the sorting criteria.",
-      "value": "sort"
+      "value": "sort",
+      "required": false
     },
     "PRODUCTS_PER_PAGE_FIELD": {
       "description": "Field in the URL query string containing the amount of products per page.",
-      "value": "display"
+      "value": "display",
+      "required": false
     },
     "PRODUCTS_PER_PAGE_OPTIONS": {
       "description": "Available options to select the amount of products per page. Enter the values separated by commas.",
-      "value": "24, 48"
+      "value": "24, 48",
+      "required": false
     },
     "PRODUCTS_PER_PAGE_DEFAULT": {
       "description": "The selected amount of products per page by default.",
-      "value": "24"
+      "value": "24",
+      "required": false
+    },
+
+    "COUNTRIES": {
+      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE COUNTRIES DEFINED IN YOUR PROJECT. In case you want to replace them, enter the list of countries as ISO country codes (e.g. DE). Default country first.",
+      "required": false
+    },
+    "CURRENCIES": {
+      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE CURRENCIES DEFINED IN YOUR PROJECT. In case you want to replace them, enter the list of currencies as ISO currency codes (e.g. EUR). Default currency first.",
+      "required": false
+    },
+    "LANGUAGES": {
+      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE LANGUAGES DEFINED IN YOUR PROJECT. In case you want to replace them, enter the list of languages as language tags (e.g. en-UK). Default language first.",
+      "required": false
+    },
+
+
+    "BASIC_AUTH_CREDENTIALS": {
+      "description": "Leave empty if you do not want to enable basic access authentication! If you only want authorized users to access your website, please enter here the required credentials separated by colon ':'. For example, for a username 'john' and password 'secret', enter 'john:secret'",
+      "required": false
+    },
+    "BASIC_AUTH_REALM": {
+      "description": "Authentication realm that identifies your application. This is only necessary when basic authentication is enabled.",
+      "value": "Sunrise Demo",
+      "required": false
+    },
+    "APPLICATION_SECRET": {
+      "description": "The secret key is used to secure cryptographics functions. Anyone that can get access to the application secret will be able to generate any session they please, effectively allowing them to log in to your system as any user they please. If you deploy your application to several instances be sure to use the same key.",
+      "generator": "secret"
     }
   }
 }
