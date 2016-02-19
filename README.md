@@ -56,7 +56,6 @@ $ docker run -it --rm -p 9000:9000 sphereio/sunrise
 
 ## Related projects
 
-* Template sources: https://github.com/sphereio/commercetools-sunrise-design
+* Theme (layout and design sources): https://github.com/sphereio/commercetools-sunrise-theme
 * Data: https://github.com/sphereio/commercetools-sunrise-data
 * Commercetools' JVM SDK: https://github.com/sphereio/sphere-jvm-sdk
-* Automated web tests: https://github.com/sphereio/commercetools-sunrise-scenarios
