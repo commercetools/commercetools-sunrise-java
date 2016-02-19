@@ -41,7 +41,7 @@ public class NavMenuData extends Base {
                                                    @Nullable final String saleCategoryExtId) {
         final CategoryData categoryData = new CategoryData();
         categoryData.setText(category.getName().find(userContext.locales()).orElse(""));
-        categoryData.setUrl(reverseRouter.categoryUrlOrEmpty(userContext.locale(), category));
+        categoryData.setUrl(reverseRouter.showCategoryUrlOrEmpty(userContext.locale(), category));
         categoryData.setSale(Optional.ofNullable(category.getExternalId())
                 .map(id -> id.equals(saleCategoryExtId))
                 .orElse(false));

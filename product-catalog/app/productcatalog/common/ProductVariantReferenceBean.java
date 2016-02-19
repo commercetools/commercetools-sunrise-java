@@ -16,7 +16,7 @@ public class ProductVariantReferenceBean extends Base {
     public ProductVariantReferenceBean(final ProductVariant productVariant, final ProductProjection product,
                                        final UserContext userContext, final ReverseRouter reverseRouter) {
         this.id = productVariant.getId();
-        this.url = reverseRouter.productUrlOrEmpty(userContext.locale(), product, productVariant);
+        this.url = reverseRouter.showProductUrlOrEmpty(userContext.locale(), product, productVariant);
     }
 
     public int getId() {

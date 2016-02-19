@@ -88,19 +88,19 @@ public abstract class SunriseController extends ShopController {
 
     private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
         final PageMeta pageMeta = new PageMeta();
-        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());
+        pageMeta.setAssetsPath(reverseRouter().themeAssets("").url());
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
-        pageMeta.addHalLink(reverseRouter().home(language), "home", "continueShopping")
-                .addHalLink(reverseRouter().search(language), "search")
+        pageMeta.addHalLink(reverseRouter().showHome(language), "home", "continueShopping")
+                .addHalLink(reverseRouter().processSearchProductsForm(language), "search")
                 .addHalLink(reverseRouter().changeLanguage(), "selectLanguage")
                 .addHalLink(reverseRouter().changeCountry(language), "selectCountry")
 
                 .addHalLink(reverseRouter().showCart(language), "cart")
-                .addHalLink(reverseRouter().productToCartForm(language), "addToCart")
-                .addHalLink(reverseRouter().processChangeLineItemQuantity(language), "changeLineItem")
-                .addHalLink(reverseRouter().processDeleteLineItem(language), "deleteLineItem")
+                .addHalLink(reverseRouter().processAddProductToCartForm(language), "addToCart")
+                .addHalLink(reverseRouter().processChangeLineItemQuantityForm(language), "changeLineItem")
+                .addHalLink(reverseRouter().processDeleteLineItemForm(language), "deleteLineItem")
 
                 .addHalLink(reverseRouter().showCheckoutAddressesForm(language), "checkout", "editShippingAddress", "editBillingAddress")
                 .addHalLink(reverseRouter().processCheckoutAddressesForm(language), "checkoutAddressSubmit")
@@ -110,7 +110,7 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
-        newCategory().flatMap(nc -> reverseRouter().category(userContext.locale(), nc))
+        newCategory().flatMap(nc -> reverseRouter().showCategory(userContext.locale(), nc))
                 .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
 
         return pageMeta;

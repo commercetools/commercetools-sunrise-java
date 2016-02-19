@@ -55,7 +55,7 @@ public class ProductDetailPageController extends ProductCatalogController {
                                                       final ProductProjection product) {
         final String masterVariantSku = product.getMasterVariant().getSku();
         final String languageTag = userContext.locale().toLanguageTag();
-        return F.Promise.pure(redirect(reverseRouter().product(languageTag, slug, masterVariantSku)));
+        return F.Promise.pure(redirect(reverseRouter().showProduct(languageTag, slug, masterVariantSku)));
     }
 
     /* Methods to render the page */
@@ -73,7 +73,7 @@ public class ProductDetailPageController extends ProductCatalogController {
         content.setBreadcrumb(new BreadcrumbData(product, variant, categoryTree(), userContext, reverseRouter()));
         content.setShippingRates(createDeliveryData(userContext));
         content.setSuggestions(createSuggestions(userContext, suggestions));
-        content.setAddToCartFormUrl(reverseRouter().productToCartForm(userContext.locale().getLanguage()).url());
+        content.setAddToCartFormUrl(reverseRouter().processAddProductToCartForm(userContext.locale().getLanguage()).url());
         return content;
     }
 

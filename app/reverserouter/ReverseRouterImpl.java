@@ -20,8 +20,8 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
-    public Call home(final String languageTag) {
-        return HomeController.show(languageTag);
+    public Call themeAssets(final String file) {
+        return controllers.routes.WebJarAssets.at(file);
     }
 
     @Override
@@ -35,23 +35,43 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
-    public Call category(final String languageTag, final String categorySlug) {
+    public Call showHome(final String languageTag) {
+        return HomeController.show(languageTag);
+    }
+
+    @Override
+    public Call showCategory(final String languageTag, final String categorySlug) {
         return ProductOverviewPageController.show(languageTag, 1, categorySlug);
     }
 
     @Override
-    public Call search(final String languageTag) {
-        return ProductOverviewPageController.search(languageTag, 1);
-    }
-
-    @Override
-    public Call product(final String languageTag, final String productSlug, final String sku) {
+    public Call showProduct(final String languageTag, final String productSlug, final String sku) {
         return ProductDetailPageController.show(languageTag, productSlug, sku);
     }
 
     @Override
-    public Call productToCartForm(final String languageTag) {
+    public Call processSearchProductsForm(final String languageTag) {
+        return ProductOverviewPageController.search(languageTag, 1);
+    }
+
+    @Override
+    public Call showCart(final String languageTag) {
+        return CartDetailPageController.show(languageTag);
+    }
+
+    @Override
+    public Call processAddProductToCartForm(final String languageTag) {
         return CartDetailPageController.addToCart(languageTag);
+    }
+
+    @Override
+    public Call processChangeLineItemQuantityForm(final String languageTag) {
+        return CartDetailPageController.processChangeLineItemQuantity(languageTag);
+    }
+
+    @Override
+    public Call processDeleteLineItemForm(final String languageTag) {
+        return CartDetailPageController.processRemoveLineItem(languageTag);
     }
 
     @Override
@@ -95,27 +115,17 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
-    public Call designAssets(final String file) {
-        return controllers.routes.WebJarAssets.at(file);
+    public Call showCheckoutThankYou(final String languageTag) {
+        return CheckoutThankYouController.show(languageTag);
     }
 
     @Override
-    public Call showCart(final String languageTag) {
-        return CartDetailPageController.show(languageTag);
+    public Call showLogInForm(final String languageTag) {
+        return LogInPageController.show(languageTag);
     }
 
     @Override
-    public Call processDeleteLineItem(final String languageTag) {
-        return CartDetailPageController.processRemoveLineItem(languageTag);
-    }
-
-    @Override
-    public Call processChangeLineItemQuantity(final String languageTag) {
-        return CartDetailPageController.processChangeLineItemQuantity(languageTag);
-    }
-
-    @Override
-    public Call showCheckoutThankyou(final String languageTag) {
-        return CheckoutThankyouController.show(languageTag);
+    public Call processLogInForm(final String languageTag) {
+        return LogInPageController.process(languageTag);
     }
 }
