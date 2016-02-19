@@ -18,7 +18,7 @@ import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.common.CartController;
-import shoppingcart.ErrorsBean;
+import common.errors.ErrorsBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

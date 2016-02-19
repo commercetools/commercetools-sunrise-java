@@ -7,7 +7,7 @@ import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
-import shoppingcart.ErrorsBean;
+import common.errors.ErrorsBean;
 
 import java.util.Optional;
 

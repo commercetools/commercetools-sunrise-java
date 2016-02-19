@@ -13,6 +13,7 @@ import static shoppingcart.checkout.confirmation.routes.*;
 import static shoppingcart.checkout.payment.routes.*;
 import static shoppingcart.checkout.shipping.routes.*;
 import static shoppingcart.checkout.thankyou.routes.*;
+import static myaccount.login.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
 
@@ -61,17 +62,17 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call processAddProductToCartForm(final String languageTag) {
-        return CartDetailPageController.addToCart(languageTag);
+        return CartDetailPageController.addProductToCart(languageTag);
     }
 
     @Override
     public Call processChangeLineItemQuantityForm(final String languageTag) {
-        return CartDetailPageController.processChangeLineItemQuantity(languageTag);
+        return CartDetailPageController.changeLineItemQuantity(languageTag);
     }
 
     @Override
     public Call processDeleteLineItemForm(final String languageTag) {
-        return CartDetailPageController.processRemoveLineItem(languageTag);
+        return CartDetailPageController.removeLineItem(languageTag);
     }
 
     @Override

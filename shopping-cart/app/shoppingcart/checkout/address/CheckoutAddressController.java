@@ -21,7 +21,7 @@ import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.common.CartController;
-import shoppingcart.ErrorsBean;
+import common.errors.ErrorsBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Singleton

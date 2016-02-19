@@ -24,6 +24,7 @@ import static java.util.Arrays.asList;
 
 @NoCache
 public abstract class CartController extends SunriseController {
+
     public CartController(final ControllerDependency controllerDependency) {
         super(controllerDependency);
     }
