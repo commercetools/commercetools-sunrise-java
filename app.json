@@ -21,12 +21,12 @@
     },
 
     "HARD_SELECTABLE_ATTRIBUTES": {
-      "description": "List of those product attributes that when selected require loading a different URL to display the selected variant (e.g. you would like to share the product URL for a particular color variant). Enter the attribute names separated by commas.",
+      "description": "List here those product attributes that enable selecting a different product variant. In particular, those attributes that require re-loading the page to display the selected variant, e.g. if you select a different color you may like to show different pictures, description, etc. Enter the attribute names separated by commas.",
       "required" : false
     },
 
     "SOFT_SELECTABLE_ATTRIBUTES": {
-      "description": "List of those product attributes that when selected DO NOT require loading a different URL to display the selected variant (e.g. size). Enter the attribute names separated by commas.",
+      "description": "List here those product attributes that enable selecting a different product variant. In particular, those attributes that DO NOT require re-loading the page to display the selected variant, e.g. size. Enter the attribute names separated by commas.",
       "required" : false
     },
 
