@@ -21,7 +21,7 @@
     },
 
     "HARD_SELECTABLE_ATTRIBUTES": {
-      "description": "List here those product attributes that enable selecting a different product variant. In particular, those attributes that require re-loading the page to display the selected variant, e.g. if you select a different color you may like to show different pictures, description, etc. Enter the attribute names separated by commas.",
+      "description": "List here those product attributes that enable selecting a different product variant. In particular, those attributes that require re-loading the page to display the selected variant, e.g. if you select a different color you may want to show different pictures, description, etc. Enter the attribute names separated by commas.",
       "required" : false
     },
 
