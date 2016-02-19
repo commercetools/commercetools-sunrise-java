@@ -76,7 +76,7 @@
       "required": false
     },
     "PRODUCTS_PER_PAGE_DEFAULT": {
-      "description": "The selected amount of products per page by default.",
+      "description": "The default selected amount of products per page.",
       "value": "24",
       "required": false
     },
