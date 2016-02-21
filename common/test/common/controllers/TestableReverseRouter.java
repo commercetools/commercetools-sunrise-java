@@ -26,6 +26,7 @@ public class TestableReverseRouter implements ReverseRouter {
     private String showLogInFormUrl;
     private String processLogInFormUrl;
     private String processSignUpFormUrl;
+    private String processLogOutUrl;
 
     public void setThemeAssetsUrl(final String themeAssetsUrl) {
         this.themeAssetsUrl = themeAssetsUrl;
@@ -119,18 +120,22 @@ public class TestableReverseRouter implements ReverseRouter {
         this.processSignUpFormUrl = processSignUpFormUrl;
     }
 
+    public void setProcessLogOutUrl(final String processLogOutUrl) {
+        this.processLogOutUrl = processLogOutUrl;
+    }
+
     @Override
     public Call themeAssets(final String file) {
         return createCall(themeAssetsUrl);
     }
 
     @Override
-    public Call changeLanguage() {
+    public Call processChangeLanguageForm() {
         return createCall(changeLanguageUrl);
     }
 
     @Override
-    public Call changeCountry(final String languageTag) {
+    public Call processChangeCountryForm(final String languageTag) {
         return createCall(changeCountryUrl);
     }
 
@@ -232,6 +237,11 @@ public class TestableReverseRouter implements ReverseRouter {
     @Override
     public Call processSignUpForm(final String languageTag) {
         return createCall(processSignUpFormUrl);
+    }
+
+    @Override
+    public Call processLogOut(final String languageTag) {
+        return createCall(processLogOutUrl);
     }
 
     private Call createCall(final String url) {

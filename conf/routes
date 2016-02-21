@@ -93,6 +93,8 @@ GET         /:languageTag/user/login                           @myaccount.login.
 POST        /:languageTag/user/login                           @myaccount.login.LogInPageController.processLogIn(languageTag: String)
 # Signs up the user
 POST        /:languageTag/user/signup                          @myaccount.login.LogInPageController.processSignUp(languageTag: String)
+# Logs out the user
+GET         /:languageTag/user/logout                          @myaccount.login.LogInPageController.processLogOut(languageTag: String)
 
 
 # PRODUCT DETAIL

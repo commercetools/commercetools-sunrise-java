@@ -14,6 +14,7 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
+import myaccount.CustomerSessionUtils;
 import play.Configuration;
 import play.filters.csrf.AddCSRFToken;
 import play.mvc.Http;
@@ -88,14 +89,15 @@ public abstract class SunriseController extends ShopController {
 
     private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
         final PageMeta pageMeta = new PageMeta();
+        pageMeta.setUser(CustomerSessionUtils.getUser(session()));
         pageMeta.setAssetsPath(reverseRouter().themeAssets("").url());
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(reverseRouter().showHome(language), "home", "continueShopping")
                 .addHalLink(reverseRouter().processSearchProductsForm(language), "search")
-                .addHalLink(reverseRouter().changeLanguage(), "selectLanguage")
-                .addHalLink(reverseRouter().changeCountry(language), "selectCountry")
+                .addHalLink(reverseRouter().processChangeLanguageForm(), "selectLanguage")
+                .addHalLink(reverseRouter().processChangeCountryForm(language), "selectCountry")
 
                 .addHalLink(reverseRouter().showCart(language), "cart")
                 .addHalLink(reverseRouter().processAddProductToCartForm(language), "addToCart")
@@ -113,6 +115,7 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().showLogInForm(language), "signIn", "logIn", "signUp")
                 .addHalLink(reverseRouter().processLogInForm(language), "logInSubmit")
                 .addHalLink(reverseRouter().processSignUpForm(language), "signUpSubmit")
+                .addHalLink(reverseRouter().processLogOut(language), "logOut")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         newCategory().flatMap(nc -> reverseRouter().showCategory(userContext.locale(), nc))

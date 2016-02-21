@@ -12,6 +12,7 @@ import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
 import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
+import myaccount.CustomerSessionUtils;
 import play.Logger;
 import play.data.Form;
 import play.filters.csrf.AddCSRFToken;
@@ -19,10 +20,12 @@ import play.filters.csrf.RequireCSRFCheck;
 import play.libs.F;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import shoppingcart.CartSessionUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
 
 /**
@@ -54,10 +57,9 @@ public final class LogInPageController extends SunriseController {
         if (form.hasErrors()) {
             return F.Promise.pure(handleLogInFormErrors(form, pageContent, userContext));
         } else {
-            return logIn(form).map(result -> {
-                overwriteCartSessionData(result.getCart(), session(), userContext, reverseRouter());
-                return redirect(reverseRouter().showHome(languageTag));
-            }).recover(throwable -> handleInvalidCredentialsError(throwable, pageContent, userContext));
+            return logIn(form)
+                    .map(signInResult -> handleSuccessfulSignIn(signInResult, userContext))
+                    .recover(throwable -> handleInvalidCredentialsError(throwable, pageContent, userContext));
         }
     }
 
@@ -70,11 +72,16 @@ public final class LogInPageController extends SunriseController {
         if (form.hasErrors()) {
             return F.Promise.pure(handleSignUpFormErrors(form, pageContent, userContext));
         } else {
-            return signUp(form).map(result -> {
-                overwriteCartSessionData(result.getCart(), session(), userContext, reverseRouter());
-                return redirect(reverseRouter().showHome(languageTag));
-            }).recover(throwable -> handleExistingCustomerError(throwable, pageContent, userContext));
+            return signUp(form)
+                    .map(signInResult -> handleSuccessfulSignIn(signInResult, userContext))
+                    .recover(throwable -> handleExistingCustomerError(throwable, pageContent, userContext));
         }
+    }
+
+    public Result processLogOut(final String languageTag) {
+        CustomerSessionUtils.removeCustomer(session());
+        CartSessionUtils.removeCart(session());
+        return redirect(reverseRouter().showHome(languageTag));
     }
 
     private F.Promise<CustomerSignInResult> logIn(final Form<LogInFormData> form) {
@@ -88,6 +95,12 @@ public final class LogInPageController extends SunriseController {
         final CustomerDraftDsl customerDraft = CustomerDraftBuilder.of(formData.customerName(), formData.getEmail(), formData.getPassword()).build();
         final CustomerCreateCommand customerCreateCommand = CustomerCreateCommand.of(customerDraft);
         return sphere().execute(customerCreateCommand);
+    }
+
+    private Result handleSuccessfulSignIn(final CustomerSignInResult result, final UserContext userContext) {
+        overwriteCartSessionData(result.getCart(), session(), userContext, reverseRouter());
+        overwriteCustomerSessionData(result.getCustomer(), session());
+        return redirect(reverseRouter().showHome(userContext.locale().toLanguageTag()));
     }
 
     private Result handleLogInFormErrors(final Form<LogInFormData> form, final LogInPageContent pageContent,

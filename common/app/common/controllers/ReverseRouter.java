@@ -13,9 +13,9 @@ public interface ReverseRouter {
 
     Call themeAssets(final String file);
 
-    Call changeLanguage();
+    Call processChangeLanguageForm();
 
-    Call changeCountry(final String languageTag);
+    Call processChangeCountryForm(final String languageTag);
 
     Call showHome(final String languageTag);
 
@@ -56,6 +56,8 @@ public interface ReverseRouter {
     Call processLogInForm(final String languageTag);
 
     Call processSignUpForm(final String languageTag);
+
+    Call processLogOut(final String languageTag);
 
     default Optional<Call> showCategory(final Locale locale, final Category category) {
         return category.getSlug().find(locale)
