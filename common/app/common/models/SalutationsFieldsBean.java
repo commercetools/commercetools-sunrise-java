@@ -1,8 +1,7 @@
-package shoppingcart.checkout.address;
+package common.models;
 
 import common.contexts.UserContext;
 import common.i18n.I18nResolver;
-import common.models.SelectableData;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
@@ -19,6 +18,11 @@ public class SalutationsFieldsBean extends Base {
     private List<SelectableData> list;
 
     public SalutationsFieldsBean() {
+    }
+
+    public SalutationsFieldsBean(final UserContext userContext, final I18nResolver i18nResolver,
+                                 final Configuration configuration) {
+        fill(null, userContext, i18nResolver, configuration);
     }
 
     public SalutationsFieldsBean(final String title, final UserContext userContext, final I18nResolver i18nResolver,

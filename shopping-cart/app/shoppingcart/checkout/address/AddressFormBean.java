@@ -4,6 +4,8 @@ import com.neovisionaries.i18n.CountryCode;
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.i18n.I18nResolver;
+import common.models.CountriesFieldsBean;
+import common.models.SalutationsFieldsBean;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;

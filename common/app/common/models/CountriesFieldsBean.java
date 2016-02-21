@@ -1,9 +1,8 @@
-package shoppingcart.checkout.address;
+package common.models;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;
-import common.models.SelectableData;
 import io.sphere.sdk.models.Address;
 
 import javax.annotation.Nullable;

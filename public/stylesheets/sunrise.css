@@ -13,8 +13,3 @@ form[name=add-to-wishlist] {
 .bzoom .bzoom_small_thumbs {
     display: none;
 }
-
-/* Hide sign up */
-.signup-box-mobile {
-    display: none;
-}

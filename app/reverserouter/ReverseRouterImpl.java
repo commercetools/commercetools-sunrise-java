@@ -127,6 +127,11 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call processLogInForm(final String languageTag) {
-        return LogInPageController.process(languageTag);
+        return LogInPageController.processLogIn(languageTag);
+    }
+
+    @Override
+    public Call processSignUpForm(final String languageTag) {
+        return LogInPageController.processSignUp(languageTag);
     }
 }

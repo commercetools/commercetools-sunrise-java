@@ -110,8 +110,9 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
 
-                .addHalLink(reverseRouter().showLogInForm(language), "signIn", "logIn")
+                .addHalLink(reverseRouter().showLogInForm(language), "signIn", "logIn", "signUp")
                 .addHalLink(reverseRouter().processLogInForm(language), "logInSubmit")
+                .addHalLink(reverseRouter().processSignUpForm(language), "signUpSubmit")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         newCategory().flatMap(nc -> reverseRouter().showCategory(userContext.locale(), nc))

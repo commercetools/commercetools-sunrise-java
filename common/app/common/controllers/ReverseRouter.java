@@ -55,6 +55,8 @@ public interface ReverseRouter {
 
     Call processLogInForm(final String languageTag);
 
+    Call processSignUpForm(final String languageTag);
+
     default Optional<Call> showCategory(final Locale locale, final Category category) {
         return category.getSlug().find(locale)
                 .map(slug -> showCategory(locale.toLanguageTag(), slug));

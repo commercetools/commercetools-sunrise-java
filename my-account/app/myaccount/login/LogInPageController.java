@@ -6,26 +6,33 @@ import common.controllers.SunriseController;
 import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import io.sphere.sdk.client.ErrorResponseException;
+import io.sphere.sdk.customers.CustomerDraftBuilder;
+import io.sphere.sdk.customers.CustomerDraftDsl;
+import io.sphere.sdk.customers.CustomerSignInResult;
+import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
 import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
 import play.Logger;
-import play.data.DynamicForm;
 import play.data.Form;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.F;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.CartSessionUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
 
 /**
  * Allows to log in as a customer.
  */
 @Singleton
 public final class LogInPageController extends SunriseController {
+
+    private static final Form<LogInFormData> LOG_IN_FORM = Form.form(LogInFormData.class);
+    private static final Form<SignUpFormData> SIGN_UP_FORM = Form.form(SignUpFormData.class);
 
     @Inject
     public LogInPageController(final ControllerDependency controllerDependency) {
@@ -34,31 +41,71 @@ public final class LogInPageController extends SunriseController {
 
     public F.Promise<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final SunrisePageData pageData = pageData(userContext, new LogInPageContent(), ctx());
-        return F.Promise.pure(ok(renderLogInPage(userContext, pageData)));
+        final LogInPageContent pageContent = new LogInPageContent();
+        return F.Promise.pure(ok(renderLogInPage(pageContent, userContext)));
     }
 
     @AddCSRFToken
     @RequireCSRFCheck
-    public F.Promise<Result> process(final String languageTag) {
+    public F.Promise<Result> processLogIn(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Form<LogInFormData> filledForm = obtainFilledForm(LogInFormData.class);
-        final LogInFormData formData = extractFormData(LogInFormData.class);
-        final LogInPageContent pageContent = new LogInPageContent(formData);
-        if (filledForm.hasErrors()) {
-            final ErrorsBean errors = new ErrorsBean(filledForm);
-            return F.Promise.pure(badRequest(errors, pageContent, userContext));
+        final Form<LogInFormData> form = LOG_IN_FORM.bindFromRequest();
+        final LogInPageContent pageContent = new LogInPageContent(form);
+        if (form.hasErrors()) {
+            return F.Promise.pure(handleLogInFormErrors(form, pageContent, userContext));
         } else {
-            final CustomerSignInCommand signInCommand = CustomerSignInCommand.of(formData.getUsername(), formData.getPassword());
-            return sphere().execute(signInCommand).map(result -> {
-                CartSessionUtils.overwriteCartSessionData(result.getCart(), session(), userContext, reverseRouter());
-                return redirect(reverseRouter().showCart(languageTag));
-            }).recover(throwable -> handleInvalidCredentials(throwable, pageContent, userContext));
+            return logIn(form).map(result -> {
+                overwriteCartSessionData(result.getCart(), session(), userContext, reverseRouter());
+                return redirect(reverseRouter().showHome(languageTag));
+            }).recover(throwable -> handleInvalidCredentialsError(throwable, pageContent, userContext));
         }
     }
 
-    private Result handleInvalidCredentials(final Throwable throwable, final LogInPageContent pageContent,
-                                            final UserContext userContext) {
+    @AddCSRFToken
+    @RequireCSRFCheck
+    public F.Promise<Result> processSignUp(final String languageTag) {
+        final UserContext userContext = userContext(languageTag);
+        final Form<SignUpFormData> form = SIGN_UP_FORM.bindFromRequest();
+        final LogInPageContent pageContent = new LogInPageContent(form, userContext, i18nResolver(), configuration());
+        if (form.hasErrors()) {
+            return F.Promise.pure(handleSignUpFormErrors(form, pageContent, userContext));
+        } else {
+            return signUp(form).map(result -> {
+                overwriteCartSessionData(result.getCart(), session(), userContext, reverseRouter());
+                return redirect(reverseRouter().showHome(languageTag));
+            }).recover(throwable -> handleExistingCustomerError(throwable, pageContent, userContext));
+        }
+    }
+
+    private F.Promise<CustomerSignInResult> logIn(final Form<LogInFormData> form) {
+        final LogInFormData formData = form.get();
+        final CustomerSignInCommand signInCommand = CustomerSignInCommand.of(formData.getUsername(), formData.getPassword());
+        return sphere().execute(signInCommand);
+    }
+
+    private F.Promise<CustomerSignInResult> signUp(final Form<SignUpFormData> form) {
+        final SignUpFormData formData = form.get();
+        final CustomerDraftDsl customerDraft = CustomerDraftBuilder.of(formData.customerName(), formData.getEmail(), formData.getPassword()).build();
+        final CustomerCreateCommand customerCreateCommand = CustomerCreateCommand.of(customerDraft);
+        return sphere().execute(customerCreateCommand);
+    }
+
+    private Result handleLogInFormErrors(final Form<LogInFormData> form, final LogInPageContent pageContent,
+                                             final UserContext userContext) {
+        final ErrorsBean errors = new ErrorsBean(form);
+        pageContent.getLogInForm().setErrors(errors);
+        return badRequest(renderLogInPage(pageContent, userContext));
+    }
+
+    private Result handleSignUpFormErrors(final Form<SignUpFormData> form, final LogInPageContent pageContent,
+                                          final UserContext userContext) {
+        final ErrorsBean errors = new ErrorsBean(form);
+        pageContent.getSignUpForm().setErrors(errors);
+        return badRequest(renderLogInPage(pageContent, userContext));
+    }
+
+    private Result handleInvalidCredentialsError(final Throwable throwable, final LogInPageContent pageContent,
+                                                 final UserContext userContext) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             final ErrorsBean errors;
@@ -69,27 +116,30 @@ public final class LogInPageController extends SunriseController {
                 Logger.error("Unknown error", errorResponseException);
                 errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             }
-            return badRequest(errors, pageContent, userContext);
+            pageContent.getLogInForm().setErrors(errors);
+            return badRequest(renderLogInPage(pageContent, userContext));
         }
         throw new RuntimeException(throwable);
     }
 
-    private Result badRequest(final ErrorsBean errors, final LogInPageContent pageContent, final UserContext userContext) {
-        pageContent.getLogInForm().setErrors(errors);
-        final SunrisePageData pageData = pageData(userContext, pageContent, ctx());
-        return badRequest(renderLogInPage(userContext, pageData));
+    private Result handleExistingCustomerError(final Throwable throwable, final LogInPageContent pageContent,
+                                               final UserContext userContext) {
+        if (throwable.getCause() instanceof ErrorResponseException) {
+            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
+            Logger.error("Unknown error, probably customer already exists", errorResponseException);
+            final ErrorsBean errors = new ErrorsBean("A user with this email already exists"); // TODO get from i18n
+            pageContent.getSignUpForm().setErrors(errors);
+            return badRequest(renderLogInPage(pageContent, userContext));
+        }
+        throw new RuntimeException(throwable);
     }
 
-    private Html renderLogInPage(final UserContext userContext, final SunrisePageData pageData) {
+    private Html renderLogInPage(final LogInPageContent pageContent, final UserContext userContext) {
+        if (pageContent.getSignUpForm() == null) {
+            final SignUpFormBean signUpFormBean = new SignUpFormBean(null, userContext, i18nResolver(), configuration());
+            pageContent.setSignUpForm(signUpFormBean);
+        }
+        final SunrisePageData pageData = pageData(userContext, pageContent, ctx());
         return templateService().renderToHtml("my-account-login", pageData, userContext.locales());
     }
-
-    private <T> T extractFormData(final Class<T> clazz) {
-        return DynamicForm.form(clazz, null).bindFromRequest(request()).get();
-    }
-
-    private <T> Form<T> obtainFilledForm(final Class<T> clazz) {
-        return Form.form(clazz).bindFromRequest(request());
-    }
-
 }

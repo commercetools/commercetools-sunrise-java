@@ -87,10 +87,12 @@ GET         /:languageTag/checkout/thankyou                    @shoppingcart.che
 # MY ACCOUNT
 # ~~~~~
 
-# Shows the details of the cart belonging to the current session
+# Shows log in form
 GET         /:languageTag/user/login                           @myaccount.login.LogInPageController.show(languageTag: String)
-# Adds the selected product to the cart
-POST        /:languageTag/user/login                           @myaccount.login.LogInPageController.process(languageTag: String)
+# Logs in the user
+POST        /:languageTag/user/login                           @myaccount.login.LogInPageController.processLogIn(languageTag: String)
+# Signs up the user
+POST        /:languageTag/user/signup                          @myaccount.login.LogInPageController.processSignUp(languageTag: String)
 
 
 # PRODUCT DETAIL
