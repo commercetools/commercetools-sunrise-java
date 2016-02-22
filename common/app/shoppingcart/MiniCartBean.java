@@ -1,4 +1,4 @@
-package common.models;
+package shoppingcart;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
@@ -9,17 +9,17 @@ import io.sphere.sdk.models.Base;
 
 import static common.utils.PriceUtils.calculateTotalPrice;
 
-public class MiniCart extends Base {
+public class MiniCartBean extends Base {
     private Long totalItems;
     private String totalPrice;
     private MiniCartLineItemsBean lineItems;
 
-    public MiniCart() {
+    public MiniCartBean() {
         this.totalItems = 0L;
         this.lineItems = new MiniCartLineItemsBean();
     }
 
-    public MiniCart(final Cart cart, final UserContext userContext, final ReverseRouter reverseRouter) {
+    public MiniCartBean(final Cart cart, final UserContext userContext, final ReverseRouter reverseRouter) {
         final MoneyContext moneyContext = MoneyContext.of(cart.getCurrency(), userContext.locale());
         this.totalItems = cart.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
         this.totalPrice = moneyContext.formatOrZero(calculateTotalPrice(cart));
