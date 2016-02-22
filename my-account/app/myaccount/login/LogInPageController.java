@@ -57,7 +57,7 @@ public final class LogInPageController extends SunriseController {
         if (form.hasErrors()) {
             return F.Promise.pure(handleLogInFormErrors(form, pageContent, userContext));
         } else {
-            return logIn(form)
+            return logIn(form.get())
                     .map(signInResult -> handleSuccessfulSignIn(signInResult, userContext))
                     .recover(throwable -> handleInvalidCredentialsError(throwable, pageContent, userContext));
         }
@@ -72,7 +72,7 @@ public final class LogInPageController extends SunriseController {
         if (form.hasErrors()) {
             return F.Promise.pure(handleSignUpFormErrors(form, pageContent, userContext));
         } else {
-            return signUp(form)
+            return signUp(form.get())
                     .map(signInResult -> handleSuccessfulSignIn(signInResult, userContext))
                     .recover(throwable -> handleExistingCustomerError(throwable, pageContent, userContext));
         }
@@ -84,15 +84,13 @@ public final class LogInPageController extends SunriseController {
         return redirect(reverseRouter().showHome(languageTag));
     }
 
-    private F.Promise<CustomerSignInResult> logIn(final Form<LogInFormData> form) {
-        final LogInFormData formData = form.get();
+    private F.Promise<CustomerSignInResult> logIn(final LogInFormData formData) {
         final String anonymousCartId = CartSessionUtils.getCartId(session()).orElse(null);
         final CustomerSignInCommand signInCommand = CustomerSignInCommand.of(formData.getUsername(), formData.getPassword(), anonymousCartId);
         return sphere().execute(signInCommand);
     }
 
-    private F.Promise<CustomerSignInResult> signUp(final Form<SignUpFormData> form) {
-        final SignUpFormData formData = form.get();
+    private F.Promise<CustomerSignInResult> signUp(final SignUpFormData formData) {
         final String anonymousCartId = CartSessionUtils.getCartId(session()).orElse(null);
         final CustomerDraft customerDraft = CustomerDraftBuilder.of(formData.getEmail(), formData.getPassword())
                 .title(formData.getTitle())
