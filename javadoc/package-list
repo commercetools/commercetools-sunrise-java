@@ -4,6 +4,7 @@ common.actions
 common.cms
 common.contexts
 common.controllers
+common.errors
 common.i18n
 common.models
 common.prices
@@ -17,6 +18,8 @@ io.sphere.sdk.facets
 io.sphere.sdk.play.controllers
 io.sphere.sdk.play.metrics
 io.sphere.sdk.queries
+myaccount
+myaccount.login
 productcatalog.common
 productcatalog.home
 productcatalog.productdetail
