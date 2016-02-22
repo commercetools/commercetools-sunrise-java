@@ -3,13 +3,17 @@ package common.controllers;
 import play.mvc.Call;
 
 public class TestableReverseRouter implements ReverseRouter {
-    private String homeUrl;
+    private String themeAssetsUrl;
     private String changeLanguageUrl;
     private String changeCountryUrl;
-    private String categoryUrl;
-    private String searchUrl;
-    private String productUrl;
-    private String addToCartFormUrl;
+    private String showHomeUrl;
+    private String showCategoryUrl;
+    private String showProductUrl;
+    private String processSearchProductsFormUrl;
+    private String showCartUrl;
+    private String processAddProductToCartFormUrl;
+    private String processChangeLineItemQuantityFormUrl;
+    private String processDeleteLineItemFormUrl;
     private String showCheckoutAddressesFormUrl;
     private String processCheckoutAddressesFormUrl;
     private String showCheckoutShippingFormUrl;
@@ -17,15 +21,15 @@ public class TestableReverseRouter implements ReverseRouter {
     private String showCheckoutPaymentFormUrl;
     private String processCheckoutPaymentFormUrl;
     private String showCheckoutConfirmationFormUrl;
-    private String designAssets;
-    private String processCheckoutConfirmationForm;
-    private String showCart;
-    private String processDeleteLineItem;
-    private String processChangeLineItemQuantity;
-    private String showCheckoutThankyou;
+    private String processCheckoutConfirmationFormUrl;
+    private String showCheckoutThankYouUrl;
+    private String showLogInFormUrl;
+    private String processLogInFormUrl;
+    private String processSignUpFormUrl;
+    private String processLogOutUrl;
 
-    public void setHomeUrl(final String homeUrl) {
-        this.homeUrl = homeUrl;
+    public void setThemeAssetsUrl(final String themeAssetsUrl) {
+        this.themeAssetsUrl = themeAssetsUrl;
     }
 
     public void setChangeLanguageUrl(final String changeLanguageUrl) {
@@ -36,20 +40,36 @@ public class TestableReverseRouter implements ReverseRouter {
         this.changeCountryUrl = changeCountryUrl;
     }
 
-    public void setCategoryUrl(final String categoryUrl) {
-        this.categoryUrl = categoryUrl;
+    public void setShowHomeUrl(final String showHomeUrl) {
+        this.showHomeUrl = showHomeUrl;
     }
 
-    public void setSearchUrl(final String searchUrl) {
-        this.searchUrl = searchUrl;
+    public void setShowCategoryUrl(final String showCategoryUrl) {
+        this.showCategoryUrl = showCategoryUrl;
     }
 
-    public void setProductUrl(final String productUrl) {
-        this.productUrl = productUrl;
+    public void setShowProductUrl(final String showProductUrl) {
+        this.showProductUrl = showProductUrl;
     }
 
-    public void setAddToCartFormUrl(final String addToCartFormUrl) {
-        this.addToCartFormUrl = addToCartFormUrl;
+    public void setProcessSearchProductsFormUrl(final String processSearchProductsFormUrl) {
+        this.processSearchProductsFormUrl = processSearchProductsFormUrl;
+    }
+
+    public void setShowCartUrl(final String showCartUrl) {
+        this.showCartUrl = showCartUrl;
+    }
+
+    public void setProcessAddProductToCartFormUrl(final String processAddProductToCartFormUrl) {
+        this.processAddProductToCartFormUrl = processAddProductToCartFormUrl;
+    }
+
+    public void setProcessChangeLineItemQuantityFormUrl(final String processChangeLineItemQuantityFormUrl) {
+        this.processChangeLineItemQuantityFormUrl = processChangeLineItemQuantityFormUrl;
+    }
+
+    public void setProcessDeleteLineItemFormUrl(final String processDeleteLineItemFormUrl) {
+        this.processDeleteLineItemFormUrl = processDeleteLineItemFormUrl;
     }
 
     public void setShowCheckoutAddressesFormUrl(final String showCheckoutAddressesFormUrl) {
@@ -80,63 +100,83 @@ public class TestableReverseRouter implements ReverseRouter {
         this.showCheckoutConfirmationFormUrl = showCheckoutConfirmationFormUrl;
     }
 
-    public void setDesignAssets(final String designAssets) {
-        this.designAssets = designAssets;
+    public void setProcessCheckoutConfirmationFormUrl(final String processCheckoutConfirmationFormUrl) {
+        this.processCheckoutConfirmationFormUrl = processCheckoutConfirmationFormUrl;
     }
 
-    public void setProcessCheckoutConfirmationForm(final String processCheckoutConfirmationForm) {
-        this.processCheckoutConfirmationForm = processCheckoutConfirmationForm;
+    public void setShowCheckoutThankYouUrl(final String showCheckoutThankYouUrl) {
+        this.showCheckoutThankYouUrl = showCheckoutThankYouUrl;
     }
 
-    public void setShowCart(final String showCart) {
-        this.showCart = showCart;
+    public void setShowLogInFormUrl(final String showLogInFormUrl) {
+        this.showLogInFormUrl = showLogInFormUrl;
     }
 
-    public void setProcessDeleteLineItem(final String processDeleteLineItem) {
-        this.processDeleteLineItem = processDeleteLineItem;
+    public void setProcessLogInFormUrl(final String processLogInFormUrl) {
+        this.processLogInFormUrl = processLogInFormUrl;
     }
 
-    public void setProcessChangeLineItemQuantity(final String processChangeLineItemQuantity) {
-        this.processChangeLineItemQuantity = processChangeLineItemQuantity;
+    public void setProcessSignUpFormUrl(final String processSignUpFormUrl) {
+        this.processSignUpFormUrl = processSignUpFormUrl;
     }
 
-    public void setShowCheckoutThankyou(final String showCheckoutThankyou) {
-        this.showCheckoutThankyou = showCheckoutThankyou;
-    }
-
-    @Override
-    public Call home(final String languageTag) {
-        return createCall(homeUrl);
+    public void setProcessLogOutUrl(final String processLogOutUrl) {
+        this.processLogOutUrl = processLogOutUrl;
     }
 
     @Override
-    public Call changeLanguage() {
+    public Call themeAssets(final String file) {
+        return createCall(themeAssetsUrl);
+    }
+
+    @Override
+    public Call processChangeLanguageForm() {
         return createCall(changeLanguageUrl);
     }
 
     @Override
-    public Call changeCountry(final String languageTag) {
+    public Call processChangeCountryForm(final String languageTag) {
         return createCall(changeCountryUrl);
     }
 
     @Override
-    public Call category(final String languageTag, final String categorySlug) {
-        return createCall(categoryUrl + categorySlug);
+    public Call showHome(final String languageTag) {
+        return createCall(showHomeUrl);
     }
 
     @Override
-    public Call search(final String languageTag) {
-        return createCall(searchUrl);
+    public Call showCategory(final String languageTag, final String categorySlug) {
+        return createCall(showCategoryUrl + categorySlug);
     }
 
     @Override
-    public Call product(final String languageTag, final String productSlug, final String sku) {
-        return createCall(productUrl + productSlug + sku);
+    public Call showProduct(final String languageTag, final String productSlug, final String sku) {
+        return createCall(showProductUrl + productSlug + sku);
     }
 
     @Override
-    public Call productToCartForm(final String languageTag) {
-        return createCall(addToCartFormUrl);
+    public Call processSearchProductsForm(final String languageTag) {
+        return createCall(processSearchProductsFormUrl);
+    }
+
+    @Override
+    public Call showCart(final String languageTag) {
+        return createCall(showCartUrl);
+    }
+
+    @Override
+    public Call processAddProductToCartForm(final String languageTag) {
+        return createCall(processAddProductToCartFormUrl);
+    }
+
+    @Override
+    public Call processChangeLineItemQuantityForm(final String languageTag) {
+        return createCall(processChangeLineItemQuantityFormUrl);
+    }
+
+    @Override
+    public Call processDeleteLineItemForm(final String languageTag) {
+        return createCall(processDeleteLineItemFormUrl);
     }
 
     @Override
@@ -175,33 +215,33 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     @Override
-    public Call designAssets(final String file) {
-        return createCall(designAssets);
-    }
-
-    @Override
     public Call processCheckoutConfirmationForm(final String languageTag) {
-        return createCall(processCheckoutConfirmationForm);
+        return createCall(processCheckoutConfirmationFormUrl);
     }
 
     @Override
-    public Call showCart(final String languageTag) {
-        return createCall(showCart);
+    public Call showCheckoutThankYou(final String languageTag) {
+        return createCall(showCheckoutThankYouUrl);
     }
 
     @Override
-    public Call processDeleteLineItem(final String languageTag) {
-        return createCall(processDeleteLineItem);
+    public Call showLogInForm(final String languageTag) {
+        return createCall(showLogInFormUrl);
     }
 
     @Override
-    public Call processChangeLineItemQuantity(final String languageTag) {
-        return createCall(processChangeLineItemQuantity);
+    public Call processLogInForm(final String languageTag) {
+        return createCall(processLogInFormUrl);
     }
 
     @Override
-    public Call showCheckoutThankyou(final String languageTag) {
-        return createCall(showCheckoutThankyou);
+    public Call processSignUpForm(final String languageTag) {
+        return createCall(processSignUpFormUrl);
+    }
+
+    @Override
+    public Call processLogOut(final String languageTag) {
+        return createCall(processLogOutUrl);
     }
 
     private Call createCall(final String url) {

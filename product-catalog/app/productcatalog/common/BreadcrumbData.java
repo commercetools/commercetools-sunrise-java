@@ -71,7 +71,7 @@ public class BreadcrumbData {
                                                    final ReverseRouter reverseRouter) {
         final LinkData linkData = new LinkData();
         linkData.setText(category.getName().find(userContext.locales()).orElse(""));
-        linkData.setUrl(reverseRouter.categoryUrlOrEmpty(userContext.locale(), category));
+        linkData.setUrl(reverseRouter.showCategoryUrlOrEmpty(userContext.locale(), category));
         return linkData;
     }
 
@@ -79,7 +79,7 @@ public class BreadcrumbData {
                                                   final UserContext userContext, final ReverseRouter reverseRouter) {
         final LinkData linkData = new LinkData();
         linkData.setText(currentProduct.getName().find(userContext.locales()).orElse(""));
-        linkData.setUrl(reverseRouter.productUrlOrEmpty(userContext.locale(), currentProduct, variant));
+        linkData.setUrl(reverseRouter.showProductUrlOrEmpty(userContext.locale(), currentProduct, variant));
         return linkData;
     }
 }

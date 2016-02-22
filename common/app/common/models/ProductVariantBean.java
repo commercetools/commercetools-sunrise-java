@@ -27,14 +27,14 @@ public class ProductVariantBean {
     }
 
     public ProductVariantBean(final LineItem lineItem, final UserContext userContext, final ReverseRouter reverseRouter) {
-        this.url = reverseRouter.lineItemUrlOrEmpty(userContext.locale(), lineItem);
+        this.url = reverseRouter.showProductUrlOrEmpty(userContext.locale(), lineItem);
         fill(lineItem.getName(), lineItem.getVariant(), userContext);
         fillPrice(lineItem.getPrice(), userContext.locale());
     }
 
     public ProductVariantBean(final ProductProjection product, final ProductVariant variant,
                               final UserContext userContext, final ReverseRouter reverseRouter) {
-        this.url = reverseRouter.productUrlOrEmpty(userContext.locale(), product, variant);
+        this.url = reverseRouter.showProductUrlOrEmpty(userContext.locale(), product, variant);
         fill(product.getName(), variant, userContext);
         PriceFinder.of(userContext).findPrice(variant.getPrices()).ifPresent(price -> fillPrice(price, userContext.locale()));
     }

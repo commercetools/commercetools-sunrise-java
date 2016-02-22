@@ -59,9 +59,9 @@ public class BreadcrumbDataTest {
 
     private static ReverseRouter reverseRouter() {
         final TestableReverseRouter reverseRouter = new TestableReverseRouter();
-        reverseRouter.setCategoryUrl("category-");
-        reverseRouter.setProductUrl("product-");
-        reverseRouter.setSearchUrl("search-");
+        reverseRouter.setShowCategoryUrl("category-");
+        reverseRouter.setShowProductUrl("product-");
+        reverseRouter.setProcessSearchProductsFormUrl("search-");
         return reverseRouter;
     }
 

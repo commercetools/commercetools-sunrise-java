@@ -5,39 +5,64 @@
 # Untrail url
 GET         /*path/                                            @controllers.ApplicationController.untrail(path: String)
 
-# Map static resources from the /public folder to the /assets/public URL path
-GET         /assets/public/*file                               controllers.Assets.at(path="/public", file)
-# Map static resources from webjars (only CSS, JS, fonts and images) to the /assets URL path
-GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJarAssets.at(file)
+# Main entry point that decides whether to go to home page or to setup wizard
+GET         /                                                  @controllers.ApplicationController.index()
 
-# Endpoint to manually refresh category tree (otherwise an app restart is required)
-GET         /categories/refresh                                @categorytree.CategoriesRefreshController.refresh()
+->          /setup                                             setupwidget.Routes
+
+
+# ADMIN
+# ~~~~~
 
 # Shows the deployed version, artifactId and GIT SHA
 GET         /version                                           @controllers.StatusController.version()
 # Shows if the application is healthy
 GET         /health                                            @controllers.StatusController.health()
 
-# Main entry point that decides whether to go to home page or to setup wizard
-GET         /                                                  @controllers.ApplicationController.index()
-# Changes the language of the app
-POST        /changeLanguage                                    @controllers.ApplicationController.changeLanguage()
-# Changes the country of the app
-POST        /:languageTag/changeCountry                        @controllers.ApplicationController.changeCountry(languageTag: String)
+# Endpoint to manually refresh category tree (otherwise an app restart is required)
+GET         /categories/refresh                                @categorytree.CategoriesRefreshController.refresh()
+
+
+# WEB ASSETS
+# ~~~~~
+
+# Map static resources from the /public folder to the /assets/public URL path
+GET         /assets/public/*file                               controllers.Assets.at(path="/public", file)
+# Map static resources from webjars (only CSS, JS, fonts and images) to the /assets URL path
+GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJarAssets.at(file)
+
+
+# HOME
+# ~~~~~
+
 # Home page
 GET         /:languageTag/home                                 @productcatalog.home.HomeController.show(languageTag: String)
 
 
-->          /setup                                             setupwidget.Routes
+# LOCATION
+# ~~~~~
+
+# Changes the language of the app
+POST        /changeLanguage                                    @controllers.ApplicationController.changeLanguage()
+# Changes the country of the app
+POST        /:languageTag/changeCountry                        @controllers.ApplicationController.changeCountry(languageTag: String)
+
+
+# CART
+# ~~~~~
 
 # Shows the details of the cart belonging to the current session
 GET         /:languageTag/cart                                 @shoppingcart.cartdetail.CartDetailPageController.show(languageTag: String)
 # Adds the selected product to the cart
-POST        /:languageTag/cart                                 @shoppingcart.cartdetail.CartDetailPageController.addToCart(languageTag: String)
-# Removes a selected line item from the cart of the current session
-POST        /:languageTag/cart/removeitem                      @shoppingcart.cartdetail.CartDetailPageController.processRemoveLineItem(languageTag: String)
+POST        /:languageTag/cart/add                             @shoppingcart.cartdetail.CartDetailPageController.addProductToCart(languageTag: String)
 # Changes the quantity of a selected line item from the cart of the current session
-POST        /:languageTag/cart/quantity                        @shoppingcart.cartdetail.CartDetailPageController.processChangeLineItemQuantity(languageTag: String)
+POST        /:languageTag/cart/quantity                        @shoppingcart.cartdetail.CartDetailPageController.changeLineItemQuantity(languageTag: String)
+# Removes a selected line item from the cart of the current session
+POST        /:languageTag/cart/remove                          @shoppingcart.cartdetail.CartDetailPageController.removeLineItem(languageTag: String)
+
+
+# CHECKOUT
+# ~~~~~
 
 # Shows the form to enter shipping address and billing address
 GET         /:languageTag/checkout/address                     @shoppingcart.checkout.address.CheckoutAddressController.show(languageTag: String)
@@ -56,10 +81,31 @@ GET         /:languageTag/checkout/confirmation                @shoppingcart.che
 # Processes the order creation
 POST        /:languageTag/checkout/confirmation                @shoppingcart.checkout.confirmation.CheckoutConfirmationController.process(languageTag: String)
 # Shows the customer a confirmation for the created order
-GET         /:languageTag/checkout/thankyou                    @shoppingcart.checkout.thankyou.CheckoutThankyouController.show(languageTag: String)
+GET         /:languageTag/checkout/thankyou                    @shoppingcart.checkout.thankyou.CheckoutThankYouController.show(languageTag: String)
+
+
+# MY ACCOUNT
+# ~~~~~
+
+# Shows log in form
+GET         /:languageTag/user/login                           @myaccount.login.LogInPageController.show(languageTag: String)
+# Logs in the user
+POST        /:languageTag/user/login                           @myaccount.login.LogInPageController.processLogIn(languageTag: String)
+# Signs up the user
+POST        /:languageTag/user/signup                          @myaccount.login.LogInPageController.processSignUp(languageTag: String)
+# Logs out the user
+GET         /:languageTag/user/logout                          @myaccount.login.LogInPageController.processLogOut(languageTag: String)
+
+
+# PRODUCT DETAIL
+# ~~~~~
 
 # Shows the product detail page
 GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.productdetail.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)
+
+
+# PRODUCT OVERVIEW
+# ~~~~~
 
 # Shows the search results page
 GET         /:languageTag/search                               @productcatalog.productoverview.ProductOverviewPageController.search(languageTag: String, page: Int ?= 1)

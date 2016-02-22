@@ -17,11 +17,11 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static shoppingcart.CartSessionKeys.LAST_ORDER_ID_KEY;
 
 @Singleton
-public class CheckoutThankyouController extends CartController {
+public class CheckoutThankYouController extends CartController {
     private final ProductDataConfig productDataConfig;
 
     @Inject
-    public CheckoutThankyouController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
+    public CheckoutThankYouController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
         super(controllerDependency);
         this.productDataConfig = productDataConfig;
     }

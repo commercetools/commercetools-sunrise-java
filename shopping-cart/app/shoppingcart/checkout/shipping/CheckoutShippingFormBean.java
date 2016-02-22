@@ -2,7 +2,7 @@ package shoppingcart.checkout.shipping;
 
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Base;
-import shoppingcart.ErrorsBean;
+import common.errors.ErrorsBean;
 
 public class CheckoutShippingFormBean extends Base {
     private ShippingMethodsFormBean shippingMethods;

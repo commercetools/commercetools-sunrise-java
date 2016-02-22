@@ -54,7 +54,7 @@ public final class ApplicationController extends Controller {
 
     private Result redirectToHomePage(final String languageTag) {
         final ReverseRouter reverseRouter = injector.instanceOf(ReverseRouter.class);
-        return redirect(reverseRouter.home(languageTag));
+        return redirect(reverseRouter.showHome(languageTag));
     }
 
     private String defaultLanguage() {

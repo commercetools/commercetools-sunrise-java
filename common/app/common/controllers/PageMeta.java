@@ -1,6 +1,7 @@
 package common.controllers;
 
 import common.models.HalLink;
+import myaccount.UserBean;
 import play.mvc.Call;
 
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 public class PageMeta {
     private String assetsPath;
     private String csrfToken;
+    private UserBean user;
     private List<Integer> bagQuantityOptions;
     private Map<String, HalLink> _links = new HashMap<>();
 
@@ -40,6 +42,14 @@ public class PageMeta {
         this.csrfToken = csrfToken;
     }
 
+    public UserBean getUser() {
+        return user;
+    }
+
+    public void setUser(final UserBean user) {
+        this.user = user;
+    }
+
     public Map<String, HalLink> get_links() {
         return _links;
     }
@@ -52,10 +62,10 @@ public class PageMeta {
         return addHalLinkOfHrefAndRel(call.url(), rel, moreRel);
     }
 
-    public PageMeta addHalLinkOfHrefAndRel(final String href, final String rel,  final String ... moreRel) {
+    public PageMeta addHalLinkOfHrefAndRel(final String href, final String rel,  final String ... moreRels) {
         _links.put(rel, new HalLink(href));
-        for (int i = 0; i < moreRel.length; i++) {
-            addHalLinkOfHrefAndRel(href, moreRel[i]);
+        for (final String moreRel : moreRels) {
+            addHalLinkOfHrefAndRel(href, moreRel);
         }
         return this;
     }

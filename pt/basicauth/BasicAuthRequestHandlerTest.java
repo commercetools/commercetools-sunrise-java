@@ -65,7 +65,7 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
 
     private static Application appWithBasicAuth(final BasicAuth basicAuth) {
         final TestableReverseRouter reverseRouter = new TestableReverseRouter();
-        reverseRouter.setHomeUrl("/en/home");
+        reverseRouter.setShowHomeUrl("/en/home");
         return appBuilder(new BasicAuthTestModule(basicAuth), new ReverseRouterTestModule(reverseRouter))
                 .loadConfig(CONFIG)
                 .build();

@@ -1,4 +1,4 @@
-package shoppingcart;
+package common.errors;
 
 import io.sphere.sdk.models.Base;
 

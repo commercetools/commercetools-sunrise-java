@@ -8,12 +8,14 @@ import common.contexts.UserContext;
 import common.i18n.I18nResolver;
 import common.models.LocationSelector;
 import common.models.NavMenuData;
+import myaccount.UserBean;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
+import myaccount.CustomerSessionUtils;
 import play.Configuration;
 import play.filters.csrf.AddCSRFToken;
 import play.mvc.Http;
@@ -88,19 +90,20 @@ public abstract class SunriseController extends ShopController {
 
     private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
         final PageMeta pageMeta = new PageMeta();
-        pageMeta.setAssetsPath(reverseRouter().designAssets("").url());
+        pageMeta.setUser(CustomerSessionUtils.getUserBean(session()));
+        pageMeta.setAssetsPath(reverseRouter().themeAssets("").url());
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
-        pageMeta.addHalLink(reverseRouter().home(language), "home", "continueShopping")
-                .addHalLink(reverseRouter().search(language), "search")
-                .addHalLink(reverseRouter().changeLanguage(), "selectLanguage")
-                .addHalLink(reverseRouter().changeCountry(language), "selectCountry")
+        pageMeta.addHalLink(reverseRouter().showHome(language), "home", "continueShopping")
+                .addHalLink(reverseRouter().processSearchProductsForm(language), "search")
+                .addHalLink(reverseRouter().processChangeLanguageForm(), "selectLanguage")
+                .addHalLink(reverseRouter().processChangeCountryForm(language), "selectCountry")
 
                 .addHalLink(reverseRouter().showCart(language), "cart")
-                .addHalLink(reverseRouter().productToCartForm(language), "addToCart")
-                .addHalLink(reverseRouter().processChangeLineItemQuantity(language), "changeLineItem")
-                .addHalLink(reverseRouter().processDeleteLineItem(language), "deleteLineItem")
+                .addHalLink(reverseRouter().processAddProductToCartForm(language), "addToCart")
+                .addHalLink(reverseRouter().processChangeLineItemQuantityForm(language), "changeLineItem")
+                .addHalLink(reverseRouter().processDeleteLineItemForm(language), "deleteLineItem")
 
                 .addHalLink(reverseRouter().showCheckoutAddressesForm(language), "checkout", "editShippingAddress", "editBillingAddress")
                 .addHalLink(reverseRouter().processCheckoutAddressesForm(language), "checkoutAddressSubmit")
@@ -109,8 +112,14 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
                 .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
                 .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
+
+                .addHalLink(reverseRouter().showLogInForm(language), "signIn", "logIn", "signUp")
+                .addHalLink(reverseRouter().processLogInForm(language), "logInSubmit")
+                .addHalLink(reverseRouter().processSignUpForm(language), "signUpSubmit")
+                .addHalLink(reverseRouter().processLogOut(language), "logOut")
+
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
-        newCategory().flatMap(nc -> reverseRouter().category(userContext.locale(), nc))
+        newCategory().flatMap(nc -> reverseRouter().showCategory(userContext.locale(), nc))
                 .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
 
         return pageMeta;

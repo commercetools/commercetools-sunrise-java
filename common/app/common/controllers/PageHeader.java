@@ -1,7 +1,7 @@
 package common.controllers;
 
 import common.models.LocationSelector;
-import common.models.MiniCart;
+import shoppingcart.MiniCartBean;
 import common.models.NavMenuData;
 import io.sphere.sdk.models.Base;
 
@@ -9,7 +9,7 @@ public class PageHeader extends Base {
     private String title;
     private String customerServiceNumber;
     private LocationSelector location;
-    private MiniCart miniCart;
+    private MiniCartBean miniCart;
     private NavMenuData navMenu;
 
     public PageHeader() {
@@ -35,11 +35,11 @@ public class PageHeader extends Base {
         this.location = location;
     }
 
-    public MiniCart getMiniCart() {
+    public MiniCartBean getMiniCart() {
         return miniCart;
     }
 
-    public void setMiniCart(final MiniCart miniCart) {
+    public void setMiniCart(final MiniCartBean miniCart) {
         this.miniCart = miniCart;
     }
 

@@ -1,11 +1,15 @@
+
+/* Hide "more colours" in product thumbnails */
 .shop-item .pop-product-more-colors {
     visibility: hidden;
 }
 
+/* Hide add to wishlist */
 form[name=add-to-wishlist] {
     display: none;
 }
 
+/* Hide product gallery */
 .bzoom .bzoom_small_thumbs {
     display: none;
 }

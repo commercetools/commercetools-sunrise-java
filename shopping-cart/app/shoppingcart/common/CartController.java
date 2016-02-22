@@ -7,12 +7,14 @@ import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
+import io.sphere.sdk.carts.CartDraftBuilder;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.carts.queries.CartByIdGet;
 import io.sphere.sdk.models.Address;
+import myaccount.CustomerSessionUtils;
 import play.libs.F;
 import play.mvc.Http;
 import shoppingcart.CartSessionKeys;
@@ -24,6 +26,7 @@ import static java.util.Arrays.asList;
 
 @NoCache
 public abstract class CartController extends SunriseController {
+
     public CartController(final ControllerDependency controllerDependency) {
         super(controllerDependency);
     }
@@ -41,9 +44,12 @@ public abstract class CartController extends SunriseController {
 
     private F.Promise<Cart> createCart(final UserContext userContext) {
         final Address address = Address.of(userContext.country());
-        final CartDraft cartDraft = CartDraft.of(userContext.currency())
-                .withCountry(address.getCountry())
-                .withShippingAddress(address);
+        final CartDraft cartDraft = CartDraftBuilder.of(userContext.currency())
+                .country(address.getCountry())
+                .shippingAddress(address)
+                .customerId(CustomerSessionUtils.getCustomerId(session()).orElse(null))
+                .customerEmail(CustomerSessionUtils.getCustomerEmail(session()).orElse(null))
+                .build();
         return sphere().execute(CartCreateCommand.of(cartDraft));
     }
 

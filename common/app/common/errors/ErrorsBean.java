@@ -1,4 +1,4 @@
-package shoppingcart;
+package common.errors;
 
 import io.sphere.sdk.models.Base;
 import play.data.Form;
@@ -12,8 +12,12 @@ public class ErrorsBean extends Base {
     public ErrorsBean() {
     }
 
+    public ErrorsBean(final String errorMessage) {
+        this.globalErrors = Collections.singletonList(new ErrorBean(errorMessage));
+    }
+
     public ErrorsBean(final Form<?> filledForm) {
-        setGlobalErrors(Collections.singletonList(new ErrorBean(filledForm.errorsAsJson().toString())));
+        this(filledForm.errorsAsJson().toString());
     }
 
     public List<ErrorBean> getGlobalErrors() {

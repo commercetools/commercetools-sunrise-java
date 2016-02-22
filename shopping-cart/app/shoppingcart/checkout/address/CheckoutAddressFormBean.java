@@ -3,11 +3,13 @@ package shoppingcart.checkout.address;
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.i18n.I18nResolver;
+import common.models.CountriesFieldsBean;
+import common.models.SalutationsFieldsBean;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
-import shoppingcart.ErrorsBean;
+import common.errors.ErrorsBean;
 
 import java.util.Optional;
 

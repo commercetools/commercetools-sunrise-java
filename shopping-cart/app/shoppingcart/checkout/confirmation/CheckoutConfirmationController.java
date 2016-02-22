@@ -16,7 +16,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.common.CartController;
 import shoppingcart.CartSessionUtils;
-import shoppingcart.ErrorsBean;
+import common.errors.ErrorsBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -74,7 +74,7 @@ public class CheckoutConfirmationController extends CartController {
                 .map(order -> {
                     session(LAST_ORDER_ID_KEY, order.getId());
                     CartSessionUtils.removeCart(session());
-                    return redirect(reverseRouter().showCheckoutThankyou(languageTag));
+                    return redirect(reverseRouter().showCheckoutThankYou(languageTag));
                 });
     }
 

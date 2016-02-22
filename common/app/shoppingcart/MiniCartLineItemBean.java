@@ -1,7 +1,8 @@
-package common.models;
+package shoppingcart;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
+import common.models.ProductVariantBean;
 import common.utils.MoneyContext;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;

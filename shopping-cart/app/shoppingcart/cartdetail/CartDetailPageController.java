@@ -24,7 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 /**
- * Shows the contents of the cart.
+ * Shows and modifies the contents of the cart.
  */
 @Singleton
 public final class CartDetailPageController extends CartController {
@@ -42,7 +42,7 @@ public final class CartDetailPageController extends CartController {
         return cartPromise.map(cart -> renderCartPage(cart, userContext));
     }
 
-    public F.Promise<Result> addToCart(final String languageTag) {
+    public F.Promise<Result> addProductToCart(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final Http.Session session = session();
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session);
@@ -63,30 +63,8 @@ public final class CartDetailPageController extends CartController {
         }
     }
 
-    private Result renderCartPage(final Cart cart, final UserContext userContext) {
-        final CartDetailPageContent content = new CartDetailPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
-        final SunrisePageData pageData = pageData(userContext, content, ctx());
-        return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
-    }
-
-    private Form<AddToCartFormData> obtainFilledForm() {
-        return Form.form(AddToCartFormData.class, AddToCartFormData.Validation.class).bindFromRequest(request());
-    }
-
     @RequireCSRFCheck
-    public F.Promise<Result> processRemoveLineItem(final String languageTag) {
-        final String lineItemId = DynamicForm.form().bindFromRequest().get("lineItemId");
-        final UserContext userContext = userContext(languageTag);
-        return getOrCreateCart(userContext, session())
-                .flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart, RemoveLineItem.of(lineItemId)))
-                .map(updatedCart -> {
-                    CartSessionUtils.overwriteCartSessionData(cart, session(), userContext, reverseRouter());
-                    return redirect(reverseRouter().showCart(languageTag));
-                }));
-    }
-
-    @RequireCSRFCheck
-    public F.Promise<Result> processChangeLineItemQuantity(final String languageTag) {
+    public F.Promise<Result> changeLineItemQuantity(final String languageTag) {
         final Form<LineItemQuantityFormData> filledForm = Form.form(LineItemQuantityFormData.class).bindFromRequest();
         if (filledForm.hasErrors()) {
             return F.Promise.pure(redirect(reverseRouter().showCart(languageTag)));
@@ -100,6 +78,28 @@ public final class CartDetailPageController extends CartController {
                                 return redirect(reverseRouter().showCart(languageTag));
                             }));
         }
+    }
+
+    @RequireCSRFCheck
+    public F.Promise<Result> removeLineItem(final String languageTag) {
+        final String lineItemId = DynamicForm.form().bindFromRequest().get("lineItemId");
+        final UserContext userContext = userContext(languageTag);
+        return getOrCreateCart(userContext, session())
+                .flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart, RemoveLineItem.of(lineItemId)))
+                        .map(updatedCart -> {
+                            CartSessionUtils.overwriteCartSessionData(cart, session(), userContext, reverseRouter());
+                            return redirect(reverseRouter().showCart(languageTag));
+                        }));
+    }
+
+    private Result renderCartPage(final Cart cart, final UserContext userContext) {
+        final CartDetailPageContent content = new CartDetailPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        return ok(templateService().renderToHtml("cart", pageData, userContext.locales()));
+    }
+
+    private Form<AddToCartFormData> obtainFilledForm() {
+        return Form.form(AddToCartFormData.class, AddToCartFormData.Validation.class).bindFromRequest(request());
     }
 
     public static class LineItemQuantityFormData extends Base {
