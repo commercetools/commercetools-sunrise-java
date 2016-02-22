@@ -8,6 +8,7 @@ import common.contexts.UserContext;
 import common.i18n.I18nResolver;
 import common.models.LocationSelector;
 import common.models.NavMenuData;
+import myaccount.UserBean;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
@@ -89,7 +90,7 @@ public abstract class SunriseController extends ShopController {
 
     private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
         final PageMeta pageMeta = new PageMeta();
-        pageMeta.setUser(CustomerSessionUtils.getUser(session()));
+        pageMeta.setUser(CustomerSessionUtils.getUserBean(session()));
         pageMeta.setAssetsPath(reverseRouter().themeAssets("").url());
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));

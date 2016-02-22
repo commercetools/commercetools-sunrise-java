@@ -6,8 +6,8 @@ import common.controllers.SunriseController;
 import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import io.sphere.sdk.client.ErrorResponseException;
+import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerDraftBuilder;
-import io.sphere.sdk.customers.CustomerDraftDsl;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
@@ -92,7 +92,12 @@ public final class LogInPageController extends SunriseController {
 
     private F.Promise<CustomerSignInResult> signUp(final Form<SignUpFormData> form) {
         final SignUpFormData formData = form.get();
-        final CustomerDraftDsl customerDraft = CustomerDraftBuilder.of(formData.customerName(), formData.getEmail(), formData.getPassword()).build();
+        final CustomerDraft customerDraft = CustomerDraftBuilder.of(formData.getEmail(), formData.getPassword())
+                .title(formData.getTitle())
+                .firstName(formData.getFirstName())
+                .lastName(formData.getLastName())
+                .anonymousCartId(CartSessionUtils.getCartId(session()).orElse(null))
+                .build();
         final CustomerCreateCommand customerCreateCommand = CustomerCreateCommand.of(customerDraft);
         return sphere().execute(customerCreateCommand);
     }

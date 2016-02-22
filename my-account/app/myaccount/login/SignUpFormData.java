@@ -1,6 +1,5 @@
 package myaccount.login;
 
-import io.sphere.sdk.customers.CustomerName;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
@@ -28,10 +27,6 @@ public class SignUpFormData extends Base {
             return "You must agree to terms"; // TODO use i18n version
         }
         return null;
-    }
-
-    public CustomerName customerName() {
-        return CustomerName.ofTitleFirstAndLastName(title, firstName, lastName);
     }
 
     public String getTitle() {
