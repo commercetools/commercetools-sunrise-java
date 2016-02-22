@@ -3,8 +3,9 @@ package myaccount.login;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
+import javax.annotation.Nullable;
+
 public class SignUpFormData extends Base {
-    @Constraints.Required
     private String title;
     @Constraints.Required
     private String firstName;
@@ -29,6 +30,7 @@ public class SignUpFormData extends Base {
         return null;
     }
 
+    @Nullable
     public String getTitle() {
         return title;
     }
