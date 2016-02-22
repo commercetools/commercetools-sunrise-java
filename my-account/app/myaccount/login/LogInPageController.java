@@ -86,17 +86,19 @@ public final class LogInPageController extends SunriseController {
 
     private F.Promise<CustomerSignInResult> logIn(final Form<LogInFormData> form) {
         final LogInFormData formData = form.get();
-        final CustomerSignInCommand signInCommand = CustomerSignInCommand.of(formData.getUsername(), formData.getPassword());
+        final String anonymousCartId = CartSessionUtils.getCartId(session()).orElse(null);
+        final CustomerSignInCommand signInCommand = CustomerSignInCommand.of(formData.getUsername(), formData.getPassword(), anonymousCartId);
         return sphere().execute(signInCommand);
     }
 
     private F.Promise<CustomerSignInResult> signUp(final Form<SignUpFormData> form) {
         final SignUpFormData formData = form.get();
+        final String anonymousCartId = CartSessionUtils.getCartId(session()).orElse(null);
         final CustomerDraft customerDraft = CustomerDraftBuilder.of(formData.getEmail(), formData.getPassword())
                 .title(formData.getTitle())
                 .firstName(formData.getFirstName())
                 .lastName(formData.getLastName())
-                .anonymousCartId(CartSessionUtils.getCartId(session()).orElse(null))
+                .anonymousCartId(anonymousCartId)
                 .build();
         final CustomerCreateCommand customerCreateCommand = CustomerCreateCommand.of(customerDraft);
         return sphere().execute(customerCreateCommand);
