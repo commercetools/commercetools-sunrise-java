@@ -40,7 +40,7 @@
     },
 
     "HOME_SUGGESTIONS_CATEGORIES": {
-      "description": "The categories where to obtain the products shown in the home page suggestions. Enter the category external IDs separated by commas.",
+      "description": "The categories to which the products shown in the home page suggestions belong. Enter the category external IDs separated by commas.",
       "required": false
     },
 
