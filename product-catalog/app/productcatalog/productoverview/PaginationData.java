@@ -5,8 +5,8 @@ import common.models.LinkData;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.PagedResult;
 
-import java.util.*;
-import java.util.stream.IntStream;
+import java.util.List;
+import java.util.stream.LongStream;
 
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -23,9 +23,9 @@ public class PaginationData extends Base {
 
     public PaginationData(final RequestContext requestContext, final PagedResult<?> searchResult,
                           final int currentPage, final int pageSize, final int displayedPages) {
-        final int totalPages = calculateTotalPages(searchResult, pageSize);
-        final int thresholdLeft = displayedPages - 1;
-        final int thresholdRight = totalPages - displayedPages + 2;
+        final long totalPages = calculateTotalPages(searchResult, pageSize);
+        final long thresholdLeft = displayedPages - 1;
+        final long thresholdRight = totalPages - displayedPages + 2;
 
         if (totalPages <= displayedPages) {
             this.pages = createPages(1, totalPages, currentPage, requestContext);
@@ -88,19 +88,19 @@ public class PaginationData extends Base {
         this.nextUrl = nextUrl;
     }
 
-    private static int calculateTotalPages(final PagedResult<?> searchResult, final int pageSize) {
+    private static long calculateTotalPages(final PagedResult<?> searchResult, final int pageSize) {
         final Double totalPages = Math.ceil((float) searchResult.getTotal() / pageSize);
-        return totalPages.intValue();
+        return totalPages.longValue();
     }
 
-    private static List<LinkData> createPages(final int startPage, final int endPage, final int currentPage,
+    private static List<LinkData> createPages(final long startPage, final long endPage, final long currentPage,
                                               final RequestContext requestContext) {
-        return IntStream.rangeClosed(startPage, endPage)
+        return LongStream.rangeClosed(startPage, endPage)
                 .mapToObj(page -> createLinkData(page, currentPage, requestContext))
                 .collect(toList());
     }
 
-    private static LinkData createLinkData(final int page, final int currentPage, final RequestContext requestContext) {
+    private static LinkData createLinkData(final long page, final long currentPage, final RequestContext requestContext) {
         final LinkData linkData = new LinkData(String.valueOf(page), buildRequestUrlWithPage(page, requestContext));
         if (page == currentPage) {
             linkData.setSelected(true);
@@ -108,7 +108,7 @@ public class PaginationData extends Base {
         return linkData;
     }
 
-    private static String buildRequestUrlWithPage(final int page, final RequestContext requestContext) {
+    private static String buildRequestUrlWithPage(final long page, final RequestContext requestContext) {
         return requestContext.buildUrl("page", singletonList(String.valueOf(page)));
     }
 }
