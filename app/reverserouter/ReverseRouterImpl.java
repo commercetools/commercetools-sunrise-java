@@ -13,7 +13,7 @@ import static shoppingcart.checkout.confirmation.routes.*;
 import static shoppingcart.checkout.payment.routes.*;
 import static shoppingcart.checkout.shipping.routes.*;
 import static shoppingcart.checkout.thankyou.routes.*;
-import static myaccount.login.routes.*;
+//import static myaccount.login.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
 
@@ -122,21 +122,25 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call showLogInForm(final String languageTag) {
-        return LogInPageController.show(languageTag);
+        return showHome(languageTag);
+//        return LogInPageController.show(languageTag);
     }
 
     @Override
     public Call processLogInForm(final String languageTag) {
-        return LogInPageController.processLogIn(languageTag);
+        return showHome(languageTag);
+//        return LogInPageController.processLogIn(languageTag);
     }
 
     @Override
     public Call processSignUpForm(final String languageTag) {
-        return LogInPageController.processSignUp(languageTag);
+        return showHome(languageTag);
+//        return LogInPageController.processSignUp(languageTag);
     }
 
     @Override
     public Call processLogOut(final String languageTag) {
-        return LogInPageController.processLogOut(languageTag);
+        return showHome(languageTag);
+//        return LogInPageController.processLogOut(languageTag);
     }
 }
