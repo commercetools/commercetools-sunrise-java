@@ -1,4 +1,4 @@
-<configuration debug="false">
+<configuration debug="true">
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -15,10 +15,9 @@
     <logger name="play.requests" level="DEBUG" />
     <logger name="sphere" level="INFO" />
     <logger name="sphere.metrics.simple" level="DEBUG" />
-    <logger name="productcatalog.services.ProductServiceImpl" level="TRACE" />
     <logger name="tasks.WebjarsFilesCopier" level="INFO" />
 
-    <root level="ERROR">
+    <root level="WARN">
         <appender-ref ref="STDOUT" />
     </root>
 

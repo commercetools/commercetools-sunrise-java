@@ -98,7 +98,7 @@ lazy val dockerSettings = Seq(
   packageName in Docker := "sunrise",
   dockerRepository := Some("sphereio"),
   dockerExposedPorts := Seq(9000),
-  dockerCmd := Seq("-Dconfig.resource=prod.conf", "-Dlogger.resource=docker-logger.xml")
+  dockerCmd := Seq("-Dconfig.resource=prod.conf")
 )
 
 lazy val disableDockerPublish = Seq(
