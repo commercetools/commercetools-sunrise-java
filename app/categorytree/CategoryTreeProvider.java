@@ -20,7 +20,7 @@ class CategoryTreeProvider implements Provider<CategoryTreeExtended> {
     public CategoryTreeExtended get() {
         try {
             final RefreshableCategoryTree categoryTree = RefreshableCategoryTree.of(client);
-            Logger.debug("Provide RefreshableCategoryTree with " + categoryTree.getAllAsFlatList().size() + " categories");
+            Logger.info("Provide RefreshableCategoryTree with " + categoryTree.getAllAsFlatList().size() + " categories");
             return categoryTree;
         } catch (RuntimeException e) {
             throw new SunriseInitializationException("Could not fetch categories", e);

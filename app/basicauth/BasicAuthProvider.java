@@ -26,13 +26,13 @@ class BasicAuthProvider implements Provider<BasicAuth> {
         final String credentials = configuration.getString(CONFIG_CREDENTIALS);
         if (credentials != null && !credentials.isEmpty()) {
             if (credentials.matches(REGEX_CREDENTIALS)) {
-                Logger.debug("Basic authentication: enabled for realm \"{}\"", realm);
+                Logger.info("Basic authentication: enabled for realm \"{}\"", realm);
                 return BasicAuth.of(realm, credentials);
             } else {
                 throw new SunriseInitializationException("Basic access authentication credentials must be of the form 'username:password', matching: " + REGEX_CREDENTIALS);
             }
         } else {
-            Logger.debug("Basic authentication: disabled");
+            Logger.info("Basic authentication: disabled");
             return null;
         }
     }

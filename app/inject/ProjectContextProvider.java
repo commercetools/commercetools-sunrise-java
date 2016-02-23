@@ -41,7 +41,7 @@ class ProjectContextProvider implements Provider<ProjectContext> {
             final List<Locale> languages = getLanguages(project);
             final List<CountryCode> countries = getCountries(project);
             final List<CurrencyUnit> currencies = getCurrencies(project);
-            Logger.debug("Provide ProjectContext:"
+            Logger.info("Provide ProjectContext:"
                     + " Languages " + languages + ","
                     + " Countries " + countries + ","
                     + " Currencies " + currencies);

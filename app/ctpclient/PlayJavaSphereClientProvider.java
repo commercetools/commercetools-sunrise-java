@@ -21,7 +21,7 @@ class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
 
     @Override
     public PlayJavaSphereClient get() {
-        Logger.debug("Provide PlayJavaSphereClient");
+        Logger.info("Provide PlayJavaSphereClient");
         final PlayJavaSphereClient playJavaSphereClient = PlayJavaSphereClient.of(sphereClient);
         applicationLifecycle.addStopHook(() ->
                         F.Promise.promise(() -> {

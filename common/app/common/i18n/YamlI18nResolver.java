@@ -26,7 +26,7 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
         for (final Locale locale : locales) {
             buildYamlMap(filepath, bundles, locale);
         }
-        Logger.debug("Yaml i18n resolver: Loaded {} from filepath '{}'", yamlMap.keySet(), filepath);
+        Logger.info("Yaml i18n resolver: Loaded {} from filepath '{}'", yamlMap.keySet(), filepath);
     }
 
     @Override

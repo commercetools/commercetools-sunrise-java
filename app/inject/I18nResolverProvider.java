@@ -34,7 +34,7 @@ class I18nResolverProvider implements Provider<I18nResolver> {
     public I18nResolver get() {
         final List<Locale> locales = projectContext.locales();
         final List<String> bundles = getBundles();
-        Logger.debug("Provide CompositeI18nResolver: languages {}, bundles {}", locales, bundles);
+        Logger.info("Provide CompositeI18nResolver: languages {}, bundles {}", locales, bundles);
         final List<I18nResolver> i18nResolvers = loadI18nResolvers(locales, bundles);
         return CompositeI18nResolver.of(i18nResolvers);
     }

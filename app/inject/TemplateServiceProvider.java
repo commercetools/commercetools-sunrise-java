@@ -38,7 +38,7 @@ class TemplateServiceProvider implements Provider<TemplateService> {
         if (templateLoaders.isEmpty()) {
             throw new SunriseInitializationException("No Handlebars template loaders found in configuration '" + CONFIG_TEMPLATE_LOADERS + "'");
         }
-        Logger.debug("Provide HandlebarsTemplateService: template loaders [{}]]",
+        Logger.info("Provide HandlebarsTemplateService: template loaders [{}]]",
                 templateLoaders.stream().map(TemplateLoader::getPrefix).collect(joining(", ")));
         return HandlebarsTemplateService.of(templateLoaders, i18NResolver);
     }
