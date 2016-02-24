@@ -19,7 +19,6 @@ io.sphere.sdk.play.controllers
 io.sphere.sdk.play.metrics
 io.sphere.sdk.queries
 myaccount
-myaccount.login
 productcatalog.common
 productcatalog.home
 productcatalog.productdetail
