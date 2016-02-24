@@ -85,9 +85,7 @@ lazy val commonSettings = releaseSettings ++ Seq (
 )
 
 lazy val jvmSdkDependencies = Seq (
-  resolvers ++= Seq (
-    Resolver.sonatypeRepo("releases")
-  ),
+  resolvers += Resolver.sonatypeRepo("releases"),
   libraryDependencies ++= Seq (
     "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
     "com.commercetools.sdk.jvm.scala-add-ons" %% "commercetools-play-2_4-java-client" % jvmSdkVersion
@@ -95,9 +93,7 @@ lazy val jvmSdkDependencies = Seq (
 )
 
 lazy val themeDependencies = Seq (
-  resolvers ++= Seq (
-    Resolver.bintrayRepo("commercetools", "maven")
-  ),
+  resolvers += Resolver.bintrayRepo("commercetools", "maven"),
   libraryDependencies ++= Seq (
     "io.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseDesignVersion,
     "org.webjars" %% "webjars-play" % "2.4.0-1",
