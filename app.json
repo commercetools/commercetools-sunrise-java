@@ -46,12 +46,12 @@
 
     "HOME_SUGGESTIONS_SIZE": {
       "description": "The amount of products displayed in the home page suggestions.",
-      "value": 4,
+      "value": "4",
       "required": false
     },
     "PRODUCT_SUGGESTIONS_SIZE": {
       "description": "The amount of products displayed for a product's suggestions.",
-      "value": 4,
+      "value": "4",
       "required": false
     },
 
