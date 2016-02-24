@@ -26,32 +26,38 @@ lazy val jacksonVersion = "2.6.0"
 lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;test->test;it->it;pt->pt"
 
 lazy val `commercetools-sunrise` = (project in file("."))
-  .enablePlugins(PlayJava, DockerPlugin).configs(IntegrationTest, PlayTest).settings(commonSettings ++ dockerSettings: _*)
-  .dependsOn(commonWithTests, `product-catalog`, `shopping-cart`, /*`my-account`,*/ `setup-widget`)
-  .aggregate(common, `product-catalog`, `shopping-cart`, /*`my-account`,*/ `setup-widget`, `move-to-sdk`)
+  .enablePlugins(PlayJava, DockerPlugin).configs(IntegrationTest, PlayTest)
+  .settings(commonSettings ++ commonTestSettings ++ dockerSettings: _*)
+  .dependsOn(commonWithTests, `product-catalog`, `shopping-cart`, `my-account`, `setup-widget`)
+  .aggregate(common, `product-catalog`, `shopping-cart`, `my-account`, `setup-widget`, `move-to-sdk`)
 
 lazy val common = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
+  .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ themeDependencies ++ commonDependencies ++ disableDockerPublish: _*)
   .dependsOn(`move-to-sdk`)
 
 lazy val `product-catalog` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
+  .settings(commonSettings ++ commonTestSettings ++ disableDockerPublish: _*)
   .dependsOn(commonWithTests)
 
 lazy val `shopping-cart` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
+  .settings(commonSettings ++ commonTestSettings ++ disableDockerPublish: _*)
   .dependsOn(commonWithTests)
 
-/*
 lazy val `my-account` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
+  .settings(commonSettings ++ commonTestSettings ++ disableDockerPublish: _*)
   .dependsOn(commonWithTests)
-*/
+
 lazy val `setup-widget` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
+  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
+  .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ disableDockerPublish: _*)
 
 lazy val `move-to-sdk` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest).settings(commonSettings ++ disableDockerPublish: _*)
+  .enablePlugins(PlayJava).configs(IntegrationTest)
+  .settings(commonSettings ++ testSettingsWithoutPt ++ jvmSdkDependencies ++ disableDockerPublish: _*)
 
 /**
  * COMMON SETTINGS
@@ -59,25 +65,9 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
+lazy val commonSettings = releaseSettings ++ Seq (
   scalaVersion := "2.10.6",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
-  resolvers ++= Seq (
-    Resolver.sonatypeRepo("releases"),
-    Resolver.bintrayRepo("commercetools", "maven")
-    //,Resolver.sonatypeRepo("snapshots")
-    //,Resolver.mavenLocal
-  ),
-  libraryDependencies ++= Seq (
-    filters,
-    "io.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseDesignVersion,
-    "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
-    "com.commercetools.sdk.jvm.scala-add-ons" %% "commercetools-play-2_4-java-client" % jvmSdkVersion,
-    "org.webjars" %% "webjars-play" % "2.4.0-1",
-    "com.github.jknack" % "handlebars" % "2.3.2",
-    "commons-beanutils" % "commons-beanutils" % "1.9.2",
-    "commons-io" % "commons-io" % "2.4"
-  ),
   dependencyOverrides ++= Set (
     "org.slf4j" % "slf4j-api" % "1.7.15",
     "com.google.guava" % "guava" % "18.0",
@@ -91,6 +81,35 @@ lazy val commonSettings = testSettings ++ releaseSettings ++ Seq (
     "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
     "org.scala-lang" % "scala-library" % "2.10.6",
     "org.scala-lang" % "scala-reflect" % "2.10.6"
+  )
+)
+
+lazy val jvmSdkDependencies = Seq (
+  resolvers ++= Seq (
+    Resolver.sonatypeRepo("releases")
+  ),
+  libraryDependencies ++= Seq (
+    "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
+    "com.commercetools.sdk.jvm.scala-add-ons" %% "commercetools-play-2_4-java-client" % jvmSdkVersion
+  )
+)
+
+lazy val themeDependencies = Seq (
+  resolvers ++= Seq (
+    Resolver.bintrayRepo("commercetools", "maven")
+  ),
+  libraryDependencies ++= Seq (
+    "io.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseDesignVersion,
+    "org.webjars" %% "webjars-play" % "2.4.0-1",
+    "com.github.jknack" % "handlebars" % "2.3.2"
+  )
+)
+
+lazy val commonDependencies = Seq (
+  libraryDependencies ++= Seq (
+    filters,
+    "commons-beanutils" % "commons-beanutils" % "1.9.2",
+    "commons-io" % "commons-io" % "2.4"
   )
 )
 
@@ -110,28 +129,42 @@ lazy val disableDockerPublish = Seq(
 /**
  * TEST SETTINGS
  */
+
 lazy val PlayTest = config("pt") extend(Test)
 
-lazy val testScopes = "test,it,pt"
+lazy val commonTestSettings = itBaseTestSettings ++ ptBaseTestSettings ++ configCommonTestSettings("test,it,pt")
 
-lazy val testSettings = Defaults.itSettings ++ inConfig(PlayTest)(Defaults.testSettings) ++ testDirConfigs(IntegrationTest, "it") ++ testDirConfigs(PlayTest, "pt") ++ Seq (
-  testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
-  unmanagedBase in Test := baseDirectory.value / "test" / "lib",
+lazy val testSettingsWithoutPt = itBaseTestSettings ++ configCommonTestSettings("test,it")
+
+lazy val itBaseTestSettings = Defaults.itSettings ++ configTestDirs(IntegrationTest, "it")
+
+lazy val ptBaseTestSettings = inConfig(PlayTest)(Defaults.testSettings) ++ configTestDirs(PlayTest, "pt") ++ Seq (
   libraryDependencies ++= Seq (
-    javaWs % "pt",
-    "org.assertj" % "assertj-core" % "3.0.0" % testScopes,
-    PlayImport.component("play-test") % "it,pt"
-  ),
-  dependencyOverrides ++= Set (
-    "junit" % "junit" % "4.12" % testScopes
+    javaWs % "pt"
   )
 )
 
-def testDirConfigs(config: Configuration, folderName: String) = Seq(
+def configTestDirs(config: Configuration, folderName: String) = Seq(
   javaSource in config := baseDirectory.value / folderName,
   scalaSource in config := baseDirectory.value / folderName,
   resourceDirectory in config := baseDirectory.value / s"$folderName/resources"
 )
+
+def configCommonTestSettings(scopes: String) = Seq(
+  testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
+  unmanagedBase in Test := baseDirectory.value / "test" / "lib",
+  libraryDependencies ++= Seq (
+    "org.assertj" % "assertj-core" % "3.0.0" % scopes,
+    PlayImport.component("play-test") % scopes
+  ),
+  dependencyOverrides ++= Set (
+    "junit" % "junit" % "4.12" % scopes
+  )
+)
+
+/**
+ * VERSION
+ */
 
 resourceGenerators in Compile += Def.task {
   val file = (resourceManaged in Compile).value / "internal" / "version.json"
