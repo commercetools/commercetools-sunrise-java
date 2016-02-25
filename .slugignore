@@ -1,4 +1,1 @@
-**/test
-**/pt
-**/it
-**/*.md
+!/target
