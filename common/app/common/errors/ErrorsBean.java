@@ -3,6 +3,7 @@ package common.errors;
 import io.sphere.sdk.models.Base;
 import play.data.Form;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,7 +18,10 @@ public class ErrorsBean extends Base {
     }
 
     public ErrorsBean(final Form<?> filledForm) {
-        this(filledForm.errorsAsJson().toString());
+        this.globalErrors = new ArrayList<>();
+        filledForm.errors()
+                .forEach((field, errors) -> errors
+                        .forEach(error -> globalErrors.add(new ErrorBean(field + ": " + error))));
     }
 
     public List<ErrorBean> getGlobalErrors() {
