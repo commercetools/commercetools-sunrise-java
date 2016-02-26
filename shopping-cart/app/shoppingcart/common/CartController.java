@@ -8,6 +8,7 @@ import common.controllers.SunriseController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
 import io.sphere.sdk.carts.CartDraftBuilder;
+import io.sphere.sdk.carts.CartState;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
@@ -33,7 +34,7 @@ public abstract class CartController extends SunriseController {
 
     protected F.Promise<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
         return Optional.ofNullable(session(CartSessionKeys.CART_ID))
-                .map(this::fetchCart)
+                .map(cartId -> fetchCart(cartId, userContext))
                 .orElseGet(() -> createCart(userContext))
                 .flatMap(cart -> {
                     CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
@@ -53,9 +54,13 @@ public abstract class CartController extends SunriseController {
         return sphere().execute(CartCreateCommand.of(cartDraft));
     }
 
-    private F.Promise<Cart> fetchCart(final String cartId) {
-        final CartByIdGet query = CartByIdGet.of(cartId).withExpansionPaths(m -> m.shippingInfo().shippingMethod());
-        return sphere().execute(query);
+    private F.Promise<Cart> fetchCart(final String cartId, final UserContext userContext) {
+        final CartByIdGet query = CartByIdGet.of(cartId)
+                .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
+        return sphere().execute(query).flatMap(cart -> {
+            final boolean isActive = cart.getCartState().equals(CartState.ACTIVE);
+            return isActive ? F.Promise.pure(cart) : createCart(userContext);
+        });
     }
 
     /**
