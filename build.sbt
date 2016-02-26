@@ -4,6 +4,9 @@ import java.util.Date
 import play.sbt.PlayImport
 import complete.DefaultParsers._
 
+import sbt._
+import sbt.Keys._
+
 import scala.util.{Success, Try}
 
 import ReleaseTransformations._
@@ -199,6 +202,28 @@ lazy val releaseSettings = Seq(
     pushChanges
   )
 )
+
+/**
+ * HEROKU SETTINGS
+ */
+
+stage := {
+  val f = (stage in Universal).value
+
+  val log = streams.value.log
+  log.info("Cleaning submodules' target directories")
+
+  sbt.IO.listFiles(baseDirectory.value, new FileFilter {
+    override def accept(pathname: File): Boolean =
+      (pathname / "target" exists()) && !pathname.getName.equals("project")
+  }).foreach(f => {
+    val t = f / "target"
+    sbt.IO.delete(t)
+    log.info(s"Removed ${t}")
+  })
+
+  f
+}
 
 /**
  * TEMPLATE SETTINGS
