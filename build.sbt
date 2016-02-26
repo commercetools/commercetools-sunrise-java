@@ -113,7 +113,7 @@ lazy val commonDependencies = Seq (
 )
 
 lazy val dockerSettings = Seq(
-  version in Docker := "latest",
+  version in Docker := Option(System.getenv("BUILD_VCS_NUMBER")).getOrElse("latest"),
   packageName in Docker := "sunrise",
   dockerRepository := Some("sphereio"),
   dockerExposedPorts := Seq(9000),
