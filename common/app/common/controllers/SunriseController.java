@@ -1,6 +1,7 @@
 package common.controllers;
 
 import com.neovisionaries.i18n.CountryCode;
+import common.actions.NoCache;
 import common.cms.CmsService;
 import common.contexts.ProjectContext;
 import common.contexts.RequestContext;
@@ -38,6 +39,7 @@ import static java.util.stream.Collectors.toList;
  */
 @With(MetricAction.class)
 @AddCSRFToken
+@NoCache
 public abstract class SunriseController extends ShopController {
     public static final String SESSION_COUNTRY = "countryCode";
     private final ControllerDependency controllerDependency;
