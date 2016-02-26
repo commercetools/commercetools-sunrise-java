@@ -21,7 +21,7 @@ public class ErrorsBean extends Base {
         this.globalErrors = new ArrayList<>();
         filledForm.errors()
                 .forEach((field, errors) -> errors
-                        .forEach(error -> globalErrors.add(new ErrorBean(field + ": " + error))));
+                        .forEach(error -> globalErrors.add(new ErrorBean(error.key() + ": " + error.message()))));
     }
 
     public List<ErrorBean> getGlobalErrors() {
