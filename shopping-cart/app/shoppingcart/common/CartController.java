@@ -13,14 +13,15 @@ import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
+import io.sphere.sdk.carts.queries.CartByCustomerIdGet;
 import io.sphere.sdk.carts.queries.CartByIdGet;
 import io.sphere.sdk.models.Address;
 import myaccount.CustomerSessionUtils;
 import play.libs.F;
 import play.mvc.Http;
-import shoppingcart.CartSessionKeys;
 import shoppingcart.CartSessionUtils;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
@@ -33,14 +34,19 @@ public abstract class CartController extends SunriseController {
     }
 
     protected F.Promise<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
-        return Optional.ofNullable(session(CartSessionKeys.CART_ID))
-                .map(cartId -> fetchCart(cartId, userContext))
-                .orElseGet(() -> createCart(userContext))
-                .flatMap(cart -> {
-                    CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
-                    final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
-                    return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : F.Promise.pure(cart);
-                });
+        return fetchCart(userContext, session).flatMap(cart -> {
+            CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
+            final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
+            return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : F.Promise.pure(cart);
+        });
+    }
+
+    private F.Promise<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
+        return CustomerSessionUtils.getCustomerId(session)
+                .map(customerId -> fetchCartByCustomerOrNew(customerId, userContext))
+                .orElseGet(() -> CartSessionUtils.getCartId(session)
+                        .map(cartId -> fetchCartByIdOrNew(cartId, userContext))
+                        .orElseGet(() -> createCart(userContext)));
     }
 
     private F.Promise<Cart> createCart(final UserContext userContext) {
@@ -54,13 +60,25 @@ public abstract class CartController extends SunriseController {
         return sphere().execute(CartCreateCommand.of(cartDraft));
     }
 
-    private F.Promise<Cart> fetchCart(final String cartId, final UserContext userContext) {
+    private F.Promise<Cart> fetchCartByIdOrNew(final String cartId, final UserContext userContext) {
         final CartByIdGet query = CartByIdGet.of(cartId)
                 .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
-        return sphere().execute(query).flatMap(cart -> {
-            final boolean isActive = cart.getCartState().equals(CartState.ACTIVE);
-            return isActive ? F.Promise.pure(cart) : createCart(userContext);
-        });
+        return sphere().execute(query)
+                .flatMap(cart -> validCartOrNew(cart, userContext));
+    }
+
+    private F.Promise<Cart> fetchCartByCustomerOrNew(final String customerId, final UserContext userContext) {
+        final CartByCustomerIdGet query = CartByCustomerIdGet.of(customerId)
+                .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
+        return sphere().execute(query)
+                .flatMap(cart -> validCartOrNew(cart, userContext));
+    }
+
+    private F.Promise<Cart> validCartOrNew(@Nullable final Cart cart, final UserContext userContext) {
+        return Optional.ofNullable(cart)
+                .filter(c -> c.getCartState().equals(CartState.ACTIVE))
+                .map(F.Promise::pure)
+                .orElseGet(() -> createCart(userContext));
     }
 
     /**
