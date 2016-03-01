@@ -7,7 +7,6 @@ import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Identifiable;
-import io.sphere.sdk.queries.QueryAll;
 import org.apache.commons.lang3.ObjectUtils;
 import play.Logger;
 
@@ -15,7 +14,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
+import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
+import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
 import static java.util.stream.Collectors.toList;
 
 public final class RefreshableCategoryTree extends Base implements CategoryTreeExtended {
@@ -87,7 +89,7 @@ public final class RefreshableCategoryTree extends Base implements CategoryTreeE
     }
 
     private static List<Category> fetchCategories(final SphereClient client) {
-        final List<Category> categories = QueryAll.of(CategoryQuery.of()).run(client).toCompletableFuture().join();
+        final List<Category> categories = blockingWait(queryAll(client, CategoryQuery.of()), 30, TimeUnit.SECONDS);
         return sortCategories(categories);
     }
 
