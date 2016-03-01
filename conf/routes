@@ -26,9 +26,11 @@ GET         /categories/refresh                                @categorytree.Cat
 # WEB ASSETS
 # ~~~~~
 
+# Map static favicon.ico from WebJars to root folder
+GET         /favicon.ico                                       controllers.WebJarAssets.at(file="img/favicon.ico")
 # Map static resources from the /public folder to the /assets/public URL path
 GET         /assets/public/*file                               controllers.Assets.at(path="/public", file)
-# Map static resources from webjars (only CSS, JS, fonts and images) to the /assets URL path
+# Map static resources from WebJars (only CSS, JS, fonts and images) to the /assets URL path
 GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJarAssets.at(file)
 
 
