@@ -6,14 +6,16 @@ import io.sphere.sdk.models.Base;
 import io.sphere.sdk.producttypes.MetaProductType;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.queries.ProductTypeQuery;
-import io.sphere.sdk.queries.QueryAll;
 import play.Configuration;
 import play.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
+import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
 import static java.util.Collections.emptyList;
 
 class ProductDataConfigProvider extends Base implements Provider<ProductDataConfig> {
@@ -40,7 +42,7 @@ class ProductDataConfigProvider extends Base implements Provider<ProductDataConf
     }
 
     private MetaProductType getMetaProductType() {
-        final List<ProductType> productTypes =  QueryAll.of(ProductTypeQuery.of()).run(client).toCompletableFuture().join();
+        final List<ProductType> productTypes = blockingWait(queryAll(client, ProductTypeQuery.of()), 30, TimeUnit.SECONDS);
         return MetaProductType.of(productTypes);
     }
 }

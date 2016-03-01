@@ -91,6 +91,7 @@ lazy val jvmSdkDependencies = Seq (
   resolvers += Resolver.sonatypeRepo("releases"),
   libraryDependencies ++= Seq (
     "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
+    "com.commercetools.sdk.jvm.core" % "commercetools-convenience" % jvmSdkVersion,
     "com.commercetools.sdk.jvm.scala-add-ons" %% "commercetools-play-2_4-java-client" % jvmSdkVersion
   )
 )
