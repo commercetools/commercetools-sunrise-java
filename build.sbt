@@ -17,7 +17,9 @@ organization := "io.commercetools.sunrise"
 
 lazy val sunriseDesignVersion = "0.54.0"
 
-lazy val jvmSdkVersion = "1.0.0-RC1"
+lazy val jvmSdkVersion = "1.0.0-RC2"
+
+lazy val jvmSdkPlayAddOnVersion = "1.0.0-RC1"
 
 lazy val jacksonVersion = "2.6.0"
 
@@ -88,11 +90,11 @@ lazy val commonSettings = releaseSettings ++ Seq (
 )
 
 lazy val jvmSdkDependencies = Seq (
-  resolvers += Resolver.sonatypeRepo("releases"),
+  resolvers in ThisBuild ++= Resolver.sonatypeRepo("releases") :: Resolver.mavenLocal :: Nil,
   libraryDependencies ++= Seq (
     "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
     "com.commercetools.sdk.jvm.core" % "commercetools-convenience" % jvmSdkVersion,
-    "com.commercetools.sdk.jvm.scala-add-ons" %% "commercetools-play-2_4-java-client" % jvmSdkVersion
+    "com.commercetools.sdk.jvm.scala-add-ons" %% "commercetools-play-2_4-java-client" % jvmSdkPlayAddOnVersion
   )
 )
 
