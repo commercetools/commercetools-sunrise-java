@@ -25,8 +25,7 @@ public final class HandlebarsTemplateService implements TemplateService {
     @Override
     public String render(final String templateName, final PageData pageData, final List<Locale> locales) {
         final Template template = compileTemplate(templateName);
-        final Context context = createContext(pageData);
-        context.data("locales", locales.stream().map(Locale::toLanguageTag).collect(toList()));
+        final Context context = createContext(pageData, locales);
         try {
             Logger.debug("Rendering template " + templateName);
             return template.apply(context);
@@ -46,8 +45,10 @@ public final class HandlebarsTemplateService implements TemplateService {
         return new HandlebarsTemplateService(handlebars);
     }
 
-    private Context createContext(final PageData pageData) {
-        return Context.newContext(pageData);
+    private Context createContext(final PageData pageData, final List<Locale> locales) {
+        final Context context = Context.newContext(pageData);
+        context.data("locales", locales.stream().map(Locale::toLanguageTag).collect(toList()));
+        return context;
     }
 
     private Template compileTemplate(final String templateName) {
