@@ -8,8 +8,3 @@
 form[name=add-to-wishlist] {
     display: none;
 }
-
-/* Hide product gallery */
-.bzoom .bzoom_small_thumbs {
-    display: none;
-}
