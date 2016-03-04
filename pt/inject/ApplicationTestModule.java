@@ -18,7 +18,7 @@ public class ApplicationTestModule extends AbstractModule {
     }
 
     private I18nResolver injectedI18nResolver() {
-        return ((locale, bundle, key, args) -> Optional.empty());
+        return ((locales, bundle, key, args) -> Optional.empty());
     }
 
     protected TemplateService injectedTemplateService() {
@@ -26,6 +26,6 @@ public class ApplicationTestModule extends AbstractModule {
     }
 
     protected CmsService injectedCmsService() {
-        return ((locale, pageKey) -> F.Promise.pure((messageKey, args) -> Optional.empty()));
+        return ((locales, pageKey) -> F.Promise.pure((messageKey, args) -> Optional.empty()));
     }
 }

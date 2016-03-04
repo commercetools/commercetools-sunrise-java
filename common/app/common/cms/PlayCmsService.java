@@ -7,12 +7,15 @@ import play.libs.F;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 import java.util.Locale;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Service that provides content data from Messages files as handled by Play.
  * In order to share a common interface with other CMS, a normal message key has been split into Page Key
- * (required by {@link PlayCmsService#getPage(Locale, String)}) and Message Key (required by {@link PlayCmsPage#get(String, Object...)}).
+ * (required by {@link PlayCmsService#getPage(List, String)}) and Message Key (required by {@link PlayCmsPage#get(String, Object...)}).
  * A possible example: "home.title" is split into "home" as Page Key and "title" as Message Key.
  * Nonetheless, you can always skip the Page Key and provide only a Message Key "home.title".
  */
@@ -26,11 +29,13 @@ public final class PlayCmsService implements CmsService {
     }
 
     @Override
-    public F.Promise<CmsPage> getPage(final Locale locale, final String pageKey) {
-        final Lang lang = Lang.forCode(locale.toLanguageTag());
-        final Messages messages = new Messages(lang, messagesApi);
-        final CmsPage cmsPage = new PlayCmsPage(messages, pageKey);
-        return F.Promise.pure(cmsPage);
+    public F.Promise<List<CmsPage>> getPage(final List<Locale> locales, final String pageKey) {
+        final List<CmsPage> cmsPages = locales.stream().map(locale -> {
+            final Lang lang = Lang.forCode(locale.toLanguageTag());
+            final Messages messages = new Messages(lang, messagesApi);
+            return new PlayCmsPage(messages, pageKey);
+        }).collect(toList());
+        return F.Promise.pure(cmsPages);
     }
 
     public static PlayCmsService of(final MessagesApi messagesApi) {

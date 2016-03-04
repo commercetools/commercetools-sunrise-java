@@ -30,11 +30,14 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
     }
 
     @Override
-    public Optional<String> get(final Locale locale, final String bundle, final String key, final Object... args) {
-        // TODO Work with the arguments (replace arguments, pluralize)
-        final Map yamlContent = getYamlContent(bundle, locale);
-        final String[] pathSegments = StringUtils.split(key, '.');
-        return get(yamlContent, pathSegments, 0);
+    public Optional<String> get(final List<Locale> locales, final String bundle, final String key, final Object... args) {
+        for (final Locale locale : locales) {
+            final Optional<String> message = findTranslation(locale, bundle, key, args);
+            if (message.isPresent()) {
+                return message;
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -48,14 +51,21 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
         return new YamlI18nResolver(filepath, locales, bundles);
     }
 
-    private Optional<String> get(final Map yamlContent, final String[] pathSegments, final int index) {
+    private Optional<String> findTranslation(final Locale locale, final String bundle, final String key, final Object... args) {
+        // TODO Work with the arguments (replace arguments, pluralize)
+        final Map yamlContent = getYamlContent(bundle, locale);
+        final String[] pathSegments = StringUtils.split(key, '.');
+        return findTranslation(yamlContent, pathSegments, 0);
+    }
+
+    private Optional<String> findTranslation(final Map yamlContent, final String[] pathSegments, final int index) {
         Optional<String> message = Optional.empty();
         if (index < pathSegments.length) {
             final Object yamlEntry = yamlContent.get(pathSegments[index]);
             if (yamlEntry instanceof String) {
                 message = Optional.of((String) yamlEntry);
             } else if (yamlEntry instanceof Map) {
-                message = get((Map) yamlEntry, pathSegments, index + 1);
+                message = findTranslation((Map) yamlEntry, pathSegments, index + 1);
             }
         }
         return message;

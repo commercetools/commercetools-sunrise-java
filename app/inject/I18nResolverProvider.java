@@ -1,7 +1,9 @@
 package inject;
 
 import com.google.inject.Provider;
+import common.cms.CmsService;
 import common.contexts.ProjectContext;
+import common.i18n.CmsI18nResolver;
 import common.i18n.CompositeI18nResolver;
 import common.i18n.I18nResolver;
 import common.i18n.YamlI18nResolver;
@@ -21,13 +23,16 @@ class I18nResolverProvider implements Provider<I18nResolver> {
     private static final String CONFIG_TYPE_ATTR = "type";
     private static final String CONFIG_PATH_ATTR = "path";
     private static final String YAML_TYPE = "yaml";
+    private static final String CMS_TYPE = "cms";
     private final Configuration configuration;
     private final ProjectContext projectContext;
+    private final CmsService cmsService;
 
     @Inject
-    public I18nResolverProvider(final Configuration configuration, final ProjectContext projectContext) {
+    public I18nResolverProvider(final Configuration configuration, final ProjectContext projectContext, final CmsService cmsService) {
         this.configuration = configuration;
         this.projectContext = projectContext;
+        this.cmsService = cmsService;
     }
 
     @Override
@@ -57,11 +62,13 @@ class I18nResolverProvider implements Provider<I18nResolver> {
                 .collect(toList());
     }
 
-    private static YamlI18nResolver loadI18nResolver(final Configuration resolverLoader, final List<Locale> locales, final List<String> bundles) {
+    private I18nResolver loadI18nResolver(final Configuration resolverLoader, final List<Locale> locales, final List<String> bundles) {
         final String type = resolverLoader.getString(CONFIG_TYPE_ATTR);
         final String path = resolverLoader.getString(CONFIG_PATH_ATTR);
         if (YAML_TYPE.equals(type)) {
             return YamlI18nResolver.of(path, locales, bundles);
+        } else if (CMS_TYPE.equals(type)) {
+            return CmsI18nResolver.of(cmsService);
         } else {
             throw new SunriseInitializationException("Not recognized i18n resolver loader: " + type);
         }
