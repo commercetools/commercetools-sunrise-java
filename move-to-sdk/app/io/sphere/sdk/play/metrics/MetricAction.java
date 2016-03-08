@@ -4,12 +4,12 @@ import io.sphere.sdk.http.HttpMethod;
 import io.sphere.sdk.utils.SphereInternalLogger;
 import org.apache.commons.lang3.tuple.Pair;
 import play.Configuration;
-import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.*;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Predicate;
 
 import static java.lang.String.format;
@@ -28,11 +28,11 @@ public class MetricAction extends play.mvc.Action.Simple {
     }
 
     @Override
-    public F.Promise<Result> call(final Http.Context ctx) throws Throwable {
+    public CompletionStage<Result> call(final Http.Context ctx) {
         if (metricsEnabled) {
             final List<ReportRawData> rawData = Collections.synchronizedList(new LinkedList<>());
             ctx.args.put(KEY, rawData);
-            final F.Promise<Result> resultPromise = delegate.call(ctx);
+            final CompletionStage<Result> resultPromise = delegate.call(ctx);
             logRequestDataOnComplete(ctx, rawData, resultPromise);
             return resultPromise;
         } else {
@@ -40,8 +40,8 @@ public class MetricAction extends play.mvc.Action.Simple {
         }
     }
 
-    private void logRequestDataOnComplete(final Http.Context ctx, final List<ReportRawData> rawDatas, final F.Promise<Result> resultPromise) {
-        resultPromise.onRedeem(r -> {
+    private void logRequestDataOnComplete(final Http.Context ctx, final List<ReportRawData> rawDatas, final CompletionStage<Result> resultPromise) {
+        resultPromise.thenAccept(r -> {
             final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
             final List<ReportRawData> queries = queryCommandPair.getLeft();
             final List<ReportRawData> commands = queryCommandPair.getRight();
