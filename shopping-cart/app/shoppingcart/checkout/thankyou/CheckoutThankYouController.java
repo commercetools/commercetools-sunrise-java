@@ -5,13 +5,14 @@ import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.orders.queries.OrderByIdGet;
-import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.common.CartController;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static shoppingcart.CartSessionKeys.LAST_ORDER_ID_KEY;
@@ -26,16 +27,16 @@ public class CheckoutThankYouController extends CartController {
         this.productDataConfig = productDataConfig;
     }
 
-    public F.Promise<Result> show(final String languageTag) {
+    public CompletionStage<Result> show(final String languageTag) {
         final String lastOrderId = session(LAST_ORDER_ID_KEY);
-        return isBlank(lastOrderId) ? F.Promise.pure(redirectToCart(languageTag)) : loadOrder(lastOrderId, languageTag);
+        return isBlank(lastOrderId) ? CompletableFuture.completedFuture(redirectToCart(languageTag)) : loadOrder(lastOrderId, languageTag);
     }
 
     private Result redirectToCart(final String languageTag) {
         return redirect(reverseRouter().showCart(languageTag));
     }
 
-    private F.Promise<Result> loadOrder(final String lastOrderId, final String languageTag) {
+    private CompletionStage<Result> loadOrder(final String lastOrderId, final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final Http.Context ctx = ctx();
         return sphere().execute(OrderByIdGet.of(lastOrderId))

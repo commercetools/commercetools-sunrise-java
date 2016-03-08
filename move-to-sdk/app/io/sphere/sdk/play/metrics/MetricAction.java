@@ -4,6 +4,7 @@ import io.sphere.sdk.http.HttpMethod;
 import io.sphere.sdk.utils.SphereInternalLogger;
 import org.apache.commons.lang3.tuple.Pair;
 import play.Configuration;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import play.mvc.Result;
 
@@ -32,23 +33,23 @@ public class MetricAction extends play.mvc.Action.Simple {
         if (metricsEnabled) {
             final List<ReportRawData> rawData = Collections.synchronizedList(new LinkedList<>());
             ctx.args.put(KEY, rawData);
-            final CompletionStage<Result> resultPromise = delegate.call(ctx);
-            logRequestDataOnComplete(ctx, rawData, resultPromise);
-            return resultPromise;
+            final CompletionStage<Result> resultStage = delegate.call(ctx);
+            logRequestDataOnComplete(ctx, rawData, resultStage);
+            return resultStage;
         } else {
             return delegate.call(ctx);
         }
     }
 
-    private void logRequestDataOnComplete(final Http.Context ctx, final List<ReportRawData> rawDatas, final CompletionStage<Result> resultPromise) {
-        resultPromise.thenAccept(r -> {
+    private void logRequestDataOnComplete(final Http.Context ctx, final List<ReportRawData> rawDatas, final CompletionStage<Result> resultStage) {
+        resultStage.thenAcceptAsync(r -> {
             final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
             final List<ReportRawData> queries = queryCommandPair.getLeft();
             final List<ReportRawData> commands = queryCommandPair.getRight();
             final int size = calculateTotalSize(rawDatas);
             final String durations = rawDatas.stream().map(data -> data.getStopTimestamp() - data.getStartTimestamp()).map(l -> Long.toString(l) + " ms").collect(joining(", "));
             LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %d bytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
-        });
+        }, HttpExecution.defaultContext());
     }
 
     private Pair<List<ReportRawData>, List<ReportRawData>> splitByQueriesAndCommands(final List<ReportRawData> rawData) {

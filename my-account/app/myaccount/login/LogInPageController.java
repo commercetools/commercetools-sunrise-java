@@ -17,13 +17,15 @@ import play.Logger;
 import play.data.Form;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.CartSessionUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import static myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
@@ -42,39 +44,39 @@ public final class LogInPageController extends SunriseController {
         super(controllerDependency);
     }
 
-    public F.Promise<Result> show(final String languageTag) {
+    public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final LogInPageContent pageContent = new LogInPageContent();
-        return F.Promise.pure(ok(renderLogInPage(pageContent, userContext)));
+        return CompletableFuture.completedFuture(ok(renderLogInPage(pageContent, userContext)));
     }
 
     @AddCSRFToken
     @RequireCSRFCheck
-    public F.Promise<Result> processLogIn(final String languageTag) {
+    public CompletionStage<Result> processLogIn(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final Form<LogInFormData> form = LOG_IN_FORM.bindFromRequest();
         final LogInPageContent pageContent = new LogInPageContent(form);
         if (form.hasErrors()) {
-            return F.Promise.pure(handleLogInFormErrors(form, pageContent, userContext));
+            return CompletableFuture.completedFuture(handleLogInFormErrors(form, pageContent, userContext));
         } else {
             return logIn(form.get())
-                    .map(signInResult -> handleSuccessfulSignIn(signInResult, userContext))
-                    .recover(throwable -> handleInvalidCredentialsError(throwable, pageContent, userContext));
+                    .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
+                    .exceptionally(throwable -> handleInvalidCredentialsError(throwable, pageContent, userContext));
         }
     }
 
     @AddCSRFToken
     @RequireCSRFCheck
-    public F.Promise<Result> processSignUp(final String languageTag) {
+    public CompletionStage<Result> processSignUp(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final Form<SignUpFormData> form = SIGN_UP_FORM.bindFromRequest();
         final LogInPageContent pageContent = new LogInPageContent(form, userContext, i18nResolver(), configuration());
         if (form.hasErrors()) {
-            return F.Promise.pure(handleSignUpFormErrors(form, pageContent, userContext));
+            return CompletableFuture.completedFuture(handleSignUpFormErrors(form, pageContent, userContext));
         } else {
             return signUp(form.get())
-                    .map(signInResult -> handleSuccessfulSignIn(signInResult, userContext))
-                    .recover(throwable -> handleExistingCustomerError(throwable, pageContent, userContext));
+                    .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
+                    .exceptionally(throwable -> handleExistingCustomerError(throwable, pageContent, userContext));
         }
     }
 
@@ -84,13 +86,13 @@ public final class LogInPageController extends SunriseController {
         return redirect(reverseRouter().showHome(languageTag));
     }
 
-    private F.Promise<CustomerSignInResult> logIn(final LogInFormData formData) {
+    private CompletionStage<CustomerSignInResult> logIn(final LogInFormData formData) {
         final String anonymousCartId = CartSessionUtils.getCartId(session()).orElse(null);
         final CustomerSignInCommand signInCommand = CustomerSignInCommand.of(formData.getUsername(), formData.getPassword(), anonymousCartId);
         return sphere().execute(signInCommand);
     }
 
-    private F.Promise<CustomerSignInResult> signUp(final SignUpFormData formData) {
+    private CompletionStage<CustomerSignInResult> signUp(final SignUpFormData formData) {
         final String anonymousCartId = CartSessionUtils.getCartId(session()).orElse(null);
         final CustomerDraft customerDraft = CustomerDraftBuilder.of(formData.getEmail(), formData.getPassword())
                 .title(formData.getTitle())

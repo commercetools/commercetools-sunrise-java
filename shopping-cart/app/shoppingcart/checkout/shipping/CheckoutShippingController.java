@@ -3,6 +3,7 @@ package shoppingcart.checkout.shipping;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
+import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -14,14 +15,15 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.common.CartController;
-import common.errors.ErrorsBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 @Singleton
 public class CheckoutShippingController extends CartController {
@@ -37,34 +39,34 @@ public class CheckoutShippingController extends CartController {
         this.productDataConfig = productDataConfig;
     }
 
-    public F.Promise<Result> show(final String languageTag) {
+    public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
-        return cartPromise.map(cart -> {
+        final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
+        return cartStage.thenApplyAsync(cart -> {
             final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, shippingMethods, productDataConfig, userContext, i18nResolver(), reverseRouter());
             final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
-        });
+        }, HttpExecution.defaultContext());
     }
 
     @AddCSRFToken
     @RequireCSRFCheck
-    public F.Promise<Result> process(final String languageTag) {
+    public CompletionStage<Result> process(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        return getOrCreateCart(userContext, session()).flatMap(cart -> {
+        return getOrCreateCart(userContext, session()).thenComposeAsync(cart -> {
             final CheckoutShippingFormData checkoutShippingFormData = extractBean(request(), CheckoutShippingFormData.class);
             final Form<CheckoutShippingFormData> filledForm = obtainFilledForm();
             final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, checkoutShippingFormData, shippingMethods, userContext, productDataConfig, i18nResolver(), reverseRouter());
             if (filledForm.hasErrors()) {
-                return F.Promise.pure(badRequest(content, filledForm, userContext));
+                return CompletableFuture.completedFuture(badRequest(content, filledForm, userContext));
             } else {
                 return updateCart(cart, checkoutShippingFormData)
-                        .map(updatedCart -> redirect(reverseRouter().showCheckoutPaymentForm(languageTag)));
+                        .thenApplyAsync(updatedCart -> redirect(reverseRouter().showCheckoutPaymentForm(languageTag)), HttpExecution.defaultContext());
             }
-        });
+        }, HttpExecution.defaultContext());
     }
 
-    private F.Promise<Cart> updateCart(final Cart cart, final CheckoutShippingFormData checkoutShippingFormData) {
+    private CompletionStage<Cart> updateCart(final Cart cart, final CheckoutShippingFormData checkoutShippingFormData) {
         final String shippingMethodId = checkoutShippingFormData.getShippingMethodId();
         final SetShippingMethod setShippingMethod = SetShippingMethod.of(Reference.of(ShippingMethod.referenceTypeId(), shippingMethodId));
         return sphere().execute(CartUpdateCommand.of(cart, setShippingMethod));

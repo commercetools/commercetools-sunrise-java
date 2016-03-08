@@ -5,9 +5,9 @@ import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.client.SphereClient;
 import play.Logger;
 import play.inject.ApplicationLifecycle;
-import play.libs.F;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
 
 class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
     private final ApplicationLifecycle applicationLifecycle;
@@ -24,10 +24,7 @@ class PlayJavaSphereClientProvider implements Provider<PlayJavaSphereClient> {
         Logger.info("Provide PlayJavaSphereClient");
         final PlayJavaSphereClient playJavaSphereClient = PlayJavaSphereClient.of(sphereClient);
         applicationLifecycle.addStopHook(() ->
-                        F.Promise.promise(() -> {
-                            playJavaSphereClient.close();
-                            return null;
-                        })
+                CompletableFuture.runAsync(() -> playJavaSphereClient.close())
         );
         return playJavaSphereClient;
     }

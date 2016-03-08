@@ -17,12 +17,14 @@ import io.sphere.sdk.carts.queries.CartByCustomerIdGet;
 import io.sphere.sdk.carts.queries.CartByIdGet;
 import io.sphere.sdk.models.Address;
 import myaccount.CustomerSessionUtils;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
@@ -33,15 +35,15 @@ public abstract class CartController extends SunriseController {
         super(controllerDependency);
     }
 
-    protected F.Promise<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
-        return fetchCart(userContext, session).flatMap(cart -> {
+    protected CompletionStage<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
+        return fetchCart(userContext, session).thenComposeAsync(cart -> {
             CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
             final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
-            return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : F.Promise.pure(cart);
-        });
+            return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : CompletableFuture.completedFuture(cart);
+        }, HttpExecution.defaultContext());
     }
 
-    private F.Promise<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
+    private CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
         return CustomerSessionUtils.getCustomerId(session)
                 .map(customerId -> fetchCartByCustomerOrNew(customerId, userContext))
                 .orElseGet(() -> CartSessionUtils.getCartId(session)
@@ -49,7 +51,7 @@ public abstract class CartController extends SunriseController {
                         .orElseGet(() -> createCart(userContext)));
     }
 
-    private F.Promise<Cart> createCart(final UserContext userContext) {
+    private CompletionStage<Cart> createCart(final UserContext userContext) {
         final Address address = Address.of(userContext.country());
         final CartDraft cartDraft = CartDraftBuilder.of(userContext.currency())
                 .country(address.getCountry())
@@ -60,24 +62,24 @@ public abstract class CartController extends SunriseController {
         return sphere().execute(CartCreateCommand.of(cartDraft));
     }
 
-    private F.Promise<Cart> fetchCartByIdOrNew(final String cartId, final UserContext userContext) {
+    private CompletionStage<Cart> fetchCartByIdOrNew(final String cartId, final UserContext userContext) {
         final CartByIdGet query = CartByIdGet.of(cartId)
                 .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
         return sphere().execute(query)
                 .flatMap(cart -> validCartOrNew(cart, userContext));
     }
 
-    private F.Promise<Cart> fetchCartByCustomerOrNew(final String customerId, final UserContext userContext) {
+    private CompletionStage<Cart> fetchCartByCustomerOrNew(final String customerId, final UserContext userContext) {
         final CartByCustomerIdGet query = CartByCustomerIdGet.of(customerId)
                 .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
         return sphere().execute(query)
-                .flatMap(cart -> validCartOrNew(cart, userContext));
+                .thenComposeAsync(cart -> validCartOrNew(cart, userContext), HttpExecution.defaultContext());
     }
 
-    private F.Promise<Cart> validCartOrNew(@Nullable final Cart cart, final UserContext userContext) {
+    private CompletionStage<Cart> validCartOrNew(@Nullable final Cart cart, final UserContext userContext) {
         return Optional.ofNullable(cart)
                 .filter(c -> c.getCartState().equals(CartState.ACTIVE))
-                .map(F.Promise::pure)
+                .map((value) -> (CompletionStage<Cart>) CompletableFuture.completedFuture(value))
                 .orElseGet(() -> createCart(userContext));
     }
 
@@ -86,9 +88,9 @@ public abstract class CartController extends SunriseController {
      * This is necessary in order to obtain prices with tax calculation.
      * @param cart the cart which country needs to be updated
      * @param country the country to set in the cart
-     * @return the promise of a cart with the given country
+     * @return the completionStage of a cart with the given country
      */
-    private F.Promise<Cart> updateCartCountry(final Cart cart, final CountryCode country) {
+    private CompletionStage<Cart> updateCartCountry(final Cart cart, final CountryCode country) {
         // TODO Handle case where some line items do not exist for this country
         final Address shippingAddress = Optional.ofNullable(cart.getShippingAddress())
                 .map(address -> address.withCountry(country))

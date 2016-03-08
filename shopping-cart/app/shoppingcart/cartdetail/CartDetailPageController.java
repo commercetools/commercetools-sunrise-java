@@ -14,7 +14,7 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.data.validation.Constraints;
 import play.filters.csrf.RequireCSRFCheck;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.CartSessionUtils;
@@ -22,6 +22,8 @@ import shoppingcart.common.CartController;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Shows and modifies the contents of the cart.
@@ -36,60 +38,60 @@ public final class CartDetailPageController extends CartController {
         this.productDataConfig = productDataConfig;
     }
 
-    public F.Promise<Result> show(final String languageTag) {
+    public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
-        return cartPromise.map(cart -> renderCartPage(cart, userContext));
+        final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
+        return cartStage.thenApplyAsync(cart -> renderCartPage(cart, userContext), HttpExecution.defaultContext());
     }
 
-    public F.Promise<Result> addProductToCart(final String languageTag) {
+    public CompletionStage<Result> addProductToCart(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final Http.Session session = session();
-        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session);
+        final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session);
         final Form<AddToCartFormData> filledForm = obtainFilledForm();
         if (filledForm.hasErrors()) {
-            return F.Promise.pure(badRequest());
+            return CompletableFuture.completedFuture(badRequest());
         } else {
             final String productId = filledForm.get().getProductId();
             final int variantId = filledForm.get().getVariantId();
             final long quantity = filledForm.get().getQuantity();
             final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
-            return cartPromise.flatMap(cart ->
+            return cartStage.thenComposeAsync(cart ->
                 sphere().execute(CartUpdateCommand.of(cart, updateAction)).map(updatedCart -> {
                     CartSessionUtils.overwriteCartSessionData(updatedCart, session, userContext, reverseRouter());
                     return renderCartPage(updatedCart, userContext);
-                })
+                }, HttpExecution.defaultContext())
             );
         }
     }
 
     @RequireCSRFCheck
-    public F.Promise<Result> changeLineItemQuantity(final String languageTag) {
+    public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
         final Form<LineItemQuantityFormData> filledForm = Form.form(LineItemQuantityFormData.class).bindFromRequest();
         if (filledForm.hasErrors()) {
-            return F.Promise.pure(redirect(reverseRouter().showCart(languageTag)));
+            return CompletableFuture.completedFuture(redirect(reverseRouter().showCart(languageTag)));
         } else {
             final LineItemQuantityFormData value = filledForm.get();
             final UserContext userContext = userContext(languageTag);
             return getOrCreateCart(userContext, session())
-                    .flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart, ChangeLineItemQuantity.of(value.lineItemId, value.quantity)))
-                            .map(updatedCart -> {
+                    .thenComposeAsync(cart -> sphere().execute(CartUpdateCommand.of(cart, ChangeLineItemQuantity.of(value.lineItemId, value.quantity)))
+                            .thenApplyAsync(updatedCart -> {
                                 CartSessionUtils.overwriteCartSessionData(cart, session(), userContext, reverseRouter());
                                 return redirect(reverseRouter().showCart(languageTag));
-                            }));
+                            }, HttpExecution.defaultContext()));
         }
     }
 
     @RequireCSRFCheck
-    public F.Promise<Result> removeLineItem(final String languageTag) {
+    public CompletionStage<Result> removeLineItem(final String languageTag) {
         final String lineItemId = DynamicForm.form().bindFromRequest().get("lineItemId");
         final UserContext userContext = userContext(languageTag);
         return getOrCreateCart(userContext, session())
-                .flatMap(cart -> sphere().execute(CartUpdateCommand.of(cart, RemoveLineItem.of(lineItemId)))
-                        .map(updatedCart -> {
+                .thenComposeAsync(cart -> sphere().execute(CartUpdateCommand.of(cart, RemoveLineItem.of(lineItemId)))
+                        .thenApplyAsync(updatedCart -> {
                             CartSessionUtils.overwriteCartSessionData(cart, session(), userContext, reverseRouter());
                             return redirect(reverseRouter().showCart(languageTag));
-                        }));
+                        }, HttpExecution.defaultContext()));
     }
 
     private Result renderCartPage(final Cart cart, final UserContext userContext) {

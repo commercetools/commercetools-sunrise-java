@@ -2,9 +2,9 @@ package common.controllers;
 
 import io.sphere.sdk.client.*;
 import org.junit.AfterClass;
-import play.libs.F;
 
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
 public abstract class WithPlayJavaSphereClient {
     protected static final int ALLOWED_TIMEOUT = 5000;
@@ -23,7 +23,7 @@ public abstract class WithPlayJavaSphereClient {
         }
     }
 
-    protected static <T> F.Promise<T> execute(final SphereRequest<T> sphereRequest) {
+    protected static <T> CompletionStage<T> execute(final SphereRequest<T> sphereRequest) {
         return sphereClient().execute(sphereRequest);
     }
 
