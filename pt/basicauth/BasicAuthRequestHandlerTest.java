@@ -12,6 +12,7 @@ import play.mvc.Http;
 import reverserouter.ReverseRouterTestModule;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +25,7 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
     @Test
     public void allowsAccessWhenDisabled() throws Exception {
         run(appWithoutBasicAuth(), "/", request -> {
-            final WSResponse response = request.get().get(ALLOWED_TIMEOUT);
+            final WSResponse response = request.get().toCompletableFuture().get(ALLOWED_TIMEOUT, TimeUnit.MILLISECONDS);
             assertThat(response.getStatus()).isEqualTo(Http.Status.OK);
         });
     }
@@ -32,7 +33,7 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
     @Test
     public void unauthorizedWhenEnabled() throws Exception {
         run(appWithBasicAuth(), "/", request -> {
-            final WSResponse response = request.get().get(ALLOWED_TIMEOUT);
+            final WSResponse response = request.get().toCompletableFuture().get(ALLOWED_TIMEOUT, TimeUnit.MILLISECONDS);
             assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
         });
     }
@@ -41,7 +42,7 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
     public void authorizedWhenEnabledAndCredentialsProvided() throws Exception {
         run(appWithBasicAuth(), "/", request -> {
             final WSRequest authorizedRequest = request.setAuth(USERNAME, PASSWORD, WSAuthScheme.BASIC);
-            final WSResponse response = authorizedRequest.get().get(ALLOWED_TIMEOUT);
+            final WSResponse response = authorizedRequest.get().toCompletableFuture().get(ALLOWED_TIMEOUT, TimeUnit.MILLISECONDS);
             assertThat(response.getStatus()).isEqualTo(Http.Status.OK);
         });
     }
@@ -50,7 +51,7 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
     public void unauthorizedWhenEnabledAndWrongCredentialsProvided() throws Exception {
         run(appWithBasicAuth(), "/", request -> {
             final WSRequest unauthorizedRequest = request.setAuth(USERNAME, "wrong", WSAuthScheme.BASIC);
-            final WSResponse response = unauthorizedRequest.get().get(ALLOWED_TIMEOUT);
+            final WSResponse response = unauthorizedRequest.get().toCompletableFuture().get(ALLOWED_TIMEOUT, TimeUnit.MILLISECONDS);
             assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
         });
     }

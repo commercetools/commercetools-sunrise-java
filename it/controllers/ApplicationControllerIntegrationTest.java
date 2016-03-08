@@ -7,6 +7,7 @@ import io.sphere.sdk.queries.PagedQueryResult;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.toList;
@@ -16,7 +17,7 @@ public class ApplicationControllerIntegrationTest extends WithSphereClient {
 
     @Test
     public void itFindsSomeCategories() throws Exception {
-        final PagedQueryResult<Category> result = execute(CategoryQuery.of()).get(ALLOWED_TIMEOUT);
+        final PagedQueryResult<Category> result = execute(CategoryQuery.of()).toCompletableFuture().get(1, TimeUnit.SECONDS);
         final long count = result.size();
         assertThat(count).isGreaterThan(3);
         //this is a project specific assertion as example

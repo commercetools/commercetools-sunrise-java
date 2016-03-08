@@ -11,7 +11,7 @@ import play.Application;
 import play.mvc.Http;
 import play.mvc.Result;
 
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static common.JsonUtils.readCtpObject;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,22 +50,22 @@ public class StatusControllerTest extends WithSunriseApplication {
         run(app(), StatusController.class, controller -> {
             final Result result = controller.version();
             assertThat(result.status()).isEqualTo(Http.Status.OK);
-            assertThat(result.contentType()).isEqualTo(Http.MimeTypes.JSON);
+            assertThat(result.contentType()).contains(Http.MimeTypes.JSON);
             assertThat(contentAsString(result)).contains("version").contains("build");
         });
     }
 
-    private void rendersHealthyCtp(final StatusController controller) throws IOException {
-        final Result result = controller.health().get(ALLOWED_TIMEOUT);
+    private void rendersHealthyCtp(final StatusController controller) throws Exception {
+        final Result result = controller.health().toCompletableFuture().get(1, TimeUnit.SECONDS);
         assertThat(result.status()).isEqualTo(Http.Status.OK);
-        assertThat(result.contentType()).isEqualTo(Http.MimeTypes.JSON);
+        assertThat(result.contentType()).contains(Http.MimeTypes.JSON);
         assertThat(contentAsString(result)).contains("\"healthy\" : true");
     }
 
-    private void rendersUnhealthyCtp(final StatusController controller) throws IOException {
-        final Result result = controller.health().get(ALLOWED_TIMEOUT);
+    private void rendersUnhealthyCtp(final StatusController controller) throws Exception {
+        final Result result = controller.health().toCompletableFuture().get(1, TimeUnit.SECONDS);
         assertThat(result.status()).isEqualTo(Http.Status.SERVICE_UNAVAILABLE);
-        assertThat(result.contentType()).isEqualTo(Http.MimeTypes.JSON);
+        assertThat(result.contentType()).contains(Http.MimeTypes.JSON);
         assertThat(contentAsString(result)).contains("\"healthy\" : false");
     }
 
