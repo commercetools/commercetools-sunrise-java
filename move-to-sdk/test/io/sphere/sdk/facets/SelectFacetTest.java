@@ -67,7 +67,7 @@ public class SelectFacetTest {
                 .matchingAll(false)
                 .build();
         final FacetedSearchExpression<ProductProjection> expr = facet.getFacetedSearchExpression();
-        final TermFacetedSearchExpression<ProductProjection> expectedExpr = SEARCH_MODEL.byAny(SELECTED_VALUE_TWO);
+        final TermFacetedSearchExpression<ProductProjection> expectedExpr = SEARCH_MODEL.containsAny(SELECTED_VALUE_TWO);
         assertThat(expr.facetExpression()).isEqualTo(expectedExpr.facetExpression());
         assertThat(expr.filterExpressions()).isEqualTo(expectedExpr.filterExpressions());
     }
@@ -79,7 +79,7 @@ public class SelectFacetTest {
                 .matchingAll(true)
                 .build();
         final FacetedSearchExpression<ProductProjection> expr = facet.getFacetedSearchExpression();
-        final TermFacetedSearchExpression<ProductProjection> expectedExpr = SEARCH_MODEL.byAll(SELECTED_VALUE_TWO);
+        final TermFacetedSearchExpression<ProductProjection> expectedExpr = SEARCH_MODEL.containsAll(SELECTED_VALUE_TWO);
         assertThat(expr.facetExpression()).isEqualTo(expectedExpr.facetExpression());
         assertThat(expr.filterExpressions()).isEqualTo(expectedExpr.filterExpressions());
     }

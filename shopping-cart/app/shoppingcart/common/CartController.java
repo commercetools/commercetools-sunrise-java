@@ -66,7 +66,7 @@ public abstract class CartController extends SunriseController {
         final CartByIdGet query = CartByIdGet.of(cartId)
                 .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
         return sphere().execute(query)
-                .flatMap(cart -> validCartOrNew(cart, userContext));
+                .thenComposeAsync(cart -> validCartOrNew(cart, userContext), HttpExecution.defaultContext());
     }
 
     private CompletionStage<Cart> fetchCartByCustomerOrNew(final String customerId, final UserContext userContext) {

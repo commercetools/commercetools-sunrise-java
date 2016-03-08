@@ -57,7 +57,7 @@ public final class CartDetailPageController extends CartController {
             final long quantity = filledForm.get().getQuantity();
             final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
             return cartStage.thenComposeAsync(cart ->
-                sphere().execute(CartUpdateCommand.of(cart, updateAction)).map(updatedCart -> {
+                sphere().execute(CartUpdateCommand.of(cart, updateAction)).thenApplyAsync(updatedCart -> {
                     CartSessionUtils.overwriteCartSessionData(updatedCart, session, userContext, reverseRouter());
                     return renderCartPage(updatedCart, userContext);
                 }, HttpExecution.defaultContext())

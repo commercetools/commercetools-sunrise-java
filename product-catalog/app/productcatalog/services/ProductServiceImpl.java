@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
 
     public CompletionStage<Optional<ProductProjection>> findProductBySlug(final Locale locale, final String slug) {
         final ProductProjectionQuery request = ProductProjectionQuery.ofCurrent().bySlug(locale, slug);
-        final CompletionStage<Optional<ProductProjection>> productOptStage = sphere.execute(request).map(PagedQueryResult::head);
+        final CompletionStage<Optional<ProductProjection>> productOptStage = sphere.execute(request).thenApplyAsync(PagedQueryResult::head, HttpExecution.defaultContext());
         productOptStage.thenAcceptAsync(productOpt -> {
             if (productOpt.isPresent()) {
                 final String productId = productOpt.get().getId();
@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
                 .collect(toList());
         final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
                 .withLimit(numSuggestions)
-                .withQueryFilters(filter -> filter.categories().id().byAny(categoryIds));
+                .withQueryFilters(filter -> filter.categories().id().containsAny(categoryIds));
         final CompletionStage<PagedSearchResult<ProductProjection>> resultStage = sphere.execute(request);
         logRequest(request, resultStage);
         return resultStage.thenApplyAsync(PagedSearchResult::getResults, HttpExecution.defaultContext());
