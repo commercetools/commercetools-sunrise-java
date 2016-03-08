@@ -73,11 +73,11 @@ public class CheckoutConfirmationController extends CartController {
     private CompletionStage<Result> createOrder(final Cart cart, final String languageTag) {
         final String orderNumber = RandomStringUtils.randomNumeric(8);
         return  sphere().execute(OrderFromCartCreateCommand.of(OrderFromCartDraft.of(cart, orderNumber, PaymentState.BALANCE_DUE)))
-                .map(order -> {
+                .thenApplyAsync(order -> {
                     session(LAST_ORDER_ID_KEY, order.getId());
                     CartSessionUtils.removeCart(session());
                     return redirect(reverseRouter().showCheckoutThankYou(languageTag));
-                });
+                }, HttpExecution.defaultContext());
     }
 
 }

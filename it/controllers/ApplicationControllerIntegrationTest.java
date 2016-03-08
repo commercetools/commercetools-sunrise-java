@@ -1,6 +1,6 @@
 package controllers;
 
-import common.controllers.WithPlayJavaSphereClient;
+import common.controllers.WithSphereClient;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
@@ -12,7 +12,7 @@ import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ApplicationControllerIntegrationTest extends WithPlayJavaSphereClient {
+public class ApplicationControllerIntegrationTest extends WithSphereClient {
 
     @Test
     public void itFindsSomeCategories() throws Exception {

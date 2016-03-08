@@ -2,7 +2,7 @@ package productcatalog.services;
 
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTreeExtended;
-import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -26,10 +26,10 @@ public class ProductServiceImpl implements ProductService {
     private static final Random RANDOM = new Random();
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
 
-    private final PlayJavaSphereClient sphere;
+    private final SphereClient sphere;
 
     @Inject
-    public ProductServiceImpl(final PlayJavaSphereClient sphere) {
+    public ProductServiceImpl(final SphereClient sphere) {
         this.sphere = sphere;
     }
 
