@@ -17,7 +17,7 @@ public class ApplicationControllerIntegrationTest extends WithSphereClient {
 
     @Test
     public void itFindsSomeCategories() throws Exception {
-        final PagedQueryResult<Category> result = execute(CategoryQuery.of()).toCompletableFuture().get(1, TimeUnit.SECONDS);
+        final PagedQueryResult<Category> result = execute(CategoryQuery.of()).toCompletableFuture().get(3, TimeUnit.SECONDS);
         final long count = result.size();
         assertThat(count).isGreaterThan(3);
         //this is a project specific assertion as example
