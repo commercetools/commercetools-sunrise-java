@@ -43,7 +43,7 @@ public final class HandlebarsTemplateService implements TemplateService {
                 .with(new HighConcurrencyTemplateCache())
                 .infiniteLoops(true);
         handlebars.registerHelper("i18n", new CustomI18nHelper(i18NResolver));
-        handlebars.registerHelper("cms", new CustomCmsHelper(i18NResolver));
+        handlebars.registerHelper("cms", new CustomCmsHelper(cmsService));
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
         return new HandlebarsTemplateService(handlebars);
     }

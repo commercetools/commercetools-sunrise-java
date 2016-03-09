@@ -35,8 +35,8 @@ final class CustomI18nHelper extends Base implements Helper<String> {
     }
 
     private static class I18nIdentifier {
-        private final String key;
         private final String bundle;
+        private final String key;
 
         public I18nIdentifier(final String context) {
             final String[] parts = StringUtils.split(context, ':');
