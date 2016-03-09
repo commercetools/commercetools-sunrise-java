@@ -72,7 +72,7 @@ public class BreadcrumbDataTest {
     }
 
     private void testProductBreadcrumb(final String sku, final ProductProjection product, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        final ProductVariant variant = product.findVariantBySky(sku).get();
+        final ProductVariant variant = product.findVariantBySku(sku).get();
         final BreadcrumbData breadcrumbData = new BreadcrumbData(product, variant, CATEGORY_TREE, USER_CONTEXT, REVERSE_ROUTER);
         testBreadcrumb(breadcrumbData, texts, urls);
     }

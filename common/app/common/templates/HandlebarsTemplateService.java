@@ -5,6 +5,7 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
 import com.github.jknack.handlebars.io.TemplateLoader;
+import common.cms.CmsService;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
 import play.Logger;
@@ -34,13 +35,15 @@ public final class HandlebarsTemplateService implements TemplateService {
         }
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders, final I18nResolver i18NResolver) {
+    public static TemplateService of(final List<TemplateLoader> templateLoaders, final I18nResolver i18NResolver,
+                                     final CmsService cmsService) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars()
                 .with(loaders)
                 .with(new HighConcurrencyTemplateCache())
                 .infiniteLoops(true);
         handlebars.registerHelper("i18n", new CustomI18nHelper(i18NResolver));
+        handlebars.registerHelper("cms", new CustomCmsHelper(i18NResolver));
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
         return new HandlebarsTemplateService(handlebars);
     }

@@ -16,6 +16,6 @@ public class ApplicationProductionModule extends AbstractModule {
     protected void configure() {
         bind(I18nResolver.class).toProvider(I18nResolverProvider.class).in(Singleton.class);
         bind(TemplateService.class).toProvider(TemplateServiceProvider.class).in(Singleton.class);
-        bind(CmsService.class).toProvider(CmsServiceProvider.class).in(Singleton.class);
+        bind(CmsService.class).toProvider(CmsServiceProvider.class);
     }
 }

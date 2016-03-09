@@ -12,6 +12,7 @@ import play.test.WithApplication;
 import java.util.Locale;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,6 +54,6 @@ public class PlayCmsPageTest extends WithApplication {
 
     private CmsPage cms(final Locale locale, final String pageKey) {
         final MessagesApi messagesApi = app.injector().instanceOf(MessagesApi.class);
-        return PlayCmsService.of(messagesApi).getPage(locale, pageKey).get(0);
+        return PlayCmsService.of(messagesApi).getPage(singletonList(locale), pageKey).get(0);
     }
 }

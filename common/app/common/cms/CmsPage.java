@@ -5,6 +5,7 @@ import java.util.Optional;
 /**
  * Obtains content data for a page, usually coming from a Content Management System (CMS).
  */
+@FunctionalInterface
 public interface CmsPage {
 
     /**

@@ -18,5 +18,5 @@ public interface CmsService {
      * @return the promise of the page contents identified by the key, in the given language
      * @throws CmsPageNotFoundException when the page identified by the given key could not be found in the given locale
      */
-    F.Promise<List<CmsPage>> getPage(final List<Locale> locales, final String pageKey);
+    F.Promise<CmsPage> getPage(final List<Locale> locales, final String pageKey);
 }

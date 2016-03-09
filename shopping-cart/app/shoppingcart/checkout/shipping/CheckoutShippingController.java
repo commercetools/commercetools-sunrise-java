@@ -3,6 +3,7 @@ package shoppingcart.checkout.shipping;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
+import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -18,7 +19,6 @@ import play.libs.F;
 import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.common.CartController;
-import common.errors.ErrorsBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

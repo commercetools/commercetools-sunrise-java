@@ -29,13 +29,13 @@ public final class PlayCmsService implements CmsService {
     }
 
     @Override
-    public F.Promise<List<CmsPage>> getPage(final List<Locale> locales, final String pageKey) {
-        final List<CmsPage> cmsPages = locales.stream().map(locale -> {
+    public F.Promise<CmsPage> getPage(final List<Locale> locales, final String pageKey) {
+        final List<Messages> messagesList = locales.stream().map(locale -> {
             final Lang lang = Lang.forCode(locale.toLanguageTag());
-            final Messages messages = new Messages(lang, messagesApi);
-            return new PlayCmsPage(messages, pageKey);
+            return new Messages(lang, messagesApi);
         }).collect(toList());
-        return F.Promise.pure(cmsPages);
+        final CmsPage cmsPage = new PlayCmsPage(messagesList, pageKey);
+        return F.Promise.pure(cmsPage);
     }
 
     public static PlayCmsService of(final MessagesApi messagesApi) {

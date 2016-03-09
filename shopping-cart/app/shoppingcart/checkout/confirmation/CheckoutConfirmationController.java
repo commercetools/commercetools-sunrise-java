@@ -3,6 +3,7 @@ package shoppingcart.checkout.confirmation;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
+import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.orders.OrderFromCartDraft;
@@ -12,11 +13,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import play.data.Form;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.F;
-import play.mvc.Http;
 import play.mvc.Result;
-import shoppingcart.common.CartController;
 import shoppingcart.CartSessionUtils;
-import common.errors.ErrorsBean;
+import shoppingcart.common.CartController;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -36,10 +35,9 @@ public class CheckoutConfirmationController extends CartController {
     public F.Promise<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
-        final Http.Context ctx = ctx();
         return cartPromise.map(cart -> {
             final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
-            final SunrisePageData pageData = pageData(userContext, content, ctx);
+            final SunrisePageData pageData = pageData(userContext, content, ctx());
             return ok(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales()));
         });
     }
@@ -55,16 +53,17 @@ public class CheckoutConfirmationController extends CartController {
 //            filledForm.reject("terms need to be agreed");
 //        }
         if (filledForm.hasErrors()) {
-            return cartPromise.flatMap(cart -> renderErrorResponse(cart, filledForm, ctx(), userContext));
+            return cartPromise.flatMap(cart -> renderErrorResponse(cart, filledForm, userContext));
         } else {
             return cartPromise.flatMap(cart -> createOrder(cart, languageTag));
         }
     }
 
-    private F.Promise<Result> renderErrorResponse(final Cart cart, final Form<CheckoutConfirmationFormData> filledForm, final Http.Context ctx, final UserContext userContext) {
+    private F.Promise<Result> renderErrorResponse(final Cart cart, final Form<CheckoutConfirmationFormData> filledForm,
+                                                  final UserContext userContext) {
         final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
         content.getCheckoutForm().setErrors(new ErrorsBean(filledForm));
-        final SunrisePageData pageData = pageData(userContext, content, ctx);
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
         return F.Promise.pure(badRequest(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales())));
     }
 

@@ -2,25 +2,27 @@ package common.cms;
 
 import play.i18n.Messages;
 
+import java.util.List;
 import java.util.Optional;
 
 public final class PlayCmsPage implements CmsPage {
-    private final Messages messages;
+    private final List<Messages> messagesList;
     private final Optional<String> pageKey;
 
-    PlayCmsPage(final Messages messages, final String pageKey) {
-        this.messages = messages;
+    PlayCmsPage(final List<Messages> messagesList, final String pageKey) {
+        this.messagesList = messagesList;
         this.pageKey = Optional.ofNullable(pageKey);
     }
 
     @Override
     public Optional<String> get(final String messageKey, final Object... args) {
         final String key = key(messageKey);
-        if (messages.isDefinedAt(key)) {
-            return Optional.of(messages.at(key, args));
-        } else {
-            return Optional.empty();
+        for (final Messages messages : messagesList) {
+            if (messages.isDefinedAt(key)) {
+                return Optional.of(messages.at(key, args));
+            }
         }
+        return Optional.empty();
     }
 
     private String key(final String messageKey) {
