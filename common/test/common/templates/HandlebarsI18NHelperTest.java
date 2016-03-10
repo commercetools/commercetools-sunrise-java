@@ -5,6 +5,7 @@ import com.github.jknack.handlebars.io.TemplateLoader;
 import common.cms.CmsService;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
+import common.templates.handlebars.HandlebarsTemplateService;
 import org.junit.Test;
 import play.libs.F;
 
@@ -21,7 +22,7 @@ import static java.util.Locale.ENGLISH;
 import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomI18nHelperTest {
+public class HandlebarsI18NHelperTest {
     private static final CmsService CMS_SERVICE = (locales, pageKey) -> F.Promise.pure((message, args) -> Optional.empty());
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
     private static final PageData SOME_PAGE_DATA = new TestablePageData();

@@ -1,0 +1,68 @@
+bannerTopLeft:
+  title: Summer Essentials
+  subtitle: Make the great day happen
+  linkText: Shop collection
+  linkHref: men
+  imageSmall: ../../assets/img/leather_small-4to3-89742802f59011114ed3d011b7103ca6.jpg
+  imageMedium: ../../assets/img/leather_medium-4to3-4a47ca30ac82d710e682f71abbdef00e.jpg
+  imageLarge: ../../assets/img/leather_large-4to3-77f215b17919a3c4a819c870ee8a3c3d.jpg
+
+bannerTopRight:
+  title: Summer Lovin'
+  subtitle: Summer must have outfits
+  linkText: Shop collection
+  linkHref: women
+  imageSmall: ../../assets/img/woman_small-4to3-6eb4165189448630e6fc1a86e9eabe4f.jpg
+  imageMedium: ../../assets/img/woman_medium-4to3-5e926626d017902a91432edb62899c6e.jpg
+  imageLarge: ../../assets/img/woman_large-4to3-17e8b36917215f05acec38784a504f3f.jpg
+
+bannerMiddle:
+  title: <img class="hidden-xs" src="../../assets/img/sun-logo-709384debb2f9d98b86ef505681ce42e.png"/><br/><br/>Here comes the sun
+  subtitle: FABULOUS EVERY DAY - SUMMER CHIC
+  description: Between rising temperature outside and cool A/C inside, dressing for the  the summer can be a tricky business. Luckily, we pulled together the most inspiring looks for. Check out our must-to-have-it pieces.<br/><br/>The weather is heating up, but you don’t have the right outfit yet. Thankfully, we are here to help you out. Spring break is upon us and it's essential to migrate. So whether you're jetting off to Ibiza or Majorca for a party vacation or getting away to greener pastures - here are the fashion pieces we'll be stashing in our favorite getaway bags.
+  linkText: Shop collection
+  linkHref: men-clothing-shirts
+  imageSmall: ../../assets/img/man_small-8to3-e6af17700807cc5324dcdd2fca20bf69.jpg
+  imageMedium: ../../assets/img/man_medium-8to3-94489b341445e7b2cfe0535dba734e3d.jpg
+  imageLarge: ../../assets/img/man_large-8to3-2241532f1c80ba8bb1220be0b30446ab.jpg
+
+bannerBottomLeft:
+  title: Unique style for every season
+  subtitle: Fashion styles 2016
+  linkText: Shop collection
+  linkHref: women-shoes
+  imageSmall: ../../assets/img/shoes_small-4to3-aa80570b918f2231e6928847ca5b1844.jpg
+  imageMedium: ../../assets/img/shoes_medium-4to3-800cc0f907181532547afa3493b22437.jpg
+  imageLarge: ../../assets/img/shoes_large-4to3-e96c1f8289eb7889df52144082f8568a.jpg
+
+bannerBottomRight1:
+  title: <img src="../../assets/img/sun-logo-709384debb2f9d98b86ef505681ce42e.png"/><br/><br/>SUMMER FASHION 2016
+  imageSmall: ../../assets/img/blue-bg_small-4to3-4f423f2f16577c1f33646b62571bcab9.png
+  imageMedium: ../../assets/img/blue-bg_medium-4to3-3bc9737b5e6e9ba633a35a255aa250b5.png
+  imageLarge: ../../assets/img/blue-bg_large-4to3-393edb3f747907fabbed798d18e0c16f.png
+
+bannerBottomRight2:
+  title: Trendy Sunglasses
+  subtitle: Accessories for the perfect summer
+  linkText: Shop collection
+  linkHref: accessories-women-sunglasses
+  imageSmall: ../../assets/img/sunglass_small-4to3-ad97f52106f7168d57e3a1fb0a85bf7f.jpg
+  imageMedium: ../../assets/img/sunglass_medium-4to3-76e9ea8da6c8b487f91867329b088212.jpg
+  imageLarge: ../../assets/img/sunglass_large-4to3-f99b3625df0a78b98477ab238cdd7f11.jpg
+
+bannerBottomRight3:
+  title: Must to have it
+  subtitle: Hot pieces for the summer
+  linkText: Shop collection
+  linkHref: women-clothing-dresses
+  imageSmall: ../../assets/img/woman_small-8to3-f4d60a035c525f57140e656920af1b06.jpg
+  imageMedium: ../../assets/img/woman_medium-8to3-311501d3cb06c3b17f54ad5e1e649ec1.jpg
+  imageLarge: ../../assets/img/woman_large-8to3-40263215f195b692b6c9072145840140.jpg
+
+suggestions:
+  title: Get beach ready
+  subtitle: Get your sun on
+
+viewProducts:
+  linkText: View all new products
+  linkHref: new

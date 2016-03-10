@@ -1,0 +1,3 @@
+header:
+  title: foo
+day: Today is __today__, tomorrow is __tomorrow__

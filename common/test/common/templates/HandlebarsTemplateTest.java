@@ -5,6 +5,7 @@ import com.github.jknack.handlebars.io.TemplateLoader;
 import common.cms.CmsService;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
+import common.templates.handlebars.HandlebarsTemplateService;
 import org.junit.Test;
 import play.libs.F;
 

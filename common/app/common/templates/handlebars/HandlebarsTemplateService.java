@@ -1,4 +1,4 @@
-package common.templates;
+package common.templates.handlebars;
 
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
@@ -8,6 +8,9 @@ import com.github.jknack.handlebars.io.TemplateLoader;
 import common.cms.CmsService;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
+import common.templates.TemplateNotFoundException;
+import common.templates.TemplateRenderException;
+import common.templates.TemplateService;
 import play.Logger;
 
 import java.io.IOException;
@@ -17,6 +20,7 @@ import java.util.Locale;
 import static java.util.stream.Collectors.toList;
 
 public final class HandlebarsTemplateService implements TemplateService {
+    static final String LANGUAGE_TAGS_IN_CONTEXT_KEY = "app-language-tags";
     private final Handlebars handlebars;
 
     private HandlebarsTemplateService(final Handlebars handlebars) {
@@ -42,15 +46,15 @@ public final class HandlebarsTemplateService implements TemplateService {
                 .with(loaders)
                 .with(new HighConcurrencyTemplateCache())
                 .infiniteLoops(true);
-        handlebars.registerHelper("i18n", new CustomI18nHelper(i18NResolver));
-        handlebars.registerHelper("cms", new CustomCmsHelper(cmsService));
+        handlebars.registerHelper("i18n", new HandlebarsI18nHelper(i18NResolver));
+        handlebars.registerHelper("cms", new HandlebarsCmsHelper(cmsService));
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
         return new HandlebarsTemplateService(handlebars);
     }
 
     private Context createContext(final PageData pageData, final List<Locale> locales) {
         final Context context = Context.newContext(pageData);
-        context.data("locales", locales.stream().map(Locale::toLanguageTag).collect(toList()));
+        context.data(LANGUAGE_TAGS_IN_CONTEXT_KEY, locales.stream().map(Locale::toLanguageTag).collect(toList()));
         return context;
     }
 

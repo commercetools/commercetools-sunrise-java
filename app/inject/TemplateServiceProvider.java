@@ -6,7 +6,7 @@ import com.github.jknack.handlebars.io.TemplateLoader;
 import com.google.inject.Provider;
 import common.cms.CmsService;
 import common.i18n.I18nResolver;
-import common.templates.HandlebarsTemplateService;
+import common.templates.handlebars.HandlebarsTemplateService;
 import common.templates.TemplateService;
 import play.Configuration;
 import play.Logger;
