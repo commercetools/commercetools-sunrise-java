@@ -8,7 +8,7 @@ import static java.util.Collections.emptyMap;
 /**
  * Obtains fields from a CMS content.
  *
- * @see {@link CmsService}
+ * @see CmsService
  */
 @FunctionalInterface
 public interface CmsContent {
