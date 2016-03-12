@@ -7,6 +7,17 @@ import java.util.Locale;
 
 /**
  * Service that provides page content, usually coming from a Content Management System (CMS).
+ * It expects a structure that can be accessed as explained below.
+ *
+ * To find the CMS Page:
+ * - {@code pageKey} (e.g. home)
+ *
+ * To access the CMS Content:
+ * - {@code contentType} (e.g. banner)
+ * - {@code contentId} (e.g. homeTopLeft)
+ *
+ * To access the content field:
+ * - {@code field} (e.g. subtitle)
  */
 @FunctionalInterface
 public interface CmsService {

@@ -6,8 +6,8 @@ import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import play.libs.F;
+import play.mvc.Controller;
 import play.mvc.Result;
-import play.twirl.api.Html;
 import productcatalog.common.ProductCatalogController;
 import productcatalog.common.ProductListData;
 import productcatalog.common.SuggestionsData;
@@ -43,17 +43,17 @@ public class HomeController extends ProductCatalogController {
         final HomePageContent content = new HomePageContent();
         final List<Category> suggestedCategories = suggestedCategories();
         if (!suggestedCategories.isEmpty()) {
-            return productService().getSuggestions(suggestedCategories, numSuggestions).map(suggestions -> {
+            return productService().getSuggestions(suggestedCategories, numSuggestions).flatMap(suggestions -> {
                 content.setSuggestions(createSuggestions(userContext, suggestions));
-                return ok(renderHome(userContext, content));
+                return renderHome(userContext, content);
             });
         } else {
-            return  F.Promise.pure(ok(renderHome(userContext, content)));
+            return renderHome(userContext, content);
         }
     }
 
-    private Html renderHome(final UserContext userContext, final HomePageContent content) {
-        return templateService().renderToHtml("home", pageData(userContext, content, ctx()), userContext.locales());
+    private F.Promise<Result> renderHome(final UserContext userContext, final HomePageContent content) {
+        return renderPage("home", content, userContext).map(Controller::ok);
     }
 
     private List<Category> suggestedCategories() {

@@ -19,7 +19,7 @@ import static java.util.Objects.requireNonNull;
  *
  * For pluralized forms, specify the amount of items as a hash parameter {@code count}.
  * For the plural message, a suffix {@code _plural} must be added to the message key.
- * Notice only pluralization forms similar to English are supported (1 is singular, the rest are plural).
+ * Notice only pluralization forms similar to English are currently supported (1 is singular, the rest are plural).
  */
 public final class YamlI18nResolver extends Base implements I18nResolver {
     private final Map<String, Map> yamlMap = new HashMap<>();

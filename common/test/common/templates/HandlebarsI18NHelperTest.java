@@ -2,12 +2,10 @@ package common.templates;
 
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import common.cms.CmsService;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
 import common.templates.handlebars.HandlebarsTemplateService;
 import org.junit.Test;
-import play.libs.F;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -23,7 +21,6 @@ import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HandlebarsI18NHelperTest {
-    private static final CmsService CMS_SERVICE = (locales, pageKey) -> F.Promise.pure((message, args) -> Optional.empty());
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
     private static final PageData SOME_PAGE_DATA = new TestablePageData();
 
@@ -66,7 +63,7 @@ public class HandlebarsI18NHelperTest {
 
     private static void testTemplate(final String templateName, final Locale locale, final Map<String, Object> parameters,
                                      final Map<String, String> i18nMap, final Consumer<String> test) {
-        final TemplateService templateService = HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), i18nResolver(i18nMap), CMS_SERVICE);
+        final TemplateService templateService = HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), i18nResolver(i18nMap));
         final String html = renderTemplate(templateName, templateService, locale);
         test.accept(html);
     }

@@ -9,7 +9,6 @@ import common.contexts.UserContext;
 import common.i18n.I18nResolver;
 import common.models.LocationSelector;
 import common.models.NavMenuData;
-import myaccount.UserBean;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
@@ -19,8 +18,10 @@ import io.sphere.sdk.play.metrics.MetricAction;
 import myaccount.CustomerSessionUtils;
 import play.Configuration;
 import play.filters.csrf.AddCSRFToken;
+import play.libs.F;
 import play.mvc.Http;
 import play.mvc.With;
+import play.twirl.api.Html;
 import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
@@ -145,6 +146,14 @@ public abstract class SunriseController extends ShopController {
 
     protected Optional<Category> newCategory() {
         return categoryNewExtId.flatMap(extId -> categoryTree().findByExternalId(extId));
+    }
+
+    protected F.Promise<Html> renderPage(final String pageKey, final PageContent pageContent, final UserContext userContext) {
+        return cmsService().getPage(userContext.locales(), pageKey).map(cmsPage -> {
+            final SunrisePageData pageData = pageData(userContext, pageContent, ctx());
+            final String htmlAsString = templateService().render(pageKey, pageData, userContext.locales(), cmsPage);
+            return new Html(htmlAsString);
+        });
     }
 
     private static Locale currentLocale(final String languageTag, final ProjectContext projectContext) {

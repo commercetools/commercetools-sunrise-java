@@ -5,7 +5,7 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import common.cms.CmsService;
+import common.cms.CmsPage;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
 import common.templates.TemplateNotFoundException;
@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 
 public final class HandlebarsTemplateService implements TemplateService {
     static final String LANGUAGE_TAGS_IN_CONTEXT_KEY = "app-language-tags";
+    static final String CMS_PAGE_IN_CONTEXT_KEY = "app-cms-page";
     private final Handlebars handlebars;
 
     private HandlebarsTemplateService(final Handlebars handlebars) {
@@ -28,9 +29,9 @@ public final class HandlebarsTemplateService implements TemplateService {
     }
 
     @Override
-    public String render(final String templateName, final PageData pageData, final List<Locale> locales) {
+    public String render(final String templateName, final PageData pageData, final List<Locale> locales, final CmsPage cmsPage) {
         final Template template = compileTemplate(templateName);
-        final Context context = createContext(pageData, locales);
+        final Context context = createContext(pageData, locales, cmsPage);
         try {
             Logger.debug("Rendering template " + templateName);
             return template.apply(context);
@@ -39,22 +40,22 @@ public final class HandlebarsTemplateService implements TemplateService {
         }
     }
 
-    public static TemplateService of(final List<TemplateLoader> templateLoaders, final I18nResolver i18NResolver,
-                                     final CmsService cmsService) {
+    public static TemplateService of(final List<TemplateLoader> templateLoaders, final I18nResolver i18NResolver) {
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
         final Handlebars handlebars = new Handlebars()
                 .with(loaders)
                 .with(new HighConcurrencyTemplateCache())
                 .infiniteLoops(true);
         handlebars.registerHelper("i18n", new HandlebarsI18nHelper(i18NResolver));
-        handlebars.registerHelper("cms", new HandlebarsCmsHelper(cmsService));
+        handlebars.registerHelper("cms", new HandlebarsCmsHelper());
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
         return new HandlebarsTemplateService(handlebars);
     }
 
-    private Context createContext(final PageData pageData, final List<Locale> locales) {
+    private Context createContext(final PageData pageData, final List<Locale> locales, final CmsPage cmsPage) {
         final Context context = Context.newContext(pageData);
         context.data(LANGUAGE_TAGS_IN_CONTEXT_KEY, locales.stream().map(Locale::toLanguageTag).collect(toList()));
+        context.data(CMS_PAGE_IN_CONTEXT_KEY, cmsPage);
         return context;
     }
 

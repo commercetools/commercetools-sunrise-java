@@ -14,7 +14,7 @@ public class TemplateServiceTest {
     @Test
     public void fillsToHtml() throws Exception {
         final String expectedHtml = someHtml();
-        final TemplateService templateService = (t, p, l) -> expectedHtml;
+        final TemplateService templateService = (t, p, l, c) -> expectedHtml;
         final Html html = templateService.renderToHtml(someTemplateName(), somePageData(), singletonList(Locale.ENGLISH));
         assertThat(html.body()).isEqualTo(expectedHtml);
     }

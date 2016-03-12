@@ -1,49 +1,21 @@
 package common.cms;
 
-import java.util.Map;
 import java.util.Optional;
-
-import static java.util.Collections.emptyMap;
 
 /**
  * Obtains content data for a page, usually coming from a Content Management System (CMS).
+ *
+ * @see {@link CmsService}
  */
 @FunctionalInterface
 public interface CmsPage {
 
     /**
      * Gets the message corresponding to the given key, or empty in case it does not exist.
-     * @param messageKey identifying the message
-     * @param hashArgs list of hash arguments
-     * @return the message identified by the key, with the given arguments, or absent if not found
+     * @param contentType type of the content
+     * @param contentId identification of the content
+     * @return the content of a particular type and ID, or absent if not found
      */
-    Optional<String> get(final String messageKey, final Map<String, Object> hashArgs);
+    Optional<CmsContent> get(final String contentType, final String contentId);
 
-    /**
-     * Gets the message corresponding to the given key, or empty in case it does not exist.
-     * @param messageKey identifying the message
-     * @return the message identified by the key, or absent if not found
-     */
-    default Optional<String> get(final String messageKey) {
-        return get(messageKey, emptyMap());
-    }
-
-    /**
-     * Gets the message corresponding to the given key, or empty in case it does not exist.
-     * @param messageKey identifying the message
-     * @param hashArgs list of hash arguments
-     * @return the message identified by the key, with the given arguments, or empty string if not found
-     */
-    default String getOrEmpty(final String messageKey, final Map<String, Object> hashArgs) {
-        return get(messageKey, hashArgs).orElse("");
-    }
-
-    /**
-     * Gets the message corresponding to the given key, or empty in case it does not exist.
-     * @param messageKey identifying the message
-     * @return the message identified by the key, or empty string if not found
-     */
-    default String getOrEmpty(final String messageKey) {
-        return get(messageKey).orElse("");
-    }
 }

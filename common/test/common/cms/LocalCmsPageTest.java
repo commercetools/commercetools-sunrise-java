@@ -22,22 +22,22 @@ public class LocalCmsPageTest {
 
     @Test
     public void resolvesMessage() throws Exception {
-        assertThat(cms(DE, "home").get("header.title")).contains("foo");
+        assertThat(cms(DE).get("home", "header").get().get("title")).contains("foo");
     }
 
     @Test
     public void resolvesWithRegion() throws Exception {
-        assertThat(cms(DE_AT, "home").get("header.title")).contains("bar");
+        assertThat(cms(DE_AT).get("home", "header").get().get("title")).contains("bar");
     }
 
     @Test
     public void emptyWhenPageKeyNotFound() throws Exception {
-        assertThat(cms(DE, "unknown").get("header.title")).isEmpty();
+        assertThat(cms(DE).get("unknown", "header").get().get("title")).isEmpty();
     }
 
     @Test
     public void emptyWhenMessageKeyNotFound() throws Exception {
-        assertThat(cms(DE, "home").get("wrong.message")).isEmpty();
+        assertThat(cms(DE).get("home", "wrong").get().get("message")).isEmpty();
     }
 
     @Test
@@ -45,15 +45,12 @@ public class LocalCmsPageTest {
         final Map<String, Object> hashArgs = new LinkedHashMap<>();
         hashArgs.put("today", "Monday");
         hashArgs.put("tomorrow", "Tuesday");
-        assertThat(cms(DE, "home").get("day", hashArgs)).contains("Today is Monday, tomorrow is Tuesday");
+        assertThat(cms(DE).get("home", "content").get().get("day", hashArgs))
+                .contains("Today is Monday, tomorrow is Tuesday");
     }
 
     private CmsPage cms(final Locale locale) {
-        return cms(locale, null);
-    }
-
-    private CmsPage cms(final Locale locale, final String pageKey) {
         final I18nResolver i18nResolver = YamlI18nResolver.of("cms", SUPPORTED_LOCALES, AVAILABLE_BUNDLES);
-        return LocalCmsService.of(i18nResolver).getPage(singletonList(locale), pageKey).get(0);
+        return LocalCmsService.of(i18nResolver).getPage(singletonList(locale), "cms").get(0);
     }
 }

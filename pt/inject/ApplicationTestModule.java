@@ -22,7 +22,7 @@ public class ApplicationTestModule extends AbstractModule {
     }
 
     protected TemplateService injectedTemplateService() {
-        return ((templateName, pageData, locales) -> "");
+        return ((templateName, pageData, locales, cmsPage) -> "");
     }
 
     protected CmsService injectedCmsService() {

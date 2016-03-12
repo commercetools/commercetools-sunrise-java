@@ -2,12 +2,10 @@ package common.templates;
 
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import common.cms.CmsService;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
 import common.templates.handlebars.HandlebarsTemplateService;
 import org.junit.Test;
-import play.libs.F;
 
 import java.util.List;
 import java.util.Locale;
@@ -24,7 +22,6 @@ public class HandlebarsTemplateTest {
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
     private static final TemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
     private static final I18nResolver I18N_MESSAGES = ((locale, bundle, key, hashArgs) -> Optional.empty());
-    private static final CmsService CMS_SERVICE = (locales, pageKey) -> F.Promise.pure((message, args) -> Optional.empty());
     private static final List<Locale> LOCALES = emptyList();
     private static final PageData SOME_PAGE_DATA = new TestablePageData();
 
@@ -67,11 +64,11 @@ public class HandlebarsTemplateTest {
     }
 
     private static TemplateService defaultHandlebars() {
-        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), I18N_MESSAGES, CMS_SERVICE);
+        return HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), I18N_MESSAGES);
     }
 
     private static TemplateService handlebarsWithOverride() {
-        return HandlebarsTemplateService.of(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES, CMS_SERVICE);
+        return HandlebarsTemplateService.of(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES);
     }
 
     private static void testTemplate(final String templateName, final TemplateService templateService, final Consumer<String> test) {

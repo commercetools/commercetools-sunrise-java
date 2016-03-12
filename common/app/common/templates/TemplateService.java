@@ -1,8 +1,10 @@
 package common.templates;
 
+import common.cms.CmsPage;
 import common.controllers.PageData;
 import play.twirl.api.Html;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,11 +18,40 @@ public interface TemplateService {
      * @param templateName name of the template
      * @param pageData data to be injected in the template
      * @param locales locales used for i18n
+     * @param cmsPage cms content for this page
      * @return string of the HTML generated with the template and the given page data
      * @throws TemplateNotFoundException when the given template name does not correspond to an existing template
      * @throws TemplateRenderException when the provided page data could not be injected to the template
      */
-    String render(final String templateName, final PageData pageData, final List<Locale> locales);
+    String render(final String templateName, final PageData pageData, final List<Locale> locales, @Nullable final CmsPage cmsPage);
+
+    /**
+     * Injects the page data into the template with the given name.
+     * @param templateName name of the template
+     * @param pageData data to be injected in the template
+     * @param locales locales used for i18n
+     * @return string of the HTML generated with the template and the given page data
+     * @throws TemplateNotFoundException when the given template name does not correspond to an existing template
+     * @throws TemplateRenderException when the provided page data could not be injected to the template
+     */
+    default String render(final String templateName, final PageData pageData, final List<Locale> locales) {
+        return render(templateName, pageData, locales, null);
+    }
+
+
+    /**
+     * Injects the page data into the template with the given name.
+     * @param templateName name of the template
+     * @param pageData data to be injected in the template
+     * @param locales locales used for i18n
+     * @param cmsPage cms content for this page
+     * @return HTML generated with the template and the given page data
+     * @throws TemplateNotFoundException when the given template name does not correspond to an existing template
+     * @throws TemplateRenderException when the provided page data could not be injected to the template
+     */
+    default Html renderToHtml(final String templateName, final PageData pageData, final List<Locale> locales, @Nullable final CmsPage cmsPage) {
+        return new Html(render(templateName, pageData, locales, cmsPage));
+    }
 
     /**
      * Injects the page data into the template with the given name.
@@ -32,6 +63,6 @@ public interface TemplateService {
      * @throws TemplateRenderException when the provided page data could not be injected to the template
      */
     default Html renderToHtml(final String templateName, final PageData pageData, final List<Locale> locales) {
-        return new Html(render(templateName, pageData, locales));
+        return renderToHtml(templateName, pageData, locales, null);
     }
 }

@@ -13,6 +13,13 @@ import java.util.Locale;
 /**
  * Service that provides content data from i18n files that can be found locally.
  * It uses a I18nResolver internally to resolve the requested messages.
+ *
+ * The mapping of the {@link CmsService} parameters to {@link I18nResolver} parameters goes as follows:
+ *
+ * - {@code bundle} = {@code contentType} (e.g. banner)
+ * - {@code key} = {@code contentId.field} (e.g. homeTopLeft.subtitle)
+ *
+ * The {@code pageKey} is then ignored as its only purpose is for remote access.
  */
 @Singleton
 public final class LocalCmsService implements CmsService {
@@ -25,7 +32,7 @@ public final class LocalCmsService implements CmsService {
 
     @Override
     public F.Promise<CmsPage> getPage(final List<Locale> locales, final String pageKey) {
-        final CmsPage cmsPage = new LocalCmsPage(i18nResolver, locales, pageKey);
+        final CmsPage cmsPage = new LocalCmsPage(i18nResolver, locales);
         return F.Promise.pure(cmsPage);
     }
 

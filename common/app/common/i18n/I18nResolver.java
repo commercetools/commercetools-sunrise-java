@@ -17,7 +17,7 @@ public interface I18nResolver {
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
      * @param locales the list of locales used to translate the message
      * @param bundle name of the bundle containing the message key
-     * @param key identifier of the message
+     * @param key identifier of the message of the form {@code some.message.key}
      * @param hashArgs list of hash arguments
      * @return the resolved message in the any of the given languages, or absent if it could not be found
      */
@@ -27,7 +27,7 @@ public interface I18nResolver {
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
      * @param locales the list of locales used to translate the message
      * @param bundle name of the bundle containing the message key
-     * @param key identifier of the message
+     * @param key identifier of the message of the form {@code some.message.key}
      * @return the resolved message in the given language, or absent if it could not be found
      */
     default Optional<String> get(final List<Locale> locales, final String bundle, final String key) {
@@ -38,7 +38,7 @@ public interface I18nResolver {
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
      * @param locales the list of locales used to translate the message
      * @param bundle name of the bundle containing the message key
-     * @param key identifier of the message
+     * @param key identifier of the message of the form {@code some.message.key}
      * @param hashArgs list of hash arguments
      * @return the resolved message in the first found given language, or empty string if it could not be found
      */
@@ -50,7 +50,7 @@ public interface I18nResolver {
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
      * @param locales the list of locales used to translate the message
      * @param bundle name of the bundle containing the message key
-     * @param key identifier of the message
+     * @param key identifier of the message of the form {@code some.message.key}
      * @return the resolved message in the any of the given languages, or empty string if it could not be found
      */
     default String getOrEmpty(final List<Locale> locales, final String bundle, final String key) {
