@@ -4,9 +4,6 @@ import io.sphere.sdk.models.Identifiable;
 
 import java.util.*;
 
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
-
 public class CategoryTreeExtendedImpl implements CategoryTreeExtended {
     private final CategoryTree categoryTree;
 
@@ -62,14 +59,6 @@ public class CategoryTreeExtendedImpl implements CategoryTreeExtended {
     @Override
     public List<Category> getSubtreeRoots() {
         return categoryTree.getSubtreeRoots();
-    }
-
-    @Override
-    public Category getRootAncestor(final Category category) {
-        requireNonNull(category);
-        return category.getAncestors().stream().findFirst()
-                .flatMap(root -> categoryTree.findById(root.getId()))
-                .orElse(category);
     }
 
     private List<Category> getSiblings(final Identifiable<Category> category) {

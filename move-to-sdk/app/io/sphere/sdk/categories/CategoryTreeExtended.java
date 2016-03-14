@@ -29,12 +29,17 @@ public interface CategoryTreeExtended extends CategoryTree {
     @Override
     List<Category> findChildren(Identifiable<Category> category);
 
-    /**
-     * Gets the ancestor of the given category that is in root level.
-     * @param category the category which to find the root ancestor
-     * @return the root ancestor of the category or the same category in case it is a root itself
-     */
-    Category getRootAncestor(final Category category);
+    @Override
+    List<Category> findSiblings(Collection<? extends Identifiable<Category>> collection);
+
+    @Override
+    Category getRootAncestor(Identifiable<Category> identifiable);
+
+    @Override
+    CategoryTree getSubtree(Collection<? extends Identifiable<Category>> collection);
+
+    @Override
+    List<Category> getSubtreeRoots();
 
     /**
      * Creates a category tree from a flat list of categories.

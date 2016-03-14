@@ -83,11 +83,6 @@ public final class RefreshableCategoryTree extends Base implements CategoryTreeE
         return categoryTree.getSubtreeRoots();
     }
 
-    @Override
-    public Category getRootAncestor(final Category category) {
-        return categoryTree.getRootAncestor(category);
-    }
-
     public static RefreshableCategoryTree of(final SphereClient sphereClient) {
         return new RefreshableCategoryTree(sphereClient);
     }
