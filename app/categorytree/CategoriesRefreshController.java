@@ -1,6 +1,6 @@
 package categorytree;
 
-import io.sphere.sdk.categories.CategoryTreeExtended;
+import io.sphere.sdk.categories.CategoryTree;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -11,7 +11,7 @@ public class CategoriesRefreshController extends Controller {
     private final Optional<RefreshableCategoryTree> refreshableCategoryTree;
 
     @Inject
-    public CategoriesRefreshController(final CategoryTreeExtended categoryTree) {
+    public CategoriesRefreshController(final CategoryTree categoryTree) {
         if (categoryTree instanceof RefreshableCategoryTree) {
             this.refreshableCategoryTree = Optional.of((RefreshableCategoryTree) categoryTree);
         } else {

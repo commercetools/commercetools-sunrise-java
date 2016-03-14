@@ -2,7 +2,6 @@ package categorytree;
 
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.categories.CategoryTreeExtended;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Base;
@@ -20,8 +19,8 @@ import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
 import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
 import static java.util.stream.Collectors.toList;
 
-public final class RefreshableCategoryTree extends Base implements CategoryTreeExtended {
-    private CategoryTreeExtended categoryTree;
+public final class RefreshableCategoryTree extends Base implements CategoryTree {
+    private CategoryTree categoryTree;
     private SphereClient sphereClient;
 
     private RefreshableCategoryTree(final SphereClient sphereClient) {
@@ -87,10 +86,10 @@ public final class RefreshableCategoryTree extends Base implements CategoryTreeE
         return new RefreshableCategoryTree(sphereClient);
     }
 
-    private static CategoryTreeExtended fetchFreshCategoryTree(final SphereClient client) {
+    private static CategoryTree fetchFreshCategoryTree(final SphereClient client) {
         final List<Category> categories = fetchCategories(client);
         Logger.debug("Provide CategoryTree with " + categories.size() + " categories");
-        return CategoryTreeExtended.of(categories);
+        return CategoryTree.of(categories);
     }
 
     private static List<Category> fetchCategories(final SphereClient client) {

@@ -1,7 +1,7 @@
 package productcatalog.services;
 
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTreeExtended;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public F.Promise<List<ProductProjection>> getSuggestions(final ProductProjection product, final CategoryTreeExtended categoryTree,
+    public F.Promise<List<ProductProjection>> getSuggestions(final ProductProjection product, final CategoryTree categoryTree,
                                                              final int numSuggestions) {
         final List<Category> categories = product.getCategories().stream()
                 .map(c -> categoryTree.findById(c.getId()))
