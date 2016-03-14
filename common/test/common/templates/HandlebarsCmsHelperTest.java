@@ -14,9 +14,9 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static java.util.Locale.ENGLISH;
 import static java.util.Locale.GERMAN;
@@ -56,21 +56,17 @@ public class HandlebarsCmsHelperTest {
         testTemplate("missingField", ENGLISH, defaultI18nMap(), html -> assertThat(html).isEmpty());
     }
 
-    private static void testTemplate(final String templateName, final Locale locale, final Map<String, String> i18nMap,
-                                     final Consumer<String> test) {
-        testTemplate(templateName, locale, emptyMap(), i18nMap, test);
-    }
 
-    private static void testTemplate(final String templateName, final Locale locale, final Map<String, Object> parameters,
-                                     final Map<String, String> i18nMap, final Consumer<String> test) {
+    private static void testTemplate(final String templateName, final Locale locale, final Map<String, String> i18nMap,
+                                     final Consumer<String> test) throws Exception {
         final TemplateService templateService = HandlebarsTemplateService.of(singletonList(DEFAULT_LOADER), i18nResolver(i18nMap));
         final String html = renderTemplate(templateName, templateService, locale);
         test.accept(html);
     }
 
-    private static String renderTemplate(final String templateName, final TemplateService templateService, final Locale locale) {
+    private static String renderTemplate(final String templateName, final TemplateService templateService, final Locale locale) throws Exception {
         final CmsService cmsService =  LocalCmsService.of(i18nResolver(defaultI18nMap()));
-        final CmsPage cmsPage = cmsService.getPage(singletonList(locale), "cms").get(0);
+        final CmsPage cmsPage = cmsService.getPage(singletonList(locale), "cms").toCompletableFuture().get(0, TimeUnit.SECONDS);
         return templateService.render(templateName, SOME_PAGE_DATA, singletonList(locale), cmsPage);
     }
 
