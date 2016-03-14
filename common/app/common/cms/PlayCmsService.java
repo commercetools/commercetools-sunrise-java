@@ -3,11 +3,12 @@ package common.cms;
 import play.i18n.Lang;
 import play.i18n.Messages;
 import play.i18n.MessagesApi;
-import play.libs.F;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Service that provides content data from Messages files as handled by Play.
@@ -26,11 +27,11 @@ public final class PlayCmsService implements CmsService {
     }
 
     @Override
-    public F.Promise<CmsPage> getPage(final Locale locale, final String pageKey) {
+    public CompletionStage<CmsPage> getPage(final Locale locale, final String pageKey) {
         final Lang lang = Lang.forCode(locale.toLanguageTag());
         final Messages messages = new Messages(lang, messagesApi);
         final CmsPage cmsPage = new PlayCmsPage(messages, pageKey);
-        return F.Promise.pure(cmsPage);
+        return CompletableFuture.completedFuture(cmsPage);
     }
 
     public static PlayCmsService of(final MessagesApi messagesApi) {

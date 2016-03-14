@@ -38,7 +38,6 @@ import static java.util.stream.Collectors.toList;
  * An application specific controller.
  */
 @With(MetricAction.class)
-@AddCSRFToken
 @NoCache
 public abstract class SunriseController extends ShopController {
     public static final String SESSION_COUNTRY = "countryCode";
@@ -81,16 +80,17 @@ public abstract class SunriseController extends ShopController {
         return controllerDependency.projectContext();
     }
 
-    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content, final Http.Context ctx) {
+    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content,
+                                             final Http.Context ctx, final Http.Session session) {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
-        pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session()));
+        pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session));
         pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));
-        return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
+        return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(userContext, ctx, session));
     }
 
-    private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
+    private PageMeta getPageMeta(final UserContext userContext, final Http.Context ctx, final Http.Session session) {
         final PageMeta pageMeta = new PageMeta();
         pageMeta.setUser(CustomerSessionUtils.getUserBean(session()));
         pageMeta.setAssetsPath(reverseRouter().themeAssets("").url());
@@ -139,8 +139,8 @@ public abstract class SunriseController extends ShopController {
         return UserContext.of(acceptedLocales, currentCountry, currentCurrency);
     }
 
-    protected RequestContext requestContext() {
-        return RequestContext.of(request().queryString(), request().path());
+    protected RequestContext requestContext(final Http.Request request) {
+        return RequestContext.of(request.queryString(), request.path());
     }
 
     protected Optional<Category> newCategory() {

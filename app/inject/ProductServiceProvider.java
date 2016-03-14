@@ -1,7 +1,7 @@
 package inject;
 
 import com.google.inject.Provider;
-import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.client.SphereClient;
 import play.Logger;
 import productcatalog.services.ProductService;
 import productcatalog.services.ProductServiceImpl;
@@ -9,10 +9,10 @@ import productcatalog.services.ProductServiceImpl;
 import javax.inject.Inject;
 
 class ProductServiceProvider implements Provider<ProductService> {
-    private final PlayJavaSphereClient sphere;
+    private final SphereClient sphere;
 
     @Inject
-    public ProductServiceProvider(final PlayJavaSphereClient sphere) {
+    public ProductServiceProvider(final SphereClient sphere) {
         this.sphere = sphere;
     }
 

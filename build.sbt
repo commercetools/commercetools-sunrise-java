@@ -19,8 +19,6 @@ lazy val sunriseDesignVersion = "0.55.0"
 
 lazy val jvmSdkVersion = "1.0.0-RC2"
 
-lazy val jvmSdkPlayAddOnVersion = "1.0.0-RC1"
-
 lazy val jacksonVersion = "2.6.0"
 
 
@@ -71,21 +69,14 @@ lazy val `move-to-sdk` = project
 javaUnidocSettings
 
 lazy val commonSettings = releaseSettings ++ Seq (
-  scalaVersion := "2.10.6",
+  scalaVersion := "2.11.7",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   dependencyOverrides ++= Set (
-    "org.slf4j" % "slf4j-api" % "1.7.15",
-    "com.google.guava" % "guava" % "18.0",
-    "commons-io" % "commons-io" % "2.4",
-    "commons-logging" % "commons-logging" % "1.1.3",
-    "io.netty" % "netty" % "3.10.4.Final",
     "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
     "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
     "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
-    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
-    "org.scala-lang" % "scala-library" % "2.10.6",
-    "org.scala-lang" % "scala-reflect" % "2.10.6"
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
   )
 )
 
@@ -93,8 +84,8 @@ lazy val jvmSdkDependencies = Seq (
   resolvers in ThisBuild ++= Resolver.sonatypeRepo("releases") :: Resolver.mavenLocal :: Nil,
   libraryDependencies ++= Seq (
     "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
-    "com.commercetools.sdk.jvm.core" % "commercetools-convenience" % jvmSdkVersion,
-    "com.commercetools.sdk.jvm.scala-add-ons" %% "commercetools-play-2_4-java-client" % jvmSdkPlayAddOnVersion
+    "com.commercetools.sdk.jvm.core" % "commercetools-java-client" % jvmSdkVersion,
+    "com.commercetools.sdk.jvm.core" % "commercetools-convenience" % jvmSdkVersion
   )
 )
 

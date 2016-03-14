@@ -1,16 +1,16 @@
 package io.sphere.sdk.play.controllers;
 
-import io.sphere.sdk.client.PlayJavaSphereClient;
+import io.sphere.sdk.client.SphereClient;
 import play.mvc.Controller;
 
 public abstract class ShopController extends Controller {
-    private final PlayJavaSphereClient sphere;
+    private final SphereClient sphere;
 
-    protected ShopController(PlayJavaSphereClient sphere) {
+    protected ShopController(SphereClient sphere) {
         this.sphere = sphere;
     }
 
-    protected final PlayJavaSphereClient sphere() {
+    protected final SphereClient sphere() {
         return sphere;
     }
 }

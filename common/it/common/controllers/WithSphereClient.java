@@ -2,18 +2,18 @@ package common.controllers;
 
 import io.sphere.sdk.client.*;
 import org.junit.AfterClass;
-import play.libs.F;
 
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 
-public abstract class WithPlayJavaSphereClient {
+public abstract class WithSphereClient {
     protected static final int ALLOWED_TIMEOUT = 5000;
     private static final String IT_PREFIX = "SUNRISE_IT_";
     private static final String IT_CTP_PROJECT_KEY = IT_PREFIX + "CTP_PROJECT_KEY";
     private static final String IT_CTP_CLIENT_SECRET = IT_PREFIX + "CTP_CLIENT_SECRET";
     private static final String IT_CTP_CLIENT_ID = IT_PREFIX + "CTP_CLIENT_ID";
 
-    private static volatile PlayJavaSphereClient sphereClient;
+    private static volatile SphereClient sphereClient;
 
     @AfterClass
     public static void stopJavaClient() {
@@ -23,7 +23,7 @@ public abstract class WithPlayJavaSphereClient {
         }
     }
 
-    protected static <T> F.Promise<T> execute(final SphereRequest<T> sphereRequest) {
+    protected static <T> CompletionStage<T> execute(final SphereRequest<T> sphereRequest) {
         return sphereClient().execute(sphereRequest);
     }
 
@@ -39,11 +39,10 @@ public abstract class WithPlayJavaSphereClient {
         return getValueForEnvVar(IT_CTP_CLIENT_SECRET);
     }
 
-    private synchronized static PlayJavaSphereClient sphereClient() {
+    private synchronized static SphereClient sphereClient() {
         if (sphereClient == null) {
-            final SphereClient client = SphereClientFactory.of(SphereAsyncHttpClientFactory::create)
+            sphereClient = SphereClientFactory.of(SphereAsyncHttpClientFactory::create)
                     .createClient(projectKey(), clientId(), clientSecret());
-            sphereClient = PlayJavaSphereClient.of(client);
         }
         return sphereClient;
     }

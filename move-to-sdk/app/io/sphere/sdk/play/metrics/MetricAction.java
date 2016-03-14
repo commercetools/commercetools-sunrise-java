@@ -4,12 +4,13 @@ import io.sphere.sdk.http.HttpMethod;
 import io.sphere.sdk.utils.SphereInternalLogger;
 import org.apache.commons.lang3.tuple.Pair;
 import play.Configuration;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.*;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Predicate;
 
 import static java.lang.String.format;
@@ -28,27 +29,24 @@ public class MetricAction extends play.mvc.Action.Simple {
     }
 
     @Override
-    public F.Promise<Result> call(final Http.Context ctx) throws Throwable {
+    public CompletionStage<Result> call(final Http.Context ctx) {
         if (metricsEnabled) {
             final List<ReportRawData> rawData = Collections.synchronizedList(new LinkedList<>());
             ctx.args.put(KEY, rawData);
-            final F.Promise<Result> resultPromise = delegate.call(ctx);
-            logRequestDataOnComplete(ctx, rawData, resultPromise);
-            return resultPromise;
+            return delegate.call(ctx)
+                    .whenCompleteAsync((r, t) -> logRequestData(ctx, rawData), HttpExecution.defaultContext());
         } else {
             return delegate.call(ctx);
         }
     }
 
-    private void logRequestDataOnComplete(final Http.Context ctx, final List<ReportRawData> rawDatas, final F.Promise<Result> resultPromise) {
-        resultPromise.onRedeem(r -> {
-            final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
-            final List<ReportRawData> queries = queryCommandPair.getLeft();
-            final List<ReportRawData> commands = queryCommandPair.getRight();
-            final int size = calculateTotalSize(rawDatas);
-            final String durations = rawDatas.stream().map(data -> data.getStopTimestamp() - data.getStartTimestamp()).map(l -> Long.toString(l) + " ms").collect(joining(", "));
-            LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %d bytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
-        });
+    private void logRequestData(final Http.Context ctx, final List<ReportRawData> rawDatas) {
+        final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
+        final List<ReportRawData> queries = queryCommandPair.getLeft();
+        final List<ReportRawData> commands = queryCommandPair.getRight();
+        final int size = calculateTotalSize(rawDatas);
+        final String durations = rawDatas.stream().map(data -> data.getStopTimestamp() - data.getStartTimestamp()).map(l -> Long.toString(l) + " ms").collect(joining(", "));
+        LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %d bytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
     }
 
     private Pair<List<ReportRawData>, List<ReportRawData>> splitByQueriesAndCommands(final List<ReportRawData> rawData) {
