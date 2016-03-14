@@ -13,7 +13,6 @@ common.utils
 controllers
 ctpclient
 inject
-io.sphere.sdk.categories
 io.sphere.sdk.facets
 io.sphere.sdk.play.controllers
 io.sphere.sdk.play.metrics
