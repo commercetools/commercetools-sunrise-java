@@ -57,12 +57,12 @@ public final class LogInPageController extends SunriseController {
     @RequireCSRFCheck
     public CompletionStage<Result> processLogIn(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Form<LogInFormData> form = logInForm.bindFromRequest();
-        final LogInPageContent pageContent = new LogInPageContent(form);
-        if (form.hasErrors()) {
-            return completedFuture(handleLogInFormErrors(form, pageContent, userContext));
+        final Form<LogInFormData> boundForm = logInForm.bindFromRequest();
+        final LogInPageContent pageContent = new LogInPageContent(boundForm);
+        if (boundForm.hasErrors()) {
+            return completedFuture(handleLogInFormErrors(boundForm, pageContent, userContext));
         } else {
-            return logIn(form.get())
+            return logIn(boundForm.get())
                     .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
                     .exceptionally(throwable -> handleInvalidCredentialsError(throwable, pageContent, userContext));
         }
@@ -71,12 +71,12 @@ public final class LogInPageController extends SunriseController {
     @RequireCSRFCheck
     public CompletionStage<Result> processSignUp(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Form<SignUpFormData> form = signUpForm.bindFromRequest();
-        final LogInPageContent pageContent = new LogInPageContent(form, userContext, i18nResolver(), configuration());
-        if (form.hasErrors()) {
-            return completedFuture(handleSignUpFormErrors(form, pageContent, userContext));
+        final Form<SignUpFormData> boundForm = signUpForm.bindFromRequest();
+        final LogInPageContent pageContent = new LogInPageContent(boundForm, userContext, i18nResolver(), configuration());
+        if (boundForm.hasErrors()) {
+            return completedFuture(handleSignUpFormErrors(boundForm, pageContent, userContext));
         } else {
-            return signUp(form.get())
+            return signUp(boundForm.get())
                     .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
                     .exceptionally(throwable -> handleExistingCustomerError(throwable, pageContent, userContext));
         }

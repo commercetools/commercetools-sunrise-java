@@ -11,6 +11,7 @@ import io.sphere.sdk.orders.PaymentState;
 import io.sphere.sdk.orders.commands.OrderFromCartCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
 import play.data.Form;
+import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
@@ -28,11 +29,14 @@ import static shoppingcart.CartSessionKeys.LAST_ORDER_ID_KEY;
 @Singleton
 public class CheckoutConfirmationController extends CartController {
     private final ProductDataConfig productDataConfig;
+    private final Form<CheckoutConfirmationFormData> checkoutConfirmationForm;
 
     @Inject
-    public CheckoutConfirmationController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
+    public CheckoutConfirmationController(final ControllerDependency controllerDependency,
+                                          final ProductDataConfig productDataConfig, final FormFactory formFactory) {
         super(controllerDependency);
         this.productDataConfig = productDataConfig;
+        this.checkoutConfirmationForm = formFactory.form(CheckoutConfirmationFormData.class);
     }
 
     @AddCSRFToken
@@ -46,7 +50,7 @@ public class CheckoutConfirmationController extends CartController {
     public CompletionStage<Result> process(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
-        final Form<CheckoutConfirmationFormData> filledForm = Form.form(CheckoutConfirmationFormData.class).bindFromRequest(request());
+        final Form<CheckoutConfirmationFormData> filledForm = checkoutConfirmationForm.bindFromRequest(request());
         final CheckoutConfirmationFormData data = filledForm.get();
         // TODO Enable back agreed terms
 //        if (!data.isAgreeTerms()) {

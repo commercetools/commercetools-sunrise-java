@@ -25,6 +25,7 @@ import javax.inject.Singleton;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
+import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
 
 /**
  * Shows and modifies the contents of the cart.
@@ -55,16 +56,16 @@ public final class CartDetailPageController extends CartController {
     }
 
     public CompletionStage<Result> addProductToCart(final String languageTag) {
-        final Form<AddProductToCartFormData> form = addProductToCartForm.bindFromRequest();
-        if (form.hasErrors()) {
+        final Form<AddProductToCartFormData> boundForm = addProductToCartForm.bindFromRequest();
+        if (boundForm.hasErrors()) {
             return completedFuture(badRequest());
         } else {
             final UserContext userContext = userContext(languageTag);
             final Http.Session session = session();
             return getOrCreateCart(userContext, session)
-                    .thenComposeAsync(cart -> addProductToCart(form.get(), cart))
+                    .thenComposeAsync(cart -> addProductToCart(boundForm.get(), cart))
                     .thenApplyAsync(updatedCart -> {
-                        CartSessionUtils.overwriteCartSessionData(updatedCart, session, userContext, reverseRouter());
+                        overwriteCartSessionData(updatedCart, session, userContext, reverseRouter());
                         return redirect(reverseRouter().showCart(languageTag));
                     }, HttpExecution.defaultContext());
         }
@@ -72,16 +73,16 @@ public final class CartDetailPageController extends CartController {
 
     @RequireCSRFCheck
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
-        final Form<ChangeLineItemQuantityFormData> form = changeLineItemQuantityForm.bindFromRequest();
-        if (form.hasErrors()) {
+        final Form<ChangeLineItemQuantityFormData> boundForm = changeLineItemQuantityForm.bindFromRequest();
+        if (boundForm.hasErrors()) {
             return completedFuture(redirect(reverseRouter().showCart(languageTag)));
         } else {
             final UserContext userContext = userContext(languageTag);
             final Http.Session session = session();
             return getOrCreateCart(userContext, session)
-                    .thenComposeAsync(cart -> changeLineItemQuantity(form.get(), cart))
+                    .thenComposeAsync(cart -> changeLineItemQuantity(boundForm.get(), cart))
                     .thenApplyAsync(updatedCart -> {
-                        CartSessionUtils.overwriteCartSessionData(updatedCart, session, userContext, reverseRouter());
+                        overwriteCartSessionData(updatedCart, session, userContext, reverseRouter());
                         return redirect(reverseRouter().showCart(languageTag));
                     }, HttpExecution.defaultContext());
         }
@@ -89,15 +90,15 @@ public final class CartDetailPageController extends CartController {
 
     @RequireCSRFCheck
     public CompletionStage<Result> removeLineItem(final String languageTag) {
-        final Form<RemoveLineItemFormData> form = removeLineItemForm.bindFromRequest();
-        if (form.hasErrors()) {
+        final Form<RemoveLineItemFormData> boundForm = removeLineItemForm.bindFromRequest();
+        if (boundForm.hasErrors()) {
             return completedFuture(badRequest());
         } else {
             final UserContext userContext = userContext(languageTag);
             return getOrCreateCart(userContext, session())
-                    .thenComposeAsync(cart -> removeLineItem(form.get(), cart))
+                    .thenComposeAsync(cart -> removeLineItem(boundForm.get(), cart))
                     .thenApplyAsync(updatedCart -> {
-                        CartSessionUtils.overwriteCartSessionData(updatedCart, session(), userContext, reverseRouter());
+                        overwriteCartSessionData(updatedCart, session(), userContext, reverseRouter());
                         return redirect(reverseRouter().showCart(languageTag));
                     }, HttpExecution.defaultContext());
         }
