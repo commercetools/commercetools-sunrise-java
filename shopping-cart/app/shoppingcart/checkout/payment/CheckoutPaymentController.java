@@ -28,11 +28,13 @@ public class CheckoutPaymentController extends CartController {
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
-        return cartStage.thenApplyAsync(cart -> {
-            final CheckoutPaymentPageContent content = new CheckoutPaymentPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
-            final SunrisePageData pageData = pageData(userContext, content, ctx());
-            return ok(templateService().renderToHtml("checkout-payment", pageData, userContext.locales()));
-        }, HttpExecution.defaultContext());
+        return cartStage.thenApplyAsync(cart -> renderCheckoutPaymentPage(userContext, cart), HttpExecution.defaultContext());
+    }
+
+    private Result renderCheckoutPaymentPage(final UserContext userContext, final Cart cart) {
+        final CheckoutPaymentPageContent content = new CheckoutPaymentPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        return ok(templateService().renderToHtml("checkout-payment", pageData, userContext.locales()));
     }
 
     @RequireCSRFCheck

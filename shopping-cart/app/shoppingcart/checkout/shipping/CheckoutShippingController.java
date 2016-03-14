@@ -42,11 +42,7 @@ public class CheckoutShippingController extends CartController {
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
-        return cartStage.thenApplyAsync(cart -> {
-            final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, shippingMethods, productDataConfig, userContext, i18nResolver(), reverseRouter());
-            final SunrisePageData pageData = pageData(userContext, content, ctx());
-            return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
-        }, HttpExecution.defaultContext());
+        return cartStage.thenApplyAsync(cart -> renderCheckoutShippingForm(userContext, cart), HttpExecution.defaultContext());
     }
 
     @AddCSRFToken
@@ -70,6 +66,12 @@ public class CheckoutShippingController extends CartController {
         final String shippingMethodId = checkoutShippingFormData.getShippingMethodId();
         final SetShippingMethod setShippingMethod = SetShippingMethod.of(Reference.of(ShippingMethod.referenceTypeId(), shippingMethodId));
         return sphere().execute(CartUpdateCommand.of(cart, setShippingMethod));
+    }
+
+    private Result renderCheckoutShippingForm(final UserContext userContext, final Cart cart) {
+        final CheckoutShippingPageContent content = new CheckoutShippingPageContent(cart, shippingMethods, productDataConfig, userContext, i18nResolver(), reverseRouter());
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        return ok(templateService().renderToHtml("checkout-shipping", pageData, userContext.locales()));
     }
 
     private Result badRequest(final CheckoutShippingPageContent content, final Form<CheckoutShippingFormData> filledForm, final UserContext userContext) {

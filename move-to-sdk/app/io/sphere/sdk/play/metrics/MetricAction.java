@@ -33,23 +33,20 @@ public class MetricAction extends play.mvc.Action.Simple {
         if (metricsEnabled) {
             final List<ReportRawData> rawData = Collections.synchronizedList(new LinkedList<>());
             ctx.args.put(KEY, rawData);
-            final CompletionStage<Result> resultStage = delegate.call(ctx);
-            logRequestDataOnComplete(ctx, rawData, resultStage);
-            return resultStage;
+            return delegate.call(ctx)
+                    .whenCompleteAsync((r, t) -> logRequestData(ctx, rawData), HttpExecution.defaultContext());
         } else {
             return delegate.call(ctx);
         }
     }
 
-    private void logRequestDataOnComplete(final Http.Context ctx, final List<ReportRawData> rawDatas, final CompletionStage<Result> resultStage) {
-        resultStage.thenAcceptAsync(r -> {
-            final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
-            final List<ReportRawData> queries = queryCommandPair.getLeft();
-            final List<ReportRawData> commands = queryCommandPair.getRight();
-            final int size = calculateTotalSize(rawDatas);
-            final String durations = rawDatas.stream().map(data -> data.getStopTimestamp() - data.getStartTimestamp()).map(l -> Long.toString(l) + " ms").collect(joining(", "));
-            LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %d bytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
-        }, HttpExecution.defaultContext());
+    private void logRequestData(final Http.Context ctx, final List<ReportRawData> rawDatas) {
+        final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
+        final List<ReportRawData> queries = queryCommandPair.getLeft();
+        final List<ReportRawData> commands = queryCommandPair.getRight();
+        final int size = calculateTotalSize(rawDatas);
+        final String durations = rawDatas.stream().map(data -> data.getStopTimestamp() - data.getStartTimestamp()).map(l -> Long.toString(l) + " ms").collect(joining(", "));
+        LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %d bytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
     }
 
     private Pair<List<ReportRawData>, List<ReportRawData>> splitByQueriesAndCommands(final List<ReportRawData> rawData) {

@@ -42,20 +42,24 @@ public class HomeController extends ProductCatalogController {
 
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final HomePageContent content = new HomePageContent();
         final List<Category> suggestedCategories = suggestedCategories();
         if (!suggestedCategories.isEmpty()) {
-            return productService().getSuggestions(suggestedCategories, numSuggestions).thenApplyAsync(suggestions -> {
-                content.setSuggestions(createSuggestions(userContext, suggestions));
-                return ok(renderHome(userContext, content));
-            }, HttpExecution.defaultContext());
+            return productService().getSuggestions(suggestedCategories, numSuggestions).thenApplyAsync(suggestions ->
+                    ok(renderHome(userContext, suggestions)), HttpExecution.defaultContext());
         } else {
-            return CompletableFuture.completedFuture(ok(renderHome(userContext, content)));
+            return CompletableFuture.completedFuture(ok(renderHome(userContext, emptyList())));
         }
     }
 
-    private Html renderHome(final UserContext userContext, final HomePageContent content) {
-        return templateService().renderToHtml("home", pageData(userContext, content, ctx()), userContext.locales());
+    private HomePageContent createPageContent(final UserContext userContext, final List<ProductProjection> suggestions) {
+        final HomePageContent homePageContent = new HomePageContent();
+        homePageContent.setSuggestions(createSuggestions(userContext, suggestions));
+        return homePageContent;
+    }
+
+    private Html renderHome(final UserContext userContext, final List<ProductProjection> suggestions) {
+        final HomePageContent pageContent = createPageContent(userContext, suggestions);
+        return templateService().renderToHtml("home", pageData(userContext, pageContent, ctx()), userContext.locales());
     }
 
     private List<Category> suggestedCategories() {

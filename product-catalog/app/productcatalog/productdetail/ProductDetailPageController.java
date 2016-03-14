@@ -39,17 +39,14 @@ public class ProductDetailPageController extends ProductCatalogController {
         final UserContext userContext = userContext(locale);
         return productService().findProductBySlug(userContext.locale(), slug)
                 .thenComposeAsync(productOpt -> productOpt
-                        .map(product -> renderProduct(userContext, slug, product, sku))
+                        .map(product -> renderProduct(slug, sku, product, userContext))
                         .orElseGet(() -> CompletableFuture.completedFuture(notFound())), HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Result> renderProduct(final UserContext userContext, final String slug, final ProductProjection product, final String sku) {
+    private CompletionStage<Result> renderProduct(final String slug, final String sku, final ProductProjection product, final UserContext userContext) {
         return product.findVariantBySku(sku)
-                .map(variant ->
-                        productService().getSuggestions(product, categoryTree(), numSuggestions).thenApplyAsync(suggestions -> {
-                        final ProductDetailPageContent content = createPageContent(userContext, product, variant, suggestions);
-                        return (Result) ok(renderPage(userContext, content));
-                        }, HttpExecution.defaultContext())
+                .map(variant -> productService().getSuggestions(product, categoryTree(), numSuggestions).thenApplyAsync(suggestions ->
+                        ok(renderProductPage(product, userContext, variant, suggestions)), HttpExecution.defaultContext())
                 ).orElseGet(() -> redirectToMasterVariant(userContext, slug, product));
     }
 
@@ -62,8 +59,10 @@ public class ProductDetailPageController extends ProductCatalogController {
 
     /* Methods to render the page */
 
-    private Html renderPage(final UserContext userContext, final ProductDetailPageContent content) {
-        final SunrisePageData pageData = pageData(userContext, content, ctx());
+    private Html renderProductPage(final ProductProjection product, final UserContext userContext,
+                                   final ProductVariant variant, final List<ProductProjection> suggestions) {
+        final ProductDetailPageContent pageContent = createPageContent(userContext, product, variant, suggestions);
+        final SunrisePageData pageData = pageData(userContext, pageContent, ctx());
         return templateService().renderToHtml("pdp", pageData, userContext.locales());
     }
 

@@ -17,13 +17,11 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.stream.Collectors.toList;
 
 public class ProductServiceImpl implements ProductService {
-    private static final Random RANDOM = new Random();
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private final SphereClient sphere;
@@ -44,23 +42,22 @@ public class ProductServiceImpl implements ProductService {
         final ProductProjectionSearch request = searchCriteria.searchTerm()
                 .map(baseRequest::withText)
                 .orElse(baseRequest);
-        final CompletionStage<PagedSearchResult<ProductProjection>> resultStage = sphere.execute(request);
-        logRequest(request, resultStage);
-        return resultStage;
+        return sphere.execute(request)
+                .whenCompleteAsync((result, t) -> logRequest(request, result), HttpExecution.defaultContext());
     }
 
     public CompletionStage<Optional<ProductProjection>> findProductBySlug(final Locale locale, final String slug) {
         final ProductProjectionQuery request = ProductProjectionQuery.ofCurrent().bySlug(locale, slug);
-        final CompletionStage<Optional<ProductProjection>> productOptStage = sphere.execute(request).thenApplyAsync(PagedQueryResult::head, HttpExecution.defaultContext());
-        productOptStage.thenAcceptAsync(productOpt -> {
-            if (productOpt.isPresent()) {
-                final String productId = productOpt.get().getId();
-                LOGGER.trace("Found product for slug {} in locale {} with ID {}.", slug, locale, productId);
-            } else {
-                LOGGER.trace("No product found for slug {} in locale {}.", slug, locale);
-            }
-        }, HttpExecution.defaultContext());
-        return productOptStage;
+        return sphere.execute(request)
+                .thenApplyAsync(PagedQueryResult::head, HttpExecution.defaultContext())
+                .whenComplete((productOpt, t) -> {
+                    if (productOpt.isPresent()) {
+                        final String productId = productOpt.get().getId();
+                        LOGGER.trace("Found product for slug {} in locale {} with ID {}.", slug, locale, productId);
+                    } else {
+                        LOGGER.trace("No product found for slug {} in locale {}.", slug, locale);
+                    }
+                });
     }
 
     @Override
@@ -72,13 +69,8 @@ public class ProductServiceImpl implements ProductService {
                 .map(Optional::get)
                 .collect(toList());
         final List<Category> siblingCategories = categoryTree.getSiblings(categories);
-        final CompletionStage<List<ProductProjection>> suggestions;
-        if (siblingCategories.isEmpty()) {
-            suggestions = getSuggestions(categories, numSuggestions);
-        } else {
-            suggestions = getSuggestions(siblingCategories, numSuggestions);
-        }
-        return suggestions;
+        final List<Category> targetCategories = siblingCategories.isEmpty() ? categories : siblingCategories;
+        return getSuggestions(targetCategories, numSuggestions);
     }
 
     @Override
@@ -89,15 +81,15 @@ public class ProductServiceImpl implements ProductService {
         final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
                 .withLimit(numSuggestions)
                 .withQueryFilters(filter -> filter.categories().id().containsAny(categoryIds));
-        final CompletionStage<PagedSearchResult<ProductProjection>> resultStage = sphere.execute(request);
-        logRequest(request, resultStage);
-        return resultStage.thenApplyAsync(PagedSearchResult::getResults, HttpExecution.defaultContext());
+        return sphere.execute(request)
+                .whenCompleteAsync((result, t) -> logRequest(request, result), HttpExecution.defaultContext())
+                .thenApply(PagedSearchResult::getResults);
     }
 
-    private void logRequest(final ProductProjectionSearch request, final CompletionStage<PagedSearchResult<ProductProjection>> resultStage) {
-        resultStage.thenAcceptAsync(result -> LOGGER.debug("Fetched {} out of {} products with request {}",
+    private void logRequest(final ProductProjectionSearch request, final PagedSearchResult<ProductProjection> result) {
+        LOGGER.debug("Fetched {} out of {} products with request {}",
                 result.size(),
                 result.getTotal(),
-                request.httpRequestIntent().getPath()));
+                request.httpRequestIntent().getPath());
     }
 }

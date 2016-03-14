@@ -15,6 +15,7 @@ import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
 import myaccount.CustomerSessionUtils;
 import play.Logger;
 import play.data.Form;
+import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
@@ -36,12 +37,14 @@ import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
 @Singleton
 public final class LogInPageController extends SunriseController {
 
-    private static final Form<LogInFormData> LOG_IN_FORM = Form.form(LogInFormData.class);
-    private static final Form<SignUpFormData> SIGN_UP_FORM = Form.form(SignUpFormData.class);
+    private final Form<LogInFormData> logInForm;
+    private final Form<SignUpFormData> signUpForm;
 
     @Inject
-    public LogInPageController(final ControllerDependency controllerDependency) {
+    public LogInPageController(final ControllerDependency controllerDependency, final FormFactory formFactory) {
         super(controllerDependency);
+        this.logInForm = formFactory.form(LogInFormData.class);
+        this.signUpForm = formFactory.form(SignUpFormData.class);
     }
 
     public CompletionStage<Result> show(final String languageTag) {
@@ -54,7 +57,7 @@ public final class LogInPageController extends SunriseController {
     @RequireCSRFCheck
     public CompletionStage<Result> processLogIn(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Form<LogInFormData> form = LOG_IN_FORM.bindFromRequest();
+        final Form<LogInFormData> form = logInForm.bindFromRequest();
         final LogInPageContent pageContent = new LogInPageContent(form);
         if (form.hasErrors()) {
             return CompletableFuture.completedFuture(handleLogInFormErrors(form, pageContent, userContext));
@@ -69,7 +72,7 @@ public final class LogInPageController extends SunriseController {
     @RequireCSRFCheck
     public CompletionStage<Result> processSignUp(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Form<SignUpFormData> form = SIGN_UP_FORM.bindFromRequest();
+        final Form<SignUpFormData> form = signUpForm.bindFromRequest();
         final LogInPageContent pageContent = new LogInPageContent(form, userContext, i18nResolver(), configuration());
         if (form.hasErrors()) {
             return CompletableFuture.completedFuture(handleSignUpFormErrors(form, pageContent, userContext));

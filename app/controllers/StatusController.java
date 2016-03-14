@@ -9,7 +9,7 @@ import io.sphere.sdk.search.PagedSearchResult;
 import org.apache.commons.io.IOUtils;
 import play.Application;
 import play.Logger;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import play.mvc.Result;
 
@@ -44,9 +44,9 @@ public class StatusController extends SunriseController {
         final ProductProjectionSearch productRequest = ProductProjectionSearch.ofCurrent().withLimit(1);
         final CompletionStage<PagedSearchResult<ProductProjection>> searchResultStage = sphere().execute(productRequest);
         return searchResultStage
-                .thenApplyAsync(this::renderGoodHealthStatus)
+                .thenApplyAsync(this::renderGoodHealthStatus, HttpExecution.defaultContext())
                 .exceptionally(this::renderBadHealthStatus)
-                .thenApplyAsync(r -> r.as(Http.MimeTypes.JSON));
+                .thenApply(r -> r.as(Http.MimeTypes.JSON));
     }
 
     private Result renderGoodHealthStatus(final PagedSearchResult<ProductProjection> productResult) {

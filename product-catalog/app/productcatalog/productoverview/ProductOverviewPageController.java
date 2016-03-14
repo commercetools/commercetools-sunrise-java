@@ -42,15 +42,13 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     public CompletionStage<Result> show(final String languageTag, final int page, final String categorySlug) {
         final UserContext userContext = userContext(languageTag);
-        final Optional<Category> category = categoryTree().findBySlug(userContext.locale(), categorySlug);
-        if (category.isPresent()) {
-            final CategoryTree categoriesInFacet = getCategoriesInFacet(category.get());
-            final List<String> selectedCategoryIds = getSelectedCategoryIds(category.get());
-            final SearchCriteria searchCriteria = SearchCriteria.of(configuration(), request(), i18nResolver(), userContext, category.get(), selectedCategoryIds, categoriesInFacet);
-            return productService().searchProducts(page, searchCriteria).thenApplyAsync(searchResult -> {
-                final ProductOverviewPageContent content = createPageContent(userContext, searchResult, page, searchCriteria);
-                return ok(renderPage(userContext, fillPageContent(content, userContext, category.get())));
-            }, HttpExecution.defaultContext());
+        final Optional<Category> categoryOpt = categoryTree().findBySlug(userContext.locale(), categorySlug);
+        if (categoryOpt.isPresent()) {
+            final CategoryTree categoriesInFacet = getCategoriesInFacet(categoryOpt.get());
+            final List<String> selectedCategoryIds = getSelectedCategoryIds(categoryOpt.get());
+            final SearchCriteria searchCriteria = SearchCriteria.of(configuration(), request(), i18nResolver(), userContext, categoryOpt.get(), selectedCategoryIds, categoriesInFacet);
+            return productService().searchProducts(page, searchCriteria).thenApplyAsync(searchResult ->
+                    renderCategoryPage(categoryOpt.get(), page, searchCriteria, searchResult, userContext), HttpExecution.defaultContext());
         } else {
             return CompletableFuture.completedFuture(notFound("Category not found: " + categorySlug));
         }
@@ -61,25 +59,16 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final SearchCriteria searchCriteria = SearchCriteria.of(configuration(), request(), i18nResolver(), userContext, categoryTree());
         if (searchCriteria.searchTerm().isPresent()) {
             final CompletionStage<PagedSearchResult<ProductProjection>> searchResultStage = productService().searchProducts(page, searchCriteria);
-            return searchResultStage.thenApplyAsync(searchResult -> {
-                final ProductOverviewPageContent content = createPageContent(userContext, searchResult, page, searchCriteria);
-                final String searchTerm = searchCriteria.searchTerm().get().getValue();
-                return ok(renderPage(userContext, fillPageContent(content, searchTerm)));
-            }, HttpExecution.defaultContext());
+            return searchResultStage.thenApplyAsync(searchResult ->
+                    renderSearchPage(page, userContext, searchCriteria, searchResult), HttpExecution.defaultContext());
         } else {
             return CompletableFuture.completedFuture(badRequest("Search term missing"));
         }
     }
 
-    /* Methods to render the page */
-
-    private Html renderPage(final UserContext userContext, final ProductOverviewPageContent content) {
-        final SunrisePageData pageData = pageData(userContext, content, ctx());
-        return templateService().renderToHtml("pop", pageData, userContext.locales());
-    }
-
-    private ProductOverviewPageContent createPageContent(final UserContext userContext, final PagedSearchResult<ProductProjection> searchResult,
-                                                         final int page, final SearchCriteria searchCriteria) {
+    private ProductOverviewPageContent createPageContent(final int page, final SearchCriteria searchCriteria,
+                                                         final PagedSearchResult<ProductProjection> searchResult,
+                                                         final UserContext userContext) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
         content.setFilterProductsUrl(request().path());
         content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()));
@@ -90,22 +79,30 @@ public class ProductOverviewPageController extends ProductCatalogController {
         return content;
     }
 
-    private ProductOverviewPageContent fillPageContent(final ProductOverviewPageContent pageContent,
-                                                       final UserContext userContext, final Category category) {
+    private Result renderCategoryPage(final Category category, final int page, final SearchCriteria searchCriteria,
+                                      final PagedSearchResult<ProductProjection> searchResult, final UserContext userContext) {
+        final ProductOverviewPageContent pageContent = createPageContent(page, searchCriteria, searchResult, userContext);
         pageContent.setAdditionalTitle(category.getName().find(userContext.locales()).orElse(""));
         pageContent.setBreadcrumb(new BreadcrumbData(category, categoryTree(), userContext, reverseRouter()));
         pageContent.setJumbotron(new JumbotronData(category, userContext, categoryTree()));
         pageContent.setBanner(createBanner(userContext, category));
         pageContent.setSeo(new SeoData(userContext, category));
-        return pageContent;
+        return ok(renderPage(userContext, pageContent));
     }
 
-    private ProductOverviewPageContent fillPageContent(final ProductOverviewPageContent pageContent,
-                                                       final String searchTerm) {
+    private Result renderSearchPage(final int page, final UserContext userContext, final SearchCriteria searchCriteria,
+                                    final PagedSearchResult<ProductProjection> searchResult) {
+        final String searchTerm = searchCriteria.searchTerm().get().getValue();
+        final ProductOverviewPageContent pageContent = createPageContent(page, searchCriteria, searchResult, userContext);
         pageContent.setAdditionalTitle(searchTerm);
         pageContent.setBreadcrumb(new BreadcrumbData(searchTerm));
         pageContent.setSearchTerm(searchTerm);
-        return pageContent;
+        return ok(renderPage(userContext, pageContent));
+    }
+
+    private Html renderPage(final UserContext userContext, final ProductOverviewPageContent content) {
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        return templateService().renderToHtml("pop", pageData, userContext.locales());
     }
 
     private static BannerData createBanner(final UserContext userContext, final Category category) {

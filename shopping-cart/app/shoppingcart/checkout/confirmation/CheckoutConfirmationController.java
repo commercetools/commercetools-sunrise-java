@@ -39,11 +39,7 @@ public class CheckoutConfirmationController extends CartController {
         final UserContext userContext = userContext(languageTag);
         final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
         final Http.Context ctx = ctx();
-        return cartStage.thenApplyAsync(cart -> {
-            final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
-            final SunrisePageData pageData = pageData(userContext, content, ctx);
-            return ok(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales()));
-        }, HttpExecution.defaultContext());
+        return cartStage.thenApplyAsync(cart -> renderCheckoutConfirmationPage(userContext, ctx, cart), HttpExecution.defaultContext());
     }
 
     @RequireCSRFCheck
@@ -61,6 +57,12 @@ public class CheckoutConfirmationController extends CartController {
         } else {
             return cartStage.thenComposeAsync(cart -> createOrder(cart, languageTag), HttpExecution.defaultContext());
         }
+    }
+
+    private Result renderCheckoutConfirmationPage(final UserContext userContext, final Http.Context ctx, final Cart cart) {
+        final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
+        final SunrisePageData pageData = pageData(userContext, content, ctx);
+        return ok(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales()));
     }
 
     private CompletionStage<Result> renderErrorResponse(final Cart cart, final Form<CheckoutConfirmationFormData> filledForm, final Http.Context ctx, final UserContext userContext) {

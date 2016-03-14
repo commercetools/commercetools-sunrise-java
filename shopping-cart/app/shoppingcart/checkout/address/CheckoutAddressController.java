@@ -46,11 +46,7 @@ public class CheckoutAddressController extends CartController {
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
-        return cartStage.thenApplyAsync(cart -> {
-            final CheckoutAddressPageContent content = new CheckoutAddressPageContent(cart, i18nResolver(), configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
-            final SunrisePageData pageData = pageData(userContext, content, ctx());
-            return ok(templateService().renderToHtml("checkout-address", pageData, userContext.locales()));
-        }, HttpExecution.defaultContext());
+        return cartStage.thenApplyAsync(cart -> renderCheckoutAddressPage(userContext, cart), HttpExecution.defaultContext());
     }
 
     @AddCSRFToken
@@ -81,6 +77,12 @@ public class CheckoutAddressController extends CartController {
         Optional.ofNullable(shippingAddress.getEmail())
                 .ifPresent(email -> updateActions.add(SetCustomerEmail.of(email)));
         return sphere().execute(CartUpdateCommand.of(cart, updateActions));
+    }
+
+    private Result renderCheckoutAddressPage(final UserContext userContext, final Cart cart) {
+        final CheckoutAddressPageContent content = new CheckoutAddressPageContent(cart, i18nResolver(), configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
+        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        return ok(templateService().renderToHtml("checkout-address", pageData, userContext.locales()));
     }
 
     private Result badRequest(final UserContext userContext, final Form<CheckoutAddressFormData> filledForm, final CheckoutAddressPageContent content) {
