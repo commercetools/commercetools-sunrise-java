@@ -62,7 +62,7 @@ public class ProductDetailPageController extends ProductCatalogController {
     private Html renderProductPage(final ProductProjection product, final UserContext userContext,
                                    final ProductVariant variant, final List<ProductProjection> suggestions) {
         final ProductDetailPageContent pageContent = createPageContent(userContext, product, variant, suggestions);
-        final SunrisePageData pageData = pageData(userContext, pageContent, ctx());
+        final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateService().renderToHtml("pdp", pageData, userContext.locales());
     }
 

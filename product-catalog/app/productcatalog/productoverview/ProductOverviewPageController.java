@@ -72,7 +72,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
         content.setFilterProductsUrl(request().path());
         content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()));
-        content.setPagination(new PaginationData(requestContext(), searchResult, page, searchCriteria.selectedDisplay(), paginationDisplayedPages));
+        content.setPagination(new PaginationData(requestContext(request()), searchResult, page, searchCriteria.selectedDisplay(), paginationDisplayedPages));
         content.setSortSelector(searchCriteria.boundSortSelector());
         content.setDisplaySelector(searchCriteria.boundDisplaySelector());
         content.setFacets(new FacetListData(searchResult, searchCriteria.boundFacets()));
@@ -101,7 +101,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
     }
 
     private Html renderPage(final UserContext userContext, final ProductOverviewPageContent content) {
-        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
         return templateService().renderToHtml("pop", pageData, userContext.locales());
     }
 

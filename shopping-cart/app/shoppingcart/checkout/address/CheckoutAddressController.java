@@ -46,26 +46,27 @@ public class CheckoutAddressController extends CartController {
         this.formFactory = formFactory;
     }
 
+    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         return getOrCreateCart(userContext, session())
                 .thenApplyAsync(cart -> renderCheckoutAddressPage(userContext, cart), HttpExecution.defaultContext());
     }
 
-    @AddCSRFToken
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
+        final Http.Request request = request();
         return getOrCreateCart(userContext, session()).thenComposeAsync(cart -> {
-            final CheckoutAddressFormData checkoutAddressFormData = extractBean(request(), CheckoutAddressFormData.class);
-            final Form<CheckoutAddressFormData> filledForm = obtainFilledForm(checkoutAddressFormData);
+            final CheckoutAddressFormData checkoutAddressFormData = extractBean(request, CheckoutAddressFormData.class);
+            final Form<CheckoutAddressFormData> filledForm = obtainFilledForm(checkoutAddressFormData, request);
             final CheckoutAddressPageContent content = new CheckoutAddressPageContent(checkoutAddressFormData, cart, i18nResolver(), configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
             if (filledForm.hasErrors()) {
                 return CompletableFuture.completedFuture(badRequest(userContext, filledForm, content));
             } else {
                 return updateCart(cart, content).thenApplyAsync(updatedCart -> redirect(reverseRouter().showCheckoutShippingForm(languageTag)), HttpExecution.defaultContext());
             }
-        });
+        }, HttpExecution.defaultContext());
     }
 
     private CompletionStage<Cart> updateCart(final Cart cart, final CheckoutAddressPageContent content) {
@@ -84,19 +85,20 @@ public class CheckoutAddressController extends CartController {
 
     private Result renderCheckoutAddressPage(final UserContext userContext, final Cart cart) {
         final CheckoutAddressPageContent content = new CheckoutAddressPageContent(cart, i18nResolver(), configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
-        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
         return ok(templateService().renderToHtml("checkout-address", pageData, userContext.locales()));
     }
 
-    private Result badRequest(final UserContext userContext, final Form<CheckoutAddressFormData> filledForm, final CheckoutAddressPageContent content) {
+    private Result badRequest(final UserContext userContext, final Form<CheckoutAddressFormData> filledForm,
+                              final CheckoutAddressPageContent content) {
         Logger.info("cart not valid");
         content.getAddressForm().setErrors(new ErrorsBean(filledForm));
-        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
         return badRequest(templateService().renderToHtml("checkout-address", pageData, userContext.locales()));
     }
 
-    private Form<CheckoutAddressFormData> obtainFilledForm(final CheckoutAddressFormData checkoutAddressFormData) {
-        final Form<CheckoutAddressFormData> filledForm = formFactory.form(CheckoutAddressFormData.class, CheckoutAddressFormData.Validation.class).bindFromRequest(request());
+    private Form<CheckoutAddressFormData> obtainFilledForm(final CheckoutAddressFormData checkoutAddressFormData, final Http.Request request) {
+        final Form<CheckoutAddressFormData> filledForm = formFactory.form(CheckoutAddressFormData.class, CheckoutAddressFormData.Validation.class).bindFromRequest(request);
         additionalValidations(filledForm, checkoutAddressFormData);
         return filledForm;
     }

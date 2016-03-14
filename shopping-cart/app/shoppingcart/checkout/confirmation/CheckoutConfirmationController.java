@@ -11,9 +11,9 @@ import io.sphere.sdk.orders.PaymentState;
 import io.sphere.sdk.orders.commands.OrderFromCartCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
 import play.data.Form;
+import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
-import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.CartSessionUtils;
 import shoppingcart.common.CartController;
@@ -35,11 +35,11 @@ public class CheckoutConfirmationController extends CartController {
         this.productDataConfig = productDataConfig;
     }
 
+    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Http.Context ctx = ctx();
         return getOrCreateCart(userContext, session())
-                .thenApplyAsync(cart -> renderCheckoutConfirmationPage(userContext, ctx, cart), HttpExecution.defaultContext());
+                .thenApplyAsync(cart -> renderCheckoutConfirmationPage(cart, userContext), HttpExecution.defaultContext());
     }
 
     @RequireCSRFCheck
@@ -53,22 +53,22 @@ public class CheckoutConfirmationController extends CartController {
 //            filledForm.reject("terms need to be agreed");
 //        }
         if (filledForm.hasErrors()) {
-            return cartStage.thenComposeAsync(cart -> renderErrorResponse(cart, filledForm, ctx(), userContext), HttpExecution.defaultContext());
+            return cartStage.thenComposeAsync(cart -> renderErrorResponse(cart, filledForm, userContext), HttpExecution.defaultContext());
         } else {
             return cartStage.thenComposeAsync(cart -> createOrder(cart, languageTag), HttpExecution.defaultContext());
         }
     }
 
-    private Result renderCheckoutConfirmationPage(final UserContext userContext, final Http.Context ctx, final Cart cart) {
+    private Result renderCheckoutConfirmationPage(final Cart cart, final UserContext userContext) {
         final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
-        final SunrisePageData pageData = pageData(userContext, content, ctx);
+        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
         return ok(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales()));
     }
 
-    private CompletionStage<Result> renderErrorResponse(final Cart cart, final Form<CheckoutConfirmationFormData> filledForm, final Http.Context ctx, final UserContext userContext) {
+    private CompletionStage<Result> renderErrorResponse(final Cart cart, final Form<CheckoutConfirmationFormData> filledForm, final UserContext userContext) {
         final CheckoutConfirmationPageContent content = new CheckoutConfirmationPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
         content.getCheckoutForm().setErrors(new ErrorsBean(filledForm));
-        final SunrisePageData pageData = pageData(userContext, content, ctx);
+        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
         return CompletableFuture.completedFuture(badRequest(templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales())));
     }
 

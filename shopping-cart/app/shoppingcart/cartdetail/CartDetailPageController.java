@@ -11,6 +11,7 @@ import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
 import io.sphere.sdk.carts.commands.updateactions.RemoveLineItem;
 import play.data.Form;
 import play.data.FormFactory;
+import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
@@ -46,6 +47,7 @@ public final class CartDetailPageController extends CartController {
         this.removeLineItemForm = formFactory.form(RemoveLineItemFormData.class);
     }
 
+    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         return getOrCreateCart(userContext, session())
@@ -122,7 +124,7 @@ public final class CartDetailPageController extends CartController {
 
     private Html renderCartPage(final Cart cart, final UserContext userContext) {
         final CartDetailPageContent content = new CartDetailPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
-        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
         return templateService().renderToHtml("cart", pageData, userContext.locales());
     }
 }

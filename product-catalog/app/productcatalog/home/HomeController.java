@@ -59,7 +59,7 @@ public class HomeController extends ProductCatalogController {
 
     private Html renderHome(final UserContext userContext, final List<ProductProjection> suggestions) {
         final HomePageContent pageContent = createPageContent(userContext, suggestions);
-        return templateService().renderToHtml("home", pageData(userContext, pageContent, ctx()), userContext.locales());
+        return templateService().renderToHtml("home", pageData(userContext, pageContent, ctx(), session()), userContext.locales());
     }
 
     private List<Category> suggestedCategories() {

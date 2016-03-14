@@ -47,13 +47,13 @@ public final class LogInPageController extends SunriseController {
         this.signUpForm = formFactory.form(SignUpFormData.class);
     }
 
+    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final LogInPageContent pageContent = new LogInPageContent();
         return completedFuture(ok(renderLogInPage(pageContent, userContext)));
     }
 
-    @AddCSRFToken
     @RequireCSRFCheck
     public CompletionStage<Result> processLogIn(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
@@ -68,7 +68,6 @@ public final class LogInPageController extends SunriseController {
         }
     }
 
-    @AddCSRFToken
     @RequireCSRFCheck
     public CompletionStage<Result> processSignUp(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
@@ -162,7 +161,7 @@ public final class LogInPageController extends SunriseController {
             final SignUpFormBean signUpFormBean = new SignUpFormBean(null, userContext, i18nResolver(), configuration());
             pageContent.setSignUpForm(signUpFormBean);
         }
-        final SunrisePageData pageData = pageData(userContext, pageContent, ctx());
+        final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateService().renderToHtml("my-account-login", pageData, userContext.locales());
     }
 }

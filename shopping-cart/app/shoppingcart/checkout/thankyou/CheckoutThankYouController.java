@@ -7,7 +7,6 @@ import common.models.ProductDataConfig;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderByIdGet;
 import play.libs.concurrent.HttpExecution;
-import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.common.CartController;
 
@@ -40,14 +39,13 @@ public class CheckoutThankYouController extends CartController {
 
     private CompletionStage<Result> loadOrder(final String lastOrderId, final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Http.Context ctx = ctx();
         return sphere().execute(OrderByIdGet.of(lastOrderId))
-                .thenApplyAsync(order -> renderCheckoutThankYou(userContext, ctx, order), HttpExecution.defaultContext());
+                .thenApplyAsync(order -> renderCheckoutThankYou(userContext, order), HttpExecution.defaultContext());
     }
 
-    private Result renderCheckoutThankYou(final UserContext userContext, final Http.Context ctx, final Order order) {
+    private Result renderCheckoutThankYou(final UserContext userContext, final Order order) {
         final CheckoutThankYouContent content = new CheckoutThankYouContent(order, userContext, productDataConfig, i18nResolver(), reverseRouter());
-        final SunrisePageData pageData = pageData(userContext, content, ctx);
+        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
         return ok(templateService().renderToHtml("checkout-thankyou", pageData, userContext.locales()));
     }
 }
