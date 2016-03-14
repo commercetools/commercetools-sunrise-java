@@ -65,7 +65,7 @@ public class CategoryTreeExtendedImpl implements CategoryTreeExtended {
     }
 
     @Override
-    public List<Category> getSiblings(final Collection<Category> categoryIds) {
+    public List<Category> getSiblings(final Collection<? extends Identifiable<Category>> categoryIds) {
         return categoryIds.stream()
                 .flatMap(category -> getSiblings(category).stream())
                 .distinct()
@@ -81,8 +81,8 @@ public class CategoryTreeExtendedImpl implements CategoryTreeExtended {
                 .orElse(category);
     }
 
-    private List<Category> getSiblings(final Category category) {
-        return Optional.ofNullable(category.getParent())
+    private List<Category> getSiblings(final Identifiable<Category> category) {
+        return Optional.ofNullable(findById(category.getId()).orElseThrow(() -> new IllegalStateException("categoryTree does not contain " + category)).getParent())
                 .map(categoryTree::findChildren)
                 .orElseGet(Collections::emptyList);
     }

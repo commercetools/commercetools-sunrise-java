@@ -35,7 +35,7 @@ public interface CategoryTreeExtended extends CategoryTree {
      * @param categoryIds Categories for which the sibling categories should be fetched
      * @return a list of sibling categories
      */
-    List<Category> getSiblings(final Collection<Category> categoryIds);
+    List<Category> getSiblings(final Collection<? extends Identifiable<Category>> categoryIds);
 
 
     /**

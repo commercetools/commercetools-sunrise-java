@@ -84,7 +84,7 @@ public final class RefreshableCategoryTree extends Base implements CategoryTreeE
     }
 
     @Override
-    public List<Category> getSiblings(final Collection<Category> categoryIds) {
+    public List<Category> getSiblings(final Collection<? extends Identifiable<Category>> categoryIds) {
         return categoryTree.getSiblings(categoryIds);
     }
 
