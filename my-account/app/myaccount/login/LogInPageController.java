@@ -25,9 +25,9 @@ import shoppingcart.CartSessionUtils;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
 import static myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
 
@@ -50,7 +50,7 @@ public final class LogInPageController extends SunriseController {
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
         final LogInPageContent pageContent = new LogInPageContent();
-        return CompletableFuture.completedFuture(ok(renderLogInPage(pageContent, userContext)));
+        return completedFuture(ok(renderLogInPage(pageContent, userContext)));
     }
 
     @AddCSRFToken
@@ -60,7 +60,7 @@ public final class LogInPageController extends SunriseController {
         final Form<LogInFormData> form = logInForm.bindFromRequest();
         final LogInPageContent pageContent = new LogInPageContent(form);
         if (form.hasErrors()) {
-            return CompletableFuture.completedFuture(handleLogInFormErrors(form, pageContent, userContext));
+            return completedFuture(handleLogInFormErrors(form, pageContent, userContext));
         } else {
             return logIn(form.get())
                     .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
@@ -75,7 +75,7 @@ public final class LogInPageController extends SunriseController {
         final Form<SignUpFormData> form = signUpForm.bindFromRequest();
         final LogInPageContent pageContent = new LogInPageContent(form, userContext, i18nResolver(), configuration());
         if (form.hasErrors()) {
-            return CompletableFuture.completedFuture(handleSignUpFormErrors(form, pageContent, userContext));
+            return completedFuture(handleSignUpFormErrors(form, pageContent, userContext));
         } else {
             return signUp(form.get())
                     .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
@@ -114,7 +114,7 @@ public final class LogInPageController extends SunriseController {
     }
 
     private Result handleLogInFormErrors(final Form<LogInFormData> form, final LogInPageContent pageContent,
-                                             final UserContext userContext) {
+                                         final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean(form);
         pageContent.getLogInForm().setErrors(errors);
         return badRequest(renderLogInPage(pageContent, userContext));

@@ -37,9 +37,9 @@ public class CheckoutConfirmationController extends CartController {
 
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
         final Http.Context ctx = ctx();
-        return cartStage.thenApplyAsync(cart -> renderCheckoutConfirmationPage(userContext, ctx, cart), HttpExecution.defaultContext());
+        return getOrCreateCart(userContext, session())
+                .thenApplyAsync(cart -> renderCheckoutConfirmationPage(userContext, ctx, cart), HttpExecution.defaultContext());
     }
 
     @RequireCSRFCheck
@@ -74,7 +74,7 @@ public class CheckoutConfirmationController extends CartController {
 
     private CompletionStage<Result> createOrder(final Cart cart, final String languageTag) {
         final String orderNumber = RandomStringUtils.randomNumeric(8);
-        return  sphere().execute(OrderFromCartCreateCommand.of(OrderFromCartDraft.of(cart, orderNumber, PaymentState.BALANCE_DUE)))
+        return sphere().execute(OrderFromCartCreateCommand.of(OrderFromCartDraft.of(cart, orderNumber, PaymentState.BALANCE_DUE)))
                 .thenApplyAsync(order -> {
                     session(LAST_ORDER_ID_KEY, order.getId());
                     CartSessionUtils.removeCart(session());

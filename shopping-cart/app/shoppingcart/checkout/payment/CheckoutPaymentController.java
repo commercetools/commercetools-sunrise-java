@@ -27,8 +27,8 @@ public class CheckoutPaymentController extends CartController {
 
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
-        return cartStage.thenApplyAsync(cart -> renderCheckoutPaymentPage(userContext, cart), HttpExecution.defaultContext());
+        return getOrCreateCart(userContext, session())
+                .thenApplyAsync(cart -> renderCheckoutPaymentPage(userContext, cart), HttpExecution.defaultContext());
     }
 
     private Result renderCheckoutPaymentPage(final UserContext userContext, final Cart cart) {

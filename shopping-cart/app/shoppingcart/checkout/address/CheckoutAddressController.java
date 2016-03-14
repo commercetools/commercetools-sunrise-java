@@ -14,8 +14,8 @@ import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
 import play.Logger;
-import play.data.DynamicForm;
 import play.data.Form;
+import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
@@ -36,17 +36,20 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Singleton
 public class CheckoutAddressController extends CartController {
     private final ProductDataConfig productDataConfig;
+    private final FormFactory formFactory;
 
     @Inject
-    public CheckoutAddressController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
+    public CheckoutAddressController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig,
+                                     final FormFactory formFactory) {
         super(controllerDependency);
         this.productDataConfig = productDataConfig;
+        this.formFactory = formFactory;
     }
 
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final CompletionStage<Cart> cartStage = getOrCreateCart(userContext, session());
-        return cartStage.thenApplyAsync(cart -> renderCheckoutAddressPage(userContext, cart), HttpExecution.defaultContext());
+        return getOrCreateCart(userContext, session())
+                .thenApplyAsync(cart -> renderCheckoutAddressPage(userContext, cart), HttpExecution.defaultContext());
     }
 
     @AddCSRFToken
@@ -93,7 +96,7 @@ public class CheckoutAddressController extends CartController {
     }
 
     private Form<CheckoutAddressFormData> obtainFilledForm(final CheckoutAddressFormData checkoutAddressFormData) {
-        final Form<CheckoutAddressFormData> filledForm = Form.form(CheckoutAddressFormData.class, CheckoutAddressFormData.Validation.class).bindFromRequest(request());
+        final Form<CheckoutAddressFormData> filledForm = formFactory.form(CheckoutAddressFormData.class, CheckoutAddressFormData.Validation.class).bindFromRequest(request());
         additionalValidations(filledForm, checkoutAddressFormData);
         return filledForm;
     }
@@ -104,7 +107,7 @@ public class CheckoutAddressController extends CartController {
         }
     }
 
-    private static <T> T extractBean(final Http.Request request, final Class<T> clazz) {
-        return DynamicForm.form(clazz, null).bindFromRequest(request).get();
+    private <T> T extractBean(final Http.Request request, final Class<T> clazz) {
+        return formFactory.form(clazz, null).bindFromRequest(request).get();
     }
 }

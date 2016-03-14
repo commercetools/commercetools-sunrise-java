@@ -11,8 +11,8 @@ import io.sphere.sdk.carts.commands.updateactions.SetShippingMethod;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import play.Logger;
-import play.data.DynamicForm;
 import play.data.Form;
+import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
@@ -28,15 +28,17 @@ import java.util.concurrent.CompletionStage;
 @Singleton
 public class CheckoutShippingController extends CartController {
 
-
     private final ShippingMethods shippingMethods;
     private final ProductDataConfig productDataConfig;
+    private final FormFactory formFactory;
 
     @Inject
-    public CheckoutShippingController(final ControllerDependency controllerDependency, final ShippingMethods shippingMethods, final ProductDataConfig productDataConfig) {
+    public CheckoutShippingController(final ControllerDependency controllerDependency, final ShippingMethods shippingMethods,
+                                      final ProductDataConfig productDataConfig, final FormFactory formFactory) {
         super(controllerDependency);
         this.shippingMethods = shippingMethods;
         this.productDataConfig = productDataConfig;
+        this.formFactory = formFactory;
     }
 
     public CompletionStage<Result> show(final String languageTag) {
@@ -82,10 +84,10 @@ public class CheckoutShippingController extends CartController {
     }
 
     private Form<CheckoutShippingFormData> obtainFilledForm() {
-        return Form.form(CheckoutShippingFormData.class, CheckoutShippingFormData.Validation.class).bindFromRequest(request());
+        return formFactory.form(CheckoutShippingFormData.class, CheckoutShippingFormData.Validation.class).bindFromRequest(request());
     }
 
-    private static <T> T extractBean(final Http.Request request, final Class<T> clazz) {
-        return DynamicForm.form(clazz, null).bindFromRequest(request).get();
+    private <T> T extractBean(final Http.Request request, final Class<T> clazz) {
+        return formFactory.form(clazz, null).bindFromRequest(request).get();
     }
 }

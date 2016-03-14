@@ -36,11 +36,12 @@ public abstract class CartController extends SunriseController {
     }
 
     protected CompletionStage<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
-        return fetchCart(userContext, session).thenComposeAsync(cart -> {
-            CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
-            final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
-            return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : CompletableFuture.completedFuture(cart);
-        }, HttpExecution.defaultContext());
+        return fetchCart(userContext, session)
+                .thenComposeAsync(cart -> {
+                    CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
+                    final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
+                    return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : CompletableFuture.completedFuture(cart);
+                }, HttpExecution.defaultContext());
     }
 
     private CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
