@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toList());
-        final List<Category> siblingCategories = categoryTree.getSiblings(categories);
+        final List<Category> siblingCategories = categoryTree.findSiblings(categories);
         final F.Promise<List<ProductProjection>> suggestions;
         if (siblingCategories.isEmpty()) {
             suggestions = getSuggestions(categories, numSuggestions);

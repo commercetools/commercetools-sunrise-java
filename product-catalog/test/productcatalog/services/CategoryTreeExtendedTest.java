@@ -48,7 +48,7 @@ public class CategoryTreeExtendedTest {
         final List<Category> categories = categoryRefs.stream()
                 .map(c -> CATEGORY_TREE.findById(c.getId()).get())
                 .collect(toList());
-        final List<Category> siblings = CATEGORY_TREE.getSiblings(categories);
+        final List<Category> siblings = CATEGORY_TREE.findSiblings(categories);
         test.accept(siblings);
     }
 }

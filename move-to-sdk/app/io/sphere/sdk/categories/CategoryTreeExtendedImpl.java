@@ -65,15 +65,6 @@ public class CategoryTreeExtendedImpl implements CategoryTreeExtended {
     }
 
     @Override
-    public List<Category> getSiblings(final Collection<? extends Identifiable<Category>> categoryIds) {
-        return categoryIds.stream()
-                .flatMap(category -> getSiblings(category).stream())
-                .distinct()
-                .filter(sibling -> !categoryIds.stream().anyMatch(c -> sibling.getId().equals(c.getId())))
-                .collect(toList());
-    }
-
-    @Override
     public Category getRootAncestor(final Category category) {
         requireNonNull(category);
         return category.getAncestors().stream().findFirst()

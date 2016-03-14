@@ -30,15 +30,6 @@ public interface CategoryTreeExtended extends CategoryTree {
     List<Category> findChildren(Identifiable<Category> category);
 
     /**
-     * Gets a list containing all categories that share a parent
-     * with at least one of the given categories.
-     * @param categoryIds Categories for which the sibling categories should be fetched
-     * @return a list of sibling categories
-     */
-    List<Category> getSiblings(final Collection<? extends Identifiable<Category>> categoryIds);
-
-
-    /**
      * Gets the ancestor of the given category that is in root level.
      * @param category the category which to find the root ancestor
      * @return the root ancestor of the category or the same category in case it is a root itself
