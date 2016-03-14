@@ -4,9 +4,9 @@ import com.google.inject.AbstractModule;
 import common.cms.CmsService;
 import common.i18n.I18nResolver;
 import common.templates.TemplateService;
-import play.libs.F;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class ApplicationTestModule extends AbstractModule {
 
@@ -26,6 +26,6 @@ public class ApplicationTestModule extends AbstractModule {
     }
 
     protected CmsService injectedCmsService() {
-        return ((locale, pageKey) -> F.Promise.pure((messageKey, args) -> Optional.empty()));
+        return ((locale, pageKey) -> CompletableFuture.completedFuture((messageKey, args) -> Optional.empty()));
     }
 }

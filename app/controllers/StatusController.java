@@ -9,16 +9,16 @@ import io.sphere.sdk.search.PagedSearchResult;
 import org.apache.commons.io.IOUtils;
 import play.Application;
 import play.Logger;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import play.mvc.Result;
-import play.mvc.Results;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Controller for health report.
@@ -40,15 +40,16 @@ public class StatusController extends SunriseController {
         return ok(versionAsString).as(Http.MimeTypes.JSON);
     }
 
-    public F.Promise<Result> health() throws IOException {
+    public CompletionStage<Result> health() throws IOException {
         final ProductProjectionSearch productRequest = ProductProjectionSearch.ofCurrent().withLimit(1);
-        return sphere().execute(productRequest)
-                .map(this::renderGoodHealthStatus)
-                .recover(this::renderBadHealthStatus)
-                .map(r -> r.as(Http.MimeTypes.JSON));
+        final CompletionStage<PagedSearchResult<ProductProjection>> searchResultStage = sphere().execute(productRequest);
+        return searchResultStage
+                .thenApplyAsync(this::renderGoodHealthStatus, HttpExecution.defaultContext())
+                .exceptionally(this::renderBadHealthStatus)
+                .thenApply(r -> r.as(Http.MimeTypes.JSON));
     }
 
-    private Results.Status renderGoodHealthStatus(final PagedSearchResult<ProductProjection> productResult) {
+    private Result renderGoodHealthStatus(final PagedSearchResult<ProductProjection> productResult) {
         final boolean containsProducts = !productResult.getResults().isEmpty();
         if (!containsProducts) {
             throw new RuntimeException("Cannot find any product!");
@@ -56,7 +57,7 @@ public class StatusController extends SunriseController {
         return ok(healthJson(true));
     }
 
-    private Status renderBadHealthStatus(final Throwable t) {
+    private Result renderBadHealthStatus(final Throwable t) {
         Logger.error("Could not fetch products", t);
         return status(Http.Status.SERVICE_UNAVAILABLE, healthJson(false));
     }

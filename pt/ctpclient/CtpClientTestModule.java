@@ -1,7 +1,6 @@
 package ctpclient;
 
 import com.google.inject.AbstractModule;
-import io.sphere.sdk.client.PlayJavaSphereClient;
 import io.sphere.sdk.client.SphereClient;
 
 public class CtpClientTestModule extends AbstractModule {
@@ -14,6 +13,5 @@ public class CtpClientTestModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(SphereClient.class).toInstance(sphereClient);
-        bind(PlayJavaSphereClient.class).toInstance(PlayJavaSphereClient.of(sphereClient));
     }
 }

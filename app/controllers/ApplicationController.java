@@ -5,6 +5,7 @@ import common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.Logger;
 import play.data.Form;
+import play.data.FormFactory;
 import play.data.validation.Constraints;
 import play.inject.Injector;
 import play.mvc.Controller;
@@ -23,11 +24,15 @@ import static common.controllers.SunriseController.SESSION_COUNTRY;
 public final class ApplicationController extends Controller {
     private final Injector injector;
     private final SetupController setupController;
+    private Form<LanguageFormData> languageForm;
+    private Form<CountryFormData> countryForm;
 
     @Inject
-    public ApplicationController(final Injector injector, final SetupController setupController) {
+    public ApplicationController(final Injector injector, final SetupController setupController, final FormFactory formFactory) {
         this.injector = injector;
         this.setupController = setupController;
+        this.languageForm = formFactory.form(LanguageFormData.class);
+        this.countryForm = formFactory.form(CountryFormData.class);
     }
 
     public Result untrail(final String path) {
@@ -39,14 +44,14 @@ public final class ApplicationController extends Controller {
     }
 
     public Result changeLanguage() {
-        final Form<LanguageFormData> languageForm = Form.form(LanguageFormData.class).bindFromRequest();
-        final String languageTag = languageForm.hasErrors() ? defaultLanguage() : languageForm.get().getLanguage();
+        final Form<LanguageFormData> boundForm = languageForm.bindFromRequest();
+        final String languageTag = boundForm.hasErrors() ? defaultLanguage() : boundForm.get().getLanguage();
         return redirectToHomePage(languageTag);
     }
 
     public Result changeCountry(final String languageTag) {
-        final Form<CountryFormData> countryForm = Form.form(CountryFormData.class).bindFromRequest();
-        final String country = countryForm.hasErrors() ? defaultCountry() : countryForm.get().getCountry();
+        final Form<CountryFormData> boundForm = countryForm.bindFromRequest();
+        final String country = boundForm.hasErrors() ? defaultCountry() : boundForm.get().getCountry();
         session(SESSION_COUNTRY, country);
         Logger.debug("Changed country: " + session().toString());
         return redirectToHomePage(languageTag);

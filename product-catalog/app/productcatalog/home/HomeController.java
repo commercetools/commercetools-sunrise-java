@@ -5,7 +5,7 @@ import common.controllers.ControllerDependency;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.common.ProductCatalogController;
@@ -17,6 +17,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
@@ -38,22 +40,26 @@ public class HomeController extends ProductCatalogController {
         this.numSuggestions = configuration().getInt("home.suggestions.count", 4);
     }
 
-    public F.Promise<Result> show(final String languageTag) {
+    public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final HomePageContent content = new HomePageContent();
         final List<Category> suggestedCategories = suggestedCategories();
         if (!suggestedCategories.isEmpty()) {
-            return productService().getSuggestions(suggestedCategories, numSuggestions).map(suggestions -> {
-                content.setSuggestions(createSuggestions(userContext, suggestions));
-                return ok(renderHome(userContext, content));
-            });
+            return productService().getSuggestions(suggestedCategories, numSuggestions).thenApplyAsync(suggestions ->
+                    ok(renderHome(userContext, suggestions)), HttpExecution.defaultContext());
         } else {
-            return  F.Promise.pure(ok(renderHome(userContext, content)));
+            return CompletableFuture.completedFuture(ok(renderHome(userContext, emptyList())));
         }
     }
 
-    private Html renderHome(final UserContext userContext, final HomePageContent content) {
-        return templateService().renderToHtml("home", pageData(userContext, content, ctx()), userContext.locales());
+    private HomePageContent createPageContent(final UserContext userContext, final List<ProductProjection> suggestions) {
+        final HomePageContent homePageContent = new HomePageContent();
+        homePageContent.setSuggestions(createSuggestions(userContext, suggestions));
+        return homePageContent;
+    }
+
+    private Html renderHome(final UserContext userContext, final List<ProductProjection> suggestions) {
+        final HomePageContent pageContent = createPageContent(userContext, suggestions);
+        return templateService().renderToHtml("home", pageData(userContext, pageContent, ctx(), session()), userContext.locales());
     }
 
     private List<Category> suggestedCategories() {

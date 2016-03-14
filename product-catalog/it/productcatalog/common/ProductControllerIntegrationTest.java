@@ -1,7 +1,7 @@
 package productcatalog.common;
 
-import common.controllers.WithPlayJavaSphereClient;
+import common.controllers.WithSphereClient;
 
-public class ProductControllerIntegrationTest extends WithPlayJavaSphereClient {
+public class ProductControllerIntegrationTest extends WithSphereClient {
 
 }

@@ -7,7 +7,7 @@ import common.models.ProductDataConfig;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.common.*;
@@ -16,6 +16,8 @@ import productcatalog.services.ProductService;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -33,35 +35,34 @@ public class ProductDetailPageController extends ProductCatalogController {
 
     /* Controller actions */
 
-    public F.Promise<Result> show(final String locale, final String slug, final String sku) {
+    public CompletionStage<Result> show(final String locale, final String slug, final String sku) {
         final UserContext userContext = userContext(locale);
         return productService().findProductBySlug(userContext.locale(), slug)
-                .flatMap(productOpt -> productOpt
-                        .map(product -> renderProduct(userContext, slug, product, sku))
-                        .orElseGet(() -> F.Promise.pure(notFound())));
+                .thenComposeAsync(productOpt -> productOpt
+                        .map(product -> renderProduct(slug, sku, product, userContext))
+                        .orElseGet(() -> CompletableFuture.completedFuture(notFound())), HttpExecution.defaultContext());
     }
 
-    private F.Promise<Result> renderProduct(final UserContext userContext, final String slug, final ProductProjection product, final String sku) {
+    private CompletionStage<Result> renderProduct(final String slug, final String sku, final ProductProjection product, final UserContext userContext) {
         return product.findVariantBySku(sku)
-                .map(variant ->
-                    productService().getSuggestions(product, categoryTree(), numSuggestions).map(suggestions -> {
-                        final ProductDetailPageContent content = createPageContent(userContext, product, variant, suggestions);
-                        return (Result) ok(renderPage(userContext, content));
-                    })
+                .map(variant -> productService().getSuggestions(product, categoryTree(), numSuggestions).thenApplyAsync(suggestions ->
+                        ok(renderProductPage(product, userContext, variant, suggestions)), HttpExecution.defaultContext())
                 ).orElseGet(() -> redirectToMasterVariant(userContext, slug, product));
     }
 
-    private F.Promise<Result> redirectToMasterVariant(final UserContext userContext, final String slug,
-                                                      final ProductProjection product) {
+    private CompletionStage<Result> redirectToMasterVariant(final UserContext userContext, final String slug,
+                                                            final ProductProjection product) {
         final String masterVariantSku = product.getMasterVariant().getSku();
         final String languageTag = userContext.locale().toLanguageTag();
-        return F.Promise.pure(redirect(reverseRouter().showProduct(languageTag, slug, masterVariantSku)));
+        return CompletableFuture.completedFuture(redirect(reverseRouter().showProduct(languageTag, slug, masterVariantSku)));
     }
 
     /* Methods to render the page */
 
-    private Html renderPage(final UserContext userContext, final ProductDetailPageContent content) {
-        final SunrisePageData pageData = pageData(userContext, content, ctx());
+    private Html renderProductPage(final ProductProjection product, final UserContext userContext,
+                                   final ProductVariant variant, final List<ProductProjection> suggestions) {
+        final ProductDetailPageContent pageContent = createPageContent(userContext, product, variant, suggestions);
+        final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateService().renderToHtml("pdp", pageData, userContext.locales());
     }
 

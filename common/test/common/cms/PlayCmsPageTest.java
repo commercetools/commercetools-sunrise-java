@@ -10,6 +10,10 @@ import play.inject.guice.GuiceApplicationBuilder;
 import play.test.WithApplication;
 
 import java.util.Locale;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
@@ -53,6 +57,10 @@ public class PlayCmsPageTest extends WithApplication {
 
     private CmsPage cms(final Locale locale, final String pageKey) {
         final MessagesApi messagesApi = app.injector().instanceOf(MessagesApi.class);
-        return PlayCmsService.of(messagesApi).getPage(locale, pageKey).get(0);
+        try {
+            return PlayCmsService.of(messagesApi).getPage(locale, pageKey).toCompletableFuture().get(1, TimeUnit.SECONDS);
+        } catch (final Exception e) {
+            throw new CompletionException(e);
+        }
     }
 }

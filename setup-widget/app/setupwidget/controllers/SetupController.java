@@ -1,11 +1,12 @@
 package setupwidget.controllers;
 
-import play.Logger;
-import setupwidget.models.SphereCredentials;
 import play.Configuration;
+import play.Logger;
 import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Result;
+import setupwidget.models.SphereCredentials;
 import setupwidget.views.html.*;
 
 import javax.inject.Inject;
@@ -19,16 +20,17 @@ import java.util.function.Supplier;
 @Singleton
 public class SetupController extends Controller {
     private static final String CONFIG_SETUP_ENABLED = "application.setup.enabled";
-    private static final Form<SphereCredentials> SPHERE_CREDENTIALS_FORM = Form.form(SphereCredentials.class);
     private static final Path PATH = FileSystems.getDefault().getPath("conf", "dev.conf");
 
+    private final Form<SphereCredentials> sphereCredentialsForm;
     private final boolean setupEnabled;
     private boolean setupComplete;
 
     @Inject
-    public SetupController(final Configuration configuration) {
+    public SetupController(final Configuration configuration, final FormFactory formFactory) {
         this.setupEnabled = configuration.getBoolean(CONFIG_SETUP_ENABLED, true);
         this.setupComplete = doesConfigFileExist();
+        this.sphereCredentialsForm = formFactory.form(SphereCredentials.class);
     }
 
     public Result handleOrFallback(final Supplier<Result> fallback) {
@@ -37,12 +39,12 @@ public class SetupController extends Controller {
     }
 
     public Result renderForm() {
-        return onSetupEnabled(() -> ok(setup.render(SPHERE_CREDENTIALS_FORM)));
+        return onSetupEnabled(() -> ok(setup.render(sphereCredentialsForm)));
     }
 
     public Result processForm() {
         return onSetupEnabled(() -> {
-            final Form<SphereCredentials> boundForm = SPHERE_CREDENTIALS_FORM.bindFromRequest();
+            final Form<SphereCredentials> boundForm = sphereCredentialsForm.bindFromRequest();
             final Result result;
             if (boundForm.hasErrors()) {
                 result = badRequest(setup.render(boundForm));
