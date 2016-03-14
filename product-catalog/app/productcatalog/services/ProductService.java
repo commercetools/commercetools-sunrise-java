@@ -1,7 +1,7 @@
 package productcatalog.services;
 
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTreeExtended;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 import productcatalog.productoverview.SearchCriteria;
@@ -37,7 +37,7 @@ public interface ProductService {
      *                       than the number of available products.
      * @return A CompletionStage of the list of products without duplicates
      */
-    CompletionStage<List<ProductProjection>> getSuggestions(final ProductProjection product, final CategoryTreeExtended categoryTree,
+    CompletionStage<List<ProductProjection>> getSuggestions(final ProductProjection product, final CategoryTree categoryTree,
                                                             final int numSuggestions);
 
     /**

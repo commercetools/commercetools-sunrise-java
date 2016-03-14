@@ -17,7 +17,7 @@ organization := "io.commercetools.sunrise"
 
 lazy val sunriseDesignVersion = "0.55.0"
 
-lazy val jvmSdkVersion = "1.0.0-RC2"
+lazy val jvmSdkVersion = "1.0.0-RC3"
 
 lazy val jacksonVersion = "2.6.0"
 

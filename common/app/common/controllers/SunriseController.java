@@ -9,11 +9,10 @@ import common.contexts.UserContext;
 import common.i18n.I18nResolver;
 import common.models.LocationSelector;
 import common.models.NavMenuData;
-import myaccount.UserBean;
 import common.templates.TemplateService;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTreeExtended;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import myaccount.CustomerSessionUtils;
@@ -52,7 +51,7 @@ public abstract class SunriseController extends ShopController {
         this.categoryNewExtId = Optional.ofNullable(controllerDependency.configuration().getString("common.newCategoryExternalId"));
     }
 
-    protected final CategoryTreeExtended categoryTree() {
+    protected final CategoryTree categoryTree() {
         return controllerDependency.categoryTree();
     }
 

@@ -124,7 +124,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toList());
-        final List<Category> siblings = categoryTree().getSiblings(singletonList(category));
+        final List<Category> siblings = categoryTree().findSiblings(singletonList(category));
         final List<Category> children = categoryTree().findChildren(category);
         final List<Category> relatives = new ArrayList<>();
         relatives.add(category);

@@ -2,7 +2,7 @@ package categorytree;
 
 import com.google.inject.AbstractModule;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTreeExtended;
+import io.sphere.sdk.categories.CategoryTree;
 
 import java.util.List;
 
@@ -15,6 +15,6 @@ public class CategoryTreeTestModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(CategoryTreeExtended.class).toInstance(CategoryTreeExtended.of(categories));
+        bind(CategoryTree.class).toInstance(CategoryTree.of(categories));
     }
 }

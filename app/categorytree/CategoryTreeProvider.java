@@ -2,13 +2,13 @@ package categorytree;
 
 import com.google.inject.Provider;
 import inject.SunriseInitializationException;
-import io.sphere.sdk.categories.CategoryTreeExtended;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import play.Logger;
 
 import javax.inject.Inject;
 
-class CategoryTreeProvider implements Provider<CategoryTreeExtended> {
+class CategoryTreeProvider implements Provider<CategoryTree> {
     private final SphereClient client;
 
     @Inject
@@ -17,7 +17,7 @@ class CategoryTreeProvider implements Provider<CategoryTreeExtended> {
     }
 
     @Override
-    public CategoryTreeExtended get() {
+    public CategoryTree get() {
         try {
             final RefreshableCategoryTree categoryTree = RefreshableCategoryTree.of(client);
             Logger.info("Provide RefreshableCategoryTree with " + categoryTree.getAllAsFlatList().size() + " categories");
