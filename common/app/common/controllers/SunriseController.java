@@ -17,8 +17,7 @@ import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import myaccount.CustomerSessionUtils;
 import play.Configuration;
-import play.filters.csrf.AddCSRFToken;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import play.mvc.With;
 import play.twirl.api.Html;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -39,7 +39,6 @@ import static java.util.stream.Collectors.toList;
  * An application specific controller.
  */
 @With(MetricAction.class)
-@AddCSRFToken
 @NoCache
 public abstract class SunriseController extends ShopController {
     public static final String SESSION_COUNTRY = "countryCode";
@@ -82,16 +81,17 @@ public abstract class SunriseController extends ShopController {
         return controllerDependency.projectContext();
     }
 
-    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content, final Http.Context ctx) {
+    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content,
+                                             final Http.Context ctx, final Http.Session session) {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
-        pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session()));
+        pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session));
         pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));
-        return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(ctx, userContext));
+        return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(userContext, ctx, session));
     }
 
-    private PageMeta getPageMeta(final Http.Context ctx, final UserContext userContext) {
+    private PageMeta getPageMeta(final UserContext userContext, final Http.Context ctx, final Http.Session session) {
         final PageMeta pageMeta = new PageMeta();
         pageMeta.setUser(CustomerSessionUtils.getUserBean(session()));
         pageMeta.setAssetsPath(reverseRouter().themeAssets("").url());
@@ -140,20 +140,22 @@ public abstract class SunriseController extends ShopController {
         return UserContext.of(acceptedLocales, currentCountry, currentCurrency);
     }
 
-    protected RequestContext requestContext() {
-        return RequestContext.of(request().queryString(), request().path());
+    protected RequestContext requestContext(final Http.Request request) {
+        return RequestContext.of(request.queryString(), request.path());
     }
 
     protected Optional<Category> newCategory() {
         return categoryNewExtId.flatMap(extId -> categoryTree().findByExternalId(extId));
     }
 
-    protected F.Promise<Html> renderPage(final String pageKey, final PageContent pageContent, final UserContext userContext) {
-        return cmsService().getPage(userContext.locales(), pageKey).map(cmsPage -> {
-            final SunrisePageData pageData = pageData(userContext, pageContent, ctx());
-            final String htmlAsString = templateService().render(pageKey, pageData, userContext.locales(), cmsPage);
-            return new Html(htmlAsString);
-        });
+    protected CompletionStage<Html> renderPage(final String pageKey, final PageContent pageContent, final UserContext userContext,
+                                               final Http.Context ctx, final Http.Session session) {
+        return cmsService().getPage(userContext.locales(), pageKey)
+                .thenApplyAsync(cmsPage -> {
+                    final SunrisePageData pageData = pageData(userContext, pageContent, ctx, session);
+                    final String htmlAsString = templateService().render(pageKey, pageData, userContext.locales(), cmsPage);
+                    return new Html(htmlAsString);
+                }, HttpExecution.defaultContext());
     }
 
     private static Locale currentLocale(final String languageTag, final ProjectContext projectContext) {

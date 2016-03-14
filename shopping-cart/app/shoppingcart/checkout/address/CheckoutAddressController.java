@@ -14,11 +14,11 @@ import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
 import play.Logger;
-import play.data.DynamicForm;
 import play.data.Form;
+import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
-import play.libs.F;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import play.mvc.Result;
 import shoppingcart.common.CartController;
@@ -28,46 +28,48 @@ import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Singleton
 public class CheckoutAddressController extends CartController {
     private final ProductDataConfig productDataConfig;
+    private final FormFactory formFactory;
 
     @Inject
-    public CheckoutAddressController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
+    public CheckoutAddressController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig,
+                                     final FormFactory formFactory) {
         super(controllerDependency);
         this.productDataConfig = productDataConfig;
-    }
-
-    public F.Promise<Result> show(final String languageTag) {
-        final UserContext userContext = userContext(languageTag);
-        final F.Promise<Cart> cartPromise = getOrCreateCart(userContext, session());
-        return cartPromise.map(cart -> {
-            final CheckoutAddressPageContent content = new CheckoutAddressPageContent(cart, i18nResolver(), configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
-            final SunrisePageData pageData = pageData(userContext, content, ctx());
-            return ok(templateService().renderToHtml("checkout-address", pageData, userContext.locales()));
-        });
+        this.formFactory = formFactory;
     }
 
     @AddCSRFToken
-    @RequireCSRFCheck
-    public F.Promise<Result> process(final String languageTag) {
+    public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        return getOrCreateCart(userContext, session()).flatMap(cart -> {
-            final CheckoutAddressFormData checkoutAddressFormData = extractBean(request(), CheckoutAddressFormData.class);
-            final Form<CheckoutAddressFormData> filledForm = obtainFilledForm(checkoutAddressFormData);
-            final CheckoutAddressPageContent content = new CheckoutAddressPageContent(checkoutAddressFormData, cart, i18nResolver(), configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
-            if (filledForm.hasErrors()) {
-                return F.Promise.pure(badRequest(userContext, filledForm, content));
-            } else {
-                return updateCart(cart, content).map(updatedCart -> redirect(reverseRouter().showCheckoutShippingForm(languageTag)));
-            }
-        });
+        return getOrCreateCart(userContext, session())
+                .thenApplyAsync(cart -> renderCheckoutAddressPage(userContext, cart), HttpExecution.defaultContext());
     }
 
-    private F.Promise<Cart> updateCart(final Cart cart, final CheckoutAddressPageContent content) {
+    @RequireCSRFCheck
+    public CompletionStage<Result> process(final String languageTag) {
+        final UserContext userContext = userContext(languageTag);
+        final Http.Request request = request();
+        return getOrCreateCart(userContext, session()).thenComposeAsync(cart -> {
+            final CheckoutAddressFormData checkoutAddressFormData = extractBean(request, CheckoutAddressFormData.class);
+            final Form<CheckoutAddressFormData> filledForm = obtainFilledForm(checkoutAddressFormData, request);
+            final CheckoutAddressPageContent content = new CheckoutAddressPageContent(checkoutAddressFormData, cart, i18nResolver(), configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
+            if (filledForm.hasErrors()) {
+                return CompletableFuture.completedFuture(badRequest(userContext, filledForm, content));
+            } else {
+                return updateCart(cart, content).thenApplyAsync(updatedCart -> redirect(reverseRouter().showCheckoutShippingForm(languageTag)), HttpExecution.defaultContext());
+            }
+        }, HttpExecution.defaultContext());
+    }
+
+    private CompletionStage<Cart> updateCart(final Cart cart, final CheckoutAddressPageContent content) {
         final Address shippingAddress = content.getAddressForm().getShippingAddress().toAddress();
         final Address nullableBillingAddress = content.getAddressForm().isBillingAddressDifferentToBillingAddress()
                 ? content.getAddressForm().getBillingAddress().toAddress()
@@ -81,15 +83,22 @@ public class CheckoutAddressController extends CartController {
         return sphere().execute(CartUpdateCommand.of(cart, updateActions));
     }
 
-    private Result badRequest(final UserContext userContext, final Form<CheckoutAddressFormData> filledForm, final CheckoutAddressPageContent content) {
+    private Result renderCheckoutAddressPage(final UserContext userContext, final Cart cart) {
+        final CheckoutAddressPageContent content = new CheckoutAddressPageContent(cart, i18nResolver(), configuration(), userContext, projectContext(), productDataConfig, reverseRouter());
+        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
+        return ok(templateService().renderToHtml("checkout-address", pageData, userContext.locales()));
+    }
+
+    private Result badRequest(final UserContext userContext, final Form<CheckoutAddressFormData> filledForm,
+                              final CheckoutAddressPageContent content) {
         Logger.info("cart not valid");
         content.getAddressForm().setErrors(new ErrorsBean(filledForm));
-        final SunrisePageData pageData = pageData(userContext, content, ctx());
+        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
         return badRequest(templateService().renderToHtml("checkout-address", pageData, userContext.locales()));
     }
 
-    private Form<CheckoutAddressFormData> obtainFilledForm(final CheckoutAddressFormData checkoutAddressFormData) {
-        final Form<CheckoutAddressFormData> filledForm = Form.form(CheckoutAddressFormData.class, CheckoutAddressFormData.Validation.class).bindFromRequest(request());
+    private Form<CheckoutAddressFormData> obtainFilledForm(final CheckoutAddressFormData checkoutAddressFormData, final Http.Request request) {
+        final Form<CheckoutAddressFormData> filledForm = formFactory.form(CheckoutAddressFormData.class, CheckoutAddressFormData.Validation.class).bindFromRequest(request);
         additionalValidations(filledForm, checkoutAddressFormData);
         return filledForm;
     }
@@ -100,7 +109,7 @@ public class CheckoutAddressController extends CartController {
         }
     }
 
-    private static <T> T extractBean(final Http.Request request, final Class<T> clazz) {
-        return DynamicForm.form(clazz, null).bindFromRequest(request).get();
+    private <T> T extractBean(final Http.Request request, final Class<T> clazz) {
+        return formFactory.form(clazz, null).bindFromRequest(request).get();
     }
 }

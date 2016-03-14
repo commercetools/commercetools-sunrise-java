@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -49,8 +50,8 @@ public class LocalCmsPageTest {
                 .contains("Today is Monday, tomorrow is Tuesday");
     }
 
-    private CmsPage cms(final Locale locale) {
+    private CmsPage cms(final Locale locale) throws Exception {
         final I18nResolver i18nResolver = YamlI18nResolver.of("cms", SUPPORTED_LOCALES, AVAILABLE_BUNDLES);
-        return LocalCmsService.of(i18nResolver).getPage(singletonList(locale), "cms").get(0);
+        return LocalCmsService.of(i18nResolver).getPage(singletonList(locale), "cms").toCompletableFuture().get(0, TimeUnit.SECONDS);
     }
 }

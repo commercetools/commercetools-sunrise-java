@@ -3,19 +3,16 @@ package shoppingcart.cartdetail;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-public class AddToCartFormData extends Base {
-    public interface Validation {}
-
+public class AddProductToCartFormData extends Base {
     private String csrfToken;
-
-    @Constraints.Required(groups = Validation.class)
+    @Constraints.Required
     private String productId;
-    @Constraints.Required(groups = Validation.class)
+    @Constraints.Required
     private int variantId;
-    @Constraints.Required(groups = Validation.class)
+    @Constraints.Required
     private long quantity;
 
-    public AddToCartFormData() {
+    public AddProductToCartFormData() {
     }
 
     public String getCsrfToken() {

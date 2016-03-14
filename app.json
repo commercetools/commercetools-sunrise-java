@@ -17,30 +17,36 @@
 
     "DISPLAYED_ATTRIBUTES": {
       "description": "Product attributes that are displayed for a specific product variant (this does not allow to select different product variants, please check soft/hard selectable attributes for that purpose). Enter the attribute names separated by commas.",
+      "value": "colorFreeDefinition, designer",
       "required": false
     },
 
     "HARD_SELECTABLE_ATTRIBUTES": {
       "description": "List here those product attributes that enable selecting a different product variant. In particular, those attributes that require re-loading the page to display the selected variant, e.g. if you select a different color you may want to show different pictures, description, etc. Enter the attribute names separated by commas.",
+      "value": "color",
       "required" : false
     },
 
     "SOFT_SELECTABLE_ATTRIBUTES": {
       "description": "List here those product attributes that enable selecting a different product variant. In particular, those attributes that DO NOT require re-loading the page to display the selected variant, e.g. size. Enter the attribute names separated by commas.",
+      "value": "size",
       "required" : false
     },
 
     "SALES_CATEGORY": {
       "description": "The sales category in your project. Enter the category external ID.",
+      "value": "6",
       "required": false
     },
     "NEW_CATEGORY": {
       "description": "The category containing the new products in your project. Enter the category external ID.",
+      "value": "1",
       "required": false
     },
 
     "HOME_SUGGESTIONS_CATEGORIES": {
       "description": "The categories to which the products shown in the home page suggestions belong. Enter the category external IDs separated by commas.",
+      "value": "29, 37, 22, 28",
       "required": false
     },
 
@@ -83,14 +89,17 @@
 
     "COUNTRIES": {
       "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE COUNTRIES DEFINED IN YOUR COMMERCETOOLS PROJECT. If you want to replace them, enter the countries as ISO country codes (e.g. DE) separated by commas. Default country first.",
+      "value": "",
       "required": false
     },
     "CURRENCIES": {
       "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE CURRENCIES DEFINED IN YOUR COMMERCETOOLS PROJECT. If you want to replace them, enter the currencies as ISO currency codes (e.g. EUR) separated by commas. Default currency first.",
+      "value": "",
       "required": false
     },
     "LANGUAGES": {
       "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE LANGUAGES DEFINED IN YOUR COMMERCETOOLS PROJECT. If you want to replace them, enter the languages as language tags (e.g. en-UK) separated by commas. Default language first.",
+      "value": "",
       "required": false
     },
 

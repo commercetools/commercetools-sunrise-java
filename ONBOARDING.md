@@ -120,7 +120,7 @@ You may need to provide additional HTML `<meta>` tags or other kind of informati
 
 ```hbs
 <link rel="stylesheet" href="/assets/public/stylesheets/sunrise.css"/> <!-- default sunrise CSS file -->
-<meta name="description" content="My description"> <!-- your meta tag -->
+<meta name="description" content="My description"/> <!-- your meta tag -->
 ```
 
 ####Customize Web Assets

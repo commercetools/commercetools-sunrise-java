@@ -3,12 +3,13 @@ package common.cms.local;
 import common.cms.CmsPage;
 import common.cms.CmsService;
 import common.i18n.I18nResolver;
-import play.libs.F;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
  * Service that provides content data from i18n files that can be found locally.
@@ -31,9 +32,9 @@ public final class LocalCmsService implements CmsService {
     }
 
     @Override
-    public F.Promise<CmsPage> getPage(final List<Locale> locales, final String pageKey) {
+    public CompletionStage<CmsPage> getPage(final List<Locale> locales, final String pageKey) {
         final CmsPage cmsPage = new LocalCmsPage(i18nResolver, locales);
-        return F.Promise.pure(cmsPage);
+        return CompletableFuture.completedFuture(cmsPage);
     }
 
     public static LocalCmsService of(final I18nResolver i18nResolver) {

@@ -38,8 +38,7 @@ class SphereClientProvider implements Provider<SphereClient> {
     private SphereClient createClientWithMetrics(final SphereClientConfig clientConfig) {
         final HttpClient underlyingHttpClient = SphereAsyncHttpClientFactory.create();
         final MetricHttpClient httpClient = MetricHttpClient.of(underlyingHttpClient);
-        final SphereAccessTokenSupplier tokenSupplier = SphereAccessTokenSupplierFactory.of(() -> httpClient)
-                .createSupplierOfAutoRefresh(clientConfig);
+        final SphereAccessTokenSupplier tokenSupplier = SphereAccessTokenSupplier.ofAutoRefresh(clientConfig, httpClient, false);
         Logger.info("Provide SphereClient with metrics");
         return SphereClient.of(clientConfig, httpClient, tokenSupplier);
     }

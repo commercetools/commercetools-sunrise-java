@@ -31,7 +31,7 @@ import static productcatalog.productoverview.SunriseFacetType.*;
 public class SearchCriteria {
     private static final ProductProjectionSortSearchModel SORT = ProductProjectionSearchModel.of().sort();
     private static final ProductProjectionFacetedSearchSearchModel FACET = ProductProjectionSearchModel.of().facetedSearch();
-    private static final SortExpression<ProductProjection> DEFAULT_SORT = SORT.createdAt().byDesc();
+    private static final SortExpression<ProductProjection> DEFAULT_SORT = SORT.createdAt().desc();
     private final Http.Request request;
     private final I18nResolver i18nResolver;
     private final UserContext userContext;
