@@ -19,12 +19,12 @@ import static play.mvc.Http.HeaderNames.WWW_AUTHENTICATE;
 /**
  * Request handler that enables HTTP basic access authentication.
  */
-public class BasicAuthRequestHandler extends DefaultActionCreator {
-    private static final Logger.ALogger LOGGER = Logger.of(BasicAuthRequestHandler.class);
+public class BasicAuthActionCreator extends DefaultActionCreator {
+    private static final Logger.ALogger LOGGER = Logger.of(BasicAuthActionCreator.class);
     private final Optional<BasicAuth> basicAuth;
 
     @Inject
-    public BasicAuthRequestHandler(@Nullable final BasicAuth basicAuth) {
+    public BasicAuthActionCreator(@Nullable final BasicAuth basicAuth) {
         this.basicAuth = Optional.ofNullable(basicAuth);
     }
 

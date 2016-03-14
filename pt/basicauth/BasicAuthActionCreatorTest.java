@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
+public class BasicAuthActionCreatorTest extends WithSunriseApplication {
     private static final Configuration CONFIG = configurationWithHandleEnabled();
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -73,7 +73,7 @@ public class BasicAuthRequestHandlerTest extends WithSunriseApplication {
     }
 
     private static Configuration configurationWithHandleEnabled() {
-        final Map<String, Object> configMap = singletonMap("play.http.requestHandler", "basicauth.BasicAuthRequestHandler");
+        final Map<String, Object> configMap = singletonMap("play.http.actionCreator", "basicauth.BasicAuthActionCreator");
         return new Configuration(configMap).withFallback(testConfiguration());
     }
 }
