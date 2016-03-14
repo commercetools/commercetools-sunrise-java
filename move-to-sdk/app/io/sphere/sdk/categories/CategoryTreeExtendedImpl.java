@@ -45,17 +45,32 @@ public class CategoryTreeExtendedImpl implements CategoryTreeExtended {
     }
 
     @Override
+    public List<Category> findSiblings(final Collection<? extends Identifiable<Category>> collection) {
+        return categoryTree.findSiblings(collection);
+    }
+
+    @Override
+    public CategoryTree getSubtree(final Collection<? extends Identifiable<Category>> collection) {
+        return CategoryTree.of(Collections.emptyList());
+    }
+
+    @Override
+    public Category getRootAncestor(final Identifiable<Category> identifiable) {
+        return categoryTree.getRootAncestor(identifiable);
+    }
+
+    @Override
+    public List<Category> getSubtreeRoots() {
+        return categoryTree.getSubtreeRoots();
+    }
+
+    @Override
     public List<Category> getSiblings(final Collection<Category> categoryIds) {
         return categoryIds.stream()
                 .flatMap(category -> getSiblings(category).stream())
                 .distinct()
                 .filter(sibling -> !categoryIds.stream().anyMatch(c -> sibling.getId().equals(c.getId())))
                 .collect(toList());
-    }
-
-    @Override
-    public CategoryTree getSubtree(final Collection<Category> parentCategories) {
-        return CategoryTree.of(getSubtreeAsFlatList(parentCategories));
     }
 
     @Override

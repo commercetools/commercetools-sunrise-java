@@ -37,12 +37,6 @@ public interface CategoryTreeExtended extends CategoryTree {
      */
     List<Category> getSiblings(final Collection<Category> categoryIds);
 
-    /**
-     * Gets the subtree of the given parent categories.
-     * @param parentCategories the list of parent categories to use as a starting point
-     * @return the subtree with the subcategories including the parent categories
-     */
-    CategoryTree getSubtree(final Collection<Category> parentCategories);
 
     /**
      * Gets the ancestor of the given category that is in root level.

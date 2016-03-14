@@ -64,14 +64,30 @@ public final class RefreshableCategoryTree extends Base implements CategoryTreeE
     }
 
     @Override
+    public List<Category> findSiblings(final Collection<? extends Identifiable<Category>> collection) {
+        return categoryTree.findSiblings(collection);
+    }
+
+    @Override
+    public CategoryTree getSubtree(final Collection<? extends Identifiable<Category>> collection) {
+        return categoryTree.getSubtree(collection);
+    }
+
+    @Override
+    public Category getRootAncestor(final Identifiable<Category> identifiable) {
+        return categoryTree.getRootAncestor(identifiable);
+    }
+
+    @Override
+    public List<Category> getSubtreeRoots() {
+        return categoryTree.getSubtreeRoots();
+    }
+
+    @Override
     public List<Category> getSiblings(final Collection<Category> categoryIds) {
         return categoryTree.getSiblings(categoryIds);
     }
 
-    @Override
-    public CategoryTree getSubtree(final Collection<Category> parentCategories) {
-        return categoryTree.getSubtree(parentCategories);
-    }
 
     @Override
     public Category getRootAncestor(final Category category) {
