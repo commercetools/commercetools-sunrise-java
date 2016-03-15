@@ -2,6 +2,7 @@ basicauth
 categorytree
 common.actions
 common.cms
+common.cms.local
 common.contexts
 common.controllers
 common.errors
@@ -9,6 +10,7 @@ common.i18n
 common.models
 common.prices
 common.templates
+common.templates.handlebars
 common.utils
 controllers
 ctpclient
