@@ -30,13 +30,13 @@ lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;tes
 
 lazy val `commercetools-sunrise` = (project in file("."))
   .enablePlugins(PlayJava, DockerPlugin).configs(IntegrationTest, PlayTest)
-  .settings(commonSettings ++ commonTestSettings ++ dockerSettings: _*)
+  .settings(commonSettings ++ commonTestSettings ++ sunriseThemeSettings ++ dockerSettings: _*)
   .dependsOn(commonWithTests, `product-catalog`, `shopping-cart`, `my-account`, `setup-widget`)
-  .aggregate(common, `product-catalog`, `shopping-cart`, `my-account`, `setup-widget`, `move-to-sdk`)
+  .aggregate(common, `product-catalog`, `shopping-cart`, `my-account`, `setup-widget`, `sbt-tasks`, `move-to-sdk`)
 
 lazy val common = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
-  .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ themeDependencies ++ commonDependencies ++ disableDockerPublish: _*)
+  .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ templateDependencies ++ commonDependencies ++ disableDockerPublish: _*)
   .dependsOn(`move-to-sdk`)
 
 lazy val `product-catalog` = project
@@ -57,6 +57,10 @@ lazy val `my-account` = project
 lazy val `setup-widget` = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
   .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ disableDockerPublish: _*)
+
+lazy val `sbt-tasks` = project
+  .enablePlugins(PlayJava).configs(IntegrationTest)
+  .settings(commonSettings ++ testSettingsWithoutPt ++ sunriseThemeSettings ++ disableDockerPublish : _*)
 
 lazy val `move-to-sdk` = project
   .enablePlugins(PlayJava).configs(IntegrationTest)
@@ -89,10 +93,17 @@ lazy val jvmSdkDependencies = Seq (
   )
 )
 
-lazy val themeDependencies = Seq (
+lazy val sunriseThemeSettings = Seq (
+  unmanagedBase in Compile := (baseDirectory in ThisBuild).value / "lib",
+  unmanagedBase in Test := baseDirectory.value / "test" / "lib",
   resolvers += Resolver.bintrayRepo("commercetools", "maven"),
   libraryDependencies ++= Seq (
-    "io.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseDesignVersion,
+    "io.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseDesignVersion
+  )
+)
+
+lazy val templateDependencies = Seq (
+  libraryDependencies ++= Seq (
     "org.webjars" %% "webjars-play" % "2.4.0-1",
     "com.github.jknack" % "handlebars" % "2.3.2"
   )
@@ -145,7 +156,6 @@ def configTestDirs(config: Configuration, folderName: String) = Seq(
 
 def configCommonTestSettings(scopes: String) = Seq(
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
-  unmanagedBase in Test := baseDirectory.value / "test" / "lib",
   libraryDependencies ++= Seq (
     "org.assertj" % "assertj-core" % "3.0.0" % scopes,
     PlayImport.component("play-test") % scopes
@@ -242,5 +252,5 @@ copyI18nFiles := Def.inputTaskDyn {
 }.evaluated
 
 def runMainInCompile(dest: String, args: Seq[String]) = Def.taskDyn {
-  (runMain in Compile).toTask(s" tasks.WebjarsFilesCopier $dest ${args.mkString(" ")}")
+  (runMain in Compile in `sbt-tasks`).toTask(s" tasks.WebjarsFilesCopier $dest ${args.mkString(" ")}")
 }
