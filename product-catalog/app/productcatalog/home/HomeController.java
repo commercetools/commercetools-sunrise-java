@@ -6,8 +6,8 @@ import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import play.libs.concurrent.HttpExecution;
+import play.mvc.Controller;
 import play.mvc.Result;
-import play.twirl.api.Html;
 import productcatalog.common.ProductCatalogController;
 import productcatalog.common.ProductListData;
 import productcatalog.common.SuggestionsData;
@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
@@ -44,22 +43,17 @@ public class HomeController extends ProductCatalogController {
         final UserContext userContext = userContext(languageTag);
         final List<Category> suggestedCategories = suggestedCategories();
         if (!suggestedCategories.isEmpty()) {
-            return productService().getSuggestions(suggestedCategories, numSuggestions).thenApplyAsync(suggestions ->
-                    ok(renderHome(userContext, suggestions)), HttpExecution.defaultContext());
+            return productService().getSuggestions(suggestedCategories, numSuggestions)
+                    .thenComposeAsync(suggestions -> renderHome(userContext, suggestions), HttpExecution.defaultContext());
         } else {
-            return CompletableFuture.completedFuture(ok(renderHome(userContext, emptyList())));
+            return renderHome(userContext, emptyList());
         }
     }
 
-    private HomePageContent createPageContent(final UserContext userContext, final List<ProductProjection> suggestions) {
+    private CompletionStage<Result> renderHome(final UserContext userContext, final List<ProductProjection> suggestions) {
         final HomePageContent homePageContent = new HomePageContent();
         homePageContent.setSuggestions(createSuggestions(userContext, suggestions));
-        return homePageContent;
-    }
-
-    private Html renderHome(final UserContext userContext, final List<ProductProjection> suggestions) {
-        final HomePageContent pageContent = createPageContent(userContext, suggestions);
-        return templateService().renderToHtml("home", pageData(userContext, pageContent, ctx(), session()), userContext.locales());
+        return renderPage("home", homePageContent, userContext, ctx(), session()).thenApply(Controller::ok);
     }
 
     private List<Category> suggestedCategories() {

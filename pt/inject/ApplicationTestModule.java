@@ -18,14 +18,14 @@ public class ApplicationTestModule extends AbstractModule {
     }
 
     private I18nResolver injectedI18nResolver() {
-        return ((locale, bundle, key, args) -> Optional.empty());
+        return ((locales, bundle, key, hashArgs) -> Optional.empty());
     }
 
     protected TemplateService injectedTemplateService() {
-        return ((templateName, pageData, locales) -> "");
+        return ((templateName, pageData, locales, cmsPage) -> "");
     }
 
     protected CmsService injectedCmsService() {
-        return ((locale, pageKey) -> CompletableFuture.completedFuture((messageKey, args) -> Optional.empty()));
+        return ((locales, pageKey) -> CompletableFuture.completedFuture((messageKey, args) -> Optional.empty()));
     }
 }

@@ -2,23 +2,23 @@ package inject;
 
 import com.google.inject.Provider;
 import common.cms.CmsService;
-import common.cms.PlayCmsService;
+import common.cms.local.LocalCmsService;
+import common.i18n.I18nResolver;
 import play.Logger;
-import play.i18n.MessagesApi;
 
 import javax.inject.Inject;
 
 class CmsServiceProvider implements Provider<CmsService> {
-    private final MessagesApi messagesApi;
+    private final I18nResolver i18nResolver;
 
     @Inject
-    private CmsServiceProvider(final MessagesApi messagesApi) {
-        this.messagesApi = messagesApi;
+    private CmsServiceProvider(final I18nResolver i18nResolver) {
+        this.i18nResolver = i18nResolver;
     }
 
     @Override
     public CmsService get() {
-        Logger.info("Provide PlayCmsService");
-        return PlayCmsService.of(messagesApi);
+        Logger.info("Provide LocalCmsService");
+        return LocalCmsService.of(i18nResolver);
     }
 }

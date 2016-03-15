@@ -1,4 +1,4 @@
-package common.templates;
+package common.templates.handlebars;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jknack.handlebars.Helper;

@@ -57,7 +57,7 @@ class I18nResolverProvider implements Provider<I18nResolver> {
                 .collect(toList());
     }
 
-    private static YamlI18nResolver loadI18nResolver(final Configuration resolverLoader, final List<Locale> locales, final List<String> bundles) {
+    private I18nResolver loadI18nResolver(final Configuration resolverLoader, final List<Locale> locales, final List<String> bundles) {
         final String type = resolverLoader.getString(CONFIG_TYPE_ATTR);
         final String path = resolverLoader.getString(CONFIG_PATH_ATTR);
         if (YAML_TYPE.equals(type)) {

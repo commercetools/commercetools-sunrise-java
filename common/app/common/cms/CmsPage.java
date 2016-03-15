@@ -4,24 +4,18 @@ import java.util.Optional;
 
 /**
  * Obtains content data for a page, usually coming from a Content Management System (CMS).
+ *
+ * @see CmsService
  */
+@FunctionalInterface
 public interface CmsPage {
 
     /**
      * Gets the message corresponding to the given key, or empty in case it does not exist.
-     * @param messageKey identifying the message
-     * @param args optional list of arguments
-     * @return the message identified by the key, with the given arguments, or empty string if not found
+     * @param contentType type of the content
+     * @param contentId identification of the content
+     * @return the content of a particular type and ID, or absent if not found
      */
-    Optional<String> get(final String messageKey, final Object... args);
+    Optional<CmsContent> get(final String contentType, final String contentId);
 
-    /**
-     * Gets the message corresponding to the given key, or empty in case it does not exist.
-     * @param messageKey identifying the message
-     * @param args optional list of arguments
-     * @return the message identified by the key, with the given arguments, or empty string if not found
-     */
-    default String getOrEmpty(final String messageKey, final Object... args) {
-        return get(messageKey, args).orElse("");
-    }
 }

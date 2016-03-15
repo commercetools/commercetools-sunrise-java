@@ -17,9 +17,10 @@ import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
 import myaccount.CustomerSessionUtils;
 import play.Configuration;
-import play.filters.csrf.AddCSRFToken;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import play.mvc.With;
+import play.twirl.api.Html;
 import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -144,6 +146,16 @@ public abstract class SunriseController extends ShopController {
 
     protected Optional<Category> newCategory() {
         return categoryNewExtId.flatMap(extId -> categoryTree().findByExternalId(extId));
+    }
+
+    protected CompletionStage<Html> renderPage(final String pageKey, final PageContent pageContent, final UserContext userContext,
+                                               final Http.Context ctx, final Http.Session session) {
+        return cmsService().getPage(userContext.locales(), pageKey)
+                .thenApplyAsync(cmsPage -> {
+                    final SunrisePageData pageData = pageData(userContext, pageContent, ctx, session);
+                    final String htmlAsString = templateService().render(pageKey, pageData, userContext.locales(), cmsPage);
+                    return new Html(htmlAsString);
+                }, HttpExecution.defaultContext());
     }
 
     private static Locale currentLocale(final String languageTag, final ProjectContext projectContext) {

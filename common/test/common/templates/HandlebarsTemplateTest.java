@@ -4,6 +4,7 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.controllers.PageData;
 import common.i18n.I18nResolver;
+import common.templates.handlebars.HandlebarsTemplateService;
 import org.junit.Test;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class HandlebarsTemplateTest {
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
     private static final TemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
-    private static final I18nResolver I18N_MESSAGES = ((locale, bundle, key, args) -> Optional.empty());
+    private static final I18nResolver I18N_MESSAGES = ((locale, bundle, key, hashArgs) -> Optional.empty());
     private static final List<Locale> LOCALES = emptyList();
     private static final PageData SOME_PAGE_DATA = new TestablePageData();
 
