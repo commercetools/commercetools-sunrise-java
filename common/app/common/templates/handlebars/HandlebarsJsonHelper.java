@@ -11,8 +11,7 @@ final class HandlebarsJsonHelper<T> extends Base implements Helper<T> {
 
     @Override
     public CharSequence apply(final T context, final Options options) throws IOException {
-        return "";
-//        final ObjectMapper objectMapper = new ObjectMapper();
-//        return objectMapper.writeValueAsString(context);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(context);
     }
 }
