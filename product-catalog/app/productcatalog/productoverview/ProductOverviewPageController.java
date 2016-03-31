@@ -14,6 +14,7 @@ import play.twirl.api.Html;
 import productcatalog.common.BreadcrumbData;
 import productcatalog.common.ProductCatalogController;
 import productcatalog.common.ProductListData;
+import productcatalog.productoverview.search.SearchConfig;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;
@@ -32,9 +33,9 @@ public class ProductOverviewPageController extends ProductCatalogController {
     private final int paginationDisplayedPages;
 
     @Inject
-    public ProductOverviewPageController(final ControllerDependency controllerDependency,
-                                         final ProductService productService, final ProductDataConfig productDataConfig) {
-        super(controllerDependency, productService, productDataConfig);
+    public ProductOverviewPageController(final ControllerDependency controllerDependency, final ProductService productService,
+                                         final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
+        super(controllerDependency, productService, productDataConfig, searchConfig);
         this.paginationDisplayedPages = configuration().getInt("pop.pagination.displayedPages", 6);
     }
 
@@ -46,7 +47,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
         if (categoryOpt.isPresent()) {
             final CategoryTree categoriesInFacet = getCategoriesInFacet(categoryOpt.get());
             final List<String> selectedCategoryIds = getSelectedCategoryIds(categoryOpt.get());
-            final SearchCriteria searchCriteria = SearchCriteria.of(configuration(), request(), i18nResolver(), userContext, categoryOpt.get(), selectedCategoryIds, categoriesInFacet);
+            final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext, categoriesInFacet, selectedCategoryIds, categoryOpt.get());
             return productService().searchProducts(page, searchCriteria).thenApplyAsync(searchResult ->
                     renderCategoryPage(categoryOpt.get(), page, searchCriteria, searchResult, userContext), HttpExecution.defaultContext());
         } else {
@@ -56,7 +57,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     public CompletionStage<Result> search(final String languageTag, final int page) {
         final UserContext userContext = userContext(languageTag);
-        final SearchCriteria searchCriteria = SearchCriteria.of(configuration(), request(), i18nResolver(), userContext, categoryTree());
+        final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext, categoryTree());
         if (searchCriteria.searchTerm().isPresent()) {
             final CompletionStage<PagedSearchResult<ProductProjection>> searchResultStage = productService().searchProducts(page, searchCriteria);
             return searchResultStage.thenApplyAsync(searchResult ->
@@ -72,9 +73,9 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
         content.setFilterProductsUrl(request().path());
         content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()));
-        content.setPagination(new PaginationData(requestContext(request()), searchResult, page, searchCriteria.selectedDisplay(), paginationDisplayedPages));
-        content.setSortSelector(searchCriteria.boundSortSelector());
-        content.setDisplaySelector(searchCriteria.boundDisplaySelector());
+        content.setPagination(new PaginationData(requestContext(request()), searchResult, page, searchCriteria.getDisplayCriteria().getSelectedPageSize(), paginationDisplayedPages));
+        content.setSortSelector(searchCriteria.getSortCriteria().boundSortSelector());
+        content.setDisplaySelector(searchCriteria.getDisplayCriteria().boundDisplaySelector());
         content.setFacets(new FacetListData(searchResult, searchCriteria.boundFacets()));
         return content;
     }

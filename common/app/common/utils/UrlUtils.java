@@ -1,10 +1,13 @@
 package common.utils;
 
+import play.mvc.Http;
+
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toMap;
 
 public final class UrlUtils {
 
@@ -27,5 +30,10 @@ public final class UrlUtils {
 
     private static String buildQueryStringOfParameter(final String key, final List<String> values) {
         return values.stream().collect(joining("&" + key + "=", key + "=", ""));
+    }
+
+    public static Map<String, List<String>> getQueryString(final Http.Request request) {
+        return request.queryString().entrySet().stream()
+                .collect(toMap(Map.Entry::getKey, e -> asList(e.getValue())));
     }
 }

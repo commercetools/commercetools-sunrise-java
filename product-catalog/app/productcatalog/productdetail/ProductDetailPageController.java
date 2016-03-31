@@ -11,6 +11,7 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.common.*;
+import productcatalog.productoverview.search.SearchConfig;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;
@@ -27,9 +28,9 @@ public class ProductDetailPageController extends ProductCatalogController {
     private final int numSuggestions;
 
     @Inject
-    public ProductDetailPageController(final ControllerDependency controllerDependency,
-                                       final ProductService productService, final ProductDataConfig productDataConfig) {
-        super(controllerDependency, productService, productDataConfig);
+    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductService productService,
+                                       final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
+        super(controllerDependency, productService, productDataConfig, searchConfig);
         this.numSuggestions = configuration().getInt("pdp.productSuggestions.count");
     }
 

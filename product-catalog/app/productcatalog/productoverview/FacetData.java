@@ -4,7 +4,7 @@ import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.facets.FacetType;
 import io.sphere.sdk.models.Base;
 
-import static productcatalog.productoverview.SunriseFacetType.*;
+import static productcatalog.productoverview.search.SunriseFacetType.*;
 
 public class FacetData extends Base {
     private Facet facet;

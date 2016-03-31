@@ -15,6 +15,7 @@
     <logger name="play.requests" level="DEBUG" />
     <logger name="sphere" level="INFO" />
     <logger name="sphere.metrics.simple" level="DEBUG" />
+    <logger name="productcatalog" level="DEBUG" />
     <logger name="tasks.WebjarsFilesCopier" level="INFO" />
 
     <root level="WARN">

@@ -2,7 +2,10 @@ package productcatalog.services;
 
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.client.HttpRequestIntent;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.http.FormUrlEncodedHttpRequestBody;
+import io.sphere.sdk.http.StringHttpRequestBody;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -18,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -32,11 +36,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public CompletionStage<PagedSearchResult<ProductProjection>> searchProducts(final int page, final SearchCriteria searchCriteria) {
-        final int pageSize = searchCriteria.selectedDisplay();
+        final int pageSize = searchCriteria.getDisplayCriteria().getSelectedPageSize();
         final int offset = (page - 1) * pageSize;
         final ProductProjectionSearch baseRequest = ProductProjectionSearch.ofCurrent()
                 .withFacetedSearch(searchCriteria.selectedFacets())
-                .withSort(searchCriteria.selectedSort())
+                .withSort(searchCriteria.getSortCriteria().getSelectedSortExpressions())
                 .withOffset(offset)
                 .withLimit(pageSize);
         final ProductProjectionSearch request = searchCriteria.searchTerm()
@@ -86,10 +90,32 @@ public class ProductServiceImpl implements ProductService {
                 .thenApply(PagedSearchResult::getResults);
     }
 
-    private void logRequest(final ProductProjectionSearch request, final PagedSearchResult<ProductProjection> result) {
-        LOGGER.debug("Fetched {} out of {} products with request {}",
+    private static void logRequest(final ProductProjectionSearch request, final PagedSearchResult<ProductProjection> result) {
+        final HttpRequestIntent httpRequest = request.httpRequestIntent();
+        final String requestBody = printableRequestBody(httpRequest)
+                .map(body -> " with body {" + body + "}")
+                .orElse("");
+        LOGGER.debug("Fetched {} out of {} products with request {} {}",
                 result.size(),
                 result.getTotal(),
-                request.httpRequestIntent().getPath());
+                httpRequest.getHttpMethod(),
+                httpRequest.getPath() + requestBody);
+    }
+
+    private static Optional<String> printableRequestBody(final HttpRequestIntent httpRequest) {
+        return Optional.ofNullable(httpRequest.getBody())
+                .map(body -> {
+                    final String bodyAsString;
+                    if (httpRequest.getBody() instanceof StringHttpRequestBody) {
+                        bodyAsString = ((StringHttpRequestBody) httpRequest.getBody()).getSecuredBody();
+                    } else if (httpRequest.getBody() instanceof FormUrlEncodedHttpRequestBody) {
+                        bodyAsString = ((FormUrlEncodedHttpRequestBody) httpRequest.getBody()).getParameters().stream()
+                                .map(pair -> pair.getName() + "=" + pair.getValue())
+                                .collect(Collectors.joining("&"));
+                    } else {
+                        bodyAsString = "**removed output**";
+                    }
+                    return bodyAsString;
+                });
     }
 }

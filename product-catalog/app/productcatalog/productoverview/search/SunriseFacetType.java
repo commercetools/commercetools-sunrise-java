@@ -1,4 +1,4 @@
-package productcatalog.productoverview;
+package productcatalog.productoverview.search;
 
 import io.sphere.sdk.facets.FacetType;
 
