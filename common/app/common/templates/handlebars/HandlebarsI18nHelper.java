@@ -2,6 +2,7 @@ package common.templates.handlebars;
 
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
+import common.i18n.I18nIdentifier;
 import common.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 
@@ -21,7 +22,7 @@ final class HandlebarsI18nHelper extends Base implements Helper<String> {
     @Override
     public CharSequence apply(final String context, final Options options) throws IOException {
         final List<Locale> locales = getLocalesFromContext(options.context);
-        final I18nIdentifier i18nIdentifier = new I18nIdentifier(context);
-        return i18n.getOrEmpty(locales, i18nIdentifier.getBundle(), i18nIdentifier.getKey(), options.hash);
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of(context);
+        return i18n.getOrEmpty(locales, i18nIdentifier, options.hash);
     }
 }

@@ -35,9 +35,9 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
     }
 
     @Override
-    public Optional<String> get(final List<Locale> locales, final String bundle, final String key, final Map<String, Object> hashArgs) {
-        final String message = findPluralizedTranslation(locales, bundle, key, hashArgs)
-                .orElseGet(() -> findFirstTranslation(locales, bundle, key)
+    public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs) {
+        final String message = findPluralizedTranslation(locales, i18nIdentifier, hashArgs)
+                .orElseGet(() -> findFirstTranslation(locales, i18nIdentifier.getBundle(), i18nIdentifier.getKey())
                         .orElse(null));
         return Optional.ofNullable(message).map(resolvedValue -> replaceParameters(resolvedValue, hashArgs));
     }
@@ -53,10 +53,11 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
         return new YamlI18nResolver(filepath, locales, bundles);
     }
 
-    private Optional<String> findPluralizedTranslation(final List<Locale> locales, final String bundle, final String key, final Map<String, Object> hashArgs) {
+    private Optional<String> findPluralizedTranslation(final List<Locale> locales, final I18nIdentifier i18nIdentifier,
+                                                       final Map<String, Object> hashArgs) {
         if (containsPlural(hashArgs)) {
-            final String pluralizedKey = key + "_plural";
-            return findFirstTranslation(locales, bundle, pluralizedKey);
+            final String pluralizedKey = i18nIdentifier.getKey() + "_plural";
+            return findFirstTranslation(locales, i18nIdentifier.getBundle(), pluralizedKey);
         } else {
             return Optional.empty();
         }

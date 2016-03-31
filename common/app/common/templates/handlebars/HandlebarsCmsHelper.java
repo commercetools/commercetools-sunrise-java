@@ -2,6 +2,7 @@ package common.templates.handlebars;
 
 import com.github.jknack.handlebars.Helper;
 import com.github.jknack.handlebars.Options;
+import common.cms.CmsIdentifier;
 import io.sphere.sdk.models.Base;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ final class HandlebarsCmsHelper extends Base implements Helper<String> {
 
     @Override
     public CharSequence apply(final String context, final Options options) throws IOException {
-        final CmsIdentifier cmsIdentifier = new CmsIdentifier(context);
+        final CmsIdentifier cmsIdentifier = CmsIdentifier.of(context);
         return getMessage(cmsIdentifier, options).orElse("");
     }
 

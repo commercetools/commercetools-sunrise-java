@@ -2,12 +2,13 @@ package shoppingcart.checkout.shipping;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
+import common.i18n.I18nIdentifier;
 import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
-import shoppingcart.common.CartOrderBean;
 import shoppingcart.checkout.CheckoutPageContent;
 import shoppingcart.checkout.StepWidgetBean;
+import shoppingcart.common.CartOrderBean;
 
 public class CheckoutShippingPageContent extends CheckoutPageContent {
     private CheckoutShippingFormBean shippingForm;
@@ -36,7 +37,7 @@ public class CheckoutShippingPageContent extends CheckoutPageContent {
         stepWidget.setShippingStepActive(true);
         setStepWidget(stepWidget);
         setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter));
-        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "shippingPage.title"));
+        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
     }
 
     public CheckoutShippingFormBean getShippingForm() {

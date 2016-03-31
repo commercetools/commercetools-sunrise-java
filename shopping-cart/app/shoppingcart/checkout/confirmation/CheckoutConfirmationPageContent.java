@@ -2,13 +2,14 @@ package shoppingcart.checkout.confirmation;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
+import common.i18n.I18nIdentifier;
 import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import common.models.SelectableData;
 import io.sphere.sdk.carts.Cart;
-import shoppingcart.common.CartOrderBean;
 import shoppingcart.checkout.CheckoutPageContent;
 import shoppingcart.checkout.StepWidgetBean;
+import shoppingcart.common.CartOrderBean;
 
 public class CheckoutConfirmationPageContent extends CheckoutPageContent {
 
@@ -24,7 +25,7 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
         stepWidget.setConfirmationStepActive(true);
         setStepWidget(stepWidget);
         fillForm();
-        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "confirmationPage.title"));
+        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:confirmationPage.title")));
     }
 
     private void fillForm() {
