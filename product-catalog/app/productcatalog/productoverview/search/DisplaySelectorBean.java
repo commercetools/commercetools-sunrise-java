@@ -1,4 +1,4 @@
-package productcatalog.productoverview;
+package productcatalog.productoverview.search;
 
 import common.models.SelectableData;
 import io.sphere.sdk.models.Base;
@@ -7,21 +7,21 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class DisplaySelector extends Base {
+public class DisplaySelectorBean extends Base {
     private String key;
     private List<SelectableData> list;
 
-    public DisplaySelector() {
+    public DisplaySelectorBean() {
     }
 
-    public DisplaySelector(final String key, final List<Integer> pageSizeOptions, final int currentPageSize) {
+    public DisplaySelectorBean(final String key, final List<Integer> pageSizeOptions, final int currentPageSize) {
         this.key = key;
         this.list = pageSizeOptions.stream()
                 .map(pageSize -> createDisplayOption(pageSize, currentPageSize))
                 .collect(toList());
     }
 
-    public DisplaySelector(final String key, final List<SelectableData> list) {
+    public DisplaySelectorBean(final String key, final List<SelectableData> list) {
         this.key = key;
         this.list = list;
     }

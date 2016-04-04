@@ -4,7 +4,7 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
-import productcatalog.productoverview.SearchCriteria;
+import productcatalog.productoverview.search.SearchCriteria;
 
 import java.util.List;
 import java.util.Locale;

@@ -10,7 +10,7 @@ public class SortConfig extends Base {
     private final List<SortOption> options;
     private final List<String> defaultValue;
 
-    public SortConfig(final String key, final List<SortOption> options, final List<String> defaultValue) {
+    private SortConfig(final String key, final List<SortOption> options, final List<String> defaultValue) {
         this.key = key;
         this.options = options;
         this.defaultValue = defaultValue;
@@ -26,5 +26,9 @@ public class SortConfig extends Base {
 
     public List<String> getDefaultValue() {
         return defaultValue;
+    }
+
+    public static SortConfig of(final String key, final List<SortOption> options, final List<String> defaultValue) {
+        return new SortConfig(key, options, defaultValue);
     }
 }

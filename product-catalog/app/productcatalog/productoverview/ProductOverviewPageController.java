@@ -13,7 +13,9 @@ import play.twirl.api.Html;
 import productcatalog.common.BreadcrumbData;
 import productcatalog.common.ProductCatalogController;
 import productcatalog.common.ProductListData;
+import productcatalog.productoverview.search.FacetBeanList;
 import productcatalog.productoverview.search.SearchConfig;
+import productcatalog.productoverview.search.SearchCriteria;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;
@@ -68,7 +70,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
         content.setPagination(new PaginationData(requestContext(request()), searchResult, page, searchCriteria.getDisplayCriteria().getSelectedPageSize(), paginationDisplayedPages));
         content.setSortSelector(searchCriteria.getSortCriteria().boundSortSelector());
         content.setDisplaySelector(searchCriteria.getDisplayCriteria().boundDisplaySelector());
-        content.setFacets(new FacetListData(searchCriteria.getFacetsCriteria().boundFacets(searchResult)));
+        content.setFacets(new FacetBeanList(searchCriteria.getFacetsCriteria().boundFacets(searchResult)));
         return content;
     }
 

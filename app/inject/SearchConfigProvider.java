@@ -58,7 +58,7 @@ class SearchConfigProvider implements Provider<SearchConfig> {
         final SortConfig sortConfig = getSortConfig(configuration);
         final FacetsConfig facetsConfig = getFacetsConfig(configuration);
         //Logger.debug("Provide SearchConfig: sort {}", sortConfig);
-        return new SearchConfig(paginationKey, searchProductsKey, displayConfig, sortConfig, facetsConfig);
+        return SearchConfig.of(paginationKey, searchProductsKey, displayConfig, sortConfig, facetsConfig);
     }
 
     private static DisplayConfig getDisplayConfig(final Configuration configuration) {
@@ -69,7 +69,7 @@ class SearchConfigProvider implements Provider<SearchConfig> {
             throw new SunriseInitializationException(String.format("Products per page options are not within bounds [0, %d]: %s",
                     MAX_PAGE_SIZE, options));
         }
-        return new DisplayConfig(key, options, defaultValue);
+        return DisplayConfig.of(key, options, defaultValue);
     }
 
     private static SortConfig getSortConfig(final Configuration configuration) {
@@ -78,7 +78,7 @@ class SearchConfigProvider implements Provider<SearchConfig> {
         final List<SortOption> options = configuration.getConfigList(CONFIG_SORT_OPTIONS, emptyList()).stream()
                 .map(SearchConfigProvider::initializeSortOption)
                 .collect(toList());
-        return new SortConfig(key, options, defaultValue);
+        return SortConfig.of(key, options, defaultValue);
     }
 
     private static SortOption initializeSortOption(final Configuration optionConfig) {
@@ -96,7 +96,7 @@ class SearchConfigProvider implements Provider<SearchConfig> {
         final List<FacetConfig> facetConfigs = configuration.getConfigList(CONFIG_FACETS, emptyList()).stream()
                 .map(SearchConfigProvider::getFacetConfig)
                 .collect(toList());
-        return new FacetsConfig(facetConfigs);
+        return FacetsConfig.of(facetConfigs);
     }
 
     private static FacetConfig getFacetConfig(final Configuration facetConfig) {
@@ -111,7 +111,7 @@ class SearchConfigProvider implements Provider<SearchConfig> {
         final Long limit = facetConfig.getLong(FACETS_LIMIT_ATTR);
         final Long threshold = facetConfig.getLong(FACETS_THRESHOLD_ATTR);
         final FacetMapperConfig mapperConfig = getFacetMapperConfig(facetConfig).orElse(null);
-        return new FacetConfig(type, key, label, expr, count, matchingAll, multiSelect, limit, threshold, mapperConfig);
+        return FacetConfig.of(type, key, label, expr, count, matchingAll, multiSelect, limit, threshold, mapperConfig);
     }
 
     private static SunriseFacetType getFacetType(final Configuration facetConfig) {
@@ -128,7 +128,7 @@ class SearchConfigProvider implements Provider<SearchConfig> {
                 .map(config -> {
                     final String type = config.getString(FACETS_MAPPER_TYPE_ATTR, "");
                     final List<String> values = config.getStringList(FACETS_MAPPER_VALUES_ATTR, emptyList());
-                    return new FacetMapperConfig(type, values);
+                    return FacetMapperConfig.of(type, values);
                 });
     }
 

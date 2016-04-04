@@ -1,4 +1,4 @@
-package productcatalog.productoverview;
+package productcatalog.productoverview.search;
 
 import common.contexts.UserContext;
 import common.i18n.I18nResolver;
@@ -8,10 +8,6 @@ import io.sphere.sdk.models.LocalizedStringEntry;
 import io.sphere.sdk.products.search.ProductProjectionFacetedSearchSearchModel;
 import io.sphere.sdk.products.search.ProductProjectionSearchModel;
 import play.mvc.Http;
-import productcatalog.productoverview.search.DisplayCriteria;
-import productcatalog.productoverview.search.FacetsCriteria;
-import productcatalog.productoverview.search.SearchConfig;
-import productcatalog.productoverview.search.SortCriteria;
 
 import javax.annotation.Nullable;
 import java.util.Collections;

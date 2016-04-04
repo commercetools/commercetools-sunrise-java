@@ -4,7 +4,6 @@ import common.contexts.UserContext;
 import common.i18n.I18nIdentifier;
 import common.i18n.I18nResolver;
 import common.models.SelectableData;
-import productcatalog.productoverview.DisplaySelector;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -29,11 +28,11 @@ public class DisplayCriteria {
         this.i18nResolver = i18nResolver;
     }
 
-    public DisplaySelector boundDisplaySelector() {
+    public DisplaySelectorBean boundDisplaySelector() {
         final List<SelectableData> displaySelectableData = displayConfig.getOptions().stream()
                 .map(this::optionToSelectableData)
                 .collect(toList());
-        return new DisplaySelector(displayConfig.getKey(), displaySelectableData);
+        return new DisplaySelectorBean(displayConfig.getKey(), displaySelectableData);
     }
 
     public int getSelectedPageSize() {

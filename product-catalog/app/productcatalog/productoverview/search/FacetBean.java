@@ -1,4 +1,4 @@
-package productcatalog.productoverview;
+package productcatalog.productoverview.search;
 
 import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.facets.FacetType;
@@ -6,13 +6,13 @@ import io.sphere.sdk.models.Base;
 
 import static productcatalog.productoverview.search.SunriseFacetType.*;
 
-public class FacetData extends Base {
+public class FacetBean extends Base {
     private Facet facet;
 
-    public FacetData() {
+    public FacetBean() {
     }
 
-    public FacetData(final Facet facet) {
+    public FacetBean(final Facet facet) {
         this.facet = facet;
     }
 

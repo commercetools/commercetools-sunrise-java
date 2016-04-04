@@ -8,7 +8,7 @@ public class SearchConfig {
     private final SortConfig sortConfig;
     private final FacetsConfig facetsConfig;
 
-    public SearchConfig(final String paginationKey, final String searchTermKey, final DisplayConfig displayConfig,
+    private SearchConfig(final String paginationKey, final String searchTermKey, final DisplayConfig displayConfig,
                         final SortConfig sortConfig, final FacetsConfig facetsConfig) {
         this.paginationKey = paginationKey;
         this.searchTermKey = searchTermKey;
@@ -35,5 +35,10 @@ public class SearchConfig {
 
     public FacetsConfig getFacetsConfig() {
         return facetsConfig;
+    }
+
+    public static SearchConfig of(final String paginationKey, final String searchTermKey, final DisplayConfig displayConfig,
+                                  final SortConfig sortConfig, final FacetsConfig facetsConfig) {
+        return new SearchConfig(paginationKey, searchTermKey, displayConfig, sortConfig, facetsConfig);
     }
 }

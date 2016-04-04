@@ -18,9 +18,9 @@ public class FacetConfig extends Base {
     private final Optional<Long> threshold;
     private final Optional<FacetMapperConfig> mapperConfig;
 
-    public FacetConfig(final SunriseFacetType type, final String key, final String label, final String expr,
-                       final boolean countShown, final boolean matchingAll, final boolean multiSelect,
-                       @Nullable final Long limit, @Nullable final Long threshold, @Nullable final FacetMapperConfig mapperConfig) {
+    private FacetConfig(final SunriseFacetType type, final String key, final String label, final String expr,
+                        final boolean countShown, final boolean matchingAll, final boolean multiSelect,
+                        @Nullable final Long limit, @Nullable final Long threshold, @Nullable final FacetMapperConfig mapperConfig) {
         this.type = type;
         this.key = key;
         this.label = label;
@@ -71,5 +71,11 @@ public class FacetConfig extends Base {
 
     public Optional<FacetMapperConfig> getMapperConfig() {
         return mapperConfig;
+    }
+
+    public static FacetConfig of(final SunriseFacetType type, final String key, final String label, final String expr,
+                                 final boolean countShown, final boolean matchingAll, final boolean multiSelect,
+                                 @Nullable final Long limit, @Nullable final Long threshold, @Nullable final FacetMapperConfig mapperConfig) {
+        return new FacetConfig(type, key, label, expr, countShown, matchingAll, multiSelect, limit, threshold, mapperConfig);
     }
 }

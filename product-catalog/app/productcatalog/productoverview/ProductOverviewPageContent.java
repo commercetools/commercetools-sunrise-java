@@ -4,6 +4,9 @@ import common.models.DetailData;
 import common.controllers.PageContent;
 import productcatalog.common.BreadcrumbData;
 import productcatalog.common.ProductListData;
+import productcatalog.productoverview.search.DisplaySelectorBean;
+import productcatalog.productoverview.search.FacetBeanList;
+import productcatalog.productoverview.search.SortSelectorBean;
 
 public class ProductOverviewPageContent extends PageContent {
     private String filterProductsUrl;
@@ -13,10 +16,10 @@ public class ProductOverviewPageContent extends PageContent {
     // TODO searchResult
     private DetailData seo;
     private BreadcrumbData breadcrumb;
-    private FacetListData facets;
+    private FacetBeanList facets;
     private PaginationData pagination;
-    private DisplaySelector displaySelector;
-    private SortSelector sortSelector;
+    private DisplaySelectorBean displaySelector;
+    private SortSelectorBean sortSelector;
     private ProductListData products;
     // TODO wishlist
 
@@ -71,11 +74,11 @@ public class ProductOverviewPageContent extends PageContent {
         this.breadcrumb = breadcrumb;
     }
 
-    public FacetListData getFacets() {
+    public FacetBeanList getFacets() {
         return facets;
     }
 
-    public void setFacets(final FacetListData facets) {
+    public void setFacets(final FacetBeanList facets) {
         this.facets = facets;
     }
 
@@ -87,19 +90,19 @@ public class ProductOverviewPageContent extends PageContent {
         this.pagination = pagination;
     }
 
-    public DisplaySelector getDisplaySelector() {
+    public DisplaySelectorBean getDisplaySelector() {
         return displaySelector;
     }
 
-    public void setDisplaySelector(final DisplaySelector displaySelector) {
+    public void setDisplaySelector(final DisplaySelectorBean displaySelector) {
         this.displaySelector = displaySelector;
     }
 
-    public SortSelector getSortSelector() {
+    public SortSelectorBean getSortSelector() {
         return sortSelector;
     }
 
-    public void setSortSelector(final SortSelector sortSelector) {
+    public void setSortSelector(final SortSelectorBean sortSelector) {
         this.sortSelector = sortSelector;
     }
 

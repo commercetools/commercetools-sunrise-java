@@ -10,7 +10,7 @@ public class DisplayConfig extends Base {
     private final List<Integer> options;
     private final int defaultValue;
 
-    public DisplayConfig(final String key, final List<Integer> options, final int defaultValue) {
+    private DisplayConfig(final String key, final List<Integer> options, final int defaultValue) {
         this.key = key;
         this.options = options;
         this.defaultValue = defaultValue;
@@ -26,5 +26,9 @@ public class DisplayConfig extends Base {
 
     public int getDefaultValue() {
         return defaultValue;
+    }
+
+    public static DisplayConfig of(final String key, final List<Integer> options, final int defaultValue) {
+        return new DisplayConfig(key, options, defaultValue);
     }
 }

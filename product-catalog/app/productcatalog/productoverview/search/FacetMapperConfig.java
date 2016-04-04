@@ -9,7 +9,7 @@ public class FacetMapperConfig extends Base {
     private final String type;
     private final List<String> values;
 
-    public FacetMapperConfig(final String type, final List<String> values) {
+    private FacetMapperConfig(final String type, final List<String> values) {
         this.type = type;
         this.values = values;
     }
@@ -20,5 +20,9 @@ public class FacetMapperConfig extends Base {
 
     public List<String> getValues() {
         return values;
+    }
+
+    public static FacetMapperConfig of(final String type, final List<String> values) {
+        return new FacetMapperConfig(type, values);
     }
 }

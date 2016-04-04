@@ -6,7 +6,6 @@ import common.i18n.I18nResolver;
 import common.models.SelectableData;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.SortExpression;
-import productcatalog.productoverview.SortSelector;
 
 import java.util.List;
 import java.util.Map;
@@ -30,11 +29,11 @@ public class SortCriteria {
         this.i18nResolver = i18nResolver;
     }
 
-    public SortSelector boundSortSelector() {
+    public SortSelectorBean boundSortSelector() {
         final List<SelectableData> sortSelectableData = sortConfig.getOptions().stream()
                 .map(this::optionToSelectableData)
                 .collect(toList());
-        return new SortSelector(sortConfig.getKey(), sortSelectableData);
+        return new SortSelectorBean(sortConfig.getKey(), sortSelectableData);
     }
 
     public List<SortExpression<ProductProjection>> getSelectedSortExpressions() {

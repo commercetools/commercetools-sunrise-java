@@ -14,7 +14,7 @@ import io.sphere.sdk.search.PagedSearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
-import productcatalog.productoverview.SearchCriteria;
+import productcatalog.productoverview.search.SearchCriteria;
 
 import javax.inject.Inject;
 import java.util.List;
