@@ -11,17 +11,17 @@ import java.util.stream.LongStream;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
-public class PaginationData extends Base {
+public class PaginationBean extends Base {
     private String previousUrl;
     private String nextUrl;
     private LinkData firstPage;
     private LinkData lastPage;
     private List<LinkData> pages;
 
-    public PaginationData() {
+    public PaginationBean() {
     }
 
-    public PaginationData(final RequestContext requestContext, final PagedResult<?> searchResult,
+    public PaginationBean(final RequestContext requestContext, final PagedResult<?> searchResult,
                           final int currentPage, final int pageSize, final int displayedPages) {
         final long totalPages = calculateTotalPages(searchResult, pageSize);
         final long thresholdLeft = displayedPages - 1;

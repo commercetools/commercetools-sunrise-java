@@ -7,13 +7,13 @@ import io.sphere.sdk.categories.CategoryTree;
 
 import java.util.Optional;
 
-public class JumbotronData extends DetailData {
+public class JumbotronBean extends DetailData {
     private String subtitle;
 
-    public JumbotronData() {
+    public JumbotronBean() {
     }
 
-    public JumbotronData(final Category category, final UserContext userContext, final CategoryTree categoryTree) {
+    public JumbotronBean(final Category category, final UserContext userContext, final CategoryTree categoryTree) {
         setTitle(category.getName().find(userContext.locales()).orElse(""));
         Optional.ofNullable(category.getParent())
                 .ifPresent(parentRef -> categoryTree.findById(parentRef.getId())

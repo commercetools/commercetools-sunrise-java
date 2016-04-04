@@ -11,13 +11,13 @@ import productcatalog.productoverview.search.SortSelectorBean;
 public class ProductOverviewPageContent extends PageContent {
     private String filterProductsUrl;
     private String searchTerm;
-    private BannerData banner;
-    private JumbotronData jumbotron;
+    private BannerBean banner;
+    private JumbotronBean jumbotron;
     // TODO searchResult
     private DetailData seo;
     private BreadcrumbData breadcrumb;
     private FacetBeanList facets;
-    private PaginationData pagination;
+    private PaginationBean pagination;
     private DisplaySelectorBean displaySelector;
     private SortSelectorBean sortSelector;
     private ProductListData products;
@@ -42,19 +42,19 @@ public class ProductOverviewPageContent extends PageContent {
         this.searchTerm = searchTerm;
     }
 
-    public BannerData getBanner() {
+    public BannerBean getBanner() {
         return banner;
     }
 
-    public void setBanner(final BannerData banner) {
+    public void setBanner(final BannerBean banner) {
         this.banner = banner;
     }
 
-    public JumbotronData getJumbotron() {
+    public JumbotronBean getJumbotron() {
         return jumbotron;
     }
 
-    public void setJumbotron(final JumbotronData jumbotron) {
+    public void setJumbotron(final JumbotronBean jumbotron) {
         this.jumbotron = jumbotron;
     }
 
@@ -82,11 +82,11 @@ public class ProductOverviewPageContent extends PageContent {
         this.facets = facets;
     }
 
-    public PaginationData getPagination() {
+    public PaginationBean getPagination() {
         return pagination;
     }
 
-    public void setPagination(final PaginationData pagination) {
+    public void setPagination(final PaginationBean pagination) {
         this.pagination = pagination;
     }
 

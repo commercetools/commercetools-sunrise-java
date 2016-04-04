@@ -67,7 +67,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
         content.setFilterProductsUrl(request().path());
         content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()));
-        content.setPagination(new PaginationData(requestContext(request()), searchResult, page, searchCriteria.getDisplayCriteria().getSelectedPageSize(), paginationDisplayedPages));
+        content.setPagination(new PaginationBean(requestContext(request()), searchResult, page, searchCriteria.getDisplayCriteria().getSelectedPageSize(), paginationDisplayedPages));
         content.setSortSelector(searchCriteria.getSortCriteria().boundSortSelector());
         content.setDisplaySelector(searchCriteria.getDisplayCriteria().boundDisplaySelector());
         content.setFacets(new FacetBeanList(searchCriteria.getFacetsCriteria().boundFacets(searchResult)));
@@ -79,9 +79,9 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final ProductOverviewPageContent pageContent = createPageContent(page, searchCriteria, searchResult, userContext);
         pageContent.setAdditionalTitle(category.getName().find(userContext.locales()).orElse(""));
         pageContent.setBreadcrumb(new BreadcrumbData(category, categoryTree(), userContext, reverseRouter()));
-        pageContent.setJumbotron(new JumbotronData(category, userContext, categoryTree()));
+        pageContent.setJumbotron(new JumbotronBean(category, userContext, categoryTree()));
         pageContent.setBanner(createBanner(userContext, category));
-        pageContent.setSeo(new SeoData(userContext, category));
+        pageContent.setSeo(new SeoBean(userContext, category));
         return ok(renderPage(userContext, pageContent));
     }
 
@@ -100,10 +100,10 @@ public class ProductOverviewPageController extends ProductCatalogController {
         return templateService().renderToHtml("pop", pageData, userContext.locales());
     }
 
-    private static BannerData createBanner(final UserContext userContext, final Category category) {
-        final BannerData bannerData = new BannerData(userContext, category);
-        bannerData.setImageMobile("/assets/img/banner_mobile-0a9241da249091a023ecfadde951a53b.jpg"); // TODO obtain from category?
-        bannerData.setImageDesktop("/assets/img/banner_desktop-9ffd148c48068ce2666d6533b4a87d11.jpg"); // TODO obtain from category?
-        return bannerData;
+    private static BannerBean createBanner(final UserContext userContext, final Category category) {
+        final BannerBean bannerBean = new BannerBean(userContext, category);
+        bannerBean.setImageMobile("/assets/img/banner_mobile-0a9241da249091a023ecfadde951a53b.jpg"); // TODO obtain from category?
+        bannerBean.setImageDesktop("/assets/img/banner_desktop-9ffd148c48068ce2666d6533b4a87d11.jpg"); // TODO obtain from category?
+        return bannerBean;
     }
 }
