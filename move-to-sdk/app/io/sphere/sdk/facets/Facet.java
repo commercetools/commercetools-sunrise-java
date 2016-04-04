@@ -68,4 +68,11 @@ public interface Facet<T> {
      */
     Facet<T> withSearchResult(final PagedSearchResult<T> searchResult);
 
+    /**
+     * Gets a new instance of Facet with the same attributes as this, but with the given selected values.
+     * @param selectedValues the new selected values
+     * @return a new instance with same attributes, but with the given selected values
+     */
+    Facet<T> withSelectedValues(final List<String> selectedValues);
+
 }

@@ -82,7 +82,7 @@ public class SelectFacetBuilderTest {
 
     @Test
     public void mapsOptions() throws Exception {
-        final SortedFacetOptionMapper mapper = SortedFacetOptionMapper.of(asList("two", "three", "one"));
+        final CustomSortedFacetOptionMapper mapper = CustomSortedFacetOptionMapper.of(asList("two", "three", "one"));
         final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL)
                 .mapper(mapper)
                 .facetResult(FACET_RESULT_WITH_THREE_TERMS)

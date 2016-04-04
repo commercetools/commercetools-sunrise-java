@@ -26,12 +26,13 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     private final Optional<TermFacetResult> facetResult;
     private final Optional<Long> threshold;
     private final Optional<Long> limit;
-    private final FacetOptionMapper mapper;
+    private final Optional<FacetOptionMapper> mapper;
+    private final List<FacetOption> facetOptions;
 
     protected SelectFacetImpl(final String key, final String label, final boolean countHidden, final FacetType type,
                               final TermFacetedSearchSearchModel<T> searchModel, final boolean multiSelect, final boolean matchingAll,
                               final List<String> selectedValues, @Nullable final TermFacetResult facetResult,
-                              @Nullable final Long threshold, @Nullable final Long limit, final FacetOptionMapper mapper) {
+                              @Nullable final Long threshold, @Nullable final Long limit, @Nullable final FacetOptionMapper mapper) {
         super(key, label, countHidden, type, searchModel);
         if (threshold != null && limit != null && threshold > limit) {
             throw new InvalidSelectFacetConstraintsException(threshold, limit);
@@ -42,36 +43,24 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
         this.facetResult = Optional.ofNullable(facetResult);
         this.threshold = Optional.ofNullable(threshold);
         this.limit = Optional.ofNullable(limit);
-        this.mapper = mapper;
-    }
-
-    /**
-     * Generates the facet options according to the facet result and selected values provided.
-     * @return the generated facet options
-     */
-    protected List<FacetOption> getOptions() {
-        final List<FacetOption> facetOptions = facetResult
-                .map(result -> result.getTerms().stream()
-                        .map(termStats -> FacetOption.ofTermStats(termStats, selectedValues))
-                        .collect(toList()))
-                .orElseGet(Collections::emptyList);
-        return mapper.apply(facetOptions);
+        this.mapper = Optional.ofNullable(mapper);
+        this.facetOptions = initializeOptions(selectedValues, facetResult, mapper);
     }
 
     @Override
     public boolean isAvailable() {
-        return threshold.map(threshold -> getOptions().size() >= threshold).orElse(true);
+        return threshold.map(threshold -> facetOptions.size() >= threshold).orElse(true);
     }
 
     @Override
     public List<FacetOption> getAllOptions() {
-        return getOptions();
+        return facetOptions;
     }
 
     @Override
     public List<FacetOption> getLimitedOptions() {
-        return limit.map(limit -> getOptions().stream().limit(limit).collect(toList()))
-                .orElseGet(this::getOptions);
+        return limit.map(limit -> facetOptions.stream().limit(limit).collect(toList()))
+                .orElse(facetOptions);
     }
 
     @Override
@@ -105,7 +94,7 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     }
 
     @Override
-    public FacetOptionMapper getMapper() {
+    public Optional<FacetOptionMapper> getMapper() {
         return mapper;
     }
 
@@ -126,5 +115,24 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     public SelectFacet<T> withSearchResult(final PagedSearchResult<T> searchResult) {
         final TermFacetResult termFacetResult = searchResult.getFacetResult(searchModel.allTerms().facetExpression());
         return SelectFacetBuilder.of(this).facetResult(termFacetResult).build();
+    }
+
+    @Override
+    public SelectFacet<T> withSelectedValues(final List<String> selectedValues) {
+        return SelectFacetBuilder.of(this).selectedValues(selectedValues).build();
+    }
+
+    /**
+     * Generates the facet options according to the facet result and selected values provided.
+     * @return the generated facet options
+     */
+    private static List<FacetOption> initializeOptions(final List<String> selectedValues, @Nullable final TermFacetResult facetResult,
+                                                       @Nullable final FacetOptionMapper mapper) {
+        final List<FacetOption> facetOptions = Optional.ofNullable(facetResult)
+                .map(result -> result.getTerms().stream()
+                        .map(termStats -> FacetOption.ofTermStats(termStats, selectedValues))
+                        .collect(toList()))
+                .orElseGet(Collections::emptyList);
+        return Optional.ofNullable(mapper).map(m -> m.apply(facetOptions)).orElse(facetOptions);
     }
 }

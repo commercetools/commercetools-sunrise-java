@@ -3,7 +3,6 @@ package productcatalog.productoverview;
 import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.search.PagedSearchResult;
 
 import java.util.List;
 
@@ -15,9 +14,8 @@ public class FacetListData extends Base {
     public FacetListData() {
     }
 
-    public FacetListData(final PagedSearchResult<ProductProjection> searchResult, final List<Facet<ProductProjection>> facets) {
+    public FacetListData(final List<Facet<ProductProjection>> facets) {
         this.list = facets.stream()
-                .map(facet -> facet.withSearchResult(searchResult))
                 .map(FacetData::new)
                 .collect(toList());
     }

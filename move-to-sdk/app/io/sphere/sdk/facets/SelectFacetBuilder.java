@@ -22,7 +22,7 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
     private Optional<TermFacetResult> facetResult = Optional.empty();
     private Optional<Long> threshold = Optional.of(1L);
     private Optional<Long> limit = Optional.empty();
-    private FacetOptionMapper mapper = v -> v;
+    private Optional<FacetOptionMapper> mapper = Optional.empty();
 
     private SelectFacetBuilder(final String key, final String label, final TermFacetedSearchSearchModel<T> searchModel) {
         this.key = key;
@@ -33,11 +33,11 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
     @Override
     public SelectFacet<T> build() {
         return new SelectFacetImpl<>(getKey(), getLabel(), countHidden, getType(), searchModel, multiSelect, matchingAll,
-                selectedValues, facetResult.orElse(null), threshold.orElse(null), limit.orElse(null), mapper);
+                selectedValues, facetResult.orElse(null), threshold.orElse(null), limit.orElse(null), mapper.orElse(null));
     }
 
-    public SelectFacetBuilder<T> mapper(final FacetOptionMapper mapper) {
-        this.mapper = mapper;
+    public SelectFacetBuilder<T> mapper(@Nullable final FacetOptionMapper mapper) {
+        this.mapper = Optional.ofNullable(mapper);
         return this;
     }
 
@@ -121,7 +121,7 @@ public final class SelectFacetBuilder<T> extends Base implements Builder<SelectF
         return limit;
     }
 
-    public FacetOptionMapper getMapper() {
+    public Optional<FacetOptionMapper> getMapper() {
         return mapper;
     }
 

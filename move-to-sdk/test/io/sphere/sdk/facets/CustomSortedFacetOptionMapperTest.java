@@ -4,12 +4,12 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static io.sphere.sdk.facets.SortedFacetOptionMapper.comparePositions;
+import static io.sphere.sdk.facets.CustomSortedFacetOptionMapper.comparePositions;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SortedFacetOptionMapperTest {
+public class CustomSortedFacetOptionMapperTest {
     private static final FacetOption OPTION_A = FacetOption.of("A", 5, false);
     private static final FacetOption OPTION_B = FacetOption.of("B", 10, true);
     private static final FacetOption OPTION_C = FacetOption.of("C", 2, true);
@@ -18,21 +18,21 @@ public class SortedFacetOptionMapperTest {
 
     @Test
     public void sortsOptionsAsGivenList() throws Exception {
-        final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(asList("A", "B", "C"))
+        final List<FacetOption> sortedFacetOptions = CustomSortedFacetOptionMapper.of(asList("A", "B", "C"))
                 .apply(asList(OPTION_B, OPTION_A, OPTION_C));
         assertThat(sortedFacetOptions).containsExactly(OPTION_A, OPTION_B, OPTION_C);
     }
 
     @Test
     public void leavesUnknownOptionsAtTheEnd() throws Exception {
-        final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(asList("A", "B", "C"))
+        final List<FacetOption> sortedFacetOptions = CustomSortedFacetOptionMapper.of(asList("A", "B", "C"))
                 .apply(asList(OPTION_B, OPTION_D, OPTION_A, OPTION_C, OPTION_E));
         assertThat(sortedFacetOptions).containsExactly(OPTION_A, OPTION_B, OPTION_C, OPTION_D, OPTION_E);
     }
 
     @Test
     public void onEmptyListKeepsSameOrder() throws Exception {
-        final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(emptyList())
+        final List<FacetOption> sortedFacetOptions = CustomSortedFacetOptionMapper.of(emptyList())
                 .apply(asList(OPTION_B, OPTION_D, OPTION_A, OPTION_C, OPTION_E));
         assertThat(sortedFacetOptions).containsExactly(OPTION_B, OPTION_D, OPTION_A, OPTION_C, OPTION_E);
     }
@@ -40,7 +40,7 @@ public class SortedFacetOptionMapperTest {
     @Test
     public void givenUnsortedFacetOptionsAreNotSorted() throws Exception {
         final List<FacetOption> unsortedFacetOptions = asList(OPTION_B, OPTION_A, OPTION_C);
-        final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(asList("A", "B", "C"))
+        final List<FacetOption> sortedFacetOptions = CustomSortedFacetOptionMapper.of(asList("A", "B", "C"))
                 .apply(unsortedFacetOptions);
         assertThat(unsortedFacetOptions).containsExactly(OPTION_B, OPTION_A, OPTION_C);
         assertThat(sortedFacetOptions).containsExactly(OPTION_A, OPTION_B, OPTION_C);
@@ -48,7 +48,7 @@ public class SortedFacetOptionMapperTest {
 
     @Test
     public void worksWithEmptyFacetOptions() throws Exception {
-        final List<FacetOption> sortedFacetOptions = SortedFacetOptionMapper.of(asList("A", "B", "C"))
+        final List<FacetOption> sortedFacetOptions = CustomSortedFacetOptionMapper.of(asList("A", "B", "C"))
                 .apply(emptyList());
         assertThat(sortedFacetOptions).isEmpty();
     }

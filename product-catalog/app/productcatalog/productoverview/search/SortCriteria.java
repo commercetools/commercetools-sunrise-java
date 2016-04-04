@@ -48,7 +48,7 @@ public class SortCriteria {
         }
     }
 
-    private SelectableData optionToSelectableData(final SortOption<ProductProjection> option) {
+    private SelectableData optionToSelectableData(final SortOption option) {
         final String label = i18nResolver.get(userContext.locales(), I18nIdentifier.of(option.getLabel()))
                 .orElse(option.getLabel());
         final SelectableData sortOption = new SelectableData(label, option.getValue());

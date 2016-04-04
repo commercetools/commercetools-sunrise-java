@@ -2,15 +2,11 @@ package inject;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.search.SortExpression;
 import play.Configuration;
-import productcatalog.productoverview.search.DisplayConfig;
-import productcatalog.productoverview.search.SearchConfig;
-import productcatalog.productoverview.search.SortConfig;
-import productcatalog.productoverview.search.SortOption;
+import productcatalog.productoverview.search.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -30,6 +26,22 @@ class SearchConfigProvider implements Provider<SearchConfig> {
     private static final String SORT_OPTION_VALUE_ATTR = "value";
     private static final String SORT_OPTION_EXPR_ATTR = "expr";
 
+    private static final String CONFIG_FACETS = "pop.facets";
+    private static final String FACETS_KEY_ATTR = "key";
+    private static final String FACETS_LABEL_ATTR = "label";
+    private static final String FACETS_EXPR_ATTR = "expr";
+    private static final String FACETS_TYPE_ATTR = "type";
+    private static final String FACETS_COUNT_ATTR = "count";
+
+    private static final String FACETS_LIMIT_ATTR = "limit";
+    private static final String FACETS_MATCHING_ALL_ATTR = "matchingAll";
+    private static final String FACETS_MULTI_SELECT_ATTR = "multiSelect";
+    private static final String FACETS_THRESHOLD_ATTR = "threshold";
+
+    private static final String FACETS_MAPPER_ATTR = "mapper";
+    private static final String FACETS_MAPPER_TYPE_ATTR = "type";
+    private static final String FACETS_MAPPER_VALUES_ATTR = "values";
+
     private final Configuration configuration;
 
     @Inject
@@ -39,15 +51,14 @@ class SearchConfigProvider implements Provider<SearchConfig> {
 
     @Override
     public SearchConfig get() {
-        final List<String> sortedSizes = configuration.getStringList("pop.facet.size", emptyList());
-
         final String paginationKey = configuration.getString("pop.pagination.key", "page");
         final String searchProductsKey = configuration.getString("pop.searchTerm.key", "q");
 
         final DisplayConfig displayConfig = getDisplayConfig(configuration);
         final SortConfig sortConfig = getSortConfig(configuration);
+        final FacetsConfig facetsConfig = getFacetsConfig(configuration);
         //Logger.debug("Provide SearchConfig: sort {}", sortConfig);
-        return new SearchConfig(paginationKey, searchProductsKey, sortConfig, displayConfig, sortedSizes);
+        return new SearchConfig(paginationKey, searchProductsKey, displayConfig, sortConfig, facetsConfig);
     }
 
     private static DisplayConfig getDisplayConfig(final Configuration configuration) {
@@ -64,27 +75,61 @@ class SearchConfigProvider implements Provider<SearchConfig> {
     private static SortConfig getSortConfig(final Configuration configuration) {
         final String key = configuration.getString(CONFIG_SORT_KEY, "display");
         final List<String> defaultValue = configuration.getStringList(CONFIG_SORT_DEFAULT, emptyList());
-        final List<SortOption<ProductProjection>> options = configuration.getConfigList(CONFIG_SORT_OPTIONS, emptyList()).stream()
+        final List<SortOption> options = configuration.getConfigList(CONFIG_SORT_OPTIONS, emptyList()).stream()
                 .map(SearchConfigProvider::initializeSortOption)
                 .collect(toList());
         return new SortConfig(key, options, defaultValue);
     }
 
-    private static SortOption<ProductProjection> initializeSortOption(final Configuration optionConfig) {
+    private static SortOption initializeSortOption(final Configuration optionConfig) {
         final String label = optionConfig.getString(SORT_OPTION_LABEL_ATTR, "");
         final String value = optionConfig.getString(SORT_OPTION_VALUE_ATTR, "");
-        final List<SortExpression<ProductProjection>> exprList = optionConfig.getStringList(SORT_OPTION_EXPR_ATTR, emptyList()).stream()
-                .map(SearchConfigProvider::getProductSortExpression)
-                .collect(toList());
-        if (!exprList.isEmpty()) {
-            return new SortOption<>(label, value, exprList);
+        final List<String> expressions = optionConfig.getStringList(SORT_OPTION_EXPR_ATTR, emptyList());
+        if (!expressions.isEmpty()) {
+            return SortOption.of(value, label, expressions);
         } else {
             throw new SunriseInitializationException("Missing sort expression: " + optionConfig);
         }
     }
 
-    private static SortExpression<ProductProjection> getProductSortExpression(final String expr) {
-        return SortExpression.of(expr);
+    private static FacetsConfig getFacetsConfig(final Configuration configuration) {
+        final List<FacetConfig> facetConfigs = configuration.getConfigList(CONFIG_FACETS, emptyList()).stream()
+                .map(SearchConfigProvider::getFacetConfig)
+                .collect(toList());
+        return new FacetsConfig(facetConfigs);
+    }
+
+    private static FacetConfig getFacetConfig(final Configuration facetConfig) {
+        final SunriseFacetType type = getFacetType(facetConfig);
+        final String key = facetConfig.getString(FACETS_KEY_ATTR, "");
+        final String label = facetConfig.getString(FACETS_LABEL_ATTR, "");
+        final String expr = Optional.ofNullable(facetConfig.getString(FACETS_EXPR_ATTR))
+                .orElseThrow(() -> new SunriseInitializationException("Missing facet expression: " + facetConfig));
+        final boolean count = facetConfig.getBoolean(FACETS_COUNT_ATTR, true);
+        final boolean matchingAll = facetConfig.getBoolean(FACETS_MATCHING_ALL_ATTR, false);
+        final boolean multiSelect = facetConfig.getBoolean(FACETS_MULTI_SELECT_ATTR, true);
+        final Long limit = facetConfig.getLong(FACETS_LIMIT_ATTR);
+        final Long threshold = facetConfig.getLong(FACETS_THRESHOLD_ATTR);
+        final FacetMapperConfig mapperConfig = getFacetMapperConfig(facetConfig).orElse(null);
+        return new FacetConfig(type, key, label, expr, count, matchingAll, multiSelect, limit, threshold, mapperConfig);
+    }
+
+    private static SunriseFacetType getFacetType(final Configuration facetConfig) {
+        final String type = facetConfig.getString(FACETS_TYPE_ATTR, "");
+        try {
+            return SunriseFacetType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new SunriseInitializationException("Not recognized facet type: " + type);
+        }
+    }
+
+    private static Optional<FacetMapperConfig> getFacetMapperConfig(final Configuration facetConfig) {
+        return Optional.ofNullable(facetConfig.getConfig(FACETS_MAPPER_ATTR))
+                .map(config -> {
+                    final String type = config.getString(FACETS_MAPPER_TYPE_ATTR, "");
+                    final List<String> values = config.getStringList(FACETS_MAPPER_VALUES_ATTR, emptyList());
+                    return new FacetMapperConfig(type, values);
+                });
     }
 
     private static boolean isValidDisplayValue(final int value) {

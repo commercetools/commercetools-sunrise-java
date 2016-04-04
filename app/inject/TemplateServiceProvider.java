@@ -53,12 +53,13 @@ class TemplateServiceProvider implements Provider<TemplateService> {
     private static TemplateLoader initializeTemplateLoader(final Configuration loaderConfig) {
         final String type = loaderConfig.getString(TYPE_ATTR);
         final String path = loaderConfig.getString(PATH_ATTR);
-        if (CLASSPATH_TYPE.equals(type)) {
-            return new ClassPathTemplateLoader(path);
-        } else if (FILE_TYPE.equals(type)) {
-            return new FileTemplateLoader(path);
-        } else {
-            throw new SunriseInitializationException("Not recognized template loader: " + type);
+        switch (type) {
+            case CLASSPATH_TYPE:
+                return new ClassPathTemplateLoader(path);
+            case FILE_TYPE:
+                return new FileTemplateLoader(path);
+            default:
+                throw new SunriseInitializationException("Not recognized template loader: " + type);
         }
     }
 }

@@ -39,11 +39,11 @@ public class ProductServiceImpl implements ProductService {
         final int pageSize = searchCriteria.getDisplayCriteria().getSelectedPageSize();
         final int offset = (page - 1) * pageSize;
         final ProductProjectionSearch baseRequest = ProductProjectionSearch.ofCurrent()
-                .withFacetedSearch(searchCriteria.selectedFacets())
+                .withFacetedSearch(searchCriteria.getFacetsCriteria().getFacetedSearchExpressions())
                 .withSort(searchCriteria.getSortCriteria().getSelectedSortExpressions())
                 .withOffset(offset)
                 .withLimit(pageSize);
-        final ProductProjectionSearch request = searchCriteria.searchTerm()
+        final ProductProjectionSearch request = searchCriteria.getSearchTerm()
                 .map(baseRequest::withText)
                 .orElse(baseRequest);
         return sphere.execute(request)
@@ -113,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
                                 .map(pair -> pair.getName() + "=" + pair.getValue())
                                 .collect(Collectors.joining("&"));
                     } else {
-                        bodyAsString = "**removed output**";
+                        bodyAsString = "**omitted output**";
                     }
                     return bodyAsString;
                 });

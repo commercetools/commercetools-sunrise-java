@@ -5,7 +5,6 @@ import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 import play.libs.concurrent.HttpExecution;
@@ -19,14 +18,9 @@ import productcatalog.services.ProductService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductOverviewPageController extends ProductCatalogController {
@@ -45,9 +39,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final UserContext userContext = userContext(languageTag);
         final Optional<Category> categoryOpt = categoryTree().findBySlug(userContext.locale(), categorySlug);
         if (categoryOpt.isPresent()) {
-            final CategoryTree categoriesInFacet = getCategoriesInFacet(categoryOpt.get());
-            final List<String> selectedCategoryIds = getSelectedCategoryIds(categoryOpt.get());
-            final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext, categoriesInFacet, selectedCategoryIds, categoryOpt.get());
+            final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext, categoryTree(), categoryOpt.get());
             return productService().searchProducts(page, searchCriteria).thenApplyAsync(searchResult ->
                     renderCategoryPage(categoryOpt.get(), page, searchCriteria, searchResult, userContext), HttpExecution.defaultContext());
         } else {
@@ -57,8 +49,8 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     public CompletionStage<Result> search(final String languageTag, final int page) {
         final UserContext userContext = userContext(languageTag);
-        final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext, categoryTree());
-        if (searchCriteria.searchTerm().isPresent()) {
+        final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext);
+        if (searchCriteria.getSearchTerm().isPresent()) {
             final CompletionStage<PagedSearchResult<ProductProjection>> searchResultStage = productService().searchProducts(page, searchCriteria);
             return searchResultStage.thenApplyAsync(searchResult ->
                     renderSearchPage(page, userContext, searchCriteria, searchResult), HttpExecution.defaultContext());
@@ -76,7 +68,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
         content.setPagination(new PaginationData(requestContext(request()), searchResult, page, searchCriteria.getDisplayCriteria().getSelectedPageSize(), paginationDisplayedPages));
         content.setSortSelector(searchCriteria.getSortCriteria().boundSortSelector());
         content.setDisplaySelector(searchCriteria.getDisplayCriteria().boundDisplaySelector());
-        content.setFacets(new FacetListData(searchResult, searchCriteria.boundFacets()));
+        content.setFacets(new FacetListData(searchCriteria.getFacetsCriteria().boundFacets(searchResult)));
         return content;
     }
 
@@ -93,7 +85,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     private Result renderSearchPage(final int page, final UserContext userContext, final SearchCriteria searchCriteria,
                                     final PagedSearchResult<ProductProjection> searchResult) {
-        final String searchTerm = searchCriteria.searchTerm().get().getValue();
+        final String searchTerm = searchCriteria.getSearchTerm().get().getValue();
         final ProductOverviewPageContent pageContent = createPageContent(page, searchCriteria, searchResult, userContext);
         pageContent.setAdditionalTitle(searchTerm);
         pageContent.setBreadcrumb(new BreadcrumbData(searchTerm));
@@ -111,27 +103,5 @@ public class ProductOverviewPageController extends ProductCatalogController {
         bannerData.setImageMobile("/assets/img/banner_mobile-0a9241da249091a023ecfadde951a53b.jpg"); // TODO obtain from category?
         bannerData.setImageDesktop("/assets/img/banner_desktop-9ffd148c48068ce2666d6533b4a87d11.jpg"); // TODO obtain from category?
         return bannerData;
-    }
-
-    private List<String> getSelectedCategoryIds(final Category category) {
-        return categoryTree().getSubtree(singletonList(category)).getAllAsFlatList().stream()
-                .map(Category::getId)
-                .collect(toList());
-    }
-
-    private CategoryTree getCategoriesInFacet(final Category category) {
-        final List<Category> ancestors = category.getAncestors().stream()
-                .map(c -> categoryTree().findById(c.getId()))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(toList());
-        final List<Category> siblings = categoryTree().findSiblings(singletonList(category));
-        final List<Category> children = categoryTree().findChildren(category);
-        final List<Category> relatives = new ArrayList<>();
-        relatives.add(category);
-        relatives.addAll(ancestors);
-        relatives.addAll(siblings);
-        relatives.addAll(children);
-        return CategoryTree.of(relatives);
     }
 }
