@@ -6,7 +6,6 @@ import common.i18n.I18nResolver;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
-import io.sphere.sdk.models.Identifiable;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.FacetedSearchExpression;
 import io.sphere.sdk.search.PagedSearchResult;
@@ -19,6 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 public class FacetCriteria {
@@ -111,16 +111,20 @@ public class FacetCriteria {
     }
 
     private static CategoryTree getCategoriesInFacet(final List<Category> selectedCategories, final CategoryTree categoryTree) {
-        final List<Identifiable<Category>> categories = selectedCategories.stream()
+        final List<Category> categoriesInFacet = selectedCategories.stream()
                 .flatMap(category -> {
-                    final List<Identifiable<Category>> relatives = new ArrayList<>();
-                    relatives.add(categoryTree.getRootAncestor(category));
-                    //relatives.addAll(categoryTree.findSiblings(singletonList(category)));
-                    //relatives.addAll(categoryTree.findChildren(category));
-                    return relatives.stream();
+                    final List<Category> categories = new ArrayList<>();
+                    categories.add(category);
+                    categories.addAll(category.getAncestors().stream()
+                            .map(c -> categoryTree.findById(c.getId()).orElse(null))
+                            .filter(c -> c != null)
+                            .collect(toList()));
+                    categories.addAll(categoryTree.findSiblings(singletonList(category)));
+                    categories.addAll(categoryTree.findChildren(category));
+                    return categories.stream();
                 })
                 .collect(toList());
 
-        return categoryTree.getSubtree(categories);
+        return CategoryTree.of(categoriesInFacet);
     }
 }
