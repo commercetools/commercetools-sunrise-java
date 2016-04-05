@@ -37,9 +37,9 @@ public class FacetsCriteria {
     public static FacetsCriteria of(final FacetsConfig facetsConfig, final Map<String, List<String>> queryString,
                                     final UserContext userContext, final I18nResolver i18nResolver,
                                     final List<Category> selectedCategories, final CategoryTree subcategoryTreeFacet) {
-        final List<FacetCriteria> facetCriterias = facetsConfig.getFacetConfigs().stream()
+        final List<FacetCriteria> facetCriteriaList = facetsConfig.getFacetConfigs().stream()
                 .map(facetConfig -> FacetCriteria.of(facetConfig, queryString, userContext, i18nResolver, selectedCategories, subcategoryTreeFacet))
                 .collect(toList());
-        return new FacetsCriteria(facetCriterias);
+        return new FacetsCriteria(facetCriteriaList);
     }
 }

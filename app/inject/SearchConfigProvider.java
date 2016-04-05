@@ -111,7 +111,7 @@ class SearchConfigProvider implements Provider<SearchConfig> {
         final boolean matchingAll = facetConfig.getBoolean(FACETS_MATCHING_ALL_ATTR, false);
         final boolean multiSelect = facetConfig.getBoolean(FACETS_MULTI_SELECT_ATTR, true);
         final Long limit = facetConfig.getLong(FACETS_LIMIT_ATTR);
-        final Long threshold = facetConfig.getLong(FACETS_THRESHOLD_ATTR);
+        final Long threshold = facetConfig.getLong(FACETS_THRESHOLD_ATTR, 1L);
         final FacetMapperConfig mapperConfig = getFacetMapperConfig(facetConfig).orElse(null);
         return FacetConfig.of(type, key, label, expr, count, matchingAll, multiSelect, limit, threshold, mapperConfig);
     }
