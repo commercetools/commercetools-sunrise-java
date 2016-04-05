@@ -24,6 +24,8 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+import static java.util.Collections.singletonList;
+
 @Singleton
 public class ProductOverviewPageController extends ProductCatalogController {
     private final int paginationDisplayedPages;
@@ -41,7 +43,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final UserContext userContext = userContext(languageTag);
         final Optional<Category> categoryOpt = categoryTree().findBySlug(userContext.locale(), categorySlug);
         if (categoryOpt.isPresent()) {
-            final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext, categoryTree(), categoryOpt.get());
+            final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext, categoryTree(), singletonList(categoryOpt.get()));
             return productService().searchProducts(page, searchCriteria).thenApplyAsync(searchResult ->
                     renderCategoryPage(categoryOpt.get(), page, searchCriteria, searchResult, userContext), HttpExecution.defaultContext());
         } else {

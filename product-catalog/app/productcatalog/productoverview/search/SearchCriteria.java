@@ -10,7 +10,6 @@ import io.sphere.sdk.products.search.ProductProjectionSearchModel;
 import play.mvc.Http;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -59,10 +58,9 @@ public class SearchCriteria {
 
     public static SearchCriteria of(final int page, final SearchConfig searchConfig, final Http.Request request,
                                     final I18nResolver i18nResolver, final UserContext userContext,
-                                    final CategoryTree subcategoryTreeFacet, @Nullable final Category selectedCategory) {
+                                    final CategoryTree subcategoryTreeFacet, final List<Category> selectedCategories) {
         final Map<String, List<String>> queryString = getQueryString(request);
         final LocalizedStringEntry searchTerm = getSearchTerm(searchConfig, queryString, userContext).orElse(null);
-        final List<Category> selectedCategories = Optional.ofNullable(selectedCategory).map(Collections::singletonList).orElseGet(Collections::emptyList);
         final DisplayCriteria displayCriteria = DisplayCriteria.of(searchConfig.getDisplayConfig(), queryString, userContext, i18nResolver);
         final SortCriteria sortCriteria = SortCriteria.of(searchConfig.getSortConfig(), queryString, userContext, i18nResolver);
         final FacetsCriteria facetsCriteria = FacetsCriteria.of(searchConfig.getFacetsConfig(), queryString, userContext, i18nResolver, selectedCategories, subcategoryTreeFacet);
@@ -71,7 +69,7 @@ public class SearchCriteria {
 
     public static SearchCriteria of(final int page, final SearchConfig searchConfig, final Http.Request request,
                                     final I18nResolver i18nResolver, final UserContext userContext) {
-        return of(page, searchConfig, request, i18nResolver, userContext, CategoryTree.of(emptyList()), null);
+        return of(page, searchConfig, request, i18nResolver, userContext, CategoryTree.of(emptyList()), emptyList());
     }
 
     public static Optional<LocalizedStringEntry> getSearchTerm(final SearchConfig searchConfig, final Map<String, List<String>> queryString,

@@ -62,7 +62,7 @@ public class FacetCriteria {
         final String label = i18nResolver.get(userContext.locales(), I18nIdentifier.of(facetConfig.getLabel()))
                 .orElse(facetConfig.getLabel());
         final FacetOptionMapper mapper = initializeMapper(facetConfig, selectedCategories, userContext, categoryTree).orElse(null);
-        final List<String> selectedValues = getSelectedValues(facetConfig, mapper, queryString, selectedCategories);
+        final List<String> selectedValues = getSelectedValues(facetConfig, mapper, queryString, selectedCategories, categoryTree);
         return SelectFacetBuilder.of(facetConfig.getKey(), label, getSearchModel(facetConfig, userContext))
                 .type(facetConfig.getType())
                 .countHidden(!facetConfig.isCountShown())
@@ -76,10 +76,13 @@ public class FacetCriteria {
     }
 
     private static List<String> getSelectedValues(final FacetConfig facetConfig, final @Nullable FacetOptionMapper mapper,
-                                                  final Map<String, List<String>> queryString, final List<Category> selectedCategories) {
+                                                  final Map<String, List<String>> queryString,
+                                                  final List<Category> selectedCategories, final CategoryTree categoryTree) {
         if (mapper instanceof HierarchicalCategoryFacetOptionMapper) {
             return selectedCategories.stream()
+                    .flatMap(category -> categoryTree.getSubtree(singletonList(category)).getAllAsFlatList().stream())
                     .map(Category::getId)
+                    .distinct()
                     .collect(toList());
         } else {
             return queryString.getOrDefault(facetConfig.getKey(), emptyList());
@@ -110,6 +113,16 @@ public class FacetCriteria {
                 });
     }
 
+    /**
+     * Forms the category tree displayed in the category facet. That is, the tree containing:
+     * - the category itself
+     * - the ancestors tree
+     * - the direct children categories
+     * - the sibling categories
+     * @param selectedCategories list of the selected categories
+     * @param categoryTree the original category tree
+     * @return the new category tree containing only those categories displayed in the category facet
+     */
     private static CategoryTree getCategoriesInFacet(final List<Category> selectedCategories, final CategoryTree categoryTree) {
         final List<Category> categoriesInFacet = selectedCategories.stream()
                 .flatMap(category -> {
@@ -119,12 +132,12 @@ public class FacetCriteria {
                             .map(c -> categoryTree.findById(c.getId()).orElse(null))
                             .filter(c -> c != null)
                             .collect(toList()));
-                    categories.addAll(categoryTree.findSiblings(singletonList(category)));
                     categories.addAll(categoryTree.findChildren(category));
+                    categories.addAll(categoryTree.findSiblings(singletonList(category)));
                     return categories.stream();
                 })
+                .distinct()
                 .collect(toList());
-
         return CategoryTree.of(categoriesInFacet);
     }
 }
