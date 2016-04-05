@@ -8,6 +8,7 @@ import common.models.SelectableData;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -32,23 +33,31 @@ public class DisplayCriteria {
         final List<SelectableData> displaySelectableData = displayConfig.getOptions().stream()
                 .map(this::optionToSelectableData)
                 .collect(toList());
+        optionAllToSelectableData().ifPresent(displaySelectableData::add);
         return new DisplaySelectorBean(displayConfig.getKey(), displaySelectableData);
     }
 
     public int getSelectedPageSize() {
-        return selectedValue == 0 ? ALL_PRODUCTS_PAGE_SIZE : selectedValue;
+        return selectedValue;
+    }
+
+    private Optional<SelectableData> optionAllToSelectableData() {
+        if (displayConfig.isEnableAll()) {
+            final String label = i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("catalog:displaySelector.all"));
+            final SelectableData selectableData = optionToSelectableData(label, ALL_PRODUCTS_PAGE_SIZE);
+            return Optional.of(selectableData);
+        } else {
+            return Optional.empty();
+        }
     }
 
     private SelectableData optionToSelectableData(final int option) {
-        final String label;
-        final String value = String.valueOf(option);
-        if (option == 0) {
-            label = i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("catalog:displaySelector.all"));
-        } else {
-            label = value;
-        }
-        final SelectableData displayOption = new SelectableData(label, value);
-        if (selectedValue == option) {
+        return optionToSelectableData(String.valueOf(option), option);
+    }
+
+    private SelectableData optionToSelectableData(final String label, final int value) {
+        final SelectableData displayOption = new SelectableData(label, String.valueOf(value));
+        if (selectedValue == value) {
             displayOption.setSelected(true);
         }
         return displayOption;
@@ -78,6 +87,12 @@ public class DisplayCriteria {
     }
 
     private static boolean isEnabledDisplayValue(final DisplayConfig displayConfig, @Nullable final Integer displayValue) {
-        return displayValue != null && displayConfig.getOptions().contains(displayValue);
+        if (displayValue != null) {
+            final boolean valueIsValid = displayConfig.getOptions().contains(displayValue);
+            final boolean isAllProducts = displayConfig.isEnableAll() && displayValue == ALL_PRODUCTS_PAGE_SIZE;
+            return valueIsValid || isAllProducts;
+        } else {
+            return false;
+        }
     }
 }

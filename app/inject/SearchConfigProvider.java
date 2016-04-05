@@ -18,6 +18,7 @@ class SearchConfigProvider implements Provider<SearchConfig> {
     private static final String CONFIG_DISPLAY_KEY = "pop.productsPerPage.key";
     private static final String CONFIG_DISPLAY_OPTIONS = "pop.productsPerPage.options";
     private static final String CONFIG_DISPLAY_DEFAULT = "pop.productsPerPage.default";
+    private static final String CONFIG_DISPLAY_ENABLE_ALL = "pop.productsPerPage.enableAll";
 
     private static final String CONFIG_SORT_KEY = "pop.sortProducts.key";
     private static final String CONFIG_SORT_OPTIONS = "pop.sortProducts.options";
@@ -64,12 +65,13 @@ class SearchConfigProvider implements Provider<SearchConfig> {
     private static DisplayConfig getDisplayConfig(final Configuration configuration) {
         final String key = configuration.getString(CONFIG_DISPLAY_KEY, "display");
         final int defaultValue = configuration.getInt(CONFIG_DISPLAY_DEFAULT, 24);
-        final List<Integer> options = configuration.getIntList(CONFIG_DISPLAY_OPTIONS, asList(24, 48, 0));
+        final List<Integer> options = configuration.getIntList(CONFIG_DISPLAY_OPTIONS, asList(24, 48));
         if (!options.stream().allMatch(SearchConfigProvider::isValidDisplayValue)) {
             throw new SunriseInitializationException(String.format("Products per page options are not within bounds [0, %d]: %s",
                     MAX_PAGE_SIZE, options));
         }
-        return DisplayConfig.of(key, options, defaultValue);
+        final boolean enableAll = configuration.getBoolean(CONFIG_DISPLAY_ENABLE_ALL, false);
+        return DisplayConfig.of(key, options, defaultValue, enableAll);
     }
 
     private static SortConfig getSortConfig(final Configuration configuration) {

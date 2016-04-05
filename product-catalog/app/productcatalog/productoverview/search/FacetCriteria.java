@@ -30,9 +30,7 @@ public class FacetCriteria {
     }
 
     public Facet<ProductProjection> boundFacet(final PagedSearchResult<ProductProjection> searchResult) {
-        final Facet<ProductProjection> facet = this.facet.withSearchResult(searchResult);
-        System.out.println(facet.getType());
-        return facet;
+        return this.facet.withSearchResult(searchResult);
     }
 
     public FacetedSearchExpression<ProductProjection> getFacetedSearchExpression() {

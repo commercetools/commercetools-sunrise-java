@@ -9,11 +9,13 @@ public class DisplayConfig extends Base {
     private final String key;
     private final List<Integer> options;
     private final int defaultValue;
+    private final boolean enableAll;
 
-    private DisplayConfig(final String key, final List<Integer> options, final int defaultValue) {
+    private DisplayConfig(final String key, final List<Integer> options, final int defaultValue, final boolean enableAll) {
         this.key = key;
         this.options = options;
         this.defaultValue = defaultValue;
+        this.enableAll = enableAll;
     }
 
     public String getKey() {
@@ -28,7 +30,11 @@ public class DisplayConfig extends Base {
         return defaultValue;
     }
 
-    public static DisplayConfig of(final String key, final List<Integer> options, final int defaultValue) {
-        return new DisplayConfig(key, options, defaultValue);
+    public boolean isEnableAll() {
+        return enableAll;
+    }
+
+    public static DisplayConfig of(final String key, final List<Integer> options, final int defaultValue, final boolean enableAll) {
+        return new DisplayConfig(key, options, defaultValue, enableAll);
     }
 }
