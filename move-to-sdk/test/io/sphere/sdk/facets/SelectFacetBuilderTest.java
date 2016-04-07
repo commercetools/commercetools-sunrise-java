@@ -35,7 +35,8 @@ public class SelectFacetBuilderTest {
 
     @Test
     public void createsInstance() throws Exception {
-        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL)
+        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, SEARCH_MODEL)
+                .label(LABEL)
                 .mapper(IDENTITY_MAPPER)
                 .type(SORTED_SELECT)
                 .facetResult(FACET_RESULT_WITH_THREE_TERMS)
@@ -46,9 +47,9 @@ public class SelectFacetBuilderTest {
                 .limit(10L)
                 .build();
         assertThat(facet.getKey()).isEqualTo(KEY);
-        assertThat(facet.getLabel()).isEqualTo(LABEL);
         assertThat(facet.getType()).isEqualTo(SORTED_SELECT);
-        assertThat(facet.getMapper()).isEqualTo(IDENTITY_MAPPER);
+        assertThat(facet.getLabel()).contains(LABEL);
+        assertThat(facet.getMapper()).contains(IDENTITY_MAPPER);
         assertThat(facet.getSearchModel()).isEqualTo(SEARCH_MODEL);
         assertThat(facet.getFacetResult()).contains(FACET_RESULT_WITH_THREE_TERMS);
         assertThat(facet.getSelectedValues()).containsExactlyElementsOf(SELECTED_VALUE_TWO);
@@ -63,12 +64,12 @@ public class SelectFacetBuilderTest {
 
     @Test
     public void createsInstanceWithOptionalValues() throws Exception {
-        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL).build();
+        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, SEARCH_MODEL).build();
         assertThat(facet.getKey()).isEqualTo(KEY);
-        assertThat(facet.getLabel()).isEqualTo(LABEL);
         assertThat(facet.getType()).isEqualTo(SELECT);
+        assertThat(facet.getLabel()).isEmpty();
         assertThat(facet.getSearchModel()).isEqualTo(SEARCH_MODEL);
-        assertThat(facet.getMapper()).isNotNull();
+        assertThat(facet.getMapper()).isEmpty();
         assertThat(facet.getFacetResult()).isEmpty();
         assertThat(facet.getSelectedValues()).isEmpty();
         assertThat(facet.isMatchingAll()).isFalse();
@@ -83,19 +84,19 @@ public class SelectFacetBuilderTest {
     @Test
     public void mapsOptions() throws Exception {
         final CustomSortedFacetOptionMapper mapper = CustomSortedFacetOptionMapper.of(asList("two", "three", "one"));
-        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL)
+        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, SEARCH_MODEL)
                 .mapper(mapper)
                 .facetResult(FACET_RESULT_WITH_THREE_TERMS)
                 .selectedValues(SELECTED_VALUE_TWO)
                 .build();
-        assertThat(facet.getMapper()).isEqualTo(mapper);
+        assertThat(facet.getMapper()).contains(mapper);
         assertThat(facet.getAllOptions()).containsExactly(OPTIONS.get(1), OPTIONS.get(2), OPTIONS.get(0));
         assertThat(facet.getLimitedOptions()).containsExactly(OPTIONS.get(1), OPTIONS.get(2), OPTIONS.get(0));
     }
 
     @Test
     public void createsInstanceWithDifferentFacetResult() throws Exception {
-        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, LABEL, SEARCH_MODEL).build();
+        final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, SEARCH_MODEL).build();
         assertThat(facet.getFacetResult()).isEmpty();
         assertThat(facet.withSearchResult(searchResult()).getFacetResult()).contains(FACET_RESULT_WITH_THREE_TERMS);
     }

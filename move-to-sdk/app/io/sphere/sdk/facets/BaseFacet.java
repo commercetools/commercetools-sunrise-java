@@ -3,18 +3,22 @@ package io.sphere.sdk.facets;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 
+import javax.annotation.Nullable;
+import java.util.Optional;
+
 abstract class BaseFacet<T> extends Base implements Facet<T> {
     private final String key;
-    private final String label;
-    private final boolean countHidden;
     private final FacetType type;
+    private final Optional<String> label;
+    private final boolean countHidden;
     protected final TermFacetedSearchSearchModel<T> searchModel;
 
-    public BaseFacet(final String key, final String label, final boolean countHidden, final FacetType type, final TermFacetedSearchSearchModel<T> searchModel) {
+    protected BaseFacet(final String key, final FacetType type, final boolean countHidden, @Nullable final String label,
+                        final TermFacetedSearchSearchModel<T> searchModel) {
         this.key = key;
-        this.label = label;
-        this.countHidden = countHidden;
         this.type = type;
+        this.label = Optional.ofNullable(label);
+        this.countHidden = countHidden;
         this.searchModel = searchModel;
     }
 
@@ -24,18 +28,18 @@ abstract class BaseFacet<T> extends Base implements Facet<T> {
     }
 
     @Override
-    public String getLabel() {
+    public FacetType getType() {
+        return type;
+    }
+
+    @Override
+    public Optional<String> getLabel() {
         return label;
     }
 
     @Override
     public boolean isCountHidden() {
         return countHidden;
-    }
-
-    @Override
-    public FacetType getType() {
-        return type;
     }
 
     @Override

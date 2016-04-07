@@ -33,7 +33,7 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
                               final TermFacetedSearchSearchModel<T> searchModel, final boolean multiSelect, final boolean matchingAll,
                               final List<String> selectedValues, @Nullable final TermFacetResult facetResult,
                               @Nullable final Long threshold, @Nullable final Long limit, @Nullable final FacetOptionMapper mapper) {
-        super(key, label, countHidden, type, searchModel);
+        super(key, type, countHidden, label, searchModel);
         if (threshold != null && limit != null && threshold > limit) {
             throw new InvalidSelectFacetConstraintsException(threshold, limit);
         }
@@ -118,8 +118,8 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     }
 
     @Override
-    public SelectFacet<T> withSelectedValues(final List<String> selectedValues) {
-        return SelectFacetBuilder.of(this).selectedValues(selectedValues).build();
+    public SelectFacet<T> withLabel(final String label) {
+        return SelectFacetBuilder.of(this).label(label).build();
     }
 
     /**

@@ -111,6 +111,6 @@ public class SelectFacetTest {
     }
 
     private SelectFacetBuilder<ProductProjection> selectFacet() {
-        return SelectFacetBuilder.of("foo", "bar", SEARCH_MODEL);
+        return SelectFacetBuilder.of("foo", SEARCH_MODEL);
     }
 }

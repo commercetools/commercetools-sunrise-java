@@ -5,6 +5,7 @@ import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface that represents a facet, as used in a faceted search.
@@ -19,16 +20,16 @@ public interface Facet<T> {
     String getKey();
 
     /**
-     * Gets the label displayed in the facet.
-     * @return the label displayed in this facet
-     */
-    String getLabel();
-
-    /**
      * Gets the type of this facet.
      * @return the type of this facet
      */
     FacetType getType();
+
+    /**
+     * Gets the label displayed in the facet.
+     * @return the label displayed in this facet, or absent if none defined
+     */
+    Optional<String> getLabel();
 
     /**
      * Whether the facet can be displayed or not.
@@ -69,10 +70,10 @@ public interface Facet<T> {
     Facet<T> withSearchResult(final PagedSearchResult<T> searchResult);
 
     /**
-     * Gets a new instance of Facet with the same attributes as this, but with the given selected values.
-     * @param selectedValues the new selected values
-     * @return a new instance with same attributes, but with the given selected values
+     * Gets a new instance of Facet with the same attributes as this, but with the given label.
+     * @param label the new label
+     * @return a new instance with same attributes, but with the given label
      */
-    Facet<T> withSelectedValues(final List<String> selectedValues);
+    Facet<T> withLabel(final String label);
 
 }

@@ -63,5 +63,4 @@ public interface SelectFacet<T> extends Facet<T> {
 
     SelectFacet<T> withSearchResult(final PagedSearchResult<T> searchResult);
 
-    SelectFacet<T> withSelectedValues(final List<String> selectedValues);
 }
