@@ -101,7 +101,7 @@ public class SelectFacetBuilderTest {
         assertThat(facet.withSearchResult(searchResult()).getFacetResult()).contains(FACET_RESULT_WITH_THREE_TERMS);
     }
 
-    private PagedSearchResult<ProductProjection> searchResult() {
+    private static PagedSearchResult<ProductProjection> searchResult() {
         return readObjectFromResource("pagedSearchResult.json", ProductProjectionSearch.resultTypeReference());
     }
 }

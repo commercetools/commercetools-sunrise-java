@@ -104,15 +104,15 @@ class SearchConfigProvider implements Provider<SearchConfig> {
         final SunriseFacetType type = getFacetType(facetConfig);
         final String key = facetConfig.getString(FACETS_KEY_ATTR, "");
         final String label = facetConfig.getString(FACETS_LABEL_ATTR, "");
-        final String expr = Optional.ofNullable(facetConfig.getString(FACETS_EXPR_ATTR))
-                .orElseThrow(() -> new SunriseInitializationException("Missing facet expression: " + facetConfig));
-        final boolean count = facetConfig.getBoolean(FACETS_COUNT_ATTR, true);
+        final String attrPath = Optional.ofNullable(facetConfig.getString(FACETS_EXPR_ATTR))
+                .orElseThrow(() -> new SunriseInitializationException("Missing facet attribute path expression: " + facetConfig));
+        final boolean countHidden = !facetConfig.getBoolean(FACETS_COUNT_ATTR, true);
         final boolean matchingAll = facetConfig.getBoolean(FACETS_MATCHING_ALL_ATTR, false);
         final boolean multiSelect = facetConfig.getBoolean(FACETS_MULTI_SELECT_ATTR, true);
         final Long limit = facetConfig.getLong(FACETS_LIMIT_ATTR);
         final Long threshold = facetConfig.getLong(FACETS_THRESHOLD_ATTR, 1L);
         final FacetMapperConfig mapperConfig = getFacetMapperConfig(facetConfig).orElse(null);
-        return FacetConfig.of(type, key, label, expr, count, matchingAll, multiSelect, limit, threshold, mapperConfig);
+        return FacetConfig.of(type, key, label, attrPath, countHidden, matchingAll, multiSelect, limit, threshold, mapperConfig);
     }
 
     private static SunriseFacetType getFacetType(final Configuration facetConfig) {

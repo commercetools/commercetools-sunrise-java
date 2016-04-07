@@ -64,7 +64,7 @@ public class FacetCriteria {
         return SelectFacetBuilder.of(facetConfig.getKey(), getSearchModel(facetConfig, locales))
                 .type(facetConfig.getType())
                 .label(facetConfig.getLabel())
-                .countHidden(!facetConfig.isCountShown())
+                .countHidden(facetConfig.isCountHidden())
                 .matchingAll(facetConfig.isMatchingAll())
                 .multiSelect(facetConfig.isMultiSelect())
                 .limit(facetConfig.getLimit().orElse(null))
@@ -91,8 +91,8 @@ public class FacetCriteria {
     private static TermFacetedSearchSearchModel<ProductProjection> getSearchModel(final FacetConfig facetConfig,
                                                                                   final List<Locale> locales) {
         final Locale locale = locales.stream().findFirst().orElseThrow(NoLocaleFoundException::new);
-        final String expr = facetConfig.getExpr().replaceAll("\\{\\{locale\\}\\}", locale.toLanguageTag());
-        return TermFacetedSearchSearchModel.of(expr);
+        final String attrPath = facetConfig.getAttrPath().replaceAll("\\{\\{locale\\}\\}", locale.toLanguageTag());
+        return TermFacetedSearchSearchModel.of(attrPath);
     }
 
     private static Optional<FacetOptionMapper> initializeMapper(final FacetConfig facetConfig, final List<Category> selectedCategories,

@@ -10,22 +10,22 @@ public class FacetConfig extends Base {
     private final SunriseFacetType type;
     private final String key;
     private final String label;
-    private final String expr;
-    private final boolean countShown;
+    private final String attrPath;
+    private final boolean countHidden;
     private final boolean matchingAll;
     private final boolean multiSelect;
     private final Optional<Long> limit;
     private final Optional<Long> threshold;
     private final Optional<FacetMapperConfig> mapperConfig;
 
-    private FacetConfig(final SunriseFacetType type, final String key, final String label, final String expr,
-                        final boolean countShown, final boolean matchingAll, final boolean multiSelect,
+    private FacetConfig(final SunriseFacetType type, final String key, final String label, final String attrPath,
+                        final boolean countHidden, final boolean matchingAll, final boolean multiSelect,
                         @Nullable final Long limit, @Nullable final Long threshold, @Nullable final FacetMapperConfig mapperConfig) {
         this.type = type;
         this.key = key;
         this.label = label;
-        this.expr = expr;
-        this.countShown = countShown;
+        this.attrPath = attrPath;
+        this.countHidden = countHidden;
         this.matchingAll = matchingAll;
         this.multiSelect = multiSelect;
         this.limit = Optional.ofNullable(limit);
@@ -45,12 +45,12 @@ public class FacetConfig extends Base {
         return label;
     }
 
-    public String getExpr() {
-        return expr;
+    public String getAttrPath() {
+        return attrPath;
     }
 
-    public boolean isCountShown() {
-        return countShown;
+    public boolean isCountHidden() {
+        return countHidden;
     }
 
     public boolean isMatchingAll() {
@@ -73,14 +73,14 @@ public class FacetConfig extends Base {
         return mapperConfig;
     }
 
-    public static FacetConfig of(final SunriseFacetType type, final String key, final String label, final String expr,
-                                 final boolean countShown, final boolean matchingAll, final boolean multiSelect,
+    public static FacetConfig of(final SunriseFacetType type, final String key, final String label, final String attrPath,
+                                 final boolean countHidden, final boolean matchingAll, final boolean multiSelect,
                                  @Nullable final Long limit, @Nullable final Long threshold, @Nullable final FacetMapperConfig mapperConfig) {
-        return new FacetConfig(type, key, label, expr, countShown, matchingAll, multiSelect, limit, threshold, mapperConfig);
+        return new FacetConfig(type, key, label, attrPath, countHidden, matchingAll, multiSelect, limit, threshold, mapperConfig);
     }
 
-    public static FacetConfig of(final SunriseFacetType type, final String key, final String label, final String expr,
-                                 final boolean countShown, final boolean matchingAll, final boolean multiSelect) {
-        return new FacetConfig(type, key, label, expr, countShown, matchingAll, multiSelect, null, null, null);
+    public static FacetConfig of(final SunriseFacetType type, final String key, final String label, final String attrPath,
+                                 final boolean countHidden, final boolean matchingAll, final boolean multiSelect) {
+        return new FacetConfig(type, key, label, attrPath, countHidden, matchingAll, multiSelect, null, null, null);
     }
 }
