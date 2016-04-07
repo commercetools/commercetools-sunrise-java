@@ -1,9 +1,10 @@
 package productcatalog.productoverview.search;
 
-import io.sphere.sdk.facets.Facet;
+import common.contexts.UserContext;
+import common.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
-import productcatalog.productoverview.search.FacetBean;
+import io.sphere.sdk.search.PagedSearchResult;
 
 import java.util.List;
 
@@ -15,9 +16,10 @@ public class FacetBeanList extends Base {
     public FacetBeanList() {
     }
 
-    public FacetBeanList(final List<Facet<ProductProjection>> facets) {
-        this.list = facets.stream()
-                .map(FacetBean::new)
+    public FacetBeanList(final List<FacetCriteria> facetsCriteria, final PagedSearchResult<ProductProjection> searchResult,
+                         final UserContext userContext, final I18nResolver i18nResolver) {
+        this.list = facetsCriteria.stream()
+                .map(facetCriteria -> new FacetBean(facetCriteria, searchResult, userContext, i18nResolver))
                 .collect(toList());
     }
 

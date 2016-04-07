@@ -10,20 +10,21 @@ import io.sphere.sdk.search.PagedSearchResult;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import productcatalog.common.BreadcrumbData;
+import productcatalog.common.BreadcrumbBean;
 import productcatalog.common.ProductCatalogController;
 import productcatalog.common.ProductListData;
-import productcatalog.productoverview.search.FacetBeanList;
-import productcatalog.productoverview.search.SearchConfig;
-import productcatalog.productoverview.search.SearchCriteria;
+import productcatalog.productoverview.search.*;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+import static common.utils.UrlUtils.getQueryString;
 import static java.util.Collections.singletonList;
 
 @Singleton
@@ -43,7 +44,8 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final UserContext userContext = userContext(languageTag);
         final Optional<Category> categoryOpt = categoryTree().findBySlug(userContext.locale(), categorySlug);
         if (categoryOpt.isPresent()) {
-            final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext, categoryTree(), singletonList(categoryOpt.get()));
+            final Map<String, List<String>> queryString = getQueryString(request());
+            final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), queryString, userContext.locales(), categoryTree(), singletonList(categoryOpt.get()));
             return productService().searchProducts(page, searchCriteria).thenApplyAsync(searchResult ->
                     renderCategoryPage(categoryOpt.get(), page, searchCriteria, searchResult, userContext), HttpExecution.defaultContext());
         } else {
@@ -53,7 +55,8 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     public CompletionStage<Result> search(final String languageTag, final int page) {
         final UserContext userContext = userContext(languageTag);
-        final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), request(), i18nResolver(), userContext);
+        final Map<String, List<String>> queryString = getQueryString(request());
+        final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), queryString, userContext.locales());
         if (searchCriteria.getSearchTerm().isPresent()) {
             final CompletionStage<PagedSearchResult<ProductProjection>> searchResultStage = productService().searchProducts(page, searchCriteria);
             return searchResultStage.thenApplyAsync(searchResult ->
@@ -70,9 +73,9 @@ public class ProductOverviewPageController extends ProductCatalogController {
         content.setFilterProductsUrl(request().path());
         content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()));
         content.setPagination(new PaginationBean(requestContext(request()), searchResult, page, searchCriteria.getDisplayCriteria().getSelectedPageSize(), paginationDisplayedPages));
-        content.setSortSelector(searchCriteria.getSortCriteria().boundSortSelector());
-        content.setDisplaySelector(searchCriteria.getDisplayCriteria().boundDisplaySelector());
-        content.setFacets(new FacetBeanList(searchCriteria.getFacetsCriteria().boundFacets(searchResult)));
+        content.setSortSelector(new SortSelectorBean(searchCriteria.getSortCriteria(), userContext, i18nResolver()));
+        content.setDisplaySelector(new DisplaySelectorBean(searchCriteria.getDisplayCriteria(), userContext, i18nResolver()));
+        content.setFacets(new FacetBeanList(searchCriteria.getFacetsCriteria(), searchResult, userContext, i18nResolver()));
         return content;
     }
 
@@ -80,7 +83,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
                                       final PagedSearchResult<ProductProjection> searchResult, final UserContext userContext) {
         final ProductOverviewPageContent pageContent = createPageContent(page, searchCriteria, searchResult, userContext);
         pageContent.setAdditionalTitle(category.getName().find(userContext.locales()).orElse(""));
-        pageContent.setBreadcrumb(new BreadcrumbData(category, categoryTree(), userContext, reverseRouter()));
+        pageContent.setBreadcrumb(new BreadcrumbBean(category, categoryTree(), userContext, reverseRouter()));
         pageContent.setJumbotron(new JumbotronBean(category, userContext, categoryTree()));
         pageContent.setBanner(createBanner(userContext, category));
         pageContent.setSeo(new SeoBean(userContext, category));
@@ -92,7 +95,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final String searchTerm = searchCriteria.getSearchTerm().get().getValue();
         final ProductOverviewPageContent pageContent = createPageContent(page, searchCriteria, searchResult, userContext);
         pageContent.setAdditionalTitle(searchTerm);
-        pageContent.setBreadcrumb(new BreadcrumbData(searchTerm));
+        pageContent.setBreadcrumb(new BreadcrumbBean(searchTerm));
         pageContent.setSearchTerm(searchTerm);
         return ok(renderPage(userContext, pageContent));
     }

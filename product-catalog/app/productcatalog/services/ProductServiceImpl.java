@@ -14,6 +14,7 @@ import io.sphere.sdk.search.PagedSearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
+import productcatalog.productoverview.search.FacetCriteria;
 import productcatalog.productoverview.search.SearchCriteria;
 
 import javax.inject.Inject;
@@ -39,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
         final int pageSize = searchCriteria.getDisplayCriteria().getSelectedPageSize();
         final int offset = (page - 1) * pageSize;
         final ProductProjectionSearch baseRequest = ProductProjectionSearch.ofCurrent()
-                .withFacetedSearch(searchCriteria.getFacetsCriteria().getFacetedSearchExpressions())
+                .withFacetedSearch(searchCriteria.getFacetsCriteria().stream().map(FacetCriteria::getFacetedSearchExpression).collect(toList()))
                 .withSort(searchCriteria.getSortCriteria().getSelectedSortExpressions())
                 .withOffset(offset)
                 .withLimit(pageSize);

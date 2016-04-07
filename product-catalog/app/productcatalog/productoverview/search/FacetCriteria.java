@@ -1,8 +1,6 @@
 package productcatalog.productoverview.search;
 
-import common.contexts.UserContext;
-import common.i18n.I18nIdentifier;
-import common.i18n.I18nResolver;
+import common.contexts.NoLocaleFoundException;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.*;
@@ -12,10 +10,7 @@ import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -23,14 +18,20 @@ import static java.util.stream.Collectors.toList;
 
 public class FacetCriteria {
 
+    private final FacetConfig facetConfig;
     private final Facet<ProductProjection> facet;
 
-    private FacetCriteria(Facet<ProductProjection> facet) {
+    private FacetCriteria(final FacetConfig facetConfig, Facet<ProductProjection> facet) {
+        this.facetConfig = facetConfig;
         this.facet = facet;
     }
 
-    public Facet<ProductProjection> boundFacet(final PagedSearchResult<ProductProjection> searchResult) {
-        return this.facet.withSearchResult(searchResult);
+    public FacetConfig getFacetConfig() {
+        return facetConfig;
+    }
+
+    public Facet<ProductProjection> getFacet(final PagedSearchResult<ProductProjection> searchResult) {
+        return facet.withSearchResult(searchResult);
     }
 
     public FacetedSearchExpression<ProductProjection> getFacetedSearchExpression() {
@@ -38,33 +39,31 @@ public class FacetCriteria {
     }
 
     public static FacetCriteria of(final FacetConfig facetConfig, final Map<String, List<String>> queryString,
-                                   final UserContext userContext, final I18nResolver i18nResolver,
-                                   final List<Category> selectedCategories, final CategoryTree categoryTree) {
-        final Facet<ProductProjection> facet = initializeFacet(facetConfig, selectedCategories, queryString, userContext, i18nResolver, categoryTree);
-        return new FacetCriteria(facet);
+                                   final List<Locale> locales, final List<Category> selectedCategories, final CategoryTree categoryTree) {
+        final Facet<ProductProjection> facet = initializeFacet(facetConfig, selectedCategories, queryString, locales, categoryTree);
+        return new FacetCriteria(facetConfig, facet);
     }
 
     private static Facet<ProductProjection> initializeFacet(final FacetConfig facetConfig, final List<Category> selectedCategories,
-                                                            final Map<String, List<String>> queryString, final UserContext userContext,
-                                                            final I18nResolver i18nResolver, final CategoryTree categoryTree) {
+                                                            final Map<String, List<String>> queryString, final List<Locale> locales,
+                                                            final CategoryTree categoryTree) {
         switch (facetConfig.getType()) {
             case SELECT_CATEGORY_HIERARCHICAL_DISPLAY:
             case SELECT_TWO_COLUMNS_DISPLAY:
             case SELECT_LIST_DISPLAY:
             default:
-                return initializeSelectFacet(facetConfig, selectedCategories, queryString, userContext, i18nResolver, categoryTree);
+                return initializeSelectFacet(facetConfig, selectedCategories, queryString, locales, categoryTree);
         }
     }
 
     private static Facet<ProductProjection> initializeSelectFacet(final FacetConfig facetConfig, final List<Category> selectedCategories,
-                                                                  final Map<String, List<String>> queryString, final UserContext userContext,
-                                                                  final I18nResolver i18nResolver, final CategoryTree categoryTree) {
-        final String label = i18nResolver.get(userContext.locales(), I18nIdentifier.of(facetConfig.getLabel()))
-                .orElse(facetConfig.getLabel());
-        final FacetOptionMapper mapper = initializeMapper(facetConfig, selectedCategories, userContext, categoryTree).orElse(null);
+                                                                  final Map<String, List<String>> queryString, final List<Locale> locales,
+                                                                  final CategoryTree categoryTree) {
+        final FacetOptionMapper mapper = initializeMapper(facetConfig, selectedCategories, locales, categoryTree).orElse(null);
         final List<String> selectedValues = getSelectedValues(facetConfig, mapper, queryString, selectedCategories, categoryTree);
-        return SelectFacetBuilder.of(facetConfig.getKey(), label, getSearchModel(facetConfig, userContext))
+        return SelectFacetBuilder.of(facetConfig.getKey(), getSearchModel(facetConfig, locales))
                 .type(facetConfig.getType())
+                .label(facetConfig.getLabel())
                 .countHidden(!facetConfig.isCountShown())
                 .matchingAll(facetConfig.isMatchingAll())
                 .multiSelect(facetConfig.isMultiSelect())
@@ -90,19 +89,20 @@ public class FacetCriteria {
     }
 
     private static TermFacetedSearchSearchModel<ProductProjection> getSearchModel(final FacetConfig facetConfig,
-                                                                                  final UserContext userContext) {
-        final String expr = facetConfig.getExpr().replaceAll("\\{\\{locale\\}\\}", userContext.locale().toLanguageTag());
+                                                                                  final List<Locale> locales) {
+        final Locale locale = locales.stream().findFirst().orElseThrow(NoLocaleFoundException::new);
+        final String expr = facetConfig.getExpr().replaceAll("\\{\\{locale\\}\\}", locale.toLanguageTag());
         return TermFacetedSearchSearchModel.of(expr);
     }
 
     private static Optional<FacetOptionMapper> initializeMapper(final FacetConfig facetConfig, final List<Category> selectedCategories,
-                                                                final UserContext userContext, final CategoryTree categoryTree) {
+                                                                final List<Locale> locales, final CategoryTree categoryTree) {
         return facetConfig.getMapperConfig()
                 .map(mapperConfig -> {
                     switch (mapperConfig.getType()) {
                         case "hierarchicalCategoryFacet":
                             final CategoryTree categoriesInFacet = getCategoriesInFacet(selectedCategories, categoryTree);
-                            return HierarchicalCategoryFacetOptionMapper.of(selectedCategories, categoriesInFacet, userContext.locales());
+                            return HierarchicalCategoryFacetOptionMapper.of(selectedCategories, categoriesInFacet, locales);
                         case "alphabeticallySortedFacet":
                             return AlphabeticallySortedFacetOptionMapper.of();
                         case "customSortedFacet":

@@ -57,7 +57,7 @@ class SearchConfigProvider implements Provider<SearchConfig> {
 
         final DisplayConfig displayConfig = getDisplayConfig(configuration);
         final SortConfig sortConfig = getSortConfig(configuration);
-        final FacetsConfig facetsConfig = getFacetsConfig(configuration);
+        final List<FacetConfig> facetsConfig = getFacetsConfig(configuration);
         //Logger.debug("Provide SearchConfig: sort {}", sortConfig);
         return SearchConfig.of(paginationKey, searchProductsKey, displayConfig, sortConfig, facetsConfig);
     }
@@ -94,11 +94,10 @@ class SearchConfigProvider implements Provider<SearchConfig> {
         }
     }
 
-    private static FacetsConfig getFacetsConfig(final Configuration configuration) {
-        final List<FacetConfig> facetConfigs = configuration.getConfigList(CONFIG_FACETS, emptyList()).stream()
+    private static List<FacetConfig> getFacetsConfig(final Configuration configuration) {
+        return configuration.getConfigList(CONFIG_FACETS, emptyList()).stream()
                 .map(SearchConfigProvider::getFacetConfig)
                 .collect(toList());
-        return FacetsConfig.of(facetConfigs);
     }
 
     private static FacetConfig getFacetConfig(final Configuration facetConfig) {
