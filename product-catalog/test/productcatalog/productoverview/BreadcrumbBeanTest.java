@@ -1,4 +1,4 @@
-package productcatalog.models;
+package productcatalog.productoverview;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
@@ -11,7 +11,7 @@ import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import org.junit.Test;
-import productcatalog.common.BreadcrumbData;
+import productcatalog.common.BreadcrumbBean;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,9 +22,9 @@ import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BreadcrumbDataTest {
-    private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("models/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
-    private static final ProductProjection PRODUCT = readCtpObject("models/breadcrumbProduct.json", ProductProjection.typeReference());
+public class BreadcrumbBeanTest {
+    private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("breadcrumb/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
+    private static final ProductProjection PRODUCT = readCtpObject("breadcrumb/breadcrumbProduct.json", ProductProjection.typeReference());
     private static final UserContext USER_CONTEXT = UserContext.of(singletonList(ENGLISH), CountryCode.UK, null);
     private static final ReverseRouter REVERSE_ROUTER = reverseRouter();
 
@@ -51,7 +51,7 @@ public class BreadcrumbDataTest {
 
     @Test
     public void createSearchBreadcrumb() throws Exception {
-        final BreadcrumbData breadcrumb = new BreadcrumbData("foo");
+        final BreadcrumbBean breadcrumb = new BreadcrumbBean("foo");
         testBreadcrumb(breadcrumb,
                 texts -> assertThat(texts).containsExactly("foo"),
                 urls -> assertThat(urls).containsNull());
@@ -67,18 +67,18 @@ public class BreadcrumbDataTest {
 
     private void testCategoryBreadcrumb(final String extId, final CategoryTree categoryTree, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
         final Category category = categoryTree.findByExternalId(extId).get();
-        final BreadcrumbData breadcrumbData = new BreadcrumbData(category, CATEGORY_TREE, USER_CONTEXT, REVERSE_ROUTER);
-        testBreadcrumb(breadcrumbData, texts, urls);
+        final BreadcrumbBean breadcrumb = new BreadcrumbBean(category, CATEGORY_TREE, USER_CONTEXT, REVERSE_ROUTER);
+        testBreadcrumb(breadcrumb, texts, urls);
     }
 
     private void testProductBreadcrumb(final String sku, final ProductProjection product, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
         final ProductVariant variant = product.findVariantBySku(sku).get();
-        final BreadcrumbData breadcrumbData = new BreadcrumbData(product, variant, CATEGORY_TREE, USER_CONTEXT, REVERSE_ROUTER);
-        testBreadcrumb(breadcrumbData, texts, urls);
+        final BreadcrumbBean breadcrumb = new BreadcrumbBean(product, variant, CATEGORY_TREE, USER_CONTEXT, REVERSE_ROUTER);
+        testBreadcrumb(breadcrumb, texts, urls);
     }
 
-    private void testBreadcrumb(final BreadcrumbData breadcrumbData, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        texts.accept(breadcrumbData.getLinks().stream().map(LinkData::getText).collect(toList()));
-        urls.accept(breadcrumbData.getLinks().stream().map(LinkData::getUrl).collect(toList()));
+    private void testBreadcrumb(final BreadcrumbBean breadcrumb, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
+        texts.accept(breadcrumb.getLinks().stream().map(LinkData::getText).collect(toList()));
+        urls.accept(breadcrumb.getLinks().stream().map(LinkData::getUrl).collect(toList()));
     }
 }

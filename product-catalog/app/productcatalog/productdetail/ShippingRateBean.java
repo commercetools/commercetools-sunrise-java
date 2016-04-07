@@ -4,23 +4,23 @@ import common.utils.PriceFormatter;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 
-public class ShippingRateData extends Base {
+public class ShippingRateBean extends Base {
     private String shippingMethod;
     private String zone;
     private String shippingRate;
     private String freeAbove;
 
-    public ShippingRateData() {
+    public ShippingRateBean() {
     }
 
-    public ShippingRateData(final String shippingMethod, final String zone, final String shippingRate, final String freeAbove) {
+    public ShippingRateBean(final String shippingMethod, final String zone, final String shippingRate, final String freeAbove) {
         this.shippingMethod = shippingMethod;
         this.zone = zone;
         this.shippingRate = shippingRate;
         this.freeAbove = freeAbove;
     }
 
-    public ShippingRateData(final PriceFormatter priceFormatter, final ShopShippingRate shopShippingRate) {
+    public ShippingRateBean(final PriceFormatter priceFormatter, final ShopShippingRate shopShippingRate) {
         this.shippingMethod = shopShippingRate.shippingMethodName;
         final ShippingRate shippingRate = shopShippingRate.shippingRate;
         this.shippingRate = priceFormatter.format(shippingRate.getPrice());

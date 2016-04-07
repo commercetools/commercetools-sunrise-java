@@ -15,24 +15,24 @@ import java.util.Optional;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
-public class BreadcrumbData {
+public class BreadcrumbBean {
     private List<LinkData> links;
 
-    public BreadcrumbData() {
+    public BreadcrumbBean() {
     }
 
-    public BreadcrumbData(final String searchTerm) {
+    public BreadcrumbBean(final String searchTerm) {
         final LinkData linkData = new LinkData();
         linkData.setText(searchTerm);
         this.links = singletonList(linkData);
     }
 
-    public BreadcrumbData(final Category currentCategory, final CategoryTree categoryTree, final UserContext userContext,
+    public BreadcrumbBean(final Category currentCategory, final CategoryTree categoryTree, final UserContext userContext,
                           final ReverseRouter reverseRouter) {
         this.links = createCategoryBreadcrumb(currentCategory, categoryTree, userContext, reverseRouter);
     }
 
-    public BreadcrumbData(final ProductProjection currentProduct, final ProductVariant currentVariant,
+    public BreadcrumbBean(final ProductProjection currentProduct, final ProductVariant currentVariant,
                           final CategoryTree categoryTree, final UserContext userContext, final ReverseRouter reverseRouter) {
         this.links = currentProduct.getCategories().stream().findFirst()
                 .flatMap(ref -> categoryTree.findById(ref.getId())

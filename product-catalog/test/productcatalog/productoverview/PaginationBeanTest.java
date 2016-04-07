@@ -1,11 +1,10 @@
-package productcatalog.models;
+package productcatalog.productoverview;
 
 import common.contexts.RequestContext;
 import common.models.LinkData;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
 import org.junit.Test;
-import productcatalog.productoverview.PaginationBean;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

@@ -2,7 +2,7 @@ package productcatalog.productoverview;
 
 import common.models.DetailData;
 import common.controllers.PageContent;
-import productcatalog.common.BreadcrumbData;
+import productcatalog.common.BreadcrumbBean;
 import productcatalog.common.ProductListData;
 import productcatalog.productoverview.search.DisplaySelectorBean;
 import productcatalog.productoverview.search.FacetBeanList;
@@ -15,7 +15,7 @@ public class ProductOverviewPageContent extends PageContent {
     private JumbotronBean jumbotron;
     // TODO searchResult
     private DetailData seo;
-    private BreadcrumbData breadcrumb;
+    private BreadcrumbBean breadcrumb;
     private FacetBeanList facets;
     private PaginationBean pagination;
     private DisplaySelectorBean displaySelector;
@@ -66,11 +66,11 @@ public class ProductOverviewPageContent extends PageContent {
         this.seo = seo;
     }
 
-    public BreadcrumbData getBreadcrumb() {
+    public BreadcrumbBean getBreadcrumb() {
         return breadcrumb;
     }
 
-    public void setBreadcrumb(final BreadcrumbData breadcrumb) {
+    public void setBreadcrumb(final BreadcrumbBean breadcrumb) {
         this.breadcrumb = breadcrumb;
     }
 

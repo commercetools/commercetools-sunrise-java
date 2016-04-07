@@ -72,7 +72,7 @@ public class ProductDetailPageController extends ProductCatalogController {
         final ProductDetailPageContent content = new ProductDetailPageContent();
         content.setAdditionalTitle(product.getName().find(userContext.locales()).orElse(""));
         content.setProduct(new ProductBean(product, variant, productDataConfig(), userContext, reverseRouter()));
-        content.setBreadcrumb(new BreadcrumbData(product, variant, categoryTree(), userContext, reverseRouter()));
+        content.setBreadcrumb(new BreadcrumbBean(product, variant, categoryTree(), userContext, reverseRouter()));
         content.setShippingRates(createDeliveryData(userContext));
         content.setSuggestions(createSuggestions(userContext, suggestions));
         content.setAddToCartFormUrl(reverseRouter().processAddProductToCartForm(userContext.locale().getLanguage()).url());
@@ -84,10 +84,10 @@ public class ProductDetailPageController extends ProductCatalogController {
         return new SuggestionsData(productListData);
     }
 
-    private List<ShippingRateData> createDeliveryData(final UserContext userContext) {
+    private List<ShippingRateBean> createDeliveryData(final UserContext userContext) {
         final PriceFormatter priceFormatter = priceFormatter(userContext);
         return getShippingRates().stream()
-                .map(rate -> new ShippingRateData(priceFormatter, rate))
+                .map(rate -> new ShippingRateBean(priceFormatter, rate))
                 .collect(toList());
     }
 
