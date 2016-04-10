@@ -16,7 +16,7 @@ import productcatalog.common.BreadcrumbBean;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static common.JsonUtils.readCtpObject;
+import static common.utils.JsonUtils.readCtpObject;
 import static java.util.Collections.singletonList;
 import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.toList;

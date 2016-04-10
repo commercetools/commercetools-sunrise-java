@@ -13,7 +13,7 @@ import play.mvc.Result;
 
 import java.util.concurrent.TimeUnit;
 
-import static common.JsonUtils.readCtpObject;
+import static common.utils.JsonUtils.readCtpObject;
 import static org.assertj.core.api.Assertions.assertThat;
 import static play.test.Helpers.contentAsString;
 

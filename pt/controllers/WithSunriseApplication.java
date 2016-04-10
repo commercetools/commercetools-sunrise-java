@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static common.JsonUtils.readCtpObject;
+import static common.utils.JsonUtils.readCtpObject;
 import static play.test.Helpers.running;
 import static play.test.Helpers.testServer;
 
