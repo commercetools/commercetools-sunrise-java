@@ -11,8 +11,8 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static io.sphere.sdk.facets.DefaultFacetType.CATEGORY_TREE;
 import static io.sphere.sdk.facets.DefaultFacetType.SELECT;
-import static io.sphere.sdk.facets.DefaultFacetType.SORTED_SELECT;
 import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -38,7 +38,7 @@ public class SelectFacetBuilderTest {
         final SelectFacet<ProductProjection> facet = SelectFacetBuilder.of(KEY, SEARCH_MODEL)
                 .label(LABEL)
                 .mapper(IDENTITY_MAPPER)
-                .type(SORTED_SELECT)
+                .type(CATEGORY_TREE)
                 .facetResult(FACET_RESULT_WITH_THREE_TERMS)
                 .selectedValues(SELECTED_VALUE_TWO)
                 .matchingAll(true)
@@ -47,7 +47,7 @@ public class SelectFacetBuilderTest {
                 .limit(10L)
                 .build();
         assertThat(facet.getKey()).isEqualTo(KEY);
-        assertThat(facet.getType()).isEqualTo(SORTED_SELECT);
+        assertThat(facet.getType()).isEqualTo(CATEGORY_TREE);
         assertThat(facet.getLabel()).contains(LABEL);
         assertThat(facet.getMapper()).contains(IDENTITY_MAPPER);
         assertThat(facet.getSearchModel()).isEqualTo(SEARCH_MODEL);
