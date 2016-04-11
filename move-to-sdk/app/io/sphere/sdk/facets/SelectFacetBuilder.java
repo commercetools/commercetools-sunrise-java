@@ -2,13 +2,13 @@ package io.sphere.sdk.facets;
 
 import io.sphere.sdk.models.Builder;
 import io.sphere.sdk.search.TermFacetResult;
-import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
+import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
 public final class SelectFacetBuilder<T> extends FacetBuilder<SelectFacetBuilder<T>> implements Builder<SelectFacet<T>> {
-    private final TermFacetedSearchSearchModel<T> searchModel;
+    private final FacetedSearchSearchModel<T> searchModel;
     private boolean multiSelect = true;
     private boolean matchingAll = false;
     private Optional<TermFacetResult> facetResult = Optional.empty();
@@ -16,7 +16,7 @@ public final class SelectFacetBuilder<T> extends FacetBuilder<SelectFacetBuilder
     private Optional<Long> limit = Optional.empty();
     private Optional<FacetOptionMapper> mapper = Optional.empty();
 
-    private SelectFacetBuilder(final String key, final TermFacetedSearchSearchModel<T> searchModel) {
+    private SelectFacetBuilder(final String key, final FacetedSearchSearchModel<T> searchModel) {
         super(key);
         this.searchModel = searchModel;
     }
@@ -81,7 +81,7 @@ public final class SelectFacetBuilder<T> extends FacetBuilder<SelectFacetBuilder
         return mapper;
     }
 
-    public TermFacetedSearchSearchModel<T> getSearchModel() {
+    public FacetedSearchSearchModel<T> getSearchModel() {
         return searchModel;
     }
 
@@ -90,7 +90,7 @@ public final class SelectFacetBuilder<T> extends FacetBuilder<SelectFacetBuilder
         return this;
     }
 
-    public static <T> SelectFacetBuilder<T> of(final String key, final TermFacetedSearchSearchModel<T> searchModel) {
+    public static <T> SelectFacetBuilder<T> of(final String key, final FacetedSearchSearchModel<T> searchModel) {
         return new SelectFacetBuilder<>(key, searchModel);
     }
 

@@ -2,7 +2,7 @@ package io.sphere.sdk.facets;
 
 import io.sphere.sdk.search.FacetedSearchExpression;
 import io.sphere.sdk.search.PagedSearchResult;
-import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
+import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,11 +50,11 @@ public interface Facet<T> {
     List<String> getSelectedValues();
 
     /**
-     * Gets the untyped search model associated with this facet, representing the attribute path.
+     * Gets the faceted search model associated with this facet, representing the attribute path.
      * With this search model you can build facet and filter expressions for this attribute.
-     * @return the untyped search model for this facet
+     * @return the faceted search model for this facet
      */
-    TermFacetedSearchSearchModel<T> getSearchModel();
+    FacetedSearchSearchModel<T> getSearchModel();
 
     /**
      * Gets the filter expressions associated to this facet, according to the selected values, as needed to obtain a faceted search.

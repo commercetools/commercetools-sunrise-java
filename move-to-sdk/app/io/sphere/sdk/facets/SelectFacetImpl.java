@@ -1,9 +1,9 @@
 package io.sphere.sdk.facets;
 
+import io.sphere.sdk.search.FacetedSearchExpression;
 import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.TermFacetResult;
-import io.sphere.sdk.search.TermFacetedSearchExpression;
-import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
+import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -30,7 +30,7 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     private final List<FacetOption> facetOptions;
 
     protected SelectFacetImpl(final String key, final String label, final boolean countHidden, final FacetType type,
-                              final TermFacetedSearchSearchModel<T> searchModel, final boolean multiSelect, final boolean matchingAll,
+                              final FacetedSearchSearchModel<T> searchModel, final boolean multiSelect, final boolean matchingAll,
                               final List<String> selectedValues, @Nullable final TermFacetResult facetResult,
                               @Nullable final Long threshold, @Nullable final Long limit, @Nullable final FacetOptionMapper mapper) {
         super(key, type, countHidden, label, searchModel);
@@ -99,8 +99,8 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
     }
 
     @Override
-    public TermFacetedSearchExpression<T> getFacetedSearchExpression() {
-        final TermFacetedSearchExpression<T> facetedSearchExpr;
+    public FacetedSearchExpression<T> getFacetedSearchExpression() {
+        final FacetedSearchExpression<T> facetedSearchExpr;
         if (selectedValues.isEmpty()) {
             facetedSearchExpr = searchModel.allTerms();
         } else if (matchingAll) {
