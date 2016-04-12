@@ -29,6 +29,10 @@ public class ProductsPerPageSelector extends Base {
         return options;
     }
 
+    public int getDefaultAmount() {
+        return defaultAmount;
+    }
+
     public int getSelectedPageSize() {
         return selectedOption.map(ProductsPerPageOption::getAmount).orElse(defaultAmount);
     }

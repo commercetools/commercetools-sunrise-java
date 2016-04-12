@@ -16,9 +16,10 @@ public class FacetSelectorsBean extends Base {
     public FacetSelectorsBean() {
     }
 
-    public FacetSelectorsBean(final List<FacetSelector> facetsCriteria, final PagedSearchResult<ProductProjection> searchResult,
+    public FacetSelectorsBean(final List<FacetSelector> facetSelectors, final PagedSearchResult<ProductProjection> searchResult,
                               final UserContext userContext, final I18nResolver i18nResolver) {
-        this.list = facetsCriteria.stream()
+        this.list = facetSelectors.stream()
+                .sorted((f1, f2) -> Double.compare(f1.getPosition(), f2.getPosition()))
                 .map(facetCriteria -> new FacetSelectorBean(facetCriteria, searchResult, userContext, i18nResolver))
                 .collect(toList());
     }

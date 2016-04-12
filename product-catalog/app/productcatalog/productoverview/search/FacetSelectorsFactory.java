@@ -4,6 +4,7 @@ import common.contexts.UserContext;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +33,18 @@ public class FacetSelectorsFactory {
     }
 
     public List<FacetSelector> create() {
-        return createSelectFacetSelectors();
+        final List<FacetSelector> selectors = createSelectFacetSelectors();
+        selectors.addAll(createRangeFacetSelectors());
+        return selectors;
     }
 
     private List<FacetSelector> createSelectFacetSelectors() {
         return configList.getSelectFacetConfigs().stream()
                 .map(facetConfig -> SelectFacetSelectorFactory.of(facetConfig, queryString, selectedCategories, userContext, categoryTree).create())
                 .collect(toList());
+    }
+
+    private List<FacetSelector> createRangeFacetSelectors() {
+        return Collections.emptyList(); // missing ranges
     }
 }
