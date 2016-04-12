@@ -13,6 +13,7 @@ import io.sphere.sdk.search.FilterExpression;
 import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 import org.assertj.core.api.Assertions;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.money.Monetary;
@@ -72,6 +73,7 @@ public class SelectFacetSelectorFactoryTest {
         });
     }
 
+    @Ignore
     @Test
     public void getsFacetedSearchExprWithLocale() throws Exception {
         final SelectFacetConfig config = SelectFacetConfig.of(facetBuilder("some.{{locale}}.foo.{{locale}}.bar"), 1);
