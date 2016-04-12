@@ -5,30 +5,34 @@ import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 public final class SelectFacetBuilder<T> extends FacetBuilder<SelectFacetBuilder<T>> implements Builder<SelectFacet<T>> {
-    private final FacetedSearchSearchModel<T> searchModel;
+    private FacetedSearchSearchModel<T> facetedSearchSearchModel;
     private boolean multiSelect = true;
     private boolean matchingAll = false;
-    private Optional<TermFacetResult> facetResult = Optional.empty();
-    private Optional<Long> threshold = Optional.of(1L);
-    private Optional<Long> limit = Optional.empty();
-    private Optional<FacetOptionMapper> mapper = Optional.empty();
+    @Nullable private TermFacetResult facetResult = null;
+    @Nullable private Long threshold = 1L;
+    @Nullable private Long limit = null;
+    @Nullable private FacetOptionMapper mapper = null;
 
-    private SelectFacetBuilder(final String key, final FacetedSearchSearchModel<T> searchModel) {
+    private SelectFacetBuilder(final String key, final FacetedSearchSearchModel<T> facetedSearchSearchModel) {
         super(key);
-        this.searchModel = searchModel;
+        this.facetedSearchSearchModel = facetedSearchSearchModel;
     }
 
     @Override
     public SelectFacet<T> build() {
-        return new SelectFacetImpl<>(getKey(), getLabel().orElse(null), isCountHidden(), getType(), searchModel, multiSelect, matchingAll,
-                selectedValues, facetResult.orElse(null), threshold.orElse(null), limit.orElse(null), mapper.orElse(null));
+        return new SelectFacetImpl<>(getKey(), getLabel(), isCountHidden(), getType(), facetedSearchSearchModel,
+                multiSelect, matchingAll, selectedValues, facetResult, threshold, limit, mapper);
+    }
+
+    public SelectFacetBuilder<T> facetedSearchSearchModel(final FacetedSearchSearchModel<T> facetedSearchSearchModel) {
+        this.facetedSearchSearchModel = facetedSearchSearchModel;
+        return this;
     }
 
     public SelectFacetBuilder<T> mapper(@Nullable final FacetOptionMapper mapper) {
-        this.mapper = Optional.ofNullable(mapper);
+        this.mapper = mapper;
         return this;
     }
 
@@ -43,18 +47,22 @@ public final class SelectFacetBuilder<T> extends FacetBuilder<SelectFacetBuilder
     }
 
     public SelectFacetBuilder<T> facetResult(@Nullable final TermFacetResult facetResult) {
-        this.facetResult = Optional.ofNullable(facetResult);
+        this.facetResult = facetResult;
         return this;
     }
 
     public SelectFacetBuilder<T> threshold(@Nullable final Long threshold) {
-        this.threshold = Optional.ofNullable(threshold);
+        this.threshold = threshold;
         return this;
     }
 
     public SelectFacetBuilder<T> limit(@Nullable final Long limit) {
-        this.limit = Optional.ofNullable(limit);
+        this.limit = limit;
         return this;
+    }
+
+    public FacetedSearchSearchModel<T> getFacetedSearchSearchModel() {
+        return facetedSearchSearchModel;
     }
 
     public boolean isMultiSelect() {
@@ -65,24 +73,24 @@ public final class SelectFacetBuilder<T> extends FacetBuilder<SelectFacetBuilder
         return matchingAll;
     }
 
-    public Optional<TermFacetResult> getFacetResult() {
+    @Nullable
+    public TermFacetResult getFacetResult() {
         return facetResult;
     }
 
-    public Optional<Long> getThreshold() {
+    @Nullable
+    public Long getThreshold() {
         return threshold;
     }
 
-    public Optional<Long> getLimit() {
+    @Nullable
+    public Long getLimit() {
         return limit;
     }
 
-    public Optional<FacetOptionMapper> getMapper() {
+    @Nullable
+    public FacetOptionMapper getMapper() {
         return mapper;
-    }
-
-    public FacetedSearchSearchModel<T> getSearchModel() {
-        return searchModel;
     }
 
     @Override
@@ -95,7 +103,7 @@ public final class SelectFacetBuilder<T> extends FacetBuilder<SelectFacetBuilder
     }
 
     public static <T> SelectFacetBuilder<T> of(final SelectFacet<T> facet) {
-        final SelectFacetBuilder<T> builder = new SelectFacetBuilder<>(facet.getKey(), facet.getSearchModel());
+        final SelectFacetBuilder<T> builder = new SelectFacetBuilder<>(facet.getKey(), facet.getFacetedSearchSearchModel());
         builder.type = facet.getType();
         builder.label = facet.getLabel();
         builder.countHidden = facet.isCountHidden();

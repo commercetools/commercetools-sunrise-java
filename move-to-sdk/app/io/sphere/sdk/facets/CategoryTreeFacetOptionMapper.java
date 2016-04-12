@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -17,15 +18,15 @@ import static java.util.stream.Collectors.toList;
  * The IDs are then replaced by the Category name, in a language according to the provided locales.
  * Any facet option that is not represented in the list of categories or doesn't contain a name for the locales, is discarded.
  */
-public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper {
+public class CategoryTreeFacetOptionMapper implements FacetOptionMapper {
     private final List<Category> selectedCategories;
-    private final CategoryTree subcategoryTree;
+    private final CategoryTree categoryTree;
     private final List<Locale> locales;
 
-    private HierarchicalCategoryFacetOptionMapper(final List<Category> selectedCategories,
-                                                  final CategoryTree subcategoryTree, final List<Locale> locales) {
+    private CategoryTreeFacetOptionMapper(final List<Category> selectedCategories,
+                                          final CategoryTree categoryTree, final List<Locale> locales) {
         this.selectedCategories = selectedCategories;
-        this.subcategoryTree = subcategoryTree;
+        this.categoryTree = categoryTree;
         this.locales = locales;
     }
 
@@ -38,21 +39,35 @@ public class HierarchicalCategoryFacetOptionMapper implements FacetOptionMapper 
                 .collect(toList());
     }
 
-    public static HierarchicalCategoryFacetOptionMapper of(final List<Category> selectedCategories,
-                                                           final CategoryTree subcategoryTree, final List<Locale> locales) {
-        return new HierarchicalCategoryFacetOptionMapper(selectedCategories, subcategoryTree, locales);
+    public CategoryTreeFacetOptionMapper withCategories(final List<Category> selectedCategories,
+                                                        final CategoryTree categoryTree, final List<Locale> locales) {
+        return new CategoryTreeFacetOptionMapper(selectedCategories, categoryTree, locales);
+    }
+
+    public static CategoryTreeFacetOptionMapper of(final List<Category> selectedCategories,
+                                                   final CategoryTree subcategoryTree, final List<Locale> locales) {
+        return new CategoryTreeFacetOptionMapper(selectedCategories, subcategoryTree, locales);
+    }
+
+    /**
+     * Initializes the facet mapper without any category tree associated.
+     * Notice with this configuration no category will be obtained, so please configure it via {@link #withCategories(List, CategoryTree, List)}.
+     * @return a new instance of {@link CategoryTreeFacetOptionMapper} without any category tree
+     */
+    public static CategoryTreeFacetOptionMapper ofEmptyTree() {
+        return of(emptyList(), CategoryTree.of(emptyList()), emptyList());
     }
 
     private List<Category> getRootCategories() {
-        return subcategoryTree.getAllAsFlatList().stream().filter(category -> {
+        return categoryTree.getAllAsFlatList().stream().filter(category -> {
             final Optional<Reference<Category>> parentRef = Optional.ofNullable(category.getParent());
-            return parentRef.map(parent -> !subcategoryTree.findById(parent.getId()).isPresent()).orElse(true);
+            return parentRef.map(parent -> !categoryTree.findById(parent.getId()).isPresent()).orElse(true);
         }).collect(toList());
     }
 
     private Optional<FacetOption> buildFacetOption(final Category category, final Function<Category, Optional<FacetOption>> facetOptionFinder) {
         Optional<FacetOption> facetOption = facetOptionFinder.apply(category);
-        final List<Category> children = subcategoryTree.findChildren(category);
+        final List<Category> children = categoryTree.findChildren(category);
         if (!children.isEmpty()) {
             facetOption = addChildrenToFacetOption(facetOption, category, children, facetOptionFinder);
         }

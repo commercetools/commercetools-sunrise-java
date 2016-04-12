@@ -4,8 +4,8 @@ import io.sphere.sdk.search.FacetedSearchExpression;
 import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Interface that represents a facet, as used in a faceted search.
@@ -29,7 +29,8 @@ public interface Facet<T> {
      * Gets the label displayed in the facet.
      * @return the label displayed in this facet, or absent if none defined
      */
-    Optional<String> getLabel();
+    @Nullable
+    String getLabel();
 
     /**
      * Whether the facet can be displayed or not.
@@ -54,7 +55,7 @@ public interface Facet<T> {
      * With this search model you can build facet and filter expressions for this attribute.
      * @return the faceted search model for this facet
      */
-    FacetedSearchSearchModel<T> getSearchModel();
+    FacetedSearchSearchModel<T> getFacetedSearchSearchModel();
 
     /**
      * Gets the filter expressions associated to this facet, according to the selected values, as needed to obtain a faceted search.
@@ -68,6 +69,13 @@ public interface Facet<T> {
      * @return a new instance with same attributes, but with the given facet result
      */
     Facet<T> withSearchResult(final PagedSearchResult<T> searchResult);
+
+    /**
+     * Gets a new instance of Facet with the same attributes as this, but with the given selected values.
+     * @param selectedValues the new selected values for this facet
+     * @return a new instance with same attributes, but with the given selected values
+     */
+    Facet<T> withSelectedValues(final List<String> selectedValues);
 
     /**
      * Gets a new instance of Facet with the same attributes as this, but with the given label.

@@ -16,7 +16,7 @@ import static java.util.Collections.singletonList;
 import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HierarchicalCategoryFacetOptionMapperTest {
+public class CategoryTreeFacetOptionMapperTest {
     private static final List<Locale> LOCALES = singletonList(Locale.ENGLISH);
     private final static String CAT_A_ID = "d5a0952b-6574-49c9-b0cd-61e0d21d36cc";
     private final static String CAT_B_ID = "e92b6d26-7a34-4960-804c-0fc9e40c64e3";
@@ -45,62 +45,67 @@ public class HierarchicalCategoryFacetOptionMapperTest {
     @Test
     public void replacesIdForName() throws Exception {
         final CategoryTree categoryTree = CategoryTree.of(singletonList(CAT_D));
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES)
-                .apply(singletonList(OPTION_D));
-        assertThat(hierarchicalOptions).containsExactly(OPTION_D.withLabel("D").withValue("D-slug"));
+        final CategoryTreeFacetOptionMapper mapper = CategoryTreeFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES);
+        assertThat(mapper.apply(singletonList(OPTION_D)))
+                .containsExactly(OPTION_D.withLabel("D").withValue("D-slug"));
+    }
+
+    @Test
+    public void emptyWhenNotConfigured() throws Exception {
+        final CategoryTreeFacetOptionMapper emptyMapper = CategoryTreeFacetOptionMapper.ofEmptyTree();
+        assertThat(emptyMapper.apply(singletonList(OPTION_D))).isEmpty();
+        final CategoryTree categoryTree = CategoryTree.of(singletonList(CAT_D));
+        final CategoryTreeFacetOptionMapper configuredMapper = emptyMapper.withCategories(SELECTED_CATEGORIES, categoryTree, LOCALES);
+        assertThat(configuredMapper.apply(singletonList(OPTION_D)))
+                .containsExactly(OPTION_D.withLabel("D").withValue("D-slug"));
     }
 
     @Test
     public void keepsOrderFromCategoryTree() throws Exception {
         final CategoryTree categoryTree = CategoryTree.of(asList(CAT_C, CAT_D));
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES)
-                .apply(asList(OPTION_D, OPTION_C));
-        assertThat(hierarchicalOptions).containsExactly(OPTION_C.withLabel("C").withValue("C-slug"), OPTION_D.withLabel("D").withValue("D-slug"));
+        final CategoryTreeFacetOptionMapper mapper = CategoryTreeFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES);
+        assertThat(mapper.apply(asList(OPTION_D, OPTION_C)))
+                .containsExactly(OPTION_C.withLabel("C").withValue("C-slug"), OPTION_D.withLabel("D").withValue("D-slug"));
     }
 
     @Test
     public void discardsOnMissingLocale() throws Exception {
         final CategoryTree categoryTree = CategoryTree.of(singletonList(CAT_D));
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, singletonList(GERMAN))
-                .apply(singletonList(OPTION_D));
-        assertThat(hierarchicalOptions).isEmpty();
+        final CategoryTreeFacetOptionMapper mapper = CategoryTreeFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, singletonList(GERMAN));
+        assertThat(mapper.apply(singletonList(OPTION_D))).isEmpty();
     }
 
     @Test
     public void discardsWithEmptyCategoryTree() throws Exception {
         final CategoryTree categoryTree = CategoryTree.of(emptyList());
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES)
-                .apply(asList(OPTION_D, OPTION_C));
-        assertThat(hierarchicalOptions).isEmpty();
+        final CategoryTreeFacetOptionMapper mapper = CategoryTreeFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES);
+        assertThat(mapper.apply(asList(OPTION_D, OPTION_C))).isEmpty();
     }
 
     @Test
     public void worksWithEmptyFacetOptions() throws Exception {
         final CategoryTree categoryTree = CategoryTree.of(singletonList(CAT_D));
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES)
-                .apply(emptyList());
-        assertThat(hierarchicalOptions).isEmpty();
+        final CategoryTreeFacetOptionMapper mapper = CategoryTreeFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES);
+        assertThat(mapper.apply(emptyList())).isEmpty();
     }
 
     @Test
     public void inheritsInformationFromLeaves() throws Exception {
         final CategoryTree categoryTree = CategoryTree.of(asList(CAT_B, CAT_C, CAT_D));
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES)
-                .apply(asList(OPTION_D, OPTION_C, OPTION_B));
+        final CategoryTreeFacetOptionMapper mapper = CategoryTreeFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES);
         final FacetOption expectedOptions = OPTION_B
                 .withLabel("B")
                 .withValue("B-slug")
                 .withCount(sumCount(OPTION_B, OPTION_C, OPTION_D))
                 .withSelected(isSelected(OPTION_B))
                 .withChildren(asList(OPTION_C.withLabel("C").withValue("C-slug"), OPTION_D.withLabel("D").withValue("D-slug")));
-        assertThat(hierarchicalOptions).containsExactly(expectedOptions);
+        assertThat(mapper.apply(asList(OPTION_D, OPTION_C, OPTION_B))).containsExactly(expectedOptions);
     }
 
     @Test
     public void discardsEmptyBranches() throws Exception {
         final CategoryTree categoryTree = CategoryTree.of(asList(CAT_A, CAT_B, CAT_C, CAT_D, CAT_E));
-        final List<FacetOption> hierarchicalOptions = HierarchicalCategoryFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES)
-                .apply(asList(OPTION_D, OPTION_C, OPTION_B));
+        final CategoryTreeFacetOptionMapper mapper = CategoryTreeFacetOptionMapper.of(SELECTED_CATEGORIES, categoryTree, LOCALES);
         final FacetOption expectedOptions = OPTION_A
                 .withLabel("A")
                 .withValue("A-slug")
@@ -112,7 +117,7 @@ public class HierarchicalCategoryFacetOptionMapperTest {
                         .withCount(sumCount(OPTION_B, OPTION_C, OPTION_D))
                         .withSelected(isSelected(OPTION_B))
                         .withChildren(asList(OPTION_C.withLabel("C").withValue("C-slug"), OPTION_D.withLabel("D").withValue("D-slug")))));
-        assertThat(hierarchicalOptions).containsExactly(expectedOptions);
+        assertThat(mapper.apply(asList(OPTION_D, OPTION_C, OPTION_B))).containsExactly(expectedOptions);
     }
 
     private long sumCount(final FacetOption... facetOptions) {

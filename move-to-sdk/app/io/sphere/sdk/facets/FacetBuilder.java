@@ -5,12 +5,11 @@ import io.sphere.sdk.models.Base;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class FacetBuilder<T> extends Base {
     private final String key;
     protected FacetType type = DefaultFacetType.SELECT;
-    protected Optional<String> label = Optional.empty();
+    @Nullable protected String label = null;
     protected boolean countHidden = false;
     protected List<String> selectedValues = Collections.emptyList();
 
@@ -24,7 +23,7 @@ public abstract class FacetBuilder<T> extends Base {
     }
 
     public T label(@Nullable final String label) {
-        this.label = Optional.ofNullable(label);
+        this.label = label;
         return getThis();
     }
 
@@ -46,7 +45,8 @@ public abstract class FacetBuilder<T> extends Base {
         return type;
     }
 
-    public Optional<String> getLabel() {
+    @Nullable
+    public String getLabel() {
         return label;
     }
 
