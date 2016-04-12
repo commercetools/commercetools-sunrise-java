@@ -44,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
                 .withSort(searchCriteria.getSortSelector().getSelectedSortExpressions())
                 .withOffset(offset)
                 .withLimit(pageSize);
-        final ProductProjectionSearch request = searchCriteria.getSearchTerm()
+        final ProductProjectionSearch request = searchCriteria.getSearchBox().getSearchTerm()
                 .map(baseRequest::withText)
                 .orElse(baseRequest);
         return sphere.execute(request)

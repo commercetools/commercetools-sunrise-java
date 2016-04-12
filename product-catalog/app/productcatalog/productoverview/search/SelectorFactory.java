@@ -6,7 +6,7 @@ import java.util.Map;
 
 import static java.util.Collections.emptyList;
 
-public abstract class SelectorFactory<T> {
+abstract class SelectorFactory<T> {
 
     private final Map<String, List<String>> queryString;
 

@@ -39,10 +39,6 @@ public class ProductsPerPageSelector extends Base {
         return new ProductsPerPageSelector(key, options, defaultAmount, selectedOption);
     }
 
-    public static ProductsPerPageSelector ofConfig(final ProductsPerPageConfig config, final List<String> selectedValues) {
-        return of(config.getKey(), config.getOptions(), config.getDefaultAmount(), selectedValues);
-    }
-
     private static Optional<ProductsPerPageOption> findFirstSelectedOption(final List<String> selectedValues,
                                                                            final List<ProductsPerPageOption> options) {
         return options.stream()

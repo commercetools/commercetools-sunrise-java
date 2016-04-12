@@ -25,6 +25,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static common.utils.UrlUtils.getQueryString;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
 @Singleton
@@ -44,8 +45,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
         final UserContext userContext = userContext(languageTag);
         final Optional<Category> categoryOpt = categoryTree().findBySlug(userContext.locale(), categorySlug);
         if (categoryOpt.isPresent()) {
-            final Map<String, List<String>> queryString = getQueryString(request());
-            final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), queryString, userContext, categoryTree(), singletonList(categoryOpt.get()));
+            final SearchCriteria searchCriteria = getSearchCriteria(page, singletonList(categoryOpt.get()), userContext);
             return productService().searchProducts(page, searchCriteria).thenApplyAsync(searchResult ->
                     renderCategoryPage(categoryOpt.get(), page, searchCriteria, searchResult, userContext), HttpExecution.defaultContext());
         } else {
@@ -55,9 +55,8 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     public CompletionStage<Result> search(final String languageTag, final int page) {
         final UserContext userContext = userContext(languageTag);
-        final Map<String, List<String>> queryString = getQueryString(request());
-        final SearchCriteria searchCriteria = SearchCriteria.of(page, searchConfig(), queryString, userContext);
-        if (searchCriteria.getSearchTerm().isPresent()) {
+        final SearchCriteria searchCriteria = getSearchCriteria(page, emptyList(), userContext);
+        if (searchCriteria.getSearchBox().getSearchTerm().isPresent()) {
             final CompletionStage<PagedSearchResult<ProductProjection>> searchResultStage = productService().searchProducts(page, searchCriteria);
             return searchResultStage.thenApplyAsync(searchResult ->
                     renderSearchPage(page, userContext, searchCriteria, searchResult), HttpExecution.defaultContext());
@@ -92,7 +91,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     private Result renderSearchPage(final int page, final UserContext userContext, final SearchCriteria searchCriteria,
                                     final PagedSearchResult<ProductProjection> searchResult) {
-        final String searchTerm = searchCriteria.getSearchTerm().get().getValue();
+        final String searchTerm = searchCriteria.getSearchBox().getSearchTerm().get().getValue();
         final ProductOverviewPageContent content = createPageContent(page, searchCriteria, searchResult, userContext);
         content.setAdditionalTitle(searchTerm);
         content.setBreadcrumb(new BreadcrumbBean(searchTerm));
@@ -105,10 +104,21 @@ public class ProductOverviewPageController extends ProductCatalogController {
         return templateService().renderToHtml("pop", pageData, userContext.locales());
     }
 
+    private SearchCriteria getSearchCriteria(final int page, final List<Category> selectedCategories, final UserContext userContext) {
+        final Map<String, List<String>> queryString = getQueryString(request());
+        final SearchConfig searchConfig = searchConfig();
+        final SearchBox searchBox = SearchBoxFactory.of(searchConfig, queryString, userContext).create();
+        final ProductsPerPageSelector productsPerPageSelector = ProductsPerPageSelectorFactory.of(searchConfig.getProductsPerPageConfig(), queryString).create();
+        final SortSelector sortSelector = SortSelectorFactory.of(searchConfig.getSortConfig(), queryString, userContext).create();
+        final List<FacetSelector> facetSelectors = FacetSelectorsFactory.of(searchConfig.getFacetConfigList(), queryString, selectedCategories, userContext, categoryTree()).create();
+        return SearchCriteria.of(page, searchBox, productsPerPageSelector, sortSelector, facetSelectors);
+    }
+
     private static BannerBean createBanner(final UserContext userContext, final Category category) {
         final BannerBean bannerBean = new BannerBean(userContext, category);
         bannerBean.setImageMobile("/assets/img/banner_mobile-0a9241da249091a023ecfadde951a53b.jpg"); // TODO obtain from category?
         bannerBean.setImageDesktop("/assets/img/banner_desktop-9ffd148c48068ce2666d6533b4a87d11.jpg"); // TODO obtain from category?
         return bannerBean;
     }
+
 }
