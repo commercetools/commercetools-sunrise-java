@@ -4,8 +4,8 @@ import common.models.DetailData;
 import common.controllers.PageContent;
 import productcatalog.common.BreadcrumbBean;
 import productcatalog.common.ProductListData;
-import productcatalog.productoverview.search.DisplaySelectorBean;
-import productcatalog.productoverview.search.FacetBeanList;
+import productcatalog.productoverview.search.ProductsPerPageSelectorBean;
+import productcatalog.productoverview.search.FacetSelectorsBean;
 import productcatalog.productoverview.search.SortSelectorBean;
 
 public class ProductOverviewPageContent extends PageContent {
@@ -16,9 +16,9 @@ public class ProductOverviewPageContent extends PageContent {
     // TODO searchResult
     private DetailData seo;
     private BreadcrumbBean breadcrumb;
-    private FacetBeanList facets;
+    private FacetSelectorsBean facets;
     private PaginationBean pagination;
-    private DisplaySelectorBean displaySelector;
+    private ProductsPerPageSelectorBean displaySelector;
     private SortSelectorBean sortSelector;
     private ProductListData products;
     // TODO wishlist
@@ -74,11 +74,11 @@ public class ProductOverviewPageContent extends PageContent {
         this.breadcrumb = breadcrumb;
     }
 
-    public FacetBeanList getFacets() {
+    public FacetSelectorsBean getFacets() {
         return facets;
     }
 
-    public void setFacets(final FacetBeanList facets) {
+    public void setFacets(final FacetSelectorsBean facets) {
         this.facets = facets;
     }
 
@@ -90,11 +90,11 @@ public class ProductOverviewPageContent extends PageContent {
         this.pagination = pagination;
     }
 
-    public DisplaySelectorBean getDisplaySelector() {
+    public ProductsPerPageSelectorBean getDisplaySelector() {
         return displaySelector;
     }
 
-    public void setDisplaySelector(final DisplaySelectorBean displaySelector) {
+    public void setDisplaySelector(final ProductsPerPageSelectorBean displaySelector) {
         this.displaySelector = displaySelector;
     }
 

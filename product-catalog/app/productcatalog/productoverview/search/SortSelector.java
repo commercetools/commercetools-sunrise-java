@@ -1,62 +1,63 @@
 package productcatalog.productoverview.search;
 
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.SortExpression;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-public class SortSelector {
+public class SortSelector extends Base {
 
-    private final List<String> selectedValues;
-    private final SortConfig sortConfig;
+    private final String key;
+    private final List<SortOption> options;
+    private final List<SortOption> selectedOptions;
+    private final List<SortOption> defaultOptions;
 
-    private SortSelector(final List<String> selectedValues, final SortConfig sortConfig) {
-        this.selectedValues = selectedValues;
-        this.sortConfig = sortConfig;
+    private SortSelector(final String key, final List<SortOption> options, final List<SortOption> defaultOptions,
+                         final List<SortOption> selectedOptions) {
+        this.key = key;
+        this.options = options;
+        this.selectedOptions = selectedOptions;
+        this.defaultOptions = defaultOptions;
     }
 
-    public SortConfig getSortConfig() {
-        return sortConfig;
+    public String getKey() {
+        return key;
     }
 
-    public List<String> getSelectedValues() {
-        return selectedValues;
+    public List<SortOption> getOptions() {
+        return options;
+    }
+
+    public List<SortOption> getSelectedOptions() {
+        return selectedOptions.isEmpty() ? defaultOptions : selectedOptions;
     }
 
     public List<SortExpression<ProductProjection>> getSelectedSortExpressions() {
-        if (!selectedValues.isEmpty()) {
-            return selectedValues.stream()
-                    .flatMap(value -> sortConfig.getOptions().stream()
-                            .filter(option -> option.getValue().equals(value))
-                            .findFirst()
-                            .map(SortOption::getExpressions).orElse(emptyList()).stream())
-                    .collect(toList());
-        } else {
-            return emptyList();
-        }
-    }
-
-    public static SortSelector of(final SortConfig sortConfig, final Map<String, List<String>> queryString) {
-        final List<String> selectedValues = getSortSelectedValues(sortConfig, queryString);
-        return new SortSelector(selectedValues, sortConfig);
-    }
-
-    private static List<String> getSortSelectedValues(final SortConfig sortConfig, final Map<String, List<String>> queryString) {
-        final List<String> selectedValues = queryString.getOrDefault(sortConfig.getKey(), emptyList()).stream()
-                .filter(selectedValue -> isEnabledSortValue(selectedValue, sortConfig))
+        return getSelectedOptions().stream()
+                .flatMap(option -> option.getExpressions().stream())
                 .collect(toList());
-        return selectedValues.isEmpty() ? sortConfig.getDefaultValue() : selectedValues;
     }
 
-    private static boolean isEnabledSortValue(final String sortValue, final SortConfig sortConfig) {
-        return Optional.ofNullable(sortValue)
-                .map(value -> sortConfig.getOptions().stream()
-                        .anyMatch(option -> value.equals(option.getValue())))
-        .orElse(false);
+    public static SortSelector of(final String key, final List<SortOption> options, final List<String> selectedValues) {
+        final List<SortOption> selectedOptions = findSelectedOptions(options, selectedValues);
+        final List<SortOption> defaultOptions = options.stream().filter(SortOption::isDefault).collect(toList());
+        return new SortSelector(key, options, defaultOptions, selectedOptions);
+    }
+
+    private static List<SortOption> findSelectedOptions(final List<SortOption> options, final List<String> selectedValues) {
+        return selectedValues.stream()
+                .map(value -> findOptionByValue(value, options).orElse(null))
+                .filter(value -> value != null)
+                .collect(toList());
+    }
+
+    private static Optional<SortOption> findOptionByValue(final String value, final List<SortOption> options) {
+        return options.stream()
+                .filter(option -> option.getValue().equals(value))
+                .findFirst();
     }
 }

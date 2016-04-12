@@ -9,19 +9,22 @@ import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 
-public class FacetBean extends Base {
+public class FacetSelectorBean extends Base {
     private Facet facet;
 
-    public FacetBean() {
+    public FacetSelectorBean() {
     }
 
-    public FacetBean(final FacetCriteria facetCriteria, final PagedSearchResult<ProductProjection> searchResult,
-                     final UserContext userContext, final I18nResolver i18nResolver) {
-        final Facet<ProductProjection> facet = facetCriteria.getFacet(searchResult);
-        final String label = facetCriteria.getFacetConfig().getLabel();
-        final String resolvedLabel = i18nResolver.get(userContext.locales(), I18nIdentifier.of(label))
-                .orElse(label);
-        this.facet = facet.withLabel(resolvedLabel);
+    public FacetSelectorBean(final FacetSelector facetSelector, final PagedSearchResult<ProductProjection> searchResult,
+                             final UserContext userContext, final I18nResolver i18nResolver) {
+        final Facet<ProductProjection> facet = facetSelector.getFacet(searchResult);
+        if (facet.getLabel() != null) {
+            final String label = i18nResolver.get(userContext.locales(), I18nIdentifier.of(facet.getLabel()))
+                    .orElse(facet.getLabel());
+            this.facet = facet.withLabel(label);
+        } else {
+            this.facet = facet;
+        }
     }
 
     public Facet getFacet() {
@@ -33,11 +36,11 @@ public class FacetBean extends Base {
     }
 
     public boolean isDisplayList() {
-        return isFacetType(SunriseFacetType.SELECT_LIST_DISPLAY);
+        return isFacetType(SunriseFacetType.LIST);
     }
 
     public boolean isSelectFacet() {
-        return isFacetType(SunriseFacetType.SELECT_LIST_DISPLAY) || isFacetType(SunriseFacetType.SELECT_TWO_COLUMNS_DISPLAY);
+        return isFacetType(SunriseFacetType.LIST) || isFacetType(SunriseFacetType.COLUMNS_LIST);
     }
 
     public boolean isSliderRangeFacet() {
@@ -49,7 +52,7 @@ public class FacetBean extends Base {
     }
 
     public boolean isHierarchicalSelectFacet() {
-        return isFacetType(SunriseFacetType.SELECT_CATEGORY_HIERARCHICAL_DISPLAY);
+        return isFacetType(SunriseFacetType.CATEGORY_TREE);
     }
 
     private boolean isFacetType(final FacetType type) {

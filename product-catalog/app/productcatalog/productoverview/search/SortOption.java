@@ -6,17 +6,18 @@ import io.sphere.sdk.search.SortExpression;
 
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 public class SortOption extends Base {
     private String value;
     private String label;
     private List<SortExpression<ProductProjection>> expressions;
+    private boolean isDefault;
 
-    public SortOption(final String value, final String label, final List<SortExpression<ProductProjection>> expressions) {
+    public SortOption(final String value, final String label, final List<SortExpression<ProductProjection>> expressions,
+                      final boolean isDefault) {
         this.label = label;
         this.value = value;
         this.expressions = expressions;
+        this.isDefault = isDefault;
     }
 
     public String getValue() {
@@ -27,6 +28,10 @@ public class SortOption extends Base {
         return label;
     }
 
+    public boolean isDefault() {
+        return isDefault;
+    }
+
     /**
      * Gets the sort model associated with this option, representing the attribute path and sorting direction.
      * @return the sort model for this option
@@ -35,14 +40,12 @@ public class SortOption extends Base {
         return expressions;
     }
 
-    public static SortOption of(final String value, final String label, final List<String> expressions) {
-        final List<SortExpression<ProductProjection>> sortExpressions = expressions.stream()
-                .map(SortOption::toSortExpression)
-                .collect(toList());
-        return new SortOption(value, label, sortExpressions);
+    public SortOption withExpressions(final List<SortExpression<ProductProjection>> expressions) {
+        return new SortOption(value, label, expressions, isDefault);
     }
 
-    private static SortExpression<ProductProjection> toSortExpression(final String expr) {
-        return SortExpression.of(expr);
+    public static SortOption of(final String value, final String label, final List<SortExpression<ProductProjection>> sortExpressions,
+                                final boolean isDefault) {
+        return new SortOption(value, label, sortExpressions, isDefault);
     }
 }

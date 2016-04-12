@@ -17,11 +17,10 @@ public class SortSelectorBean extends Base {
     public SortSelectorBean() {
     }
 
-    public SortSelectorBean(final SortSelector sortCriteria, final UserContext userContext, final I18nResolver i18nResolver) {
-        final SortConfig sortConfig = sortCriteria.getSortConfig();
-        this.key = sortConfig.getKey();
-        this.list = sortConfig.getOptions().stream()
-                .map(option -> optionToSelectableData(option, sortCriteria, userContext, i18nResolver))
+    public SortSelectorBean(final SortSelector sortSelector, final UserContext userContext, final I18nResolver i18nResolver) {
+        this.key = sortSelector.getKey();
+        this.list = sortSelector.getOptions().stream()
+                .map(option -> optionToSelectableData(option, sortSelector, userContext, i18nResolver))
                 .collect(toList());
     }
 
@@ -41,12 +40,12 @@ public class SortSelectorBean extends Base {
         this.list = list;
     }
 
-    private static SelectableData optionToSelectableData(final SortOption option, final SortSelector sortCriteria,
+    private static SelectableData optionToSelectableData(final SortOption option, final SortSelector sortSelector,
                                                          final UserContext userContext, final I18nResolver i18nResolver) {
         final String label = i18nResolver.get(userContext.locales(), I18nIdentifier.of(option.getLabel()))
                 .orElse(option.getLabel());
         final SelectableData sortOption = new SelectableData(label, option.getValue());
-        if (sortCriteria.getSelectedValues().contains(option.getValue())) {
+        if (sortSelector.getSelectedOptions().contains(option)) {
             sortOption.setSelected(true);
         }
         return sortOption;

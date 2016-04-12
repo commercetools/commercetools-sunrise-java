@@ -1,22 +1,20 @@
 package productcatalog.productoverview.search;
 
-import java.util.List;
-
 public class SearchConfig {
 
     private final String paginationKey;
     private final String searchTermKey;
-    private final DisplayConfig displayConfig;
+    private final ProductsPerPageConfig productsPerPageConfig;
     private final SortConfig sortConfig;
-    private final List<FacetConfig> facetsConfig;
+    private final FacetConfigList facetConfigList;
 
-    private SearchConfig(final String paginationKey, final String searchTermKey, final DisplayConfig displayConfig,
-                        final SortConfig sortConfig, final List<FacetConfig> facetsConfig) {
+    private SearchConfig(final String paginationKey, final String searchTermKey, final ProductsPerPageConfig productsPerPageConfig,
+                        final SortConfig sortConfig, final FacetConfigList facetConfigList) {
         this.paginationKey = paginationKey;
         this.searchTermKey = searchTermKey;
-        this.displayConfig = displayConfig;
+        this.productsPerPageConfig = productsPerPageConfig;
         this.sortConfig = sortConfig;
-        this.facetsConfig = facetsConfig;
+        this.facetConfigList = facetConfigList;
     }
 
     public String getPaginationKey() {
@@ -27,20 +25,20 @@ public class SearchConfig {
         return searchTermKey;
     }
 
-    public DisplayConfig getDisplayConfig() {
-        return displayConfig;
+    public ProductsPerPageConfig getProductsPerPageConfig() {
+        return productsPerPageConfig;
     }
 
     public SortConfig getSortConfig() {
         return sortConfig;
     }
 
-    public List<FacetConfig> getFacetsConfig() {
-        return facetsConfig;
+    public FacetConfigList getFacetConfigList() {
+        return facetConfigList;
     }
 
-    public static SearchConfig of(final String paginationKey, final String searchTermKey, final DisplayConfig displayConfig,
-                                  final SortConfig sortConfig, final List<FacetConfig> facetsConfig) {
-        return new SearchConfig(paginationKey, searchTermKey, displayConfig, sortConfig, facetsConfig);
+    public static SearchConfig of(final String paginationKey, final String searchTermKey, final ProductsPerPageConfig productsPerPageConfig,
+                                  final SortConfig sortConfig, final FacetConfigList facetConfigList) {
+        return new SearchConfig(paginationKey, searchTermKey, productsPerPageConfig, sortConfig, facetConfigList);
     }
 }
