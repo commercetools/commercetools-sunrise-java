@@ -1,4 +1,4 @@
-package inject;
+package ctpmodels;
 
 import com.google.inject.AbstractModule;
 import com.neovisionaries.i18n.CountryCode;

@@ -1,4 +1,4 @@
-package controllers;
+package common;
 
 import common.actions.NoCache;
 import common.controllers.ControllerDependency;

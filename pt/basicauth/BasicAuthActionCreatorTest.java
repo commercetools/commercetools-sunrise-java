@@ -1,7 +1,7 @@
 package basicauth;
 
 import common.controllers.TestableReverseRouter;
-import controllers.WithSunriseApplication;
+import common.WithSunriseApplication;
 import org.junit.Test;
 import play.Application;
 import play.Configuration;

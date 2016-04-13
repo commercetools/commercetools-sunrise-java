@@ -1,4 +1,4 @@
-package controllers;
+package common;
 
 import common.controllers.TestableSphereClient;
 import ctpclient.CtpClientTestModule;

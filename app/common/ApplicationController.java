@@ -1,4 +1,4 @@
-package controllers;
+package common;
 
 import common.contexts.ProjectContext;
 import common.controllers.ReverseRouter;

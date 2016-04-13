@@ -1,4 +1,4 @@
-package inject;
+package common;
 
 import common.utils.SunriseConfiguration;
 import play.ApplicationLoader;

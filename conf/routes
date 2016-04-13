@@ -3,10 +3,10 @@
 # ~~~~
 
 # Untrail url
-GET         /*path/                                            @controllers.ApplicationController.untrail(path: String)
+GET         /*path/                                            @common.ApplicationController.untrail(path: String)
 
 # Main entry point that decides whether to go to home page or to setup wizard
-GET         /                                                  @controllers.ApplicationController.index()
+GET         /                                                  @common.ApplicationController.index()
 
 ->          /setup                                             setupwidget.Routes
 
@@ -15,9 +15,9 @@ GET         /                                                  @controllers.Appl
 # ~~~~~
 
 # Shows the deployed version, artifactId and GIT SHA
-GET         /version                                           @controllers.StatusController.version()
+GET         /version                                           @common.StatusController.version()
 # Shows if the application is healthy
-GET         /health                                            @controllers.StatusController.health()
+GET         /health                                            @common.StatusController.health()
 
 # Endpoint to manually refresh category tree (otherwise an app restart is required)
 GET         /categories/refresh                                @categorytree.CategoriesRefreshController.refresh()
@@ -45,9 +45,9 @@ GET         /:languageTag/home                                 @productcatalog.h
 # ~~~~~
 
 # Changes the language of the app
-POST        /changeLanguage                                    @controllers.ApplicationController.changeLanguage()
+POST        /changeLanguage                                    @common.ApplicationController.changeLanguage()
 # Changes the country of the app
-POST        /:languageTag/changeCountry                        @controllers.ApplicationController.changeCountry(languageTag: String)
+POST        /:languageTag/changeCountry                        @common.ApplicationController.changeCountry(languageTag: String)
 
 
 # CART

@@ -1,4 +1,4 @@
-package inject;
+package ctpmodels;
 
 import common.models.ProductDataConfig;
 import io.sphere.sdk.client.SphereClient;

@@ -1,4 +1,4 @@
-package inject;
+package ctpmodels;
 
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.shippingmethods.ShippingMethod;

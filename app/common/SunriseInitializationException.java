@@ -1,4 +1,4 @@
-package inject;
+package common;
 
 public class SunriseInitializationException extends RuntimeException {
 
