@@ -4,7 +4,6 @@ import com.github.jknack.handlebars.Context;
 import common.cms.CmsPage;
 import io.sphere.sdk.models.Base;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -39,11 +38,5 @@ final class HelperUtils extends Base {
         } else {
             return Optional.empty();
         }
-    }
-
-    @Nullable
-    public static String getPart(final String[] parts, final int position, final String defaultValue) {
-        final boolean containsPosition = parts.length > position;
-        return containsPosition ? parts[position] : defaultValue;
     }
 }

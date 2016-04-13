@@ -14,7 +14,7 @@ import javax.money.Monetary;
 import java.util.Collections;
 import java.util.Locale;
 
-import static common.JsonUtils.readCtpObject;
+import static common.utils.JsonUtils.readCtpObject;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 

@@ -1,8 +1,8 @@
 package shoppingcart.checkout.confirmation;
 
+import common.errors.ErrorsBean;
 import common.models.SelectableData;
 import io.sphere.sdk.models.Base;
-import common.errors.ErrorsBean;
 
 public class CheckoutConfirmationFormBean extends Base {
     private SelectableData newsletter;

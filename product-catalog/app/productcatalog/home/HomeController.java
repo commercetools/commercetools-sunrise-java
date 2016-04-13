@@ -11,6 +11,7 @@ import play.mvc.Result;
 import productcatalog.common.ProductCatalogController;
 import productcatalog.common.ProductListData;
 import productcatalog.common.SuggestionsData;
+import productcatalog.productoverview.search.SearchConfig;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;
@@ -33,8 +34,8 @@ public class HomeController extends ProductCatalogController {
 
     @Inject
     public HomeController(final ControllerDependency controllerDependency, final ProductService productService,
-                          final ProductDataConfig productDataConfig) {
-        super(controllerDependency, productService, productDataConfig);
+                          final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
+        super(controllerDependency, productService, productDataConfig, searchConfig);
         this.suggestionsExternalIds = configuration().getStringList("home.suggestions.externalId", emptyList());
         this.numSuggestions = configuration().getInt("home.suggestions.count", 4);
     }

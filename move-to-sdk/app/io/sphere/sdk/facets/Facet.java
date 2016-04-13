@@ -2,8 +2,9 @@ package io.sphere.sdk.facets;
 
 import io.sphere.sdk.search.FacetedSearchExpression;
 import io.sphere.sdk.search.PagedSearchResult;
-import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
+import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -19,16 +20,17 @@ public interface Facet<T> {
     String getKey();
 
     /**
-     * Gets the label displayed in the facet.
-     * @return the label displayed in this facet
-     */
-    String getLabel();
-
-    /**
      * Gets the type of this facet.
      * @return the type of this facet
      */
     FacetType getType();
+
+    /**
+     * Gets the label displayed in the facet.
+     * @return the label displayed in this facet, or absent if none defined
+     */
+    @Nullable
+    String getLabel();
 
     /**
      * Whether the facet can be displayed or not.
@@ -49,11 +51,11 @@ public interface Facet<T> {
     List<String> getSelectedValues();
 
     /**
-     * Gets the untyped search model associated with this facet, representing the attribute path.
+     * Gets the faceted search model associated with this facet, representing the attribute path.
      * With this search model you can build facet and filter expressions for this attribute.
-     * @return the untyped search model for this facet
+     * @return the faceted search model for this facet
      */
-    TermFacetedSearchSearchModel<T> getSearchModel();
+    FacetedSearchSearchModel<T> getFacetedSearchSearchModel();
 
     /**
      * Gets the filter expressions associated to this facet, according to the selected values, as needed to obtain a faceted search.
@@ -67,5 +69,19 @@ public interface Facet<T> {
      * @return a new instance with same attributes, but with the given facet result
      */
     Facet<T> withSearchResult(final PagedSearchResult<T> searchResult);
+
+    /**
+     * Gets a new instance of Facet with the same attributes as this, but with the given selected values.
+     * @param selectedValues the new selected values for this facet
+     * @return a new instance with same attributes, but with the given selected values
+     */
+    Facet<T> withSelectedValues(final List<String> selectedValues);
+
+    /**
+     * Gets a new instance of Facet with the same attributes as this, but with the given label.
+     * @param label the new label
+     * @return a new instance with same attributes, but with the given label
+     */
+    Facet<T> withLabel(final String label);
 
 }

@@ -11,6 +11,7 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.common.*;
+import productcatalog.productoverview.search.SearchConfig;
 import productcatalog.services.ProductService;
 
 import javax.inject.Inject;
@@ -27,9 +28,9 @@ public class ProductDetailPageController extends ProductCatalogController {
     private final int numSuggestions;
 
     @Inject
-    public ProductDetailPageController(final ControllerDependency controllerDependency,
-                                       final ProductService productService, final ProductDataConfig productDataConfig) {
-        super(controllerDependency, productService, productDataConfig);
+    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductService productService,
+                                       final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
+        super(controllerDependency, productService, productDataConfig, searchConfig);
         this.numSuggestions = configuration().getInt("pdp.productSuggestions.count");
     }
 
@@ -71,7 +72,7 @@ public class ProductDetailPageController extends ProductCatalogController {
         final ProductDetailPageContent content = new ProductDetailPageContent();
         content.setAdditionalTitle(product.getName().find(userContext.locales()).orElse(""));
         content.setProduct(new ProductBean(product, variant, productDataConfig(), userContext, reverseRouter()));
-        content.setBreadcrumb(new BreadcrumbData(product, variant, categoryTree(), userContext, reverseRouter()));
+        content.setBreadcrumb(new BreadcrumbBean(product, variant, categoryTree(), userContext, reverseRouter()));
         content.setShippingRates(createDeliveryData(userContext));
         content.setSuggestions(createSuggestions(userContext, suggestions));
         content.setAddToCartFormUrl(reverseRouter().processAddProductToCartForm(userContext.locale().getLanguage()).url());
@@ -83,10 +84,10 @@ public class ProductDetailPageController extends ProductCatalogController {
         return new SuggestionsData(productListData);
     }
 
-    private List<ShippingRateData> createDeliveryData(final UserContext userContext) {
+    private List<ShippingRateBean> createDeliveryData(final UserContext userContext) {
         final PriceFormatter priceFormatter = priceFormatter(userContext);
         return getShippingRates().stream()
-                .map(rate -> new ShippingRateData(priceFormatter, rate))
+                .map(rate -> new ShippingRateBean(priceFormatter, rate))
                 .collect(toList());
     }
 

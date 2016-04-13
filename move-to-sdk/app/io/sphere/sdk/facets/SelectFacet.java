@@ -3,8 +3,8 @@ package io.sphere.sdk.facets;
 import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.TermFacetResult;
 
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Facet that contains a list of selectable options.
@@ -28,13 +28,15 @@ public interface SelectFacet<T> extends Facet<T> {
      * Gets the threshold indicating the minimum amount of options allowed to be displayed in the facet.
      * @return the threshold for the amount of options that can be displayed, or absent if it has no threshold
      */
-    Optional<Long> getThreshold();
+    @Nullable
+    Long getThreshold();
 
     /**
      * Gets the limit for the maximum amount of options allowed to be displayed in the facet.
      * @return the limit for the amount of options that can be displayed, or absent if it has no limit
      */
-    Optional<Long> getLimit();
+    @Nullable
+    Long getLimit();
 
     /**
      * Defines whether multiple options can be selected or only one.
@@ -53,13 +55,16 @@ public interface SelectFacet<T> extends Facet<T> {
      * Gets the associated term facet result for this select facet.
      * @return the term facet result, or absent if there is no associated facet result
      */
-    Optional<TermFacetResult> getFacetResult();
+    @Nullable
+    TermFacetResult getFacetResult();
 
     /**
      * Gets the mapper for this facet.
-     * @return the facet option mapper
+     * @return the facet option mapper, or absent if there is no mapper
      */
+    @Nullable
     FacetOptionMapper getMapper();
 
     SelectFacet<T> withSearchResult(final PagedSearchResult<T> searchResult);
+
 }

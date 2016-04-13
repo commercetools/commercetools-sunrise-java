@@ -50,60 +50,6 @@
       "required": false
     },
 
-    "HOME_SUGGESTIONS_SIZE": {
-      "description": "The amount of products displayed in the home page suggestions.",
-      "value": "4",
-      "required": false
-    },
-    "PRODUCT_SUGGESTIONS_SIZE": {
-      "description": "The amount of products displayed for a product's suggestions.",
-      "value": "4",
-      "required": false
-    },
-
-    "SEARCH_FIELD": {
-      "description": "Field in the URL query string containing the searched term.",
-      "value": "q",
-      "required": false
-    },
-    "SORT_FIELD": {
-      "description": "Field in the URL query string containing the sorting criteria.",
-      "value": "sort",
-      "required": false
-    },
-    "PRODUCTS_PER_PAGE_FIELD": {
-      "description": "Field in the URL query string containing the amount of products per page.",
-      "value": "display",
-      "required": false
-    },
-    "PRODUCTS_PER_PAGE_OPTIONS": {
-      "description": "Available options to select the amount of products per page. Enter the values separated by commas.",
-      "value": "24, 48",
-      "required": false
-    },
-    "PRODUCTS_PER_PAGE_DEFAULT": {
-      "description": "The default selected amount of products per page.",
-      "value": "24",
-      "required": false
-    },
-
-    "COUNTRIES": {
-      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE COUNTRIES DEFINED IN YOUR COMMERCETOOLS PROJECT. If you want to replace them, enter the countries as ISO country codes (e.g. DE) separated by commas. Default country first.",
-      "value": "",
-      "required": false
-    },
-    "CURRENCIES": {
-      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE CURRENCIES DEFINED IN YOUR COMMERCETOOLS PROJECT. If you want to replace them, enter the currencies as ISO currency codes (e.g. EUR) separated by commas. Default currency first.",
-      "value": "",
-      "required": false
-    },
-    "LANGUAGES": {
-      "description": "OPTIONAL! LEAVE EMPTY IF YOU WANT THE APPLICATION TO USE THE LANGUAGES DEFINED IN YOUR COMMERCETOOLS PROJECT. If you want to replace them, enter the languages as language tags (e.g. en-UK) separated by commas. Default language first.",
-      "value": "",
-      "required": false
-    },
-
-
     "BASIC_AUTH_CREDENTIALS": {
       "description": "OPTIONAL! LEAVE EMPTY IF YOU DO NOT WANT TO ENABLE BASIC AUTHENTICATION. If you only want authorized users to access your website, please enter here the required credentials separated by colon ':'. For example, for a username 'john' and password 'secret', enter 'john:secret'",
       "required": false

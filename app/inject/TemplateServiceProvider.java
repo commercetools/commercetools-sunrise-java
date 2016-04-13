@@ -34,7 +34,7 @@ class TemplateServiceProvider implements Provider<TemplateService> {
 
     @Override
     public TemplateService get() {
-        final List<TemplateLoader> templateLoaders = initializeTemplateLoaders(CONFIG_TEMPLATE_LOADERS);
+        final List<TemplateLoader> templateLoaders = initializeTemplateLoaders(configuration, CONFIG_TEMPLATE_LOADERS);
         if (templateLoaders.isEmpty()) {
             throw new SunriseInitializationException("No Handlebars template loaders found in configuration '" + CONFIG_TEMPLATE_LOADERS + "'");
         }
@@ -43,22 +43,23 @@ class TemplateServiceProvider implements Provider<TemplateService> {
         return HandlebarsTemplateService.of(templateLoaders, i18NResolver);
     }
 
-    private List<TemplateLoader> initializeTemplateLoaders(final String configKey) {
+    private static List<TemplateLoader> initializeTemplateLoaders(final Configuration configuration, final String configKey) {
         return configuration.getConfigList(configKey, emptyList())
                 .stream()
-                .map(this::initializeTemplateLoader)
+                .map(TemplateServiceProvider::initializeTemplateLoader)
                 .collect(toList());
     }
 
-    private TemplateLoader initializeTemplateLoader(final Configuration loaderConfig) {
+    private static TemplateLoader initializeTemplateLoader(final Configuration loaderConfig) {
         final String type = loaderConfig.getString(TYPE_ATTR);
         final String path = loaderConfig.getString(PATH_ATTR);
-        if (CLASSPATH_TYPE.equals(type)) {
-            return new ClassPathTemplateLoader(path);
-        } else if (FILE_TYPE.equals(type)) {
-            return new FileTemplateLoader(path);
-        } else {
-            throw new SunriseInitializationException("Not recognized template loader: " + type);
+        switch (type) {
+            case CLASSPATH_TYPE:
+                return new ClassPathTemplateLoader(path);
+            case FILE_TYPE:
+                return new FileTemplateLoader(path);
+            default:
+                throw new SunriseInitializationException("Not recognized template loader: " + type);
         }
     }
 }

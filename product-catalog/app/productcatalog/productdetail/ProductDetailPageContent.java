@@ -1,27 +1,27 @@
 package productcatalog.productdetail;
 
 import common.controllers.PageContent;
-import productcatalog.common.BreadcrumbData;
+import productcatalog.common.BreadcrumbBean;
 import productcatalog.common.ProductBean;
 import productcatalog.common.SuggestionsData;
 
 import java.util.List;
 
 public class ProductDetailPageContent extends PageContent {
-    private BreadcrumbData breadcrumb;
+    private BreadcrumbBean breadcrumb;
     private ProductBean product;
-    private List<ShippingRateData> shippingRates;
+    private List<ShippingRateBean> shippingRates;
     private SuggestionsData suggestions;
     private String addToCartFormUrl;
 
     public ProductDetailPageContent() {
     }
 
-    public BreadcrumbData getBreadcrumb() {
+    public BreadcrumbBean getBreadcrumb() {
         return breadcrumb;
     }
 
-    public void setBreadcrumb(final BreadcrumbData breadcrumb) {
+    public void setBreadcrumb(final BreadcrumbBean breadcrumb) {
         this.breadcrumb = breadcrumb;
     }
 
@@ -33,11 +33,11 @@ public class ProductDetailPageContent extends PageContent {
         this.product = product;
     }
 
-    public List<ShippingRateData> getShippingRates() {
+    public List<ShippingRateBean> getShippingRates() {
         return shippingRates;
     }
 
-    public void setShippingRates(final List<ShippingRateData> shippingRates) {
+    public void setShippingRates(final List<ShippingRateBean> shippingRates) {
         this.shippingRates = shippingRates;
     }
 

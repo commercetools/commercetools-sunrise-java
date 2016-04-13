@@ -1,6 +1,7 @@
 package common.models;
 
 import common.contexts.UserContext;
+import common.i18n.I18nIdentifier;
 import common.i18n.I18nResolver;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;
@@ -13,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 
 public class SalutationsFieldsBean extends Base {
     private static final String ALLOWED_TITLES_CONFIG_KEY = "checkout.allowedTitles";
-    private static final String MESSAGE_CONFIG_KEY = "message";
+    private static final String LABEL_ATTR = "label";
 
     private List<SelectableData> list;
 
@@ -39,8 +40,8 @@ public class SalutationsFieldsBean extends Base {
     private void fill(@Nullable final String title, final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration) {
         final List<SelectableData> selectableDataList = configuration.getObjectList(ALLOWED_TITLES_CONFIG_KEY).stream()
                 .map(titleMap -> {
-                    final String key = titleMap.get(MESSAGE_CONFIG_KEY).toString();
-                    final String shownTitle = i18nResolver.getOrEmpty(userContext.locales(), "main", key);
+                    final String key = titleMap.get(LABEL_ATTR).toString();
+                    final String shownTitle = i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of(key));
                     final SelectableData selectableData = new SelectableData(shownTitle, shownTitle);
                     selectableData.setSelected(selectableData.getValue().equals(title));
                     return selectableData;

@@ -2,21 +2,24 @@ package productcatalog.productoverview;
 
 import common.models.DetailData;
 import common.controllers.PageContent;
-import productcatalog.common.BreadcrumbData;
+import productcatalog.common.BreadcrumbBean;
 import productcatalog.common.ProductListData;
+import productcatalog.productoverview.search.ProductsPerPageSelectorBean;
+import productcatalog.productoverview.search.FacetSelectorsBean;
+import productcatalog.productoverview.search.SortSelectorBean;
 
 public class ProductOverviewPageContent extends PageContent {
     private String filterProductsUrl;
     private String searchTerm;
-    private BannerData banner;
-    private JumbotronData jumbotron;
+    private BannerBean banner;
+    private JumbotronBean jumbotron;
     // TODO searchResult
     private DetailData seo;
-    private BreadcrumbData breadcrumb;
-    private FacetListData facets;
-    private PaginationData pagination;
-    private DisplaySelector displaySelector;
-    private SortSelector sortSelector;
+    private BreadcrumbBean breadcrumb;
+    private FacetSelectorsBean facets;
+    private PaginationBean pagination;
+    private ProductsPerPageSelectorBean displaySelector;
+    private SortSelectorBean sortSelector;
     private ProductListData products;
     // TODO wishlist
 
@@ -39,19 +42,19 @@ public class ProductOverviewPageContent extends PageContent {
         this.searchTerm = searchTerm;
     }
 
-    public BannerData getBanner() {
+    public BannerBean getBanner() {
         return banner;
     }
 
-    public void setBanner(final BannerData banner) {
+    public void setBanner(final BannerBean banner) {
         this.banner = banner;
     }
 
-    public JumbotronData getJumbotron() {
+    public JumbotronBean getJumbotron() {
         return jumbotron;
     }
 
-    public void setJumbotron(final JumbotronData jumbotron) {
+    public void setJumbotron(final JumbotronBean jumbotron) {
         this.jumbotron = jumbotron;
     }
 
@@ -63,43 +66,43 @@ public class ProductOverviewPageContent extends PageContent {
         this.seo = seo;
     }
 
-    public BreadcrumbData getBreadcrumb() {
+    public BreadcrumbBean getBreadcrumb() {
         return breadcrumb;
     }
 
-    public void setBreadcrumb(final BreadcrumbData breadcrumb) {
+    public void setBreadcrumb(final BreadcrumbBean breadcrumb) {
         this.breadcrumb = breadcrumb;
     }
 
-    public FacetListData getFacets() {
+    public FacetSelectorsBean getFacets() {
         return facets;
     }
 
-    public void setFacets(final FacetListData facets) {
+    public void setFacets(final FacetSelectorsBean facets) {
         this.facets = facets;
     }
 
-    public PaginationData getPagination() {
+    public PaginationBean getPagination() {
         return pagination;
     }
 
-    public void setPagination(final PaginationData pagination) {
+    public void setPagination(final PaginationBean pagination) {
         this.pagination = pagination;
     }
 
-    public DisplaySelector getDisplaySelector() {
+    public ProductsPerPageSelectorBean getDisplaySelector() {
         return displaySelector;
     }
 
-    public void setDisplaySelector(final DisplaySelector displaySelector) {
+    public void setDisplaySelector(final ProductsPerPageSelectorBean displaySelector) {
         this.displaySelector = displaySelector;
     }
 
-    public SortSelector getSortSelector() {
+    public SortSelectorBean getSortSelector() {
         return sortSelector;
     }
 
-    public void setSortSelector(final SortSelector sortSelector) {
+    public void setSortSelector(final SortSelectorBean sortSelector) {
         this.sortSelector = sortSelector;
     }
 

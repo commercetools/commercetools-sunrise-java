@@ -14,8 +14,8 @@ public class TestableI18nResolver implements I18nResolver {
     }
 
     @Override
-    public Optional<String> get(final List<Locale> locales, final String bundle, final String key, final Map<String, Object> hashArgs) {
-        final String mapKey = String.format("%s/%s:%s", locales.get(0), bundle, key);
+    public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs) {
+        final String mapKey = String.format("%s/%s:%s", locales.get(0), i18nIdentifier.getBundle(), i18nIdentifier.getKey());
         final String message = i18nMap.get(mapKey);
         final String parameters = hashArgs.entrySet().stream()
                 .map(hashPair -> hashPair.getKey() + "=" + hashPair.getValue())

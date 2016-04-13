@@ -3,6 +3,7 @@ package shoppingcart.checkout.address;
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
+import common.i18n.I18nIdentifier;
 import common.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
@@ -37,7 +38,7 @@ public class CheckoutAddressPageContent extends CheckoutPageContent {
         stepWidget.setShippingStepActive(true);
         setStepWidget(stepWidget);
         setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter));
-        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), "checkout", "shippingPage.title"));
+        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
     }
 
     public CheckoutAddressFormBean getAddressForm() {

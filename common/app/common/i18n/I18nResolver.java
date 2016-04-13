@@ -16,44 +16,40 @@ public interface I18nResolver {
     /**
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
      * @param locales the list of locales used to translate the message
-     * @param bundle name of the bundle containing the message key
-     * @param key identifier of the message of the form {@code some.message.key}
+     * @param i18nIdentifier identifier of the i18n message
      * @param hashArgs list of hash arguments
      * @return the resolved message in the any of the given languages, or absent if it could not be found
      */
-    Optional<String> get(final List<Locale> locales, final String bundle, final String key, final Map<String, Object> hashArgs);
+    Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs);
 
     /**
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
      * @param locales the list of locales used to translate the message
-     * @param bundle name of the bundle containing the message key
-     * @param key identifier of the message of the form {@code some.message.key}
+     * @param i18nIdentifier identifier of the i18n message
      * @return the resolved message in the given language, or absent if it could not be found
      */
-    default Optional<String> get(final List<Locale> locales, final String bundle, final String key) {
-        return get(locales, bundle, key, emptyMap());
+    default Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier) {
+        return get(locales, i18nIdentifier, emptyMap());
     }
 
     /**
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
      * @param locales the list of locales used to translate the message
-     * @param bundle name of the bundle containing the message key
-     * @param key identifier of the message of the form {@code some.message.key}
+     * @param i18nIdentifier identifier of the i18n message
      * @param hashArgs list of hash arguments
      * @return the resolved message in the first found given language, or empty string if it could not be found
      */
-    default String getOrEmpty(final List<Locale> locales, final String bundle, final String key, final Map<String, Object> hashArgs) {
-        return get(locales, bundle, key, hashArgs).orElse("");
+    default String getOrEmpty(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs) {
+        return get(locales, i18nIdentifier, hashArgs).orElse("");
     }
 
     /**
      * Resolves i18n message identified by a bundle and a key for the the first found given locale.
      * @param locales the list of locales used to translate the message
-     * @param bundle name of the bundle containing the message key
-     * @param key identifier of the message of the form {@code some.message.key}
+     * @param i18nIdentifier identifier of the i18n message
      * @return the resolved message in the any of the given languages, or empty string if it could not be found
      */
-    default String getOrEmpty(final List<Locale> locales, final String bundle, final String key) {
-        return get(locales, bundle, key).orElse("");
+    default String getOrEmpty(final List<Locale> locales, final I18nIdentifier i18nIdentifier) {
+        return get(locales, i18nIdentifier).orElse("");
     }
 }

@@ -1,6 +1,7 @@
 package common.cms.local;
 
 import common.cms.CmsContent;
+import common.i18n.I18nIdentifier;
 import common.i18n.I18nResolver;
 
 import java.util.List;
@@ -26,8 +27,8 @@ final class LocalCmsContent implements CmsContent {
         if (field.isEmpty()) {
             return Optional.empty();
         } else {
-            final String messageKey = messageKey(field);
-            return i18nResolver.get(locales, contentType, messageKey, hashArgs);
+            final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey(contentType, messageKey(field));
+            return i18nResolver.get(locales, i18nIdentifier, hashArgs);
         }
     }
 
