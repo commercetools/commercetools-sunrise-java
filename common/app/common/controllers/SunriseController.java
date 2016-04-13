@@ -2,14 +2,14 @@ package common.controllers;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.actions.NoCache;
-import common.cms.CmsService;
+import common.template.cms.CmsService;
 import common.contexts.ProjectContext;
 import common.contexts.RequestContext;
 import common.contexts.UserContext;
-import common.i18n.I18nResolver;
+import common.template.i18n.I18nResolver;
 import common.models.LocationSelector;
 import common.models.NavMenuData;
-import common.templates.TemplateService;
+import common.template.engine.TemplateService;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;

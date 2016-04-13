@@ -2,7 +2,7 @@ package myaccount.login;
 
 import common.contexts.UserContext;
 import common.controllers.PageContent;
-import common.i18n.I18nResolver;
+import common.template.i18n.I18nResolver;
 import play.Configuration;
 import play.data.Form;
 

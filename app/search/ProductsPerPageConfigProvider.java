@@ -2,7 +2,7 @@ package search;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import inject.SunriseInitializationException;
+import common.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;
 import productcatalog.productoverview.search.ProductsPerPageConfig;

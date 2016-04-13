@@ -1,6 +1,6 @@
 package basicauth;
 
-import inject.SunriseInitializationException;
+import common.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;
 

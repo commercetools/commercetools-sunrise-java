@@ -2,7 +2,7 @@ package myaccount.login;
 
 import common.contexts.UserContext;
 import common.errors.ErrorsBean;
-import common.i18n.I18nResolver;
+import common.template.i18n.I18nResolver;
 import common.models.SalutationsFieldsBean;
 import io.sphere.sdk.models.Base;
 import play.Configuration;

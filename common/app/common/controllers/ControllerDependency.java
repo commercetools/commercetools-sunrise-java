@@ -1,9 +1,9 @@
 package common.controllers;
 
-import common.cms.CmsService;
+import common.template.cms.CmsService;
 import common.contexts.ProjectContext;
-import common.i18n.I18nResolver;
-import common.templates.TemplateService;
+import common.template.i18n.I18nResolver;
+import common.template.engine.TemplateService;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Base;

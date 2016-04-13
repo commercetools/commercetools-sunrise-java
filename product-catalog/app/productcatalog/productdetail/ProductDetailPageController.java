@@ -7,16 +7,23 @@ import common.models.ProductDataConfig;
 import common.utils.PriceFormatter;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
+import io.sphere.sdk.products.queries.ProductProjectionQuery;
+import io.sphere.sdk.queries.PagedQueryResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.common.*;
 import productcatalog.productoverview.search.SearchConfig;
-import productcatalog.services.ProductService;
+import common.suggestion.ProductSuggestion;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -25,12 +32,14 @@ import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductDetailPageController extends ProductCatalogController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductDetailPageController.class);
     private final int numSuggestions;
 
     @Inject
-    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductService productService,
+    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductSuggestion productSuggestion,
                                        final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
-        super(controllerDependency, productService, productDataConfig, searchConfig);
+        super(controllerDependency, productSuggestion, productDataConfig, searchConfig);
         this.numSuggestions = configuration().getInt("pdp.productSuggestions.count");
     }
 
@@ -38,37 +47,57 @@ public class ProductDetailPageController extends ProductCatalogController {
 
     public CompletionStage<Result> show(final String locale, final String slug, final String sku) {
         final UserContext userContext = userContext(locale);
-        return productService().findProductBySlug(userContext.locale(), slug)
+        return findProductBySlug(userContext.locale(), slug)
                 .thenComposeAsync(productOpt -> productOpt
                         .map(product -> renderProduct(slug, sku, product, userContext))
                         .orElseGet(() -> CompletableFuture.completedFuture(notFound())), HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Result> renderProduct(final String slug, final String sku, final ProductProjection product, final UserContext userContext) {
+    /**
+     * Gets a product, uniquely identified by a locale and a slug
+     * @param locale the locale in which you provide the slug
+     * @param slug the slug
+     * @return A CompletionStage of an optionally found ProductProjection
+     */
+    protected CompletionStage<Optional<ProductProjection>> findProductBySlug(final Locale locale, final String slug) {
+        final ProductProjectionQuery request = ProductProjectionQuery.ofCurrent().bySlug(locale, slug);
+        return sphere().execute(request)
+                .thenApplyAsync(PagedQueryResult::head, HttpExecution.defaultContext())
+                .whenComplete((productOpt, t) -> {
+                    if (productOpt.isPresent()) {
+                        final String productId = productOpt.get().getId();
+                        LOGGER.trace("Found product for slug {} in locale {} with ID {}.", slug, locale, productId);
+                    } else {
+                        LOGGER.trace("No product found for slug {} in locale {}.", slug, locale);
+                    }
+                });
+    }
+
+    protected CompletionStage<Result> renderProduct(final String slug, final String sku, final ProductProjection product, final UserContext userContext) {
         return product.findVariantBySku(sku)
-                .map(variant -> productService().getSuggestions(product, categoryTree(), numSuggestions).thenApplyAsync(suggestions ->
+                .map(variant -> productSuggestion().relatedToProduct(product, numSuggestions).thenApplyAsync(suggestions ->
                         ok(renderProductPage(product, userContext, variant, suggestions)), HttpExecution.defaultContext())
                 ).orElseGet(() -> redirectToMasterVariant(userContext, slug, product));
     }
 
-    private CompletionStage<Result> redirectToMasterVariant(final UserContext userContext, final String slug,
+    protected CompletionStage<Result> redirectToMasterVariant(final UserContext userContext, final String slug,
                                                             final ProductProjection product) {
         final String masterVariantSku = product.getMasterVariant().getSku();
         final String languageTag = userContext.locale().toLanguageTag();
         return CompletableFuture.completedFuture(redirect(reverseRouter().showProduct(languageTag, slug, masterVariantSku)));
     }
 
-    /* Methods to render the page */
+    /* Page rendering methods */
 
-    private Html renderProductPage(final ProductProjection product, final UserContext userContext,
-                                   final ProductVariant variant, final List<ProductProjection> suggestions) {
+    protected Html renderProductPage(final ProductProjection product, final UserContext userContext,
+                                   final ProductVariant variant, final Set<ProductProjection> suggestions) {
         final ProductDetailPageContent pageContent = createPageContent(userContext, product, variant, suggestions);
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateService().renderToHtml("pdp", pageData, userContext.locales());
     }
 
-    private ProductDetailPageContent createPageContent(final UserContext userContext, final ProductProjection product,
-                                                       final ProductVariant variant, final List<ProductProjection> suggestions) {
+    protected ProductDetailPageContent createPageContent(final UserContext userContext, final ProductProjection product,
+                                                         final ProductVariant variant, final Set<ProductProjection> suggestions) {
         final ProductDetailPageContent content = new ProductDetailPageContent();
         content.setAdditionalTitle(product.getName().find(userContext.locales()).orElse(""));
         content.setProduct(new ProductBean(product, variant, productDataConfig(), userContext, reverseRouter()));
@@ -79,19 +108,19 @@ public class ProductDetailPageController extends ProductCatalogController {
         return content;
     }
 
-    private SuggestionsData createSuggestions(final UserContext userContext, final List<ProductProjection> suggestions) {
+    protected SuggestionsData createSuggestions(final UserContext userContext, final Set<ProductProjection> suggestions) {
         final ProductListData productListData = new ProductListData(suggestions, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew());
         return new SuggestionsData(productListData);
     }
 
-    private List<ShippingRateBean> createDeliveryData(final UserContext userContext) {
+    protected List<ShippingRateBean> createDeliveryData(final UserContext userContext) {
         final PriceFormatter priceFormatter = priceFormatter(userContext);
         return getShippingRates().stream()
                 .map(rate -> new ShippingRateBean(priceFormatter, rate))
                 .collect(toList());
     }
 
-    private List<ShopShippingRate> getShippingRates() {
+    protected List<ShopShippingRate> getShippingRates() {
         return emptyList(); // TODO get shipping rates for this product
     }
 }

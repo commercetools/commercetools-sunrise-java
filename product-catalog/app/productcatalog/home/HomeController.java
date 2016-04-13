@@ -12,16 +12,18 @@ import productcatalog.common.ProductCatalogController;
 import productcatalog.common.ProductListData;
 import productcatalog.common.SuggestionsData;
 import productcatalog.productoverview.search.SearchConfig;
-import productcatalog.services.ProductService;
+import common.suggestion.ProductSuggestion;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 
 /**
  * Controller for the home page.
@@ -33,9 +35,9 @@ public class HomeController extends ProductCatalogController {
 
 
     @Inject
-    public HomeController(final ControllerDependency controllerDependency, final ProductService productService,
+    public HomeController(final ControllerDependency controllerDependency, final ProductSuggestion productSuggestion,
                           final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
-        super(controllerDependency, productService, productDataConfig, searchConfig);
+        super(controllerDependency, productSuggestion, productDataConfig, searchConfig);
         this.suggestionsExternalIds = configuration().getStringList("home.suggestions.externalId", emptyList());
         this.numSuggestions = configuration().getInt("home.suggestions.count", 4);
     }
@@ -44,14 +46,14 @@ public class HomeController extends ProductCatalogController {
         final UserContext userContext = userContext(languageTag);
         final List<Category> suggestedCategories = suggestedCategories();
         if (!suggestedCategories.isEmpty()) {
-            return productService().getSuggestions(suggestedCategories, numSuggestions)
+            return productSuggestion().relatedToCategories(suggestedCategories, numSuggestions)
                     .thenComposeAsync(suggestions -> renderHome(userContext, suggestions), HttpExecution.defaultContext());
         } else {
-            return renderHome(userContext, emptyList());
+            return renderHome(userContext, emptySet());
         }
     }
 
-    private CompletionStage<Result> renderHome(final UserContext userContext, final List<ProductProjection> suggestions) {
+    private CompletionStage<Result> renderHome(final UserContext userContext, final Set<ProductProjection> suggestions) {
         final HomePageContent homePageContent = new HomePageContent();
         homePageContent.setSuggestions(createSuggestions(userContext, suggestions));
         return renderPage("home", homePageContent, userContext, ctx(), session()).thenApply(Controller::ok);
@@ -65,7 +67,7 @@ public class HomeController extends ProductCatalogController {
                 .collect(Collectors.toList());
     }
 
-    private SuggestionsData createSuggestions(final UserContext userContext, final List<ProductProjection> suggestions) {
+    private SuggestionsData createSuggestions(final UserContext userContext, final Set<ProductProjection> suggestions) {
         final ProductListData productListData = new ProductListData(suggestions, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew());
         return new SuggestionsData(productListData);
     }

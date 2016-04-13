@@ -27,12 +27,12 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call processChangeLanguageForm() {
-        return controllers.routes.ApplicationController.changeLanguage();
+        return common.routes.ApplicationController.changeLanguage();
     }
 
     @Override
     public Call processChangeCountryForm(final String languageTag) {
-        return controllers.routes.ApplicationController.changeCountry(languageTag);
+        return common.routes.ApplicationController.changeCountry(languageTag);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package productcatalog.productoverview.search;
 
 import common.contexts.UserContext;
-import common.i18n.I18nIdentifier;
-import common.i18n.I18nResolver;
+import common.template.i18n.I18nIdentifier;
+import common.template.i18n.I18nResolver;
 import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.facets.FacetType;
 import io.sphere.sdk.models.Base;

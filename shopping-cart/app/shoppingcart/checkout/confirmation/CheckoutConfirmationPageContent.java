@@ -2,8 +2,8 @@ package shoppingcart.checkout.confirmation;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
-import common.i18n.I18nIdentifier;
-import common.i18n.I18nResolver;
+import common.template.i18n.I18nIdentifier;
+import common.template.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import common.models.SelectableData;
 import io.sphere.sdk.carts.Cart;
