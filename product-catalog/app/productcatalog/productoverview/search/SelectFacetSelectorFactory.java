@@ -9,6 +9,8 @@ import io.sphere.sdk.facets.FacetOptionMapper;
 import io.sphere.sdk.facets.SelectFacetBuilder;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.model.FacetedSearchSearchModel;
+import io.sphere.sdk.search.model.SearchModel;
+import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,10 +63,9 @@ public class SelectFacetSelectorFactory extends FacetSelectorFactory<SelectFacet
     }
 
     private FacetedSearchSearchModel<ProductProjection> localizedSearchModel() {
-//        final SearchModel<ProductProjection> searchModel = config.getFacetBuilder().getFacetedSearchSearchModel().getSearchModel();
-//        final String localizedAttrPath = localizeExpression(searchModel.getAttrPath(), userContext.locale());
-//        return TermFacetedSearchSearchModel.of(localizedAttrPath);
-        return config.getFacetBuilder().getFacetedSearchSearchModel();
+        final SearchModel<ProductProjection> searchModel = config.getFacetBuilder().getFacetedSearchSearchModel().getSearchModel();
+        final String localizedAttrPath = localizeExpression(searchModel.attributePath(), userContext.locale());
+        return TermFacetedSearchSearchModel.of(localizedAttrPath);
     }
 
     private Optional<FacetOptionMapper> configuredMapper() {
