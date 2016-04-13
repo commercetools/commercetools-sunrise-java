@@ -24,8 +24,10 @@ productcatalog.common
 productcatalog.home
 productcatalog.productdetail
 productcatalog.productoverview
+productcatalog.productoverview.search
 productcatalog.services
 reverserouter
+search
 setupwidget.controllers
 setupwidget.models
 shoppingcart
