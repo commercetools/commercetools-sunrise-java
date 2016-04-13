@@ -6,21 +6,21 @@ import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import productcatalog.productoverview.search.SearchConfig;
-import productcatalog.services.ProductService;
+import common.suggestion.ProductSuggestion;
 
 import java.util.Collections;
 import java.util.List;
 
 public abstract class ProductCatalogController extends SunriseController {
-    private final ProductService productService;
+    private final ProductSuggestion productSuggestion;
     private final ProductDataConfig productDataConfig;
     private final SearchConfig searchConfig;
 
     public ProductCatalogController(final ControllerDependency controllerDependency,
-                                    final ProductService productService, final ProductDataConfig productDataConfig,
+                                    final ProductSuggestion productSuggestion, final ProductDataConfig productDataConfig,
                                     final SearchConfig searchConfig) {
         super(controllerDependency);
-        this.productService = productService;
+        this.productSuggestion = productSuggestion;
         this.productDataConfig = productDataConfig;
         this.searchConfig = searchConfig;
     }
@@ -32,8 +32,8 @@ public abstract class ProductCatalogController extends SunriseController {
         return categoryTree().getSubtree(categoriesInNew);
     }
 
-    protected ProductService productService() {
-        return productService;
+    protected ProductSuggestion productSuggestion() {
+        return productSuggestion;
     }
 
     protected ProductDataConfig productDataConfig() {

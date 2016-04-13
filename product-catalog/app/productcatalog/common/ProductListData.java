@@ -9,6 +9,7 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,9 +19,9 @@ public class ProductListData extends Base {
     public ProductListData() {
     }
 
-    public ProductListData(final List<ProductProjection> productList, final ProductDataConfig productDataConfig,
+    public ProductListData(final Iterable<ProductProjection> productList, final ProductDataConfig productDataConfig,
                            final UserContext userContext, final ReverseRouter reverseRouter, final CategoryTree categoryTreeNew) {
-        this.list = productList.stream()
+        this.list = StreamSupport.stream(productList.spliterator(), false)
                 .map(product -> {
                     final ProductVariant matchingVariant = product.findFirstMatchingVariant()
                             .orElseGet(product::getMasterVariant);
