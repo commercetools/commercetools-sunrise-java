@@ -18,7 +18,7 @@ public class ApplicationTestModule extends AbstractModule {
     }
 
     private I18nResolver injectedI18nResolver() {
-        return ((locales, bundle, key, hashArgs) -> Optional.empty());
+        return ((locales, i18nIdentifier, hashArgs) -> Optional.empty());
     }
 
     protected TemplateService injectedTemplateService() {
