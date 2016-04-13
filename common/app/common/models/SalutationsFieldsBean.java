@@ -1,8 +1,8 @@
 package common.models;
 
 import common.contexts.UserContext;
-import common.i18n.I18nIdentifier;
-import common.i18n.I18nResolver;
+import common.template.i18n.I18nIdentifier;
+import common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;
 import play.Configuration;

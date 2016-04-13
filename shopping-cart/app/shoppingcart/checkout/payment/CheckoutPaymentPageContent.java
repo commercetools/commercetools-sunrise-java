@@ -2,8 +2,8 @@ package shoppingcart.checkout.payment;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
-import common.i18n.I18nIdentifier;
-import common.i18n.I18nResolver;
+import common.template.i18n.I18nIdentifier;
+import common.template.i18n.I18nResolver;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import shoppingcart.checkout.CheckoutPageContent;

@@ -1,7 +1,7 @@
 package productcatalog.productoverview.search;
 
 import common.contexts.UserContext;
-import common.i18n.I18nResolver;
+import common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
