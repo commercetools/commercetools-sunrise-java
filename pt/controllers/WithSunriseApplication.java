@@ -21,7 +21,9 @@ import play.libs.ws.WS;
 import play.libs.ws.WSRequest;
 import play.mvc.Controller;
 import play.mvc.Http;
+import productcatalog.productoverview.search.SearchConfig;
 import reverserouter.ReverseRouterTestModule;
+import search.SearchTestModule;
 
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +92,8 @@ public abstract class WithSunriseApplication {
                 new CtpModelsTestModule(),
                 new BasicAuthTestModule(null),
                 new ReverseRouterTestModule(new TestableReverseRouter()),
-                new CategoryTreeTestModule(categories));
+                new CategoryTreeTestModule(categories),
+                new SearchTestModule(SearchConfig.of(null, null, null, null, null)));
     }
 
     protected static Configuration testConfiguration() {
