@@ -85,7 +85,11 @@ lazy val commonSettings = releaseSettings ++ Seq (
 )
 
 lazy val jvmSdkDependencies = Seq (
-  resolvers in ThisBuild ++= Resolver.sonatypeRepo("releases") :: Resolver.mavenLocal :: Nil,
+  resolvers in ThisBuild ++= Seq (
+    Resolver.sonatypeRepo("releases"),
+    Resolver.sonatypeRepo("snapshots"),
+    Resolver.mavenLocal
+  ),
   libraryDependencies ++= Seq (
     "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
     "com.commercetools.sdk.jvm.core" % "commercetools-java-client" % jvmSdkVersion,
