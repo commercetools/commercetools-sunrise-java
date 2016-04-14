@@ -7,6 +7,7 @@ import common.models.ProductVariantBean;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
+import io.sphere.sdk.products.attributes.Attribute;
 
 import java.util.HashMap;
 import java.util.List;
@@ -132,11 +133,14 @@ public class ProductBean extends Base {
         final Map<String, ProductVariantReferenceBean> variantsMap = new HashMap<>();
         product.getAllVariants().forEach(variant -> {
             final String attrCombination = productDataConfig.getSelectableAttributes().stream()
-                    .map(variant::getAttribute)
-                    .filter(enabledAttr -> enabledAttr != null)
-                    .map(enabledAttr -> {
-                        final String enabledAttrValue = attributeValue(enabledAttr, productDataConfig.getMetaProductType(), userContext);
-                        return attributeValueAsKey(enabledAttrValue);
+                    .map(selectableAttr -> {
+                        final Attribute attr = variant.getAttribute(selectableAttr);
+                        if (attr != null) {
+                            final String enabledAttrValue = attributeValue(attr, productDataConfig.getMetaProductType(), userContext);
+                            return attributeValueAsKey(enabledAttrValue);
+                        } else {
+                            return "";
+                        }
                     })
                     .collect(joining("-"));
             variantsMap.put(attrCombination, new ProductVariantReferenceBean(variant, product, userContext, reverseRouter));

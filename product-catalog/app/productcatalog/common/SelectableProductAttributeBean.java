@@ -74,7 +74,9 @@ public class SelectableProductAttributeBean extends ProductAttributeBean {
                 .filter(enabledAttrKey -> !fixedAttribute.getName().equals(enabledAttrKey))
                 .forEach(enabledAttrKey -> {
                     final List<String> allowedAttrValues = attributeCombination(enabledAttrKey, fixedAttribute, product, metaProductType, userContext);
-                    attrCombination.put(enabledAttrKey, allowedAttrValues);
+                    if (!allowedAttrValues.isEmpty()) {
+                        attrCombination.put(enabledAttrKey, allowedAttrValues);
+                    }
                 });
         return attrCombination;
     }
