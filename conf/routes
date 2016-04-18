@@ -86,7 +86,7 @@ POST        /:languageTag/checkout/confirmation                @shoppingcart.che
 GET         /:languageTag/checkout/thankyou                    @shoppingcart.checkout.thankyou.CheckoutThankYouController.show(languageTag: String)
 
 
-# MY ACCOUNT
+# SIGN UP/IN/OUT
 # ~~~~~
 
 # Shows log in form
@@ -97,6 +97,13 @@ POST        /:languageTag/user/login                           @myaccount.login.
 POST        /:languageTag/user/signup                          @myaccount.login.LogInPageController.processSignUp(languageTag: String)
 # Logs out the user
 GET         /:languageTag/user/logout                          @myaccount.login.LogInPageController.processLogOut(languageTag: String)
+
+
+# MY ACCOUNT
+# ~~~~~
+
+# Shows log in form
+GET         /:languageTag/user/orders                          @myaccount.orders.MyOrdersController.show(languageTag: String)
 
 
 # PRODUCT DETAIL
