@@ -14,6 +14,7 @@ public class PageMeta {
     private UserBean user;
     private List<Integer> bagQuantityOptions;
     private Map<String, HalLink> _links = new HashMap<>();
+    private boolean showInfoModal;
 
     public PageMeta() {
     }
@@ -68,5 +69,13 @@ public class PageMeta {
             addHalLinkOfHrefAndRel(href, moreRel);
         }
         return this;
+    }
+
+    public boolean isShowInfoModal() {
+        return showInfoModal;
+    }
+
+    public void setShowInfoModal(final boolean showInfoModal) {
+        this.showInfoModal = showInfoModal;
     }
 }
