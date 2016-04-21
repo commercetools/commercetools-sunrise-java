@@ -41,16 +41,20 @@ import static java.util.stream.Collectors.toList;
 @With(MetricAction.class)
 @NoCache
 public abstract class SunriseController extends ShopController {
+
     public static final String SESSION_COUNTRY = "countryCode";
     private final ControllerDependency controllerDependency;
     private final Optional<String> saleCategoryExtId;
     private final Optional<String> categoryNewExtId;
+    private final boolean showInfoModal;
 
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
         this.controllerDependency = controllerDependency;
-        this.saleCategoryExtId = Optional.ofNullable(controllerDependency.configuration().getString("common.saleCategoryExternalId"));
-        this.categoryNewExtId = Optional.ofNullable(controllerDependency.configuration().getString("common.newCategoryExternalId"));
+        final Configuration configuration = controllerDependency.configuration();
+        this.saleCategoryExtId = Optional.ofNullable(configuration.getString("common.saleCategoryExternalId"));
+        this.categoryNewExtId = Optional.ofNullable(configuration.getString("common.newCategoryExternalId"));
+        this.showInfoModal = configuration.getBoolean("application.demoInfo.enabled", false);
     }
 
     protected final CategoryTree categoryTree() {
@@ -124,7 +128,7 @@ public abstract class SunriseController extends ShopController {
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         newCategory().flatMap(nc -> reverseRouter().showCategory(userContext.locale(), nc))
                 .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
-
+        pageMeta.setShowInfoModal(showInfoModal);
         return pageMeta;
     }
 
