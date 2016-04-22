@@ -29,14 +29,14 @@ import static java.util.Collections.emptySet;
  * Controller for the home page.
  */
 @Singleton
-public class HomeController extends ProductCatalogController {
+public class HomePageController extends ProductCatalogController {
     private final List<String> suggestionsExternalIds;
     private final int numSuggestions;
 
 
     @Inject
-    public HomeController(final ControllerDependency controllerDependency, final ProductSuggestion productSuggestion,
-                          final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
+    public HomePageController(final ControllerDependency controllerDependency, final ProductSuggestion productSuggestion,
+                              final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
         super(controllerDependency, productSuggestion, productDataConfig, searchConfig);
         this.suggestionsExternalIds = configuration().getStringList("home.suggestions.externalId", emptyList());
         this.numSuggestions = configuration().getInt("home.suggestions.count", 4);

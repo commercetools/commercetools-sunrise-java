@@ -64,7 +64,7 @@ public final class LogInPageController extends SunriseController {
         } else {
             return logIn(boundForm.get())
                     .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
-                    .exceptionally(throwable -> handleInvalidCredentialsError(throwable, pageContent, userContext));
+                    .exceptionally(throwable -> handleInvalidCredentialsError(throwable, pageContent, userContext)); // TODO this raised a HTTP context not found exception!
         }
     }
 

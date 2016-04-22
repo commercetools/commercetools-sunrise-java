@@ -5,7 +5,7 @@ import play.mvc.Http;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
+import static common.utils.ArrayUtils.arrayToList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 
@@ -34,6 +34,6 @@ public final class UrlUtils {
 
     public static Map<String, List<String>> getQueryString(final Http.Request request) {
         return request.queryString().entrySet().stream()
-                .collect(toMap(Map.Entry::getKey, e -> asList(e.getValue())));
+                .collect(toMap(Map.Entry::getKey, e -> arrayToList(e.getValue())));
     }
 }

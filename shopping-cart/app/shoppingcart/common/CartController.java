@@ -36,12 +36,11 @@ public abstract class CartController extends SunriseController {
     }
 
     protected CompletionStage<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
-        return fetchCart(userContext, session)
-                .thenComposeAsync(cart -> {
-                    CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
-                    final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
-                    return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : CompletableFuture.completedFuture(cart);
-                }, HttpExecution.defaultContext());
+        final CompletionStage<Cart> cartFuture = fetchCart(userContext, session)
+                .thenComposeAsync(cart -> updateCartWithUserPreferences(cart, userContext), HttpExecution.defaultContext());
+        cartFuture.thenAcceptAsync(cart ->
+                CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter()), HttpExecution.defaultContext());
+        return cartFuture;
     }
 
     private CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
@@ -82,6 +81,11 @@ public abstract class CartController extends SunriseController {
                 .filter(c -> c.getCartState().equals(CartState.ACTIVE))
                 .map((value) -> (CompletionStage<Cart>) CompletableFuture.completedFuture(value))
                 .orElseGet(() -> createCart(userContext));
+    }
+
+    private CompletionStage<Cart> updateCartWithUserPreferences(final Cart cart, final UserContext userContext) {
+        final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
+        return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : CompletableFuture.completedFuture(cart);
     }
 
     /**

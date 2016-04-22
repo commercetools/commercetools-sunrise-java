@@ -1,0 +1,47 @@
+myAccount:
+  title: My Account
+myAccountSidebar:
+  personalDetails: Personal Details
+  addressBook: Address Book
+  paymentDetails: Payment Details
+  myOrders: My Orders
+  returnsExchange: Returns / Exchange
+  wishlist: Wishlist
+  signOut: Sign Out
+personalDetails:
+  shopAllBtn: Shop All
+  updateBtn: Update Details
+  cancelBtn: Cancel
+  bannerOne:
+    title: Your Sunrise
+    subtitle: Make the great days happen
+  bannerTwo:
+    title: Your Sunrise
+    subtitle: Make the great days happen
+  welcomeBack: Welcome back
+  welcomeDescription: for an even better customer service please provide your customer number
+  personalDetailsTitle: Your Personal Details
+myOrders:
+  title: My Orders
+  orderNumber:
+    title: Order Number
+  creationDate:
+    title: Date
+  totalPrice:
+    title: Total
+  paymentStatus:
+    title: Payment Status
+    balanceDue: Balance due
+    failed: Failed
+    pending: Pending
+    creditOwed: Credit owed
+    paid: Paid
+  shippingStatus:
+    title: Shipping Status
+    shipped: Shipped
+    ready: Ready
+    pending: Pending
+    partial: Partial
+    backorder: Backorder
+    delayed: Delayed
+  view: View

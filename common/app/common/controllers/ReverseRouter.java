@@ -2,6 +2,7 @@ package common.controllers;
 
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.mvc.Call;
@@ -59,6 +60,11 @@ public interface ReverseRouter {
 
     Call processLogOut(final String languageTag);
 
+    Call showMyOrders(final String languageTag);
+
+    Call showMyOrder(final String languageTag, final String orderNumber);
+
+
     default Optional<Call> showCategory(final Locale locale, final Category category) {
         return category.getSlug().find(locale)
                 .map(slug -> showCategory(locale.toLanguageTag(), slug));
@@ -75,6 +81,11 @@ public interface ReverseRouter {
                         .map(slug -> showProduct(locale.toLanguageTag(), slug, lineItem.getVariant().getSku())));
     }
 
+    default Optional<Call> showMyOrder(final Locale locale, final Order order) {
+        return Optional.ofNullable(order.getOrderNumber())
+                .map(orderNumber -> showMyOrder(locale.toLanguageTag(), orderNumber));
+    }
+
     default String showCategoryUrlOrEmpty(final Locale locale, final Category category) {
         return showCategory(locale, category).map(Call::url).orElse("");
     }
@@ -85,5 +96,9 @@ public interface ReverseRouter {
 
     default String showProductUrlOrEmpty(final Locale locale, final LineItem lineItem) {
         return showProduct(locale, lineItem).map(Call::url).orElse("");
+    }
+
+    default String showMyOrderUrlOrEmpty(final Locale locale, final Order order) {
+        return showMyOrder(locale, order).map(Call::url).orElse("");
     }
 }
