@@ -1,0 +1,5 @@
+infoModal:
+  title: Dear guest,
+  body: <p>You are visiting our current <b>commercetools</b> demo shop <b>SUNRISE</b>.</p><p>If you are interested in a personal demonstration, please contact our sales team via email <b>sales@commercetools.com</b> or by phone <b>+49 (89) 99 82 996-28</b>.</p>
+  footer: <p>Thank you</p>
+  button: OK
