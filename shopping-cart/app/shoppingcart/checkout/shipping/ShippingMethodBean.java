@@ -1,20 +1,27 @@
 package shoppingcart.checkout.shipping;
 
-import common.models.SelectableData;
+import common.models.SelectableBean;
 import common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.CartShippingInfo;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
-public class SelectableShippingMethodBean extends SelectableData {
+import javax.annotation.Nullable;
+
+public class ShippingMethodBean extends SelectableBean {
+
     private String deliveryDays;
     private String price;
 
-    public SelectableShippingMethodBean() {
+    public ShippingMethodBean() {
     }
 
-    public SelectableShippingMethodBean(final CartLike<?> cartLike, final MoneyContext moneyContext) {
+    public ShippingMethodBean(final ShippingMethod shippingMethod, final @Nullable String selectedShippingMethodId) {
+        super(shippingMethod.getName(), shippingMethod.getId(), shippingMethod.getId().equals(selectedShippingMethodId));
+    }
+
+    public ShippingMethodBean(final CartLike<?> cartLike, final MoneyContext moneyContext) {
         final CartShippingInfo shippingInfo = cartLike.getShippingInfo();
         if (shippingInfo != null) {
             this.price = moneyContext.formatOrZero(shippingInfo.getPrice());

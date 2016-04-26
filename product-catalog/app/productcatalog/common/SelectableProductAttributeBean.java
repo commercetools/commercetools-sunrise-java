@@ -3,7 +3,7 @@ package productcatalog.common;
 import common.contexts.UserContext;
 import common.models.ProductAttributeBean;
 import common.models.ProductDataConfig;
-import common.models.SelectableData;
+import common.models.SelectableBean;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.attributes.Attribute;
 import io.sphere.sdk.producttypes.MetaProductType;
@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 
 public class SelectableProductAttributeBean extends ProductAttributeBean {
     private boolean reload;
-    private List<SelectableData> list = new ArrayList<>();
+    private List<SelectableBean> list = new ArrayList<>();
     private Map<String, Map<String, List<String>>> selectData = new HashMap<>();
 
     public SelectableProductAttributeBean() {
@@ -37,7 +37,7 @@ public class SelectableProductAttributeBean extends ProductAttributeBean {
                 .forEach(attrOption -> {
                     final String attrOptionValue = attributeValue(attrOption, metaProductType, userContext);
                     final String attrOptionValueKey = attributeValueAsKey(attrOptionValue);
-                    this.list.add(new SelectableData(attrOptionValue, attrOptionValueKey, attrOption.equals(selectedAttribute)));
+                    this.list.add(new SelectableBean(attrOptionValue, attrOptionValueKey, attrOption.equals(selectedAttribute)));
                     this.selectData.put(attrOptionValue, allowedAttributeCombinations(attrOption, product, productDataConfig, userContext));
                 });
     }
@@ -50,11 +50,11 @@ public class SelectableProductAttributeBean extends ProductAttributeBean {
         this.reload = reload;
     }
 
-    public List<SelectableData> getList() {
+    public List<SelectableBean> getList() {
         return list;
     }
 
-    public void setList(final List<SelectableData> list) {
+    public void setList(final List<SelectableBean> list) {
         this.list = list;
     }
 

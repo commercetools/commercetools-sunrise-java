@@ -9,7 +9,7 @@ import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.orders.Order;
 import shoppingcart.checkout.address.AddressBean;
 import shoppingcart.checkout.payment.PaymentsBean;
-import shoppingcart.checkout.shipping.SelectableShippingMethodBean;
+import shoppingcart.checkout.shipping.ShippingMethodBean;
 
 import java.time.format.DateTimeFormatter;
 
@@ -23,7 +23,7 @@ public class CartOrderBean {
     private CartLineItemsBean lineItems;
     private AddressBean shippingAddress;
     private AddressBean billingAddress;
-    private SelectableShippingMethodBean shippingMethod;
+    private ShippingMethodBean shippingMethod;
     private PaymentsBean paymentDetails;
     private String orderNumber;
     private String orderDate;
@@ -42,7 +42,7 @@ public class CartOrderBean {
         this.lineItems = new CartLineItemsBean(cartLike, productDataConfig, userContext, reverseRouter);
         this.shippingAddress = new AddressBean(cartLike.getShippingAddress(), userContext.locale());
         this.billingAddress = new AddressBean(cartLike.getBillingAddress(), userContext.locale());
-        this.shippingMethod = new SelectableShippingMethodBean(cartLike, moneyContext);
+        this.shippingMethod = new ShippingMethodBean(cartLike, moneyContext);
         this.paymentDetails = new PaymentsBean("prepaid");
 
         if (cartLike instanceof Order) {
@@ -113,11 +113,11 @@ public class CartOrderBean {
         this.shippingAddress = shippingAddress;
     }
 
-    public SelectableShippingMethodBean getShippingMethod() {
+    public ShippingMethodBean getShippingMethod() {
         return shippingMethod;
     }
 
-    public void setShippingMethod(final SelectableShippingMethodBean shippingMethod) {
+    public void setShippingMethod(final ShippingMethodBean shippingMethod) {
         this.shippingMethod = shippingMethod;
     }
 

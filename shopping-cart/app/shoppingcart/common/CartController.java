@@ -16,17 +16,22 @@ import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.carts.queries.CartByCustomerIdGet;
 import io.sphere.sdk.carts.queries.CartByIdGet;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
+import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
 import myaccount.CustomerSessionUtils;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 @NoCache
 public abstract class CartController extends SunriseController {
@@ -42,6 +47,12 @@ public abstract class CartController extends SunriseController {
                     final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
                     return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : CompletableFuture.completedFuture(cart);
                 }, HttpExecution.defaultContext());
+    }
+
+    protected CompletionStage<List<ShippingMethod>> getShippingMethods(final Http.Session session) {
+        return CartSessionUtils.getCartId(session)
+                .map(cartId -> sphere().execute(ShippingMethodsByCartGet.of(cartId)))
+                .orElseGet(() -> CompletableFuture.completedFuture(emptyList()));
     }
 
     private CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {

@@ -5,7 +5,7 @@ import common.controllers.ReverseRouter;
 import common.template.i18n.I18nIdentifier;
 import common.template.i18n.I18nResolver;
 import common.models.ProductDataConfig;
-import common.models.SelectableData;
+import common.models.SelectableBean;
 import io.sphere.sdk.carts.Cart;
 import shoppingcart.checkout.CheckoutPageContent;
 import shoppingcart.checkout.StepWidgetBean;
@@ -30,10 +30,10 @@ public class CheckoutConfirmationPageContent extends CheckoutPageContent {
 
     private void fillForm() {
         final CheckoutConfirmationFormBean checkoutConfirmationFormBean = new CheckoutConfirmationFormBean();
-        final SelectableData newsletter = new SelectableData();
+        final SelectableBean newsletter = new SelectableBean();
         newsletter.setLabel("SUNRISE Newsletter");
         checkoutConfirmationFormBean.setNewsletter(newsletter);
-        final SelectableData termsConditions = new SelectableData();
+        final SelectableBean termsConditions = new SelectableBean();
         checkoutConfirmationFormBean.setTermsConditions(termsConditions);
         setCheckoutForm(checkoutConfirmationFormBean);
     }

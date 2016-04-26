@@ -2,8 +2,8 @@ package myaccount.login;
 
 import common.contexts.UserContext;
 import common.errors.ErrorsBean;
+import common.models.TitleFormFieldBean;
 import common.template.i18n.I18nResolver;
-import common.models.SalutationsFieldsBean;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
 import play.data.Form;
@@ -11,8 +11,9 @@ import play.data.Form;
 import javax.annotation.Nullable;
 
 public class SignUpFormBean extends Base {
+
     private ErrorsBean errors;
-    private SalutationsFieldsBean salutations;
+    private TitleFormFieldBean titleFormField;
     private String firstName;
     private String lastName;
     private String email;
@@ -24,13 +25,13 @@ public class SignUpFormBean extends Base {
     public SignUpFormBean(@Nullable final Form<SignUpFormData> form, final UserContext userContext,
                           final I18nResolver i18nResolver, final Configuration configuration) {
         if (form != null) {
-            this.salutations = new SalutationsFieldsBean(form.field("title").value(), userContext, i18nResolver, configuration);
+            this.titleFormField = new TitleFormFieldBean(form.field("title").value(), userContext, i18nResolver, configuration);
             this.firstName = form.field("firstName").value();
             this.lastName = form.field("lastName").value();
             this.email = form.field("email").value();
             this.agreeToTerms = Boolean.valueOf(form.field("agreeToTerms").value());
         } else {
-            this.salutations = new SalutationsFieldsBean(userContext, i18nResolver, configuration);
+            this.titleFormField = new TitleFormFieldBean(userContext, i18nResolver, configuration);
             this.agreeToTerms = false;
         }
     }
@@ -43,12 +44,12 @@ public class SignUpFormBean extends Base {
         this.errors = errors;
     }
 
-    public SalutationsFieldsBean getSalutations() {
-        return salutations;
+    public TitleFormFieldBean getSalutations() {
+        return titleFormField;
     }
 
-    public void setSalutations(final SalutationsFieldsBean salutations) {
-        this.salutations = salutations;
+    public void setSalutations(final TitleFormFieldBean titleFormField) {
+        this.titleFormField = titleFormField;
     }
 
     public String getFirstName() {

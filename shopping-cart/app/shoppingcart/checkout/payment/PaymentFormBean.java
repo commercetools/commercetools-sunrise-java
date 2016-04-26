@@ -1,6 +1,6 @@
 package shoppingcart.checkout.payment;
 
-import common.models.SelectableData;
+import common.models.SelectableBean;
 
 import java.util.Collections;
 
@@ -14,7 +14,7 @@ public class PaymentFormBean {
     public static PaymentFormBean ofDummyData() {
         final PaymentFormBean paymentFormBean = new PaymentFormBean();
         final PaymentOptionsBean paymentOptions = new PaymentOptionsBean();
-        final SelectableData o = new SelectableData();
+        final SelectableBean o = new SelectableBean();
         o.setLabel("prepaid");
         o.setSelected(true);
         paymentOptions.setList(Collections.singletonList(o));

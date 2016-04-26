@@ -1,20 +1,20 @@
 package shoppingcart.checkout.payment;
 
-import common.models.SelectableData;
+import common.models.SelectableBean;
 
 import java.util.List;
 
 public class PaymentOptionsBean {
-    private List<SelectableData> list;
+    private List<SelectableBean> list;
 
     public PaymentOptionsBean() {
      }
 
-    public List<SelectableData> getList() {
+    public List<SelectableBean> getList() {
         return list;
     }
 
-    public void setList(final List<SelectableData> list) {
+    public void setList(final List<SelectableBean> list) {
         this.list = list;
     }
 }
