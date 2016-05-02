@@ -28,10 +28,6 @@ public class TitleFormFieldBean extends Base {
                 .collect(toList());
     }
 
-    public TitleFormFieldBean(final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration) {
-        this(null, userContext, i18nResolver, configuration);
-    }
-
     public List<SelectableBean> getList() {
         return list;
     }

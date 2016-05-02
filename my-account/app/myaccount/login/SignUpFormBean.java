@@ -6,7 +6,6 @@ import common.models.TitleFormFieldBean;
 import common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
-import play.data.Form;
 
 import javax.annotation.Nullable;
 
@@ -22,18 +21,18 @@ public class SignUpFormBean extends Base {
     public SignUpFormBean() {
     }
 
-    public SignUpFormBean(@Nullable final Form<SignUpFormData> form, final UserContext userContext,
+    public SignUpFormBean(final @Nullable String title, final @Nullable String firstName, final @Nullable String lastName,
+                          final @Nullable String email, final boolean agreeToTerms, final UserContext userContext,
                           final I18nResolver i18nResolver, final Configuration configuration) {
-        if (form != null) {
-            this.titleFormField = new TitleFormFieldBean(form.field("title").value(), userContext, i18nResolver, configuration);
-            this.firstName = form.field("firstName").value();
-            this.lastName = form.field("lastName").value();
-            this.email = form.field("email").value();
-            this.agreeToTerms = Boolean.valueOf(form.field("agreeToTerms").value());
-        } else {
-            this.titleFormField = new TitleFormFieldBean(userContext, i18nResolver, configuration);
-            this.agreeToTerms = false;
-        }
+        this.titleFormField = new TitleFormFieldBean(title, userContext, i18nResolver, configuration);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.agreeToTerms = agreeToTerms;
+    }
+
+    public SignUpFormBean(final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration) {
+        this(null, null, null, null, false, userContext, i18nResolver, configuration);
     }
 
     public ErrorsBean getErrors() {

@@ -1,14 +1,15 @@
-package shoppingcart.checkout.payment;
+package shoppingcart.common;
 
 import io.sphere.sdk.models.Base;
 
-public class PaymentsBean extends Base {
+public class PaymentBean extends Base {
+
     private String type;
 
-    public PaymentsBean() {
+    public PaymentBean() {
     }
 
-    public PaymentsBean(final String type) {
+    public PaymentBean(final String type) {
         this.type = type;
     }
 

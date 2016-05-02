@@ -37,14 +37,14 @@ import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
 @Singleton
 public final class LogInPageController extends SunriseController {
 
-    private final Form<LogInFormData> logInForm;
-    private final Form<SignUpFormData> signUpForm;
+    private final Form<LogInFormData> logInUnboundForm;
+    private final Form<SignUpFormData> signUpUnboundForm;
 
     @Inject
     public LogInPageController(final ControllerDependency controllerDependency, final FormFactory formFactory) {
         super(controllerDependency);
-        this.logInForm = formFactory.form(LogInFormData.class);
-        this.signUpForm = formFactory.form(SignUpFormData.class);
+        this.logInUnboundForm = formFactory.form(LogInFormData.class);
+        this.signUpUnboundForm = formFactory.form(SignUpFormData.class);
     }
 
     @AddCSRFToken
@@ -57,26 +57,26 @@ public final class LogInPageController extends SunriseController {
     @RequireCSRFCheck
     public CompletionStage<Result> processLogIn(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Form<LogInFormData> logInBoundForm = logInForm.bindFromRequest();
-        if (logInBoundForm.hasErrors()) {
-            return completedFuture(handleLogInFormErrors(logInBoundForm, userContext));
+        final Form<LogInFormData> logInForm = logInUnboundForm.bindFromRequest();
+        if (logInForm.hasErrors()) {
+            return completedFuture(handleLogInFormErrors(logInForm, userContext));
         } else {
-            return logIn(logInBoundForm.get())
+            return logIn(logInForm.get())
                     .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
-                    .exceptionally(throwable -> handleInvalidCredentialsError(throwable, logInBoundForm, userContext));
+                    .exceptionally(throwable -> handleInvalidCredentialsError(throwable, logInForm, userContext));
         }
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> processSignUp(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Form<SignUpFormData> signUpBoundForm = signUpForm.bindFromRequest();
-        if (signUpBoundForm.hasErrors()) {
-            return completedFuture(handleSignUpFormErrors(signUpBoundForm, userContext));
+        final Form<SignUpFormData> signUpForm = signUpUnboundForm.bindFromRequest();
+        if (signUpForm.hasErrors()) {
+            return completedFuture(handleSignUpFormErrors(signUpForm, userContext));
         } else {
-            return signUp(signUpBoundForm.get())
+            return signUp(signUpForm.get())
                     .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
-                    .exceptionally(throwable -> handleExistingCustomerError(throwable, signUpBoundForm, userContext));
+                    .exceptionally(throwable -> handleExistingCustomerError(throwable, signUpForm, userContext));
         }
     }
 
@@ -110,19 +110,19 @@ public final class LogInPageController extends SunriseController {
         return redirect(reverseRouter().showHome(userContext.locale().toLanguageTag()));
     }
 
-    protected Result handleLogInFormErrors(final Form<LogInFormData> logInBoundForm, final UserContext userContext) {
-        final ErrorsBean errors = new ErrorsBean(logInBoundForm);
-        final LogInPageContent pageContent = createPageContentWithLogInError(logInBoundForm, errors, userContext);
+    protected Result handleLogInFormErrors(final Form<LogInFormData> logInForm, final UserContext userContext) {
+        final ErrorsBean errors = new ErrorsBean(logInForm);
+        final LogInPageContent pageContent = createPageContentWithLogInError(logInForm, errors, userContext);
         return badRequest(renderLogInPage(pageContent, userContext));
     }
 
-    protected Result handleSignUpFormErrors(final Form<SignUpFormData> signUpBoundForm, final UserContext userContext) {
-        final ErrorsBean errors = new ErrorsBean(signUpBoundForm);
-        final LogInPageContent pageContent = createPageContentWithSignUpError(signUpBoundForm, errors, userContext);
+    protected Result handleSignUpFormErrors(final Form<SignUpFormData> signUpForm, final UserContext userContext) {
+        final ErrorsBean errors = new ErrorsBean(signUpForm);
+        final LogInPageContent pageContent = createPageContentWithSignUpError(signUpForm, errors, userContext);
         return badRequest(renderLogInPage(pageContent, userContext));
     }
 
-    protected Result handleInvalidCredentialsError(final Throwable throwable, final Form<LogInFormData> logInBoundForm,
+    protected Result handleInvalidCredentialsError(final Throwable throwable, final Form<LogInFormData> logInForm,
                                                    final UserContext userContext) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
@@ -134,19 +134,19 @@ public final class LogInPageController extends SunriseController {
                 Logger.error("Unknown error", errorResponseException);
                 errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             }
-            final LogInPageContent pageContent = createPageContentWithLogInError(logInBoundForm, errors, userContext);
+            final LogInPageContent pageContent = createPageContentWithLogInError(logInForm, errors, userContext);
             return badRequest(renderLogInPage(pageContent, userContext));
         }
         throw new RuntimeException(throwable);
     }
 
-    protected Result handleExistingCustomerError(final Throwable throwable, final Form<SignUpFormData> signUpBoundForm,
+    protected Result handleExistingCustomerError(final Throwable throwable, final Form<SignUpFormData> signUpForm,
                                                  final UserContext userContext) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             Logger.error("Unknown error, probably customer already exists", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("A user with this email already exists"); // TODO get from i18n
-            final LogInPageContent pageContent = createPageContentWithSignUpError(signUpBoundForm, errors, userContext);
+            final LogInPageContent pageContent = createPageContentWithSignUpError(signUpForm, errors, userContext);
             return badRequest(renderLogInPage(pageContent, userContext));
         }
         throw new RuntimeException(throwable);
@@ -155,27 +155,33 @@ public final class LogInPageController extends SunriseController {
     protected LogInPageContent createPageContent(final UserContext userContext) {
         final LogInPageContent pageContent = new LogInPageContent();
         pageContent.setLogInForm(new LogInFormBean(null));
-        pageContent.setSignUpForm(new SignUpFormBean(null, userContext, i18nResolver(), configuration()));
+        pageContent.setSignUpForm(new SignUpFormBean(userContext, i18nResolver(), configuration()));
         return pageContent;
     }
 
-    protected LogInPageContent createPageContentWithLogInError(final Form<LogInFormData> logInBoundForm,
-                                                             final ErrorsBean errors, final UserContext userContext) {
+    protected LogInPageContent createPageContentWithLogInError(final Form<LogInFormData> logInForm,
+                                                               final ErrorsBean errors, final UserContext userContext) {
         final LogInPageContent pageContent = new LogInPageContent();
-        final LogInFormBean logInFormBean = new LogInFormBean(logInBoundForm);
+        final String username = logInForm.field("username").value();
+        final LogInFormBean logInFormBean = new LogInFormBean(username);
         logInFormBean.setErrors(errors);
         pageContent.setLogInForm(logInFormBean);
-        pageContent.setSignUpForm(new SignUpFormBean(null, userContext, i18nResolver(), configuration()));
+        pageContent.setSignUpForm(new SignUpFormBean(userContext, i18nResolver(), configuration()));
         return pageContent;
     }
 
-    protected LogInPageContent createPageContentWithSignUpError(final Form<SignUpFormData> signUpBoundForm,
-                                                              final ErrorsBean errors, final UserContext userContext) {
+    protected LogInPageContent createPageContentWithSignUpError(final Form<SignUpFormData> signUpForm,
+                                                                final ErrorsBean errors, final UserContext userContext) {
         final LogInPageContent pageContent = new LogInPageContent();
-        final SignUpFormBean signUpFormBean = new SignUpFormBean(signUpBoundForm, userContext, i18nResolver(), configuration());
+        final String title = signUpForm.field("title").value();
+        final String firstName = signUpForm.field("firstName").value();
+        final String lastName = signUpForm.field("lastName").value();
+        final String email = signUpForm.field("email").value();
+        final boolean agreeToTerms = Boolean.valueOf(signUpForm.field("agreeToTerms").value());
+        final SignUpFormBean signUpFormBean = new SignUpFormBean(title, firstName, lastName, email, agreeToTerms, userContext, i18nResolver(), configuration());
         signUpFormBean.setErrors(errors);
         pageContent.setSignUpForm(signUpFormBean);
-        pageContent.setLogInForm(new LogInFormBean(null));
+        pageContent.setLogInForm(new LogInFormBean());
         return pageContent;
     }
 

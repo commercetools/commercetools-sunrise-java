@@ -24,7 +24,6 @@ import play.mvc.Http;
 import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -76,14 +75,16 @@ public abstract class CartController extends SunriseController {
 
     private CompletionStage<Cart> fetchCartByIdOrNew(final String cartId, final UserContext userContext) {
         final CartByIdGet query = CartByIdGet.of(cartId)
-                .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
+                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
+                .plusExpansionPaths(c -> c.paymentInfo().payments());
         return sphere().execute(query)
                 .thenComposeAsync(cart -> validCartOrNew(cart, userContext), HttpExecution.defaultContext());
     }
 
     private CompletionStage<Cart> fetchCartByCustomerOrNew(final String customerId, final UserContext userContext) {
         final CartByCustomerIdGet query = CartByCustomerIdGet.of(customerId)
-                .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
+                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
+                .plusExpansionPaths(c -> c.paymentInfo().payments());
         return sphere().execute(query)
                 .thenComposeAsync(cart -> validCartOrNew(cart, userContext), HttpExecution.defaultContext());
     }

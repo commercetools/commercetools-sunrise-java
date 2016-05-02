@@ -44,16 +44,16 @@ public class AddressFormBean extends Base {
             this.phone = address.getPhone();
             this.email = address.getEmail();
         } else {
-            this.titleFormField = new TitleFormFieldBean(userContext, i18nResolver, configuration);
+            this.titleFormField = new TitleFormFieldBean(null, userContext, i18nResolver, configuration);
             this.countries = new CountryFormFieldBean(availableCountries, userContext.country(), userContext);
         }
     }
 
-    public TitleFormFieldBean getTitleFormField() {
+    public TitleFormFieldBean getSalutations() {
         return titleFormField;
     }
 
-    public void setTitleFormField(final TitleFormFieldBean titleFormField) {
+    public void setSalutations(final TitleFormFieldBean titleFormField) {
         this.titleFormField = titleFormField;
     }
 

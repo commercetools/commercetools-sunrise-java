@@ -23,24 +23,12 @@ public class CheckoutAddressFormBean extends Base {
     private AddressFormBean billingAddress;
     private ErrorsBean errors;
 
-    public CheckoutAddressFormBean(final Form<CheckoutShippingAddressFormData> shippingForm,
-                                   final @Nullable Form<CheckoutBillingAddressFormData> billingForm,
-                                   final UserContext userContext, final ProjectContext projectContext,
-                                   final I18nResolver i18nResolver, final Configuration configuration) {
-        final Address shippingAddress = FormUtils.extractAddress(shippingForm, "shipping");
-        this.shippingAddress = createShippingAddressFormBean(shippingAddress, userContext, i18nResolver, configuration);
-        final Address billingAddress = FormUtils.extractAddress(billingForm, "billing");
-        this.billingAddress = createBillingAddressFormBean(billingAddress, userContext, projectContext, i18nResolver, configuration);
-        this.differentBillingAddress = Boolean.valueOf(shippingForm.field("billingAddressDifferentToBillingAddress").value());
-
-    }
-
     public CheckoutAddressFormBean(final @Nullable Address shippingAddress, final @Nullable Address billingAddress,
-                                   final UserContext userContext, final ProjectContext projectContext,
-                                   final I18nResolver i18nResolver, final Configuration configuration) {
-        this.differentBillingAddress = billingAddress != null;
+                                   final boolean differentBillingAddress, final UserContext userContext,
+                                   final ProjectContext projectContext, final I18nResolver i18nResolver, final Configuration configuration) {
         this.shippingAddress = createShippingAddressFormBean(shippingAddress, userContext, i18nResolver, configuration);
         this.billingAddress = createBillingAddressFormBean(billingAddress, userContext, projectContext, i18nResolver, configuration);
+        this.differentBillingAddress = differentBillingAddress;
     }
 
     public boolean isBillingAddressDifferentToBillingAddress() {

@@ -8,7 +8,6 @@ import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.orders.Order;
 import shoppingcart.checkout.address.AddressBean;
-import shoppingcart.checkout.payment.PaymentsBean;
 import shoppingcart.checkout.shipping.ShippingMethodBean;
 
 import java.time.format.DateTimeFormatter;
@@ -24,7 +23,7 @@ public class CartOrderBean {
     private AddressBean shippingAddress;
     private AddressBean billingAddress;
     private ShippingMethodBean shippingMethod;
-    private PaymentsBean paymentDetails;
+    private PaymentBean paymentDetails;
     private String orderNumber;
     private String orderDate;
     private String customerEmail;
@@ -43,7 +42,7 @@ public class CartOrderBean {
         this.shippingAddress = new AddressBean(cartLike.getShippingAddress(), userContext.locale());
         this.billingAddress = new AddressBean(cartLike.getBillingAddress(), userContext.locale());
         this.shippingMethod = new ShippingMethodBean(cartLike, moneyContext);
-        this.paymentDetails = new PaymentsBean("prepaid");
+        this.paymentDetails = new PaymentBean("prepaid");
 
         if (cartLike instanceof Order) {
             fillOrder((Order) cartLike, userContext);
@@ -121,11 +120,11 @@ public class CartOrderBean {
         this.shippingMethod = shippingMethod;
     }
 
-    public PaymentsBean getPaymentDetails() {
+    public PaymentBean getPaymentDetails() {
         return paymentDetails;
     }
 
-    public void setPaymentDetails(final PaymentsBean paymentDetails) {
+    public void setPaymentDetails(final PaymentBean paymentDetails) {
         this.paymentDetails = paymentDetails;
     }
 

@@ -2,7 +2,6 @@ package myaccount.login;
 
 import common.errors.ErrorsBean;
 import io.sphere.sdk.models.Base;
-import play.data.Form;
 
 import javax.annotation.Nullable;
 
@@ -13,10 +12,8 @@ public class LogInFormBean extends Base {
     public LogInFormBean() {
     }
 
-    public LogInFormBean(@Nullable final Form<LogInFormData> form) {
-        if (form != null) {
-            this.username = form.field("username").value();
-        }
+    public LogInFormBean(@Nullable final String username) {
+        this.username = username;
     }
 
     public ErrorsBean getErrors() {

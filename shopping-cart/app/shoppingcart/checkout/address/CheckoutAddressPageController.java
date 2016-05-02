@@ -6,6 +6,7 @@ import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
 import common.template.i18n.I18nIdentifier;
+import common.utils.FormUtils;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
@@ -33,23 +34,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
-public class CheckoutAddressController extends CartController {
+public class CheckoutAddressPageController extends CartController {
 
-    private final Form<CheckoutShippingAddressFormData> shippingAddressForm;
-    private final Form<CheckoutBillingAddressFormData> billingAddressForm;
+    private final Form<CheckoutShippingAddressFormData> shippingAddressUnboundForm;
+    private final Form<CheckoutBillingAddressFormData> billingAddressUnboundForm;
     private final ProductDataConfig productDataConfig;
 
     @Inject
-    public CheckoutAddressController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig,
-                                     final FormFactory formFactory) {
+    public CheckoutAddressPageController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig,
+                                         final FormFactory formFactory) {
         super(controllerDependency);
         this.productDataConfig = productDataConfig;
-        this.shippingAddressForm = formFactory.form(CheckoutShippingAddressFormData.class);
-        this.billingAddressForm = formFactory.form(CheckoutBillingAddressFormData.class);
+        this.shippingAddressUnboundForm = formFactory.form(CheckoutShippingAddressFormData.class);
+        this.billingAddressUnboundForm = formFactory.form(CheckoutBillingAddressFormData.class);
     }
 
     @AddCSRFToken
@@ -65,29 +65,29 @@ public class CheckoutAddressController extends CartController {
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
-        final Form<CheckoutShippingAddressFormData> shippingAddressBoundForm = shippingAddressForm.bindFromRequest();
-        final Form<CheckoutBillingAddressFormData> billingAddressBoundForm = billingAddressForm.bindFromRequest();
+        final Form<CheckoutShippingAddressFormData> shippingAddressForm = shippingAddressUnboundForm.bindFromRequest();
+        final Form<CheckoutBillingAddressFormData> billingAddressForm = billingAddressUnboundForm.bindFromRequest();
         return getOrCreateCart(userContext, session())
                 .thenComposeAsync(cart -> {
-                    if (formHasErrors(shippingAddressBoundForm, billingAddressBoundForm)) {
-                        return completedFuture(handleFormErrors(shippingAddressBoundForm, billingAddressBoundForm, cart, userContext));
+                    if (formHasErrors(shippingAddressForm, billingAddressForm)) {
+                        return completedFuture(handleFormErrors(shippingAddressForm, billingAddressForm, cart, userContext));
                     } else {
-                        final Address shippingAddress = shippingAddressBoundForm.get().toAddress();
-                        final boolean differentBilling = shippingAddressBoundForm.get().isBillingAddressDifferentToBillingAddress();
-                        final Address billingAddress = differentBilling ? billingAddressBoundForm.get().toAddress() : null;
+                        final Address shippingAddress = shippingAddressForm.get().toAddress();
+                        final boolean differentBilling = shippingAddressForm.get().isBillingAddressDifferentToBillingAddress();
+                        final Address billingAddress = differentBilling ? billingAddressForm.get().toAddress() : null;
                         return setAddressToCart(cart, shippingAddress, billingAddress)
                                 .thenApplyAsync(updatedCart -> handleSuccessfulSetAddress(userContext), HttpExecution.defaultContext());
                     }
                 }, HttpExecution.defaultContext());
     }
 
-    protected boolean formHasErrors(final Form<CheckoutShippingAddressFormData> shippingAddressBoundForm,
-                                  final Form<CheckoutBillingAddressFormData> billingAddressBoundForm) {
-        if (shippingAddressBoundForm.hasErrors()) {
+    protected boolean formHasErrors(final Form<CheckoutShippingAddressFormData> shippingAddressForm,
+                                    final Form<CheckoutBillingAddressFormData> billingAddressForm) {
+        if (shippingAddressForm.hasErrors()) {
             return true;
         } else {
-            final boolean differentBilling = shippingAddressBoundForm.get().isBillingAddressDifferentToBillingAddress();
-            return differentBilling && billingAddressBoundForm.hasErrors();
+            final boolean differentBilling = shippingAddressForm.get().isBillingAddressDifferentToBillingAddress();
+            return differentBilling && billingAddressForm.hasErrors();
         }
     }
 
@@ -106,11 +106,16 @@ public class CheckoutAddressController extends CartController {
         return redirect(reverseRouter().showCheckoutShippingForm(userContext.locale().toLanguageTag()));
     }
 
-    protected Result handleFormErrors(final Form<CheckoutShippingAddressFormData> shippingAddressBoundForm,
-                                      final Form<CheckoutBillingAddressFormData> billingAddressBoundForm,
+    protected Result handleFormErrors(final Form<CheckoutShippingAddressFormData> shippingAddressForm,
+                                      final Form<CheckoutBillingAddressFormData> billingAddressForm,
                                       final Cart cart, final UserContext userContext) {
-        final ErrorsBean errors = new ErrorsBean(asList(shippingAddressBoundForm, billingAddressBoundForm));
-        final CheckoutAddressPageContent pageContent = createPageContentWithAddressError(shippingAddressBoundForm, billingAddressBoundForm, errors, userContext);
+        final ErrorsBean errors;
+        if (shippingAddressForm.hasErrors()) {
+            errors = new ErrorsBean(shippingAddressForm);
+        } else {
+            errors = new ErrorsBean(billingAddressForm);
+        }
+        final CheckoutAddressPageContent pageContent = createPageContentWithAddressError(shippingAddressForm, billingAddressForm, errors, userContext);
         return badRequest(renderCheckoutAddressPage(cart, pageContent, userContext));
     }
 
@@ -118,15 +123,19 @@ public class CheckoutAddressController extends CartController {
         final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
         final Address shippingAddress = cart.getShippingAddress();
         final Address billingAddress = cart.getBillingAddress();
-        pageContent.setAddressForm(new CheckoutAddressFormBean(shippingAddress, billingAddress, userContext, projectContext(), i18nResolver(), configuration()));
+        final boolean differentBillingAddress = billingAddress != null;
+        pageContent.setAddressForm(new CheckoutAddressFormBean(shippingAddress, billingAddress, differentBillingAddress, userContext, projectContext(), i18nResolver(), configuration()));
         return pageContent;
     }
 
-    protected CheckoutAddressPageContent createPageContentWithAddressError(final Form<CheckoutShippingAddressFormData> shippingAddressBoundForm,
-                                                                           final Form<CheckoutBillingAddressFormData> billingAddressBoundForm,
+    protected CheckoutAddressPageContent createPageContentWithAddressError(final Form<CheckoutShippingAddressFormData> shippingAddressForm,
+                                                                           final Form<CheckoutBillingAddressFormData> billingAddressForm,
                                                                            final ErrorsBean errors, final UserContext userContext) {
         final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
-        final CheckoutAddressFormBean formBean = new CheckoutAddressFormBean(shippingAddressBoundForm, billingAddressBoundForm, userContext, projectContext(), i18nResolver(), configuration());
+        final Address shippingAddress = FormUtils.extractAddress(shippingAddressForm, "Shipping");
+        final Address billingAddress = FormUtils.extractAddress(billingAddressForm, "Billing");
+        final boolean differentBillingAddress = Boolean.valueOf(shippingAddressForm.field("billingAddressDifferentToBillingAddress").value());
+        final CheckoutAddressFormBean formBean = new CheckoutAddressFormBean(shippingAddress, billingAddress, differentBillingAddress, userContext, projectContext(), i18nResolver(), configuration());
         formBean.setErrors(errors);
         pageContent.setAddressForm(formBean);
         return pageContent;
