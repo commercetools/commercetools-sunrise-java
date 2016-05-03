@@ -1,19 +1,19 @@
 package shoppingcart.checkout.thankyou;
 
 import common.controllers.PageContent;
-import shoppingcart.common.CartOrderBean;
+import shoppingcart.CartLikeBean;
 
 public class CheckoutThankYouPageContent extends PageContent {
-    private CartOrderBean order;
+    private CartLikeBean order;
 
     public CheckoutThankYouPageContent() {
     }
 
-    public CartOrderBean getOrder() {
+    public CartLikeBean getOrder() {
         return order;
     }
 
-    public void setOrder(final CartOrderBean order) {
+    public void setOrder(final CartLikeBean order) {
         this.order = order;
     }
 }

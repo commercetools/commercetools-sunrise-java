@@ -1,20 +1,20 @@
 package shoppingcart.cartdetail;
 
 import common.controllers.PageContent;
-import shoppingcart.common.CartOrderBean;
+import shoppingcart.CartLikeBean;
 
 public class CartDetailPageContent extends PageContent {
 
-    private CartOrderBean cart;
+    private CartLikeBean cart;
 
     public CartDetailPageContent() {
     }
 
-    public CartOrderBean getCart() {
+    public CartLikeBean getCart() {
         return cart;
     }
 
-    public void setCart(final CartOrderBean cart) {
+    public void setCart(final CartLikeBean cart) {
         this.cart = cart;
     }
 }

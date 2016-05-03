@@ -1,4 +1,4 @@
-package shoppingcart.checkout;
+package shoppingcart.common;
 
 public class StepWidgetBean {
 

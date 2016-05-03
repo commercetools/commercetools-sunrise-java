@@ -23,9 +23,8 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.checkout.StepWidgetBean;
+import shoppingcart.common.StepWidgetBean;
 import shoppingcart.common.CartController;
-import shoppingcart.common.CartOrderBean;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -141,11 +140,15 @@ public class CheckoutAddressPageController extends CartController {
         return pageContent;
     }
 
-    protected Html renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent, final UserContext userContext) {
+    protected StepWidgetBean createStepWidgetBean() {
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setAddressStepActive(true);
-        pageContent.setStepWidget(stepWidget);
-        pageContent.setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter()));
+        return stepWidget;
+    }
+
+    protected Html renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent, final UserContext userContext) {
+        pageContent.setStepWidget(createStepWidgetBean());
+        pageContent.setCart(createCartLikeBean(cart, userContext));
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateService().renderToHtml("checkout-address", pageData, userContext.locales());

@@ -1,6 +1,6 @@
 package shoppingcart.checkout.confirmation;
 
-import shoppingcart.checkout.CheckoutPageContent;
+import shoppingcart.common.CheckoutPageContent;
 
 public class CheckoutConfirmationPageContent extends CheckoutPageContent {
 

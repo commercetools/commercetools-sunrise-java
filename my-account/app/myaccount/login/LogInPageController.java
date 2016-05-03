@@ -81,10 +81,11 @@ public class LogInPageController extends SunriseController {
         }
     }
 
-    public Result processLogOut(final String languageTag) {
+    public CompletionStage<Result> processLogOut(final String languageTag) {
         CustomerSessionUtils.removeCustomer(session());
         CartSessionUtils.removeCart(session());
-        return redirect(reverseRouter().showHome(languageTag));
+        final Call call = reverseRouter().showHome(languageTag);
+        return completedFuture(redirect(call));
     }
 
     protected CompletionStage<CustomerSignInResult> logIn(final LogInFormData formData) {

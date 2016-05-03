@@ -1,4 +1,4 @@
-package shoppingcart.checkout.address;
+package shoppingcart;
 
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;

@@ -12,7 +12,6 @@ import play.mvc.Call;
 import play.mvc.Result;
 import shoppingcart.OrderSessionUtils;
 import shoppingcart.common.CartController;
-import shoppingcart.common.CartOrderBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -48,7 +47,7 @@ public class CheckoutThankYouPageController extends CartController {
 
     protected CompletionStage<Result> handleFoundOrder(final Order order, final UserContext userContext) {
         final CheckoutThankYouPageContent pageContent = new CheckoutThankYouPageContent();
-        pageContent.setOrder(new CartOrderBean(order, userContext, productDataConfig, reverseRouter()));
+        pageContent.setOrder(createCartLikeBean(order, userContext));
         return completedFuture(renderCheckoutThankYouPage(pageContent, userContext));
     }
 

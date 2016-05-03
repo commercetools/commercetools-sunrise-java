@@ -7,10 +7,7 @@ import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
 import common.models.ProductDataConfig;
-import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.CartDraft;
-import io.sphere.sdk.carts.CartDraftBuilder;
-import io.sphere.sdk.carts.CartState;
+import io.sphere.sdk.carts.*;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
@@ -23,6 +20,7 @@ import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
 import myaccount.CustomerSessionUtils;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
+import shoppingcart.CartLikeBean;
 import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
@@ -43,6 +41,10 @@ public abstract class CartController extends SunriseController {
     public CartController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
         super(controllerDependency);
         this.productDataConfig = productDataConfig;
+    }
+
+    protected CartLikeBean createCartLikeBean(final CartLike<?> cartLike, final UserContext userContext) {
+        return new CartLikeBean(cartLike, userContext, productDataConfig, reverseRouter());
     }
 
     protected CompletionStage<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {

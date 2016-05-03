@@ -1,4 +1,4 @@
-package shoppingcart.common;
+package shoppingcart;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
@@ -7,54 +7,53 @@ import common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.orders.Order;
-import shoppingcart.checkout.address.AddressBean;
-import shoppingcart.checkout.shipping.ShippingMethodBean;
 
 import java.time.format.DateTimeFormatter;
 
 import static common.utils.PriceUtils.*;
 
-public class CartOrderBean {
+public class CartLikeBean {
 
     private Long totalItems;
     private String salesTax;
     private String totalPrice;
     private String subtotalPrice;
-    private CartLineItemsBean lineItems;
+    private LineItemsBean lineItems;
     private AddressBean shippingAddress;
     private AddressBean billingAddress;
-    private ShippingMethodBean shippingMethod;
-    private PaymentBean paymentDetails;
+    private ShippingInfoBean shippingMethod;
+    private PaymentInfoBean paymentDetails;
     private String orderNumber;
     private String orderDate;
     private String customerEmail;
 
-    public CartOrderBean() {
+    public CartLikeBean() {
     }
 
-    public CartOrderBean(final CartLike<?> cartLike, final UserContext userContext,
-                         final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
+    public CartLikeBean(final CartLike<?> cartLike, final UserContext userContext,
+                        final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
         final MoneyContext moneyContext = MoneyContext.of(cartLike.getCurrency(), userContext.locale());
         this.totalItems = cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
         this.salesTax = moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null));
         this.totalPrice = moneyContext.formatOrZero(calculateTotalPrice(cartLike));
         this.subtotalPrice = moneyContext.formatOrZero(calculateSubTotal(cartLike));
-        this.lineItems = new CartLineItemsBean(cartLike, productDataConfig, userContext, reverseRouter);
+        this.lineItems = new LineItemsBean(cartLike.getLineItems(), productDataConfig, userContext, reverseRouter);
         this.shippingAddress = new AddressBean(cartLike.getShippingAddress(), userContext.locale());
-        this.billingAddress = new AddressBean(cartLike.getBillingAddress(), userContext.locale());
-        this.shippingMethod = new ShippingMethodBean(cartLike, moneyContext);
-        this.paymentDetails = new PaymentBean("prepaid");
+        if (cartLike.getBillingAddress() != null) {
+            this.billingAddress = new AddressBean(cartLike.getBillingAddress(), userContext.locale());
+        } else {
+            this.billingAddress = new AddressBean(cartLike.getShippingAddress(), userContext.locale());
+        }
+        this.shippingMethod = new ShippingInfoBean(cartLike.getShippingInfo(), moneyContext);
+        this.paymentDetails = new PaymentInfoBean(cartLike.getPaymentInfo(), userContext);
 
         if (cartLike instanceof Order) {
-            fillOrder((Order) cartLike, userContext);
+            final Order order = (Order) cartLike;
+            final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", userContext.locale());
+            this.orderDate = dateTimeFormatter.format(order.getCreatedAt());
+            this.orderNumber = order.getOrderNumber();
+            this.customerEmail = order.getCustomerEmail();
         }
-    }
-
-    private void fillOrder(final Order order, final UserContext userContext) {
-        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", userContext.locale());
-        this.orderDate = dateTimeFormatter.format(order.getCreatedAt());
-        this.orderNumber = order.getOrderNumber();
-        this.customerEmail = order.getCustomerEmail();
     }
 
     public Long getTotalItems() {
@@ -65,11 +64,11 @@ public class CartOrderBean {
         this.totalItems = totalItems;
     }
 
-    public CartLineItemsBean getLineItems() {
+    public LineItemsBean getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(final CartLineItemsBean lineItems) {
+    public void setLineItems(final LineItemsBean lineItems) {
         this.lineItems = lineItems;
     }
 
@@ -113,19 +112,19 @@ public class CartOrderBean {
         this.shippingAddress = shippingAddress;
     }
 
-    public ShippingMethodBean getShippingMethod() {
+    public ShippingInfoBean getShippingMethod() {
         return shippingMethod;
     }
 
-    public void setShippingMethod(final ShippingMethodBean shippingMethod) {
+    public void setShippingMethod(final ShippingInfoBean shippingMethod) {
         this.shippingMethod = shippingMethod;
     }
 
-    public PaymentBean getPaymentDetails() {
+    public PaymentInfoBean getPaymentDetails() {
         return paymentDetails;
     }
 
-    public void setPaymentDetails(final PaymentBean paymentDetails) {
+    public void setPaymentDetails(final PaymentInfoBean paymentDetails) {
         this.paymentDetails = paymentDetails;
     }
 

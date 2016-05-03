@@ -1,12 +1,12 @@
-package shoppingcart.checkout;
+package shoppingcart.common;
 
 import common.controllers.PageContent;
-import shoppingcart.common.CartOrderBean;
+import shoppingcart.CartLikeBean;
 
 public abstract class CheckoutPageContent extends PageContent {
 
     private StepWidgetBean stepWidget;
-    private CartOrderBean cart;
+    private CartLikeBean cart;
 
     public StepWidgetBean getStepWidget() {
         return stepWidget;
@@ -16,11 +16,11 @@ public abstract class CheckoutPageContent extends PageContent {
         this.stepWidget = stepWidget;
     }
 
-    public CartOrderBean getCart() {
+    public CartLikeBean getCart() {
         return cart;
     }
 
-    public void setCart(final CartOrderBean cart) {
+    public void setCart(final CartLikeBean cart) {
         this.cart = cart;
     }
 }

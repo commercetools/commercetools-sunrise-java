@@ -1,6 +1,6 @@
 package shoppingcart.checkout.address;
 
-import shoppingcart.checkout.CheckoutPageContent;
+import shoppingcart.common.CheckoutPageContent;
 
 public class CheckoutAddressPageContent extends CheckoutPageContent {
 

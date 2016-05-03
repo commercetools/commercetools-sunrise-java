@@ -22,9 +22,8 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.CartSessionUtils;
 import shoppingcart.OrderSessionUtils;
-import shoppingcart.checkout.StepWidgetBean;
+import shoppingcart.common.StepWidgetBean;
 import shoppingcart.common.CartController;
-import shoppingcart.common.CartOrderBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -108,11 +107,15 @@ public class CheckoutConfirmationPageController extends CartController {
         return pageContent;
     }
 
-    protected Html renderCheckoutConfirmationPage(final Cart cart, final CheckoutConfirmationPageContent pageContent, final UserContext userContext) {
+    protected StepWidgetBean createStepWidgetBean() {
         final StepWidgetBean stepWidget = new StepWidgetBean();
         stepWidget.setConfirmationStepActive(true);
-        pageContent.setStepWidget(stepWidget);
-        pageContent.setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter()));
+        return stepWidget;
+    }
+
+    protected Html renderCheckoutConfirmationPage(final Cart cart, final CheckoutConfirmationPageContent pageContent, final UserContext userContext) {
+        pageContent.setStepWidget(createStepWidgetBean());
+        pageContent.setCart(createCartLikeBean(cart, userContext));
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:confirmationPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales());

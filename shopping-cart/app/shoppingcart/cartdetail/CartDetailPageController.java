@@ -19,7 +19,6 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.common.CartController;
-import shoppingcart.common.CartOrderBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -169,7 +168,7 @@ public class CartDetailPageController extends CartController {
     }
 
     protected Html renderCartPage(final Cart cart, final CartDetailPageContent pageContent, final UserContext userContext) {
-        pageContent.setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter()));
+        pageContent.setCart(createCartLikeBean(cart, userContext));
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateService().renderToHtml("cart", pageData, userContext.locales());
