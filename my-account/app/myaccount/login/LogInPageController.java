@@ -19,6 +19,7 @@ import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
+import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.CartSessionUtils;
@@ -35,10 +36,10 @@ import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
  * Allows to log in as a customer.
  */
 @Singleton
-public final class LogInPageController extends SunriseController {
+public class LogInPageController extends SunriseController {
 
-    private final Form<LogInFormData> logInUnboundForm;
-    private final Form<SignUpFormData> signUpUnboundForm;
+    protected final Form<LogInFormData> logInUnboundForm;
+    protected final Form<SignUpFormData> signUpUnboundForm;
 
     @Inject
     public LogInPageController(final ControllerDependency controllerDependency, final FormFactory formFactory) {
@@ -59,11 +60,11 @@ public final class LogInPageController extends SunriseController {
         final UserContext userContext = userContext(languageTag);
         final Form<LogInFormData> logInForm = logInUnboundForm.bindFromRequest();
         if (logInForm.hasErrors()) {
-            return completedFuture(handleLogInFormErrors(logInForm, userContext));
+            return handleLogInFormErrors(logInForm, userContext);
         } else {
             return logIn(logInForm.get())
-                    .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
-                    .exceptionally(throwable -> handleInvalidCredentialsError(throwable, logInForm, userContext));
+                    .thenComposeAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
+                    .exceptionally(throwable -> handleInvalidCredentialsError(throwable, logInForm, userContext).toCompletableFuture().join()); // TODO move to async
         }
     }
 
@@ -72,11 +73,11 @@ public final class LogInPageController extends SunriseController {
         final UserContext userContext = userContext(languageTag);
         final Form<SignUpFormData> signUpForm = signUpUnboundForm.bindFromRequest();
         if (signUpForm.hasErrors()) {
-            return completedFuture(handleSignUpFormErrors(signUpForm, userContext));
+            return handleSignUpFormErrors(signUpForm, userContext);
         } else {
             return signUp(signUpForm.get())
-                    .thenApplyAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
-                    .exceptionally(throwable -> handleExistingCustomerError(throwable, signUpForm, userContext));
+                    .thenComposeAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
+                    .exceptionally(throwable -> handleExistingCustomerError(throwable, signUpForm, userContext).toCompletableFuture().join());  // TODO move to async
         }
     }
 
@@ -104,26 +105,27 @@ public final class LogInPageController extends SunriseController {
         return sphere().execute(customerCreateCommand);
     }
 
-    protected Result handleSuccessfulSignIn(final CustomerSignInResult result, final UserContext userContext) {
+    protected CompletionStage<Result> handleSuccessfulSignIn(final CustomerSignInResult result, final UserContext userContext) {
         overwriteCartSessionData(result.getCart(), session(), userContext, reverseRouter());
         overwriteCustomerSessionData(result.getCustomer(), session());
-        return redirect(reverseRouter().showHome(userContext.locale().toLanguageTag()));
+        final Call call = reverseRouter().showHome(userContext.locale().toLanguageTag());
+        return completedFuture(redirect(call));
     }
 
-    protected Result handleLogInFormErrors(final Form<LogInFormData> logInForm, final UserContext userContext) {
+    protected CompletionStage<Result> handleLogInFormErrors(final Form<LogInFormData> logInForm, final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean(logInForm);
         final LogInPageContent pageContent = createPageContentWithLogInError(logInForm, errors, userContext);
-        return badRequest(renderLogInPage(pageContent, userContext));
+        return completedFuture(badRequest(renderLogInPage(pageContent, userContext)));
     }
 
-    protected Result handleSignUpFormErrors(final Form<SignUpFormData> signUpForm, final UserContext userContext) {
+    protected CompletionStage<Result> handleSignUpFormErrors(final Form<SignUpFormData> signUpForm, final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean(signUpForm);
         final LogInPageContent pageContent = createPageContentWithSignUpError(signUpForm, errors, userContext);
-        return badRequest(renderLogInPage(pageContent, userContext));
+        return completedFuture(badRequest(renderLogInPage(pageContent, userContext)));
     }
 
-    protected Result handleInvalidCredentialsError(final Throwable throwable, final Form<LogInFormData> logInForm,
-                                                   final UserContext userContext) {
+    protected CompletionStage<Result> handleInvalidCredentialsError(final Throwable throwable, final Form<LogInFormData> logInForm,
+                                                                    final UserContext userContext) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             final ErrorsBean errors;
@@ -135,19 +137,19 @@ public final class LogInPageController extends SunriseController {
                 errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             }
             final LogInPageContent pageContent = createPageContentWithLogInError(logInForm, errors, userContext);
-            return badRequest(renderLogInPage(pageContent, userContext));
+            return completedFuture(badRequest(renderLogInPage(pageContent, userContext)));
         }
         throw new RuntimeException(throwable);
     }
 
-    protected Result handleExistingCustomerError(final Throwable throwable, final Form<SignUpFormData> signUpForm,
+    protected CompletionStage<Result> handleExistingCustomerError(final Throwable throwable, final Form<SignUpFormData> signUpForm,
                                                  final UserContext userContext) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             Logger.error("Unknown error, probably customer already exists", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("A user with this email already exists"); // TODO get from i18n
             final LogInPageContent pageContent = createPageContentWithSignUpError(signUpForm, errors, userContext);
-            return badRequest(renderLogInPage(pageContent, userContext));
+            return completedFuture(badRequest(renderLogInPage(pageContent, userContext)));
         }
         throw new RuntimeException(throwable);
     }

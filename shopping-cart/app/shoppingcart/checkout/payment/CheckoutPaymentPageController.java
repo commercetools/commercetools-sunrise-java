@@ -21,6 +21,7 @@ import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
+import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.checkout.StepWidgetBean;
@@ -31,31 +32,28 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static java.util.Locale.ENGLISH;
-import static java.util.Locale.GERMAN;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class CheckoutPaymentPageController extends CartController {
 
-    private final Form<CheckoutPaymentFormData> paymentUnboundForm;
-    private final ProductDataConfig productDataConfig;
-    private final List<PaymentMethodInfo> paymentMethodsInfo;
+    protected final Form<CheckoutPaymentFormData> paymentUnboundForm;
+    protected final List<PaymentMethodInfo> paymentMethodsInfo;
 
     @Inject
     public CheckoutPaymentPageController(final ControllerDependency controllerDependency,
                                          final ProductDataConfig productDataConfig, final FormFactory formFactory) {
-        super(controllerDependency);
-        this.productDataConfig = productDataConfig;
+        super(controllerDependency, productDataConfig);
         this.paymentUnboundForm = formFactory.form(CheckoutPaymentFormData.class);
         this.paymentMethodsInfo = singletonList(PaymentMethodInfoBuilder.of()
-                .name(LocalizedString.of(ENGLISH, "Prepaid", GERMAN, "Prepaid")) // TODO pull out
+                .name(LocalizedString.of(Locale.ENGLISH, "Prepaid", Locale.GERMAN, "Prepaid")) // TODO pull out
                 .method("prepaid")
                 .build());
     }
@@ -77,13 +75,13 @@ public class CheckoutPaymentPageController extends CartController {
         return getOrCreateCart(userContext, session())
                 .thenComposeAsync(cart -> {
                     if (paymentForm.hasErrors()) {
-                        return completedFuture(handleFormErrors(paymentForm, paymentMethodsInfo, cart, userContext));
+                        return handleFormErrors(paymentForm, paymentMethodsInfo, cart, userContext);
                     } else {
                         final String selectedPaymentMethod = paymentForm.get().getPayment();
                         return findPaymentMethodInfoByMethod(selectedPaymentMethod)
                                 .map(selectedPaymentInfo -> setPaymentToCart(cart, selectedPaymentInfo)
-                                        .thenApplyAsync(updatedCart -> handleSuccessfulSetPayment(userContext), HttpExecution.defaultContext()))
-                                .orElseGet(() -> completedFuture(handleInvalidPaymentError(paymentForm, paymentMethodsInfo, cart, userContext)));
+                                        .thenComposeAsync(updatedCart -> handleSuccessfulSetPayment(userContext), HttpExecution.defaultContext()))
+                                .orElseGet(() -> handleInvalidPaymentError(paymentForm, paymentMethodsInfo, cart, userContext));
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -103,22 +101,25 @@ public class CheckoutPaymentPageController extends CartController {
                 .findFirst();
     }
 
-    protected Result handleSuccessfulSetPayment(final UserContext userContext) {
-        return redirect(reverseRouter().showCheckoutConfirmationForm(userContext.locale().toLanguageTag()));
+    protected CompletionStage<Result> handleSuccessfulSetPayment(final UserContext userContext) {
+        final Call call = reverseRouter().showCheckoutConfirmationForm(userContext.locale().toLanguageTag());
+        return completedFuture(redirect(call));
     }
 
-    protected Result handleFormErrors(final Form<CheckoutPaymentFormData> paymentForm, final List<PaymentMethodInfo> paymentMethods,
-                                      final Cart cart, final UserContext userContext) {
+    protected CompletionStage<Result> handleFormErrors(final Form<CheckoutPaymentFormData> paymentForm,
+                                                       final List<PaymentMethodInfo> paymentMethods,
+                                                       final Cart cart, final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean(paymentForm);
         final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
-        return badRequest(renderCheckoutPaymentPage(cart, pageContent, userContext));
+        return completedFuture(badRequest(renderCheckoutPaymentPage(cart, pageContent, userContext)));
     }
 
-    protected Result handleInvalidPaymentError(final Form<CheckoutPaymentFormData> paymentForm, final List<PaymentMethodInfo> paymentMethods,
-                                               final Cart cart, final UserContext userContext) {
+    protected CompletionStage<Result> handleInvalidPaymentError(final Form<CheckoutPaymentFormData> paymentForm,
+                                                                final List<PaymentMethodInfo> paymentMethods,
+                                                                final Cart cart, final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean("Invalid payment error"); // TODO use i18n
         final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
-        return badRequest(renderCheckoutPaymentPage(cart, pageContent, userContext));
+        return completedFuture(badRequest(renderCheckoutPaymentPage(cart, pageContent, userContext)));
     }
 
     protected CheckoutPaymentPageContent createPageContent(final Cart cart, final List<PaymentMethodInfo> paymentMethods,

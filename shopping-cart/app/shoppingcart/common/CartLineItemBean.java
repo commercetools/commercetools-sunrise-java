@@ -12,6 +12,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public class CartLineItemBean extends MiniCartLineItemBean {
+
     private List<ProductAttributeBean> attributes;
 
     public CartLineItemBean() {

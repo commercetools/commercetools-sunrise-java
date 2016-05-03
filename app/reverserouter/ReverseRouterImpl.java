@@ -107,17 +107,17 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call showCheckoutConfirmationForm(final String languageTag) {
-        return CheckoutConfirmationController.show(languageTag);
+        return CheckoutConfirmationPageController.show(languageTag);
     }
 
     @Override
     public Call processCheckoutConfirmationForm(final String languageTag) {
-        return CheckoutConfirmationController.process(languageTag);
+        return CheckoutConfirmationPageController.process(languageTag);
     }
 
     @Override
     public Call showCheckoutThankYou(final String languageTag) {
-        return CheckoutThankYouController.show(languageTag);
+        return CheckoutThankYouPageController.show(languageTag);
     }
 
     @Override

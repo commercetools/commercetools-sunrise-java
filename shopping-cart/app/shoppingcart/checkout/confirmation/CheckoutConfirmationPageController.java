@@ -17,6 +17,7 @@ import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
+import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.CartSessionUtils;
@@ -34,14 +35,12 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @Singleton
 public class CheckoutConfirmationPageController extends CartController {
 
-    private final ProductDataConfig productDataConfig;
-    private final Form<CheckoutConfirmationFormData> confirmationUnboundForm;
+    protected final Form<CheckoutConfirmationFormData> confirmationUnboundForm;
 
     @Inject
     public CheckoutConfirmationPageController(final ControllerDependency controllerDependency,
                                               final ProductDataConfig productDataConfig, final FormFactory formFactory) {
-        super(controllerDependency);
-        this.productDataConfig = productDataConfig;
+        super(controllerDependency, productDataConfig);
         this.confirmationUnboundForm = formFactory.form(CheckoutConfirmationFormData.class);
     }
 
@@ -62,10 +61,10 @@ public class CheckoutConfirmationPageController extends CartController {
         return getOrCreateCart(userContext, session())
                 .thenComposeAsync(cart -> {
                     if (confirmationForm.hasErrors()) {
-                        return completedFuture(handleFormErrors(confirmationForm, cart, userContext));
+                        return handleFormErrors(confirmationForm, cart, userContext);
                     } else {
                         return createOrder(cart)
-                                .thenApplyAsync(order -> handleSuccessfulCreateOrder(userContext), HttpExecution.defaultContext());
+                                .thenComposeAsync(order -> handleSuccessfulCreateOrder(userContext), HttpExecution.defaultContext());
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -81,15 +80,16 @@ public class CheckoutConfirmationPageController extends CartController {
                 }, HttpExecution.defaultContext());
     }
 
-    protected Result handleSuccessfulCreateOrder(final UserContext userContext) {
-        return redirect(reverseRouter().showCheckoutThankYou(userContext.locale().toLanguageTag()));
+    protected CompletionStage<Result> handleSuccessfulCreateOrder(final UserContext userContext) {
+        final Call call = reverseRouter().showCheckoutThankYou(userContext.locale().toLanguageTag());
+        return completedFuture(redirect(call));
     }
 
-    protected Result handleFormErrors(final Form<CheckoutConfirmationFormData> confirmationForm, final Cart cart,
+    protected CompletionStage<Result> handleFormErrors(final Form<CheckoutConfirmationFormData> confirmationForm, final Cart cart,
                                       final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean(confirmationForm);
         final CheckoutConfirmationPageContent pageContent = createPageContentWithConfirmationError(confirmationForm, errors);
-        return badRequest(renderCheckoutConfirmationPage(cart, pageContent, userContext));
+        return completedFuture(badRequest(renderCheckoutConfirmationPage(cart, pageContent, userContext)));
     }
 
     protected CheckoutConfirmationPageContent createPageContent() {

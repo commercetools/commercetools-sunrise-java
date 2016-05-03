@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CartLineItemsBean extends Base {
+
     private List<CartLineItemBean> list;
 
     public CartLineItemsBean() {

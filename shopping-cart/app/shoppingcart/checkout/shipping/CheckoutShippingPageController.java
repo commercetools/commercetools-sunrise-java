@@ -18,6 +18,7 @@ import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
+import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.checkout.StepWidgetBean;
@@ -30,17 +31,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
 @Singleton
 public class CheckoutShippingPageController extends CartController {
 
-    private final Form<CheckoutShippingFormData> shippingUnboundForm;
-    private final ProductDataConfig productDataConfig;
+    protected final Form<CheckoutShippingFormData> shippingUnboundForm;
 
     @Inject
     public CheckoutShippingPageController(final ControllerDependency controllerDependency,
                                           final ProductDataConfig productDataConfig, final FormFactory formFactory) {
-        super(controllerDependency);
-        this.productDataConfig = productDataConfig;
+        super(controllerDependency, productDataConfig);
         this.shippingUnboundForm = formFactory.form(CheckoutShippingFormData.class);
     }
 
@@ -65,7 +66,7 @@ public class CheckoutShippingPageController extends CartController {
                     } else {
                         final String shippingMethodId = shippingForm.get().getShippingMethodId();
                         return setShippingToCart(cart, shippingMethodId)
-                                .thenApplyAsync(updatedCart -> handleSuccessfulSetShipping(userContext), HttpExecution.defaultContext());
+                                .thenComposeAsync(updatedCart -> handleSuccessfulSetShipping(userContext), HttpExecution.defaultContext());
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -76,8 +77,9 @@ public class CheckoutShippingPageController extends CartController {
         return sphere().execute(CartUpdateCommand.of(cart, setShippingMethod));
     }
 
-    protected Result handleSuccessfulSetShipping(final UserContext userContext) {
-        return redirect(reverseRouter().showCheckoutPaymentForm(userContext.locale().toLanguageTag()));
+    protected CompletionStage<Result> handleSuccessfulSetShipping(final UserContext userContext) {
+        final Call call = reverseRouter().showCheckoutPaymentForm(userContext.locale().toLanguageTag());
+        return completedFuture(redirect(call));
     }
 
     protected CompletionStage<Result> handleFormErrors(final Form<CheckoutShippingFormData> shippingForm,

@@ -4,6 +4,7 @@ import common.controllers.PageContent;
 import shoppingcart.common.CartOrderBean;
 
 public abstract class CheckoutPageContent extends PageContent {
+
     private StepWidgetBean stepWidget;
     private CartOrderBean cart;
 

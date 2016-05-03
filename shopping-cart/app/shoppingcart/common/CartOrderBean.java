@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import static common.utils.PriceUtils.*;
 
 public class CartOrderBean {
+
     private Long totalItems;
     private String salesTax;
     private String totalPrice;
