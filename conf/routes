@@ -79,11 +79,11 @@ GET         /:languageTag/checkout/payment                     @shoppingcart.che
 # Processes the form for selecting a payment method
 POST        /:languageTag/checkout/payment                     @shoppingcart.checkout.payment.CheckoutPaymentPageController.process(languageTag: String)
 # Shows the form to create an order out of the cart of the session
-GET         /:languageTag/checkout/confirmation                @shoppingcart.checkout.confirmation.CheckoutConfirmationController.show(languageTag: String)
+GET         /:languageTag/checkout/confirmation                @shoppingcart.checkout.confirmation.CheckoutConfirmationPageController.show(languageTag: String)
 # Processes the order creation
-POST        /:languageTag/checkout/confirmation                @shoppingcart.checkout.confirmation.CheckoutConfirmationController.process(languageTag: String)
+POST        /:languageTag/checkout/confirmation                @shoppingcart.checkout.confirmation.CheckoutConfirmationPageController.process(languageTag: String)
 # Shows the customer a confirmation for the created order
-GET         /:languageTag/checkout/thankyou                    @shoppingcart.checkout.thankyou.CheckoutThankYouController.show(languageTag: String)
+GET         /:languageTag/checkout/thankyou                    @shoppingcart.checkout.thankyou.CheckoutThankYouPageController.show(languageTag: String)
 
 
 # MY ACCOUNT

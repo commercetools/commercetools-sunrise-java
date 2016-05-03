@@ -14,7 +14,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 public class NavMenuData extends Base {
-    private List<CategoryData> categories;
+    private List<CategoryBean> categories;
 
     public NavMenuData() {
     }
@@ -23,23 +23,23 @@ public class NavMenuData extends Base {
                        @Nullable final String saleCategoryExtId) {
         this.categories = new ArrayList<>();
         categoryTree.getRoots().forEach(root -> {
-            final CategoryData categoryData = createCategoryData(root, categoryTree, userContext, reverseRouter, saleCategoryExtId);
+            final CategoryBean categoryData = createCategoryData(root, categoryTree, userContext, reverseRouter, saleCategoryExtId);
             this.categories.add(categoryData);
         });
     }
 
-    public List<CategoryData> getCategories() {
+    public List<CategoryBean> getCategories() {
         return categories;
     }
 
-    public void setCategories(final List<CategoryData> categories) {
+    public void setCategories(final List<CategoryBean> categories) {
         this.categories = categories;
     }
 
-    private static CategoryData createCategoryData(final Category category, final CategoryTree categoryTree,
+    private static CategoryBean createCategoryData(final Category category, final CategoryTree categoryTree,
                                                    final UserContext userContext, final ReverseRouter reverseRouter,
                                                    @Nullable final String saleCategoryExtId) {
-        final CategoryData categoryData = new CategoryData();
+        final CategoryBean categoryData = new CategoryBean();
         categoryData.setText(category.getName().find(userContext.locales()).orElse(""));
         categoryData.setUrl(reverseRouter.showCategoryUrlOrEmpty(userContext.locale(), category));
         categoryData.setSale(Optional.ofNullable(category.getExternalId())

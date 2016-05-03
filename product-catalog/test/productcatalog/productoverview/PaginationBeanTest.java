@@ -1,7 +1,7 @@
 package productcatalog.productoverview;
 
 import common.contexts.RequestContext;
-import common.models.LinkData;
+import common.models.LinkBean;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
 import org.junit.Test;
@@ -29,10 +29,10 @@ public class PaginationBeanTest {
         assertThat(pagination.getFirstPage()).isNull();
         assertThat(pagination.getLastPage()).isNull();
         assertThat(pagination.getPages())
-                .extracting(LinkData::getText)
+                .extracting(LinkBean::getText)
                 .containsExactly("1", "2", "3", "4", "5");
         assertThat(pagination.getPages())
-                .extracting(LinkData::isSelected)
+                .extracting(LinkBean::isSelected)
                 .containsExactly(false, false, true, false, false);
     }
 
@@ -68,7 +68,7 @@ public class PaginationBeanTest {
                 .forEach(page -> {
                     final PaginationBean pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
                     assertThat(pagination.getPages())
-                            .extracting(LinkData::getText)
+                            .extracting(LinkBean::getText)
                             .containsExactly("1", "2", "3", "4");
                 });
     }
@@ -81,7 +81,7 @@ public class PaginationBeanTest {
                 .forEach(page -> {
                     final PaginationBean pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
                     assertThat(pagination.getPages())
-                            .extracting(LinkData::getText)
+                            .extracting(LinkBean::getText)
                             .containsExactly("7", "8", "9", "10");
                 });
     }

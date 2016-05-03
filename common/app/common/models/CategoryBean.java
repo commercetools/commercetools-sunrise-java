@@ -2,22 +2,22 @@ package common.models;
 
 import java.util.List;
 
-public class CategoryData extends LinkData {
-    private List<CategoryData> children;
+public class CategoryBean extends LinkBean {
+    private List<CategoryBean> children;
     private boolean sale;
 
-    public CategoryData() {
+    public CategoryBean() {
     }
 
-    public CategoryData(final String text, final String url) {
+    public CategoryBean(final String text, final String url) {
         super(text, url);
     }
 
-    public List<CategoryData> getChildren() {
+    public List<CategoryBean> getChildren() {
         return children;
     }
 
-    public void setChildren(final List<CategoryData> children) {
+    public void setChildren(final List<CategoryBean> children) {
         this.children = children;
     }
 
