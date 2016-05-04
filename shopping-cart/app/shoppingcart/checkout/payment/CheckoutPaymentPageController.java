@@ -24,8 +24,8 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.common.StepWidgetBean;
 import shoppingcart.common.CartController;
+import shoppingcart.common.StepWidgetBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
+import static common.utils.FormUtils.extractFormField;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
@@ -138,7 +139,7 @@ public class CheckoutPaymentPageController extends CartController {
                                                                            final ErrorsBean errors, final List<PaymentMethodInfo> paymentMethods,
                                                                            final UserContext userContext) {
         final CheckoutPaymentPageContent pageContent = new CheckoutPaymentPageContent();
-        final List<String> selectedPaymentMethodKeys = Optional.ofNullable(paymentForm.field("payment").value())
+        final List<String> selectedPaymentMethodKeys = Optional.ofNullable(extractFormField(paymentForm, "payment"))
                 .map(Collections::singletonList)
                 .orElse(emptyList());
         final CheckoutPaymentFormBean formBean = new CheckoutPaymentFormBean(paymentMethods, selectedPaymentMethodKeys, userContext);

@@ -21,8 +21,8 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.common.StepWidgetBean;
 import shoppingcart.common.CartController;
+import shoppingcart.common.StepWidgetBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
+import static common.utils.FormUtils.extractFormField;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
@@ -117,7 +118,7 @@ public class CheckoutShippingPageController extends CartController {
     protected CheckoutShippingPageContent createPageContentWithShippingError(final Form<CheckoutShippingFormData> shippingForm,
                                                                              final ErrorsBean errors, final List<ShippingMethod> shippingMethods) {
         final CheckoutShippingPageContent pageContent = new CheckoutShippingPageContent();
-        final String selectedShippingMethodId = shippingForm.field("shippingMethodId").value();
+        final String selectedShippingMethodId = extractFormField(shippingForm, "shippingMethodId");
         final CheckoutShippingFormBean formBean = new CheckoutShippingFormBean(shippingMethods, selectedShippingMethodId);
         formBean.setErrors(errors);
         pageContent.setShippingForm(formBean);

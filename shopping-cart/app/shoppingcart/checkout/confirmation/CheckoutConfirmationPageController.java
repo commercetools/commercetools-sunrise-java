@@ -22,13 +22,14 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.CartSessionUtils;
 import shoppingcart.OrderSessionUtils;
-import shoppingcart.common.StepWidgetBean;
 import shoppingcart.common.CartController;
+import shoppingcart.common.StepWidgetBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.concurrent.CompletionStage;
 
+import static common.utils.FormUtils.extractBooleanFormField;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
@@ -100,7 +101,7 @@ public class CheckoutConfirmationPageController extends CartController {
     protected CheckoutConfirmationPageContent createPageContentWithConfirmationError(final Form<CheckoutConfirmationFormData> confirmationForm,
                                                                                      final ErrorsBean errors) {
         final CheckoutConfirmationPageContent pageContent = new CheckoutConfirmationPageContent();
-        final boolean agreeToTerms = Boolean.valueOf(confirmationForm.field("agreeTerms").value());
+        final boolean agreeToTerms = extractBooleanFormField(confirmationForm, "agreeTerms");
         final CheckoutConfirmationFormBean formBean = new CheckoutConfirmationFormBean(agreeToTerms);
         formBean.setErrors(errors);
         pageContent.setCheckoutForm(formBean);

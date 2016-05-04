@@ -6,7 +6,6 @@ import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
 import common.template.i18n.I18nIdentifier;
-import common.utils.FormUtils;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
@@ -23,8 +22,8 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.common.StepWidgetBean;
 import shoppingcart.common.CartController;
+import shoppingcart.common.StepWidgetBean;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -34,6 +33,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
+import static common.utils.FormUtils.extractAddress;
+import static common.utils.FormUtils.extractBooleanFormField;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
@@ -131,9 +132,9 @@ public class CheckoutAddressPageController extends CartController {
                                                                            final Form<CheckoutBillingAddressFormData> billingAddressForm,
                                                                            final ErrorsBean errors, final UserContext userContext) {
         final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
-        final Address shippingAddress = FormUtils.extractAddress(shippingAddressForm, "Shipping");
-        final Address billingAddress = FormUtils.extractAddress(billingAddressForm, "Billing");
-        final boolean differentBillingAddress = Boolean.valueOf(shippingAddressForm.field("billingAddressDifferentToBillingAddress").value());
+        final Address shippingAddress = extractAddress(shippingAddressForm, "Shipping");
+        final Address billingAddress = extractAddress(billingAddressForm, "Billing");
+        final boolean differentBillingAddress = extractBooleanFormField(shippingAddressForm, "billingAddressDifferentToBillingAddress");
         final CheckoutAddressFormBean formBean = new CheckoutAddressFormBean(shippingAddress, billingAddress, differentBillingAddress, userContext, projectContext(), i18nResolver(), configuration());
         formBean.setErrors(errors);
         pageContent.setAddressForm(formBean);

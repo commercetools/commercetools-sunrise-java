@@ -28,6 +28,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.concurrent.CompletionStage;
 
+import static common.utils.FormUtils.extractBooleanFormField;
+import static common.utils.FormUtils.extractFormField;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
@@ -165,7 +167,7 @@ public class LogInPageController extends SunriseController {
     protected LogInPageContent createPageContentWithLogInError(final Form<LogInFormData> logInForm,
                                                                final ErrorsBean errors, final UserContext userContext) {
         final LogInPageContent pageContent = new LogInPageContent();
-        final String username = logInForm.field("username").value();
+        final String username = extractFormField(logInForm, "username");
         final LogInFormBean logInFormBean = new LogInFormBean(username);
         logInFormBean.setErrors(errors);
         pageContent.setLogInForm(logInFormBean);
@@ -176,11 +178,11 @@ public class LogInPageController extends SunriseController {
     protected LogInPageContent createPageContentWithSignUpError(final Form<SignUpFormData> signUpForm,
                                                                 final ErrorsBean errors, final UserContext userContext) {
         final LogInPageContent pageContent = new LogInPageContent();
-        final String title = signUpForm.field("title").value();
-        final String firstName = signUpForm.field("firstName").value();
-        final String lastName = signUpForm.field("lastName").value();
-        final String email = signUpForm.field("email").value();
-        final boolean agreeToTerms = Boolean.valueOf(signUpForm.field("agreeToTerms").value());
+        final String title = extractFormField(signUpForm, "title");
+        final String firstName = extractFormField(signUpForm, "firstName");
+        final String lastName = extractFormField(signUpForm, "lastName");
+        final String email = extractFormField(signUpForm, "email");
+        final boolean agreeToTerms = extractBooleanFormField(signUpForm, "agreeToTerms");
         final SignUpFormBean signUpFormBean = new SignUpFormBean(title, firstName, lastName, email, agreeToTerms, userContext, i18nResolver(), configuration());
         signUpFormBean.setErrors(errors);
         pageContent.setSignUpForm(signUpFormBean);

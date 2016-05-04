@@ -6,26 +6,45 @@ import io.sphere.sdk.models.AddressBuilder;
 import play.data.Form;
 
 import javax.annotation.Nullable;
+import java.util.function.Function;
 
 public final class FormUtils {
 
     private FormUtils() {
     }
 
+    @Nullable
+    public static String extractFormField(@Nullable final Form<?> form, final String fieldName) {
+        return form != null ? form.field(fieldName).value() : null;
+    }
+
+    public static Function<String, String> formFieldExtractor(@Nullable final Form<?> form) {
+        return formFieldExtractor(form, null);
+    }
+
+    public static Function<String, String> formFieldExtractor(@Nullable final Form<?> form, @Nullable final String suffix) {
+        return fieldName -> extractFormField(form, fieldName + suffix);
+    }
+
+    public static boolean extractBooleanFormField(@Nullable final Form<?> form, final String fieldName) {
+        return Boolean.valueOf(extractFormField(form, fieldName));
+    }
+
     public static Address extractAddress(@Nullable final Form<?> form, final String suffix) {
         if (form != null) {
-            final CountryCode country = countryOrUndefined(form.field("country" + suffix).value());
+            final Function<String, String> formExtractor = formFieldExtractor(form, suffix);
+            final CountryCode country = countryOrUndefined(formExtractor.apply("country"));
             return AddressBuilder.of(country)
-                    .title(form.field("title" + suffix).value())
-                    .firstName(form.field("firstName" + suffix).value())
-                    .lastName(form.field("lastName" + suffix).value())
-                    .streetName(form.field("streetName" + suffix).value())
-                    .additionalStreetInfo(form.field("additionalStreetInfo" + suffix).value())
-                    .city(form.field("city" + suffix).value())
-                    .postalCode(form.field("postalCode" + suffix).value())
-                    .region(form.field("region" + suffix).value())
-                    .phone(form.field("phone" + suffix).value())
-                    .email(form.field("email" + suffix).value())
+                    .title(formExtractor.apply("title"))
+                    .firstName(formExtractor.apply("firstName"))
+                    .lastName(formExtractor.apply("lastName"))
+                    .streetName(formExtractor.apply("streetName"))
+                    .additionalStreetInfo(formExtractor.apply("additionalStreetInfo"))
+                    .city(formExtractor.apply("city"))
+                    .postalCode(formExtractor.apply("postalCode"))
+                    .region(formExtractor.apply("region"))
+                    .phone(formExtractor.apply("phone"))
+                    .email(formExtractor.apply("email"))
                     .build();
         } else {
             return Address.of(CountryCode.UNDEFINED);
