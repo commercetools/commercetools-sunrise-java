@@ -33,7 +33,6 @@ setupwidget.controllers
 setupwidget.models
 shoppingcart
 shoppingcart.cartdetail
-shoppingcart.checkout
 shoppingcart.checkout.address
 shoppingcart.checkout.confirmation
 shoppingcart.checkout.payment
