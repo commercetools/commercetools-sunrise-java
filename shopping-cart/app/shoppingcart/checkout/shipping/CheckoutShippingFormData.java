@@ -4,15 +4,11 @@ import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
 public class CheckoutShippingFormData extends Base {
-    public interface Validation {}
 
     private String csrfToken;
 
-    @Constraints.Required(groups = Validation.class)
+    @Constraints.Required
     private String shippingMethodId;
-
-    public CheckoutShippingFormData() {
-    }
 
     public String getCsrfToken() {
         return csrfToken;

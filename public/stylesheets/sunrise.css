@@ -8,3 +8,11 @@
 form[name=add-to-wishlist] {
     display: none;
 }
+
+.follow-up {
+
+}
+
+.follow-up label[for=confirmation-newsletter-input] {
+    visibility: hidden;
+}

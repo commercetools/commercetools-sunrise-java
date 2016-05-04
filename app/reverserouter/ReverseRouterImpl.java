@@ -78,47 +78,47 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call showCheckoutAddressesForm(final String languageTag) {
-        return CheckoutAddressController.show(languageTag);
+        return CheckoutAddressPageController.show(languageTag);
     }
 
     @Override
     public Call processCheckoutAddressesForm(final String languageTag) {
-        return CheckoutAddressController.process(languageTag);
+        return CheckoutAddressPageController.process(languageTag);
     }
 
     @Override
     public Call showCheckoutShippingForm(final String languageTag) {
-        return CheckoutShippingController.show(languageTag);
+        return CheckoutShippingPageController.show(languageTag);
     }
 
     @Override
     public Call processCheckoutShippingForm(final String languageTag) {
-        return CheckoutShippingController.process(languageTag);
+        return CheckoutShippingPageController.process(languageTag);
     }
 
     @Override
     public Call showCheckoutPaymentForm(final String languageTag) {
-        return CheckoutPaymentController.show(languageTag);
+        return CheckoutPaymentPageController.show(languageTag);
     }
 
     @Override
     public Call processCheckoutPaymentForm(final String languageTag) {
-        return CheckoutPaymentController.process(languageTag);
+        return CheckoutPaymentPageController.process(languageTag);
     }
 
     @Override
     public Call showCheckoutConfirmationForm(final String languageTag) {
-        return CheckoutConfirmationController.show(languageTag);
+        return CheckoutConfirmationPageController.show(languageTag);
     }
 
     @Override
     public Call processCheckoutConfirmationForm(final String languageTag) {
-        return CheckoutConfirmationController.process(languageTag);
+        return CheckoutConfirmationPageController.process(languageTag);
     }
 
     @Override
     public Call showCheckoutThankYou(final String languageTag) {
-        return CheckoutThankYouController.show(languageTag);
+        return CheckoutThankYouPageController.show(languageTag);
     }
 
     @Override

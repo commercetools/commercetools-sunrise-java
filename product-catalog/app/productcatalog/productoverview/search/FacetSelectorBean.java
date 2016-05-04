@@ -19,8 +19,7 @@ public class FacetSelectorBean extends Base {
                              final UserContext userContext, final I18nResolver i18nResolver) {
         final Facet<ProductProjection> facet = facetSelector.getFacet(searchResult);
         if (facet.getLabel() != null) {
-            final String label = i18nResolver.get(userContext.locales(), I18nIdentifier.of(facet.getLabel()))
-                    .orElse(facet.getLabel());
+            final String label = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(facet.getLabel()));
             this.facet = facet.withLabel(label);
         } else {
             this.facet = facet;

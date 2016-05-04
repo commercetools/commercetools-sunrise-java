@@ -13,15 +13,18 @@ import java.util.Optional;
 
 public final class CartSessionUtils {
 
+    public static final String CART_ID = "cart-id";
+    public static final String MINI_CART = "mini-cart";
+
     private CartSessionUtils() {
     }
 
     public static Optional<String> getCartId(final Session session) {
-        return Optional.ofNullable(session.get(CartSessionKeys.CART_ID));
+        return Optional.ofNullable(session.get(CART_ID));
     }
 
     public static MiniCartBean getMiniCart(final Session session) {
-        return Optional.ofNullable(session.get(CartSessionKeys.MINI_CART))
+        return Optional.ofNullable(session.get(MINI_CART))
                 .map(miniCartAsJson -> SphereJsonUtils.readObject(miniCartAsJson, MiniCartBean.class))
                 .orElseGet(MiniCartBean::new);
     }
@@ -32,8 +35,8 @@ public final class CartSessionUtils {
             final String id = cart.getId();
             final MiniCartBean miniCart = new MiniCartBean(cart, userContext, reverseRouter);
             final String miniCartAsJson = Json.stringify(SphereJsonUtils.toJsonNode(miniCart));
-            session.put(CartSessionKeys.CART_ID, id);
-            session.put(CartSessionKeys.MINI_CART, miniCartAsJson);
+            session.put(CART_ID, id);
+            session.put(MINI_CART, miniCartAsJson);
             Logger.debug("Saved cart in session: ID \"{}\", Mini Cart: \"{}\"", id, miniCartAsJson);
         } else {
             removeCart(session);
@@ -41,8 +44,8 @@ public final class CartSessionUtils {
     }
 
     public static void removeCart(final Session session) {
-        session.remove(CartSessionKeys.CART_ID);
-        session.remove(CartSessionKeys.MINI_CART);
+        session.remove(CART_ID);
+        session.remove(MINI_CART);
         Logger.debug("Removed cart from session");
     }
 }

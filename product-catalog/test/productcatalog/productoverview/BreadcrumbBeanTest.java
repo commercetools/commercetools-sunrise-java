@@ -3,7 +3,7 @@ package productcatalog.productoverview;
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
 import common.controllers.TestableReverseRouter;
-import common.models.LinkData;
+import common.models.LinkBean;
 import common.controllers.ReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
@@ -78,7 +78,7 @@ public class BreadcrumbBeanTest {
     }
 
     private void testBreadcrumb(final BreadcrumbBean breadcrumb, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        texts.accept(breadcrumb.getLinks().stream().map(LinkData::getText).collect(toList()));
-        urls.accept(breadcrumb.getLinks().stream().map(LinkData::getUrl).collect(toList()));
+        texts.accept(breadcrumb.getLinks().stream().map(LinkBean::getText).collect(toList()));
+        urls.accept(breadcrumb.getLinks().stream().map(LinkBean::getUrl).collect(toList()));
     }
 }

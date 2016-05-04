@@ -1,25 +1,37 @@
 package shoppingcart.checkout.confirmation;
 
+import play.data.validation.Constraints;
+
 public class CheckoutConfirmationFormData {
-    private boolean subscribeNewsletter;
-    private boolean agreeTerms;
+
+    //@Constraints.Required
+    //private boolean agreeTerms;
+    //private boolean subscribeNewsletter;
 
     public CheckoutConfirmationFormData() {
     }
 
-    public boolean isAgreeTerms() {
-        return agreeTerms;
+    public String validate() {
+// TODO Enable back once theme is adapted
+//        if (!agreeTerms) {
+//            return "You must agree to terms"; // TODO use i18n version
+//        }
+        return null;
     }
 
-    public void setAgreeTerms(final boolean agreeTerms) {
-        this.agreeTerms = agreeTerms;
-    }
-
-    public boolean isSubscribeNewsletter() {
-        return subscribeNewsletter;
-    }
-
-    public void setSubscribeNewsletter(final boolean subscribeNewsletter) {
-        this.subscribeNewsletter = subscribeNewsletter;
-    }
+//    public boolean isAgreeTerms() {
+//        return agreeTerms;
+//    }
+//
+//    public void setAgreeTerms(final boolean agreeTerms) {
+//        this.agreeTerms = agreeTerms;
+//    }
+//
+//    public boolean isSubscribeNewsletter() {
+//        return subscribeNewsletter;
+//    }
+//
+//    public void setSubscribeNewsletter(final boolean subscribeNewsletter) {
+//        this.subscribeNewsletter = subscribeNewsletter;
+//    }
 }

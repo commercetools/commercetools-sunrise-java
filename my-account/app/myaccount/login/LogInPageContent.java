@@ -1,25 +1,12 @@
 package myaccount.login;
 
-import common.contexts.UserContext;
 import common.controllers.PageContent;
-import common.template.i18n.I18nResolver;
-import play.Configuration;
-import play.data.Form;
 
 public class LogInPageContent extends PageContent {
     private LogInFormBean logInForm;
     private SignUpFormBean signUpForm;
 
     public LogInPageContent() {
-    }
-
-    public LogInPageContent(final Form<LogInFormData> logInForm) {
-        this.logInForm = new LogInFormBean(logInForm);
-    }
-
-    public LogInPageContent(final Form<SignUpFormData> signUpForm, final UserContext userContext,
-                            final I18nResolver i18nResolver, final Configuration configuration) {
-        this.signUpForm = new SignUpFormBean(signUpForm, userContext, i18nResolver, configuration);
     }
 
     public LogInFormBean getLogInForm() {

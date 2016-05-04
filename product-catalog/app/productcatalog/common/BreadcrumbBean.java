@@ -1,7 +1,7 @@
 package productcatalog.common;
 
 import common.contexts.UserContext;
-import common.models.LinkData;
+import common.models.LinkBean;
 import common.controllers.ReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
@@ -16,15 +16,15 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 public class BreadcrumbBean {
-    private List<LinkData> links;
+    private List<LinkBean> links;
 
     public BreadcrumbBean() {
     }
 
     public BreadcrumbBean(final String searchTerm) {
-        final LinkData linkData = new LinkData();
-        linkData.setText(searchTerm);
-        this.links = singletonList(linkData);
+        final LinkBean linkBean = new LinkBean();
+        linkBean.setText(searchTerm);
+        this.links = singletonList(linkBean);
     }
 
     public BreadcrumbBean(final Category currentCategory, final CategoryTree categoryTree, final UserContext userContext,
@@ -41,15 +41,15 @@ public class BreadcrumbBean {
         this.links.add(createProductLinkData(currentProduct, currentVariant, userContext, reverseRouter));
     }
 
-    public List<LinkData> getLinks() {
+    public List<LinkBean> getLinks() {
         return links;
     }
 
-    public void setLinks(final List<LinkData> links) {
+    public void setLinks(final List<LinkBean> links) {
         this.links = links;
     }
 
-    private static List<LinkData> createCategoryBreadcrumb(final Category currentCategory, final CategoryTree categoryTree,
+    private static List<LinkBean> createCategoryBreadcrumb(final Category currentCategory, final CategoryTree categoryTree,
                                                            final UserContext userContext, final ReverseRouter reverseRouter) {
         final List<Category> categoryWithAncestors = getCategoryWithAncestors(currentCategory, categoryTree);
         return categoryWithAncestors.stream()
@@ -67,19 +67,19 @@ public class BreadcrumbBean {
         return ancestors;
     }
 
-    private static LinkData createCategoryLinkData(final Category category, final UserContext userContext,
+    private static LinkBean createCategoryLinkData(final Category category, final UserContext userContext,
                                                    final ReverseRouter reverseRouter) {
-        final LinkData linkData = new LinkData();
-        linkData.setText(category.getName().find(userContext.locales()).orElse(""));
-        linkData.setUrl(reverseRouter.showCategoryUrlOrEmpty(userContext.locale(), category));
-        return linkData;
+        final LinkBean linkBean = new LinkBean();
+        linkBean.setText(category.getName().find(userContext.locales()).orElse(""));
+        linkBean.setUrl(reverseRouter.showCategoryUrlOrEmpty(userContext.locale(), category));
+        return linkBean;
     }
 
-    private static LinkData createProductLinkData(final ProductProjection currentProduct, final ProductVariant variant,
+    private static LinkBean createProductLinkData(final ProductProjection currentProduct, final ProductVariant variant,
                                                   final UserContext userContext, final ReverseRouter reverseRouter) {
-        final LinkData linkData = new LinkData();
-        linkData.setText(currentProduct.getName().find(userContext.locales()).orElse(""));
-        linkData.setUrl(reverseRouter.showProductUrlOrEmpty(userContext.locale(), currentProduct, variant));
-        return linkData;
+        final LinkBean linkBean = new LinkBean();
+        linkBean.setText(currentProduct.getName().find(userContext.locales()).orElse(""));
+        linkBean.setUrl(reverseRouter.showProductUrlOrEmpty(userContext.locale(), currentProduct, variant));
+        return linkBean;
     }
 }

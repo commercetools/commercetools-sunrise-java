@@ -1,7 +1,7 @@
 package productcatalog.productoverview;
 
 import common.contexts.RequestContext;
-import common.models.LinkData;
+import common.models.LinkBean;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.PagedResult;
 
@@ -14,9 +14,9 @@ import static java.util.stream.Collectors.toList;
 public class PaginationBean extends Base {
     private String previousUrl;
     private String nextUrl;
-    private LinkData firstPage;
-    private LinkData lastPage;
-    private List<LinkData> pages;
+    private LinkBean firstPage;
+    private LinkBean lastPage;
+    private List<LinkBean> pages;
 
     public PaginationBean() {
     }
@@ -48,27 +48,27 @@ public class PaginationBean extends Base {
         }
     }
 
-    public List<LinkData> getPages() {
+    public List<LinkBean> getPages() {
         return pages;
     }
 
-    public void setPages(final List<LinkData> pages) {
+    public void setPages(final List<LinkBean> pages) {
         this.pages = pages;
     }
 
-    public LinkData getFirstPage() {
+    public LinkBean getFirstPage() {
         return firstPage;
     }
 
-    public void setFirstPage(final LinkData firstPage) {
+    public void setFirstPage(final LinkBean firstPage) {
         this.firstPage = firstPage;
     }
 
-    public LinkData getLastPage() {
+    public LinkBean getLastPage() {
         return lastPage;
     }
 
-    public void setLastPage(final LinkData lastPage) {
+    public void setLastPage(final LinkBean lastPage) {
         this.lastPage = lastPage;
     }
 
@@ -93,19 +93,19 @@ public class PaginationBean extends Base {
         return totalPages.longValue();
     }
 
-    private static List<LinkData> createPages(final long startPage, final long endPage, final long currentPage,
+    private static List<LinkBean> createPages(final long startPage, final long endPage, final long currentPage,
                                               final RequestContext requestContext) {
         return LongStream.rangeClosed(startPage, endPage)
                 .mapToObj(page -> createLinkData(page, currentPage, requestContext))
                 .collect(toList());
     }
 
-    private static LinkData createLinkData(final long page, final long currentPage, final RequestContext requestContext) {
-        final LinkData linkData = new LinkData(String.valueOf(page), buildRequestUrlWithPage(page, requestContext));
+    private static LinkBean createLinkData(final long page, final long currentPage, final RequestContext requestContext) {
+        final LinkBean linkBean = new LinkBean(String.valueOf(page), buildRequestUrlWithPage(page, requestContext));
         if (page == currentPage) {
-            linkData.setSelected(true);
+            linkBean.setSelected(true);
         }
-        return linkData;
+        return linkBean;
     }
 
     private static String buildRequestUrlWithPage(final long page, final RequestContext requestContext) {

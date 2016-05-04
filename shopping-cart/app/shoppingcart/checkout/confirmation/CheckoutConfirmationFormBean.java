@@ -1,40 +1,26 @@
 package shoppingcart.checkout.confirmation;
 
 import common.errors.ErrorsBean;
-import common.models.SelectableData;
 import io.sphere.sdk.models.Base;
 
 public class CheckoutConfirmationFormBean extends Base {
-    private SelectableData newsletter;
-    private SelectableData termsConditions;
-    private SelectableData remember;
+
+    private boolean agreeToTerms;
     private ErrorsBean errors;
 
     public CheckoutConfirmationFormBean() {
     }
 
-    public SelectableData getNewsletter() {
-        return newsletter;
+    public CheckoutConfirmationFormBean(final boolean agreeToTerms) {
+        this.agreeToTerms = agreeToTerms;
     }
 
-    public void setNewsletter(final SelectableData newsletter) {
-        this.newsletter = newsletter;
+    public boolean isAgreeToTerms() {
+        return agreeToTerms;
     }
 
-    public SelectableData getRemember() {
-        return remember;
-    }
-
-    public void setRemember(final SelectableData remember) {
-        this.remember = remember;
-    }
-
-    public SelectableData getTermsConditions() {
-        return termsConditions;
-    }
-
-    public void setTermsConditions(final SelectableData termsConditions) {
-        this.termsConditions = termsConditions;
+    public void setAgreeToTerms(final boolean agreeToTerms) {
+        this.agreeToTerms = agreeToTerms;
     }
 
     public ErrorsBean getErrors() {
