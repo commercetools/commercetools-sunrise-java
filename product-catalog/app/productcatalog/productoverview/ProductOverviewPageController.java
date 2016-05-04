@@ -4,6 +4,7 @@ import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
+import common.suggestion.ProductSuggestion;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -17,7 +18,6 @@ import productcatalog.common.BreadcrumbBean;
 import productcatalog.common.ProductCatalogController;
 import productcatalog.common.ProductListData;
 import productcatalog.productoverview.search.*;
-import common.suggestion.ProductSuggestion;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -105,8 +105,8 @@ public class ProductOverviewPageController extends ProductCatalogController {
     /* Page rendering methods */
 
     protected ProductOverviewPageContent createPageContent(final int page, final SearchCriteria searchCriteria,
-                                                         final PagedSearchResult<ProductProjection> searchResult,
-                                                         final UserContext userContext) {
+                                                           final PagedSearchResult<ProductProjection> searchResult,
+                                                           final UserContext userContext) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
         content.setFilterProductsUrl(request().path());
         content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()));

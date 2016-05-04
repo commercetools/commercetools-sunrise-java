@@ -8,10 +8,8 @@ import io.sphere.sdk.producttypes.MetaProductType;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.queries.ProductTypeQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
-import shoppingcart.checkout.shipping.ShippingMethods;
 
 import javax.money.Monetary;
-import java.util.Collections;
 import java.util.Locale;
 
 import static common.utils.JsonUtils.readCtpObject;
@@ -24,7 +22,6 @@ public class CtpModelsTestModule extends AbstractModule {
     protected void configure() {
         bind(ProjectContext.class).toInstance(injectedProjectContext());
         bind(ProductDataConfig.class).toInstance(injectedProductDataConfig());
-        bind(ShippingMethods.class).toInstance(new ShippingMethods(Collections.emptyList()));
     }
 
     protected ProjectContext injectedProjectContext() {

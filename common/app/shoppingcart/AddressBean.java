@@ -1,60 +1,50 @@
-package shoppingcart.checkout.address;
+package shoppingcart;
 
-import com.neovisionaries.i18n.CountryCode;
-import common.contexts.UserContext;
-import common.models.CountryFormFieldBean;
-import common.models.TitleFormFieldBean;
-import common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;
-import play.Configuration;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.Locale;
 
-public class AddressFormBean extends Base {
+public class AddressBean extends Base {
 
-    private TitleFormFieldBean titleFormField;
+    private String title;
     private String firstName;
     private String lastName;
     private String streetName;
     private String additionalStreetInfo;
     private String city;
-    private String postalCode;
-    private CountryFormFieldBean countries;
     private String region;
+    private String postalCode;
+    private String country;
     private String phone;
     private String email;
 
-    public AddressFormBean() {
+    public AddressBean() {
     }
 
-    public AddressFormBean(@Nullable final Address address, final List<CountryCode> availableCountries,
-                           final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration) {
+    public AddressBean(@Nullable final Address address, final Locale locale) {
         if (address != null) {
-            this.titleFormField = new TitleFormFieldBean(address.getTitle(), userContext, i18nResolver, configuration);
+            this.title = address.getTitle();
             this.firstName = address.getFirstName();
             this.lastName = address.getLastName();
             this.streetName = address.getStreetName();
             this.additionalStreetInfo = address.getAdditionalStreetInfo();
             this.city = address.getCity();
-            this.postalCode = address.getPostalCode();
             this.region = address.getRegion();
-            this.countries = new CountryFormFieldBean(availableCountries, address.getCountry(), userContext);
+            this.postalCode = address.getPostalCode();
+            this.country = address.getCountry().toLocale().getDisplayCountry(locale);
             this.phone = address.getPhone();
             this.email = address.getEmail();
-        } else {
-            this.titleFormField = new TitleFormFieldBean(null, userContext, i18nResolver, configuration);
-            this.countries = new CountryFormFieldBean(availableCountries, userContext.country(), userContext);
         }
     }
 
-    public TitleFormFieldBean getSalutations() {
-        return titleFormField;
+    public String getTitle() {
+        return title;
     }
 
-    public void setSalutations(final TitleFormFieldBean titleFormField) {
-        this.titleFormField = titleFormField;
+    public void setTitle(final String title) {
+        this.title = title;
     }
 
     public String getFirstName() {
@@ -97,6 +87,14 @@ public class AddressFormBean extends Base {
         this.city = city;
     }
 
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(final String region) {
+        this.region = region;
+    }
+
     public String getPostalCode() {
         return postalCode;
     }
@@ -105,20 +103,12 @@ public class AddressFormBean extends Base {
         this.postalCode = postalCode;
     }
 
-    public CountryFormFieldBean getCountries() {
-        return countries;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCountries(final CountryFormFieldBean countries) {
-        this.countries = countries;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(final String region) {
-        this.region = region;
+    public void setCountry(final String country) {
+        this.country = country;
     }
 
     public String getPhone() {

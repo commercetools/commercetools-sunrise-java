@@ -3,7 +3,9 @@ package shoppingcart.cartdetail;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
+import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
+import common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
@@ -14,10 +16,8 @@ import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
-import play.mvc.Http;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.CartSessionUtils;
 import shoppingcart.common.CartController;
 
 import javax.inject.Inject;
@@ -31,101 +31,146 @@ import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
  * Shows and modifies the contents of the cart.
  */
 @Singleton
-public final class CartDetailPageController extends CartController {
+public class CartDetailPageController extends CartController {
 
-    private final ProductDataConfig productDataConfig;
-    private final Form<AddProductToCartFormData> addProductToCartForm;
-    private final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm;
-    private final Form<RemoveLineItemFormData> removeLineItemForm;
+    protected final Form<AddProductToCartFormData> addProductToCartForm;
+    protected final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityUnboundForm;
+    protected final Form<RemoveLineItemFormData> removeLineItemUnboundForm;
 
     @Inject
     public CartDetailPageController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig,
                                     final FormFactory formFactory) {
-        super(controllerDependency);
-        this.productDataConfig = productDataConfig;
+        super(controllerDependency, productDataConfig);
         this.addProductToCartForm = formFactory.form(AddProductToCartFormData.class);
-        this.changeLineItemQuantityForm = formFactory.form(ChangeLineItemQuantityFormData.class);
-        this.removeLineItemForm = formFactory.form(RemoveLineItemFormData.class);
+        this.changeLineItemQuantityUnboundForm = formFactory.form(ChangeLineItemQuantityFormData.class);
+        this.removeLineItemUnboundForm = formFactory.form(RemoveLineItemFormData.class);
     }
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         final UserContext userContext = userContext(languageTag);
+        final CartDetailPageContent pageContent = createPageContent(userContext);
         return getOrCreateCart(userContext, session())
-                .thenApplyAsync(cart -> ok(renderCartPage(cart, userContext)), HttpExecution.defaultContext());
+                .thenApplyAsync(cart -> ok(renderCartPage(cart, pageContent, userContext)), HttpExecution.defaultContext());
     }
 
     public CompletionStage<Result> addProductToCart(final String languageTag) {
-        final Form<AddProductToCartFormData> boundForm = addProductToCartForm.bindFromRequest();
-        if (boundForm.hasErrors()) {
-            return completedFuture(badRequest());
-        } else {
-            final UserContext userContext = userContext(languageTag);
-            final Http.Session session = session();
-            return getOrCreateCart(userContext, session)
-                    .thenComposeAsync(cart -> addProductToCart(boundForm.get(), cart))
-                    .thenApplyAsync(updatedCart -> {
-                        overwriteCartSessionData(updatedCart, session, userContext, reverseRouter());
-                        return redirect(reverseRouter().showCart(languageTag));
-                    }, HttpExecution.defaultContext());
-        }
+        final UserContext userContext = userContext(languageTag);
+        final Form<AddProductToCartFormData> addProductToCartForm = this.addProductToCartForm.bindFromRequest();
+        return getOrCreateCart(userContext, session())
+                .thenComposeAsync(cart -> {
+                    if (addProductToCartForm.hasErrors()) {
+                        return handleAddProductToCartFormErrors(addProductToCartForm, cart, userContext);
+                    } else {
+                        final String productId = addProductToCartForm.get().getProductId();
+                        final int variantId = addProductToCartForm.get().getVariantId();
+                        final long quantity = addProductToCartForm.get().getQuantity();
+                        return addProductToCart(productId, variantId, quantity, cart)
+                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart, userContext), HttpExecution.defaultContext());
+                    }
+                }, HttpExecution.defaultContext());
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
-        final Form<ChangeLineItemQuantityFormData> boundForm = changeLineItemQuantityForm.bindFromRequest();
-        if (boundForm.hasErrors()) {
-            return completedFuture(redirect(reverseRouter().showCart(languageTag)));
-        } else {
-            final UserContext userContext = userContext(languageTag);
-            final Http.Session session = session();
-            return getOrCreateCart(userContext, session)
-                    .thenComposeAsync(cart -> changeLineItemQuantity(boundForm.get(), cart))
-                    .thenApplyAsync(updatedCart -> {
-                        overwriteCartSessionData(updatedCart, session, userContext, reverseRouter());
-                        return redirect(reverseRouter().showCart(languageTag));
-                    }, HttpExecution.defaultContext());
-        }
+        final UserContext userContext = userContext(languageTag);
+        final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm = changeLineItemQuantityUnboundForm.bindFromRequest();
+        return getOrCreateCart(userContext, session())
+                .thenComposeAsync(cart -> {
+                    if (changeLineItemQuantityForm.hasErrors()) {
+                        return handleChangeLineItemQuantityFormErrors(changeLineItemQuantityForm, cart, userContext);
+                    } else {
+                        final String lineItemId = changeLineItemQuantityForm.get().getLineItemId();
+                        final Long quantity = changeLineItemQuantityForm.get().getQuantity();
+                        return changeLineItemQuantity(lineItemId, quantity, cart)
+                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart, userContext), HttpExecution.defaultContext());
+                    }
+                }, HttpExecution.defaultContext());
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> removeLineItem(final String languageTag) {
-        final Form<RemoveLineItemFormData> boundForm = removeLineItemForm.bindFromRequest();
-        if (boundForm.hasErrors()) {
-            return completedFuture(badRequest());
-        } else {
-            final UserContext userContext = userContext(languageTag);
-            return getOrCreateCart(userContext, session())
-                    .thenComposeAsync(cart -> removeLineItem(boundForm.get(), cart))
-                    .thenApplyAsync(updatedCart -> {
-                        overwriteCartSessionData(updatedCart, session(), userContext, reverseRouter());
-                        return redirect(reverseRouter().showCart(languageTag));
-                    }, HttpExecution.defaultContext());
-        }
+        final UserContext userContext = userContext(languageTag);
+        final Form<RemoveLineItemFormData> removeLineItemForm = removeLineItemUnboundForm.bindFromRequest();
+        return getOrCreateCart(userContext, session())
+                .thenComposeAsync(cart -> {
+                    if (removeLineItemForm.hasErrors()) {
+                        return handleRemoveLineItemFormErrors(removeLineItemForm, cart, userContext);
+                    } else {
+                        final String lineItemId = removeLineItemForm.get().getLineItemId();
+                        return removeLineItem(lineItemId, cart)
+                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart, userContext), HttpExecution.defaultContext());
+                    }
+                }, HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Cart> addProductToCart(final AddProductToCartFormData formData, final Cart cart) {
-        final String productId = formData.getProductId();
-        final int variantId = formData.getVariantId();
-        final long quantity = formData.getQuantity();
+    protected CompletionStage<Cart> addProductToCart(final String productId, final int variantId, final long quantity, final Cart cart) {
         final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
         return sphere().execute(CartUpdateCommand.of(cart, updateAction));
     }
 
-    private CompletionStage<Cart> changeLineItemQuantity(final ChangeLineItemQuantityFormData formData, final Cart cart) {
-        final String lineItemId = formData.getLineItemId();
-        final Long quantity = formData.getQuantity();
-        return sphere().execute(CartUpdateCommand.of(cart, ChangeLineItemQuantity.of(lineItemId, quantity)));
+    protected CompletionStage<Cart> changeLineItemQuantity(final String lineItemId, final long quantity, final Cart cart) {
+        final ChangeLineItemQuantity changeLineItemQuantity = ChangeLineItemQuantity.of(lineItemId, quantity);
+        return sphere().execute(CartUpdateCommand.of(cart, changeLineItemQuantity));
     }
 
-    private CompletionStage<Cart> removeLineItem(final RemoveLineItemFormData formData, final Cart cart) {
-        final String lineItemId = formData.getLineItemId();
-        return sphere().execute(CartUpdateCommand.of(cart, RemoveLineItem.of(lineItemId)));
+    protected CompletionStage<Cart> removeLineItem(final String lineItemId, final Cart cart) {
+        final RemoveLineItem removeLineItem = RemoveLineItem.of(lineItemId);
+        return sphere().execute(CartUpdateCommand.of(cart, removeLineItem));
     }
 
-    private Html renderCartPage(final Cart cart, final UserContext userContext) {
-        final CartDetailPageContent content = new CartDetailPageContent(cart, userContext, productDataConfig, i18nResolver(), reverseRouter());
-        final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
+    protected CompletionStage<Result> handleSuccessfulCartChange(final Cart cart, final UserContext userContext) {
+        overwriteCartSessionData(cart, session(), userContext, reverseRouter());
+        return completedFuture(redirect(reverseRouter().showCart(userContext.locale().toLanguageTag())));
+    }
+
+    protected CompletionStage<Result> handleAddProductToCartFormErrors(final Form<AddProductToCartFormData> addProductToCartForm,
+                                                                       final Cart cart, final UserContext userContext) {
+        final ErrorsBean errorsBean = new ErrorsBean(addProductToCartForm);
+        final CartDetailPageContent pageContent = createPageContentWithAddProductToCartError(addProductToCartForm, errorsBean, userContext);
+        return completedFuture(badRequest(renderCartPage(cart, pageContent, userContext)));
+    }
+
+    protected CompletionStage<Result> handleChangeLineItemQuantityFormErrors(final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
+                                                                             final Cart cart, final UserContext userContext) {
+        final ErrorsBean errorsBean = new ErrorsBean(changeLineItemQuantityForm);
+        final CartDetailPageContent pageContent = createPageContentWithChangeLineItemQuantityError(changeLineItemQuantityForm, errorsBean, userContext);
+        return completedFuture(badRequest(renderCartPage(cart, pageContent, userContext)));
+    }
+
+    protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<RemoveLineItemFormData> removeLineItemForm,
+                                                                     final Cart cart, final UserContext userContext) {
+        final ErrorsBean errorsBean = new ErrorsBean(removeLineItemForm);
+        final CartDetailPageContent pageContent = createPageContentWithRemoveLineItemError(removeLineItemForm, errorsBean, userContext);
+        return completedFuture(badRequest(renderCartPage(cart, pageContent, userContext)));
+    }
+
+    protected CartDetailPageContent createPageContent(final UserContext userContext) {
+        return new CartDetailPageContent();
+    }
+
+    protected CartDetailPageContent createPageContentWithAddProductToCartError(final Form<AddProductToCartFormData> addProductToCartForm,
+                                                                               final ErrorsBean errors, final UserContext userContext) {
+        // TODO placeholder to put cart form errors
+        return new CartDetailPageContent();
+    }
+
+    protected CartDetailPageContent createPageContentWithChangeLineItemQuantityError(final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
+                                                                                     final ErrorsBean errors, final UserContext userContext) {
+        // TODO placeholder to put cart form errors
+        return new CartDetailPageContent();
+    }
+
+    protected CartDetailPageContent createPageContentWithRemoveLineItemError(final Form<RemoveLineItemFormData> removeLineItemForm,
+                                                                             final ErrorsBean errors, final UserContext userContext) {
+        // TODO placeholder to put cart form errors
+        return new CartDetailPageContent();
+    }
+
+    protected Html renderCartPage(final Cart cart, final CartDetailPageContent pageContent, final UserContext userContext) {
+        pageContent.setCart(createCartLikeBean(cart, userContext));
+        pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
+        final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateService().renderToHtml("cart", pageData, userContext.locales());
     }
 }

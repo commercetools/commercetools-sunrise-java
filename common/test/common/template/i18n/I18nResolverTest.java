@@ -44,6 +44,24 @@ public class I18nResolverTest {
         assertThat(message).isEmpty();
     }
 
+    @Test
+    public void keyWhenNoLanguageFound() throws Exception {
+        final String message = i18nOnlyForEnglish().getOrKey(singletonList(Locale.GERMAN), I18N_IDENTIFIER);
+        assertThat(message).isEqualTo(I18N_IDENTIFIER.getKey());
+    }
+
+    @Test
+    public void keyWhenNoLanguageDefined() throws Exception {
+        final String message = i18nOnlyForEnglish().getOrKey(emptyList(), I18N_IDENTIFIER);
+        assertThat(message).isEqualTo(I18N_IDENTIFIER.getKey());
+    }
+
+    @Test
+    public void keyWhenNoMessageKeyProvided() throws Exception {
+        final String message = i18nOnlyForEnglish().getOrKey(emptyList(), I18nIdentifier.of("some text"));
+        assertThat(message).isEqualTo("some text");
+    }
+
     private I18nResolver i18nOnlyForEnglish() {
         return (locales, i18nIdentifier, hashArgs) ->
                 locales.contains(Locale.ENGLISH) ? Optional.of("some sentence") : Optional.empty();

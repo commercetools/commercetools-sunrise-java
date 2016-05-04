@@ -1,9 +1,8 @@
-package shoppingcart.common;
+package shoppingcart;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
 import common.models.ProductAttributeBean;
-import shoppingcart.MiniCartLineItemBean;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.LineItem;
 
@@ -11,14 +10,15 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class CartLineItemBean extends MiniCartLineItemBean {
+public class LineItemBean extends MiniCartLineItemBean {
+
     private List<ProductAttributeBean> attributes;
 
-    public CartLineItemBean() {
+    public LineItemBean() {
     }
 
-    public CartLineItemBean(final LineItem lineItem, final ProductDataConfig productDataConfig,
-                            final UserContext userContext, final ReverseRouter reverseRouter) {
+    public LineItemBean(final LineItem lineItem, final ProductDataConfig productDataConfig,
+                        final UserContext userContext, final ReverseRouter reverseRouter) {
         super(lineItem, userContext, reverseRouter);
         this.attributes = lineItem.getVariant().getAttributes().stream()
                 .filter(attr -> productDataConfig.getSelectableAttributes().contains(attr.getName()))

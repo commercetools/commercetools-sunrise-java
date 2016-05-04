@@ -1,14 +1,13 @@
 package shoppingcart.common;
 
+import com.google.inject.Inject;
 import com.neovisionaries.i18n.CountryCode;
 import common.actions.NoCache;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
-import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.CartDraft;
-import io.sphere.sdk.carts.CartDraftBuilder;
-import io.sphere.sdk.carts.CartState;
+import common.models.ProductDataConfig;
+import io.sphere.sdk.carts.*;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
@@ -16,23 +15,36 @@ import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.carts.queries.CartByCustomerIdGet;
 import io.sphere.sdk.carts.queries.CartByIdGet;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
+import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
 import myaccount.CustomerSessionUtils;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
+import shoppingcart.CartLikeBean;
 import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @NoCache
 public abstract class CartController extends SunriseController {
 
-    public CartController(final ControllerDependency controllerDependency) {
+    protected final ProductDataConfig productDataConfig;
+
+    @Inject
+    public CartController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
         super(controllerDependency);
+        this.productDataConfig = productDataConfig;
+    }
+
+    protected CartLikeBean createCartLikeBean(final CartLike<?> cartLike, final UserContext userContext) {
+        return new CartLikeBean(cartLike, userContext, productDataConfig, reverseRouter());
     }
 
     protected CompletionStage<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
@@ -40,11 +52,17 @@ public abstract class CartController extends SunriseController {
                 .thenComposeAsync(cart -> {
                     CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter());
                     final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
-                    return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : CompletableFuture.completedFuture(cart);
+                    return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : completedFuture(cart);
                 }, HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
+    protected CompletionStage<List<ShippingMethod>> getShippingMethods(final Http.Session session) {
+        return CartSessionUtils.getCartId(session)
+                .map(cartId -> sphere().execute(ShippingMethodsByCartGet.of(cartId)))
+                .orElseGet(() -> completedFuture(emptyList()));
+    }
+
+    protected CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
         return CustomerSessionUtils.getCustomerId(session)
                 .map(customerId -> fetchCartByCustomerOrNew(customerId, userContext))
                 .orElseGet(() -> CartSessionUtils.getCartId(session)
@@ -52,7 +70,7 @@ public abstract class CartController extends SunriseController {
                         .orElseGet(() -> createCart(userContext)));
     }
 
-    private CompletionStage<Cart> createCart(final UserContext userContext) {
+    protected CompletionStage<Cart> createCart(final UserContext userContext) {
         final Address address = Address.of(userContext.country());
         final CartDraft cartDraft = CartDraftBuilder.of(userContext.currency())
                 .country(address.getCountry())
@@ -63,24 +81,26 @@ public abstract class CartController extends SunriseController {
         return sphere().execute(CartCreateCommand.of(cartDraft));
     }
 
-    private CompletionStage<Cart> fetchCartByIdOrNew(final String cartId, final UserContext userContext) {
+    protected CompletionStage<Cart> fetchCartByIdOrNew(final String cartId, final UserContext userContext) {
         final CartByIdGet query = CartByIdGet.of(cartId)
-                .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
+                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
+                .plusExpansionPaths(c -> c.paymentInfo().payments());
         return sphere().execute(query)
                 .thenComposeAsync(cart -> validCartOrNew(cart, userContext), HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Cart> fetchCartByCustomerOrNew(final String customerId, final UserContext userContext) {
+    protected CompletionStage<Cart> fetchCartByCustomerOrNew(final String customerId, final UserContext userContext) {
         final CartByCustomerIdGet query = CartByCustomerIdGet.of(customerId)
-                .withExpansionPaths(m -> m.shippingInfo().shippingMethod());
+                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
+                .plusExpansionPaths(c -> c.paymentInfo().payments());
         return sphere().execute(query)
                 .thenComposeAsync(cart -> validCartOrNew(cart, userContext), HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Cart> validCartOrNew(@Nullable final Cart cart, final UserContext userContext) {
+    protected CompletionStage<Cart> validCartOrNew(@Nullable final Cart cart, final UserContext userContext) {
         return Optional.ofNullable(cart)
                 .filter(c -> c.getCartState().equals(CartState.ACTIVE))
-                .map((value) -> (CompletionStage<Cart>) CompletableFuture.completedFuture(value))
+                .map((value) -> (CompletionStage<Cart>) completedFuture(value))
                 .orElseGet(() -> createCart(userContext));
     }
 
@@ -91,7 +111,7 @@ public abstract class CartController extends SunriseController {
      * @param country the country to set in the cart
      * @return the completionStage of a cart with the given country
      */
-    private CompletionStage<Cart> updateCartCountry(final Cart cart, final CountryCode country) {
+    protected CompletionStage<Cart> updateCartCountry(final Cart cart, final CountryCode country) {
         // TODO Handle case where some line items do not exist for this country
         final Address shippingAddress = Optional.ofNullable(cart.getShippingAddress())
                 .map(address -> address.withCountry(country))

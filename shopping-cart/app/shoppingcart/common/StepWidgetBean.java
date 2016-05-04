@@ -1,11 +1,21 @@
-package shoppingcart.checkout;
+package shoppingcart.common;
 
 public class StepWidgetBean {
+
+    private boolean addressStepActive;
     private boolean shippingStepActive;
     private boolean paymentStepActive;
     private boolean confirmationStepActive;
 
     public StepWidgetBean() {
+    }
+
+    public boolean isAddressStepActive() {
+        return addressStepActive;
+    }
+
+    public void setAddressStepActive(final boolean addressStepActive) {
+        this.addressStepActive = addressStepActive;
     }
 
     public boolean isShippingStepActive() {

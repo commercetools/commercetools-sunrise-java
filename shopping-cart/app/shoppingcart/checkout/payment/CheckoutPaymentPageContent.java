@@ -1,34 +1,19 @@
 package shoppingcart.checkout.payment;
 
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
-import common.template.i18n.I18nIdentifier;
-import common.template.i18n.I18nResolver;
-import common.models.ProductDataConfig;
-import io.sphere.sdk.carts.Cart;
-import shoppingcart.checkout.CheckoutPageContent;
-import shoppingcart.checkout.StepWidgetBean;
-import shoppingcart.common.CartOrderBean;
+import shoppingcart.common.CheckoutPageContent;
 
 public class CheckoutPaymentPageContent extends CheckoutPageContent {
 
-    private PaymentFormBean paymentForm;
+    private CheckoutPaymentFormBean paymentForm;
 
-    public CheckoutPaymentPageContent(final Cart cart, final UserContext userContext, final ProductDataConfig productDataConfig,
-                                      final I18nResolver i18nResolver, final ReverseRouter reverseRouter) {
-        final StepWidgetBean stepWidget = new StepWidgetBean();
-        stepWidget.setPaymentStepActive(true);
-        setStepWidget(stepWidget);
-        setCart(new CartOrderBean(cart, userContext, productDataConfig, reverseRouter));
-        setPaymentForm(PaymentFormBean.ofDummyData());
-        setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:paymentPage.title")));
+    public CheckoutPaymentPageContent() {
     }
 
-    public PaymentFormBean getPaymentForm() {
+    public CheckoutPaymentFormBean getPaymentForm() {
         return paymentForm;
     }
 
-    public void setPaymentForm(final PaymentFormBean paymentForm) {
+    public void setPaymentForm(final CheckoutPaymentFormBean paymentForm) {
         this.paymentForm = paymentForm;
     }
 }

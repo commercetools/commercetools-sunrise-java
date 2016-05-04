@@ -6,6 +6,7 @@ import play.data.validation.Constraints;
 import javax.annotation.Nullable;
 
 public class SignUpFormData extends Base {
+
     private String title;
     @Constraints.Required
     private String firstName;

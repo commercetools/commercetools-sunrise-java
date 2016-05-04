@@ -30,6 +30,7 @@ import static java.util.Collections.emptySet;
  */
 @Singleton
 public class HomeController extends ProductCatalogController {
+
     private final List<String> suggestionsExternalIds;
     private final int numSuggestions;
 

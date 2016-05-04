@@ -2,7 +2,7 @@ package productcatalog.productoverview.search;
 
 import common.contexts.UserContext;
 import common.template.i18n.I18nResolver;
-import common.models.SelectableData;
+import common.models.FormSelectableOptionBean;
 import io.sphere.sdk.models.Base;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.toList;
 
 public class ProductsPerPageSelectorBean extends Base {
     private String key;
-    private List<SelectableData> list;
+    private List<FormSelectableOptionBean> list;
 
     public ProductsPerPageSelectorBean() {
     }
@@ -23,7 +23,7 @@ public class ProductsPerPageSelectorBean extends Base {
                 .collect(toList());
     }
 
-    public ProductsPerPageSelectorBean(final String key, final List<SelectableData> list) {
+    public ProductsPerPageSelectorBean(final String key, final List<FormSelectableOptionBean> list) {
         this.key = key;
         this.list = list;
     }
@@ -36,16 +36,16 @@ public class ProductsPerPageSelectorBean extends Base {
         this.key = key;
     }
 
-    public List<SelectableData> getList() {
+    public List<FormSelectableOptionBean> getList() {
         return list;
     }
 
-    public void setList(final List<SelectableData> list) {
+    public void setList(final List<FormSelectableOptionBean> list) {
         this.list = list;
     }
 
-    private static SelectableData optionToSelectableData(final ProductsPerPageOption option, final ProductsPerPageSelector productsPerPageSelector) {
-        final SelectableData displayOption = new SelectableData(option.getLabel(), option.getValue());
+    private static FormSelectableOptionBean optionToSelectableData(final ProductsPerPageOption option, final ProductsPerPageSelector productsPerPageSelector) {
+        final FormSelectableOptionBean displayOption = new FormSelectableOptionBean(option.getLabel(), option.getValue());
         if (productsPerPageSelector.getSelectedPageSize() == option.getAmount()) {
             displayOption.setSelected(true);
         }

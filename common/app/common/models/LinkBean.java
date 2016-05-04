@@ -2,15 +2,15 @@ package common.models;
 
 import io.sphere.sdk.models.Base;
 
-public class LinkData extends Base {
+public class LinkBean extends Base {
     private String text;
     private String url;
     private boolean selected;
 
-    public LinkData() {
+    public LinkBean() {
     }
 
-    public LinkData(final String text, final String url) {
+    public LinkBean(final String text, final String url) {
         this.text = text;
         this.url = url;
     }
