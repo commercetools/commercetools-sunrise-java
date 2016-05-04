@@ -3,7 +3,7 @@ package productcatalog.productoverview.search;
 import common.contexts.UserContext;
 import common.template.i18n.I18nIdentifier;
 import common.template.i18n.I18nResolver;
-import common.models.SelectableBean;
+import common.models.FormSelectableOptionBean;
 import io.sphere.sdk.models.Base;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toList;
 
 public class SortSelectorBean extends Base {
     private String key;
-    private List<SelectableBean> list;
+    private List<FormSelectableOptionBean> list;
 
     public SortSelectorBean() {
     }
@@ -32,18 +32,18 @@ public class SortSelectorBean extends Base {
         this.key = key;
     }
 
-    public List<SelectableBean> getList() {
+    public List<FormSelectableOptionBean> getList() {
         return list;
     }
 
-    public void setList(final List<SelectableBean> list) {
+    public void setList(final List<FormSelectableOptionBean> list) {
         this.list = list;
     }
 
-    private static SelectableBean optionToSelectableData(final SortOption option, final SortSelector sortSelector,
-                                                         final UserContext userContext, final I18nResolver i18nResolver) {
+    private static FormSelectableOptionBean optionToSelectableData(final SortOption option, final SortSelector sortSelector,
+                                                                   final UserContext userContext, final I18nResolver i18nResolver) {
         final String label = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(option.getLabel()));
-        final SelectableBean sortOption = new SelectableBean(label, option.getValue());
+        final FormSelectableOptionBean sortOption = new FormSelectableOptionBean(label, option.getValue());
         if (sortSelector.getSelectedOptions().contains(option)) {
             sortOption.setSelected(true);
         }

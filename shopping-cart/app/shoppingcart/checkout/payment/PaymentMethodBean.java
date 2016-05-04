@@ -1,13 +1,13 @@
 package shoppingcart.checkout.payment;
 
 import common.contexts.UserContext;
-import common.models.SelectableBean;
+import common.models.FormSelectableOptionBean;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 
 import java.util.List;
 import java.util.Optional;
 
-public class PaymentMethodBean extends SelectableBean {
+public class PaymentMethodBean extends FormSelectableOptionBean {
 
     public PaymentMethodBean() {
     }

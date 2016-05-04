@@ -16,7 +16,7 @@ public class TitleFormFieldBean extends Base {
 
     private static final String CONFIG_TITLE_OPTIONS = "form.titles";
 
-    private List<SelectableBean> list;
+    private List<FormSelectableOptionBean> list;
 
     public TitleFormFieldBean() {
     }
@@ -28,21 +28,21 @@ public class TitleFormFieldBean extends Base {
                 .collect(toList());
     }
 
-    public List<SelectableBean> getList() {
+    public List<FormSelectableOptionBean> getList() {
         return list;
     }
 
-    public void setList(final List<SelectableBean> list) {
+    public void setList(final List<FormSelectableOptionBean> list) {
         this.list = list;
     }
 
-    private SelectableBean titleToSelectableData(final String titleKey, final @Nullable String selectedTitle,
-                                                 final I18nResolver i18nResolver, final UserContext userContext) {
+    private FormSelectableOptionBean titleToSelectableData(final String titleKey, final @Nullable String selectedTitle,
+                                                           final I18nResolver i18nResolver, final UserContext userContext) {
         final String title = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(titleKey));
-        final SelectableBean selectableBean = new SelectableBean(title, title);
+        final FormSelectableOptionBean formSelectableOptionBean = new FormSelectableOptionBean(title, title);
         if (title.equals(selectedTitle)) {
-            selectableBean.setSelected(true);
+            formSelectableOptionBean.setSelected(true);
         }
-        return selectableBean;
+        return formSelectableOptionBean;
     }
 }

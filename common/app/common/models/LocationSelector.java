@@ -13,8 +13,8 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public class LocationSelector extends Base {
-    private List<SelectableBean> language;
-    private List<SelectableBean> country;
+    private List<FormSelectableOptionBean> language;
+    private List<FormSelectableOptionBean> country;
 
     public LocationSelector() {
     }
@@ -24,26 +24,26 @@ public class LocationSelector extends Base {
         this.language = createLanguage(projectContext.locales(), userContext.locale());
     }
 
-    public List<SelectableBean> getLanguage() {
+    public List<FormSelectableOptionBean> getLanguage() {
         return language;
     }
 
-    public void setLanguage(final List<SelectableBean> language) {
+    public void setLanguage(final List<FormSelectableOptionBean> language) {
         this.language = language;
     }
 
-    public List<SelectableBean> getCountry() {
+    public List<FormSelectableOptionBean> getCountry() {
         return country;
     }
 
-    public void setCountry(final List<SelectableBean> country) {
+    public void setCountry(final List<FormSelectableOptionBean> country) {
         this.country = country;
     }
 
-    private static List<SelectableBean> createCountry(final List<CountryCode> countryCodes, @Nullable final CountryCode selectedCountryCode) {
-        final List<SelectableBean> countrySelector = countryCodes.stream()
+    private static List<FormSelectableOptionBean> createCountry(final List<CountryCode> countryCodes, @Nullable final CountryCode selectedCountryCode) {
+        final List<FormSelectableOptionBean> countrySelector = countryCodes.stream()
                 .map(countryCode -> {
-                    final SelectableBean selector = new SelectableBean(countryCode.getName(), countryCode.getAlpha2());
+                    final FormSelectableOptionBean selector = new FormSelectableOptionBean(countryCode.getName(), countryCode.getAlpha2());
                     if (countryCode.equals(selectedCountryCode)) {
                         selector.setSelected(true);
                     }
@@ -52,10 +52,10 @@ public class LocationSelector extends Base {
         return (countrySelector.size() > 1) ? countrySelector : emptyList();
     }
 
-    private static List<SelectableBean> createLanguage(final List<Locale> locales, @Nullable final Locale selectedLocale) {
-        final List<SelectableBean> localeSelector = locales.stream()
+    private static List<FormSelectableOptionBean> createLanguage(final List<Locale> locales, @Nullable final Locale selectedLocale) {
+        final List<FormSelectableOptionBean> localeSelector = locales.stream()
                 .map(locale -> {
-                    final SelectableBean selector = new SelectableBean(locale.getDisplayName(), locale.getLanguage());
+                    final FormSelectableOptionBean selector = new FormSelectableOptionBean(locale.getDisplayName(), locale.getLanguage());
                     if (locale.equals(selectedLocale)) {
                         selector.setSelected(true);
                     }

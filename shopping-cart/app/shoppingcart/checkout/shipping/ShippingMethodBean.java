@@ -1,11 +1,11 @@
 package shoppingcart.checkout.shipping;
 
-import common.models.SelectableBean;
+import common.models.FormSelectableOptionBean;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import javax.annotation.Nullable;
 
-public class ShippingMethodBean extends SelectableBean {
+public class ShippingMethodBean extends FormSelectableOptionBean {
 
     private String deliveryDays;
     private String price;

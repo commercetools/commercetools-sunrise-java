@@ -2,7 +2,7 @@ package common.models;
 
 import io.sphere.sdk.models.Base;
 
-public class SelectableBean extends Base {
+public class FormSelectableOptionBean extends Base {
 
     private String label;
     private String value;
@@ -10,15 +10,15 @@ public class SelectableBean extends Base {
     private String image;
     private boolean selected;
 
-    public SelectableBean() {
+    public FormSelectableOptionBean() {
     }
 
-    public SelectableBean(final String label, final String value) {
+    public FormSelectableOptionBean(final String label, final String value) {
         this.label = label;
         this.value = value;
     }
 
-    public SelectableBean(final String label, final String value, final boolean selected) {
+    public FormSelectableOptionBean(final String label, final String value, final boolean selected) {
         this.label = label;
         this.value = value;
         this.selected = selected;

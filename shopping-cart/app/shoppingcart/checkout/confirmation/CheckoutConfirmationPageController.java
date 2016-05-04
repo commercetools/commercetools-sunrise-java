@@ -70,7 +70,7 @@ public class CheckoutConfirmationPageController extends CartController {
 
     protected CompletionStage<Order> createOrder(final Cart cart) {
         final String orderNumber = RandomStringUtils.randomNumeric(8);
-        final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, PaymentState.BALANCE_DUE);
+        final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, PaymentState.PAID);
         return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
                 .thenApplyAsync(order -> {
                     OrderSessionUtils.overwriteLastOrderId(order, session());

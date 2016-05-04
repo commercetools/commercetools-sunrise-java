@@ -10,7 +10,7 @@ import static java.util.stream.Collectors.toList;
 
 public class CountryFormFieldBean {
 
-    private List<SelectableBean> list;
+    private List<FormSelectableOptionBean> list;
 
 
     public CountryFormFieldBean() {
@@ -23,22 +23,22 @@ public class CountryFormFieldBean {
                 .collect(toList());
     }
 
-    public List<SelectableBean> getList() {
+    public List<FormSelectableOptionBean> getList() {
         return list;
     }
 
-    public void setList(final List<SelectableBean> list) {
+    public void setList(final List<FormSelectableOptionBean> list) {
         this.list = list;
     }
 
-    private SelectableBean countryToSelectableData(final CountryCode country, final @Nullable CountryCode selectedCountry,
-                                                   final UserContext userContext) {
-        final SelectableBean selectableBean = new SelectableBean();
-        selectableBean.setLabel(country.toLocale().getDisplayCountry(userContext.locale()));
-        selectableBean.setValue(country.getAlpha2());
+    private FormSelectableOptionBean countryToSelectableData(final CountryCode country, final @Nullable CountryCode selectedCountry,
+                                                             final UserContext userContext) {
+        final FormSelectableOptionBean formSelectableOptionBean = new FormSelectableOptionBean();
+        formSelectableOptionBean.setLabel(country.toLocale().getDisplayCountry(userContext.locale()));
+        formSelectableOptionBean.setValue(country.getAlpha2());
         if (country.equals(selectedCountry)) {
-            selectableBean.setSelected(true);
+            formSelectableOptionBean.setSelected(true);
         }
-        return selectableBean;
+        return formSelectableOptionBean;
     }
 }
