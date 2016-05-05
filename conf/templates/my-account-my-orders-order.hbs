@@ -1,0 +1,207 @@
+<!-- start my-account-my-orders-order.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {{> common/htmlhead}}
+</head>
+
+<body>
+  <div class="darkbg hidden"></div>
+  {{> common/header}}
+  <div class="my-orders">
+    <div class="container">
+      <div class="my-account-title">
+        <span class="my-account-title-text icon-user">{{i18n "my-account:myAccount.title"}}</span>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="my-orders-wrapper">
+            <div class="row">
+              <div class="col-sm-3">
+                {{> myaccount/my-account-sidebar positionFour=true}}
+              </div>
+              <div id="my-account-desktop-content" class="col-sm-9">
+                <div class="my-orders-order-content">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="my-orders-title hidden-xs">
+                          {{i18n "my-account:myOrders.title"}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="your-order-details-wrapper">
+                    <div class="your-order-details-title">{{i18n "my-account:myOrder.title"}}</div>
+                    <div class="your-order-details">
+                      <span class="your-order-details-titles">{{i18n "my-account:myOrder.orderNumber"}}<br>{{i18n "my-account:myOrder.creationDate"}}</span>
+                      <span class="your-order-details-info">{{content.order.orderNumber}}<br>{{content.order.orderDate}}</span>
+                    </div>
+                    <button onclick="window.print()" class="my-orders-print-receipt-btn hidden-xs">{{i18n "my-account:myOrder.print"}}</button>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="my-orders-order-dark-box">
+                        <div class="my-orders-order-dark-box-title">{{i18n "my-account:myOrder.shippingAddress"}}</div>
+                        <div>{{content.order.shippingAddress.title}} {{content.order.shippingAddress.firstName}} {{content.order.shippingAddress.lastName}}</div>
+                        <div>{{content.order.shippingAddress.streetName}}</div>
+                        <div>{{content.order.shippingAddress.additionalStreetInfo}}</div>
+                        <div>{{content.order.shippingAddress.city}}</div>
+                        <div>{{content.order.shippingAddress.region}}</div>
+                        <div>{{content.order.shippingAddress.postCode}}</div>
+                        <div>{{content.order.shippingAddress.country}}</div><br>
+                        <div>{{content.order.shippingAddress.phone}}</div>
+                        <div>{{content.order.shippingAddress.email}}</div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="my-orders-order-dark-box">
+                        <div class="my-orders-order-dark-box-title">{{i18n "my-account:myOrder.billingAddress"}}</div>
+                        <div>{{content.order.billingAddress.title}} {{content.order.billingAddress.firstName}} {{content.order.billingAddress.lastName}}</div>
+                        <div>{{content.order.billingAddress.streetName}}</div>
+                        <div>{{content.order.billingAddress.additionalStreetInfo}}</div>
+                        <div>{{content.order.billingAddress.city}}</div>
+                        <div>{{content.order.billingAddress.region}}</div>
+                        <div>{{content.order.billingAddress.postCode}}</div>
+                        <div>{{content.order.billingAddress.country}}</div><br>
+                        <div>{{content.order.billingAddress.phone}}</div>
+                        <div>{{content.order.billingAddress.email}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="my-orders-order-dark-box">
+                        <div class="my-orders-order-dark-box-title">{{i18n "my-account:myOrder.shippingMethod"}}</div>
+                          <div>
+                              {{content.order.shippingMethod.label}}
+                              {{#if content.order.shippingMethod.description}}- {{content.order.shippingMethod.description}}{{/if}}
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="my-orders-order-dark-box">
+                        <div class="my-orders-order-dark-box-title">{{i18n "my-account:myOrder.paymentDetails"}}</div>
+                        <div>{{content.order.paymentDetails.payment}}</div>
+                        <div>{{content.order.paymentDetails.name}}</div>
+                        <div>{{content.order.paymentDetails.type}}</div>
+                        <div>{{content.order.paymentDetails.number}}</div>
+                        <div>{{content.order.paymentDetails.date}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="my-orders-order-price-summary-wrapper">
+                      {{#if content.order.discountCode}}
+                          <div class="text-right">
+                              <span class="my-orders-order-promocode-title">{{i18n "my-account:myOrder.price.discountCode"}}</span>
+                              <span class="my-orders-order-promocode">{{content.order.discountCode}}</span>
+                          </div>
+                      {{/if}}
+                    <div class="text-right">
+                      <div class="my-orders-order-price-titles">
+                        <span>{{i18n "my-account:myOrder.price.subtotal"}}</span><br>
+                        <span>{{i18n "my-account:myOrder.price.cartDiscount"}}</span><br>
+                        <span>{{i18n "my-account:myOrder.price.deliveryCost"}}</span>
+                      </div>
+                      <div class="my-orders-order-price">
+                        <span>{{content.order.subtotalPrice}}</span><br>
+                        <span>{{content.order.cartDiscount}}</span><br>
+                        <span>{{content.order.shippingMethod.price}}</span>
+                      </div>
+                      <div class="order-hr"></div>
+                      <div class="my-orders-order-price-titles">
+                        <span>{{i18n "my-account:myOrder.price.taxes"}}</span><br>
+                        <span class="order-total-big">{{i18n "my-account:myOrder.price.total"}}</span>
+                      </div>
+                      <div class="my-orders-order-price">
+                        <span>{{content.order.salesTax}}</span><br>
+                        <span class="order-total-big">{{content.order.totalPrice}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="order-list-summary-titles-wrapper">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div>
+                            {{i18n "my-account:myOrder.items.productDescription"}}
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class="text-right">
+                            {{i18n "my-account:myOrder.items.quantity"}}
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class="text-right">
+                            {{i18n "my-account:myOrder.items.unitPrice"}}
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <div class="text-right">
+                            {{i18n "my-account:myOrder.items.totalPrice"}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {{#each content.order}}
+                    <div class="order-detail-wrapper">
+                      <div class="row">
+                        <div class="col-sm-2">
+                          <div>
+                            <img class="img-responsive" src="{{image}}" alt="Product image">
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div>
+                            <div class="order-detail-product-title">{{productTitleOne}}</div>
+                            <div class="order-detail-product-title">{{productTitleTwo}}</div>
+                            <div class="order-sku">{{sku}}</div>
+                            <div class="order-detail-attributes-title">
+                            {{#each attributes}}
+                                <span>{{label}}</span>{{#unless @last}}<br>{{/unless}}
+                            {{/each}}
+                            </div>
+                            <div class="order-detail-attributes">
+                            {{#each attributes}}
+                                 <span>{{value}}</span>{{#unless @last}}<br>{{/unless}}
+                            {{/each}}
+                            </div>
+                            <div class="order-detail-available">{{available}}</div>
+                          </div>
+                        </div>
+                        <div class="col-sm-2">
+                          <div class="text-right">
+                            {{quantity}}
+                          </div>
+                        </div>
+                        <div class="col-sm-2">
+                          <div class="text-right">
+                            <span class="order-detail-discount-price">{{discountedPrice}}</span>
+                            <span>{{price}}</span>
+                          </div>
+                        </div>
+                        <div class="col-sm-2">
+                          <div class="text-right">
+                            {{totalPrice}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {{/each}}
+                  <div class="order-print-receipt-btn-wrapper">
+                    <button onclick="window.print()" class="order-print-receipt-btn">{{i18n "my-account:myOrder.print"}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{!-- {{> common/wishlist}} --}}
+  {{> common/footer}}
+  {{> common/htmlscripts}}
+</body>
+
+</html>
+<!-- end my-account-my-orders-order.hbs -->
