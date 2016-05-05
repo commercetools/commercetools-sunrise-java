@@ -34,27 +34,27 @@
                     <div class="row">
                       <div class="col-sm-2 col-xs-4">
                         <div class="my-orders-table-titles">
-                          {{i18n "my-account:myOrders.orderNumber.title"}}
+                          {{i18n "my-account:myOrders.orderNumber"}}
                         </div>
                       </div>
                       <div class="col-sm-2 hidden-xs">
                         <div class="my-orders-table-titles">
-                          {{i18n "my-account:myOrders.creationDate.title"}}
+                          {{i18n "my-account:myOrders.creationDate"}}
                         </div>
                       </div>
                       <div class="col-sm-2 col-xs-4">
                         <div class="my-orders-table-titles">
-                          {{i18n "my-account:myOrders.totalPrice.title"}}
+                          {{i18n "my-account:myOrders.totalPrice"}}
                         </div>
                       </div>
                       <div class="col-sm-2 hidden-xs">
                         <div class="my-orders-table-titles">
-                          {{i18n "my-account:myOrders.paymentStatus.title"}}
+                          {{i18n "my-account:myOrders.paymentStatus"}}
                         </div>
                       </div>
                       <div class="col-sm-2 hidden-xs">
                         <div class="my-orders-table-titles">
-                          {{i18n "my-account:myOrders.shippingStatus.title"}}
+                          {{i18n "my-account:myOrders.shippingStatus"}}
                         </div>
                       </div>
                       <div class="col-sm-2 col-xs-4">
@@ -83,7 +83,7 @@
                           <span>{{shipping}}</span>
                         </div>
                         <div class="col-sm-2 col-xs-4 text-right">
-                        <form id="form-view-my-order{{@index}}" name="view-my-order" method="post" action="{{url}}">
+                        <form id="form-view-my-order{{@index}}" name="view-my-order" method="get" action="{{url}}">
                             <button type="submit" class="my-orders-view-order-btn">{{i18n "my-account:myOrders.view"}}</button>
                         </form>
                         </div>

@@ -9,6 +9,10 @@ import java.util.Optional;
 
 public final class CustomerSessionUtils {
 
+    public static final String CUSTOMER_ID = "customer-id";
+    public static final String CUSTOMER_NAME = "customer-name";
+    public static final String CUSTOMER_EMAIL = "customer-email";
+
     private CustomerSessionUtils() {
     }
 
@@ -24,15 +28,15 @@ public final class CustomerSessionUtils {
     }
 
     public static Optional<String> getCustomerId(final Session session) {
-        return Optional.ofNullable(session.get(CustomerSessionKeys.CUSTOMER_ID));
+        return Optional.ofNullable(session.get(CUSTOMER_ID));
     }
 
     public static Optional<String> getCustomerName(final Session session) {
-        return Optional.ofNullable(session.get(CustomerSessionKeys.CUSTOMER_NAME));
+        return Optional.ofNullable(session.get(CUSTOMER_NAME));
     }
 
     public static Optional<String> getCustomerEmail(final Session session) {
-        return Optional.ofNullable(session.get(CustomerSessionKeys.CUSTOMER_EMAIL));
+        return Optional.ofNullable(session.get(CUSTOMER_EMAIL));
     }
 
     public static void overwriteCustomerSessionData(@Nullable final Customer customer, final Session session) {
@@ -40,9 +44,9 @@ public final class CustomerSessionUtils {
             final String id = customer.getId();
             final String name = customer.getName().getFirstName();
             final String email = customer.getEmail();
-            session.put(CustomerSessionKeys.CUSTOMER_ID, id);
-            session.put(CustomerSessionKeys.CUSTOMER_NAME, name);
-            session.put(CustomerSessionKeys.CUSTOMER_EMAIL, email);
+            session.put(CUSTOMER_ID, id);
+            session.put(CUSTOMER_NAME, name);
+            session.put(CUSTOMER_EMAIL, email);
             Logger.debug("Saved customer in session: ID {}, name {}, email {}", id, name, email);
         } else {
             removeCustomer(session);
@@ -50,9 +54,9 @@ public final class CustomerSessionUtils {
     }
 
     public static void removeCustomer(final Session session) {
-        session.remove(CustomerSessionKeys.CUSTOMER_ID);
-        session.remove(CustomerSessionKeys.CUSTOMER_NAME);
-        session.remove(CustomerSessionKeys.CUSTOMER_EMAIL);
+        session.remove(CUSTOMER_ID);
+        session.remove(CUSTOMER_NAME);
+        session.remove(CUSTOMER_EMAIL);
         Logger.debug("Removed customer from session");
     }
 }

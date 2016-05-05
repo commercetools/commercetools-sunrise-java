@@ -14,18 +14,18 @@ import static common.utils.PriceUtils.*;
 
 public class CartLikeBean {
 
-    private Long totalItems;
-    private String salesTax;
-    private String totalPrice;
-    private String subtotalPrice;
-    private LineItemsBean lineItems;
+    private String orderNumber;
+    private String orderDate;
+    private String customerEmail;
     private AddressBean shippingAddress;
     private AddressBean billingAddress;
     private ShippingInfoBean shippingMethod;
     private PaymentInfoBean paymentDetails;
-    private String orderNumber;
-    private String orderDate;
-    private String customerEmail;
+    private String subtotalPrice;
+    private String salesTax;
+    private String totalPrice;
+    private Long totalItems;
+    private LineItemsBean lineItems;
 
     public CartLikeBean() {
     }
@@ -56,52 +56,28 @@ public class CartLikeBean {
         }
     }
 
-    public Long getTotalItems() {
-        return totalItems;
+    public String getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setTotalItems(final Long totalItems) {
-        this.totalItems = totalItems;
+    public void setOrderNumber(final String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
-    public LineItemsBean getLineItems() {
-        return lineItems;
+    public String getOrderDate() {
+        return orderDate;
     }
 
-    public void setLineItems(final LineItemsBean lineItems) {
-        this.lineItems = lineItems;
+    public void setOrderDate(final String orderDate) {
+        this.orderDate = orderDate;
     }
 
-    public String getSalesTax() {
-        return salesTax;
+    public String getCustomerEmail() {
+        return customerEmail;
     }
 
-    public void setSalesTax(final String salesTax) {
-        this.salesTax = salesTax;
-    }
-
-    public String getSubtotalPrice() {
-        return subtotalPrice;
-    }
-
-    public void setSubtotalPrice(final String subtotalPrice) {
-        this.subtotalPrice = subtotalPrice;
-    }
-
-    public String getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(final String totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public AddressBean getBillingAddress() {
-        return billingAddress;
-    }
-
-    public void setBillingAddress(final AddressBean billingAddress) {
-        this.billingAddress = billingAddress;
+    public void setCustomerEmail(final String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     public AddressBean getShippingAddress() {
@@ -110,6 +86,14 @@ public class CartLikeBean {
 
     public void setShippingAddress(final AddressBean shippingAddress) {
         this.shippingAddress = shippingAddress;
+    }
+
+    public AddressBean getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(final AddressBean billingAddress) {
+        this.billingAddress = billingAddress;
     }
 
     public ShippingInfoBean getShippingMethod() {
@@ -128,27 +112,43 @@ public class CartLikeBean {
         this.paymentDetails = paymentDetails;
     }
 
-    public String getCustomerEmail() {
-        return customerEmail;
+    public String getSubtotalPrice() {
+        return subtotalPrice;
     }
 
-    public void setCustomerEmail(final String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setSubtotalPrice(final String subtotalPrice) {
+        this.subtotalPrice = subtotalPrice;
     }
 
-    public String getOrderDate() {
-        return orderDate;
+    public String getSalesTax() {
+        return salesTax;
     }
 
-    public void setOrderDate(final String orderDate) {
-        this.orderDate = orderDate;
+    public void setSalesTax(final String salesTax) {
+        this.salesTax = salesTax;
     }
 
-    public String getOrderNumber() {
-        return orderNumber;
+    public String getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setOrderNumber(final String orderNumber) {
-        this.orderNumber = orderNumber;
+    public void setTotalPrice(final String totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Long getTotalItems() {
+        return totalItems;
+    }
+
+    public void setTotalItems(final Long totalItems) {
+        this.totalItems = totalItems;
+    }
+
+    public LineItemsBean getLineItems() {
+        return lineItems;
+    }
+
+    public void setLineItems(final LineItemsBean lineItems) {
+        this.lineItems = lineItems;
     }
 }

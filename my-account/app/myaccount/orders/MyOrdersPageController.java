@@ -3,61 +3,69 @@ package myaccount.orders;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
+import common.models.ProductDataConfig;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
 import myaccount.CustomerSessionUtils;
 import myaccount.common.MyAccountController;
 import play.libs.concurrent.HttpExecution;
+import play.mvc.Call;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import shoppingcart.CartLikeBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.emptyList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
+import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class MyOrdersPageController extends MyAccountController {
 
     public static final int PAGE_SIZE = 500; // TODO allow to configure and work with pages
+    protected final ProductDataConfig productDataConfig;
 
     @Inject
-    public MyOrdersPageController(final ControllerDependency controllerDependency) {
+    public MyOrdersPageController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
         super(controllerDependency);
+        this.productDataConfig = productDataConfig;
     }
 
     public CompletionStage<Result> list(final String languageTag, final int page) {
         final UserContext userContext = userContext(languageTag);
-        return getCustomerOrders(session(), page).thenApplyAsync(orders -> {
-            final MyOrdersPageContent pageContent = new MyOrdersPageContent(orders, userContext, i18nResolver(), reverseRouter());
-            return ok(renderMyOrdersPage(pageContent, userContext));
-        }, HttpExecution.defaultContext());
+        return getCustomerOrders(page)
+                .thenApplyAsync(orders -> {
+                    final MyOrdersPageContent pageContent = createMyOrdersPage(orders, userContext);
+                    return ok(renderMyOrdersPage(pageContent, userContext));
+                }, HttpExecution.defaultContext());
     }
 
     public CompletionStage<Result> show(final String languageTag, final String orderNumber) {
         final UserContext userContext = userContext(languageTag);
-        return getCustomerOrder(session(), orderNumber).thenApplyAsync(orderOpt -> {
-            final MyOrderPageContent pageContent = new MyOrderPageContent();
-            return ok(renderMyOrderPage(pageContent, userContext));
-        }, HttpExecution.defaultContext());
+        return getCustomerOrder(session(), orderNumber)
+                .thenComposeAsync(orderOpt -> orderOpt
+                        .map(order -> handleFoundOrder(order, userContext))
+                        .orElseGet(() -> handleNotFoundOrder(userContext)),
+                        HttpExecution.defaultContext());
     }
 
-    protected CompletionStage<List<Order>> getCustomerOrders(final Http.Session session, final int page) {
-        return CustomerSessionUtils.getCustomerId(session)
+    protected CompletionStage<List<Order>> getCustomerOrders(final int page) {
+        return CustomerSessionUtils.getCustomerId(session())
                 .map(customerId -> fetchOrdersByCustomer(customerId, page, PAGE_SIZE))
-                .orElseGet(() -> CompletableFuture.completedFuture(emptyList()));
+                .orElseGet(() -> completedFuture(emptyList()));
     }
 
     protected CompletionStage<Optional<Order>> getCustomerOrder(final Http.Session session, final String orderNumber) {
         return CustomerSessionUtils.getCustomerId(session)
                 .map(customerId -> fetchOrderByCustomer(customerId, orderNumber))
-                .orElseGet(() -> CompletableFuture.completedFuture(Optional.empty()));
+                .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
     protected CompletionStage<List<Order>> fetchOrdersByCustomer(final String customerId, final int page, final int pageSize) {
@@ -73,6 +81,31 @@ public class MyOrdersPageController extends MyAccountController {
                 .plusPredicates(order -> order.orderNumber().is(orderNumber))
                 .withLimit(1);
         return sphere().execute(query).thenApply(PagedQueryResult::head);
+    }
+
+    protected CompletionStage<Result> handleFoundOrder(final Order order, final UserContext userContext) {
+        final MyOrderPageContent pageContent = createMyOrderPage(order, userContext);
+        return completedFuture(ok(renderMyOrderPage(pageContent, userContext)));
+    }
+
+    protected CompletionStage<Result> handleNotFoundOrder(final UserContext userContext) {
+        final Call call = reverseRouter().showMyOrders(userContext.locale().toLanguageTag());
+        return completedFuture(redirect(call));
+    }
+
+    protected MyOrderPageContent createMyOrderPage(final Order order, final UserContext userContext) {
+        final MyOrderPageContent pageContent = new MyOrderPageContent();
+        pageContent.setOrder(new CartLikeBean(order, userContext, productDataConfig, reverseRouter()));
+        return pageContent;
+    }
+
+    protected MyOrdersPageContent createMyOrdersPage(final List<Order> orders, final UserContext userContext) {
+        final MyOrdersPageContent pageContent = new MyOrdersPageContent();
+        final List<OrderOverviewBean> orderBeans = orders.stream()
+                .map(order -> new OrderOverviewBean(order, userContext, i18nResolver(), reverseRouter()))
+                .collect(toList());
+        pageContent.setOrder(orderBeans);
+        return pageContent;
     }
 
     protected Html renderMyOrdersPage(final MyOrdersPageContent pageContent, final UserContext userContext) {

@@ -23,21 +23,18 @@ personalDetails:
   personalDetailsTitle: Your Personal Details
 myOrders:
   title: My Orders
-  orderNumber:
-    title: Order Number
-  creationDate:
-    title: Date
-  totalPrice:
-    title: Total
+  orderNumber: Order Number
+  creationDate: Date
+  totalPrice: Total
+  paymentStatus: Payment Status
   paymentStatus:
-    title: Payment Status
     balanceDue: Balance due
     failed: Failed
     pending: Pending
     creditOwed: Credit owed
     paid: Paid
+  shippingStatus: Shipping Status
   shippingStatus:
-    title: Shipping Status
     shipped: Shipped
     ready: Ready
     pending: Pending
@@ -45,3 +42,25 @@ myOrders:
     backorder: Backorder
     delayed: Delayed
   view: View
+myOrder:
+  title: Your Order Details
+  orderNumber: Order number
+  creationDate: Order date
+  print: Print Receipt
+  shippingAddress: Shipping Address
+  billingAddress: Shipping Address
+  shippingMethod: Shipping Method
+  paymentDetails: Payment Details
+  price:
+    discountCode: Promotional Code Applied
+    subtotal: Subtotal
+    cartDiscount: Order Discount
+    deliveryCost: Delivery Cost
+    taxes: Sales Tax
+    total: Order Total
+  items:
+    productDescription: Product Description
+    quantity: Quantity
+    unitPrice: Unit Price
+    totalPrice: Total
+
