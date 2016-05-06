@@ -12,6 +12,13 @@ public final class FutureUtils {
     private FutureUtils() {
     }
 
+    /**
+     * Transforms a list of {@code CompletionStage} into a {@code CompletionStage} of a list,
+     * that will be completed once all the elements of the given list are completed.
+     * @param stageList list of {@code CompletionStage}
+     * @param <T> the element obtained from the list of {@code CompletionStage}
+     * @return the {@code CompletionStage} of a list of elements
+     */
     public static <T> CompletionStage<List<T>> listOfFuturesToFutureOfList(final List<CompletionStage<T>> stageList) {
         final List<CompletableFuture<T>> futureList = stageList.stream()
                 .map(CompletionStage::toCompletableFuture)
