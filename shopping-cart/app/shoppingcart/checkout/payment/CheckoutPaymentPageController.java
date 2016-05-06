@@ -6,16 +6,21 @@ import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
 import common.template.i18n.I18nIdentifier;
+import common.utils.FutureUtils;
 import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.carts.PaymentInfo;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddPayment;
+import io.sphere.sdk.carts.commands.updateactions.RemovePayment;
+import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.LocalizedString;
-import io.sphere.sdk.payments.PaymentDraft;
-import io.sphere.sdk.payments.PaymentDraftBuilder;
-import io.sphere.sdk.payments.PaymentMethodInfo;
-import io.sphere.sdk.payments.PaymentMethodInfoBuilder;
+import io.sphere.sdk.models.Reference;
+import io.sphere.sdk.payments.*;
 import io.sphere.sdk.payments.commands.PaymentCreateCommand;
+import io.sphere.sdk.payments.commands.PaymentDeleteCommand;
+import io.sphere.sdk.payments.queries.PaymentByIdGet;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -29,11 +34,10 @@ import shoppingcart.common.StepWidgetBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static common.utils.FormUtils.extractFormField;
 import static java.util.Collections.emptyList;
@@ -53,7 +57,7 @@ public class CheckoutPaymentPageController extends CartController {
         super(controllerDependency, productDataConfig);
         this.paymentUnboundForm = formFactory.form(CheckoutPaymentFormData.class);
         this.paymentMethodsInfo = singletonList(PaymentMethodInfoBuilder.of()
-                .name(LocalizedString.of(Locale.ENGLISH, "Prepaid", Locale.GERMAN, "Prepaid")) // TODO pull out
+                .name(LocalizedString.of(Locale.ENGLISH, "Prepaid", Locale.GERMAN, "Vorkasse")) // TODO pull out
                 .method("prepaid")
                 .build());
     }
@@ -77,28 +81,72 @@ public class CheckoutPaymentPageController extends CartController {
                     if (paymentForm.hasErrors()) {
                         return handleFormErrors(paymentForm, paymentMethodsInfo, cart, userContext);
                     } else {
-                        final String selectedPaymentMethod = paymentForm.get().getPayment();
-                        return findPaymentMethodInfoByMethod(selectedPaymentMethod)
-                                .map(selectedPaymentInfo -> setPaymentToCart(cart, selectedPaymentInfo)
-                                        .thenComposeAsync(updatedCart -> handleSuccessfulSetPayment(userContext), HttpExecution.defaultContext()))
-                                .orElseGet(() -> handleInvalidPaymentError(paymentForm, paymentMethodsInfo, cart, userContext));
+                        final List<String> selectedMethodNames = singletonList(paymentForm.get().getPayment());
+                        final List<PaymentMethodInfo> selectedPaymentMethods = getSelectedPaymentMethodsInfo(selectedMethodNames);
+                        if (selectedPaymentMethods.isEmpty()) {
+                            return handleInvalidPaymentError(paymentForm, selectedPaymentMethods, cart, userContext);
+                        } else {
+                            return setPaymentToCart(cart, selectedPaymentMethods)
+                                    .thenComposeAsync(updatedCart -> handleSuccessfulSetPayment(userContext), HttpExecution.defaultContext());
+                        }
                     }
                 }, HttpExecution.defaultContext());
     }
 
-    protected CompletionStage<Cart> setPaymentToCart(final Cart cart, final PaymentMethodInfo selectedPaymentMethod) {
-        final PaymentDraft paymentDraft = PaymentDraftBuilder.of(cart.getTotalPrice())
-                .paymentMethodInfo(selectedPaymentMethod)
-                .customer(Optional.ofNullable(cart.getCustomerId()).map(Customer::referenceOfId).orElse(null))
-                .build();
-        return sphere().execute(PaymentCreateCommand.of(paymentDraft))
-                .thenCompose(payment -> sphere().execute(CartUpdateCommand.of(cart, AddPayment.of(payment))));
+    protected CompletionStage<Cart> setPaymentToCart(final Cart cart, final List<PaymentMethodInfo> selectedPaymentMethods) {
+        return withPaymentsToRemove(cart, selectedPaymentMethods, paymentsToRemove ->
+                withPaymentsToAdd(cart, selectedPaymentMethods, paymentsToAdd -> {
+                    final Stream<RemovePayment> removePaymentStream = paymentsToRemove.stream().map(RemovePayment::of);
+                    final Stream<AddPayment> addPaymentStream = paymentsToAdd.stream().map(AddPayment::of);
+                    final List<UpdateAction<Cart>> updateActions = Stream.concat(removePaymentStream, addPaymentStream).collect(toList());
+                    return sphere().execute(CartUpdateCommand.of(cart, updateActions));
+                })
+        );
     }
 
-    private Optional<PaymentMethodInfo> findPaymentMethodInfoByMethod(final String paymentMethod) {
+    protected CompletionStage<Cart> withPaymentsToRemove(final Cart cart, final List<PaymentMethodInfo> selectedPaymentMethods,
+                                                         final Function<List<Payment>, CompletionStage<Cart>> setPaymentAction) {
+        final List<Reference<Payment>> paymentRefs = Optional.ofNullable(cart.getPaymentInfo())
+                .map(PaymentInfo::getPayments)
+                .orElseGet(() -> {
+                    Logger.error("Payment info is not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
+                    return emptyList();
+                });
+        final List<CompletionStage<Payment>> paymentStages = paymentRefs.stream()
+                .map(paymentRef -> sphere().execute(PaymentByIdGet.of(paymentRef)))
+                .collect(toList());
+        return FutureUtils.listOfFuturesToFutureOfList(paymentStages)
+                .thenComposeAsync(payments -> {
+                    payments.removeIf(Objects::isNull);
+                    final CompletionStage<Cart> updatedCartStage = setPaymentAction.apply(payments);
+                    updatedCartStage.thenAccept(updatedCart ->
+                            payments.forEach(payment -> sphere().execute(PaymentDeleteCommand.of(payment))));
+                    return updatedCartStage;
+                });
+    }
+
+    protected CompletionStage<Cart> withPaymentsToAdd(final Cart cart, final List<PaymentMethodInfo> selectedPaymentMethods,
+                                                      final Function<List<Payment>, CompletionStage<Cart>> setPaymentAction) {
+        final List<CompletionStage<Payment>> paymentStages = selectedPaymentMethods.stream()
+                .map(selectedPaymentMethod -> {
+                    final PaymentDraft paymentDraft = PaymentDraftBuilder.of(cart.getTotalPrice())
+                            .paymentMethodInfo(selectedPaymentMethod)
+                            .customer(Optional.ofNullable(cart.getCustomerId()).map(Customer::referenceOfId).orElse(null))
+                            .build();
+                    return sphere().execute(PaymentCreateCommand.of(paymentDraft));
+                })
+                .collect(toList());
+        return FutureUtils.listOfFuturesToFutureOfList(paymentStages)
+                .thenComposeAsync(payments -> {
+                    payments.removeIf(Objects::isNull);
+                    return setPaymentAction.apply(payments);
+                });
+    }
+
+    protected List<PaymentMethodInfo> getSelectedPaymentMethodsInfo(final List<String> paymentMethod) {
         return paymentMethodsInfo.stream()
-                .filter(info -> info.getMethod() != null && info.getMethod().equals(paymentMethod))
-                .findFirst();
+                .filter(info -> info.getMethod() != null && paymentMethod.contains(info.getMethod()))
+                .collect(toList());
     }
 
     protected CompletionStage<Result> handleSuccessfulSetPayment(final UserContext userContext) {
@@ -125,13 +173,13 @@ public class CheckoutPaymentPageController extends CartController {
     protected CheckoutPaymentPageContent createPageContent(final Cart cart, final List<PaymentMethodInfo> paymentMethods,
                                                            final UserContext userContext) {
         final CheckoutPaymentPageContent pageContent = new CheckoutPaymentPageContent();
-        final List<String> selectedPaymentMethod = Optional.ofNullable(cart.getPaymentInfo())
+        final List<String> selectedPaymentMethods = Optional.ofNullable(cart.getPaymentInfo())
                 .map(info -> info.getPayments().stream()
                         .filter(ref -> ref.getObj() != null)
                         .map(ref -> ref.getObj().getPaymentMethodInfo().getMethod())
                         .collect(toList()))
                 .orElse(emptyList());
-        pageContent.setPaymentForm(new CheckoutPaymentFormBean(paymentMethods, selectedPaymentMethod, userContext));
+        pageContent.setPaymentForm(new CheckoutPaymentFormBean(paymentMethods, selectedPaymentMethods, userContext));
         return pageContent;
     }
 

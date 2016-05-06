@@ -12,8 +12,8 @@ import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
-import io.sphere.sdk.carts.queries.CartByCustomerIdGet;
-import io.sphere.sdk.carts.queries.CartByIdGet;
+import io.sphere.sdk.carts.queries.CartQuery;
+import io.sphere.sdk.carts.queries.CartQueryBuilder;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
@@ -23,9 +23,9 @@ import play.mvc.Http;
 import shoppingcart.CartLikeBean;
 import shoppingcart.CartSessionUtils;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
@@ -81,29 +81,32 @@ public abstract class CartController extends SunriseController {
     }
 
     protected CompletionStage<Cart> fetchCartByIdOrNew(final String cartId, final UserContext userContext) {
-        final CartByIdGet query = CartByIdGet.of(cartId)
-                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
-                .plusExpansionPaths(c -> c.paymentInfo().payments());
-        return sphere().execute(query)
-                .thenComposeAsync(cart -> validCartOrNew(cart, userContext), HttpExecution.defaultContext());
+        final CartQueryBuilder queryBuilder = CartQueryBuilder.of()
+                .plusPredicates(cart -> cart.is(Cart.referenceOfId(cartId)));
+        return queryCartOrNew(queryBuilder, userContext);
     }
 
     protected CompletionStage<Cart> fetchCartByCustomerOrNew(final String customerId, final UserContext userContext) {
-        final CartByCustomerIdGet query = CartByCustomerIdGet.of(customerId)
+        final CartQueryBuilder queryBuilder = CartQueryBuilder.of()
+                .plusPredicates(cart -> cart.customerId().is(customerId));
+        return queryCartOrNew(queryBuilder, userContext);
+    }
+
+    protected CompletionStage<Cart> queryCartOrNew(final CartQueryBuilder queryBuilder, final UserContext userContext) {
+        final CartQuery query = queryBuilder
+                .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
                 .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
-                .plusExpansionPaths(c -> c.paymentInfo().payments());
-        return sphere().execute(query)
-                .thenComposeAsync(cart -> validCartOrNew(cart, userContext), HttpExecution.defaultContext());
+                .plusExpansionPaths(c -> c.paymentInfo().payments())
+                .sort(cart -> cart.lastModifiedAt().sort().desc())
+                .limit(1)
+                .build();
+        return sphere().execute(query).thenComposeAsync(carts -> carts.head()
+                .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
+                .orElseGet(() -> createCart(userContext)),
+                HttpExecution.defaultContext());
     }
 
-    protected CompletionStage<Cart> validCartOrNew(@Nullable final Cart cart, final UserContext userContext) {
-        return Optional.ofNullable(cart)
-                .filter(c -> c.getCartState().equals(CartState.ACTIVE))
-                .map((value) -> (CompletionStage<Cart>) completedFuture(value))
-                .orElseGet(() -> createCart(userContext));
-    }
-
-    private CompletionStage<Cart> updateCartWithUserPreferences(final Cart cart, final UserContext userContext) {
+    protected CompletionStage<Cart> updateCartWithUserPreferences(final Cart cart, final UserContext userContext) {
         final boolean hasDifferentCountry = !userContext.country().equals(cart.getCountry());
         return hasDifferentCountry ? updateCartCountry(cart, userContext.country()) : completedFuture(cart);
     }
