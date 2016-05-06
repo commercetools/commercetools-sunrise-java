@@ -55,12 +55,12 @@ myOrder:
     discountCode: Promotional Code Applied
     subtotal: Subtotal
     cartDiscount: Order Discount
-    deliveryCost: Delivery Cost
+    shipping: Shipping
     taxes: Sales Tax
-    total: Order Total
+    total: Total
   items:
-    productDescription: Product Description
+    productDescription: Description
     quantity: Quantity
-    unitPrice: Unit Price
+    unitPrice: Price
     totalPrice: Total
 

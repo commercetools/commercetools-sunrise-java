@@ -97,25 +97,7 @@
                           </div>
                       {{/if}}
                     <div class="text-right">
-                      <div class="my-orders-order-price-titles">
-                        <span>{{i18n "my-account:myOrder.price.subtotal"}}</span><br>
-                        <span>{{i18n "my-account:myOrder.price.cartDiscount"}}</span><br>
-                        <span>{{i18n "my-account:myOrder.price.deliveryCost"}}</span>
-                      </div>
-                      <div class="my-orders-order-price">
-                        <span>{{content.order.subtotalPrice}}</span><br>
-                        <span>{{content.order.cartDiscount}}</span><br>
-                        <span>{{content.order.shippingMethod.price}}</span>
-                      </div>
-                      <div class="order-hr"></div>
-                      <div class="my-orders-order-price-titles">
-                        <span>{{i18n "my-account:myOrder.price.taxes"}}</span><br>
-                        <span class="order-total-big">{{i18n "my-account:myOrder.price.total"}}</span>
-                      </div>
-                      <div class="my-orders-order-price">
-                        <span>{{content.order.salesTax}}</span><br>
-                        <span class="order-total-big">{{content.order.totalPrice}}</span>
-                      </div>
+                        {{> checkout/order-summary/totals cart=content.order}}
                     </div>
                   </div>
                   <div class="order-list-summary-titles-wrapper">
@@ -142,51 +124,49 @@
                       </div>
                     </div>
                   </div>
-                  {{#each content.order}}
-                    <div class="order-detail-wrapper">
-                      <div class="row">
-                        <div class="col-sm-2">
-                          <div>
-                            <img class="img-responsive" src="{{image}}" alt="Product image">
-                          </div>
-                        </div>
-                        <div class="col-sm-4">
-                          <div>
-                            <div class="order-detail-product-title">{{productTitleOne}}</div>
-                            <div class="order-detail-product-title">{{productTitleTwo}}</div>
-                            <div class="order-sku">{{sku}}</div>
-                            <div class="order-detail-attributes-title">
-                            {{#each attributes}}
-                                <span>{{label}}</span>{{#unless @last}}<br>{{/unless}}
-                            {{/each}}
+                    {{#each content.order.lineItems.list}}
+                        <div class="order-detail-wrapper">
+                            <div class="row">
+                                <div class="col-sm-1 col-xs-4 product-img-col">
+                                    <img class="img-responsive cart-item-img" src="{{variant.image}}" alt="{{variant.name}}">
+                                </div>
+                                <div class="col-sm-3 col-xs-8 product-info-text">
+                                    <p class="cart-item-name">
+                                        <a href="{{variant.url}}">{{variant.name}}</a>
+                                    </p>
+                                    <p class="grey-p">{{variant.sku}}</p>
+                                    <p class="cart-attributes">
+                                        {{#each attributes}}
+                                            {{name}}
+                                            <span class="black-p" data-model="cartItem.{{key}}">{{value}}</span>
+                                            {{#unless @last}}<br>{{/unless}}
+                                        {{/each}}
+                                    </p>
+                                </div>
+                                <div class="col-sm-2 col-sm-offset-2 col-xs-12 text-center quantity-counter">
+                                    <span class="visible-xs">{{i18n "main:common.quantity"}}:</span>
+                                    <span class="quantity-number">{{quantity}}</span>
+                                </div>
+
+                                <div class="col-sm-2 col-xs-7">
+                                    <div class="text-right cart-item-price">
+                                        <span class="visible-xs xs-price-title">{{i18n "main:common.price"}}</span>
+                                        {{#if variant.priceOld}}
+                                            <span class="discounted-price">{{variant.priceOld}}</span>
+                                        {{/if}}
+                                        <span>{{variant.price}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-xs-5">
+                                    <div class="text-right cart-item-price">
+                                        <span class="visible-xs xs-price-title">{{i18n "checkout:total"}}</span>
+                                        <span>{{totalPrice}}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="order-detail-attributes">
-                            {{#each attributes}}
-                                 <span>{{value}}</span>{{#unless @last}}<br>{{/unless}}
-                            {{/each}}
-                            </div>
-                            <div class="order-detail-available">{{available}}</div>
-                          </div>
                         </div>
-                        <div class="col-sm-2">
-                          <div class="text-right">
-                            {{quantity}}
-                          </div>
-                        </div>
-                        <div class="col-sm-2">
-                          <div class="text-right">
-                            <span class="order-detail-discount-price">{{discountedPrice}}</span>
-                            <span>{{price}}</span>
-                          </div>
-                        </div>
-                        <div class="col-sm-2">
-                          <div class="text-right">
-                            {{totalPrice}}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  {{/each}}
+                    {{/each}}
+
                   <div class="order-print-receipt-btn-wrapper">
                     <button onclick="window.print()" class="order-print-receipt-btn">{{i18n "my-account:myOrder.print"}}</button>
                   </div>

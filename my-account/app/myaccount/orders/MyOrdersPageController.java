@@ -79,6 +79,8 @@ public class MyOrdersPageController extends MyAccountController {
     protected CompletionStage<Optional<Order>> fetchOrderByCustomer(final String customerId, final String orderNumber) {
         final OrderQuery query = OrderQuery.of().byCustomerId(customerId)
                 .plusPredicates(order -> order.orderNumber().is(orderNumber))
+                .plusExpansionPaths(order -> order.paymentInfo().payments())
+                .plusExpansionPaths(order -> order.shippingInfo().shippingMethod())
                 .withLimit(1);
         return sphere().execute(query).thenApply(PagedQueryResult::head);
     }
