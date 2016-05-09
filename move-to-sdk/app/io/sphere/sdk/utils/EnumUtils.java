@@ -1,8 +1,8 @@
-package common.utils;
+package io.sphere.sdk.utils;
 
 import com.google.common.base.CaseFormat;
 
-public class CtpUtils {
+public class EnumUtils {
 
     /**
      * Transforms a CTP enum name (e.g. BALANCE_DUE) to lower CamelCase (e.g. balanceDue).

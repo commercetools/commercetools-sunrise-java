@@ -1,4 +1,4 @@
-package common.utils;
+package io.sphere.sdk.utils;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

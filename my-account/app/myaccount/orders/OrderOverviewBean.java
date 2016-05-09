@@ -10,7 +10,7 @@ import io.sphere.sdk.orders.Order;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static common.utils.CtpUtils.enumToCamelCase;
+import static io.sphere.sdk.utils.EnumUtils.enumToCamelCase;
 import static common.utils.PriceUtils.calculateTotalPrice;
 
 public class OrderOverviewBean {

@@ -6,7 +6,7 @@ import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
 import common.template.i18n.I18nIdentifier;
-import common.utils.FutureUtils;
+import io.sphere.sdk.utils.FutureUtils;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.PaymentInfo;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
