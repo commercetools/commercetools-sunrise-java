@@ -6,12 +6,12 @@ import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
 import common.template.i18n.I18nIdentifier;
-import io.sphere.sdk.utils.FutureUtils;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.PaymentInfo;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddPayment;
 import io.sphere.sdk.carts.commands.updateactions.RemovePayment;
+import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.LocalizedString;
@@ -20,6 +20,7 @@ import io.sphere.sdk.payments.*;
 import io.sphere.sdk.payments.commands.PaymentCreateCommand;
 import io.sphere.sdk.payments.commands.PaymentDeleteCommand;
 import io.sphere.sdk.payments.queries.PaymentByIdGet;
+import io.sphere.sdk.utils.FutureUtils;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
@@ -40,6 +41,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static common.utils.FormUtils.extractFormField;
+import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
+import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
@@ -86,8 +89,10 @@ public class CheckoutPaymentPageController extends CartController {
                         if (selectedPaymentMethods.isEmpty()) {
                             return handleInvalidPaymentError(paymentForm, selectedPaymentMethods, cart, userContext);
                         } else {
-                            return setPaymentToCart(cart, selectedPaymentMethods)
+                            final CompletionStage<Result> resultStage = setPaymentToCart(cart, selectedPaymentMethods)
                                     .thenComposeAsync(updatedCart -> handleSuccessfulSetPayment(userContext), HttpExecution.defaultContext());
+                            return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                    handleSetPaymentToCartError(throwable, paymentForm, paymentMethodsInfo, cart, userContext));
                         }
                     }
                 }, HttpExecution.defaultContext());
@@ -168,6 +173,20 @@ public class CheckoutPaymentPageController extends CartController {
         final ErrorsBean errors = new ErrorsBean("Invalid payment error"); // TODO use i18n
         final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
         return completedFuture(badRequest(renderCheckoutPaymentPage(cart, pageContent, userContext)));
+    }
+
+    protected CompletionStage<Result> handleSetPaymentToCartError(final Throwable throwable,
+                                                                  final Form<CheckoutPaymentFormData> paymentForm,
+                                                                  final List<PaymentMethodInfo> paymentMethods,
+                                                                  final Cart cart, final UserContext userContext) {
+        if (throwable.getCause() instanceof ErrorResponseException) {
+            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
+            Logger.error("The request to set payment to cart raised an exception", errorResponseException);
+            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
+            final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
+            return completedFuture(badRequest(renderCheckoutPaymentPage(cart, pageContent, userContext)));
+        }
+        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
     protected CheckoutPaymentPageContent createPageContent(final Cart cart, final List<PaymentMethodInfo> paymentMethods,

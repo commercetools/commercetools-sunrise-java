@@ -3,6 +3,9 @@ package io.sphere.sdk.utils;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -28,5 +31,31 @@ public final class FutureUtils {
                 .thenApply(x -> futureList.stream()
                         .map(CompletableFuture::join)
                         .collect(Collectors.<T>toList()));
+    }
+
+    public static <T> CompletionStage<T> exceptionallyCompletedFuture(final Throwable throwable) {
+        final CompletableFuture<T> completableFuture = new CompletableFuture<>();
+        completableFuture.completeExceptionally(throwable);
+        return completableFuture;
+    }
+
+    public static <T> CompletionStage<T> recoverWithAsync(final CompletionStage<T> future, final Executor executor, final Function<? super Throwable, CompletionStage<T>> f) {
+        final CompletableFuture<T> result = new CompletableFuture<>();
+        final BiConsumer<T, Throwable> action = (value, error) -> {
+            if (value != null) {
+                result.complete(value);
+            } else {
+                final CompletionStage<T> alternative = f.apply(error);
+                alternative.whenComplete((alternativeValue, alternativeError) -> {
+                    if (alternativeValue != null) {
+                        result.complete(alternativeValue);
+                    } else {
+                        result.completeExceptionally(alternativeError);
+                    }
+                });
+            }
+        };
+        future.whenCompleteAsync(action, executor);
+        return result;
     }
 }

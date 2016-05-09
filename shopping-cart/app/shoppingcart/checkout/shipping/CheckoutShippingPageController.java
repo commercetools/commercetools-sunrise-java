@@ -9,6 +9,7 @@ import common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingMethod;
+import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.models.SphereException;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
@@ -31,6 +32,8 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import static common.utils.FormUtils.extractFormField;
+import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
+import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
@@ -65,8 +68,10 @@ public class CheckoutShippingPageController extends CartController {
                         return handleFormErrors(shippingForm, cart, userContext);
                     } else {
                         final String shippingMethodId = shippingForm.get().getShippingMethodId();
-                        return setShippingToCart(cart, shippingMethodId)
+                        final CompletionStage<Result> resultStage = setShippingToCart(cart, shippingMethodId)
                                 .thenComposeAsync(updatedCart -> handleSuccessfulSetShipping(userContext), HttpExecution.defaultContext());
+                        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                handleSetShippingToCartError(throwable, shippingForm, cart, userContext));
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -92,18 +97,20 @@ public class CheckoutShippingPageController extends CartController {
                 }, HttpExecution.defaultContext());
     }
 
-    protected CompletionStage<Result> handleCtpError(final Throwable throwable, final Form<CheckoutShippingFormData> shippingForm,
-                                                     final Cart cart, final UserContext userContext) {
+    protected CompletionStage<Result> handleSetShippingToCartError(final Throwable throwable,
+                                                                   final Form<CheckoutShippingFormData> shippingForm,
+                                                                   final Cart cart, final UserContext userContext) {
         if (throwable.getCause() instanceof SphereException) {
+            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
+            Logger.error("The request to set shipping to cart raised an exception", errorResponseException);
+            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             return getShippingMethods(session())
                     .thenApplyAsync(shippingMethods -> {
-                        Logger.error("Unknown CTP error", throwable.getCause());
-                        final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
                         final CheckoutShippingPageContent pageContent = createPageContentWithShippingError(shippingForm, errors, shippingMethods);
                         return badRequest(renderCheckoutShippingPage(cart, pageContent, userContext));
                     }, HttpExecution.defaultContext());
         }
-        throw new RuntimeException(throwable);
+        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
     protected CheckoutShippingPageContent createPageContent(final Cart cart, final List<ShippingMethod> shippingMethods) {

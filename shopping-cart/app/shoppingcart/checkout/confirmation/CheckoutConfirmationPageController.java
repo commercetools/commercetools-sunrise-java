@@ -7,11 +7,13 @@ import common.errors.ErrorsBean;
 import common.models.ProductDataConfig;
 import common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.OrderFromCartDraft;
 import io.sphere.sdk.orders.PaymentState;
 import io.sphere.sdk.orders.commands.OrderFromCartCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -30,6 +32,8 @@ import javax.inject.Singleton;
 import java.util.concurrent.CompletionStage;
 
 import static common.utils.FormUtils.extractBooleanFormField;
+import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
+import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
@@ -63,8 +67,10 @@ public class CheckoutConfirmationPageController extends CartController {
                     if (confirmationForm.hasErrors()) {
                         return handleFormErrors(confirmationForm, cart, userContext);
                     } else {
-                        return createOrder(cart)
+                        final CompletionStage<Result> resultStage = createOrder(cart)
                                 .thenComposeAsync(order -> handleSuccessfulCreateOrder(userContext), HttpExecution.defaultContext());
+                        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                handleCreateOrderError(throwable, confirmationForm, cart, userContext));
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -90,6 +96,19 @@ public class CheckoutConfirmationPageController extends CartController {
         final ErrorsBean errors = new ErrorsBean(confirmationForm);
         final CheckoutConfirmationPageContent pageContent = createPageContentWithConfirmationError(confirmationForm, errors);
         return completedFuture(badRequest(renderCheckoutConfirmationPage(cart, pageContent, userContext)));
+    }
+
+    protected CompletionStage<Result> handleCreateOrderError(final Throwable throwable,
+                                                             final Form<CheckoutConfirmationFormData> confirmationForm,
+                                                             final Cart cart, final UserContext userContext) {
+        if (throwable.getCause() instanceof ErrorResponseException) {
+            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
+            Logger.error("The request to create the order raised an exception", errorResponseException);
+            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
+            final CheckoutConfirmationPageContent pageContent = createPageContentWithConfirmationError(confirmationForm, errors);
+            return completedFuture(badRequest(renderCheckoutConfirmationPage(cart, pageContent, userContext)));
+        }
+        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
     protected CheckoutConfirmationPageContent createPageContent() {
