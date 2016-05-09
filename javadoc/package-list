@@ -20,8 +20,11 @@ ctpmodels
 io.sphere.sdk.facets
 io.sphere.sdk.play.controllers
 io.sphere.sdk.play.metrics
+io.sphere.sdk.utils
 myaccount
+myaccount.common
 myaccount.login
+myaccount.orders
 productcatalog.common
 productcatalog.home
 productcatalog.productdetail
