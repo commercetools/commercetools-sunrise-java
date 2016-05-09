@@ -12,9 +12,9 @@ public class PaymentMethodBean extends FormSelectableOptionBean {
     public PaymentMethodBean() {
     }
 
-    public PaymentMethodBean(final PaymentMethodInfo paymentMethod, final List<String> selectedPaymentMethod,
+    public PaymentMethodBean(final PaymentMethodInfo paymentMethod, final List<String> selectedPaymentMethods,
                              final UserContext userContext) {
-        super(createLabel(paymentMethod, userContext), paymentMethod.getMethod(), selectedPaymentMethod.contains(paymentMethod.getMethod()));
+        super(createLabel(paymentMethod, userContext), paymentMethod.getMethod(), selectedPaymentMethods.contains(paymentMethod.getMethod()));
     }
 
     private static String createLabel(final PaymentMethodInfo paymentMethod, final UserContext userContext) {

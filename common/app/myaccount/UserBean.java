@@ -3,6 +3,7 @@ package myaccount;
 import io.sphere.sdk.models.Base;
 
 public class UserBean extends Base {
+
     private boolean loggedIn;
     private String name;
 

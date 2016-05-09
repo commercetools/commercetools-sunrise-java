@@ -10,6 +10,7 @@ import io.sphere.sdk.orders.queries.OrderByIdGet;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
+import play.twirl.api.Html;
 import shoppingcart.OrderSessionUtils;
 import shoppingcart.common.CartController;
 
@@ -48,7 +49,7 @@ public class CheckoutThankYouPageController extends CartController {
     protected CompletionStage<Result> handleFoundOrder(final Order order, final UserContext userContext) {
         final CheckoutThankYouPageContent pageContent = new CheckoutThankYouPageContent();
         pageContent.setOrder(createCartLikeBean(order, userContext));
-        return completedFuture(renderCheckoutThankYouPage(pageContent, userContext));
+        return completedFuture(ok(renderCheckoutThankYouPage(pageContent, userContext)));
     }
 
     protected CompletionStage<Result> handleNotFoundOrder(final UserContext userContext) {
@@ -56,9 +57,9 @@ public class CheckoutThankYouPageController extends CartController {
         return completedFuture(redirect(call));
     }
 
-    protected Result renderCheckoutThankYouPage(final CheckoutThankYouPageContent pageContent, final UserContext userContext) {
+    protected Html renderCheckoutThankYouPage(final CheckoutThankYouPageContent pageContent, final UserContext userContext) {
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:thankYouPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return ok(templateService().renderToHtml("checkout-thankyou", pageData, userContext.locales()));
+        return templateService().renderToHtml("checkout-thankyou", pageData, userContext.locales());
     }
 }

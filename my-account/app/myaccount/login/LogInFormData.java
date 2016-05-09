@@ -4,6 +4,7 @@ import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
 public class LogInFormData extends Base {
+
     @Constraints.Required
     private String username;
     @Constraints.Required

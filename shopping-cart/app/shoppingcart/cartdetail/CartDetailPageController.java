@@ -11,6 +11,8 @@ import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
 import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
 import io.sphere.sdk.carts.commands.updateactions.RemoveLineItem;
+import io.sphere.sdk.client.ErrorResponseException;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -24,6 +26,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.concurrent.CompletionStage;
 
+import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
+import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
 
@@ -65,8 +69,10 @@ public class CartDetailPageController extends CartController {
                         final String productId = addProductToCartForm.get().getProductId();
                         final int variantId = addProductToCartForm.get().getVariantId();
                         final long quantity = addProductToCartForm.get().getQuantity();
-                        return addProductToCart(productId, variantId, quantity, cart)
+                        final CompletionStage<Result> resultStage = addProductToCart(productId, variantId, quantity, cart)
                                 .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart, userContext), HttpExecution.defaultContext());
+                        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                handleAddProductToCartError(throwable, addProductToCartForm, cart, userContext));
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -82,8 +88,10 @@ public class CartDetailPageController extends CartController {
                     } else {
                         final String lineItemId = changeLineItemQuantityForm.get().getLineItemId();
                         final Long quantity = changeLineItemQuantityForm.get().getQuantity();
-                        return changeLineItemQuantity(lineItemId, quantity, cart)
+                        final CompletionStage<Result> resultStage = changeLineItemQuantity(lineItemId, quantity, cart)
                                 .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart, userContext), HttpExecution.defaultContext());
+                        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                handleChangeLineItemQuantityError(throwable, changeLineItemQuantityForm, cart, userContext));
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -98,8 +106,10 @@ public class CartDetailPageController extends CartController {
                         return handleRemoveLineItemFormErrors(removeLineItemForm, cart, userContext);
                     } else {
                         final String lineItemId = removeLineItemForm.get().getLineItemId();
-                        return removeLineItem(lineItemId, cart)
+                        final CompletionStage<Result> resultStage = removeLineItem(lineItemId, cart)
                                 .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart, userContext), HttpExecution.defaultContext());
+                        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                handleRemoveLineItemError(throwable, removeLineItemForm, cart, userContext));
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -143,6 +153,45 @@ public class CartDetailPageController extends CartController {
         final ErrorsBean errorsBean = new ErrorsBean(removeLineItemForm);
         final CartDetailPageContent pageContent = createPageContentWithRemoveLineItemError(removeLineItemForm, errorsBean, userContext);
         return completedFuture(badRequest(renderCartPage(cart, pageContent, userContext)));
+    }
+
+    protected CompletionStage<Result> handleAddProductToCartError(final Throwable throwable,
+                                                                  final Form<AddProductToCartFormData> addProductToCartForm,
+                                                                  final Cart cart, final UserContext userContext) {
+        if (throwable.getCause() instanceof ErrorResponseException) {
+            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
+            Logger.error("The request to add product to cart raised an exception", errorResponseException);
+            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
+            final CartDetailPageContent pageContent = createPageContentWithAddProductToCartError(addProductToCartForm, errors, userContext);
+            return completedFuture(badRequest(renderCartPage(cart, pageContent, userContext)));
+        }
+        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
+    }
+
+    protected CompletionStage<Result> handleChangeLineItemQuantityError(final Throwable throwable,
+                                                                        final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
+                                                                        final Cart cart, final UserContext userContext) {
+        if (throwable.getCause() instanceof ErrorResponseException) {
+            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
+            Logger.error("The request to change line item quantity raised an exception", errorResponseException);
+            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
+            final CartDetailPageContent pageContent = createPageContentWithChangeLineItemQuantityError(changeLineItemQuantityForm, errors, userContext);
+            return completedFuture(badRequest(renderCartPage(cart, pageContent, userContext)));
+        }
+        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
+    }
+
+    protected CompletionStage<Result> handleRemoveLineItemError(final Throwable throwable,
+                                                                final Form<RemoveLineItemFormData> removeLineItemForm,
+                                                                final Cart cart, final UserContext userContext) {
+        if (throwable.getCause() instanceof ErrorResponseException) {
+            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
+            Logger.error("The request to remove line item raised an exception", errorResponseException);
+            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
+            final CartDetailPageContent pageContent = createPageContentWithRemoveLineItemError(removeLineItemForm, errors, userContext);
+            return completedFuture(badRequest(renderCartPage(cart, pageContent, userContext)));
+        }
+        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
     protected CartDetailPageContent createPageContent(final UserContext userContext) {

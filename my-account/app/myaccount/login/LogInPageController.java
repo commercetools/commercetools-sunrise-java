@@ -30,6 +30,8 @@ import java.util.concurrent.CompletionStage;
 
 import static common.utils.FormUtils.extractBooleanFormField;
 import static common.utils.FormUtils.extractFormField;
+import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
+import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
@@ -64,9 +66,10 @@ public class LogInPageController extends SunriseController {
         if (logInForm.hasErrors()) {
             return handleLogInFormErrors(logInForm, userContext);
         } else {
-            return logIn(logInForm.get())
-                    .thenComposeAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
-                    .exceptionally(throwable -> handleInvalidCredentialsError(throwable, logInForm, userContext).toCompletableFuture().join()); // TODO move to async
+            final CompletionStage<Result> resultStage = logIn(logInForm.get())
+                    .thenComposeAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext());
+            return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                    handleInvalidCredentialsError(throwable, logInForm, userContext));
         }
     }
 
@@ -142,11 +145,11 @@ public class LogInPageController extends SunriseController {
             final LogInPageContent pageContent = createPageContentWithLogInError(logInForm, errors, userContext);
             return completedFuture(badRequest(renderLogInPage(pageContent, userContext)));
         }
-        throw new RuntimeException(throwable);
+        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
     protected CompletionStage<Result> handleExistingCustomerError(final Throwable throwable, final Form<SignUpFormData> signUpForm,
-                                                 final UserContext userContext) {
+                                                                  final UserContext userContext) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             Logger.error("Unknown error, probably customer already exists", errorResponseException);
@@ -154,7 +157,7 @@ public class LogInPageController extends SunriseController {
             final LogInPageContent pageContent = createPageContentWithSignUpError(signUpForm, errors, userContext);
             return completedFuture(badRequest(renderLogInPage(pageContent, userContext)));
         }
-        throw new RuntimeException(throwable);
+        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
     protected LogInPageContent createPageContent(final UserContext userContext) {

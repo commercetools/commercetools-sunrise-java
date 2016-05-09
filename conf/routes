@@ -38,7 +38,7 @@ GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJa
 # ~~~~~
 
 # Home page
-GET         /:languageTag/home                                 @productcatalog.home.HomeController.show(languageTag: String)
+GET         /:languageTag/home                                 @productcatalog.home.HomePageController.show(languageTag: String)
 
 
 # LOCATION
@@ -86,7 +86,7 @@ POST        /:languageTag/checkout/confirmation                @shoppingcart.che
 GET         /:languageTag/checkout/thankyou                    @shoppingcart.checkout.thankyou.CheckoutThankYouPageController.show(languageTag: String)
 
 
-# MY ACCOUNT
+# SIGN UP/IN/OUT
 # ~~~~~
 
 # Shows log in form
@@ -97,6 +97,15 @@ POST        /:languageTag/user/login                           @myaccount.login.
 POST        /:languageTag/user/signup                          @myaccount.login.LogInPageController.processSignUp(languageTag: String)
 # Logs out the user
 GET         /:languageTag/user/logout                          @myaccount.login.LogInPageController.processLogOut(languageTag: String)
+
+
+# MY ACCOUNT
+# ~~~~~
+
+# Shows log in form
+GET         /:languageTag/user/orders                          @myaccount.orders.MyOrdersPageController.list(languageTag: String, page: Int ?= 1)
+
+GET         /:languageTag/user/orders/:orderNumber             @myaccount.orders.MyOrdersPageController.show(languageTag: String, orderNumber: String)
 
 
 # PRODUCT DETAIL

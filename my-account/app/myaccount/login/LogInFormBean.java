@@ -6,6 +6,7 @@ import io.sphere.sdk.models.Base;
 import javax.annotation.Nullable;
 
 public class LogInFormBean extends Base {
+
     private ErrorsBean errors;
     private String username;
 

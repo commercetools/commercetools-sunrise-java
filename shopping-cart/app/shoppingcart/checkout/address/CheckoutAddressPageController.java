@@ -12,8 +12,10 @@ import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
 import io.sphere.sdk.carts.commands.updateactions.SetCustomerEmail;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
+import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -35,6 +37,8 @@ import java.util.concurrent.CompletionStage;
 
 import static common.utils.FormUtils.extractAddress;
 import static common.utils.FormUtils.extractBooleanFormField;
+import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
+import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
@@ -74,8 +78,10 @@ public class CheckoutAddressPageController extends CartController {
                         final Address shippingAddress = shippingAddressForm.get().toAddress();
                         final boolean differentBilling = shippingAddressForm.get().isBillingAddressDifferentToBillingAddress();
                         final Address billingAddress = differentBilling ? billingAddressForm.get().toAddress() : null;
-                        return setAddressToCart(cart, shippingAddress, billingAddress)
+                        final CompletionStage<Result> resultStage = setAddressToCart(cart, shippingAddress, billingAddress)
                                 .thenComposeAsync(updatedCart -> handleSuccessfulSetAddress(userContext), HttpExecution.defaultContext());
+                        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                handleSetAddressToCartError(throwable, shippingAddressForm, billingAddressForm, cart, userContext));
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -107,8 +113,8 @@ public class CheckoutAddressPageController extends CartController {
     }
 
     protected CompletionStage<Result> handleFormErrors(final Form<CheckoutShippingAddressFormData> shippingAddressForm,
-                                      final Form<CheckoutBillingAddressFormData> billingAddressForm,
-                                      final Cart cart, final UserContext userContext) {
+                                                       final Form<CheckoutBillingAddressFormData> billingAddressForm,
+                                                       final Cart cart, final UserContext userContext) {
         final ErrorsBean errors;
         if (shippingAddressForm.hasErrors()) {
             errors = new ErrorsBean(shippingAddressForm);
@@ -117,6 +123,20 @@ public class CheckoutAddressPageController extends CartController {
         }
         final CheckoutAddressPageContent pageContent = createPageContentWithAddressError(shippingAddressForm, billingAddressForm, errors, userContext);
         return completedFuture(badRequest(renderCheckoutAddressPage(cart, pageContent, userContext)));
+    }
+
+    protected CompletionStage<Result> handleSetAddressToCartError(final Throwable throwable,
+                                                                  final Form<CheckoutShippingAddressFormData> shippingAddressForm,
+                                                                  final Form<CheckoutBillingAddressFormData> billingAddressForm,
+                                                                  final Cart cart, final UserContext userContext) {
+        if (throwable.getCause() instanceof ErrorResponseException) {
+            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
+            Logger.error("The request to set address to cart raised an exception", errorResponseException);
+            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
+            final CheckoutAddressPageContent pageContent = createPageContentWithAddressError(shippingAddressForm, billingAddressForm, errors, userContext);
+            return completedFuture(badRequest(renderCheckoutAddressPage(cart, pageContent, userContext)));
+        }
+        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
     protected CheckoutAddressPageContent createPageContent(final Cart cart, final UserContext userContext) {

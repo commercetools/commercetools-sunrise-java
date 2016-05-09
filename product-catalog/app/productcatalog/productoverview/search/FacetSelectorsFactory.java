@@ -28,7 +28,8 @@ public class FacetSelectorsFactory {
     }
 
     public static FacetSelectorsFactory of(final FacetConfigList configList, final Map<String, List<String>> queryString,
-                                    final List<Category> selectedCategories, final UserContext userContext, final CategoryTree categoryTree) {
+                                           final List<Category> selectedCategories, final UserContext userContext,
+                                           final CategoryTree categoryTree) {
         return new FacetSelectorsFactory(configList, queryString, selectedCategories, userContext, categoryTree);
     }
 

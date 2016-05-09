@@ -2,7 +2,7 @@ package common.template.i18n;
 
 import io.sphere.sdk.models.Base;
 
-import static common.utils.SunriseArrayUtils.getArrayElement;
+import static common.utils.ArrayUtils.getArrayElement;
 import static org.apache.commons.lang3.StringUtils.split;
 
 /**
