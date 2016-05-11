@@ -9,7 +9,7 @@ common.models
 common.prices
 common.suggestion
 common.template.cms
-common.template.cms.local
+common.template.cms.filebased
 common.template.engine
 common.template.engine.handlebars
 common.template.i18n
