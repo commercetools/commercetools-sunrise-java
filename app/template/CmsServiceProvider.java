@@ -2,7 +2,7 @@ package template;
 
 import com.google.inject.Provider;
 import common.template.cms.CmsService;
-import common.template.cms.local.LocalCmsService;
+import common.template.cms.filebased.FileBasedCmsService;
 import common.template.i18n.I18nResolver;
 import play.Logger;
 
@@ -19,6 +19,6 @@ class CmsServiceProvider implements Provider<CmsService> {
     @Override
     public CmsService get() {
         Logger.info("Provide LocalCmsService");
-        return LocalCmsService.of(i18nResolver);
+        return FileBasedCmsService.of(i18nResolver);
     }
 }

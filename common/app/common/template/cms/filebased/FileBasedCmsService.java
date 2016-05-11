@@ -1,4 +1,4 @@
-package common.template.cms.local;
+package common.template.cms.filebased;
 
 import common.template.cms.CmsPage;
 import common.template.cms.CmsService;
@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Service that provides content data from i18n files that can be found locally.
+ * Service that provides content data from i18n files that can be found in a local file.
  * It uses a I18nResolver internally to resolve the requested messages.
  *
  * The mapping of the {@link CmsService} parameters to {@link I18nResolver} parameters goes as follows:
@@ -23,21 +23,21 @@ import java.util.concurrent.CompletionStage;
  * The {@code pageKey} is then ignored as its only purpose is for remote access.
  */
 @Singleton
-public final class LocalCmsService implements CmsService {
+public final class FileBasedCmsService implements CmsService {
     private final I18nResolver i18nResolver;
 
     @Inject
-    private LocalCmsService(final I18nResolver i18nResolver) {
+    private FileBasedCmsService(final I18nResolver i18nResolver) {
         this.i18nResolver = i18nResolver;
     }
 
     @Override
     public CompletionStage<CmsPage> getPage(final List<Locale> locales, final String pageKey) {
-        final CmsPage cmsPage = new LocalCmsPage(i18nResolver, locales);
+        final CmsPage cmsPage = new FileBasedCmsPage(i18nResolver, locales);
         return CompletableFuture.completedFuture(cmsPage);
     }
 
-    public static LocalCmsService of(final I18nResolver i18nResolver) {
-        return new LocalCmsService(i18nResolver);
+    public static FileBasedCmsService of(final I18nResolver i18nResolver) {
+        return new FileBasedCmsService(i18nResolver);
     }
 }

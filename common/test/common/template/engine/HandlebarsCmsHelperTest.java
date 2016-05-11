@@ -4,7 +4,7 @@ import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import common.template.cms.CmsPage;
 import common.template.cms.CmsService;
-import common.template.cms.local.LocalCmsService;
+import common.template.cms.filebased.FileBasedCmsService;
 import common.controllers.PageData;
 import common.template.i18n.I18nResolver;
 import common.template.i18n.TestableI18nResolver;
@@ -65,7 +65,7 @@ public class HandlebarsCmsHelperTest {
     }
 
     private static String renderTemplate(final String templateName, final TemplateService templateService, final Locale locale) throws Exception {
-        final CmsService cmsService =  LocalCmsService.of(i18nResolver(defaultI18nMap()));
+        final CmsService cmsService =  FileBasedCmsService.of(i18nResolver(defaultI18nMap()));
         final CmsPage cmsPage = cmsService.getPage(singletonList(locale), "cms").toCompletableFuture().get(0, TimeUnit.SECONDS);
         return templateService.render(templateName, SOME_PAGE_DATA, singletonList(locale), cmsPage);
     }

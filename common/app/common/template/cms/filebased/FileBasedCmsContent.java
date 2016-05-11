@@ -1,4 +1,4 @@
-package common.template.cms.local;
+package common.template.cms.filebased;
 
 import common.template.cms.CmsContent;
 import common.template.i18n.I18nIdentifier;
@@ -9,13 +9,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-final class LocalCmsContent implements CmsContent {
+final class FileBasedCmsContent implements CmsContent {
     private final I18nResolver i18nResolver;
     private final List<Locale> locales;
     private final String contentType;
     private final String contentId;
 
-    LocalCmsContent(final I18nResolver i18nResolver, final List<Locale> locales, final String contentType, final String contentId) {
+    FileBasedCmsContent(final I18nResolver i18nResolver, final List<Locale> locales, final String contentType, final String contentId) {
         this.i18nResolver = i18nResolver;
         this.locales = locales;
         this.contentType = contentType;

@@ -1,4 +1,4 @@
-package common.template.cms.local;
+package common.template.cms.filebased;
 
 import common.template.cms.CmsContent;
 import common.template.cms.CmsPage;
@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-final class LocalCmsPage implements CmsPage {
+final class FileBasedCmsPage implements CmsPage {
     private final I18nResolver i18nResolver;
     private final List<Locale> locales;
 
-    LocalCmsPage(final I18nResolver i18nResolver, final List<Locale> locales) {
+    FileBasedCmsPage(final I18nResolver i18nResolver, final List<Locale> locales) {
         this.i18nResolver = i18nResolver;
         this.locales = locales;
     }
@@ -22,7 +22,7 @@ final class LocalCmsPage implements CmsPage {
         if (contentType.isEmpty() || contentId.isEmpty()) {
             return Optional.empty();
         } else {
-            final LocalCmsContent cmsContent = new LocalCmsContent(i18nResolver, locales, contentType, contentId);
+            final FileBasedCmsContent cmsContent = new FileBasedCmsContent(i18nResolver, locales, contentType, contentId);
             return Optional.of(cmsContent);
         }
     }

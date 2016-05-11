@@ -1,6 +1,6 @@
 package common.template.cms;
 
-import common.template.cms.local.LocalCmsService;
+import common.template.cms.filebased.FileBasedCmsService;
 import common.template.i18n.I18nResolver;
 import common.template.i18n.YamlI18nResolver;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LocalCmsPageTest {
+public class FileBasedCmsPageTest {
     private static final Locale DE = Locale.forLanguageTag("de");
     private static final Locale DE_AT = Locale.forLanguageTag("de-AT");
     private static final List<Locale> SUPPORTED_LOCALES = asList(DE, DE_AT);
@@ -52,6 +52,6 @@ public class LocalCmsPageTest {
 
     private CmsPage cms(final Locale locale) throws Exception {
         final I18nResolver i18nResolver = YamlI18nResolver.of("cms", SUPPORTED_LOCALES, AVAILABLE_BUNDLES);
-        return LocalCmsService.of(i18nResolver).getPage(singletonList(locale), "cms").toCompletableFuture().get(0, TimeUnit.SECONDS);
+        return FileBasedCmsService.of(i18nResolver).getPage(singletonList(locale), "cms").toCompletableFuture().get(0, TimeUnit.SECONDS);
     }
 }
