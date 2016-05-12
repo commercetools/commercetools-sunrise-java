@@ -72,7 +72,6 @@ public class MyPersonalDetailsPageController extends MyAccountController {
                 .thenComposeAsync(customerOpt -> customerOpt
                         .map(customer -> {
                             if (myPersonalDetailsForm.hasErrors()) {
-                                System.out.println("form error");
                                 return handleFormErrors(myPersonalDetailsForm, customer, userContext);
                             } else {
                                 final CompletionStage<Result> resultStage = updateCustomer(customer, myPersonalDetailsForm.get())
