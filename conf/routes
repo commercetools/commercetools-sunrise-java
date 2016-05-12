@@ -102,10 +102,14 @@ GET         /:languageTag/user/logout                          @myaccount.login.
 # MY ACCOUNT
 # ~~~~~
 
-# Shows log in form
-GET         /:languageTag/user/orders                          @myaccount.orders.MyOrdersPageController.list(languageTag: String, page: Int ?= 1)
-
-GET         /:languageTag/user/orders/:orderNumber             @myaccount.orders.MyOrdersPageController.show(languageTag: String, orderNumber: String)
+# Shows a form for updating the customer's details
+GET         /:languageTag/user/details                         @myaccount.mydetails.MyPersonalDetailsPageController.show(languageTag: String)
+# Processes the form for updating the customer's details
+POST        /:languageTag/user/details                         @myaccount.mydetails.MyPersonalDetailsPageController.process(languageTag: String)
+# Shows all orders from the customer
+GET         /:languageTag/user/orders                          @myaccount.myorders.MyOrdersPageController.list(languageTag: String, page: Int ?= 1)
+# Show an order from the customer
+GET         /:languageTag/user/orders/:orderNumber             @myaccount.myorders.MyOrdersPageController.show(languageTag: String, orderNumber: String)
 
 
 # PRODUCT DETAIL

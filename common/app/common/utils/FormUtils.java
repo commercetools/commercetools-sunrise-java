@@ -19,10 +19,10 @@ public final class FormUtils {
     }
 
     public static Function<String, String> formFieldExtractor(@Nullable final Form<?> form) {
-        return formFieldExtractor(form, null);
+        return formFieldExtractor(form, "");
     }
 
-    public static Function<String, String> formFieldExtractor(@Nullable final Form<?> form, @Nullable final String suffix) {
+    public static Function<String, String> formFieldExtractor(@Nullable final Form<?> form, final String suffix) {
         return fieldName -> extractFormField(form, fieldName + suffix);
     }
 

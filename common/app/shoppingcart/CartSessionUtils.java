@@ -39,11 +39,11 @@ public final class CartSessionUtils {
             session.put(MINI_CART_SESSION_KEY, miniCartAsJson);
             Logger.debug("Saved cart in session: ID \"{}\", Mini Cart: \"{}\"", id, miniCartAsJson);
         } else {
-            removeCart(session);
+            removeCartSessionData(session);
         }
     }
 
-    public static void removeCart(final Session session) {
+    public static void removeCartSessionData(final Session session) {
         session.remove(CART_ID_SESSION_KEY);
         session.remove(MINI_CART_SESSION_KEY);
         Logger.debug("Removed cart from session");
