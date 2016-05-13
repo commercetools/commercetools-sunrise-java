@@ -24,7 +24,8 @@ io.sphere.sdk.utils
 myaccount
 myaccount.common
 myaccount.login
-myaccount.orders
+myaccount.mydetails
+myaccount.myorders
 productcatalog.common
 productcatalog.home
 productcatalog.productdetail
