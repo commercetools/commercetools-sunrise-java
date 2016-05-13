@@ -13,6 +13,8 @@ common.template.cms.filebased
 common.template.engine
 common.template.engine.handlebars
 common.template.i18n
+common.template.i18n.composite
+common.template.i18n.yaml
 common.utils
 controllers
 ctpclient
