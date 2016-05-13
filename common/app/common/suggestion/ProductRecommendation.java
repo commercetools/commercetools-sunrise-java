@@ -8,12 +8,12 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Provides suggested products.
+ * Provides recommendation of products.
  */
-public interface ProductSuggestion {
+public interface ProductRecommendation {
 
     /**
-     * Gets a set of products suggestions for the given product, of length {@code numProducts} or less
+     * Gets a set of products recommendations for the given product, of length {@code numProducts} or less
      * if the requested number is greater than the number of available products.
      * @param product the product to get suggestions for
      * @param numProducts the number of products the returned set should contain
@@ -22,7 +22,7 @@ public interface ProductSuggestion {
     CompletionStage<Set<ProductProjection>> relatedToProduct(final ProductProjection product, final int numProducts);
 
     /**
-     * Gets a set of products suggestions for the given categories, of length {@code numProducts} or less
+     * Gets a set of products recommendations for the given categories, of length {@code numProducts} or less
      * if the requested number is greater than the number of available products.
      * @param categories the categories to get suggestions from
      * @param numProducts the number of products the returned set should contain

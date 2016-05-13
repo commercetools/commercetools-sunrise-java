@@ -4,7 +4,7 @@ import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
-import common.suggestion.ProductSuggestion;
+import common.suggestion.ProductRecommendation;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -40,9 +40,9 @@ public class ProductOverviewPageController extends ProductCatalogController {
     private final int paginationDisplayedPages;
 
     @Inject
-    public ProductOverviewPageController(final ControllerDependency controllerDependency, final ProductSuggestion productSuggestion,
+    public ProductOverviewPageController(final ControllerDependency controllerDependency, final ProductRecommendation productRecommendation,
                                          final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
-        super(controllerDependency, productSuggestion, productDataConfig, searchConfig);
+        super(controllerDependency, productRecommendation, productDataConfig, searchConfig);
         this.paginationDisplayedPages = configuration().getInt("pop.pagination.displayedPages", 6);
     }
 
