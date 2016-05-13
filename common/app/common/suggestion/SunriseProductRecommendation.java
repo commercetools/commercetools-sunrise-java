@@ -24,13 +24,13 @@ import static java.util.stream.Collectors.toSet;
 /**
  * Default implementation for Sunrise suggestions.
  */
-public class SunriseProductSuggestion implements ProductSuggestion {
+public class SunriseProductRecommendation implements ProductRecommendation {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductSuggestion.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductRecommendation.class);
     private final SphereClient sphere;
 
     @Inject
-    public SunriseProductSuggestion(final SphereClient sphere) {
+    public SunriseProductRecommendation(final SphereClient sphere) {
         this.sphere = sphere;
     }
 
@@ -85,7 +85,7 @@ public class SunriseProductSuggestion implements ProductSuggestion {
                 .withSort(product -> product.allVariants().price().desc());
         return sphere.execute(request)
                 .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, request, result), HttpExecution.defaultContext())
-                .thenApply(SunriseProductSuggestion::resultToProductSet);
+                .thenApply(SunriseProductRecommendation::resultToProductSet);
     }
 
     private static Set<ProductProjection> resultToProductSet(final PagedSearchResult<ProductProjection> result) {

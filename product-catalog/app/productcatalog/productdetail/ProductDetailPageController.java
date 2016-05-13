@@ -16,7 +16,7 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.common.*;
 import productcatalog.productoverview.search.SearchConfig;
-import common.suggestion.ProductSuggestion;
+import common.suggestion.ProductRecommendation;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -37,9 +37,9 @@ public class ProductDetailPageController extends ProductCatalogController {
     private final int numSuggestions;
 
     @Inject
-    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductSuggestion productSuggestion,
+    public ProductDetailPageController(final ControllerDependency controllerDependency, final ProductRecommendation productRecommendation,
                                        final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
-        super(controllerDependency, productSuggestion, productDataConfig, searchConfig);
+        super(controllerDependency, productRecommendation, productDataConfig, searchConfig);
         this.numSuggestions = configuration().getInt("pdp.productSuggestions.count");
     }
 
@@ -75,7 +75,7 @@ public class ProductDetailPageController extends ProductCatalogController {
 
     protected CompletionStage<Result> renderProduct(final String slug, final String sku, final ProductProjection product, final UserContext userContext) {
         return product.findVariantBySku(sku)
-                .map(variant -> productSuggestion().relatedToProduct(product, numSuggestions).thenApplyAsync(suggestions ->
+                .map(variant -> productRecommendation().relatedToProduct(product, numSuggestions).thenApplyAsync(suggestions ->
                         ok(renderProductPage(product, userContext, variant, suggestions)), HttpExecution.defaultContext())
                 ).orElseGet(() -> redirectToMasterVariant(userContext, slug, product));
     }
