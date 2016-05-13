@@ -166,6 +166,6 @@ public class MyPersonalDetailsPageController extends MyAccountController {
 
     protected Html renderMyPersonalDetailsPage(final MyPersonalDetailsPageContent pageContent, final UserContext userContext) {
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("my-account-personal-details", pageData, userContext.locales());
+        return templateEngine().renderToHtml("my-account-personal-details", pageData, userContext.locales());
     }
 }
