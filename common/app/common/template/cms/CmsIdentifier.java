@@ -10,7 +10,7 @@ import static org.apache.commons.lang3.StringUtils.split;
  *
  * - {@code entryType}: type of entry which usually defines the fields it can contain (e.g. banner)
  * - {@code entryKey}: key that identifies the particular entry (e.g. homeTopLeft)
- * - {@code fieldName}: can contain multiple path elements (e.g. subtitle.text)
+ * - {@code fieldName}: field name of the required content (e.g. subtitle)
  *
  * @see CmsService
  */

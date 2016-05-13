@@ -21,7 +21,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * The mapping of the {@link CmsService} parameters to {@link I18nResolver} parameters goes as follows:
  *
  * - {@code bundle} = {@code entryType} (e.g. banner)
- * - {@code messageKey} = {@code entryKey.field} (e.g. homeTopLeft.subtitle.text)
+ * - {@code messageKey} = {@code entryKey.fieldName} (e.g. homeTopLeft.subtitle.text)
  */
 @Singleton
 public final class FileBasedCmsService implements CmsService {
