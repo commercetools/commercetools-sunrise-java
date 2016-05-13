@@ -14,7 +14,7 @@ import static org.apache.commons.lang3.StringUtils.split;
  *
  * @see CmsService
  */
-public class CmsIdentifier extends Base {
+public final class CmsIdentifier extends Base {
 
     private final String entryType;
     private final String entryKey;

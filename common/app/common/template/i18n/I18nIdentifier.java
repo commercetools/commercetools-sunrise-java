@@ -13,7 +13,7 @@ import static org.apache.commons.lang3.StringUtils.split;
  *
  * @see I18nIdentifier
  */
-public class I18nIdentifier extends Base {
+public final class I18nIdentifier extends Base {
 
     private static final String DEFAULT_BUNDLE = "main";
     private final String bundle;
