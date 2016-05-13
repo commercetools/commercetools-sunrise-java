@@ -226,6 +226,6 @@ public class CheckoutPaymentPageController extends CartController {
         pageContent.setCart(createCartLikeBean(cart, userContext));
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:paymentPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("checkout-payment", pageData, userContext.locales());
+        return templateEngine().renderToHtml("checkout-payment", pageData, userContext.locales());
     }
 }

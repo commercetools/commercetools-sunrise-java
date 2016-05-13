@@ -8,17 +8,17 @@ public class CmsIdentifierTest {
 
     @Test
     public void parsesIdentifier() throws Exception {
-        final CmsIdentifier identifier = CmsIdentifier.of("contentType:contentId.some.field");
-        assertThat(identifier.getContentType()).isEqualTo("contentType");
-        assertThat(identifier.getContentId()).isEqualTo("contentId");
-        assertThat(identifier.getField()).isEqualTo("some.field");
+        final CmsIdentifier identifier = CmsIdentifier.of("entryType:entryKey.some.field");
+        assertThat(identifier.getEntryType()).isEqualTo("entryType");
+        assertThat(identifier.getEntryKey()).isEqualTo("entryKey");
+        assertThat(identifier.getFieldName()).isEqualTo("some.field");
     }
 
     @Test
     public void parsesEmptyIdentifier() throws Exception {
         final CmsIdentifier identifier = CmsIdentifier.of("");
-        assertThat(identifier.getContentType()).isEmpty();
-        assertThat(identifier.getContentId()).isEmpty();
-        assertThat(identifier.getField()).isEmpty();
+        assertThat(identifier.getEntryType()).isEmpty();
+        assertThat(identifier.getEntryKey()).isEmpty();
+        assertThat(identifier.getFieldName()).isEmpty();
     }
 }

@@ -1,5 +1,7 @@
-package common.template.i18n;
+package common.template.i18n.yaml;
 
+import common.template.i18n.I18nIdentifier;
+import common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -37,7 +39,7 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
     @Override
     public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs) {
         final String message = findPluralizedTranslation(locales, i18nIdentifier, hashArgs)
-                .orElseGet(() -> findFirstTranslation(locales, i18nIdentifier.getBundle(), i18nIdentifier.getKey())
+                .orElseGet(() -> findFirstTranslation(locales, i18nIdentifier.getBundle(), i18nIdentifier.getMessageKey())
                         .orElse(null));
         return Optional.ofNullable(message).map(resolvedValue -> replaceParameters(resolvedValue, hashArgs));
     }
@@ -56,7 +58,7 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
     private Optional<String> findPluralizedTranslation(final List<Locale> locales, final I18nIdentifier i18nIdentifier,
                                                        final Map<String, Object> hashArgs) {
         if (containsPlural(hashArgs)) {
-            final String pluralizedKey = i18nIdentifier.getKey() + "_plural";
+            final String pluralizedKey = i18nIdentifier.getMessageKey() + "_plural";
             return findFirstTranslation(locales, i18nIdentifier.getBundle(), pluralizedKey);
         } else {
             return Optional.empty();

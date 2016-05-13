@@ -204,6 +204,6 @@ public class LogInPageController extends SunriseController {
 
     protected Html renderLogInPage(final LogInPageContent pageContent, final UserContext userContext) {
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("my-account-login", pageData, userContext.locales());
+        return templateEngine().renderToHtml("my-account-login", pageData, userContext.locales());
     }
 }

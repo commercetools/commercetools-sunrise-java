@@ -1,5 +1,7 @@
-package common.template.i18n;
+package common.template.i18n.composite;
 
+import common.template.i18n.I18nIdentifier;
+import common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 
 import java.util.List;

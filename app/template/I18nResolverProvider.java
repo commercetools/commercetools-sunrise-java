@@ -2,9 +2,9 @@ package template;
 
 import com.google.inject.Provider;
 import common.contexts.ProjectContext;
-import common.template.i18n.CompositeI18nResolver;
+import common.template.i18n.composite.CompositeI18nResolver;
 import common.template.i18n.I18nResolver;
-import common.template.i18n.YamlI18nResolver;
+import common.template.i18n.yaml.YamlI18nResolver;
 import common.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;

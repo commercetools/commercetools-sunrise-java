@@ -142,6 +142,6 @@ public class CheckoutConfirmationPageController extends CartController {
         pageContent.setCart(createCartLikeBean(cart, userContext));
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:confirmationPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("checkout-confirmation", pageData, userContext.locales());
+        return templateEngine().renderToHtml("checkout-confirmation", pageData, userContext.locales());
     }
 }

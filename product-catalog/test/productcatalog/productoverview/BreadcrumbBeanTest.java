@@ -2,9 +2,9 @@ package productcatalog.productoverview;
 
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
+import common.controllers.ReverseRouter;
 import common.controllers.TestableReverseRouter;
 import common.models.LinkBean;
-import common.controllers.ReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
@@ -23,6 +23,7 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BreadcrumbBeanTest {
+
     private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("breadcrumb/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
     private static final ProductProjection PRODUCT = readCtpObject("breadcrumb/breadcrumbProduct.json", ProductProjection.typeReference());
     private static final UserContext USER_CONTEXT = UserContext.of(singletonList(ENGLISH), CountryCode.UK, null);

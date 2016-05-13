@@ -60,6 +60,6 @@ public class CheckoutThankYouPageController extends CartController {
     protected Html renderCheckoutThankYouPage(final CheckoutThankYouPageContent pageContent, final UserContext userContext) {
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:thankYouPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("checkout-thankyou", pageData, userContext.locales());
+        return templateEngine().renderToHtml("checkout-thankyou", pageData, userContext.locales());
     }
 }
