@@ -98,7 +98,11 @@ public class MyPersonalDetailsPageController extends MyAccountController {
         if (!Objects.equals(customer.getEmail(), newCustomerData.getEmail())) {
             updateActions.add(ChangeEmail.of(newCustomerData.getEmail()));
         }
-        return sphere().execute(CustomerUpdateCommand.of(customer, updateActions));
+        if (!updateActions.isEmpty()) {
+            return sphere().execute(CustomerUpdateCommand.of(customer, updateActions));
+        } else {
+            return completedFuture(customer);
+        }
     }
 
     protected CompletionStage<Result> handleFoundCustomer(final Customer customer, final UserContext userContext) {
