@@ -1,0 +1,161 @@
+<!-- start my-account-personal-details.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {{> common/htmlhead}}
+</head>
+
+<body>
+  <div class="darkbg hidden"></div>
+  {{> common/header}}
+  <div class="my-account">
+    <div class="container">
+      <div class="my-account-title">
+        <span class="my-account-title-text icon-user">{{i18n "my-account:myAccount.title"}}</span>
+      </div>
+      <div class="row">
+        <div class="col-sm-9">
+          <div class="my-account-content">
+            <div class="row">
+              <div class="col-sm-3">
+                {{> myaccount/my-account-sidebar positionOne=true}}
+              </div>
+              <div id="my-account-desktop-content" class="col-sm-9">
+                <div class="personal-details">
+                  <div class="personal-details-text-one">
+                    <span>{{i18n "my-account:personalDetails.welcomeBack"}}</span>
+                    <span>{{content.customer.firstName}}</span>
+                  </div>
+                  <div class="personal-details-text-two">
+                    {{i18n "my-account:personalDetails.welcomeDescription"}}<br>
+                    <span class="customer-number">{{content.customer.customerNumber}}</span>
+                  </div>
+                    <div class="personal-details-title">
+                        <span>{{i18n "my-account:personalDetails.personalDetailsTitle"}}</span>
+                        <span class="pull-right required-text personal-details-edit-show hide">{{i18n "main:form.required"}}*</span>
+                    </div>
+
+                    <div class="personal-details-edit-hide">
+                        <div class="personal-details-box">
+                          <div>
+                              {{content.customer.title}}
+                              {{content.customer.firstName}}
+                              {{content.customer.lastName}}
+                          </div>
+                          <div>{{content.customer.email}}</div><br>
+                            {{#if content.customer.subscribed}}
+                            <div>{{i18n "my-account:myDetails.subscribedToNewsletter"}}</div>
+                            {{/if}}
+                          <div class="personal-details-box-edit">
+                            <button class="personal-details-edit-show-btn"><img src="{{meta.assetsPath}}img/edit-1-2b7e8483b4bb1bfc5a2daf069c3f56d1.png" alt="edit icon">{{i18n "main:form.edit"}}</button>
+                          </div>
+                        </div>
+                  </div>
+
+                  <div class="personal-details-edit personal-details-edit-show {{#if content.personalDetailsForm.errors}}in{{/if}}">
+                      <form id="form-edit-personal-details" action="{{@root.meta._links.editMyPersonalDetails.href}}" method="POST">
+                          <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+                          <div class="row">
+                            {{> form/global-errors errors=content.personalDetailsForm.errors}}
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="form-sections">
+                                  <span class="text-uppercase">{{i18n "main:form.title"}}</span><br>
+                                  <select id="shipping-title-select" class="checkout-dropdown" name="title">
+                                      {{#each content.personalDetailsForm.salutations.list}}
+                                          <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                                      {{/each}}
+                                  </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-sections">
+                                <span class="form-labels">{{i18n "my-account:myDetails.personalDetailsForm.firstName"}}*</span><br>
+                                <input class="form-inputs" name="firstName" value="{{content.personalDetailsForm.firstName}}" type="text">
+                              </div>
+                              <div class="form-sections">
+                                <span class="form-labels">{{i18n "my-account:myDetails.personalDetailsForm.password"}}*</span><br>
+                                <input class="form-inputs" name="password" value="{{content.personalDetailsForm.password}}" type="password">
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-sections">
+                                <span class="form-labels">{{i18n "my-account:myDetails.personalDetailsForm.lastName"}}*</span><br>
+                                <input class="form-inputs" name="lastName" value="{{content.personalDetailsForm.lastName}}" type="text">
+                              </div>
+                              <div class="form-sections">
+                                <span class="form-labels">{{i18n "my-account:myDetails.personalDetailsForm.confirmPassword"}}*</span><br>
+                                <input class="form-inputs" name="confirmPassword" value="{{content.personalDetailsForm.confirmPassword}}" type="password">
+                              </div>
+                              <div class="form-sections">
+                                <span class="form-labels">{{i18n "my-account:myDetails.personalDetailsForm.email"}}*</span><br>
+                                <input class="form-inputs" name="email" value="{{content.personalDetailsForm.email}}" type="email"><br>
+                                <span class="form-notes">{{i18n "my-account:myDetails.personalDetailsForm.emailNotes"}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        <hr class="light-grey-hr">
+                        <div class="personal-details-newsletter">
+                          <span>
+                            <input type="checkbox">{{content.addMeTo}} <a href="">{{content.newsletter}}</a>
+                          </span>
+                        </div>
+                        <div class="personal-details-edit-btn">
+                          <span>
+                            <button type="submit" class="update-btn">{{i18n "my-account:personalDetails.updateBtn"}}</button>
+                            <button type="button" class="cancel-btn personal-details-edit-hide-btn">{{i18n "my-account:personalDetails.cancelBtn"}}</button>
+                          </span>
+                        </div>
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="my-account-banners">
+            <div class="banner-one-wrapper hidden-xs">
+              <div class="my-account-banner">
+                <div class="banner-title">
+                  {{i18n "my-account:personalDetails.bannerOne.title"}}
+                </div>
+                <hr class="banner-hr">
+                <div class="banner-subtitle">
+                  {{i18n "my-account:personalDetails.bannerOne.subtitle"}}
+                </div>
+                <div class="banner-btn-wrapper">
+                  <a class="banner-btn" href="{{content.bannerOne.url}}">{{i18n "my-account:personalDetails.shopAllBtn"}}</a>
+                </div>
+              </div>
+            </div>
+            <div class="banner-two-wrapper">
+              <div class="my-account-banner image-banner">
+                <div class="banner-title">
+                  {{i18n "my-account:personalDetails.bannerTwo.title"}}
+                </div>
+                <hr class="banner-hr">
+                <div class="banner-subtitle">
+                  {{i18n "my-account:personalDetails.bannerTwo.subtitle"}}
+                </div>
+                <div class="banner-btn-wrapper">
+                  <a class="banner-btn" href="{{content.bannerTwo.url}}">{{i18n "my-account:personalDetails.shopAllBtn"}}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{!-- {{> common/wishlist}} --}}
+  {{> common/footer}}
+  {{> common/htmlscripts}}
+</body>
+
+</html>
+<!-- end my-account-personal-details.hbs -->

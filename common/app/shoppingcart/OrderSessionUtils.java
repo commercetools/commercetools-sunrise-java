@@ -16,7 +16,7 @@ public final class OrderSessionUtils {
         return Optional.ofNullable(session.get(LAST_ORDER_ID_SESSION_KEY));
     }
 
-    public static void overwriteLastOrderId(final Order order, final Session session) {
+    public static void overwriteLastOrderIdSessionData(final Order order, final Session session) {
         session.put(LAST_ORDER_ID_SESSION_KEY, order.getId());
     }
 }

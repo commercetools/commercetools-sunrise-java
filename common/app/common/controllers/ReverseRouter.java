@@ -60,6 +60,10 @@ public interface ReverseRouter {
 
     Call processLogOut(final String languageTag);
 
+    Call showMyPersonalDetailsForm(final String languageTag);
+
+    Call processMyPersonalDetailsForm(final String languageTag);
+
     Call showMyOrders(final String languageTag);
 
     Call showMyOrder(final String languageTag, final String orderNumber);

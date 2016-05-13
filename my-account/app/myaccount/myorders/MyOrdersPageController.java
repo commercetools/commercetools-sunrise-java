@@ -1,4 +1,4 @@
-package myaccount.orders;
+package myaccount.myorders;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;

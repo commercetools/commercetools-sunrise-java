@@ -27,6 +27,8 @@ public class TestableReverseRouter implements ReverseRouter {
     private String processLogInFormUrl;
     private String processSignUpFormUrl;
     private String processLogOutUrl;
+    private String showMyPersonalDetailsFormUrl;
+    private String processMyPersonalDetailsFormUrl;
     private String showMyOrdersUrl;
     private String showMyOrderUrl;
 
@@ -124,6 +126,14 @@ public class TestableReverseRouter implements ReverseRouter {
 
     public void setProcessLogOutUrl(final String processLogOutUrl) {
         this.processLogOutUrl = processLogOutUrl;
+    }
+
+    public void setShowMyPersonalDetailsFormUrl(final String showMyPersonalDetailsFormUrl) {
+        this.showMyPersonalDetailsFormUrl = showMyPersonalDetailsFormUrl;
+    }
+
+    public void setProcessMyPersonalDetailsFormUrl(final String processMyPersonalDetailsFormUrl) {
+        this.processMyPersonalDetailsFormUrl = processMyPersonalDetailsFormUrl;
     }
 
     public void setShowMyOrdersUrl(final String showMyOrdersUrl) {
@@ -252,6 +262,16 @@ public class TestableReverseRouter implements ReverseRouter {
     @Override
     public Call processLogOut(final String languageTag) {
         return createCall(processLogOutUrl);
+    }
+
+    @Override
+    public Call showMyPersonalDetailsForm(final String languageTag) {
+        return createCall(showMyPersonalDetailsFormUrl);
+    }
+
+    @Override
+    public Call processMyPersonalDetailsForm(final String languageTag) {
+        return createCall(processMyPersonalDetailsFormUrl);
     }
 
     @Override

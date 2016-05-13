@@ -22,7 +22,7 @@ public final class FutureUtils {
      * @param <T> the element obtained from the list of {@code CompletionStage}
      * @return the {@code CompletionStage} of a list of elements
      */
-    public static <T> CompletionStage<List<T>> listOfFuturesToFutureOfList(final List<CompletionStage<T>> stageList) {
+    public static <T> CompletionStage<List<T>> listOfFuturesToFutureOfList(final List<? extends CompletionStage<T>> stageList) {
         final List<CompletableFuture<T>> futureList = stageList.stream()
                 .map(CompletionStage::toCompletableFuture)
                 .collect(toList());

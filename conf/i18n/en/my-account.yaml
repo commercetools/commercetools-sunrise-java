@@ -63,4 +63,13 @@ myOrder:
     quantity: Quantity
     unitPrice: Price
     totalPrice: Total
-
+myDetails:
+  subscribedToNewsletter: Subscribed to weekly newsletter
+  personalDetailsForm:
+    title: Title
+    firstName: First Name
+    lastName: Last Name
+    phone: Telephone Number
+    email: Email Address
+    password: Password
+    confirmPassword: Confirm Password

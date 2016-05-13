@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AddressFormBean extends Base {
 
-    private TitleFormFieldBean titleFormField;
+    private TitleFormFieldBean salutations;
     private String firstName;
     private String lastName;
     private String streetName;
@@ -32,7 +32,7 @@ public class AddressFormBean extends Base {
     public AddressFormBean(@Nullable final Address address, final List<CountryCode> availableCountries,
                            final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration) {
         if (address != null) {
-            this.titleFormField = new TitleFormFieldBean(address.getTitle(), userContext, i18nResolver, configuration);
+            this.salutations = new TitleFormFieldBean(address.getTitle(), userContext, i18nResolver, configuration);
             this.firstName = address.getFirstName();
             this.lastName = address.getLastName();
             this.streetName = address.getStreetName();
@@ -44,17 +44,17 @@ public class AddressFormBean extends Base {
             this.phone = address.getPhone();
             this.email = address.getEmail();
         } else {
-            this.titleFormField = new TitleFormFieldBean(null, userContext, i18nResolver, configuration);
+            this.salutations = new TitleFormFieldBean(null, userContext, i18nResolver, configuration);
             this.countries = new CountryFormFieldBean(availableCountries, userContext.country(), userContext);
         }
     }
 
     public TitleFormFieldBean getSalutations() {
-        return titleFormField;
+        return salutations;
     }
 
-    public void setSalutations(final TitleFormFieldBean titleFormField) {
-        this.titleFormField = titleFormField;
+    public void setSalutations(final TitleFormFieldBean salutations) {
+        this.salutations = salutations;
     }
 
     public String getFirstName() {

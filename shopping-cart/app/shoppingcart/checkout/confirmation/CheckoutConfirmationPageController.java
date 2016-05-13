@@ -22,8 +22,6 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.CartSessionUtils;
-import shoppingcart.OrderSessionUtils;
 import shoppingcart.common.CartController;
 import shoppingcart.common.StepWidgetBean;
 
@@ -35,6 +33,8 @@ import static common.utils.FormUtils.extractBooleanFormField;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
+import static shoppingcart.CartSessionUtils.removeCartSessionData;
+import static shoppingcart.OrderSessionUtils.overwriteLastOrderIdSessionData;
 
 @Singleton
 public class CheckoutConfirmationPageController extends CartController {
@@ -76,14 +76,18 @@ public class CheckoutConfirmationPageController extends CartController {
     }
 
     protected CompletionStage<Order> createOrder(final Cart cart) {
-        final String orderNumber = RandomStringUtils.randomNumeric(8);
+        final String orderNumber = generateOrderNumber();
         final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, PaymentState.PAID);
         return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
                 .thenApplyAsync(order -> {
-                    OrderSessionUtils.overwriteLastOrderId(order, session());
-                    CartSessionUtils.removeCart(session());
+                    overwriteLastOrderIdSessionData(order, session());
+                    removeCartSessionData(session());
                     return order;
                 }, HttpExecution.defaultContext());
+    }
+
+    protected String generateOrderNumber() {
+        return RandomStringUtils.randomNumeric(8);
     }
 
     protected CompletionStage<Result> handleSuccessfulCreateOrder(final UserContext userContext) {

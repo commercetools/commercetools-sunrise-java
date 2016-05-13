@@ -1,4 +1,4 @@
-package myaccount.orders;
+package myaccount.myorders;
 
 import common.controllers.PageContent;
 
