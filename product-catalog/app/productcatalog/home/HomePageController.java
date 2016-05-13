@@ -77,6 +77,6 @@ public class HomePageController extends ProductCatalogController {
     protected Html renderHomePage(final HomePageContent pageContent, final UserContext userContext) {
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("catalog:home.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("home", pageData, userContext.locales());
+        return templateEngine().renderToHtml("home", pageData, userContext.locales());
     }
 }

@@ -93,7 +93,7 @@ public class ProductDetailPageController extends ProductCatalogController {
                                    final ProductVariant variant, final Set<ProductProjection> suggestions) {
         final ProductDetailPageContent pageContent = createPageContent(userContext, product, variant, suggestions);
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("pdp", pageData, userContext.locales());
+        return templateEngine().renderToHtml("pdp", pageData, userContext.locales());
     }
 
     protected ProductDetailPageContent createPageContent(final UserContext userContext, final ProductProjection product,

@@ -1,33 +1,31 @@
 package common.template.cms;
 
-import java.util.Locale;
-
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Service that provides page content, usually coming from a Content Management System (CMS).
- * It expects a structure that can be accessed as explained below.
- *
- * To find the CMS Page:
- * - {@code pageKey} (e.g. home)
- *
- * To access the CMS Content:
- * - {@code contentType} (e.g. banner)
- * - {@code contentId} (e.g. homeTopLeft)
- *
- * To access the content field:
- * - {@code field} (e.g. subtitle)
+ * Service that provides page content, coming from some sort of Content Management System (CMS).
  */
 @FunctionalInterface
 public interface CmsService {
 
-    /**
-     * Gets the page content corresponding to the given key for some certain languages.
-     * @param locales for the localized text
-     * @param pageKey identifying the page
-     * @return the {@code completionStage} of the page contents identified by the key, in the given language
-     * @throws CmsPageNotFoundException when the page identified by the given key could not be found in the given locale
+     /**
+     * Gets the content corresponding to the given CMS identifier for the first found given language.
+     * @param locales the list of locales used to translate the message
+     * @param cmsIdentifier identifier of the CMS entry field
+     * @return the {@code completionStage} of the content in the first found given language, or absent if it could not be found
      */
-    CompletionStage<CmsPage> getPage(final List<Locale> locales, final String pageKey);
+    CompletionStage<Optional<String>> get(final List<Locale> locales, final CmsIdentifier cmsIdentifier);
+
+    /**
+     * Gets the content corresponding to the given CMS identifier for the first found given language.
+     * @param locales the list of locales used to translate the message
+     * @param cmsIdentifier identifier of the CMS content
+     * @return the {@code completionStage} of the content in the first found given language, or empty string if it could not be found
+     */
+    default CompletionStage<String> getOrEmpty(final List<Locale> locales, final CmsIdentifier cmsIdentifier) {
+        return get(locales, cmsIdentifier).thenApply(content -> content.orElse(""));
+    }
 }

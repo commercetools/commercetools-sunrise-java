@@ -112,11 +112,11 @@ public class MyOrdersPageController extends MyAccountController {
 
     protected Html renderMyOrdersPage(final MyOrdersPageContent pageContent, final UserContext userContext) {
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("my-account-my-orders", pageData, userContext.locales());
+        return templateEngine().renderToHtml("my-account-my-orders", pageData, userContext.locales());
     }
 
     protected Html renderMyOrderPage(final MyOrderPageContent pageContent, final UserContext userContext) {
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("my-account-my-orders-order", pageData, userContext.locales());
+        return templateEngine().renderToHtml("my-account-my-orders-order", pageData, userContext.locales());
     }
 }

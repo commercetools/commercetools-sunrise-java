@@ -7,24 +7,29 @@ import static org.apache.commons.lang3.StringUtils.split;
 
 /**
  * i18n Identifier, consisting of the message key and the bundle.
+ *
+ * - {@code bundle}: usually represents a module (e.g. catalog)
+ * - {@code messageKey}: can contain multiple path elements (e.g. pagination.next)
+ *
  * @see I18nIdentifier
  */
 public class I18nIdentifier extends Base {
+
     private static final String DEFAULT_BUNDLE = "main";
     private final String bundle;
-    private final String key;
+    private final String messageKey;
 
-    private I18nIdentifier(final String bundle, final String key) {
+    private I18nIdentifier(final String bundle, final String messageKey) {
         this.bundle = bundle;
-        this.key = key;
+        this.messageKey = messageKey;
     }
 
     public String getBundle() {
         return bundle;
     }
 
-    public String getKey() {
-        return key;
+    public String getMessageKey() {
+        return messageKey;
     }
 
     /**

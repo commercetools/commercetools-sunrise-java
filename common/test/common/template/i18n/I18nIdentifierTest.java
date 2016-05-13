@@ -10,13 +10,13 @@ public class I18nIdentifierTest {
     public void parsesIdentifier() throws Exception {
         final I18nIdentifier identifier = I18nIdentifier.of("bundle:message.key");
         assertThat(identifier.getBundle()).isEqualTo("bundle");
-        assertThat(identifier.getKey()).isEqualTo("message.key");
+        assertThat(identifier.getMessageKey()).isEqualTo("message.key");
     }
 
     @Test
     public void parsesIdentifierWithoutBundle() throws Exception {
         final I18nIdentifier identifier = I18nIdentifier.of("message.key");
         assertThat(identifier.getBundle()).isEqualTo("main");
-        assertThat(identifier.getKey()).isEqualTo("message.key");
+        assertThat(identifier.getMessageKey()).isEqualTo("message.key");
     }
 }

@@ -58,8 +58,8 @@ public abstract class SunriseController extends ShopController {
         return controllerDependency.categoryTree();
     }
 
-    protected TemplateEngine templateService() {
-        return controllerDependency.templateService();
+    protected TemplateEngine templateEngine() {
+        return controllerDependency.templateEngine();
     }
 
     protected final CmsService cmsService() {

@@ -172,6 +172,6 @@ public class CheckoutAddressPageController extends CartController {
         pageContent.setCart(createCartLikeBean(cart, userContext));
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateService().renderToHtml("checkout-address", pageData, userContext.locales());
+        return templateEngine().renderToHtml("checkout-address", pageData, userContext.locales());
     }
 }

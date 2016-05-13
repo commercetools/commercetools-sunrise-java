@@ -18,7 +18,7 @@ class CmsServiceProvider implements Provider<CmsService> {
 
     @Override
     public CmsService get() {
-        Logger.info("Provide LocalCmsService");
+        Logger.info("Provide FileBasedCmsService");
         return FileBasedCmsService.of(i18nResolver);
     }
 }

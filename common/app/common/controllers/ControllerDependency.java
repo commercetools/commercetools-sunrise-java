@@ -1,9 +1,9 @@
 package common.controllers;
 
-import common.template.cms.CmsService;
 import common.contexts.ProjectContext;
-import common.template.i18n.I18nResolver;
+import common.template.cms.CmsService;
 import common.template.engine.TemplateEngine;
+import common.template.i18n.I18nResolver;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Base;
@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class ControllerDependency extends Base {
+
     private final SphereClient sphere;
     private final CategoryTree categoryTree;
     private final ProjectContext projectContext;
@@ -49,7 +50,7 @@ public class ControllerDependency extends Base {
         return projectContext;
     }
 
-    public TemplateEngine templateService() {
+    public TemplateEngine templateEngine() {
         return templateEngine;
     }
 

@@ -1,5 +1,6 @@
-package common.template.i18n;
+package common.template.i18n.yaml;
 
+import common.template.i18n.I18nIdentifier;
 import org.junit.Test;
 
 import java.util.*;

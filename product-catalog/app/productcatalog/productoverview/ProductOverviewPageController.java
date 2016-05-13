@@ -139,7 +139,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     protected Html renderPage(final UserContext userContext, final ProductOverviewPageContent content) {
         final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
-        return templateService().renderToHtml("pop", pageData, userContext.locales());
+        return templateEngine().renderToHtml("pop", pageData, userContext.locales());
     }
 
     protected static BannerBean createBanner(final Category category, final UserContext userContext) {
