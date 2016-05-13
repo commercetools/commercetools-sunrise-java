@@ -23,6 +23,29 @@ $("form#form-filter-products .facet-clear-btn, form#form-filter-products-mobile 
     input.closest("form").submit();
 });
 
+// Initializes editable data
+function openForm(formClassName) {
+    $("." + formClassName + "-hide").hide();
+    $("." + formClassName + "-show").show();
+}
+
+function closeForm(formClassName) {
+    $("." + formClassName + "-hide").show();
+    $("." + formClassName + "-show").hide();
+}
+
+function initializeEditableData(formClassName) {
+   var formWrapper = $(formClassName);
+   if (formWrapper.hasClass("in")) {
+       openForm(formClassName);
+   } else {
+       closeForm(formClassName);
+   }
+   $("." + formClassName + "-show-btn").click(function(){ openForm(formClassName); });
+   $("." + formClassName + "-hide-btn").click(function(){ closeForm(formClassName); });
+}
+
+initializeEditableData("personal-details-edit");
 
 //$("img.pop-product-image").error(function(){
 //    $(this).attr('src', '/assets/public/images/empty-pop.jpg');

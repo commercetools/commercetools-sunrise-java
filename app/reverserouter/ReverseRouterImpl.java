@@ -14,7 +14,8 @@ import static shoppingcart.checkout.payment.routes.*;
 import static shoppingcart.checkout.shipping.routes.*;
 import static shoppingcart.checkout.thankyou.routes.*;
 import static myaccount.login.routes.*;
-import static myaccount.orders.routes.*;
+import static myaccount.mydetails.routes.*;
+import static myaccount.myorders.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
 
@@ -139,6 +140,16 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     @Override
     public Call processLogOut(final String languageTag) {
         return LogInPageController.processLogOut(languageTag);
+    }
+
+    @Override
+    public Call showMyPersonalDetailsForm(final String languageTag) {
+        return MyPersonalDetailsPageController.show(languageTag);
+    }
+
+    @Override
+    public Call processMyPersonalDetailsForm(final String languageTag) {
+        return MyPersonalDetailsPageController.process(languageTag);
     }
 
     @Override

@@ -12,7 +12,7 @@ import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
 import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
-import myaccount.CustomerSessionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
@@ -34,7 +34,9 @@ import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
+import static myaccount.CustomerSessionUtils.removeCustomerSessionData;
 import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
+import static shoppingcart.CartSessionUtils.removeCartSessionData;
 
 /**
  * Allows to log in as a customer.
@@ -80,15 +82,16 @@ public class LogInPageController extends SunriseController {
         if (signUpForm.hasErrors()) {
             return handleSignUpFormErrors(signUpForm, userContext);
         } else {
-            return signUp(signUpForm.get())
-                    .thenComposeAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext())
-                    .exceptionally(throwable -> handleExistingCustomerError(throwable, signUpForm, userContext).toCompletableFuture().join());  // TODO move to async
+            final CompletionStage<Result> resultStage = signUp(signUpForm.get())
+                    .thenComposeAsync(signInResult -> handleSuccessfulSignIn(signInResult, userContext), HttpExecution.defaultContext());
+            return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                    handleExistingCustomerError(throwable, signUpForm, userContext));
         }
     }
 
     public CompletionStage<Result> processLogOut(final String languageTag) {
-        CustomerSessionUtils.removeCustomer(session());
-        CartSessionUtils.removeCart(session());
+        removeCustomerSessionData(session());
+        removeCartSessionData(session());
         final Call call = reverseRouter().showHome(languageTag);
         return completedFuture(redirect(call));
     }
@@ -101,7 +104,9 @@ public class LogInPageController extends SunriseController {
 
     protected CompletionStage<CustomerSignInResult> signUp(final SignUpFormData formData) {
         final String anonymousCartId = CartSessionUtils.getCartId(session()).orElse(null);
+        final String customerNumber = generateCustomerNumber();
         final CustomerDraft customerDraft = CustomerDraftBuilder.of(formData.getEmail(), formData.getPassword())
+                .customerNumber(customerNumber)
                 .title(formData.getTitle())
                 .firstName(formData.getFirstName())
                 .lastName(formData.getLastName())
@@ -109,6 +114,10 @@ public class LogInPageController extends SunriseController {
                 .build();
         final CustomerCreateCommand customerCreateCommand = CustomerCreateCommand.of(customerDraft);
         return sphere().execute(customerCreateCommand);
+    }
+
+    protected String generateCustomerNumber() {
+        return RandomStringUtils.randomNumeric(6);
     }
 
     protected CompletionStage<Result> handleSuccessfulSignIn(final CustomerSignInResult result, final UserContext userContext) {

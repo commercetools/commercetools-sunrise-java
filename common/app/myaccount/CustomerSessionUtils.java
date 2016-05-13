@@ -49,11 +49,11 @@ public final class CustomerSessionUtils {
             session.put(CUSTOMER_EMAIL_SESSION_KEY, email);
             Logger.debug("Saved customer in session: ID {}, name {}, email {}", id, name, email);
         } else {
-            removeCustomer(session);
+            removeCustomerSessionData(session);
         }
     }
 
-    public static void removeCustomer(final Session session) {
+    public static void removeCustomerSessionData(final Session session) {
         session.remove(CUSTOMER_ID_SESSION_KEY);
         session.remove(CUSTOMER_NAME_SESSION_KEY);
         session.remove(CUSTOMER_EMAIL_SESSION_KEY);
