@@ -44,7 +44,7 @@ public final class FileBasedCmsService implements CmsService {
      * @return the message key mapped to the entry key and field
      */
     private String messageKey(final CmsIdentifier cmsIdentifier) {
-        return cmsIdentifier.getEntryKey() + "." + cmsIdentifier.getField();
+        return cmsIdentifier.getEntryKey() + "." + cmsIdentifier.getFieldName();
     }
 
     public static FileBasedCmsService of(final I18nResolver i18nResolver) {

@@ -10,7 +10,7 @@ import static org.apache.commons.lang3.StringUtils.split;
  *
  * - {@code entryType}: type of entry which usually defines the fields it can contain (e.g. banner)
  * - {@code entryKey}: key that identifies the particular entry (e.g. homeTopLeft)
- * - {@code field}: can contain multiple path elements (e.g. subtitle.text)
+ * - {@code fieldName}: can contain multiple path elements (e.g. subtitle.text)
  *
  * @see CmsService
  */
@@ -18,12 +18,12 @@ public final class CmsIdentifier extends Base {
 
     private final String entryType;
     private final String entryKey;
-    private final String field;
+    private final String fieldName;
 
-    private CmsIdentifier(final String entryType, final String entryKey, final String field) {
+    private CmsIdentifier(final String entryType, final String entryKey, final String fieldName) {
         this.entryType = entryType;
         this.entryKey = entryKey;
-        this.field = field;
+        this.fieldName = fieldName;
     }
 
     public String getEntryType() {
@@ -34,13 +34,13 @@ public final class CmsIdentifier extends Base {
         return entryKey;
     }
 
-    public String getField() {
-        return field;
+    public String getFieldName() {
+        return fieldName;
     }
 
     /**
      * Creates a CMS Identifier, consisting of the field name and the entry type and key.
-     * @param entryWithField of the form {@code entryType:entryKey.field}
+     * @param entryWithField of the form {@code entryType:entryKey.fieldName}
      * @return the CMS Identifier for the given input
      */
     public static CmsIdentifier of(final String entryWithField) {
@@ -55,7 +55,7 @@ public final class CmsIdentifier extends Base {
         return ofEntryTypeAndKeyAndField(contentType, contentId, field);
     }
 
-    public static CmsIdentifier ofEntryTypeAndKeyAndField(final String entryType, final String entryKey, final String field) {
-        return new CmsIdentifier(entryType, entryKey, field);
+    public static CmsIdentifier ofEntryTypeAndKeyAndField(final String entryType, final String entryKey, final String fieldName) {
+        return new CmsIdentifier(entryType, entryKey, fieldName);
     }
 }
