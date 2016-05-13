@@ -24,28 +24,28 @@ $("form#form-filter-products .facet-clear-btn, form#form-filter-products-mobile 
 });
 
 // Initializes editable data
-function openForm(formName) {
-    $(formName + "-hide").hide();
-    $(formName + "-show").show();
+function openForm(formClassName) {
+    $("." + formClassName + "-hide").hide();
+    $("." + formClassName + "-show").show();
 }
 
-function closeForm(formName) {
-    $(formName + "-hide").show();
-    $(formName + "-show").hide();
+function closeForm(formClassName) {
+    $("." + formClassName + "-hide").show();
+    $("." + formClassName + "-show").hide();
 }
 
-function initializeEditableData(formName) {
-   var formWrapper = $(formName);
+function initializeEditableData(formClassName) {
+   var formWrapper = $(formClassName);
    if (formWrapper.hasClass("in")) {
-       openForm(formName);
+       openForm(formClassName);
    } else {
-       closeForm(formName);
+       closeForm(formClassName);
    }
-   $(formName + "-show-btn").click(function(){ openForm(formName); });
-   $(formName + "-hide-btn").click(function(){ closeForm(formName); });
+   $("." + formClassName + "-show-btn").click(function(){ openForm(formClassName); });
+   $("." + formClassName + "-hide-btn").click(function(){ closeForm(formClassName); });
 }
 
-initializeEditableData(".personal-details-edit");
+initializeEditableData("personal-details-edit");
 
 //$("img.pop-product-image").error(function(){
 //    $(this).attr('src', '/assets/public/images/empty-pop.jpg');
