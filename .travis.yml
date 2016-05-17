@@ -17,14 +17,6 @@ jdk:
 env:
   matrix:
   - SBT_OPTS="-XX:PermSize=512M -XX:MaxPermSize=1024M"
-  global:
-  - secure: ImgB/rQbpWPHfRUbUtmVXfiXTgJvIlq1fzeX0KImZ83khxrRndCWiWiEjawezWPsgnoBbXzJ0jjppr5MBoM9EJkDm5S6RT3E88oFjsTsQqGM9gUdwqjHgkr3lQw7PhpbtgeP7zmRLuOdNYuvDp6ScZlkMvE3AamSIZt79ZoekNc=
-  - secure: B9qTzUYzP2+iuaQZbshCGsGNjz6ZFx/t//u8XrNzvL51gYFE1ah19qJcU4oYvCGKRzE2u5LzUH/bJPmfpFNihnA203KWFKxPUtTwbeSpuIrIuf3QZnOjq1u00Vs17LGnVzR+ylNYdOauuUkNb912dd7sbrV8FzyhmklWq28u3qA=
-  - secure: WwqJEpNqYyAhDAWNH/t8PaRZb8nqE2vCyqtRMfrrTN+/xVvzb8LAc4ePKPlPD1Ry1O58BbGz5PziuZn4As33dCF2rRE2BgwwGmBwrI2sY4wSYRzMvPfKgR2ymJhIilUNLNlmHC5r11PpQdxIMbnYDMOdYlWEINl2+APqwI0Q8fc=
-  - SUNRISE_CTP_PROJECT_KEY="dummysetting"
-  - SUNRISE_CTP_CLIENT_SECRET="dummysetting"
-  - SUNRISE_CTP_CLIENT_ID="dummysetting"
-  - secure: ocKHAWZJhmxs6tqMXtRf5mtbo671DHll91nzk2yl+bFMvhxHt5/7Y50ReLhq8Y/gXBfwA/qBAQg/ql8/q6jElg4/5T1mUdK2U153kf7FaVhDEF5ZtFbfGl+LugZAwrNGSM1+18C0ctIq87P04NU9GKY+06ZLEi95v0SS7JaRJPg=
 notifications:
   email:
     on_success: never
