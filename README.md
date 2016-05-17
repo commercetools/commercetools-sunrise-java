@@ -52,7 +52,7 @@ For an easy and fast deployment of your application we recommend [heroku](https:
 You can also use a ready-to-run docker container.
 
 ```bash
-$ docker run -it --rm -p 9000:9000 sphereio/sunrise
+$ docker run -it --rm -p 9000:9000 -e CTP_PROJECT_KEY=YOUR_PROJECT_KEY -e CTP_CLIENT_ID=YOUR_CLIENT_ID -e CTP_CLIENT_SECRET=YOUR_CLIENT_SECRET -e APPLICATION_SECRET=YOUR_PLAY_APPLICATION_SECRET sphereio/sunrise
 ```
 
 ## Related projects
