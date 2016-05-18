@@ -156,13 +156,13 @@ public abstract class SunriseController extends ShopController {
         return projectContext.isLocaleAccepted(locale) ? locale : projectContext.defaultLocale();
     }
 
-    private static CountryCode currentCountry(final Http.Session session, final ProjectContext projectContext) {
+    public static CountryCode currentCountry(final Http.Session session, final ProjectContext projectContext) {
         final String countryCodeInSession = session.get(SESSION_COUNTRY);
         final CountryCode country = CountryCode.getByCode(countryCodeInSession, false);
         return projectContext.isCountryAccepted(country) ? country : projectContext.defaultCountry();
     }
 
-    private static CurrencyUnit currentCurrency(final CountryCode currentCountry, final ProjectContext projectContext) {
+    public static CurrencyUnit currentCurrency(final CountryCode currentCountry, final ProjectContext projectContext) {
         return Optional.ofNullable(currentCountry.getCurrency())
                 .map(countryCurrency -> {
                     final CurrencyUnit currency = Monetary.getCurrency(countryCurrency.getCurrencyCode());
@@ -170,7 +170,7 @@ public abstract class SunriseController extends ShopController {
                 }).orElseGet(projectContext::defaultCurrency);
     }
 
-    private static List<Locale> acceptedLocales(final String languageTag, final Http.Request request,
+    public static List<Locale> acceptedLocales(final String languageTag, final Http.Request request,
                                                 final ProjectContext projectContext) {
         final ArrayList<Locale> acceptedLocales = new ArrayList<>();
         acceptedLocales.add(currentLocale(languageTag, projectContext));

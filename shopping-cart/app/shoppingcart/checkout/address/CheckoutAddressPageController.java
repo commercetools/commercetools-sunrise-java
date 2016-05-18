@@ -4,6 +4,7 @@ import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
+import common.inject.HttpContextScoped;
 import common.models.ProductDataConfig;
 import common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
@@ -29,7 +30,6 @@ import shoppingcart.common.StepWidgetBean;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,11 +41,13 @@ import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-@Singleton
+@HttpContextScoped
 public class CheckoutAddressPageController extends CartController {
 
     protected final Form<CheckoutShippingAddressFormData> shippingAddressUnboundForm;
     protected final Form<CheckoutBillingAddressFormData> billingAddressUnboundForm;
+    @Inject
+    protected UserContext userContext;
 
     @Inject
     public CheckoutAddressPageController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig,
@@ -57,7 +59,6 @@ public class CheckoutAddressPageController extends CartController {
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        final UserContext userContext = userContext(languageTag);
         return getOrCreateCart(userContext, session())
                 .thenApplyAsync(cart -> {
                     final CheckoutAddressPageContent pageContent = createPageContent(cart, userContext);
@@ -67,7 +68,6 @@ public class CheckoutAddressPageController extends CartController {
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
-        final UserContext userContext = userContext(languageTag);
         final Form<CheckoutShippingAddressFormData> shippingAddressForm = shippingAddressUnboundForm.bindFromRequest();
         final Form<CheckoutBillingAddressFormData> billingAddressForm = billingAddressUnboundForm.bindFromRequest();
         return getOrCreateCart(userContext, session())
