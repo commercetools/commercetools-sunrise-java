@@ -1,7 +1,7 @@
 {
   "name": "Sunrise Java",
   "description": "Create your own webshop in minutes with commercetools and our template 'Sunrise' for Java",
-  "repository": "https://github.com/sphereio/commercetools-sunrise-java",
+  "repository": "https://github.com/commercetools/commercetools-sunrise-java",
   "logo": "http://www.commercetools.com/assets/img/ct_logo_farbe.gif",
   "keywords": ["commercetools", "ecommerce", "shopping"],
   "env": {
