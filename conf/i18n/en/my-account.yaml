@@ -73,3 +73,6 @@ myDetails:
     email: Email Address
     password: Password
     confirmPassword: Confirm Password
+addressBook:
+  title: Address Book
+
