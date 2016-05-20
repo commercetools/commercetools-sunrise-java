@@ -1,10 +1,12 @@
 package shoppingcart.checkout.address;
 
+import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import common.inject.HttpContextScoped;
 import common.template.i18n.I18nIdentifier;
+import common.template.i18n.I18nResolver;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
@@ -14,6 +16,7 @@ import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
+import play.Configuration;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
@@ -58,7 +61,7 @@ public class CheckoutAddressPageController extends SunriseFrameworkCartControlle
     }
 
     private Result showCheckoutAddressPage(final Cart cart) {
-        final CheckoutAddressPageContent pageContent = createPageContent(cart, userContext());
+        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.create(cart);
         return ok(renderCheckoutAddressPage(cart, pageContent, userContext()));
     }
 
@@ -135,13 +138,39 @@ public class CheckoutAddressPageController extends SunriseFrameworkCartControlle
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
-    protected CheckoutAddressPageContent createPageContent(final Cart cart, final UserContext userContext) {
-        final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
-        final Address shippingAddress = cart.getShippingAddress();
-        final Address billingAddress = cart.getBillingAddress();
-        final boolean differentBillingAddress = billingAddress != null;
-        pageContent.setAddressForm(new CheckoutAddressFormBean(shippingAddress, billingAddress, differentBillingAddress, userContext, projectContext(), i18nResolver(), configuration()));
-        return pageContent;
+    @Inject
+    protected CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
+
+    public static class CheckoutAddressPageContentFactory {
+        @Inject
+        private CheckoutAddressFormBeanFactory formBeanFactory;
+
+        public CheckoutAddressPageContent create(final Cart cart) {
+            final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
+            pageContent.setAddressForm(formBeanFactory.create(cart));
+            return pageContent;
+        }
+    }
+
+    public static class CheckoutAddressFormBeanFactory extends SunriseDataBeanFactory {
+        public CheckoutAddressFormBean create(final Cart cart) {
+            final CheckoutAddressFormBean bean = new CheckoutAddressFormBean();
+            bean.setShippingAddress(CheckoutAddressFormBean.createShippingAddressFormBean(cart.getShippingAddress(), userContext, i18nResolver, configuration));
+            bean.setBillingAddress(CheckoutAddressFormBean.createBillingAddressFormBean(cart.getBillingAddress(), userContext, projectContext, i18nResolver, configuration));
+            bean.setBillingAddressDifferentToBillingAddress(cart.getBillingAddress() != null);
+            return bean;
+        }
+    }
+
+    public static abstract class SunriseDataBeanFactory {
+        @Inject
+        protected UserContext userContext;
+        @Inject
+        protected ProjectContext projectContext;
+        @Inject
+        protected I18nResolver i18nResolver;
+        @Inject
+        protected Configuration configuration;
     }
 
     protected CheckoutAddressPageContent createPageContentWithAddressError(final Form<CheckoutShippingAddressFormData> shippingAddressForm,

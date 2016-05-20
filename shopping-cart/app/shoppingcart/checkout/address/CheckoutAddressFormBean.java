@@ -5,11 +5,9 @@ import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.errors.ErrorsBean;
 import common.template.i18n.I18nResolver;
-import common.utils.FormUtils;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
-import play.data.Form;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -22,6 +20,9 @@ public class CheckoutAddressFormBean extends Base {
     private AddressFormBean shippingAddress;
     private AddressFormBean billingAddress;
     private ErrorsBean errors;
+
+    public CheckoutAddressFormBean() {
+    }
 
     public CheckoutAddressFormBean(final @Nullable Address shippingAddress, final @Nullable Address billingAddress,
                                    final boolean differentBillingAddress, final UserContext userContext,
@@ -67,14 +68,14 @@ public class CheckoutAddressFormBean extends Base {
         return projectContext.countries();
     }
 
-    private static AddressFormBean createShippingAddressFormBean(final @Nullable Address shippingAddress,
+    public static AddressFormBean createShippingAddressFormBean(final @Nullable Address shippingAddress,
                                                                  final UserContext userContext, final I18nResolver i18nResolver,
                                                                  final Configuration configuration) {
         final List<CountryCode> shippingCountries = singletonList(userContext.country());
         return new AddressFormBean(shippingAddress, shippingCountries, userContext, i18nResolver, configuration);
     }
 
-    private static AddressFormBean createBillingAddressFormBean(final @Nullable Address billingAddress,
+    public static AddressFormBean createBillingAddressFormBean(final @Nullable Address billingAddress,
                                                                 final UserContext userContext, final ProjectContext projectContext,
                                                                 final I18nResolver i18nResolver, final Configuration configuration) {
         final List<CountryCode> billingCountries = projectContext.countries();
