@@ -68,6 +68,7 @@ public class CheckoutAddressFormBean extends Base {
         return projectContext.countries();
     }
 
+    @Deprecated
     public static AddressFormBean createShippingAddressFormBean(final @Nullable Address shippingAddress,
                                                                  final UserContext userContext, final I18nResolver i18nResolver,
                                                                  final Configuration configuration) {
@@ -75,6 +76,7 @@ public class CheckoutAddressFormBean extends Base {
         return new AddressFormBean(shippingAddress, shippingCountries, userContext, i18nResolver, configuration);
     }
 
+    @Deprecated
     public static AddressFormBean createBillingAddressFormBean(final @Nullable Address billingAddress,
                                                                 final UserContext userContext, final ProjectContext projectContext,
                                                                 final I18nResolver i18nResolver, final Configuration configuration) {

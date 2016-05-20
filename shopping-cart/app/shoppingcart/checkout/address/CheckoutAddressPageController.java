@@ -1,5 +1,6 @@
 package shoppingcart.checkout.address;
 
+import com.neovisionaries.i18n.CountryCode;
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.controllers.SunrisePageData;
@@ -40,6 +41,7 @@ import static common.utils.FormUtils.extractAddress;
 import static common.utils.FormUtils.extractBooleanFormField;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
+import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @HttpContextScoped
@@ -153,12 +155,27 @@ public class CheckoutAddressPageController extends SunriseFrameworkCartControlle
     }
 
     public static class CheckoutAddressFormBeanFactory extends SunriseDataBeanFactory {
+        @Inject
+        private AddressFormBeanFactory addressFormBeanFactory;
+
         public CheckoutAddressFormBean create(final Cart cart) {
             final CheckoutAddressFormBean bean = new CheckoutAddressFormBean();
-            bean.setShippingAddress(CheckoutAddressFormBean.createShippingAddressFormBean(cart.getShippingAddress(), userContext, i18nResolver, configuration));
-            bean.setBillingAddress(CheckoutAddressFormBean.createBillingAddressFormBean(cart.getBillingAddress(), userContext, projectContext, i18nResolver, configuration));
+            bean.setShippingAddress(addressFormBeanFactory.createShippingAddressFormBean(cart.getShippingAddress()));
+            bean.setBillingAddress(addressFormBeanFactory.createBillingAddressFormBean(cart.getBillingAddress()));
             bean.setBillingAddressDifferentToBillingAddress(cart.getBillingAddress() != null);
             return bean;
+        }
+    }
+
+    public static class AddressFormBeanFactory extends SunriseDataBeanFactory {
+        public AddressFormBean createShippingAddressFormBean(final @Nullable Address shippingAddress) {
+            final List<CountryCode> shippingCountries = singletonList(userContext.country());
+            return new AddressFormBean(shippingAddress, shippingCountries, userContext, i18nResolver, configuration);
+        }
+
+        public AddressFormBean createBillingAddressFormBean(final @Nullable Address billingAddress) {
+            final List<CountryCode> billingCountries = projectContext.countries();
+            return new AddressFormBean(billingAddress, billingCountries, userContext, i18nResolver, configuration);
         }
     }
 
