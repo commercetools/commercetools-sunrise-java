@@ -122,7 +122,13 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().processSignUpForm(language), "signUpSubmit")
                 .addHalLink(reverseRouter().processLogOut(language), "logOut")
 
+                .addHalLink(reverseRouter().showMyPersonalDetails(language), "myPersonalDetails", "myAccount")
                 .addHalLink(reverseRouter().processMyPersonalDetailsForm(language), "editMyPersonalDetails")
+                .addHalLink(reverseRouter().showMyAddressBook(language), "myAddressBook")
+                .addHalLink(reverseRouter().processAddAddressToMyAddressBookForm(language), "addAddressToMyAddressBook")
+                .addHalLink(reverseRouter().processChangeAddressInMyAddressBookForm(language), "changeAddressInMyAddressBook")
+                .addHalLink(reverseRouter().processRemoveAddressFromMyAddressBookForm(language), "removeAddressFromMyAddressBook")
+                .addHalLink(reverseRouter().showMyOrders(language), "myOrders")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         newCategory().flatMap(nc -> reverseRouter().showCategory(userContext.locale(), nc))

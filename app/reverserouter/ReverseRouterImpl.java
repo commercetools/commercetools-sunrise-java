@@ -16,6 +16,7 @@ import static shoppingcart.checkout.thankyou.routes.*;
 import static myaccount.login.routes.*;
 import static myaccount.mydetails.routes.*;
 import static myaccount.myorders.routes.*;
+import static myaccount.myaddressbook.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
 
@@ -143,13 +144,33 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     }
 
     @Override
-    public Call showMyPersonalDetailsForm(final String languageTag) {
+    public Call showMyPersonalDetails(final String languageTag) {
         return MyPersonalDetailsPageController.show(languageTag);
     }
 
     @Override
     public Call processMyPersonalDetailsForm(final String languageTag) {
         return MyPersonalDetailsPageController.process(languageTag);
+    }
+
+    @Override
+    public Call showMyAddressBook(final String languageTag) {
+        return MyAddressBookPageController.show(languageTag);
+    }
+
+    @Override
+    public Call processAddAddressToMyAddressBookForm(final String languageTag) {
+        return MyAddressBookPageController.processAddAddress(languageTag);
+    }
+
+    @Override
+    public Call processChangeAddressInMyAddressBookForm(final String languageTag) {
+        return MyAddressBookPageController.processChangeAddress(languageTag);
+    }
+
+    @Override
+    public Call processRemoveAddressFromMyAddressBookForm(final String languageTag) {
+        return MyAddressBookPageController.processRemoveAddress(languageTag);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package myaccount.addressbook;
+package myaccount.myaddressbook;
 
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;
@@ -6,9 +6,12 @@ import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-public class AddAddressFormData extends Base {
+public class ChangeAddressFormData extends Base {
 
     private String csrfToken;
+
+    @Constraints.Required
+    private String addressId;
 
     private String title;
     @Constraints.Required
@@ -43,6 +46,14 @@ public class AddAddressFormData extends Base {
 
     public void setCsrfToken(final String csrfToken) {
         this.csrfToken = csrfToken;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(final String addressId) {
+        this.addressId = addressId;
     }
 
     public String getTitle() {

@@ -1,4 +1,4 @@
-package myaccount.addressbook;
+package myaccount.myaddressbook;
 
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
