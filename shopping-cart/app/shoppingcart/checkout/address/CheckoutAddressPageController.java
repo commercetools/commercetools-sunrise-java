@@ -55,18 +55,20 @@ public class CheckoutAddressPageController extends SunriseFrameworkCartControlle
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return getOrCreateCart(userContext, session())
-                .thenApplyAsync(cart -> {
-                    final CheckoutAddressPageContent pageContent = createPageContent(cart, userContext);
-                    return ok(renderCheckoutAddressPage(cart, pageContent, userContext));
-                }, HttpExecution.defaultContext());
+        return getOrCreateCart()
+                .thenApplyAsync(this::showCheckoutAddressPage, HttpExecution.defaultContext());
+    }
+
+    private Result showCheckoutAddressPage(final Cart cart) {
+        final CheckoutAddressPageContent pageContent = createPageContent(cart, userContext);
+        return ok(renderCheckoutAddressPage(cart, pageContent, userContext));
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         final Form<CheckoutShippingAddressFormData> shippingAddressForm = shippingAddressUnboundForm.bindFromRequest();
         final Form<CheckoutBillingAddressFormData> billingAddressForm = billingAddressUnboundForm.bindFromRequest();
-        return getOrCreateCart(userContext, session())
+        return getOrCreateCart()
                 .thenComposeAsync(cart -> {
                     if (formHasErrors(shippingAddressForm, billingAddressForm)) {
                         return handleFormErrors(shippingAddressForm, billingAddressForm, cart, userContext);

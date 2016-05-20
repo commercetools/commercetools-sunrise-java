@@ -37,6 +37,8 @@ public abstract class SunriseFrameworkController extends Controller {
     @Inject
     private SphereClient sphere;
     @Inject
+    private UserContext userContext;
+    @Inject
     private CategoryTree categoryTree;
     @Inject
     private ProjectContext projectContext;
@@ -203,5 +205,9 @@ public abstract class SunriseFrameworkController extends Controller {
     @Nullable
     private static String getCsrfToken(final Http.Session session) {
         return session.get("csrfToken");
+    }
+
+    public UserContext userContext() {
+        return userContext;
     }
 }
