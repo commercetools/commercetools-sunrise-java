@@ -1,4 +1,4 @@
-package myaccount.addressbook;
+package myaccount.myaddressbook;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
@@ -34,7 +34,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 
 @Singleton
-public class AddressBookPageController extends MyAccountController {
+public class MyAddressBookPageController extends MyAccountController {
 
     protected final ProductDataConfig productDataConfig;
     protected final Form<AddAddressFormData> addAddressUnboundForm;
@@ -42,8 +42,8 @@ public class AddressBookPageController extends MyAccountController {
     protected final Form<RemoveAddressFormData> removeAddressUnboundForm;
 
     @Inject
-    public AddressBookPageController(final ControllerDependency controllerDependency,
-                                     final ProductDataConfig productDataConfig, final FormFactory formFactory) {
+    public MyAddressBookPageController(final ControllerDependency controllerDependency,
+                                       final ProductDataConfig productDataConfig, final FormFactory formFactory) {
         super(controllerDependency);
         this.productDataConfig = productDataConfig;
         this.addAddressUnboundForm = formFactory.form(AddAddressFormData.class);
@@ -141,35 +141,35 @@ public class AddressBookPageController extends MyAccountController {
     }
 
     protected CompletionStage<Result> handleFoundCustomer(final Customer customer, final UserContext userContext) {
-        final AddressBookPageContent pageContent = createAddressBookPage(customer, userContext);
-        return completedFuture(ok(renderAddressBookPage(pageContent, userContext)));
+        final MyAddressBookPageContent pageContent = createMyAddressBookPage(customer, userContext);
+        return completedFuture(ok(renderMyAddressBookPage(pageContent, userContext)));
     }
 
     protected CompletionStage<Result> handleSuccessfulCustomerUpdate(final Customer customer, final UserContext userContext) {
         overwriteCustomerSessionData(customer, session());
-        final AddressBookPageContent pageContent = createAddressBookPage(customer, userContext);
-        return completedFuture(ok(renderAddressBookPage(pageContent, userContext)));
+        final MyAddressBookPageContent pageContent = createMyAddressBookPage(customer, userContext);
+        return completedFuture(ok(renderMyAddressBookPage(pageContent, userContext)));
     }
 
     protected CompletionStage<Result> handleAddAddressFormErrors(final Form<AddAddressFormData> addAddressForm,
                                                                  final Customer customer, final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean(addAddressForm);
-        final AddressBookPageContent pageContent = createAddressBookPageWithAddAddressError(addAddressForm, errors, customer, userContext);
-        return completedFuture(badRequest(renderAddressBookPage(pageContent, userContext)));
+        final MyAddressBookPageContent pageContent = createMyAddressBookPageWithAddAddressError(addAddressForm, errors, customer, userContext);
+        return completedFuture(badRequest(renderMyAddressBookPage(pageContent, userContext)));
     }
 
     protected CompletionStage<Result> handleChangeAddressFormErrors(final Form<ChangeAddressFormData> changeAddressForm,
                                                                     final Customer customer, final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean(changeAddressForm);
-        final AddressBookPageContent pageContent = createAddressBookPageWithChangeAddressError(changeAddressForm, errors, customer, userContext);
-        return completedFuture(badRequest(renderAddressBookPage(pageContent, userContext)));
+        final MyAddressBookPageContent pageContent = createMyAddressBookPageWithChangeAddressError(changeAddressForm, errors, customer, userContext);
+        return completedFuture(badRequest(renderMyAddressBookPage(pageContent, userContext)));
     }
 
     protected CompletionStage<Result> handleRemoveAddressFormErrors(final Form<RemoveAddressFormData> removeAddressForm,
                                                                     final Customer customer, final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean(removeAddressForm);
-        final AddressBookPageContent pageContent = createAddressBookPageWithRemoveAddressError(removeAddressForm, errors, customer, userContext);
-        return completedFuture(badRequest(renderAddressBookPage(pageContent, userContext)));
+        final MyAddressBookPageContent pageContent = createMyAddressBookPageWithRemoveAddressError(removeAddressForm, errors, customer, userContext);
+        return completedFuture(badRequest(renderMyAddressBookPage(pageContent, userContext)));
     }
 
     protected CompletionStage<Result> handleAddAddressError(final Throwable throwable,
@@ -179,8 +179,8 @@ public class AddressBookPageController extends MyAccountController {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             Logger.error("The request to add address to a customer raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-            final AddressBookPageContent pageContent = createAddressBookPageWithAddAddressError(addAddressForm, errors, customer, userContext);
-            return completedFuture(badRequest(renderAddressBookPage(pageContent, userContext)));
+            final MyAddressBookPageContent pageContent = createMyAddressBookPageWithAddAddressError(addAddressForm, errors, customer, userContext);
+            return completedFuture(badRequest(renderMyAddressBookPage(pageContent, userContext)));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
@@ -192,8 +192,8 @@ public class AddressBookPageController extends MyAccountController {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             Logger.error("The request to change address from a customer raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-            final AddressBookPageContent pageContent = createAddressBookPageWithChangeAddressError(changeAddressForm, errors, customer, userContext);
-            return completedFuture(badRequest(renderAddressBookPage(pageContent, userContext)));
+            final MyAddressBookPageContent pageContent = createMyAddressBookPageWithChangeAddressError(changeAddressForm, errors, customer, userContext);
+            return completedFuture(badRequest(renderMyAddressBookPage(pageContent, userContext)));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
@@ -205,8 +205,8 @@ public class AddressBookPageController extends MyAccountController {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             Logger.error("The request to remove address from a customer raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-            final AddressBookPageContent pageContent = createAddressBookPageWithRemoveAddressError(removeAddressForm, errors, customer, userContext);
-            return completedFuture(badRequest(renderAddressBookPage(pageContent, userContext)));
+            final MyAddressBookPageContent pageContent = createMyAddressBookPageWithRemoveAddressError(removeAddressForm, errors, customer, userContext);
+            return completedFuture(badRequest(renderMyAddressBookPage(pageContent, userContext)));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
@@ -216,34 +216,34 @@ public class AddressBookPageController extends MyAccountController {
         return completedFuture(redirect(call));
     }
 
-    protected AddressBookPageContent createAddressBookPage(final Customer customer, final UserContext userContext) {
-        final AddressBookPageContent pageContent = new AddressBookPageContent();
+    protected MyAddressBookPageContent createMyAddressBookPage(final Customer customer, final UserContext userContext) {
+        final MyAddressBookPageContent pageContent = new MyAddressBookPageContent();
         //TODO
         return pageContent;
     }
 
-    protected AddressBookPageContent createAddressBookPageWithAddAddressError(final Form<AddAddressFormData> form, final ErrorsBean errors,
-                                                                              final Customer customer, final UserContext userContext) {
-        final AddressBookPageContent pageContent = new AddressBookPageContent();
+    protected MyAddressBookPageContent createMyAddressBookPageWithAddAddressError(final Form<AddAddressFormData> form, final ErrorsBean errors,
+                                                                                  final Customer customer, final UserContext userContext) {
+        final MyAddressBookPageContent pageContent = new MyAddressBookPageContent();
         //TODO
         return pageContent;
     }
 
-    protected AddressBookPageContent createAddressBookPageWithChangeAddressError(final Form<ChangeAddressFormData> form, final ErrorsBean errors,
-                                                                                 final Customer customer, final UserContext userContext) {
-        final AddressBookPageContent pageContent = new AddressBookPageContent();
+    protected MyAddressBookPageContent createMyAddressBookPageWithChangeAddressError(final Form<ChangeAddressFormData> form, final ErrorsBean errors,
+                                                                                     final Customer customer, final UserContext userContext) {
+        final MyAddressBookPageContent pageContent = new MyAddressBookPageContent();
         //TODO
         return pageContent;
     }
 
-    protected AddressBookPageContent createAddressBookPageWithRemoveAddressError(final Form<RemoveAddressFormData> form, final ErrorsBean errors,
-                                                                                 final Customer customer, final UserContext userContext) {
-        final AddressBookPageContent pageContent = new AddressBookPageContent();
+    protected MyAddressBookPageContent createMyAddressBookPageWithRemoveAddressError(final Form<RemoveAddressFormData> form, final ErrorsBean errors,
+                                                                                     final Customer customer, final UserContext userContext) {
+        final MyAddressBookPageContent pageContent = new MyAddressBookPageContent();
         //TODO
         return pageContent;
     }
 
-    protected Html renderAddressBookPage(final AddressBookPageContent pageContent, final UserContext userContext) {
+    protected Html renderMyAddressBookPage(final MyAddressBookPageContent pageContent, final UserContext userContext) {
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateEngine().renderToHtml("my-account-address-book", pageData, userContext.locales());
     }

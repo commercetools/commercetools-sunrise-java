@@ -1,15 +1,15 @@
-package myaccount.addressbook;
+package myaccount.myaddressbook;
 
 import common.controllers.PageContent;
 import myaccount.mydetails.CustomerBean;
 import myaccount.mydetails.MyPersonalDetailsFormBean;
 
-public class AddressBookPageContent extends PageContent {
+public class MyAddressBookPageContent extends PageContent {
 
     private CustomerBean customer;
     private MyPersonalDetailsFormBean personalDetailsForm;
 
-    public AddressBookPageContent() {
+    public MyAddressBookPageContent() {
     }
 
     public CustomerBean getCustomer() {
