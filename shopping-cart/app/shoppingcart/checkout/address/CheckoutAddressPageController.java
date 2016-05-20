@@ -1,11 +1,9 @@
 package shoppingcart.checkout.address;
 
 import common.contexts.UserContext;
-import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import common.inject.HttpContextScoped;
-import common.models.ProductDataConfig;
 import common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -25,8 +23,8 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.common.CartController;
 import shoppingcart.common.StepWidgetBean;
+import shoppingcart.common.SunriseFrameworkCartController;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -42,17 +40,15 @@ import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @HttpContextScoped
-public class CheckoutAddressPageController extends CartController {
+public class CheckoutAddressPageController extends SunriseFrameworkCartController {
 
-    protected final Form<CheckoutShippingAddressFormData> shippingAddressUnboundForm;
-    protected final Form<CheckoutBillingAddressFormData> billingAddressUnboundForm;
+    protected Form<CheckoutShippingAddressFormData> shippingAddressUnboundForm;
+    protected Form<CheckoutBillingAddressFormData> billingAddressUnboundForm;
     @Inject
     protected UserContext userContext;
 
     @Inject
-    public CheckoutAddressPageController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig,
-                                         final FormFactory formFactory) {
-        super(controllerDependency, productDataConfig);
+    public void initForms(final FormFactory formFactory) {
         this.shippingAddressUnboundForm = formFactory.form(CheckoutShippingAddressFormData.class);
         this.billingAddressUnboundForm = formFactory.form(CheckoutBillingAddressFormData.class);
     }
