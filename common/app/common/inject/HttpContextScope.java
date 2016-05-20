@@ -1,15 +1,7 @@
 package common.inject;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Key;
-import com.google.inject.Provider;
-import com.google.inject.Scope;
-import com.google.inject.Scopes;
+import com.google.inject.*;
 import play.mvc.Http;
-
-import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /*
 
@@ -24,7 +16,7 @@ inspirated by: http://stackoverflow.com/questions/25626264/how-to-use-play-frame
  */
 public class HttpContextScope implements Scope {
 
-    private static final ThreadLocal<Context> httpContextScopeContext = new ThreadLocal<>();
+    private static final TypeLiteral<Http.Context> CONTEXT_TYPE_LITERAL = TypeLiteral.get(Http.Context.class);
 
     enum NullableObject {
         INSTANCE
@@ -32,66 +24,73 @@ public class HttpContextScope implements Scope {
 
     @Override
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> provider) {
-        return new Provider<T>() {
-            @Override
-            public T get() {
-                Http.Context currentContext = Http.Context.current();
-                if (currentContext == null) {
-                    Context context = httpContextScopeContext.get();
-                    if (context != null) {
-                        T t = (T) context.map.get(key);
-                        if (t == NullableObject.INSTANCE) {
-                            return null;
-                        }
-
-                        if (t == null) {
-                            t = provider.get();
-                            if (!Scopes.isCircularProxy(t)) {
-                                context.map.put(key, t != null ? t : NullableObject.INSTANCE);
-                            }
-                        }
-                        return t;
-                    }
-                }
-
-                String name = key.toString();
-                synchronized (currentContext) {
-                    Object obj = currentContext.args.get(name);
-                    if (obj == NullableObject.INSTANCE) {
-                        return null;
-                    }
-                    T t = (T) obj;
-                    if (t == null) {
-                        t = provider.get();
-                        if (!Scopes.isCircularProxy(t)) {
-                            currentContext.args.put(name, t != null ? t : NullableObject.INSTANCE);
-                        }
-                    }
-                    return t;
-                }
-            }
-        };
+        //here is no http context available
+        return new HttpContextScopeProvider<>(key, provider);
     }
 
     @Override
     public String toString() {
-        return "Http.Context.ARGS";
+        return "Http.Context.args";
     }
 
-    private static class Context {
-        final Map<Key, Object> map = Maps.newHashMap();
-        final Lock lock = new ReentrantLock();
+    private static class HttpContextScopeProvider<T> implements Provider<T> {
+        private final Key<T> key;
+        private final Provider<T> provider;
 
-        public Context open() {
-            lock.lock();
-            final Context previous = httpContextScopeContext.get();
-            httpContextScopeContext.set(this);
-            return new Context() {
-                public void close() {
-                    httpContextScopeContext.set(previous);
-                    lock.unlock();
+        public HttpContextScopeProvider(final Key<T> key, final Provider<T> provider) {
+            this.key = key;
+            this.provider = provider;
+        }
+
+        @Override
+        public T get() {
+            final Http.Context currentContext = Http.Context.current();
+            if (key.getTypeLiteral().equals(CONTEXT_TYPE_LITERAL)) {
+                return (T) currentContext;
+            } else {
+                final Cache cache = new HttpContextCache(currentContext);
+                final String cacheKey = key.toString();
+                final Object obj = cache.get(cacheKey);
+                final boolean objectIsSupposedToBeNull = obj == NullableObject.INSTANCE;
+                if (objectIsSupposedToBeNull) {
+                    return null;
+                } else if (obj == null) {
+                    final T t = provider.get();
+                    if (!Scopes.isCircularProxy(t)) {
+                        final Object cacheValue = t != null ? t : NullableObject.INSTANCE;
+                        cache.put(cacheKey, cacheValue);
+                    }
+                    return t;
+                } else {
+                    return (T) obj;
                 }
-            };
+            }
+        }
+    }
+
+    private interface Cache {
+        Object get(final String key);
+
+        void put(final String key, final Object object);
+    }
+
+    /**
+     * Put dependency objects into {@link play.mvc.Http.Context#args} which has the benefit if the context gets deleted also the cached objects.
+     */
+    private static class HttpContextCache implements Cache {
+        final Http.Context context;
+
+        private HttpContextCache(final Http.Context currentContext) {
+            this.context = currentContext;
+        }
+
+        public Object get(final String key) {
+            return context.args.get(key);
+        }
+
+        @Override
+        public void put(final String key, final Object object) {
+            context.args.put(key, object);
         }
     }
 }
