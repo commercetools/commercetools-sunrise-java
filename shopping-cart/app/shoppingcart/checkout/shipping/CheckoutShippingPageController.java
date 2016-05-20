@@ -132,14 +132,8 @@ public class CheckoutShippingPageController extends CartController {
         return pageContent;
     }
 
-    protected StepWidgetBean createStepWidgetBean() {
-        final StepWidgetBean stepWidget = new StepWidgetBean();
-        stepWidget.setShippingStepActive(true);
-        return stepWidget;
-    }
-
     protected Html renderCheckoutShippingPage(final Cart cart, final CheckoutShippingPageContent pageContent, final UserContext userContext) {
-        pageContent.setStepWidget(createStepWidgetBean());
+        pageContent.setStepWidget(StepWidgetBean.SHIPPING);
         pageContent.setCart(createCartLikeBean(cart, userContext));
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());

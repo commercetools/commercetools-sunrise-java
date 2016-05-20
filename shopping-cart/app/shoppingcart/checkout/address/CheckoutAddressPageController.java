@@ -44,8 +44,6 @@ public class CheckoutAddressPageController extends SunriseFrameworkCartControlle
 
     protected Form<CheckoutShippingAddressFormData> shippingAddressUnboundForm;
     protected Form<CheckoutBillingAddressFormData> billingAddressUnboundForm;
-    @Inject
-    protected UserContext userContext;
 
     @Inject
     public void initForms(final FormFactory formFactory) {
@@ -60,8 +58,8 @@ public class CheckoutAddressPageController extends SunriseFrameworkCartControlle
     }
 
     private Result showCheckoutAddressPage(final Cart cart) {
-        final CheckoutAddressPageContent pageContent = createPageContent(cart, userContext);
-        return ok(renderCheckoutAddressPage(cart, pageContent, userContext));
+        final CheckoutAddressPageContent pageContent = createPageContent(cart, userContext());
+        return ok(renderCheckoutAddressPage(cart, pageContent, userContext()));
     }
 
     @RequireCSRFCheck
@@ -71,15 +69,15 @@ public class CheckoutAddressPageController extends SunriseFrameworkCartControlle
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
                     if (formHasErrors(shippingAddressForm, billingAddressForm)) {
-                        return handleFormErrors(shippingAddressForm, billingAddressForm, cart, userContext);
+                        return handleFormErrors(shippingAddressForm, billingAddressForm, cart, userContext());
                     } else {
                         final Address shippingAddress = shippingAddressForm.get().toAddress();
                         final boolean differentBilling = shippingAddressForm.get().isBillingAddressDifferentToBillingAddress();
                         final Address billingAddress = differentBilling ? billingAddressForm.get().toAddress() : null;
                         final CompletionStage<Result> resultStage = setAddressToCart(cart, shippingAddress, billingAddress)
-                                .thenComposeAsync(updatedCart -> handleSuccessfulSetAddress(userContext), HttpExecution.defaultContext());
+                                .thenComposeAsync(updatedCart -> handleSuccessfulSetAddress(userContext()), HttpExecution.defaultContext());
                         return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                                handleSetAddressToCartError(throwable, shippingAddressForm, billingAddressForm, cart, userContext));
+                                handleSetAddressToCartError(throwable, shippingAddressForm, billingAddressForm, cart, userContext()));
                     }
                 }, HttpExecution.defaultContext());
     }
@@ -159,14 +157,8 @@ public class CheckoutAddressPageController extends SunriseFrameworkCartControlle
         return pageContent;
     }
 
-    protected StepWidgetBean createStepWidgetBean() {
-        final StepWidgetBean stepWidget = new StepWidgetBean();
-        stepWidget.setAddressStepActive(true);
-        return stepWidget;
-    }
-
     protected Html renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent, final UserContext userContext) {
-        pageContent.setStepWidget(createStepWidgetBean());
+        pageContent.setStepWidget(StepWidgetBean.ADDRESS);
         pageContent.setCart(createCartLikeBean(cart, userContext));
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());

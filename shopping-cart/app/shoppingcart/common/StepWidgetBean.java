@@ -1,44 +1,26 @@
 package shoppingcart.common;
 
-public class StepWidgetBean {
+public enum StepWidgetBean {
 
-    private boolean addressStepActive;
-    private boolean shippingStepActive;
-    private boolean paymentStepActive;
-    private boolean confirmationStepActive;
-
-    public StepWidgetBean() {
-    }
+    ADDRESS, SHIPPING, PAYMENT, CONFIRMATION;
 
     public boolean isAddressStepActive() {
-        return addressStepActive;
-    }
-
-    public void setAddressStepActive(final boolean addressStepActive) {
-        this.addressStepActive = addressStepActive;
+        return isStep(ADDRESS);
     }
 
     public boolean isShippingStepActive() {
-        return shippingStepActive;
-    }
-
-    public void setShippingStepActive(final boolean shippingStepActive) {
-        this.shippingStepActive = shippingStepActive;
+        return isStep(SHIPPING);
     }
 
     public boolean isPaymentStepActive() {
-        return paymentStepActive;
-    }
-
-    public void setPaymentStepActive(final boolean paymentStepActive) {
-        this.paymentStepActive = paymentStepActive;
+        return isStep(PAYMENT);
     }
 
     public boolean isConfirmationStepActive() {
-        return confirmationStepActive;
+        return isStep(CONFIRMATION);
     }
 
-    public void setConfirmationStepActive(final boolean confirmationStepActive) {
-        this.confirmationStepActive = confirmationStepActive;
+    private boolean isStep(final StepWidgetBean what) {
+        return name().equals(what.name());
     }
 }

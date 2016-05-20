@@ -131,14 +131,8 @@ public class CheckoutConfirmationPageController extends CartController {
         return pageContent;
     }
 
-    protected StepWidgetBean createStepWidgetBean() {
-        final StepWidgetBean stepWidget = new StepWidgetBean();
-        stepWidget.setConfirmationStepActive(true);
-        return stepWidget;
-    }
-
     protected Html renderCheckoutConfirmationPage(final Cart cart, final CheckoutConfirmationPageContent pageContent, final UserContext userContext) {
-        pageContent.setStepWidget(createStepWidgetBean());
+        pageContent.setStepWidget(StepWidgetBean.CONFIRMATION);
         pageContent.setCart(createCartLikeBean(cart, userContext));
         pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:confirmationPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
