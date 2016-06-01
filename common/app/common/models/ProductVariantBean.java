@@ -9,6 +9,7 @@ import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
+import wedecidelatercommon.ProductReverseRouter;
 
 import javax.money.MonetaryAmount;
 import java.util.Locale;
@@ -26,7 +27,7 @@ public class ProductVariantBean {
     public ProductVariantBean() {
     }
 
-    public ProductVariantBean(final LineItem lineItem, final UserContext userContext, final ReverseRouter reverseRouter) {
+    public ProductVariantBean(final LineItem lineItem, final UserContext userContext, final ProductReverseRouter reverseRouter) {
         this.url = reverseRouter.showProductUrlOrEmpty(userContext.locale(), lineItem);
         fill(lineItem.getName(), lineItem.getVariant(), userContext);
         fillPrice(lineItem.getPrice(), userContext.locale());

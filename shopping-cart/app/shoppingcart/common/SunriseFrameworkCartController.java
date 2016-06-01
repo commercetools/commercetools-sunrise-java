@@ -21,6 +21,7 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import shoppingcart.CartLikeBean;
 import shoppingcart.CartSessionUtils;
+import wedecidelatercommon.ProductReverseRouter;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,16 +37,19 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     @Inject
     protected ProductDataConfig productDataConfig;
 
+    @Inject
+    private ProductReverseRouter productReverseRouter;
+
 
     protected CartLikeBean createCartLikeBean(final CartLike<?> cartLike, final UserContext userContext) {
-        return new CartLikeBean(cartLike, userContext, productDataConfig, reverseRouter());
+        return new CartLikeBean(cartLike, userContext, productDataConfig, productReverseRouter);
     }
 
     protected CompletionStage<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
         final CompletionStage<Cart> cartFuture = fetchCart(userContext, session)
                 .thenComposeAsync(cart -> updateCartWithUserPreferences(cart, userContext), HttpExecution.defaultContext());
         cartFuture.thenAcceptAsync(cart ->
-                CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter()), HttpExecution.defaultContext());
+                CartSessionUtils.overwriteCartSessionData(cart, session, userContext, productReverseRouter), HttpExecution.defaultContext());
         return cartFuture;
     }
 

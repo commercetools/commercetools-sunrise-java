@@ -7,6 +7,7 @@ import io.sphere.sdk.json.SphereJsonUtils;
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Http.Session;
+import wedecidelatercommon.ProductReverseRouter;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -30,7 +31,7 @@ public final class CartSessionUtils {
     }
 
     public static void overwriteCartSessionData(@Nullable final Cart cart, final Session session,
-                                                final UserContext userContext, final ReverseRouter reverseRouter) {
+                                                final UserContext userContext, final ProductReverseRouter reverseRouter) {
         if (cart != null) {
             final String id = cart.getId();
             final MiniCartBean miniCart = new MiniCartBean(cart, userContext, reverseRouter);

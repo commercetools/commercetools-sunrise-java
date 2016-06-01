@@ -6,11 +6,14 @@ import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.mvc.Call;
+import wedecidelatercommon.CheckoutReverseRouter;
+import wedecidelatercommon.ProductReverseRouter;
 
+import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
 
-public interface ReverseRouter {
+public interface ReverseRouter extends ProductReverseRouter, CheckoutReverseRouter {
 
     Call themeAssets(final String file);
 
@@ -38,6 +41,7 @@ public interface ReverseRouter {
 
     Call processCheckoutAddressesForm(final String languageTag);
 
+    @Override
     Call showCheckoutShippingForm(final String languageTag);
 
     Call processCheckoutShippingForm(final String languageTag);
@@ -74,17 +78,6 @@ public interface ReverseRouter {
                 .map(slug -> showCategory(locale.toLanguageTag(), slug));
     }
 
-    default Optional<Call> showProduct(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
-        return product.getSlug().find(locale)
-                .map(slug -> showProduct(locale.toLanguageTag(), slug, productVariant.getSku()));
-    }
-
-    default Optional<Call> showProduct(final Locale locale, final LineItem lineItem) {
-        return Optional.ofNullable(lineItem.getProductSlug())
-                .flatMap(slugs -> slugs.find(locale)
-                        .map(slug -> showProduct(locale.toLanguageTag(), slug, lineItem.getVariant().getSku())));
-    }
-
     default Optional<Call> showMyOrder(final Locale locale, final Order order) {
         return Optional.ofNullable(order.getOrderNumber())
                 .map(orderNumber -> showMyOrder(locale.toLanguageTag(), orderNumber));
@@ -94,15 +87,20 @@ public interface ReverseRouter {
         return showCategory(locale, category).map(Call::url).orElse("");
     }
 
-    default String showProductUrlOrEmpty(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
-        return showProduct(locale, product, productVariant).map(Call::url).orElse("");
-    }
-
-    default String showProductUrlOrEmpty(final Locale locale, final LineItem lineItem) {
-        return showProduct(locale, lineItem).map(Call::url).orElse("");
-    }
-
     default String showMyOrderUrlOrEmpty(final Locale locale, final Order order) {
         return showMyOrder(locale, order).map(Call::url).orElse("");
+    }
+
+    @Override
+    default Optional<Call> showProduct(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
+        return product.getSlug().find(locale)
+                .map(slug -> showProduct(locale.toLanguageTag(), slug, productVariant.getSku()));
+    }
+
+    @Override
+    default Optional<Call> showProduct(final Locale locale, final LineItem lineItem) {
+        return Optional.ofNullable(lineItem.getProductSlug())
+                .flatMap(slugs -> slugs.find(locale)
+                        .map(slug -> showProduct(locale.toLanguageTag(), slug, lineItem.getVariant().getSku())));
     }
 }

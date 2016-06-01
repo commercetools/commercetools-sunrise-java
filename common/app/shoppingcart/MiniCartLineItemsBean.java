@@ -4,6 +4,7 @@ import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Base;
+import wedecidelatercommon.ProductReverseRouter;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class MiniCartLineItemsBean extends Base {
         this.list = emptyList();
     }
 
-    public MiniCartLineItemsBean(final Cart cart, final UserContext userContext, final ReverseRouter reverseRouter) {
+    public MiniCartLineItemsBean(final Cart cart, final UserContext userContext, final ProductReverseRouter reverseRouter) {
         this.list = cart.getLineItems().stream()
                 .map(lineItem -> new MiniCartLineItemBean(lineItem, userContext, reverseRouter))
                 .collect(toList());

@@ -6,6 +6,7 @@ import common.utils.MoneyContext;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
+import wedecidelatercommon.ProductReverseRouter;
 
 import static common.utils.PriceUtils.calculateTotalPrice;
 
@@ -19,7 +20,7 @@ public class MiniCartBean extends Base {
         this.lineItems = new MiniCartLineItemsBean();
     }
 
-    public MiniCartBean(final Cart cart, final UserContext userContext, final ReverseRouter reverseRouter) {
+    public MiniCartBean(final Cart cart, final UserContext userContext, final ProductReverseRouter reverseRouter) {
         final MoneyContext moneyContext = MoneyContext.of(cart.getCurrency(), userContext.locale());
         this.totalItems = cart.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
         this.totalPrice = moneyContext.formatOrZero(calculateTotalPrice(cart));

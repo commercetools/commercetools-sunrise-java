@@ -5,6 +5,7 @@ import common.controllers.ReverseRouter;
 import common.models.ProductAttributeBean;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.LineItem;
+import wedecidelatercommon.ProductReverseRouter;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class LineItemBean extends MiniCartLineItemBean {
     }
 
     public LineItemBean(final LineItem lineItem, final ProductDataConfig productDataConfig,
-                        final UserContext userContext, final ReverseRouter reverseRouter) {
+                        final UserContext userContext, final ProductReverseRouter reverseRouter) {
         super(lineItem, userContext, reverseRouter);
         this.attributes = lineItem.getVariant().getAttributes().stream()
                 .filter(attr -> productDataConfig.getSelectableAttributes().contains(attr.getName()))

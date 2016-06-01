@@ -7,6 +7,7 @@ import common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.orders.Order;
+import wedecidelatercommon.ProductReverseRouter;
 
 import java.time.format.DateTimeFormatter;
 
@@ -31,7 +32,7 @@ public class CartLikeBean {
     }
 
     public CartLikeBean(final CartLike<?> cartLike, final UserContext userContext,
-                        final ProductDataConfig productDataConfig, final ReverseRouter reverseRouter) {
+                        final ProductDataConfig productDataConfig, final ProductReverseRouter reverseRouter) {
         final MoneyContext moneyContext = MoneyContext.of(cartLike.getCurrency(), userContext.locale());
         this.totalItems = cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
         this.salesTax = moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null));

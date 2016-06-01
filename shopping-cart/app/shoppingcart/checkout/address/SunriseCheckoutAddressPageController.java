@@ -24,6 +24,7 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.common.StepWidgetBean;
 import shoppingcart.common.SunriseFrameworkCartController;
+import wedecidelatercommon.CheckoutReverseRouter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -43,6 +44,8 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     protected CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
     protected Form<CheckoutShippingAddressFormData> shippingAddressUnboundForm;
     protected Form<CheckoutBillingAddressFormData> billingAddressUnboundForm;
+    @Inject
+    private CheckoutReverseRouter checkoutReverseRouter;
 
     @Inject
     public void initializeForms(final FormFactory formFactory) {
@@ -106,7 +109,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     }
 
     protected CompletionStage<Result> handleSuccessfulSetAddress(final Cart cart) {
-        final Call call = reverseRouter().showCheckoutShippingForm(userContext().locale().toLanguageTag());
+        final Call call = checkoutReverseRouter.showCheckoutShippingForm(userContext().locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

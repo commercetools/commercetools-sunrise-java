@@ -5,7 +5,7 @@ import common.contexts.ProjectContext;
 import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.models.LocationSelector;
-import common.models.NavMenuData;
+import common.models.NavMenuDataFactory;
 import common.template.cms.CmsService;
 import common.template.engine.TemplateEngine;
 import common.template.i18n.I18nResolver;
@@ -13,14 +13,12 @@ import common.utils.PriceFormatter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
-import myaccount.CustomerSessionUtils;
 import play.Configuration;
 import play.mvc.Controller;
 import play.mvc.Http;
 import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -28,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 import static common.controllers.SunriseController.SESSION_COUNTRY;
 import static java.util.stream.Collectors.toList;
@@ -50,11 +47,12 @@ public abstract class SunriseFrameworkController extends Controller {
     private Configuration configuration;
     @Inject
     private I18nResolver i18nResolver;
-    @Inject
-    private ReverseRouter reverseRouter;
-    private Optional<String> saleCategoryExtId;
     private Optional<String> categoryNewExtId;
     private boolean showInfoModal;
+    @Inject
+    private PageMetaFactory pageMetaFactory;
+    @Inject
+    private NavMenuDataFactory navMenuDataFactory;
 
     protected SunriseFrameworkController() {
     }
@@ -62,7 +60,6 @@ public abstract class SunriseFrameworkController extends Controller {
     @Inject
     public void initializeFields(Configuration configuration) {
         System.err.println("init in SunriseFrameworkController");
-        this.saleCategoryExtId = Optional.ofNullable(configuration.getString("common.saleCategoryExternalId"));
         this.categoryNewExtId = Optional.ofNullable(configuration.getString("common.newCategoryExternalId"));
         this.showInfoModal = configuration.getBoolean("application.demoInfo.enabled", false);
     }
@@ -95,61 +92,14 @@ public abstract class SunriseFrameworkController extends Controller {
         return i18nResolver;
     }
 
-    public ReverseRouter reverseRouter() {
-        return reverseRouter;
-    }
-
     protected final SunrisePageData pageData(final UserContext userContext, final PageContent content,
                                              final Http.Context ctx, final Http.Session session) {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
-
-        System.err.println("saleCategoryExtId");
-        System.err.println(saleCategoryExtId);
-
-        pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
+        pageHeader.setNavMenu(navMenuDataFactory.create());
         pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session));
         pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));
-        return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(userContext, ctx, session));
-    }
-
-    private PageMeta getPageMeta(final UserContext userContext, final Http.Context ctx, final Http.Session session) {
-        final PageMeta pageMeta = new PageMeta();
-        pageMeta.setUser(CustomerSessionUtils.getUserBean(session()));
-        pageMeta.setAssetsPath(reverseRouter().themeAssets("").url());
-        pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
-        pageMeta.setCsrfToken(getCsrfToken(ctx.session()));
-        final String language = userContext.locale().getLanguage();
-        pageMeta.addHalLink(reverseRouter().showHome(language), "home", "continueShopping")
-                .addHalLink(reverseRouter().processSearchProductsForm(language), "search")
-                .addHalLink(reverseRouter().processChangeLanguageForm(), "selectLanguage")
-                .addHalLink(reverseRouter().processChangeCountryForm(language), "selectCountry")
-
-                .addHalLink(reverseRouter().showCart(language), "cart")
-                .addHalLink(reverseRouter().processAddProductToCartForm(language), "addToCart")
-                .addHalLink(reverseRouter().processChangeLineItemQuantityForm(language), "changeLineItem")
-                .addHalLink(reverseRouter().processDeleteLineItemForm(language), "deleteLineItem")
-
-                .addHalLink(reverseRouter().showCheckoutAddressesForm(language), "checkout", "editShippingAddress", "editBillingAddress")
-                .addHalLink(reverseRouter().processCheckoutAddressesForm(language), "checkoutAddressSubmit")
-                .addHalLink(reverseRouter().showCheckoutShippingForm(language), "editShippingMethod")
-                .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutShippingSubmit")
-                .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
-                .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
-                .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
-
-                .addHalLink(reverseRouter().showLogInForm(language), "signIn", "logIn", "signUp")
-                .addHalLink(reverseRouter().processLogInForm(language), "logInSubmit")
-                .addHalLink(reverseRouter().processSignUpForm(language), "signUpSubmit")
-                .addHalLink(reverseRouter().processLogOut(language), "logOut")
-
-                .addHalLink(reverseRouter().processMyPersonalDetailsForm(language), "editMyPersonalDetails")
-
-                .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
-        newCategory().flatMap(nc -> reverseRouter().showCategory(userContext.locale(), nc))
-                .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
-        pageMeta.setShowInfoModal(showInfoModal);
-        return pageMeta;
+        return new SunrisePageData(pageHeader, new PageFooter(), content, pageMetaFactory.create());
     }
 
     protected PriceFormatter priceFormatter(final UserContext userContext) {
@@ -203,7 +153,7 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     @Nullable
-    private static String getCsrfToken(final Http.Session session) {
+    public static String getCsrfToken(final Http.Session session) {
         return session.get("csrfToken");
     }
 
