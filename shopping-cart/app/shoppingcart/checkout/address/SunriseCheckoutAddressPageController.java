@@ -37,7 +37,7 @@ import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @HttpContextScoped
-public class CheckoutAddressPageController extends SunriseFrameworkCartController {
+public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController {
 
     @Inject
     protected CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;

@@ -3,12 +3,11 @@ package reverserouter;
 import common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
-
+import static wedecidelater.routes.CheckoutAddressPageController;
 import static productcatalog.home.routes.*;
 import static productcatalog.productdetail.routes.*;
 import static productcatalog.productoverview.routes.*;
 import static shoppingcart.cartdetail.routes.*;
-import static shoppingcart.checkout.address.routes.*;
 import static shoppingcart.checkout.confirmation.routes.*;
 import static shoppingcart.checkout.payment.routes.*;
 import static shoppingcart.checkout.shipping.routes.*;

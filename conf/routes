@@ -67,9 +67,9 @@ POST        /:languageTag/cart/remove                          @shoppingcart.car
 # ~~~~~
 
 # Shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/address                     @shoppingcart.checkout.address.CheckoutAddressPageController.show(languageTag: String)
+GET         /:languageTag/checkout/address                     @wedecidelater.CheckoutAddressPageController.show(languageTag: String)
 # Processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/address                     @shoppingcart.checkout.address.CheckoutAddressPageController.process(languageTag: String)
+POST        /:languageTag/checkout/address                     @wedecidelater.CheckoutAddressPageController.process(languageTag: String)
 # Shows the form to enter shipping address and billing address
 GET         /:languageTag/checkout/shipping                    @shoppingcart.checkout.shipping.CheckoutShippingPageController.show(languageTag: String)
 # Processes the form of the shipping address and billing address
