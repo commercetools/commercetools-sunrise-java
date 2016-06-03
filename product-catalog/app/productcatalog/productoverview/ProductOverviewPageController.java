@@ -4,7 +4,6 @@ import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
-import common.suggestion.ProductRecommendation;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -40,9 +39,13 @@ public class ProductOverviewPageController extends ProductCatalogController {
     private final int paginationDisplayedPages;
 
     @Inject
-    public ProductOverviewPageController(final ControllerDependency controllerDependency, final ProductRecommendation productRecommendation,
-                                         final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
-        super(controllerDependency, productRecommendation, productDataConfig, searchConfig);
+    private ProductDataConfig productDataConfig;
+    @Inject
+    private SearchConfig searchConfig;
+
+    @Inject
+    public ProductOverviewPageController(final ControllerDependency controllerDependency) {
+        super(controllerDependency);
         this.paginationDisplayedPages = configuration().getInt("pop.pagination.displayedPages", 6);
     }
 
@@ -74,7 +77,6 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     protected SearchCriteria getSearchCriteria(final int page, final List<Category> selectedCategories, final UserContext userContext) {
         final Map<String, List<String>> queryString = getQueryString(request());
-        final SearchConfig searchConfig = searchConfig();
         final SearchBox searchBox = SearchBoxFactory.of(searchConfig, queryString, userContext).create();
         final ProductsPerPageSelector productsPerPageSelector = ProductsPerPageSelectorFactory.of(searchConfig.getProductsPerPageConfig(), queryString).create();
         final SortSelector sortSelector = SortSelectorFactory.of(searchConfig.getSortConfig(), queryString, userContext).create();
@@ -108,7 +110,7 @@ public class ProductOverviewPageController extends ProductCatalogController {
                                                            final SearchCriteria searchCriteria, final UserContext userContext) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
         content.setFilterProductsUrl(request().path());
-        content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig(), userContext, reverseRouter(), categoryTreeInNew()));
+        content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig, userContext, reverseRouter(), categoryTreeInNew()));
         content.setPagination(new PaginationBean(requestContext(request()), searchResult, searchCriteria.getPage(), searchCriteria.getProductsPerPageSelector().getSelectedPageSize(), paginationDisplayedPages));
         content.setSortSelector(new SortSelectorBean(searchCriteria.getSortSelector(), userContext, i18nResolver()));
         content.setDisplaySelector(new ProductsPerPageSelectorBean(searchCriteria.getProductsPerPageSelector(), userContext, i18nResolver()));

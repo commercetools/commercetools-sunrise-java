@@ -116,7 +116,7 @@ GET         /:languageTag/user/orders/:orderNumber             @myaccount.myorde
 # ~~~~~
 
 # Shows the product detail page
-GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.productdetail.ProductDetailPageController.show(languageTag: String, productSlug: String, sku: String)
+GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.productdetail.ProductDetailPageController.showProductBySlugAndSku(languageTag: String, productSlug: String, sku: String)
 
 
 # PRODUCT OVERVIEW

@@ -14,7 +14,6 @@ import play.twirl.api.Html;
 import productcatalog.common.ProductCatalogController;
 import productcatalog.common.ProductListData;
 import productcatalog.common.SuggestionsData;
-import productcatalog.productoverview.search.SearchConfig;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -38,9 +37,13 @@ public class HomePageController extends ProductCatalogController {
     private final int numSuggestions;
 
     @Inject
-    public HomePageController(final ControllerDependency controllerDependency, final ProductRecommendation productRecommendation,
-                              final ProductDataConfig productDataConfig, final SearchConfig searchConfig) {
-        super(controllerDependency, productRecommendation, productDataConfig, searchConfig);
+    private ProductDataConfig productDataConfig;
+    @Inject
+    private ProductRecommendation productRecommendation;
+
+    @Inject
+    public HomePageController(final ControllerDependency controllerDependency) {
+        super(controllerDependency);
         this.suggestionsExternalIds = configuration().getStringList("home.suggestions.externalId", emptyList());
         this.numSuggestions = configuration().getInt("home.suggestions.count", 4);
     }
@@ -61,7 +64,7 @@ public class HomePageController extends ProductCatalogController {
                 .map(Optional::get)
                 .collect(Collectors.toList());
         if (!suggestedCategories.isEmpty()) {
-            return productRecommendation().relatedToCategories(suggestedCategories, numSuggestions);
+            return productRecommendation.relatedToCategories(suggestedCategories, numSuggestions);
         } else {
             return completedFuture(emptySet());
         }
@@ -69,7 +72,7 @@ public class HomePageController extends ProductCatalogController {
 
     protected HomePageContent createPageContent(final Set<ProductProjection> recommendedProducts, final UserContext userContext) {
         final HomePageContent pageContent = new HomePageContent();
-        final ProductListData productListData = new ProductListData(recommendedProducts, productDataConfig(), userContext, reverseRouter(), categoryTreeInNew());
+        final ProductListData productListData = new ProductListData(recommendedProducts, productDataConfig, userContext, reverseRouter(), categoryTreeInNew());
         pageContent.setSuggestions(new SuggestionsData(productListData));
         return pageContent;
     }
