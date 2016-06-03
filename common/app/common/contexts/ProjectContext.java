@@ -6,17 +6,12 @@ import javax.money.CurrencyUnit;
 import java.util.List;
 import java.util.Locale;
 
-import static io.sphere.sdk.utils.IterableUtils.requireNonEmpty;
-
 public class ProjectContext {
     private final List<Locale> locales;
     private final List<CountryCode> countryCodes;
     private final List<CurrencyUnit> currencies;
 
     private ProjectContext(final List<Locale> locales, final List<CountryCode> countryCodes, final List<CurrencyUnit> currencies) {
-        requireNonEmpty(locales);
-        requireNonEmpty(countryCodes);
-        requireNonEmpty(currencies);
         this.locales = locales;
         this.countryCodes = countryCodes;
         this.currencies = currencies;
