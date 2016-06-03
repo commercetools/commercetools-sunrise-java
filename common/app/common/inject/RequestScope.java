@@ -14,7 +14,7 @@ inspirated by: http://stackoverflow.com/questions/25626264/how-to-use-play-frame
 /**
  * Allows objects to be bound to Play! Http.Context.current.args with a ThreadLocal fallback.
  */
-public class HttpContextScope implements Scope {
+public class RequestScope implements Scope {
 
     private static final TypeLiteral<Http.Context> CONTEXT_TYPE_LITERAL = TypeLiteral.get(Http.Context.class);
 

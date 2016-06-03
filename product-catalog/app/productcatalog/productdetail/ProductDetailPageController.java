@@ -1,14 +1,14 @@
 package productcatalog.productdetail;
 
 import common.controllers.ControllerDependency;
-import common.inject.HttpContextScoped;
+import common.inject.RequestScoped;
 import common.suggestion.ProductRecommendation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
-@HttpContextScoped
+@RequestScoped
 public final class ProductDetailPageController extends SunriseProductDetailPageController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductDetailPageController.class);

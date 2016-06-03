@@ -12,9 +12,9 @@ public class HttpModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        final HttpContextScope httpContextScope = new HttpContextScope();
-        bindScope(HttpContextScoped.class, httpContextScope);
-        bind(Http.Context.class).toProvider(HttpContextProvider.class).in(httpContextScope);
-        bind(UserContext.class).toProvider(UserContextProvider.class).in(httpContextScope);
+        final RequestScope requestScope = new RequestScope();
+        bindScope(RequestScoped.class, requestScope);
+        bind(Http.Context.class).toProvider(HttpContextProvider.class).in(requestScope);
+        bind(UserContext.class).toProvider(UserContextProvider.class).in(requestScope);
     }
 }

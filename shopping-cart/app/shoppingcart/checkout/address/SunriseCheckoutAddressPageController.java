@@ -2,7 +2,7 @@ package shoppingcart.checkout.address;
 
 import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
-import common.inject.HttpContextScoped;
+import common.inject.RequestScoped;
 import common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -37,7 +37,7 @@ import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-@HttpContextScoped
+@RequestScoped
 public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController {
 
     @Inject

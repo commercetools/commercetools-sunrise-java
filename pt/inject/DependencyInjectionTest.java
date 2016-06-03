@@ -1,7 +1,7 @@
 package inject;
 
 import common.WithSunriseApplication;
-import common.inject.HttpContextScoped;
+import common.inject.RequestScoped;
 import org.junit.Test;
 import play.Application;
 import play.Configuration;
@@ -42,7 +42,7 @@ public class DependencyInjectionTest extends WithSunriseApplication {
         setContext(new Http.RequestBuilder().header("marker", marker).build());
     }
 
-    @HttpContextScoped
+    @RequestScoped
     private static class SomethingRequestScoped {
         @Inject
         private Configuration configuration;

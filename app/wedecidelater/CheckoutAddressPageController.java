@@ -1,9 +1,9 @@
 package wedecidelater;
 
-import common.inject.HttpContextScoped;
+import common.inject.RequestScoped;
 import shoppingcart.checkout.address.SunriseCheckoutAddressPageController;
 
-@HttpContextScoped
+@RequestScoped
 public class CheckoutAddressPageController extends SunriseCheckoutAddressPageController {
 
 }
