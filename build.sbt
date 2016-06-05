@@ -13,7 +13,7 @@ import ReleaseTransformations._
 
 name := "commercetools-sunrise"
 
-organization := "io.commercetools.sunrise"
+organization in ThisBuild := "io.commercetools.sunrise"
 
 lazy val sunriseDesignVersion = "0.56.0"
 
@@ -133,6 +133,18 @@ lazy val disableDockerPublish = Seq(
   publish in Docker := {},
   publishLocal in Docker := {}
 )
+
+publishMavenStyle in ThisBuild := true
+
+publishArtifact in Test in ThisBuild := false
+
+publishTo in ThisBuild <<= version { (v: String) =>
+  val nexus = "https://oss.sonatype.org/"
+  if (v.trim.endsWith("SNAPSHOT"))
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
 
 /**
  * TEST SETTINGS
