@@ -3,7 +3,6 @@ package shoppingcart.checkout.address;
 import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
 import common.inject.RequestScoped;
-import common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
@@ -147,8 +146,6 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     protected Html renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent) {
         pageContent.setStepWidget(StepWidgetBean.ADDRESS);
         pageContent.setCart(createCartLikeBean(cart, userContext()));
-        //TODO framework
-//        pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext().locales(), I18nIdentifier.of("checkout:shippingPage.title")));
         final SunrisePageData pageData = pageData(userContext(), pageContent, ctx(), session());
         return templateEngine().renderToHtml("checkout-address", pageData, userContext().locales());
     }
