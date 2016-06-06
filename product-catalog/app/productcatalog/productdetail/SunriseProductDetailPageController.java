@@ -2,6 +2,7 @@ package productcatalog.productdetail;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
+import common.controllers.SunriseController;
 import common.controllers.SunrisePageData;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -10,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import productcatalog.common.ProductCatalogController;
 import wedecidelatercommon.ProductReverseRouter;
 
 import javax.annotation.Nullable;
@@ -20,7 +20,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseProductDetailPageController extends ProductCatalogController {
+public abstract class SunriseProductDetailPageController extends SunriseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductDetailPageController.class);
 

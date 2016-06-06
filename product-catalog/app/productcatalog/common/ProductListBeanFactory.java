@@ -5,6 +5,7 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
@@ -12,25 +13,28 @@ import static java.util.stream.Collectors.toList;
 public class ProductListBeanFactory {
 
     @Inject
+    @Named("new")
+    private CategoryTree categoryTreeInNew;
+    @Inject
     private ProductBeanFactory productBeanFactory;
 
-    public ProductListBean create(final Iterable<ProductProjection> productList, final CategoryTree categoryTreeInNew) {
+    public ProductListBean create(final Iterable<ProductProjection> productList) {
         final ProductListBean bean = new ProductListBean();
         bean.setList(StreamSupport.stream(productList.spliterator(), false)
                 .map(product -> {
                     final ProductVariant matchingVariant = product.findFirstMatchingVariant()
                             .orElseGet(product::getMasterVariant);
-                    return createThumbnail(product, matchingVariant, categoryTreeInNew);
+                    return createThumbnail(product, matchingVariant);
                 })
                 .collect(toList()));
         return bean;
     }
 
-    private ProductThumbnailBean createThumbnail(final ProductProjection product, final ProductVariant variant, final CategoryTree categoryTreeNew) {
+    private ProductThumbnailBean createThumbnail(final ProductProjection product, final ProductVariant variant) {
         final ProductThumbnailBean bean = new ProductThumbnailBean();
         bean.setProduct(productBeanFactory.create(product, variant));
         bean.setNew(product.getCategories().stream()
-                .anyMatch(category -> categoryTreeNew.findById(category.getId()).isPresent()));
+                .anyMatch(category -> categoryTreeInNew.findById(category.getId()).isPresent()));
         fillIsSaleInfo(bean, bean.getProduct());
         return bean;
     }

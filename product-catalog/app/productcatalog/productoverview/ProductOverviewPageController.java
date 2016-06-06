@@ -2,6 +2,7 @@ package productcatalog.productoverview;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
+import common.controllers.SunriseController;
 import common.controllers.SunrisePageData;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import productcatalog.common.ProductCatalogController;
 import productcatalog.productoverview.search.*;
 
 import javax.inject.Inject;
@@ -30,7 +30,7 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
-public class ProductOverviewPageController extends ProductCatalogController {
+public class ProductOverviewPageController extends SunriseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductOverviewPageController.class);
     private final int paginationDisplayedPages;
@@ -105,14 +105,14 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     protected Result renderCategoryPage(final Category category, final PagedSearchResult<ProductProjection> searchResult,
                                         final SearchCriteria searchCriteria, final UserContext userContext) {
-        final ProductOverviewPageContent content = productOverviewPageContentFactory.create(category, searchResult, searchCriteria, categoryTreeInNew());
+        final ProductOverviewPageContent content = productOverviewPageContentFactory.create(category, searchResult, searchCriteria);
         fillPageContent(content, searchResult, searchCriteria);
         return ok(renderPage(userContext, content));
     }
 
     protected Result renderSearchPage(final PagedSearchResult<ProductProjection> searchResult,
                                       final SearchCriteria searchCriteria, final UserContext userContext) {
-        final ProductOverviewPageContent content = productOverviewPageContentFactory.create(searchResult, searchCriteria, categoryTreeInNew());
+        final ProductOverviewPageContent content = productOverviewPageContentFactory.create(searchResult, searchCriteria);
         fillPageContent(content, searchResult, searchCriteria);
         return ok(renderPage(userContext, content));
     }

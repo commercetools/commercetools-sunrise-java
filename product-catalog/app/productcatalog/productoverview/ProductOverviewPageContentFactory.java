@@ -1,8 +1,9 @@
 package productcatalog.productoverview;
 
-import common.contexts.SunriseDataBeanFactory;
+import common.contexts.UserContext;
 import common.models.FormSelectableOptionBean;
 import common.template.i18n.I18nIdentifier;
+import common.template.i18n.I18nResolver;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
@@ -15,19 +16,23 @@ import javax.inject.Inject;
 
 import static java.util.stream.Collectors.toList;
 
-public class ProductOverviewPageContentFactory extends SunriseDataBeanFactory {
+public class ProductOverviewPageContentFactory {
 
+    @Inject
+    private UserContext userContext;
+    @Inject
+    private I18nResolver i18nResolver;
+    @Inject
+    private CategoryTree categoryTree;
     @Inject
     private BreadcrumbBeanFactory breadcrumbBeanFactory;
     @Inject
     private ProductListBeanFactory productListBeanFactory;
-    @Inject
-    private CategoryTree categoryTree;
 
     public ProductOverviewPageContent create(final Category category, final PagedSearchResult<ProductProjection> searchResult,
-                                             final SearchCriteria searchCriteria, final CategoryTree categoryTreeInNew) {
+                                             final SearchCriteria searchCriteria) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
-        fill(content, searchResult, searchCriteria, categoryTreeInNew);
+        fill(content, searchResult, searchCriteria);
         content.setAdditionalTitle(category.getName().find(userContext.locales()).orElse(""));
         content.setBreadcrumb(breadcrumbBeanFactory.create(category));
         content.setJumbotron(new JumbotronBean(category, userContext, categoryTree));
@@ -37,9 +42,9 @@ public class ProductOverviewPageContentFactory extends SunriseDataBeanFactory {
     }
 
     public ProductOverviewPageContent create(final PagedSearchResult<ProductProjection> searchResult,
-                                             final SearchCriteria searchCriteria, final CategoryTree categoryTreeInNew) {
+                                             final SearchCriteria searchCriteria) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
-        fill(content, searchResult, searchCriteria, categoryTreeInNew);
+        fill(content, searchResult, searchCriteria);
         final String searchTerm = searchCriteria.getSearchBox().getSearchTerm().get().getValue();
         content.setAdditionalTitle(searchTerm);
         content.setBreadcrumb(breadcrumbBeanFactory.create(searchTerm));
@@ -47,9 +52,9 @@ public class ProductOverviewPageContentFactory extends SunriseDataBeanFactory {
         return content;
     }
 
-    public void fill(final ProductOverviewPageContent content, final PagedSearchResult<ProductProjection> searchResult,
-                     final SearchCriteria searchCriteria, final CategoryTree categoryTreeInNew) {
-        content.setProducts(productListBeanFactory.create(searchResult.getResults(), categoryTreeInNew));
+    private void fill(final ProductOverviewPageContent content, final PagedSearchResult<ProductProjection> searchResult,
+                      final SearchCriteria searchCriteria) {
+        content.setProducts(productListBeanFactory.create(searchResult.getResults()));
         content.setSortSelector(createSortSelector(searchCriteria.getSortSelector()));
         content.setDisplaySelector(createProductsPerPageSelector(searchCriteria.getProductsPerPageSelector()));
         content.setFacets(new FacetSelectorsBean(searchCriteria.getFacetSelectors(), searchResult, userContext, i18nResolver));
