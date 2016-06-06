@@ -57,8 +57,9 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         final CompletionStage<Cart> loadedCart = getOrCreateCart();
-        final CompletionStage<?> stage = loadedCart.thenComposeAsync(cart -> runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart)), HttpExecution.defaultContext());
-        return loadedCart.thenCombineAsync(stage, (cart, loadedCartHooksResult) -> showCheckoutAddressPage(cart), HttpExecution.defaultContext());
+        final CompletionStage<Object> completionStage =
+                loadedCart.thenComposeAsync(cart -> runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart)), HttpExecution.defaultContext());
+        return loadedCart.thenCombineAsync(completionStage, (cart, loadedCartHooksResult) -> showCheckoutAddressPage(cart), HttpExecution.defaultContext());
     }
 
     @RequireCSRFCheck

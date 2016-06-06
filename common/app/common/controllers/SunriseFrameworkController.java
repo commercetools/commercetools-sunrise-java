@@ -169,11 +169,13 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
 
-    protected final <T> CompletionStage<?> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<Object>> f) {
-        final List<? extends CompletionStage<Object>> collect = controllerComponents.stream()
+    protected final <T> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
+        final List<CompletionStage<Void>> collect = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
                 .map(hook -> f.apply((T) hook))
+                .map(stage -> (CompletionStage<Void>) stage)
                 .collect(Collectors.toList());
-        return FutureUtils.listOfFuturesToFutureOfList(collect);
+        final CompletionStage<?> listCompletionStage = FutureUtils.listOfFuturesToFutureOfList(collect);
+        return listCompletionStage.thenApply(z -> null);
     }
 }
