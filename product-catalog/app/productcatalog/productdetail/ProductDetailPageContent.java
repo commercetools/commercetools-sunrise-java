@@ -8,6 +8,7 @@ import productcatalog.common.SuggestionsData;
 import java.util.List;
 
 public class ProductDetailPageContent extends PageContent {
+
     private BreadcrumbBean breadcrumb;
     private ProductBean product;
     private List<ShippingRateBean> shippingRates;

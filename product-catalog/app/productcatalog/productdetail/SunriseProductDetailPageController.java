@@ -2,9 +2,7 @@ package productcatalog.productdetail;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
-import common.controllers.ReverseRouter;
 import common.controllers.SunrisePageData;
-import common.models.ProductDataConfig;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import org.slf4j.Logger;
@@ -12,9 +10,8 @@ import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import productcatalog.common.BreadcrumbBean;
-import productcatalog.common.ProductBean;
 import productcatalog.common.ProductCatalogController;
+import wedecidelatercommon.ProductReverseRouter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -30,11 +27,11 @@ public abstract class SunriseProductDetailPageController extends ProductCatalogC
     @Inject
     private UserContext userContext;
     @Inject
-    private ReverseRouter reverseRouter;
-    @Inject
-    private ProductDataConfig productDataConfig;
+    private ProductReverseRouter productReverseRouter;
     @Inject
     private ProductFetchBySlugAndSku productFetchBySlugAndSku;
+    @Inject
+    protected ProductDetailPageContentFactory productDetailPageContentFactory;
 
     @Nullable
     private String slug;
@@ -94,12 +91,7 @@ public abstract class SunriseProductDetailPageController extends ProductCatalogC
     }
 
     protected ProductDetailPageContent createPageContent(final ProductProjection product, final ProductVariant variant) {
-        final ProductDetailPageContent content = new ProductDetailPageContent();
-        content.setAdditionalTitle(product.getName().find(userContext.locales()).orElse(""));
-        content.setProduct(new ProductBean(product, variant, productDataConfig, userContext, reverseRouter()));
-        content.setBreadcrumb(new BreadcrumbBean(product, variant, categoryTree(), userContext, reverseRouter()));
-        content.setAddToCartFormUrl(reverseRouter().processAddProductToCartForm(userContext.locale().getLanguage()).url()); // TODO move to page meta
-        return content;
+        return productDetailPageContentFactory.create(product, variant);
     }
 
     protected Html renderPage(final ProductDetailPageContent pageContent) {
@@ -112,11 +104,11 @@ public abstract class SunriseProductDetailPageController extends ProductCatalogC
     }
 
     private Result redirectToNewSlug(final String newSlug, final String sku) {
-        return movedPermanently(reverseRouter.showProduct(userContext.locale().toLanguageTag(), newSlug, sku));
+        return movedPermanently(productReverseRouter.productDetailPageCall(userContext.locale().toLanguageTag(), newSlug, sku));
     }
 
     private CompletionStage<Result> redirectToMasterVariant(final ProductProjection product) {
-        return reverseRouter().showProduct(userContext.locale(), product, product.getMasterVariant())
+        return reverseRouter().productDetailPageCall(userContext.locale(), product, product.getMasterVariant())
                 .map(call -> completedFuture(redirect(call)))
                 .orElseGet(() -> completedFuture(notFoundProductResult()));
     }

@@ -3,7 +3,7 @@ package productcatalog.productoverview;
 import common.models.DetailData;
 import common.controllers.PageContent;
 import productcatalog.common.BreadcrumbBean;
-import productcatalog.common.ProductListData;
+import productcatalog.common.ProductListBean;
 import productcatalog.productoverview.search.ProductsPerPageSelectorBean;
 import productcatalog.productoverview.search.FacetSelectorsBean;
 import productcatalog.productoverview.search.SortSelectorBean;
@@ -20,7 +20,7 @@ public class ProductOverviewPageContent extends PageContent {
     private PaginationBean pagination;
     private ProductsPerPageSelectorBean displaySelector;
     private SortSelectorBean sortSelector;
-    private ProductListData products;
+    private ProductListBean products;
     // TODO wishlist
 
     public ProductOverviewPageContent() {
@@ -106,11 +106,11 @@ public class ProductOverviewPageContent extends PageContent {
         this.sortSelector = sortSelector;
     }
 
-    public ProductListData getProducts() {
+    public ProductListBean getProducts() {
         return products;
     }
 
-    public void setProducts(final ProductListData products) {
+    public void setProducts(final ProductListBean products) {
         this.products = products;
     }
 }

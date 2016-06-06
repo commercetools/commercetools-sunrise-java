@@ -2,10 +2,12 @@ package shoppingcart;
 
 import common.contexts.UserContext;
 import common.models.ProductAttributeBean;
+import common.models.ProductAttributeBeanFactory;
 import common.models.ProductDataConfig;
 import io.sphere.sdk.carts.LineItem;
 import wedecidelatercommon.ProductReverseRouter;
 
+import javax.inject.Inject;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -13,6 +15,9 @@ import static java.util.stream.Collectors.toList;
 public class LineItemBean extends MiniCartLineItemBean {
 
     private List<ProductAttributeBean> attributes;
+
+    @Inject
+    private ProductAttributeBeanFactory productAttributeBeanFactory;
 
     public LineItemBean() {
     }
@@ -22,7 +27,7 @@ public class LineItemBean extends MiniCartLineItemBean {
         super(lineItem, userContext, reverseRouter);
         this.attributes = lineItem.getVariant().getAttributes().stream()
                 .filter(attr -> productDataConfig.getSelectableAttributes().contains(attr.getName()))
-                .map(attr -> new ProductAttributeBean(attr, productDataConfig.getMetaProductType(), userContext))
+                .map(attr -> productAttributeBeanFactory.create(attr))
                 .collect(toList());
     }
 
