@@ -6,7 +6,7 @@ import common.controllers.SunrisePageData;
 import common.hooks.SunrisePageDataHook;
 import common.models.ProductDataConfig;
 import common.suggestion.ProductRecommendation;
-import framework.ControllerComponent;
+import framework.ControllerSunriseComponent;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
