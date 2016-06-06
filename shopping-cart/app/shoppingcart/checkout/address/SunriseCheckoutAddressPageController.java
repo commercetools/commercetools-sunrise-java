@@ -24,6 +24,7 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 import shoppingcart.common.StepWidgetBean;
 import shoppingcart.common.SunriseFrameworkCartController;
+import shoppingcart.hooks.CartLoadedHook;
 import wedecidelatercommon.CheckoutReverseRouter;
 
 import javax.annotation.Nullable;
@@ -55,8 +56,9 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return getOrCreateCart()
-                .thenApplyAsync(this::showCheckoutAddressPage, HttpExecution.defaultContext());
+        final CompletionStage<Cart> loadedCart = getOrCreateCart();
+        final CompletionStage<?> stage = loadedCart.thenComposeAsync(cart -> runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart)), HttpExecution.defaultContext());
+        return loadedCart.thenCombineAsync(stage, (cart, loadedCartHooksResult) -> showCheckoutAddressPage(cart), HttpExecution.defaultContext());
     }
 
     @RequireCSRFCheck

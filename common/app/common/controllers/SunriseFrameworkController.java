@@ -10,9 +10,11 @@ import common.template.cms.CmsService;
 import common.template.engine.TemplateEngine;
 import common.template.i18n.I18nResolver;
 import common.utils.PriceFormatter;
+import framework.ControllerComponent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.utils.FutureUtils;
 import play.Configuration;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -22,10 +24,10 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static common.controllers.SunriseController.SESSION_COUNTRY;
 import static java.util.stream.Collectors.toList;
@@ -53,6 +55,7 @@ public abstract class SunriseFrameworkController extends Controller {
     private PageMetaFactory pageMetaFactory;
     @Inject
     private NavMenuDataFactory navMenuDataFactory;
+    private final List<ControllerComponent> controllerComponents = new LinkedList<>();
 
     protected SunriseFrameworkController() {
     }
@@ -159,5 +162,18 @@ public abstract class SunriseFrameworkController extends Controller {
 
     public UserContext userContext() {
         return userContext;
+    }
+
+    protected final void registerControllerComponent(final ControllerComponent controllerComponent) {
+        controllerComponents.add(controllerComponent);
+    }
+
+
+    protected final <T> CompletionStage<?> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<Object>> f) {
+        final List<? extends CompletionStage<Object>> collect = controllerComponents.stream()
+                .filter(x -> hookClass.isAssignableFrom(x.getClass()))
+                .map(hook -> f.apply((T) hook))
+                .collect(Collectors.toList());
+        return FutureUtils.listOfFuturesToFutureOfList(collect);
     }
 }
