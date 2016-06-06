@@ -47,8 +47,6 @@ public abstract class SunriseFrameworkController extends Controller {
     private Configuration configuration;
     @Inject
     private I18nResolver i18nResolver;
-    private Optional<String> categoryNewExtId;
-    private boolean showInfoModal;
     @Inject
     private PageMetaFactory pageMetaFactory;
     @Inject
@@ -56,13 +54,6 @@ public abstract class SunriseFrameworkController extends Controller {
     private final List<ControllerComponent> controllerComponents = new LinkedList<>();
 
     protected SunriseFrameworkController() {
-    }
-
-    @Inject
-    public void initializeFields(Configuration configuration) {
-        System.err.println("init in SunriseFrameworkController");
-        this.categoryNewExtId = Optional.ofNullable(configuration.getString("common.newCategoryExternalId"));
-        this.showInfoModal = configuration.getBoolean("application.demoInfo.enabled", false);
     }
 
     public SphereClient sphere() {
