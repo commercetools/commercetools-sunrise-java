@@ -25,8 +25,9 @@ class CategoryTreeInNewProvider implements Provider<CategoryTree> {
         final List<Category> categories = getCategoryNew()
                 .map(Collections::singletonList)
                 .orElseGet(Collections::emptyList);
-        Logger.info("Provide CategoryTreeInNew with " + categories.size() + " categories");
-        return categoryTree.getSubtree(categories);
+        final CategoryTree categoryTreeInNew = categoryTree.getSubtree(categories);
+        Logger.info("Provide CategoryTreeInNew with " + categoryTreeInNew.getAllAsFlatList().size() + " categories");
+        return categoryTreeInNew;
     }
 
     private Optional<Category> getCategoryNew() {
