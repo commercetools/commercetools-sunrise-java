@@ -170,6 +170,7 @@ public abstract class SunriseFrameworkController extends Controller {
 
 
     protected final <T> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
+        //TODO throw a helpful NPE if component returns null instead of CompletionStage
         final List<CompletionStage<Void>> collect = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
                 .map(hook -> f.apply((T) hook))
