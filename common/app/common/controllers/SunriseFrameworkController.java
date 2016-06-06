@@ -1,11 +1,13 @@
 package common.controllers;
 
+import com.google.inject.Injector;
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.models.LocationSelector;
 import common.models.NavMenuDataFactory;
 import common.template.engine.TemplateEngine;
-import framework.ControllerComponent;
+import framework.ControllerSunriseComponent;
+import framework.MultiControllerSunriseComponentResolver;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.utils.FutureUtils;
 import play.mvc.Controller;
@@ -16,7 +18,9 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -33,10 +37,23 @@ public abstract class SunriseFrameworkController extends Controller {
     private PageMetaFactory pageMetaFactory;
     @Inject
     private NavMenuDataFactory navMenuDataFactory;
-    private final List<ControllerComponent> controllerComponents = new LinkedList<>();
+
+    private final List<ControllerSunriseComponent> controllerComponents = new LinkedList<>();
+
+
+    @Inject
+    public void setMultiControllerComponents(final MultiControllerSunriseComponentResolver multiComponent, final Injector injector) {
+        final List<Class<? extends ControllerSunriseComponent>> components = multiComponent.findMatchingComponents(this);
+        components.forEach(clazz -> {
+            final ControllerSunriseComponent instance = injector.getInstance(clazz);
+            controllerComponents.add(instance);
+        });
+    }
 
     protected SunriseFrameworkController() {
     }
+
+    public abstract Set<String> getFrameworkTags();
 
     public SphereClient sphere() {
         return sphere;
@@ -56,7 +73,6 @@ public abstract class SunriseFrameworkController extends Controller {
         pageHeader.setLocation(new LocationSelector(projectContext, userContext));
         pageHeader.setNavMenu(navMenuDataFactory.create());
         pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session));
-//        pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));//TODO framework check
         return new SunrisePageData(pageHeader, new PageFooter(), content, pageMetaFactory.create());
     }
 
@@ -65,8 +81,14 @@ public abstract class SunriseFrameworkController extends Controller {
         return session.get("csrfToken");
     }
 
-    protected final void registerControllerComponent(final ControllerComponent controllerComponent) {
+    protected final void registerControllerComponent(final ControllerSunriseComponent controllerComponent) {
         controllerComponents.add(controllerComponent);
+    }
+
+    protected final <T> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer) {
+        controllerComponents.stream()
+                .filter(x -> hookClass.isAssignableFrom(x.getClass()))
+                .forEach(action -> consumer.accept((T) action));
     }
 
     protected final <T> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {

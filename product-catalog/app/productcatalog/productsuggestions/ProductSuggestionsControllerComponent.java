@@ -6,7 +6,7 @@ import common.controllers.SunrisePageData;
 import common.hooks.SunrisePageDataHook;
 import common.models.ProductDataConfig;
 import common.suggestion.ProductRecommendation;
-import framework.ControllerComponent;
+import framework.ControllerSunriseComponent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-public class ProductSuggestionsControllerComponent implements ControllerComponent, SingleProductProjectionHook, SunrisePageDataHook {
+public class ProductSuggestionsControllerComponent implements ControllerSunriseComponent, SingleProductProjectionHook, SunrisePageDataHook {
 
     @Inject
     private UserContext userContext;
