@@ -7,30 +7,41 @@ import io.sphere.sdk.play.metrics.MetricAction;
 import io.sphere.sdk.play.metrics.MetricHttpClient;
 import play.Configuration;
 import play.Logger;
+import play.inject.ApplicationLifecycle;
 
 import javax.inject.Inject;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 class SphereClientProvider implements Provider<SphereClient> {
-    public static final String CONFIG_PROJECT_KEY = "ctp.projectKey";
-    public static final String CONFIG_CLIENT_ID = "ctp.clientId";
-    public static final String CONFIG_CLIENT_SECRET = "ctp.clientSecret";
-    private final Configuration configuration;
+
+    private static final String CONFIG_PROJECT_KEY = "ctp.projectKey";
+    private static final String CONFIG_CLIENT_ID = "ctp.clientId";
+    private static final String CONFIG_CLIENT_SECRET = "ctp.clientSecret";
 
     @Inject
-    public SphereClientProvider(final Configuration configuration) {
-        this.configuration = configuration;
-    }
+    private ApplicationLifecycle applicationLifecycle;
+    @Inject
+    private Configuration configuration;
 
     @Override
     public SphereClient get() {
         final SphereClientConfig config = getClientConfig();
-        final boolean metricsEnabled = configuration.getBoolean(MetricAction.CONFIG_METRICS_ENABLED);
-        return metricsEnabled ? createClientWithMetrics(config) : createClient(config);
+        final SphereClient sphereClient = createClient(config);
+        applicationLifecycle.addStopHook(() -> {
+            sphereClient.close();
+            return completedFuture(null);
+        });
+        return sphereClient;
     }
 
-    private SphereClient createClient(final SphereClientConfig clientConfig) {
+    private SphereClient createClient(final SphereClientConfig config) {
+        final boolean metricsEnabled = configuration.getBoolean(MetricAction.CONFIG_METRICS_ENABLED);
+        return metricsEnabled ? createClientWithMetrics(config) : createRegularClient(config);
+    }
+
+    private SphereClient createRegularClient(final SphereClientConfig clientConfig) {
         Logger.info("Provide SphereClient");
         return SphereClientFactory.of().createClient(clientConfig);
     }
