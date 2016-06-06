@@ -11,7 +11,8 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
-import productcatalog.common.ProductListData;
+import productcatalog.common.ProductListBean;
+import productcatalog.common.ProductListBeanFactory;
 import productcatalog.common.SuggestionsData;
 import productcatalog.hooks.SingleProductProjectionHook;
 import productcatalog.productdetail.ProductDetailPageContent;
@@ -35,6 +36,8 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
     private ProductDataConfig productDataConfig;
     @Inject
     private ReverseRouter reverseRouter;//TODO framework remove this big dep
+    @Inject
+    private ProductListBeanFactory productListBeanFactory;
     private int numSuggestions;
     private Set<ProductProjection> suggestions;
     private String categoryNewExtId;
@@ -60,7 +63,7 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
     }
 
     private SuggestionsData createSuggestions(final UserContext userContext, final Set<ProductProjection> suggestions) {
-        final ProductListData productListData = new ProductListData(suggestions, productDataConfig, userContext, reverseRouter, categoryTreeInNew());
+        final ProductListBean productListData = productListBeanFactory.create(suggestions, categoryTreeInNew());
         return new SuggestionsData(productListData);
     }
 
