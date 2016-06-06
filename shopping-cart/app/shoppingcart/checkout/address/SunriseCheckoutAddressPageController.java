@@ -2,6 +2,7 @@ package shoppingcart.checkout.address;
 
 import common.controllers.SunrisePageData;
 import common.errors.ErrorsBean;
+import common.hooks.SunrisePageDataHook;
 import common.inject.RequestScoped;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -29,13 +30,12 @@ import wedecidelatercommon.CheckoutReverseRouter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
 
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
+import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
@@ -151,6 +151,12 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         pageContent.setStepWidget(StepWidgetBean.ADDRESS);
         pageContent.setCart(createCartLikeBean(cart, userContext()));
         final SunrisePageData pageData = pageData(userContext(), pageContent, ctx(), session());
+        runVoidHook(SunrisePageDataHook.class, sunrisePageDataHook -> sunrisePageDataHook.acceptSunrisePageData(pageData));
         return templateEngine().renderToHtml("checkout-address", pageData, userContext().locales());
+    }
+
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("checkout", "checkout.address"));
     }
 }
