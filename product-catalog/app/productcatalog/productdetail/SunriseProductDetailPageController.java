@@ -34,9 +34,9 @@ public abstract class SunriseProductDetailPageController extends SunriseControll
     protected ProductDetailPageContentFactory productDetailPageContentFactory;
 
     @Nullable
-    private String slug;
+    private String productSlug;
     @Nullable
-    private String sku;
+    private String variantSku;
 
     @Inject
     public SunriseProductDetailPageController(final ControllerDependency controllerDependency) {
@@ -44,18 +44,18 @@ public abstract class SunriseProductDetailPageController extends SunriseControll
     }
 
     public CompletionStage<Result> showProductBySlugAndSku(final String languageTag, final String slug, final String sku) {
-        this.slug = slug;
-        this.sku = sku;
+        this.productSlug = slug;
+        this.variantSku = sku;
         return productFetchBySlugAndSku.findProduct(slug, sku)
                 .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
     }
 
-    protected Optional<String> getSlug() {
-        return Optional.ofNullable(slug);
+    protected Optional<String> getProductSlug() {
+        return Optional.ofNullable(productSlug);
     }
 
-    protected Optional<String> getSku() {
-        return Optional.ofNullable(sku);
+    protected Optional<String> getVariantSku() {
+        return Optional.ofNullable(variantSku);
     }
 
     protected CompletionStage<Result> showProduct(final ProductFetchResult productFetchResult) {
@@ -80,9 +80,9 @@ public abstract class SunriseProductDetailPageController extends SunriseControll
     }
 
     protected CompletionStage<Result> handleNotFoundProduct() {
-        if (getSlug().isPresent() && getSku().isPresent()) {
-            return findNewProductSlug(getSlug().get()).thenApplyAsync(newSlugOpt -> newSlugOpt
-                    .map(newSlug -> redirectToNewSlug(newSlug, getSku().get()))
+        if (getProductSlug().isPresent() && getVariantSku().isPresent()) {
+            return findNewProductSlug(getProductSlug().get()).thenApplyAsync(newSlugOpt -> newSlugOpt
+                    .map(newSlug -> redirectToNewSlug(newSlug, getVariantSku().get()))
                     .orElseGet(this::notFoundProductResult),
                     HttpExecution.defaultContext());
         } else {
