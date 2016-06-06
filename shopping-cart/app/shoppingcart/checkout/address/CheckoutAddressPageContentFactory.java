@@ -2,6 +2,7 @@ package shoppingcart.checkout.address;
 
 import common.contexts.SunriseDataBeanFactory;
 import common.errors.ErrorsBean;
+import common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
@@ -18,10 +19,11 @@ public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
     public CheckoutAddressPageContent create(final Cart cart) {
         final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
         pageContent.setAddressForm(formBeanFactory.create(cart));
+        setCommonData(pageContent);
         return pageContent;
     }
 
-    protected CheckoutAddressPageContent createWithAddressError(final Form<CheckoutShippingAddressFormData> shippingAddressForm,
+    public CheckoutAddressPageContent createWithAddressError(final Form<CheckoutShippingAddressFormData> shippingAddressForm,
                                                                 final Form<CheckoutBillingAddressFormData> billingAddressForm,
                                                                 final ErrorsBean errors) {
         final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
@@ -31,6 +33,11 @@ public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
         final CheckoutAddressFormBean formBean = new CheckoutAddressFormBean(shippingAddress, billingAddress, differentBillingAddress, userContext, projectContext, i18nResolver, configuration);
         formBean.setErrors(errors);
         pageContent.setAddressForm(formBean);
+        setCommonData(pageContent);
         return pageContent;
+    }
+
+    private void setCommonData(final CheckoutAddressPageContent pageContent) {
+        pageContent.setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
     }
 }
