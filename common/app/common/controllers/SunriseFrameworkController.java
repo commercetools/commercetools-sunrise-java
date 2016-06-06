@@ -38,8 +38,6 @@ public abstract class SunriseFrameworkController extends Controller {
     @Inject
     private UserContext userContext;
     @Inject
-    private CategoryTree categoryTree;
-    @Inject
     private ProjectContext projectContext;
     @Inject
     private TemplateEngine templateEngine;
@@ -69,10 +67,6 @@ public abstract class SunriseFrameworkController extends Controller {
 
     public SphereClient sphere() {
         return sphere;
-    }
-
-    public CategoryTree categoryTree() {
-        return categoryTree;
     }
 
     public ProjectContext projectContext() {
@@ -119,10 +113,6 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected RequestContext requestContext(final Http.Request request) {
         return RequestContext.of(request.queryString(), request.path());
-    }
-
-    protected Optional<Category> newCategory() {
-        return categoryNewExtId.flatMap(extId -> categoryTree().findByExternalId(extId));
     }
 
     private static Locale currentLocale(final String languageTag, final ProjectContext projectContext) {
