@@ -1,7 +1,5 @@
 package common.contexts;
 
-import common.contexts.ProjectContext;
-import common.contexts.UserContext;
 import common.template.i18n.I18nResolver;
 import play.Configuration;
 

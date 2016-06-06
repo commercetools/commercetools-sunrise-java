@@ -1,0 +1,93 @@
+package common.models;
+
+import common.contexts.UserContext;
+import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.attributes.Attribute;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static common.utils.ProductAttributeUtils.*;
+import static java.util.stream.Collectors.toList;
+
+public class ProductAttributeBeanFactory {
+
+    @Inject
+    private ProductDataConfig productDataConfig;
+    @Inject
+    private UserContext userContext;
+
+    public ProductAttributeBean create(final Attribute attribute) {
+        final ProductAttributeBean bean = new ProductAttributeBean();
+        fillAttributeInfo(bean, attribute);
+        return bean;
+    }
+
+    public SelectableProductAttributeBean createSelectableAttribute(final Attribute attribute, final ProductProjection product) {
+        final SelectableProductAttributeBean bean = new SelectableProductAttributeBean();
+        fillAttributeInfo(bean, attribute);
+        fillAttributeCombinations(bean, attribute, product);
+        bean.setReload(productDataConfig.getHardSelectableAttributes().contains(attribute.getName()));
+        return bean;
+    }
+
+    private  <T extends ProductAttributeBean> void fillAttributeInfo(final T bean, final Attribute attribute) {
+        bean.setKey(attribute.getName());
+        bean.setName(attributeLabel(attribute, userContext.locales(), productDataConfig.getMetaProductType()));
+        bean.setValue(attributeValue(attribute, userContext.locales(), productDataConfig.getMetaProductType()));
+    }
+
+    private void fillAttributeCombinations(final SelectableProductAttributeBean bean, final Attribute attribute,
+                                           final ProductProjection product) {
+        final List<FormSelectableOptionBean> formOption = new ArrayList<>();
+        final Map<String, Map<String, List<String>>> selectableData = new HashMap<>();
+        product.getAllVariants().stream()
+                .map(variant -> variant.getAttribute(attribute.getName()))
+                .filter(attrOption -> attrOption != null)
+                .distinct()
+                .forEach(attrOption -> {
+                    final String attrOptionValue = attributeValue(attrOption, userContext.locales(), productDataConfig.getMetaProductType());
+                    formOption.add(createFormOption(attribute, attrOption, attrOptionValue));
+                    selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attrOption, product));
+                });
+        bean.setList(formOption);
+        bean.setSelectData(selectableData);
+    }
+
+    private FormSelectableOptionBean createFormOption(final Attribute attribute, final Attribute attributeOption,
+                                                      final String attributeOptionValue) {
+        final FormSelectableOptionBean bean = new FormSelectableOptionBean();
+        bean.setLabel(attributeOptionValue);
+        bean.setValue(attributeValueAsKey(attributeOptionValue));
+        bean.setSelected(attributeOption.equals(attribute));
+        return bean;
+    }
+
+    private Map<String, List<String>> createAllowedAttributeCombinations(final Attribute fixedAttribute, final ProductProjection product) {
+        final Map<String, List<String>> attrCombination = new HashMap<>();
+        productDataConfig.getSelectableAttributes().stream()
+                .filter(enabledAttrKey -> !fixedAttribute.getName().equals(enabledAttrKey))
+                .forEach(enabledAttrKey -> {
+                    final List<String> allowedAttrValues = attributeCombination(enabledAttrKey, fixedAttribute, product);
+                    if (!allowedAttrValues.isEmpty()) {
+                        attrCombination.put(enabledAttrKey, allowedAttrValues);
+                    }
+                });
+        return attrCombination;
+    }
+
+    private List<String> attributeCombination(final String attributeKey, final Attribute fixedAttribute, final ProductProjection product) {
+        return product.getAllVariants().stream()
+                .filter(variant -> variant.getAttribute(attributeKey) != null)
+                .filter(variant -> {
+                    final Attribute variantAttribute = variant.getAttribute(fixedAttribute.getName());
+                    return variantAttribute != null && variantAttribute.equals(fixedAttribute);
+                })
+                .map(variant -> attributeValue(variant.getAttribute(attributeKey), userContext.locales(), productDataConfig.getMetaProductType()))
+                .distinct()
+                .collect(toList());
+    }
+}

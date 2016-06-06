@@ -2,8 +2,9 @@ package productcatalog.home;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
+import common.controllers.SunriseController;
 import common.controllers.SunrisePageData;
-import common.models.ProductDataConfig;
+import common.inject.RequestScoped;
 import common.suggestion.ProductRecommendation;
 import common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.categories.Category;
@@ -11,12 +12,11 @@ import io.sphere.sdk.products.ProductProjection;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import productcatalog.common.ProductCatalogController;
-import productcatalog.common.ProductListData;
+import productcatalog.common.ProductListBean;
+import productcatalog.common.ProductListBeanFactory;
 import productcatalog.common.SuggestionsData;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -30,16 +30,16 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 /**
  * Controller for the home page.
  */
-@Singleton
-public class HomePageController extends ProductCatalogController {
+@RequestScoped
+public class HomePageController extends SunriseController {
 
     private final List<String> suggestionsExternalIds;
     private final int numSuggestions;
 
     @Inject
-    private ProductDataConfig productDataConfig;
-    @Inject
     private ProductRecommendation productRecommendation;
+    @Inject
+    private ProductListBeanFactory productListBeanFactory;
 
     @Inject
     public HomePageController(final ControllerDependency controllerDependency) {
@@ -52,7 +52,7 @@ public class HomePageController extends ProductCatalogController {
         final UserContext userContext = userContext(languageTag);
         return generateRecommendedProducts()
                 .thenApplyAsync(recommendedProducts -> {
-                    final HomePageContent pageContent = createPageContent(recommendedProducts, userContext);
+                    final HomePageContent pageContent = createPageContent(recommendedProducts);
                     return ok(renderHomePage(pageContent, userContext));
                 }, HttpExecution.defaultContext());
     }
@@ -70,9 +70,9 @@ public class HomePageController extends ProductCatalogController {
         }
     }
 
-    protected HomePageContent createPageContent(final Set<ProductProjection> recommendedProducts, final UserContext userContext) {
+    protected HomePageContent createPageContent(final Set<ProductProjection> recommendedProducts) {
         final HomePageContent pageContent = new HomePageContent();
-        final ProductListData productListData = new ProductListData(recommendedProducts, productDataConfig, userContext, reverseRouter(), categoryTreeInNew());
+        final ProductListBean productListData = productListBeanFactory.create(recommendedProducts);
         pageContent.setSuggestions(new SuggestionsData(productListData));
         return pageContent;
     }

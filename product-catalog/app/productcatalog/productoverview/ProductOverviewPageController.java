@@ -2,8 +2,8 @@ package productcatalog.productoverview;
 
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
+import common.controllers.SunriseController;
 import common.controllers.SunrisePageData;
-import common.models.ProductDataConfig;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -13,9 +13,6 @@ import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import productcatalog.common.BreadcrumbBean;
-import productcatalog.common.ProductCatalogController;
-import productcatalog.common.ProductListData;
 import productcatalog.productoverview.search.*;
 
 import javax.inject.Inject;
@@ -33,15 +30,15 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
-public class ProductOverviewPageController extends ProductCatalogController {
+public class ProductOverviewPageController extends SunriseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductOverviewPageController.class);
     private final int paginationDisplayedPages;
 
     @Inject
-    private ProductDataConfig productDataConfig;
-    @Inject
     private SearchConfig searchConfig;
+    @Inject
+    private ProductOverviewPageContentFactory productOverviewPageContentFactory;
 
     @Inject
     public ProductOverviewPageController(final ControllerDependency controllerDependency) {
@@ -106,49 +103,29 @@ public class ProductOverviewPageController extends ProductCatalogController {
 
     /* Page rendering methods */
 
-    protected ProductOverviewPageContent createPageContent(final PagedSearchResult<ProductProjection> searchResult,
-                                                           final SearchCriteria searchCriteria, final UserContext userContext) {
-        final ProductOverviewPageContent content = new ProductOverviewPageContent();
-        content.setFilterProductsUrl(request().path());
-        content.setProducts(new ProductListData(searchResult.getResults(), productDataConfig, userContext, reverseRouter(), categoryTreeInNew()));
-        content.setPagination(new PaginationBean(requestContext(request()), searchResult, searchCriteria.getPage(), searchCriteria.getProductsPerPageSelector().getSelectedPageSize(), paginationDisplayedPages));
-        content.setSortSelector(new SortSelectorBean(searchCriteria.getSortSelector(), userContext, i18nResolver()));
-        content.setDisplaySelector(new ProductsPerPageSelectorBean(searchCriteria.getProductsPerPageSelector(), userContext, i18nResolver()));
-        content.setFacets(new FacetSelectorsBean(searchCriteria.getFacetSelectors(), searchResult, userContext, i18nResolver()));
-        return content;
-    }
-
     protected Result renderCategoryPage(final Category category, final PagedSearchResult<ProductProjection> searchResult,
                                         final SearchCriteria searchCriteria, final UserContext userContext) {
-        final ProductOverviewPageContent content = createPageContent(searchResult, searchCriteria, userContext);
-        content.setAdditionalTitle(category.getName().find(userContext.locales()).orElse(""));
-        content.setBreadcrumb(new BreadcrumbBean(category, categoryTree(), userContext, reverseRouter()));
-        content.setJumbotron(new JumbotronBean(category, userContext, categoryTree()));
-        content.setBanner(createBanner(category, userContext));
-        content.setSeo(new SeoBean(userContext, category));
+        final ProductOverviewPageContent content = productOverviewPageContentFactory.create(category, searchResult, searchCriteria);
+        fillPageContent(content, searchResult, searchCriteria);
         return ok(renderPage(userContext, content));
     }
 
     protected Result renderSearchPage(final PagedSearchResult<ProductProjection> searchResult,
                                       final SearchCriteria searchCriteria, final UserContext userContext) {
-        final String searchTerm = searchCriteria.getSearchBox().getSearchTerm().get().getValue();
-        final ProductOverviewPageContent content = createPageContent(searchResult, searchCriteria, userContext);
-        content.setAdditionalTitle(searchTerm);
-        content.setBreadcrumb(new BreadcrumbBean(searchTerm));
-        content.setSearchTerm(searchTerm);
+        final ProductOverviewPageContent content = productOverviewPageContentFactory.create(searchResult, searchCriteria);
+        fillPageContent(content, searchResult, searchCriteria);
         return ok(renderPage(userContext, content));
+    }
+
+    protected void fillPageContent(final ProductOverviewPageContent content,
+                                   final PagedSearchResult<ProductProjection> searchResult,
+                                   final SearchCriteria searchCriteria) {
+        content.setFilterProductsUrl(request().path());
+        content.setPagination(new PaginationBean(requestContext(request()), searchResult, searchCriteria.getPage(), searchCriteria.getProductsPerPageSelector().getSelectedPageSize(), paginationDisplayedPages));
     }
 
     protected Html renderPage(final UserContext userContext, final ProductOverviewPageContent content) {
         final SunrisePageData pageData = pageData(userContext, content, ctx(), session());
         return templateEngine().renderToHtml("pop", pageData, userContext.locales());
     }
-
-    protected static BannerBean createBanner(final Category category, final UserContext userContext) {
-        final BannerBean bannerBean = new BannerBean(userContext, category);
-        bannerBean.setImageMobile("/assets/img/banner_mobile-0a9241da249091a023ecfadde951a53b.jpg"); // TODO obtain from category?
-        bannerBean.setImageDesktop("/assets/img/banner_desktop-9ffd148c48068ce2666d6533b4a87d11.jpg"); // TODO obtain from category?
-        return bannerBean;
-    }
-
 }

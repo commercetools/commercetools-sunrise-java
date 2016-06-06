@@ -1,5 +1,9 @@
 package productcatalog.productoverview;
 
+import com.google.inject.Binder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.neovisionaries.i18n.CountryCode;
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
@@ -12,6 +16,8 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import org.junit.Test;
 import productcatalog.common.BreadcrumbBean;
+import productcatalog.common.BreadcrumbBeanFactory;
+import wedecidelatercommon.ProductReverseRouter;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,7 +28,7 @@ import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BreadcrumbBeanTest {
+public class BreadcrumbBeanFactoryTest {
 
     private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("breadcrumb/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
     private static final ProductProjection PRODUCT = readCtpObject("breadcrumb/breadcrumbProduct.json", ProductProjection.typeReference());
@@ -31,14 +37,14 @@ public class BreadcrumbBeanTest {
 
     @Test
     public void createCategoryBreadcrumbOfOneLevel() {
-        testCategoryBreadcrumb("1stLevel", CATEGORY_TREE,
+        testCategoryBreadcrumb("1stLevel",
                 texts -> assertThat(texts).containsExactly("1st Level"),
                 urls -> assertThat(urls).containsExactly("category-1st-level"));
     }
 
     @Test
     public void createCategoryBreadcrumbOfManyLevels() {
-        testCategoryBreadcrumb("3rdLevel", CATEGORY_TREE,
+        testCategoryBreadcrumb("3rdLevel",
                 texts -> assertThat(texts).containsExactly("1st Level", "2nd Level", "3rd Level"),
                 urls -> assertThat(urls).containsExactly("category-1st-level", "category-2nd-level", "category-3rd-level"));
     }
@@ -52,10 +58,40 @@ public class BreadcrumbBeanTest {
 
     @Test
     public void createSearchBreadcrumb() throws Exception {
-        final BreadcrumbBean breadcrumb = new BreadcrumbBean("foo");
+        final BreadcrumbBean breadcrumb = createBreadcrumbBeanFactory().create("foo");
         testBreadcrumb(breadcrumb,
                 texts -> assertThat(texts).containsExactly("foo"),
                 urls -> assertThat(urls).containsNull());
+    }
+
+    private static BreadcrumbBeanFactory createBreadcrumbBeanFactory() {
+        final Injector injector = Guice.createInjector(new Module() {
+            @Override
+            public void configure(final Binder binder) {
+                binder.bind(UserContext.class).toInstance(USER_CONTEXT);
+                binder.bind(CategoryTree.class).toInstance(CATEGORY_TREE);
+                binder.bind(ProductReverseRouter.class).toInstance(REVERSE_ROUTER);
+            }
+        });
+        return injector.getInstance(BreadcrumbBeanFactory.class);
+    }
+
+    private void testCategoryBreadcrumb(final String extId, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
+        final BreadcrumbBeanFactory breadcrumbBeanFactory = createBreadcrumbBeanFactory();
+        final Category category = CATEGORY_TREE.findByExternalId(extId).get();
+        final BreadcrumbBean breadcrumb = breadcrumbBeanFactory.create(category);
+        testBreadcrumb(breadcrumb, texts, urls);
+    }
+
+    private void testProductBreadcrumb(final String sku, final ProductProjection product, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
+        final ProductVariant variant = product.findVariantBySku(sku).get();
+        final BreadcrumbBean breadcrumb = createBreadcrumbBeanFactory().create(product, variant);
+        testBreadcrumb(breadcrumb, texts, urls);
+    }
+
+    private void testBreadcrumb(final BreadcrumbBean breadcrumb, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
+        texts.accept(breadcrumb.getLinks().stream().map(LinkBean::getText).collect(toList()));
+        urls.accept(breadcrumb.getLinks().stream().map(LinkBean::getUrl).collect(toList()));
     }
 
     private static ReverseRouter reverseRouter() {
@@ -64,22 +100,5 @@ public class BreadcrumbBeanTest {
         reverseRouter.setShowProductUrl("product-");
         reverseRouter.setProcessSearchProductsFormUrl("search-");
         return reverseRouter;
-    }
-
-    private void testCategoryBreadcrumb(final String extId, final CategoryTree categoryTree, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        final Category category = categoryTree.findByExternalId(extId).get();
-        final BreadcrumbBean breadcrumb = new BreadcrumbBean(category, CATEGORY_TREE, USER_CONTEXT, REVERSE_ROUTER);
-        testBreadcrumb(breadcrumb, texts, urls);
-    }
-
-    private void testProductBreadcrumb(final String sku, final ProductProjection product, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        final ProductVariant variant = product.findVariantBySku(sku).get();
-        final BreadcrumbBean breadcrumb = new BreadcrumbBean(product, variant, CATEGORY_TREE, USER_CONTEXT, REVERSE_ROUTER);
-        testBreadcrumb(breadcrumb, texts, urls);
-    }
-
-    private void testBreadcrumb(final BreadcrumbBean breadcrumb, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        texts.accept(breadcrumb.getLinks().stream().map(LinkBean::getText).collect(toList()));
-        urls.accept(breadcrumb.getLinks().stream().map(LinkBean::getUrl).collect(toList()));
     }
 }

@@ -1,22 +1,9 @@
 package common.models;
 
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
-import common.prices.PriceFinder;
-import common.utils.MoneyContext;
-import io.sphere.sdk.carts.LineItem;
-import io.sphere.sdk.models.LocalizedString;
-import io.sphere.sdk.products.Price;
-import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
-import wedecidelatercommon.ProductReverseRouter;
+import io.sphere.sdk.models.Base;
 
-import javax.money.MonetaryAmount;
-import java.util.Locale;
+public class ProductVariantBean extends Base {
 
-import static common.utils.PriceUtils.calculateFinalPrice;
-
-public class ProductVariantBean {
     private String name;
     private String sku;
     private String url;
@@ -25,35 +12,6 @@ public class ProductVariantBean {
     private String priceOld;
 
     public ProductVariantBean() {
-    }
-
-    public ProductVariantBean(final LineItem lineItem, final UserContext userContext, final ProductReverseRouter reverseRouter) {
-        this.url = reverseRouter.showProductUrlOrEmpty(userContext.locale(), lineItem);
-        fill(lineItem.getName(), lineItem.getVariant(), userContext);
-        fillPrice(lineItem.getPrice(), userContext.locale());
-    }
-
-    public ProductVariantBean(final ProductProjection product, final ProductVariant variant,
-                              final UserContext userContext, final ReverseRouter reverseRouter) {
-        this.url = reverseRouter.showProductUrlOrEmpty(userContext.locale(), product, variant);
-        fill(product.getName(), variant, userContext);
-        PriceFinder.of(userContext).findPrice(variant.getPrices()).ifPresent(price -> fillPrice(price, userContext.locale()));
-    }
-
-    private void fill(final LocalizedString name, final ProductVariant variant, final UserContext userContext) {
-        this.name = name.find(userContext.locales()).orElse("");
-        this.sku = variant.getSku();
-        variant.getImages().stream().findFirst().ifPresent(image -> this.image = image.getUrl());
-    }
-
-    private void fillPrice(final Price price, final Locale locale) {
-        final MoneyContext moneyContext = MoneyContext.of(price.getValue().getCurrency(), locale);
-        final MonetaryAmount currentPrice = calculateFinalPrice(price);
-        final boolean hasDiscount = currentPrice.isLessThan(price.getValue());
-        if (hasDiscount) {
-            this.priceOld = moneyContext.formatOrNull(price);
-        }
-        this.price = moneyContext.formatOrNull(currentPrice);
     }
 
     public String getImage() {

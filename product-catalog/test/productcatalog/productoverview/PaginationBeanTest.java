@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PaginationBeanTest {
     private static final String URL_PATH = "www.url.dom/path/to/";
-    private static final int PAGE_SIZE = 9;
+    private static final Long PAGE_SIZE = 9L;
 
     @Test
     public void calculatesPagination() throws Exception {
@@ -92,15 +92,40 @@ public class PaginationBeanTest {
 
     private PaginationBean createPaginationData(final int currentPage, final int displayedPages, final PagedResult<ProductProjection> searchResult) {
         final RequestContext requestContext = RequestContext.of(buildQueryString(currentPage), URL_PATH);
-        return new PaginationBean(requestContext, searchResult, currentPage, PAGE_SIZE, displayedPages);
+        return new PaginationBean(requestContext, searchResult, currentPage, PAGE_SIZE.intValue(), displayedPages);
     }
 
     @SuppressWarnings("unchecked")
     private PagedResult<ProductProjection> pagedResult(final int page, final int totalPages) {
         final long offset = (page - 1) * PAGE_SIZE;
         final long totalProducts = totalPages * PAGE_SIZE;
-        final List<ProductProjection> products = Collections.nCopies(PAGE_SIZE, null);
-        return new PagedResult(offset, totalProducts, products) {};
+        final List<ProductProjection> products = Collections.nCopies(PAGE_SIZE.intValue(), null);
+        return new PagedResult() {
+            @Override
+            public List getResults() {
+                return products;
+            }
+
+            @Override
+            public Long getOffset() {
+                return offset;
+            }
+
+            @Override
+            public Long getTotal() {
+                return totalProducts;
+            }
+
+            @Override
+            public Long size() {
+                return getCount();
+            }
+
+            @Override
+            public Long getCount() {
+                return PAGE_SIZE;
+            }
+        };
     }
 
     private Map<String, String[]> buildQueryString(final int currentPage) {

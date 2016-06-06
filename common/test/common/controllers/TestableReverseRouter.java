@@ -165,12 +165,12 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     @Override
-    public Call showCategory(final String languageTag, final String categorySlug) {
+    public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
         return createCall(showCategoryUrl + categorySlug);
     }
 
     @Override
-    public Call showProduct(final String languageTag, final String productSlug, final String sku) {
+    public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
         return createCall(showProductUrl + productSlug + sku);
     }
 

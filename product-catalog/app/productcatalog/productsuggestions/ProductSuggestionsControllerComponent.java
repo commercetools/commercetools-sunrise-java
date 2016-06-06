@@ -6,20 +6,17 @@ import common.controllers.SunrisePageData;
 import common.hooks.SunrisePageDataHook;
 import common.models.ProductDataConfig;
 import common.suggestion.ProductRecommendation;
-import framework.ControllerSunriseComponent;
-import io.sphere.sdk.categories.Category;
+import framework.ControllerComponent;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
-import productcatalog.common.ProductListData;
+import productcatalog.common.ProductListBean;
+import productcatalog.common.ProductListBeanFactory;
 import productcatalog.common.SuggestionsData;
 import productcatalog.hooks.SingleProductProjectionHook;
 import productcatalog.productdetail.ProductDetailPageContent;
 
 import javax.inject.Inject;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
@@ -35,15 +32,15 @@ public class ProductSuggestionsControllerComponent implements ControllerSunriseC
     private ProductDataConfig productDataConfig;
     @Inject
     private ReverseRouter reverseRouter;//TODO framework remove this big dep
+    @Inject
+    private ProductListBeanFactory productListBeanFactory;
     private int numSuggestions;
     private Set<ProductProjection> suggestions;
-    private String categoryNewExtId;
 
     @Inject
     public void setConfig(final Configuration configuration) {
         this.numSuggestions = configuration.getInt("pdp.productSuggestions.count");
-        this.categoryNewExtId = configuration.getString("common.newCategoryExternalId");
-    }
+     }
 
     @Override
     public CompletionStage<?> onSingleProductProjectionLoaded(final ProductProjection product) {
@@ -60,20 +57,7 @@ public class ProductSuggestionsControllerComponent implements ControllerSunriseC
     }
 
     private SuggestionsData createSuggestions(final UserContext userContext, final Set<ProductProjection> suggestions) {
-        final ProductListData productListData = new ProductListData(suggestions, productDataConfig, userContext, reverseRouter, categoryTreeInNew());
+        final ProductListBean productListData = productListBeanFactory.create(suggestions);
         return new SuggestionsData(productListData);
-    }
-
-    //TODO duplicated
-    private CategoryTree categoryTreeInNew() {
-        final List<Category> categoriesInNew = newCategory()
-                .map(Collections::singletonList)
-                .orElseGet(Collections::emptyList);
-        return categoryTree.getSubtree(categoriesInNew);
-    }
-
-    //TODO duplicated
-    private Optional<Category> newCategory() {
-        return Optional.ofNullable(categoryNewExtId).flatMap(extId -> categoryTree.findByExternalId(extId));
     }
 }
