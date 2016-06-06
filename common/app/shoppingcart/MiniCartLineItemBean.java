@@ -1,9 +1,8 @@
 package shoppingcart;
 
-import com.google.inject.Inject;
 import common.contexts.UserContext;
 import common.models.ProductVariantBean;
-import common.models.ProductVariantBeanFactory;
+import common.models.ProductVariantBeanFactoryInjectless;
 import common.utils.MoneyContext;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
@@ -15,8 +14,6 @@ public class MiniCartLineItemBean extends Base {
     private long quantity;
     private String totalPrice;
     private ProductVariantBean variant;
-    @Inject
-    private ProductVariantBeanFactory productVariantBeanFactory;
 
     public MiniCartLineItemBean() {
     }
@@ -26,7 +23,7 @@ public class MiniCartLineItemBean extends Base {
         this.lineItemId = lineItem.getId();
         this.quantity = lineItem.getQuantity();
         this.totalPrice = moneyContext.formatOrZero(lineItem.getTotalPrice());
-        this.variant = productVariantBeanFactory.create(lineItem);
+        this.variant = ProductVariantBeanFactoryInjectless.create(lineItem, reverseRouter, userContext);
     }
 
     public String getLineItemId() {

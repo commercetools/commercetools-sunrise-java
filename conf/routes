@@ -125,4 +125,4 @@ GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.p
 # Shows the search results page
 GET         /:languageTag/search                               @productcatalog.productoverview.ProductOverviewPageController.search(languageTag: String, page: Int ?= 1)
 # Shows the product overview page for this category
-GET         /:languageTag/:categorySlug                        @productcatalog.productoverview.ProductOverviewPageController.show(languageTag: String, page: Int ?= 1, categorySlug: String)
+GET         /:languageTag/:categorySlug                        @productcatalog.productoverview.ProductOverviewPageController.showProductsByCategorySlug(languageTag: String, page: Int ?= 1, categorySlug: String)

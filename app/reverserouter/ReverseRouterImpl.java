@@ -43,7 +43,7 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
-        return ProductOverviewPageController.show(languageTag, 1, categorySlug);
+        return ProductOverviewPageController.showProductsByCategorySlug(languageTag, 1, categorySlug);
     }
 
     @Override
