@@ -3,6 +3,7 @@ package productcatalog.productdetail;
 import common.contexts.UserContext;
 import common.controllers.ControllerDependency;
 import common.controllers.SunriseController;
+import common.controllers.SunriseFrameworkController;
 import common.controllers.SunrisePageData;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -15,12 +16,15 @@ import wedecidelatercommon.ProductReverseRouter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
+import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseProductDetailPageController extends SunriseController {
+public abstract class SunriseProductDetailPageController extends SunriseFrameworkController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductDetailPageController.class);
 
@@ -37,11 +41,6 @@ public abstract class SunriseProductDetailPageController extends SunriseControll
     private String productSlug;
     @Nullable
     private String variantSku;
-
-    @Inject
-    public SunriseProductDetailPageController(final ControllerDependency controllerDependency) {
-        super(controllerDependency);
-    }
 
     public CompletionStage<Result> showProductBySlugAndSku(final String languageTag, final String slug, final String sku) {
         this.productSlug = slug;
@@ -108,12 +107,17 @@ public abstract class SunriseProductDetailPageController extends SunriseControll
     }
 
     private CompletionStage<Result> redirectToMasterVariant(final ProductProjection product) {
-        return reverseRouter().productDetailPageCall(userContext.locale(), product, product.getMasterVariant())
+        return productReverseRouter.productDetailPageCall(userContext.locale(), product, product.getMasterVariant())
                 .map(call -> completedFuture(redirect(call)))
                 .orElseGet(() -> completedFuture(notFoundProductResult()));
     }
 
     private CompletionStage<Optional<String>> findNewProductSlug(final String slug) {
         return completedFuture(Optional.empty()); // TODO look for messages and find current slug
+    }
+
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("productdetailpage", "product"));
     }
 }

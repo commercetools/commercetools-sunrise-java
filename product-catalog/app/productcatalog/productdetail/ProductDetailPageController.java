@@ -1,25 +1,13 @@
 package productcatalog.productdetail;
 
-import common.controllers.ControllerDependency;
 import common.inject.RequestScoped;
-import common.suggestion.ProductRecommendation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
 
 @RequestScoped
 public final class ProductDetailPageController extends SunriseProductDetailPageController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductDetailPageController.class);
-
-    @Inject
-    private ProductRecommendation productRecommendation;
-
-    @Inject
-    public ProductDetailPageController(final ControllerDependency controllerDependency) {
-        super(controllerDependency);
-    }
 
 //    protected CompletionStage<SuggestionsData> createSuggestions(final ProductProjection product, final UserContext userContext) {
 //        return productRecommendation().relatedToProduct(product, numSuggestions)
