@@ -2,12 +2,12 @@ package shoppingcart.checkout;
 
 import common.controllers.SunrisePageData;
 import common.hooks.SunrisePageDataHook;
-import framework.ControllerSunriseComponent;
+import framework.ControllerComponent;
 import play.Configuration;
 
 import javax.inject.Inject;
 
-public class CheckoutCommonComponent implements ControllerSunriseComponent, SunrisePageDataHook {
+public class CheckoutCommonComponent implements ControllerComponent, SunrisePageDataHook {
     @Inject
     private Configuration configuration;
 

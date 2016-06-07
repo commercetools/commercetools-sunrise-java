@@ -3,11 +3,11 @@ package wedecidelatercommon;
 import common.controllers.SunrisePageData;
 import common.hooks.SunrisePageDataHook;
 import common.models.NavMenuDataFactory;
-import framework.ControllerSunriseComponent;
+import framework.ControllerComponent;
 
 import javax.inject.Inject;
 
-public class DefaultNavMenuControllerComponent implements ControllerSunriseComponent, SunrisePageDataHook {
+public class DefaultNavMenuControllerComponent implements ControllerComponent, SunrisePageDataHook {
     @Inject
     private NavMenuDataFactory navMenuDataFactory;
 

@@ -5,8 +5,8 @@ import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.models.LocationSelector;
 import common.template.engine.TemplateEngine;
-import framework.ControllerSunriseComponent;
-import framework.MultiControllerSunriseComponentResolver;
+import framework.ControllerComponent;
+import framework.MultiControllerComponentResolver;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.utils.FutureUtils;
 import play.mvc.Controller;
@@ -34,14 +34,14 @@ public abstract class SunriseFrameworkController extends Controller {
     @Inject
     private PageMetaFactory pageMetaFactory;
 
-    private final List<ControllerSunriseComponent> controllerComponents = new LinkedList<>();
+    private final List<ControllerComponent> controllerComponents = new LinkedList<>();
 
 
     @Inject
-    public void setMultiControllerComponents(final MultiControllerSunriseComponentResolver multiComponent, final Injector injector) {
-        final List<Class<? extends ControllerSunriseComponent>> components = multiComponent.findMatchingComponents(this);
+    public void setMultiControllerComponents(final MultiControllerComponentResolver multiComponent, final Injector injector) {
+        final List<Class<? extends ControllerComponent>> components = multiComponent.findMatchingComponents(this);
         components.forEach(clazz -> {
-            final ControllerSunriseComponent instance = injector.getInstance(clazz);
+            final ControllerComponent instance = injector.getInstance(clazz);
             controllerComponents.add(instance);
         });
     }
@@ -75,7 +75,7 @@ public abstract class SunriseFrameworkController extends Controller {
         return session.get("csrfToken");
     }
 
-    protected final void registerControllerComponent(final ControllerSunriseComponent controllerComponent) {
+    protected final void registerControllerComponent(final ControllerComponent controllerComponent) {
         controllerComponents.add(controllerComponent);
     }
 

@@ -9,15 +9,15 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-final class MultiControllerSunriseComponentResolverImpl extends Base implements MultiControllerSunriseComponentResolver {
-    private final Map<Class<? extends ControllerSunriseComponent>, Predicate<SunriseFrameworkController>> classToPredicateMap;
+final class MultiControllerComponentResolverImpl extends Base implements MultiControllerComponentResolver {
+    private final Map<Class<? extends ControllerComponent>, Predicate<SunriseFrameworkController>> classToPredicateMap;
 
-    public MultiControllerSunriseComponentResolverImpl(final Map<Class<? extends ControllerSunriseComponent>, Predicate<SunriseFrameworkController>> classToPredicateMap) {
+    public MultiControllerComponentResolverImpl(final Map<Class<? extends ControllerComponent>, Predicate<SunriseFrameworkController>> classToPredicateMap) {
         this.classToPredicateMap = new HashMap<>(classToPredicateMap);
     }
 
     @Override
-    public List<Class<? extends ControllerSunriseComponent>> findMatchingComponents(final SunriseFrameworkController controller) {
+    public List<Class<? extends ControllerComponent>> findMatchingComponents(final SunriseFrameworkController controller) {
         return classToPredicateMap.entrySet().stream()
                 .filter(entry -> entry.getValue().test(controller))
                 .map(entry -> entry.getKey())
