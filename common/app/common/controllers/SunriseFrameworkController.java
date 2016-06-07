@@ -1,9 +1,7 @@
 package common.controllers;
 
 import com.google.inject.Injector;
-import common.contexts.ProjectContext;
 import common.contexts.UserContext;
-import common.models.LocationSelector;
 import common.template.engine.TemplateEngine;
 import framework.ControllerComponent;
 import framework.MultiControllerComponentResolver;
@@ -29,8 +27,6 @@ public abstract class SunriseFrameworkController extends Controller {
     private UserContext userContext;
     @Inject
     private TemplateEngine templateEngine;
-    @Inject
-    private ProjectContext projectContext;
     @Inject
     private PageMetaFactory pageMetaFactory;
 
@@ -66,7 +62,6 @@ public abstract class SunriseFrameworkController extends Controller {
     protected final SunrisePageData pageData(final UserContext userContext, final PageContent content,
                                              final Http.Context ctx, final Http.Session session) {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
-        pageHeader.setLocation(new LocationSelector(projectContext, userContext));
         return new SunrisePageData(pageHeader, new PageFooter(), content, pageMetaFactory.create());
     }
 
