@@ -12,7 +12,6 @@ import static shoppingcart.checkout.confirmation.routes.*;
 import static shoppingcart.checkout.payment.routes.*;
 import static shoppingcart.checkout.shipping.routes.*;
 import static shoppingcart.checkout.thankyou.routes.*;
-import static myaccount.login.routes.*;
 import static myaccount.mydetails.routes.*;
 import static myaccount.myorders.routes.*;
 

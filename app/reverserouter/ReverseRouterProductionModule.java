@@ -3,6 +3,7 @@ package reverserouter;
 import com.google.inject.AbstractModule;
 import common.controllers.ReverseRouter;
 import wedecidelatercommon.CheckoutReverseRouter;
+import wedecidelatercommon.HomeReverseRouter;
 import wedecidelatercommon.ProductReverseRouter;
 
 public class ReverseRouterProductionModule extends AbstractModule {
@@ -13,5 +14,6 @@ public class ReverseRouterProductionModule extends AbstractModule {
         bind(ReverseRouter.class).toInstance(reverseRouter);
         bind(ProductReverseRouter.class).toInstance(reverseRouter);
         bind(CheckoutReverseRouter.class).toInstance(reverseRouter);
+        bind(HomeReverseRouter.class).toInstance(reverseRouter);
     }
 }

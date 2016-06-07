@@ -3,12 +3,13 @@ package common.controllers;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Call;
 import wedecidelatercommon.CheckoutReverseRouter;
+import wedecidelatercommon.HomeReverseRouter;
 import wedecidelatercommon.ProductReverseRouter;
 
 import java.util.Locale;
 import java.util.Optional;
 
-public interface ReverseRouter extends ProductReverseRouter, CheckoutReverseRouter {
+public interface ReverseRouter extends ProductReverseRouter, CheckoutReverseRouter, HomeReverseRouter {
 
     Call themeAssets(final String file);
 
@@ -16,6 +17,7 @@ public interface ReverseRouter extends ProductReverseRouter, CheckoutReverseRout
 
     Call processChangeCountryForm(final String languageTag);
 
+    @Override
     Call showHome(final String languageTag);
 
     @Override

@@ -90,13 +90,13 @@ GET         /:languageTag/checkout/thankyou                    @shoppingcart.che
 # ~~~~~
 
 # Shows log in form
-GET         /:languageTag/user/login                           @myaccount.login.LogInPageController.show(languageTag: String)
+GET         /:languageTag/user/login                           @wedecidelater.LogInPageController.show(languageTag: String)
 # Logs in the user
-POST        /:languageTag/user/login                           @myaccount.login.LogInPageController.processLogIn(languageTag: String)
+POST        /:languageTag/user/login                           @wedecidelater.LogInPageController.processLogIn(languageTag: String)
 # Signs up the user
-POST        /:languageTag/user/signup                          @myaccount.login.LogInPageController.processSignUp(languageTag: String)
+POST        /:languageTag/user/signup                          @wedecidelater.LogInPageController.processSignUp(languageTag: String)
 # Logs out the user
-GET         /:languageTag/user/logout                          @myaccount.login.LogInPageController.processLogOut(languageTag: String)
+GET         /:languageTag/user/logout                          @wedecidelater.LogInPageController.processLogOut(languageTag: String)
 
 
 # MY ACCOUNT
