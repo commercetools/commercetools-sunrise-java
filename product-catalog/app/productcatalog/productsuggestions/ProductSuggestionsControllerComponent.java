@@ -39,7 +39,7 @@ public class ProductSuggestionsControllerComponent implements ControllerSunriseC
 
     @Inject
     public void setConfig(final Configuration configuration) {
-        this.numSuggestions = configuration.getInt("pdp.productSuggestions.count");
+        this.numSuggestions = configuration.getInt("productSuggestions.count");
      }
 
     @Override
