@@ -1,10 +1,9 @@
 package productcatalog.productdetail;
 
 import common.contexts.UserContext;
-import common.controllers.ControllerDependency;
-import common.controllers.SunriseController;
 import common.controllers.SunriseFrameworkController;
 import common.controllers.SunrisePageData;
+import common.hooks.SunrisePageDataHook;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import org.slf4j.Logger;
@@ -12,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import productcatalog.hooks.SingleProductProjectionHook;
 import wedecidelatercommon.ProductReverseRouter;
 
 import javax.annotation.Nullable;
@@ -70,8 +70,11 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     }
 
     protected CompletionStage<Result> handleFoundProduct(final ProductProjection product, final ProductVariant variant) {
-        final ProductDetailPageContent pageContent = createPageContent(product, variant);
-        return completedFuture(ok(renderPage(pageContent)));
+        final CompletionStage<Object> hooksCompletionStage = runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
+        return hooksCompletionStage.thenApplyAsync(unusedResult -> {
+            final ProductDetailPageContent pageContent = createPageContent(product, variant);
+            return ok(renderPage(pageContent));
+        }, HttpExecution.defaultContext());
     }
 
     protected CompletionStage<Result> handleNotFoundVariant(final ProductProjection product) {
@@ -95,6 +98,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
 
     protected Html renderPage(final ProductDetailPageContent pageContent) {
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
+        runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
         return templateEngine().renderToHtml("pdp", pageData, userContext.locales());
     }
 
