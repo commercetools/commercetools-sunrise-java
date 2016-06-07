@@ -38,7 +38,7 @@ GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJa
 # ~~~~~
 
 # Home page
-GET         /:languageTag/home                                 @productcatalog.home.HomePageController.show(languageTag: String)
+GET         /:languageTag/home                                 @wedecidelater.HomePageController.show(languageTag: String)
 
 
 # LOCATION

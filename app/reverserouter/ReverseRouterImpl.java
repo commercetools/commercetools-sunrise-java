@@ -4,7 +4,7 @@ import common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
 import static wedecidelater.routes.CheckoutAddressPageController;
-import static productcatalog.home.routes.*;
+import static wedecidelater.routes.*;
 import static productcatalog.productdetail.routes.*;
 import static productcatalog.productoverview.routes.*;
 import static shoppingcart.cartdetail.routes.*;
