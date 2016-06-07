@@ -72,7 +72,6 @@ public abstract class SunriseFrameworkController extends Controller {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext, userContext));
         pageHeader.setNavMenu(navMenuDataFactory.create());
-        pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session));
         return new SunrisePageData(pageHeader, new PageFooter(), content, pageMetaFactory.create());
     }
 
