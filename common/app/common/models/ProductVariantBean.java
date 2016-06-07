@@ -1,8 +1,6 @@
 package common.models;
 
-import io.sphere.sdk.models.Base;
-
-public class ProductVariantBean extends Base {
+public class ProductVariantBean extends ModelBean {
 
     private String name;
     private String sku;

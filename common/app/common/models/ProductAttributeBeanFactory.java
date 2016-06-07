@@ -34,7 +34,7 @@ public class ProductAttributeBeanFactory {
         return bean;
     }
 
-    private  <T extends ProductAttributeBean> void fillAttributeInfo(final T bean, final Attribute attribute) {
+    private <T extends ProductAttributeBean> void fillAttributeInfo(final T bean, final Attribute attribute) {
         bean.setKey(attribute.getName());
         bean.setName(attributeLabel(attribute, userContext.locales(), productDataConfig.getMetaProductType()));
         bean.setValue(attributeValue(attribute, userContext.locales(), productDataConfig.getMetaProductType()));
