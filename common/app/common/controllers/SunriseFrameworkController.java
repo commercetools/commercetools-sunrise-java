@@ -4,7 +4,6 @@ import com.google.inject.Injector;
 import common.contexts.ProjectContext;
 import common.contexts.UserContext;
 import common.models.LocationSelector;
-import common.models.NavMenuDataFactory;
 import common.template.engine.TemplateEngine;
 import framework.ControllerSunriseComponent;
 import framework.MultiControllerSunriseComponentResolver;
@@ -12,7 +11,6 @@ import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.utils.FutureUtils;
 import play.mvc.Controller;
 import play.mvc.Http;
-import shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -35,8 +33,6 @@ public abstract class SunriseFrameworkController extends Controller {
     private ProjectContext projectContext;
     @Inject
     private PageMetaFactory pageMetaFactory;
-    @Inject
-    private NavMenuDataFactory navMenuDataFactory;
 
     private final List<ControllerSunriseComponent> controllerComponents = new LinkedList<>();
 
@@ -71,7 +67,6 @@ public abstract class SunriseFrameworkController extends Controller {
                                              final Http.Context ctx, final Http.Session session) {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         pageHeader.setLocation(new LocationSelector(projectContext, userContext));
-        pageHeader.setNavMenu(navMenuDataFactory.create());
         return new SunrisePageData(pageHeader, new PageFooter(), content, pageMetaFactory.create());
     }
 
