@@ -1,13 +1,10 @@
 package productcatalog.productsuggestions;
 
 import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
 import common.controllers.SunrisePageData;
 import common.hooks.SunrisePageDataHook;
-import common.models.ProductDataConfig;
 import common.suggestion.ProductRecommendation;
 import framework.ControllerComponent;
-import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
 import productcatalog.common.ProductListBean;
@@ -27,12 +24,6 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
     @Inject
     private ProductRecommendation productRecommendation;
     @Inject
-    private CategoryTree categoryTree;
-    @Inject
-    private ProductDataConfig productDataConfig;
-    @Inject
-    private ReverseRouter reverseRouter;//TODO framework remove this big dep
-    @Inject
     private ProductListBeanFactory productListBeanFactory;
     private int numSuggestions;
     private Set<ProductProjection> suggestions;
@@ -44,7 +35,7 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
 
     @Override
     public CompletionStage<?> onSingleProductProjectionLoaded(final ProductProjection product) {
-        return productRecommendation.relatedToProduct(product, numSuggestions)
+        return productRecommendation.relatedToProduct(product, numSuggestions, userContext)
                 .thenAccept(m -> suggestions = m);
     }
 

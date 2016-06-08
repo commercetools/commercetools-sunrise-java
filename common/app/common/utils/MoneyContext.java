@@ -1,6 +1,6 @@
 package common.utils;
 
-import io.sphere.sdk.products.Price;
+import io.sphere.sdk.products.PriceLike;
 
 import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;
@@ -12,7 +12,7 @@ public interface MoneyContext {
 
     String formatOrZero(@Nullable final MonetaryAmount monetaryAmount);
 
-    String formatOrNull(@Nullable final Price price);
+    String formatOrNull(@Nullable final PriceLike price);
 
     String formatOrNull(@Nullable final MonetaryAmount amountForOneLineItem);
 

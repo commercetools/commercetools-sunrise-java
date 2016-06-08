@@ -1,6 +1,7 @@
 package common.utils;
 
 import io.sphere.sdk.products.Price;
+import io.sphere.sdk.products.PriceLike;
 import io.sphere.sdk.utils.MoneyImpl;
 
 import javax.annotation.Nullable;
@@ -34,9 +35,9 @@ final class MoneyContextImpl implements MoneyContext {
     }
 
     @Override
-    public String formatOrNull(@Nullable final Price price) {
+    public String formatOrNull(@Nullable final PriceLike price) {
         final MonetaryAmount concreteAmount = Optional.ofNullable(price)
-                .map(Price::getValue)
+                .map(PriceLike::getValue)
                 .orElseGet(this::zero);
         return formatOrNull(concreteAmount);
     }

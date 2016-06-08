@@ -2,6 +2,7 @@ package productcatalog.productdetail;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import productcatalog.common.BreadcrumbBeanFactory;
@@ -9,31 +10,47 @@ import productcatalog.common.ProductBeanFactory;
 
 import javax.inject.Inject;
 
-public class ProductDetailPageContentFactory {
+public class ProductDetailPageContentFactory extends Base {
 
     @Inject
-    private UserContext userContext;
+    protected UserContext userContext;
     @Inject
-    private ReverseRouter reverseRouter;
+    protected ReverseRouter reverseRouter;
     @Inject
-    private BreadcrumbBeanFactory breadcrumbBeanFactory;
+    protected BreadcrumbBeanFactory breadcrumbBeanFactory;
     @Inject
-    private ProductBeanFactory productBeanFactory;
+    protected ProductBeanFactory productBeanFactory;
 
     public ProductDetailPageContent create(final ProductProjection product, final ProductVariant variant) {
         final ProductDetailPageContent content = new ProductDetailPageContent();
-        content.setAdditionalTitle(getAdditionalTitle(product));
-        content.setProduct(productBeanFactory.create(product, variant));
-        content.setBreadcrumb(breadcrumbBeanFactory.create(product, variant));
-        content.setAddToCartFormUrl(getAddToCartUrl()); // TODO move to page meta
+        fillAdditionalTitle(product, content);
+        fillProduct(product, variant, content);
+        fillBreadCrumb(product, variant, content);
+        fillAddToCartFormUrl(content);
         return content;
     }
 
-    private String getAdditionalTitle(final ProductProjection product) {
+    protected void fillAddToCartFormUrl(final ProductDetailPageContent content) {
+        content.setAddToCartFormUrl(getAddToCartUrl()); // TODO move to page meta
+    }
+
+    protected void fillAdditionalTitle(final ProductProjection product, final ProductDetailPageContent content) {
+        content.setAdditionalTitle(getAdditionalTitle(product));
+    }
+
+    protected void fillBreadCrumb(final ProductProjection product, final ProductVariant variant, final ProductDetailPageContent content) {
+        content.setBreadcrumb(breadcrumbBeanFactory.create(product, variant));
+    }
+
+    protected void fillProduct(final ProductProjection product, final ProductVariant variant, final ProductDetailPageContent content) {
+        content.setProduct(productBeanFactory.create(product, variant));
+    }
+
+    protected String getAdditionalTitle(final ProductProjection product) {
         return product.getName().find(userContext.locales()).orElse("");
     }
 
-    private String getAddToCartUrl() {
+    protected String getAddToCartUrl() {
         return reverseRouter.processAddProductToCartForm(userContext.locale().getLanguage()).url();
     }
 }

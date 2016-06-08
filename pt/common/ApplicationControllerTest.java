@@ -3,7 +3,7 @@ package common;
 import org.junit.Test;
 import play.mvc.Http;
 import play.mvc.Result;
-import productcatalog.home.HomePageController;
+import productcatalog.home.SunriseHomePageController;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,7 +15,7 @@ public class ApplicationControllerTest extends WithSunriseApplication {
     @Test
     public void homeIsAlive() {
         setContext(requestBuilder().build());
-        run(app(), HomePageController.class, controller -> {
+        run(app(), SunriseHomePageController.class, controller -> {
             final Result result = controller.show("en").toCompletableFuture().get(ALLOWED_TIMEOUT, TimeUnit.MILLISECONDS);
             assertThat(result.status()).isEqualTo(Http.Status.OK);
             assertThat(contentAsString(result)).isNullOrEmpty();
