@@ -4,9 +4,8 @@ import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ByIdVariantIdentifier;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
-import io.sphere.sdk.queries.PagedQueryResult;
+import io.sphere.sdk.search.PagedSearchResult;
 import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
@@ -20,11 +19,10 @@ public final class ProductFetchByProductIdAndVariantId implements ProductFetch<S
     @Override
     public CompletionStage<ProductFetchResult> findProduct(final String productId,
                                                            final Integer variantId,
-                                                           final UnaryOperator<ProductProjectionQuery> queryFilter,
                                                            final UnaryOperator<ProductProjectionSearch> searchFilter) {
-        final ProductProjectionQuery request = ProductProjectionQuery.ofCurrent().withPredicates(m -> m.id().is(productId));
-        return sphereClient.execute(queryFilter.apply(request))
-                .thenApplyAsync(PagedQueryResult::head, HttpExecution.defaultContext())
+        final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent().withQueryFilters(m -> m.id().is(productId));
+        return sphereClient.execute(searchFilter.apply(request))
+                .thenApplyAsync(PagedSearchResult::head, HttpExecution.defaultContext())
                 .thenApplyAsync(productOptional -> {
                     final ProductProjection product = productOptional.orElse(null);
                     final ProductVariant productVariant = productOptional

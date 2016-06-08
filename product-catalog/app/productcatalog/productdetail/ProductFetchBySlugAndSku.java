@@ -4,9 +4,8 @@ import common.contexts.UserContext;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
-import io.sphere.sdk.queries.PagedQueryResult;
+import io.sphere.sdk.search.PagedSearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
@@ -29,9 +28,8 @@ public final class ProductFetchBySlugAndSku implements ProductFetch<String, Stri
     @Override
     public CompletionStage<ProductFetchResult> findProduct(final String productIdentifier,
                                                            final String variantIdentifier,
-                                                           final UnaryOperator<ProductProjectionQuery> queryFilter,
                                                            final UnaryOperator<ProductProjectionSearch> searchFilter) {
-        return findProduct(productIdentifier, queryFilter)
+        return findProduct(productIdentifier, searchFilter)
                 .thenApplyAsync(productOpt -> productOpt
                 .map(product -> findVariant(variantIdentifier, product)
                         .map(variant -> ProductFetchResult.of(product, variant))
@@ -40,7 +38,7 @@ public final class ProductFetchBySlugAndSku implements ProductFetch<String, Stri
                 HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Optional<ProductProjection>> findProduct(final String productIdentifier, final UnaryOperator<ProductProjectionQuery> queryFilter) {
+    private CompletionStage<Optional<ProductProjection>> findProduct(final String productIdentifier, final UnaryOperator<ProductProjectionSearch> queryFilter) {
         return findProductBySlug(productIdentifier, userContext.locale(), queryFilter);
     }
 
@@ -55,10 +53,10 @@ public final class ProductFetchBySlugAndSku implements ProductFetch<String, Stri
      * @param queryFilter
      * @return A CompletionStage of an optionally found ProductProjection
      */
-    private CompletionStage<Optional<ProductProjection>> findProductBySlug(final String slug, final Locale locale, final UnaryOperator<ProductProjectionQuery> queryFilter) {
-        final ProductProjectionQuery request = ProductProjectionQuery.ofCurrent().bySlug(locale, slug);
+    private CompletionStage<Optional<ProductProjection>> findProductBySlug(final String slug, final Locale locale, final UnaryOperator<ProductProjectionSearch> queryFilter) {
+        final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent().withQueryFilters(m -> m.slug().locale(locale).is(slug));
         return sphereClient.execute(queryFilter.apply(request))
-                .thenApplyAsync(PagedQueryResult::head, HttpExecution.defaultContext())
+                .thenApplyAsync(PagedSearchResult::head, HttpExecution.defaultContext())
                 .whenCompleteAsync((productOpt, t) -> {
                     if (productOpt.isPresent()) {
                         final String productId = productOpt.get().getId();

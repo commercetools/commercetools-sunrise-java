@@ -54,7 +54,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
             logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
             this.productSlug = slug;
             this.variantSku = sku;
-            return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku, this::filter, this::filter)
+            return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku, this::filter)
                     .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
         });
     }
@@ -62,13 +62,9 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     public CompletionStage<Result> showProductByProductIdAndVariantId(final String languageTag, final String productId, final int variantId) {
         return doRequest(() -> {
             logger.debug("look for product with productId={} and variantId={}", productId, variantId);
-            return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId, this::filter, this::filter)
+            return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId, this::filter)
                     .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
         });
-    }
-
-    private ProductProjectionQuery filter(ProductProjectionQuery q) {
-        return runFilterHook(ProductProjectionQueryFilterHook.class, (hook, r) -> hook.filterProductProjectionQuery(r), q);
     }
 
     private ProductProjectionSearch filter(ProductProjectionSearch q) {
