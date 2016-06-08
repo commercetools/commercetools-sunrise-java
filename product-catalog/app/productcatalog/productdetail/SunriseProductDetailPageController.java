@@ -8,11 +8,15 @@ import common.controllers.WithOverwriteableTemplateName;
 import common.hooks.SunrisePageDataHook;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
+import io.sphere.sdk.products.queries.ProductProjectionQuery;
+import io.sphere.sdk.products.search.ProductProjectionSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import productcatalog.hooks.ProductProjectionQueryFilterHook;
+import productcatalog.hooks.ProductProjectionSearchFilterHook;
 import productcatalog.hooks.SingleProductProjectionHook;
 import wedecidelatercommon.ProductReverseRouter;
 
@@ -48,14 +52,22 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
         this.productSlug = slug;
         this.variantSku = sku;
-        return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku)
+        return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku, this::filter, this::filter)
                 .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
     }
 
     public CompletionStage<Result> showProductByProductIdAndVariantId(final String languageTag, final String productId, final int variantId) {
         logger.debug("look for product with productId={} and variantId={}", productId, variantId);
-        return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId)
+        return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId, this::filter, this::filter)
                 .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
+    }
+
+    private ProductProjectionQuery filter(ProductProjectionQuery q) {
+        return runFilterHook(ProductProjectionQueryFilterHook.class, (hook, r) -> hook.filterProductProjectionQuery(r), q);
+    }
+
+    private ProductProjectionSearch filter(ProductProjectionSearch q) {
+        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, r) -> hook.filterProductProjectionSearch(r), q);
     }
 
     protected Optional<String> getProductSlug() {

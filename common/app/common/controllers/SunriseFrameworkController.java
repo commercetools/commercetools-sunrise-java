@@ -17,9 +17,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public abstract class SunriseFrameworkController extends Controller {
     @Inject
@@ -81,13 +84,25 @@ public abstract class SunriseFrameworkController extends Controller {
                 .forEach(action -> consumer.accept((T) action));
     }
 
+    protected final <T extends Hook, R> R runFilterHook(final Class<T> hookClass, final BiFunction<T, R, R> f, final R param) {
+        R result = param;
+        final List<T> applyableHooks = controllerComponents.stream()
+                .filter(x -> hookClass.isAssignableFrom(x.getClass()))
+                .map(x -> (T) x)
+                .collect(Collectors.toList());
+        for (final T hook : applyableHooks) {
+            result = f.apply(hook, result);
+        }
+        return result;
+    }
+
     protected final <T extends Hook> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
         //TODO throw a helpful NPE if component returns null instead of CompletionStage
         final List<CompletionStage<Void>> collect = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
                 .map(hook -> f.apply((T) hook))
                 .map(stage -> (CompletionStage<Void>) stage)
-                .collect(Collectors.toList());
+                .collect(toList());
         final CompletionStage<?> listCompletionStage = FutureUtils.listOfFuturesToFutureOfList(collect);
         return listCompletionStage.thenApply(z -> null);
     }
