@@ -1,24 +1,23 @@
 package myaccount.common;
 
 import common.actions.NoCache;
-import common.controllers.ControllerDependency;
-import common.controllers.SunriseController;
+import common.controllers.SunriseFrameworkController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.queries.CustomerByIdGet;
 import myaccount.CustomerSessionUtils;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-@NoCache
-public abstract class MyAccountController extends SunriseController {
+import static java.util.Arrays.asList;
 
-    public MyAccountController(final ControllerDependency controllerDependency) {
-        super(controllerDependency);
-    }
+@NoCache
+public abstract class MyAccountController extends SunriseFrameworkController {
 
     protected CompletionStage<Optional<Customer>> getCustomer(final Http.Session session) {
         final CompletionStage<Optional<Customer>> customerFuture = fetchCustomer(session);
@@ -36,5 +35,10 @@ public abstract class MyAccountController extends SunriseController {
     protected CompletionStage<Optional<Customer>> fetchCustomerById(final String customerId) {
         final CustomerByIdGet query = CustomerByIdGet.of(customerId);
         return sphere().execute(query).thenApply(Optional::ofNullable);
+    }
+
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("my-account"));
     }
 }

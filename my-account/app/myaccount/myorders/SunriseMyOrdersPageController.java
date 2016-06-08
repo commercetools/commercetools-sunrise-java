@@ -1,9 +1,10 @@
 package myaccount.myorders;
 
 import common.contexts.UserContext;
-import common.controllers.ControllerDependency;
+import common.controllers.ReverseRouter;
 import common.controllers.SunrisePageData;
 import common.models.ProductDataConfig;
+import common.template.i18n.I18nResolver;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
@@ -26,33 +27,29 @@ import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-@Singleton
-public class MyOrdersPageController extends MyAccountController {
+public abstract class SunriseMyOrdersPageController extends MyAccountController {
 
     public static final int PAGE_SIZE = 500; // TODO allow to configure and work with pages
-    protected final ProductDataConfig productDataConfig;
-
     @Inject
-    public MyOrdersPageController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
-        super(controllerDependency);
-        this.productDataConfig = productDataConfig;
-    }
+    protected ProductDataConfig productDataConfig;
+    @Inject
+    protected ReverseRouter reverseRouter;
+    @Inject
+    protected I18nResolver i18nResolver;
 
     public CompletionStage<Result> list(final String languageTag, final int page) {
-        final UserContext userContext = userContext(languageTag);
         return getCustomerOrders(page)
                 .thenApplyAsync(orders -> {
-                    final MyOrdersPageContent pageContent = createMyOrdersPage(orders, userContext);
-                    return ok(renderMyOrdersPage(pageContent, userContext));
+                    final MyOrdersPageContent pageContent = createMyOrdersPage(orders, userContext());
+                    return ok(renderMyOrdersPage(pageContent, userContext()));
                 }, HttpExecution.defaultContext());
     }
 
     public CompletionStage<Result> show(final String languageTag, final String orderNumber) {
-        final UserContext userContext = userContext(languageTag);
         return getCustomerOrder(session(), orderNumber)
                 .thenComposeAsync(orderOpt -> orderOpt
-                        .map(order -> handleFoundOrder(order, userContext))
-                        .orElseGet(() -> handleNotFoundOrder(userContext)),
+                        .map(order -> handleFoundOrder(order, userContext()))
+                        .orElseGet(() -> handleNotFoundOrder(userContext())),
                         HttpExecution.defaultContext());
     }
 
@@ -91,32 +88,33 @@ public class MyOrdersPageController extends MyAccountController {
     }
 
     protected CompletionStage<Result> handleNotFoundOrder(final UserContext userContext) {
-        final Call call = reverseRouter().showMyOrders(userContext.locale().toLanguageTag());
+        final Call call = reverseRouter.showMyOrders(userContext.locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 
     protected MyOrderPageContent createMyOrderPage(final Order order, final UserContext userContext) {
         final MyOrderPageContent pageContent = new MyOrderPageContent();
-        pageContent.setOrder(new CartLikeBean(order, userContext, productDataConfig, reverseRouter()));
+        pageContent.setOrder(new CartLikeBean(order, userContext, productDataConfig, reverseRouter));
         return pageContent;
     }
 
     protected MyOrdersPageContent createMyOrdersPage(final List<Order> orders, final UserContext userContext) {
         final MyOrdersPageContent pageContent = new MyOrdersPageContent();
         final List<OrderOverviewBean> orderBeans = orders.stream()
-                .map(order -> new OrderOverviewBean(order, userContext, i18nResolver(), reverseRouter()))
+                .map(order -> new OrderOverviewBean(order, userContext, i18nResolver, reverseRouter))
                 .collect(toList());
         pageContent.setOrder(orderBeans);
         return pageContent;
     }
 
+    //TODO split this controller into two
     protected Html renderMyOrdersPage(final MyOrdersPageContent pageContent, final UserContext userContext) {
-        final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
+        final SunrisePageData pageData = pageData(pageContent);
         return templateEngine().renderToHtml("my-account-my-orders", pageData, userContext.locales());
     }
 
     protected Html renderMyOrderPage(final MyOrderPageContent pageContent, final UserContext userContext) {
-        final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
+        final SunrisePageData pageData = pageData(pageContent);
         return templateEngine().renderToHtml("my-account-my-orders-order", pageData, userContext.locales());
     }
 }
