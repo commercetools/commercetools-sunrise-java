@@ -1,6 +1,7 @@
 package common;
 
 import com.google.inject.AbstractModule;
+import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.inject.*;
 import play.mvc.Http;
@@ -16,5 +17,6 @@ public class HttpModule extends AbstractModule {
         bindScope(RequestScoped.class, requestScope);
         bind(Http.Context.class).toProvider(HttpContextProvider.class).in(requestScope);
         bind(UserContext.class).toProvider(UserContextProvider.class).in(requestScope);
+        bind(RequestContext.class).toProvider(RequestContextProvider.class).in(requestScope);
     }
 }

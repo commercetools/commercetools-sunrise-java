@@ -1,13 +1,13 @@
 package search;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 import common.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;
-import productcatalog.productoverview.search.ProductsPerPageConfig;
-import productcatalog.productoverview.search.ProductsPerPageOption;
+import productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
+import productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,12 +27,8 @@ class ProductsPerPageConfigProvider implements Provider<ProductsPerPageConfig> {
     private static final String OPTION_VALUE_ATTR = "value";
     private static final String OPTION_AMOUNT_ATTR = "amount";
 
-    private final Configuration configuration;
-
     @Inject
-    public ProductsPerPageConfigProvider(final Configuration configuration) {
-        this.configuration = configuration;
-    }
+    private Configuration configuration;
 
     @Override
     public ProductsPerPageConfig get() {

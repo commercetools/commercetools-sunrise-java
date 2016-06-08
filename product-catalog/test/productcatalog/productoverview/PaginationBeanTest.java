@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PaginationBeanTest {
@@ -128,10 +129,10 @@ public class PaginationBeanTest {
         };
     }
 
-    private Map<String, String[]> buildQueryString(final int currentPage) {
-        final LinkedHashMap<String, String[]> queryString = new LinkedHashMap<>();
-        queryString.put("foo", new String[] {"bar"});
-        queryString.put("page", new String[] {String.valueOf(currentPage)});
+    private Map<String, List<String>> buildQueryString(final int currentPage) {
+        final LinkedHashMap<String, List<String>> queryString = new LinkedHashMap<>();
+        queryString.put("foo", singletonList("bar"));
+        queryString.put("page", singletonList(String.valueOf(currentPage)));
         return queryString;
     }
 }

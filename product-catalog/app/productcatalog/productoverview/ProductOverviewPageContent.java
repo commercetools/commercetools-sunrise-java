@@ -4,9 +4,9 @@ import common.models.DetailData;
 import common.controllers.PageContent;
 import productcatalog.common.BreadcrumbBean;
 import productcatalog.common.ProductListBean;
-import productcatalog.productoverview.search.ProductsPerPageSelectorBean;
-import productcatalog.productoverview.search.FacetSelectorsBean;
-import productcatalog.productoverview.search.SortSelectorBean;
+import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorBean;
+import productcatalog.productoverview.search.facetedsearch.FacetSelectorListBean;
+import productcatalog.productoverview.search.sort.SortSelectorBean;
 
 public class ProductOverviewPageContent extends PageContent {
     private String filterProductsUrl;
@@ -16,7 +16,7 @@ public class ProductOverviewPageContent extends PageContent {
     // TODO searchResult
     private DetailData seo;
     private BreadcrumbBean breadcrumb;
-    private FacetSelectorsBean facets;
+    private FacetSelectorListBean facets;
     private PaginationBean pagination;
     private ProductsPerPageSelectorBean displaySelector;
     private SortSelectorBean sortSelector;
@@ -74,11 +74,11 @@ public class ProductOverviewPageContent extends PageContent {
         this.breadcrumb = breadcrumb;
     }
 
-    public FacetSelectorsBean getFacets() {
+    public FacetSelectorListBean getFacets() {
         return facets;
     }
 
-    public void setFacets(final FacetSelectorsBean facets) {
+    public void setFacets(final FacetSelectorListBean facets) {
         this.facets = facets;
     }
 

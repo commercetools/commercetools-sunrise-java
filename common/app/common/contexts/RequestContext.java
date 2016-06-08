@@ -1,13 +1,15 @@
 package common.contexts;
 
+import io.sphere.sdk.models.Base;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
-public class RequestContext {
+public class RequestContext extends Base {
+
     private final String path;
     private final Map<String, List<String>> queryString;
 
@@ -16,16 +18,22 @@ public class RequestContext {
         this.queryString = new HashMap<>(queryString);
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public Map<String, List<String>> getQueryString() {
+        return queryString;
+    }
+
     public String buildUrl(final String key, final List<String> values) {
         final HashMap<String, List<String>> copyQueryString = new HashMap<>(queryString);
         copyQueryString.put(key, values);
         return buildUrl(path, buildQueryString(copyQueryString));
     }
 
-    public static RequestContext of(final Map<String, String[]> queryString, final String path) {
-        final Map<String, List<String>> queryStringWithList = new HashMap<>();
-        queryString.forEach((key, arrayValue) -> queryStringWithList.put(key, asList(arrayValue)));
-        return new RequestContext(queryStringWithList, path);
+    public static RequestContext of(final Map<String, List<String>> queryString, final String path) {
+        return new RequestContext(queryString, path);
     }
 
     private static String buildQueryString(final Map<String, List<String>> queryString) {

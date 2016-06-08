@@ -10,9 +10,21 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 import productcatalog.common.BreadcrumbBeanFactory;
 import productcatalog.common.ProductListBeanFactory;
-import productcatalog.productoverview.search.*;
+import productcatalog.productoverview.search.SearchCriteriaImpl;
+import productcatalog.productoverview.search.facetedsearch.FacetSelectorListBean;
+import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelectorListFactory;
+import productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
+import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelector;
+import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorBean;
+import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorFactory;
+import productcatalog.productoverview.search.sort.SortOption;
+import productcatalog.productoverview.search.sort.SortSelector;
+import productcatalog.productoverview.search.sort.SortSelectorBean;
+import productcatalog.productoverview.search.sort.SortSelectorFactory;
 
 import javax.inject.Inject;
+import java.util.Collections;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -29,10 +41,18 @@ public class ProductOverviewPageContentFactory {
     @Inject
     private ProductListBeanFactory productListBeanFactory;
 
+    // TODO Remove to avoid duplicated work
+    @Inject
+    private SortSelectorFactory sortSelectorFactory;
+    @Inject
+    private ProductsPerPageSelectorFactory productsPerPageSelectorFactory;
+    @Inject
+    private FacetedSearchSelectorListFactory facetedSearchSelectorListFactory;
+
     public ProductOverviewPageContent create(final Category category, final PagedSearchResult<ProductProjection> searchResult,
-                                             final SearchCriteria searchCriteria) {
+                                             final SearchCriteriaImpl searchCriteria) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
-        fill(content, searchResult, searchCriteria);
+        fill(Collections.singletonList(category), content, searchResult, searchCriteria);
         content.setAdditionalTitle(category.getName().find(userContext.locales()).orElse(""));
         content.setBreadcrumb(breadcrumbBeanFactory.create(category));
         content.setJumbotron(new JumbotronBean(category, userContext, categoryTree));
@@ -42,22 +62,22 @@ public class ProductOverviewPageContentFactory {
     }
 
     public ProductOverviewPageContent create(final PagedSearchResult<ProductProjection> searchResult,
-                                             final SearchCriteria searchCriteria) {
+                                             final SearchCriteriaImpl searchCriteria) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
-        fill(content, searchResult, searchCriteria);
-        final String searchTerm = searchCriteria.getSearchBox().getSearchTerm().get().getValue();
+        fill(Collections.emptyList(), content, searchResult, searchCriteria);
+        final String searchTerm = searchCriteria.getSearchTerm().get().getValue();
         content.setAdditionalTitle(searchTerm);
         content.setBreadcrumb(breadcrumbBeanFactory.create(searchTerm));
         content.setSearchTerm(searchTerm);
         return content;
     }
 
-    private void fill(final ProductOverviewPageContent content, final PagedSearchResult<ProductProjection> searchResult,
-                      final SearchCriteria searchCriteria) {
+    private void fill(final List<Category> selectedCategories, final ProductOverviewPageContent content, final PagedSearchResult<ProductProjection> searchResult,
+                      final SearchCriteriaImpl searchCriteria) {
         content.setProducts(productListBeanFactory.create(searchResult.getResults()));
-        content.setSortSelector(createSortSelector(searchCriteria.getSortSelector()));
-        content.setDisplaySelector(createProductsPerPageSelector(searchCriteria.getProductsPerPageSelector()));
-        content.setFacets(new FacetSelectorsBean(searchCriteria.getFacetSelectors(), searchResult, userContext, i18nResolver));
+        content.setSortSelector(createSortSelector(sortSelectorFactory.create()));
+        content.setDisplaySelector(createProductsPerPageSelector(productsPerPageSelectorFactory.create()));
+        content.setFacets(new FacetSelectorListBean(facetedSearchSelectorListFactory.create(selectedCategories), searchResult, userContext, i18nResolver));
     }
 
     private BannerBean createBanner(final Category category) {

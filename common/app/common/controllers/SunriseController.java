@@ -3,7 +3,6 @@ package common.controllers;
 import com.neovisionaries.i18n.CountryCode;
 import common.actions.NoCache;
 import common.contexts.ProjectContext;
-import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.models.LocationSelector;
 import common.models.NavMenuData;
@@ -141,10 +140,6 @@ public abstract class SunriseController extends ShopController {
         final CountryCode currentCountry = currentCountry(session(), projectContext);
         final CurrencyUnit currentCurrency = currentCurrency(currentCountry, projectContext);
         return UserContext.of(acceptedLocales, currentCountry, currentCurrency);
-    }
-
-    protected RequestContext requestContext(final Http.Request request) {
-        return RequestContext.of(request.queryString(), request.path());
     }
 
     protected Optional<Category> newCategory() {

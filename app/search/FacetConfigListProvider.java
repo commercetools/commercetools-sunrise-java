@@ -1,7 +1,5 @@
 package search;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 import common.SunriseInitializationException;
 import io.sphere.sdk.facets.*;
 import io.sphere.sdk.products.ProductProjection;
@@ -9,11 +7,13 @@ import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 import play.Configuration;
 import play.Logger;
-import productcatalog.productoverview.search.FacetConfigList;
-import productcatalog.productoverview.search.SelectFacetConfig;
-import productcatalog.productoverview.search.SunriseFacetType;
+import productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
+import productcatalog.productoverview.search.facetedsearch.SelectFacetedSearchConfig;
+import productcatalog.productoverview.search.facetedsearch.SunriseFacetType;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-class FacetConfigListProvider implements Provider<FacetConfigList> {
+class FacetConfigListProvider implements Provider<FacetedSearchConfigList> {
 
     private static final String CONFIG_FACETS = "pop.facets";
 
@@ -41,16 +41,12 @@ class FacetConfigListProvider implements Provider<FacetConfigList> {
     private static final String MAPPER_TYPE_ATTR = "type";
     private static final String MAPPER_VALUES_ATTR = "values";
 
-    private final Configuration configuration;
-
     @Inject
-    public FacetConfigListProvider(final Configuration configuration) {
-        this.configuration = configuration;
-    }
+    private Configuration configuration;
 
     @Override
-    public FacetConfigList get() {
-        final List<SelectFacetConfig> selectFacetConfigs = new ArrayList<>();
+    public FacetedSearchConfigList get() {
+        final List<SelectFacetedSearchConfig> selectFacetConfigs = new ArrayList<>();
         final List<Configuration> configList = configuration.getConfigList(CONFIG_FACETS, emptyList());
         IntStream.range(0, configList.size()).forEach(i -> {
             final Configuration config = configList.get(i);
@@ -69,7 +65,7 @@ class FacetConfigListProvider implements Provider<FacetConfigList> {
         Logger.debug("Provide SelectFacetConfigs: {}", selectFacetConfigs.stream()
                 .map(config -> config.getFacetBuilder().getKey())
                 .collect(toList()));
-        return FacetConfigList.of(selectFacetConfigs);
+        return FacetedSearchConfigList.of(selectFacetConfigs);
     }
 
     private static SunriseFacetType getFacetType(final Configuration facetConfig) {
@@ -80,8 +76,8 @@ class FacetConfigListProvider implements Provider<FacetConfigList> {
                 .orElseThrow(() -> new SunriseInitializationException("Not recognized facet type: " + configType));
     }
 
-    private static SelectFacetConfig getSelectFacetConfig(final FacetType type, final Configuration facetConfig, final int position) {
-        return SelectFacetConfig.of(getSelectFacetBuilder(type, facetConfig), position);
+    private static SelectFacetedSearchConfig getSelectFacetConfig(final FacetType type, final Configuration facetConfig, final int position) {
+        return SelectFacetedSearchConfig.of(getSelectFacetBuilder(type, facetConfig), position);
     }
 
     private static SelectFacetBuilder<ProductProjection> getSelectFacetBuilder(final FacetType type, final Configuration facetConfig) {

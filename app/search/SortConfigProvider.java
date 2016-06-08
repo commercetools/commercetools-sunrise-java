@@ -1,15 +1,15 @@
 package search;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 import common.SunriseInitializationException;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.SortExpression;
 import play.Configuration;
 import play.Logger;
-import productcatalog.productoverview.search.SortConfig;
-import productcatalog.productoverview.search.SortOption;
+import productcatalog.productoverview.search.sort.SortConfig;
+import productcatalog.productoverview.search.sort.SortOption;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,12 +26,8 @@ class SortConfigProvider implements Provider<SortConfig> {
     private static final String OPTION_EXPR_ATTR = "expr";
     private static final String OPTION_DEFAULT_ATTR = "default";
 
-    private final Configuration configuration;
-
     @Inject
-    public SortConfigProvider(final Configuration configuration) {
-        this.configuration = configuration;
-    }
+    private Configuration configuration;
 
     @Override
     public SortConfig get() {

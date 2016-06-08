@@ -1,46 +1,16 @@
 package productcatalog.productoverview.search;
 
-import java.util.List;
+import io.sphere.sdk.models.LocalizedStringEntry;
+import productcatalog.productoverview.search.facetedsearch.FacetedSearchCriteria;
+import productcatalog.productoverview.search.productsperpage.ProductsPerPageCriteria;
+import productcatalog.productoverview.search.sort.SortCriteria;
 
-public class SearchCriteria {
+import java.util.Optional;
 
-    private final int page;
-    private final SearchBox searchBox;
-    private final SortSelector sortSelector;
-    private final ProductsPerPageSelector productsPerPageSelector;
-    private final List<FacetSelector> facetSelectors;
+public interface SearchCriteria extends SortCriteria, ProductsPerPageCriteria, FacetedSearchCriteria {
 
-    private SearchCriteria(final int page, final SearchBox searchBox, final ProductsPerPageSelector productsPerPageSelector,
-                           final SortSelector sortSelector, final List<FacetSelector> facetSelectors) {
-        this.page = page;
-        this.searchBox = searchBox;
-        this.productsPerPageSelector = productsPerPageSelector;
-        this.sortSelector = sortSelector;
-        this.facetSelectors = facetSelectors;
-    }
+    int getPage();
 
-    public int getPage() {
-        return page;
-    }
+    Optional<LocalizedStringEntry> getSearchTerm();
 
-    public SearchBox getSearchBox() {
-        return searchBox;
-    }
-
-    public ProductsPerPageSelector getProductsPerPageSelector() {
-        return productsPerPageSelector;
-    }
-
-    public SortSelector getSortSelector() {
-        return sortSelector;
-    }
-
-    public List<FacetSelector> getFacetSelectors() {
-        return facetSelectors;
-    }
-
-    public static SearchCriteria of(final int page, final SearchBox searchBox, final ProductsPerPageSelector productsPerPageSelector,
-                                    final SortSelector sortSelector, final List<FacetSelector> facetSelectors) {
-        return new SearchCriteria(page, searchBox, productsPerPageSelector, sortSelector, facetSelectors);
-    }
 }

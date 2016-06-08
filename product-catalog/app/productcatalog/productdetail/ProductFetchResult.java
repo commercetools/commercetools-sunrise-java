@@ -13,7 +13,7 @@ public class ProductFetchResult {
     @Nullable
     private final ProductVariant variant;
 
-    public ProductFetchResult(final ProductProjection product, final ProductVariant variant) {
+    public ProductFetchResult(@Nullable final ProductProjection product, @Nullable final ProductVariant variant) {
         this.product = product;
         this.variant = variant;
     }
