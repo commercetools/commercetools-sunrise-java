@@ -5,6 +5,7 @@ import common.models.ProductAttributeBeanFactory;
 import common.models.ProductDataConfig;
 import common.models.ProductVariantBeanFactory;
 import common.models.SelectableProductAttributeBean;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
@@ -22,40 +23,72 @@ import static common.utils.ProductAttributeUtils.attributeValueAsKey;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public class ProductBeanFactory {
+public class ProductBeanFactory extends Base {
 
     @Inject
-    private UserContext userContext;
+    protected UserContext userContext;
     @Inject
-    private ProductDataConfig productDataConfig;
+    protected ProductDataConfig productDataConfig;
     @Inject
-    private ProductReverseRouter productReverseRouter;
+    protected ProductReverseRouter productReverseRouter;
     @Inject
-    private ProductVariantBeanFactory productVariantBeanFactory;
+    protected ProductVariantBeanFactory productVariantBeanFactory;
     @Inject
-    private ProductAttributeBeanFactory productAttributeBeanFactory;
+    protected ProductAttributeBeanFactory productAttributeBeanFactory;
 
     public ProductBean create(final ProductProjection product, final ProductVariant variant) {
         final ProductBean productBean = new ProductBean();
-        productBean.setProductId(product.getId());
-        productBean.setVariantId(variant.getId());
-        productBean.setDescription(createDescription(product));
-        productBean.setGallery(createGallery(variant));
-        productBean.setDetails(createProductDetails(variant));
-        productBean.setVariant(productVariantBeanFactory.create(product, variant));
-        productBean.setVariantIdentifiers(productDataConfig.getSelectableAttributes());
-        productBean.setVariants(createAttributeCombinationToVariantMap(product));
-        productBean.setAttributes(createSelectableAttributes(product, variant));
+        fillIds(product, variant, productBean);
+        fillDescription(product, productBean);
+        fillGallery(variant, productBean);
+        fillDetails(variant, productBean);
+        fillVariant(product, variant, productBean);
+        fillVariantIdentifiers(productBean);
+        fillVariants(product, productBean);
+        fillAttributes(product, variant, productBean);
         return productBean;
     }
 
-    private String createDescription(final ProductProjection product) {
+    protected void fillAttributes(final ProductProjection product, final ProductVariant variant, final ProductBean productBean) {
+        productBean.setAttributes(createSelectableAttributes(product, variant));
+    }
+
+    protected void fillVariants(final ProductProjection product, final ProductBean productBean) {
+        productBean.setVariants(createAttributeCombinationToVariantMap(product));
+    }
+
+    protected void fillVariantIdentifiers(final ProductBean productBean) {
+        productBean.setVariantIdentifiers(productDataConfig.getSelectableAttributes());
+    }
+
+    protected void fillVariant(final ProductProjection product, final ProductVariant variant, final ProductBean productBean) {
+        productBean.setVariant(productVariantBeanFactory.create(product, variant));
+    }
+
+    protected void fillDetails(final ProductVariant variant, final ProductBean productBean) {
+        productBean.setDetails(createProductDetails(variant));
+    }
+
+    protected void fillGallery(final ProductVariant variant, final ProductBean productBean) {
+        productBean.setGallery(createGallery(variant));
+    }
+
+    protected void fillDescription(final ProductProjection product, final ProductBean productBean) {
+        productBean.setDescription(createDescription(product));
+    }
+
+    protected void fillIds(final ProductProjection product, final ProductVariant variant, final ProductBean productBean) {
+        productBean.setProductId(product.getId());
+        productBean.setVariantId(variant.getId());
+    }
+
+    protected String createDescription(final ProductProjection product) {
         return Optional.ofNullable(product.getDescription())
                 .flatMap(locText -> locText.find(userContext.locales()))
                 .orElse("");
     }
 
-    private ProductGalleryBean createGallery(final ProductVariant variant) {
+    protected ProductGalleryBean createGallery(final ProductVariant variant) {
         final ProductGalleryBean bean = new ProductGalleryBean();
         bean.setList(variant.getImages().stream()
                 .map(ProductImageData::new)
@@ -63,7 +96,7 @@ public class ProductBeanFactory {
         return bean;
     }
 
-    private ProductDetailsBean createProductDetails(final ProductVariant variant) {
+    protected ProductDetailsBean createProductDetails(final ProductVariant variant) {
         final ProductDetailsBean bean = new ProductDetailsBean();
         bean.setFeatures(productDataConfig.getDisplayedAttributes().stream()
                 .map(variant::getAttribute)
@@ -73,7 +106,7 @@ public class ProductBeanFactory {
         return bean;
     }
 
-    private List<SelectableProductAttributeBean> createSelectableAttributes(final ProductProjection product, final ProductVariant variant) {
+    protected List<SelectableProductAttributeBean> createSelectableAttributes(final ProductProjection product, final ProductVariant variant) {
         return productDataConfig.getSelectableAttributes().stream()
                 .map(variant::getAttribute)
                 .filter(attr -> attr != null)
@@ -81,7 +114,7 @@ public class ProductBeanFactory {
                 .collect(toList());
     }
 
-    private Map<String, ProductVariantReferenceBean> createAttributeCombinationToVariantMap(final ProductProjection product) {
+    protected Map<String, ProductVariantReferenceBean> createAttributeCombinationToVariantMap(final ProductProjection product) {
         final Map<String, ProductVariantReferenceBean> variantsMap = new HashMap<>();
         product.getAllVariants().forEach(variant -> {
             final String attrCombination = productDataConfig.getSelectableAttributes().stream()
@@ -92,7 +125,7 @@ public class ProductBeanFactory {
         return variantsMap;
     }
 
-    private String createAttributeKey(@Nullable final Attribute nullableAttribute) {
+    protected String createAttributeKey(@Nullable final Attribute nullableAttribute) {
         return Optional.ofNullable(nullableAttribute)
                 .map(attribute -> {
                     final String enabledAttrValue = attributeValue(attribute, userContext.locales(), productDataConfig.getMetaProductType());
@@ -101,7 +134,7 @@ public class ProductBeanFactory {
                 .orElse("");
     }
 
-    private ProductVariantReferenceBean createVariantReference(final ProductProjection product, final ProductVariant variant) {
+    protected ProductVariantReferenceBean createVariantReference(final ProductProjection product, final ProductVariant variant) {
         final ProductVariantReferenceBean bean = new ProductVariantReferenceBean();
         bean.setId(variant.getId());
         bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(userContext.locale(), product, variant));
