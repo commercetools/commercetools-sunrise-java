@@ -18,6 +18,7 @@ import play.twirl.api.Html;
 import productcatalog.hooks.ProductProjectionQueryFilterHook;
 import productcatalog.hooks.ProductProjectionSearchFilterHook;
 import productcatalog.hooks.SingleProductProjectionHook;
+import productcatalog.hooks.SingleProductVariantHook;
 import wedecidelatercommon.ProductReverseRouter;
 
 import javax.annotation.Nullable;
@@ -82,7 +83,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         final Optional<ProductProjection> product = productFetchResult.getProduct();
         final Optional<ProductVariant> variant = productFetchResult.getVariant();
         if (product.isPresent() && variant.isPresent()) {
-            return handleFoundProduct(product.get(), variant.get());
+            return handleFoundProductAndCallingHooks(product.get(), variant.get());
         } else if (product.isPresent()) {
             return handleNotFoundVariant(product.get());
         } else {
@@ -90,12 +91,16 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         }
     }
 
-    protected CompletionStage<Result> handleFoundProduct(final ProductProjection product, final ProductVariant variant) {
+    protected CompletionStage<Result> handleFoundProductAndCallingHooks(final ProductProjection product, final ProductVariant variant) {
         final CompletionStage<Object> hooksCompletionStage = runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
-        return hooksCompletionStage.thenApplyAsync(unusedResult -> {
-            final ProductDetailPageContent pageContent = createPageContent(product, variant);
-            return ok(renderPage(pageContent));
-        }, HttpExecution.defaultContext());
+        final CompletionStage<Object> hooksCompletionStage2 = runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
+        return hooksCompletionStage2.thenComposeAsync(unused ->
+                hooksCompletionStage.thenComposeAsync(unusedResult -> handleFoundProduct(product, variant), HttpExecution.defaultContext()), HttpExecution.defaultContext());
+    }
+
+    protected CompletionStage<Result> handleFoundProduct(final ProductProjection product, final ProductVariant variant) {
+        final ProductDetailPageContent pageContent = createPageContent(product, variant);
+        return completedFuture(ok(renderPage(pageContent)));
     }
 
     protected CompletionStage<Result> handleNotFoundVariant(final ProductProjection product) {
