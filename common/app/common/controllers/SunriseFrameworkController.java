@@ -2,6 +2,7 @@ package common.controllers;
 
 import com.google.inject.Injector;
 import common.contexts.UserContext;
+import common.hooks.Hook;
 import common.template.engine.TemplateEngine;
 import framework.ControllerComponent;
 import framework.MultiControllerComponentResolver;
@@ -74,13 +75,13 @@ public abstract class SunriseFrameworkController extends Controller {
         controllerComponents.add(controllerComponent);
     }
 
-    protected final <T> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer) {
+    protected final <T extends Hook> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer) {
         controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
                 .forEach(action -> consumer.accept((T) action));
     }
 
-    protected final <T> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
+    protected final <T extends Hook> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
         //TODO throw a helpful NPE if component returns null instead of CompletionStage
         final List<CompletionStage<Void>> collect = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
