@@ -6,10 +6,7 @@ import common.utils.MoneyContext;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.LocalizedString;
-import io.sphere.sdk.products.Image;
-import io.sphere.sdk.products.Price;
-import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
+import io.sphere.sdk.products.*;
 import wedecidelatercommon.ProductReverseRouter;
 
 import javax.inject.Inject;
@@ -17,6 +14,7 @@ import javax.money.MonetaryAmount;
 import java.util.Optional;
 
 import static common.utils.PriceUtils.calculateFinalPrice;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 public class ProductVariantBeanFactory extends Base {
 
@@ -56,7 +54,15 @@ public class ProductVariantBeanFactory extends Base {
     }
 
     protected void fillPrices(final ProductVariant variant, final ProductVariantBean bean) {
-        PriceFinder.of(userContext).findPrice(variant.getPrices()).ifPresent(price -> fillPriceInfo(bean, price));
+        resolvePrice(variant).ifPresent(price -> fillPriceInfo(bean, price));
+    }
+
+    protected Optional<PriceLike> resolvePrice(final ProductVariant variant) {
+        PriceLike price = firstNonNull(variant.getPrice(), variant.getScopedPrice());
+        if (price == null) {
+            price = PriceFinder.of(userContext).findPrice(variant.getPrices()).orElse(null);
+        }
+        return Optional.ofNullable(price);
     }
 
     protected void fillName(final LineItem lineItem, final ProductVariantBean bean) {
@@ -68,7 +74,7 @@ public class ProductVariantBeanFactory extends Base {
         createImage(variant).ifPresent(bean::setImage);
     }
 
-    protected void fillPriceInfo(final ProductVariantBean bean, final Price price) {
+    protected void fillPriceInfo(final ProductVariantBean bean, final PriceLike price) {
         final MoneyContext moneyContext = MoneyContext.of(price.getValue().getCurrency(), userContext.locale());
         final MonetaryAmount currentPrice = calculateFinalPrice(price);
         final boolean hasDiscount = currentPrice.isLessThan(price.getValue());

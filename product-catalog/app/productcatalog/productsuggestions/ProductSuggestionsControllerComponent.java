@@ -35,7 +35,7 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
 
     @Override
     public CompletionStage<?> onSingleProductProjectionLoaded(final ProductProjection product) {
-        return productRecommendation.relatedToProduct(product, numSuggestions)
+        return productRecommendation.relatedToProduct(product, numSuggestions, userContext)
                 .thenAccept(m -> suggestions = m);
     }
 

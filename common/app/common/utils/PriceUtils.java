@@ -1,8 +1,10 @@
 package common.utils;
 
+import common.contexts.UserContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.TaxedPrice;
-import io.sphere.sdk.products.Price;
+import io.sphere.sdk.products.PriceLike;
+import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.utils.MoneyImpl;
 
 import javax.money.MonetaryAmount;
@@ -32,8 +34,15 @@ public final class PriceUtils {
                 }).reduce(zeroAmount, (left, right) -> left.add(right));
     }
 
-    public static MonetaryAmount calculateFinalPrice(final Price price) {
+    public static MonetaryAmount calculateFinalPrice(final PriceLike price) {
         final boolean hasProductDiscount = price.getDiscounted() != null;
         return hasProductDiscount ? price.getDiscounted().getValue() : price.getValue();
+    }
+
+    public static PriceSelection createPriceSelection(final UserContext userContext) {
+        return PriceSelection.of(userContext.currency())
+                .withPriceCountry(userContext.country())
+                .withPriceCustomerGroup(userContext.customerGroup().orElse(null))
+                .withPriceChannel(userContext.channel().orElse(null));
     }
 }

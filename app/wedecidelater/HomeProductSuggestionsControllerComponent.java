@@ -1,5 +1,6 @@
 package wedecidelater;
 
+import common.contexts.UserContext;
 import common.controllers.SunrisePageData;
 import common.hooks.RequestHook;
 import common.hooks.SunrisePageDataHook;
@@ -41,6 +42,8 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
     private ProductRecommendation productRecommendation;
     @Inject
     private CategoryTree categoryTree;
+    @Inject
+    private UserContext userContext;
 
     @Inject
     public void setConfiguration(final Configuration configuration) {
@@ -57,7 +60,7 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
                 .map(Optional::get)
                 .collect(Collectors.toList());
         if (!suggestedCategories.isEmpty()) {
-            return productRecommendation.relatedToCategories(suggestedCategories, numSuggestions)
+            return productRecommendation.relatedToCategories(suggestedCategories, numSuggestions, userContext)
                     .exceptionally(e -> {
                         logger.error("failed to fetch product suggestions", e);
                         return emptySet();

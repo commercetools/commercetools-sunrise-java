@@ -4,6 +4,7 @@ import common.contexts.UserContext;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
+import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
 import org.slf4j.Logger;
@@ -15,6 +16,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.UnaryOperator;
+
+import static common.utils.PriceUtils.createPriceSelection;
 
 public final class ProductFetchBySlugAndSku implements ProductFetch<String, String> {
 
@@ -54,7 +57,10 @@ public final class ProductFetchBySlugAndSku implements ProductFetch<String, Stri
      * @return A CompletionStage of an optionally found ProductProjection
      */
     private CompletionStage<Optional<ProductProjection>> findProductBySlug(final String slug, final Locale locale, final UnaryOperator<ProductProjectionSearch> queryFilter) {
-        final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent().withQueryFilters(m -> m.slug().locale(locale).is(slug));
+        final PriceSelection priceSelection = createPriceSelection(userContext);
+        final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
+                .withQueryFilters(m -> m.slug().locale(locale).is(slug))
+                .withPriceSelection(priceSelection);
         return sphereClient.execute(queryFilter.apply(request))
                 .thenApplyAsync(PagedSearchResult::head, HttpExecution.defaultContext())
                 .whenCompleteAsync((productOpt, t) -> {
