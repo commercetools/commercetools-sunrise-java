@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * Controller for the home page.
@@ -28,8 +29,7 @@ public abstract class SunriseHomePageController extends SunriseFrameworkControll
     private I18nResolver i18nResolver;
 
     public CompletionStage<Result> show(final String languageTag) {
-        return runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()))
-        .thenApplyAsync(unused -> ok(renderHomePage(new HomePageContent())), HttpExecution.defaultContext());
+        return doRequest(() -> completedFuture(ok(renderHomePage(new HomePageContent()))));
     }
 
     protected Html renderHomePage(final HomePageContent pageContent) {

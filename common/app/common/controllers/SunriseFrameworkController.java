@@ -3,13 +3,16 @@ package common.controllers;
 import com.google.inject.Injector;
 import common.contexts.UserContext;
 import common.hooks.Hook;
+import common.hooks.RequestHook;
 import common.template.engine.TemplateEngine;
 import framework.ControllerComponent;
 import framework.MultiControllerComponentResolver;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.utils.FutureUtils;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Controller;
 import play.mvc.Http;
+import play.mvc.Result;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -20,6 +23,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -36,7 +40,6 @@ public abstract class SunriseFrameworkController extends Controller {
 
     private final List<ControllerComponent> controllerComponents = new LinkedList<>();
 
-
     @Inject
     public void setMultiControllerComponents(final MultiControllerComponentResolver multiComponent, final Injector injector) {
         final List<Class<? extends ControllerComponent>> components = multiComponent.findMatchingComponents(this);
@@ -47,6 +50,11 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected SunriseFrameworkController() {
+    }
+
+    protected final CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> objectResultFunction) {
+        return runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()))
+                .thenComposeAsync(unused -> objectResultFunction.get(), HttpExecution.defaultContext());
     }
 
     public abstract Set<String> getFrameworkTags();

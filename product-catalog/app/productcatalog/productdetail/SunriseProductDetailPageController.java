@@ -50,17 +50,21 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     private String variantSku;
 
     public CompletionStage<Result> showProductBySlugAndSku(final String languageTag, final String slug, final String sku) {
-        logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
-        this.productSlug = slug;
-        this.variantSku = sku;
-        return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku, this::filter, this::filter)
-                .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
+        return doRequest(() -> {
+            logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
+            this.productSlug = slug;
+            this.variantSku = sku;
+            return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku, this::filter, this::filter)
+                    .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
+        });
     }
 
     public CompletionStage<Result> showProductByProductIdAndVariantId(final String languageTag, final String productId, final int variantId) {
-        logger.debug("look for product with productId={} and variantId={}", productId, variantId);
-        return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId, this::filter, this::filter)
-                .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
+        return doRequest(() -> {
+            logger.debug("look for product with productId={} and variantId={}", productId, variantId);
+            return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId, this::filter, this::filter)
+                    .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
+        });
     }
 
     private ProductProjectionQuery filter(ProductProjectionQuery q) {
