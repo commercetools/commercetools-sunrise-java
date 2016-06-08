@@ -128,7 +128,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         return "pdp";
     }
 
-    private Result notFoundProductResult() {
+    protected Result notFoundProductResult() {
         return notFound();
     }
 
