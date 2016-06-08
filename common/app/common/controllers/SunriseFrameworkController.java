@@ -71,8 +71,7 @@ public abstract class SunriseFrameworkController extends Controller {
         return templateEngine;
     }
 
-    protected final SunrisePageData pageData(final UserContext userContext, final PageContent content,
-                                             final Http.Context ctx, final Http.Session session) {
+    protected final SunrisePageData pageData(final PageContent content) {
         final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
         return new SunrisePageData(pageHeader, new PageFooter(), content, pageMetaFactory.create());
     }

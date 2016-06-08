@@ -127,7 +127,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     }
 
     protected Html renderPage(final ProductDetailPageContent pageContent) {
-        final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
+        final SunrisePageData pageData = pageData(pageContent);
         runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
         return templateEngine().renderToHtml(getTemplateName(), pageData, userContext.locales());
     }
