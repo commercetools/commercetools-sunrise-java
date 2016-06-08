@@ -3,6 +3,7 @@ package productcatalog.productdetail;
 import common.contexts.UserContext;
 import common.controllers.SunriseFrameworkController;
 import common.controllers.SunrisePageData;
+import common.controllers.WithOverwriteableTemplateName;
 import common.hooks.SunrisePageDataHook;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -24,9 +25,9 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseProductDetailPageController extends SunriseFrameworkController {
+public abstract class SunriseProductDetailPageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductDetailPageController.class);
+    protected static final Logger logger = LoggerFactory.getLogger(SunriseProductDetailPageController.class);
 
     @Inject
     private UserContext userContext;
@@ -43,6 +44,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     private String variantSku;
 
     public CompletionStage<Result> showProductBySlugAndSku(final String languageTag, final String slug, final String sku) {
+        logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
         this.productSlug = slug;
         this.variantSku = sku;
         return productFetchBySlugAndSku.findProduct(slug, sku)
@@ -99,7 +101,12 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     protected Html renderPage(final ProductDetailPageContent pageContent) {
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
-        return templateEngine().renderToHtml("pdp", pageData, userContext.locales());
+        return templateEngine().renderToHtml(getTemplateName(), pageData, userContext.locales());
+    }
+
+    @Override
+    public String getTemplateName() {
+        return "pdp";
     }
 
     private Result notFoundProductResult() {
