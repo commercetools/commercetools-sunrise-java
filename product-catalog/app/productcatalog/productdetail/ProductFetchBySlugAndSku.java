@@ -26,7 +26,8 @@ public final class ProductFetchBySlugAndSku implements ProductFetch<String, Stri
 
     @Override
     public CompletionStage<ProductFetchResult> findProduct(final String productIdentifier, final String variantIdentifier) {
-        return findProduct(productIdentifier).thenApplyAsync(productOpt -> productOpt
+        return findProduct(productIdentifier)
+                .thenApplyAsync(productOpt -> productOpt
                 .map(product -> findVariant(variantIdentifier, product)
                         .map(variant -> ProductFetchResult.of(product, variant))
                         .orElseGet(() -> ProductFetchResult.ofNotFoundVariant(product)))

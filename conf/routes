@@ -117,6 +117,8 @@ GET         /:languageTag/user/orders/:orderNumber             @myaccount.myorde
 
 # Shows the product detail page
 GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.productdetail.ProductDetailPageController.showProductBySlugAndSku(languageTag: String, productSlug: String, sku: String)
+# TODO framework remove this route
+GET         /:languageTag/:productId/:variantId        @productcatalog.productdetail.ProductDetailPageController.showProductByProductIdAndVariantId(languageTag: String, productId: String, variantId: Int)
 
 
 # PRODUCT OVERVIEW

@@ -1,5 +1,6 @@
 package productcatalog.productdetail;
 
+import com.google.inject.Injector;
 import common.contexts.UserContext;
 import common.controllers.SunriseFrameworkController;
 import common.controllers.SunrisePageData;
@@ -34,7 +35,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     @Inject
     private ProductReverseRouter productReverseRouter;
     @Inject
-    private ProductFetchBySlugAndSku productFetchBySlugAndSku;
+    private Injector injector;
     @Inject
     protected ProductDetailPageContentFactory productDetailPageContentFactory;
 
@@ -47,7 +48,13 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
         this.productSlug = slug;
         this.variantSku = sku;
-        return productFetchBySlugAndSku.findProduct(slug, sku)
+        return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku)
+                .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
+    }
+
+    public CompletionStage<Result> showProductByProductIdAndVariantId(final String languageTag, final String productId, final int variantId) {
+        logger.debug("look for product with productId={} and variantId={}", productId, variantId);
+        return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId)
                 .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
     }
 
