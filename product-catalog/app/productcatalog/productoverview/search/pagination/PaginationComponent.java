@@ -1,6 +1,5 @@
 package productcatalog.productoverview.search.pagination;
 
-import common.contexts.RequestContext;
 import common.controllers.SunrisePageData;
 import common.hooks.SunrisePageDataHook;
 import common.models.FormSelectableOptionBean;
@@ -9,10 +8,9 @@ import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
-import play.Configuration;
 import productcatalog.hooks.ProductProjectionPagedSearchResultHook;
 import productcatalog.hooks.ProductProjectionSearchFilterHook;
-import productcatalog.productoverview.PaginationBean;
+import productcatalog.productoverview.PaginationBeanFactory;
 import productcatalog.productoverview.ProductOverviewPageContent;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelector;
@@ -31,9 +29,7 @@ public class PaginationComponent extends Base implements ControllerComponent, Su
     @Inject
     private PaginationFactory paginationFactory;
     @Inject
-    private Configuration configuration;
-    @Inject
-    private RequestContext requestContext;
+    private PaginationBeanFactory paginationBeanFactory;
 
     @Nullable
     private ProductsPerPageSelector productsPerPageSelector;
@@ -62,8 +58,7 @@ public class PaginationComponent extends Base implements ControllerComponent, Su
     public void acceptSunrisePageData(final SunrisePageData sunrisePageData) {
         if (pagination != null && productsPerPageSelector != null && pagedSearchResult != null && sunrisePageData.getContent() instanceof ProductOverviewPageContent) {
             final ProductOverviewPageContent content = (ProductOverviewPageContent) sunrisePageData.getContent();
-            final Integer paginationDisplayedPages = configuration.getInt("pop.pagination.displayedPages", 6);
-            content.setPagination(new PaginationBean(requestContext, pagedSearchResult, pagination.getPage(), productsPerPageSelector.getSelectedPageSize(), paginationDisplayedPages));
+            content.setPagination(paginationBeanFactory.create(pagedSearchResult, pagination, productsPerPageSelector.getSelectedPageSize()));
             content.setDisplaySelector(createProductsPerPageSelector(productsPerPageSelectorFactory.create()));
         }
     }

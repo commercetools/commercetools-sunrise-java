@@ -42,8 +42,6 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
     private Injector injector;
     @Inject
     private ProductOverviewPageContentFactory productOverviewPageContentFactory;
-    @Inject
-    private ProductListFetchSimple productListFetchSimple;
 
     @Nullable
     private String categorySlug;

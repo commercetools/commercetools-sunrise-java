@@ -1,10 +1,16 @@
 package productcatalog.productoverview;
 
+import com.google.inject.Binder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import common.contexts.RequestContext;
 import common.models.LinkBean;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
 import org.junit.Test;
+import play.Configuration;
+import productcatalog.productoverview.search.pagination.Pagination;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -13,9 +19,10 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PaginationBeanTest {
+public class PaginationBeanFactoryTest {
     private static final String URL_PATH = "www.url.dom/path/to/";
     private static final Long PAGE_SIZE = 9L;
 
@@ -93,7 +100,17 @@ public class PaginationBeanTest {
 
     private PaginationBean createPaginationData(final int currentPage, final int displayedPages, final PagedResult<ProductProjection> searchResult) {
         final RequestContext requestContext = RequestContext.of(buildQueryString(currentPage), URL_PATH);
-        return new PaginationBean(requestContext, searchResult, currentPage, PAGE_SIZE.intValue(), displayedPages);
+        final Map<String, Object> configMap = singletonMap("pop.pagination.displayedPages", displayedPages);
+        final Configuration configuration = new Configuration(configMap);
+        final Injector injector = Guice.createInjector(new Module() {
+            @Override
+            public void configure(final Binder binder) {
+                binder.bind(RequestContext.class).toInstance(requestContext);
+                binder.bind(Configuration.class).toInstance(configuration);
+            }
+        });
+        final Pagination pagination = Pagination.of("page", currentPage);
+        return injector.getInstance(PaginationBeanFactory.class).create(searchResult, pagination, PAGE_SIZE.intValue());
     }
 
     private PagedResult<ProductProjection> pagedResult(final int page, final int totalPages) {
