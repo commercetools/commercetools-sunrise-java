@@ -65,8 +65,14 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         });
     }
 
-    private ProductProjectionSearch filter(ProductProjectionSearch q) {
-        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, r) -> hook.filterProductProjectionSearch(r), q);
+    @Override
+    public String getTemplateName() {
+        return "pdp";
+    }
+
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("productdetailpage", "product"));
     }
 
     protected Optional<String> getProductSlug() {
@@ -126,13 +132,12 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         return templateEngine().renderToHtml(getTemplateName(), pageData, userContext.locales());
     }
 
-    @Override
-    public String getTemplateName() {
-        return "pdp";
-    }
-
     protected Result notFoundProductResult() {
         return notFound();
+    }
+
+    protected final ProductProjectionSearch filter(ProductProjectionSearch q) {
+        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, r) -> hook.filterProductProjectionSearch(r), q);
     }
 
     private Result redirectToNewSlug(final String newSlug, final String sku) {
@@ -147,10 +152,5 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
 
     private CompletionStage<Optional<String>> findNewProductSlug(final String slug) {
         return completedFuture(Optional.empty()); // TODO look for messages and find current slug
-    }
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("productdetailpage", "product"));
     }
 }

@@ -1,5 +1,6 @@
 package productcatalog.productoverview;
 
+import com.google.inject.Injector;
 import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.controllers.SunriseFrameworkController;
@@ -15,8 +16,8 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.productoverview.search.SearchCriteriaImpl;
-import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelectorListFactory;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelector;
+import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelectorListFactory;
 import productcatalog.productoverview.search.pagination.Pagination;
 import productcatalog.productoverview.search.pagination.PaginationFactory;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelector;
@@ -40,6 +41,8 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductOverviewPageController.class);
 
+    @Inject
+    private Injector injector;
     @Inject
     private UserContext userContext;
     @Inject
