@@ -12,17 +12,16 @@ import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import static productcatalog.productoverview.search.SearchUtils.selectedValues;
 
-@RequestScoped
 public class SearchBoxFactory {
 
-    private final String key;
+    private String key;
     @Inject
     private UserContext userContext;
     @Inject
     private RequestContext requestContext;
 
     @Inject
-    public SearchBoxFactory(final Configuration configuration) {
+    public void setConfiguration(final Configuration configuration) {
         this.key = configuration.getString("pop.searchTerm.key", "q");
     }
 

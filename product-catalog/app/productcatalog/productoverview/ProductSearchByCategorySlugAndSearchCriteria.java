@@ -11,6 +11,7 @@ import productcatalog.productoverview.search.SearchCriteria;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
+import java.util.function.UnaryOperator;
 
 import static common.utils.LogUtils.logProductRequest;
 
@@ -25,8 +26,8 @@ public class ProductSearchByCategorySlugAndSearchCriteria implements ProductSear
 //    @Inject
 //    private UserContext userContext;
 
-    public CompletionStage<ProductSearchResult> searchProducts(final String categorySlug, final SearchCriteria searchCriteria) {
-        return findProducts(searchCriteria)
+    public CompletionStage<ProductSearchResult> searchProducts(final String categorySlug, final SearchCriteria searchCriteria, final UnaryOperator<ProductProjectionSearch> filter) {
+        return findProducts(searchCriteria, filter)
                 .thenApplyAsync(ProductSearchResult::of, HttpExecution.defaultContext());
     }
 
@@ -39,15 +40,15 @@ public class ProductSearchByCategorySlugAndSearchCriteria implements ProductSear
      * @param searchCriteria all information regarding the request parameters
      * @return A CompletionStage of a paged result of the search request
      */
-    protected CompletionStage<PagedSearchResult<ProductProjection>> findProducts(final SearchCriteria searchCriteria) {
+    protected CompletionStage<PagedSearchResult<ProductProjection>> findProducts(final SearchCriteria searchCriteria, final UnaryOperator<ProductProjectionSearch> filter) {
         final ProductProjectionSearch baseRequest = ProductProjectionSearch.ofCurrent()
                 .withFacetedSearch(searchCriteria.getFacetedSearchExpressions())
-                .withSort(searchCriteria.getSortExpressions())
                 .withOffset(calculateOffset(searchCriteria))
                 .withLimit(searchCriteria.getPageSize());
         final ProductProjectionSearch request = getRequestWithTextSearch(baseRequest, searchCriteria);
-        return sphereClient.execute(request)
-                .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, request, result), HttpExecution.defaultContext());
+        final ProductProjectionSearch filterRequest = filter.apply(request);
+        return sphereClient.execute(filterRequest)
+                .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, filterRequest, result), HttpExecution.defaultContext());
     }
 
     protected ProductProjectionSearch getRequestWithTextSearch(final ProductProjectionSearch request, final SearchCriteria searchCriteria) {

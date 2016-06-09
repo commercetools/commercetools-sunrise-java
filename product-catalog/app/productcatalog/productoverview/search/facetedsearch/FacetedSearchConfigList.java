@@ -6,16 +6,16 @@ import java.util.List;
 
 public final class FacetedSearchConfigList extends Base {
 
-    private final List<SelectFacetedSearchConfig> selectFacetConfigList;
+    private final List<SelectFacetedSearchConfig> selectFacetedSearchConfigList;
     // missing range facets
 
 
-    private FacetedSearchConfigList(final List<SelectFacetedSearchConfig> selectFacetConfigList) {
-        this.selectFacetConfigList = selectFacetConfigList;
+    private FacetedSearchConfigList(final List<SelectFacetedSearchConfig> selectFacetedSearchConfigList) {
+        this.selectFacetedSearchConfigList = selectFacetedSearchConfigList;
     }
 
     public List<SelectFacetedSearchConfig> getSelectFacetedSearchConfigList() {
-        return selectFacetConfigList;
+        return selectFacetedSearchConfigList;
     }
 
     public static FacetedSearchConfigList of(final List<SelectFacetedSearchConfig> selectFacetConfigList) {

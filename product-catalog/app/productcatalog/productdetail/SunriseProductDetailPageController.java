@@ -99,7 +99,9 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         final CompletionStage<Object> hooksCompletionStage = runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
         final CompletionStage<Object> hooksCompletionStage2 = runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
         return hooksCompletionStage2.thenComposeAsync(unused ->
-                hooksCompletionStage.thenComposeAsync(unusedResult -> handleFoundProduct(product, variant), HttpExecution.defaultContext()), HttpExecution.defaultContext());
+                hooksCompletionStage.thenComposeAsync(unusedResult ->
+                        handleFoundProduct(product, variant), HttpExecution.defaultContext()),
+                HttpExecution.defaultContext());
     }
 
     protected CompletionStage<Result> handleFoundProduct(final ProductProjection product, final ProductVariant variant) {
@@ -122,6 +124,10 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         }
     }
 
+    protected Result notFoundProductResult() {
+        return notFound();
+    }
+
     protected ProductDetailPageContent createPageContent(final ProductProjection product, final ProductVariant variant) {
         return productDetailPageContentFactory.create(product, variant);
     }
@@ -130,10 +136,6 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         final SunrisePageData pageData = pageData(pageContent);
         runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
         return templateEngine().renderToHtml(getTemplateName(), pageData, userContext.locales());
-    }
-
-    protected Result notFoundProductResult() {
-        return notFound();
     }
 
     protected final ProductProjectionSearch filter(ProductProjectionSearch q) {

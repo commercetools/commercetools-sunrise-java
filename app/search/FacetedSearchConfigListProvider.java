@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-class FacetConfigListProvider implements Provider<FacetedSearchConfigList> {
+class FacetedSearchConfigListProvider implements Provider<FacetedSearchConfigList> {
 
     private static final String CONFIG_FACETS = "pop.facets";
 

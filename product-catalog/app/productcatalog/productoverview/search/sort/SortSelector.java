@@ -16,7 +16,7 @@ public final class SortSelector extends Base {
     private final List<SortOption> defaultOptions;
 
     private SortSelector(final String key, final List<SortOption> options, final List<SortOption> defaultOptions,
-                           final List<SortOption> selectedOptions) {
+                         final List<SortOption> selectedOptions) {
         this.key = key;
         this.options = options;
         this.selectedOptions = selectedOptions;

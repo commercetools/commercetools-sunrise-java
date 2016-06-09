@@ -13,6 +13,6 @@ public class SearchProductionModule extends AbstractModule {
     protected void configure() {
         bind(ProductsPerPageConfig.class).toProvider(ProductsPerPageConfigProvider.class).in(Singleton.class);
         bind(SortConfig.class).toProvider(SortConfigProvider.class).in(Singleton.class);
-        bind(FacetedSearchConfigList.class).toProvider(FacetConfigListProvider.class).in(Singleton.class);
+        bind(FacetedSearchConfigList.class).toProvider(FacetedSearchConfigListProvider.class).in(Singleton.class);
     }
 }

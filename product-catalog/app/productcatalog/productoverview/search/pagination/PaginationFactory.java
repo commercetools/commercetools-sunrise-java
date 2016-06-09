@@ -9,24 +9,23 @@ import javax.inject.Inject;
 
 import static productcatalog.productoverview.search.SearchUtils.selectedValues;
 
-@RequestScoped
 public class PaginationFactory extends Base {
 
     public static final int DEFAULT_PAGE = 1;
-    private final String key;
+    private String key;
     @Inject
     private RequestContext requestContext;
 
     @Inject
-    public PaginationFactory(final Configuration configuration) {
+    public void setConfiguration(final Configuration configuration) {
         this.key = configuration.getString("pop.pagination.key", "page");
     }
 
     public Pagination create() {
-        return Pagination.of(key, page());
+        return Pagination.of(key, selectedPage());
     }
 
-    private int page() {
+    private int selectedPage() {
         return selectedValues(key, requestContext).stream()
                 .findFirst()
                 .map(page -> {

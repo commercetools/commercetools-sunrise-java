@@ -6,12 +6,15 @@ import common.template.i18n.I18nIdentifier;
 import common.template.i18n.I18nResolver;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 import productcatalog.common.BreadcrumbBeanFactory;
 import productcatalog.common.ProductListBeanFactory;
 import productcatalog.productoverview.search.SearchCriteriaImpl;
+import productcatalog.productoverview.search.facetedsearch.FacetSelectorBean;
 import productcatalog.productoverview.search.facetedsearch.FacetSelectorListBean;
+import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelector;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelectorListFactory;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelector;
@@ -75,9 +78,29 @@ public class ProductOverviewPageContentFactory {
     private void fill(final List<Category> selectedCategories, final ProductOverviewPageContent content, final PagedSearchResult<ProductProjection> searchResult,
                       final SearchCriteriaImpl searchCriteria) {
         content.setProducts(productListBeanFactory.create(searchResult.getResults()));
-        content.setSortSelector(createSortSelector(sortSelectorFactory.create()));
         content.setDisplaySelector(createProductsPerPageSelector(productsPerPageSelectorFactory.create()));
-        content.setFacets(new FacetSelectorListBean(facetedSearchSelectorListFactory.create(selectedCategories), searchResult, userContext, i18nResolver));
+        content.setFacets(createFacetSelectorList(facetedSearchSelectorListFactory.create(selectedCategories), searchResult));
+    }
+
+    private FacetSelectorListBean createFacetSelectorList(final List<FacetedSearchSelector> facetedSearchSelectors, final PagedSearchResult<ProductProjection> searchResult) {
+         final FacetSelectorListBean bean = new FacetSelectorListBean();
+         bean.setList(facetedSearchSelectors.stream()
+                 .sorted((f1, f2) -> Double.compare(f1.getPosition(), f2.getPosition()))
+                 .map(facetedSearchSelector -> createFacetSelector(facetedSearchSelector, searchResult))
+                 .collect(toList()));
+         return bean;
+    }
+
+    private FacetSelectorBean createFacetSelector(final FacetedSearchSelector facetedSearchSelector, final PagedSearchResult<ProductProjection> searchResult) {
+        final FacetSelectorBean bean = new FacetSelectorBean();
+        final Facet<ProductProjection> facet = facetedSearchSelector.getFacet(searchResult);
+        if (facet.getLabel() != null) {
+            final String label = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(facet.getLabel()));
+            bean.setFacet(facet.withLabel(label));
+        } else {
+            bean.setFacet(facet);
+        }
+        return bean;
     }
 
     private BannerBean createBanner(final Category category) {
@@ -85,24 +108,6 @@ public class ProductOverviewPageContentFactory {
         bannerBean.setImageMobile("/assets/img/banner_mobile-0a9241da249091a023ecfadde951a53b.jpg"); // TODO obtain from category?
         bannerBean.setImageDesktop("/assets/img/banner_desktop-9ffd148c48068ce2666d6533b4a87d11.jpg"); // TODO obtain from category?
         return bannerBean;
-    }
-
-    private SortSelectorBean createSortSelector(final SortSelector sortSelector) {
-        final SortSelectorBean bean = new SortSelectorBean();
-        bean.setKey(sortSelector.getKey());
-        bean.setList(sortSelector.getOptions().stream()
-                .map(option -> optionToSelectableData(option, sortSelector))
-                .collect(toList()));
-        return bean;
-    }
-
-    private FormSelectableOptionBean optionToSelectableData(final SortOption option, final SortSelector sortSelector) {
-        final String label = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(option.getLabel()));
-        final FormSelectableOptionBean sortOption = new FormSelectableOptionBean(label, option.getValue());
-        if (sortSelector.getSelectedOptions().contains(option)) {
-            sortOption.setSelected(true);
-        }
-        return sortOption;
     }
 
     private ProductsPerPageSelectorBean createProductsPerPageSelector(final ProductsPerPageSelector productsPerPageSelector) {

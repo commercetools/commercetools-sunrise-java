@@ -5,9 +5,12 @@ import common.contexts.RequestContext;
 import common.contexts.UserContext;
 import common.controllers.SunriseFrameworkController;
 import common.controllers.SunrisePageData;
+import common.controllers.WithOverwriteableTemplateName;
+import common.hooks.SunrisePageDataHook;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,7 @@ import play.Configuration;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import productcatalog.hooks.ProductProjectionSearchFilterHook;
 import productcatalog.productoverview.search.SearchCriteriaImpl;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelector;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelectorListFactory;
@@ -29,15 +33,18 @@ import productcatalog.productoverview.search.sort.SortSelectorFactory;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseProductOverviewPageController extends SunriseFrameworkController {
+public abstract class SunriseProductOverviewPageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductOverviewPageController.class);
 
@@ -71,17 +78,37 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
     @Nullable
     private Integer page;
 
-    /* Controller actions */
-
     public CompletionStage<Result> showProductsByCategorySlug(final String languageTag, final int page, final String categorySlug) {
-        this.page = page;
-        this.categorySlug = categorySlug;
-        final Optional<Category> category = categoryTree.findBySlug(userContext.locale(), categorySlug);
-        if (category.isPresent()) {
-            return handleFoundCategory(category.get());
+        return doRequest(() -> {
+            this.page = page;
+            this.categorySlug = categorySlug;
+            final Optional<Category> category = categoryTree.findBySlug(userContext.locale(), categorySlug);
+            if (category.isPresent()) {
+                return handleFoundCategory(category.get());
+            } else {
+                return handleNotFoundCategory();
+            }
+        });
+    }
+
+    public CompletionStage<Result> search(final String languageTag, final int page) {
+        final SearchCriteriaImpl searchCriteria = getSearchCriteria(emptyList());
+        if (searchCriteria.getSearchTerm().isPresent()) {
+            return productSearchByCategorySlugAndSearchCriteria.searchProducts(categorySlug, searchCriteria, this::filter)
+                    .thenApplyAsync(searchResult -> ok(renderPage(createPageContent(searchResult.getPagedSearchResult().get(), searchCriteria))), HttpExecution.defaultContext());
         } else {
-            return handleNotFoundCategory();
+            return completedFuture(badRequest("Search term missing"));
         }
+    }
+
+    @Override
+    public String getTemplateName() {
+        return "pop";
+    }
+
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("productoverviewpage", "product"));
     }
 
     protected Optional<String> getCategorySlug() {
@@ -91,29 +118,39 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
     protected Optional<Integer> getPage() {
         return Optional.ofNullable(page);
     }
-
-    private CompletionStage<Result> handleNotFoundCategory() {
-        return completedFuture(notFoundCategoryResult());
-    }
-
-    private Result notFoundCategoryResult() {
-        return notFound("Category not found: " + categorySlug);
-    }
+//
+//    protected CompletionStage<Result> showProducts(final ProductSearchResult productSearchResult) {
+//        final Optional<PagedSearchResult<ProductProjection>> searchResult = productSearchResult.getPagedSearchResult();
+//        if (searchResult.isPresent()) {
+//            return handleSuccessfulSearch(searchResult.get());
+//        }
+//    }
 
     private CompletionStage<Result> handleFoundCategory(final Category category) {
         final SearchCriteriaImpl searchCriteria = getSearchCriteria(singletonList(category));
-        return productSearchByCategorySlugAndSearchCriteria.searchProducts(categorySlug, searchCriteria)
+        return productSearchByCategorySlugAndSearchCriteria.searchProducts(categorySlug, searchCriteria, this::filter)
                 .thenApplyAsync(searchResult -> ok(renderPage(createPageContent(category, searchResult.getPagedSearchResult().get(), searchCriteria))), HttpExecution.defaultContext());
     }
 
-    public CompletionStage<Result> search(final String languageTag, final int page) {
-        final SearchCriteriaImpl searchCriteria = getSearchCriteria(emptyList());
-        if (searchCriteria.getSearchTerm().isPresent()) {
-            return productSearchByCategorySlugAndSearchCriteria.searchProducts(categorySlug, searchCriteria)
-                    .thenApplyAsync(searchResult -> ok(renderPage(createPageContent(searchResult.getPagedSearchResult().get(), searchCriteria))), HttpExecution.defaultContext());
-        } else {
-            return completedFuture(badRequest("Search term missing"));
-        }
+//    protected CompletionStage<Result> handleSuccessfulSearch(final PagedSearchResult<ProductProjection> searchResult) {
+//        final ProductOverviewPageContent pageContent = createPageContent();
+//        return completedFuture(ok(renderPage(pageContent)));
+//    }
+
+    protected CompletionStage<Result> handleNotFoundCategory() {
+        return completedFuture(notFoundCategoryResult());
+    }
+//
+//    protected CompletionStage<Result> handleInvalidSearchTerm() {
+//
+//    }
+//
+//    protected CompletionStage<Result> handleEmptySearch() {
+//
+//    }
+
+    protected Result notFoundCategoryResult() {
+        return notFound("Category not found: " + categorySlug);
     }
 
     protected SearchCriteriaImpl getSearchCriteria(final List<Category> selectedCategories) {
@@ -124,8 +161,6 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
         final List<FacetedSearchSelector> facetedSearchSelectors = facetedSearchSelectorListFactory.create(selectedCategories);
         return SearchCriteriaImpl.of(pagination, searchBox, sortSelector, productsPerPageSelector, facetedSearchSelectors);
     }
-
-    /* Page rendering methods */
 
     protected ProductOverviewPageContent createPageContent(final Category category, final PagedSearchResult<ProductProjection> searchResult,
                                                            final SearchCriteriaImpl searchCriteria) {
@@ -151,6 +186,11 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
 
     protected Html renderPage(final ProductOverviewPageContent pageContent) {
         final SunrisePageData pageData = pageData(pageContent);
-        return templateEngine().renderToHtml("pop", pageData, userContext.locales());
+        runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
+        return templateEngine().renderToHtml(getTemplateName(), pageData, userContext.locales());
+    }
+
+    protected final ProductProjectionSearch filter(ProductProjectionSearch q) {
+        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, r) -> hook.filterProductProjectionSearch(r), q);
     }
 }
