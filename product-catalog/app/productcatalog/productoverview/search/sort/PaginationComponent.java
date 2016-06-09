@@ -47,8 +47,8 @@ public class PaginationComponent extends Base implements ControllerComponent, Su
 
     @Override
     public ProductProjectionSearch filterProductProjectionSearch(final ProductProjectionSearch search) {
-        productsPerPageSelector = productsPerPageSelectorFactory.create();
         pagination = paginationFactory.create();
+        productsPerPageSelector = productsPerPageSelectorFactory.create();
         final int pageSize = productsPerPageSelector.getSelectedPageSize();
         return search
                 .withOffset((pagination.getPage() - 1) * pageSize)

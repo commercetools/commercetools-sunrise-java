@@ -61,10 +61,6 @@ public class ProductOverviewPageContentFactory {
                                              final SearchCriteriaImpl searchCriteria) {
         final ProductOverviewPageContent content = new ProductOverviewPageContent();
         fill(Collections.emptyList(), content, searchResult, searchCriteria);
-        final String searchTerm = searchCriteria.getSearchTerm().get().getValue();
-        content.setAdditionalTitle(searchTerm);
-        content.setBreadcrumb(breadcrumbBeanFactory.create(searchTerm));
-        content.setSearchTerm(searchTerm);
         return content;
     }
 

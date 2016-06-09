@@ -1,7 +1,6 @@
 package productcatalog.productoverview.search.sort;
 
 import common.contexts.UserContext;
-import common.controllers.PageContent;
 import common.controllers.SunrisePageData;
 import common.hooks.SunrisePageDataHook;
 import common.models.FormSelectableOptionBean;
