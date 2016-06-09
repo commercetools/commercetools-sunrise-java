@@ -96,14 +96,13 @@ public class PaginationBeanTest {
         return new PaginationBean(requestContext, searchResult, currentPage, PAGE_SIZE.intValue(), displayedPages);
     }
 
-    @SuppressWarnings("unchecked")
     private PagedResult<ProductProjection> pagedResult(final int page, final int totalPages) {
         final long offset = (page - 1) * PAGE_SIZE;
         final long totalProducts = totalPages * PAGE_SIZE;
         final List<ProductProjection> products = Collections.nCopies(PAGE_SIZE.intValue(), null);
-        return new PagedResult() {
+        return new PagedResult<ProductProjection>() {
             @Override
-            public List getResults() {
+            public List<ProductProjection> getResults() {
                 return products;
             }
 
