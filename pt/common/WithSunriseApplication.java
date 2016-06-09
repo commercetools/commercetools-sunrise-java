@@ -7,7 +7,6 @@ import com.google.inject.util.Modules;
 import common.controllers.TestableReverseRouter;
 import common.controllers.TestableSphereClient;
 import ctpclient.CtpClientTestModule;
-import template.TemplateTestModule;
 import ctpmodels.CtpModelsTestModule;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.queries.CategoryQuery;
@@ -21,15 +20,19 @@ import play.libs.ws.WS;
 import play.libs.ws.WSRequest;
 import play.mvc.Controller;
 import play.mvc.Http;
-import productcatalog.productoverview.search.SearchConfig;
+import productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
+import productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
+import productcatalog.productoverview.search.sort.SortConfig;
 import reverserouter.ReverseRouterTestModule;
 import search.SearchTestModule;
+import template.TemplateTestModule;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static common.utils.JsonUtils.readCtpObject;
+import static java.util.Collections.emptyList;
 import static play.test.Helpers.running;
 import static play.test.Helpers.testServer;
 
@@ -93,7 +96,7 @@ public abstract class WithSunriseApplication {
                 new BasicAuthTestModule(null),
                 new ReverseRouterTestModule(new TestableReverseRouter()),
                 new CategoryTreeTestModule(categories),
-                new SearchTestModule(SearchConfig.of(null, null, null, null, null)));
+                new SearchTestModule(ProductsPerPageConfig.of("", emptyList(), 0), SortConfig.of("", emptyList()), FacetedSearchConfigList.of(emptyList())));
     }
 
     protected static Configuration testConfiguration() {

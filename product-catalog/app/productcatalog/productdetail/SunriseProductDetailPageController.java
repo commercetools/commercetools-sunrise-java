@@ -47,6 +47,16 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     @Nullable
     private String variantSku;
 
+    @Override
+    public String getTemplateName() {
+        return "pdp";
+    }
+
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("productdetailpage", "product"));
+    }
+
     public CompletionStage<Result> showProductBySlugAndSku(final String languageTag, final String slug, final String sku) {
         return doRequest(() -> {
             logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
@@ -65,24 +75,6 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         });
     }
 
-    @Override
-    public String getTemplateName() {
-        return "pdp";
-    }
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("productdetailpage", "product"));
-    }
-
-    protected Optional<String> getProductSlug() {
-        return Optional.ofNullable(productSlug);
-    }
-
-    protected Optional<String> getVariantSku() {
-        return Optional.ofNullable(variantSku);
-    }
-
     protected CompletionStage<Result> showProduct(final ProductFetchResult productFetchResult) {
         final Optional<ProductProjection> product = productFetchResult.getProduct();
         final Optional<ProductVariant> variant = productFetchResult.getVariant();
@@ -93,15 +85,6 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         } else {
             return handleNotFoundProduct();
         }
-    }
-
-    protected CompletionStage<Result> handleFoundProductAndCallingHooks(final ProductProjection product, final ProductVariant variant) {
-        final CompletionStage<Object> hooksCompletionStage = runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
-        final CompletionStage<Object> hooksCompletionStage2 = runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
-        return hooksCompletionStage2.thenComposeAsync(unused ->
-                hooksCompletionStage.thenComposeAsync(unusedResult ->
-                        handleFoundProduct(product, variant), HttpExecution.defaultContext()),
-                HttpExecution.defaultContext());
     }
 
     protected CompletionStage<Result> handleFoundProduct(final ProductProjection product, final ProductVariant variant) {
@@ -140,6 +123,23 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
 
     protected final ProductProjectionSearch filter(ProductProjectionSearch q) {
         return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, r) -> hook.filterProductProjectionSearch(r), q);
+    }
+
+    protected final CompletionStage<Result> handleFoundProductAndCallingHooks(final ProductProjection product, final ProductVariant variant) {
+        final CompletionStage<Object> hooksCompletionStage = runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
+        final CompletionStage<Object> hooksCompletionStage2 = runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
+        return hooksCompletionStage2.thenComposeAsync(unused ->
+                        hooksCompletionStage.thenComposeAsync(unusedResult ->
+                                handleFoundProduct(product, variant), HttpExecution.defaultContext()),
+                HttpExecution.defaultContext());
+    }
+
+    protected final Optional<String> getProductSlug() {
+        return Optional.ofNullable(productSlug);
+    }
+
+    protected final Optional<String> getVariantSku() {
+        return Optional.ofNullable(variantSku);
     }
 
     private Result redirectToNewSlug(final String newSlug, final String sku) {

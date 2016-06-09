@@ -34,8 +34,6 @@ public class SearchBoxComponent implements ControllerComponent, SunrisePageDataH
         if (searchBox != null && searchBox.getSearchTerm().isPresent() && sunrisePageData.getContent() instanceof ProductOverviewPageContent) {
             final ProductOverviewPageContent content = (ProductOverviewPageContent) sunrisePageData.getContent();
             final String searchTerm = searchBox.getSearchTerm().get().getValue();
-            content.setAdditionalTitle(searchTerm);
-            content.setBreadcrumb(breadcrumbBeanFactory.create(searchTerm));
             content.setSearchTerm(searchTerm);
         }
     }

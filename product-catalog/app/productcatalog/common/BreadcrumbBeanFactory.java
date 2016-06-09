@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 public class BreadcrumbBeanFactory extends Base {
@@ -59,14 +58,6 @@ public class BreadcrumbBeanFactory extends Base {
 
     protected void fillLinks(final BreadcrumbBean breadcrumbBean, final List<LinkBean> linkBeans) {
         breadcrumbBean.setLinks(linkBeans);
-    }
-
-    public BreadcrumbBean create(final String searchTerm) {
-        final BreadcrumbBean breadcrumbBean = new BreadcrumbBean();
-        final LinkBean linkBean = new LinkBean();
-        linkBean.setText(searchTerm);
-        fillLinks(breadcrumbBean, singletonList(linkBean));
-        return breadcrumbBean;
     }
 
     protected List<LinkBean> createCategoryTreeLinks(final Category category) {

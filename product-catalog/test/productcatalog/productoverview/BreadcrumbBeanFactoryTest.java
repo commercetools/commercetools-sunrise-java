@@ -56,14 +56,6 @@ public class BreadcrumbBeanFactoryTest {
                 urls -> assertThat(urls).containsExactly("category-1st-level", "category-2nd-level", "product-some-product-some-sku"));
     }
 
-    @Test
-    public void createSearchBreadcrumb() throws Exception {
-        final BreadcrumbBean breadcrumb = createBreadcrumbBeanFactory().create("foo");
-        testBreadcrumb(breadcrumb,
-                texts -> assertThat(texts).containsExactly("foo"),
-                urls -> assertThat(urls).containsNull());
-    }
-
     private static BreadcrumbBeanFactory createBreadcrumbBeanFactory() {
         final Injector injector = Guice.createInjector(new Module() {
             @Override

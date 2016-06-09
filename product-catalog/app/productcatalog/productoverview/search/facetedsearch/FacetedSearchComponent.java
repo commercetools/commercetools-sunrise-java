@@ -27,6 +27,7 @@ import static java.util.stream.Collectors.toList;
 
 public class FacetedSearchComponent implements ControllerComponent, SunrisePageDataHook, ProductProjectionSearchFilterHook, ProductProjectionPagedSearchResultHook, SingleCategoryHook {
 
+    private List<Category> selectedCategories = emptyList();
     private List<FacetedSearchSelector> facetedSearchSelectorList = emptyList();
     private List<FacetSelectorBean> facetBeans = emptyList();
 
@@ -39,12 +40,13 @@ public class FacetedSearchComponent implements ControllerComponent, SunrisePageD
 
     @Override
     public CompletionStage<?> onSingleCategoryLoaded(final Category category) {
-        this.facetedSearchSelectorList = facetedSearchSelectorListFactory.create(singletonList(category));
+        this.selectedCategories = singletonList(category);
         return completedFuture(null);
     }
 
     @Override
     public ProductProjectionSearch filterProductProjectionSearch(final ProductProjectionSearch search) {
+        this.facetedSearchSelectorList = facetedSearchSelectorListFactory.create(selectedCategories);
         return search.plusFacetedSearch(facetedSearchSelectorList.stream()
                 .map(FacetedSearchSelector::getFacetedSearchExpression)
                 .collect(toList()));

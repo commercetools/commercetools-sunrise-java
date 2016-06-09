@@ -40,7 +40,7 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
-        return ProductOverviewPageController.showProductsByCategorySlug(languageTag, 1, categorySlug);
+        return ProductOverviewPageController.searchProductsByCategorySlug(languageTag, categorySlug);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call processSearchProductsForm(final String languageTag) {
-        return ProductOverviewPageController.search(languageTag, 1);
+        return ProductOverviewPageController.searchProductsBySearchTerm(languageTag);
     }
 
     @Override
