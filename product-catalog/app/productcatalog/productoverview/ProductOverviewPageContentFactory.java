@@ -1,7 +1,6 @@
 package productcatalog.productoverview;
 
 import common.contexts.UserContext;
-import common.models.FormSelectableOptionBean;
 import common.template.i18n.I18nIdentifier;
 import common.template.i18n.I18nResolver;
 import io.sphere.sdk.categories.Category;
@@ -16,13 +15,7 @@ import productcatalog.productoverview.search.facetedsearch.FacetSelectorBean;
 import productcatalog.productoverview.search.facetedsearch.FacetSelectorListBean;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelector;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelectorListFactory;
-import productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
-import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelector;
-import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorBean;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorFactory;
-import productcatalog.productoverview.search.sort.SortOption;
-import productcatalog.productoverview.search.sort.SortSelector;
-import productcatalog.productoverview.search.sort.SortSelectorBean;
 import productcatalog.productoverview.search.sort.SortSelectorFactory;
 
 import javax.inject.Inject;
@@ -78,7 +71,6 @@ public class ProductOverviewPageContentFactory {
     private void fill(final List<Category> selectedCategories, final ProductOverviewPageContent content, final PagedSearchResult<ProductProjection> searchResult,
                       final SearchCriteriaImpl searchCriteria) {
         content.setProducts(productListBeanFactory.create(searchResult.getResults()));
-        content.setDisplaySelector(createProductsPerPageSelector(productsPerPageSelectorFactory.create()));
         content.setFacets(createFacetSelectorList(facetedSearchSelectorListFactory.create(selectedCategories), searchResult));
     }
 
@@ -109,22 +101,4 @@ public class ProductOverviewPageContentFactory {
         bannerBean.setImageDesktop("/assets/img/banner_desktop-9ffd148c48068ce2666d6533b4a87d11.jpg"); // TODO obtain from category?
         return bannerBean;
     }
-
-    private ProductsPerPageSelectorBean createProductsPerPageSelector(final ProductsPerPageSelector productsPerPageSelector) {
-        final ProductsPerPageSelectorBean bean = new ProductsPerPageSelectorBean();
-        bean.setKey(productsPerPageSelector.getKey());
-        bean.setList(productsPerPageSelector.getOptions().stream()
-                .map(option -> optionToSelectableData(option, productsPerPageSelector))
-                .collect(toList()));
-        return bean;
-    }
-
-    private static FormSelectableOptionBean optionToSelectableData(final ProductsPerPageOption option, final ProductsPerPageSelector productsPerPageSelector) {
-        final FormSelectableOptionBean displayOption = new FormSelectableOptionBean(option.getLabel(), option.getValue());
-        if (productsPerPageSelector.getSelectedPageSize() == option.getAmount()) {
-            displayOption.setSelected(true);
-        }
-        return displayOption;
-    }
-
 }

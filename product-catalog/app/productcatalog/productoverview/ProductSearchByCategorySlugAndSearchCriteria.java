@@ -21,19 +21,11 @@ public class ProductSearchByCategorySlugAndSearchCriteria implements ProductSear
 
     @Inject
     private SphereClient sphereClient;
-//    @Inject
-//    private CategoryTree categoryTree;
-//    @Inject
-//    private UserContext userContext;
 
     public CompletionStage<ProductSearchResult> searchProducts(final String categorySlug, final SearchCriteria searchCriteria, final UnaryOperator<ProductProjectionSearch> filter) {
         return findProducts(searchCriteria, filter)
                 .thenApplyAsync(ProductSearchResult::of, HttpExecution.defaultContext());
     }
-
-//    private Optional<Category> findCategory(final String categorySlug) {
-//        return categoryTree.findBySlug(userContext.locale(), categorySlug);
-//    }
 
     /**
      * Gets a list of Products from a PagedQueryResult
@@ -42,9 +34,7 @@ public class ProductSearchByCategorySlugAndSearchCriteria implements ProductSear
      */
     protected CompletionStage<PagedSearchResult<ProductProjection>> findProducts(final SearchCriteria searchCriteria, final UnaryOperator<ProductProjectionSearch> filter) {
         final ProductProjectionSearch baseRequest = ProductProjectionSearch.ofCurrent()
-                .withFacetedSearch(searchCriteria.getFacetedSearchExpressions())
-                .withOffset(calculateOffset(searchCriteria))
-                .withLimit(searchCriteria.getPageSize());
+                .withFacetedSearch(searchCriteria.getFacetedSearchExpressions());
         final ProductProjectionSearch request = getRequestWithTextSearch(baseRequest, searchCriteria);
         final ProductProjectionSearch filterRequest = filter.apply(request);
         return sphereClient.execute(filterRequest)
@@ -55,9 +45,5 @@ public class ProductSearchByCategorySlugAndSearchCriteria implements ProductSear
         return searchCriteria.getSearchTerm()
                 .map(request::withText)
                 .orElse(request);
-    }
-
-    protected int calculateOffset(final SearchCriteria searchCriteria) {
-        return (searchCriteria.getPage() - 1) * searchCriteria.getPageSize();
     }
 }

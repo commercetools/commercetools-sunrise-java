@@ -93,11 +93,11 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected final <T extends Hook, R> R runFilterHook(final Class<T> hookClass, final BiFunction<T, R, R> f, final R param) {
         R result = param;
-        final List<T> applyableHooks = controllerComponents.stream()
+        final List<T> applicableHooks = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
                 .map(x -> (T) x)
                 .collect(Collectors.toList());
-        for (final T hook : applyableHooks) {
+        for (final T hook : applicableHooks) {
             result = f.apply(hook, result);
         }
         return result;

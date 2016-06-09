@@ -1,10 +1,10 @@
 package productcatalog.productoverview.search.pagination;
 
 import common.contexts.RequestContext;
-import common.inject.RequestScoped;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
 import static productcatalog.productoverview.search.SearchUtils.selectedValues;
@@ -21,6 +21,7 @@ public class PaginationFactory extends Base {
         this.key = configuration.getString("pop.pagination.key", "page");
     }
 
+    @Nonnull
     public Pagination create() {
         return Pagination.of(key, selectedPage());
     }

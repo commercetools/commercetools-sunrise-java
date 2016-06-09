@@ -18,6 +18,7 @@ import play.Configuration;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import productcatalog.hooks.ProductProjectionPagedSearchResultHook;
 import productcatalog.hooks.ProductProjectionSearchFilterHook;
 import productcatalog.productoverview.search.SearchCriteriaImpl;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelector;
@@ -129,7 +130,11 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
     private CompletionStage<Result> handleFoundCategory(final Category category) {
         final SearchCriteriaImpl searchCriteria = getSearchCriteria(singletonList(category));
         return productSearchByCategorySlugAndSearchCriteria.searchProducts(categorySlug, searchCriteria, this::filter)
-                .thenApplyAsync(searchResult -> ok(renderPage(createPageContent(category, searchResult.getPagedSearchResult().get(), searchCriteria))), HttpExecution.defaultContext());
+                .thenApplyAsync(searchResult -> createResult(category, searchCriteria, searchResult), HttpExecution.defaultContext());
+    }
+
+    private Result createResult(final Category category, final SearchCriteriaImpl searchCriteria, final ProductSearchResult searchResult) {
+        return ok(renderPage(createPageContent(category, searchResult.getPagedSearchResult().get(), searchCriteria)));
     }
 
 //    protected CompletionStage<Result> handleSuccessfulSearch(final PagedSearchResult<ProductProjection> searchResult) {
@@ -180,8 +185,7 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
                                    final PagedSearchResult<ProductProjection> searchResult,
                                    final SearchCriteriaImpl searchCriteria) {
         content.setFilterProductsUrl(request().path());
-        final Integer paginationDisplayedPages = configuration.getInt("pop.pagination.displayedPages", 6);
-        content.setPagination(new PaginationBean(requestContext, searchResult, searchCriteria.getPage(), searchCriteria.getPageSize(), paginationDisplayedPages));
+        runVoidHook(ProductProjectionPagedSearchResultHook.class, hook -> hook.acceptProductProjectionPagedSearchResult(searchResult));
     }
 
     protected Html renderPage(final ProductOverviewPageContent pageContent) {
