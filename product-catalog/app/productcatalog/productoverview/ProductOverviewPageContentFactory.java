@@ -1,19 +1,14 @@
 package productcatalog.productoverview;
 
 import common.contexts.UserContext;
-import common.template.i18n.I18nIdentifier;
 import common.template.i18n.I18nResolver;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 import productcatalog.common.BreadcrumbBeanFactory;
 import productcatalog.common.ProductListBeanFactory;
 import productcatalog.productoverview.search.SearchCriteriaImpl;
-import productcatalog.productoverview.search.facetedsearch.FacetSelectorBean;
-import productcatalog.productoverview.search.facetedsearch.FacetSelectorListBean;
-import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelector;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelectorListFactory;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorFactory;
 import productcatalog.productoverview.search.sort.SortSelectorFactory;
@@ -21,8 +16,6 @@ import productcatalog.productoverview.search.sort.SortSelectorFactory;
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 public class ProductOverviewPageContentFactory {
 
@@ -67,29 +60,9 @@ public class ProductOverviewPageContentFactory {
     private void fill(final List<Category> selectedCategories, final ProductOverviewPageContent content, final PagedSearchResult<ProductProjection> searchResult,
                       final SearchCriteriaImpl searchCriteria) {
         content.setProducts(productListBeanFactory.create(searchResult.getResults()));
-        content.setFacets(createFacetSelectorList(facetedSearchSelectorListFactory.create(selectedCategories), searchResult));
     }
 
-    private FacetSelectorListBean createFacetSelectorList(final List<FacetedSearchSelector> facetedSearchSelectors, final PagedSearchResult<ProductProjection> searchResult) {
-         final FacetSelectorListBean bean = new FacetSelectorListBean();
-         bean.setList(facetedSearchSelectors.stream()
-                 .sorted((f1, f2) -> Double.compare(f1.getPosition(), f2.getPosition()))
-                 .map(facetedSearchSelector -> createFacetSelector(facetedSearchSelector, searchResult))
-                 .collect(toList()));
-         return bean;
-    }
 
-    private FacetSelectorBean createFacetSelector(final FacetedSearchSelector facetedSearchSelector, final PagedSearchResult<ProductProjection> searchResult) {
-        final FacetSelectorBean bean = new FacetSelectorBean();
-        final Facet<ProductProjection> facet = facetedSearchSelector.getFacet(searchResult);
-        if (facet.getLabel() != null) {
-            final String label = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(facet.getLabel()));
-            bean.setFacet(facet.withLabel(label));
-        } else {
-            bean.setFacet(facet);
-        }
-        return bean;
-    }
 
     private BannerBean createBanner(final Category category) {
         final BannerBean bannerBean = new BannerBean(userContext, category);

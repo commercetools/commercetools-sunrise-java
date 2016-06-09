@@ -3,8 +3,9 @@ package productcatalog.productoverview;
 import common.inject.RequestScoped;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import productcatalog.productoverview.search.facetedsearch.FacetedSearchComponent;
+import productcatalog.productoverview.search.pagination.PaginationComponent;
 import productcatalog.productoverview.search.searchbox.SearchBoxComponent;
-import productcatalog.productoverview.search.sort.PaginationComponent;
 import productcatalog.productoverview.search.sort.SortSelectorComponent;
 
 import javax.inject.Inject;
@@ -26,6 +27,11 @@ public class ProductOverviewPageController extends SunriseProductOverviewPageCon
 
     @Inject
     public void setSearchBoxComponent(final SearchBoxComponent component) {
+        registerControllerComponent(component);
+    }
+
+    @Inject
+    public void setFacetedSearchComponent(final FacetedSearchComponent component) {
         registerControllerComponent(component);
     }
 }

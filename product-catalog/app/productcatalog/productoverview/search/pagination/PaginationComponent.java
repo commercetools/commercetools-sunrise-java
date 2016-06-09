@@ -1,4 +1,4 @@
-package productcatalog.productoverview.search.sort;
+package productcatalog.productoverview.search.pagination;
 
 import common.contexts.RequestContext;
 import common.controllers.SunrisePageData;
@@ -14,8 +14,6 @@ import productcatalog.hooks.ProductProjectionPagedSearchResultHook;
 import productcatalog.hooks.ProductProjectionSearchFilterHook;
 import productcatalog.productoverview.PaginationBean;
 import productcatalog.productoverview.ProductOverviewPageContent;
-import productcatalog.productoverview.search.pagination.Pagination;
-import productcatalog.productoverview.search.pagination.PaginationFactory;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelector;
 import productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorBean;

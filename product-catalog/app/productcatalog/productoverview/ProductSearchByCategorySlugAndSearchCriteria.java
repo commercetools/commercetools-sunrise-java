@@ -33,10 +33,8 @@ public class ProductSearchByCategorySlugAndSearchCriteria implements ProductSear
      * @return A CompletionStage of a paged result of the search request
      */
     protected CompletionStage<PagedSearchResult<ProductProjection>> findProducts(final SearchCriteria searchCriteria, final UnaryOperator<ProductProjectionSearch> filter) {
-        final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
-                .withFacetedSearch(searchCriteria.getFacetedSearchExpressions());
-        final ProductProjectionSearch filterRequest = filter.apply(request);
-        return sphereClient.execute(filterRequest)
-                .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, filterRequest, result), HttpExecution.defaultContext());
+        final ProductProjectionSearch request = filter.apply(ProductProjectionSearch.ofCurrent());
+        return sphereClient.execute(request)
+                .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, request, result), HttpExecution.defaultContext());
     }
 }

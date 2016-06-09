@@ -20,6 +20,7 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 import productcatalog.hooks.ProductProjectionPagedSearchResultHook;
 import productcatalog.hooks.ProductProjectionSearchFilterHook;
+import productcatalog.hooks.SingleCategoryHook;
 import productcatalog.productoverview.search.SearchCriteriaImpl;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelector;
 import productcatalog.productoverview.search.facetedsearch.FacetedSearchSelectorListFactory;
@@ -85,7 +86,8 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
             this.categorySlug = categorySlug;
             final Optional<Category> category = categoryTree.findBySlug(userContext.locale(), categorySlug);
             if (category.isPresent()) {
-                return handleFoundCategory(category.get());
+                return runAsyncHook(SingleCategoryHook.class, hook -> hook.onSingleCategoryLoaded(category.get()))
+                        .thenComposeAsync(ignoredResult -> handleFoundCategory(category.get()), HttpExecution.defaultContext());
             } else {
                 return handleNotFoundCategory();
             }
