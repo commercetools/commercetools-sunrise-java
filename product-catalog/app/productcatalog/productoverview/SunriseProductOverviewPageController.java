@@ -147,7 +147,7 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
     }
 
     protected Html renderPage(final ProductOverviewPageContent pageContent) {
-        final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
+        final SunrisePageData pageData = pageData(pageContent);
         return templateEngine().renderToHtml("pop", pageData, userContext.locales());
     }
 }
