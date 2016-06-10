@@ -1,4 +1,4 @@
-package wedecidelater;
+package com.commercetools.sunrise.common.inject.wedecidelater;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.PageMeta;

@@ -3,7 +3,6 @@ package reverserouter;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
-import static wedecidelater.routes.CheckoutAddressPageController;
 import static wedecidelater.routes.*;
 import static com.commercetools.sunrise.common.controllers.routes.*;
 import static com.commercetools.sunrise.productcatalog.productdetail.routes.*;

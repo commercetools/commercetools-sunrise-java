@@ -1,4 +1,4 @@
-package wedecidelater;
+package com.commercetools.sunrise.common.inject.wedecidelater;
 
 import com.google.inject.AbstractModule;
 import com.commercetools.sunrise.common.controllers.PageMetaFactory;
