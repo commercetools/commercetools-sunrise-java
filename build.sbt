@@ -2,18 +2,15 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import play.sbt.PlayImport
-import complete.DefaultParsers._
-
-import sbt._
 import sbt.Keys._
+import sbt._
+import sbt.complete.DefaultParsers._
 
 import scala.util.{Success, Try}
 
-import ReleaseTransformations._
-
 name := "commercetools-sunrise"
 
-organization in ThisBuild := "io.commercetools.sunrise"
+organization in ThisBuild := "com.commercetools.sunrise"
 
 lazy val sunriseDesignVersion = "0.56.0"
 
@@ -205,23 +202,6 @@ resourceGenerators in Compile += Def.task {
   IO.write(file, contents)
   Seq(file)
 }.taskValue
-
-/**
- * RELEASE SETTINGS
- */
-lazy val releaseSettings = Seq(
-  releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    runTest,
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    setNextVersion,
-    commitNextVersion,
-    pushChanges
-  )
-)
 
 /**
  * HEROKU SETTINGS
