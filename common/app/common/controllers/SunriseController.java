@@ -1,5 +1,6 @@
 package common.controllers;
 
+import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.neovisionaries.i18n.CountryCode;
 import common.actions.NoCache;
 import common.contexts.ProjectContext;
@@ -14,7 +15,6 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
-import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.Configuration;
 import play.mvc.Http;
 import play.mvc.With;
@@ -136,7 +136,8 @@ public abstract class SunriseController extends ShopController {
 
     protected UserContext userContext(final String languageTag) {
         final ProjectContext projectContext = projectContext();
-        final List<Locale> acceptedLocales = acceptedLocales(languageTag, request(), projectContext);
+        final Locale locale = Locale.forLanguageTag(languageTag);
+        final List<Locale> acceptedLocales = acceptedLocales(locale, request(), projectContext);
         final CountryCode currentCountry = currentCountry(session(), projectContext);
         final CurrencyUnit currentCurrency = currentCurrency(currentCountry, projectContext);
         return UserContext.of(acceptedLocales, currentCountry, currentCurrency);
@@ -146,8 +147,7 @@ public abstract class SunriseController extends ShopController {
         return categoryNewExtId.flatMap(extId -> categoryTree().findByExternalId(extId));
     }
 
-    private static Locale currentLocale(final String languageTag, final ProjectContext projectContext) {
-        final Locale locale = Locale.forLanguageTag(languageTag);
+    private static Locale currentLocale(final Locale locale, final ProjectContext projectContext) {
         return projectContext.isLocaleAccepted(locale) ? locale : projectContext.defaultLocale();
     }
 
@@ -165,10 +165,12 @@ public abstract class SunriseController extends ShopController {
                 }).orElseGet(projectContext::defaultCurrency);
     }
 
-    public static List<Locale> acceptedLocales(final String languageTag, final Http.Request request,
-                                                final ProjectContext projectContext) {
+    public static List<Locale> acceptedLocales(@Nullable final Locale locale, final Http.Request request,
+                                               final ProjectContext projectContext) {
         final ArrayList<Locale> acceptedLocales = new ArrayList<>();
-        acceptedLocales.add(currentLocale(languageTag, projectContext));
+        if (locale != null) {
+            acceptedLocales.add(currentLocale(locale, projectContext));
+        }
         acceptedLocales.addAll(request.acceptLanguages().stream()
                 .map(lang -> Locale.forLanguageTag(lang.code()))
                 .collect(toList()));

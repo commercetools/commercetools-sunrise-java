@@ -1,7 +1,9 @@
 package common;
 
 import common.contexts.ProjectContext;
+import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
+import common.inject.RequestScoped;
 import io.sphere.sdk.models.Base;
 import play.Logger;
 import play.data.Form;
@@ -20,12 +22,15 @@ import static common.controllers.SunriseController.SESSION_COUNTRY;
 /**
  * Controller for main web pages like index, imprint and contact.
  */
-@Singleton
+@RequestScoped
 public final class ApplicationController extends Controller {
     private final Injector injector;
     private final SetupController setupController;
     private Form<LanguageFormData> languageForm;
     private Form<CountryFormData> countryForm;
+
+    @Inject
+    private UserContext userContext;
 
     @Inject
     public ApplicationController(final Injector injector, final SetupController setupController, final FormFactory formFactory) {

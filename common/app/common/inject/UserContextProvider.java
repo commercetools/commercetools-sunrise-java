@@ -6,6 +6,7 @@ import common.contexts.UserContext;
 import common.controllers.SunriseController;
 import play.mvc.Http;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.money.CurrencyUnit;
@@ -21,16 +22,21 @@ public class UserContextProvider implements Provider<UserContext> {
 
     @Override
     public UserContext get() {
-        final String languageTag = getLanguageTag(context);
-        final List<Locale> acceptedLocales = SunriseController.acceptedLocales(languageTag, context.request(), projectContext);
+        final Locale locale = getLocaleInPath(context);
+        final List<Locale> acceptedLocales = SunriseController.acceptedLocales(locale, context.request(), projectContext);
         final CountryCode currentCountry = SunriseController.currentCountry(context.session(), projectContext);
         final CurrencyUnit currentCurrency = SunriseController.currentCurrency(currentCountry, projectContext);
         return UserContext.of(acceptedLocales, currentCountry, currentCurrency);
     }
 
-    private String getLanguageTag(final Http.Context context) {
+    @Nullable
+    private Locale getLocaleInPath(final Http.Context context) {
         final int i = indexLanguageTagInRoute(context);
-        return context.request().path().split("/")[i];
+        if (i != -1) {
+            final String languageTag = context.request().path().split("/")[i];
+            return Locale.forLanguageTag(languageTag);
+        }
+        return null;
     }
 
     private int indexLanguageTagInRoute(final Http.Context context) {
