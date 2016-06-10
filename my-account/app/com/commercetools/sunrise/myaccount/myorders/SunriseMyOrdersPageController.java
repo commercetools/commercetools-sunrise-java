@@ -15,7 +15,7 @@ import play.mvc.Call;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.CartLikeBean;
+import com.commercetools.sunrise.shoppingcart.CartLikeBean;
 
 import javax.inject.Inject;
 import java.util.List;

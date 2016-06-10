@@ -18,7 +18,7 @@ import io.sphere.sdk.play.metrics.MetricAction;
 import play.Configuration;
 import play.mvc.Http;
 import play.mvc.With;
-import shoppingcart.CartSessionUtils;
+import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;

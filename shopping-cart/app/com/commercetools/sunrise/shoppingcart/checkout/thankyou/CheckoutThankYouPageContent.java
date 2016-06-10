@@ -1,13 +1,12 @@
-package com.commercetools.sunrise.myaccount.myorders;
+package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.controllers.PageContent;
 import com.commercetools.sunrise.shoppingcart.CartLikeBean;
 
-public class MyOrderPageContent extends PageContent {
-
+public class CheckoutThankYouPageContent extends PageContent {
     private CartLikeBean order;
 
-    public MyOrderPageContent() {
+    public CheckoutThankYouPageContent() {
     }
 
     public CartLikeBean getOrder() {

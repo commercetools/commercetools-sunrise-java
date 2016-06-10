@@ -7,11 +7,11 @@ import static wedecidelater.routes.CheckoutAddressPageController;
 import static wedecidelater.routes.*;
 import static com.commercetools.sunrise.productcatalog.productdetail.routes.*;
 import static com.commercetools.sunrise.productcatalog.productoverview.routes.*;
-import static shoppingcart.cartdetail.routes.*;
-import static shoppingcart.checkout.confirmation.routes.*;
-import static shoppingcart.checkout.payment.routes.*;
-import static shoppingcart.checkout.shipping.routes.*;
-import static shoppingcart.checkout.thankyou.routes.*;
+import static com.commercetools.sunrise.shoppingcart.cartdetail.routes.*;
+import static com.commercetools.sunrise.shoppingcart.checkout.confirmation.routes.*;
+import static com.commercetools.sunrise.shoppingcart.checkout.payment.routes.*;
+import static com.commercetools.sunrise.shoppingcart.checkout.shipping.routes.*;
+import static com.commercetools.sunrise.shoppingcart.checkout.thankyou.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter {
 

@@ -23,7 +23,7 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import shoppingcart.CartSessionUtils;
+import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import wedecidelatercommon.HomeReverseRouter;
 import wedecidelatercommon.ProductReverseRouter;
 
@@ -40,8 +40,8 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.removeCustomerSessionData;
-import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
-import static shoppingcart.CartSessionUtils.removeCartSessionData;
+import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
+import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.removeCartSessionData;
 
 public abstract class SunriseLogInPageController extends SunriseFrameworkController {
 

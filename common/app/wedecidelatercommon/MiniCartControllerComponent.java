@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.controllers.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import framework.ControllerComponent;
 import play.mvc.Http;
-import shoppingcart.CartSessionUtils;
+import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 
 import javax.inject.Inject;
 

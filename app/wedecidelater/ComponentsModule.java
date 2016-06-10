@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import framework.MultiControllerComponentResolver;
 import framework.MultiControllerComponentResolverBuilder;
-import shoppingcart.checkout.CheckoutCommonComponent;
+import com.commercetools.sunrise.shoppingcart.checkout.CheckoutCommonComponent;
 import wedecidelatercommon.DefaultNavMenuControllerComponent;
 import wedecidelatercommon.LocationSelectorControllerComponent;
 import wedecidelatercommon.MiniCartControllerComponent;

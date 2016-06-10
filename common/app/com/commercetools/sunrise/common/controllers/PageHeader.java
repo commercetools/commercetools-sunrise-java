@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.models.LocationSelector;
 import com.commercetools.sunrise.common.models.NavMenuData;
-import shoppingcart.MiniCartBean;
+import com.commercetools.sunrise.shoppingcart.MiniCartBean;
 import io.sphere.sdk.models.Base;
 
 public class PageHeader extends Base {
