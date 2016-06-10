@@ -5,6 +5,7 @@ import common.contexts.UserContext;
 import common.controllers.SunriseFrameworkController;
 import common.controllers.SunrisePageData;
 import common.controllers.WithOverwriteableTemplateName;
+import common.hooks.RequestHook;
 import common.hooks.SunrisePageDataHook;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -17,6 +18,7 @@ import play.twirl.api.Html;
 import productcatalog.hooks.ProductProjectionSearchFilterHook;
 import productcatalog.hooks.SingleProductProjectionHook;
 import productcatalog.hooks.SingleProductVariantHook;
+import productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import wedecidelatercommon.ProductReverseRouter;
 
 import javax.annotation.Nullable;
@@ -29,6 +31,29 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
+/**
+ * Controller to show the information about a single product.
+ * Loads one {@link ProductProjection} and the selected {@link ProductVariant}.
+ *
+ * <p>Components that may be a fit</p>
+ * <ul>
+ *     <li>{@link ProductSuggestionsControllerComponent}</li>
+ * </ul>
+ * <p id="hooks">supported hooks</p>
+ * <ul>
+ *     <li>{@link RequestHook}</li>
+ *     <li>{@link SunrisePageDataHook}</li>
+ *     <li>{@link ProductProjectionSearchFilterHook}</li>
+ *     <li>{@link SingleProductProjectionHook}</li>
+ *     <li>{@link SingleProductVariantHook}</li>
+ * </ul>
+ * <p>tags</p>
+ * <ul>
+ *     <li>product-detail</li>
+ *     <li>product</li>
+ *     <li>product-catalog</li>
+ * </ul>
+ */
 public abstract class SunriseProductDetailPageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
     protected static final Logger logger = LoggerFactory.getLogger(SunriseProductDetailPageController.class);
@@ -54,7 +79,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("productdetailpage", "product"));
+        return new HashSet<>(asList("product-detail", "product", "product-catalog"));
     }
 
     public CompletionStage<Result> showProductBySlugAndSku(final String languageTag, final String slug, final String sku) {

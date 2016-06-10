@@ -1,4 +1,4 @@
-package wedecidelater;
+package productcatalog.home;
 
 import common.contexts.UserContext;
 import common.controllers.SunrisePageData;
@@ -16,7 +16,6 @@ import play.mvc.Http;
 import productcatalog.common.ProductListBean;
 import productcatalog.common.ProductListBeanFactory;
 import productcatalog.common.SuggestionsData;
-import productcatalog.home.HomePageContent;
 
 import javax.inject.Inject;
 import java.util.List;

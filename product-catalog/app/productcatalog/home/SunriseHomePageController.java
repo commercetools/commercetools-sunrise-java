@@ -2,12 +2,14 @@ package productcatalog.home;
 
 import common.controllers.SunriseFrameworkController;
 import common.controllers.SunrisePageData;
+import common.hooks.RequestHook;
 import common.hooks.SunrisePageDataHook;
 import common.inject.RequestScoped;
 import common.template.i18n.I18nIdentifier;
 import common.template.i18n.I18nResolver;
 import play.mvc.Result;
 import play.twirl.api.Html;
+import productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -19,6 +21,20 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * Controller for the home page.
+ <p>Components that may be a fit</p>
+ * <ul>
+ *     <li>{@link ProductSuggestionsControllerComponent}</li>
+ * </ul>
+ * <p id="hooks">supported hooks</p>
+ * <ul>
+ *     <li>{@link RequestHook}</li>
+ *     <li>{@link SunrisePageDataHook}</li>
+ * </ul>
+ * <p>tags</p>
+ * <ul>
+ *     <li>home</li>
+ *     <li>product-catalog</li>
+ * </ul>
  */
 @RequestScoped
 public abstract class SunriseHomePageController extends SunriseFrameworkController {
@@ -39,6 +55,6 @@ public abstract class SunriseHomePageController extends SunriseFrameworkControll
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("home"));
+        return new HashSet<>(asList("home", "product-catalog"));
     }
 }

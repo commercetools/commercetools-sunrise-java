@@ -4,6 +4,7 @@ import common.contexts.UserContext;
 import common.controllers.SunriseFrameworkController;
 import common.controllers.SunrisePageData;
 import common.controllers.WithOverwriteableTemplateName;
+import common.hooks.RequestHook;
 import common.hooks.SunrisePageDataHook;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
@@ -16,9 +17,11 @@ import play.inject.Injector;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import productcatalog.hooks.ProductProjectionPagedSearchResultHook;
-import productcatalog.hooks.ProductProjectionSearchFilterHook;
-import productcatalog.hooks.SingleCategoryHook;
+import productcatalog.hooks.*;
+import productcatalog.productoverview.search.facetedsearch.FacetedSearchComponent;
+import productcatalog.productoverview.search.pagination.PaginationComponent;
+import productcatalog.productoverview.search.searchbox.SearchBoxComponent;
+import productcatalog.productoverview.search.sort.SortSelectorComponent;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -30,9 +33,36 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
+/**
+ * Provides facilities to search and display products.
+ *
+ * <p>Components that may be a fit</p>
+ * <ul>
+ *     <li>{@link SortSelectorComponent}</li>
+ *     <li>{@link PaginationComponent}</li>
+ *     <li>{@link SearchBoxComponent}</li>
+ *     <li>{@link FacetedSearchComponent}</li>
+ * </ul>
+ * <p id="hooks">supported hooks</p>
+ * <ul>
+ *     <li>{@link RequestHook}</li>
+ *     <li>{@link SunrisePageDataHook}</li>
+ *     <li>{@link ProductProjectionSearchFilterHook}</li>
+ *     <li>{@link SingleCategoryHook}</li>
+ *     <li>{@link ProductProjectionPagedSearchResultHook}</li>
+ * </ul>
+ * <p>tags</p>
+ * <ul>
+ *     <li>product-overview</li>
+ *     <li>product-catalog</li>
+ *     <li>search</li>
+ *     <li>product</li>
+ *     <li>category</li>
+ * </ul>
+ */
 public abstract class SunriseProductOverviewPageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductOverviewPageController.class);
+    protected static final Logger logger = LoggerFactory.getLogger(SunriseProductOverviewPageController.class);
 
     @Inject
     private UserContext userContext;
@@ -55,7 +85,7 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("product-overview-page", "product-catalog", "search", "product", "category"));
+        return new HashSet<>(asList("product-overview", "product-catalog", "search", "product", "category"));
     }
 
     public CompletionStage<Result> searchProductsByCategorySlug(final String languageTag, final String categorySlug) {

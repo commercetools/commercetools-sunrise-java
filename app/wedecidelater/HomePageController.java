@@ -1,5 +1,6 @@
 package wedecidelater;
 
+import productcatalog.home.HomeProductSuggestionsControllerComponent;
 import productcatalog.home.SunriseHomePageController;
 
 import javax.inject.Inject;
