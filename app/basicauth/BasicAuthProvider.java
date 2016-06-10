@@ -1,6 +1,6 @@
 package basicauth;
 
-import common.SunriseInitializationException;
+import com.commercetools.sunrise.common.inject.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;
 

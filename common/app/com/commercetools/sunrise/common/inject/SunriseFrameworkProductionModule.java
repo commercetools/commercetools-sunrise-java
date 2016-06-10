@@ -1,9 +1,8 @@
 package com.commercetools.sunrise.common.inject;
 
-import com.google.inject.AbstractModule;
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.inject.*;
+import com.google.inject.AbstractModule;
 import play.mvc.Http;
 
 /**

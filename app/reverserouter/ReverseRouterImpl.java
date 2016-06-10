@@ -5,6 +5,7 @@ import io.sphere.sdk.models.Base;
 import play.mvc.Call;
 import static wedecidelater.routes.CheckoutAddressPageController;
 import static wedecidelater.routes.*;
+import static com.commercetools.sunrise.common.controllers.routes.*;
 import static com.commercetools.sunrise.productcatalog.productdetail.routes.*;
 import static com.commercetools.sunrise.productcatalog.productoverview.routes.*;
 import static com.commercetools.sunrise.shoppingcart.cartdetail.routes.*;
@@ -25,12 +26,12 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call processChangeLanguageForm() {
-        return common.routes.ApplicationController.changeLanguage();
+        return ApplicationController.changeLanguage();
     }
 
     @Override
     public Call processChangeCountryForm(final String languageTag) {
-        return common.routes.ApplicationController.changeCountry(languageTag);
+        return ApplicationController.changeCountry(languageTag);
     }
 
     @Override
