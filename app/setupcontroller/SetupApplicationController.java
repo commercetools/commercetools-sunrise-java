@@ -1,4 +1,4 @@
-package controllers;
+package setupcontroller;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.inject.RequestScoped;
@@ -13,7 +13,7 @@ import javax.inject.Inject;
  * Controller for main web pages like index, imprint and contact.
  */
 @RequestScoped
-public final class ApplicationController extends Controller {
+public final class SetupApplicationController extends Controller {
     private final Injector injector;
     private final SetupController setupController;
 
@@ -21,7 +21,7 @@ public final class ApplicationController extends Controller {
     private UserContext userContext;
 
     @Inject
-    public ApplicationController(final Injector injector, final SetupController setupController, final FormFactory formFactory) {
+    public SetupApplicationController(final Injector injector, final SetupController setupController, final FormFactory formFactory) {
         this.injector = injector;
         this.setupController = setupController;
     }

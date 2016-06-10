@@ -6,7 +6,7 @@
 GET         /*path/                                            @com.commercetools.sunrise.common.controllers.ApplicationController.untrail(path: String)
 
 # Main entry point that decides whether to go to home page or to setup wizard
-GET         /                                                  @wedecidelater.HomePageController.index()
+GET         /                                                  @demo.HomePageController.index()
 
 ->          /setup                                             setupwidget.Routes
 
@@ -38,7 +38,7 @@ GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJa
 # ~~~~~
 
 # Home page
-GET         /:languageTag/home                                 @wedecidelater.HomePageController.show(languageTag: String)
+GET         /:languageTag/home                                 @demo.HomePageController.show(languageTag: String)
 
 
 # LOCATION
@@ -67,9 +67,9 @@ POST        /:languageTag/cart/remove                          @com.commercetool
 # ~~~~~
 
 # Shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/address                     @wedecidelater.CheckoutAddressPageController.show(languageTag: String)
+GET         /:languageTag/checkout/address                     @demo.CheckoutAddressPageController.show(languageTag: String)
 # Processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/address                     @wedecidelater.CheckoutAddressPageController.process(languageTag: String)
+POST        /:languageTag/checkout/address                     @demo.CheckoutAddressPageController.process(languageTag: String)
 # Shows the form to enter shipping address and billing address
 GET         /:languageTag/checkout/shipping                    @com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingPageController.show(languageTag: String)
 # Processes the form of the shipping address and billing address
@@ -90,26 +90,26 @@ GET         /:languageTag/checkout/thankyou                    @com.commercetool
 # ~~~~~
 
 # Shows log in form
-GET         /:languageTag/user/login                           @wedecidelater.LogInPageController.show(languageTag: String)
+GET         /:languageTag/user/login                           @demo.LogInPageController.show(languageTag: String)
 # Logs in the user
-POST        /:languageTag/user/login                           @wedecidelater.LogInPageController.processLogIn(languageTag: String)
+POST        /:languageTag/user/login                           @demo.LogInPageController.processLogIn(languageTag: String)
 # Signs up the user
-POST        /:languageTag/user/signup                          @wedecidelater.LogInPageController.processSignUp(languageTag: String)
+POST        /:languageTag/user/signup                          @demo.LogInPageController.processSignUp(languageTag: String)
 # Logs out the user
-GET         /:languageTag/user/logout                          @wedecidelater.LogInPageController.processLogOut(languageTag: String)
+GET         /:languageTag/user/logout                          @demo.LogInPageController.processLogOut(languageTag: String)
 
 
 # MY ACCOUNT
 # ~~~~~
 
 # Shows a form for updating the customer's details
-GET         /:languageTag/user/details                         @wedecidelater.MyPersonalDetailsPageController.show(languageTag: String)
+GET         /:languageTag/user/details                         @demo.MyPersonalDetailsPageController.show(languageTag: String)
 # Processes the form for updating the customer's details
-POST        /:languageTag/user/details                         @wedecidelater.MyPersonalDetailsPageController.process(languageTag: String)
+POST        /:languageTag/user/details                         @demo.MyPersonalDetailsPageController.process(languageTag: String)
 # Shows all orders from the customer
-GET         /:languageTag/user/orders                          @wedecidelater.MyOrdersPageController.list(languageTag: String, page: Int ?= 1)
+GET         /:languageTag/user/orders                          @demo.MyOrdersPageController.list(languageTag: String, page: Int ?= 1)
 # Show an order from the customer
-GET         /:languageTag/user/orders/:orderNumber             @wedecidelater.MyOrdersPageController.show(languageTag: String, orderNumber: String)
+GET         /:languageTag/user/orders/:orderNumber             @demo.MyOrdersPageController.show(languageTag: String, orderNumber: String)
 
 
 # PRODUCT DETAIL

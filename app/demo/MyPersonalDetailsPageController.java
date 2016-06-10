@@ -1,4 +1,4 @@
-package wedecidelater;
+package demo;
 
 import com.commercetools.sunrise.common.inject.RequestScoped;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsPageController;

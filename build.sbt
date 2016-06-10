@@ -147,7 +147,7 @@ publishTo in ThisBuild <<= version { (v: String) =>
  * TEST SETTINGS
  */
 
-lazy val PlayTest = config("pt") extend(Test)
+lazy val PlayTest = config("pt") extend Test
 
 lazy val commonTestSettings = itBaseTestSettings ++ ptBaseTestSettings ++ configCommonTestSettings("test,it,pt")
 

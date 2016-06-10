@@ -1,4 +1,4 @@
-package wedecidelater;
+package demo;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;

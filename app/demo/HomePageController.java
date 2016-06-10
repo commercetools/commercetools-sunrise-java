@@ -1,4 +1,4 @@
-package wedecidelater;
+package demo;
 
 
 import com.commercetools.sunrise.productcatalog.home.HomeProductSuggestionsControllerComponent;
