@@ -1,7 +1,7 @@
 package wedecidelater;
 
-import productcatalog.home.HomeProductSuggestionsControllerComponent;
-import productcatalog.home.SunriseHomePageController;
+import com.commercetools.sunrise.productcatalog.home.HomeProductSuggestionsControllerComponent;
+import com.commercetools.sunrise.productcatalog.home.SunriseHomePageController;
 
 import javax.inject.Inject;
 

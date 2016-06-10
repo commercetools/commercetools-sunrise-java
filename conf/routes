@@ -116,15 +116,15 @@ GET         /:languageTag/user/orders/:orderNumber             @wedecidelater.My
 # ~~~~~
 
 # Shows the product detail page
-GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @productcatalog.productdetail.ProductDetailPageController.showProductBySlugAndSku(languageTag: String, productSlug: String, sku: String)
+GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageController.showProductBySlugAndSku(languageTag: String, productSlug: String, sku: String)
 # TODO framework remove this route
-GET         /:languageTag/:productId/:variantId                @productcatalog.productdetail.ProductDetailPageController.showProductByProductIdAndVariantId(languageTag: String, productId: String, variantId: Int)
+GET         /:languageTag/:productId/:variantId                @com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageController.showProductByProductIdAndVariantId(languageTag: String, productId: String, variantId: Int)
 
 
 # PRODUCT OVERVIEW
 # ~~~~~
 
 # Shows the search results page
-GET         /:languageTag/search                               @productcatalog.productoverview.ProductOverviewPageController.searchProductsBySearchTerm(languageTag: String)
+GET         /:languageTag/search                               @com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageController.searchProductsBySearchTerm(languageTag: String)
 # Shows the product overview page for this category
-GET         /:languageTag/:categorySlug                        @productcatalog.productoverview.ProductOverviewPageController.searchProductsByCategorySlug(languageTag: String, categorySlug: String)
+GET         /:languageTag/:categorySlug                        @com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageController.searchProductsByCategorySlug(languageTag: String, categorySlug: String)

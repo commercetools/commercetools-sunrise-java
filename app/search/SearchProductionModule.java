@@ -1,9 +1,9 @@
 package search;
 
 import com.google.inject.AbstractModule;
-import productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
-import productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
-import productcatalog.productoverview.search.sort.SortConfig;
+import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
+import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
+import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfig;
 
 import javax.inject.Singleton;
 

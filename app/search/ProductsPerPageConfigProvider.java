@@ -3,8 +3,8 @@ package search;
 import common.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;
-import productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
-import productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
+import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
+import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

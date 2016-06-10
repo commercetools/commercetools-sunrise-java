@@ -5,8 +5,8 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.SortExpression;
 import play.Configuration;
 import play.Logger;
-import productcatalog.productoverview.search.sort.SortConfig;
-import productcatalog.productoverview.search.sort.SortOption;
+import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfig;
+import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortOption;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

@@ -3,7 +3,7 @@ package common;
 import org.junit.Test;
 import play.mvc.Http;
 import play.mvc.Result;
-import productcatalog.home.SunriseHomePageController;
+import com.commercetools.sunrise.productcatalog.home.SunriseHomePageController;
 
 import java.util.concurrent.TimeUnit;
 

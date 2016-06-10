@@ -7,9 +7,9 @@ import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 import play.Configuration;
 import play.Logger;
-import productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
-import productcatalog.productoverview.search.facetedsearch.SelectFacetedSearchConfig;
-import productcatalog.productoverview.search.facetedsearch.SunriseFacetType;
+import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
+import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.SelectFacetedSearchConfig;
+import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.SunriseFacetType;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
