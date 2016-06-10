@@ -18,8 +18,6 @@ public class SearchBoxComponent implements ControllerComponent, SunrisePageDataH
 
     @Inject
     private SearchBoxFactory searchBoxFactory;
-    @Inject
-    private BreadcrumbBeanFactory breadcrumbBeanFactory;
 
     @Override
     public ProductProjectionSearch filterProductProjectionSearch(final ProductProjectionSearch search) {

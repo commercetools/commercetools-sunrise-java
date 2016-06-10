@@ -17,37 +17,71 @@ import javax.inject.Inject;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
+/* (non-Javadoc)
+ * this component is used as reference component to document how components work
+ */
+
+/**
+ * Loads some other products that are related to the loaded product in the controller.
+ */
 public class ProductSuggestionsControllerComponent implements ControllerComponent, SingleProductProjectionHook, SunrisePageDataHook {
 
+    //this part contains fields which are initialized by Google Guice and mostly are in the scope of the HTTP request
     @Inject
-    private UserContext userContext;
+    protected UserContext userContext;
+    //an example for a singleton scope dependency
     @Inject
-    private ProductRecommendation productRecommendation;
+    protected ProductRecommendation productRecommendation;
+    //an example for a factory in request scope
     @Inject
-    private ProductListBeanFactory productListBeanFactory;
-    private int numSuggestions;
-    private Set<ProductProjection> suggestions;
+    protected ProductListBeanFactory productListBeanFactory;
 
+    //this value is indirectly filled when "setConfig" is called via Guice
+    protected int numSuggestions;
+
+    //here are fields which are not injected via dependency injection
+    //it is a stash of values collected within the hooks
+    protected Set<ProductProjection> suggestions;
+
+    /* (non-Javadoc)
+     * setter injection for the configuration
+     * you can override it in a subclass like
+<pre>{@code
+    @Override
+    @Inject
+    public void setConfig(final Configuration configuration) {
+        super.setConfig(configuration.getConfig("config-prefix-key"));
+    }
+}</pre>
+     */
     @Inject
     public void setConfig(final Configuration configuration) {
         this.numSuggestions = configuration.getInt("productSuggestions.count");
-     }
+    }
 
+    /* (non-Javadoc)
+        Implements the hook SingleProductProjectionHook and stores the result inside the field "suggestions".
+     */
     @Override
     public CompletionStage<?> onSingleProductProjectionLoaded(final ProductProjection product) {
         return productRecommendation.relatedToProduct(product, numSuggestions, userContext)
-                .thenAccept(m -> suggestions = m);
+                .thenAccept(m -> suggestions = m);//this method needs to return a CompletionStage which is completed when everything is done.
     }
 
+    /* (non-Javadoc)
+      Implements the hook SunrisePageDataHook which is executed after all asynchronous tasks related to this HTTP request are completed.
+    */
     @Override
     public void acceptSunrisePageData(final SunrisePageData sunrisePageData) {
-        if (sunrisePageData.getContent() instanceof ProductDetailPageContent) {
+        //it is a very good practice to check if the field is not null before using it
+        //in this example it is required that the content is of type ProductDetailPageContent
+        if (suggestions != null && sunrisePageData.getContent() instanceof ProductDetailPageContent) {
             final ProductDetailPageContent content = (ProductDetailPageContent) sunrisePageData.getContent();
-            content.setSuggestions(createSuggestions(userContext, suggestions));
+            content.setSuggestions(createSuggestions(suggestions));
         }
     }
 
-    private SuggestionsData createSuggestions(final UserContext userContext, final Set<ProductProjection> suggestions) {
+    protected SuggestionsData createSuggestions(final Set<ProductProjection> suggestions) {
         final ProductListBean productListData = productListBeanFactory.create(suggestions);
         return new SuggestionsData(productListData);
     }
