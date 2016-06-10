@@ -1,4 +1,4 @@
-package myaccount.myorders;
+package com.commercetools.sunrise.myaccount.myorders;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;

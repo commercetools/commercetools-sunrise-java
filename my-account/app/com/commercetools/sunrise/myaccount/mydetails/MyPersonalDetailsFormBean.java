@@ -1,4 +1,4 @@
-package myaccount.mydetails;
+package com.commercetools.sunrise.myaccount.mydetails;
 
 import common.contexts.UserContext;
 import common.errors.ErrorsBean;

@@ -1,7 +1,7 @@
 package common.controllers;
 
 import common.models.HalLink;
-import myaccount.UserBean;
+import com.commercetools.sunrise.myaccount.UserBean;
 import play.mvc.Call;
 
 import java.util.HashMap;

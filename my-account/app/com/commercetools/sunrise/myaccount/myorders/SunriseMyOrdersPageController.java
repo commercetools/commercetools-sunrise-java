@@ -1,4 +1,4 @@
-package myaccount.myorders;
+package com.commercetools.sunrise.myaccount.myorders;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
@@ -8,8 +8,8 @@ import common.template.i18n.I18nResolver;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
-import myaccount.CustomerSessionUtils;
-import myaccount.common.MyAccountController;
+import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Http;
@@ -18,7 +18,6 @@ import play.twirl.api.Html;
 import shoppingcart.CartLikeBean;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;

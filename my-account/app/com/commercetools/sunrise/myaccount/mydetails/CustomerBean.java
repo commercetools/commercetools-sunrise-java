@@ -1,21 +1,35 @@
-package myaccount.mydetails;
+package com.commercetools.sunrise.myaccount.mydetails;
 
+import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints;
 
-import javax.annotation.Nullable;
+public class CustomerBean extends Base {
 
-public class MyPersonalDetailsFormData extends Base {
-
+    private String customerNumber;
     private String title;
-    @Constraints.Required
     private String firstName;
-    @Constraints.Required
     private String lastName;
-    @Constraints.Required
     private String email;
 
-    @Nullable
+    public CustomerBean() {
+    }
+
+    public CustomerBean(final Customer customer) {
+        this.customerNumber = customer.getCustomerNumber();
+        this.title = customer.getTitle();
+        this.firstName = customer.getFirstName();
+        this.lastName = customer.getLastName();
+        this.email = customer.getEmail();
+    }
+
+    public String getCustomerNumber() {
+        return customerNumber;
+    }
+
+    public void setCustomerNumber(final String customerNumber) {
+        this.customerNumber = customerNumber;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -48,4 +62,3 @@ public class MyPersonalDetailsFormData extends Base {
         this.email = email;
     }
 }
-

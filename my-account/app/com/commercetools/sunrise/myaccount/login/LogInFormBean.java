@@ -1,4 +1,4 @@
-package myaccount.login;
+package com.commercetools.sunrise.myaccount.login;
 
 import common.errors.ErrorsBean;
 import io.sphere.sdk.models.Base;

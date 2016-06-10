@@ -1,4 +1,4 @@
-package myaccount;
+package com.commercetools.sunrise.myaccount;
 
 import io.sphere.sdk.customers.Customer;
 import play.Logger;

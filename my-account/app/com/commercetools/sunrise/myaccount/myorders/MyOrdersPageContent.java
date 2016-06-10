@@ -1,4 +1,4 @@
-package myaccount.myorders;
+package com.commercetools.sunrise.myaccount.myorders;
 
 import common.controllers.PageContent;
 

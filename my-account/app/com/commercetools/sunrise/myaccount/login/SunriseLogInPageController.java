@@ -1,4 +1,4 @@
-package myaccount.login;
+package com.commercetools.sunrise.myaccount.login;
 
 import common.contexts.UserContext;
 import common.controllers.SunriseFrameworkController;
@@ -38,8 +38,8 @@ import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
-import static myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
-import static myaccount.CustomerSessionUtils.removeCustomerSessionData;
+import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
+import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.removeCustomerSessionData;
 import static shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static shoppingcart.CartSessionUtils.removeCartSessionData;
 

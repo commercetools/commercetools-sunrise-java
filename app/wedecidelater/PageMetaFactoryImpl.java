@@ -4,7 +4,7 @@ import common.contexts.UserContext;
 import common.controllers.PageMeta;
 import common.controllers.PageMetaFactory;
 import common.controllers.ReverseRouter;
-import myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.mvc.Http;
 
 import javax.inject.Inject;

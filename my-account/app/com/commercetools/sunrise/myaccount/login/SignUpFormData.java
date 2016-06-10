@@ -1,4 +1,4 @@
-package myaccount.login;
+package com.commercetools.sunrise.myaccount.login;
 
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;

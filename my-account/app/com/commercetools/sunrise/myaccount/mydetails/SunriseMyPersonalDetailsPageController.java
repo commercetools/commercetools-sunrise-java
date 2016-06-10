@@ -1,4 +1,4 @@
-package myaccount.mydetails;
+package com.commercetools.sunrise.myaccount.mydetails;
 
 import common.contexts.UserContext;
 import common.controllers.ReverseRouter;
@@ -17,7 +17,7 @@ import io.sphere.sdk.customers.commands.updateactions.SetFirstName;
 import io.sphere.sdk.customers.commands.updateactions.SetLastName;
 import io.sphere.sdk.customers.commands.updateactions.SetTitle;
 import io.sphere.sdk.models.SphereException;
-import myaccount.common.MyAccountController;
+import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import play.Configuration;
 import play.Logger;
 import play.data.Form;
@@ -39,7 +39,7 @@ import java.util.function.Function;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
-import static myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
+import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 
 public abstract class SunriseMyPersonalDetailsPageController extends MyAccountController {
 

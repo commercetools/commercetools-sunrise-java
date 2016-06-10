@@ -1,4 +1,4 @@
-package myaccount.login;
+package com.commercetools.sunrise.myaccount.login;
 
 import common.controllers.PageContent;
 

@@ -1,10 +1,10 @@
-package myaccount.common;
+package com.commercetools.sunrise.myaccount.common;
 
 import common.actions.NoCache;
 import common.controllers.SunriseFrameworkController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.queries.CustomerByIdGet;
-import myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 

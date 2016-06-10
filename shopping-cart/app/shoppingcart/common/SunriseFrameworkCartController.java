@@ -16,7 +16,7 @@ import io.sphere.sdk.carts.queries.CartQueryBuilder;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
-import myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import shoppingcart.CartLikeBean;

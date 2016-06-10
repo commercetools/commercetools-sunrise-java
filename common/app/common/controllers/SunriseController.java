@@ -14,7 +14,7 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.play.controllers.ShopController;
 import io.sphere.sdk.play.metrics.MetricAction;
-import myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.Configuration;
 import play.mvc.Http;
 import play.mvc.With;
