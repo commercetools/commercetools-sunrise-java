@@ -1,5 +1,6 @@
 package productcatalog.productoverview;
 
+import common.contexts.UserContext;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -13,6 +14,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.UnaryOperator;
 
 import static common.utils.LogUtils.logProductRequest;
+import static common.utils.PriceUtils.createPriceSelection;
 
 public class ProductListFetchSimple implements ProductListFetch<Void> {
 
@@ -20,9 +22,13 @@ public class ProductListFetchSimple implements ProductListFetch<Void> {
 
     @Inject
     private SphereClient sphereClient;
+    @Inject
+    private UserContext userContext;
 
     public CompletionStage<PagedSearchResult<ProductProjection>> searchProducts(final Void criteria, final UnaryOperator<ProductProjectionSearch> filter) {
-        final ProductProjectionSearch request = filter.apply(ProductProjectionSearch.ofCurrent());
+        final ProductProjectionSearch baseRequest = ProductProjectionSearch.ofCurrent()
+                .withPriceSelection(createPriceSelection(userContext));
+        final ProductProjectionSearch request = filter.apply(baseRequest);
         return sphereClient.execute(request)
                 .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, request, result), HttpExecution.defaultContext());
     }
