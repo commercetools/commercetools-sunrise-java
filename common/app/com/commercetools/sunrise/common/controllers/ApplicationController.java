@@ -6,6 +6,7 @@ import com.commercetools.sunrise.common.inject.RequestScoped;
 import io.sphere.sdk.models.Base;
 import play.Logger;
 import play.data.Form;
+import play.data.FormFactory;
 import play.data.validation.Constraints;
 import play.inject.Injector;
 import play.mvc.Controller;
@@ -23,27 +24,20 @@ public final class ApplicationController extends Controller {
     @Inject
     private Injector injector;
     @Inject
-    private UserContext userContext;
-
-    private Form<LanguageFormData> languageForm;
-    private Form<CountryFormData> countryForm;
+    private FormFactory formFactory;
 
     public Result untrail(final String path) {
         return movedPermanently("/" + path);
     }
 
-    public Result index() {
-        return redirectToHomePage(defaultLanguage());
-    }
-
     public Result changeLanguage() {
-        final Form<LanguageFormData> boundForm = languageForm.bindFromRequest();
+        final Form<LanguageFormData> boundForm = formFactory.form(LanguageFormData.class).bindFromRequest();
         final String languageTag = boundForm.hasErrors() ? defaultLanguage() : boundForm.get().getLanguage();
         return redirectToHomePage(languageTag);
     }
 
     public Result changeCountry(final String languageTag) {
-        final Form<CountryFormData> boundForm = countryForm.bindFromRequest();
+        final Form<CountryFormData> boundForm = formFactory.form(CountryFormData.class).bindFromRequest();
         final String country = boundForm.hasErrors() ? defaultCountry() : boundForm.get().getCountry();
         session(SESSION_COUNTRY, country);
         Logger.debug("Changed country: " + session().toString());

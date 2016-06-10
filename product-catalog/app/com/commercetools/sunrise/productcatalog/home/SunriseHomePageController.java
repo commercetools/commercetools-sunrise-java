@@ -7,9 +7,10 @@ import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.inject.RequestScoped;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
+import wedecidelatercommon.HomeReverseRouter;
 
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -41,6 +42,12 @@ public abstract class SunriseHomePageController extends SunriseFrameworkControll
 
     @Inject
     private I18nResolver i18nResolver;
+    @Inject
+    private HomeReverseRouter homeReverseRouter;
+
+    public Result index() {
+        return redirect(homeReverseRouter.homePageCall(userContext().locale().toLanguageTag()));
+    }
 
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> completedFuture(ok(renderHomePage(new HomePageContent()))));

@@ -6,7 +6,7 @@
 GET         /*path/                                            @com.commercetools.sunrise.common.controllers.ApplicationController.untrail(path: String)
 
 # Main entry point that decides whether to go to home page or to setup wizard
-GET         /                                                  @com.commercetools.sunrise.common.controllers.ApplicationController.index()
+GET         /                                                  @wedecidelater.HomePageController.index()
 
 ->          /setup                                             setupwidget.Routes
 
