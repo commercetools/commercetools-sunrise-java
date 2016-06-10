@@ -1,6 +1,6 @@
 package shoppingcart.checkout.thankyou;
 
-import common.controllers.PageContent;
+import com.commercetools.sunrise.common.controllers.PageContent;
 import shoppingcart.CartLikeBean;
 
 public class CheckoutThankYouPageContent extends PageContent {

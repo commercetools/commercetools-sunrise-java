@@ -1,17 +1,17 @@
 package com.commercetools.sunrise.myaccount.myorders;
 
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
-import common.template.i18n.I18nIdentifier;
-import common.template.i18n.I18nResolver;
-import common.utils.MoneyContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.orders.Order;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static io.sphere.sdk.utils.EnumUtils.enumToCamelCase;
-import static common.utils.PriceUtils.calculateTotalPrice;
+import static com.commercetools.sunrise.common.utils.PriceUtils.calculateTotalPrice;
 
 public class OrderOverviewBean {
 

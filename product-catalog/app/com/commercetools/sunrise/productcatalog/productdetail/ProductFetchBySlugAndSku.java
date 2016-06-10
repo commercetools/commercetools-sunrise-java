@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.UnaryOperator;
 
-import static common.utils.PriceUtils.createPriceSelection;
+import static com.commercetools.sunrise.common.utils.PriceUtils.createPriceSelection;
 
 public final class ProductFetchBySlugAndSku implements ProductFetch<String, String> {
 

@@ -1,6 +1,6 @@
 package ctpmodels;
 
-import common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.producttypes.MetaProductType;

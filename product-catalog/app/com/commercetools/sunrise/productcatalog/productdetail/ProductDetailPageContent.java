@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import common.controllers.PageContent;
+import com.commercetools.sunrise.common.controllers.PageContent;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductBean;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsData;

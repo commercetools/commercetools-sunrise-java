@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.common;
 
 import com.google.inject.Inject;
-import common.contexts.UserContext;
-import common.models.LinkBean;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.models.LinkBean;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;

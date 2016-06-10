@@ -1,16 +1,16 @@
 package wedecidelater;
 
-import common.contexts.UserContext;
-import common.controllers.PageMeta;
-import common.controllers.PageMetaFactory;
-import common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.PageMeta;
+import com.commercetools.sunrise.common.controllers.PageMetaFactory;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.stream.IntStream;
 
-import static common.controllers.SunriseFrameworkController.getCsrfToken;
+import static com.commercetools.sunrise.common.controllers.SunriseFrameworkController.getCsrfToken;
 import static java.util.stream.Collectors.toList;
 
 public class PageMetaFactoryImpl implements PageMetaFactory {

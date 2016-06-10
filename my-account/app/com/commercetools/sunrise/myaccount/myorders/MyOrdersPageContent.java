@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders;
 
-import common.controllers.PageContent;
+import com.commercetools.sunrise.common.controllers.PageContent;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import common.models.ProductAttributeBean;
+import com.commercetools.sunrise.common.models.ProductAttributeBean;
 import io.sphere.sdk.models.Base;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package shoppingcart.checkout.shipping;
 
-import common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import javax.annotation.Nullable;

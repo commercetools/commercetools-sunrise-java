@@ -1,6 +1,6 @@
 package shoppingcart;
 
-import common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.carts.PaymentInfo;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.payments.PaymentMethodInfo;

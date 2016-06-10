@@ -1,10 +1,10 @@
 package shoppingcart.checkout.thankyou;
 
-import common.contexts.UserContext;
-import common.controllers.ControllerDependency;
-import common.controllers.SunrisePageData;
-import common.models.ProductDataConfig;
-import common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.ControllerDependency;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderByIdGet;
 import play.libs.concurrent.HttpExecution;

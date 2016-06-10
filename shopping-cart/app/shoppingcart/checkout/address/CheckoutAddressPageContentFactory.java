@@ -1,16 +1,16 @@
 package shoppingcart.checkout.address;
 
-import common.contexts.SunriseDataBeanFactory;
-import common.errors.ErrorsBean;
-import common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.contexts.SunriseDataBeanFactory;
+import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
 
 import javax.inject.Inject;
 
-import static common.utils.FormUtils.extractAddress;
-import static common.utils.FormUtils.extractBooleanFormField;
+import static com.commercetools.sunrise.common.utils.FormUtils.extractAddress;
+import static com.commercetools.sunrise.common.utils.FormUtils.extractBooleanFormField;
 
 public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
     @Inject

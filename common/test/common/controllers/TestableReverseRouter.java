@@ -1,5 +1,6 @@
 package common.controllers;
 
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import play.mvc.Call;
 
 public class TestableReverseRouter implements ReverseRouter {

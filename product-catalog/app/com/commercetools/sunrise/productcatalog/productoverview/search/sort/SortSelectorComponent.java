@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
-import common.contexts.UserContext;
-import common.controllers.SunrisePageData;
-import common.hooks.SunrisePageDataHook;
-import common.models.FormSelectableOptionBean;
-import common.template.i18n.I18nIdentifier;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import framework.ControllerComponent;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;

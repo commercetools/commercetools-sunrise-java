@@ -1,7 +1,7 @@
 package shoppingcart.checkout;
 
-import common.controllers.SunrisePageData;
-import common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import framework.ControllerComponent;
 import play.Configuration;
 

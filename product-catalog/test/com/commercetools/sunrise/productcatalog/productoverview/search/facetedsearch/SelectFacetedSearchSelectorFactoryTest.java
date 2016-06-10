@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
 import com.neovisionaries.i18n.CountryCode;
-import common.contexts.RequestContext;
-import common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.AlphabeticallySortedFacetOptionMapper;
 import io.sphere.sdk.facets.Facet;

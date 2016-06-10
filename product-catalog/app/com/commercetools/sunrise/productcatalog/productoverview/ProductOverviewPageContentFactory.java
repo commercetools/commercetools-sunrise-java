@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import common.contexts.RequestContext;
-import common.contexts.UserContext;
-import common.models.DetailData;
+import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.models.DetailData;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;

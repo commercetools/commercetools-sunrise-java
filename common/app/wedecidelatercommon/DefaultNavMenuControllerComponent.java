@@ -1,8 +1,8 @@
 package wedecidelatercommon;
 
-import common.controllers.SunrisePageData;
-import common.hooks.SunrisePageDataHook;
-import common.models.NavMenuDataFactory;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.models.NavMenuDataFactory;
 import framework.ControllerComponent;
 
 import javax.inject.Inject;

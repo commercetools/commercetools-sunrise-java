@@ -1,6 +1,6 @@
 package framework;
 
-import common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package common;
 
-import common.actions.NoCache;
-import common.controllers.ControllerDependency;
-import common.controllers.SunriseController;
+import com.commercetools.sunrise.common.actions.NoCache;
+import com.commercetools.sunrise.common.controllers.ControllerDependency;
+import com.commercetools.sunrise.common.controllers.SunriseController;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;

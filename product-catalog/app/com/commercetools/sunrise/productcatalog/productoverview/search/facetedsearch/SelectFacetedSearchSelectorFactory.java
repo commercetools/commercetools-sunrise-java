@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import common.contexts.RequestContext;
-import common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.CategoryTreeFacetOptionMapper;

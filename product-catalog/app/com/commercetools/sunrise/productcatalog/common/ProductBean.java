@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import common.models.ProductVariantBean;
-import common.models.SelectableProductAttributeBean;
+import com.commercetools.sunrise.common.models.ProductVariantBean;
+import com.commercetools.sunrise.common.models.SelectableProductAttributeBean;
 import io.sphere.sdk.models.Base;
 
 import java.util.List;

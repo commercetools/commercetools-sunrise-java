@@ -1,14 +1,13 @@
 package shoppingcart;
 
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
-import common.utils.MoneyContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
 import wedecidelatercommon.ProductReverseRouter;
 
-import static common.utils.PriceUtils.calculateTotalPrice;
+import static com.commercetools.sunrise.common.utils.PriceUtils.calculateTotalPrice;
 
 public class MiniCartBean extends Base {
     private Long totalItems;

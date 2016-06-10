@@ -1,7 +1,6 @@
 package shoppingcart;
 
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Base;
 import wedecidelatercommon.ProductReverseRouter;

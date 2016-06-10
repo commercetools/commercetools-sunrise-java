@@ -1,7 +1,8 @@
 package common.template.i18n.composite;
 
-import common.template.i18n.I18nIdentifier;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.template.i18n.composite.CompositeI18nResolver;
 import org.junit.Test;
 
 import java.util.List;

@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import common.controllers.SunriseFrameworkController;
-import common.controllers.SunrisePageData;
-import common.hooks.RequestHook;
-import common.hooks.SunrisePageDataHook;
-import common.inject.RequestScoped;
-import common.template.i18n.I18nIdentifier;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.hooks.RequestHook;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.inject.RequestScoped;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;

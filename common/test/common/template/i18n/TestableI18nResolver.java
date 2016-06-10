@@ -1,5 +1,8 @@
 package common.template.i18n;
 
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;

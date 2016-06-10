@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import common.contexts.UserContext;
-import common.controllers.SunriseFrameworkController;
-import common.controllers.SunrisePageData;
-import common.controllers.WithOverwriteableTemplateName;
-import common.hooks.RequestHook;
-import common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.hooks.RequestHook;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;

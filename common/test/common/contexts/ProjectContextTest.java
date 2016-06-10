@@ -1,6 +1,7 @@
 package common.contexts;
 
 import com.neovisionaries.i18n.CountryCode;
+import com.commercetools.sunrise.common.contexts.ProjectContext;
 import org.junit.Test;
 
 import javax.money.CurrencyUnit;

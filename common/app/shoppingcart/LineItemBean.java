@@ -1,9 +1,9 @@
 package shoppingcart;
 
-import common.contexts.UserContext;
-import common.models.ProductAttributeBean;
-import common.models.ProductAttributeBeanFactoryInjectless;
-import common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.models.ProductAttributeBean;
+import com.commercetools.sunrise.common.models.ProductAttributeBeanFactoryInjectless;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
 import io.sphere.sdk.carts.LineItem;
 import wedecidelatercommon.ProductReverseRouter;
 

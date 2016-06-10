@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.myaccount.login;
 
-import common.contexts.UserContext;
-import common.controllers.SunriseFrameworkController;
-import common.controllers.SunrisePageData;
-import common.errors.ErrorsBean;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerDraftBuilder;
@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static common.utils.FormUtils.extractBooleanFormField;
-import static common.utils.FormUtils.extractFormField;
+import static com.commercetools.sunrise.common.utils.FormUtils.extractBooleanFormField;
+import static com.commercetools.sunrise.common.utils.FormUtils.extractFormField;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;

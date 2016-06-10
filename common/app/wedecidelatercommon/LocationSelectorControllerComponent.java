@@ -1,10 +1,10 @@
 package wedecidelatercommon;
 
-import common.contexts.ProjectContext;
-import common.contexts.UserContext;
-import common.controllers.SunrisePageData;
-import common.hooks.SunrisePageDataHook;
-import common.models.LocationSelector;
+import com.commercetools.sunrise.common.contexts.ProjectContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.models.LocationSelector;
 import framework.ControllerComponent;
 
 import javax.inject.Inject;

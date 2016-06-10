@@ -1,8 +1,8 @@
 package ctpmodels;
 
 import com.google.inject.AbstractModule;
-import common.contexts.ProjectContext;
-import common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.contexts.ProjectContext;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
 
 import javax.inject.Singleton;
 

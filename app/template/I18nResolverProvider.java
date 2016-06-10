@@ -1,10 +1,10 @@
 package template;
 
 import com.google.inject.Provider;
-import common.contexts.ProjectContext;
-import common.template.i18n.composite.CompositeI18nResolver;
-import common.template.i18n.I18nResolver;
-import common.template.i18n.yaml.YamlI18nResolver;
+import com.commercetools.sunrise.common.contexts.ProjectContext;
+import com.commercetools.sunrise.common.template.i18n.composite.CompositeI18nResolver;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver;
 import common.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;

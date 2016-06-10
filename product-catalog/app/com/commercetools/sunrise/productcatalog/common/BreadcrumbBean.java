@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import common.models.LinkBean;
+import com.commercetools.sunrise.common.models.LinkBean;
 
 import java.util.List;
 

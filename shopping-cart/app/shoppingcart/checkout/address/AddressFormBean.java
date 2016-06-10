@@ -1,10 +1,10 @@
 package shoppingcart.checkout.address;
 
 import com.neovisionaries.i18n.CountryCode;
-import common.contexts.UserContext;
-import common.models.CountryFormFieldBean;
-import common.models.TitleFormFieldBean;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.models.CountryFormFieldBean;
+import com.commercetools.sunrise.common.models.TitleFormFieldBean;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.Base;
 import play.Configuration;

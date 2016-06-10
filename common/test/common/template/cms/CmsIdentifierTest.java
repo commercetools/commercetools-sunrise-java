@@ -1,5 +1,6 @@
 package common.template.cms;
 
+import com.commercetools.sunrise.common.template.cms.CmsIdentifier;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

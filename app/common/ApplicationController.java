@@ -1,9 +1,9 @@
 package common;
 
-import common.contexts.ProjectContext;
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
-import common.inject.RequestScoped;
+import com.commercetools.sunrise.common.contexts.ProjectContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.inject.RequestScoped;
 import io.sphere.sdk.models.Base;
 import play.Logger;
 import play.data.Form;
@@ -15,9 +15,8 @@ import play.mvc.Result;
 import setupwidget.controllers.SetupController;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import static common.controllers.SunriseController.SESSION_COUNTRY;
+import static com.commercetools.sunrise.common.controllers.SunriseController.SESSION_COUNTRY;
 
 /**
  * Controller for main web pages like index, imprint and contact.

@@ -1,9 +1,9 @@
 package template;
 
 import com.google.inject.Provider;
-import common.template.cms.CmsService;
-import common.template.cms.filebased.FileBasedCmsService;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.template.cms.CmsService;
+import com.commercetools.sunrise.common.template.cms.filebased.FileBasedCmsService;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import play.Logger;
 
 import javax.inject.Inject;

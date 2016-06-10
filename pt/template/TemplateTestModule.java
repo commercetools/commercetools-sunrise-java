@@ -1,9 +1,9 @@
 package template;
 
 import com.google.inject.AbstractModule;
-import common.template.cms.CmsService;
-import common.template.engine.TemplateEngine;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.template.cms.CmsService;
+import com.commercetools.sunrise.common.template.engine.TemplateEngine;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;

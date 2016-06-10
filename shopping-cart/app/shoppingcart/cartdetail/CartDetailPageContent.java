@@ -1,6 +1,6 @@
 package shoppingcart.cartdetail;
 
-import common.controllers.PageContent;
+import com.commercetools.sunrise.common.controllers.PageContent;
 import shoppingcart.CartLikeBean;
 
 public class CartDetailPageContent extends PageContent {

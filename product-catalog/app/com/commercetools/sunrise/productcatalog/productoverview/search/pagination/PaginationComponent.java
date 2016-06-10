@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
-import common.controllers.SunrisePageData;
-import common.hooks.SunrisePageDataHook;
-import common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import framework.ControllerComponent;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;

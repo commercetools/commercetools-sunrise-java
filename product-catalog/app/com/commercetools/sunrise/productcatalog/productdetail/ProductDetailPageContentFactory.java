@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;

@@ -1,7 +1,7 @@
 package shoppingcart.checkout.payment;
 
-import common.contexts.UserContext;
-import common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 
 import java.util.List;

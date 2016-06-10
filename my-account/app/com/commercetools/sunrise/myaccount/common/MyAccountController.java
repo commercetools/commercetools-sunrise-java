@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.common;
 
-import common.actions.NoCache;
-import common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.actions.NoCache;
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.queries.CustomerByIdGet;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;

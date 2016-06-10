@@ -1,9 +1,9 @@
 package common;
 
 import com.google.inject.AbstractModule;
-import common.contexts.RequestContext;
-import common.contexts.UserContext;
-import common.inject.*;
+import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.inject.*;
 import play.mvc.Http;
 
 /**

@@ -1,6 +1,6 @@
 package reverserouter;
 
-import common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
 import static wedecidelater.routes.CheckoutAddressPageController;

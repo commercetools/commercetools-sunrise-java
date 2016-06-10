@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import common.controllers.PageContent;
+import com.commercetools.sunrise.common.controllers.PageContent;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsData;
 
 public class HomePageContent extends PageContent {

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search;
 
-import common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.RequestContext;
 
 import java.util.List;
 import java.util.Locale;

@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productsuggestions;
 
-import common.contexts.UserContext;
-import common.controllers.SunrisePageData;
-import common.hooks.SunrisePageDataHook;
-import common.suggestion.ProductRecommendation;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import framework.ControllerComponent;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;

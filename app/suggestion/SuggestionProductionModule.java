@@ -1,7 +1,7 @@
 package suggestion;
 
 import com.google.inject.AbstractModule;
-import common.suggestion.ProductRecommendation;
+import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 
 /**
  * Configuration for the Guice {@link com.google.inject.Injector} which shall be used in production.

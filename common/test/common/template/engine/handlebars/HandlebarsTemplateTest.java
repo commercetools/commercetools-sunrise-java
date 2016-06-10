@@ -2,12 +2,13 @@ package common.template.engine.handlebars;
 
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import common.controllers.PageData;
-import common.template.cms.CmsService;
-import common.template.engine.TemplateNotFoundException;
-import common.template.engine.TemplateEngine;
+import com.commercetools.sunrise.common.controllers.PageData;
+import com.commercetools.sunrise.common.template.cms.CmsService;
+import com.commercetools.sunrise.common.template.engine.TemplateNotFoundException;
+import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import common.template.engine.TestablePageData;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsTemplateEngine;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import org.junit.Test;
 
 import java.util.List;

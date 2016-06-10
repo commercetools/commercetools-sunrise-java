@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import common.inject.RequestScoped;
+import com.commercetools.sunrise.common.inject.RequestScoped;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.PaginationComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.searchbox.SearchBoxComponent;

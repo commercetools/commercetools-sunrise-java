@@ -1,5 +1,6 @@
 package common.template.i18n;
 
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

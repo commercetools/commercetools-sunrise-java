@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import common.contexts.UserContext;
-import common.models.ProductAttributeBeanFactoryInjectless;
-import common.models.ProductDataConfig;
-import common.models.ProductVariantBeanFactoryInjectless;
-import common.models.SelectableProductAttributeBean;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.models.ProductAttributeBeanFactoryInjectless;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.models.ProductVariantBeanFactoryInjectless;
+import com.commercetools.sunrise.common.models.SelectableProductAttributeBean;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static common.utils.ProductAttributeUtils.attributeValue;
-import static common.utils.ProductAttributeUtils.attributeValueAsKey;
+import static com.commercetools.sunrise.common.utils.ProductAttributeUtils.attributeValue;
+import static com.commercetools.sunrise.common.utils.ProductAttributeUtils.attributeValueAsKey;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 

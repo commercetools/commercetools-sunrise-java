@@ -1,6 +1,6 @@
 package common.template.engine;
 
-import common.controllers.*;
+import com.commercetools.sunrise.common.controllers.*;
 
 public class TestablePageData implements PageData {
 

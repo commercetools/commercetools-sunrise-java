@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import common.inject.RequestScoped;
+import com.commercetools.sunrise.common.inject.RequestScoped;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 
 import javax.inject.Inject;

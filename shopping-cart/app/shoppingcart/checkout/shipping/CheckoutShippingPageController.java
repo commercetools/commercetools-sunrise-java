@@ -1,11 +1,11 @@
 package shoppingcart.checkout.shipping;
 
-import common.contexts.UserContext;
-import common.controllers.ControllerDependency;
-import common.controllers.SunrisePageData;
-import common.errors.ErrorsBean;
-import common.models.ProductDataConfig;
-import common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.ControllerDependency;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingMethod;
@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static common.utils.FormUtils.extractFormField;
+import static com.commercetools.sunrise.common.utils.FormUtils.extractFormField;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;

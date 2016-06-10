@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -13,8 +13,8 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 import java.util.function.UnaryOperator;
 
-import static common.utils.LogUtils.logProductRequest;
-import static common.utils.PriceUtils.createPriceSelection;
+import static com.commercetools.sunrise.common.utils.LogUtils.logProductRequest;
+import static com.commercetools.sunrise.common.utils.PriceUtils.createPriceSelection;
 
 public class ProductListFetchSimple implements ProductListFetch<Void> {
 

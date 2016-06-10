@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
-import common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.RequestContext;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
 

@@ -1,9 +1,9 @@
 package wedecidelater;
 
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
-import common.models.NavMenuData;
-import common.models.NavMenuDataFactory;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.models.NavMenuData;
+import com.commercetools.sunrise.common.models.NavMenuDataFactory;
 import io.sphere.sdk.categories.CategoryTree;
 import play.Configuration;
 

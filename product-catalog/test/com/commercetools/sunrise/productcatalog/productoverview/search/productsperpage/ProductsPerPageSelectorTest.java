@@ -4,7 +4,7 @@ import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.RequestContext;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 

@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.myaccount.myorders;
 
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
-import common.controllers.SunrisePageData;
-import common.models.ProductDataConfig;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderQuery;
 import io.sphere.sdk.queries.PagedQueryResult;

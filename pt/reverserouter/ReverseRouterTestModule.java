@@ -1,7 +1,7 @@
 package reverserouter;
 
 import com.google.inject.AbstractModule;
-import common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
 
 public class ReverseRouterTestModule extends AbstractModule {
     private final ReverseRouter reverseRouter;

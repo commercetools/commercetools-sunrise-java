@@ -1,5 +1,6 @@
 package common.utils;
 
+import com.commercetools.sunrise.common.utils.PriceFormatter;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
 

@@ -1,13 +1,13 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import common.contexts.UserContext;
-import common.controllers.ReverseRouter;
-import common.controllers.SunrisePageData;
-import common.errors.ErrorsBean;
-import common.models.ProductDataConfig;
-import common.models.TitleFormFieldBean;
-import common.template.i18n.I18nResolver;
-import common.utils.FormUtils;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.models.TitleFormFieldBean;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.utils.FormUtils;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;

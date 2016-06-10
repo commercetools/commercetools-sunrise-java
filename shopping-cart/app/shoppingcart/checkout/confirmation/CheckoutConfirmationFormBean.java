@@ -1,6 +1,6 @@
 package shoppingcart.checkout.confirmation;
 
-import common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.errors.ErrorsBean;
 import io.sphere.sdk.models.Base;
 
 public class CheckoutConfirmationFormBean extends Base {

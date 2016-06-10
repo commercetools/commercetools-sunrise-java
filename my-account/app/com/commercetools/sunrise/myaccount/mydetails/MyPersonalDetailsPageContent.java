@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import common.controllers.PageContent;
+import com.commercetools.sunrise.common.controllers.PageContent;
 
 public class MyPersonalDetailsPageContent extends PageContent {
 

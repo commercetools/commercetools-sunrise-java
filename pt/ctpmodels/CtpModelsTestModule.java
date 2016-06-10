@@ -2,8 +2,8 @@ package ctpmodels;
 
 import com.google.inject.AbstractModule;
 import com.neovisionaries.i18n.CountryCode;
-import common.contexts.ProjectContext;
-import common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.contexts.ProjectContext;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
 import io.sphere.sdk.producttypes.MetaProductType;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.queries.ProductTypeQuery;
@@ -12,7 +12,7 @@ import io.sphere.sdk.queries.PagedQueryResult;
 import javax.money.Monetary;
 import java.util.Locale;
 
-import static common.utils.JsonUtils.readCtpObject;
+import static com.commercetools.sunrise.common.utils.JsonUtils.readCtpObject;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 

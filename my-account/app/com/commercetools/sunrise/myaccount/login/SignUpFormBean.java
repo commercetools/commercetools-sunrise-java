@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.login;
 
-import common.contexts.UserContext;
-import common.errors.ErrorsBean;
-import common.models.TitleFormFieldBean;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.models.TitleFormFieldBean;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
 

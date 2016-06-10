@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static common.utils.JsonUtils.readCtpObject;
+import static com.commercetools.sunrise.common.utils.JsonUtils.readCtpObject;
 import static java.util.Collections.emptyList;
 import static play.test.Helpers.running;
 import static play.test.Helpers.testServer;

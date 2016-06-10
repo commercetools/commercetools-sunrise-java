@@ -1,8 +1,10 @@
 package common.suggestion;
 
 import com.neovisionaries.i18n.CountryCode;
-import common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
 import common.controllers.TestableSphereClient;
+import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
+import com.commercetools.sunrise.common.suggestion.SunriseProductRecommendation;
 import org.junit.Test;
 
 import java.util.Locale;

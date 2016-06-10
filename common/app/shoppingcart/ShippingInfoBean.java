@@ -1,6 +1,6 @@
 package shoppingcart;
 
-import common.utils.MoneyContext;
+import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartShippingInfo;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Reference;

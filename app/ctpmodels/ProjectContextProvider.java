@@ -2,7 +2,7 @@ package ctpmodels;
 
 import com.google.inject.Provider;
 import com.neovisionaries.i18n.CountryCode;
-import common.contexts.ProjectContext;
+import com.commercetools.sunrise.common.contexts.ProjectContext;
 import common.SunriseInitializationException;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.projects.Project;

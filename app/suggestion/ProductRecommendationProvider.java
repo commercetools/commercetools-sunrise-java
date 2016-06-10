@@ -3,8 +3,8 @@ package suggestion;
 import com.google.inject.Provider;
 import io.sphere.sdk.client.SphereClient;
 import play.Logger;
-import common.suggestion.ProductRecommendation;
-import common.suggestion.SunriseProductRecommendation;
+import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
+import com.commercetools.sunrise.common.suggestion.SunriseProductRecommendation;
 
 import javax.inject.Inject;
 

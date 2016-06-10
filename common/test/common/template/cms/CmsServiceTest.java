@@ -1,5 +1,6 @@
 package common.template.cms;
 
+import com.commercetools.sunrise.common.template.cms.CmsService;
 import org.junit.Test;
 
 import java.util.Optional;

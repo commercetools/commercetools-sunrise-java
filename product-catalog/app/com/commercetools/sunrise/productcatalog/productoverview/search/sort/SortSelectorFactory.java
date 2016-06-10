@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
-import common.contexts.RequestContext;
-import common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.SortExpression;
 

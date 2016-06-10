@@ -2,10 +2,10 @@ package shoppingcart.common;
 
 import com.google.inject.Inject;
 import com.neovisionaries.i18n.CountryCode;
-import common.actions.NoCache;
-import common.contexts.UserContext;
-import common.controllers.SunriseFrameworkController;
-import common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.actions.NoCache;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
 import io.sphere.sdk.carts.*;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;

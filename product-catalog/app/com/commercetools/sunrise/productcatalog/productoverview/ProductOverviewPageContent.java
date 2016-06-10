@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import common.models.DetailData;
-import common.controllers.PageContent;
+import com.commercetools.sunrise.common.models.DetailData;
+import com.commercetools.sunrise.common.controllers.PageContent;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorBean;

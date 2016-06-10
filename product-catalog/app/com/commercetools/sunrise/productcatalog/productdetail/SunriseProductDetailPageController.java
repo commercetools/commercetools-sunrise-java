@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.google.inject.Injector;
-import common.contexts.UserContext;
-import common.controllers.SunriseFrameworkController;
-import common.controllers.SunrisePageData;
-import common.controllers.WithOverwriteableTemplateName;
-import common.hooks.RequestHook;
-import common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.hooks.RequestHook;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.search.ProductProjectionSearch;

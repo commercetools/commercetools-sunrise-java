@@ -5,10 +5,10 @@ import com.github.jknack.handlebars.io.FileTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import com.google.inject.Provider;
 import common.SunriseInitializationException;
-import common.template.cms.CmsService;
-import common.template.engine.TemplateEngine;
-import common.template.engine.handlebars.HandlebarsTemplateEngine;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.template.cms.CmsService;
+import com.commercetools.sunrise.common.template.engine.TemplateEngine;
+import com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsTemplateEngine;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import play.Configuration;
 import play.Logger;
 

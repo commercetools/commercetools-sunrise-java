@@ -1,6 +1,7 @@
 package common.prices;
 
 import com.neovisionaries.i18n.CountryCode;
+import com.commercetools.sunrise.common.prices.PriceFinder;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;

@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import common.contexts.UserContext;
-import common.controllers.SunrisePageData;
-import common.hooks.SunrisePageDataHook;
-import common.template.i18n.I18nIdentifier;
-import common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import framework.ControllerComponent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.facets.Facet;

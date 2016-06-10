@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage;
 
-import common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import io.sphere.sdk.models.Base;
 
 import java.util.List;

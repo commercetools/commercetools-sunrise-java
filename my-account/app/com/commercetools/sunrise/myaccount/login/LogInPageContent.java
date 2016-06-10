@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.login;
 
-import common.controllers.PageContent;
+import com.commercetools.sunrise.common.controllers.PageContent;
 
 public class LogInPageContent extends PageContent {
 

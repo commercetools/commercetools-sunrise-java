@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import common.utils.PriceFormatter;
+import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 

@@ -1,5 +1,6 @@
 package common.contexts;
 
+import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Reference;
@@ -7,7 +8,6 @@ import org.junit.Test;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import java.time.ZoneId;
 
 import static com.neovisionaries.i18n.CountryCode.UK;
 import static java.util.Arrays.asList;

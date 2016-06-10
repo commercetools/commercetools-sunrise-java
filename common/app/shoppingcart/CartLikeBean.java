@@ -1,8 +1,8 @@
 package shoppingcart;
 
-import common.contexts.UserContext;
-import common.models.ProductDataConfig;
-import common.utils.MoneyContext;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.orders.Order;
@@ -10,7 +10,7 @@ import wedecidelatercommon.ProductReverseRouter;
 
 import java.time.format.DateTimeFormatter;
 
-import static common.utils.PriceUtils.*;
+import static com.commercetools.sunrise.common.utils.PriceUtils.*;
 
 public class CartLikeBean {
 

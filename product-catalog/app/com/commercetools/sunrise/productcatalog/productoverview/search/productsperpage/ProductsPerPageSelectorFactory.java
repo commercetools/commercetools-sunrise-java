@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage;
 
-import common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.RequestContext;
 
 import javax.inject.Inject;
 import java.util.List;

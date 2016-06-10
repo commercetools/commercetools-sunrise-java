@@ -1,6 +1,7 @@
 package common.template.engine;
 
-import common.controllers.PageData;
+import com.commercetools.sunrise.common.controllers.PageData;
+import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import org.junit.Test;
 import play.twirl.api.Html;
 
