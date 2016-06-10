@@ -19,7 +19,7 @@ import com.commercetools.sunrise.common.inject.RequestScope;
  * </ul>
  *
  * <h3>Controller Components</h3>
- * {@link framework.ControllerComponent}s are plugins for controllers which communicate with the controller on the one hand
+ * {@link com.commercetools.sunrise.framework.ControllerComponent}s are plugins for controllers which communicate with the controller on the one hand
  * via dependency-injected fields like {@link UserContext} and on the other hand via {@link Hook}s of the controller.
  * A controller component instance lives in the {@link RequestScope} so they assist with one HTTP request and then for the next HTTP request another instance is created.
  * Controller components implement the hooks of the controllers where they need to do sth. for example implementing {@link SunrisePageDataHook}

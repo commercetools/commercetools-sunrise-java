@@ -70,7 +70,7 @@ lazy val `move-to-sdk` = project
 javaUnidocSettings
 
 lazy val commonSettings = Seq (
-  scalaVersion := "2.11.7",
+  scalaVersion := "2.11.8",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   dependencyOverrides ++= Set (
     "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
@@ -248,5 +248,5 @@ copyI18nFiles := Def.inputTaskDyn {
 }.evaluated
 
 def runMainInCompile(dest: String, args: Seq[String]) = Def.taskDyn {
-  (runMain in Compile in `sbt-tasks`).toTask(s" tasks.WebjarsFilesCopier $dest ${args.mkString(" ")}")
+  (runMain in Compile in `sbt-tasks`).toTask(s" com.commercetools.sunrise.theme.WebjarsFilesCopier $dest ${args.mkString(" ")}")
 }

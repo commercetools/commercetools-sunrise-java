@@ -9,7 +9,7 @@ import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
-import wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;

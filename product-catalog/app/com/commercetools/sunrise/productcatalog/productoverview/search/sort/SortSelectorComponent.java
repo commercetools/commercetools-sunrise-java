@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import framework.ControllerComponent;
+import com.commercetools.sunrise.framework.ControllerComponent;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;

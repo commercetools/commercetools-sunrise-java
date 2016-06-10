@@ -3,7 +3,7 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.paginati
 import com.commercetools.sunrise.common.controllers.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import framework.ControllerComponent;
+import com.commercetools.sunrise.framework.ControllerComponent;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;

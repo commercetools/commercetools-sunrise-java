@@ -16,7 +16,7 @@
     <logger name="sphere" level="INFO" />
     <logger name="sphere.metrics.simple" level="DEBUG" />
     <logger name="com.commercetools.sunrise.productcatalog" level="DEBUG" />
-    <logger name="tasks.WebjarsFilesCopier" level="INFO" />
+    <logger name="com.commercetools.sunrise.theme.WebjarsFilesCopier" level="INFO" />
 
     <root level="WARN">
         <appender-ref ref="STDOUT" />

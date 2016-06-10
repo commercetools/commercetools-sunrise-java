@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout;
 
 import com.commercetools.sunrise.common.controllers.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
-import framework.ControllerComponent;
+import com.commercetools.sunrise.framework.ControllerComponent;
 import play.Configuration;
 
 import javax.inject.Inject;

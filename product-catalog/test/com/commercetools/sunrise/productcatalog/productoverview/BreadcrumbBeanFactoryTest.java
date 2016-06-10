@@ -1,23 +1,23 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
+import com.commercetools.sunrise.common.models.LinkBean;
+import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
+import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
+import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
 import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.neovisionaries.i18n.CountryCode;
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import common.controllers.TestableReverseRouter;
-import com.commercetools.sunrise.common.models.LinkBean;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import org.junit.Test;
-import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
-import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
-import wedecidelatercommon.ProductReverseRouter;
 
 import java.util.List;
 import java.util.function.Consumer;

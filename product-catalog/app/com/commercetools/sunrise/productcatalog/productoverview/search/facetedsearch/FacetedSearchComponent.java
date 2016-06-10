@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.controllers.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import framework.ControllerComponent;
+import com.commercetools.sunrise.framework.ControllerComponent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.products.ProductProjection;

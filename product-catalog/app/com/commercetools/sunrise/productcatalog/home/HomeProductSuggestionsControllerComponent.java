@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.controllers.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.RequestHook;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
-import framework.ControllerComponent;
+import com.commercetools.sunrise.framework.ControllerComponent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;

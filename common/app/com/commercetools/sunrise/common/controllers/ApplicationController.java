@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.inject.RequestScoped;
 import io.sphere.sdk.models.Base;
 import play.Logger;

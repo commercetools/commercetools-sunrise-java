@@ -8,7 +8,7 @@ import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.*;
-import wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
 
 import javax.inject.Inject;
 import javax.money.MonetaryAmount;

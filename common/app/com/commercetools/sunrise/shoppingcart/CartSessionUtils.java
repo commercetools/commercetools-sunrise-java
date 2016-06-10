@@ -6,7 +6,7 @@ import io.sphere.sdk.json.SphereJsonUtils;
 import play.Logger;
 import play.libs.Json;
 import play.mvc.Http.Session;
-import wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

@@ -2,12 +2,12 @@ package wedecidelater;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import framework.MultiControllerComponentResolver;
-import framework.MultiControllerComponentResolverBuilder;
+import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
+import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuilder;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutCommonComponent;
-import wedecidelatercommon.DefaultNavMenuControllerComponent;
-import wedecidelatercommon.LocationSelectorControllerComponent;
-import wedecidelatercommon.MiniCartControllerComponent;
+import com.commercetools.sunrise.wedecidelatercommon.DefaultNavMenuControllerComponent;
+import com.commercetools.sunrise.wedecidelatercommon.LocationSelectorControllerComponent;
+import com.commercetools.sunrise.wedecidelatercommon.MiniCartControllerComponent;
 
 public class ComponentsModule extends AbstractModule {
 

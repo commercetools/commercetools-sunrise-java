@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
-import framework.ControllerComponent;
+import com.commercetools.sunrise.framework.ControllerComponent;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;

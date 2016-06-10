@@ -2,9 +2,9 @@ package reverserouter;
 
 import com.google.inject.AbstractModule;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import wedecidelatercommon.CheckoutReverseRouter;
-import wedecidelatercommon.HomeReverseRouter;
-import wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.wedecidelatercommon.CheckoutReverseRouter;
+import com.commercetools.sunrise.wedecidelatercommon.HomeReverseRouter;
+import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
 
 public class ReverseRouterProductionModule extends AbstractModule {
 

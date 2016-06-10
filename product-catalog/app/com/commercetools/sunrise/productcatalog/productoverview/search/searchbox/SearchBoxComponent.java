@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.searchbo
 
 import com.commercetools.sunrise.common.controllers.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
-import framework.ControllerComponent;
+import com.commercetools.sunrise.framework.ControllerComponent;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;

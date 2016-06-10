@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.orders.Order;
-import wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
 
 import java.time.format.DateTimeFormatter;
 

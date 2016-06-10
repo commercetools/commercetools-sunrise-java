@@ -21,7 +21,7 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import com.commercetools.sunrise.shoppingcart.CartLikeBean;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
-import wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
 
 import java.util.List;
 import java.util.Optional;
