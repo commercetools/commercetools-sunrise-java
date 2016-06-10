@@ -105,7 +105,7 @@ lazy val sunriseThemeSettings = Seq (
 
 lazy val templateDependencies = Seq (
   libraryDependencies ++= Seq (
-    "org.webjars" %% "webjars-play" % "2.4.0-1",
+    "org.webjars" %% "webjars-play" % "2.5.0-2",
     "com.github.jknack" % "handlebars" % "2.3.2"
   )
 )
