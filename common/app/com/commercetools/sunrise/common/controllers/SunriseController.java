@@ -98,7 +98,7 @@ public abstract class SunriseController extends ShopController {
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
-        pageMeta.addHalLink(reverseRouter().showHome(language), "home", "continueShopping")
+        pageMeta.addHalLink(reverseRouter().homePageCall(language), "home", "continueShopping")
                 .addHalLink(reverseRouter().processSearchProductsForm(language), "search")
                 .addHalLink(reverseRouter().processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter().processChangeCountryForm(language), "selectCountry")

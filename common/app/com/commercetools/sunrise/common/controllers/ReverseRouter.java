@@ -18,7 +18,7 @@ public interface ReverseRouter extends ProductReverseRouter, CheckoutReverseRout
     Call processChangeCountryForm(final String languageTag);
 
     @Override
-    Call showHome(final String languageTag);
+    Call homePageCall(final String languageTag);
 
     @Override
     Call productOverviewPageCall(final String languageTag, final String categorySlug);

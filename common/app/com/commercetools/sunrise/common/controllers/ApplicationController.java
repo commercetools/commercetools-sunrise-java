@@ -6,7 +6,6 @@ import com.commercetools.sunrise.common.inject.RequestScoped;
 import io.sphere.sdk.models.Base;
 import play.Logger;
 import play.data.Form;
-import play.data.FormFactory;
 import play.data.validation.Constraints;
 import play.inject.Injector;
 import play.mvc.Controller;
@@ -53,7 +52,7 @@ public final class ApplicationController extends Controller {
 
     private Result redirectToHomePage(final String languageTag) {
         final ReverseRouter reverseRouter = injector.instanceOf(ReverseRouter.class);
-        return redirect(reverseRouter.showHome(languageTag));
+        return redirect(reverseRouter.homePageCall(languageTag));
     }
 
     private String defaultLanguage() {

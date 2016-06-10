@@ -53,7 +53,7 @@ public class CheckoutThankYouPageController extends CartController {
     }
 
     protected CompletionStage<Result> handleNotFoundOrder(final UserContext userContext) {
-        final Call call = reverseRouter().showHome(userContext.locale().toLanguageTag());
+        final Call call = reverseRouter().homePageCall(userContext.locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

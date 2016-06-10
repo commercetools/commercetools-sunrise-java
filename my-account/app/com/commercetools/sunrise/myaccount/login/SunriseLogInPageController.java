@@ -92,7 +92,7 @@ public abstract class SunriseLogInPageController extends SunriseFrameworkControl
         removeCustomerSessionData(session());
         removeCartSessionData(session());
         //TODO shouldn't we delete all session data? if not, a comment is necessary
-        final Call call = homeReverseRouter.showHome(languageTag);
+        final Call call = homeReverseRouter.homePageCall(languageTag);
         return completedFuture(redirect(call));
     }
 
@@ -123,7 +123,7 @@ public abstract class SunriseLogInPageController extends SunriseFrameworkControl
     protected CompletionStage<Result> handleSuccessfulSignIn(final CustomerSignInResult result, final UserContext userContext) {
         overwriteCartSessionData(result.getCart(), session(), userContext, productReverseRouter);
         overwriteCustomerSessionData(result.getCustomer(), session());
-        final Call call = homeReverseRouter.showHome(userContext.locale().toLanguageTag());
+        final Call call = homeReverseRouter.homePageCall(userContext.locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

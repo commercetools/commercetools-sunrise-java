@@ -161,7 +161,7 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     @Override
-    public Call showHome(final String languageTag) {
+    public Call homePageCall(final String languageTag) {
         return createCall(showHomeUrl);
     }
 
