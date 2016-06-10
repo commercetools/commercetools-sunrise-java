@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-class CategoryTreeInNewProvider implements Provider<CategoryTree> {
+public class CategoryTreeInNewProvider implements Provider<CategoryTree> {
 
     private static final String CONFIG_CATEGORY_NEW_EXT_ID = "common.newCategoryExternalId";
 

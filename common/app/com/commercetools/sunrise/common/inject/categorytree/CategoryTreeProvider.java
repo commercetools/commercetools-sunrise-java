@@ -8,7 +8,7 @@ import play.Logger;
 
 import javax.inject.Inject;
 
-class CategoryTreeProvider implements Provider<CategoryTree> {
+public class CategoryTreeProvider implements Provider<CategoryTree> {
     private final SphereClient client;
 
     @Inject
