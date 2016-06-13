@@ -10,7 +10,7 @@ import io.sphere.sdk.products.Image;
 import io.sphere.sdk.products.Price;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import javax.money.MonetaryAmount;
 import java.util.Optional;

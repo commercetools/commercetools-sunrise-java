@@ -19,7 +19,7 @@ import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFil
 import com.commercetools.sunrise.productcatalog.hooks.SingleProductProjectionHook;
 import com.commercetools.sunrise.productcatalog.hooks.SingleProductVariantHook;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;

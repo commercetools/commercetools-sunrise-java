@@ -9,6 +9,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
 public class TestableSphereClient implements SphereClient {
+
     private CompletionStage<?> fakeResponse;
 
     private TestableSphereClient(final CompletionStage<?> fakeResponse) {

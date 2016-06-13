@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.common;
 
 import com.google.inject.Inject;
 import com.neovisionaries.i18n.CountryCode;
-import com.commercetools.sunrise.common.actions.NoCache;
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.models.ProductDataConfig;
@@ -21,7 +21,7 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 import com.commercetools.sunrise.shoppingcart.CartLikeBean;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import java.util.List;
 import java.util.Optional;

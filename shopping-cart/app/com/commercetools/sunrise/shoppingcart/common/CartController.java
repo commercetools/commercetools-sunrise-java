@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.common;
 
 import com.google.inject.Inject;
 import com.neovisionaries.i18n.CountryCode;
-import com.commercetools.sunrise.common.actions.NoCache;
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ControllerDependency;
 import com.commercetools.sunrise.common.controllers.SunriseController;

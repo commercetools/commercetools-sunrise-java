@@ -1,6 +1,6 @@
 package productcatalog.productoverview.search.sort.basicauth;
 
-import com.commercetools.sunrise.common.inject.basicauth.BasicAuth;
+import com.commercetools.sunrise.common.basicauth.BasicAuth;
 import org.junit.Test;
 
 import java.util.Base64;

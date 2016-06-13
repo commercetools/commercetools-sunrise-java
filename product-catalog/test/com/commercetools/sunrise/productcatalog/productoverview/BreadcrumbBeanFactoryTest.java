@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
 import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;

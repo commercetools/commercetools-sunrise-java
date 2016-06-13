@@ -8,7 +8,7 @@ import com.commercetools.sunrise.common.models.SelectableProductAttributeBean;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

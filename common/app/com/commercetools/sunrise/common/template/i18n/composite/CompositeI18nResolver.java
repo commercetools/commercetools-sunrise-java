@@ -14,6 +14,7 @@ import java.util.Optional;
  * This class allows to override i18n resolvers.
  */
 public final class CompositeI18nResolver extends Base implements I18nResolver {
+
     private final List<I18nResolver> i18nResolvers;
 
     private CompositeI18nResolver(final List<I18nResolver> i18nResolvers) {

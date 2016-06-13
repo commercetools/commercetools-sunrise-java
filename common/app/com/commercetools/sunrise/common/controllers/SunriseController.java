@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.neovisionaries.i18n.CountryCode;
-import com.commercetools.sunrise.common.actions.NoCache;
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.LocationSelector;

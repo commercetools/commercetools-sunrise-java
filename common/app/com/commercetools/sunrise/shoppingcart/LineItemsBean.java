@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.ProductDataConfig;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -10,7 +10,7 @@ import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import com.commercetools.sunrise.wedecidelatercommon.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 
 import javax.inject.Inject;
 import java.util.HashSet;

@@ -8,7 +8,7 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import java.util.ArrayList;
 import java.util.Collections;

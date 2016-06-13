@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.models.ProductAttributeBean;
 import com.commercetools.sunrise.common.models.ProductAttributeBeanFactoryInjectless;
 import com.commercetools.sunrise.common.models.ProductDataConfig;
 import io.sphere.sdk.carts.LineItem;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import java.util.List;
 

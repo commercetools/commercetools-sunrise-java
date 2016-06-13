@@ -2,9 +2,9 @@ package com.commercetools.sunrise.common.controllers;
 
 import io.sphere.sdk.orders.Order;
 import play.mvc.Call;
-import com.commercetools.sunrise.wedecidelatercommon.CheckoutReverseRouter;
-import com.commercetools.sunrise.wedecidelatercommon.HomeReverseRouter;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import java.util.Locale;
 import java.util.Optional;

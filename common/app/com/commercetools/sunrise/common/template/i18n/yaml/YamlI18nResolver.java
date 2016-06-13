@@ -24,6 +24,7 @@ import static java.util.Objects.requireNonNull;
  * Notice only pluralization forms similar to English are currently supported (1 is singular, the rest are plural).
  */
 public final class YamlI18nResolver extends Base implements I18nResolver {
+
     private final Map<String, Map> yamlMap = new HashMap<>();
 
     private YamlI18nResolver(final String filepath, final List<Locale> locales, final List<String> bundles) {

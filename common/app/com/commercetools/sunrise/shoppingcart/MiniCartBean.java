@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import static com.commercetools.sunrise.common.utils.PriceUtils.calculateTotalPrice;
 

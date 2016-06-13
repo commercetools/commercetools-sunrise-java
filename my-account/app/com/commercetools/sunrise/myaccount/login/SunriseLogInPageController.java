@@ -24,8 +24,8 @@ import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
-import com.commercetools.sunrise.wedecidelatercommon.HomeReverseRouter;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import javax.inject.Inject;
 import java.util.HashSet;

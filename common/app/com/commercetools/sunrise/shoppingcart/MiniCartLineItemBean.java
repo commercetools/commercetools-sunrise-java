@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.models.ProductVariantBeanFactoryInjectle
 import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
-import com.commercetools.sunrise.wedecidelatercommon.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 public class MiniCartLineItemBean extends Base {
 

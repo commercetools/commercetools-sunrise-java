@@ -1,8 +1,9 @@
-package common;
+package com.commercetools.sunrise.common;
 
+import com.commercetools.sunrise.WithSunriseApplication;
 import com.commercetools.sunrise.common.controllers.StatusController;
-import common.controllers.TestableSphereClient;
-import com.commercetools.sunrise.common.inject.ctpclient.CtpClientTestModule;
+import com.commercetools.sunrise.CtpClientTestModule;
+import com.commercetools.sunrise.common.controllers.TestableSphereClient;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;

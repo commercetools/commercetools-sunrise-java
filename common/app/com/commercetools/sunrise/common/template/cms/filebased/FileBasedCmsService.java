@@ -6,7 +6,6 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -23,14 +22,10 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * - {@code bundle} = {@code entryType} (e.g. banner)
  * - {@code messageKey} = {@code entryKey.fieldName} (e.g. homeTopLeft.subtitle.text)
  */
-@Singleton
 public final class FileBasedCmsService implements CmsService {
-    private final I18nResolver i18nResolver;
 
     @Inject
-    private FileBasedCmsService(final I18nResolver i18nResolver) {
-        this.i18nResolver = i18nResolver;
-    }
+    private I18nResolver i18nResolver;
 
     @Override
     public CompletionStage<Optional<String>> get(final List<Locale> locales, final CmsIdentifier cmsIdentifier) {
@@ -45,9 +40,5 @@ public final class FileBasedCmsService implements CmsService {
      */
     private String messageKey(final CmsIdentifier cmsIdentifier) {
         return cmsIdentifier.getEntryKey() + "." + cmsIdentifier.getFieldName();
-    }
-
-    public static FileBasedCmsService of(final I18nResolver i18nResolver) {
-        return new FileBasedCmsService(i18nResolver);
     }
 }
