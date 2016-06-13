@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.models;
 import io.sphere.sdk.models.Base;
 
 public class DetailData extends Base {
+
     private String title;
     private String text;
     private String description;

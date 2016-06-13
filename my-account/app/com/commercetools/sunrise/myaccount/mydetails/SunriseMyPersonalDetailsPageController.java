@@ -2,9 +2,9 @@ package com.commercetools.sunrise.myaccount.mydetails;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
-import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.models.TitleFormFieldBean;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.utils.FormUtils;

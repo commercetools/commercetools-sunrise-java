@@ -3,7 +3,7 @@ package com.commercetools.sunrise;
 import com.google.inject.AbstractModule;
 import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.contexts.ProjectContext;
-import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import io.sphere.sdk.producttypes.MetaProductType;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.queries.ProductTypeQuery;

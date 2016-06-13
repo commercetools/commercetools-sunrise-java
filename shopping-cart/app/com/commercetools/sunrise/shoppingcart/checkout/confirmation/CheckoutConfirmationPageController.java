@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.ControllerDependency;
-import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
-import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ErrorResponseException;
@@ -134,7 +134,7 @@ public class CheckoutConfirmationPageController extends CartController {
     protected Html renderCheckoutConfirmationPage(final Cart cart, final CheckoutConfirmationPageContent pageContent, final UserContext userContext) {
         pageContent.setStepWidget(StepWidgetBean.CONFIRMATION);
         pageContent.setCart(createCartLikeBean(cart, userContext));
-        pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:confirmationPage.title")));
+        pageContent.setTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:confirmationPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateEngine().renderToHtml("checkout-confirmation", pageData, userContext.locales());
     }

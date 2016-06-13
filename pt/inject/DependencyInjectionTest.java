@@ -1,7 +1,7 @@
 package inject;
 
 import com.commercetools.sunrise.WithSunriseApplication;
-import com.commercetools.sunrise.common.inject.RequestScoped;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import org.junit.Test;
 import play.Application;
 import play.Configuration;

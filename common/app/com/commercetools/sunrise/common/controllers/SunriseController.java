@@ -1,16 +1,19 @@
 package com.commercetools.sunrise.common.controllers;
 
-import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
-import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.LocationSelector;
 import com.commercetools.sunrise.common.models.NavMenuData;
+import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.template.cms.CmsService;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
+import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
+import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.play.controllers.ShopController;
@@ -18,7 +21,6 @@ import io.sphere.sdk.play.metrics.MetricAction;
 import play.Configuration;
 import play.mvc.Http;
 import play.mvc.With;
-import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 
 import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;
@@ -83,12 +85,21 @@ public abstract class SunriseController extends ShopController {
 
     protected final SunrisePageData pageData(final UserContext userContext, final PageContent content,
                                              final Http.Context ctx, final Http.Session session) {
-        final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
+        final SunrisePageData pageData = new SunrisePageData();
+        pageData.setHeader(getPageHeader(userContext, content, session));
+        pageData.setContent(content);
+        pageData.setFooter(new PageFooter());
+        pageData.setMeta(getPageMeta(userContext, ctx, session));
+        return pageData;
+    }
+
+    private PageHeader getPageHeader(final UserContext userContext, final PageContent content, final Http.Session session) {
+        final PageHeader pageHeader = new PageHeader(content.getTitle());
         pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
         pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
         pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session));
         pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));
-        return new SunrisePageData(pageHeader, new PageFooter(), content, getPageMeta(userContext, ctx, session));
+        return pageHeader;
     }
 
     private PageMeta getPageMeta(final UserContext userContext, final Http.Context ctx, final Http.Session session) {

@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.ProductAttributeBeanFactory;
-import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.models.ProductVariantBeanFactory;
 import com.commercetools.sunrise.common.models.SelectableProductAttributeBean;
 import io.sphere.sdk.models.Base;

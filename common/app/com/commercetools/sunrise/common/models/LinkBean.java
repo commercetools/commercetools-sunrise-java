@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.models;
 import io.sphere.sdk.models.Base;
 
 public class LinkBean extends Base {
+
     private String text;
     private String url;
     private boolean selected;

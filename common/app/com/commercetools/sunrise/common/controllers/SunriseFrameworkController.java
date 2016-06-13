@@ -1,12 +1,13 @@
 package com.commercetools.sunrise.common.controllers;
 
-import com.google.inject.Injector;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.hooks.Hook;
 import com.commercetools.sunrise.common.hooks.RequestHook;
+import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
+import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.utils.FutureUtils;
 import play.libs.concurrent.HttpExecution;
@@ -40,6 +41,11 @@ public abstract class SunriseFrameworkController extends Controller {
 
     private final List<ControllerComponent> controllerComponents = new LinkedList<>();
 
+    protected SunriseFrameworkController() {
+    }
+
+    public abstract Set<String> getFrameworkTags();
+
     @Inject
     public void setMultiControllerComponents(final MultiControllerComponentResolver multiComponent, final Injector injector) {
         final List<Class<? extends ControllerComponent>> components = multiComponent.findMatchingComponents(this);
@@ -49,15 +55,9 @@ public abstract class SunriseFrameworkController extends Controller {
         });
     }
 
-    protected SunriseFrameworkController() {
+    protected final void registerControllerComponent(final ControllerComponent controllerComponent) {
+        controllerComponents.add(controllerComponent);
     }
-
-    protected final CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> objectResultFunction) {
-        return runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()))
-                .thenComposeAsync(unused -> objectResultFunction.get(), HttpExecution.defaultContext());
-    }
-
-    public abstract Set<String> getFrameworkTags();
 
     public SphereClient sphere() {
         return sphere;
@@ -71,18 +71,23 @@ public abstract class SunriseFrameworkController extends Controller {
         return templateEngine;
     }
 
-    protected final SunrisePageData pageData(final PageContent content) {
-        final PageHeader pageHeader = new PageHeader(content.getAdditionalTitle());
-        return new SunrisePageData(pageHeader, new PageFooter(), content, pageMetaFactory.create());
-    }
-
     @Nullable
     public static String getCsrfToken(final Http.Session session) {
         return session.get("csrfToken");
     }
 
-    protected final void registerControllerComponent(final ControllerComponent controllerComponent) {
-        controllerComponents.add(controllerComponent);
+    protected final SunrisePageData pageData(final PageContent content) {
+        final SunrisePageData pageData = new SunrisePageData();
+        pageData.setHeader(new PageHeader(content.getTitle()));
+        pageData.setContent(content);
+        pageData.setFooter(new PageFooter());
+        pageData.setMeta(pageMetaFactory.create());
+        return pageData;
+    }
+
+    protected final CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> objectResultFunction) {
+        return runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()))
+                .thenComposeAsync(unused -> objectResultFunction.get(), HttpExecution.defaultContext());
     }
 
     protected final <T extends Hook> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer) {

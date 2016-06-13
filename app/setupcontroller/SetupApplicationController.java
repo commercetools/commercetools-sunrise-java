@@ -1,7 +1,7 @@
 package setupcontroller;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.inject.RequestScoped;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import play.data.FormFactory;
 import play.inject.Injector;
 import play.mvc.Controller;

@@ -1,12 +1,14 @@
 package com.commercetools.sunrise.common.contexts;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.sphere.sdk.models.Base;
 
 import javax.money.CurrencyUnit;
 import java.util.List;
 import java.util.Locale;
 
-public class ProjectContext {
+public class ProjectContext extends Base {
+
     private final List<Locale> locales;
     private final List<CountryCode> countryCodes;
     private final List<CurrencyUnit> currencies;

@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.models.ProductAttributeBeanFactoryInjectless;
-import com.commercetools.sunrise.common.models.ProductDataConfig;
-import com.commercetools.sunrise.common.models.ProductVariantBeanFactoryInjectless;
+import com.commercetools.sunrise.common.tobedeleted.ProductAttributeBeanFactoryInjectless;
+import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.tobedeleted.ProductVariantBeanFactoryInjectless;
 import com.commercetools.sunrise.common.models.SelectableProductAttributeBean;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;

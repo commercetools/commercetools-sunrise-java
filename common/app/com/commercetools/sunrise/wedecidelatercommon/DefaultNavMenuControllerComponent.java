@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.wedecidelatercommon;
 
-import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.models.NavMenuDataFactory;
 import com.commercetools.sunrise.framework.ControllerComponent;

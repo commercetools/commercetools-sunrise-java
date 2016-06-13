@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
-import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
-import com.commercetools.sunrise.common.inject.RequestScoped;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;

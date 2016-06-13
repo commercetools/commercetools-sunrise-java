@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.basicauth;
 
-import com.commercetools.sunrise.common.inject.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;
 
@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-class BasicAuthProvider implements Provider<BasicAuth> {
+public final class BasicAuthProvider implements Provider<BasicAuth> {
 
     public static final String CONFIG_REALM = "application.auth.realm";
     public static final String CONFIG_CREDENTIALS = "application.auth.credentials";

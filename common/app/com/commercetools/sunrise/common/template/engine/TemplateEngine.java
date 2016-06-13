@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.template.engine;
 
-import com.commercetools.sunrise.common.controllers.PageData;
+import com.commercetools.sunrise.common.pages.PageData;
 import play.twirl.api.Html;
 
 import java.util.List;

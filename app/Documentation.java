@@ -3,7 +3,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.hooks.Hook;
 import com.commercetools.sunrise.common.hooks.RequestHook;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
-import com.commercetools.sunrise.common.inject.RequestScope;
+import com.commercetools.sunrise.common.contexts.RequestScope;
 
 /**
  * <p>Sunrise Framework provides overridable controllers, a plugin architecture and default components to speed up the web shop development.</p>

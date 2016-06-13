@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.categorytree;
 
-import com.commercetools.sunrise.common.inject.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseInitializationException;
 import com.google.inject.Provider;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;

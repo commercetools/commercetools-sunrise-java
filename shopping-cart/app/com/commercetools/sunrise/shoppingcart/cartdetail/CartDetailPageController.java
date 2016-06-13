@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.shoppingcart.cartdetail;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.ControllerDependency;
-import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
-import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -218,7 +218,7 @@ public class CartDetailPageController extends CartController {
 
     protected Html renderCartPage(final Cart cart, final CartDetailPageContent pageContent, final UserContext userContext) {
         pageContent.setCart(createCartLikeBean(cart, userContext));
-        pageContent.setAdditionalTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
+        pageContent.setTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
         final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
         return templateEngine().renderToHtml("cart", pageData, userContext.locales());
     }

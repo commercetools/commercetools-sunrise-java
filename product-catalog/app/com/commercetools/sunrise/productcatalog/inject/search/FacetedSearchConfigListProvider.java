@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.inject.search;
 
-import com.commercetools.sunrise.common.inject.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseInitializationException;
 import io.sphere.sdk.facets.*;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.model.FacetedSearchSearchModel;

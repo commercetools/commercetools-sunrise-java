@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.template.i18n;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
-import com.commercetools.sunrise.common.inject.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseInitializationException;
 import com.commercetools.sunrise.common.template.i18n.composite.CompositeI18nResolver;
 import com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver;
 import com.google.inject.Provider;

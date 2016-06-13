@@ -1,9 +1,8 @@
-# Routes
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
 # Untrail url
-GET         /*path/                                            @com.commercetools.sunrise.common.controllers.ApplicationController.untrail(path: String)
+GET         /*path/                                            @demo.ApplicationController.untrail(path: String)
 
 # Main entry point that decides whether to go to home page or to setup wizard
 GET         /                                                  @demo.HomePageController.index()
@@ -15,9 +14,9 @@ GET         /                                                  @demo.HomePageCon
 # ~~~~~
 
 # Shows the deployed version, artifactId and GIT SHA
-GET         /version                                           @com.commercetools.sunrise.common.controllers.StatusController.version()
+GET         /version                                           @com.commercetools.sunrise.common.controllers.SunriseStatusController.version()
 # Shows if the application is healthy
-GET         /health                                            @com.commercetools.sunrise.common.controllers.StatusController.health()
+GET         /health                                            @com.commercetools.sunrise.common.controllers.SunriseStatusController.health()
 
 # Endpoint to manually refresh category tree (otherwise an app restart is required)
 GET         /categories/refresh                                @com.commercetools.sunrise.common.categorytree.CategoriesRefreshController.refresh()
@@ -45,9 +44,9 @@ GET         /:languageTag/home                                 @demo.HomePageCon
 # ~~~~~
 
 # Changes the language of the app
-POST        /changeLanguage                                    @com.commercetools.sunrise.common.controllers.ApplicationController.changeLanguage()
+POST        /changeLanguage                                    @demo.LocalizationController.changeLanguage()
 # Changes the country of the app
-POST        /:languageTag/changeCountry                        @com.commercetools.sunrise.common.controllers.ApplicationController.changeCountry(languageTag: String)
+POST        /:languageTag/changeCountry                        @demo.LocalizationController.changeCountry(languageTag: String)
 
 
 # CART

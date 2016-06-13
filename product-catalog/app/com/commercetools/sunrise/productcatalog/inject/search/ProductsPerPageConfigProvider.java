@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.inject.search;
 
-import com.commercetools.sunrise.common.inject.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;

@@ -2,8 +2,8 @@ package com.commercetools.sunrise.myaccount.myorders;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.controllers.SunrisePageData;
-import com.commercetools.sunrise.common.models.ProductDataConfig;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
+import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderQuery;

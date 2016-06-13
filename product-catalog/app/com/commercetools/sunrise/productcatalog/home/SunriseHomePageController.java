@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.productcatalog.home;
 
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.RequestHook;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
-import com.commercetools.sunrise.common.inject.RequestScoped;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
@@ -54,7 +54,7 @@ public abstract class SunriseHomePageController extends SunriseFrameworkControll
     }
 
     protected Html renderHomePage(final HomePageContent pageContent) {
-        pageContent.setAdditionalTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of("catalog:home.title")));
+        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of("catalog:home.title")));
         final SunrisePageData pageData = pageData(pageContent);
         runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
         return templateEngine().renderToHtml("home", pageData, userContext().locales());

@@ -14,6 +14,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 public class NavMenuData extends Base {
+
     private List<CategoryBean> categories;
 
     public NavMenuData() {

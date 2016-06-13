@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.ProductVariantBean;
-import com.commercetools.sunrise.common.models.ProductVariantBeanFactoryInjectless;
+import com.commercetools.sunrise.common.tobedeleted.ProductVariantBeanFactoryInjectless;
 import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;

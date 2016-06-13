@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.login;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.SunrisePageData;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.client.ErrorResponseException;

@@ -5,7 +5,7 @@ import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
 import com.github.jknack.handlebars.io.TemplateLoader;
-import com.commercetools.sunrise.common.controllers.PageData;
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.cms.CmsService;
 import com.commercetools.sunrise.common.template.engine.TemplateNotFoundException;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderException;

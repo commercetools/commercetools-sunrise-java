@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.common;
 
-import com.commercetools.sunrise.common.controllers.PageContent;
+import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.shoppingcart.CartLikeBean;
 
 public abstract class CheckoutPageContent extends PageContent {

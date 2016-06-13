@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class ModelBean extends Base {
+
     private final Map<String, Object> dynamic = new HashMap<>();
 
     public ModelBean() {

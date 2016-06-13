@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.neovisionaries.i18n.CountryCode;
-import com.commercetools.sunrise.common.contexts.SunriseDataBeanFactory;
+import com.commercetools.sunrise.common.models.SunriseDataBeanFactory;
 import io.sphere.sdk.models.Address;
 
 import javax.annotation.Nullable;

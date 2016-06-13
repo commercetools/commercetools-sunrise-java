@@ -35,7 +35,7 @@ public class ProductDetailPageContentFactory extends Base {
     }
 
     protected void fillAdditionalTitle(final ProductProjection product, final ProductDetailPageContent content) {
-        content.setAdditionalTitle(getAdditionalTitle(product));
+        content.setTitle(getAdditionalTitle(product));
     }
 
     protected void fillBreadCrumb(final ProductProjection product, final ProductVariant variant, final ProductDetailPageContent content) {

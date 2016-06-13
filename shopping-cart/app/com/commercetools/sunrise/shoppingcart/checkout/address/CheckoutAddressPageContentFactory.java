@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
-import com.commercetools.sunrise.common.contexts.SunriseDataBeanFactory;
+import com.commercetools.sunrise.common.models.SunriseDataBeanFactory;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import io.sphere.sdk.carts.Cart;
@@ -38,6 +38,6 @@ public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
     }
 
     private void setCommonData(final CheckoutAddressPageContent pageContent) {
-        pageContent.setAdditionalTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
+        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
     }
 }

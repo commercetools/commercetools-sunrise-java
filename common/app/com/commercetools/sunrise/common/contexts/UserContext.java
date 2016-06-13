@@ -16,6 +16,7 @@ import java.util.Optional;
  * A container for all information related to the current user, such as selected country, language or customer group.
  */
 public class UserContext extends Base {
+
     private final List<Locale> locales;
     private final CountryCode country;
     private final CurrencyUnit currency;
@@ -30,7 +31,7 @@ public class UserContext extends Base {
         this.customerGroup = Optional.ofNullable(customerGroup);
         this.channel = Optional.ofNullable(channel);
         if (locales.isEmpty() || locales.get(0) == null) {
-            throw new IllegalArgumentException("Locales must contain at least one valid locale");
+            throw new IllegalArgumentException("Locales must contain at least one valid locale.");
         }
     }
 
@@ -39,7 +40,7 @@ public class UserContext extends Base {
     }
 
     public Locale locale() {
-        return locales.stream().findFirst().orElseThrow(NoLocaleFoundException::new);
+        return locales.stream().findFirst().orElseThrow(() -> new NoLocaleFoundException("At least one valid locale should be applicable to the user."));
     }
 
     public List<Locale> locales() {

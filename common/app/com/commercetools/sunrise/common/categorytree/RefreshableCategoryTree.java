@@ -20,7 +20,7 @@ import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
 import static java.util.stream.Collectors.toList;
 
 public final class RefreshableCategoryTree extends Base implements CategoryTree {
-
+    
     private CategoryTree categoryTree;
     private SphereClient sphereClient;
 
@@ -100,7 +100,7 @@ public final class RefreshableCategoryTree extends Base implements CategoryTree 
 
     private static List<Category> sortCategories(final List<Category> categories) {
         return categories.stream()
-                .sorted((c1, c2) -> ObjectUtils.compare(c1.getOrderHint(), c2.getOrderHint()))
+                .sorted(new ByOrderHintCategoryComparator())
                 .collect(toList());
     }
 }

@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.common.controllers;
 
+import com.commercetools.sunrise.common.categorytree.ByNameCategoryComparator;
 import io.sphere.sdk.categories.Category;
 import org.junit.Test;
 

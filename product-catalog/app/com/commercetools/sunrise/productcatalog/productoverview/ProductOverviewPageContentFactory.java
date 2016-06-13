@@ -33,7 +33,7 @@ public class ProductOverviewPageContentFactory {
         content.setFilterProductsUrl(requestContext.getPath());
         if (category != null) {
             content.setBreadcrumb(breadcrumbBeanFactory.create(category));
-            content.setAdditionalTitle(category.getName().find(userContext.locales()).orElse(""));
+            content.setTitle(category.getName().find(userContext.locales()).orElse(""));
             content.setJumbotron(createJumbotron(category));
             content.setBanner(createBanner(category));
             content.setSeo(createSeo(category));

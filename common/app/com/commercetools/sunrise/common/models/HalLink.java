@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.common.models;
 
 public class HalLink {
+
     private String href;
 
     public HalLink() {
