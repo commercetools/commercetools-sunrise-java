@@ -10,7 +10,7 @@ import com.commercetools.sunrise.productcatalog.productoverview.search.sort.Sort
 
 import javax.inject.Singleton;
 
-public class SearchProductionModule extends AbstractModule {
+public class SearchModule extends AbstractModule {
 
     @Override
     protected void configure() {

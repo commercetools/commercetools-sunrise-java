@@ -6,7 +6,7 @@ import io.sphere.sdk.categories.CategoryTree;
 
 import javax.inject.Singleton;
 
-public class CategoryTreeProductionModule extends AbstractModule {
+public class CategoryTreeModule extends AbstractModule {
 
     @Override
     protected void configure() {
