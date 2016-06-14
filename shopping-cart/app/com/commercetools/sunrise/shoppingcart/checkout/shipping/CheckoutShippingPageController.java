@@ -83,7 +83,7 @@ public class CheckoutShippingPageController extends CartController {
     }
 
     protected CompletionStage<Result> handleSuccessfulSetShipping(final UserContext userContext) {
-        final Call call = reverseRouter().showCheckoutPaymentForm(userContext.locale().toLanguageTag());
+        final Call call = checkoutReverseRouter.checkoutPaymentPageCall(userContext.locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

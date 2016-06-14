@@ -1,11 +1,13 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
-import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
+import com.commercetools.sunrise.shoppingcart.common.CartController;
+import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.orders.Order;
@@ -22,19 +24,17 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import com.commercetools.sunrise.shoppingcart.common.CartController;
-import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.common.utils.FormUtils.extractBooleanFormField;
+import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.removeCartSessionData;
+import static com.commercetools.sunrise.shoppingcart.OrderSessionUtils.overwriteLastOrderIdSessionData;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.concurrent.CompletableFuture.completedFuture;
-import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.removeCartSessionData;
-import static com.commercetools.sunrise.shoppingcart.OrderSessionUtils.overwriteLastOrderIdSessionData;
 
 @Singleton
 public class CheckoutConfirmationPageController extends CartController {
@@ -91,7 +91,7 @@ public class CheckoutConfirmationPageController extends CartController {
     }
 
     protected CompletionStage<Result> handleSuccessfulCreateOrder(final UserContext userContext) {
-        final Call call = reverseRouter().showCheckoutThankYou(userContext.locale().toLanguageTag());
+        final Call call = checkoutReverseRouter.checkoutThankYouPageCall(userContext.locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

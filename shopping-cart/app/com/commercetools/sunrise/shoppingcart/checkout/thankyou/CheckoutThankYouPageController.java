@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
@@ -23,6 +24,9 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
 public class CheckoutThankYouPageController extends CartController {
+
+    @Inject
+    private HomeReverseRouter homeReverseRouter;
 
     @Inject
     public CheckoutThankYouPageController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
@@ -53,7 +57,7 @@ public class CheckoutThankYouPageController extends CartController {
     }
 
     protected CompletionStage<Result> handleNotFoundOrder(final UserContext userContext) {
-        final Call call = reverseRouter().homePageCall(userContext.locale().toLanguageTag());
+        final Call call = homeReverseRouter.homePageCall(userContext.locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

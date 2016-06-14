@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.pages.PageMeta;
-import com.commercetools.sunrise.common.pages.PageMetaFactory;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.mvc.Http;
 
@@ -21,6 +21,10 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private Http.Context httpContext;
     @Inject
     private ReverseRouter reverseRouter;
+    @Inject
+    private HomeReverseRouter homeReverseRouter;
+    @Inject
+    private CheckoutReverseRouter checkoutReverseRouter;
 
     @Override
     public PageMeta create() {
@@ -34,7 +38,7 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
-        pageMeta.addHalLink(reverseRouter.homePageCall(language), "home", "continueShopping")
+        pageMeta.addHalLink(homeReverseRouter.homePageCall(language), "home", "continueShopping")
                 .addHalLink(reverseRouter.processSearchProductsForm(language), "search")
                 .addHalLink(reverseRouter.processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter.processChangeCountryForm(language), "selectCountry")
@@ -44,13 +48,13 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processChangeLineItemQuantityForm(language), "changeLineItem")
                 .addHalLink(reverseRouter.processDeleteLineItemForm(language), "deleteLineItem")
 
-                .addHalLink(reverseRouter.showCheckoutAddressesForm(language), "checkout", "editShippingAddress", "editBillingAddress")
-                .addHalLink(reverseRouter.processCheckoutAddressesForm(language), "checkoutAddressSubmit")
-                .addHalLink(reverseRouter.showCheckoutShippingForm(language), "editShippingMethod")
-                .addHalLink(reverseRouter.processCheckoutShippingForm(language), "checkoutShippingSubmit")
-                .addHalLink(reverseRouter.showCheckoutPaymentForm(language), "editPaymentInfo")
-                .addHalLink(reverseRouter.processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
-                .addHalLink(reverseRouter.processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
+                .addHalLink(checkoutReverseRouter.checkoutAddressesPageCall(language), "checkout", "editShippingAddress", "editBillingAddress")
+                .addHalLink(checkoutReverseRouter.checkoutAddressesProcessFormCall(language), "checkoutAddressSubmit")
+                .addHalLink(checkoutReverseRouter.checkoutShippingPageCall(language), "editShippingMethod")
+                .addHalLink(checkoutReverseRouter.checkoutShippingProcessFormCall(language), "checkoutShippingSubmit")
+                .addHalLink(checkoutReverseRouter.checkoutPaymentPageCall(language), "editPaymentInfo")
+                .addHalLink(checkoutReverseRouter.checkoutPaymentProcessFormCall(language), "checkoutPaymentSubmit")
+                .addHalLink(checkoutReverseRouter.checkoutConfirmationProcessFormCall(language), "checkoutConfirmationSubmit")
 
                 .addHalLink(reverseRouter.showLogInForm(language), "signIn", "logIn", "signUp")
                 .addHalLink(reverseRouter.processLogInForm(language), "logInSubmit")

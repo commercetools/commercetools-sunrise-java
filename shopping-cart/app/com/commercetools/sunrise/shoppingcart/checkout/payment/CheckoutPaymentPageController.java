@@ -155,7 +155,7 @@ public class CheckoutPaymentPageController extends CartController {
     }
 
     protected CompletionStage<Result> handleSuccessfulSetPayment(final UserContext userContext) {
-        final Call call = reverseRouter().showCheckoutConfirmationForm(userContext.locale().toLanguageTag());
+        final Call call = checkoutReverseRouter.checkoutConfirmationPageCall(userContext.locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

@@ -1,12 +1,16 @@
 package com.commercetools.sunrise.shoppingcart.common;
 
-import com.google.inject.Inject;
-import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
 import com.commercetools.sunrise.common.controllers.SunriseController;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
+import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.shoppingcart.CartLikeBean;
+import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
+import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.*;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -17,12 +21,10 @@ import io.sphere.sdk.carts.queries.CartQueryBuilder;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
-import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
-import com.commercetools.sunrise.shoppingcart.CartLikeBean;
-import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
@@ -35,6 +37,11 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public abstract class CartController extends SunriseController {
 
     protected final ProductDataConfig productDataConfig;
+    @Inject
+    protected ProductReverseRouter productReverseRouter;
+    @Inject
+    protected CheckoutReverseRouter checkoutReverseRouter;
+
 
     @Inject
     public CartController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig) {
@@ -43,14 +50,14 @@ public abstract class CartController extends SunriseController {
     }
 
     protected CartLikeBean createCartLikeBean(final CartLike<?> cartLike, final UserContext userContext) {
-        return new CartLikeBean(cartLike, userContext, productDataConfig, reverseRouter());
+        return new CartLikeBean(cartLike, userContext, productDataConfig, productReverseRouter);
     }
 
     protected CompletionStage<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
         final CompletionStage<Cart> cartFuture = fetchCart(userContext, session)
                 .thenComposeAsync(cart -> updateCartWithUserPreferences(cart, userContext), HttpExecution.defaultContext());
         cartFuture.thenAcceptAsync(cart ->
-                CartSessionUtils.overwriteCartSessionData(cart, session, userContext, reverseRouter()), HttpExecution.defaultContext());
+                CartSessionUtils.overwriteCartSessionData(cart, session, userContext, productReverseRouter), HttpExecution.defaultContext());
         return cartFuture;
     }
 

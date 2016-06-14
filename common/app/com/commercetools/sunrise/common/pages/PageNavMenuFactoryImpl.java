@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import io.sphere.sdk.categories.CategoryTree;
 import play.Configuration;
 
@@ -9,13 +9,13 @@ import javax.inject.Inject;
 
 public class PageNavMenuFactoryImpl implements PageNavMenuFactory {
 
+    private String saleCategoryExtId;
     @Inject
     private CategoryTree categoryTree;
     @Inject
     private UserContext userContext;
     @Inject
-    private ReverseRouter reverseRouter;
-    private String saleCategoryExtId;
+    private ProductReverseRouter productReverseRouter;
 
     @Inject
     public void initializeFields(Configuration configuration) {
@@ -24,6 +24,6 @@ public class PageNavMenuFactoryImpl implements PageNavMenuFactory {
 
     @Override
     public PageNavMenu create() {
-        return new PageNavMenu(categoryTree, userContext, reverseRouter, saleCategoryExtId);
+        return new PageNavMenu(categoryTree, userContext, productReverseRouter, saleCategoryExtId);
     }
 }

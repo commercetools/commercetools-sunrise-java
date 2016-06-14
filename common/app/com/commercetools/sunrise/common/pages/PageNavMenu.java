@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.models.CategoryBean;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
@@ -21,11 +21,11 @@ public class PageNavMenu extends Base {
     public PageNavMenu() {
     }
 
-    public PageNavMenu(final CategoryTree categoryTree, final UserContext userContext, final ReverseRouter reverseRouter,
+    public PageNavMenu(final CategoryTree categoryTree, final UserContext userContext, final ProductReverseRouter productReverseRouter,
                        @Nullable final String saleCategoryExtId) {
         this.categories = new ArrayList<>();
         categoryTree.getRoots().forEach(root -> {
-            final CategoryBean categoryData = createCategoryData(root, categoryTree, userContext, reverseRouter, saleCategoryExtId);
+            final CategoryBean categoryData = createCategoryData(root, categoryTree, userContext, productReverseRouter, saleCategoryExtId);
             this.categories.add(categoryData);
         });
     }
@@ -39,16 +39,16 @@ public class PageNavMenu extends Base {
     }
 
     private static CategoryBean createCategoryData(final Category category, final CategoryTree categoryTree,
-                                                   final UserContext userContext, final ReverseRouter reverseRouter,
+                                                   final UserContext userContext, final ProductReverseRouter productReverseRouter,
                                                    @Nullable final String saleCategoryExtId) {
         final CategoryBean categoryData = new CategoryBean();
         categoryData.setText(category.getName().find(userContext.locales()).orElse(""));
-        categoryData.setUrl(reverseRouter.productOverviewPageUrlOrEmpty(userContext.locale(), category));
+        categoryData.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(userContext.locale(), category));
         categoryData.setSale(Optional.ofNullable(category.getExternalId())
                 .map(id -> id.equals(saleCategoryExtId))
                 .orElse(false));
         categoryData.setChildren(categoryTree.findChildren(category).stream()
-                .map(child -> createCategoryData(child, categoryTree, userContext, reverseRouter, saleCategoryExtId))
+                .map(child -> createCategoryData(child, categoryTree, userContext, productReverseRouter, saleCategoryExtId))
                 .collect(toList()));
         return categoryData;
     }

@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderQuery;
@@ -35,6 +36,8 @@ public abstract class SunriseMyOrdersPageController extends MyAccountController 
     protected ReverseRouter reverseRouter;
     @Inject
     protected I18nResolver i18nResolver;
+    @Inject
+    protected ProductReverseRouter productReverseRouter;
 
     public CompletionStage<Result> list(final String languageTag, final int page) {
         return getCustomerOrders(page)
@@ -93,7 +96,7 @@ public abstract class SunriseMyOrdersPageController extends MyAccountController 
 
     protected MyOrderPageContent createMyOrderPage(final Order order, final UserContext userContext) {
         final MyOrderPageContent pageContent = new MyOrderPageContent();
-        pageContent.setOrder(new CartLikeBean(order, userContext, productDataConfig, reverseRouter));
+        pageContent.setOrder(new CartLikeBean(order, userContext, productDataConfig, productReverseRouter));
         return pageContent;
     }
 

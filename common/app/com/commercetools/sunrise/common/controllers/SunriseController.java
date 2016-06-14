@@ -8,11 +8,13 @@ import com.commercetools.sunrise.common.localization.LocalizationSelectorBean;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.commercetools.sunrise.common.pages.PageNavMenu;
 import com.commercetools.sunrise.common.pages.*;
+import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.template.cms.CmsService;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
-import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import com.neovisionaries.i18n.CountryCode;
@@ -25,6 +27,7 @@ import play.mvc.Http;
 import play.mvc.With;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.util.ArrayList;
@@ -48,6 +51,13 @@ public abstract class SunriseController extends ShopController {
     private final Optional<String> saleCategoryExtId;
     private final Optional<String> categoryNewExtId;
     private final boolean showInfoModal;
+
+    @Inject
+    private HomeReverseRouter homeReverseRouter;
+    @Inject
+    private ProductReverseRouter productReverseRouter;
+    @Inject
+    private CheckoutReverseRouter checkoutReverseRouter;
 
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
@@ -99,7 +109,7 @@ public abstract class SunriseController extends ShopController {
     private PageHeader getPageHeader(final UserContext userContext, final PageContent content, final Http.Session session) {
         final PageHeader pageHeader = new PageHeader(content.getTitle());
         pageHeader.setLocation(createLocalizationSelector(userContext, projectContext()));
-        pageHeader.setNavMenu(new PageNavMenu(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
+        pageHeader.setNavMenu(new PageNavMenu(categoryTree(), userContext, productReverseRouter, saleCategoryExtId.orElse(null)));
         pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session));
         pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));
         return pageHeader;
@@ -112,7 +122,7 @@ public abstract class SunriseController extends ShopController {
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(SunriseController.getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
-        pageMeta.addHalLink(reverseRouter().homePageCall(language), "home", "continueShopping")
+        pageMeta.addHalLink(homeReverseRouter.homePageCall(language), "home", "continueShopping")
                 .addHalLink(reverseRouter().processSearchProductsForm(language), "search")
                 .addHalLink(reverseRouter().processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter().processChangeCountryForm(language), "selectCountry")
@@ -122,13 +132,13 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().processChangeLineItemQuantityForm(language), "changeLineItem")
                 .addHalLink(reverseRouter().processDeleteLineItemForm(language), "deleteLineItem")
 
-                .addHalLink(reverseRouter().showCheckoutAddressesForm(language), "checkout", "editShippingAddress", "editBillingAddress")
-                .addHalLink(reverseRouter().processCheckoutAddressesForm(language), "checkoutAddressSubmit")
-                .addHalLink(reverseRouter().showCheckoutShippingForm(language), "editShippingMethod")
-                .addHalLink(reverseRouter().processCheckoutShippingForm(language), "checkoutShippingSubmit")
-                .addHalLink(reverseRouter().showCheckoutPaymentForm(language), "editPaymentInfo")
-                .addHalLink(reverseRouter().processCheckoutPaymentForm(language), "checkoutPaymentSubmit")
-                .addHalLink(reverseRouter().processCheckoutConfirmationForm(language), "checkoutConfirmationSubmit")
+                .addHalLink(checkoutReverseRouter.checkoutAddressesPageCall(language), "checkout", "editShippingAddress", "editBillingAddress")
+                .addHalLink(checkoutReverseRouter.checkoutAddressesProcessFormCall(language), "checkoutAddressSubmit")
+                .addHalLink(checkoutReverseRouter.checkoutShippingPageCall(language), "editShippingMethod")
+                .addHalLink(checkoutReverseRouter.checkoutShippingProcessFormCall(language), "checkoutShippingSubmit")
+                .addHalLink(checkoutReverseRouter.checkoutPaymentPageCall(language), "editPaymentInfo")
+                .addHalLink(checkoutReverseRouter.checkoutPaymentProcessFormCall(language), "checkoutPaymentSubmit")
+                .addHalLink(checkoutReverseRouter.checkoutConfirmationProcessFormCall(language), "checkoutConfirmationSubmit")
 
                 .addHalLink(reverseRouter().showLogInForm(language), "signIn", "logIn", "signUp")
                 .addHalLink(reverseRouter().processLogInForm(language), "logInSubmit")
@@ -138,7 +148,7 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().processMyPersonalDetailsForm(language), "editMyPersonalDetails")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
-        newCategory().flatMap(nc -> reverseRouter().productOverviewPageCall(userContext.locale(), nc))
+        newCategory().flatMap(nc -> productReverseRouter.productOverviewPageCall(userContext.locale(), nc))
                 .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
         pageMeta.setShowInfoModal(showInfoModal);
         return pageMeta;

@@ -2,14 +2,11 @@ package com.commercetools.sunrise.common.controllers;
 
 import io.sphere.sdk.orders.Order;
 import play.mvc.Call;
-import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import java.util.Locale;
 import java.util.Optional;
 
-public interface ReverseRouter extends ProductReverseRouter, CheckoutReverseRouter, HomeReverseRouter {
+public interface ReverseRouter {
 
     Call themeAssets(final String file);
 
@@ -17,16 +14,7 @@ public interface ReverseRouter extends ProductReverseRouter, CheckoutReverseRout
 
     Call processChangeCountryForm(final String languageTag);
 
-    @Override
-    Call homePageCall(final String languageTag);
-
-    @Override
-    Call productOverviewPageCall(final String languageTag, final String categorySlug);
-
     Call processSearchProductsForm(final String languageTag);
-
-    @Override
-    Call productDetailPageCall(final String languageTag, final String productSlug, final String sku);
 
     Call showCart(final String languageTag);
 
@@ -35,25 +23,6 @@ public interface ReverseRouter extends ProductReverseRouter, CheckoutReverseRout
     Call processDeleteLineItemForm(final String languageTag);
 
     Call processChangeLineItemQuantityForm(final String languageTag);
-
-    Call showCheckoutAddressesForm(final String languageTag);
-
-    Call processCheckoutAddressesForm(final String languageTag);
-
-    @Override
-    Call showCheckoutShippingForm(final String languageTag);
-
-    Call processCheckoutShippingForm(final String languageTag);
-
-    Call showCheckoutPaymentForm(final String languageTag);
-
-    Call processCheckoutPaymentForm(final String languageTag);
-
-    Call showCheckoutConfirmationForm(final String languageTag);
-
-    Call processCheckoutConfirmationForm(final String languageTag);
-
-    Call showCheckoutThankYou(final String languageTag);
 
     Call showLogInForm(final String languageTag);
 

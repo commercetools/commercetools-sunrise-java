@@ -1,6 +1,9 @@
 package reverserouter;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import setupwidget.controllers.SetupReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
@@ -13,7 +16,7 @@ import static com.commercetools.sunrise.shoppingcart.checkout.shipping.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.thankyou.routes.*;
 import static setupwidget.controllers.routes.*;
 
-public class ReverseRouterImpl extends Base implements ReverseRouter, SetupReverseRouter {
+public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, SetupReverseRouter {
 
     public ReverseRouterImpl() {
     }
@@ -74,47 +77,47 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, SetupRever
     }
 
     @Override
-    public Call showCheckoutAddressesForm(final String languageTag) {
+    public Call checkoutAddressesPageCall(final String languageTag) {
         return CheckoutAddressPageController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutAddressesForm(final String languageTag) {
+    public Call checkoutAddressesProcessFormCall(final String languageTag) {
         return CheckoutAddressPageController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutShippingForm(final String languageTag) {
+    public Call checkoutShippingPageCall(final String languageTag) {
         return CheckoutShippingPageController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutShippingForm(final String languageTag) {
+    public Call checkoutShippingProcessFormCall(final String languageTag) {
         return CheckoutShippingPageController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutPaymentForm(final String languageTag) {
+    public Call checkoutPaymentPageCall(final String languageTag) {
         return CheckoutPaymentPageController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutPaymentForm(final String languageTag) {
+    public Call checkoutPaymentProcessFormCall(final String languageTag) {
         return CheckoutPaymentPageController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutConfirmationForm(final String languageTag) {
+    public Call checkoutConfirmationPageCall(final String languageTag) {
         return CheckoutConfirmationPageController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutConfirmationForm(final String languageTag) {
+    public Call checkoutConfirmationProcessFormCall(final String languageTag) {
         return CheckoutConfirmationPageController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutThankYou(final String languageTag) {
+    public Call checkoutThankYouPageCall(final String languageTag) {
         return CheckoutThankYouPageController.show(languageTag);
     }
 

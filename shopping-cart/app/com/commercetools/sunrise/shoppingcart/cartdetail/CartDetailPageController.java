@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.cartdetail;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
@@ -40,6 +41,9 @@ public class CartDetailPageController extends CartController {
     protected final Form<AddProductToCartFormData> addProductToCartForm;
     protected final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityUnboundForm;
     protected final Form<RemoveLineItemFormData> removeLineItemUnboundForm;
+
+    @Inject
+    private ProductReverseRouter productReverseRouter;
 
     @Inject
     public CartDetailPageController(final ControllerDependency controllerDependency, final ProductDataConfig productDataConfig,
@@ -130,7 +134,7 @@ public class CartDetailPageController extends CartController {
     }
 
     protected CompletionStage<Result> handleSuccessfulCartChange(final Cart cart, final UserContext userContext) {
-        overwriteCartSessionData(cart, session(), userContext, reverseRouter());
+        overwriteCartSessionData(cart, session(), userContext, productReverseRouter);
         return completedFuture(redirect(reverseRouter().showCart(userContext.locale().toLanguageTag())));
     }
 
