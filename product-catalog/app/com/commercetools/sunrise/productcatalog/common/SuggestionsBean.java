@@ -4,13 +4,14 @@ import io.sphere.sdk.models.Base;
 
 import java.util.List;
 
-public class SuggestionsData extends Base {
+public class SuggestionsBean extends Base {
+
     private List<ProductThumbnailBean> list;
 
-    public SuggestionsData() {
+    public SuggestionsBean() {
     }
 
-    public SuggestionsData(final ProductListBean productListData) {
+    public SuggestionsBean(final ProductListBean productListData) {
         this.list = productListData.getList();
     }
 

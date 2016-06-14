@@ -1,12 +1,10 @@
-package com.commercetools.sunrise.productcatalog.inject.search;
+package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
 import com.commercetools.sunrise.common.SunriseInitializationException;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.SortExpression;
 import play.Configuration;
 import play.Logger;
-import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfig;
-import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortOption;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -16,7 +14,7 @@ import java.util.Optional;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-class SortConfigProvider implements Provider<SortConfig> {
+public final class SortConfigProvider implements Provider<SortConfig> {
 
     private static final String CONFIG_KEY = "pop.sortProducts.key";
     private static final String CONFIG_OPTIONS = "pop.sortProducts.options";

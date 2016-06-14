@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.productcatalog.inject.search;
+package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
 import com.commercetools.sunrise.common.SunriseInitializationException;
 import io.sphere.sdk.facets.*;
@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-class FacetedSearchConfigListProvider implements Provider<FacetedSearchConfigList> {
+public final class FacetedSearchConfigListProvider implements Provider<FacetedSearchConfigList> {
 
     private static final String CONFIG_FACETS = "pop.facets";
 

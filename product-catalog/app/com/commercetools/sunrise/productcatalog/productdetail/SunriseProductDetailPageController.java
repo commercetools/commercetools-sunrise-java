@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.google.inject.Injector;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
@@ -54,6 +55,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  *     <li>product-catalog</li>
  * </ul>
  */
+@RequestScoped
 public abstract class SunriseProductDetailPageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
     protected static final Logger logger = LoggerFactory.getLogger(SunriseProductDetailPageController.class);

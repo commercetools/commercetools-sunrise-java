@@ -6,16 +6,16 @@ import java.util.List;
 
 public class ProductGalleryBean extends Base {
 
-    private List<ProductImageData> list;
+    private List<ProductImageBean> list;
 
     public ProductGalleryBean() {
     }
 
-    public List<ProductImageData> getList() {
+    public List<ProductImageBean> getList() {
         return list;
     }
 
-    public void setList(final List<ProductImageData> list) {
+    public void setList(final List<ProductImageBean> list) {
         this.list = list;
     }
 }

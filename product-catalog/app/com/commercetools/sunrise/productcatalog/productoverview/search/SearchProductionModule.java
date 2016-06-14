@@ -1,5 +1,8 @@
-package com.commercetools.sunrise.productcatalog.inject.search;
+package com.commercetools.sunrise.productcatalog.productoverview.search;
 
+import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfigProvider;
+import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigListProvider;
+import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfigProvider;
 import com.google.inject.AbstractModule;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;

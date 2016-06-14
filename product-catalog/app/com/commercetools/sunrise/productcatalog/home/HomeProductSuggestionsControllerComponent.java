@@ -7,7 +7,7 @@ import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
-import com.commercetools.sunrise.productcatalog.common.SuggestionsData;
+import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
@@ -77,7 +77,7 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
         if (sunrisePageData.getContent() instanceof HomePageContent) {
             final HomePageContent content = (HomePageContent) sunrisePageData.getContent();
             final ProductListBean productListBean = productListBeanFactory.create(recommendedProducts);
-            content.setSuggestions(new SuggestionsData(productListBean));
+            content.setSuggestions(new SuggestionsBean(productListBean));
         }
     }
 }

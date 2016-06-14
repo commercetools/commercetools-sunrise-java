@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
@@ -60,6 +61,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  *     <li>category</li>
  * </ul>
  */
+@RequestScoped
 public abstract class SunriseProductOverviewPageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
     protected static final Logger logger = LoggerFactory.getLogger(SunriseProductOverviewPageController.class);

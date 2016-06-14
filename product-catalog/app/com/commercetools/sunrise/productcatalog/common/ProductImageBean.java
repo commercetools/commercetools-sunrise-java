@@ -2,14 +2,15 @@ package com.commercetools.sunrise.productcatalog.common;
 
 import io.sphere.sdk.products.Image;
 
-public class ProductImageData {
+public class ProductImageBean {
+
     private String thumbImage;
     private String bigImage;
 
-    public ProductImageData() {
+    public ProductImageBean() {
     }
 
-    public ProductImageData(final Image image) {
+    public ProductImageBean(final Image image) {
         this.thumbImage = image.getUrl();
         this.bigImage = image.getUrl();
     }

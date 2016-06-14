@@ -91,7 +91,7 @@ public class ProductBeanFactory extends Base {
     protected ProductGalleryBean createGallery(final ProductVariant variant) {
         final ProductGalleryBean bean = new ProductGalleryBean();
         bean.setList(variant.getImages().stream()
-                .map(ProductImageData::new)
+                .map(ProductImageBean::new)
                 .collect(toList()));
         return bean;
     }

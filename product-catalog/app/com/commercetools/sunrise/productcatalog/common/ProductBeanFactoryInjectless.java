@@ -47,7 +47,7 @@ public class ProductBeanFactoryInjectless {
     private static ProductGalleryBean createGallery(final ProductVariant variant) {
         final ProductGalleryBean bean = new ProductGalleryBean();
         bean.setList(variant.getImages().stream()
-                .map(ProductImageData::new)
+                .map(ProductImageBean::new)
                 .collect(toList()));
         return bean;
     }

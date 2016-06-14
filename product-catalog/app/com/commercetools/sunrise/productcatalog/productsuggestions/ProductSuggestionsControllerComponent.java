@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
-import com.commercetools.sunrise.productcatalog.common.SuggestionsData;
+import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
 import com.commercetools.sunrise.productcatalog.hooks.SingleProductProjectionHook;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageContent;
 import io.sphere.sdk.products.ProductProjection;
@@ -78,8 +78,8 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
         }
     }
 
-    protected SuggestionsData createSuggestions(final Set<ProductProjection> suggestions) {
+    protected SuggestionsBean createSuggestions(final Set<ProductProjection> suggestions) {
         final ProductListBean productListData = productListBeanFactory.create(suggestions);
-        return new SuggestionsData(productListData);
+        return new SuggestionsBean(productListData);
     }
 }

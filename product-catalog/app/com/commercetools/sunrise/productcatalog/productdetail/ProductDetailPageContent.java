@@ -3,7 +3,7 @@ package com.commercetools.sunrise.productcatalog.productdetail;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductBean;
-import com.commercetools.sunrise.productcatalog.common.SuggestionsData;
+import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class ProductDetailPageContent extends PageContent {
     private BreadcrumbBean breadcrumb;
     private ProductBean product;
     private List<ShippingRateBean> shippingRates;
-    private SuggestionsData suggestions;
+    private SuggestionsBean suggestions;
     private String addToCartFormUrl;
 
     public ProductDetailPageContent() {
@@ -42,11 +42,11 @@ public class ProductDetailPageContent extends PageContent {
         this.shippingRates = shippingRates;
     }
 
-    public SuggestionsData getSuggestions() {
+    public SuggestionsBean getSuggestions() {
         return suggestions;
     }
 
-    public void setSuggestions(final SuggestionsData suggestions) {
+    public void setSuggestions(final SuggestionsBean suggestions) {
         this.suggestions = suggestions;
     }
 

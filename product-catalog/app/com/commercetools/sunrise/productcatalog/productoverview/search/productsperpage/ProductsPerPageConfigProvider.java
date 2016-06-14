@@ -1,10 +1,8 @@
-package com.commercetools.sunrise.productcatalog.inject.search;
+package com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage;
 
 import com.commercetools.sunrise.common.SunriseInitializationException;
 import play.Configuration;
 import play.Logger;
-import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
-import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -14,7 +12,7 @@ import java.util.Optional;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-class ProductsPerPageConfigProvider implements Provider<ProductsPerPageConfig> {
+public final class ProductsPerPageConfigProvider implements Provider<ProductsPerPageConfig> {
 
     private static final int MIN_PAGE_SIZE = 0;
     private static final int MAX_PAGE_SIZE = 500;

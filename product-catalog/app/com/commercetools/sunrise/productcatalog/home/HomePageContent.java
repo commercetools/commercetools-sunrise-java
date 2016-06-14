@@ -1,20 +1,20 @@
 package com.commercetools.sunrise.productcatalog.home;
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.productcatalog.common.SuggestionsData;
+import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
 
 public class HomePageContent extends PageContent {
 
-    private SuggestionsData suggestions;
+    private SuggestionsBean suggestions;
 
     public HomePageContent() {
     }
 
-    public SuggestionsData getSuggestions() {
+    public SuggestionsBean getSuggestions() {
         return suggestions;
     }
 
-    public void setSuggestions(final SuggestionsData suggestions) {
+    public void setSuggestions(final SuggestionsBean suggestions) {
         this.suggestions = suggestions;
     }
 }
