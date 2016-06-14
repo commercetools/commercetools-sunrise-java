@@ -9,7 +9,6 @@ import play.mvc.Result;
 import setupwidget.models.SphereCredentials;
 import setupwidget.views.html.*;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
