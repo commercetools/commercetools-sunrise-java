@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class SetupControllerIntegrationTest extends WithBrowser {
 
-    @Ignore
+    @Ignore // In Travis it endlessly tries to resolve injected stuff, enable back once Setup Widget is integrated in Framework
     @Test
     public void widget() throws Exception {
         if (isExecutedInCIServer()) {

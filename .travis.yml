@@ -8,7 +8,7 @@ scala:
 - 2.11.7
 script:
 - "./sbt test it:test pt:test unidoc"
-- rm conf/dev.conf
+#- rm conf/dev.conf Enable back once Setup Widget is integrated in Framework
 - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt
   "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git
   javadoc sphere-oss automation@commercetools.de"; fi
