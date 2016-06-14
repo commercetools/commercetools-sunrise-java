@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.models;
 
-import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;

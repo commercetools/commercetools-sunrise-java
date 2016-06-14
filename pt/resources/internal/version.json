@@ -1,0 +1,8 @@
+{
+  "version" : "0.7.0-SNAPSHOT",
+  "build" : {
+    "date" : "2016-06-08T16:19:58+0000",
+    "number" : "23",
+    "gitCommit" : "131e931824b3e599cad33ca47e28fe34d940b0cb"
+  }
+}

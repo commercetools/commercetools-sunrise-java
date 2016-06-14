@@ -285,6 +285,9 @@ public class TestableReverseRouter implements ReverseRouter {
     }
 
     private Call createCall(final String url) {
+        if (url == null) {
+            throw new UnsupportedOperationException();
+        }
         return new Call() {
             @Override
             public String url() {

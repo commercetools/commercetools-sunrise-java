@@ -22,7 +22,7 @@ public final class LogUtils {
                 .map(body -> " with body {" + body + "}")
                 .orElse("");
         logger.debug("Fetched {} out of {} products with request {} {}",
-                result.size(),
+                result.getCount(),
                 result.getTotal(),
                 httpRequest.getHttpMethod(),
                 httpRequest.getPath() + requestBody);

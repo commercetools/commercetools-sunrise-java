@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 final class MultiControllerComponentResolverImpl extends Base implements MultiControllerComponentResolver {
+
     private final Map<Class<? extends ControllerComponent>, Predicate<SunriseFrameworkController>> classToPredicateMap;
 
     public MultiControllerComponentResolverImpl(final Map<Class<? extends ControllerComponent>, Predicate<SunriseFrameworkController>> classToPredicateMap) {

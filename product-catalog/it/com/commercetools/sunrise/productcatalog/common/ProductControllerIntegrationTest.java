@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import common.controllers.WithSphereClient;
+import com.commercetools.sunrise.common.WithSphereClient;
 
 public class ProductControllerIntegrationTest extends WithSphereClient {
 

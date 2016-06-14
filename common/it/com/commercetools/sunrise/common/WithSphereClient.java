@@ -1,19 +1,20 @@
-package common.controllers;
+package com.commercetools.sunrise.common;
 
 import io.sphere.sdk.client.*;
 import org.junit.AfterClass;
 
 import java.util.Optional;
-import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 
 public abstract class WithSphereClient {
-    protected static final int ALLOWED_TIMEOUT = 5000;
+
+    protected static final int ALLOWED_SEC_TIMEOUT = 20;
     private static final String IT_PREFIX = "SUNRISE_IT_";
     private static final String IT_CTP_PROJECT_KEY = IT_PREFIX + "CTP_PROJECT_KEY";
     private static final String IT_CTP_CLIENT_SECRET = IT_PREFIX + "CTP_CLIENT_SECRET";
     private static final String IT_CTP_CLIENT_ID = IT_PREFIX + "CTP_CLIENT_ID";
 
-    private static volatile SphereClient sphereClient;
+    private static volatile BlockingSphereClient sphereClient;
 
     @AfterClass
     public static void stopJavaClient() {
@@ -23,8 +24,12 @@ public abstract class WithSphereClient {
         }
     }
 
-    protected static <T> CompletionStage<T> execute(final SphereRequest<T> sphereRequest) {
-        return sphereClient().execute(sphereRequest);
+    protected static <T> T execute(final SphereRequest<T> sphereRequest) {
+        return sphereClient().executeBlocking(sphereRequest);
+    }
+
+    protected static <T> T execute(final SphereRequest<T> sphereRequest, final long defaultTimeout, final TimeUnit unit) {
+        return sphereClient().executeBlocking(sphereRequest, defaultTimeout, unit);
     }
 
     protected static String projectKey() {
@@ -39,10 +44,11 @@ public abstract class WithSphereClient {
         return getValueForEnvVar(IT_CTP_CLIENT_SECRET);
     }
 
-    private synchronized static SphereClient sphereClient() {
+    private synchronized static BlockingSphereClient sphereClient() {
         if (sphereClient == null) {
-            sphereClient = SphereClientFactory.of(SphereAsyncHttpClientFactory::create)
+            final SphereClient client = SphereClientFactory.of(SphereAsyncHttpClientFactory::create)
                     .createClient(projectKey(), clientId(), clientSecret());
+            sphereClient = BlockingSphereClient.of(client, ALLOWED_SEC_TIMEOUT, TimeUnit.SECONDS);
         }
         return sphereClient;
     }

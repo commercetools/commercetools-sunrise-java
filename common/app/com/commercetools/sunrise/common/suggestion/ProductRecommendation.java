@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.common.suggestion;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 
@@ -18,18 +17,16 @@ public interface ProductRecommendation {
      * if the requested number is greater than the number of available products.
      * @param product the product to get suggestions for
      * @param numProducts the number of products the returned set should contain
-     * @param userContext user's context
      * @return a {@code CompletionStage} of the set of products of size {@code numProducts} or less
      */
-    CompletionStage<Set<ProductProjection>> relatedToProduct(final ProductProjection product, final int numProducts, final UserContext userContext);
+    CompletionStage<Set<ProductProjection>> relatedToProduct(final ProductProjection product, final int numProducts);
 
     /**
      * Gets a set of products recommendations for the given categories, of length {@code numProducts} or less
      * if the requested number is greater than the number of available products.
      * @param categories the categories to get suggestions from
      * @param numProducts the number of products the returned set should contain
-     * @param userContext user's context
      * @return a {@code CompletionStage} of the set of products of size {@code numProducts} or less
      */
-    CompletionStage<Set<ProductProjection>> relatedToCategories(final List<Category> categories, final int numProducts, final UserContext userContext);
+    CompletionStage<Set<ProductProjection>> relatedToCategories(final List<Category> categories, final int numProducts);
 }

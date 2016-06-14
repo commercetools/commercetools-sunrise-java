@@ -7,6 +7,7 @@ import java.util.Base64;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BasicAuthTest {
+
     private static final String MY_REALM = "My Realm";
     private static final String CREDENTIALS = "username:password";
     private static final BasicAuth BASIC_AUTH = BasicAuth.of(MY_REALM, CREDENTIALS);

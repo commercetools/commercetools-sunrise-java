@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
+import com.commercetools.sunrise.common.contexts.UserContextImpl;
 import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
@@ -31,7 +32,7 @@ public class SelectFacetedSearchSelectorFactoryTest {
 
     private static final String KEY = "key";
     private static final String LABEL = "Some Facet";
-    private static final UserContext USER_CONTEXT = UserContext.of(singletonList(ENGLISH), CountryCode.DE, Monetary.getCurrency("EUR"));
+    private static final UserContext USER_CONTEXT = UserContextImpl.of(singletonList(ENGLISH), CountryCode.DE, Monetary.getCurrency("EUR"));
 
     @Test
     public void initializesFacet() throws Exception {

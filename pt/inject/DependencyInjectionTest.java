@@ -1,6 +1,6 @@
 package inject;
 
-import com.commercetools.sunrise.WithSunriseApplication;
+import com.commercetools.sunrise.common.WithSunriseApplication;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import org.junit.Test;
 import play.Application;
@@ -14,10 +14,10 @@ import javax.inject.Singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DependencyInjectionTest extends WithSunriseApplication {
+
     @Test
     public void allowsAccessWhenDisabled() throws Exception {
-        final Application application = appBuilder()
-                .build();
+        final Application application = app();
         run(application, "/de/home", request -> {
             final Injector injector = application.injector();
             setNewContextWithMarkerHeaderValueOf("1");

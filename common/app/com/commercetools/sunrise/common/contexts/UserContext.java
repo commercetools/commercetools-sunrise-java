@@ -3,10 +3,8 @@ package com.commercetools.sunrise.common.contexts;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Reference;
 
-import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;
 import java.util.List;
 import java.util.Locale;
@@ -15,56 +13,42 @@ import java.util.Optional;
 /**
  * A container for all information related to the current user, such as selected country, language or customer group.
  */
-public class UserContext extends Base {
+public interface UserContext {
 
-    private final List<Locale> locales;
-    private final CountryCode country;
-    private final CurrencyUnit currency;
-    private final Optional<Reference<CustomerGroup>> customerGroup;
-    private final Optional<Reference<Channel>> channel;
 
-    private UserContext(final List<Locale> locales, final CountryCode country, final CurrencyUnit currency,
-                        @Nullable final Reference<CustomerGroup> customerGroup, @Nullable final Reference<Channel> channel) {
-        this.locales = locales;
-        this.country = country;
-        this.currency = currency;
-        this.customerGroup = Optional.ofNullable(customerGroup);
-        this.channel = Optional.ofNullable(channel);
-        if (locales.isEmpty() || locales.get(0) == null) {
-            throw new IllegalArgumentException("Locales must contain at least one valid locale.");
-        }
-    }
+    /**
+     * Country associated to the customer.
+     * @return the country code
+     */
+    CountryCode country();
 
-    public CountryCode country() {
-        return country;
-    }
+    /**
+     * Locales associated to the customer.
+     * @return the list of locales
+     */
+    List<Locale> locales();
 
-    public Locale locale() {
-        return locales.stream().findFirst().orElseThrow(() -> new NoLocaleFoundException("At least one valid locale should be applicable to the user."));
-    }
+    /**
+     * Currency associated to the customer.
+     * @return the currency unit
+     */
+    CurrencyUnit currency();
 
-    public List<Locale> locales() {
-        return locales;
-    }
+    /**
+     * Customer group associated to the customer.
+     * @return the reference of the customer group, or empty if the customer has no customer group associated
+     */
+    Optional<Reference<CustomerGroup>> customerGroup();
 
-    public CurrencyUnit currency() {
-        return currency;
-    }
+    /**
+     * Channel associated to the customer.
+     * @return the reference of the channel, or empty if the customer has no channel associated
+     */
+    Optional<Reference<Channel>> channel();
 
-    public Optional<Reference<CustomerGroup>> customerGroup() {
-        return customerGroup;
-    }
-
-    public Optional<Reference<Channel>> channel() {
-        return channel;
-    }
-
-    public static UserContext of(final List<Locale> locales, final CountryCode country, final CurrencyUnit currency) {
-        return new UserContext(locales, country, currency, null, null);
-    }
-
-    public static UserContext of(final List<Locale> locales, final CountryCode country, final CurrencyUnit currency,
-                                 @Nullable final Reference<CustomerGroup> customerGroup, @Nullable final Reference<Channel> channel) {
-        return new UserContext(locales, country, currency, customerGroup, channel);
+    default Locale locale() {
+        return locales().stream()
+                .findFirst()
+                .orElseThrow(() -> new NoLocaleFoundException("User does not have any valid locale associated."));
     }
 }

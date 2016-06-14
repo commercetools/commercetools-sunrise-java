@@ -41,7 +41,7 @@ public final class ProjectContextProvider implements Provider<ProjectContext> {
                     + " Languages " + languages + ","
                     + " Countries " + countries + ","
                     + " Currencies " + currencies);
-            return ProjectContext.of(languages, countries, currencies);
+            return ProjectContextImpl.of(languages, countries, currencies);
         } catch (ExecutionException | InterruptedException e) {
             throw new SunriseInitializationException("Could not fetch project information", e);
         }

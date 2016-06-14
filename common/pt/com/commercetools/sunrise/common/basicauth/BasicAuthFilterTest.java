@@ -1,7 +1,6 @@
-package com.commercetools.sunrise.basicauth;
+package com.commercetools.sunrise.common.basicauth;
 
-import com.commercetools.sunrise.WithSunriseApplication;
-import com.commercetools.sunrise.common.basicauth.BasicAuth;
+import com.commercetools.sunrise.common.WithSunriseApplication;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.util.Providers;
@@ -11,23 +10,21 @@ import play.Configuration;
 import play.libs.ws.WSAuthScheme;
 import play.libs.ws.WSResponse;
 import play.mvc.Http;
-import play.mvc.Result;
-import play.mvc.Results;
 import play.routing.Router;
 import play.routing.RoutingDsl;
 
 import javax.annotation.Nullable;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
+import static play.mvc.Results.ok;
 
 public class BasicAuthFilterTest extends WithSunriseApplication {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
-    private static final Router ROUTER = new RoutingDsl().GET("/").routeTo((Supplier<Result>) Results::ok).build();
+    private static final Router ROUTER = new RoutingDsl().GET("/").routeTo(() -> ok()).build();
     private static final BasicAuth BASIC_AUTH_ENABLED = BasicAuth.of("My Realm", USERNAME + ":" + PASSWORD);
     private static final BasicAuth BASIC_AUTH_DISABLED = null;
 
@@ -67,15 +64,15 @@ public class BasicAuthFilterTest extends WithSunriseApplication {
         });
     }
 
-    private static Application appWithBasicAuthEnabled() {
+    private Application appWithBasicAuthEnabled() {
         return application(BASIC_AUTH_ENABLED);
     }
 
-    private static Application appWithBasicAuthDisabled() {
+    private Application appWithBasicAuthDisabled() {
         return application(BASIC_AUTH_DISABLED);
     }
 
-    private static Application application(final @Nullable BasicAuth basicAuth) {
+    private Application application(final @Nullable BasicAuth basicAuth) {
         final Module module = new AbstractModule() {
             @Override
             protected void configure() {
@@ -88,7 +85,7 @@ public class BasicAuthFilterTest extends WithSunriseApplication {
                 .build();
     }
 
-    private static Configuration configurationWithBasicAuthFilterEnabled() {
+    private Configuration configurationWithBasicAuthFilterEnabled() {
         final Map<String, Object> configMap = singletonMap("play.http.filters", "com.commercetools.sunrise.common.basicauth.BasicAuthHttpFilters");
         return new Configuration(configMap).withFallback(testConfiguration());
     }

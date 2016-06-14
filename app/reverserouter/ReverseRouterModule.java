@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
-public class ReverseRouterProductionModule extends AbstractModule {
+public class ReverseRouterModule extends AbstractModule {
 
     @Override
     protected void configure() {

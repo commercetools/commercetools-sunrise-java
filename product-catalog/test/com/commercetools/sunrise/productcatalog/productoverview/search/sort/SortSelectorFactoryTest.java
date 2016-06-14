@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
+import com.commercetools.sunrise.common.contexts.UserContextImpl;
 import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -28,7 +29,7 @@ public class SortSelectorFactoryTest {
             SortOption.of("foo-asc", "Foo Asc", singletonList(SortExpression.of("{{locale}}.foo.{{locale}} asc")), false),
             SortOption.of("foo-desc", "Foo Desc", singletonList(SortExpression.of("foo desc")), true),
             SortOption.of("foobar-asc", "Foo Bar Asc", asList(SortExpression.of("foo asc"), SortExpression.of("bar asc")), false));
-    private static final UserContext USER_CONTEXT = UserContext.of(singletonList(ENGLISH), CountryCode.DE, Monetary.getCurrency("EUR"));
+    private static final UserContext USER_CONTEXT = UserContextImpl.of(singletonList(ENGLISH), CountryCode.DE, Monetary.getCurrency("EUR"));
 
     @Test
     public void getsSelectedSort() throws Exception {

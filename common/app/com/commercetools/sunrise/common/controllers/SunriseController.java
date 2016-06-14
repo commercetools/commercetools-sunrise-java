@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.controllers;
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.UserContextImpl;
 import com.commercetools.sunrise.common.models.LocationSelector;
 import com.commercetools.sunrise.common.models.NavMenuData;
 import com.commercetools.sunrise.common.pages.*;
@@ -151,7 +152,7 @@ public abstract class SunriseController extends ShopController {
         final List<Locale> acceptedLocales = acceptedLocales(locale, request(), projectContext);
         final CountryCode currentCountry = currentCountry(session(), projectContext);
         final CurrencyUnit currentCurrency = currentCurrency(currentCountry, projectContext);
-        return UserContext.of(acceptedLocales, currentCountry, currentCurrency);
+        return UserContextImpl.of(acceptedLocales, currentCountry, currentCurrency);
     }
 
     protected Optional<Category> newCategory() {
@@ -159,20 +160,20 @@ public abstract class SunriseController extends ShopController {
     }
 
     private static Locale currentLocale(final Locale locale, final ProjectContext projectContext) {
-        return projectContext.isLocaleAccepted(locale) ? locale : projectContext.defaultLocale();
+        return projectContext.isLocaleSupported(locale) ? locale : projectContext.defaultLocale();
     }
 
     public static CountryCode currentCountry(final Http.Session session, final ProjectContext projectContext) {
         final String countryCodeInSession = session.get(SESSION_COUNTRY);
         final CountryCode country = CountryCode.getByCode(countryCodeInSession, false);
-        return projectContext.isCountryAccepted(country) ? country : projectContext.defaultCountry();
+        return projectContext.isCountrySupported(country) ? country : projectContext.defaultCountry();
     }
 
     public static CurrencyUnit currentCurrency(final CountryCode currentCountry, final ProjectContext projectContext) {
         return Optional.ofNullable(currentCountry.getCurrency())
                 .map(countryCurrency -> {
                     final CurrencyUnit currency = Monetary.getCurrency(countryCurrency.getCurrencyCode());
-                    return projectContext.isCurrencyAccepted(currency) ? currency : projectContext.defaultCurrency();
+                    return projectContext.isCurrencySupported(currency) ? currency : projectContext.defaultCurrency();
                 }).orElseGet(projectContext::defaultCurrency);
     }
 

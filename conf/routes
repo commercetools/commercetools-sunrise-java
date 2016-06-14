@@ -14,9 +14,9 @@ GET         /                                                  @demo.HomePageCon
 # ~~~~~
 
 # Shows the deployed version, artifactId and GIT SHA
-GET         /version                                           @com.commercetools.sunrise.common.controllers.SunriseStatusController.version()
+GET         /version                                           @demo.StatusController.showVersion()
 # Shows if the application is healthy
-GET         /health                                            @com.commercetools.sunrise.common.controllers.SunriseStatusController.health()
+GET         /health                                            @demo.StatusController.showHealth()
 
 # Endpoint to manually refresh category tree (otherwise an app restart is required)
 GET         /categories/refresh                                @com.commercetools.sunrise.common.categorytree.CategoriesRefreshController.refresh()
@@ -115,15 +115,15 @@ GET         /:languageTag/user/orders/:orderNumber             @demo.MyOrdersPag
 # ~~~~~
 
 # Shows the product detail page
-GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageController.showProductBySlugAndSku(languageTag: String, productSlug: String, sku: String)
+GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @demo.ProductDetailPageController.showProductBySlugAndSku(languageTag: String, productSlug: String, sku: String)
 # TODO framework remove this route
-GET         /:languageTag/:productId/:variantId                @com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageController.showProductByProductIdAndVariantId(languageTag: String, productId: String, variantId: Int)
+GET         /:languageTag/:productId/:variantId                @demo.ProductDetailPageController.showProductByProductIdAndVariantId(languageTag: String, productId: String, variantId: Int)
 
 
 # PRODUCT OVERVIEW
 # ~~~~~
 
 # Shows the search results page
-GET         /:languageTag/search                               @com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageController.searchProductsBySearchTerm(languageTag: String)
+GET         /:languageTag/search                               @demo.ProductOverviewPageController.searchProductsBySearchTerm(languageTag: String)
 # Shows the product overview page for this category
-GET         /:languageTag/:categorySlug                        @com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageController.searchProductsByCategorySlug(languageTag: String, categorySlug: String)
+GET         /:languageTag/:categorySlug                        @demo.ProductOverviewPageController.searchProductsByCategorySlug(languageTag: String, categorySlug: String)

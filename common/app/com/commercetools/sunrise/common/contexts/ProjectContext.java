@@ -1,61 +1,61 @@
 package com.commercetools.sunrise.common.contexts;
 
 import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.models.Base;
 
 import javax.money.CurrencyUnit;
 import java.util.List;
 import java.util.Locale;
 
-public class ProjectContext extends Base {
+/**
+ * A container for all information related to the project, such as supported countries, languages or currencies.
+ */
+public interface ProjectContext {
 
-    private final List<Locale> locales;
-    private final List<CountryCode> countryCodes;
-    private final List<CurrencyUnit> currencies;
+    /**
+     * Locales associated to the project.
+     * @return the list of locales
+     */
+    List<Locale> locales();
 
-    private ProjectContext(final List<Locale> locales, final List<CountryCode> countryCodes, final List<CurrencyUnit> currencies) {
-        this.locales = locales;
-        this.countryCodes = countryCodes;
-        this.currencies = currencies;
+    /**
+     * Countries associated to the project.
+     * @return the list of country codes
+     */
+    List<CountryCode> countries();
+
+    /**
+     * Currencies associated to the project.
+     * @return the list of currency units
+     */
+    List<CurrencyUnit> currencies();
+
+    default Locale defaultLocale() {
+        return locales().stream()
+                .findFirst()
+                .orElseThrow(() -> new NoLocaleFoundException("Project does not have valid locale associated."));
     }
 
-    public List<Locale> locales() {
-        return locales;
+    default CountryCode defaultCountry() {
+        return countries().stream()
+                .findFirst()
+                .orElseThrow(() -> new NoCountryFoundException("Project does not have any valid country code associated."));
     }
 
-    public List<CountryCode> countries() {
-        return countryCodes;
+    default CurrencyUnit defaultCurrency() {
+        return currencies().stream()
+                .findFirst()
+                .orElseThrow(() -> new NoCurrencyFoundException("Project does not have any valid currency unit associated."));
     }
 
-    public List<CurrencyUnit> currencies() {
-        return currencies;
+    default boolean isLocaleSupported(final Locale locale) {
+        return locales().contains(locale);
     }
 
-    public Locale defaultLocale() {
-        return locales.stream().findFirst().get();
+    default boolean isCountrySupported(final CountryCode countryCode) {
+        return countries().contains(countryCode);
     }
 
-    public CountryCode defaultCountry() {
-        return countryCodes.stream().findFirst().get();
-    }
-
-    public CurrencyUnit defaultCurrency() {
-        return currencies.stream().findFirst().get();
-    }
-
-    public boolean isLocaleAccepted(final Locale locale) {
-        return locales.contains(locale);
-    }
-
-    public boolean isCountryAccepted(final CountryCode countryCode) {
-        return countryCodes.contains(countryCode);
-    }
-
-    public boolean isCurrencyAccepted(final CurrencyUnit currency) {
-        return currencies.contains(currency);
-    }
-
-    public static ProjectContext of(final List<Locale> locales, final List<CountryCode> countries, final List<CurrencyUnit> currencies) {
-        return new ProjectContext(locales, countries, currencies);
+    default boolean isCurrencySupported(final CurrencyUnit currency) {
+        return currencies().contains(currency);
     }
 }

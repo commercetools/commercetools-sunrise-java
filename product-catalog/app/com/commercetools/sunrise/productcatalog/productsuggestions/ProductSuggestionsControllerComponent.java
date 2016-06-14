@@ -1,17 +1,16 @@
 package com.commercetools.sunrise.productcatalog.productsuggestions;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import io.sphere.sdk.products.ProductProjection;
-import play.Configuration;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsData;
 import com.commercetools.sunrise.productcatalog.hooks.SingleProductProjectionHook;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageContent;
+import io.sphere.sdk.products.ProductProjection;
+import play.Configuration;
 
 import javax.inject.Inject;
 import java.util.Set;
@@ -27,8 +26,6 @@ import java.util.concurrent.CompletionStage;
 public class ProductSuggestionsControllerComponent implements ControllerComponent, SingleProductProjectionHook, SunrisePageDataHook {
 
     //this part contains fields which are initialized by Google Guice and mostly are in the scope of the HTTP request
-    @Inject
-    protected UserContext userContext;
     //an example for a singleton scope dependency
     @Inject
     protected ProductRecommendation productRecommendation;
@@ -64,7 +61,7 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
      */
     @Override
     public CompletionStage<?> onSingleProductProjectionLoaded(final ProductProjection product) {
-        return productRecommendation.relatedToProduct(product, numSuggestions, userContext)
+        return productRecommendation.relatedToProduct(product, numSuggestions)
                 .thenAccept(m -> suggestions = m);//this method needs to return a CompletionStage which is completed when everything is done.
     }
 

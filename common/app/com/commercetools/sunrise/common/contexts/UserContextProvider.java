@@ -25,7 +25,7 @@ public final class UserContextProvider implements Provider<UserContext> {
         final List<Locale> acceptedLocales = SunriseController.acceptedLocales(locale, context.request(), projectContext);
         final CountryCode currentCountry = SunriseController.currentCountry(context.session(), projectContext);
         final CurrencyUnit currentCurrency = SunriseController.currentCurrency(currentCountry, projectContext);
-        return UserContext.of(acceptedLocales, currentCountry, currentCurrency);
+        return UserContextImpl.of(acceptedLocales, currentCountry, currentCurrency);
     }
 
     @Nullable

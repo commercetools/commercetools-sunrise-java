@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.UserContextImpl;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
 import com.commercetools.sunrise.common.models.LinkBean;
@@ -32,7 +33,7 @@ public class BreadcrumbBeanFactoryTest {
 
     private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("breadcrumb/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
     private static final ProductProjection PRODUCT = readCtpObject("breadcrumb/breadcrumbProduct.json", ProductProjection.typeReference());
-    private static final UserContext USER_CONTEXT = UserContext.of(singletonList(ENGLISH), CountryCode.UK, null);
+    private static final UserContext USER_CONTEXT = UserContextImpl.of(singletonList(ENGLISH), CountryCode.UK, null);
     private static final ReverseRouter REVERSE_ROUTER = reverseRouter();
 
     @Test
