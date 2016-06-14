@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.models.DetailData;
+import com.commercetools.sunrise.common.models.InfoData;
 
-public class BannerBean extends DetailData {
+public class BannerBean extends InfoData {
 
     private String imageMobile;
     private String imageDesktop;

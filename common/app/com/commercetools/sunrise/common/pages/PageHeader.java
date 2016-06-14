@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.models.LocationSelector;
-import com.commercetools.sunrise.common.models.NavMenuData;
+import com.commercetools.sunrise.common.localization.LocalizationSelectorBean;
 import com.commercetools.sunrise.shoppingcart.MiniCartBean;
 import io.sphere.sdk.models.Base;
 
@@ -9,9 +8,9 @@ public class PageHeader extends Base {
 
     private String title;
     private String customerServiceNumber;
-    private LocationSelector location;
+    private LocalizationSelectorBean location;
     private MiniCartBean miniCart;
-    private NavMenuData navMenu;
+    private PageNavMenu navMenu;
 
     public PageHeader() {
     }
@@ -28,11 +27,11 @@ public class PageHeader extends Base {
         this.title = title;
     }
 
-    public LocationSelector getLocation() {
+    public LocalizationSelectorBean getLocation() {
         return location;
     }
 
-    public void setLocation(final LocationSelector location) {
+    public void setLocation(final LocalizationSelectorBean location) {
         this.location = location;
     }
 
@@ -44,11 +43,11 @@ public class PageHeader extends Base {
         this.miniCart = miniCart;
     }
 
-    public NavMenuData getNavMenu() {
+    public PageNavMenu getNavMenu() {
         return navMenu;
     }
 
-    public void setNavMenu(final NavMenuData navMenu) {
+    public void setNavMenu(final PageNavMenu navMenu) {
         this.navMenu = navMenu;
     }
 

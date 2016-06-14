@@ -14,7 +14,9 @@ public class ShippingMethodBean extends FormSelectableOptionBean {
     }
 
     public ShippingMethodBean(final ShippingMethod shippingMethod, final @Nullable String selectedShippingMethodId) {
-        super(shippingMethod.getName(), shippingMethod.getId(), shippingMethod.getId().equals(selectedShippingMethodId));
+        setLabel(shippingMethod.getName());
+        setValue(shippingMethod.getId());
+        setSelected(shippingMethod.getId().equals(selectedShippingMethodId));
     }
 
     public String getDeliveryDays() {

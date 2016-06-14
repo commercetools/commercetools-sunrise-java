@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wedecidelatercommon;
+package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;

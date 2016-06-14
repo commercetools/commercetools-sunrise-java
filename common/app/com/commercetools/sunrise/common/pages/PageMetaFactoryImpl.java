@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.models;
+package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.pages.PageMeta;

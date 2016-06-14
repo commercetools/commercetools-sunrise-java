@@ -4,8 +4,9 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.contexts.UserContextImpl;
-import com.commercetools.sunrise.common.models.LocationSelector;
-import com.commercetools.sunrise.common.models.NavMenuData;
+import com.commercetools.sunrise.common.localization.LocalizationSelectorBean;
+import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.pages.PageNavMenu;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.template.cms.CmsService;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
@@ -32,6 +33,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -96,8 +98,8 @@ public abstract class SunriseController extends ShopController {
 
     private PageHeader getPageHeader(final UserContext userContext, final PageContent content, final Http.Session session) {
         final PageHeader pageHeader = new PageHeader(content.getTitle());
-        pageHeader.setLocation(new LocationSelector(projectContext(), userContext));
-        pageHeader.setNavMenu(new NavMenuData(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
+        pageHeader.setLocation(createLocalizationSelector(userContext, projectContext()));
+        pageHeader.setNavMenu(new PageNavMenu(categoryTree(), userContext, reverseRouter(), saleCategoryExtId.orElse(null)));
         pageHeader.setMiniCart(CartSessionUtils.getMiniCart(session));
         pageHeader.setCustomerServiceNumber(configuration().getString("checkout.customerServiceNumber"));
         return pageHeader;
@@ -140,10 +142,6 @@ public abstract class SunriseController extends ShopController {
                 .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
         pageMeta.setShowInfoModal(showInfoModal);
         return pageMeta;
-    }
-
-    protected PriceFormatter priceFormatter(final UserContext userContext) {
-        return PriceFormatter.of(userContext.locale());
     }
 
     protected UserContext userContext(final String languageTag) {
@@ -193,5 +191,36 @@ public abstract class SunriseController extends ShopController {
     @Nullable
     private static String getCsrfToken(final Http.Session session) {
         return session.get("csrfToken");
+    }
+
+    private LocalizationSelectorBean createLocalizationSelector(final UserContext userContext, final ProjectContext projectContext) {
+        final LocalizationSelectorBean bean = new LocalizationSelectorBean();
+        bean.setCountry(createCountryFormOptions(userContext, projectContext));
+        bean.setLanguage(createLanguageFormOptions(userContext, projectContext));
+        return bean;
+    }
+
+    private List<FormSelectableOptionBean> createCountryFormOptions(final UserContext userContext, final ProjectContext projectContext) {
+        final List<FormSelectableOptionBean> countrySelector = projectContext.countries().stream()
+                .map(countryCode -> {
+                    final FormSelectableOptionBean bean = new FormSelectableOptionBean();
+                    bean.setLabel(countryCode.getName());
+                    bean.setValue(countryCode.getAlpha2());
+                    bean.setSelected(countryCode.equals(userContext.country()));
+                    return bean;
+                }).collect(toList());
+        return (countrySelector.size() > 1) ? countrySelector : emptyList();
+    }
+
+    private List<FormSelectableOptionBean> createLanguageFormOptions(final UserContext userContext, final ProjectContext projectContext) {
+        final List<FormSelectableOptionBean> localeSelector = projectContext.locales().stream()
+                .map(locale -> {
+                    final FormSelectableOptionBean bean = new FormSelectableOptionBean();
+                    bean.setLabel(locale.getDisplayName());
+                    bean.setValue(locale.getLanguage());
+                    bean.setSelected(locale.equals(userContext.locale()));
+                    return bean;
+                }).collect(toList());
+        return (localeSelector.size() > 1) ? localeSelector : emptyList();
     }
 }

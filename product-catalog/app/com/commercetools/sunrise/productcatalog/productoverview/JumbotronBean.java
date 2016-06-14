@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.models.DetailData;
+import com.commercetools.sunrise.common.models.InfoData;
 
-public class JumbotronBean extends DetailData {
+public class JumbotronBean extends InfoData {
 
     private String subtitle;
 

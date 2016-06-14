@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import io.sphere.sdk.products.search.ProductProjectionSearch;
 import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
+import io.sphere.sdk.products.search.ProductProjectionSearch;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -52,11 +52,10 @@ public class SortSelectorComponent implements ControllerComponent, SunrisePageDa
     }
 
     private FormSelectableOptionBean optionToSelectableData(final SortOption option, final SortSelector sortSelector) {
-        final String label = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(option.getLabel()));
-        final FormSelectableOptionBean sortOption = new FormSelectableOptionBean(label, option.getValue());
-        if (sortSelector.getSelectedOptions().contains(option)) {
-            sortOption.setSelected(true);
-        }
-        return sortOption;
+        final FormSelectableOptionBean bean = new FormSelectableOptionBean();
+        bean.setLabel(i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(option.getLabel())));
+        bean.setValue(option.getValue());
+        bean.setSelected(sortSelector.getSelectedOptions().contains(option));
+        return bean;
     }
 }

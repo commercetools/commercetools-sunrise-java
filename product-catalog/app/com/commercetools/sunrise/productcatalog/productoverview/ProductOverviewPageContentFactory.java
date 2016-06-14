@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.models.DetailData;
+import com.commercetools.sunrise.common.models.InfoData;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
@@ -62,8 +62,8 @@ public class ProductOverviewPageContentFactory {
         return bean;
     }
 
-    public DetailData createSeo(final Category category) {
-        final DetailData bean = new DetailData();
+    public InfoData createSeo(final Category category) {
+        final InfoData bean = new InfoData();
         Optional.ofNullable(category.getMetaTitle())
                 .ifPresent(title -> bean.setTitle(title.find(userContext.locales()).orElse("")));
         Optional.ofNullable(category.getMetaDescription())

@@ -38,11 +38,11 @@ public class TitleFormFieldBean extends Base {
 
     private FormSelectableOptionBean titleToSelectableData(final String titleKey, final @Nullable String selectedTitle,
                                                            final I18nResolver i18nResolver, final UserContext userContext) {
+        final FormSelectableOptionBean bean = new FormSelectableOptionBean();
         final String title = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(titleKey));
-        final FormSelectableOptionBean formSelectableOptionBean = new FormSelectableOptionBean(title, title);
-        if (title.equals(selectedTitle)) {
-            formSelectableOptionBean.setSelected(true);
-        }
-        return formSelectableOptionBean;
+        bean.setLabel(title);
+        bean.setValue(title);
+        bean.setSelected(title.equals(selectedTitle));
+        return bean;
     }
 }

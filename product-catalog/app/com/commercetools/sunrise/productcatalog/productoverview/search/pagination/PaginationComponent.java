@@ -1,13 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
-import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import io.sphere.sdk.models.Base;
-import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.search.ProductProjectionSearch;
-import io.sphere.sdk.search.PagedSearchResult;
 import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionPagedSearchResultHook;
 import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;
 import com.commercetools.sunrise.productcatalog.productoverview.PaginationBeanFactory;
@@ -16,6 +12,10 @@ import com.commercetools.sunrise.productcatalog.productoverview.search.productsp
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageSelector;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorBean;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorFactory;
+import io.sphere.sdk.models.Base;
+import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.search.ProductProjectionSearch;
+import io.sphere.sdk.search.PagedSearchResult;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -73,10 +73,10 @@ public class PaginationComponent extends Base implements ControllerComponent, Su
     }
 
     private static FormSelectableOptionBean optionToSelectableData(final ProductsPerPageOption option, final ProductsPerPageSelector productsPerPageSelector) {
-        final FormSelectableOptionBean displayOption = new FormSelectableOptionBean(option.getLabel(), option.getValue());
-        if (productsPerPageSelector.getSelectedPageSize() == option.getAmount()) {
-            displayOption.setSelected(true);
-        }
-        return displayOption;
+        final FormSelectableOptionBean bean = new FormSelectableOptionBean();
+        bean.setLabel(option.getLabel());
+        bean.setValue(option.getValue());
+        bean.setSelected(productsPerPageSelector.getSelectedPageSize() == option.getAmount());
+        return bean;
     }
 }

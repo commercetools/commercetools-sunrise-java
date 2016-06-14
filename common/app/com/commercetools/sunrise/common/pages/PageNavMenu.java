@@ -1,7 +1,8 @@
-package com.commercetools.sunrise.common.models;
+package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.models.CategoryBean;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
@@ -13,14 +14,14 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public class NavMenuData extends Base {
+public class PageNavMenu extends Base {
 
     private List<CategoryBean> categories;
 
-    public NavMenuData() {
+    public PageNavMenu() {
     }
 
-    public NavMenuData(final CategoryTree categoryTree, final UserContext userContext, final ReverseRouter reverseRouter,
+    public PageNavMenu(final CategoryTree categoryTree, final UserContext userContext, final ReverseRouter reverseRouter,
                        @Nullable final String saleCategoryExtId) {
         this.categories = new ArrayList<>();
         categoryTree.getRoots().forEach(root -> {

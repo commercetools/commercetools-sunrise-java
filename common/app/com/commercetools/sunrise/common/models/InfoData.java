@@ -2,16 +2,16 @@ package com.commercetools.sunrise.common.models;
 
 import io.sphere.sdk.models.Base;
 
-public class DetailData extends Base {
+public class InfoData extends Base {
 
     private String title;
     private String text;
     private String description;
 
-    public DetailData() {
+    public InfoData() {
     }
 
-    public DetailData(final String title) {
+    public InfoData(final String title) {
         this.title = title;
         this.text = title;
     }

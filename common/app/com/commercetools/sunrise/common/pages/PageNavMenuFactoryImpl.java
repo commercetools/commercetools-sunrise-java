@@ -1,15 +1,13 @@
-package com.commercetools.sunrise.common.models;
+package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.models.NavMenuData;
-import com.commercetools.sunrise.common.models.NavMenuDataFactory;
 import io.sphere.sdk.categories.CategoryTree;
 import play.Configuration;
 
 import javax.inject.Inject;
 
-public class NavMenuDataFactoryImpl implements NavMenuDataFactory {
+public class PageNavMenuFactoryImpl implements PageNavMenuFactory {
 
     @Inject
     private CategoryTree categoryTree;
@@ -25,7 +23,7 @@ public class NavMenuDataFactoryImpl implements NavMenuDataFactory {
     }
 
     @Override
-    public NavMenuData create() {
-        return new NavMenuData(categoryTree, userContext, reverseRouter, saleCategoryExtId);
+    public PageNavMenu create() {
+        return new PageNavMenu(categoryTree, userContext, reverseRouter, saleCategoryExtId);
     }
 }
