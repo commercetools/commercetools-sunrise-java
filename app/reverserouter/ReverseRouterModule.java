@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import setupwidget.controllers.SetupReverseRouter;
 
 public class ReverseRouterModule extends AbstractModule {
 
@@ -15,5 +16,6 @@ public class ReverseRouterModule extends AbstractModule {
         bind(ProductReverseRouter.class).toInstance(reverseRouter);
         bind(CheckoutReverseRouter.class).toInstance(reverseRouter);
         bind(HomeReverseRouter.class).toInstance(reverseRouter);
+        bind(SetupReverseRouter.class).toInstance(reverseRouter);
     }
 }

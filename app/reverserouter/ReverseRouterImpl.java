@@ -1,16 +1,19 @@
 package reverserouter;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import setupwidget.controllers.SetupReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
+
 import static demo.routes.*;
 import static com.commercetools.sunrise.shoppingcart.cartdetail.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.confirmation.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.payment.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.shipping.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.thankyou.routes.*;
+import static setupwidget.controllers.routes.*;
 
-public class ReverseRouterImpl extends Base implements ReverseRouter {
+public class ReverseRouterImpl extends Base implements ReverseRouter, SetupReverseRouter {
 
     public ReverseRouterImpl() {
     }
@@ -153,5 +156,10 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
     @Override
     public Call showMyOrder(final String languageTag, final String orderNumber) {
         return MyOrdersPageController.show(languageTag, orderNumber);
+    }
+
+    @Override
+    public Call processSetupFormCall() {
+        return SetupController.processForm();
     }
 }
