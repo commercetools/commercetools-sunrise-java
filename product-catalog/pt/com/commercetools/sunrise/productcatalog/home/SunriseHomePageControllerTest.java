@@ -1,6 +1,6 @@
-package demo;
+package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.common.DefaultProductCatalogTestModule;
+import com.commercetools.sunrise.productcatalog.ProductCatalogTestModule;
 import com.commercetools.sunrise.common.DefaultTestModule;
 import com.commercetools.sunrise.common.WithSunriseApplication;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
@@ -12,17 +12,15 @@ import play.mvc.Http;
 import play.mvc.Result;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static play.test.Helpers.contentAsString;
 
-public class HomePageControllerTest extends WithSunriseApplication {
+public class SunriseHomePageControllerTest extends WithSunriseApplication {
 
     @Test
     public void homeIsAlive() {
         setContext(requestBuilder().build());
-        run(application(), HomePageController.class, controller -> {
+        run(application(), HomePageTestController.class, controller -> {
             final Result result = controller.show("de").toCompletableFuture().join();
             assertThat(result.status()).isEqualTo(Http.Status.OK);
-            assertThat(contentAsString(result)).isNullOrEmpty();
         });
     }
 
@@ -38,6 +36,10 @@ public class HomePageControllerTest extends WithSunriseApplication {
 
     @Override
     protected DefaultTestModule defaultModule() {
-        return new DefaultProductCatalogTestModule();
+        return new ProductCatalogTestModule();
+    }
+
+    private static class HomePageTestController extends SunriseHomePageController {
+
     }
 }

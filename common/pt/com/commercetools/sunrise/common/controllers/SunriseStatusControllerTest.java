@@ -1,7 +1,6 @@
-package com.commercetools.sunrise.common;
+package com.commercetools.sunrise.common.controllers;
 
-import com.commercetools.sunrise.common.controllers.SunriseStatusController;
-import com.commercetools.sunrise.common.controllers.TestableSphereClient;
+import com.commercetools.sunrise.common.WithSunriseApplication;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import io.sphere.sdk.client.SphereClient;

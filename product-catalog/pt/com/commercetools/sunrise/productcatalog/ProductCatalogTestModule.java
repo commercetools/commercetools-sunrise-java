@@ -1,5 +1,6 @@
-package com.commercetools.sunrise.common;
+package com.commercetools.sunrise.productcatalog;
 
+import com.commercetools.sunrise.common.DefaultTestModule;
 import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
@@ -17,7 +18,7 @@ import java.util.concurrent.CompletionStage;
 import static io.sphere.sdk.utils.CompletableFutureUtils.exceptionallyCompletedFuture;
 import static java.util.Collections.emptyList;
 
-public class DefaultProductCatalogTestModule extends DefaultTestModule {
+public class ProductCatalogTestModule extends DefaultTestModule {
 
     @Override
     protected void configure() {

@@ -12,7 +12,7 @@ import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ApplicationControllerIntegrationTest extends WithSphereClient {
+public class ExampleControllerIntegrationTest extends WithSphereClient {
 
     @Test
     public void itFindsSomeCategories() throws Exception {
