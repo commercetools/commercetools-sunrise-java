@@ -13,30 +13,54 @@ import play.libs.ws.WSClient;
 import play.libs.ws.WSRequest;
 import play.mvc.Controller;
 import play.mvc.Http;
+import play.test.TestBrowser;
 import play.test.TestServer;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static play.test.Helpers.running;
-import static play.test.Helpers.testServer;
+import static play.test.Helpers.*;
 
 public abstract class WithSunriseApplication {
 
+    private static final int DEFAULT_PORT = 19001;
+
     @FunctionalInterface
     public interface CheckedConsumer<T> {
-        void apply(T t) throws Exception;
+        void accept(T t) throws Exception;
+    }
+
+    @FunctionalInterface
+    public interface CheckedBiConsumer<T, U> {
+        void accept(T t, U u) throws Exception;
+    }
+
+    protected static void run(final Application app, final CheckedBiConsumer<TestBrowser, Integer> test) {
+        final TestServer server = new TestServer(DEFAULT_PORT, app);
+        running(server, HTMLUNIT, browser -> {
+            try {
+                test.accept(browser, server.port());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     protected static void run(final Application app, final String url, final CheckedConsumer<WSRequest> test) {
-        final TestServer server = testServer(3333, app);
+        final TestServer server = testServer(DEFAULT_PORT, app);
         running(server, () -> {
+            final WSClient wsClient = WS.newClient(server.port());
             try {
-                final WSClient wsClient = WS.newClient(server.port());
-                test.apply(wsClient.url(url));
-                wsClient.close();
+                test.accept(wsClient.url(url));
             } catch (Exception e) {
                 throw new RuntimeException(e);
+            } finally {
+                try {
+                    wsClient.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -45,7 +69,7 @@ public abstract class WithSunriseApplication {
                                                      final CheckedConsumer<C> test) {
         running(app, () -> {
             try {
-                test.apply(app.injector().instanceOf(controllerClass));
+                test.accept(app.injector().instanceOf(controllerClass));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
