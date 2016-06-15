@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.productcatalog.hooks;
+package com.commercetools.sunrise.hooks;
 
 import com.commercetools.sunrise.hooks.Hook;
 import io.sphere.sdk.products.search.ProductProjectionSearch;

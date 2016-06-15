@@ -11,9 +11,9 @@ import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
-import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionPagedSearchResultHook;
-import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;
-import com.commercetools.sunrise.productcatalog.hooks.SingleCategoryHook;
+import com.commercetools.sunrise.hooks.ProductProjectionPagedSearchResultHook;
+import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
+import com.commercetools.sunrise.hooks.SingleCategoryHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 
 import javax.inject.Inject;

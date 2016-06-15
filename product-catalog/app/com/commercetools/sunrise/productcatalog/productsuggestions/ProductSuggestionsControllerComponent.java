@@ -7,7 +7,7 @@ import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
-import com.commercetools.sunrise.productcatalog.hooks.SingleProductProjectionHook;
+import com.commercetools.sunrise.hooks.SingleProductProjectionHook;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageContent;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;

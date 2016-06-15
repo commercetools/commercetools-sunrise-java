@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;
-import com.commercetools.sunrise.productcatalog.hooks.SingleProductProjectionHook;
-import com.commercetools.sunrise.productcatalog.hooks.SingleProductVariantHook;
+import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
+import com.commercetools.sunrise.hooks.SingleProductProjectionHook;
+import com.commercetools.sunrise.hooks.SingleProductVariantHook;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 

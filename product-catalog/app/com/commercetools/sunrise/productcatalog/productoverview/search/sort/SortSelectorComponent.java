@@ -7,7 +7,7 @@ import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;
+import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 

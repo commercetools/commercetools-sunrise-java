@@ -1,3 +1,4 @@
+import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.hooks.Hook;
@@ -24,7 +25,7 @@ import com.commercetools.sunrise.common.contexts.RequestScope;
  * A controller component instance lives in the {@link RequestScope} so they assist with one HTTP request and then for the next HTTP request another instance is created.
  * Controller components implement the hooks of the controllers where they need to do sth. for example implementing {@link SunrisePageDataHook}
  * enables to change the content that will be rendered, the hook is called when all asynchronous requests are completed. The hook {@link RequestHook} enables to do sth. when a request comes in like log stuff, call external systems.
- * The hook {@link com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook} enables to modify a search request for example to add extension paths.
+ * The hook {@link ProductProjectionSearchFilterHook} enables to modify a search request for example to add extension paths.
  * For a good explanation how such a component works look into the <strong>source code</strong> of {@link ProductSuggestionsControllerComponent}.
  *
  * <!-- multi controller components -->
