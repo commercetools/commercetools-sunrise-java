@@ -1,8 +1,6 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.pages.SunrisePageData;
-import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
-import com.commercetools.sunrise.common.pages.PageNavMenuFactory;
+import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.framework.ControllerComponent;
 
 import javax.inject.Inject;

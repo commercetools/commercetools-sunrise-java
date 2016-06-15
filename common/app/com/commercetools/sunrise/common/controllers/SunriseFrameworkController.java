@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.hooks.Hook;
-import com.commercetools.sunrise.common.hooks.RequestHook;
+import com.commercetools.sunrise.hooks.Hook;
+import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.framework.ControllerComponent;

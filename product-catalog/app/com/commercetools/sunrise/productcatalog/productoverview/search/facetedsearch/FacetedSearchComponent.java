@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.faceteds
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
-import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;

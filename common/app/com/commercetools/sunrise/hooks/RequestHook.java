@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.hooks;
+package com.commercetools.sunrise.hooks;
 
 import play.mvc.Http;
 

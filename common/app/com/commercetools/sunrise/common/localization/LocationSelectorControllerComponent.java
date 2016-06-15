@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.localization;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.framework.ControllerComponent;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.hooks;
 
-import com.commercetools.sunrise.common.hooks.Hook;
+import com.commercetools.sunrise.hooks.Hook;
 import io.sphere.sdk.carts.Cart;
 
 import java.util.concurrent.CompletionStage;

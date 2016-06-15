@@ -1,8 +1,8 @@
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.hooks.Hook;
-import com.commercetools.sunrise.common.hooks.RequestHook;
-import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.hooks.Hook;
+import com.commercetools.sunrise.hooks.RequestHook;
+import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.contexts.RequestScope;
 
 /**

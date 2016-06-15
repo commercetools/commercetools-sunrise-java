@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productsuggestions;
 
-import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.ControllerComponent;

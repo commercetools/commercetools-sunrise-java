@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.hooks;
+package com.commercetools.sunrise.hooks;
 
 /**
  * Hooks are called by controllers to enable components to add behaviour to controllers.
