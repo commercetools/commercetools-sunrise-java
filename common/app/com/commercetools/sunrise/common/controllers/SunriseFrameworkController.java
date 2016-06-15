@@ -1,15 +1,13 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.hooks.Hook;
-import com.commercetools.sunrise.common.hooks.RequestHook;
-import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
+import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.utils.FutureUtils;
