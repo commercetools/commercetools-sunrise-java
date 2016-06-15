@@ -16,7 +16,7 @@ lazy val sunriseDesignVersion = "0.56.0"
 
 lazy val jvmSdkVersion = "1.0.0"
 
-lazy val jacksonVersion = "2.6.0"
+lazy val jacksonVersion = "2.7.5"
 
 
 /**
