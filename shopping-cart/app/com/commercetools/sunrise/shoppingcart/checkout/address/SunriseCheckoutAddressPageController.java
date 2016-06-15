@@ -25,7 +25,7 @@ import play.twirl.api.Html;
 import scala.concurrent.ExecutionContextExecutor;
 import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
-import com.commercetools.sunrise.shoppingcart.hooks.CartLoadedHook;
+import com.commercetools.sunrise.hooks.CartLoadedHook;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 
 import javax.annotation.Nullable;
