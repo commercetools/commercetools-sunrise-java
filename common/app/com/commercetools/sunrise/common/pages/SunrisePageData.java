@@ -1,9 +1,8 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.pages.*;
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
-public final class SunrisePageData extends Base implements PageData {
+public final class SunrisePageData extends ModelBean implements PageData {
 
     private PageHeader header;
     private PageFooter footer;

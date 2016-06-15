@@ -2,11 +2,12 @@ package com.commercetools.sunrise.common.models;
 
 import io.sphere.sdk.models.Base;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ModelBean extends Base {
+public abstract class ModelBean extends Base implements Serializable {
 
     private final Map<String, Object> dynamic = new HashMap<>();
 
