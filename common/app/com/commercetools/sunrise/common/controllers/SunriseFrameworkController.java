@@ -1,6 +1,9 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.hooks.Hook;
+import com.commercetools.sunrise.common.hooks.RequestHook;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.common.pages.*;
@@ -14,6 +17,7 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -30,6 +34,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 public abstract class SunriseFrameworkController extends Controller {
+
     @Inject
     private SphereClient sphere;
     @Inject
@@ -76,18 +81,25 @@ public abstract class SunriseFrameworkController extends Controller {
         return session.get("csrfToken");
     }
 
-    protected final SunrisePageData pageData(final PageContent content) {
+    protected Html renderPage(final PageContent pageContent, final String templateName) {
+        final SunrisePageData pageData = createPageData(pageContent);
+        runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
+        final String html = templateEngine().render(templateName, pageData, userContext.locales());
+        return new Html(html);
+    }
+
+    protected final SunrisePageData createPageData(final PageContent pageContent) {
         final SunrisePageData pageData = new SunrisePageData();
-        pageData.setHeader(new PageHeader(content.getTitle()));
-        pageData.setContent(content);
+        pageData.setHeader(new PageHeader(pageContent.getTitle()));
+        pageData.setContent(pageContent);
         pageData.setFooter(new PageFooter());
         pageData.setMeta(pageMetaFactory.create());
         return pageData;
     }
 
-    protected final CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> objectResultFunction) {
+    protected final CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> nextSupplier) {
         return runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()))
-                .thenComposeAsync(unused -> objectResultFunction.get(), HttpExecution.defaultContext());
+                .thenComposeAsync(unused -> nextSupplier.get(), HttpExecution.defaultContext());
     }
 
     /**

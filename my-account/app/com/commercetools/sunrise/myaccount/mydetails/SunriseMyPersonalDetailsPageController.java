@@ -163,7 +163,7 @@ public abstract class SunriseMyPersonalDetailsPageController extends MyAccountCo
     }
 
     protected Html renderMyPersonalDetailsPage(final MyPersonalDetailsPageContent pageContent, final UserContext userContext) {
-        final SunrisePageData pageData = pageData(pageContent);
+        final SunrisePageData pageData = createPageData(pageContent);
         return templateEngine().renderToHtml("my-account-personal-details", pageData, userContext.locales());
     }
 }

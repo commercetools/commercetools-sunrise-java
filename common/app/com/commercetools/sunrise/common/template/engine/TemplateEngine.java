@@ -31,6 +31,7 @@ public interface TemplateEngine {
      * @throws TemplateNotFoundException when the given template name does not correspond to an existing template
      * @throws TemplateRenderException when the provided page data could not be injected to the template
      */
+    @Deprecated
     default Html renderToHtml(final String templateName, final PageData pageData, final List<Locale> locales) {
         return new Html(render(templateName, pageData, locales));
     }

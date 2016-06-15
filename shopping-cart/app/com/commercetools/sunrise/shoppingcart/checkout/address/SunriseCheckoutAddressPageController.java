@@ -150,7 +150,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     protected Html renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent) {
         pageContent.setStepWidget(StepWidgetBean.ADDRESS);
         pageContent.setCart(createCartLikeBean(cart, userContext()));
-        final SunrisePageData pageData = pageData(pageContent);
+        final SunrisePageData pageData = createPageData(pageContent);
         runVoidHook(SunrisePageDataHook.class, sunrisePageDataHook -> sunrisePageDataHook.acceptSunrisePageData(pageData));
         return templateEngine().renderToHtml("checkout-address", pageData, userContext().locales());
     }

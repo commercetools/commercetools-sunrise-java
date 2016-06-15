@@ -1,6 +1,12 @@
 package com.commercetools.sunrise.productcatalog.home;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.hooks.RequestHook;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SunrisePageDataHook;
@@ -9,12 +15,11 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import play.mvc.Result;
-import play.twirl.api.Html;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 
 import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
@@ -38,30 +43,39 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * </ul>
  */
 @RequestScoped
-public abstract class SunriseHomePageController extends SunriseFrameworkController {
+public abstract class SunriseHomePageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
     @Inject
     private I18nResolver i18nResolver;
     @Inject
     private HomeReverseRouter homeReverseRouter;
 
-    public Result index() {
-        return redirect(homeReverseRouter.homePageCall(userContext().locale().toLanguageTag()));
-    }
-
-    public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> completedFuture(ok(renderHomePage(new HomePageContent()))));
-    }
-
-    protected Html renderHomePage(final HomePageContent pageContent) {
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of("catalog:home.title")));
-        final SunrisePageData pageData = pageData(pageContent);
-        runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
-        return templateEngine().renderToHtml("home", pageData, userContext().locales());
+    @Override
+    public String getTemplateName() {
+        return "home";
     }
 
     @Override
     public Set<String> getFrameworkTags() {
         return new HashSet<>(asList("home", "product-catalog"));
+    }
+
+    public Result index() {
+        return redirect(homeReverseRouter.homePageCall(userContext().locale().toLanguageTag()));
+    }
+
+    public CompletionStage<Result> show(final String languageTag) {
+        return doRequest(() -> showHome());
+    }
+
+    protected CompletableFuture<Result> showHome() {
+        final PageContent pageContent = createPageContent();
+        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+    }
+
+    protected PageContent createPageContent() {
+        final HomePageContent pageContent = new HomePageContent();
+        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of("catalog:home.title")));
+        return pageContent;
     }
 }

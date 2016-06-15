@@ -9,6 +9,7 @@ import com.commercetools.sunrise.productcatalog.productoverview.search.facetedse
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortSelectorBean;
 
 public class ProductOverviewPageContent extends PageContent {
+
     private String filterProductsUrl;
     private String searchTerm;
     private BannerBean banner;

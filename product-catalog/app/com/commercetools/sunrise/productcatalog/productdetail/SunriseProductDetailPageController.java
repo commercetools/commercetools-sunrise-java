@@ -1,11 +1,18 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.google.inject.Injector;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.hooks.RequestHook;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;
+import com.commercetools.sunrise.productcatalog.hooks.SingleProductProjectionHook;
+import com.commercetools.sunrise.productcatalog.hooks.SingleProductVariantHook;
+import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
+import com.google.inject.Injector;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import io.sphere.sdk.products.ProductProjection;
@@ -89,7 +96,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
             logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
             this.productSlug = slug;
             this.variantSku = sku;
-            return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku, this::filter)
+            return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku, this::runHookOnProductSearch)
                     .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
         });
     }
@@ -97,7 +104,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     public CompletionStage<Result> showProductByProductIdAndVariantId(final String languageTag, final String productId, final int variantId) {
         return doRequest(() -> {
             logger.debug("look for product with productId={} and variantId={}", productId, variantId);
-            return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId, this::filter)
+            return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId, this::runHookOnProductSearch)
                     .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
         });
     }
@@ -106,7 +113,8 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         final Optional<ProductProjection> product = productFetchResult.getProduct();
         final Optional<ProductVariant> variant = productFetchResult.getVariant();
         if (product.isPresent() && variant.isPresent()) {
-            return handleFoundProductAndCallingHooks(product.get(), variant.get());
+            return runHookOnFoundProduct(product.get(), variant.get())
+                    .thenComposeAsync(unused -> handleFoundProduct(product.get(), variant.get()), HttpExecution.defaultContext());
         } else if (product.isPresent()) {
             return handleNotFoundVariant(product.get());
         } else {
@@ -115,8 +123,8 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     }
 
     protected CompletionStage<Result> handleFoundProduct(final ProductProjection product, final ProductVariant variant) {
-        final ProductDetailPageContent pageContent = createPageContent(product, variant);
-        return completedFuture(ok(renderPage(pageContent)));
+        final PageContent pageContent = createPageContent(product, variant);
+        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
     }
 
     protected CompletionStage<Result> handleNotFoundVariant(final ProductProjection product) {
@@ -134,31 +142,22 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         }
     }
 
+    protected PageContent createPageContent(final ProductProjection product, final ProductVariant variant) {
+        return productDetailPageContentFactory.create(product, variant);
+    }
+
     protected Result notFoundProductResult() {
         return notFound();
     }
 
-    protected ProductDetailPageContent createPageContent(final ProductProjection product, final ProductVariant variant) {
-        return productDetailPageContentFactory.create(product, variant);
+    protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
+        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
     }
 
-    protected Html renderPage(final ProductDetailPageContent pageContent) {
-        final SunrisePageData pageData = pageData(pageContent);
-        runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
-        return templateEngine().renderToHtml(getTemplateName(), pageData, userContext.locales());
-    }
-
-    protected final ProductProjectionSearch filter(ProductProjectionSearch q) {
-        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, r) -> hook.filterProductProjectionSearch(r), q);
-    }
-
-    protected final CompletionStage<Result> handleFoundProductAndCallingHooks(final ProductProjection product, final ProductVariant variant) {
-        final CompletionStage<Object> hooksCompletionStage = runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
-        final CompletionStage<Object> hooksCompletionStage2 = runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
-        return hooksCompletionStage2.thenComposeAsync(unused ->
-                        hooksCompletionStage.thenComposeAsync(unusedResult ->
-                                handleFoundProduct(product, variant), HttpExecution.defaultContext()),
-                HttpExecution.defaultContext());
+    protected final CompletionStage<?> runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {
+        final CompletionStage<?> productHooksStage = runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
+        return runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant))
+                .thenComposeAsync(unused -> productHooksStage, HttpExecution.defaultContext());
     }
 
     protected final Optional<String> getProductSlug() {

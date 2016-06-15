@@ -31,8 +31,8 @@ public final class ProductFetchBySlugAndSku implements ProductFetch<String, Stri
     @Override
     public CompletionStage<ProductFetchResult> findProduct(final String productIdentifier,
                                                            final String variantIdentifier,
-                                                           final UnaryOperator<ProductProjectionSearch> searchFilter) {
-        return findProduct(productIdentifier, searchFilter)
+                                                           final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
+        return findProduct(productIdentifier, runHookOnProductSearch)
                 .thenApplyAsync(productOpt -> productOpt
                 .map(product -> findVariant(variantIdentifier, product)
                         .map(variant -> ProductFetchResult.of(product, variant))
@@ -41,8 +41,9 @@ public final class ProductFetchBySlugAndSku implements ProductFetch<String, Stri
                 HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Optional<ProductProjection>> findProduct(final String productIdentifier, final UnaryOperator<ProductProjectionSearch> queryFilter) {
-        return findProductBySlug(productIdentifier, userContext.locale(), queryFilter);
+    private CompletionStage<Optional<ProductProjection>> findProduct(final String productIdentifier,
+                                                                     final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
+        return findProductBySlug(productIdentifier, userContext.locale(), runHookOnProductSearch);
     }
 
     private Optional<ProductVariant> findVariant(final String variantIdentifier, final ProductProjection product) {
@@ -53,15 +54,16 @@ public final class ProductFetchBySlugAndSku implements ProductFetch<String, Stri
      * Gets a product, uniquely identified by a slug for a given locale.
      * @param slug the product slug
      * @param locale the locale in which you provide the slug
-     * @param queryFilter
+     * @param runHookOnProductSearch
      * @return A CompletionStage of an optionally found ProductProjection
      */
-    private CompletionStage<Optional<ProductProjection>> findProductBySlug(final String slug, final Locale locale, final UnaryOperator<ProductProjectionSearch> queryFilter) {
+    private CompletionStage<Optional<ProductProjection>> findProductBySlug(final String slug, final Locale locale,
+                                                                           final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
         final PriceSelection priceSelection = createPriceSelection(userContext);
         final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
                 .withQueryFilters(m -> m.slug().locale(locale).is(slug))
                 .withPriceSelection(priceSelection);
-        return sphereClient.execute(queryFilter.apply(request))
+        return sphereClient.execute(runHookOnProductSearch.apply(request))
                 .thenApplyAsync(PagedSearchResult::head, HttpExecution.defaultContext())
                 .whenCompleteAsync((productOpt, t) -> {
                     if (productOpt.isPresent()) {

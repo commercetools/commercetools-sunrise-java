@@ -19,9 +19,9 @@ public final class ProductFetchByProductIdAndVariantId implements ProductFetch<S
     @Override
     public CompletionStage<ProductFetchResult> findProduct(final String productId,
                                                            final Integer variantId,
-                                                           final UnaryOperator<ProductProjectionSearch> searchFilter) {
+                                                           final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
         final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent().withQueryFilters(m -> m.id().is(productId));
-        return sphereClient.execute(searchFilter.apply(request))
+        return sphereClient.execute(runHookOnProductSearch.apply(request))
                 .thenApplyAsync(PagedSearchResult::head, HttpExecution.defaultContext())
                 .thenApplyAsync(productOptional -> {
                     final ProductProjection product = productOptional.orElse(null);

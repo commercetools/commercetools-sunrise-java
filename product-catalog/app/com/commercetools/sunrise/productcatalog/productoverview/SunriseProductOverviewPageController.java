@@ -3,16 +3,23 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.hooks.RequestHook;
+import com.commercetools.sunrise.common.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionPagedSearchResultHook;
+import com.commercetools.sunrise.productcatalog.hooks.ProductProjectionSearchFilterHook;
+import com.commercetools.sunrise.productcatalog.hooks.SingleCategoryHook;
+import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchComponent;
+import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.PaginationComponent;
+import com.commercetools.sunrise.productcatalog.productoverview.search.searchbox.SearchBoxComponent;
+import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortSelectorComponent;
 import com.commercetools.sunrise.hooks.*;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.inject.Injector;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
@@ -62,8 +69,6 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @RequestScoped
 public abstract class SunriseProductOverviewPageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
-    protected static final Logger logger = LoggerFactory.getLogger(SunriseProductOverviewPageController.class);
-
     @Inject
     private UserContext userContext;
     @Inject
@@ -94,7 +99,7 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
             final Optional<Category> category = categoryTree.findBySlug(userContext.locale(), categorySlug);
             if (category.isPresent()) {
                 this.category = category.get();
-                return runAsyncHook(SingleCategoryHook.class, hook -> hook.onSingleCategoryLoaded(category.get()))
+                return runHookOnFoundCategory(category.get())
                         .thenComposeAsync(unused -> searchProducts(), HttpExecution.defaultContext());
             } else {
                 return handleNotFoundCategory();
@@ -107,7 +112,7 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
     }
 
     protected CompletionStage<Result> searchProducts() {
-        return injector.instanceOf(ProductListFetchSimple.class).searchProducts(null, this::filter)
+        return injector.instanceOf(ProductListFetchSimple.class).searchProducts(null, this::runHookOnProductSearch)
                 .thenComposeAsync(this::listProducts, HttpExecution.defaultContext());
     }
 
@@ -115,41 +120,43 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
         if (pagedSearchResult.getResults().isEmpty()) {
             return handleEmptySearch(pagedSearchResult);
         } else {
-            return handleFoundProductsAndCallingHooks(pagedSearchResult);
+            runHookOnProductSearchResult(pagedSearchResult);
+            return handleFoundProducts(pagedSearchResult);
         }
     }
 
     protected CompletionStage<Result> handleFoundProducts(final PagedSearchResult<ProductProjection> pagedSearchResult) {
-        final ProductOverviewPageContent pageContent = productOverviewPageContentFactory.create(getCategory().orElse(null), pagedSearchResult);
-        return completedFuture(ok(renderPage(pageContent)));
+        final PageContent pageContent = createPageContent(pagedSearchResult);
+        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+    }
+
+    protected CompletionStage<Result> handleEmptySearch(final PagedSearchResult<ProductProjection> pagedSearchResult) {
+        final PageContent pageContent = createPageContent(pagedSearchResult);
+        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
     }
 
     protected CompletionStage<Result> handleNotFoundCategory() {
         return completedFuture(notFoundCategoryResult());
     }
 
-    protected CompletionStage<Result> handleEmptySearch(final PagedSearchResult<ProductProjection> pagedSearchResult) {
-        final ProductOverviewPageContent pageContent = productOverviewPageContentFactory.create(getCategory().orElse(null), pagedSearchResult);
-        return completedFuture(ok(renderPage(pageContent)));
+    protected PageContent createPageContent(final PagedSearchResult<ProductProjection> pagedSearchResult) {
+        return productOverviewPageContentFactory.create(getCategory().orElse(null), pagedSearchResult);
     }
 
     protected Result notFoundCategoryResult() {
         return notFound("Category not found: " + getCategorySlug().orElse("[unknown]"));
     }
 
-    protected Html renderPage(final ProductOverviewPageContent pageContent) {
-        final SunrisePageData pageData = pageData(pageContent);
-        runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
-        return templateEngine().renderToHtml(getTemplateName(), pageData, userContext.locales());
+    protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
+        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
     }
 
-    protected final CompletionStage<Result> handleFoundProductsAndCallingHooks(final PagedSearchResult<ProductProjection> pagedSearchResult) {
+    protected final CompletionStage<?> runHookOnFoundCategory(final Category category) {
+        return runAsyncHook(SingleCategoryHook.class, hook -> hook.onSingleCategoryLoaded(category));
+    }
+
+    protected final void runHookOnProductSearchResult(final PagedSearchResult<ProductProjection> pagedSearchResult) {
         runVoidHook(ProductProjectionPagedSearchResultHook.class, hook -> hook.acceptProductProjectionPagedSearchResult(pagedSearchResult));
-        return handleFoundProducts(pagedSearchResult);
-    }
-
-    protected final ProductProjectionSearch filter(ProductProjectionSearch q) {
-        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, r) -> hook.filterProductProjectionSearch(r), q);
     }
 
     protected final Optional<Category> getCategory() {

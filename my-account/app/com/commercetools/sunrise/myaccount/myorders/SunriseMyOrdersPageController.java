@@ -111,12 +111,12 @@ public abstract class SunriseMyOrdersPageController extends MyAccountController 
 
     //TODO split this controller into two
     protected Html renderMyOrdersPage(final MyOrdersPageContent pageContent, final UserContext userContext) {
-        final SunrisePageData pageData = pageData(pageContent);
+        final SunrisePageData pageData = createPageData(pageContent);
         return templateEngine().renderToHtml("my-account-my-orders", pageData, userContext.locales());
     }
 
     protected Html renderMyOrderPage(final MyOrderPageContent pageContent, final UserContext userContext) {
-        final SunrisePageData pageData = pageData(pageContent);
+        final SunrisePageData pageData = createPageData(pageContent);
         return templateEngine().renderToHtml("my-account-my-orders-order", pageData, userContext.locales());
     }
 }

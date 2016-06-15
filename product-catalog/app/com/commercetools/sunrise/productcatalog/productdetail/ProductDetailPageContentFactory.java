@@ -2,11 +2,11 @@ package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
+import com.commercetools.sunrise.productcatalog.common.ProductBeanFactory;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
-import com.commercetools.sunrise.productcatalog.common.ProductBeanFactory;
 
 import javax.inject.Inject;
 

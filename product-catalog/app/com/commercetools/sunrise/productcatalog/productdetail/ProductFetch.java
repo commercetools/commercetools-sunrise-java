@@ -9,5 +9,5 @@ public interface ProductFetch<P, V> {
 
     CompletionStage<ProductFetchResult> findProduct(final P productIdentifier,
                                                     final V variantIdentifier,
-                                                    final UnaryOperator<ProductProjectionSearch> searchFilter);
+                                                    final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch);
 }

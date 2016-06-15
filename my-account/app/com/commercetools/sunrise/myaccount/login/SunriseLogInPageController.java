@@ -203,7 +203,7 @@ public abstract class SunriseLogInPageController extends SunriseFrameworkControl
     }
 
     protected Html renderLogInPage(final LogInPageContent pageContent, final UserContext userContext) {
-        final SunrisePageData pageData = pageData(pageContent);
+        final SunrisePageData pageData = createPageData(pageContent);
         return templateEngine().renderToHtml("my-account-login", pageData, userContext.locales());
     }
 
