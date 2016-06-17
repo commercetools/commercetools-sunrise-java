@@ -2,6 +2,7 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
@@ -25,6 +26,8 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private HomeReverseRouter homeReverseRouter;
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
+    @Inject
+    private AddressBookReverseRouter addressBookReverseRouter;
 
     @Override
     public PageMeta create() {
@@ -60,6 +63,14 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processLogInForm(language), "logInSubmit")
                 .addHalLink(reverseRouter.processSignUpForm(language), "signUpSubmit")
                 .addHalLink(reverseRouter.processLogOut(language), "logOut")
+
+                .addHalLink(reverseRouter.showMyPersonalDetails(language), "myPersonalDetails", "myAccount")
+                .addHalLink(reverseRouter.processMyPersonalDetailsForm(language), "editMyPersonalDetails")
+                .addHalLink(addressBookReverseRouter.showMyAddressBook(language), "myAddressBook")
+                .addHalLink(addressBookReverseRouter.processAddAddressToMyAddressBookForm(language), "addAddressToMyAddressBook")
+                .addHalLink(addressBookReverseRouter.processRemoveAddressFromMyAddressBookForm(language), "removeAddressFromMyAddressBook")
+                .addHalLink(reverseRouter.showMyOrders(language), "myOrders")
+
 
                 .addHalLink(reverseRouter.processMyPersonalDetailsForm(language), "editMyPersonalDetails")
 

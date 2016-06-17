@@ -105,7 +105,7 @@ public abstract class SunriseMyOrdersPageController extends MyAccountController 
         final List<OrderOverviewBean> orderBeans = orders.stream()
                 .map(order -> new OrderOverviewBean(order, userContext, i18nResolver, reverseRouter))
                 .collect(toList());
-        pageContent.setOrder(orderBeans);
+        pageContent.setOrders(orderBeans);
         return pageContent;
     }
 

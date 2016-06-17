@@ -1,42 +1,59 @@
-package com.commercetools.sunrise.shoppingcart;
+package com.commercetools.sunrise.myaccount.addressbook;
 
+import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;
+import play.data.validation.Constraints;
 
-import javax.annotation.Nullable;
-import java.util.Locale;
+public class ChangeAddressFormData extends Base {
 
-public class AddressBean extends Base {
+    private String csrfToken;
+
+    @Constraints.Required
+    private String addressId;
 
     private String title;
+    @Constraints.Required
     private String firstName;
+    @Constraints.Required
     private String lastName;
+    @Constraints.Required
     private String streetName;
     private String additionalStreetInfo;
+    @Constraints.Required
     private String city;
-    private String region;
+    @Constraints.Required
     private String postalCode;
+    @Constraints.Required
     private String country;
+    private String region;
     private String phone;
+    @Constraints.Required
     private String email;
 
-    public AddressBean() {
+    public String validate() {
+        final CountryCode country = CountryCode.getByCode(this.country);
+        if (country == null || country.equals(CountryCode.UNDEFINED)) {
+            return "Invalid country"; // TODO use i18n version
+        }
+        return null;
     }
 
-    public AddressBean(@Nullable final Address address, final Locale locale) {
-        if (address != null) {
-            this.title = address.getTitle();
-            this.firstName = address.getFirstName();
-            this.lastName = address.getLastName();
-            this.streetName = address.getStreetName();
-            this.additionalStreetInfo = address.getAdditionalStreetInfo();
-            this.city = address.getCity();
-            this.region = address.getRegion();
-            this.postalCode = address.getPostalCode();
-            this.country = address.getCountry().toLocale().getDisplayCountry(locale);
-            this.phone = address.getPhone();
-            this.email = address.getEmail();
-        }
+    public String getCsrfToken() {
+        return csrfToken;
+    }
+
+    public void setCsrfToken(final String csrfToken) {
+        this.csrfToken = csrfToken;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(final String addressId) {
+        this.addressId = addressId;
     }
 
     public String getTitle() {
@@ -87,14 +104,6 @@ public class AddressBean extends Base {
         this.city = city;
     }
 
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(final String region) {
-        this.region = region;
-    }
-
     public String getPostalCode() {
         return postalCode;
     }
@@ -111,6 +120,14 @@ public class AddressBean extends Base {
         this.country = country;
     }
 
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(final String region) {
+        this.region = region;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -125,5 +142,21 @@ public class AddressBean extends Base {
 
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    public Address toAddress() {
+        final CountryCode country = CountryCode.getByCode(this.country);
+        return AddressBuilder.of(country)
+                .title(title)
+                .firstName(firstName)
+                .lastName(lastName)
+                .streetName(streetName)
+                .additionalStreetInfo(additionalStreetInfo)
+                .city(city)
+                .postalCode(postalCode)
+                .region(region)
+                .phone(phone)
+                .email(email)
+                .build();
     }
 }

@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import setupwidget.controllers.SetupReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
@@ -16,10 +17,7 @@ import static com.commercetools.sunrise.shoppingcart.checkout.shipping.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.thankyou.routes.*;
 import static setupwidget.controllers.routes.*;
 
-public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, SetupReverseRouter {
-
-    public ReverseRouterImpl() {
-    }
+public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, SetupReverseRouter {
 
     @Override
     public Call themeAssets(final String file) {
@@ -142,13 +140,43 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
     }
 
     @Override
-    public Call showMyPersonalDetailsForm(final String languageTag) {
+    public Call showMyPersonalDetails(final String languageTag) {
         return MyPersonalDetailsPageController.show(languageTag);
     }
 
     @Override
     public Call processMyPersonalDetailsForm(final String languageTag) {
         return MyPersonalDetailsPageController.process(languageTag);
+    }
+
+    @Override
+    public Call showMyAddressBook(final String languageTag) {
+        return AddressBookController.show(languageTag);
+    }
+
+    @Override
+    public Call showAddAddressToMyAddressBook(final String languageTag) {
+        return AddAddressController.show(languageTag);
+    }
+
+    @Override
+    public Call processAddAddressToMyAddressBookForm(final String languageTag) {
+        return AddAddressController.process(languageTag);
+    }
+
+    @Override
+    public Call showChangeAddressInMyAddressBook(final String languageTag, final String addressId) {
+        return ChangeAddressController.show(languageTag, addressId);
+    }
+
+    @Override
+    public Call processChangeAddressInMyAddressBookForm(final String languageTag, final String addressId) {
+        return ChangeAddressController.process(languageTag, addressId);
+    }
+
+    @Override
+    public Call processRemoveAddressFromMyAddressBookForm(final String languageTag) {
+        return RemoveAddressController.process(languageTag);
     }
 
     @Override

@@ -56,10 +56,6 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     protected static final Logger logger = LoggerFactory.getLogger(SunriseProductDetailPageController.class);
 
     @Inject
-    private UserContext userContext;
-    @Inject
-    private ProductReverseRouter productReverseRouter;
-    @Inject
     private Injector injector;
     @Inject
     protected ProductDetailPageContentFactory productDetailPageContentFactory;
@@ -157,11 +153,13 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     }
 
     private Result redirectToNewSlug(final String newSlug, final String sku) {
-        return movedPermanently(productReverseRouter.productDetailPageCall(userContext.locale().toLanguageTag(), newSlug, sku));
+        final ProductReverseRouter productReverseRouter = injector.getInstance(ProductReverseRouter.class);
+        return movedPermanently(productReverseRouter.productDetailPageCall(userContext().languageTag(), newSlug, sku));
     }
 
     private CompletionStage<Result> redirectToMasterVariant(final ProductProjection product) {
-        return productReverseRouter.productDetailPageCall(userContext.locale(), product, product.getMasterVariant())
+        final ProductReverseRouter productReverseRouter = injector.getInstance(ProductReverseRouter.class);
+        return productReverseRouter.productDetailPageCall(userContext().locale(), product, product.getMasterVariant())
                 .map(call -> completedFuture(redirect(call)))
                 .orElseGet(() -> completedFuture(notFoundProductResult()));
     }

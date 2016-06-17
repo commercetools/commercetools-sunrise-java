@@ -6,6 +6,8 @@ import io.sphere.sdk.models.AddressBuilder;
 import play.data.Form;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public final class FormUtils {
@@ -49,6 +51,15 @@ public final class FormUtils {
         } else {
             return Address.of(CountryCode.UNDEFINED);
         }
+    }
+
+    public static List<String> extractErrors(@Nullable final Form<?> form) {
+        final List<String> errorList = new ArrayList<>();
+        if (form != null) {
+            form.errors().forEach((field, errors) ->
+                    errors.forEach(error -> errorList.add(error.key() + ": " + error.message())));
+        }
+        return errorList;
     }
 
     private static CountryCode countryOrUndefined(@Nullable final String selectedCountry) {

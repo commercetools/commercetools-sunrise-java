@@ -9,6 +9,7 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 
 public class ErrorsBean extends Base {
+
     private List<ErrorBean> globalErrors;
 
     public ErrorsBean() {
@@ -18,6 +19,7 @@ public class ErrorsBean extends Base {
         this.globalErrors = singletonList(new ErrorBean(errorMessage));
     }
 
+    @Deprecated
     public ErrorsBean(final List<Form<?>> filledForms) {
         this.globalErrors = new ArrayList<>();
         filledForms.forEach(filledForm ->
@@ -26,6 +28,7 @@ public class ErrorsBean extends Base {
                                 globalErrors.add(new ErrorBean(error.key() + ": " + error.message())))));
     }
 
+    @Deprecated
     public ErrorsBean(final Form<?> filledForm) {
         this(singletonList(filledForm));
     }

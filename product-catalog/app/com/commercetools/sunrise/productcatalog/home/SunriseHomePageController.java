@@ -61,7 +61,7 @@ public abstract class SunriseHomePageController extends SunriseFrameworkControll
     }
 
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> showHome());
+        return doRequest(this::showHome);
     }
 
     protected CompletableFuture<Result> showHome() {

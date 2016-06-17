@@ -102,9 +102,25 @@ GET         /:languageTag/user/logout                          @demo.LogInPageCo
 # ~~~~~
 
 # Shows a form for updating the customer's details
-GET         /:languageTag/user/details                         @demo.MyPersonalDetailsPageController.show(languageTag: String)
+GET         /:languageTag/user                                 @demo.MyPersonalDetailsPageController.show(languageTag: String)
 # Processes the form for updating the customer's details
-POST        /:languageTag/user/details                         @demo.MyPersonalDetailsPageController.process(languageTag: String)
+POST        /:languageTag/user                                 @demo.MyPersonalDetailsPageController.process(languageTag: String)
+
+
+# Shows the address book
+GET         /:languageTag/user/addressbook                     @demo.AddressBookController.show(languageTag: String)
+# Shows the form to add an address to the customer's address book
+GET         /:languageTag/user/addressbook/add                 @demo.AddAddressController.show(languageTag: String)
+# Adds an address to the customer's address book
+POST        /:languageTag/user/addressbook/add                 @demo.AddAddressController.process(languageTag: String)
+# Shows the form to edit an address from the customer's address book
+GET         /:languageTag/user/addressbook/:addressId          @demo.ChangeAddressController.show(languageTag: String, addressId: String)
+# Updates an address from the customer's address book
+POST        /:languageTag/user/addressbook/:addressId          @demo.ChangeAddressController.process(languageTag: String, addressId: String)
+# Removes an address from the customer's address book
+POST        /:languageTag/user/addressbook/remove              @demo.RemoveAddressController.process(languageTag: String)
+
+
 # Shows all orders from the customer
 GET         /:languageTag/user/orders                          @demo.MyOrdersPageController.list(languageTag: String, page: Int ?= 1)
 # Show an order from the customer
