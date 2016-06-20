@@ -43,7 +43,6 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     @Inject
     protected CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
-    protected Form<CheckoutBillingAddressFormData> billingAddressUnboundForm;
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
     @Inject
