@@ -1,9 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
-import com.commercetools.sunrise.common.pages.SunrisePageData;
-import com.commercetools.sunrise.common.errors.ErrorsBean;
-import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.hooks.CartLoadedHook;
+import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
@@ -23,10 +26,6 @@ import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 import scala.concurrent.ExecutionContextExecutor;
-import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
-import com.commercetools.sunrise.hooks.CartLoadedHook;
-import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -39,7 +38,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController {
+public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
 
     @Inject
     protected CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
@@ -145,13 +144,22 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     }
 
     protected Html renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent) {
+        fill(cart, pageContent);
+        return renderPage(pageContent, getTemplateName());
+    }
+
+    protected void fill(final Cart cart, final CheckoutAddressPageContent pageContent) {
         pageContent.setStepWidget(StepWidgetBean.ADDRESS);
         pageContent.setCart(createCartLikeBean(cart, userContext()));
-        return renderPage(pageContent, "checkout-address");
+    }
+
+    @Override
+    public String getTemplateName() {
+        return "checkout-address";
     }
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("checkout", "checkout.address"));
+        return new HashSet<>(asList("checkout", "checkout-address"));
     }
 }
