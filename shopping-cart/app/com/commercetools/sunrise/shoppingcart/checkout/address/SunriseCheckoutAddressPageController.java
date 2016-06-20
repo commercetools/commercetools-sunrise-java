@@ -17,7 +17,8 @@ import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
-import play.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -40,6 +41,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
 public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+    protected static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressPageController.class);
 
     @Inject
     protected CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
@@ -81,9 +83,8 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
             super(CheckoutShippingAddressFormData.class, CheckoutBillingAddressFormData.class);
         }
 
-        //TODO the value is uses multiple times and could be cached
         @Override
-        protected boolean isBillingAddressDifferentToBillingAddress(final Form<CheckoutShippingAddressFormData> shippingAddressForm, final Form<CheckoutBillingAddressFormData> billingAddressForm) {
+        protected boolean uncachedIsBillingAddressDifferentToBillingAddress(final Form<CheckoutShippingAddressFormData> shippingAddressForm, final Form<CheckoutBillingAddressFormData> billingAddressForm) {
             return !shippingAddressForm.hasErrors() && shippingAddressForm.get().isBillingAddressDifferentToBillingAddress();
         }
     }
@@ -93,6 +94,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         private FormFactory formFactory;
         protected final Class<S> shippingAddressFormClass;
         protected final Class<B> billingAddressFormClass;
+        protected Boolean billingAddressDifferentToBillingAddress;
 
         protected AbstractFooHelper(final Class<S> shippingAddressFormClass, final Class<B> billingAddressFormClass) {
             this.billingAddressFormClass = billingAddressFormClass;
@@ -109,7 +111,14 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
             }
         }
 
-        protected abstract boolean isBillingAddressDifferentToBillingAddress(final Form<S> shippingAddressForm, final Form<B> billingAddressForm);
+        protected boolean isBillingAddressDifferentToBillingAddress(final Form<S> shippingAddressForm, final Form<B> billingAddressForm) {
+            if (billingAddressDifferentToBillingAddress == null) {
+                billingAddressDifferentToBillingAddress = uncachedIsBillingAddressDifferentToBillingAddress(shippingAddressForm, billingAddressForm);
+            }
+            return billingAddressDifferentToBillingAddress;
+        }
+
+        protected abstract boolean uncachedIsBillingAddressDifferentToBillingAddress(final Form<S> shippingAddressForm, final Form<B> billingAddressForm);
 
         public CompletionStage<Result> processAddressForm(final Cart cart, final SunriseCheckoutAddressPageController controller) {
             final Form<S> shippingAddressForm = formFactory.form(shippingAddressFormClass).bindFromRequest();
@@ -166,13 +175,17 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
                                                                   final Form<? extends WithAddressExport> billingAddressForm,
                                                                   final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
-            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
-            Logger.error("The request to set address to cart raised an exception", errorResponseException);
-            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-            final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, billingAddressForm, errors);
-            return completedFuture(badRequest(renderCheckoutAddressPage(cart, pageContent)));
+            return handleErrorResponseException(throwable, shippingAddressForm, billingAddressForm, cart);
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
+    }
+
+    private CompletionStage<Result> handleErrorResponseException(final Throwable throwable, final Form<? extends WithAddressExport> shippingAddressForm, final Form<? extends WithAddressExport> billingAddressForm, final Cart cart) {
+        final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
+        logger.error("The request to set address to cart raised an exception", errorResponseException);
+        final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
+        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, billingAddressForm, errors);
+        return completedFuture(badRequest(renderCheckoutAddressPage(cart, pageContent)));
     }
 
     protected Html renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent) {
