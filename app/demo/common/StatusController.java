@@ -1,4 +1,4 @@
-package demo;
+package demo.common;
 
 import com.commercetools.sunrise.common.controllers.SunriseStatusController;
 

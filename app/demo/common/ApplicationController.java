@@ -1,4 +1,4 @@
-package demo;
+package demo.common;
 
 import play.mvc.Controller;
 import play.mvc.Result;

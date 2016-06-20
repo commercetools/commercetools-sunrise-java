@@ -2,10 +2,10 @@
 # ~~~~
 
 # Untrail url
-GET         /*path/                                            @demo.ApplicationController.untrail(path: String)
+GET         /*path/                                            @demo.common.ApplicationController.untrail(path: String)
 
 # Main entry point that decides whether to go to home page or to setup wizard
-GET         /                                                  @demo.HomePageController.index()
+GET         /                                                  @demo.productcatalog.HomePageController.index()
 
 ->          /setup                                             setupwidget.Routes
 
@@ -14,9 +14,9 @@ GET         /                                                  @demo.HomePageCon
 # ~~~~~
 
 # Shows the deployed version, artifactId and GIT SHA
-GET         /version                                           @demo.StatusController.showVersion()
+GET         /version                                           @demo.common.StatusController.showVersion()
 # Shows if the application is healthy
-GET         /health                                            @demo.StatusController.showHealth()
+GET         /health                                            @demo.common.StatusController.showHealth()
 
 # Endpoint to manually refresh category tree (otherwise an app restart is required)
 GET         /categories/refresh                                @com.commercetools.sunrise.common.categorytree.CategoriesRefreshController.refresh()
@@ -37,16 +37,16 @@ GET         /assets/$file<(css|js|fonts|img)/.*>               controllers.WebJa
 # ~~~~~
 
 # Home page
-GET         /:languageTag/home                                 @demo.HomePageController.show(languageTag: String)
+GET         /:languageTag/home                                 @demo.productcatalog.HomePageController.show(languageTag: String)
 
 
 # LOCATION
 # ~~~~~
 
 # Changes the language of the app
-POST        /changeLanguage                                    @demo.LocalizationController.changeLanguage()
+POST        /changeLanguage                                    @demo.common.LocalizationController.changeLanguage()
 # Changes the country of the app
-POST        /:languageTag/changeCountry                        @demo.LocalizationController.changeCountry(languageTag: String)
+POST        /:languageTag/changeCountry                        @demo.common.LocalizationController.changeCountry(languageTag: String)
 
 
 # CART
@@ -66,9 +66,9 @@ POST        /:languageTag/cart/remove                          @com.commercetool
 # ~~~~~
 
 # Shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/address                     @demo.CheckoutAddressPageController.show(languageTag: String)
+GET         /:languageTag/checkout/address                     @demo.shoppingcart.CheckoutAddressPageController.show(languageTag: String)
 # Processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/address                     @demo.CheckoutAddressPageController.process(languageTag: String)
+POST        /:languageTag/checkout/address                     @demo.shoppingcart.CheckoutAddressPageController.process(languageTag: String)
 # Shows the form to enter shipping address and billing address
 GET         /:languageTag/checkout/shipping                    @com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingPageController.show(languageTag: String)
 # Processes the form of the shipping address and billing address
@@ -89,57 +89,57 @@ GET         /:languageTag/checkout/thankyou                    @com.commercetool
 # ~~~~~
 
 # Shows log in form
-GET         /:languageTag/user/login                           @demo.LogInPageController.show(languageTag: String)
+GET         /:languageTag/user/login                           @demo.myaccount.LogInPageController.show(languageTag: String)
 # Logs in the user
-POST        /:languageTag/user/login                           @demo.LogInPageController.processLogIn(languageTag: String)
+POST        /:languageTag/user/login                           @demo.myaccount.LogInPageController.processLogIn(languageTag: String)
 # Signs up the user
-POST        /:languageTag/user/signup                          @demo.LogInPageController.processSignUp(languageTag: String)
+POST        /:languageTag/user/signup                          @demo.myaccount.LogInPageController.processSignUp(languageTag: String)
 # Logs out the user
-GET         /:languageTag/user/logout                          @demo.LogInPageController.processLogOut(languageTag: String)
+GET         /:languageTag/user/logout                          @demo.myaccount.LogInPageController.processLogOut(languageTag: String)
 
 
 # MY ACCOUNT
 # ~~~~~
 
 # Shows a form for updating the customer's details
-GET         /:languageTag/user                                 @demo.MyPersonalDetailsPageController.show(languageTag: String)
+GET         /:languageTag/user                                 @demo.myaccount.MyPersonalDetailsPageController.show(languageTag: String)
 # Processes the form for updating the customer's details
-POST        /:languageTag/user                                 @demo.MyPersonalDetailsPageController.process(languageTag: String)
+POST        /:languageTag/user                                 @demo.myaccount.MyPersonalDetailsPageController.process(languageTag: String)
 
 
 # Shows the address book
-GET         /:languageTag/user/addressbook                     @demo.AddressBookController.show(languageTag: String)
+GET         /:languageTag/user/addressbook                     @demo.myaccount.AddressBookController.show(languageTag: String)
 # Shows the form to add an address to the customer's address book
-GET         /:languageTag/user/addressbook/add                 @demo.AddAddressController.show(languageTag: String)
+GET         /:languageTag/user/addressbook/add                 @demo.myaccount.AddAddressController.show(languageTag: String)
 # Adds an address to the customer's address book
-POST        /:languageTag/user/addressbook/add                 @demo.AddAddressController.process(languageTag: String)
+POST        /:languageTag/user/addressbook/add                 @demo.myaccount.AddAddressController.process(languageTag: String)
 # Shows the form to edit an address from the customer's address book
-GET         /:languageTag/user/addressbook/:addressId          @demo.ChangeAddressController.show(languageTag: String, addressId: String)
+GET         /:languageTag/user/addressbook/:addressId          @demo.myaccount.ChangeAddressController.show(languageTag: String, addressId: String)
 # Updates an address from the customer's address book
-POST        /:languageTag/user/addressbook/:addressId          @demo.ChangeAddressController.process(languageTag: String, addressId: String)
+POST        /:languageTag/user/addressbook/:addressId          @demo.myaccount.ChangeAddressController.process(languageTag: String, addressId: String)
 # Removes an address from the customer's address book
-POST        /:languageTag/user/addressbook/remove              @demo.RemoveAddressController.process(languageTag: String)
+POST        /:languageTag/user/addressbook/remove              @demo.myaccount.RemoveAddressController.process(languageTag: String)
 
 
 # Shows all orders from the customer
-GET         /:languageTag/user/orders                          @demo.MyOrdersPageController.list(languageTag: String, page: Int ?= 1)
+GET         /:languageTag/user/orders                          @demo.myaccount.MyOrdersPageController.list(languageTag: String, page: Int ?= 1)
 # Show an order from the customer
-GET         /:languageTag/user/orders/:orderNumber             @demo.MyOrdersPageController.show(languageTag: String, orderNumber: String)
+GET         /:languageTag/user/orders/:orderNumber             @demo.myaccount.MyOrdersPageController.show(languageTag: String, orderNumber: String)
 
 
 # PRODUCT DETAIL
 # ~~~~~
 
 # Shows the product detail page
-GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @demo.ProductDetailPageController.showProductBySlugAndSku(languageTag: String, productSlug: String, sku: String)
+GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @demo.productcatalog.ProductDetailPageController.showProductBySlugAndSku(languageTag: String, productSlug: String, sku: String)
 # TODO framework remove this route
-GET         /:languageTag/:productId/:variantId                @demo.ProductDetailPageController.showProductByProductIdAndVariantId(languageTag: String, productId: String, variantId: Int)
+GET         /:languageTag/:productId/:variantId                @demo.productcatalog.ProductDetailPageController.showProductByProductIdAndVariantId(languageTag: String, productId: String, variantId: Int)
 
 
 # PRODUCT OVERVIEW
 # ~~~~~
 
 # Shows the search results page
-GET         /:languageTag/search                               @demo.ProductOverviewPageController.searchProductsBySearchTerm(languageTag: String)
+GET         /:languageTag/search                               @demo.productcatalog.ProductOverviewPageController.searchProductsBySearchTerm(languageTag: String)
 # Shows the product overview page for this category
-GET         /:languageTag/:categorySlug                        @demo.ProductOverviewPageController.searchProductsByCategorySlug(languageTag: String, categorySlug: String)
+GET         /:languageTag/:categorySlug                        @demo.productcatalog.ProductOverviewPageController.searchProductsByCategorySlug(languageTag: String, categorySlug: String)

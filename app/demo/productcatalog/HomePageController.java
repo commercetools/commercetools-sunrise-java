@@ -1,4 +1,4 @@
-package demo;
+package demo.productcatalog;
 
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;

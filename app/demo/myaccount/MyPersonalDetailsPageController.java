@@ -1,4 +1,4 @@
-package demo;
+package demo.myaccount;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsPageController;

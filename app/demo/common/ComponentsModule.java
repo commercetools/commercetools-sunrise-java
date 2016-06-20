@@ -1,4 +1,4 @@
-package demo;
+package demo.common;
 
 import com.commercetools.sunrise.common.localization.LocationSelectorControllerComponent;
 import com.commercetools.sunrise.common.pages.DefaultPageNavMenuControllerComponent;
@@ -11,7 +11,6 @@ import com.google.inject.Provides;
 import io.sphere.sdk.utils.MoneyImpl;
 
 import javax.money.Monetary;
-import javax.money.MonetaryRounding;
 
 public class ComponentsModule extends AbstractModule {
 
