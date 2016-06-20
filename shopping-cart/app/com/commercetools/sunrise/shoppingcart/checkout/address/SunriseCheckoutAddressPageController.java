@@ -50,20 +50,24 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        final CompletionStage<Cart> loadedCart = getOrCreateCart();
-        final ExecutionContextExecutor contextExecutor = HttpExecution.defaultContext();
-        final CompletionStage<Object> hooksCompletionStage =
-                loadedCart.thenComposeAsync(cart -> runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart)), contextExecutor);
-        return loadedCart.thenCombineAsync(hooksCompletionStage, (cart, loadedCartHooksResult) -> showCheckoutAddressPage(cart), contextExecutor);
+        return doRequest(() -> {
+            final CompletionStage<Cart> loadedCart = getOrCreateCart();
+            final ExecutionContextExecutor contextExecutor = HttpExecution.defaultContext();
+            final CompletionStage<Object> hooksCompletionStage =
+                    loadedCart.thenComposeAsync(cart -> runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart)), contextExecutor);
+            return loadedCart.thenCombineAsync(hooksCompletionStage, (cart, loadedCartHooksResult) -> showCheckoutAddressPage(cart), contextExecutor);
+        });
     }
 
     @RequireCSRFCheck
     @SuppressWarnings("unused")
     public CompletionStage<Result> process(final String languageTag) {
-        final CompletionStage<Cart> loadedCart = getOrCreateCart();
-        final ExecutionContextExecutor executor = HttpExecution.defaultContext();
-        final CompletionStage<Object> hooksCompletionStage = loadedCart.thenComposeAsync(cart -> runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart)), executor);
-        return loadedCart.thenComposeAsync(cart -> hooksCompletionStage.thenComposeAsync(x -> processAddressForm(cart), executor), executor);
+        return doRequest(() -> {
+            final CompletionStage<Cart> loadedCart = getOrCreateCart();
+            final ExecutionContextExecutor executor = HttpExecution.defaultContext();
+            final CompletionStage<Object> hooksCompletionStage = loadedCart.thenComposeAsync(cart -> runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart)), executor);
+            return loadedCart.thenComposeAsync(cart -> hooksCompletionStage.thenComposeAsync(x -> processAddressForm(cart), executor), executor);
+        });
     }
 
     private Result showCheckoutAddressPage(final Cart cart) {
