@@ -43,16 +43,11 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     @Inject
     protected CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
-    protected Form<CheckoutShippingAddressFormData> shippingAddressUnboundForm;
     protected Form<CheckoutBillingAddressFormData> billingAddressUnboundForm;
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
-
     @Inject
-    public void initializeForms(final FormFactory formFactory) {
-        this.shippingAddressUnboundForm = formFactory.form(CheckoutShippingAddressFormData.class);
-        this.billingAddressUnboundForm = formFactory.form(CheckoutBillingAddressFormData.class);
-    }
+    private FormFactory formFactory;
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
@@ -78,8 +73,8 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     }
 
     private CompletionStage<Result> processAddressForm(final Cart cart) {
-        final Form<CheckoutShippingAddressFormData> shippingAddressForm = shippingAddressUnboundForm.bindFromRequest();
-        final Form<CheckoutBillingAddressFormData> billingAddressForm = billingAddressUnboundForm.bindFromRequest();
+        final Form<CheckoutShippingAddressFormData> shippingAddressForm = formFactory.form(CheckoutShippingAddressFormData.class).bindFromRequest();
+        final Form<CheckoutBillingAddressFormData> billingAddressForm = formFactory.form(CheckoutBillingAddressFormData.class).bindFromRequest();
         if (formHasErrors(shippingAddressForm, billingAddressForm)) {
             return handleFormErrors(shippingAddressForm, billingAddressForm, cart);
         } else {
