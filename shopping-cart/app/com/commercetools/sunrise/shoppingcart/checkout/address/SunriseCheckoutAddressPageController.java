@@ -7,6 +7,7 @@ import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.hooks.CartLoadedHook;
 import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
@@ -45,7 +46,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
     @Inject
-    private FormFactory formFactory;
+    private Injector injector;
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
@@ -74,30 +75,61 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         return ok(renderCheckoutAddressPage(cart, pageContent));
     }
 
-    private CompletionStage<Result> processAddressForm(final Cart cart) {
-        final Form<CheckoutShippingAddressFormData> shippingAddressForm = formFactory.form(CheckoutShippingAddressFormData.class).bindFromRequest();
-        final Form<CheckoutBillingAddressFormData> billingAddressForm = formFactory.form(CheckoutBillingAddressFormData.class).bindFromRequest();
-        if (formHasErrors(shippingAddressForm, billingAddressForm)) {
-            return handleFormErrors(shippingAddressForm, billingAddressForm, cart);
-        } else {
-            final Address shippingAddress = shippingAddressForm.get().toAddress();
-            final boolean differentBilling = shippingAddressForm.get().isBillingAddressDifferentToBillingAddress();
-            final Address billingAddress = differentBilling ? billingAddressForm.get().toAddress() : null;
-            final CompletionStage<Result> resultStage = setAddressToCart(cart, shippingAddress, billingAddress)
-                    .thenComposeAsync(this::handleSuccessfulSetAddress, HttpExecution.defaultContext());
-            return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                    handleSetAddressToCartError(throwable, shippingAddressForm, billingAddressForm, cart));
+    private static class DefaultFooHelper extends AbstractFooHelper<CheckoutShippingAddressFormData, CheckoutBillingAddressFormData> {
+
+        public DefaultFooHelper() {
+            super(CheckoutShippingAddressFormData.class, CheckoutBillingAddressFormData.class);
+        }
+
+        //TODO the value is uses multiple times and could be cached
+        @Override
+        protected boolean isBillingAddressDifferentToBillingAddress(final Form<CheckoutShippingAddressFormData> shippingAddressForm, final Form<CheckoutBillingAddressFormData> billingAddressForm) {
+            return !shippingAddressForm.hasErrors() && shippingAddressForm.get().isBillingAddressDifferentToBillingAddress();
         }
     }
 
-    protected boolean formHasErrors(final Form<CheckoutShippingAddressFormData> shippingAddressForm,
-                                    final Form<CheckoutBillingAddressFormData> billingAddressForm) {
-        if (shippingAddressForm.hasErrors()) {
-            return true;
-        } else {
-            final boolean differentBilling = shippingAddressForm.get().isBillingAddressDifferentToBillingAddress();
-            return differentBilling && billingAddressForm.hasErrors();
+    private static abstract class AbstractFooHelper<S extends WithAddressExport, B extends WithAddressExport> {
+        @Inject
+        private FormFactory formFactory;
+        protected final Class<S> shippingAddressFormClass;
+        protected final Class<B> billingAddressFormClass;
+
+        protected AbstractFooHelper(final Class<S> shippingAddressFormClass, final Class<B> billingAddressFormClass) {
+            this.billingAddressFormClass = billingAddressFormClass;
+            this.shippingAddressFormClass = shippingAddressFormClass;
         }
+
+        protected boolean formHasErrors(final Form<S> shippingAddressForm,
+                                        final Form<B> billingAddressForm) {
+            if (shippingAddressForm.hasErrors()) {
+                return true;
+            } else {
+                final boolean differentBilling = isBillingAddressDifferentToBillingAddress(shippingAddressForm, billingAddressForm);
+                return differentBilling && billingAddressForm.hasErrors();
+            }
+        }
+
+        protected abstract boolean isBillingAddressDifferentToBillingAddress(final Form<S> shippingAddressForm, final Form<B> billingAddressForm);
+
+        public CompletionStage<Result> processAddressForm(final Cart cart, final SunriseCheckoutAddressPageController controller) {
+            final Form<S> shippingAddressForm = formFactory.form(shippingAddressFormClass).bindFromRequest();
+            final Form<B> billingAddressForm = formFactory.form(billingAddressFormClass).bindFromRequest();
+            if (formHasErrors(shippingAddressForm, billingAddressForm)) {
+                return controller.handleFormErrors(shippingAddressForm, billingAddressForm, cart);
+            } else {
+                final Address shippingAddress = shippingAddressForm.get().toAddress();
+                final boolean differentBilling = isBillingAddressDifferentToBillingAddress(shippingAddressForm, billingAddressForm);
+                final Address billingAddress = differentBilling ? billingAddressForm.get().toAddress() : null;
+                final CompletionStage<Result> resultStage = controller.setAddressToCart(cart, shippingAddress, billingAddress)
+                        .thenComposeAsync(controller::handleSuccessfulSetAddress, HttpExecution.defaultContext());
+                return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                        controller.handleSetAddressToCartError(throwable, shippingAddressForm, billingAddressForm, cart));
+            }
+        }
+    }
+
+    private CompletionStage<Result> processAddressForm(final Cart cart) {
+        return injector.getInstance(DefaultFooHelper.class).processAddressForm(cart, this);
     }
 
     protected CompletionStage<Cart> setAddressToCart(final Cart cart, final Address shippingAddress,
@@ -116,8 +148,8 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         return completedFuture(redirect(call));
     }
 
-    protected CompletionStage<Result> handleFormErrors(final Form<CheckoutShippingAddressFormData> shippingAddressForm,
-                                                       final Form<CheckoutBillingAddressFormData> billingAddressForm,
+    protected CompletionStage<Result> handleFormErrors(final Form<? extends WithAddressExport> shippingAddressForm,
+                                                       final Form<? extends WithAddressExport> billingAddressForm,
                                                        final Cart cart) {
         final ErrorsBean errors;
         if (shippingAddressForm.hasErrors()) {
@@ -130,8 +162,8 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     }
 
     protected CompletionStage<Result> handleSetAddressToCartError(final Throwable throwable,
-                                                                  final Form<CheckoutShippingAddressFormData> shippingAddressForm,
-                                                                  final Form<CheckoutBillingAddressFormData> billingAddressForm,
+                                                                  final Form<? extends WithAddressExport> shippingAddressForm,
+                                                                  final Form<? extends WithAddressExport> billingAddressForm,
                                                                   final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();

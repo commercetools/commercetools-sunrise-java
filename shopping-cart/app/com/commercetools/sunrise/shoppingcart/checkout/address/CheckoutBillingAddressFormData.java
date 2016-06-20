@@ -6,7 +6,7 @@ import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-public class CheckoutBillingAddressFormData extends Base {
+public class CheckoutBillingAddressFormData extends Base implements WithAddressExport {
 
     private String csrfToken;
 

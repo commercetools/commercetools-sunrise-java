@@ -23,8 +23,8 @@ public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
         return pageContent;
     }
 
-    public CheckoutAddressPageContent createWithAddressError(final Form<CheckoutShippingAddressFormData> shippingAddressForm,
-                                                                final Form<CheckoutBillingAddressFormData> billingAddressForm,
+    public CheckoutAddressPageContent createWithAddressError(final Form<? extends WithAddressExport> shippingAddressForm,
+                                                                final Form<? extends WithAddressExport> billingAddressForm,
                                                                 final ErrorsBean errors) {
         final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
         final Address shippingAddress = extractAddress(shippingAddressForm, "Shipping");
