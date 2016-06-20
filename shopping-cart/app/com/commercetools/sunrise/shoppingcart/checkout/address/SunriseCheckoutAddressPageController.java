@@ -77,9 +77,9 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         return ok(renderCheckoutAddressPage(cart, pageContent));
     }
 
-    private static class DefaultFooHelper extends AbstractFooHelper<CheckoutShippingAddressFormData, CheckoutBillingAddressFormData> {
+    private static class DefaultCheckoutAddressFormDelegate extends CheckoutAddressFormDelegate<CheckoutShippingAddressFormData, CheckoutBillingAddressFormData> {
 
-        public DefaultFooHelper() {
+        public DefaultCheckoutAddressFormDelegate() {
             super(CheckoutShippingAddressFormData.class, CheckoutBillingAddressFormData.class);
         }
 
@@ -89,14 +89,14 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         }
     }
 
-    private static abstract class AbstractFooHelper<S extends WithAddressExport, B extends WithAddressExport> {
+    private static abstract class CheckoutAddressFormDelegate<S extends WithAddressExport, B extends WithAddressExport> {
         @Inject
         private FormFactory formFactory;
         protected final Class<S> shippingAddressFormClass;
         protected final Class<B> billingAddressFormClass;
         protected Boolean billingAddressDifferentToBillingAddress;
 
-        protected AbstractFooHelper(final Class<S> shippingAddressFormClass, final Class<B> billingAddressFormClass) {
+        protected CheckoutAddressFormDelegate(final Class<S> shippingAddressFormClass, final Class<B> billingAddressFormClass) {
             this.billingAddressFormClass = billingAddressFormClass;
             this.shippingAddressFormClass = shippingAddressFormClass;
         }
@@ -138,7 +138,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     }
 
     private CompletionStage<Result> processAddressForm(final Cart cart) {
-        return injector.getInstance(DefaultFooHelper.class).processAddressForm(cart, this);
+        return injector.getInstance(DefaultCheckoutAddressFormDelegate.class).processAddressForm(cart, this);
     }
 
     protected CompletionStage<Cart> setAddressToCart(final Cart cart, final Address shippingAddress,
