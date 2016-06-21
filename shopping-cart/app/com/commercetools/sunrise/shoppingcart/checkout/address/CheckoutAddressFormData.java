@@ -6,7 +6,9 @@ import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-public class CheckoutAddressFormData extends Base {
+import javax.annotation.Nullable;
+
+public class CheckoutAddressFormData extends Base implements CheckoutAddressFormDataLike {
 
     private String csrfToken;
 
@@ -241,23 +243,30 @@ public class CheckoutAddressFormData extends Base {
         this.emailShipping = emailShipping;
     }
 
-    public Address toBillingAddress() {
-        final CountryCode country = CountryCode.getByCode(countryBilling);
-        return AddressBuilder.of(country)
-                .title(titleBilling)
-                .firstName(firstNameBilling)
-                .lastName(lastNameBilling)
-                .streetName(streetNameBilling)
-                .additionalStreetInfo(additionalStreetInfoBilling)
-                .city(cityBilling)
-                .postalCode(postalCodeBilling)
-                .region(regionBilling)
-                .phone(phoneBilling)
-                .email(emailBilling)
-                .build();
+    @Override
+    @Nullable
+    public Address getBillingAddress() {
+        if (isBillingAddressDifferentToBillingAddress()) {
+            final CountryCode country = CountryCode.getByCode(countryBilling);
+            return AddressBuilder.of(country)
+                    .title(titleBilling)
+                    .firstName(firstNameBilling)
+                    .lastName(lastNameBilling)
+                    .streetName(streetNameBilling)
+                    .additionalStreetInfo(additionalStreetInfoBilling)
+                    .city(cityBilling)
+                    .postalCode(postalCodeBilling)
+                    .region(regionBilling)
+                    .phone(phoneBilling)
+                    .email(emailBilling)
+                    .build();
+        } else {
+            return null;
+        }
     }
 
-    public Address toShippingAddress() {
+    @Override
+    public Address getShippingAddress() {
         final CountryCode country = CountryCode.getByCode(countryShipping);
         return AddressBuilder.of(country)
                 .title(titleShipping)
