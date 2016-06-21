@@ -4,7 +4,6 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.hooks.CartLoadedHook;
 import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
@@ -51,13 +50,8 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            final CompletionStage<Cart> loadedCart = getOrCreateCart();
-            final ExecutionContextExecutor contextExecutor = HttpExecution.defaultContext();
-            final CompletionStage<Object> hooksCompletionStage =
-                    loadedCart.thenComposeAsync(cart -> runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart)), contextExecutor);
-            return loadedCart.thenCombineAsync(hooksCompletionStage, (cart, loadedCartHooksResult) -> showCheckoutAddressPage(cart), contextExecutor);
-        });
+        return doRequest(() -> getOrCreateCart()
+                .thenApplyAsync(cart -> showCheckoutAddressPage(cart), HttpExecution.defaultContext()));
     }
 
     @RequireCSRFCheck
@@ -70,8 +64,13 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         return doRequest(() -> {
             final CompletionStage<Cart> loadedCart = getOrCreateCart();
             final ExecutionContextExecutor executor = HttpExecution.defaultContext();
-            final CompletionStage<Object> hooksCompletionStage = loadedCart.thenComposeAsync(cart -> runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart)), executor);
-            return loadedCart.thenComposeAsync(cart -> hooksCompletionStage.thenComposeAsync(x -> processAddressForm(cart, formClass), executor), executor);
+            return loadedCart.thenComposeAsync(cart -> processAddressForm(cart, formClass), executor);
+
+            //TODO waitWithSunrisePageDataHookWhenAllAsyncHooksAreCompleted
+            //TODO getOrCreateCart executes hooks
+            //TODO is there a solution with config/DI?
+            //TODO extension point having data/form
+            //TODO log hooks calls in trace
         });
     }
 
