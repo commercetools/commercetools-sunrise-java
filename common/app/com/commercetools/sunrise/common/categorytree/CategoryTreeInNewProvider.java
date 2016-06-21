@@ -3,8 +3,9 @@ package com.commercetools.sunrise.common.categorytree;
 import com.google.inject.Provider;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.Configuration;
-import play.Logger;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 public final class CategoryTreeInNewProvider implements Provider<CategoryTree> {
 
+    private static final Logger logger = LoggerFactory.getLogger(CategoryTreeInNewProvider.class);
     private static final String CONFIG_CATEGORY_NEW_EXT_ID = "common.newCategoryExternalId";
 
     @Inject
@@ -26,7 +28,7 @@ public final class CategoryTreeInNewProvider implements Provider<CategoryTree> {
                 .map(Collections::singletonList)
                 .orElseGet(Collections::emptyList);
         final CategoryTree categoryTreeInNew = categoryTree.getSubtree(categories);
-        Logger.info("Provide CategoryTreeInNew with " + categoryTreeInNew.getAllAsFlatList().size() + " categories");
+        logger.info("Provide CategoryTreeInNew with " + categoryTreeInNew.getAllAsFlatList().size() + " categories");
         return categoryTreeInNew;
     }
 

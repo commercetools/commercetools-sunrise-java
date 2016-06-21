@@ -1,8 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage;
 
 import com.commercetools.sunrise.common.SunriseInitializationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.Configuration;
-import play.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -13,7 +14,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public final class ProductsPerPageConfigProvider implements Provider<ProductsPerPageConfig> {
-
+    private static final Logger logger = LoggerFactory.getLogger(ProductsPerPageConfigProvider.class);
     private static final int MIN_PAGE_SIZE = 0;
     private static final int MAX_PAGE_SIZE = 500;
 
@@ -33,7 +34,7 @@ public final class ProductsPerPageConfigProvider implements Provider<ProductsPer
         final String key = configuration.getString(CONFIG_KEY, "ppp");
         final List<ProductsPerPageOption> options = getOptions(configuration);
         final int defaultAmount = getDefaultAmount();
-        Logger.debug("Provide ProductsPerPageConfig: {}", options.stream().map(ProductsPerPageOption::getValue).collect(toList()));
+        logger.debug("Provide ProductsPerPageConfig: {}", options.stream().map(ProductsPerPageOption::getValue).collect(toList()));
         return ProductsPerPageConfig.of(key, options, defaultAmount);
     }
 

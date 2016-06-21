@@ -6,8 +6,9 @@ import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.projects.Project;
 import io.sphere.sdk.projects.queries.ProjectGet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.Configuration;
-import play.Logger;
 
 import javax.inject.Inject;
 import javax.money.CurrencyUnit;
@@ -22,6 +23,7 @@ import static java.util.stream.Collectors.toList;
 
 public final class ProjectContextProvider implements Provider<ProjectContext> {
 
+    private static final Logger logger = LoggerFactory.getLogger(ProjectContextProvider.class);
     private static final String CONFIG_LANGUAGES = "application.i18n.languages";
     private static final String CONFIG_COUNTRIES = "application.countries";
     private static final String CONFIG_CURRENCIES = "application.currencies";
@@ -37,7 +39,7 @@ public final class ProjectContextProvider implements Provider<ProjectContext> {
             final List<Locale> languages = getLanguages(project);
             final List<CountryCode> countries = getCountries(project);
             final List<CurrencyUnit> currencies = getCurrencies(project);
-            Logger.info("Provide ProjectContext:"
+            logger.info("Provide ProjectContext:"
                     + " Languages " + languages + ","
                     + " Countries " + countries + ","
                     + " Currencies " + currencies);

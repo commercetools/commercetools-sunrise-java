@@ -3,8 +3,9 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 import com.commercetools.sunrise.common.SunriseInitializationException;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.SortExpression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.Configuration;
-import play.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -15,6 +16,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public final class SortConfigProvider implements Provider<SortConfig> {
+    private static final Logger logger = LoggerFactory.getLogger(SortConfigProvider.class);
 
     private static final String CONFIG_KEY = "pop.sortProducts.key";
     private static final String CONFIG_OPTIONS = "pop.sortProducts.options";
@@ -31,7 +33,7 @@ public final class SortConfigProvider implements Provider<SortConfig> {
     public SortConfig get() {
         final String key = configuration.getString(CONFIG_KEY, "sort");
         final List<SortOption> options = getOptions(configuration);
-        Logger.debug("Provide SortConfig: {}", options.stream().map(SortOption::getValue).collect(toList()));
+        logger.debug("Provide SortConfig: {}", options.stream().map(SortOption::getValue).collect(toList()));
         return SortConfig.of(key, options);
     }
 

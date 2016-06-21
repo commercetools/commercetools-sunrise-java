@@ -1,14 +1,15 @@
 package com.commercetools.sunrise.myaccount;
 
 import io.sphere.sdk.customers.Customer;
-import play.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.mvc.Http.Session;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
 public final class CustomerSessionUtils {
-
+    private static final Logger logger = LoggerFactory.getLogger(CustomerSessionUtils.class);
     public static final String CUSTOMER_ID_SESSION_KEY = "customer-id";
     public static final String CUSTOMER_NAME_SESSION_KEY = "customer-name";
     public static final String CUSTOMER_EMAIL_SESSION_KEY = "customer-email";
@@ -47,7 +48,7 @@ public final class CustomerSessionUtils {
             session.put(CUSTOMER_ID_SESSION_KEY, id);
             session.put(CUSTOMER_NAME_SESSION_KEY, name);
             session.put(CUSTOMER_EMAIL_SESSION_KEY, email);
-            Logger.debug("Saved customer in session: ID {}, name {}, email {}", id, name, email);
+            logger.debug("Saved customer in session: ID {}, name {}, email {}", id, name, email);
         } else {
             removeCustomerSessionData(session);
         }
@@ -57,6 +58,6 @@ public final class CustomerSessionUtils {
         session.remove(CUSTOMER_ID_SESSION_KEY);
         session.remove(CUSTOMER_NAME_SESSION_KEY);
         session.remove(CUSTOMER_EMAIL_SESSION_KEY);
-        Logger.debug("Removed customer from session");
+        logger.debug("Removed customer from session");
     }
 }

@@ -5,11 +5,9 @@ import io.sphere.sdk.facets.*;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.Configuration;
-import play.Logger;
-import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
-import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.SelectFacetedSearchConfig;
-import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.SunriseFacetType;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -24,7 +22,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 public final class FacetedSearchConfigListProvider implements Provider<FacetedSearchConfigList> {
-
+    private static final Logger logger = LoggerFactory.getLogger(FacetedSearchConfigListProvider.class);
     private static final String CONFIG_FACETS = "pop.facets";
 
     private static final String TYPE_ATTR = "type";
@@ -62,7 +60,7 @@ public final class FacetedSearchConfigListProvider implements Provider<FacetedSe
                     throw new SunriseInitializationException("Not supported facet type: " + type);
             }
         });
-        Logger.debug("Provide SelectFacetConfigs: {}", selectFacetConfigs.stream()
+        logger.debug("Provide SelectFacetConfigs: {}", selectFacetConfigs.stream()
                 .map(config -> config.getFacetBuilder().getKey())
                 .collect(toList()));
         return FacetedSearchConfigList.of(selectFacetConfigs);

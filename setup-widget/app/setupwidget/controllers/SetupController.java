@@ -1,7 +1,8 @@
 package setupwidget.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.Configuration;
-import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -19,7 +20,7 @@ import java.util.function.Supplier;
 
 @Singleton
 public class SetupController extends Controller {
-
+    private static final Logger logger = LoggerFactory.getLogger(SetupController.class);
     public static final String CONFIG_SETUP_ENABLED = "application.setup.enabled";
     private static final Path PATH =  FileSystems.getDefault().getPath("conf", "dev.conf");
 
@@ -72,7 +73,7 @@ public class SetupController extends Controller {
     private boolean isSetupComplete() {
         if (!setupComplete) {
             setupComplete = doesConfigFileExist();
-            Logger.debug("Setup is complete: " + setupComplete);
+            logger.debug("Setup is complete: " + setupComplete);
         }
         return setupComplete;
     }
@@ -84,7 +85,7 @@ public class SetupController extends Controller {
     private static Path writeSettingsFile(final Path filePath, final String content) {
         try {
             final Path writtenFile = Files.write(filePath, content.getBytes());
-            Logger.info("CTP credentials saved in " + writtenFile.toString());
+            logger.info("CTP credentials saved in " + writtenFile.toString());
             return writtenFile;
         } catch (IOException e) {
             throw new RuntimeException(e);
