@@ -11,7 +11,8 @@ import com.commercetools.sunrise.common.template.engine.TemplateNotFoundExceptio
 import com.commercetools.sunrise.common.template.engine.TemplateRenderException;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import play.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +22,7 @@ import static java.util.stream.Collectors.toList;
 
 public final class HandlebarsTemplateEngine implements TemplateEngine {
 
+    private static final Logger logger = LoggerFactory.getLogger(HandlebarsTemplateEngine.class);
     static final String LANGUAGE_TAGS_IN_CONTEXT_KEY = "app-language-tags";
     private final Handlebars handlebars;
 
@@ -33,7 +35,7 @@ public final class HandlebarsTemplateEngine implements TemplateEngine {
         final Template template = compileTemplate(templateName);
         final Context context = createContext(pageData, locales);
         try {
-            Logger.debug("Rendering template " + templateName);
+            logger.debug("Rendering template " + templateName);
             return template.apply(context);
         } catch (IOException e) {
             throw new TemplateRenderException("Context could not be applied to template " + templateName, e);
