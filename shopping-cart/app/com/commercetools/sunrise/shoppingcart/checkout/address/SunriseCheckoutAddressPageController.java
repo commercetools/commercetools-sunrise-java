@@ -99,22 +99,17 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
                 controller.handleSetAddressToCartError(throwable, filledForm, cart));
     }
 
-    protected boolean askFormBillingAddressDifferentToShippingAddress() {
-        final String flagFieldName = "billingAddressDifferentToBillingAddress";
-        final String fieldValue = formFactory.form().bindFromRequest().get(flagFieldName);
-        return "true".equals(fieldValue);
-    }
-
     protected <F extends CheckoutAddressFormDataLike> Form<F> bindFormFromRequest(final Class<F> formClass) {
-        final boolean billingDifferent = askFormBillingAddressDifferentToShippingAddress();
-        return bindForm(formClass, billingDifferent);
-    }
-
-    protected <F extends CheckoutAddressFormDataLike> Form<F> bindForm(final Class<F> formClass, final boolean billingDifferent) {
-        final Form<F> form = billingDifferent
+        final Form<F> form = isBillingDifferent()
                 ? formFactory.form(formClass, BillingAddressDifferentToShippingAddressGroup.class)
                 : formFactory.form(formClass);
         return form.bindFromRequest();
+    }
+
+    private boolean isBillingDifferent() {
+        final String flagFieldName = "billingAddressDifferentToBillingAddress";
+        final String fieldValue = formFactory.form().bindFromRequest().get(flagFieldName);
+        return "true".equals(fieldValue);
     }
 
     protected CompletionStage<Cart> setAddressToCart(final Cart cart,
