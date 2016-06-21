@@ -80,11 +80,13 @@ public abstract class SunriseFrameworkController extends Controller {
         return session.get("csrfToken");
     }
 
-    protected Html renderPage(final PageContent pageContent, final String templateName) {
+    protected CompletionStage<Html> renderPage(final PageContent pageContent, final String templateName) {
         final SunrisePageData pageData = createPageData(pageContent);
-        runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
-        final String html = templateEngine().render(templateName, pageData, userContext.locales());
-        return new Html(html);
+        return allAsyncHooksCompletionStage().thenApply(unused -> {
+            runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
+            final String html = templateEngine().render(templateName, pageData, userContext.locales());
+            return new Html(html);
+        });
     }
 
     protected final SunrisePageData createPageData(final PageContent pageContent) {
@@ -164,5 +166,13 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected final CompletionStage<Object> allAsyncHooksCompletionStage() {
         return FutureUtils.listOfFuturesToFutureOfList(asyncHooksCompletionStages).thenApply(list -> null);
+    }
+
+    protected CompletionStage<Result> asyncOk(final CompletionStage<Html> htmlCompletionStage) {
+        return htmlCompletionStage.thenApplyAsync(html -> ok(html), HttpExecution.defaultContext());
+    }
+
+    protected CompletionStage<Result> asyncBadRequest(final CompletionStage<Html> htmlCompletionStage) {
+        return htmlCompletionStage.thenApplyAsync(html -> badRequest(html), HttpExecution.defaultContext());
     }
 }

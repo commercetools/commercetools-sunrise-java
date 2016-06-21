@@ -51,7 +51,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> getOrCreateCart()
-                .thenApplyAsync(cart -> showCheckoutAddressPage(cart), HttpExecution.defaultContext()));
+                .thenComposeAsync(cart -> showCheckoutAddressPage(cart), HttpExecution.defaultContext()));
     }
 
     @RequireCSRFCheck
@@ -74,9 +74,9 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         });
     }
 
-    private Result showCheckoutAddressPage(final Cart cart) {
+    private CompletionStage<Result> showCheckoutAddressPage(final Cart cart) {
         final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.create(cart);
-        return ok(renderCheckoutAddressPage(cart, pageContent));
+        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> ok(html));
     }
 
     protected <F extends CheckoutAddressFormDataLike> CompletionStage<Result> processAddressForm(final Cart cart, final Class<F> formClass) {
@@ -134,7 +134,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
             errors = new ErrorsBean(shippingAddressForm);
         }
         final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
-        return completedFuture(badRequest(renderCheckoutAddressPage(cart, pageContent)));
+        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> badRequest(html), HttpExecution.defaultContext());
     }
 
     protected CompletionStage<Result> handleSetAddressToCartError(final Throwable throwable,
@@ -151,10 +151,10 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         logger.error("The request to set address to cart raised an exception", errorResponseException);
         final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
         final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
-        return completedFuture(badRequest(renderCheckoutAddressPage(cart, pageContent)));
+        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> badRequest(html), HttpExecution.defaultContext());
     }
 
-    protected Html renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent) {
+    protected CompletionStage<Html> renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent) {
         fill(cart, pageContent);
         return renderPage(pageContent, getTemplateName());
     }

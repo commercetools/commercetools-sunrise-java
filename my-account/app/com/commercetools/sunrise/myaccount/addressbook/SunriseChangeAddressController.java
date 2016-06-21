@@ -81,7 +81,7 @@ public abstract class SunriseChangeAddressController extends MyAccountController
 
     protected CompletionStage<Result> showChangeAddressForm(final Customer customer) {
         final PageContent pageContent = createPageContent(customer, new Feedback());
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+        return asyncOk(renderPage(pageContent, getTemplateName()));
     }
 
     protected CompletionStage<Result> processChangeAddressForm(final Customer customer) {
@@ -96,7 +96,7 @@ public abstract class SunriseChangeAddressController extends MyAccountController
         final Feedback feedback = new Feedback();
         feedback.setErrors(extractErrors(form));
         final PageContent pageContent = createPageContent(customer, feedback);
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+        return asyncOk(renderPage(pageContent, getTemplateName()));
     }
 
     protected CompletionStage<Result> handleValidForm(final Customer customer) {
@@ -119,7 +119,7 @@ public abstract class SunriseChangeAddressController extends MyAccountController
             final Feedback feedback = new Feedback(); // TODO See how to deal with feedback in general
             feedback.setErrors(singletonList("Something went wrong, please try again")); // TODO get from i18n
             final PageContent pageContent = createPageContent(customer, feedback);
-            return completedFuture(badRequest(renderPage(pageContent, getTemplateName())));
+            return asyncBadRequest(renderPage(pageContent, getTemplateName()));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }

@@ -117,12 +117,12 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
 
     protected CompletionStage<Result> handleFoundProducts(final PagedSearchResult<ProductProjection> pagedSearchResult) {
         final PageContent pageContent = createPageContent(pagedSearchResult);
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+        return asyncOk(renderPage(pageContent, getTemplateName()));
     }
 
     protected CompletionStage<Result> handleEmptySearch(final PagedSearchResult<ProductProjection> pagedSearchResult) {
         final PageContent pageContent = createPageContent(pagedSearchResult);
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+        return asyncOk(renderPage(pageContent, getTemplateName()));
     }
 
     protected CompletionStage<Result> handleNotFoundCategory() {

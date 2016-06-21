@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
@@ -108,7 +107,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
 
     protected CompletionStage<Result> handleFoundProduct(final ProductProjection product, final ProductVariant variant) {
         final PageContent pageContent = createPageContent(product, variant);
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+        return asyncOk(renderPage(pageContent, getTemplateName()));
     }
 
     protected CompletionStage<Result> handleNotFoundVariant(final ProductProjection product) {
