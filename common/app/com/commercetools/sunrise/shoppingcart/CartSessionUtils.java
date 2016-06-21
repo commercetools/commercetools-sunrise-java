@@ -3,7 +3,8 @@ package com.commercetools.sunrise.shoppingcart;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.json.SphereJsonUtils;
-import play.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.libs.Json;
 import play.mvc.Http.Session;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
@@ -12,6 +13,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 public final class CartSessionUtils {
+    private static final Logger logger = LoggerFactory.getLogger(CartSessionUtils.class);
 
     public static final String CART_ID_SESSION_KEY = "cart-id";
     public static final String MINI_CART_SESSION_KEY = "mini-cart";
@@ -37,7 +39,7 @@ public final class CartSessionUtils {
             final String miniCartAsJson = Json.stringify(SphereJsonUtils.toJsonNode(miniCart));
             session.put(CART_ID_SESSION_KEY, id);
             session.put(MINI_CART_SESSION_KEY, miniCartAsJson);
-            Logger.debug("Saved cart in session: ID \"{}\", Mini Cart: \"{}\"", id, miniCartAsJson);
+            logger.debug("Saved cart in session: ID \"{}\", Mini Cart: \"{}\"", id, miniCartAsJson);
         } else {
             removeCartSessionData(session);
         }
@@ -46,6 +48,6 @@ public final class CartSessionUtils {
     public static void removeCartSessionData(final Session session) {
         session.remove(CART_ID_SESSION_KEY);
         session.remove(MINI_CART_SESSION_KEY);
-        Logger.debug("Removed cart from session");
+        logger.debug("Removed cart from session");
     }
 }
