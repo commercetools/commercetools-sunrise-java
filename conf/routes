@@ -74,9 +74,9 @@ GET         /:languageTag/checkout/shipping                    @com.commercetool
 # Processes the form of the shipping address and billing address
 POST        /:languageTag/checkout/shipping                    @com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingPageController.process(languageTag: String)
 # Shows a form to select the payment method
-GET         /:languageTag/checkout/payment                     @com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentPageController.show(languageTag: String)
+GET         /:languageTag/checkout/payment                     @demo.shoppingcart.CheckoutPaymentPageController.show(languageTag: String)
 # Processes the form for selecting a payment method
-POST        /:languageTag/checkout/payment                     @com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentPageController.process(languageTag: String)
+POST        /:languageTag/checkout/payment                     @demo.shoppingcart.CheckoutPaymentPageController.process(languageTag: String)
 # Shows the form to create an order out of the cart of the session
 GET         /:languageTag/checkout/confirmation                @com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationPageController.show(languageTag: String)
 # Processes the order creation

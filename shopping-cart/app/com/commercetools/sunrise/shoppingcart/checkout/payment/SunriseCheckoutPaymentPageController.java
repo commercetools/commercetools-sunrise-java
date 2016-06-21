@@ -1,11 +1,14 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.tobedeleted.ControllerDependency;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
+import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
-import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.PaymentInfo;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -30,11 +33,8 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import com.commercetools.sunrise.shoppingcart.common.CartController;
-import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.*;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
@@ -43,59 +43,58 @@ import java.util.stream.Stream;
 import static com.commercetools.sunrise.common.utils.FormUtils.extractFormField;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-@Singleton
-public class CheckoutPaymentPageController extends CartController {
-
-    protected final Form<CheckoutPaymentFormData> paymentUnboundForm;
-    protected final List<PaymentMethodInfo> paymentMethodsInfo;
-
+@RequestScoped
+public abstract class SunriseCheckoutPaymentPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
     @Inject
-    public CheckoutPaymentPageController(final ControllerDependency controllerDependency,
-                                         final ProductDataConfig productDataConfig, final FormFactory formFactory) {
-        super(controllerDependency, productDataConfig);
-        this.paymentUnboundForm = formFactory.form(CheckoutPaymentFormData.class);
-        this.paymentMethodsInfo = singletonList(PaymentMethodInfoBuilder.of()
-                .name(LocalizedString.of(Locale.ENGLISH, "Prepaid", Locale.GERMAN, "Vorkasse")) // TODO pull out
-                .method("prepaid")
-                .build());
-    }
+    private FormFactory formFactory;
+    @Inject
+    private CheckoutReverseRouter checkoutReverseRouter;
+    @Inject
+    private I18nResolver i18nResolver;
+
+    protected final List<PaymentMethodInfo> paymentMethodsInfo = singletonList(PaymentMethodInfoBuilder.of()
+            .name(LocalizedString.of(Locale.ENGLISH, "Prepaid", Locale.GERMAN, "Vorkasse")) // TODO pull out
+            .method("prepaid")
+            .build());
+
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        final UserContext userContext = userContext(languageTag);
-        return getOrCreateCart(userContext, session())
-                .thenApplyAsync(cart -> {
-                    final CheckoutPaymentPageContent pageContent = createPageContent(cart, paymentMethodsInfo, userContext);
-                    return ok(renderCheckoutPaymentPage(cart, pageContent, userContext));
-                }, HttpExecution.defaultContext());
+        return doRequest(() -> getOrCreateCart()
+                .thenComposeAsync(cart -> {
+                    final CheckoutPaymentPageContent pageContent = createPageContent(cart, paymentMethodsInfo, userContext());
+                    return asyncOk(renderCheckoutPaymentPage(cart, pageContent, userContext()));
+                }, HttpExecution.defaultContext()));
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
-        final UserContext userContext = userContext(languageTag);
-        final Form<CheckoutPaymentFormData> paymentForm = paymentUnboundForm.bindFromRequest();
-        return getOrCreateCart(userContext, session())
-                .thenComposeAsync(cart -> {
-                    if (paymentForm.hasErrors()) {
-                        return handleFormErrors(paymentForm, paymentMethodsInfo, cart, userContext);
-                    } else {
-                        final List<String> selectedMethodNames = singletonList(paymentForm.get().getPayment());
-                        final List<PaymentMethodInfo> selectedPaymentMethods = getSelectedPaymentMethodsInfo(selectedMethodNames);
-                        if (selectedPaymentMethods.isEmpty()) {
-                            return handleInvalidPaymentError(paymentForm, selectedPaymentMethods, cart, userContext);
+        return doRequest(() -> {
+            final Form<CheckoutPaymentFormData> paymentForm = formFactory.form(CheckoutPaymentFormData.class).bindFromRequest();
+            return getOrCreateCart(userContext(), session())
+                    .thenComposeAsync(cart -> {
+                        if (paymentForm.hasErrors()) {
+                            return handleFormErrors(paymentForm, paymentMethodsInfo, cart, userContext());
                         } else {
-                            final CompletionStage<Result> resultStage = setPaymentToCart(cart, selectedPaymentMethods)
-                                    .thenComposeAsync(updatedCart -> handleSuccessfulSetPayment(userContext), HttpExecution.defaultContext());
-                            return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                                    handleSetPaymentToCartError(throwable, paymentForm, paymentMethodsInfo, cart, userContext));
+                            final List<String> selectedMethodNames = singletonList(paymentForm.get().getPayment());
+                            final List<PaymentMethodInfo> selectedPaymentMethods = getSelectedPaymentMethodsInfo(selectedMethodNames);
+                            if (selectedPaymentMethods.isEmpty()) {
+                                return handleInvalidPaymentError(paymentForm, selectedPaymentMethods, cart, userContext());
+                            } else {
+                                final CompletionStage<Result> resultStage = setPaymentToCart(cart, selectedPaymentMethods)
+                                        .thenComposeAsync(updatedCart -> handleSuccessfulSetPayment(userContext()), HttpExecution.defaultContext());
+                                return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                        handleSetPaymentToCartError(throwable, paymentForm, paymentMethodsInfo, cart, userContext()));
+                            }
                         }
-                    }
-                }, HttpExecution.defaultContext());
+                    }, HttpExecution.defaultContext());
+        });
     }
 
     protected CompletionStage<Cart> setPaymentToCart(final Cart cart, final List<PaymentMethodInfo> selectedPaymentMethods) {
@@ -164,7 +163,7 @@ public class CheckoutPaymentPageController extends CartController {
                                                        final Cart cart, final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean(paymentForm);
         final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
-        return completedFuture(badRequest(renderCheckoutPaymentPage(cart, pageContent, userContext)));
+        return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent, userContext));
     }
 
     protected CompletionStage<Result> handleInvalidPaymentError(final Form<CheckoutPaymentFormData> paymentForm,
@@ -172,7 +171,7 @@ public class CheckoutPaymentPageController extends CartController {
                                                                 final Cart cart, final UserContext userContext) {
         final ErrorsBean errors = new ErrorsBean("Invalid payment error"); // TODO use i18n
         final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
-        return completedFuture(badRequest(renderCheckoutPaymentPage(cart, pageContent, userContext)));
+        return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent, userContext));
     }
 
     protected CompletionStage<Result> handleSetPaymentToCartError(final Throwable throwable,
@@ -184,7 +183,7 @@ public class CheckoutPaymentPageController extends CartController {
             Logger.error("The request to set payment to cart raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
-            return completedFuture(badRequest(renderCheckoutPaymentPage(cart, pageContent, userContext)));
+            return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent, userContext));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
@@ -215,11 +214,21 @@ public class CheckoutPaymentPageController extends CartController {
         return pageContent;
     }
 
-    protected Html renderCheckoutPaymentPage(final Cart cart, final CheckoutPaymentPageContent pageContent, final UserContext userContext) {
+    protected CompletionStage<Html> renderCheckoutPaymentPage(final Cart cart, final CheckoutPaymentPageContent pageContent, final UserContext userContext) {
         pageContent.setStepWidget(StepWidgetBean.PAYMENT);
         pageContent.setCart(createCartLikeBean(cart, userContext));
-        pageContent.setTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:paymentPage.title")));
-        final SunrisePageData pageData = pageData(userContext, pageContent, ctx(), session());
-        return templateEngine().renderToHtml("checkout-payment", pageData, userContext.locales());
+        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:paymentPage.title")));
+        return renderPage(pageContent, getTemplateName());
     }
+
+    @Override
+    public String getTemplateName() {
+        return "checkout-payment";
+    }
+
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("checkout", "checkout-payment"));
+    }
+
 }
