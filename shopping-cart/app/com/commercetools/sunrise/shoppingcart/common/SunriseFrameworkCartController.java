@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.common;
 
+import com.commercetools.sunrise.hooks.CartLoadedHook;
 import com.google.inject.Inject;
 import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.cache.NoCache;
@@ -54,7 +55,11 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Cart> getOrCreateCart() {
-        return getOrCreateCart(userContext(), session());
+        return getOrCreateCart(userContext(), session())
+                .thenApply(cart -> {
+                    runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart));
+                    return cart;
+                });
     }
 
     protected CompletionStage<List<ShippingMethod>> getShippingMethods(final Http.Session session) {
