@@ -77,63 +77,50 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         return ok(renderCheckoutAddressPage(cart, pageContent));
     }
 
-    private static class DefaultCheckoutAddressFormDelegate extends CheckoutAddressFormDelegate<CheckoutShippingAddressFormData, CheckoutBillingAddressFormData> {
+    private static class DefaultCheckoutAddressFormDelegate extends CheckoutAddressFormDelegate<CheckoutAddressFormData> {
 
         public DefaultCheckoutAddressFormDelegate() {
-            super(CheckoutShippingAddressFormData.class, CheckoutBillingAddressFormData.class);
-        }
-
-        @Override
-        protected boolean uncachedIsBillingAddressDifferentToBillingAddress(final Form<CheckoutShippingAddressFormData> shippingAddressForm, final Form<CheckoutBillingAddressFormData> billingAddressForm) {
-            return !shippingAddressForm.hasErrors() && shippingAddressForm.get().isBillingAddressDifferentToBillingAddress();
+            super(CheckoutAddressFormData.class);
         }
     }
 
-    private static abstract class CheckoutAddressFormDelegate<S extends WithAddressExport, B extends WithAddressExport> {
+    //make class replaceable with others
+    private static abstract class CheckoutAddressFormDelegate<S extends CheckoutAddressFormData> {
         @Inject
         private FormFactory formFactory;
         protected final Class<S> shippingAddressFormClass;
-        protected final Class<B> billingAddressFormClass;
-        protected Boolean billingAddressDifferentToBillingAddress;
 
-        protected CheckoutAddressFormDelegate(final Class<S> shippingAddressFormClass, final Class<B> billingAddressFormClass) {
-            this.billingAddressFormClass = billingAddressFormClass;
+        protected CheckoutAddressFormDelegate(final Class<S> shippingAddressFormClass) {
             this.shippingAddressFormClass = shippingAddressFormClass;
         }
 
-        protected boolean formHasErrors(final Form<S> shippingAddressForm,
-                                        final Form<B> billingAddressForm) {
-            if (shippingAddressForm.hasErrors()) {
-                return true;
-            } else {
-                final boolean differentBilling = isBillingAddressDifferentToBillingAddress(shippingAddressForm, billingAddressForm);
-                return differentBilling && billingAddressForm.hasErrors();
-            }
-        }
-
-        protected boolean isBillingAddressDifferentToBillingAddress(final Form<S> shippingAddressForm, final Form<B> billingAddressForm) {
-            if (billingAddressDifferentToBillingAddress == null) {
-                billingAddressDifferentToBillingAddress = uncachedIsBillingAddressDifferentToBillingAddress(shippingAddressForm, billingAddressForm);
-            }
-            return billingAddressDifferentToBillingAddress;
-        }
-
-        protected abstract boolean uncachedIsBillingAddressDifferentToBillingAddress(final Form<S> shippingAddressForm, final Form<B> billingAddressForm);
-
         public CompletionStage<Result> processAddressForm(final Cart cart, final SunriseCheckoutAddressPageController controller) {
-            final Form<S> shippingAddressForm = formFactory.form(shippingAddressFormClass).bindFromRequest();
-            final Form<B> billingAddressForm = formFactory.form(billingAddressFormClass).bindFromRequest();
-            if (formHasErrors(shippingAddressForm, billingAddressForm)) {
-                return controller.handleFormErrors(shippingAddressForm, billingAddressForm, cart);
+            final boolean billingDifferent = askFormBillingAddressDifferentToShippingAddress();
+            final Form<S> filledForm = bindForm(billingDifferent);
+            if (filledForm.hasErrors()) {
+                return controller.handleFormErrors(filledForm, cart);
             } else {
-                final Address shippingAddress = shippingAddressForm.get().toAddress();
-                final boolean differentBilling = isBillingAddressDifferentToBillingAddress(shippingAddressForm, billingAddressForm);
-                final Address billingAddress = differentBilling ? billingAddressForm.get().toAddress() : null;
+                final S formData = filledForm.get();
+                final Address shippingAddress = formData.toShippingAddress();
+                final Address billingAddress = billingDifferent ? formData.toBillingAddress() : null;
                 final CompletionStage<Result> resultStage = controller.setAddressToCart(cart, shippingAddress, billingAddress)
                         .thenComposeAsync(controller::handleSuccessfulSetAddress, HttpExecution.defaultContext());
                 return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                        controller.handleSetAddressToCartError(throwable, shippingAddressForm, billingAddressForm, cart));
+                        controller.handleSetAddressToCartError(throwable, filledForm, cart));
             }
+        }
+
+        private Form<S> bindForm(final boolean billingDifferent) {
+            final Form<S> form = billingDifferent
+                    ? formFactory.form(shippingAddressFormClass, BillingAddressDifferentToShippingAddressGroup.class)
+                    : formFactory.form(shippingAddressFormClass);
+            return form.bindFromRequest();
+        }
+
+        private boolean askFormBillingAddressDifferentToShippingAddress() {
+            final String flagFieldName = "billingAddressDifferentToBillingAddress";
+            final String fieldValue = formFactory.form().bindFromRequest().get(flagFieldName);
+            return "true".equals(fieldValue);
         }
     }
 
@@ -157,34 +144,29 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         return completedFuture(redirect(call));
     }
 
-    protected CompletionStage<Result> handleFormErrors(final Form<? extends WithAddressExport> shippingAddressForm,
-                                                       final Form<? extends WithAddressExport> billingAddressForm,
-                                                       final Cart cart) {
-        final ErrorsBean errors;
+    protected CompletionStage<Result> handleFormErrors(final Form<? extends CheckoutAddressFormData> shippingAddressForm, final Cart cart) {
+        ErrorsBean errors = null;
         if (shippingAddressForm.hasErrors()) {
             errors = new ErrorsBean(shippingAddressForm);
-        } else {
-            errors = new ErrorsBean(billingAddressForm);
         }
-        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, billingAddressForm, errors);
+        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
         return completedFuture(badRequest(renderCheckoutAddressPage(cart, pageContent)));
     }
 
     protected CompletionStage<Result> handleSetAddressToCartError(final Throwable throwable,
-                                                                  final Form<? extends WithAddressExport> shippingAddressForm,
-                                                                  final Form<? extends WithAddressExport> billingAddressForm,
+                                                                  final Form<? extends CheckoutAddressFormData> shippingAddressForm,
                                                                   final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
-            return handleErrorResponseException(throwable, shippingAddressForm, billingAddressForm, cart);
+            return handleErrorResponseException(throwable, shippingAddressForm, cart);
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
-    private CompletionStage<Result> handleErrorResponseException(final Throwable throwable, final Form<? extends WithAddressExport> shippingAddressForm, final Form<? extends WithAddressExport> billingAddressForm, final Cart cart) {
+    private CompletionStage<Result> handleErrorResponseException(final Throwable throwable, final Form<? extends CheckoutAddressFormData> shippingAddressForm, final Cart cart) {
         final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
         logger.error("The request to set address to cart raised an exception", errorResponseException);
         final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, billingAddressForm, errors);
+        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
         return completedFuture(badRequest(renderCheckoutAddressPage(cart, pageContent)));
     }
 

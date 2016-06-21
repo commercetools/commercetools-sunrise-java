@@ -23,12 +23,11 @@ public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
         return pageContent;
     }
 
-    public CheckoutAddressPageContent createWithAddressError(final Form<? extends WithAddressExport> shippingAddressForm,
-                                                                final Form<? extends WithAddressExport> billingAddressForm,
+    public CheckoutAddressPageContent createWithAddressError(final Form<? extends CheckoutAddressFormData> shippingAddressForm,
                                                                 final ErrorsBean errors) {
         final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
         final Address shippingAddress = extractAddress(shippingAddressForm, "Shipping");
-        final Address billingAddress = extractAddress(billingAddressForm, "Billing");
+        final Address billingAddress = extractAddress(shippingAddressForm, "Billing");
         final boolean differentBillingAddress = extractBooleanFormField(shippingAddressForm, "billingAddressDifferentToBillingAddress");
         final CheckoutAddressFormBean formBean = new CheckoutAddressFormBean(shippingAddress, billingAddress, differentBillingAddress, userContext, projectContext, i18nResolver, configuration);
         formBean.setErrors(errors);
