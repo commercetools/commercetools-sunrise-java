@@ -1,4 +1,4 @@
-<configuration debug="true">
+<configuration debug="false">
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -16,6 +16,7 @@
     <logger name="sphere" level="INFO" />
     <logger name="sphere.metrics.simple" level="DEBUG" />
     <logger name="com.commercetools.sunrise.productcatalog" level="DEBUG" />
+    <logger name="com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver" level="WARN" />
     <logger name="com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsTemplateEngine" level="WARN" />
     <logger name="com.commercetools.sunrise.shoppingcart.CartSessionUtils" level="WARN" />
     <logger name="com.commercetools.sunrise.theme.WebjarsFilesCopier" level="INFO" />
