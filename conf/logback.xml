@@ -15,6 +15,7 @@
     <logger name="play.requests" level="DEBUG" />
     <logger name="sphere" level="INFO" />
     <logger name="sphere.metrics.simple" level="DEBUG" />
+    <logger name="com.github.jknack.handlebars.Handlebars" level="ERROR" />
     <logger name="com.commercetools.sunrise.productcatalog" level="DEBUG" />
     <logger name="com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver" level="WARN" />
     <logger name="com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsTemplateEngine" level="WARN" />
