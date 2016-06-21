@@ -43,6 +43,7 @@ public abstract class SunriseFrameworkController extends Controller {
     private PageMetaFactory pageMetaFactory;
 
     private final List<ControllerComponent> controllerComponents = new LinkedList<>();
+    private final List<CompletionStage<Object>> asyncHooksCompletionStages = new LinkedList<>();
 
     protected SunriseFrameworkController() {
     }
@@ -156,6 +157,12 @@ public abstract class SunriseFrameworkController extends Controller {
                 .map(stage -> (CompletionStage<Void>) stage)
                 .collect(toList());
         final CompletionStage<?> listCompletionStage = FutureUtils.listOfFuturesToFutureOfList(collect);
-        return listCompletionStage.thenApply(z -> null);
+        final CompletionStage<Object> result = listCompletionStage.thenApply(z -> null);
+        asyncHooksCompletionStages.add(result);
+        return result;
+    }
+
+    protected final CompletionStage<Object> allAsyncHooksCompletionStage() {
+        return FutureUtils.listOfFuturesToFutureOfList(asyncHooksCompletionStages).thenApply(list -> null);
     }
 }
