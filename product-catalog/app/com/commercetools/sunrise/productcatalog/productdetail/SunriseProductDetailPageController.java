@@ -96,8 +96,8 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         final Optional<ProductProjection> product = productFetchResult.getProduct();
         final Optional<ProductVariant> variant = productFetchResult.getVariant();
         if (product.isPresent() && variant.isPresent()) {
-            return runHookOnFoundProduct(product.get(), variant.get())
-                    .thenComposeAsync(unused -> handleFoundProduct(product.get(), variant.get()), HttpExecution.defaultContext());
+            runHookOnFoundProduct(product.get(), variant.get());
+            return handleFoundProduct(product.get(), variant.get());
         } else if (product.isPresent()) {
             return handleNotFoundVariant(product.get());
         } else {
@@ -137,10 +137,9 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
     }
 
-    protected final CompletionStage<?> runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {
-        final CompletionStage<?> productHooksStage = runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
-        return runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant))
-                .thenComposeAsync(unused -> productHooksStage, HttpExecution.defaultContext());
+    protected final void runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {
+        runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
+        runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
     }
 
     protected final Optional<String> getProductSlug() {

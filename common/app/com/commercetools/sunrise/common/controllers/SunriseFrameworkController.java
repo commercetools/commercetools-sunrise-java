@@ -99,8 +99,8 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected final CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> nextSupplier) {
-        return runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()))
-                .thenComposeAsync(unused -> nextSupplier.get(), HttpExecution.defaultContext());
+        runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()));
+        return nextSupplier.get();
     }
 
     /**

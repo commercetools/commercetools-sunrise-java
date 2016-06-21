@@ -89,8 +89,8 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
             final Optional<Category> category = categoryTree.findBySlug(userContext.locale(), categorySlug);
             if (category.isPresent()) {
                 this.category = category.get();
-                return runHookOnFoundCategory(category.get())
-                        .thenComposeAsync(unused -> searchProducts(), HttpExecution.defaultContext());
+                runHookOnFoundCategory(category.get());
+                return searchProducts();
             } else {
                 return handleNotFoundCategory();
             }
