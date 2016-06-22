@@ -53,7 +53,7 @@ public abstract class SunriseHomePageController extends SunriseFrameworkControll
     }
 
     public Result index() {
-        return redirect(homeReverseRouter.homePageCall(userContext().locale().toLanguageTag()));
+        return redirect(homeReverseRouter.homePageCall(userContext().languageTag()));
     }
 
     public CompletionStage<Result> show(final String languageTag) {

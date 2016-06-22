@@ -85,7 +85,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
     }
 
     protected CompletionStage<Result> handleSuccessfulSetShipping() {
-        final Call call = checkoutReverseRouter.checkoutPaymentPageCall(userContext().locale().toLanguageTag());
+        final Call call = checkoutReverseRouter.checkoutPaymentPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
     }
 

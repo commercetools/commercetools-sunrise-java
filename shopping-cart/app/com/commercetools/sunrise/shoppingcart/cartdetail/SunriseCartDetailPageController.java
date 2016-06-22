@@ -134,7 +134,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
 
     protected CompletionStage<Result> handleSuccessfulCartChange(final Cart cart) {
         overwriteCartSessionData(cart, session(), userContext(), productReverseRouter);
-        return completedFuture(redirect(reverseRouter.showCart(userContext().locale().toLanguageTag())));
+        return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
     }
 
     protected CompletionStage<Result> handleAddProductToCartFormErrors(final Form<AddProductToCartFormData> addProductToCartForm,

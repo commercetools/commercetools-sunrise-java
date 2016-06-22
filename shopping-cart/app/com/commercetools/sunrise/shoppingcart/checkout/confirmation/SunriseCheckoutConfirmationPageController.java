@@ -89,7 +89,7 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
     }
 
     protected CompletionStage<Result> handleSuccessfulCreateOrder() {
-        final Call call = checkoutReverseRouter.checkoutThankYouPageCall(userContext().locale().toLanguageTag());
+        final Call call = checkoutReverseRouter.checkoutThankYouPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
     }
 

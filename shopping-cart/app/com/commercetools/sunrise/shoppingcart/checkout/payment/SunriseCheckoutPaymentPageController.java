@@ -162,7 +162,7 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
     }
 
     protected CompletionStage<Result> handleSuccessfulSetPayment(final UserContext userContext) {
-        final Call call = checkoutReverseRouter.checkoutConfirmationPageCall(userContext.locale().toLanguageTag());
+        final Call call = checkoutReverseRouter.checkoutConfirmationPageCall(userContext.languageTag());
         return completedFuture(redirect(call));
     }
 

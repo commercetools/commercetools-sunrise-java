@@ -124,7 +124,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     }
 
     protected CompletionStage<Result> handleSuccessfulSetAddress(final Cart cart) {
-        final Call call = checkoutReverseRouter.checkoutShippingPageCall(userContext().locale().toLanguageTag());
+        final Call call = checkoutReverseRouter.checkoutShippingPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
     }
 

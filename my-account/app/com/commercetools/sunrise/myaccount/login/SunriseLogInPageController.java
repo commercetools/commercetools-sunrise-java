@@ -120,7 +120,7 @@ public abstract class SunriseLogInPageController extends SunriseFrameworkControl
     protected CompletionStage<Result> handleSuccessfulSignIn(final CustomerSignInResult result, final UserContext userContext) {
         overwriteCartSessionData(result.getCart(), session(), userContext, productReverseRouter);
         overwriteCustomerSessionData(result.getCustomer(), session());
-        final Call call = homeReverseRouter.homePageCall(userContext.locale().toLanguageTag());
+        final Call call = homeReverseRouter.homePageCall(userContext.languageTag());
         return completedFuture(redirect(call));
     }
 

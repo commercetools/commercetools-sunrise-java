@@ -52,7 +52,7 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
     }
 
     protected CompletionStage<Result> handleNotFoundOrder() {
-        final Call call = homeReverseRouter.homePageCall(userContext().locale().toLanguageTag());
+        final Call call = homeReverseRouter.homePageCall(userContext().languageTag());
         return completedFuture(redirect(call));
     }
 
