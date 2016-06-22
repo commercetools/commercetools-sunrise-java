@@ -118,7 +118,7 @@ GET         /:languageTag/user/addressbook/:addressId/edit     @demo.myaccount.C
 # Updates an address from the customer's address book
 POST        /:languageTag/user/addressbook/:addressId/edit     @demo.myaccount.ChangeAddressController.process(languageTag: String, addressId: String)
 # Removes an address from the customer's address book
-POST        /:languageTag/user/addressbook/:addressId/remove   @demo.myaccount.RemoveAddressController.process(languageTag: String)
+POST        /:languageTag/user/addressbook/:addressId/remove   @demo.myaccount.RemoveAddressController.process(languageTag: String, addressId: String)
 
 
 # Shows all orders from the customer

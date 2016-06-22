@@ -125,7 +125,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         }
     }
 
-    private Html renderPage(final ProductProjection product, final ProductVariant variant) {
+    private CompletionStage<Html> renderPage(final ProductProjection product, final ProductVariant variant) {
         final PageContent pageContent = productDetailPageContentFactory.create(product, variant);
         return renderPage(pageContent, getTemplateName());
     }
