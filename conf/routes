@@ -70,9 +70,9 @@ GET         /:languageTag/checkout/address                     @demo.shoppingcar
 # Processes the form of the shipping address and billing address
 POST        /:languageTag/checkout/address                     @demo.shoppingcart.CheckoutAddressPageController.process(languageTag: String)
 # Shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/shipping                    @com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingPageController.show(languageTag: String)
+GET         /:languageTag/checkout/shipping                    @demo.shoppingcart.CheckoutShippingPageController.show(languageTag: String)
 # Processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/shipping                    @com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingPageController.process(languageTag: String)
+POST        /:languageTag/checkout/shipping                    @demo.shoppingcart.CheckoutShippingPageController.process(languageTag: String)
 # Shows a form to select the payment method
 GET         /:languageTag/checkout/payment                     @demo.shoppingcart.CheckoutPaymentPageController.show(languageTag: String)
 # Processes the form for selecting a payment method
