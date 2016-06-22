@@ -107,14 +107,14 @@ public abstract class SunriseRemoveAddressController extends MyAccountController
         if (throwable.getCause() instanceof SphereException) {
             saveError((SphereException) throwable.getCause());
             final Form<?> form = obtainFilledForm();
-            return completedFuture(badRequest(renderPage(customer, form)));
+            return asyncBadRequest(renderPage(customer, form));
         }
         return exceptionallyCompletedFuture(throwable);
     }
 
     protected <T> CompletionStage<Result> handleInvalidSubmittedAddress(final Customer customer, final Address address, final Form<T> form) {
         saveFormErrors(form);
-        return completedFuture(badRequest(renderPage(customer, form)));
+        return asyncBadRequest(renderPage(customer, form));
     }
 
     protected CompletionStage<Customer> removeAddressFromCustomer(final Customer customer, final Address address) {
@@ -122,7 +122,7 @@ public abstract class SunriseRemoveAddressController extends MyAccountController
         return sphere().execute(CustomerUpdateCommand.of(customer, updateAction));
     }
 
-    protected Html renderPage(final Customer customer, final Form<?> form) {
+    protected CompletionStage<Html> renderPage(final Customer customer, final Form<?> form) {
         final AddressBookPageContent pageContent = addressBookPageContentFactory.create(customer);
         return renderPage(pageContent, getTemplateName());
     }

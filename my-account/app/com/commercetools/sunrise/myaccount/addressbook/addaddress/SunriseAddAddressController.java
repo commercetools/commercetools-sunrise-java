@@ -84,7 +84,7 @@ public abstract class SunriseAddAddressController extends MyAccountController im
 
     protected CompletionStage<Result> showEmptyForm(final Customer customer) {
         final Form<?> form = obtainFilledForm(null);
-        return completedFuture(ok(renderPage(customer, form)));
+        return asyncOk(renderPage(customer, form));
     }
 
     protected <T extends AddressFormData> CompletionStage<Result> processAddAddress(final AddressActionData<T> data) {
@@ -114,14 +114,14 @@ public abstract class SunriseAddAddressController extends MyAccountController im
         if (throwable.getCause() instanceof SphereException) {
             saveError((SphereException) throwable.getCause());
             final Form<?> form = obtainFilledForm(formData.extractAddress());
-            return completedFuture(badRequest(renderPage(customer, form)));
+            return asyncBadRequest(renderPage(customer, form));
         }
         return exceptionallyCompletedFuture(throwable);
     }
 
     protected <T extends AddressFormData> CompletionStage<Result> handleInvalidSubmittedAddress(final Customer customer, final Form<T> form) {
         saveFormErrors(form);
-        return completedFuture(badRequest(renderPage(customer, form)));
+        return asyncBadRequest(renderPage(customer, form));
     }
 
     protected CompletionStage<Customer> addAddressToCustomer(final Customer customer, final Address address) {
@@ -129,7 +129,7 @@ public abstract class SunriseAddAddressController extends MyAccountController im
         return sphere().execute(CustomerUpdateCommand.of(customer, updateAction));
     }
 
-    protected Html renderPage(final Customer customer, final Form<?> form) {
+    protected CompletionStage<Html> renderPage(final Customer customer, final Form<?> form) {
         throw new NotImplementedException("Add address controller page");
         //return renderPage(pageContent, getTemplateName();
     }

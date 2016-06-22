@@ -48,7 +48,7 @@ public abstract class SunriseAddressBookController extends MyAccountController i
         return ifNotNullCustomer(customer, notNullCustomer -> asyncOk(renderPage(customer)));
     }
 
-    protected Html renderPage(final Customer customer) {
+    protected CompletionStage<Html> renderPage(final Customer customer) {
         final AddressBookPageContent pageContent = addressBookPageContentFactory.create(customer);
         return renderPage(pageContent, getTemplateName());
     }
