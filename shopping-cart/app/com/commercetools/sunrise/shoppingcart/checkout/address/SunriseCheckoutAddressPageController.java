@@ -161,7 +161,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     protected void fill(final Cart cart, final CheckoutAddressPageContent pageContent) {
         pageContent.setStepWidget(StepWidgetBean.ADDRESS);
-        pageContent.setCart(createCartLikeBean(cart, userContext()));
+        pageContent.setCart(cartLikeBeanFactory.create(cart));
     }
 
     @Override

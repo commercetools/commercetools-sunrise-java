@@ -136,7 +136,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
 
     protected CompletionStage<Html> renderCheckoutShippingPage(final Cart cart, final CheckoutShippingPageContent pageContent, final UserContext userContext) {
         pageContent.setStepWidget(StepWidgetBean.SHIPPING);
-        pageContent.setCart(createCartLikeBean(cart, userContext));
+        pageContent.setCart(cartLikeBeanFactory.create(cart));
         setI18nTitle(pageContent, "checkout:shippingPage.title");
         return renderPage(pageContent, getTemplateName());
     }

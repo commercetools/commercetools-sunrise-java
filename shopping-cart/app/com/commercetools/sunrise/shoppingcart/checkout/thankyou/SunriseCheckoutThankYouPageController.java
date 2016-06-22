@@ -2,10 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
-import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.OrderSessionUtils;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.orders.Order;
@@ -51,7 +48,7 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
 
     protected CompletionStage<Result> handleFoundOrder(final Order order, final UserContext userContext) {
         final CheckoutThankYouPageContent pageContent = new CheckoutThankYouPageContent();
-        pageContent.setOrder(createCartLikeBean(order, userContext));
+        pageContent.setOrder(cartLikeBeanFactory.create(order));
         return asyncOk(renderCheckoutThankYouPage(pageContent));
     }
 

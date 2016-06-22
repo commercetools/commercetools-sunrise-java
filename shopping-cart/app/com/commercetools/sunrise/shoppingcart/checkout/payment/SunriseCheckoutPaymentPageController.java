@@ -5,7 +5,6 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
@@ -213,7 +212,7 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
 
     protected CompletionStage<Html> renderCheckoutPaymentPage(final Cart cart, final CheckoutPaymentPageContent pageContent, final UserContext userContext) {
         pageContent.setStepWidget(StepWidgetBean.PAYMENT);
-        pageContent.setCart(createCartLikeBean(cart, userContext));
+        pageContent.setCart(cartLikeBeanFactory.create(cart));
         setI18nTitle(pageContent, "checkout:paymentPage.title");
         return renderPage(pageContent, getTemplateName());
     }

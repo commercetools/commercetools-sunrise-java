@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.common;
 
 import com.commercetools.sunrise.hooks.CartLoadedHook;
+import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.google.inject.Inject;
 import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.cache.NoCache;
@@ -36,15 +37,9 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public abstract class SunriseFrameworkCartController extends SunriseFrameworkController {
 
     @Inject
-    protected ProductDataConfig productDataConfig;
-
-    @Inject
     private ProductReverseRouter productReverseRouter;
-
-
-    protected CartLikeBean createCartLikeBean(final CartLike<?> cartLike, final UserContext userContext) {
-        return new CartLikeBean(cartLike, userContext, productDataConfig, productReverseRouter);
-    }
+    @Inject
+    protected CartLikeBeanFactory cartLikeBeanFactory;
 
     protected CompletionStage<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
         final CompletionStage<Cart> cartFuture = fetchCart(userContext, session)
