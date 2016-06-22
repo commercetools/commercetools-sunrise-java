@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
+import com.commercetools.sunrise.common.models.AddressFormBeanFactory;
 import com.commercetools.sunrise.common.models.SunriseDataBeanFactory;
 import io.sphere.sdk.carts.Cart;
 

@@ -84,7 +84,7 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
     }
 
     protected  <T> CompletionStage<Result> applySubmittedAddress(final Customer customer, final Address address, final T formData) {
-        final CompletionStage<Result> resultStage = removeAddressFromCustomer(customer, address)
+        final CompletionStage<Result> resultStage = removeAddressFromCustomer(customer, address, formData)
                 .thenComposeAsync(updatedCustomer -> displaySuccessfulCustomerUpdate(updatedCustomer, address, formData), HttpExecution.defaultContext());
         return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
                 handleFailedCustomerUpdate(customer, address, formData, throwable));
@@ -109,7 +109,7 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
         return asyncBadRequest(renderPage(customer, form));
     }
 
-    protected CompletionStage<Customer> removeAddressFromCustomer(final Customer customer, final Address address) {
+    protected <T> CompletionStage<Customer> removeAddressFromCustomer(final Customer customer, final Address address, final T formData) {
         final RemoveAddress updateAction = RemoveAddress.of(address);
         return sphere().execute(CustomerUpdateCommand.of(customer, updateAction));
     }

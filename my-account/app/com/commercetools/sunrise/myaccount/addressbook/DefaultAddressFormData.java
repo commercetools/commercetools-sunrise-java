@@ -30,6 +30,9 @@ public class DefaultAddressFormData extends AddressFormData {
     @Constraints.Required
     private String email;
 
+    private boolean defaultShippingAddress;
+    private boolean defaultBillingAddress;
+
     public DefaultAddressFormData() {
     }
 
@@ -135,6 +138,24 @@ public class DefaultAddressFormData extends AddressFormData {
 
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean isDefaultShippingAddress() {
+        return defaultShippingAddress;
+    }
+
+    public void setDefaultShippingAddress(final boolean defaultShippingAddress) {
+        this.defaultShippingAddress = defaultShippingAddress;
+    }
+
+    @Override
+    public boolean isDefaultBillingAddress() {
+        return defaultBillingAddress;
+    }
+
+    public void setDefaultBillingAddress(final boolean defaultBillingAddress) {
+        this.defaultBillingAddress = defaultBillingAddress;
     }
 
     @Override

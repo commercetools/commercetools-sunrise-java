@@ -12,7 +12,6 @@ import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 import io.sphere.sdk.customers.commands.updateactions.AddAddress;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.SphereException;
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -25,6 +24,8 @@ import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
@@ -95,7 +96,7 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     }
 
     protected <T extends AddressFormData> CompletionStage<Result> applySubmittedAddress(final Customer customer, final T formData) {
-        final CompletionStage<Result> resultStage = addAddressToCustomer(customer, formData.extractAddress())
+        final CompletionStage<Result> resultStage = addAddressToCustomer(customer, formData)
                 .thenComposeAsync(updatedCustomer -> handleSuccessfulCustomerUpdate(updatedCustomer, formData), HttpExecution.defaultContext());
         return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
                 handleFailedCustomerUpdate(customer, formData, throwable));
@@ -119,19 +120,32 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
         return asyncBadRequest(renderPage(customer, form));
     }
 
-    protected CompletionStage<Customer> addAddressToCustomer(final Customer customer, final Address address) {
-        final AddAddress updateAction = AddAddress.of(address);
-        return sphere().execute(CustomerUpdateCommand.of(customer, updateAction));
+    protected <T extends AddressFormData> CompletionStage<Customer> addAddressToCustomer(final Customer customer, final T formData) {
+        final AddAddress addAddressAction = AddAddress.of(formData.extractAddress());
+        return sphere().execute(CustomerUpdateCommand.of(customer, addAddressAction));
+//                .thenComposeAsync(updatedCustomer -> {
+//                    findAddress(customer, )
+//                    final List<Customer> updateActions = new ArrayList<>();
+//                    if (formData.isDefaultShippingAddress()) {
+//                        updateActions.add(SetDefaultShippingAddress.of())
+//                    }
+//                });
     }
 
     protected CompletionStage<Html> renderPage(final Customer customer, final Form<?> form) {
-        throw new NotImplementedException("Add address controller page");
-        //return renderPage(pageContent, getTemplateName();
+        final AddAddressPageContent pageContent = injector.getInstance(AddAddressPageContentFactory.class).create(customer, form);
+        return renderPage(pageContent, getTemplateName());
     }
 
     protected Form<?> obtainFilledForm(@Nullable final Address address) {
         final DefaultAddressFormData formData = new DefaultAddressFormData();
         formData.apply(address);
         return formFactory.form(DefaultAddressFormData.class).fill(formData);
+    }
+
+    private Optional<Address> findAddress(final Customer customer, final String addressId) {
+        return customer.getAddresses().stream()
+                .filter(a -> Objects.equals(a.getId(), addressId))
+                .findFirst();
     }
 }

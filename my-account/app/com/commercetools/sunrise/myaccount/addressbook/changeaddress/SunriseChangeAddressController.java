@@ -102,7 +102,7 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     }
 
     protected <T extends AddressFormData> CompletionStage<Result> applySubmittedAddress(final Customer customer, final Address oldAddress, final T formData) {
-        final CompletionStage<Result> resultStage = changeAddressFromCustomer(customer, oldAddress, formData.extractAddress())
+        final CompletionStage<Result> resultStage = changeAddressFromCustomer(customer, oldAddress, formData)
                 .thenComposeAsync(updatedCustomer -> displaySuccessfulCustomerUpdate(updatedCustomer, oldAddress, formData), HttpExecution.defaultContext());
         return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
                 handleFailedCustomerUpdate(customer, oldAddress, formData, throwable));
@@ -127,8 +127,8 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
         return asyncBadRequest(renderPage(customer, form));
     }
 
-    protected CompletionStage<Customer> changeAddressFromCustomer(final Customer customer, final Address oldAddress, final Address newAddress) {
-        final ChangeAddress updateAction = ChangeAddress.ofOldAddressToNewAddress(oldAddress, newAddress);
+    protected <T extends AddressFormData> CompletionStage<Customer> changeAddressFromCustomer(final Customer customer, final Address oldAddress, final T formData) {
+        final ChangeAddress updateAction = ChangeAddress.ofOldAddressToNewAddress(oldAddress, formData.extractAddress());
         return sphere().execute(CustomerUpdateCommand.of(customer, updateAction));
     }
 

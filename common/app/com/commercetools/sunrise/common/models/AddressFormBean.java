@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.checkout.address;
+package com.commercetools.sunrise.common.models;
 
 import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.contexts.UserContext;
