@@ -55,6 +55,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         });
     }
 
+    @RequireCSRFCheck
     public CompletionStage<Result> addProductToCart(final String languageTag) {
         return doRequest(() -> {
         final Form<AddProductToCartFormData> addProductToCartForm = formFactory.form(AddProductToCartFormData.class).bindFromRequest();
