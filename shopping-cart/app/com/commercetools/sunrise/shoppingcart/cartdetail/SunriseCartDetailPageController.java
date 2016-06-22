@@ -5,8 +5,6 @@ import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -51,9 +49,9 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
-            final CartDetailPageContent pageContent = createPageContent(userContext());
-            return getOrCreateCart(userContext(), session())
-                    .thenComposeAsync(cart -> asyncOk(renderCartPage(cart, pageContent, userContext())), HttpExecution.defaultContext());
+            final CartDetailPageContent pageContent = createPageContent();
+            return getOrCreateCart()
+                    .thenComposeAsync(cart -> asyncOk(renderCartPage(cart, pageContent)), HttpExecution.defaultContext());
         });
     }
 
@@ -140,21 +138,21 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
                                                                        final Cart cart, final UserContext userContext) {
         final ErrorsBean errorsBean = new ErrorsBean(addProductToCartForm);
         final CartDetailPageContent pageContent = createPageContentWithAddProductToCartError(addProductToCartForm, errorsBean, userContext);
-        return asyncBadRequest(renderCartPage(cart, pageContent, userContext));
+        return asyncBadRequest(renderCartPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleChangeLineItemQuantityFormErrors(final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
                                                                              final Cart cart, final UserContext userContext) {
         final ErrorsBean errorsBean = new ErrorsBean(changeLineItemQuantityForm);
         final CartDetailPageContent pageContent = createPageContentWithChangeLineItemQuantityError(changeLineItemQuantityForm, errorsBean, userContext);
-        return asyncBadRequest(renderCartPage(cart, pageContent, userContext));
+        return asyncBadRequest(renderCartPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<RemoveLineItemFormData> removeLineItemForm,
                                                                      final Cart cart, final UserContext userContext) {
         final ErrorsBean errorsBean = new ErrorsBean(removeLineItemForm);
         final CartDetailPageContent pageContent = createPageContentWithRemoveLineItemError(removeLineItemForm, errorsBean, userContext);
-        return asyncBadRequest(renderCartPage(cart, pageContent, userContext));
+        return asyncBadRequest(renderCartPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleAddProductToCartError(final Throwable throwable,
@@ -165,7 +163,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
             Logger.error("The request to add product to cart raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             final CartDetailPageContent pageContent = createPageContentWithAddProductToCartError(addProductToCartForm, errors, userContext);
-            return asyncBadRequest(renderCartPage(cart, pageContent, userContext));
+            return asyncBadRequest(renderCartPage(cart, pageContent));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
@@ -178,7 +176,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
             Logger.error("The request to change line item quantity raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             final CartDetailPageContent pageContent = createPageContentWithChangeLineItemQuantityError(changeLineItemQuantityForm, errors, userContext);
-            return asyncBadRequest(renderCartPage(cart, pageContent, userContext));
+            return asyncBadRequest(renderCartPage(cart, pageContent));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
@@ -191,12 +189,12 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
             Logger.error("The request to remove line item raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             final CartDetailPageContent pageContent = createPageContentWithRemoveLineItemError(removeLineItemForm, errors, userContext);
-            return asyncBadRequest(renderCartPage(cart, pageContent, userContext));
+            return asyncBadRequest(renderCartPage(cart, pageContent));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
-    protected CartDetailPageContent createPageContent(final UserContext userContext) {
+    protected CartDetailPageContent createPageContent() {
         return new CartDetailPageContent();
     }
 
@@ -218,8 +216,8 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return new CartDetailPageContent();
     }
 
-    protected CompletionStage<Html> renderCartPage(final Cart cart, final CartDetailPageContent pageContent, final UserContext userContext) {
-        pageContent.setCart(createCartLikeBean(cart, userContext));
+    protected CompletionStage<Html> renderCartPage(final Cart cart, final CartDetailPageContent pageContent) {
+        pageContent.setCart(createCartLikeBean(cart, userContext()));
         setI18nTitle(pageContent, "checkout:cartDetailPage.title");
         return renderPage(pageContent, getTemplateName());
     }
