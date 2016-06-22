@@ -2,11 +2,12 @@ package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.hooks.OrderByIdGetFilterHook;
+import com.commercetools.sunrise.hooks.SingleOrderHook;
 import com.commercetools.sunrise.shoppingcart.OrderSessionUtils;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderByIdGet;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -20,6 +21,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
+import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @Singleton
 public abstract class SunriseCheckoutThankYouPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
@@ -29,20 +31,31 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
 
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
-            return OrderSessionUtils.getLastOrderId(session())
+            return getLastOrderId()
                     .map(lastOrderId -> findOrder(lastOrderId)
                             .thenComposeAsync(orderOpt -> orderOpt
                                     .map(order -> handleFoundOrder(order))
                                     .orElseGet(() -> handleNotFoundOrder()),
-                                    HttpExecution.defaultContext())
+                                    defaultContext())
                     )
                     .orElseGet(() -> handleNotFoundOrder());
         });
     }
 
-    protected CompletionStage<Optional<Order>> findOrder(final String lastOrderId) {
-        return sphere().execute(OrderByIdGet.of(lastOrderId))
-                .thenApplyAsync(Optional::ofNullable, HttpExecution.defaultContext());
+    protected Optional<String> getLastOrderId() {
+        return OrderSessionUtils.getLastOrderId(session());
+    }
+
+    protected CompletionStage<Optional<Order>> findOrder(final String orderId) {
+        final OrderByIdGet orderByIdGet = runFilterHook(OrderByIdGetFilterHook.class, (hook, getter) -> hook.filterOrderByIdGet(getter), OrderByIdGet.of(orderId));
+        return sphere().execute(orderByIdGet)
+                .thenApplyAsync(nullableOrder -> {
+                    if (nullableOrder != null) {
+                        runAsyncHook(SingleOrderHook.class, hook -> hook.onSingleOrderLoaded(nullableOrder));
+                    }
+                    return nullableOrder;
+                }, defaultContext())
+                .thenApplyAsync(Optional::ofNullable, defaultContext());
     }
 
     protected CompletionStage<Result> handleFoundOrder(final Order order) {
