@@ -55,6 +55,7 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
+            logger.debug("try to remove address with id={} in locale={}", addressId, languageTag);
             final Form<RemoveAddressFormData> form = formFactory.form(RemoveAddressFormData.class).bindFromRequest();
             return injector.getInstance(RemoveAddressActionDataDefaultProvider.class).getActionData(session(), addressId, form)
                     .thenComposeAsync(this::processRemoveAddressForm);

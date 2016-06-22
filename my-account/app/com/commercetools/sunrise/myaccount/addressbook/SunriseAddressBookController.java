@@ -7,6 +7,8 @@ import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import com.google.inject.Injector;
 import io.sphere.sdk.customers.Customer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -20,6 +22,8 @@ import static java.util.Arrays.asList;
 
 @RequestScoped
 public abstract class SunriseAddressBookController extends MyAccountController implements WithOverwriteableTemplateName {
+
+    protected static final Logger logger = LoggerFactory.getLogger(SunriseAddressBookController.class);
 
     @Inject
     private Injector injector;
@@ -40,8 +44,11 @@ public abstract class SunriseAddressBookController extends MyAccountController i
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> injector.getInstance(CustomerFinderBySession.class).findCustomer(session())
-                .thenComposeAsync(customer -> showAddressBook(customer.orElse(null))));
+        return doRequest(() -> {
+            logger.debug("show address book in locale={}", languageTag);
+            return injector.getInstance(CustomerFinderBySession.class).findCustomer(session())
+                    .thenComposeAsync(customer -> showAddressBook(customer.orElse(null)));
+        });
     }
 
     protected CompletionStage<Result> showAddressBook(@Nullable final Customer customer) {

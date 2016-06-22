@@ -56,13 +56,17 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
-        return doRequest(() -> injector.getInstance(ChangeAddressActionDataDefaultProvider.class).getActionData(session(), addressId, null)
-                .thenComposeAsync(this::showChangeAddress, HttpExecution.defaultContext()));
+        return doRequest(() -> {
+            logger.debug("show edit form for address with id={} in locale={}", addressId, languageTag);
+            return injector.getInstance(ChangeAddressActionDataDefaultProvider.class).getActionData(session(), addressId, null)
+                    .thenComposeAsync(this::showChangeAddress, HttpExecution.defaultContext());
+        });
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
+            logger.debug("try to change address with id={} in locale={}", addressId, languageTag);
             Form<DefaultAddressFormData> form = formFactory.form(DefaultAddressFormData.class).bindFromRequest();
             return injector.getInstance(ChangeAddressActionDataDefaultProvider.class).getActionData(session(), addressId, form)
                     .thenComposeAsync(this::processChangeAddress, HttpExecution.defaultContext());

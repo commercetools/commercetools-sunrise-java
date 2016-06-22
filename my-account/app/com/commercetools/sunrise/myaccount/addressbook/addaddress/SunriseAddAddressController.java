@@ -56,13 +56,17 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> injector.getInstance(AddAddressActionDataDefaultProvider.class).getActionData(session(), null)
-                .thenComposeAsync(this::showAddAddress, HttpExecution.defaultContext()));
+        return doRequest(() -> {
+            logger.debug("show new address form for address in locale={}", languageTag);
+            return injector.getInstance(AddAddressActionDataDefaultProvider.class).getActionData(session(), null)
+                    .thenComposeAsync(this::showAddAddress, HttpExecution.defaultContext());
+        });
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
+            logger.debug("try to add address with in locale={}", languageTag);
             final Form<DefaultAddressFormData> form = formFactory.form(DefaultAddressFormData.class).bindFromRequest();
             return injector.getInstance(AddAddressActionDataDefaultProvider.class).getActionData(session(), form)
                     .thenComposeAsync(this::processAddAddress, HttpExecution.defaultContext());
