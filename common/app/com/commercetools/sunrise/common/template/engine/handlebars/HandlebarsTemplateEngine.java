@@ -4,6 +4,8 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
 import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
+import com.github.jknack.handlebars.context.JavaBeanValueResolver;
+import com.github.jknack.handlebars.context.MapValueResolver;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.cms.CmsService;
@@ -15,8 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -55,7 +56,13 @@ public final class HandlebarsTemplateEngine implements TemplateEngine {
     }
 
     private Context createContext(final PageData pageData, final List<Locale> locales) {
-        final Context context = Context.newContext(pageData);
+        final Context context = Context.newBuilder(pageData)
+                .resolver(
+                        MapValueResolver.INSTANCE,
+                        JavaBeanValueResolver.INSTANCE,
+                        PlayJavaFormResolver.INSTANCE
+                )
+                .build();
         context.data(LANGUAGE_TAGS_IN_CONTEXT_KEY, locales.stream().map(Locale::toLanguageTag).collect(toList()));
         return context;
     }
@@ -67,4 +74,5 @@ public final class HandlebarsTemplateEngine implements TemplateEngine {
             throw new TemplateNotFoundException("Could not find the default template", e);
         }
     }
+
 }
