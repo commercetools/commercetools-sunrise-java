@@ -4,7 +4,6 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ErrorResponseException;
@@ -75,13 +74,17 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
 
     protected CompletionStage<Order> createOrder(final Cart cart) {
         final String orderNumber = generateOrderNumber();
-        final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, PaymentState.PAID);
+        final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, orderInitialPaymentState(cart));
         return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
                 .thenApplyAsync(order -> {
                     overwriteLastOrderIdSessionData(order, session());
                     removeCartSessionData(session());
                     return order;
                 }, HttpExecution.defaultContext());
+    }
+
+    protected PaymentState orderInitialPaymentState(final Cart cart) {
+        return PaymentState.PENDING;
     }
 
     protected String generateOrderNumber() {
