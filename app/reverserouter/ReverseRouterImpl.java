@@ -13,7 +13,6 @@ import static demo.common.routes.*;
 import static demo.productcatalog.routes.*;
 import static demo.myaccount.routes.*;
 import static demo.shoppingcart.routes.*;
-import static com.commercetools.sunrise.shoppingcart.cartdetail.routes.*;
 import static setupwidget.controllers.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, SetupReverseRouter {
