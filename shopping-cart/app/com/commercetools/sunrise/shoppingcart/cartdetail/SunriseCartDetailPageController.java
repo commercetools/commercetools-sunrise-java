@@ -12,7 +12,8 @@ import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
 import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
 import io.sphere.sdk.carts.commands.updateactions.RemoveLineItem;
 import io.sphere.sdk.client.ErrorResponseException;
-import play.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -38,6 +39,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  */
 @Singleton
 public abstract class SunriseCartDetailPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+    private static final Logger logger = LoggerFactory.getLogger(SunriseCartDetailPageController.class);
 
     @Inject
     private FormFactory formFactory;
@@ -162,7 +164,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
                                                                   final Cart cart, final UserContext userContext) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
-            Logger.error("The request to add product to cart raised an exception", errorResponseException);
+            logger.error("The request to add product to cart raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             final CartDetailPageContent pageContent = createPageContentWithAddProductToCartError(addProductToCartForm, errors);
             return asyncBadRequest(renderCartPage(cart, pageContent));
@@ -175,7 +177,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
                                                                         final Cart cart, final UserContext userContext) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
-            Logger.error("The request to change line item quantity raised an exception", errorResponseException);
+            logger.error("The request to change line item quantity raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             final CartDetailPageContent pageContent = createPageContentWithChangeLineItemQuantityError(changeLineItemQuantityForm, errors);
             return asyncBadRequest(renderCartPage(cart, pageContent));
@@ -188,7 +190,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
                                                                 final Cart cart, final UserContext userContext) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
-            Logger.error("The request to remove line item raised an exception", errorResponseException);
+            logger.error("The request to remove line item raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             final CartDetailPageContent pageContent = createPageContentWithRemoveLineItemError(removeLineItemForm, errors);
             return asyncBadRequest(renderCartPage(cart, pageContent));
