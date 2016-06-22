@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.shoppingcart.OrderSessionUtils;
@@ -33,11 +32,11 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
             return OrderSessionUtils.getLastOrderId(session())
                     .map(lastOrderId -> findOrder(lastOrderId)
                             .thenComposeAsync(orderOpt -> orderOpt
-                                    .map(order -> handleFoundOrder(order, userContext()))
-                                    .orElseGet(() -> handleNotFoundOrder(userContext())),
+                                    .map(order -> handleFoundOrder(order))
+                                    .orElseGet(() -> handleNotFoundOrder()),
                                     HttpExecution.defaultContext())
                     )
-                    .orElseGet(() -> handleNotFoundOrder(userContext()));
+                    .orElseGet(() -> handleNotFoundOrder());
         });
     }
 
@@ -46,14 +45,14 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
                 .thenApplyAsync(Optional::ofNullable, HttpExecution.defaultContext());
     }
 
-    protected CompletionStage<Result> handleFoundOrder(final Order order, final UserContext userContext) {
+    protected CompletionStage<Result> handleFoundOrder(final Order order) {
         final CheckoutThankYouPageContent pageContent = new CheckoutThankYouPageContent();
         pageContent.setOrder(cartLikeBeanFactory.create(order));
         return asyncOk(renderCheckoutThankYouPage(pageContent));
     }
 
-    protected CompletionStage<Result> handleNotFoundOrder(final UserContext userContext) {
-        final Call call = homeReverseRouter.homePageCall(userContext.locale().toLanguageTag());
+    protected CompletionStage<Result> handleNotFoundOrder() {
+        final Call call = homeReverseRouter.homePageCall(userContext().locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

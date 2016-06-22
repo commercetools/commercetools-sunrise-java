@@ -64,8 +64,8 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> getOrCreateCart()
                 .thenComposeAsync(cart -> {
-                    final CheckoutPaymentPageContent pageContent = createPageContent(cart, paymentMethodsInfo, userContext());
-                    return asyncOk(renderCheckoutPaymentPage(cart, pageContent, userContext()));
+                    final CheckoutPaymentPageContent pageContent = createPageContent(cart, paymentMethodsInfo);
+                    return asyncOk(renderCheckoutPaymentPage(cart, pageContent));
                 }, HttpExecution.defaultContext()));
     }
 
@@ -76,17 +76,17 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
             return getOrCreateCart()
                     .thenComposeAsync(cart -> {
                         if (paymentForm.hasErrors()) {
-                            return handleFormErrors(paymentForm, paymentMethodsInfo, cart, userContext());
+                            return handleFormErrors(paymentForm, paymentMethodsInfo, cart);
                         } else {
                             final List<String> selectedMethodNames = singletonList(paymentForm.get().getPayment());
                             final List<PaymentMethodInfo> selectedPaymentMethods = getSelectedPaymentMethodsInfo(selectedMethodNames);
                             if (selectedPaymentMethods.isEmpty()) {
-                                return handleInvalidPaymentError(paymentForm, selectedPaymentMethods, cart, userContext());
+                                return handleInvalidPaymentError(paymentForm, selectedPaymentMethods, cart);
                             } else {
                                 final CompletionStage<Result> resultStage = setPaymentToCart(cart, selectedPaymentMethods)
                                         .thenComposeAsync(updatedCart -> handleSuccessfulSetPayment(userContext()), HttpExecution.defaultContext());
                                 return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                                        handleSetPaymentToCartError(throwable, paymentForm, paymentMethodsInfo, cart, userContext()));
+                                        handleSetPaymentToCartError(throwable, paymentForm, paymentMethodsInfo, cart));
                             }
                         }
                     }, HttpExecution.defaultContext());
@@ -156,36 +156,35 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
 
     protected CompletionStage<Result> handleFormErrors(final Form<CheckoutPaymentFormData> paymentForm,
                                                        final List<PaymentMethodInfo> paymentMethods,
-                                                       final Cart cart, final UserContext userContext) {
+                                                       final Cart cart) {
         final ErrorsBean errors = new ErrorsBean(paymentForm);
-        final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
-        return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent, userContext));
+        final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods);
+        return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleInvalidPaymentError(final Form<CheckoutPaymentFormData> paymentForm,
                                                                 final List<PaymentMethodInfo> paymentMethods,
-                                                                final Cart cart, final UserContext userContext) {
+                                                                final Cart cart) {
         final ErrorsBean errors = new ErrorsBean("Invalid payment error"); // TODO use i18n
-        final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
-        return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent, userContext));
+        final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods);
+        return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleSetPaymentToCartError(final Throwable throwable,
                                                                   final Form<CheckoutPaymentFormData> paymentForm,
                                                                   final List<PaymentMethodInfo> paymentMethods,
-                                                                  final Cart cart, final UserContext userContext) {
+                                                                  final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             Logger.error("The request to set payment to cart raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-            final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods, userContext);
-            return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent, userContext));
+            final CheckoutPaymentPageContent pageContent = createPageContentWithPaymentError(paymentForm, errors, paymentMethods);
+            return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
-    protected CheckoutPaymentPageContent createPageContent(final Cart cart, final List<PaymentMethodInfo> paymentMethods,
-                                                           final UserContext userContext) {
+    protected CheckoutPaymentPageContent createPageContent(final Cart cart, final List<PaymentMethodInfo> paymentMethods) {
         final CheckoutPaymentPageContent pageContent = new CheckoutPaymentPageContent();
         final List<String> selectedPaymentMethods = Optional.ofNullable(cart.getPaymentInfo())
                 .map(info -> info.getPayments().stream()
@@ -193,24 +192,23 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
                         .map(ref -> ref.getObj().getPaymentMethodInfo().getMethod())
                         .collect(toList()))
                 .orElse(emptyList());
-        pageContent.setPaymentForm(new CheckoutPaymentFormBean(paymentMethods, selectedPaymentMethods, userContext));
+        pageContent.setPaymentForm(new CheckoutPaymentFormBean(paymentMethods, selectedPaymentMethods, userContext()));
         return pageContent;
     }
 
     protected CheckoutPaymentPageContent createPageContentWithPaymentError(final Form<CheckoutPaymentFormData> paymentForm,
-                                                                           final ErrorsBean errors, final List<PaymentMethodInfo> paymentMethods,
-                                                                           final UserContext userContext) {
+                                                                           final ErrorsBean errors, final List<PaymentMethodInfo> paymentMethods) {
         final CheckoutPaymentPageContent pageContent = new CheckoutPaymentPageContent();
         final List<String> selectedPaymentMethodKeys = Optional.ofNullable(extractFormField(paymentForm, "payment"))
                 .map(Collections::singletonList)
                 .orElse(emptyList());
-        final CheckoutPaymentFormBean formBean = new CheckoutPaymentFormBean(paymentMethods, selectedPaymentMethodKeys, userContext);
+        final CheckoutPaymentFormBean formBean = new CheckoutPaymentFormBean(paymentMethods, selectedPaymentMethodKeys, userContext());
         formBean.setErrors(errors);
         pageContent.setPaymentForm(formBean);
         return pageContent;
     }
 
-    protected CompletionStage<Html> renderCheckoutPaymentPage(final Cart cart, final CheckoutPaymentPageContent pageContent, final UserContext userContext) {
+    protected CompletionStage<Html> renderCheckoutPaymentPage(final Cart cart, final CheckoutPaymentPageContent pageContent) {
         pageContent.setStepWidget(StepWidgetBean.PAYMENT);
         pageContent.setCart(cartLikeBeanFactory.create(cart));
         setI18nTitle(pageContent, "checkout:paymentPage.title");

@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.shoppingcart.cartdetail;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
@@ -18,7 +17,6 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
@@ -65,7 +63,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
                     if (filledForm.hasErrors()) {
-                        return handleAddProductToCartFormErrors(filledForm, cart, userContext());
+                        return handleAddProductToCartFormErrors(filledForm, cart);
                     } else {
                         final AddProductToCartFormData data = filledForm.get();
                         final String productId = data.getProductId();
@@ -74,7 +72,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
                         final CompletionStage<Result> resultStage = addProductToCart(productId, variantId, quantity, cart)
                                 .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
                         return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                                handleAddProductToCartError(throwable, filledForm, cart, userContext()));
+                                handleAddProductToCartError(throwable, filledForm, cart));
                     }
                 }, defaultContext());
         });
@@ -87,14 +85,14 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
                     if (changeLineItemQuantityForm.hasErrors()) {
-                        return handleChangeLineItemQuantityFormErrors(changeLineItemQuantityForm, cart, userContext());
+                        return handleChangeLineItemQuantityFormErrors(changeLineItemQuantityForm, cart);
                     } else {
                         final String lineItemId = changeLineItemQuantityForm.get().getLineItemId();
                         final Long quantity = changeLineItemQuantityForm.get().getQuantity();
                         final CompletionStage<Result> resultStage = changeLineItemQuantity(lineItemId, quantity, cart)
                                 .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
                         return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                                handleChangeLineItemQuantityError(throwable, changeLineItemQuantityForm, cart, userContext()));
+                                handleChangeLineItemQuantityError(throwable, changeLineItemQuantityForm, cart));
                     }
                 }, defaultContext());
         });
@@ -107,13 +105,13 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
                     if (removeLineItemForm.hasErrors()) {
-                        return handleRemoveLineItemFormErrors(removeLineItemForm, cart, userContext());
+                        return handleRemoveLineItemFormErrors(removeLineItemForm, cart);
                     } else {
                         final String lineItemId = removeLineItemForm.get().getLineItemId();
                         final CompletionStage<Result> resultStage = removeLineItem(lineItemId, cart)
                                 .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
                         return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                                handleRemoveLineItemError(throwable, removeLineItemForm, cart, userContext()));
+                                handleRemoveLineItemError(throwable, removeLineItemForm, cart));
                     }
                 }, defaultContext());
         });
@@ -140,21 +138,21 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
     }
 
     protected CompletionStage<Result> handleAddProductToCartFormErrors(final Form<AddProductToCartFormData> addProductToCartForm,
-                                                                       final Cart cart, final UserContext userContext) {
+                                                                       final Cart cart) {
         final ErrorsBean errorsBean = new ErrorsBean(addProductToCartForm);
         final CartDetailPageContent pageContent = createPageContentWithAddProductToCartError(addProductToCartForm, errorsBean);
         return asyncBadRequest(renderCartPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleChangeLineItemQuantityFormErrors(final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
-                                                                             final Cart cart, final UserContext userContext) {
+                                                                             final Cart cart) {
         final ErrorsBean errorsBean = new ErrorsBean(changeLineItemQuantityForm);
         final CartDetailPageContent pageContent = createPageContentWithChangeLineItemQuantityError(changeLineItemQuantityForm, errorsBean);
         return asyncBadRequest(renderCartPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<RemoveLineItemFormData> removeLineItemForm,
-                                                                     final Cart cart, final UserContext userContext) {
+                                                                     final Cart cart) {
         final ErrorsBean errorsBean = new ErrorsBean(removeLineItemForm);
         final CartDetailPageContent pageContent = createPageContentWithRemoveLineItemError(removeLineItemForm, errorsBean);
         return asyncBadRequest(renderCartPage(cart, pageContent));
@@ -162,7 +160,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
 
     protected CompletionStage<Result> handleAddProductToCartError(final Throwable throwable,
                                                                   final Form<AddProductToCartFormData> addProductToCartForm,
-                                                                  final Cart cart, final UserContext userContext) {
+                                                                  final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             logger.error("The request to add product to cart raised an exception", errorResponseException);
@@ -175,7 +173,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
 
     protected CompletionStage<Result> handleChangeLineItemQuantityError(final Throwable throwable,
                                                                         final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
-                                                                        final Cart cart, final UserContext userContext) {
+                                                                        final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             logger.error("The request to change line item quantity raised an exception", errorResponseException);
@@ -188,7 +186,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
 
     protected CompletionStage<Result> handleRemoveLineItemError(final Throwable throwable,
                                                                 final Form<RemoveLineItemFormData> removeLineItemForm,
-                                                                final Cart cart, final UserContext userContext) {
+                                                                final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             logger.error("The request to remove line item raised an exception", errorResponseException);

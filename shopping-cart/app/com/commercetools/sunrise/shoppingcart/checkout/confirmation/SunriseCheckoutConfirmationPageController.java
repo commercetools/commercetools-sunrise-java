@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
@@ -51,7 +50,7 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
             return getOrCreateCart()
                     .thenComposeAsync(cart -> {
                         final CheckoutConfirmationPageContent pageContent = createPageContent();
-                        return asyncOk(renderCheckoutConfirmationPage(cart, pageContent, userContext()));
+                        return asyncOk(renderCheckoutConfirmationPage(cart, pageContent));
                     }, HttpExecution.defaultContext());
         });
     }
@@ -63,12 +62,12 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
             return getOrCreateCart()
                     .thenComposeAsync(cart -> {
                         if (confirmationForm.hasErrors()) {
-                            return handleFormErrors(confirmationForm, cart, userContext());
+                            return handleFormErrors(confirmationForm, cart);
                         } else {
                             final CompletionStage<Result> resultStage = createOrder(cart)
-                                    .thenComposeAsync(order -> handleSuccessfulCreateOrder(userContext()), HttpExecution.defaultContext());
+                                    .thenComposeAsync(order -> handleSuccessfulCreateOrder(), HttpExecution.defaultContext());
                             return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                                    handleCreateOrderError(throwable, confirmationForm, cart, userContext()));
+                                    handleCreateOrderError(throwable, confirmationForm, cart));
                         }
                     }, HttpExecution.defaultContext());
         });
@@ -89,27 +88,26 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
         return RandomStringUtils.randomNumeric(8);
     }
 
-    protected CompletionStage<Result> handleSuccessfulCreateOrder(final UserContext userContext) {
-        final Call call = checkoutReverseRouter.checkoutThankYouPageCall(userContext.locale().toLanguageTag());
+    protected CompletionStage<Result> handleSuccessfulCreateOrder() {
+        final Call call = checkoutReverseRouter.checkoutThankYouPageCall(userContext().locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 
-    protected CompletionStage<Result> handleFormErrors(final Form<CheckoutConfirmationFormData> confirmationForm, final Cart cart,
-                                      final UserContext userContext) {
+    protected CompletionStage<Result> handleFormErrors(final Form<CheckoutConfirmationFormData> confirmationForm, final Cart cart) {
         final ErrorsBean errors = new ErrorsBean(confirmationForm);
         final CheckoutConfirmationPageContent pageContent = createPageContentWithConfirmationError(confirmationForm, errors);
-        return asyncBadRequest(renderCheckoutConfirmationPage(cart, pageContent, userContext));
+        return asyncBadRequest(renderCheckoutConfirmationPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleCreateOrderError(final Throwable throwable,
                                                              final Form<CheckoutConfirmationFormData> confirmationForm,
-                                                             final Cart cart, final UserContext userContext) {
+                                                             final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             Logger.error("The request to create the order raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             final CheckoutConfirmationPageContent pageContent = createPageContentWithConfirmationError(confirmationForm, errors);
-            return asyncBadRequest(renderCheckoutConfirmationPage(cart, pageContent, userContext));
+            return asyncBadRequest(renderCheckoutConfirmationPage(cart, pageContent));
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
@@ -130,7 +128,7 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
         return pageContent;
     }
 
-    protected CompletionStage<Html> renderCheckoutConfirmationPage(final Cart cart, final CheckoutConfirmationPageContent pageContent, final UserContext userContext) {
+    protected CompletionStage<Html> renderCheckoutConfirmationPage(final Cart cart, final CheckoutConfirmationPageContent pageContent) {
         pageContent.setStepWidget(StepWidgetBean.CONFIRMATION);
         pageContent.setCart(cartLikeBeanFactory.create(cart));
         setI18nTitle(pageContent, "checkout:confirmationPage.title");
