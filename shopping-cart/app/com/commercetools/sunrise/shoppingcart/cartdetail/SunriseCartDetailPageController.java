@@ -33,6 +33,7 @@ import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
+import static play.libs.concurrent.HttpExecution.defaultContext;
 
 /**
  * Shows and modifies the contents of the cart.
@@ -53,7 +54,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return doRequest(() -> {
             final CartDetailPageContent pageContent = createPageContent();
             return getOrCreateCart()
-                    .thenComposeAsync(cart -> asyncOk(renderCartPage(cart, pageContent)), HttpExecution.defaultContext());
+                    .thenComposeAsync(cart -> asyncOk(renderCartPage(cart, pageContent)), defaultContext());
         });
     }
 
@@ -71,11 +72,11 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
                         final int variantId = data.getVariantId();
                         final long quantity = data.getQuantity();
                         final CompletionStage<Result> resultStage = addProductToCart(productId, variantId, quantity, cart)
-                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), HttpExecution.defaultContext());
-                        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
+                        return recoverWithAsync(resultStage, defaultContext(), throwable ->
                                 handleAddProductToCartError(throwable, filledForm, cart, userContext()));
                     }
-                }, HttpExecution.defaultContext());
+                }, defaultContext());
         });
     }
 
@@ -91,11 +92,11 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
                         final String lineItemId = changeLineItemQuantityForm.get().getLineItemId();
                         final Long quantity = changeLineItemQuantityForm.get().getQuantity();
                         final CompletionStage<Result> resultStage = changeLineItemQuantity(lineItemId, quantity, cart)
-                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), HttpExecution.defaultContext());
-                        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
+                        return recoverWithAsync(resultStage, defaultContext(), throwable ->
                                 handleChangeLineItemQuantityError(throwable, changeLineItemQuantityForm, cart, userContext()));
                     }
-                }, HttpExecution.defaultContext());
+                }, defaultContext());
         });
     }
 
@@ -110,11 +111,11 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
                     } else {
                         final String lineItemId = removeLineItemForm.get().getLineItemId();
                         final CompletionStage<Result> resultStage = removeLineItem(lineItemId, cart)
-                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), HttpExecution.defaultContext());
-                        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
+                        return recoverWithAsync(resultStage, defaultContext(), throwable ->
                                 handleRemoveLineItemError(throwable, removeLineItemForm, cart, userContext()));
                     }
-                }, HttpExecution.defaultContext());
+                }, defaultContext());
         });
     }
 
