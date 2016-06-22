@@ -12,14 +12,14 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 import java.util.function.UnaryOperator;
 
-public final class ProductFetchByProductIdAndVariantId implements ProductFetch<String, Integer> {
+public final class ProductFinderByProductIdAndVariantId implements ProductFinder<String, Integer> {
     @Inject
     private SphereClient sphereClient;
 
     @Override
-    public CompletionStage<ProductFetchResult> findProduct(final String productId,
-                                                           final Integer variantId,
-                                                           final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
+    public CompletionStage<ProductFinderResult> findProduct(final String productId,
+                                                            final Integer variantId,
+                                                            final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
         final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent().withQueryFilters(m -> m.id().is(productId));
         return sphereClient.execute(runHookOnProductSearch.apply(request))
                 .thenApplyAsync(PagedSearchResult::head, HttpExecution.defaultContext())
@@ -28,7 +28,7 @@ public final class ProductFetchByProductIdAndVariantId implements ProductFetch<S
                     final ProductVariant productVariant = productOptional
                             .flatMap(p -> p.findVariant(ByIdVariantIdentifier.of(productId, variantId)))
                             .orElse(null);
-                    return ProductFetchResult.of(product, productVariant);
+                    return ProductFinderResult.of(product, productVariant);
                 }, HttpExecution.defaultContext());
     }
 }

@@ -3,15 +3,13 @@ package com.commercetools.sunrise.myaccount.addressbook;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
-import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-public class ChangeAddressFormData extends Base {
+import javax.annotation.Nullable;
+
+public class DefaultAddressFormData extends AddressFormData {
 
     private String csrfToken;
-
-    @Constraints.Required
-    private String addressId;
 
     private String title;
     @Constraints.Required
@@ -32,6 +30,9 @@ public class ChangeAddressFormData extends Base {
     @Constraints.Required
     private String email;
 
+    public DefaultAddressFormData() {
+    }
+
     public String validate() {
         final CountryCode country = CountryCode.getByCode(this.country);
         if (country == null || country.equals(CountryCode.UNDEFINED)) {
@@ -46,14 +47,6 @@ public class ChangeAddressFormData extends Base {
 
     public void setCsrfToken(final String csrfToken) {
         this.csrfToken = csrfToken;
-    }
-
-    public String getAddressId() {
-        return addressId;
-    }
-
-    public void setAddressId(final String addressId) {
-        this.addressId = addressId;
     }
 
     public String getTitle() {
@@ -144,19 +137,37 @@ public class ChangeAddressFormData extends Base {
         this.email = email;
     }
 
-    public Address toAddress() {
-        final CountryCode country = CountryCode.getByCode(this.country);
+    @Override
+    public void apply(@Nullable final Address address) {
+        if (address != null) {
+            this.title = address.getTitle();
+            this.firstName = address.getFirstName();
+            this.lastName = address.getLastName();
+            this.streetName = address.getStreetName();
+            this.additionalStreetInfo = address.getAdditionalStreetInfo();
+            this.city = address.getCity();
+            this.postalCode = address.getPostalCode();
+            this.country = address.getCountry().getAlpha2();
+            this.region = address.getRegion();
+            this.phone = address.getPhone();
+            this.email = address.getEmail();
+        }
+    }
+
+    @Override
+    public Address extractAddress() {
+        final CountryCode country = CountryCode.getByCode(getCountry());
         return AddressBuilder.of(country)
-                .title(title)
-                .firstName(firstName)
-                .lastName(lastName)
-                .streetName(streetName)
-                .additionalStreetInfo(additionalStreetInfo)
-                .city(city)
-                .postalCode(postalCode)
-                .region(region)
-                .phone(phone)
-                .email(email)
+                .title(getTitle())
+                .firstName(getFirstName())
+                .lastName(getLastName())
+                .streetName(getStreetName())
+                .additionalStreetInfo(getAdditionalStreetInfo())
+                .city(getCity())
+                .postalCode(getPostalCode())
+                .region(getRegion())
+                .phone(getPhone())
+                .email(getEmail())
                 .build();
     }
 }

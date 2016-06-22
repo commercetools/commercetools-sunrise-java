@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
@@ -16,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
+import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -80,7 +80,7 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
             logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
             this.productSlug = slug;
             this.variantSku = sku;
-            return injector.getInstance(ProductFetchBySlugAndSku.class).findProduct(slug, sku, this::runHookOnProductSearch)
+            return injector.getInstance(ProductFinderBySlugAndSku.class).findProduct(slug, sku, this::runHookOnProductSearch)
                     .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
         });
     }
@@ -88,17 +88,17 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     public CompletionStage<Result> showProductByProductIdAndVariantId(final String languageTag, final String productId, final int variantId) {
         return doRequest(() -> {
             logger.debug("look for product with productId={} and variantId={}", productId, variantId);
-            return injector.getInstance(ProductFetchByProductIdAndVariantId.class).findProduct(productId, variantId, this::runHookOnProductSearch)
+            return injector.getInstance(ProductFinderByProductIdAndVariantId.class).findProduct(productId, variantId, this::runHookOnProductSearch)
                     .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
         });
     }
 
-    protected CompletionStage<Result> showProduct(final ProductFetchResult productFetchResult) {
-        final Optional<ProductProjection> product = productFetchResult.getProduct();
-        final Optional<ProductVariant> variant = productFetchResult.getVariant();
+    protected CompletionStage<Result> showProduct(final ProductFinderResult productFinderResult) {
+        final Optional<ProductProjection> product = productFinderResult.getProduct();
+        final Optional<ProductVariant> variant = productFinderResult.getVariant();
         if (product.isPresent() && variant.isPresent()) {
             return runHookOnFoundProduct(product.get(), variant.get())
-                    .thenComposeAsync(unused -> handleFoundProduct(product.get(), variant.get()), HttpExecution.defaultContext());
+                    .thenComposeAsync(unused -> showFoundProduct(product.get(), variant.get()), HttpExecution.defaultContext());
         } else if (product.isPresent()) {
             return handleNotFoundVariant(product.get());
         } else {
@@ -106,9 +106,8 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         }
     }
 
-    protected CompletionStage<Result> handleFoundProduct(final ProductProjection product, final ProductVariant variant) {
-        final PageContent pageContent = createPageContent(product, variant);
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+    protected CompletionStage<Result> showFoundProduct(final ProductProjection product, final ProductVariant variant) {
+        return completedFuture(ok(renderPage(product, variant)));
     }
 
     protected CompletionStage<Result> handleNotFoundVariant(final ProductProjection product) {
@@ -126,8 +125,9 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
         }
     }
 
-    protected PageContent createPageContent(final ProductProjection product, final ProductVariant variant) {
-        return productDetailPageContentFactory.create(product, variant);
+    private Html renderPage(final ProductProjection product, final ProductVariant variant) {
+        final PageContent pageContent = productDetailPageContentFactory.create(product, variant);
+        return renderPage(pageContent, getTemplateName());
     }
 
     protected Result notFoundProductResult() {

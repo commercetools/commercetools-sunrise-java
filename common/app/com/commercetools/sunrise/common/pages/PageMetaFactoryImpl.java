@@ -68,7 +68,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processMyPersonalDetailsForm(language), "editMyPersonalDetails")
                 .addHalLink(addressBookReverseRouter.showMyAddressBook(language), "myAddressBook")
                 .addHalLink(addressBookReverseRouter.processAddAddressToMyAddressBookForm(language), "addAddressToMyAddressBook")
-                .addHalLink(addressBookReverseRouter.processRemoveAddressFromMyAddressBookForm(language), "removeAddressFromMyAddressBook")
                 .addHalLink(reverseRouter.showMyOrders(language), "myOrders")
 
 

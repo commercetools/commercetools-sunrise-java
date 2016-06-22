@@ -1,13 +1,14 @@
 package com.commercetools.sunrise.common.utils;
 
+import com.commercetools.sunrise.common.errors.UserFeedback;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
 import play.data.Form;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 public final class FormUtils {
@@ -32,6 +33,10 @@ public final class FormUtils {
         return Boolean.valueOf(extractFormField(form, fieldName));
     }
 
+    public static Address extractAddress(@Nullable final Form<?> form) {
+        return extractAddress(form, "");
+    }
+
     public static Address extractAddress(@Nullable final Form<?> form, final String suffix) {
         if (form != null) {
             final Function<String, String> formExtractor = formFieldExtractor(form, suffix);
@@ -53,13 +58,13 @@ public final class FormUtils {
         }
     }
 
-    public static List<String> extractErrors(@Nullable final Form<?> form) {
-        final List<String> errorList = new ArrayList<>();
+    public static Map<String, String> extractUserFeedback(@Nullable final Form<?> form) {
+        final Map<String, String> errorMap = new HashMap<>();
         if (form != null) {
             form.errors().forEach((field, errors) ->
-                    errors.forEach(error -> errorList.add(error.key() + ": " + error.message())));
+                    errors.forEach(error -> errorMap.put(UserFeedback.ERROR, error.key() + ": " + error.message())));
         }
-        return errorList;
+        return errorMap;
     }
 
     private static CountryCode countryOrUndefined(@Nullable final String selectedCountry) {

@@ -1,20 +1,20 @@
 package reverserouter;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
-import setupwidget.controllers.SetupReverseRouter;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
+import setupwidget.controllers.SetupReverseRouter;
 
-import static demo.routes.*;
 import static com.commercetools.sunrise.shoppingcart.cartdetail.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.confirmation.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.payment.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.shipping.routes.*;
 import static com.commercetools.sunrise.shoppingcart.checkout.thankyou.routes.*;
+import static demo.routes.*;
 import static setupwidget.controllers.routes.*;
 
 public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, SetupReverseRouter {
@@ -175,8 +175,8 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
     }
 
     @Override
-    public Call processRemoveAddressFromMyAddressBookForm(final String languageTag) {
-        return RemoveAddressController.process(languageTag);
+    public Call processRemoveAddressFromMyAddressBookForm(final String languageTag, final String addressId) {
+        return RemoveAddressController.process(languageTag, addressId);
     }
 
     @Override

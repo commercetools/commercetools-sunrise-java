@@ -13,8 +13,8 @@
         </a>
     </div>
     <div>
-        <form action="@root.meta._links.myAddressBookDeleteAddressSubmit" method="POST">
-            <input type="hidden" name="id" value="{{addressInfo.address.id}}"/>
+        <form action="{{addressInfo.addressRemoveUrl}}" method="POST">
+            <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
             <input type="image" src="{{@root.meta.assetsPath}}/img/delete-60px-421d04c332afe6d751d51e28934399fd.png" alt="delete icon">
             {{i18n "my-account:addressBook.buttons.delete"}}
         </form>

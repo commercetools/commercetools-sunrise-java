@@ -14,6 +14,6 @@ public interface AddressBookReverseRouter {
 
     Call processChangeAddressInMyAddressBookForm(final String languageTag, final String addressId);
 
-    Call processRemoveAddressFromMyAddressBookForm(final String languageTag);
+    Call processRemoveAddressFromMyAddressBookForm(final String languageTag, final String addressId);
 
 }

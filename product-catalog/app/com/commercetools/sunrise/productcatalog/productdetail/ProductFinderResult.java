@@ -6,14 +6,14 @@ import io.sphere.sdk.products.ProductVariant;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class ProductFetchResult {
+public class ProductFinderResult {
 
     @Nullable
     private final ProductProjection product;
     @Nullable
     private final ProductVariant variant;
 
-    public ProductFetchResult(@Nullable final ProductProjection product, @Nullable final ProductVariant variant) {
+    protected ProductFinderResult(@Nullable final ProductProjection product, @Nullable final ProductVariant variant) {
         this.product = product;
         this.variant = variant;
     }
@@ -26,15 +26,15 @@ public class ProductFetchResult {
         return Optional.ofNullable(variant);
     }
 
-    public static ProductFetchResult of(final ProductProjection product, final ProductVariant variant) {
-        return new ProductFetchResult(product, variant);
+    public static ProductFinderResult of(@Nullable final ProductProjection product, @Nullable final ProductVariant variant) {
+        return new ProductFinderResult(product, variant);
     }
 
-    public static ProductFetchResult ofNotFoundVariant(final ProductProjection product) {
-        return new ProductFetchResult(product, null);
+    public static ProductFinderResult ofNotFoundVariant(final ProductProjection product) {
+        return of(product, null);
     }
 
-    public static ProductFetchResult ofNotFoundProduct() {
-        return new ProductFetchResult(null, null);
+    public static ProductFinderResult ofNotFoundProduct() {
+        return of(null, null);
     }
 }

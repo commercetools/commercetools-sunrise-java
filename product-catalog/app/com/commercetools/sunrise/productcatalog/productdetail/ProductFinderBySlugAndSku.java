@@ -19,9 +19,9 @@ import java.util.function.UnaryOperator;
 
 import static com.commercetools.sunrise.common.utils.PriceUtils.createPriceSelection;
 
-public final class ProductFetchBySlugAndSku implements ProductFetch<String, String> {
+public final class ProductFinderBySlugAndSku implements ProductFinder<String, String> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductFetchBySlugAndSku.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductFinderBySlugAndSku.class);
 
     @Inject
     private SphereClient sphereClient;
@@ -29,15 +29,15 @@ public final class ProductFetchBySlugAndSku implements ProductFetch<String, Stri
     private UserContext userContext;
 
     @Override
-    public CompletionStage<ProductFetchResult> findProduct(final String productIdentifier,
-                                                           final String variantIdentifier,
-                                                           final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
+    public CompletionStage<ProductFinderResult> findProduct(final String productIdentifier,
+                                                            final String variantIdentifier,
+                                                            final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
         return findProduct(productIdentifier, runHookOnProductSearch)
                 .thenApplyAsync(productOpt -> productOpt
                 .map(product -> findVariant(variantIdentifier, product)
-                        .map(variant -> ProductFetchResult.of(product, variant))
-                        .orElseGet(() -> ProductFetchResult.ofNotFoundVariant(product)))
-                .orElseGet(ProductFetchResult::ofNotFoundProduct),
+                        .map(variant -> ProductFinderResult.of(product, variant))
+                        .orElseGet(() -> ProductFinderResult.ofNotFoundVariant(product)))
+                .orElseGet(ProductFinderResult::ofNotFoundProduct),
                 HttpExecution.defaultContext());
     }
 

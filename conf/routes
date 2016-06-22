@@ -114,11 +114,11 @@ GET         /:languageTag/user/addressbook/add                 @demo.AddAddressC
 # Adds an address to the customer's address book
 POST        /:languageTag/user/addressbook/add                 @demo.AddAddressController.process(languageTag: String)
 # Shows the form to edit an address from the customer's address book
-GET         /:languageTag/user/addressbook/:addressId          @demo.ChangeAddressController.show(languageTag: String, addressId: String)
+GET         /:languageTag/user/addressbook/:addressId/edit     @demo.ChangeAddressController.show(languageTag: String, addressId: String)
 # Updates an address from the customer's address book
-POST        /:languageTag/user/addressbook/:addressId          @demo.ChangeAddressController.process(languageTag: String, addressId: String)
+POST        /:languageTag/user/addressbook/:addressId/edit     @demo.ChangeAddressController.process(languageTag: String, addressId: String)
 # Removes an address from the customer's address book
-POST        /:languageTag/user/addressbook/remove              @demo.RemoveAddressController.process(languageTag: String)
+POST        /:languageTag/user/addressbook/:addressId/remove   @demo.RemoveAddressController.process(languageTag: String, addressId:String)
 
 
 # Shows all orders from the customer

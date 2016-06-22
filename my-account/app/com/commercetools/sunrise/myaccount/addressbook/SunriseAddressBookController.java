@@ -3,11 +3,13 @@ package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
-import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
+import com.google.inject.Injector;
 import io.sphere.sdk.customers.Customer;
 import play.filters.csrf.AddCSRFToken;
 import play.mvc.Result;
+import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -20,6 +22,8 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @RequestScoped
 public abstract class SunriseAddressBookController extends MyAccountController implements WithOverwriteableTemplateName {
 
+    @Inject
+    private Injector injector;
     @Inject
     private AddressBookPageContentFactory addressBookPageContentFactory;
 
@@ -37,15 +41,16 @@ public abstract class SunriseAddressBookController extends MyAccountController i
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> getCustomerAndExecute(this::showAddressBook));
+        return doRequest(() -> injector.getInstance(CustomerFinderBySession.class).findCustomer(session())
+                .thenComposeAsync(customer -> showAddressBook(customer.orElse(null))));
     }
 
     protected CompletionStage<Result> showAddressBook(@Nullable final Customer customer) {
-        final PageContent pageContent = createPageContent(customer);
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+        return ifNotNullCustomer(customer, notNullCustomer -> completedFuture(ok(renderPage(customer))));
     }
 
-    protected PageContent createPageContent(final Customer customer) {
-        return addressBookPageContentFactory.create(customer);
+    protected Html renderPage(final Customer customer) {
+        final AddressBookPageContent pageContent = addressBookPageContentFactory.create(customer);
+        return renderPage(pageContent, getTemplateName());
     }
 }
