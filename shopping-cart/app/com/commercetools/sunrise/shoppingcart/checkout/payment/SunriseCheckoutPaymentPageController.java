@@ -6,7 +6,6 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
@@ -55,8 +54,6 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
     private FormFactory formFactory;
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
-    @Inject
-    private I18nResolver i18nResolver;
 
     protected final List<PaymentMethodInfo> paymentMethodsInfo = singletonList(PaymentMethodInfoBuilder.of()
             .name(LocalizedString.of(Locale.ENGLISH, "Prepaid", Locale.GERMAN, "Vorkasse")) // TODO pull out
@@ -217,7 +214,7 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
     protected CompletionStage<Html> renderCheckoutPaymentPage(final Cart cart, final CheckoutPaymentPageContent pageContent, final UserContext userContext) {
         pageContent.setStepWidget(StepWidgetBean.PAYMENT);
         pageContent.setCart(createCartLikeBean(cart, userContext));
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:paymentPage.title")));
+        pageContent.setTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:paymentPage.title")));
         return renderPage(pageContent, getTemplateName());
     }
 

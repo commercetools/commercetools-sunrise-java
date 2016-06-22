@@ -45,8 +45,6 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
     @Inject
     private FormFactory formFactory;
     @Inject
-    private I18nResolver i18nResolver;
-    @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
 
     @AddCSRFToken
@@ -141,7 +139,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
     protected CompletionStage<Html> renderCheckoutShippingPage(final Cart cart, final CheckoutShippingPageContent pageContent, final UserContext userContext) {
         pageContent.setStepWidget(StepWidgetBean.SHIPPING);
         pageContent.setCart(createCartLikeBean(cart, userContext));
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
+        pageContent.setTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
         return renderPage(pageContent, getTemplateName());
     }
 

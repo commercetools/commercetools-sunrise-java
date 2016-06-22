@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.common.pages.*;
@@ -41,6 +43,8 @@ public abstract class SunriseFrameworkController extends Controller {
     private TemplateEngine templateEngine;
     @Inject
     private PageMetaFactory pageMetaFactory;
+    @Inject
+    private I18nResolver i18nResolver;
 
     private final List<ControllerComponent> controllerComponents = new LinkedList<>();
     private final List<CompletionStage<Object>> asyncHooksCompletionStages = new LinkedList<>();
@@ -73,6 +77,10 @@ public abstract class SunriseFrameworkController extends Controller {
 
     public TemplateEngine templateEngine() {
         return templateEngine;
+    }
+
+    public I18nResolver i18nResolver() {
+        return i18nResolver;
     }
 
     @Nullable
@@ -174,5 +182,9 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected CompletionStage<Result> asyncBadRequest(final CompletionStage<Html> htmlCompletionStage) {
         return htmlCompletionStage.thenApplyAsync(html -> badRequest(html), HttpExecution.defaultContext());
+    }
+
+    protected void setI18nTitle(final PageContent pageContent, final String bundleWithKey) {
+        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of(bundleWithKey)));
     }
 }

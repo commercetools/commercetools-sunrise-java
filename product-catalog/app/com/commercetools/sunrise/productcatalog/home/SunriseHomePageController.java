@@ -40,8 +40,6 @@ import static java.util.Arrays.asList;
 public abstract class SunriseHomePageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
     @Inject
-    private I18nResolver i18nResolver;
-    @Inject
     private HomeReverseRouter homeReverseRouter;
 
     @Override
@@ -69,7 +67,7 @@ public abstract class SunriseHomePageController extends SunriseFrameworkControll
 
     protected PageContent createPageContent() {
         final HomePageContent pageContent = new HomePageContent();
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of("catalog:home.title")));
+        pageContent.setTitle(i18nResolver().getOrEmpty(userContext().locales(), I18nIdentifier.of("catalog:home.title")));
         return pageContent;
     }
 }

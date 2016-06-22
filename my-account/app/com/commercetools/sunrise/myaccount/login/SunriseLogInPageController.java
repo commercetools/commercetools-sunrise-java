@@ -48,8 +48,6 @@ public abstract class SunriseLogInPageController extends SunriseFrameworkControl
     @Inject
     private Configuration configuration;
     @Inject
-    private I18nResolver i18nResolver;
-    @Inject
     private FormFactory formFactory;
     @Inject
     private HomeReverseRouter homeReverseRouter;
@@ -172,7 +170,7 @@ public abstract class SunriseLogInPageController extends SunriseFrameworkControl
     protected LogInPageContent createPageContent(final UserContext userContext) {
         final LogInPageContent pageContent = new LogInPageContent();
         pageContent.setLogInForm(new LogInFormBean(null));
-        pageContent.setSignUpForm(new SignUpFormBean(userContext, i18nResolver, configuration));
+        pageContent.setSignUpForm(new SignUpFormBean(userContext, i18nResolver(), configuration));
         return pageContent;
     }
 
@@ -183,7 +181,7 @@ public abstract class SunriseLogInPageController extends SunriseFrameworkControl
         final LogInFormBean logInFormBean = new LogInFormBean(username);
         logInFormBean.setErrors(errors);
         pageContent.setLogInForm(logInFormBean);
-        pageContent.setSignUpForm(new SignUpFormBean(userContext, i18nResolver, configuration));
+        pageContent.setSignUpForm(new SignUpFormBean(userContext, i18nResolver(), configuration));
         return pageContent;
     }
 
@@ -195,7 +193,7 @@ public abstract class SunriseLogInPageController extends SunriseFrameworkControl
         final String lastName = extractFormField(signUpForm, "lastName");
         final String email = extractFormField(signUpForm, "email");
         final boolean agreeToTerms = extractBooleanFormField(signUpForm, "agreeToTerms");
-        final SignUpFormBean signUpFormBean = new SignUpFormBean(title, firstName, lastName, email, agreeToTerms, userContext, i18nResolver, configuration);
+        final SignUpFormBean signUpFormBean = new SignUpFormBean(title, firstName, lastName, email, agreeToTerms, userContext, i18nResolver(), configuration);
         signUpFormBean.setErrors(errors);
         pageContent.setSignUpForm(signUpFormBean);
         pageContent.setLogInForm(new LogInFormBean());

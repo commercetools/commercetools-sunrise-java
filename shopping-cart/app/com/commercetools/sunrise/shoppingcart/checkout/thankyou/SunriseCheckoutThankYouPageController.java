@@ -2,6 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
@@ -28,8 +29,6 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public abstract class SunriseCheckoutThankYouPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
 
     @Inject
-    private I18nResolver i18nResolver;
-    @Inject
     private HomeReverseRouter homeReverseRouter;
 
     public CompletionStage<Result> show(final String languageTag) {
@@ -53,7 +52,7 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
     protected CompletionStage<Result> handleFoundOrder(final Order order, final UserContext userContext) {
         final CheckoutThankYouPageContent pageContent = new CheckoutThankYouPageContent();
         pageContent.setOrder(createCartLikeBean(order, userContext));
-        return asyncOk(renderCheckoutThankYouPage(pageContent, userContext));
+        return asyncOk(renderCheckoutThankYouPage(pageContent));
     }
 
     protected CompletionStage<Result> handleNotFoundOrder(final UserContext userContext) {
@@ -61,8 +60,8 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
         return completedFuture(redirect(call));
     }
 
-    protected CompletionStage<Html> renderCheckoutThankYouPage(final CheckoutThankYouPageContent pageContent, final UserContext userContext) {
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:thankYouPage.title")));
+    protected CompletionStage<Html> renderCheckoutThankYouPage(final CheckoutThankYouPageContent pageContent) {
+        setI18nTitle(pageContent, "checkout:thankYouPage.title");
         return renderPage(pageContent, getTemplateName());
     }
 

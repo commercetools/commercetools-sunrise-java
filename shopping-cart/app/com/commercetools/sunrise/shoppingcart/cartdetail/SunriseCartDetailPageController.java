@@ -47,8 +47,6 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
     private ProductReverseRouter productReverseRouter;
     @Inject
     private ReverseRouter reverseRouter;
-    @Inject
-    private I18nResolver i18nResolver;
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
@@ -222,7 +220,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
 
     protected CompletionStage<Html> renderCartPage(final Cart cart, final CartDetailPageContent pageContent, final UserContext userContext) {
         pageContent.setCart(createCartLikeBean(cart, userContext));
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
+        pageContent.setTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
         return renderPage(pageContent, getTemplateName());
     }
 
