@@ -3,11 +3,9 @@ package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
-import com.commercetools.sunrise.common.errors.UserFeedback;
-import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
+import com.commercetools.sunrise.myaccount.addressbook.AddressBookManagementController;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressFormData;
-import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import com.google.inject.Injector;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
@@ -22,25 +20,20 @@ import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
-import play.mvc.Call;
-import play.mvc.Http;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.common.utils.FormUtils.extractUserFeedback;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-public abstract class SunriseChangeAddressController extends MyAccountController implements WithOverwriteableTemplateName {
+public abstract class SunriseChangeAddressController extends AddressBookManagementController implements WithOverwriteableTemplateName {
 
     protected static final Logger logger = LoggerFactory.getLogger(SunriseChangeAddressController.class);
 
@@ -48,8 +41,6 @@ public abstract class SunriseChangeAddressController extends MyAccountController
     private Injector injector;
     @Inject
     private FormFactory formFactory;
-    @Inject
-    private AddressBookReverseRouter addressBookReverseRouter;
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -120,7 +111,7 @@ public abstract class SunriseChangeAddressController extends MyAccountController
     protected <T extends AddressFormData> CompletionStage<Result> handleFailedCustomerUpdate(final Customer customer, final Address oldAddress,
                                                                                              final T formData, final Throwable throwable) {
         if (throwable.getCause() instanceof SphereException) {
-            saveError((SphereException) throwable.getCause());
+            saveUnexpectedError((SphereException) throwable.getCause());
             final Form<?> form = obtainFilledForm(formData.extractAddress());
             return asyncBadRequest(renderPage(customer, form));
         }
@@ -146,21 +137,5 @@ public abstract class SunriseChangeAddressController extends MyAccountController
         final DefaultAddressFormData formData = new DefaultAddressFormData();
         formData.apply(address);
         return formFactory.form(DefaultAddressFormData.class).fill(formData);
-    }
-
-    protected final void saveFormErrors(final Form<?> form) {
-        final Http.Context context = injector.getInstance(Http.Context.class);
-        context.flash().putAll(extractUserFeedback(form));
-    }
-
-    private CompletableFuture<Result> redirectToAddressBook() {
-        final Call call = addressBookReverseRouter.showMyAddressBook(userContext().languageTag());
-        return completedFuture(redirect(call));
-    }
-
-    private void saveError(final SphereException sphereException) {
-        logger.error("The request to change address to a customer raised an exception", sphereException);
-        final Http.Context context = injector.getInstance(Http.Context.class);
-        context.flash().put(UserFeedback.ERROR, "Something went wrong, please try again"); // TODO get from i18n
     }
 }
