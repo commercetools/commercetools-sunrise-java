@@ -82,7 +82,7 @@ GET         /:languageTag/checkout/confirmation                @demo.shoppingcar
 # Processes the order creation
 POST        /:languageTag/checkout/confirmation                @demo.shoppingcart.CheckoutConfirmationPageController.process(languageTag: String)
 # Shows the customer a confirmation for the created order
-GET         /:languageTag/checkout/thankyou                    @com.commercetools.sunrise.shoppingcart.checkout.thankyou.CheckoutThankYouPageController.show(languageTag: String)
+GET         /:languageTag/checkout/thankyou                    @demo.shoppingcart.CheckoutThankYouPageController.show(languageTag: String)
 
 
 # SIGN UP/IN/OUT
