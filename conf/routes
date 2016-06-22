@@ -78,9 +78,9 @@ GET         /:languageTag/checkout/payment                     @demo.shoppingcar
 # Processes the form for selecting a payment method
 POST        /:languageTag/checkout/payment                     @demo.shoppingcart.CheckoutPaymentPageController.process(languageTag: String)
 # Shows the form to create an order out of the cart of the session
-GET         /:languageTag/checkout/confirmation                @com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationPageController.show(languageTag: String)
+GET         /:languageTag/checkout/confirmation                @demo.shoppingcart.CheckoutConfirmationPageController.show(languageTag: String)
 # Processes the order creation
-POST        /:languageTag/checkout/confirmation                @com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationPageController.process(languageTag: String)
+POST        /:languageTag/checkout/confirmation                @demo.shoppingcart.CheckoutConfirmationPageController.process(languageTag: String)
 # Shows the customer a confirmation for the created order
 GET         /:languageTag/checkout/thankyou                    @com.commercetools.sunrise.shoppingcart.checkout.thankyou.CheckoutThankYouPageController.show(languageTag: String)
 
