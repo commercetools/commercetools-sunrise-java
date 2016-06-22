@@ -1,7 +1,8 @@
 package com.commercetools.sunrise.common.basicauth;
 
 import akka.stream.Materializer;
-import play.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import play.mvc.Filter;
 import play.mvc.Http;
@@ -22,7 +23,7 @@ import static play.mvc.Results.unauthorized;
  */
 public class BasicAuthFilter extends Filter {
 
-    private static final Logger.ALogger LOGGER = Logger.of(BasicAuthFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(BasicAuthFilter.class);
 
     @Nullable
     private final BasicAuth basicAuth;
@@ -59,18 +60,18 @@ public class BasicAuthFilter extends Filter {
     }
 
     private CompletionStage<Result> successfulAuthentication(final Function<Http.RequestHeader, CompletionStage<Result>> nextFilter, final Http.RequestHeader requestHeader) {
-        LOGGER.trace("Authorized");
+        logger.trace("Authorized");
         return nextFilter.apply(requestHeader);
     }
 
     private CompletableFuture<Result> missingAuthentication(final BasicAuth basicAuth) {
-        LOGGER.debug("Missing authentication");
+        logger.debug("Missing authentication");
         return completedFuture(unauthorized()).thenApply(result ->
                 result.withHeader(WWW_AUTHENTICATE, "Basic realm=\"" + basicAuth.getRealm() + "\""));
     }
 
     private CompletableFuture<Result> failedAuthentication() {
-        LOGGER.info("Failed authentication");
+        logger.info("Failed authentication");
         return completedFuture(unauthorized());
     }
 

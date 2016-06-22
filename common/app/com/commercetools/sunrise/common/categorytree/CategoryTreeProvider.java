@@ -4,11 +4,13 @@ import com.commercetools.sunrise.common.SunriseInitializationException;
 import com.google.inject.Provider;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
-import play.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
 public final class CategoryTreeProvider implements Provider<CategoryTree> {
+    private static final Logger logger = LoggerFactory.getLogger(CategoryTreeProvider.class);
 
     @Inject
     private SphereClient client;
@@ -17,7 +19,7 @@ public final class CategoryTreeProvider implements Provider<CategoryTree> {
     public CategoryTree get() {
         try {
             final RefreshableCategoryTree categoryTree = RefreshableCategoryTree.of(client);
-            Logger.info("Provide RefreshableCategoryTree with " + categoryTree.getAllAsFlatList().size() + " categories");
+            logger.info("Provide RefreshableCategoryTree with " + categoryTree.getAllAsFlatList().size() + " categories");
             return categoryTree;
         } catch (RuntimeException e) {
             throw new SunriseInitializationException("Could not fetch categories", e);

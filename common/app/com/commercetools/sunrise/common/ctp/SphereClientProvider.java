@@ -5,8 +5,9 @@ import io.sphere.sdk.client.*;
 import io.sphere.sdk.http.HttpClient;
 import io.sphere.sdk.play.metrics.MetricAction;
 import io.sphere.sdk.play.metrics.MetricHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.Configuration;
-import play.Logger;
 import play.inject.ApplicationLifecycle;
 
 import javax.inject.Inject;
@@ -15,7 +16,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class SphereClientProvider implements Provider<SphereClient> {
-
+    private static final Logger logger = LoggerFactory.getLogger(SphereClientProvider.class);
     private static final String CONFIG_PROJECT_KEY = "ctp.projectKey";
     private static final String CONFIG_CLIENT_ID = "ctp.clientId";
     private static final String CONFIG_CLIENT_SECRET = "ctp.clientSecret";
@@ -42,7 +43,7 @@ public final class SphereClientProvider implements Provider<SphereClient> {
     }
 
     private SphereClient createRegularClient(final SphereClientConfig clientConfig) {
-        Logger.info("Provide SphereClient");
+        logger.info("Provide SphereClient");
         return SphereClientFactory.of().createClient(clientConfig);
     }
 
@@ -50,7 +51,7 @@ public final class SphereClientProvider implements Provider<SphereClient> {
         final HttpClient underlyingHttpClient = SphereAsyncHttpClientFactory.create();
         final MetricHttpClient httpClient = MetricHttpClient.of(underlyingHttpClient);
         final SphereAccessTokenSupplier tokenSupplier = SphereAccessTokenSupplier.ofAutoRefresh(clientConfig, httpClient, false);
-        Logger.info("Provide SphereClient with metrics");
+        logger.info("Provide SphereClient with metrics");
         return SphereClient.of(clientConfig, httpClient, tokenSupplier);
     }
 

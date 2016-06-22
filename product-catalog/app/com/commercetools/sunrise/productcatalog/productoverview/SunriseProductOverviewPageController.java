@@ -89,8 +89,8 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
             final Optional<Category> category = categoryTree.findBySlug(userContext.locale(), categorySlug);
             if (category.isPresent()) {
                 this.category = category.get();
-                return runHookOnFoundCategory(category.get())
-                        .thenComposeAsync(unused -> searchProducts(), HttpExecution.defaultContext());
+                runHookOnFoundCategory(category.get());
+                return searchProducts();
             } else {
                 return handleNotFoundCategory();
             }
@@ -117,12 +117,12 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
 
     protected CompletionStage<Result> handleFoundProducts(final PagedSearchResult<ProductProjection> pagedSearchResult) {
         final PageContent pageContent = createPageContent(pagedSearchResult);
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+        return asyncOk(renderPage(pageContent, getTemplateName()));
     }
 
     protected CompletionStage<Result> handleEmptySearch(final PagedSearchResult<ProductProjection> pagedSearchResult) {
         final PageContent pageContent = createPageContent(pagedSearchResult);
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+        return asyncOk(renderPage(pageContent, getTemplateName()));
     }
 
     protected CompletionStage<Result> handleNotFoundCategory() {

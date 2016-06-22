@@ -135,7 +135,7 @@ public abstract class SunriseMyPersonalDetailsPageController extends MyAccountCo
     }
 
     protected CompletionStage<Result> handleNotFoundCustomer(final UserContext userContext) {
-        final Call call = reverseRouter.showLogInForm(userContext.locale().toLanguageTag());
+        final Call call = reverseRouter.showLogInForm(userContext.languageTag());
         return completedFuture(redirect(call));
     }
 

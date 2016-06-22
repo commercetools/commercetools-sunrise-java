@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
 public abstract class SunriseAddressBookController extends MyAccountController implements WithOverwriteableTemplateName {
@@ -46,7 +45,7 @@ public abstract class SunriseAddressBookController extends MyAccountController i
     }
 
     protected CompletionStage<Result> showAddressBook(@Nullable final Customer customer) {
-        return ifNotNullCustomer(customer, notNullCustomer -> completedFuture(ok(renderPage(customer))));
+        return ifNotNullCustomer(customer, notNullCustomer -> asyncOk(renderPage(customer)));
     }
 
     protected Html renderPage(final Customer customer) {

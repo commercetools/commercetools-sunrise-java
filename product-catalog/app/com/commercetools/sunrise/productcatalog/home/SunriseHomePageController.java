@@ -15,11 +15,9 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * Controller for the home page.
@@ -42,8 +40,6 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public abstract class SunriseHomePageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
     @Inject
-    private I18nResolver i18nResolver;
-    @Inject
     private HomeReverseRouter homeReverseRouter;
 
     @Override
@@ -57,21 +53,21 @@ public abstract class SunriseHomePageController extends SunriseFrameworkControll
     }
 
     public Result index() {
-        return redirect(homeReverseRouter.homePageCall(userContext().locale().toLanguageTag()));
+        return redirect(homeReverseRouter.homePageCall(userContext().languageTag()));
     }
 
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(this::showHome);
     }
 
-    protected CompletableFuture<Result> showHome() {
+    protected CompletionStage<Result> showHome() {
         final PageContent pageContent = createPageContent();
-        return completedFuture(ok(renderPage(pageContent, getTemplateName())));
+        return asyncOk(renderPage(pageContent, getTemplateName()));
     }
 
     protected PageContent createPageContent() {
         final HomePageContent pageContent = new HomePageContent();
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of("catalog:home.title")));
+        setI18nTitle(pageContent, "catalog:home.title");
         return pageContent;
     }
 }

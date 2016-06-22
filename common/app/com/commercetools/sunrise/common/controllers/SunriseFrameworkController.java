@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.common.pages.*;
@@ -41,8 +43,11 @@ public abstract class SunriseFrameworkController extends Controller {
     private TemplateEngine templateEngine;
     @Inject
     private PageMetaFactory pageMetaFactory;
+    @Inject
+    private I18nResolver i18nResolver;
 
     private final List<ControllerComponent> controllerComponents = new LinkedList<>();
+    private final List<CompletionStage<Object>> asyncHooksCompletionStages = new LinkedList<>();
 
     protected SunriseFrameworkController() {
     }
@@ -74,16 +79,22 @@ public abstract class SunriseFrameworkController extends Controller {
         return templateEngine;
     }
 
+    public I18nResolver i18nResolver() {
+        return i18nResolver;
+    }
+
     @Nullable
     public static String getCsrfToken(final Http.Session session) {
         return session.get("csrfToken");
     }
 
-    protected Html renderPage(final PageContent pageContent, final String templateName) {
+    protected CompletionStage<Html> renderPage(final PageContent pageContent, final String templateName) {
         final SunrisePageData pageData = createPageData(pageContent);
-        runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
-        final String html = templateEngine().render(templateName, pageData, userContext.locales());
-        return new Html(html);
+        return allAsyncHooksCompletionStage().thenApply(unused -> {
+            runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
+            final String html = templateEngine().render(templateName, pageData, userContext.locales());
+            return new Html(html);
+        });
     }
 
     protected final SunrisePageData createPageData(final PageContent pageContent) {
@@ -96,8 +107,8 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected final CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> nextSupplier) {
-        return runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()))
-                .thenComposeAsync(unused -> nextSupplier.get(), HttpExecution.defaultContext());
+        runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()));
+        return nextSupplier.get();
     }
 
     /**
@@ -156,6 +167,24 @@ public abstract class SunriseFrameworkController extends Controller {
                 .map(stage -> (CompletionStage<Void>) stage)
                 .collect(toList());
         final CompletionStage<?> listCompletionStage = FutureUtils.listOfFuturesToFutureOfList(collect);
-        return listCompletionStage.thenApply(z -> null);
+        final CompletionStage<Object> result = listCompletionStage.thenApply(z -> null);
+        asyncHooksCompletionStages.add(result);
+        return result;
+    }
+
+    protected final CompletionStage<Object> allAsyncHooksCompletionStage() {
+        return FutureUtils.listOfFuturesToFutureOfList(asyncHooksCompletionStages).thenApply(list -> null);
+    }
+
+    protected CompletionStage<Result> asyncOk(final CompletionStage<Html> htmlCompletionStage) {
+        return htmlCompletionStage.thenApplyAsync(html -> ok(html), HttpExecution.defaultContext());
+    }
+
+    protected CompletionStage<Result> asyncBadRequest(final CompletionStage<Html> htmlCompletionStage) {
+        return htmlCompletionStage.thenApplyAsync(html -> badRequest(html), HttpExecution.defaultContext());
+    }
+
+    protected void setI18nTitle(final PageContent pageContent, final String bundleWithKey) {
+        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of(bundleWithKey)));
     }
 }

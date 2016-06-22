@@ -6,8 +6,8 @@ import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Identifiable;
-import org.apache.commons.lang3.ObjectUtils;
-import play.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +20,7 @@ import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
 import static java.util.stream.Collectors.toList;
 
 public final class RefreshableCategoryTree extends Base implements CategoryTree {
-    
+    private static final Logger logger = LoggerFactory.getLogger(RefreshableCategoryTree.class);
     private CategoryTree categoryTree;
     private SphereClient sphereClient;
 
@@ -89,7 +89,7 @@ public final class RefreshableCategoryTree extends Base implements CategoryTree 
 
     private static CategoryTree fetchFreshCategoryTree(final SphereClient client) {
         final List<Category> categories = fetchCategories(client);
-        Logger.debug("Provide CategoryTree with " + categories.size() + " categories");
+        logger.debug("Provide CategoryTree with " + categories.size() + " categories");
         return CategoryTree.of(categories);
     }
 

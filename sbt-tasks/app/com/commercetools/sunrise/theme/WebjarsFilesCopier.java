@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.theme;
 
-import play.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WebjarsFilesCopier {
-    private static final Logger.ALogger LOGGER = Logger.of(WebjarsFilesCopier.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebjarsFilesCopier.class);
     private static final String WEBJARS_PATH = "META-INF/resources/webjars/";
     private static final FileSystem FILE_SYSTEM = FileSystems.getDefault();
 
@@ -32,7 +34,7 @@ public class WebjarsFilesCopier {
                 final Path destPath = FILE_SYSTEM.getPath(destBasePath, fileToCopy);
                 copyFile(origResource, destPath);
             } else {
-                LOGGER.error("Could not find file \"{}\" in classpath", origFilePath);
+                logger.error("Could not find file \"{}\" in classpath", origFilePath);
             }
         });
     }
@@ -41,11 +43,11 @@ public class WebjarsFilesCopier {
         try {
             createDirectoryPath(destPath);
             Files.copy(origResource, destPath);
-            LOGGER.info("Successfully created \"{}\"", destPath);
+            logger.info("Successfully created \"{}\"", destPath);
         } catch (FileAlreadyExistsException e) {
-            LOGGER.error("File \"{}\" already exists, please delete it first if you want to replace it", destPath);
+            logger.error("File \"{}\" already exists, please delete it first if you want to replace it", destPath);
         } catch (IOException e) {
-            LOGGER.error("Could not copy file to \"{}\"", destPath, e);
+            logger.error("Could not copy file to \"{}\"", destPath, e);
         }
     }
 

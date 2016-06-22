@@ -1,4 +1,4 @@
-<configuration debug="true">
+<configuration debug="false">
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -14,9 +14,25 @@
     <logger name="play" level="INFO" />
     <logger name="play.requests" level="DEBUG" />
     <logger name="sphere" level="INFO" />
-    <logger name="sphere.metrics.simple" level="DEBUG" />
-    <logger name="com.commercetools.sunrise.productcatalog" level="DEBUG" />
+    <logger name="sphere.metrics.simple" level="trace" />
+    <logger name="com.github.jknack.handlebars.Handlebars" level="ERROR" />
+    <logger name="com.commercetools.sunrise" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.basicauth.BasicAuthProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.contexts.ProjectContextProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.ctp.ProductDataConfigProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.ctp.SphereClientProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.suggestion.SunriseProductRecommendation" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsTemplateEngine" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.template.i18n.I18nResolverProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.template.engine.TemplateEngineProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.productcatalog" level="INFO" />
+    <logger name="com.commercetools.sunrise.shoppingcart.CartSessionUtils" level="INFO" />
     <logger name="com.commercetools.sunrise.theme.WebjarsFilesCopier" level="INFO" />
+
 
     <root level="WARN">
         <appender-ref ref="STDOUT" />

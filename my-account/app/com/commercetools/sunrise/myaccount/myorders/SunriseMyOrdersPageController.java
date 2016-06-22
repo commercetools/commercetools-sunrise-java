@@ -90,7 +90,7 @@ public abstract class SunriseMyOrdersPageController extends MyAccountController 
     }
 
     protected CompletionStage<Result> handleNotFoundOrder(final UserContext userContext) {
-        final Call call = reverseRouter.showMyOrders(userContext.locale().toLanguageTag());
+        final Call call = reverseRouter.showMyOrders(userContext.languageTag());
         return completedFuture(redirect(call));
     }
 
