@@ -287,9 +287,11 @@ public class CheckoutAddressFormData extends Base implements CheckoutAddressForm
         if (shippingCountry == null || shippingCountry.equals(CountryCode.UNDEFINED)) {
             return "Invalid shipping country"; // TODO use i18n version
         }
-        final CountryCode billingCountry = CountryCode.getByCode(countryBilling);
-        if (billingCountry == null || billingCountry.equals(CountryCode.UNDEFINED)) {
-            return "Invalid billing country"; // TODO use i18n version
+        if (billingAddressDifferentToBillingAddress) {
+            final CountryCode billingCountry = CountryCode.getByCode(countryBilling);
+            if (billingCountry == null || billingCountry.equals(CountryCode.UNDEFINED)) {
+                return "Invalid billing country"; // TODO use i18n version
+            }
         }
         return null;
     }
