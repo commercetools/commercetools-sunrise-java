@@ -3,7 +3,6 @@ package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -12,7 +11,8 @@ import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.models.SphereException;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
-import play.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -38,6 +38,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
 public abstract class SunriseCheckoutShippingPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+    private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingPageController.class);
 
     @Inject
     private FormFactory formFactory;
@@ -103,7 +104,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
                                                                    final Cart cart) {
         if (throwable.getCause() instanceof SphereException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
-            Logger.error("The request to set shipping to cart raised an exception", errorResponseException);
+            logger.error("The request to set shipping to cart raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             return getShippingMethods(session())
                     .thenComposeAsync(shippingMethods -> {
