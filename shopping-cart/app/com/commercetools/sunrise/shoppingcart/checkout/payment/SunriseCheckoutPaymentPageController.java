@@ -221,7 +221,6 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
     }
 
     protected CompletionStage<Html> renderCheckoutPaymentPage(final Cart cart, final CheckoutPaymentPageContent pageContent) {
-        pageContent.setStepWidget(StepWidgetBean.PAYMENT);
         pageContent.setCart(cartLikeBeanFactory.create(cart));
         setI18nTitle(pageContent, "checkout:paymentPage.title");
         return renderPage(pageContent, getTemplateName());

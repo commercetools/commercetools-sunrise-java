@@ -129,7 +129,6 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
     }
 
     protected CompletionStage<Html> renderCheckoutConfirmationPage(final Cart cart, final CheckoutConfirmationPageContent pageContent) {
-        pageContent.setStepWidget(StepWidgetBean.CONFIRMATION);
         pageContent.setCart(cartLikeBeanFactory.create(cart));
         setI18nTitle(pageContent, "checkout:confirmationPage.title");
         return renderPage(pageContent, getTemplateName());
