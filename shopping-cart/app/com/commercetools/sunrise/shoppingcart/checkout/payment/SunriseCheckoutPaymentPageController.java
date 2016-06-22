@@ -73,7 +73,7 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             final Form<CheckoutPaymentFormData> paymentForm = formFactory.form(CheckoutPaymentFormData.class).bindFromRequest();
-            return getOrCreateCart(userContext(), session())
+            return getOrCreateCart()
                     .thenComposeAsync(cart -> {
                         if (paymentForm.hasErrors()) {
                             return handleFormErrors(paymentForm, paymentMethodsInfo, cart, userContext());

@@ -60,7 +60,7 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             final Form<CheckoutConfirmationFormData> confirmationForm = formFactory.form(CheckoutConfirmationFormData.class).bindFromRequest(request());
-            return getOrCreateCart(userContext(), session())
+            return getOrCreateCart()
                     .thenComposeAsync(cart -> {
                         if (confirmationForm.hasErrors()) {
                             return handleFormErrors(confirmationForm, cart, userContext());

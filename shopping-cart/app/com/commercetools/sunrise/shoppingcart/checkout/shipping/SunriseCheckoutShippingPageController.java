@@ -63,7 +63,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             final Form<CheckoutShippingFormData> shippingForm = formFactory.form(CheckoutShippingFormData.class).bindFromRequest();
-            return getOrCreateCart(userContext(), session())
+            return getOrCreateCart()
                     .thenComposeAsync(cart -> {
                         if (shippingForm.hasErrors()) {
                             return handleFormErrors(shippingForm, cart, userContext());
