@@ -2,9 +2,11 @@ package com.commercetools.sunrise.myaccount.login;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.pages.SunrisePageData;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerDraftBuilder;
@@ -23,9 +25,6 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -34,14 +33,14 @@ import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.common.utils.FormUtils.extractBooleanFormField;
 import static com.commercetools.sunrise.common.utils.FormUtils.extractFormField;
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
-import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
-import static java.util.Arrays.asList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.removeCustomerSessionData;
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.removeCartSessionData;
+import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
+import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
+import static java.util.Arrays.asList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public abstract class SunriseLogInPageController extends SunriseFrameworkController {
 

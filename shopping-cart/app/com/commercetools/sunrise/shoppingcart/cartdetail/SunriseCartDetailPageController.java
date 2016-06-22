@@ -220,7 +220,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
 
     protected CompletionStage<Html> renderCartPage(final Cart cart, final CartDetailPageContent pageContent, final UserContext userContext) {
         pageContent.setCart(createCartLikeBean(cart, userContext));
-        pageContent.setTitle(i18nResolver().getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
+        setI18nTitle(pageContent, "checkout:cartDetailPage.title");
         return renderPage(pageContent, getTemplateName());
     }
 

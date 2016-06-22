@@ -67,7 +67,7 @@ public abstract class SunriseHomePageController extends SunriseFrameworkControll
 
     protected PageContent createPageContent() {
         final HomePageContent pageContent = new HomePageContent();
-        pageContent.setTitle(i18nResolver().getOrEmpty(userContext().locales(), I18nIdentifier.of("catalog:home.title")));
+        setI18nTitle(pageContent, "catalog:home.title");
         return pageContent;
     }
 }
