@@ -53,7 +53,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     protected CompletionStage<Cart> getOrCreateCart() {
         return getOrCreateCart(userContext(), session())
                 .thenApply(cart -> {
-                    runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart));
+                    hooks().runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart));
                     return cart;
                 });
     }

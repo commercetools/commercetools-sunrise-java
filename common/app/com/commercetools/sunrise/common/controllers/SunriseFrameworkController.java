@@ -7,7 +7,6 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
-import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SunrisePageDataHook;
@@ -24,8 +23,6 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -90,8 +87,8 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected CompletionStage<Html> renderPage(final PageContent pageContent, final String templateName) {
         final SunrisePageData pageData = createPageData(pageContent);
-        return allAsyncHooksCompletionStage().thenApply(unused -> {
-            runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
+        return hooks().allAsyncHooksCompletionStage().thenApply(unused -> {
+            hooks().runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
             final String html = templateEngine().render(templateName, pageData, userContext.locales());
             return new Html(html);
         });
@@ -107,24 +104,9 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected final CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> nextSupplier) {
-        runAsyncHook(RequestHook.class, hook -> hook.onRequest(ctx()));
+        final Function<RequestHook, CompletionStage<?>> f = hook -> hook.onRequest(ctx());
+        hooks().runAsyncHook(RequestHook.class, f);
         return nextSupplier.get();
-    }
-
-    public final <T extends Hook> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer) {
-        hooks().runVoidHook(hookClass, consumer);
-    }
-
-    public final <T extends Hook, R> R runFilterHook(final Class<T> hookClass, final BiFunction<T, R, R> f, final R param) {
-        return hooks().runFilterHook(hookClass, f, param);
-    }
-
-    public final <T extends Hook> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
-        return hooks().runAsyncHook(hookClass, f);
-    }
-
-    protected final CompletionStage<Object> allAsyncHooksCompletionStage() {
-        return hooks().allAsyncHooksCompletionStage();
     }
 
     protected CompletionStage<Result> asyncOk(final CompletionStage<Html> htmlCompletionStage) {

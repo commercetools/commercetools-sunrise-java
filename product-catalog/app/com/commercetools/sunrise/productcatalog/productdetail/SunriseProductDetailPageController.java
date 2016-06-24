@@ -135,12 +135,12 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     }
 
     protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
-        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
+        return hooks().runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
     }
 
     protected final void runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {
-        runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
-        runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
+        hooks().runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
+        hooks().runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
     }
 
     protected final Optional<String> getProductSlug() {
