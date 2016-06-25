@@ -24,7 +24,7 @@ public class CheckoutShippingPageContentFactory extends Base implements WithOver
     private UserContext userContext;
     @Inject
     private I18nResolver i18nResolver;
-    @com.google.inject.Inject
+    @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
 
     public CheckoutShippingPageContent create(final Cart cart, final List<ShippingMethod> shippingMethods) {

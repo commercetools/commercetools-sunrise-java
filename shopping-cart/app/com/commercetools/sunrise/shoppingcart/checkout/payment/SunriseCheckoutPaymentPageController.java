@@ -6,6 +6,7 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
+import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.StepWidgetBean;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
@@ -58,6 +59,8 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
     private CheckoutReverseRouter checkoutReverseRouter;
     @Inject
     private PaymentConfiguration paymentConfiguration;
+    @Inject
+    protected CartLikeBeanFactory cartLikeBeanFactory;
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {

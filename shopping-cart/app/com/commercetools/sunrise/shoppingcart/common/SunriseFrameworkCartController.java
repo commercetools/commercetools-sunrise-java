@@ -39,8 +39,6 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
 
     @Inject
     private ProductReverseRouter productReverseRouter;
-    @Inject
-    protected CartLikeBeanFactory cartLikeBeanFactory;
 
     protected CompletionStage<Cart> getOrCreateCart() {
         final UserContext userContext = userContext();

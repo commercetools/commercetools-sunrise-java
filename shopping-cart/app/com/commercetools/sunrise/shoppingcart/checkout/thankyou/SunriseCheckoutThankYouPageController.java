@@ -1,9 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
-import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.hooks.*;
+import com.commercetools.sunrise.hooks.OrderByIdGetFilterHook;
+import com.commercetools.sunrise.hooks.RequestHook;
+import com.commercetools.sunrise.hooks.SingleOrderHook;
+import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.shoppingcart.OrderSessionUtils;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.google.inject.Injector;
@@ -13,7 +16,6 @@ import play.mvc.Call;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -40,12 +42,14 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  *     <li>checkout</li>
  * </ul>
  */
-@Singleton
+@RequestScoped
 public abstract class SunriseCheckoutThankYouPageController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName, WithOverridablePageContent<CheckoutThankYouPageContent> {
+        implements WithOverwriteableTemplateName {
 
     @Inject
     private Injector injector;
+    @Inject
+    private CheckoutThankYouPageContentFactory pageContentFactory;
 
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> findLastOrder().
@@ -73,23 +77,8 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
     }
 
     protected CompletionStage<Result> handleFoundOrder(final Order order) {
-        final CheckoutThankYouPageContent pageContent = createPageContent();
-        fill(pageContent, order);
+        final CheckoutThankYouPageContent pageContent = pageContentFactory.create(order);
         return asyncOk(renderPage(pageContent, getTemplateName()));
-    }
-
-    protected void fill(final CheckoutThankYouPageContent pageContent, final Order order) {
-        pageContent.setOrder(cartLikeBeanFactory.create(order));
-        setI18nTitle(pageContent, "checkout:thankYouPage.title");
-    }
-
-    /**
-     * Creates the page content. Override this method if you want to use a subclass of {@link CheckoutThankYouPageContent}.
-     * @return pageContent
-     */
-    @Override
-    public CheckoutThankYouPageContent createPageContent() {
-        return new CheckoutThankYouPageContent();
     }
 
     protected CompletionStage<Result> handleNotFoundOrder() {
