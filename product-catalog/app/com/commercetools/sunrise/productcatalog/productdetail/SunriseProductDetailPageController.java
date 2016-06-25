@@ -115,9 +115,9 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     }
 
     protected CompletionStage<Result> handleNotFoundProduct() {
-        if (getProductSlug().isPresent() && getVariantSku().isPresent()) {
-            return findNewProductSlug(getProductSlug().get()).thenApplyAsync(newSlugOpt -> newSlugOpt
-                    .map(newSlug -> redirectToNewSlug(newSlug, getVariantSku().get()))
+        if (productSlug != null && variantSku != null) {
+            return findNewProductSlug(productSlug).thenApplyAsync(newSlugOpt -> newSlugOpt
+                    .map(newSlug -> redirectToNewSlug(newSlug, variantSku))
                     .orElseGet(this::notFoundProductResult),
                     HttpExecution.defaultContext());
         } else {
@@ -141,14 +141,6 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     protected final void runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {
         hooks().runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
         hooks().runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
-    }
-
-    protected final Optional<String> getProductSlug() {
-        return Optional.ofNullable(productSlug);
-    }
-
-    protected final Optional<String> getVariantSku() {
-        return Optional.ofNullable(variantSku);
     }
 
     private Result redirectToNewSlug(final String newSlug, final String sku) {
