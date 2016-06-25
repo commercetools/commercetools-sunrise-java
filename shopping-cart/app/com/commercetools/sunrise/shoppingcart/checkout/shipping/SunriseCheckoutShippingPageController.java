@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
+import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
@@ -37,7 +38,8 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
-public abstract class SunriseCheckoutShippingPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+public abstract class SunriseCheckoutShippingPageController extends SunriseFrameworkCartController
+        implements WithOverwriteableTemplateName, WithOverridablePageContent<CheckoutShippingPageContent> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingPageController.class);
 
     @Inject
@@ -116,7 +118,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
     }
 
     protected CheckoutShippingPageContent createPageContent(final Cart cart, final List<ShippingMethod> shippingMethods) {
-        final CheckoutShippingPageContent pageContent = new CheckoutShippingPageContent();
+        final CheckoutShippingPageContent pageContent = createPageContent();
         final String selectedShippingMethodId = Optional.ofNullable(cart.getShippingInfo())
                 .flatMap(info -> Optional.ofNullable(info.getShippingMethod()).map(Reference::getId))
                 .orElse(null);
@@ -126,12 +128,17 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
 
     protected CheckoutShippingPageContent createPageContentWithShippingError(final Form<CheckoutShippingFormData> shippingForm,
                                                                              final ErrorsBean errors, final List<ShippingMethod> shippingMethods) {
-        final CheckoutShippingPageContent pageContent = new CheckoutShippingPageContent();
+        final CheckoutShippingPageContent pageContent = createPageContent();
         final String selectedShippingMethodId = extractFormField(shippingForm, "shippingMethodId");
         final CheckoutShippingFormBean formBean = new CheckoutShippingFormBean(shippingMethods, selectedShippingMethodId);
         formBean.setErrors(errors);
         pageContent.setShippingForm(formBean);
         return pageContent;
+    }
+
+    @Override
+    public CheckoutShippingPageContent createPageContent() {
+        return new CheckoutShippingPageContent();
     }
 
     protected CompletionStage<Html> renderCheckoutShippingPage(final Cart cart, final CheckoutShippingPageContent pageContent) {
