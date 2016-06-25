@@ -66,7 +66,8 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
     }
 
     protected CompletionStage<Optional<Order>> findOrderById(final String orderId) {
-        final OrderByIdGet orderByIdGet = hooks().runFilterHook(OrderByIdGetFilterHook.class, (hook, getter) -> hook.filterOrderByIdGet(getter), OrderByIdGet.of(orderId));
+        final OrderByIdGet baseRequest = OrderByIdGet.of(orderId).plusExpansionPaths(m -> m.paymentInfo().payments());
+        final OrderByIdGet orderByIdGet = hooks().runFilterHook(OrderByIdGetFilterHook.class, (hook, getter) -> hook.filterOrderByIdGet(getter), baseRequest);
         return sphere().execute(orderByIdGet)
                 .thenApplyAsync(nullableOrder -> {
                     if (nullableOrder != null) {
