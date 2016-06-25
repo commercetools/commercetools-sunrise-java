@@ -48,14 +48,15 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
     @Inject
     private ReverseRouter reverseRouter;
     @Inject
-    protected CartLikeBeanFactory cartLikeBeanFactory;
+    private CartLikeBeanFactory cartLikeBeanFactory;
+    @Inject
+    private CartDetailPageContentFactory pageContentFactory;
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
-            final CartDetailPageContent pageContent = createPageContent();
             return getOrCreateCart()
-                    .thenComposeAsync(cart -> asyncOk(renderCartPage(cart, pageContent)), defaultContext());
+                    .thenComposeAsync(cart -> asyncOk(render(pageContentFactory.create(cart))), defaultContext());
         });
     }
 
@@ -200,10 +201,6 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
-    protected CartDetailPageContent createPageContent() {
-        return new CartDetailPageContent();
-    }
-
     protected CartDetailPageContent createPageContentWithAddProductToCartError(final Form<AddProductToCartFormData> addProductToCartForm,
                                                                                final ErrorsBean errors) {
         // TODO placeholder to put cart form errors
@@ -225,6 +222,10 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
     protected CompletionStage<Html> renderCartPage(final Cart cart, final CartDetailPageContent pageContent) {
         pageContent.setCart(cartLikeBeanFactory.create(cart));
         setI18nTitle(pageContent, "checkout:cartDetailPage.title");
+        return render(pageContent);
+    }
+
+    private CompletionStage<Html> render(final CartDetailPageContent pageContent) {
         return renderPage(pageContent, getTemplateName());
     }
 
