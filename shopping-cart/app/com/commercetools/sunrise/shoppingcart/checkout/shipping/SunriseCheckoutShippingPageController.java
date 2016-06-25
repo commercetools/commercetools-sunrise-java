@@ -52,7 +52,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
-            final CompletionStage<List<ShippingMethod>> shippingMethodsStage = getShippingMethods(session());
+            final CompletionStage<List<ShippingMethod>> shippingMethodsStage = getShippingMethods();
             final CompletionStage<Cart> cartStage = getOrCreateCart();
             return cartStage
                     .thenComposeAsync(cart -> shippingMethodsStage
@@ -100,7 +100,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
 
     protected CompletionStage<Result> handleFormErrors(final Form<CheckoutShippingFormData> shippingForm,
                                                        final Cart cart) {
-        return getShippingMethods(session())
+        return getShippingMethods()
                 .thenComposeAsync(shippingMethods -> {
                     final ErrorsBean errors = new ErrorsBean(shippingForm);
                     final CheckoutShippingPageContent pageContent = createPageContentWithShippingError(shippingForm, errors, shippingMethods);
@@ -115,7 +115,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
             logger.error("The request to set shipping to cart raised an exception", errorResponseException);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-            return getShippingMethods(session())
+            return getShippingMethods()
                     .thenComposeAsync(shippingMethods -> {
                         final CheckoutShippingPageContent pageContent = createPageContentWithShippingError(shippingForm, errors, shippingMethods);
                         return asyncBadRequest(renderCheckoutShippingPage(cart, pageContent));

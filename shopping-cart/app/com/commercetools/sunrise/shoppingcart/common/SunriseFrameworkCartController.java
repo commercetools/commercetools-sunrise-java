@@ -57,8 +57,8 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
                 });
     }
 
-    protected CompletionStage<List<ShippingMethod>> getShippingMethods(final Http.Session session) {
-        return CartSessionUtils.getCartId(session)
+    protected CompletionStage<List<ShippingMethod>> getShippingMethods() {
+        return CartSessionUtils.getCartId(session())
                 .map(cartId -> sphere().execute(ShippingMethodsByCartGet.of(cartId)))
                 .orElseGet(() -> completedFuture(emptyList()));
     }
