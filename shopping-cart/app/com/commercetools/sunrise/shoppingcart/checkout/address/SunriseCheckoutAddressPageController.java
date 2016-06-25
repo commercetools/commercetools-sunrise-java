@@ -66,10 +66,6 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
             final ExecutionContextExecutor executor = defaultContext();
             return loadedCart.thenComposeAsync(cart -> processAddressForm(cart, formClass), executor);
 
-            //TODO waitWithSunrisePageDataHookWhenAllAsyncHooksAreCompleted
-            //TODO getOrCreateCart executes hooks
-            //TODO is there a solution with config/DI?
-            //TODO extension point having data/form
             //TODO log hooks calls in trace
         });
     }
