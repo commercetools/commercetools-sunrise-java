@@ -70,7 +70,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     private CompletionStage<Result> showCheckoutAddressPage(final Cart cart) {
         final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.create(cart);
-        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> ok(html));
+        return asyncOk(renderCheckoutAddressPage(cart, pageContent));
     }
 
     protected <F extends CheckoutAddressFormDataLike> CompletionStage<Result> processAddressForm(final Cart cart, final Class<F> formClass) {
@@ -145,7 +145,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         logger.error("The request to set address to cart raised an exception", errorResponseException);
         final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
         final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
-        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> badRequest(html), defaultContext());
+        return asyncBadRequest(renderCheckoutAddressPage(cart, pageContent));
     }
 
     protected CompletionStage<Html> renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent) {
