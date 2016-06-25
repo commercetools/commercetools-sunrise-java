@@ -36,6 +36,7 @@ import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
+import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
 public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
@@ -50,8 +51,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> getOrCreateCart()
-                .thenComposeAsync(cart -> showCheckoutAddressPage(cart), HttpExecution.defaultContext()));
+        return doRequest(() -> getOrCreateCart().thenCompose(cart -> showCheckoutAddressPage(cart)));
     }
 
     @RequireCSRFCheck
@@ -63,7 +63,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     protected <F extends CheckoutAddressFormDataLike> CompletionStage<Result> process(final Class<F> formClass) {
         return doRequest(() -> {
             final CompletionStage<Cart> loadedCart = getOrCreateCart();
-            final ExecutionContextExecutor executor = HttpExecution.defaultContext();
+            final ExecutionContextExecutor executor = defaultContext();
             return loadedCart.thenComposeAsync(cart -> processAddressForm(cart, formClass), executor);
 
             //TODO waitWithSunrisePageDataHookWhenAllAsyncHooksAreCompleted
@@ -93,8 +93,8 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     protected <F extends CheckoutAddressFormDataLike> CompletionStage<Result> sendAddressesToCommercetoolsPlatform(final Cart cart, final SunriseCheckoutAddressPageController controller, final Form<F> filledForm, final Address shippingAddress, final Address billingAddress) {
         final CompletionStage<Result> resultStage = controller.setAddressToCart(cart, shippingAddress, billingAddress)
-                .thenComposeAsync(controller::handleSuccessfulSetAddress, HttpExecution.defaultContext());
-        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
+                .thenComposeAsync(controller::handleSuccessfulSetAddress, defaultContext());
+        return recoverWithAsync(resultStage, defaultContext(), throwable ->
                 controller.handleSetAddressToCartError(throwable, filledForm, cart));
     }
 
@@ -134,7 +134,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
             errors = new ErrorsBean(shippingAddressForm);
         }
         final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
-        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> badRequest(html), HttpExecution.defaultContext());
+        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> badRequest(html), defaultContext());
     }
 
     protected CompletionStage<Result> handleSetAddressToCartError(final Throwable throwable,
@@ -151,7 +151,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         logger.error("The request to set address to cart raised an exception", errorResponseException);
         final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
         final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
-        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> badRequest(html), HttpExecution.defaultContext());
+        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> badRequest(html), defaultContext());
     }
 
     protected CompletionStage<Html> renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent) {
