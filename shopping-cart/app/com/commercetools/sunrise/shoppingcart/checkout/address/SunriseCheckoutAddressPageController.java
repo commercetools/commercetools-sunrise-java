@@ -65,8 +65,6 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
             final CompletionStage<Cart> loadedCart = getOrCreateCart();
             final ExecutionContextExecutor executor = defaultContext();
             return loadedCart.thenComposeAsync(cart -> processAddressForm(cart, formClass), executor);
-
-            //TODO log hooks calls in trace
         });
     }
 
