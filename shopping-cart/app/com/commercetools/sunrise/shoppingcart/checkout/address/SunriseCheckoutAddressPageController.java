@@ -134,7 +134,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
             errors = new ErrorsBean(shippingAddressForm);
         }
         final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
-        return renderCheckoutAddressPage(cart, pageContent).thenApplyAsync(html -> badRequest(html), defaultContext());
+        return asyncBadRequest(renderCheckoutAddressPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleSetAddressToCartError(final Throwable throwable,
