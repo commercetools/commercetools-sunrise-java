@@ -10,8 +10,16 @@ import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SunrisePageDataHook;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.json.SphereJsonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -27,6 +35,15 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class SunriseFrameworkController extends Controller {
+    private static final Logger pageDataLoggerAsJson = LoggerFactory.getLogger(SunrisePageData.class.getName() + "Json");
+    private static final ObjectMapper objectMapper = createObjectMapper();
+
+    private static ObjectMapper createObjectMapper() {
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        return mapper;
+    }
+
     private SphereClient sphere;
 
     @Inject
@@ -89,9 +106,23 @@ public abstract class SunriseFrameworkController extends Controller {
         final SunrisePageData pageData = createPageData(pageContent);
         return hooks().allAsyncHooksCompletionStage().thenApply(unused -> {
             hooks().runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
+            logFinalPageData(pageData);
             final String html = templateEngine().render(templateName, pageData, userContext.locales());
             return new Html(html);
         });
+    }
+
+    private static void logFinalPageData(final SunrisePageData pageData) {
+        if (pageDataLoggerAsJson.isDebugEnabled()) {
+            try {
+                final ObjectWriter objectWriter = objectMapper.writer()
+                        .withDefaultPrettyPrinter();
+                final String formatted = objectWriter.writeValueAsString(pageData);
+                pageDataLoggerAsJson.debug(formatted);
+            } catch (final Exception e) {
+                pageDataLoggerAsJson.error("serialization of " + pageData + " failed.", e);
+            }
+        }
     }
 
     protected final SunrisePageData createPageData(final PageContent pageContent) {
