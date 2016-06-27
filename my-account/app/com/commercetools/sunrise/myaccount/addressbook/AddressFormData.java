@@ -1,17 +1,16 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
 import io.sphere.sdk.models.Address;
-import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
 
-public abstract class AddressFormData extends Base {
+public interface AddressFormData {
 
-    public abstract void apply(@Nullable final Address address);
+    void apply(@Nullable final Address address);
 
-    public abstract Address extractAddress();
+    Address extractAddress();
 
-    public abstract boolean isDefaultShippingAddress();
+    boolean isDefaultShippingAddress();
 
-    public abstract boolean isDefaultBillingAddress();
+    boolean isDefaultBillingAddress();
 }

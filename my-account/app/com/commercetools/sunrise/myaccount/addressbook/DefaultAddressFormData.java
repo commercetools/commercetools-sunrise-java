@@ -3,11 +3,12 @@ package com.commercetools.sunrise.myaccount.addressbook;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
+import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
 import javax.annotation.Nullable;
 
-public class DefaultAddressFormData extends AddressFormData {
+public class DefaultAddressFormData extends Base implements AddressFormData {
 
     private String csrfToken;
 
