@@ -116,7 +116,7 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
                                                                                              final T formData, final Throwable throwable) {
         if (throwable.getCause() instanceof SphereException) {
             saveUnexpectedError((SphereException) throwable.getCause());
-            final Form<?> form = obtainFilledForm(formData.extractAddress());
+            final Form<?> form = obtainFilledForm(formData.toAddress());
             return asyncBadRequest(renderPage(customer, form));
         }
         return exceptionallyCompletedFuture(throwable);
@@ -128,7 +128,7 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     }
 
     protected <T extends AddressFormData> CompletionStage<Customer> changeAddressFromCustomer(final Customer customer, final Address oldAddress, final T formData) {
-        final ChangeAddress updateAction = ChangeAddress.ofOldAddressToNewAddress(oldAddress, formData.extractAddress());
+        final ChangeAddress updateAction = ChangeAddress.ofOldAddressToNewAddress(oldAddress, formData.toAddress());
         return sphere().execute(CustomerUpdateCommand.of(customer, updateAction));
     }
 

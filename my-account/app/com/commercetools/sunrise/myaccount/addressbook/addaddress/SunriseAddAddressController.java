@@ -111,7 +111,7 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     protected <T extends AddressFormData> CompletionStage<Result> handleFailedCustomerUpdate(final Customer customer, final T formData, final Throwable throwable) {
         if (throwable.getCause() instanceof SphereException) {
             saveUnexpectedError((SphereException) throwable.getCause());
-            final Form<?> form = obtainFilledForm(formData.extractAddress());
+            final Form<?> form = obtainFilledForm(formData.toAddress());
             return asyncBadRequest(renderPage(customer, form));
         }
         return exceptionallyCompletedFuture(throwable);
@@ -123,7 +123,7 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     }
 
     protected <T extends AddressFormData> CompletionStage<Customer> addAddressToCustomer(final Customer customer, final T formData) {
-        final Address address = formData.extractAddress();
+        final Address address = formData.toAddress();
         return addAddress(customer, address)
                 .thenComposeAsync(updatedCustomer -> findAddress(updatedCustomer, address)
                         .map(addressWithId -> {

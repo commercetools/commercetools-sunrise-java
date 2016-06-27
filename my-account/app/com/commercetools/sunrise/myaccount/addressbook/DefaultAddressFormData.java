@@ -177,7 +177,7 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
     }
 
     @Override
-    public Address extractAddress() {
+    public Address toAddress() {
         final CountryCode country = CountryCode.getByCode(getCountry());
         return AddressBuilder.of(country)
                 .title(getTitle())

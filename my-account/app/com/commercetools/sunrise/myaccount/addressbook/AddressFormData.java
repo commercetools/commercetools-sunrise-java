@@ -8,7 +8,7 @@ public interface AddressFormData {
 
     void apply(@Nullable final Address address);
 
-    Address extractAddress();
+    Address toAddress();
 
     boolean isDefaultShippingAddress();
 
