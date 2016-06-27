@@ -74,14 +74,14 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     }
 
     protected <T extends AddressFormData> CompletionStage<Result> showChangeAddress(final ChangeAddressActionData<T> data) {
-        return ifNotNullCustomer(data.getCustomer().orElse(null), notNullCustomer -> data.getOldAddress()
+        return ifNotNullCustomer(data.customer().orElse(null), notNullCustomer -> data.oldAddress()
                 .map(oldAddress -> showFormWithOriginalAddress(notNullCustomer, oldAddress))
                 .orElseGet(() -> handleNotFoundOriginalAddress(notNullCustomer)));
     }
 
     protected <T extends AddressFormData> CompletionStage<Result> processChangeAddress(final ChangeAddressActionData<T> data) {
-        return ifNotNullCustomer(data.getCustomer().orElse(null), customer -> data.getOldAddress()
-                .map(oldAddress -> data.getForm()
+        return ifNotNullCustomer(data.customer().orElse(null), customer -> data.oldAddress()
+                .map(oldAddress -> data.form()
                         .map(form -> {
                             if (!form.hasErrors()) {
                                 return applySubmittedAddress(customer, oldAddress, form.get());

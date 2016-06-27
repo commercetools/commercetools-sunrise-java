@@ -15,13 +15,13 @@ public class AddAddressActionData<T extends AddressFormData> extends AddressActi
     }
 
     @Override
-    public Optional<Customer> getCustomer() {
-        return super.getCustomer();
+    public Optional<Customer> customer() {
+        return super.customer();
     }
 
     @Override
-    public Optional<Form<T>> getForm() {
-        return super.getForm();
+    public Optional<Form<T>> form() {
+        return super.form();
     }
 
     public static <T extends AddressFormData> AddAddressActionData<T> of(@Nullable final Customer customer, @Nullable final Form<T> form) {

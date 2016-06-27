@@ -77,11 +77,11 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     }
 
     protected <T extends AddressFormData> CompletionStage<Result> show(final AddressActionData<T> data) {
-        return ifNotNullCustomer(data.getCustomer().orElse(null), this::showEmptyForm);
+        return ifNotNullCustomer(data.customer().orElse(null), this::showEmptyForm);
     }
 
     protected <T extends AddressFormData> CompletionStage<Result> process(final AddressActionData<T> data) {
-        return ifNotNullCustomer(data.getCustomer().orElse(null), customer -> data.getForm()
+        return ifNotNullCustomer(data.customer().orElse(null), customer -> data.form()
                 .map(form -> {
                     if (!form.hasErrors()) {
                         return applySubmittedAddress(customer, form.get());

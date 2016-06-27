@@ -20,16 +20,16 @@ public class ChangeAddressActionData<T extends AddressFormData> extends AddressA
     }
 
     @Override
-    public Optional<Customer> getCustomer() {
-        return super.getCustomer();
+    public Optional<Customer> customer() {
+        return super.customer();
     }
 
     @Override
-    public Optional<Form<T>> getForm() {
-        return super.getForm();
+    public Optional<Form<T>> form() {
+        return super.form();
     }
 
-    public Optional<Address> getOldAddress() {
+    public Optional<Address> oldAddress() {
         return Optional.ofNullable(oldAddress);
     }
 

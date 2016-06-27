@@ -94,8 +94,8 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     }
 
     protected CompletionStage<Result> showProduct(final ProductFinderResult productFinderResult) {
-        final Optional<ProductProjection> product = productFinderResult.getProduct();
-        final Optional<ProductVariant> variant = productFinderResult.getVariant();
+        final Optional<ProductProjection> product = productFinderResult.product();
+        final Optional<ProductVariant> variant = productFinderResult.variant();
         if (product.isPresent() && variant.isPresent()) {
             runHookOnFoundProduct(product.get(), variant.get());
             return showFoundProduct(product.get(), variant.get());
@@ -141,6 +141,14 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     protected final void runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {
         hooks().runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
         hooks().runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
+    }
+
+    protected final Optional<String> productSlug() {
+        return Optional.ofNullable(productSlug);
+    }
+
+    protected final Optional<String> variantSku() {
+        return Optional.ofNullable(variantSku);
     }
 
     private Result redirectToNewSlug(final String newSlug, final String sku) {

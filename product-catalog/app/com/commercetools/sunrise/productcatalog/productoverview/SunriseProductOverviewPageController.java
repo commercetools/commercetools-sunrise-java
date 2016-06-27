@@ -130,11 +130,11 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
     }
 
     protected PageContent createPageContent(final PagedSearchResult<ProductProjection> pagedSearchResult) {
-        return productOverviewPageContentFactory.create(getCategory().orElse(null), pagedSearchResult);
+        return productOverviewPageContentFactory.create(category, pagedSearchResult);
     }
 
     protected Result notFoundCategoryResult() {
-        return notFound("Category not found: " + getCategorySlug().orElse("[unknown]"));
+        return notFound("Category not found: " + categorySlug().orElse("[unknown]"));
     }
 
     protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
@@ -149,11 +149,11 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
         hooks().runVoidHook(ProductProjectionPagedSearchResultHook.class, hook -> hook.acceptProductProjectionPagedSearchResult(pagedSearchResult));
     }
 
-    protected final Optional<Category> getCategory() {
+    protected final Optional<Category> category() {
         return Optional.ofNullable(category);
     }
 
-    protected final Optional<String> getCategorySlug() {
+    protected final Optional<String> categorySlug() {
         return Optional.ofNullable(categorySlug);
     }
 }

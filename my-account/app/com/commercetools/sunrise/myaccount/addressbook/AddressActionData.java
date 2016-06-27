@@ -18,11 +18,11 @@ public abstract class AddressActionData<T extends AddressFormData> {
         this.form = form;
     }
 
-    public Optional<Customer> getCustomer() {
+    public Optional<Customer> customer() {
         return Optional.ofNullable(customer);
     }
 
-    public Optional<Form<T>> getForm() {
+    public Optional<Form<T>> form() {
         return Optional.ofNullable(form);
     }
 }

@@ -18,11 +18,11 @@ public class ProductFinderResult {
         this.variant = variant;
     }
 
-    public Optional<ProductProjection> getProduct() {
+    public Optional<ProductProjection> product() {
         return Optional.ofNullable(product);
     }
 
-    public Optional<ProductVariant> getVariant() {
+    public Optional<ProductVariant> variant() {
         return Optional.ofNullable(variant);
     }
 
