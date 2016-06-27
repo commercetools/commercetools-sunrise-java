@@ -125,7 +125,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         });
     }
 
-    protected CompletionStage<Cart> addProductToCart(final String productId, final int variantId, final long quantity, final Cart cart) {
+    protected CompletionStage<Cart> addProductToCart(final String productId, final Integer variantId, final Long quantity, final Cart cart) {
         final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
         return sphere().execute(CartUpdateCommand.of(cart, updateAction));
     }
