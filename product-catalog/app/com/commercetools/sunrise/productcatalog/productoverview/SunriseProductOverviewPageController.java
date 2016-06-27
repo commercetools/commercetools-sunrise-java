@@ -138,15 +138,15 @@ public abstract class SunriseProductOverviewPageController extends SunriseFramew
     }
 
     protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
-        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
+        return hooks().runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
     }
 
     protected final CompletionStage<?> runHookOnFoundCategory(final Category category) {
-        return runAsyncHook(SingleCategoryHook.class, hook -> hook.onSingleCategoryLoaded(category));
+        return hooks().runAsyncHook(SingleCategoryHook.class, hook -> hook.onSingleCategoryLoaded(category));
     }
 
     protected final void runHookOnProductSearchResult(final PagedSearchResult<ProductProjection> pagedSearchResult) {
-        runVoidHook(ProductProjectionPagedSearchResultHook.class, hook -> hook.acceptProductProjectionPagedSearchResult(pagedSearchResult));
+        hooks().runVoidHook(ProductProjectionPagedSearchResultHook.class, hook -> hook.acceptProductProjectionPagedSearchResult(pagedSearchResult));
     }
 
     protected final Optional<Category> getCategory() {

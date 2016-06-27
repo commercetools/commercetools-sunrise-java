@@ -42,7 +42,7 @@ public final class FutureUtils {
     public static <T> CompletionStage<T> recoverWithAsync(final CompletionStage<T> future, final Executor executor, final Function<? super Throwable, CompletionStage<T>> f) {
         final CompletableFuture<T> result = new CompletableFuture<>();
         final BiConsumer<T, Throwable> action = (value, error) -> {
-            if (value != null) {
+            if (error == null) {
                 result.complete(value);
             } else {
                 final CompletionStage<T> alternative = f.apply(error);

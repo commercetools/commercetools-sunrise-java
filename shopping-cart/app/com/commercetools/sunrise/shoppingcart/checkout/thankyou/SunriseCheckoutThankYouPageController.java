@@ -1,19 +1,23 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.hooks.OrderByIdGetFilterHook;
+import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SingleOrderHook;
+import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.shoppingcart.OrderSessionUtils;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.google.inject.Injector;
+import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderByIdGet;
+import play.Logger;
 import play.mvc.Call;
 import play.mvc.Result;
-import play.twirl.api.Html;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -23,55 +27,66 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
-@Singleton
-public abstract class SunriseCheckoutThankYouPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+/**
+ * Controller to show as last checkout step the confirmation of the order data.
+ * By default the last order ID is taken from the cookie.
+ *
+ * <p id="hooks">supported hooks</p>
+ * <ul>
+ *     <li>{@link RequestHook}</li>
+ *     <li>{@link SunrisePageDataHook}</li>
+ *     <li>{@link OrderByIdGetFilterHook}</li>
+ *     <li>{@link SingleOrderHook}</li>
+ * </ul>
+ * <p>tags</p>
+ * <ul>
+ *     <li>checkout-thankyou</li>
+ *     <li>checkout</li>
+ * </ul>
+ */
+@RequestScoped
+public abstract class SunriseCheckoutThankYouPageController extends SunriseFrameworkCartController
+        implements WithOverwriteableTemplateName {
 
     @Inject
-    private HomeReverseRouter homeReverseRouter;
+    private Injector injector;
+    @Inject
+    private CheckoutThankYouPageContentFactory pageContentFactory;
 
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            return getLastOrderId()
-                    .map(lastOrderId -> findOrder(lastOrderId)
-                            .thenComposeAsync(orderOpt -> orderOpt
-                                    .map(order -> handleFoundOrder(order))
-                                    .orElseGet(() -> handleNotFoundOrder()),
-                                    defaultContext())
-                    )
-                    .orElseGet(() -> handleNotFoundOrder());
-        });
+        return doRequest(() -> findLastOrder().
+                thenComposeAsync(orderOpt -> orderOpt
+                        .map(this::handleFoundOrder)
+                        .orElseGet(this::handleNotFoundOrder), defaultContext()));
     }
 
-    protected Optional<String> getLastOrderId() {
-        return OrderSessionUtils.getLastOrderId(session());
+    protected CompletionStage<Optional<Order>> findLastOrder() {
+        final Optional<String> lastOrderId = OrderSessionUtils.getLastOrderId(session());
+        return lastOrderId
+                .map(orderId -> findOrderById(orderId))
+                .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
-    protected CompletionStage<Optional<Order>> findOrder(final String orderId) {
-        final OrderByIdGet orderByIdGet = runFilterHook(OrderByIdGetFilterHook.class, (hook, getter) -> hook.filterOrderByIdGet(getter), OrderByIdGet.of(orderId));
+    protected CompletionStage<Optional<Order>> findOrderById(final String orderId) {
+        final OrderByIdGet baseRequest = OrderByIdGet.of(orderId).plusExpansionPaths(m -> m.paymentInfo().payments());
+        final OrderByIdGet orderByIdGet = hooks().runFilterHook(OrderByIdGetFilterHook.class, (hook, getter) -> hook.filterOrderByIdGet(getter), baseRequest);
         return sphere().execute(orderByIdGet)
                 .thenApplyAsync(nullableOrder -> {
                     if (nullableOrder != null) {
-                        runAsyncHook(SingleOrderHook.class, hook -> hook.onSingleOrderLoaded(nullableOrder));
+                        hooks().runAsyncHook(SingleOrderHook.class, hook -> hook.onSingleOrderLoaded(nullableOrder));
                     }
-                    return nullableOrder;
-                }, defaultContext())
-                .thenApplyAsync(Optional::ofNullable, defaultContext());
+                    return Optional.ofNullable(nullableOrder);
+                }, defaultContext());
     }
 
     protected CompletionStage<Result> handleFoundOrder(final Order order) {
-        final CheckoutThankYouPageContent pageContent = new CheckoutThankYouPageContent();
-        pageContent.setOrder(cartLikeBeanFactory.create(order));
-        return asyncOk(renderCheckoutThankYouPage(pageContent));
+        final CheckoutThankYouPageContent pageContent = pageContentFactory.create(order);
+        return asyncOk(renderPage(pageContent, getTemplateName()));
     }
 
     protected CompletionStage<Result> handleNotFoundOrder() {
-        final Call call = homeReverseRouter.homePageCall(userContext().languageTag());
+        final Call call = injector.getInstance(HomeReverseRouter.class).homePageCall(userContext().languageTag());
         return completedFuture(redirect(call));
-    }
-
-    protected CompletionStage<Html> renderCheckoutThankYouPage(final CheckoutThankYouPageContent pageContent) {
-        setI18nTitle(pageContent, "checkout:thankYouPage.title");
-        return renderPage(pageContent, getTemplateName());
     }
 
     @Override

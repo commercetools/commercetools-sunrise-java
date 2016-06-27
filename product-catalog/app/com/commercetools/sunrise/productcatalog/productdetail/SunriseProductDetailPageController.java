@@ -115,9 +115,9 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     }
 
     protected CompletionStage<Result> handleNotFoundProduct() {
-        if (getProductSlug().isPresent() && getVariantSku().isPresent()) {
-            return findNewProductSlug(getProductSlug().get()).thenApplyAsync(newSlugOpt -> newSlugOpt
-                    .map(newSlug -> redirectToNewSlug(newSlug, getVariantSku().get()))
+        if (productSlug != null && variantSku != null) {
+            return findNewProductSlug(productSlug).thenApplyAsync(newSlugOpt -> newSlugOpt
+                    .map(newSlug -> redirectToNewSlug(newSlug, variantSku))
                     .orElseGet(this::notFoundProductResult),
                     HttpExecution.defaultContext());
         } else {
@@ -135,20 +135,12 @@ public abstract class SunriseProductDetailPageController extends SunriseFramewor
     }
 
     protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
-        return runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
+        return hooks().runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
     }
 
     protected final void runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {
-        runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
-        runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
-    }
-
-    protected final Optional<String> getProductSlug() {
-        return Optional.ofNullable(productSlug);
-    }
-
-    protected final Optional<String> getVariantSku() {
-        return Optional.ofNullable(variantSku);
+        hooks().runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
+        hooks().runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
     }
 
     private Result redirectToNewSlug(final String newSlug, final String sku) {

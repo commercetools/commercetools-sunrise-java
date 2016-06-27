@@ -23,7 +23,6 @@ import io.sphere.sdk.carts.queries.CartQueryBuilder;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 
 import java.util.List;
@@ -33,33 +32,31 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
+import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @NoCache
 public abstract class SunriseFrameworkCartController extends SunriseFrameworkController {
 
     @Inject
     private ProductReverseRouter productReverseRouter;
-    @Inject
-    protected CartLikeBeanFactory cartLikeBeanFactory;
-
-    protected CompletionStage<Cart> getOrCreateCart(final UserContext userContext, final Http.Session session) {
-        final CompletionStage<Cart> cartFuture = fetchCart(userContext, session)
-                .thenComposeAsync(cart -> updateCartWithUserPreferences(cart, userContext), HttpExecution.defaultContext());
-        cartFuture.thenAcceptAsync(cart ->
-                CartSessionUtils.overwriteCartSessionData(cart, session, userContext, productReverseRouter), HttpExecution.defaultContext());
-        return cartFuture;
-    }
 
     protected CompletionStage<Cart> getOrCreateCart() {
-        return getOrCreateCart(userContext(), session())
+        final UserContext userContext = userContext();
+        final Http.Session session = session();
+        return fetchCart(userContext, session)
+                .thenComposeAsync(cart -> updateCartWithUserPreferences(cart, userContext), defaultContext())
                 .thenApply(cart -> {
-                    runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart));
+                    CartSessionUtils.overwriteCartSessionData(cart, session, userContext, productReverseRouter);
+                    return cart;
+                })
+                .thenApply(cart -> {
+                    hooks().runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart));
                     return cart;
                 });
     }
 
-    protected CompletionStage<List<ShippingMethod>> getShippingMethods(final Http.Session session) {
-        return CartSessionUtils.getCartId(session)
+    protected CompletionStage<List<ShippingMethod>> getShippingMethods() {
+        return CartSessionUtils.getCartId(session())
                 .map(cartId -> sphere().execute(ShippingMethodsByCartGet.of(cartId)))
                 .orElseGet(() -> completedFuture(emptyList()));
     }
@@ -106,7 +103,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
         return sphere().execute(query).thenComposeAsync(carts -> carts.head()
                 .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
                 .orElseGet(() -> createCart(userContext)),
-                HttpExecution.defaultContext());
+                defaultContext());
     }
 
     protected CompletionStage<Cart> updateCartWithUserPreferences(final Cart cart, final UserContext userContext) {

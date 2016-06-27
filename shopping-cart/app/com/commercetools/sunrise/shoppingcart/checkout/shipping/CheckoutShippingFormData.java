@@ -5,18 +5,8 @@ import play.data.validation.Constraints;
 
 public class CheckoutShippingFormData extends Base {
 
-    private String csrfToken;
-
     @Constraints.Required
     private String shippingMethodId;
-
-    public String getCsrfToken() {
-        return csrfToken;
-    }
-
-    public void setCsrfToken(final String csrfToken) {
-        this.csrfToken = csrfToken;
-    }
 
     public String getShippingMethodId() {
         return shippingMethodId;

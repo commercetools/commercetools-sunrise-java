@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ErrorResponseException;
@@ -42,6 +43,8 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
     private FormFactory formFactory;
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
+    @Inject
+    protected CartLikeBeanFactory cartLikeBeanFactory;
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
