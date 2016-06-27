@@ -63,8 +63,8 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
     }
 
     protected <T> CompletionStage<Result> processRemoveAddressForm(final RemoveAddressActionData<T> data) {
-        return ifNotNullCustomer(data.getCustomer().orElse(null), customer -> data.getAddress()
-                .map(address -> data.getForm()
+        return ifNotNullCustomer(data.customer().orElse(null), customer -> data.address()
+                .map(address -> data.form()
                         .map(form -> {
                             if (!form.hasErrors()) {
                                 return applySubmittedAddress(customer, address, form.get());
