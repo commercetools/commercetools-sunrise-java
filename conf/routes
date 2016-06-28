@@ -59,7 +59,7 @@ POST        /:languageTag/cart/add                             @demo.shoppingcar
 # Changes the quantity of a selected line item from the cart of the current session
 POST        /:languageTag/cart/quantity                        @demo.shoppingcart.ChangeLineItemQuantityController.changeLineItemQuantity(languageTag: String)
 # Removes a selected line item from the cart of the current session
-POST        /:languageTag/cart/remove                          @demo.shoppingcart.CartDetailPageController.removeLineItem(languageTag: String)
+POST        /:languageTag/cart/remove                          @demo.shoppingcart.RemoveLineItemController.removeLineItem(languageTag: String)
 
 
 # CHECKOUT

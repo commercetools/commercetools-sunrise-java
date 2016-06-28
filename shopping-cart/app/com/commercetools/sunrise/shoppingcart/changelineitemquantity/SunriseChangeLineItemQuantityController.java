@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.changelineitemquantity;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.UserFeedback;
 import com.commercetools.sunrise.shoppingcart.cartdetail.ChangeLineItemQuantityFormData;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
@@ -24,7 +23,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
-public abstract class SunriseChangeLineItemQuantityController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+public abstract class SunriseChangeLineItemQuantityController extends SunriseFrameworkCartController {
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeLineItemQuantityController.class);
 
     @Inject
@@ -76,10 +75,5 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
     @Override
     public Set<String> getFrameworkTags() {
         return new HashSet<>(asList("cart"));
-    }
-
-    @Override
-    public String getTemplateName() {
-        return "cart";
     }
 }

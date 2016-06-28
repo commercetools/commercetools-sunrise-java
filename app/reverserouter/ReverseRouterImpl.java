@@ -69,7 +69,7 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
 
     @Override
     public Call processDeleteLineItemForm(final String languageTag) {
-        return CartDetailPageController.removeLineItem(languageTag);
+        return RemoveLineItemController.removeLineItem(languageTag);
     }
 
     @Override
