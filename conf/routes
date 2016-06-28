@@ -55,11 +55,11 @@ POST        /:languageTag/changeCountry                        @demo.common.Loca
 # Shows the details of the cart belonging to the current session
 GET         /:languageTag/cart                                 @demo.shoppingcart.CartDetailPageController.show(languageTag: String)
 # Adds the selected product to the cart
-POST        /:languageTag/cart/add                             @demo.shoppingcart.CartDetailPageController.addProductToCart(languageTag: String)
+POST        /:languageTag/cart/add                             @demo.shoppingcart.AddProductToCartController.addProductToCart(languageTag: String)
 # Changes the quantity of a selected line item from the cart of the current session
-POST        /:languageTag/cart/quantity                        @demo.shoppingcart.CartDetailPageController.changeLineItemQuantity(languageTag: String)
+POST        /:languageTag/cart/quantity                        @demo.shoppingcart.ChangeLineItemQuantityController.changeLineItemQuantity(languageTag: String)
 # Removes a selected line item from the cart of the current session
-POST        /:languageTag/cart/remove                          @demo.shoppingcart.CartDetailPageController.removeLineItem(languageTag: String)
+POST        /:languageTag/cart/remove                          @demo.shoppingcart.RemoveLineItemController.removeLineItem(languageTag: String)
 
 
 # CHECKOUT
