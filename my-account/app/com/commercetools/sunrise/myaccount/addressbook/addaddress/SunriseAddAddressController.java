@@ -27,7 +27,10 @@ import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
@@ -93,7 +96,7 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     }
 
     protected CompletionStage<Result> showEmptyForm(final Customer customer) {
-        final Form<?> form = obtainFilledForm(null);
+        final Form<?> form = obtainFilledForm(customer, null);
         return asyncOk(renderPage(customer, form));
     }
 
@@ -111,7 +114,7 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     protected <T extends AddressFormData> CompletionStage<Result> handleFailedCustomerUpdate(final Customer customer, final T formData, final Throwable throwable) {
         if (throwable.getCause() instanceof SphereException) {
             saveUnexpectedError((SphereException) throwable.getCause());
-            final Form<?> form = obtainFilledForm(formData.toAddress());
+            final Form<?> form = obtainFilledForm(customer, formData.toAddress());
             return asyncBadRequest(renderPage(customer, form));
         }
         return exceptionallyCompletedFuture(throwable);
@@ -135,9 +138,9 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
         return renderPage(pageContent, getTemplateName());
     }
 
-    protected Form<?> obtainFilledForm(@Nullable final Address address) {
+    protected Form<?> obtainFilledForm(final Customer customer, @Nullable final Address address) {
         final DefaultAddressFormData formData = new DefaultAddressFormData();
-        formData.apply(address);
+        formData.apply(customer, address);
         return formFactory.form(DefaultAddressFormData.class).fill(formData);
     }
 

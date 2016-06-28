@@ -1,12 +1,14 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class DefaultAddressFormData extends Base implements AddressFormData {
 
@@ -159,8 +161,7 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
         this.defaultBillingAddress = defaultBillingAddress;
     }
 
-    @Override
-    public void apply(@Nullable final Address address) {
+    public void apply(final Customer customer, @Nullable final Address address) {
         if (address != null) {
             this.title = address.getTitle();
             this.firstName = address.getFirstName();
@@ -173,6 +174,8 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
             this.region = address.getRegion();
             this.phone = address.getPhone();
             this.email = address.getEmail();
+            this.defaultShippingAddress = Objects.equals(customer.getDefaultShippingAddressId(), address.getId());
+            this.defaultBillingAddress = Objects.equals(customer.getDefaultBillingAddressId(), address.getId());
         }
     }
 

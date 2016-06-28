@@ -97,7 +97,7 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     }
 
     protected CompletionStage<Result> showFormWithOriginalAddress(final Customer customer, final Address oldAddress) {
-        final Form<?> form = obtainFilledForm(oldAddress);
+        final Form<?> form = obtainFilledForm(customer, oldAddress);
         return asyncOk(renderPage(customer, form));
     }
 
@@ -125,7 +125,7 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
                                                                                              final T formData, final Throwable throwable) {
         if (throwable.getCause() instanceof SphereException) {
             saveUnexpectedError((SphereException) throwable.getCause());
-            final Form<?> form = obtainFilledForm(formData.toAddress());
+            final Form<?> form = obtainFilledForm(customer, formData.toAddress());
             return asyncBadRequest(renderPage(customer, form));
         }
         return exceptionallyCompletedFuture(throwable);
@@ -147,9 +147,9 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
         //return renderPage(pageContent, getTemplateName();
     }
 
-    protected Form<?> obtainFilledForm(@Nullable final Address address) {
+    protected Form<?> obtainFilledForm(final Customer customer, @Nullable final Address address) {
         final DefaultAddressFormData formData = new DefaultAddressFormData();
-        formData.apply(address);
+        formData.apply(customer, address);
         return formFactory.form(DefaultAddressFormData.class).fill(formData);
     }
 
