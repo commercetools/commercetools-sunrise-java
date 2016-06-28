@@ -9,6 +9,7 @@ public class AddProductToCartFormData extends Base implements AddProductToCartFo
     @Constraints.Required
     private Integer variantId;
     @Constraints.Required
+    @Constraints.Min(1)
     private Long quantity;
 
     public AddProductToCartFormData() {

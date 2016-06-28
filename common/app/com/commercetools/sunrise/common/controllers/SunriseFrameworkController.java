@@ -20,6 +20,7 @@ import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.json.SphereJsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -54,6 +55,8 @@ public abstract class SunriseFrameworkController extends Controller {
         sphere = new HookedSphereClient(sphereClient, this);
     }
 
+    @Inject
+    private Injector injector;
     @Inject
     private UserContext userContext;
     @Inject
@@ -95,6 +98,10 @@ public abstract class SunriseFrameworkController extends Controller {
 
     public I18nResolver i18nResolver() {
         return i18nResolver;
+    }
+
+    public FormFactory formFactory() {
+        return injector.getInstance(FormFactory.class);
     }
 
     @Nullable

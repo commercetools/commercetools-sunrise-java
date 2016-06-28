@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
+import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
@@ -128,4 +129,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
         return sphere().execute(updateCommand);
     }
 
+    protected void overrideCartSessionData(final Cart cart) {
+        overwriteCartSessionData(cart, session(), userContext(), productReverseRouter);
+    }
 }

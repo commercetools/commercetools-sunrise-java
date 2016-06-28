@@ -3,7 +3,6 @@ package com.commercetools.sunrise.shoppingcart.cartdetail;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.errors.ErrorsBean;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
@@ -27,7 +26,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
@@ -44,8 +42,6 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
     @Inject
     private FormFactory formFactory;
     @Inject
-    private ProductReverseRouter productReverseRouter;
-    @Inject
     private ReverseRouter reverseRouter;
     @Inject
     private CartLikeBeanFactory cartLikeBeanFactory;
@@ -60,31 +56,9 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         });
     }
 
-    @RequireCSRFCheck
-    public CompletionStage<Result> addProductToCart(final String languageTag) {
-        return doRequest(() -> {
-        final Form<? extends AddProductToCartFormDataLike> filledForm = formFactory.form(getAddProductToCartFormDataClass()).bindFromRequest();
-        return getOrCreateCart()
-                .thenComposeAsync(cart -> {
-                    if (filledForm.hasErrors()) {
-                        return handleAddProductToCartFormErrors(filledForm, cart);
-                    } else {
-                        final AddProductToCartFormDataLike data = filledForm.get();
-                        final String productId = data.getProductId();
-                        final int variantId = data.getVariantId();
-                        final long quantity = data.getQuantity();
-                        final CompletionStage<Result> resultStage = addProductToCart(productId, variantId, quantity, cart)
-                                .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
-                        return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                                handleAddProductToCartError(throwable, filledForm, cart));
-                    }
-                }, defaultContext());
-        });
-    }
 
-    protected Class<? extends AddProductToCartFormDataLike> getAddProductToCartFormDataClass() {
-        return AddProductToCartFormData.class;
-    }
+
+
 
     @RequireCSRFCheck
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
@@ -125,10 +99,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         });
     }
 
-    protected CompletionStage<Cart> addProductToCart(final String productId, final Integer variantId, final Long quantity, final Cart cart) {
-        final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
-        return sphere().execute(CartUpdateCommand.of(cart, updateAction));
-    }
+
 
     protected CompletionStage<Cart> changeLineItemQuantity(final String lineItemId, final long quantity, final Cart cart) {
         final ChangeLineItemQuantity changeLineItemQuantity = ChangeLineItemQuantity.of(lineItemId, quantity);
@@ -140,16 +111,10 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return sphere().execute(CartUpdateCommand.of(cart, removeLineItem));
     }
 
+    //TODO this is duplicated
     protected CompletionStage<Result> handleSuccessfulCartChange(final Cart cart) {
-        overwriteCartSessionData(cart, session(), userContext(), productReverseRouter);
+        overrideCartSessionData(cart);
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
-    }
-
-    protected CompletionStage<Result> handleAddProductToCartFormErrors(final Form<? extends AddProductToCartFormDataLike> addProductToCartForm,
-                                                                       final Cart cart) {
-        final ErrorsBean errorsBean = new ErrorsBean(addProductToCartForm);
-        final CartDetailPageContent pageContent = createPageContentWithAddProductToCartError(addProductToCartForm, errorsBean);
-        return asyncBadRequest(renderCartPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleChangeLineItemQuantityFormErrors(final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
@@ -166,18 +131,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return asyncBadRequest(renderCartPage(cart, pageContent));
     }
 
-    protected CompletionStage<Result> handleAddProductToCartError(final Throwable throwable,
-                                                                  final Form<? extends AddProductToCartFormDataLike> addProductToCartForm,
-                                                                  final Cart cart) {
-        if (throwable.getCause() instanceof ErrorResponseException) {
-            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
-            logger.error("The request to add product to cart raised an exception", errorResponseException);
-            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-            final CartDetailPageContent pageContent = createPageContentWithAddProductToCartError(addProductToCartForm, errors);
-            return asyncBadRequest(renderCartPage(cart, pageContent));
-        }
-        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
-    }
+
 
     protected CompletionStage<Result> handleChangeLineItemQuantityError(final Throwable throwable,
                                                                         final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
@@ -205,11 +159,7 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
 
-    protected CartDetailPageContent createPageContentWithAddProductToCartError(final Form<? extends AddProductToCartFormDataLike> addProductToCartForm,
-                                                                               final ErrorsBean errors) {
-        // TODO placeholder to put cart form errors
-        return new CartDetailPageContent();
-    }
+
 
     protected CartDetailPageContent createPageContentWithChangeLineItemQuantityError(final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
                                                                                      final ErrorsBean errors) {
