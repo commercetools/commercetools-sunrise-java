@@ -6,7 +6,10 @@ import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 
@@ -39,7 +42,7 @@ public class UserFeedback extends Base {
     }
 
     private void addErrors(final List<ErrorBean> errors) {
-        final LinkedList<ErrorBean> errorBeans = new LinkedList<>(errors);
+        final List<ErrorBean> errorBeans = new LinkedList<>(errors);
         if (!errorBeans.isEmpty()) {
             Optional.ofNullable(httpContext.args.get(ERROR))
                     .ifPresent(errorsObj -> {
