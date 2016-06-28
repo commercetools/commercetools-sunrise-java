@@ -155,16 +155,16 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
 
     private <T extends AddressFormData> List<UpdateAction<Customer>> setDefaultAddressActions(final Customer customer, final String addressId, final T formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        defaultAddressAction(addressId, formData.isDefaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
+        setDefaultAddressAction(addressId, formData.isDefaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
                 .ifPresent(updateActions::add);
-        defaultAddressAction(addressId, formData.isDefaultBillingAddress(), customer.getDefaultBillingAddressId(), SetDefaultBillingAddress::of)
+        setDefaultAddressAction(addressId, formData.isDefaultBillingAddress(), customer.getDefaultBillingAddressId(), SetDefaultBillingAddress::of)
                 .ifPresent(updateActions::add);
         return updateActions;
     }
 
-    private Optional<UpdateAction<Customer>> defaultAddressAction(final String addressId, final boolean isNewDefaultAddress,
-                                                                  @Nullable final String defaultAddressId,
-                                                                  final Function<String, UpdateAction<Customer>> actionCreator) {
+    private Optional<UpdateAction<Customer>> setDefaultAddressAction(final String addressId, final boolean isNewDefaultAddress,
+                                                                     @Nullable final String defaultAddressId,
+                                                                     final Function<String, UpdateAction<Customer>> actionCreator) {
         final boolean defaultNeedsChange = isDefaultAddressDifferent(addressId, isNewDefaultAddress, defaultAddressId);
         if (defaultNeedsChange) {
             final String addressIdToSetAsDefault = isNewDefaultAddress ? addressId : null;

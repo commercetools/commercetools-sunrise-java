@@ -71,7 +71,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
     protected CompletionStage<Result> handleChangeLineItemQuantityError(final Throwable throwable,
                                                                         final Form<ChangeLineItemQuantityFormData> form,
                                                                         final Cart cart) {
-        flash(UserFeedback.ERROR, "The request to change line item quantity raised an exception");// TODO get from i18n
+        injector.getInstance(UserFeedback.class).addErrors("The request to change line item quantity raised an exception");// TODO get from i18n
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
     }
 

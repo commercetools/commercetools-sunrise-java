@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.mvc.Call;
-import play.mvc.Http;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -35,7 +34,6 @@ public abstract class AddressBookManagementController extends MyAccountControlle
 
     protected final void saveUnexpectedError(final SphereException sphereException) {
         logger.error("The CTP request raised an unexpected exception", sphereException);
-        final Http.Context context = injector.getInstance(Http.Context.class);
-        context.flash().put(UserFeedback.ERROR, "Something went wrong, please try again"); // TODO get from i18n
+        injector.getInstance(UserFeedback.class).addErrors("Something went wrong, please try again"); // TODO get from i18n
     }
 }

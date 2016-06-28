@@ -72,7 +72,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     protected CompletionStage<Result> handleAddProductToCartError(final Throwable throwable,
                                                                   final Form<? extends AddProductToCartFormDataLike> form,
                                                                   final Cart cart) {
-        flash(UserFeedback.ERROR, "an error occurred");// TODO get from i18n
+        injector.getInstance(UserFeedback.class).addErrors("an error occurred");// TODO get from i18n
         return successfulResult();
     }
 
