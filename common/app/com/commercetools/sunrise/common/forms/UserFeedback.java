@@ -22,15 +22,10 @@ public class UserFeedback extends Base {
     @Inject
     private Http.Context httpContext;
 
-    public Optional<ErrorsBean> getErrors() {
+    public Optional<ErrorsBean> findErrors() {
         return Optional.ofNullable(httpContext.args.get(ERROR))
-                .flatMap(errorsObj -> {
-                    if (errorsObj instanceof ErrorsBean) {
-                        return Optional.of((ErrorsBean) errorsObj);
-                    } else {
-                        return Optional.empty();
-                    }
-                });
+                .filter(errorsObj -> errorsObj instanceof ErrorsBean)
+                .map(errorsObj -> (ErrorsBean) errorsObj);
     }
 
     public void addErrors(final String message) {
@@ -44,12 +39,7 @@ public class UserFeedback extends Base {
     private void addErrors(final List<ErrorBean> errors) {
         final List<ErrorBean> errorBeans = new LinkedList<>(errors);
         if (!errorBeans.isEmpty()) {
-            Optional.ofNullable(httpContext.args.get(ERROR))
-                    .ifPresent(errorsObj -> {
-                        if (errorsObj instanceof ErrorsBean) {
-                            errorBeans.addAll(((ErrorsBean) errorsObj).getGlobalErrors());
-                        }
-                    });
+            findErrors().ifPresent(savedErrors -> errorBeans.addAll((savedErrors.getGlobalErrors())));
             replaceErrorsFromContext(errorBeans);
         }
     }

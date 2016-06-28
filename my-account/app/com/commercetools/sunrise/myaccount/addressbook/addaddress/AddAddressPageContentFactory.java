@@ -23,7 +23,7 @@ public class AddAddressPageContentFactory {
 
     protected void fillNewAddressForm(final AddAddressPageContent content, final Form<?> form) {
         final AddressBookAddressFormBean bean = addressBookAddressFormBeanFactory.create(form);
-        userFeedback.getErrors().ifPresent(bean::setErrors);
+        userFeedback.findErrors().ifPresent(bean::setErrors);
         content.setNewAddressForm(bean);
     }
 
