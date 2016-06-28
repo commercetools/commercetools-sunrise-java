@@ -7,7 +7,6 @@ import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
-import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
 import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
 import io.sphere.sdk.carts.commands.updateactions.RemoveLineItem;
 import io.sphere.sdk.client.ErrorResponseException;
@@ -56,10 +55,6 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         });
     }
 
-
-
-
-
     @RequireCSRFCheck
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
         return doRequest(() -> {
@@ -99,8 +94,6 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         });
     }
 
-
-
     protected CompletionStage<Cart> changeLineItemQuantity(final String lineItemId, final long quantity, final Cart cart) {
         final ChangeLineItemQuantity changeLineItemQuantity = ChangeLineItemQuantity.of(lineItemId, quantity);
         return sphere().execute(CartUpdateCommand.of(cart, changeLineItemQuantity));
@@ -131,8 +124,6 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         return asyncBadRequest(renderCartPage(cart, pageContent));
     }
 
-
-
     protected CompletionStage<Result> handleChangeLineItemQuantityError(final Throwable throwable,
                                                                         final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
                                                                         final Cart cart) {
@@ -158,8 +149,6 @@ public abstract class SunriseCartDetailPageController extends SunriseFrameworkCa
         }
         return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
     }
-
-
 
     protected CartDetailPageContent createPageContentWithChangeLineItemQuantityError(final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
                                                                                      final ErrorsBean errors) {
