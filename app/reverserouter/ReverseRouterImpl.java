@@ -64,7 +64,7 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
 
     @Override
     public Call processChangeLineItemQuantityForm(final String languageTag) {
-        return CartDetailPageController.changeLineItemQuantity(languageTag);
+        return ChangeLineItemQuantityController.changeLineItemQuantity(languageTag);
     }
 
     @Override
