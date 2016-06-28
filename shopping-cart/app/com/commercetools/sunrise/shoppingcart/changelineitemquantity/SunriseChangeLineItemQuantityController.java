@@ -10,7 +10,7 @@ import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartControl
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
-import io.sphere.sdk.client.ErrorResponseException;
+import io.sphere.sdk.client.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -43,28 +43,30 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
     @RequireCSRFCheck
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
         return doRequest(() -> {
-            final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm = formFactory().form(ChangeLineItemQuantityFormData.class).bindFromRequest();
-            return getOrCreateCart()
-                    .thenComposeAsync(cart -> {
-                        if (changeLineItemQuantityForm.hasErrors()) {
-                            return handleChangeLineItemQuantityFormErrors(changeLineItemQuantityForm, cart);
-                        } else {
-                            final String lineItemId = changeLineItemQuantityForm.get().getLineItemId();
-                            final Long quantity = changeLineItemQuantityForm.get().getQuantity();
-                            final CompletionStage<Result> resultStage = changeLineItemQuantity(lineItemId, quantity, cart)
-                                    .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
-                            return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                                    handleChangeLineItemQuantityError(throwable, changeLineItemQuantityForm, cart));
-                        }
-                    }, defaultContext());
+            final Form<ChangeLineItemQuantityFormData> filledForm = formFactory().form(ChangeLineItemQuantityFormData.class).bindFromRequest();
+            return filledForm.hasErrors() ? handleInvalidForm(filledForm) : handleValidForm(filledForm);
         });
     }
 
-    protected CompletionStage<Result> handleChangeLineItemQuantityFormErrors(final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
-                                                                             final Cart cart) {
-        final ErrorsBean errorsBean = new ErrorsBean(changeLineItemQuantityForm);
-        final CartDetailPageContent pageContent = createPageContentWithChangeLineItemQuantityError(changeLineItemQuantityForm, errorsBean);
-        return asyncBadRequest(renderCartPage(cart, pageContent));
+    private CompletionStage<Result> handleValidForm(final Form<ChangeLineItemQuantityFormData> form) {
+        return getOrCreateCart()
+                .thenComposeAsync(cart -> {
+                    final String lineItemId = form.get().getLineItemId();
+                    final Long quantity = form.get().getQuantity();
+                    final CompletionStage<Result> resultStage = changeLineItemQuantity(lineItemId, quantity, cart)
+                            .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
+                    return recoverWithAsync(resultStage, defaultContext(), throwable ->
+                            handleChangeLineItemQuantityError(throwable, form, cart));
+                }, defaultContext());
+    }
+
+    protected CompletionStage<Result> handleInvalidForm(final Form<ChangeLineItemQuantityFormData> form) {
+        return getOrCreateCart()
+                .thenComposeAsync(cart -> {
+                    final ErrorsBean errorsBean = new ErrorsBean(form);
+                    final CartDetailPageContent pageContent = createPageContentWithChangeLineItemQuantityError(form, errorsBean);
+                    return asyncBadRequest(renderCartPage(cart, pageContent));
+                }, defaultContext());
     }
 
     protected CompletionStage<Cart> changeLineItemQuantity(final String lineItemId, final long quantity, final Cart cart) {
@@ -81,9 +83,8 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
     protected CompletionStage<Result> handleChangeLineItemQuantityError(final Throwable throwable,
                                                                         final Form<ChangeLineItemQuantityFormData> changeLineItemQuantityForm,
                                                                         final Cart cart) {
-        if (throwable.getCause() instanceof ErrorResponseException) {
-            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
-            logger.error("The request to change line item quantity raised an exception", errorResponseException);
+        if (throwable.getCause() instanceof BadRequestException) {
+            logger.error("The request to change line item quantity raised an exception", throwable);
             final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
             final CartDetailPageContent pageContent = createPageContentWithChangeLineItemQuantityError(changeLineItemQuantityForm, errors);
             return asyncBadRequest(renderCartPage(cart, pageContent));
