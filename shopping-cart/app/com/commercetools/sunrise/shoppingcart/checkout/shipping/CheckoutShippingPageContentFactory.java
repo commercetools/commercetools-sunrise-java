@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
-import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
@@ -15,7 +15,7 @@ import play.data.Form;
 import javax.inject.Inject;
 import java.util.List;
 
-import static com.commercetools.sunrise.common.utils.FormUtils.extractFormField;
+import static com.commercetools.sunrise.common.forms.FormUtils.extractFormField;
 
 public class CheckoutShippingPageContentFactory extends Base implements WithOverridablePageContent<CheckoutShippingPageContent> {
     @Inject

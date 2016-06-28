@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.forms.ErrorsBean;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 

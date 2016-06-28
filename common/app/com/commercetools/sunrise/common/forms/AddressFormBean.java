@@ -1,18 +1,18 @@
-package com.commercetools.sunrise.common.models;
+package com.commercetools.sunrise.common.forms;
 
-import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.forms.FormBean;
 import com.commercetools.sunrise.common.models.CountryFormFieldBean;
 import com.commercetools.sunrise.common.models.TitleFormFieldBean;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;
-import io.sphere.sdk.models.Base;
 import play.Configuration;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class AddressFormBean extends Base {
+public class AddressFormBean extends FormBean {
 
     private TitleFormFieldBean salutations;
     private String firstName;
@@ -29,6 +29,7 @@ public class AddressFormBean extends Base {
     public AddressFormBean() {
     }
 
+    @Deprecated
     public AddressFormBean(@Nullable final Address address, final List<CountryCode> availableCountries,
                            final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration) {
         if (address != null) {

@@ -29,9 +29,6 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
     @Constraints.Required
     private String country;
     private String region;
-    private String phone;
-    @Constraints.Required
-    private String email;
 
     private boolean defaultShippingAddress;
     private boolean defaultBillingAddress;
@@ -127,22 +124,6 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
         this.region = region;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(final String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
-
     @Override
     public boolean isDefaultShippingAddress() {
         return defaultShippingAddress;
@@ -172,8 +153,6 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
             this.postalCode = address.getPostalCode();
             this.country = address.getCountry().getAlpha2();
             this.region = address.getRegion();
-            this.phone = address.getPhone();
-            this.email = address.getEmail();
             this.defaultShippingAddress = Objects.equals(customer.getDefaultShippingAddressId(), address.getId());
             this.defaultBillingAddress = Objects.equals(customer.getDefaultBillingAddressId(), address.getId());
         }
@@ -191,8 +170,6 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
                 .city(getCity())
                 .postalCode(getPostalCode())
                 .region(getRegion())
-                .phone(getPhone())
-                .email(getEmail())
                 .build();
     }
 }

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.models;
 
-import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.neovisionaries.i18n.CountryCode;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -16,6 +16,7 @@ public class CountryFormFieldBean {
     public CountryFormFieldBean() {
     }
 
+    @Deprecated
     public CountryFormFieldBean(final List<CountryCode> availableCountries, @Nullable final CountryCode selectedCountry,
                                 final UserContext userContext) {
         this.list = availableCountries.stream()

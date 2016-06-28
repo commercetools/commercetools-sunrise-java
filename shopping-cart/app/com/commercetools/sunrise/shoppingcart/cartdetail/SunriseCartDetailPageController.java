@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.cartdetail;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
-import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;

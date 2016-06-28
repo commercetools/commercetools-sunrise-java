@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.login;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
@@ -31,8 +31,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.common.utils.FormUtils.extractBooleanFormField;
-import static com.commercetools.sunrise.common.utils.FormUtils.extractFormField;
+import static com.commercetools.sunrise.common.forms.FormUtils.extractBooleanFormField;
+import static com.commercetools.sunrise.common.forms.FormUtils.extractFormField;
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.removeCustomerSessionData;
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;

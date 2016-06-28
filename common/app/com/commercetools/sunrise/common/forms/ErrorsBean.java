@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.errors;
+package com.commercetools.sunrise.common.forms;
 
 import io.sphere.sdk.models.Base;
 import play.data.Form;

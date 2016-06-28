@@ -2,8 +2,8 @@ package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.errors.ErrorsBean;
-import com.commercetools.sunrise.common.models.AddressFormBean;
+import com.commercetools.sunrise.common.forms.ErrorsBean;
+import com.commercetools.sunrise.common.forms.AddressFormBean;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;

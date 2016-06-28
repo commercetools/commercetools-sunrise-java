@@ -1,8 +1,9 @@
-package com.commercetools.sunrise.common.errors;
+package com.commercetools.sunrise.common.forms;
 
 import io.sphere.sdk.models.Base;
 
 public class ErrorBean extends Base {
+
     private String message;
 
     public ErrorBean() {

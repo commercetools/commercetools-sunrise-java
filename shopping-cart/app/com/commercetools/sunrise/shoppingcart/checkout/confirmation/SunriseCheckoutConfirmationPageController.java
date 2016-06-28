@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
-import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.common.utils.FormUtils.extractBooleanFormField;
+import static com.commercetools.sunrise.common.forms.FormUtils.extractBooleanFormField;
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.removeCartSessionData;
 import static com.commercetools.sunrise.shoppingcart.OrderSessionUtils.overwriteLastOrderIdSessionData;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;

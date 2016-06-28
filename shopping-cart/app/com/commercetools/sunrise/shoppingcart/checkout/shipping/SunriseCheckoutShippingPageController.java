@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
-import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.google.inject.Injector;

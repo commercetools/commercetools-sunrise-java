@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
-import com.commercetools.sunrise.common.errors.UserFeedback;
+import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import com.google.inject.Injector;
@@ -15,7 +15,6 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
 
-import static com.commercetools.sunrise.common.utils.FormUtils.extractUserFeedback;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public abstract class AddressBookManagementController extends MyAccountController {
@@ -31,8 +30,7 @@ public abstract class AddressBookManagementController extends MyAccountControlle
     }
 
     protected final void saveFormErrors(final Form<?> form) {
-        final Http.Context context = injector.getInstance(Http.Context.class);
-        context.flash().putAll(extractUserFeedback(form));
+        injector.getInstance(UserFeedback.class).addErrors(form);
     }
 
     protected final void saveUnexpectedError(final SphereException sphereException) {

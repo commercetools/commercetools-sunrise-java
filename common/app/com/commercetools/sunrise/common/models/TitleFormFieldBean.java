@@ -21,6 +21,7 @@ public class TitleFormFieldBean extends Base {
     public TitleFormFieldBean() {
     }
 
+    @Deprecated
     public TitleFormFieldBean(@Nullable final String selectedTitle, final UserContext userContext,
                               final I18nResolver i18nResolver, final Configuration configuration) {
         this.list = configuration.getStringList(CONFIG_TITLE_OPTIONS, emptyList()).stream()

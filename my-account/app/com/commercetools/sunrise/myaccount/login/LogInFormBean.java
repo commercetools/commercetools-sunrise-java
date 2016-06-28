@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.login;
 
-import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.forms.ErrorsBean;
 import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;

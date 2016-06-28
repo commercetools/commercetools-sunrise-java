@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.errors.ErrorsBean;
+import com.commercetools.sunrise.common.forms.ErrorsBean;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 

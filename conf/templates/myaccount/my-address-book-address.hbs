@@ -8,14 +8,14 @@
 <div class="address-book-edit-delete">
     <div>
         <a href="{{addressInfo.addressEditUrl}}">
-            <img src="{{@root.meta.assetsPath}}/img/edit-1-e76b284c78cd97506e3b64cfd0c089ae.png" alt="edit icon">
+            <img src="{{@root.meta.assetsPath}}img/edit-1-e76b284c78cd97506e3b64cfd0c089ae.png" alt="edit icon">
             {{i18n "my-account:addressBook.buttons.edit"}}
         </a>
     </div>
     <div>
         <form action="{{addressInfo.addressDeleteUrl}}" method="POST">
             <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
-            <input type="image" src="{{@root.meta.assetsPath}}/img/delete-60px-421d04c332afe6d751d51e28934399fd.png" alt="delete icon">
+            <input type="image" src="{{@root.meta.assetsPath}}img/delete-60px-421d04c332afe6d751d51e28934399fd.png" alt="delete icon">
             {{i18n "my-account:addressBook.buttons.delete"}}
         </form>
     </div>
