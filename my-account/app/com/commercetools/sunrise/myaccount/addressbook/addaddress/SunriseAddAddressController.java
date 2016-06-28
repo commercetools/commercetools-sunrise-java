@@ -125,12 +125,9 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     protected <T extends AddressFormData> CompletionStage<Customer> addAddressToCustomer(final Customer customer, final T formData) {
         final Address address = formData.toAddress();
         return addAddress(customer, address)
-                .thenComposeAsync(updatedCustomer -> findAddress(updatedCustomer, address)
-                        .map(addressWithId -> {
-                            final boolean defaultShipping = formData.isDefaultShippingAddress();
-                            final boolean defaultBilling = formData.isDefaultBillingAddress();
-                            return setAddressAsDefault(updatedCustomer, addressWithId, defaultShipping, defaultBilling);
-                        }).orElseGet(() -> completedFuture(updatedCustomer)));
+                .thenComposeAsync(updatedCustomer -> findAddressId(updatedCustomer, address)
+                        .map(addressId -> setAddressAsDefault(updatedCustomer, addressId, formData))
+                        .orElseGet(() -> completedFuture(updatedCustomer)));
     }
 
     protected CompletionStage<Html> renderPage(final Customer customer, final Form<?> form) {
@@ -149,14 +146,13 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
         return sphere().execute(CustomerUpdateCommand.of(customer, addAddressAction));
     }
 
-    private CompletionStage<Customer> setAddressAsDefault(final Customer customer, final Address address,
-                                                          final boolean defaultShipping, final boolean defaultBilling) {
+    private <T extends AddressFormData> CompletionStage<Customer> setAddressAsDefault(final Customer customer, final String addressId, final T formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        if (defaultShipping) {
-            updateActions.add(SetDefaultShippingAddress.ofAddress(address));
+        if (formData.isDefaultShippingAddress()) {
+            updateActions.add(SetDefaultShippingAddress.of(addressId));
         }
-        if (defaultBilling) {
-            updateActions.add(SetDefaultBillingAddress.ofAddress(address));
+        if (formData.isDefaultBillingAddress()) {
+            updateActions.add(SetDefaultBillingAddress.of(addressId));
         }
         if (!updateActions.isEmpty()) {
             return sphere().execute(CustomerUpdateCommand.of(customer, updateActions));
@@ -165,9 +161,10 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
         }
     }
 
-    private Optional<Address> findAddress(final Customer customer, final Address address) {
+    private Optional<String> findAddressId(final Customer customer, final Address address) {
         return customer.getAddresses().stream()
                 .filter(a -> a.equalsIgnoreId(address))
-                .findFirst();
+                .findFirst()
+                .map(Address::getId);
     }
 }

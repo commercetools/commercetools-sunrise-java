@@ -7,9 +7,12 @@ import com.commercetools.sunrise.myaccount.addressbook.AddressBookManagementCont
 import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressFormData;
 import com.google.inject.Injector;
+import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 import io.sphere.sdk.customers.commands.updateactions.ChangeAddress;
+import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
+import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.SphereException;
 import org.apache.commons.lang3.NotImplementedException;
@@ -25,8 +28,9 @@ import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
@@ -101,6 +105,11 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
         return redirectToAddressBook();
     }
 
+    protected <T extends AddressFormData> CompletionStage<Result> handleInvalidSubmittedAddress(final Customer customer, final Address oldAddress, final Form<T> form) {
+        saveFormErrors(form);
+        return asyncBadRequest(renderPage(customer, form));
+    }
+
     protected <T extends AddressFormData> CompletionStage<Result> applySubmittedAddress(final Customer customer, final Address oldAddress, final T formData) {
         final CompletionStage<Result> resultStage = changeAddressFromCustomer(customer, oldAddress, formData)
                 .thenComposeAsync(updatedCustomer -> displaySuccessfulCustomerUpdate(updatedCustomer, oldAddress, formData), HttpExecution.defaultContext());
@@ -122,14 +131,15 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
         return exceptionallyCompletedFuture(throwable);
     }
 
-    protected <T extends AddressFormData> CompletionStage<Result> handleInvalidSubmittedAddress(final Customer customer, final Address oldAddress, final Form<T> form) {
-        saveFormErrors(form);
-        return asyncBadRequest(renderPage(customer, form));
+    protected <T extends AddressFormData> CompletionStage<Customer> changeAddressFromCustomer(final Customer customer, final Address oldAddress, final T formData) {
+        return changeAddress(customer, oldAddress, formData);
     }
 
-    protected <T extends AddressFormData> CompletionStage<Customer> changeAddressFromCustomer(final Customer customer, final Address oldAddress, final T formData) {
-        final ChangeAddress updateAction = ChangeAddress.ofOldAddressToNewAddress(oldAddress, formData.toAddress());
-        return sphere().execute(CustomerUpdateCommand.of(customer, updateAction));
+    private <T extends AddressFormData> CompletionStage<Customer> changeAddress(final Customer customer, final Address oldAddress, final T formData) {
+        final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
+        updateActions.add(ChangeAddress.ofOldAddressToNewAddress(oldAddress, formData.toAddress()));
+        updateActions.addAll(setDefaultAddressActions(customer, oldAddress.getId(), formData));
+        return sphere().execute(CustomerUpdateCommand.of(customer, updateActions));
     }
 
     protected CompletionStage<Html> renderPage(final Customer customer, final Form<?> form) {
@@ -141,5 +151,30 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
         final DefaultAddressFormData formData = new DefaultAddressFormData();
         formData.apply(address);
         return formFactory.form(DefaultAddressFormData.class).fill(formData);
+    }
+
+    private <T extends AddressFormData> List<UpdateAction<Customer>> setDefaultAddressActions(final Customer customer, final String addressId, final T formData) {
+        final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
+        defaultAddressAction(addressId, formData.isDefaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
+                .ifPresent(updateActions::add);
+        defaultAddressAction(addressId, formData.isDefaultBillingAddress(), customer.getDefaultBillingAddressId(), SetDefaultBillingAddress::of)
+                .ifPresent(updateActions::add);
+        return updateActions;
+    }
+
+    private Optional<UpdateAction<Customer>> defaultAddressAction(final String addressId, final boolean isNewDefaultAddress,
+                                                                  @Nullable final String defaultAddressId,
+                                                                  final Function<String, UpdateAction<Customer>> actionCreator) {
+        final boolean defaultNeedsChange = isDefaultAddressDifferent(addressId, isNewDefaultAddress, defaultAddressId);
+        if (defaultNeedsChange) {
+            final String addressIdToSetAsDefault = isNewDefaultAddress ? addressId : null;
+            return Optional.of(actionCreator.apply(addressIdToSetAsDefault));
+        }
+        return Optional.empty();
+    }
+
+    private boolean isDefaultAddressDifferent(final String addressId, final boolean isNewDefaultAddress, @Nullable final String defaultAddressId) {
+        final boolean isDefaultAddress = Objects.equals(defaultAddressId, addressId);
+        return isNewDefaultAddress ^ isDefaultAddress;
     }
 }
