@@ -15,7 +15,6 @@ import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.SphereException;
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -143,8 +142,8 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     }
 
     protected CompletionStage<Html> renderPage(final Customer customer, final Form<?> form) {
-        throw new NotImplementedException("Change address controller page");
-        //return renderPage(pageContent, getTemplateName();
+        final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(customer, form);
+        return renderPage(pageContent, getTemplateName());
     }
 
     protected Form<?> obtainFilledForm(final Customer customer, @Nullable final Address address) {
