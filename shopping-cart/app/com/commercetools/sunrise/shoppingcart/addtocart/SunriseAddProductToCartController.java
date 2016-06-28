@@ -1,10 +1,11 @@
 package com.commercetools.sunrise.shoppingcart.addtocart;
 
 import com.commercetools.sunrise.common.controllers.FormBindingTrait;
-import com.commercetools.sunrise.common.errors.UserFeedback;
+import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.shoppingcart.cartdetail.AddProductToCartFormData;
 import com.commercetools.sunrise.shoppingcart.cartdetail.AddProductToCartFormDataLike;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
@@ -14,6 +15,7 @@ import play.data.Form;
 import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Result;
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -25,6 +27,8 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseAddProductToCartController extends SunriseFrameworkCartController implements FormBindingTrait<AddProductToCartFormDataLike> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseAddProductToCartController.class);
+    @Inject
+    private Injector injector;
 
     @RequireCSRFCheck
     public CompletionStage<Result> addProductToCart(final String languageTag) {
@@ -54,7 +58,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     }
 
     protected CompletionStage<Result> handleInvalidForm(final Form<? extends AddProductToCartFormDataLike> form) {
-        flash(UserFeedback.ERROR, "there are errors in the form");// TODO get from i18n
+        injector.getInstance(UserFeedback.class).addErrors(form);
         return successfulResult();
     }
 

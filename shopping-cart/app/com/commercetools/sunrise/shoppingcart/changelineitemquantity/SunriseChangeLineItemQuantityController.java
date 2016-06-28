@@ -1,9 +1,10 @@
 package com.commercetools.sunrise.shoppingcart.changelineitemquantity;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.errors.UserFeedback;
+import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.shoppingcart.cartdetail.ChangeLineItemQuantityFormData;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
@@ -28,6 +29,8 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
 
     @Inject
     private ReverseRouter reverseRouter;
+    @Inject
+    private Injector injector;
 
     @RequireCSRFCheck
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
@@ -51,7 +54,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
     }
 
     protected CompletionStage<Result> handleInvalidForm(final Form<ChangeLineItemQuantityFormData> form) {
-        flash(UserFeedback.ERROR, "The form contains invalid data.");// TODO get from i18n
+        injector.getInstance(UserFeedback.class).addErrors(form);
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
     }
 
