@@ -21,7 +21,6 @@ import play.mvc.Call;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +31,6 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
-@Singleton
 public abstract class SunriseCheckoutShippingPageController extends SunriseFrameworkCartController
         implements WithOverwriteableTemplateName, FormBindingTrait<CheckoutShippingFormDataLike> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingPageController.class);
