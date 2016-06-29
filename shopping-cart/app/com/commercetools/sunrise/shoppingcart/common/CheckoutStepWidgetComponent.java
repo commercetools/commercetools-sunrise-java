@@ -17,7 +17,7 @@ public class CheckoutStepWidgetComponent implements ControllerComponent, Sunrise
     private static final Map<Class<?>, StepWidgetBean> mapping = setupData();
 
     private static HashMap setupData() {
-        final HashMap result = new HashMap();
+        final HashMap<Class<?>, StepWidgetBean> result = new HashMap<>();
         result.put(CheckoutAddressPageContent.class, ADDRESS);
         result.put(CheckoutShippingPageContent.class, SHIPPING);
         result.put(CheckoutPaymentPageContent.class, PAYMENT);

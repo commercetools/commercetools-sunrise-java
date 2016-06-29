@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
-public class CheckoutConfirmationFormData {
+public class DefaultCheckoutConfirmationFormData {
 
     //@Constraints.Required
     //private boolean agreeTerms;
     //private boolean subscribeNewsletter;
 
-    public CheckoutConfirmationFormData() {
+    public DefaultCheckoutConfirmationFormData() {
     }
 
     public String validate() {

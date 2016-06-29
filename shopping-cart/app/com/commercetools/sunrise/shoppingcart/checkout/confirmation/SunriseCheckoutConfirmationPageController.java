@@ -60,7 +60,7 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
-            final Form<CheckoutConfirmationFormData> confirmationForm = formFactory.form(CheckoutConfirmationFormData.class).bindFromRequest(request());
+            final Form<DefaultCheckoutConfirmationFormData> confirmationForm = formFactory.form(DefaultCheckoutConfirmationFormData.class).bindFromRequest(request());
             return getOrCreateCart()
                     .thenComposeAsync(cart -> {
                         if (confirmationForm.hasErrors()) {
@@ -99,14 +99,14 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
         return completedFuture(redirect(call));
     }
 
-    protected CompletionStage<Result> handleFormErrors(final Form<CheckoutConfirmationFormData> confirmationForm, final Cart cart) {
+    protected CompletionStage<Result> handleFormErrors(final Form<DefaultCheckoutConfirmationFormData> confirmationForm, final Cart cart) {
         final ErrorsBean errors = new ErrorsBean(confirmationForm);
         final CheckoutConfirmationPageContent pageContent = createPageContentWithConfirmationError(confirmationForm, errors);
         return asyncBadRequest(renderCheckoutConfirmationPage(cart, pageContent));
     }
 
     protected CompletionStage<Result> handleCreateOrderError(final Throwable throwable,
-                                                             final Form<CheckoutConfirmationFormData> confirmationForm,
+                                                             final Form<DefaultCheckoutConfirmationFormData> confirmationForm,
                                                              final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
             final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
@@ -124,7 +124,7 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
         return pageContent;
     }
 
-    protected CheckoutConfirmationPageContent createPageContentWithConfirmationError(final Form<CheckoutConfirmationFormData> confirmationForm,
+    protected CheckoutConfirmationPageContent createPageContentWithConfirmationError(final Form<DefaultCheckoutConfirmationFormData> confirmationForm,
                                                                                      final ErrorsBean errors) {
         final CheckoutConfirmationPageContent pageContent = new CheckoutConfirmationPageContent();
         final boolean agreeToTerms = extractBooleanFormField(confirmationForm, "agreeTerms");

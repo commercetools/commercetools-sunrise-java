@@ -68,10 +68,9 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     @Override
     public Form<? extends CheckoutAddressFormData> createForm() {
-        final Form<? extends CheckoutAddressFormData> form = isBillingDifferent()
+        return isBillingDifferent()
                 ? formFactory().form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class)
                 : formFactory().form(getFormDataClass());
-        return form;
     }
 
     @Override
