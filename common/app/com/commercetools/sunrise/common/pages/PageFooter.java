@@ -1,4 +1,6 @@
 package com.commercetools.sunrise.common.pages;
 
-public class PageFooter {
+import com.commercetools.sunrise.common.models.ModelBean;
+
+public class PageFooter extends ModelBean {
 }

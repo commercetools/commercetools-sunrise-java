@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.localization.LocalizationSelectorBean;
+import com.commercetools.sunrise.common.models.ModelBean;
 import com.commercetools.sunrise.shoppingcart.MiniCartBean;
-import io.sphere.sdk.models.Base;
 
-public class PageHeader extends Base {
+public class PageHeader extends ModelBean {
 
     private String title;
     private String customerServiceNumber;
