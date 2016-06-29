@@ -10,16 +10,16 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public interface FormBindingTrait<T> {
 
     default CompletionStage<Form<? extends T>> bindForm() {
-        final Form<? extends T> form = bindFormFromRequest();
+        final Form<? extends T> form = createForm().bindFromRequest();
         return asyncValidation(form);
+    }
+
+    default Form<? extends T> createForm() {
+        return formFactory().form(getFormDataClass());
     }
 
     default CompletionStage<Form<? extends T>> asyncValidation(final Form<? extends T> filledForm) {
         return completedFuture(filledForm);
-    }
-
-    default Form<? extends T> bindFormFromRequest() {
-        return formFactory().form(getFormDataClass()).bindFromRequest();
     }
 
     Class<? extends T> getFormDataClass();
