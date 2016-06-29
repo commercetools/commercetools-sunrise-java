@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.common.controllers.FormBindingTrait;
+import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
@@ -31,7 +31,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseCheckoutShippingPageController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName, FormBindingTrait<CheckoutShippingFormDataLike> {
+        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutShippingFormDataLike> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingPageController.class);
 
     @Inject
@@ -56,9 +56,7 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> bindForm().thenComposeAsync(form -> {
-            return form.hasErrors() ? handleInvalidForm(form) : handleValidForm(form);
-        }, defaultContext()));
+        return formProcessingAction(this);
     }
 
     @Override
@@ -66,7 +64,8 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
         return CheckoutShippingFormData.class;
     }
 
-    private CompletionStage<Result> handleValidForm(final Form<? extends CheckoutShippingFormDataLike> form) {
+    @Override
+    public CompletionStage<Result> handleValidForm(final Form<? extends CheckoutShippingFormDataLike> form) {
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
         final String shippingMethodId = form.get().getShippingMethodId();
@@ -89,7 +88,8 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
         return completedFuture(redirect(call));
     }
 
-    protected CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutShippingFormDataLike> shippingForm) {
+    @Override
+    public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutShippingFormDataLike> shippingForm) {
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
                     final ErrorsBean errors = new ErrorsBean(shippingForm);
