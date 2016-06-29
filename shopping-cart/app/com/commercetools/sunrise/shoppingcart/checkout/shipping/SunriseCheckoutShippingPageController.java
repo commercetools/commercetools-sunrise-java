@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
+import com.commercetools.sunrise.common.controllers.FormBindingTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
@@ -33,7 +34,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @Singleton
 public abstract class SunriseCheckoutShippingPageController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName {
+        implements WithOverwriteableTemplateName, FormBindingTrait<CheckoutShippingFormDataLike> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingPageController.class);
 
     @Inject
@@ -60,21 +61,25 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> {
-            final Form<CheckoutShippingFormData> shippingForm = formFactory.form(CheckoutShippingFormData.class).bindFromRequest();
-            return getOrCreateCart()
-                    .thenComposeAsync(cart -> {
-                        if (shippingForm.hasErrors()) {
-                            return handleFormErrors(shippingForm, cart);
-                        } else {
-                            final String shippingMethodId = shippingForm.get().getShippingMethodId();
-                            final CompletionStage<Result> resultStage = setShippingToCart(cart, shippingMethodId)
-                                    .thenComposeAsync(updatedCart -> handleSuccessfulSetShipping(), defaultContext());
-                            return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                                    handleSetShippingToCartError(throwable, shippingForm, cart));
-                        }
-                    }, defaultContext());
-        });
+        return doRequest(() -> bindForm().thenComposeAsync(form -> {
+            return form.hasErrors() ? handleInvalidForm(form) : handleValidForm(form);
+        }, defaultContext()));
+    }
+
+    @Override
+    public Class<? extends CheckoutShippingFormDataLike> getFormDataClass() {
+        return CheckoutShippingFormData.class;
+    }
+
+    private CompletionStage<Result> handleValidForm(final Form<? extends CheckoutShippingFormDataLike> form) {
+        return getOrCreateCart()
+                .thenComposeAsync(cart -> {
+        final String shippingMethodId = form.get().getShippingMethodId();
+        final CompletionStage<Result> resultStage = setShippingToCart(cart, shippingMethodId)
+                .thenComposeAsync(updatedCart -> handleSuccessfulSetShipping(), defaultContext());
+                    return recoverWithAsync(resultStage, defaultContext(), throwable ->
+                            handleSetShippingToCartError(throwable, form, cart));
+                }, defaultContext());
     }
 
     protected CompletionStage<Cart> setShippingToCart(final Cart cart, final String shippingMethodId) {
@@ -89,21 +94,23 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
         return completedFuture(redirect(call));
     }
 
-    protected CompletionStage<Result> handleFormErrors(final Form<CheckoutShippingFormData> shippingForm,
-                                                       final Cart cart) {
-        final ErrorsBean errors = new ErrorsBean(shippingForm);
-        return renderErrorForm(shippingForm, cart, errors);
+    protected CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutShippingFormDataLike> shippingForm) {
+        return getOrCreateCart()
+                .thenComposeAsync(cart -> {
+                    final ErrorsBean errors = new ErrorsBean(shippingForm);
+                    return renderErrorForm(shippingForm, cart, errors);
+                }, defaultContext());
     }
 
     protected CompletionStage<Result> handleSetShippingToCartError(final Throwable throwable,
-                                                                   final Form<CheckoutShippingFormData> shippingForm,
+                                                                   final Form<? extends CheckoutShippingFormDataLike> shippingForm,
                                                                    final Cart cart) {
         logger.error("The request to set shipping to cart raised an exception", throwable);
         final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
         return renderErrorForm(shippingForm, cart, errors);
     }
 
-    protected CompletionStage<Result> renderErrorForm(final Form<CheckoutShippingFormData> shippingForm, final Cart cart, final ErrorsBean errors) {
+    protected CompletionStage<Result> renderErrorForm(final Form<? extends CheckoutShippingFormDataLike> shippingForm, final Cart cart, final ErrorsBean errors) {
         return getShippingMethods()
                 .thenComposeAsync(shippingMethods -> {
                     final CheckoutShippingPageContent pageContent = pageContentFactory.create(cart, shippingMethods, errors, shippingForm);
