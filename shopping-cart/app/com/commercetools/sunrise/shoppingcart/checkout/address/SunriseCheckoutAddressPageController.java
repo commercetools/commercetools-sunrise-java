@@ -5,7 +5,6 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -19,7 +18,6 @@ import io.sphere.sdk.models.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Call;
@@ -45,10 +43,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     protected CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
-    @Inject
-    private FormFactory formFactory;
-    @Inject
-    protected CartLikeBeanFactory cartLikeBeanFactory;
+
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
@@ -74,8 +69,8 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     @Override
     public Form<? extends CheckoutAddressFormDataLike> bindFormFromRequest() {
         final Form<? extends CheckoutAddressFormDataLike> form = isBillingDifferent()
-                ? formFactory.form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class)
-                : formFactory.form(getFormDataClass());
+                ? formFactory().form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class)
+                : formFactory().form(getFormDataClass());
         return form.bindFromRequest();
     }
 
@@ -98,7 +93,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     private boolean isBillingDifferent() {
         final String flagFieldName = "billingAddressDifferentToBillingAddress";
-        final String fieldValue = formFactory.form().bindFromRequest().get(flagFieldName);
+        final String fieldValue = formFactory().form().bindFromRequest().get(flagFieldName);
         return "true".equals(fieldValue);
     }
 
@@ -126,7 +121,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
             if (shippingAddressForm.hasErrors()) {
                 errors = new ErrorsBean(shippingAddressForm);
             }
-            final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
+            final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors, cart);
             return asyncBadRequest(renderCheckoutAddressPage(cart, pageContent));
         }, defaultContext());
     }
@@ -144,17 +139,13 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
         logger.error("The request to set address to cart raised an exception", errorResponseException);
         final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
+        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors, cart);
         return asyncBadRequest(renderCheckoutAddressPage(cart, pageContent));
     }
 
     protected CompletionStage<Html> renderCheckoutAddressPage(final Cart cart, final CheckoutAddressPageContent pageContent) {
-        fill(cart, pageContent);
-        return renderPage(pageContent, getTemplateName());
-    }
 
-    protected void fill(final Cart cart, final CheckoutAddressPageContent pageContent) {
-        pageContent.setCart(cartLikeBeanFactory.create(cart));
+        return renderPage(pageContent, getTemplateName());
     }
 
     @Override
