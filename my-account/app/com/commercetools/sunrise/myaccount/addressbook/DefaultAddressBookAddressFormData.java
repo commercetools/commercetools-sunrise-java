@@ -10,7 +10,7 @@ import play.data.validation.Constraints;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
-public class DefaultAddressFormData extends Base implements AddressFormData {
+public class DefaultAddressBookAddressFormData extends Base implements AddressBookAddressFormData {
 
     private String csrfToken;
 
@@ -33,7 +33,7 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
     private boolean defaultShippingAddress;
     private boolean defaultBillingAddress;
 
-    public DefaultAddressFormData() {
+    public DefaultAddressBookAddressFormData() {
     }
 
     public String validate() {

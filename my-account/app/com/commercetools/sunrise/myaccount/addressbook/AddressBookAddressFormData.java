@@ -1,10 +1,8 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
-import io.sphere.sdk.models.Address;
+import com.commercetools.sunrise.common.forms.AddressFormData;
 
-public interface AddressFormData {
-
-    Address toAddress();
+public interface AddressBookAddressFormData extends AddressFormData {
 
     boolean isDefaultShippingAddress();
 
