@@ -2,7 +2,6 @@ package com.commercetools.sunrise.shoppingcart.removelineitem;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.forms.UserFeedback;
-import com.commercetools.sunrise.shoppingcart.cartdetail.RemoveLineItemFormData;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
@@ -36,19 +35,19 @@ public abstract class SunriseRemoveLineItemController extends SunriseFrameworkCa
     public CompletionStage<Result> removeLineItem(final String languageTag) {
         return doRequest(() -> {
             final Form<RemoveLineItemFormData> removeLineItemForm = formFactory().form(RemoveLineItemFormData.class).bindFromRequest();
-            return getOrCreateCart()
-                    .thenComposeAsync(cart -> {
-                        if (removeLineItemForm.hasErrors()) {
-                            return handleRemoveLineItemFormErrors(removeLineItemForm, cart);
-                        } else {
-                            final String lineItemId = removeLineItemForm.get().getLineItemId();
-                            final CompletionStage<Result> resultStage = removeLineItem(lineItemId, cart)
-                                    .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
-                            return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                                    handleRemoveLineItemError(throwable, removeLineItemForm, cart));
-                        }
-                    }, defaultContext());
+            return removeLineItemForm.hasErrors() ? handleRemoveLineItemFormErrors(removeLineItemForm) : handleValidForm(removeLineItemForm);
         });
+    }
+
+    private CompletionStage<Result> handleValidForm(final Form<RemoveLineItemFormData> removeLineItemForm) {
+        return getOrCreateCart()
+                .thenComposeAsync(cart -> {
+                    final String lineItemId = removeLineItemForm.get().getLineItemId();
+                    final CompletionStage<Result> resultStage = removeLineItem(lineItemId, cart)
+                            .thenComposeAsync(updatedCart -> handleSuccessfulCartChange(updatedCart), defaultContext());
+                    return recoverWithAsync(resultStage, defaultContext(), throwable ->
+                            handleRemoveLineItemError(throwable, removeLineItemForm, cart));
+                }, defaultContext());
     }
 
     protected CompletionStage<Cart> removeLineItem(final String lineItemId, final Cart cart) {
@@ -62,8 +61,7 @@ public abstract class SunriseRemoveLineItemController extends SunriseFrameworkCa
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
     }
 
-    protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<RemoveLineItemFormData> removeLineItemForm,
-                                                                     final Cart cart) {
+    protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<RemoveLineItemFormData> removeLineItemForm) {
         injector.getInstance(UserFeedback.class).addErrors(removeLineItemForm);
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
     }

@@ -24,7 +24,6 @@ import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
-import scala.concurrent.ExecutionContextExecutor;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -64,8 +63,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     protected <F extends CheckoutAddressFormDataLike> CompletionStage<Result> process(final Class<F> formClass) {
         return doRequest(() -> {
             final CompletionStage<Cart> loadedCart = getOrCreateCart();
-            final ExecutionContextExecutor executor = defaultContext();
-            return loadedCart.thenComposeAsync(cart -> processAddressForm(cart, formClass), executor);
+            return loadedCart.thenComposeAsync(cart -> processAddressForm(cart, formClass), defaultContext());
         });
     }
 

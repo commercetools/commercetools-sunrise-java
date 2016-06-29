@@ -6,7 +6,6 @@ import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.hooks.CartLoadedHook;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
-import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import com.google.inject.Inject;
 import com.neovisionaries.i18n.CountryCode;

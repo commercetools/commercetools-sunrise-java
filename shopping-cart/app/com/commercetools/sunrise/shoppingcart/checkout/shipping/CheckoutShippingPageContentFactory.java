@@ -36,7 +36,7 @@ public class CheckoutShippingPageContentFactory extends Base implements WithOver
         return pageContent;
     }
 
-    public CheckoutShippingPageContent create(final Cart cart, final List<ShippingMethod> shippingMethods, final ErrorsBean errors, final Form<CheckoutShippingFormData> shippingForm) {
+    public CheckoutShippingPageContent create(final Cart cart, final List<ShippingMethod> shippingMethods, final ErrorsBean errors, final Form<? extends CheckoutShippingFormDataLike> shippingForm) {
         final CheckoutShippingPageContent pageContent = createPageContent();
         final String selectedShippingMethodId = extractFormField(shippingForm, "shippingMethodId");
         final CheckoutShippingFormBean formBean = checkoutShippingFormBeanFactory.create(shippingMethods, selectedShippingMethodId);

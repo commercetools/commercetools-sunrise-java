@@ -2,10 +2,10 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.CategoryBean;
+import com.commercetools.sunrise.common.models.ModelBean;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public class PageNavMenu extends Base {
+public class PageNavMenu extends ModelBean {
 
     private List<CategoryBean> categories;
 

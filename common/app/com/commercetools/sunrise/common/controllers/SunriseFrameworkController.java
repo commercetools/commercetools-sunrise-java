@@ -35,6 +35,8 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static play.libs.concurrent.HttpExecution.defaultContext;
+
 public abstract class SunriseFrameworkController extends Controller {
     private static final Logger pageDataLoggerAsJson = LoggerFactory.getLogger(SunrisePageData.class.getName() + "Json");
     private static final ObjectMapper objectMapper = createObjectMapper();
@@ -161,5 +163,11 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected final HookContext hooks() {
         return hookContext;
+    }
+
+    protected <X> CompletionStage<Result> formProcessingAction(final SimpleFormBindingControllerTrait<X> controller) {
+        return doRequest(() -> controller.bindForm().thenComposeAsync(form -> {
+            return form.hasErrors() ? controller.handleInvalidForm(form) : controller.handleValidForm(form);
+        }, defaultContext()));
     }
 }

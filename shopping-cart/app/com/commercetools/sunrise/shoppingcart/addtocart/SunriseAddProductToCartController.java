@@ -2,8 +2,6 @@ package com.commercetools.sunrise.shoppingcart.addtocart;
 
 import com.commercetools.sunrise.common.controllers.FormBindingTrait;
 import com.commercetools.sunrise.common.forms.UserFeedback;
-import com.commercetools.sunrise.shoppingcart.cartdetail.AddProductToCartFormData;
-import com.commercetools.sunrise.shoppingcart.cartdetail.AddProductToCartFormDataLike;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
