@@ -24,7 +24,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
-public abstract class SunriseChangeLineItemQuantityController extends SunriseFrameworkCartController implements FormBindingTrait<ChangeLineItemQuantityFormDataLike> {
+public abstract class SunriseChangeLineItemQuantityController extends SunriseFrameworkCartController implements FormBindingTrait<ChangeLineItemQuantityFormData> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeLineItemQuantityController.class);
 
     @Inject
@@ -42,14 +42,14 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
     }
 
     @Override
-    public Class<? extends ChangeLineItemQuantityFormDataLike> getFormDataClass() {
-        return ChangeLineItemQuantityFormData.class;
+    public Class<? extends ChangeLineItemQuantityFormData> getFormDataClass() {
+        return DefaultChangeLineItemQuantityFormData.class;
     }
 
-    private CompletionStage<Result> handleValidForm(final Form<? extends ChangeLineItemQuantityFormDataLike> form) {
+    private CompletionStage<Result> handleValidForm(final Form<? extends ChangeLineItemQuantityFormData> form) {
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
-                    final ChangeLineItemQuantityFormDataLike formData = form.get();
+                    final ChangeLineItemQuantityFormData formData = form.get();
                     final String lineItemId = formData.getLineItemId();
                     final Long quantity = formData.getQuantity();
                     final CompletionStage<Result> resultStage = changeLineItemQuantity(cart, lineItemId, quantity)
@@ -59,7 +59,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
                 }, defaultContext());
     }
 
-    protected CompletionStage<Result> handleInvalidForm(final Form<? extends ChangeLineItemQuantityFormDataLike> form) {
+    protected CompletionStage<Result> handleInvalidForm(final Form<? extends ChangeLineItemQuantityFormData> form) {
         injector.getInstance(UserFeedback.class).addErrors(form);
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
     }
@@ -75,7 +75,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
     }
 
     protected CompletionStage<Result> handleChangeLineItemQuantityError(final Throwable throwable,
-                                                                        final Form<? extends ChangeLineItemQuantityFormDataLike> form,
+                                                                        final Form<? extends ChangeLineItemQuantityFormData> form,
                                                                         final Cart cart) {
         injector.getInstance(UserFeedback.class).addErrors("The request to change line item quantity raised an exception");// TODO get from i18n
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));

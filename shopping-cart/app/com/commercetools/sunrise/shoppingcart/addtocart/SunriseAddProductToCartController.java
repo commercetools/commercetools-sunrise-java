@@ -23,7 +23,7 @@ import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
-public abstract class SunriseAddProductToCartController extends SunriseFrameworkCartController implements FormBindingTrait<AddProductToCartFormDataLike> {
+public abstract class SunriseAddProductToCartController extends SunriseFrameworkCartController implements FormBindingTrait<AddProductToCartFormData> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseAddProductToCartController.class);
     @Inject
     private Injector injector;
@@ -36,10 +36,10 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
                 ));
     }
 
-    private CompletionStage<Result> handleValidForm(final Form<? extends AddProductToCartFormDataLike> filledForm) {
+    private CompletionStage<Result> handleValidForm(final Form<? extends AddProductToCartFormData> filledForm) {
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
-                    final AddProductToCartFormDataLike data = filledForm.get();
+                    final AddProductToCartFormData data = filledForm.get();
                     final String productId = data.getProductId();
                     final int variantId = data.getVariantId();
                     final long quantity = data.getQuantity();
@@ -51,11 +51,11 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     }
 
     @Override
-    public Class<? extends AddProductToCartFormDataLike> getFormDataClass() {
-        return AddProductToCartFormData.class;
+    public Class<? extends AddProductToCartFormData> getFormDataClass() {
+        return DefaultAddProductToCartFormData.class;
     }
 
-    protected CompletionStage<Result> handleInvalidForm(final Form<? extends AddProductToCartFormDataLike> form) {
+    protected CompletionStage<Result> handleInvalidForm(final Form<? extends AddProductToCartFormData> form) {
         injector.getInstance(UserFeedback.class).addErrors(form);
         return successfulResult();
     }
@@ -68,7 +68,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     protected abstract CompletableFuture<Result> successfulResult();
 
     protected CompletionStage<Result> handleAddProductToCartError(final Throwable throwable,
-                                                                  final Form<? extends AddProductToCartFormDataLike> form,
+                                                                  final Form<? extends AddProductToCartFormData> form,
                                                                   final Cart cart) {
         injector.getInstance(UserFeedback.class).addErrors("an error occurred");// TODO get from i18n
         return successfulResult();

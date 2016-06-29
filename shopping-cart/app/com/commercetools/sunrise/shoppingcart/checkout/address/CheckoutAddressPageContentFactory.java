@@ -27,7 +27,7 @@ public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
         return pageContent;
     }
 
-    public CheckoutAddressPageContent createWithAddressError(final Form<? extends CheckoutAddressFormDataLike> addressForm,
+    public CheckoutAddressPageContent createWithAddressError(final Form<? extends CheckoutAddressFormData> addressForm,
                                                              final ErrorsBean errors, final Cart cart) {
         final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
         pageContent.setCart(cartLikeBeanFactory.create(cart));
