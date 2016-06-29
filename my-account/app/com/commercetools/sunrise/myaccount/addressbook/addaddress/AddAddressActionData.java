@@ -1,17 +1,15 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
 import com.commercetools.sunrise.myaccount.addressbook.AddressActionData;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
 import io.sphere.sdk.customers.Customer;
-import play.data.Form;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class AddAddressActionData<T extends AddressFormData> extends AddressActionData<T> {
+public class AddAddressActionData extends AddressActionData {
 
-    public AddAddressActionData(@Nullable final Customer customer, @Nullable final Form<T> form) {
-        super(customer, form);
+    public AddAddressActionData(@Nullable final Customer customer) {
+        super(customer);
     }
 
     @Override
@@ -19,16 +17,11 @@ public class AddAddressActionData<T extends AddressFormData> extends AddressActi
         return super.customer();
     }
 
-    @Override
-    public Optional<Form<T>> form() {
-        return super.form();
-    }
-
-    public static <T extends AddressFormData> AddAddressActionData<T> of(@Nullable final Customer customer, @Nullable final Form<T> form) {
-        return new AddAddressActionData<>(customer, form);
+    public static AddAddressActionData of(@Nullable final Customer customer) {
+        return new AddAddressActionData(customer);
     }
 
     public static AddAddressActionData ofNotFoundCustomer() {
-        return of(null, null);
+        return of(null);
     }
 }

@@ -97,7 +97,7 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
     protected <T> CompletionStage<Result> handleFailedCustomerUpdate(final Customer customer, final Address address,
                                                                      final T formData, final Throwable throwable) {
         if (throwable.getCause() instanceof SphereException) {
-            saveUnexpectedError((SphereException) throwable.getCause());
+            saveUnexpectedError(throwable.getCause());
             final Form<?> form = obtainFilledForm();
             return asyncBadRequest(renderPage(customer, form));
         }

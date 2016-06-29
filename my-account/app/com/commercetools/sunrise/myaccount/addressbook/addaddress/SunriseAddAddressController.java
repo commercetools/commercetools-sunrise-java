@@ -75,24 +75,22 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
             logger.debug("try to add address with in locale={}", languageTag);
             final Form<DefaultAddressFormData> form = formFactory.form(DefaultAddressFormData.class).bindFromRequest();
             return injector.getInstance(AddAddressActionDataDefaultProvider.class).getActionData(session(), form)
-                    .thenComposeAsync(this::process, HttpExecution.defaultContext());
+                    .thenComposeAsync(actionData -> process(actionData, form), HttpExecution.defaultContext());
         });
     }
 
-    protected <T extends AddressFormData> CompletionStage<Result> show(final AddressActionData<T> data) {
+    protected <T extends AddressFormData> CompletionStage<Result> show(final AddressActionData data) {
         return ifNotNullCustomer(data.customer().orElse(null), this::showEmptyForm);
     }
 
-    protected <T extends AddressFormData> CompletionStage<Result> process(final AddressActionData<T> data) {
-        return ifNotNullCustomer(data.customer().orElse(null), customer -> data.form()
-                .map(form -> {
-                    if (!form.hasErrors()) {
-                        return applySubmittedAddress(customer, form.get());
-                    } else {
-                        return handleInvalidSubmittedAddress(customer, form);
-                    }
-                }).orElseGet(() -> showEmptyForm(customer))
-        );
+    protected <T extends AddressFormData> CompletionStage<Result> process(final AddressActionData data, final Form<T> form) {
+        return ifNotNullCustomer(data.customer().orElse(null), customer -> {
+            if (!form.hasErrors()) {
+                return applySubmittedAddress(customer, form.get());
+            } else {
+                return handleInvalidSubmittedAddress(customer, form);
+            }
+        });
     }
 
     protected CompletionStage<Result> showEmptyForm(final Customer customer) {

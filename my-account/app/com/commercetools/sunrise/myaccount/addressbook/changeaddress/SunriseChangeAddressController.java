@@ -7,6 +7,7 @@ import com.commercetools.sunrise.myaccount.addressbook.AddressBookManagementCont
 import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressFormData;
 import com.google.inject.Injector;
+import io.sphere.sdk.client.BadRequestException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
@@ -14,7 +15,6 @@ import io.sphere.sdk.customers.commands.updateactions.ChangeAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
 import io.sphere.sdk.models.Address;
-import io.sphere.sdk.models.SphereException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -61,7 +61,7 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("show edit form for address with id={} in locale={}", addressId, languageTag);
-            return injector.getInstance(ChangeAddressActionDataDefaultProvider.class).getActionData(session(), addressId, null)
+            return injector.getInstance(ChangeAddressActionDataDefaultProvider.class).getActionData(session(), addressId)
                     .thenComposeAsync(this::showChangeAddress, HttpExecution.defaultContext());
         });
     }
@@ -71,28 +71,26 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
         return doRequest(() -> {
             logger.debug("try to change address with id={} in locale={}", addressId, languageTag);
             Form<DefaultAddressFormData> form = formFactory.form(DefaultAddressFormData.class).bindFromRequest();
-            return injector.getInstance(ChangeAddressActionDataDefaultProvider.class).getActionData(session(), addressId, form)
-                    .thenComposeAsync(this::processChangeAddress, HttpExecution.defaultContext());
+            return injector.getInstance(ChangeAddressActionDataDefaultProvider.class).getActionData(session(), addressId)
+                    .thenComposeAsync(actionData -> processChangeAddress(actionData, form), HttpExecution.defaultContext());
         });
     }
 
-    protected <T extends AddressFormData> CompletionStage<Result> showChangeAddress(final ChangeAddressActionData<T> data) {
+    protected <T extends AddressFormData> CompletionStage<Result> showChangeAddress(final ChangeAddressActionData data) {
         return ifNotNullCustomer(data.customer().orElse(null), notNullCustomer -> data.oldAddress()
                 .map(oldAddress -> showFormWithOriginalAddress(notNullCustomer, oldAddress))
                 .orElseGet(() -> handleNotFoundOriginalAddress(notNullCustomer)));
     }
 
-    protected <T extends AddressFormData> CompletionStage<Result> processChangeAddress(final ChangeAddressActionData<T> data) {
+    protected <T extends AddressFormData> CompletionStage<Result> processChangeAddress(final ChangeAddressActionData data, final Form<T> form) {
         return ifNotNullCustomer(data.customer().orElse(null), customer -> data.oldAddress()
-                .map(oldAddress -> data.form()
-                        .map(form -> {
-                            if (!form.hasErrors()) {
-                                return applySubmittedAddress(customer, oldAddress, form.get());
-                            } else {
-                                return handleInvalidSubmittedAddress(customer, oldAddress, form);
-                            }
-                        }).orElseGet(() -> showFormWithOriginalAddress(customer, oldAddress)))
-                .orElseGet(() -> handleNotFoundOriginalAddress(customer)));
+                .map(oldAddress -> {
+                    if (!form.hasErrors()) {
+                        return applySubmittedAddress(customer, oldAddress, form.get());
+                    } else {
+                        return handleInvalidSubmittedAddress(customer, oldAddress, form);
+                    }
+                }).orElseGet(() -> handleNotFoundOriginalAddress(customer)));
     }
 
     protected CompletionStage<Result> showFormWithOriginalAddress(final Customer customer, final Address oldAddress) {
@@ -122,8 +120,8 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
 
     protected <T extends AddressFormData> CompletionStage<Result> handleFailedCustomerUpdate(final Customer customer, final Address oldAddress,
                                                                                              final T formData, final Throwable throwable) {
-        if (throwable.getCause() instanceof SphereException) {
-            saveUnexpectedError((SphereException) throwable.getCause());
+        if (throwable.getCause() instanceof BadRequestException) {
+            saveUnexpectedError(throwable.getCause());
             final Form<?> form = obtainFilledForm(customer, formData.toAddress());
             return asyncBadRequest(renderPage(customer, form));
         }

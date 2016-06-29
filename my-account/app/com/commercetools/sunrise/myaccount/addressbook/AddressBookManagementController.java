@@ -32,8 +32,8 @@ public abstract class AddressBookManagementController extends MyAccountControlle
         injector.getInstance(UserFeedback.class).addErrors(form);
     }
 
-    protected final void saveUnexpectedError(final SphereException sphereException) {
-        logger.error("The CTP request raised an unexpected exception", sphereException);
+    protected final void saveUnexpectedError(final Throwable throwable) {
+        logger.error("The CTP request raised an unexpected exception", throwable);
         injector.getInstance(UserFeedback.class).addErrors("Something went wrong, please try again"); // TODO get from i18n
     }
 }
