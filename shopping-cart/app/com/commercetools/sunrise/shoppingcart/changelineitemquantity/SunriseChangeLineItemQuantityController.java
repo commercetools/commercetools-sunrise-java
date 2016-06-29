@@ -41,6 +41,11 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
         });
     }
 
+    @Override
+    public Class<? extends ChangeLineItemQuantityFormDataLike> getFormDataClass() {
+        return ChangeLineItemQuantityFormData.class;
+    }
+
     private CompletionStage<Result> handleValidForm(final Form<? extends ChangeLineItemQuantityFormDataLike> form) {
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
