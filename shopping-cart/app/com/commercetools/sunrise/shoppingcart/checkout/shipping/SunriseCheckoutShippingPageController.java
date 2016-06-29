@@ -36,8 +36,6 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingPageController.class);
 
     @Inject
-    private FormFactory formFactory;
-    @Inject
     private Injector injector;
     @Inject
     private CheckoutShippingPageContentFactory pageContentFactory;
