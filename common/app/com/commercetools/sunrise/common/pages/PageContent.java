@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.pages;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
-public abstract class PageContent extends Base {
+public abstract class PageContent extends ModelBean {
 
     private String title;
 
