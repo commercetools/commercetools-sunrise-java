@@ -1,9 +1,10 @@
 package com.commercetools.sunrise.shoppingcart.removelineitem;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.errors.UserFeedback;
+import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.shoppingcart.cartdetail.RemoveLineItemFormData;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.RemoveLineItem;
@@ -61,8 +62,7 @@ public abstract class SunriseRemoveLineItemController extends SunriseFrameworkCa
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
     }
 
-    protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<RemoveLineItemFormData> removeLineItemForm,
-                                                                     final Cart cart) {
+    protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<RemoveLineItemFormData> removeLineItemForm) {
         injector.getInstance(UserFeedback.class).addErrors(removeLineItemForm);
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
     }
