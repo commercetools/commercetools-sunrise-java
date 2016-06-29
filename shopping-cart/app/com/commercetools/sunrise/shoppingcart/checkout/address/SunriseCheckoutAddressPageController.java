@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
@@ -37,7 +38,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
-public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutAddressFormDataLike> {
     protected static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressPageController.class);
 
     @Inject
@@ -54,17 +55,15 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         return doRequest(() -> getOrCreateCart().thenCompose(cart -> showCheckoutAddressPage(cart)));
     }
 
+    @Override
+    public Class<? extends CheckoutAddressFormDataLike> getFormDataClass() {
+        return CheckoutAddressFormData.class;
+    }
+
     @RequireCSRFCheck
     @SuppressWarnings("unused")
     public CompletionStage<Result> process(final String languageTag) {
-        return process(CheckoutAddressFormData.class);
-    }
-
-    protected <F extends CheckoutAddressFormDataLike> CompletionStage<Result> process(final Class<F> formClass) {
-        return doRequest(() -> {
-            final CompletionStage<Cart> loadedCart = getOrCreateCart();
-            return loadedCart.thenComposeAsync(cart -> processAddressForm(cart, formClass), defaultContext());
-        });
+        return formProcessingAction(this);
     }
 
     private CompletionStage<Result> showCheckoutAddressPage(final Cart cart) {
@@ -72,16 +71,22 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         return asyncOk(renderCheckoutAddressPage(cart, pageContent));
     }
 
-    protected <F extends CheckoutAddressFormDataLike> CompletionStage<Result> processAddressForm(final Cart cart, final Class<F> formClass) {
-        final Form<F> filledForm = bindFormFromRequest(formClass);
-        if (filledForm.hasErrors()) {
-            return handleFormErrors(filledForm, cart);
-        } else {
-            final CheckoutAddressFormDataLike formData = filledForm.get();
+    @Override
+    public Form<? extends CheckoutAddressFormDataLike> bindFormFromRequest() {
+        final Form<? extends CheckoutAddressFormDataLike> form = isBillingDifferent()
+                ? formFactory.form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class)
+                : formFactory.form(getFormDataClass());
+        return form.bindFromRequest();
+    }
+
+    @Override
+    public CompletionStage<Result> handleValidForm(final Form<? extends CheckoutAddressFormDataLike> form) {
+        return getOrCreateCart().thenComposeAsync(cart -> {
+            final CheckoutAddressFormDataLike formData = form.get();
             final Address shippingAddress = formData.getShippingAddress();
             final Address billingAddress = formData.getBillingAddress();
-            return sendAddressesToCommercetoolsPlatform(cart, this, filledForm, shippingAddress, billingAddress);
-        }
+            return sendAddressesToCommercetoolsPlatform(cart, this, form, shippingAddress, billingAddress);
+        }, defaultContext());
     }
 
     protected <F extends CheckoutAddressFormDataLike> CompletionStage<Result> sendAddressesToCommercetoolsPlatform(final Cart cart, final SunriseCheckoutAddressPageController controller, final Form<F> filledForm, final Address shippingAddress, final Address billingAddress) {
@@ -89,13 +94,6 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
                 .thenComposeAsync(controller::handleSuccessfulSetAddress, defaultContext());
         return recoverWithAsync(resultStage, defaultContext(), throwable ->
                 controller.handleSetAddressToCartError(throwable, filledForm, cart));
-    }
-
-    protected <F extends CheckoutAddressFormDataLike> Form<F> bindFormFromRequest(final Class<F> formClass) {
-        final Form<F> form = isBillingDifferent()
-                ? formFactory.form(formClass, BillingAddressDifferentToShippingAddressGroup.class)
-                : formFactory.form(formClass);
-        return form.bindFromRequest();
     }
 
     private boolean isBillingDifferent() {
@@ -121,13 +119,16 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
         return completedFuture(redirect(call));
     }
 
-    protected CompletionStage<Result> handleFormErrors(final Form<? extends CheckoutAddressFormDataLike> shippingAddressForm, final Cart cart) {
-        ErrorsBean errors = null;
-        if (shippingAddressForm.hasErrors()) {
-            errors = new ErrorsBean(shippingAddressForm);
-        }
-        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
-        return asyncBadRequest(renderCheckoutAddressPage(cart, pageContent));
+    @Override
+    public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutAddressFormDataLike> shippingAddressForm) {
+        return getOrCreateCart().thenComposeAsync(cart -> {
+            ErrorsBean errors = null;
+            if (shippingAddressForm.hasErrors()) {
+                errors = new ErrorsBean(shippingAddressForm);
+            }
+            final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.createWithAddressError(shippingAddressForm, errors);
+            return asyncBadRequest(renderCheckoutAddressPage(cart, pageContent));
+        }, defaultContext());
     }
 
     protected CompletionStage<Result> handleSetAddressToCartError(final Throwable throwable,
