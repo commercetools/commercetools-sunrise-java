@@ -3,7 +3,7 @@ package com.commercetools.sunrise.shoppingcart.changelineitemquantity;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-public class ChangeLineItemQuantityFormData extends Base {
+public class ChangeLineItemQuantityFormData extends Base implements ChangeLineItemQuantityFormDataLike {
     @Constraints.Required
     private String lineItemId;
     @Constraints.Min(0)
@@ -11,6 +11,7 @@ public class ChangeLineItemQuantityFormData extends Base {
     @Constraints.Required
     private Long quantity;
 
+    @Override
     public String getLineItemId() {
         return lineItemId;
     }
@@ -19,6 +20,7 @@ public class ChangeLineItemQuantityFormData extends Base {
         this.lineItemId = lineItemId;
     }
 
+    @Override
     public Long getQuantity() {
         return quantity;
     }
