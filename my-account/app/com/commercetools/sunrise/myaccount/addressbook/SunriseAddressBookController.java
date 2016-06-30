@@ -52,7 +52,7 @@ public abstract class SunriseAddressBookController extends MyAccountController i
     }
 
     protected CompletionStage<Result> showAddressBook(@Nullable final Customer customer) {
-        return ifNotNullCustomer(customer, notNullCustomer -> asyncOk(renderPage(customer)));
+        return ifValidCustomer(customer, notNullCustomer -> asyncOk(renderPage(customer)));
     }
 
     protected CompletionStage<Html> renderPage(final Customer customer) {

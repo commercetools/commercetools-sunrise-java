@@ -10,14 +10,11 @@ import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SunrisePageDataHook;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.json.SphereJsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.FormFactory;
@@ -34,8 +31,6 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseFrameworkController extends Controller {
     private static final Logger pageDataLoggerAsJson = LoggerFactory.getLogger(SunrisePageData.class.getName() + "Json");
@@ -163,11 +158,5 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected final HookContext hooks() {
         return hookContext;
-    }
-
-    protected <X> CompletionStage<Result> formProcessingAction(final SimpleFormBindingControllerTrait<X> controller) {
-        return doRequest(() -> controller.bindForm().thenComposeAsync(form -> {
-            return form.hasErrors() ? controller.handleInvalidForm(form) : controller.handleValidForm(form);
-        }, defaultContext()));
     }
 }

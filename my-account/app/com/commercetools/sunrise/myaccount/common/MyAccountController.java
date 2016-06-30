@@ -38,14 +38,12 @@ public abstract class MyAccountController extends SunriseFrameworkController {
         return injector.getInstance(CustomerFinderBySession.class).findCustomer(session);
     }
 
-    protected CompletionStage<Result> ifNotNullCustomer(@Nullable final Customer customer,
-                                                        final Function<Customer, CompletionStage<Result>> onCustomerFound) {
-        if (customer != null) {
-            return runHookOnFoundCustomer(customer)
-                    .thenComposeAsync(unused -> onCustomerFound.apply(customer), HttpExecution.defaultContext());
-        } else {
-            return handleNotFoundCustomer();
-        }
+    protected CompletionStage<Result> ifValidCustomer(@Nullable final Customer customer,
+                                                      final Function<Customer, CompletionStage<Result>> onValidActionData) {
+        return Optional.ofNullable(customer)
+                .map(notNullCustomer -> runHookOnFoundCustomer(notNullCustomer)
+                        .thenComposeAsync(unused -> onValidActionData.apply(notNullCustomer), HttpExecution.defaultContext()))
+                .orElseGet(this::handleNotFoundCustomer);
     }
 
     protected CompletionStage<Result> handleNotFoundCustomer() {
