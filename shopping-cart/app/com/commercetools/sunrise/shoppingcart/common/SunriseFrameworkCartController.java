@@ -62,14 +62,14 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
-        final CartQuery query = createQueryForPrimaryCart(session);
+        final CartQuery query = buildQueryForPrimaryCart(session);
         return sphere().execute(query).thenComposeAsync(carts -> carts.head()
                         .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
                         .orElseGet(() -> createCart(userContext)),
                 defaultContext());
     }
 
-    private CartQuery createQueryForPrimaryCart(final Http.Session session) {
+    private CartQuery buildQueryForPrimaryCart(final Http.Session session) {
         final String nullableCustomerId = CustomerSessionUtils.getCustomerId(session).orElse(null);
         final String nullableCartId = CartSessionUtils.getCartId(session).orElse(null);
         CartQuery query = CartQuery.of();
