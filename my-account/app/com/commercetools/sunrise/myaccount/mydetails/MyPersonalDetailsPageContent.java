@@ -4,18 +4,18 @@ import com.commercetools.sunrise.common.pages.PageContent;
 
 public class MyPersonalDetailsPageContent extends PageContent {
 
-    private CustomerBean customer;
+    private CustomerInfoBean customerInfo;
     private MyPersonalDetailsFormBean personalDetailsForm;
 
     public MyPersonalDetailsPageContent() {
     }
 
-    public CustomerBean getCustomer() {
-        return customer;
+    public CustomerInfoBean getCustomerInfo() {
+        return customerInfo;
     }
 
-    public void setCustomer(final CustomerBean customer) {
-        this.customer = customer;
+    public void setCustomerInfo(final CustomerInfoBean customerInfo) {
+        this.customerInfo = customerInfo;
     }
 
     public MyPersonalDetailsFormBean getPersonalDetailsForm() {

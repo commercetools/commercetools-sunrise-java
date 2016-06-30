@@ -16,7 +16,7 @@ public class MyPersonalDetailsPageContentFactory {
     @Inject
     private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
 
-    public MyPersonalDetailsPageContent create(final Customer customer, final Form<?> form) {
+    public MyPersonalDetailsPageContent create(final Form<?> form, final Customer customer) {
         final MyPersonalDetailsPageContent content = new MyPersonalDetailsPageContent();
         fillCustomer(content, customer);
         fillForm(content, form);
@@ -24,7 +24,9 @@ public class MyPersonalDetailsPageContentFactory {
     }
 
     protected void fillCustomer(final MyPersonalDetailsPageContent content, final Customer customer) {
-        content.setCustomer(new CustomerBean(customer));
+        final CustomerInfoBean bean = new CustomerInfoBean();
+        bean.setCustomer(customer);
+        content.setCustomerInfo(bean);
     }
 
     protected void fillForm(final MyPersonalDetailsPageContent content, final Form<?> form) {

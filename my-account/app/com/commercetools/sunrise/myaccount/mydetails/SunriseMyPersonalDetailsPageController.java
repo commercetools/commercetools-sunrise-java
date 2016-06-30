@@ -135,7 +135,8 @@ public abstract class SunriseMyPersonalDetailsPageController extends MyAccountCo
     }
 
     protected CompletionStage<Html> renderPage(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer) {
-        final MyPersonalDetailsPageContent pageContent = injector().getInstance(MyPersonalDetailsPageContentFactory.class).create(customer, form);
+        final MyPersonalDetailsPageContent pageContent = injector().getInstance(MyPersonalDetailsPageContentFactory.class).create(form, customer);
+        System.out.println(pageContent);
         return renderPage(pageContent, getTemplateName());
     }
 
