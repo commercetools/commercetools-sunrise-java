@@ -6,10 +6,10 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.contexts.UserContextImpl;
 import com.commercetools.sunrise.common.localization.LocalizationSelectorBean;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import com.commercetools.sunrise.common.pages.PageNavMenu;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.template.cms.CmsService;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
@@ -58,6 +58,8 @@ public abstract class SunriseController extends ShopController {
     private ProductReverseRouter productReverseRouter;
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
+    @Inject
+    private MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
 
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
@@ -145,7 +147,7 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().processSignUpForm(language), "signUpSubmit")
                 .addHalLink(reverseRouter().processLogOut(language), "logOut")
 
-                .addHalLink(reverseRouter().processMyPersonalDetailsForm(language), "editMyPersonalDetails")
+                .addHalLink(myPersonalDetailsReverseRouter.myPersonalDetailsProcessFormCall(language), "editMyPersonalDetails")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         newCategory().flatMap(nc -> productReverseRouter.productOverviewPageCall(userContext.locale(), nc))

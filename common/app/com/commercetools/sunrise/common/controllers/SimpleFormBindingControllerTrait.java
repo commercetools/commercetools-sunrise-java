@@ -15,7 +15,7 @@ public interface SimpleFormBindingControllerTrait<F, T, R> extends FormBindingTr
     default CompletionStage<Result> validateForm(final T data) {
         return bindForm().thenComposeAsync(form -> {
             if (!form.hasErrors()) {
-                return handleValidForm(form.get(), data);
+                return handleValidForm(form, data);
             } else {
                 return handleInvalidForm(form, data);
             }
@@ -24,16 +24,16 @@ public interface SimpleFormBindingControllerTrait<F, T, R> extends FormBindingTr
 
     CompletionStage<Result> handleInvalidForm(final Form<? extends F> form, final T data);
 
-    default CompletionStage<Result> handleValidForm(final F formData, final T data) {
-        final CompletionStage<Result> resultStage = doAction(formData, data)
-                .thenComposeAsync(result -> handleSuccessfulAction(formData, data, result), HttpExecution.defaultContext());
+    default CompletionStage<Result> handleValidForm(final Form<? extends F> form, final T data) {
+        final CompletionStage<Result> resultStage = doAction(form.get(), data)
+                .thenComposeAsync(result -> handleSuccessfulAction(form.get(), data, result), HttpExecution.defaultContext());
         return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                handleFailedAction(formData, data, throwable));
+                handleFailedAction(form, data, throwable));
     }
 
     CompletionStage<? extends R> doAction(final F formData, final T data);
 
-    CompletionStage<Result> handleFailedAction(final F formData, final T data, final Throwable throwable);
+    CompletionStage<Result> handleFailedAction(final Form<? extends F> form, final T data, final Throwable throwable);
 
     CompletionStage<Result> handleSuccessfulAction(final F formData, final T data, final R result);
 }

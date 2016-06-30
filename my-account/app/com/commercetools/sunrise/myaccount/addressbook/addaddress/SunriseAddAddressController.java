@@ -7,7 +7,6 @@ import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookManagementController;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
-import com.google.inject.Injector;
 import io.sphere.sdk.client.BadRequestException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
@@ -26,7 +25,6 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,10 +39,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @RequestScoped
 public abstract class SunriseAddAddressController extends AddressBookManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<AddressBookAddressFormData, Customer, Customer> {
 
-    protected static final Logger logger = LoggerFactory.getLogger(SunriseAddAddressController.class);
-
-    @Inject
-    private Injector injector;
+    private static final Logger logger = LoggerFactory.getLogger(SunriseAddAddressController.class);
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -67,11 +62,9 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show new address form for address in locale={}", languageTag);
-            return injector.getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customerOpt -> {
-                        Customer nullableCustomer = customerOpt.orElse(null);
-                        return validateInput(nullableCustomer, this::showForm);
-                    }, HttpExecution.defaultContext());
+            return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
+                    .thenComposeAsync(customerOpt ->
+                            ifValidCustomer(customerOpt.orElse(null), this::showForm), HttpExecution.defaultContext());
         });
     }
 
@@ -79,7 +72,7 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("try to add address with in locale={}", languageTag);
-            return injector.getInstance(CustomerFinderBySession.class).findCustomer(session())
+            return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
                     .thenComposeAsync(customerOpt -> {
                         Customer nullableCustomer = customerOpt.orElse(null);
                         return validateInput(nullableCustomer, this::validateForm);
@@ -109,11 +102,10 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final AddressBookAddressFormData formData, final Customer customer, final Throwable throwable) {
+    public CompletionStage<Result> handleFailedAction(final Form<? extends AddressBookAddressFormData> form, final Customer customer, final Throwable throwable) {
         if (throwable.getCause() instanceof BadRequestException) {
-            saveUnexpectedError(throwable.getCause());
-            final Form<? extends AddressBookAddressFormData> filledForm = createFilledForm(customer, formData.toAddress());
-            return asyncBadRequest(renderPage(filledForm, customer));
+            saveUnexpectedError(logger, throwable.getCause());
+            return asyncBadRequest(renderPage(form, customer));
         }
         return exceptionallyCompletedFuture(throwable);
     }
@@ -124,14 +116,8 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     }
 
     protected CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final Customer customer) {
-        final AddAddressPageContent pageContent = injector.getInstance(AddAddressPageContentFactory.class).create(customer, form);
+        final AddAddressPageContent pageContent = injector().getInstance(AddAddressPageContentFactory.class).create(customer, form);
         return renderPage(pageContent, getTemplateName());
-    }
-
-    protected Form<? extends AddressBookAddressFormData> createFilledForm(final Customer customer, @Nullable final Address address) {
-        final DefaultAddressBookAddressFormData formData = new DefaultAddressBookAddressFormData();
-        formData.apply(customer, address);
-        return formFactory().form(DefaultAddressBookAddressFormData.class).fill(formData);
     }
 
     protected final CompletionStage<Result> validateInput(@Nullable final Customer nullableCustomer,

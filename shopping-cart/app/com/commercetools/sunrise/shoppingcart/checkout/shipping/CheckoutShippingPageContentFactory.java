@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
-import com.commercetools.sunrise.common.forms.ErrorsBean;
+import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
@@ -16,43 +16,59 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static com.commercetools.sunrise.common.forms.FormUtils.extractFormField;
+import static java.util.stream.Collectors.toList;
 
 public class CheckoutShippingPageContentFactory extends Base implements WithOverridablePageContent<CheckoutShippingPageContent> {
-    @Inject
-    private CheckoutShippingFormBeanFactory checkoutShippingFormBeanFactory;
+
     @Inject
     private UserContext userContext;
     @Inject
     private I18nResolver i18nResolver;
     @Inject
+    private UserFeedback userFeedback;
+    @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
-
-    public CheckoutShippingPageContent create(final Cart cart, final List<ShippingMethod> shippingMethods) {
-        final CheckoutShippingPageContent pageContent = createPageContent();
-        final CheckoutShippingFormBean shippingFormBean = checkoutShippingFormBeanFactory.create(cart, shippingMethods);
-        pageContent.setShippingForm(shippingFormBean);
-        fillTitle(pageContent);
-        pageContent.setCart(cartLikeBeanFactory.create(cart));
-        return pageContent;
-    }
-
-    public CheckoutShippingPageContent create(final Cart cart, final List<ShippingMethod> shippingMethods, final ErrorsBean errors, final Form<? extends CheckoutShippingFormData> shippingForm) {
-        final CheckoutShippingPageContent pageContent = createPageContent();
-        final String selectedShippingMethodId = extractFormField(shippingForm, "shippingMethodId");
-        final CheckoutShippingFormBean formBean = checkoutShippingFormBeanFactory.create(shippingMethods, selectedShippingMethodId);
-        formBean.setErrors(errors);
-        pageContent.setShippingForm(formBean);
-        fillTitle(pageContent);
-        pageContent.setCart(cartLikeBeanFactory.create(cart));
-        return pageContent;
-    }
 
     @Override
     public CheckoutShippingPageContent createPageContent() {
         return new CheckoutShippingPageContent();
     }
 
-    protected void fillTitle(final PageContent pageContent) {
+    public CheckoutShippingPageContent create(final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
+        final CheckoutShippingPageContent pageContent = createPageContent();
+        fillForm(pageContent, form, shippingMethods);
+        fillTitle(pageContent, cart);
+        fillCart(pageContent, cart);
+        return pageContent;
+    }
+
+    protected void fillCart(final CheckoutShippingPageContent pageContent, final Cart cart) {
+        pageContent.setCart(cartLikeBeanFactory.create(cart));
+    }
+
+    protected void fillTitle(final PageContent pageContent, final Cart cart) {
         pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
+    }
+
+    protected void fillForm(final CheckoutShippingPageContent pageContent, final Form<?> form, final List<ShippingMethod> shippingMethods) {
+        final CheckoutShippingFormBean bean = createShippingForm(form, shippingMethods);
+        userFeedback.findErrors().ifPresent(bean::setErrors);
+        pageContent.setShippingForm(bean);
+    }
+
+    protected CheckoutShippingFormBean createShippingForm(final Form<?> form, final List<ShippingMethod> shippingMethods) {
+        final CheckoutShippingFormBean bean = new CheckoutShippingFormBean();
+        final String shippingMethodId = extractFormField(form, "shippingMethodId");
+        final ShippingMethodsFormBean formBean = createShippingMethods(shippingMethods, shippingMethodId);
+        bean.setShippingMethods(formBean);
+        return bean;
+    }
+
+    protected ShippingMethodsFormBean createShippingMethods(final List<ShippingMethod> shippingMethods, final String selectedShippingMethodId) {
+        final ShippingMethodsFormBean bean = new ShippingMethodsFormBean();
+        bean.setList(shippingMethods.stream()
+                .map(shippingMethod -> new ShippingMethodBean(shippingMethod, selectedShippingMethodId))
+                .collect(toList()));
+        return bean;
     }
 }

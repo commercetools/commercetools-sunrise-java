@@ -4,16 +4,16 @@ import play.mvc.Call;
 
 public interface AddressBookReverseRouter {
 
-    Call showMyAddressBook(final String languageTag);
+    Call addressBookCall(final String languageTag);
 
-    Call showAddAddressToMyAddressBook(final String languageTag);
+    Call addAddressToAddressBookCall(final String languageTag);
 
-    Call processAddAddressToMyAddressBookForm(final String languageTag);
+    Call addAddressToAddressBookProcessFormCall(final String languageTag);
 
-    Call showChangeAddressInMyAddressBook(final String languageTag, final String addressId);
+    Call changeAddressInAddressBookCall(final String languageTag, final String addressId);
 
-    Call processChangeAddressInMyAddressBookForm(final String languageTag, final String addressId);
+    Call changeAddressInAddressBookProcessFormCall(final String languageTag, final String addressId);
 
-    Call processRemoveAddressFromMyAddressBookForm(final String languageTag, final String addressId);
+    Call removeAddressFromAddressBookProcessFormCall(final String languageTag, final String addressId);
 
 }

@@ -142,20 +142,16 @@ public class DefaultAddressBookAddressFormData extends Base implements AddressBo
         this.defaultBillingAddress = defaultBillingAddress;
     }
 
-    public void apply(final Customer customer, @Nullable final Address address) {
-        if (address != null) {
-            this.title = address.getTitle();
-            this.firstName = address.getFirstName();
-            this.lastName = address.getLastName();
-            this.streetName = address.getStreetName();
-            this.additionalStreetInfo = address.getAdditionalStreetInfo();
-            this.city = address.getCity();
-            this.postalCode = address.getPostalCode();
-            this.country = address.getCountry().getAlpha2();
-            this.region = address.getRegion();
-            this.defaultShippingAddress = Objects.equals(customer.getDefaultShippingAddressId(), address.getId());
-            this.defaultBillingAddress = Objects.equals(customer.getDefaultBillingAddressId(), address.getId());
-        }
+    public void applyAddress(final Address address) {
+        this.title = address.getTitle();
+        this.firstName = address.getFirstName();
+        this.lastName = address.getLastName();
+        this.streetName = address.getStreetName();
+        this.additionalStreetInfo = address.getAdditionalStreetInfo();
+        this.city = address.getCity();
+        this.postalCode = address.getPostalCode();
+        this.country = address.getCountry().getAlpha2();
+        this.region = address.getRegion();
     }
 
     @Override

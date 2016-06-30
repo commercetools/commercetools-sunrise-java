@@ -6,9 +6,6 @@ public class CheckoutAddressPageContent extends CheckoutPageContent {
 
     private CheckoutAddressFormBean addressForm;
 
-    public CheckoutAddressPageContent() {
-    }
-
     public CheckoutAddressFormBean getAddressForm() {
         return addressForm;
     }

@@ -288,6 +288,34 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
                 .build();
     }
 
+    public void applyShippingAddress(final Address address) {
+        this.titleShipping = address.getTitle();
+        this.firstNameShipping = address.getFirstName();
+        this.lastNameShipping = address.getLastName();
+        this.streetNameShipping = address.getStreetName();
+        this.additionalStreetInfoShipping = address.getAdditionalStreetInfo();
+        this.cityShipping = address.getCity();
+        this.postalCodeShipping = address.getPostalCode();
+        this.countryShipping = address.getCountry().getAlpha2();
+        this.regionShipping = address.getRegion();
+        this.phoneShipping = address.getPhone();
+        this.emailShipping = address.getEmail();
+    }
+
+    public void applyBillingAddress(final Address address) {
+        this.titleBilling = address.getTitle();
+        this.firstNameBilling = address.getFirstName();
+        this.lastNameBilling = address.getLastName();
+        this.streetNameBilling = address.getStreetName();
+        this.additionalStreetInfoBilling = address.getAdditionalStreetInfo();
+        this.cityBilling = address.getCity();
+        this.postalCodeBilling = address.getPostalCode();
+        this.countryBilling = address.getCountry().getAlpha2();
+        this.regionBilling = address.getRegion();
+        this.phoneBilling = address.getPhone();
+        this.emailBilling = address.getEmail();
+    }
+
     public String validate() {
         final CountryCode shippingCountry = CountryCode.getByCode(countryShipping);
         if (shippingCountry == null || shippingCountry.equals(CountryCode.UNDEFINED)) {

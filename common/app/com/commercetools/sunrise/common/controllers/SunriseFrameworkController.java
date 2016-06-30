@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
@@ -19,6 +20,7 @@ import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Controller;
@@ -34,8 +36,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseFrameworkController extends Controller {
     private static final Logger pageDataLoggerAsJson = LoggerFactory.getLogger(SunrisePageData.class.getName() + "Json");
@@ -179,5 +179,14 @@ public abstract class SunriseFrameworkController extends Controller {
                     hooks().runAsyncHook(updatedHookClass, hook -> fu.apply(hook, res));
                     return res;
                 });
+    }
+
+    protected final void saveFormErrors(final Form<?> form) {
+        injector.getInstance(UserFeedback.class).addErrors(form);
+    }
+
+    protected final void saveUnexpectedError(final Logger logger, final Throwable throwable) {
+        logger.error("The CTP request raised an unexpected exception", throwable);
+        injector.getInstance(UserFeedback.class).addErrors("Something went wrong, please try again"); // TODO get from i18n
     }
 }

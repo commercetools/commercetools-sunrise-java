@@ -9,6 +9,7 @@ import com.commercetools.sunrise.myaccount.addressbook.AddressBookManagementCont
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookPageContent;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookPageContentFactory;
 import com.google.inject.Injector;
+import io.sphere.sdk.client.BadRequestException;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 import io.sphere.sdk.customers.commands.updateactions.RemoveAddress;
@@ -34,7 +35,7 @@ import static java.util.Arrays.asList;
 @RequestScoped
 public abstract class SunriseRemoveAddressController extends AddressBookManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<RemoveAddressFormData, AddressBookActionData, Customer> {
 
-    protected static final Logger logger = LoggerFactory.getLogger(SunriseRemoveAddressController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveAddressController.class);
 
     @Inject
     private Injector injector;
@@ -94,11 +95,10 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final RemoveAddressFormData formData, final AddressBookActionData data, final Throwable throwable) {
-        if (throwable.getCause() instanceof SphereException) {
-            saveUnexpectedError(throwable.getCause());
-            final Form<? extends RemoveAddressFormData> filledForm = createFilledForm();
-            return asyncBadRequest(renderPage(filledForm, data.getCustomer()));
+    public CompletionStage<Result> handleFailedAction(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData data, final Throwable throwable) {
+        if (throwable.getCause() instanceof BadRequestException) {
+            saveUnexpectedError(logger, throwable.getCause());
+            return asyncBadRequest(renderPage(form, data.getCustomer()));
         }
         return exceptionallyCompletedFuture(throwable);
     }
@@ -106,11 +106,6 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
     protected CompletionStage<Html> renderPage(final Form<? extends RemoveAddressFormData> form, final Customer customer) {
         final AddressBookPageContent pageContent = addressBookPageContentFactory.create(customer);
         return renderPage(pageContent, getTemplateName());
-    }
-
-    protected Form<? extends RemoveAddressFormData> createFilledForm() {
-        final RemoveAddressFormData formData = new RemoveAddressFormData();
-        return formFactory().form(RemoveAddressFormData.class).fill(formData);
     }
 
     protected final CompletionStage<Result> validateInput(@Nullable final Customer nullableCustomer, @Nullable final Address nullableAddress,

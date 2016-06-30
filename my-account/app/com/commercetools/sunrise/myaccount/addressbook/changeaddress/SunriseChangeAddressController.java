@@ -29,7 +29,10 @@ import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
@@ -39,7 +42,7 @@ import static java.util.Arrays.asList;
 @RequestScoped
 public abstract class SunriseChangeAddressController extends AddressBookManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<AddressBookAddressFormData, AddressBookActionData, Customer> {
 
-    protected static final Logger logger = LoggerFactory.getLogger(SunriseChangeAddressController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SunriseChangeAddressController.class);
 
     @Inject
     private Injector injector;
@@ -94,41 +97,34 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     }
 
     @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData actionData) {
+    public CompletionStage<Result> handleInvalidForm(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData data) {
         saveFormErrors(form);
-        return asyncBadRequest(renderPage(actionData.getCustomer(), form));
+        return asyncBadRequest(renderPage(data.getCustomer(), form));
     }
 
     @Override
-    public CompletionStage<? extends Customer> doAction(final AddressBookAddressFormData formData, final AddressBookActionData actionData) {
-        return changeAddress(actionData.getCustomer(), actionData.getAddress(), formData)
+    public CompletionStage<? extends Customer> doAction(final AddressBookAddressFormData formData, final AddressBookActionData data) {
+        return changeAddress(data.getCustomer(), data.getAddress(), formData)
                 .thenApplyAsync(updatedCustomer -> updatedCustomer, HttpExecution.defaultContext());
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final AddressBookAddressFormData formData, final AddressBookActionData actionData, final Throwable throwable) {
+    public CompletionStage<Result> handleFailedAction(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData data, final Throwable throwable) {
         if (throwable.getCause() instanceof BadRequestException) {
-            saveUnexpectedError(throwable.getCause());
-            final Form<? extends AddressBookAddressFormData> filledForm = createFilledForm(actionData.getCustomer(), formData.toAddress());
-            return asyncBadRequest(renderPage(actionData.getCustomer(), filledForm));
+            saveUnexpectedError(logger, throwable.getCause());
+            return asyncBadRequest(renderPage(data.getCustomer(), form));
         }
         return exceptionallyCompletedFuture(throwable);
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final AddressBookActionData actionData, final Customer updatedCustomer) {
+    public CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final AddressBookActionData data, final Customer updatedCustomer) {
         return redirectToAddressBook();
     }
 
     protected CompletionStage<Html> renderPage(final Customer customer, final Form<?> form) {
         final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(customer, form);
         return renderPage(pageContent, getTemplateName());
-    }
-
-    protected Form<? extends AddressBookAddressFormData> createFilledForm(final Customer customer, @Nullable final Address address) {
-        final DefaultAddressBookAddressFormData formData = new DefaultAddressBookAddressFormData();
-        formData.apply(customer, address);
-        return formFactory().form(DefaultAddressBookAddressFormData.class).fill(formData);
     }
 
     protected final CompletionStage<Result> validateInput(@Nullable final Customer nullableCustomer, @Nullable final Address nullableAddress,
@@ -166,7 +162,6 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     }
 
     private boolean isDefaultAddressDifferent(final String addressId, final boolean isNewDefaultAddress, @Nullable final String defaultAddressId) {
-        final boolean isDefaultAddress = Objects.equals(defaultAddressId, addressId);
-        return isNewDefaultAddress ^ isDefaultAddress;
+        return isNewDefaultAddress ^ isDefaultAddress(addressId, defaultAddressId);
     }
 }

@@ -3,7 +3,6 @@ package com.commercetools.sunrise.shoppingcart.checkout.address;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
-import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
 import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
@@ -24,6 +23,7 @@ import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
+import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -59,18 +59,14 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
 
     @Override
     public CompletionStage<Result> showForm(final Cart cart) {
-        final CheckoutAddressPageContent pageContent = pageContentFactory.create(cart);
-        return asyncOk(renderPage(pageContent, getTemplateName()));
+        final Form<? extends CheckoutAddressFormData> filledForm = createFilledForm(cart);
+        return asyncOk(renderPage(filledForm, cart));
     }
 
     @Override
     public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutAddressFormData> form, final Cart cart) {
-        ErrorsBean errors = null;
-        if (form.hasErrors()) {
-            errors = new ErrorsBean(form);
-        }
-        final CheckoutAddressPageContent pageContent = pageContentFactory.createWithAddressError(form, errors, cart);
-        return asyncBadRequest(renderPage(pageContent, getTemplateName()));
+        saveFormErrors(form);
+        return asyncBadRequest(renderPage(form, cart));
     }
 
     @Override
@@ -79,7 +75,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final CheckoutAddressFormData formData, final Cart cart, final Throwable throwable) {
+    public CompletionStage<Result> handleFailedAction(final Form<? extends CheckoutAddressFormData> form, final Cart cart, final Throwable throwable) {
         return exceptionallyCompletedFuture(throwable);
     }
 
@@ -96,6 +92,18 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
                 : formFactory().form(getFormDataClass());
     }
 
+    protected Form<? extends CheckoutAddressFormData> createFilledForm(final Cart cart) {
+        final DefaultCheckoutAddressFormData formData = new DefaultCheckoutAddressFormData();
+        if (cart.getShippingAddress() != null) {
+            formData.applyShippingAddress(cart.getShippingAddress());
+        }
+        if (cart.getBillingAddress() != null) {
+            formData.applyBillingAddress(cart.getBillingAddress());
+            formData.setBillingAddressDifferentToBillingAddress(true);
+        }
+        return formFactory().form(DefaultCheckoutAddressFormData.class).fill(formData);
+    }
+
     @Override
     public String getTemplateName() {
         return "checkout-address";
@@ -104,6 +112,11 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     @Override
     public Set<String> getFrameworkTags() {
         return new HashSet<>(asList("checkout", "checkout-address"));
+    }
+
+    protected CompletionStage<Html> renderPage(final Form<? extends CheckoutAddressFormData> form, final Cart cart) {
+        final CheckoutAddressPageContent pageContent = injector().getInstance(CheckoutAddressPageContentFactory.class).create(form, cart);
+        return renderPage(pageContent, getTemplateName());
     }
 
     private CompletionStage<Cart> setAddressToCart(final Cart cart,

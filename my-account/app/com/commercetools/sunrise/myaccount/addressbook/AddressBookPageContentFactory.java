@@ -49,8 +49,8 @@ public class AddressBookPageContentFactory {
     protected AddressInfoBean createAddressInfo(final Address address) {
         final AddressInfoBean bean = new AddressInfoBean();
         bean.setAddress(addressBeanFactory.create(address));
-        bean.setAddressEditUrl(addressBookReverseRouter.showChangeAddressInMyAddressBook(userContext.languageTag(), address.getId()).url());
-        bean.setAddressDeleteUrl(addressBookReverseRouter.processRemoveAddressFromMyAddressBookForm(userContext.languageTag(), address.getId()).url());
+        bean.setAddressEditUrl(addressBookReverseRouter.changeAddressInAddressBookCall(userContext.languageTag(), address.getId()).url());
+        bean.setAddressDeleteUrl(addressBookReverseRouter.removeAddressFromAddressBookProcessFormCall(userContext.languageTag(), address.getId()).url());
         return bean;
     }
 

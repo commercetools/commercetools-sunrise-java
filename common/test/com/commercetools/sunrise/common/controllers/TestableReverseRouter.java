@@ -1,11 +1,9 @@
 package com.commercetools.sunrise.common.controllers;
 
-import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.*;
 import play.mvc.Call;
 
-public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter {
+public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter {
 
     private String themeAssetsUrl;
     private String changeLanguageUrl;
@@ -34,9 +32,11 @@ public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, 
     private String showMyPersonalDetailsUrl;
     private String processMyPersonalDetailsFormUrl;
     private String showMyAddressBookUrl;
-    private String processAddAddressToMyAddressBookFormUrl;
-    private String processChangeAddressInMyAddressBookFormUrl;
-    private String processRemoveAddressFromMyAddressBookFormUrl;
+    private String showAddAddressToAddressBookUrl;
+    private String processAddAddressToAddressBookFormUrl;
+    private String showChangeAddressInAddressBookUrl;
+    private String processChangeAddressInAddressBookFormUrl;
+    private String processRemoveAddressFromAddressBookFormUrl;
     private String showMyOrdersUrl;
     private String showMyOrderUrl;
 
@@ -148,16 +148,24 @@ public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, 
         this.showMyAddressBookUrl = showMyAddressBookUrl;
     }
 
-    public void setProcessAddAddressToMyAddressBookFormUrl(final String processAddAddressToMyAddressBookFormUrl) {
-        this.processAddAddressToMyAddressBookFormUrl = processAddAddressToMyAddressBookFormUrl;
+    public void setShowAddAddressToAddressBookUrl(final String showAddAddressToAddressBookUrl) {
+        this.showAddAddressToAddressBookUrl = showAddAddressToAddressBookUrl;
     }
 
-    public void setProcessChangeAddressInMyAddressBookFormUrl(final String processChangeAddressInMyAddressBookFormUrl) {
-        this.processChangeAddressInMyAddressBookFormUrl = processChangeAddressInMyAddressBookFormUrl;
+    public void setProcessAddAddressToAddressBookFormUrl(final String processAddAddressToAddressBookFormUrl) {
+        this.processAddAddressToAddressBookFormUrl = processAddAddressToAddressBookFormUrl;
     }
 
-    public void setProcessRemoveAddressFromMyAddressBookFormUrl(final String processRemoveAddressFromMyAddressBookFormUrl) {
-        this.processRemoveAddressFromMyAddressBookFormUrl = processRemoveAddressFromMyAddressBookFormUrl;
+    public void setShowChangeAddressInAddressBookUrl(final String showChangeAddressInAddressBookUrl) {
+        this.showChangeAddressInAddressBookUrl = showChangeAddressInAddressBookUrl;
+    }
+
+    public void setProcessChangeAddressInAddressBookFormUrl(final String processChangeAddressInAddressBookFormUrl) {
+        this.processChangeAddressInAddressBookFormUrl = processChangeAddressInAddressBookFormUrl;
+    }
+
+    public void setProcessRemoveAddressFromAddressBookFormUrl(final String processRemoveAddressFromAddressBookFormUrl) {
+        this.processRemoveAddressFromAddressBookFormUrl = processRemoveAddressFromAddressBookFormUrl;
     }
 
     public void setShowMyOrdersUrl(final String showMyOrdersUrl) {
@@ -289,33 +297,43 @@ public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, 
     }
 
     @Override
-    public Call showMyPersonalDetails(final String languageTag) {
+    public Call myPersonalDetailsPageCall(final String languageTag) {
         return createCall(showMyPersonalDetailsUrl);
     }
 
     @Override
-    public Call processMyPersonalDetailsForm(final String languageTag) {
+    public Call myPersonalDetailsProcessFormCall(final String languageTag) {
         return createCall(processMyPersonalDetailsFormUrl);
     }
 
     @Override
-    public Call showMyAddressBook(final String languageTag) {
+    public Call addressBookCall(final String languageTag) {
         return createCall(showMyAddressBookUrl);
     }
 
     @Override
-    public Call processAddAddressToMyAddressBookForm(final String languageTag) {
-        return createCall(processAddAddressToMyAddressBookFormUrl);
+    public Call addAddressToAddressBookCall(final String languageTag) {
+        return createCall(showAddAddressToAddressBookUrl);
     }
 
     @Override
-    public Call processChangeAddressInMyAddressBookForm(final String languageTag) {
-        return createCall(processChangeAddressInMyAddressBookFormUrl);
+    public Call addAddressToAddressBookProcessFormCall(final String languageTag) {
+        return createCall(processAddAddressToAddressBookFormUrl);
     }
 
     @Override
-    public Call processRemoveAddressFromMyAddressBookForm(final String languageTag) {
-        return createCall(processRemoveAddressFromMyAddressBookFormUrl);
+    public Call changeAddressInAddressBookCall(final String languageTag, final String addressId) {
+        return createCall(showChangeAddressInAddressBookUrl);
+    }
+
+    @Override
+    public Call changeAddressInAddressBookProcessFormCall(final String languageTag, final String addressId) {
+        return createCall(processChangeAddressInAddressBookFormUrl);
+    }
+
+    @Override
+    public Call removeAddressFromAddressBookProcessFormCall(final String languageTag, final String addressId) {
+        return createCall(processRemoveAddressFromAddressBookFormUrl);
     }
 
     @Override

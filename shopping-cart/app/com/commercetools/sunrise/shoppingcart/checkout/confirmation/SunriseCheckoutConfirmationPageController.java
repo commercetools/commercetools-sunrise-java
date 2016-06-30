@@ -74,7 +74,7 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final CheckoutConfirmationFormData formData, final Cart cart, final Throwable throwable) {
+    public CompletionStage<Result> handleFailedAction(final Form<? extends CheckoutConfirmationFormData> form, final Cart cart, final Throwable throwable) {
         return exceptionallyCompletedFuture(throwable);
     }
 

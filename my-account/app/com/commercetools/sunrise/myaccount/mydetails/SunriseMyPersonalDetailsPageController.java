@@ -1,25 +1,25 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
-import com.commercetools.sunrise.common.forms.ErrorsBean;
+import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
-import com.commercetools.sunrise.common.models.TitleFormFieldBean;
+import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.commercetools.sunrise.common.forms.FormUtils;
-import io.sphere.sdk.client.ErrorResponseException;
+import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
+import com.commercetools.sunrise.myaccount.common.MyAccountController;
+import io.sphere.sdk.client.BadRequestException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
+import io.sphere.sdk.customers.CustomerName;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 import io.sphere.sdk.customers.commands.updateactions.ChangeEmail;
 import io.sphere.sdk.customers.commands.updateactions.SetFirstName;
 import io.sphere.sdk.customers.commands.updateactions.SetLastName;
 import io.sphere.sdk.customers.commands.updateactions.SetTitle;
-import io.sphere.sdk.models.SphereException;
-import com.commercetools.sunrise.myaccount.common.MyAccountController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.Configuration;
-import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
@@ -33,15 +33,17 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
-import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
-import static java.util.concurrent.CompletableFuture.completedFuture;
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
+import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
+import static java.util.Collections.singletonList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseMyPersonalDetailsPageController extends MyAccountController {
+public abstract class SunriseMyPersonalDetailsPageController extends MyAccountController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<MyPersonalDetailsFormData, Customer, Customer> {
+
+    private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsPageController.class);
 
     @Inject
     protected ProductDataConfig productDataConfig;
@@ -54,48 +56,91 @@ public abstract class SunriseMyPersonalDetailsPageController extends MyAccountCo
     @Inject
     protected ReverseRouter reverseRouter;//TODO framework use smaller router
 
+    @Override
+    public Set<String> getFrameworkTags() {
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(singletonList("my-personal-details"));
+        return frameworkTags;
+    }
+
+    @Override
+    public String getTemplateName() {
+        return "my-account-personal-details";
+    }
+
+    @Override
+    public Class<? extends MyPersonalDetailsFormData> getFormDataClass() {
+        return DefaultMyPersonalDetailsFormData.class;
+    }
+
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return getCustomer(session())
-                .thenComposeAsync(customerOpt -> customerOpt
-                        .map(customer -> handleFoundCustomer(customer, userContext()))
-                        .orElseGet(() -> handleNotFoundCustomer(userContext())),
-                        HttpExecution.defaultContext());
+        return doRequest(() -> {
+            logger.debug("show my personal details form in locale={}", languageTag);
+            return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
+                    .thenComposeAsync(customerOpt ->
+                            ifValidCustomer(customerOpt.orElse(null), this::showForm), HttpExecution.defaultContext());
+        });
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
-        final Form<MyPersonalDetailsFormData> myPersonalDetailsForm = formFactory.form(MyPersonalDetailsFormData.class).bindFromRequest();
-        return getCustomer(session())
-                .thenComposeAsync(customerOpt -> customerOpt
-                        .map(customer -> {
-                            if (myPersonalDetailsForm.hasErrors()) {
-                                return handleFormErrors(myPersonalDetailsForm, customer, userContext());
-                            } else {
-                                final CompletionStage<Result> resultStage = updateCustomer(customer, myPersonalDetailsForm.get())
-                                        .thenComposeAsync(updatedCustomer -> handleSuccessfulCustomerUpdate(updatedCustomer, userContext()), HttpExecution.defaultContext());
-                                return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                                        handleSetShippingToCartError(throwable, myPersonalDetailsForm, customer, userContext()));
-                            }
-                        })
-                        .orElseGet(() -> handleNotFoundCustomer(userContext())),
-                        HttpExecution.defaultContext());
+        return doRequest(() -> {
+            logger.debug("process my personal details form in locale={}", languageTag);
+            return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
+                    .thenComposeAsync(customerOpt ->
+                            ifValidCustomer(customerOpt.orElse(null), this::validateForm), HttpExecution.defaultContext());
+        });
     }
 
-    protected CompletionStage<Customer> updateCustomer(final Customer customer, final MyPersonalDetailsFormData newCustomerData) {
-        final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        if (!Objects.equals(customer.getTitle(), newCustomerData.getTitle())) {
-            updateActions.add(SetTitle.of(newCustomerData.getTitle()));
+    @Override
+    public CompletionStage<Result> showForm(final Customer customer) {
+        final Form<? extends MyPersonalDetailsFormData> filledForm = createFilledForm(customer);
+        return asyncOk(renderPage(filledForm, customer));
+    }
+
+    @Override
+    public CompletionStage<Result> handleInvalidForm(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer) {
+        saveFormErrors(form);
+        return asyncBadRequest(renderPage(form, customer));
+    }
+
+    @Override
+    public CompletionStage<? extends Customer> doAction(final MyPersonalDetailsFormData formData, final Customer customer) {
+        final CompletionStage<Customer> customerStage = updateCustomer(formData, customer);
+        customerStage.thenAcceptAsync(updatedCustomer ->
+                overwriteCustomerSessionData(updatedCustomer, session()), HttpExecution.defaultContext());
+        return customerStage;
+    }
+
+    @Override
+    public CompletionStage<Result> handleFailedAction(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer, final Throwable throwable) {
+        if (throwable.getCause() instanceof BadRequestException) {
+            saveUnexpectedError(logger, throwable.getCause());
+            return asyncBadRequest(renderPage(form, customer));
         }
-        if (!Objects.equals(customer.getFirstName(), newCustomerData.getFirstName())) {
-            updateActions.add(SetFirstName.of(newCustomerData.getFirstName()));
-        }
-        if (!Objects.equals(customer.getLastName(), newCustomerData.getLastName())) {
-            updateActions.add(SetLastName.of(newCustomerData.getLastName()));
-        }
-        if (!Objects.equals(customer.getEmail(), newCustomerData.getEmail())) {
-            updateActions.add(ChangeEmail.of(newCustomerData.getEmail()));
-        }
+        return exceptionallyCompletedFuture(throwable);
+    }
+
+    @Override
+    public CompletionStage<Result> handleSuccessfulAction(final MyPersonalDetailsFormData formData, final Customer oldCustomer, final Customer updatedCustomer) {
+        return redirectToMyPersonalDetails();
+    }
+
+    protected Form<? extends MyPersonalDetailsFormData> createFilledForm(final Customer customer) {
+        final DefaultMyPersonalDetailsFormData formData = new DefaultMyPersonalDetailsFormData();
+        formData.applyCustomerName(customer.getName());
+        formData.setEmail(customer.getEmail());
+        return formFactory().form(DefaultMyPersonalDetailsFormData.class).fill(formData);
+    }
+
+    protected CompletionStage<Html> renderPage(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer) {
+        final MyPersonalDetailsPageContent pageContent = injector().getInstance(MyPersonalDetailsPageContentFactory.class).create(customer, form);
+        return renderPage(pageContent, getTemplateName());
+    }
+
+    protected CompletionStage<Customer> updateCustomer(final MyPersonalDetailsFormData formData, final Customer customer) {
+        final List<UpdateAction<Customer>> updateActions = buildUpdateActions(formData, customer);
         if (!updateActions.isEmpty()) {
             return sphere().execute(CustomerUpdateCommand.of(customer, updateActions));
         } else {
@@ -103,67 +148,26 @@ public abstract class SunriseMyPersonalDetailsPageController extends MyAccountCo
         }
     }
 
-    protected CompletionStage<Result> handleFoundCustomer(final Customer customer, final UserContext userContext) {
-        final MyPersonalDetailsPageContent pageContent = createMyPersonalDetailsPage(customer, userContext);
-        return completedFuture(ok(renderMyPersonalDetailsPage(pageContent, userContext)));
-    }
-
-    protected CompletionStage<Result> handleSuccessfulCustomerUpdate(final Customer customer, final UserContext userContext) {
-        overwriteCustomerSessionData(customer, session());
-        final MyPersonalDetailsPageContent pageContent = createMyPersonalDetailsPage(customer, userContext);
-        return completedFuture(ok(renderMyPersonalDetailsPage(pageContent, userContext)));
-    }
-
-    protected CompletionStage<Result> handleFormErrors(final Form<MyPersonalDetailsFormData> myPersonalDetailsForm,
-                                                       final Customer customer, final UserContext userContext) {
-        final ErrorsBean errors = new ErrorsBean(myPersonalDetailsForm);
-        final MyPersonalDetailsPageContent pageContent = createMyPersonalDetailsPageWithError(myPersonalDetailsForm, errors, customer, userContext);
-        return completedFuture(badRequest(renderMyPersonalDetailsPage(pageContent, userContext)));
-    }
-
-    protected CompletionStage<Result> handleSetShippingToCartError(final Throwable throwable,
-                                                                   final Form<MyPersonalDetailsFormData> myPersonalDetailsForm,
-                                                                   final Customer customer, final UserContext userContext) {
-        if (throwable.getCause() instanceof SphereException) {
-            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
-            Logger.error("The request to update customer details raised an exception", errorResponseException);
-            final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-            final MyPersonalDetailsPageContent pageContent = createMyPersonalDetailsPageWithError(myPersonalDetailsForm, errors, customer, userContext);
-            return completedFuture(badRequest(renderMyPersonalDetailsPage(pageContent, userContext)));
+    protected List<UpdateAction<Customer>> buildUpdateActions(final MyPersonalDetailsFormData formData, final Customer customer) {
+        final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
+        final CustomerName customerName = formData.toCustomerName();
+        if (!Objects.equals(customer.getTitle(), customerName.getTitle())) {
+            updateActions.add(SetTitle.of(customerName.getTitle()));
         }
-        return exceptionallyCompletedFuture(new IllegalArgumentException(throwable));
+        if (!Objects.equals(customer.getFirstName(), customerName.getFirstName())) {
+            updateActions.add(SetFirstName.of(customerName.getFirstName()));
+        }
+        if (!Objects.equals(customer.getLastName(), customerName.getLastName())) {
+            updateActions.add(SetLastName.of(customerName.getLastName()));
+        }
+        if (!Objects.equals(customer.getEmail(), formData.getEmail())) {
+            updateActions.add(ChangeEmail.of(formData.getEmail()));
+        }
+        return updateActions;
     }
 
-    protected CompletionStage<Result> handleNotFoundCustomer(final UserContext userContext) {
-        final Call call = reverseRouter.showLogInForm(userContext.languageTag());
+    protected final CompletionStage<Result> redirectToMyPersonalDetails() {
+        final Call call = injector().getInstance(MyPersonalDetailsReverseRouter.class).myPersonalDetailsPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
-    }
-
-    protected MyPersonalDetailsPageContent createMyPersonalDetailsPage(final Customer customer, final UserContext userContext) {
-        final MyPersonalDetailsPageContent pageContent = new MyPersonalDetailsPageContent();
-        pageContent.setCustomer(new CustomerBean(customer));
-        pageContent.setPersonalDetailsForm(new MyPersonalDetailsFormBean(customer, userContext, i18nResolver, configuration));
-        return pageContent;
-    }
-
-    protected MyPersonalDetailsPageContent createMyPersonalDetailsPageWithError(final Form<MyPersonalDetailsFormData> myPersonalDetailsForm,
-                                                                                final ErrorsBean errors, final Customer customer,
-                                                                                final UserContext userContext) {
-        final MyPersonalDetailsPageContent pageContent = new MyPersonalDetailsPageContent();
-        pageContent.setCustomer(new CustomerBean(customer));
-        final MyPersonalDetailsFormBean formBean = new MyPersonalDetailsFormBean();
-        final Function<String, String> formFieldExtractor = FormUtils.formFieldExtractor(myPersonalDetailsForm);
-        formBean.setSalutations(new TitleFormFieldBean(formFieldExtractor.apply("title"), userContext, i18nResolver, configuration));
-        formBean.setFirstName(formFieldExtractor.apply("firstName"));
-        formBean.setLastName(formFieldExtractor.apply("lastName"));
-        formBean.setEmail(formFieldExtractor.apply("email"));
-        formBean.setErrors(errors);
-        pageContent.setPersonalDetailsForm(formBean);
-        return pageContent;
-    }
-
-    protected Html renderMyPersonalDetailsPage(final MyPersonalDetailsPageContent pageContent, final UserContext userContext) {
-        final SunrisePageData pageData = createPageData(pageContent);
-        return templateEngine().renderToHtml("my-account-personal-details", pageData, userContext.locales());
     }
 }

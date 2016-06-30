@@ -1,37 +1,17 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.forms.AddressFormBean;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.forms.FormBean;
 import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.models.Address;
-import io.sphere.sdk.models.Base;
-import play.Configuration;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-import static java.util.Collections.singletonList;
-
-public class CheckoutAddressFormBean extends Base {
+public class CheckoutAddressFormBean extends FormBean {
 
     private boolean differentBillingAddress;
     private AddressFormBean shippingAddress;
     private AddressFormBean billingAddress;
-    private ErrorsBean errors;
-
-    public CheckoutAddressFormBean() {
-    }
-
-    public CheckoutAddressFormBean(final @Nullable Address shippingAddress, final @Nullable Address billingAddress,
-                                   final boolean differentBillingAddress, final UserContext userContext,
-                                   final ProjectContext projectContext, final I18nResolver i18nResolver, final Configuration configuration) {
-        this.shippingAddress = createShippingAddressFormBean(shippingAddress, userContext, i18nResolver, configuration);
-        this.billingAddress = createBillingAddressFormBean(billingAddress, userContext, projectContext, i18nResolver, configuration);
-        this.differentBillingAddress = differentBillingAddress;
-    }
 
     public boolean isBillingAddressDifferentToBillingAddress() {
         return differentBillingAddress;
@@ -57,31 +37,7 @@ public class CheckoutAddressFormBean extends Base {
         this.billingAddress = billingAddress;
     }
 
-    public ErrorsBean getErrors() {
-        return errors;
-    }
-
-    public void setErrors(final ErrorsBean errors) {
-        this.errors = errors;
-    }
-
     private List<CountryCode> availableBillingCountries(final ProjectContext projectContext) {
         return projectContext.countries();
-    }
-
-    @Deprecated
-    public static AddressFormBean createShippingAddressFormBean(final @Nullable Address shippingAddress,
-                                                                 final UserContext userContext, final I18nResolver i18nResolver,
-                                                                 final Configuration configuration) {
-        final List<CountryCode> shippingCountries = singletonList(userContext.country());
-        return new AddressFormBean(shippingAddress, shippingCountries, userContext, i18nResolver, configuration);
-    }
-
-    @Deprecated
-    public static AddressFormBean createBillingAddressFormBean(final @Nullable Address billingAddress,
-                                                                final UserContext userContext, final ProjectContext projectContext,
-                                                                final I18nResolver i18nResolver, final Configuration configuration) {
-        final List<CountryCode> billingCountries = projectContext.countries();
-        return new AddressFormBean(billingAddress, billingCountries, userContext, i18nResolver, configuration);
     }
 }

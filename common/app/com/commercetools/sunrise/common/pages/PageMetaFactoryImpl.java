@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.mvc.Http;
 
@@ -28,6 +29,8 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private CheckoutReverseRouter checkoutReverseRouter;
     @Inject
     private AddressBookReverseRouter addressBookReverseRouter;
+    @Inject
+    private MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
 
     @Override
     public PageMeta create() {
@@ -64,15 +67,12 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processSignUpForm(language), "signUpSubmit")
                 .addHalLink(reverseRouter.processLogOut(language), "logOut")
 
-                .addHalLink(reverseRouter.showMyPersonalDetails(language), "myPersonalDetails", "myAccount")
-                .addHalLink(reverseRouter.processMyPersonalDetailsForm(language), "editMyPersonalDetails")
-                .addHalLink(addressBookReverseRouter.showMyAddressBook(language), "myAddressBook")
-                .addHalLink(addressBookReverseRouter.showAddAddressToMyAddressBook(language), "myAddressBookAddAddress")
-                .addHalLink(addressBookReverseRouter.processAddAddressToMyAddressBookForm(language), "myAddressBookAddAddressSubmit")
+                .addHalLink(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall(language), "myPersonalDetails", "myAccount")
+                .addHalLink(myPersonalDetailsReverseRouter.myPersonalDetailsProcessFormCall(language), "editMyPersonalDetails")
+                .addHalLink(addressBookReverseRouter.addressBookCall(language), "myAddressBook")
+                .addHalLink(addressBookReverseRouter.addAddressToAddressBookCall(language), "myAddressBookAddAddress")
+                .addHalLink(addressBookReverseRouter.addAddressToAddressBookProcessFormCall(language), "myAddressBookAddAddressSubmit")
                 .addHalLink(reverseRouter.showMyOrders(language), "myOrders")
-
-
-                .addHalLink(reverseRouter.processMyPersonalDetailsForm(language), "editMyPersonalDetails")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO frameork migration
