@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 
@@ -30,38 +31,62 @@ import java.util.*;
 import java.util.concurrent.CompletionStage;
 
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
-import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
-import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
-public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutAddressFormData> {
+public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutAddressFormData, Cart, Cart> {
     protected static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressPageController.class);
 
     @Inject
     protected CheckoutAddressPageContentFactory pageContentFactory;
-
-
-    @AddCSRFToken
-    public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> getOrCreateCart().thenCompose(cart -> showCheckoutAddressPage(cart)));
-    }
 
     @Override
     public Class<? extends CheckoutAddressFormData> getFormDataClass() {
         return DefaultCheckoutAddressFormData.class;
     }
 
+    @AddCSRFToken
+    public CompletionStage<Result> show(final String languageTag) {
+        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::showForm, HttpExecution.defaultContext()));
+    }
+
     @RequireCSRFCheck
     @SuppressWarnings("unused")
     public CompletionStage<Result> process(final String languageTag) {
-        return formProcessingAction(this);
+        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::validateForm, HttpExecution.defaultContext()));
     }
 
-    private CompletionStage<Result> showCheckoutAddressPage(final Cart cart) {
+    @Override
+    public CompletionStage<Result> showForm(final Cart cart) {
         final CheckoutAddressPageContent pageContent = pageContentFactory.create(cart);
         return asyncOk(renderPage(pageContent, getTemplateName()));
+    }
+
+    @Override
+    public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutAddressFormData> form, final Cart cart) {
+        ErrorsBean errors = null;
+        if (form.hasErrors()) {
+            errors = new ErrorsBean(form);
+        }
+        final CheckoutAddressPageContent pageContent = pageContentFactory.createWithAddressError(form, errors, cart);
+        return asyncBadRequest(renderPage(pageContent, getTemplateName()));
+    }
+
+    @Override
+    public CompletionStage<? extends Cart> doAction(final CheckoutAddressFormData formData, final Cart cart) {
+        return setAddressToCart(cart, formData.toShippingAddress(), formData.toBillingAddress());
+    }
+
+    @Override
+    public CompletionStage<Result> handleFailedAction(final CheckoutAddressFormData formData, final Cart cart, final Throwable throwable) {
+        return exceptionallyCompletedFuture(throwable);
+    }
+
+    @Override
+    public CompletionStage<Result> handleSuccessfulAction(final CheckoutAddressFormData formData, final Cart cart, final Cart result) {
+        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutShippingPageCall(userContext().languageTag());
+        return completedFuture(redirect(call));
     }
 
     @Override
@@ -72,31 +97,18 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     }
 
     @Override
-    public CompletionStage<Result> handleValidForm(final Form<? extends CheckoutAddressFormData> form) {
-        return getOrCreateCart().thenComposeAsync(cart -> {
-            final CheckoutAddressFormData formData = form.get();
-            final Address shippingAddress = formData.toShippingAddress();
-            final Address billingAddress = formData.toBillingAddress();
-            return sendAddressesToCommercetoolsPlatform(cart, this, form, shippingAddress, billingAddress);
-        }, defaultContext());
+    public String getTemplateName() {
+        return "checkout-address";
     }
 
-    protected <F extends CheckoutAddressFormData> CompletionStage<Result> sendAddressesToCommercetoolsPlatform(final Cart cart, final SunriseCheckoutAddressPageController controller, final Form<F> filledForm, final Address shippingAddress, final Address billingAddress) {
-        final CompletionStage<Result> resultStage = controller.setAddressToCart(cart, shippingAddress, billingAddress)
-                .thenComposeAsync(controller::handleSuccessfulSetAddress, defaultContext());
-        return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                controller.handleSetAddressToCartError(throwable, filledForm, cart));
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("checkout", "checkout-address"));
     }
 
-    private boolean isBillingDifferent() {
-        final String flagFieldName = "billingAddressDifferentToBillingAddress";
-        final String fieldValue = formFactory().form().bindFromRequest().get(flagFieldName);
-        return "true".equals(fieldValue);
-    }
-
-    protected CompletionStage<Cart> setAddressToCart(final Cart cart,
-                                                     final Address shippingAddress,
-                                                     @Nullable final Address billingAddress) {
+    private CompletionStage<Cart> setAddressToCart(final Cart cart,
+                                                   final Address shippingAddress,
+                                                   @Nullable final Address billingAddress) {
         final List<UpdateAction<Cart>> updateActions = new ArrayList<>();
         updateActions.add(SetCountry.of(shippingAddress.getCountry()));
         updateActions.add(SetShippingAddress.of(shippingAddress));
@@ -108,36 +120,9 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
                 PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
     }
 
-    protected CompletionStage<Result> handleSuccessfulSetAddress(final Cart cart) {
-        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutShippingPageCall(userContext().languageTag());
-        return completedFuture(redirect(call));
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutAddressFormData> shippingAddressForm) {
-        return getOrCreateCart().thenComposeAsync(cart -> {
-            ErrorsBean errors = null;
-            if (shippingAddressForm.hasErrors()) {
-                errors = new ErrorsBean(shippingAddressForm);
-            }
-            final CheckoutAddressPageContent pageContent = pageContentFactory.createWithAddressError(shippingAddressForm, errors, cart);
-            return asyncBadRequest(renderPage(pageContent, getTemplateName()));
-        }, defaultContext());
-    }
-
-    protected CompletionStage<Result> handleSetAddressToCartError(final Throwable throwable,
-                                                                  final Form<? extends CheckoutAddressFormData> shippingAddressForm,
-                                                                  final Cart cart) {
-        return exceptionallyCompletedFuture(throwable);
-    }
-
-    @Override
-    public String getTemplateName() {
-        return "checkout-address";
-    }
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("checkout", "checkout-address"));
+    private boolean isBillingDifferent() {
+        final String flagFieldName = "billingAddressDifferentToBillingAddress";
+        final String fieldValue = formFactory().form().bindFromRequest().get(flagFieldName);
+        return "true".equals(fieldValue);
     }
 }
