@@ -29,62 +29,59 @@ import static com.commercetools.sunrise.common.forms.FormUtils.extractBooleanFor
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.removeCartSessionData;
 import static com.commercetools.sunrise.shoppingcart.OrderSessionUtils.overwriteLastOrderIdSessionData;
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
-import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
 public abstract class SunriseCheckoutConfirmationPageController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutConfirmationFormData> {
+        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutConfirmationFormData, Cart, Order> {
 
     @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
 
+    @Override
+    public Class<? extends CheckoutConfirmationFormData> getFormDataClass() {
+        return DefaultCheckoutConfirmationFormData.class;
+    }
+
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            return getOrCreateCart()
-                    .thenComposeAsync(cart -> {
-                        final CheckoutConfirmationPageContent pageContent = createPageContent();
-                        return asyncOk(renderCheckoutConfirmationPage(cart, pageContent));
-                    }, defaultContext());
-        });
+        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::showForm, defaultContext()));
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> {
-            return bindForm().thenComposeAsync(form -> {
-                if (form.hasErrors()) {
-                    return handleInvalidForm(form);
-                } else {
-                    return handleValidForm(form);
-                }
-            }, defaultContext());
-        });
+        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::validateForm, defaultContext()));
     }
 
     @Override
-    public CompletionStage<Result> handleValidForm(final Form<? extends CheckoutConfirmationFormData> form) {
-        return getOrCreateCart()
-                .thenComposeAsync(cart -> {
-        final CompletionStage<Result> resultStage = createOrder(cart)
-                .thenComposeAsync(order -> handleSuccessfulCreateOrder(), defaultContext());
-        return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                handleCreateOrderError(throwable, form, cart));
-                }, defaultContext());
+    public CompletionStage<Result> showForm(final Cart cart) {
+        final CheckoutConfirmationPageContent pageContent = createPageContent();
+        return asyncOk(renderCheckoutConfirmationPage(cart, pageContent));
     }
 
-    protected CompletionStage<Order> createOrder(final Cart cart) {
-        final String orderNumber = generateOrderNumber();
-        final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, orderInitialPaymentState(cart));
-        return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
-                .thenApplyAsync(order -> {
-                    overwriteLastOrderIdSessionData(order, session());
-                    removeCartSessionData(session());
-                    return order;
-                }, defaultContext());
+    @Override
+    public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutConfirmationFormData> form, final Cart cart) {
+        final ErrorsBean errors = new ErrorsBean(form);
+        final CheckoutConfirmationPageContent pageContent = createPageContentWithConfirmationError(form, errors);
+        return asyncBadRequest(renderCheckoutConfirmationPage(cart, pageContent));
+    }
+
+    @Override
+    public CompletionStage<? extends Order> doAction(final CheckoutConfirmationFormData formData, final Cart cart) {
+        return createOrder(cart);
+    }
+
+    @Override
+    public CompletionStage<Result> handleFailedAction(final CheckoutConfirmationFormData formData, final Cart cart, final Throwable throwable) {
+        return exceptionallyCompletedFuture(throwable);
+    }
+
+    @Override
+    public CompletionStage<Result> handleSuccessfulAction(final CheckoutConfirmationFormData formData, final Cart cart, final Order order) {
+        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutThankYouPageCall(userContext().languageTag());
+        return completedFuture(redirect(call));
     }
 
     protected PaymentState orderInitialPaymentState(final Cart cart) {
@@ -93,32 +90,6 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
 
     protected String generateOrderNumber() {
         return RandomStringUtils.randomNumeric(8);
-    }
-
-    protected CompletionStage<Result> handleSuccessfulCreateOrder() {
-        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutThankYouPageCall(userContext().languageTag());
-        return completedFuture(redirect(call));
-    }
-
-    @Override
-    public Class<? extends CheckoutConfirmationFormData> getFormDataClass() {
-        return DefaultCheckoutConfirmationFormData.class;
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutConfirmationFormData> confirmationForm) {
-        return getOrCreateCart()
-                .thenComposeAsync(cart -> {
-                    final ErrorsBean errors = new ErrorsBean(confirmationForm);
-                    final CheckoutConfirmationPageContent pageContent = createPageContentWithConfirmationError(confirmationForm, errors);
-                    return asyncBadRequest(renderCheckoutConfirmationPage(cart, pageContent));
-                }, defaultContext());
-    }
-
-    protected CompletionStage<Result> handleCreateOrderError(final Throwable throwable,
-                                                             final Form<? extends CheckoutConfirmationFormData> confirmationForm,
-                                                             final Cart cart) {
-        return exceptionallyCompletedFuture(throwable);
     }
 
     protected CheckoutConfirmationPageContent createPageContent() {
@@ -151,5 +122,16 @@ public abstract class SunriseCheckoutConfirmationPageController extends SunriseF
     @Override
     public String getTemplateName() {
         return "checkout-confirmation";
+    }
+
+    private CompletionStage<Order> createOrder(final Cart cart) {
+        final String orderNumber = generateOrderNumber();
+        final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, orderInitialPaymentState(cart));
+        return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
+                .thenApplyAsync(order -> {
+                    overwriteLastOrderIdSessionData(order, session());
+                    removeCartSessionData(session());
+                    return order;
+                }, defaultContext());
     }
 }
