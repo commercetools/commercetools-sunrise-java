@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.hooks.CartQueryFilterHook;
 import com.commercetools.sunrise.hooks.UserCartLoadedHook;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
@@ -62,11 +63,30 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
-        return CustomerSessionUtils.getCustomerId(session)
-                .map(customerId -> fetchCartByCustomerOrNew(customerId, userContext))
-                .orElseGet(() -> CartSessionUtils.getCartId(session)
-                        .map(cartId -> fetchCartByIdOrNew(cartId, userContext))
-                        .orElseGet(() -> createCart(userContext)));
+        final CartQuery query = createQueryForUserCart(session);
+        return sphere().execute(query).thenComposeAsync(carts -> carts.head()
+                        .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
+                        .orElseGet(() -> createCart(userContext)),
+                defaultContext());
+    }
+
+    private CartQuery createQueryForUserCart(final Http.Session session) {
+        final String nullableCustomerId = CustomerSessionUtils.getCustomerId(session).orElse(null);
+        final String nullableCartId = CartSessionUtils.getCartId(session).orElse(null);
+        CartQuery query = CartQuery.of();
+        if (nullableCustomerId != null) {
+            query = query.plusPredicates(cart -> cart.customerId().is(nullableCustomerId));
+        } else if(nullableCartId != null) {
+            query.plusPredicates(cart -> cart.id().is(nullableCartId));
+        }
+        query = query
+                .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
+                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
+                .plusExpansionPaths(c -> c.paymentInfo().payments())
+                .withSort(cart -> cart.lastModifiedAt().sort().desc())
+                .withLimit(1);
+        query = hooks().runFilterHook(CartQueryFilterHook.class, (hook, q) -> hook.filterCartQuery(q), query);
+        return query;
     }
 
     protected CompletionStage<Cart> createCart(final UserContext userContext) {
@@ -78,32 +98,6 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
                 .customerEmail(CustomerSessionUtils.getCustomerEmail(session()).orElse(null))
                 .build();
         return sphere().execute(CartCreateCommand.of(cartDraft));
-    }
-
-    protected CompletionStage<Cart> fetchCartByIdOrNew(final String cartId, final UserContext userContext) {
-        final CartQueryBuilder queryBuilder = CartQueryBuilder.of()
-                .plusPredicates(cart -> cart.is(Cart.referenceOfId(cartId)));
-        return queryCartOrNew(queryBuilder, userContext);
-    }
-
-    protected CompletionStage<Cart> fetchCartByCustomerOrNew(final String customerId, final UserContext userContext) {
-        final CartQueryBuilder queryBuilder = CartQueryBuilder.of()
-                .plusPredicates(cart -> cart.customerId().is(customerId));
-        return queryCartOrNew(queryBuilder, userContext);
-    }
-
-    protected CompletionStage<Cart> queryCartOrNew(final CartQueryBuilder queryBuilder, final UserContext userContext) {
-        final CartQuery query = queryBuilder
-                .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
-                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
-                .plusExpansionPaths(c -> c.paymentInfo().payments())
-                .sort(cart -> cart.lastModifiedAt().sort().desc())
-                .limit(1)
-                .build();
-        return sphere().execute(query).thenComposeAsync(carts -> carts.head()
-                .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
-                .orElseGet(() -> createCart(userContext)),
-                defaultContext());
     }
 
     protected CompletionStage<Cart> updateCartWithUserPreferences(final Cart cart, final UserContext userContext) {

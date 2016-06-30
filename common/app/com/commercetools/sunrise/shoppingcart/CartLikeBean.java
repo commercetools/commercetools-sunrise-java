@@ -31,6 +31,7 @@ public class CartLikeBean {
     public CartLikeBean() {
     }
 
+    @Deprecated//use a factory
     public CartLikeBean(final CartLike<?> cartLike, final UserContext userContext,
                         final ProductDataConfig productDataConfig, final ProductReverseRouter reverseRouter) {
         final MoneyContext moneyContext = MoneyContext.of(cartLike.getCurrency(), userContext.locale());
