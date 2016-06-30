@@ -25,7 +25,7 @@ public class HookContextImpl extends Base implements HookContext {
 
     @Override
     public <T extends Hook> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
-        hookRunnerLogger.debug("runAsyncHook {}", hookClass.getName());
+        hookRunnerLogger.debug("runAsyncHook {}", hookClass.getSimpleName());
         //TODO throw a helpful NPE if component returns null instead of CompletionStage
         final List<CompletionStage<Void>> collect = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
@@ -40,7 +40,7 @@ public class HookContextImpl extends Base implements HookContext {
 
     @Override
     public <T extends Hook, R> R runFilterHook(final Class<T> hookClass, final BiFunction<T, R, R> f, final R param) {
-        hookRunnerLogger.debug("runFilterHook {}", hookClass.getName());
+        hookRunnerLogger.debug("runFilterHook {}", hookClass.getSimpleName());
         R result = param;
         final List<T> applicableHooks = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
@@ -54,7 +54,7 @@ public class HookContextImpl extends Base implements HookContext {
 
     @Override
     public <T extends Hook> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer) {
-        hookRunnerLogger.debug("runVoidHook {}", hookClass.getName());
+        hookRunnerLogger.debug("runVoidHook {}", hookClass.getSimpleName());
         controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
                 .forEach(action -> consumer.accept((T) action));

@@ -10,45 +10,59 @@ import javax.annotation.Nullable;
 
 public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddressFormData {
 
-    private String csrfToken;
-
     private boolean billingAddressDifferentToBillingAddress;
 
     private String titleShipping;
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String firstNameShipping;
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String lastNameShipping;
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String streetNameShipping;
     private String additionalStreetInfoShipping;
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String cityShipping;
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String postalCodeShipping;
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String countryShipping;
     private String regionShipping;
     private String phoneShipping;
     @Constraints.Required
+    @Constraints.MinLength(1)
+    @Constraints.Email
     private String emailShipping;
     private String titleBilling;
+    @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
     private String firstNameBilling;
+    @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
     private String lastNameBilling;
+    @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
     private String streetNameBilling;
     private String additionalStreetInfoBilling;
+    @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
     private String cityBilling;
+    @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
     private String postalCodeBilling;
+    @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
     private String countryBilling;
     private String regionBilling;
     private String phoneBilling;
+    @Constraints.MinLength(value = 1, groups = BillingAddressDifferentToShippingAddressGroup.class)
     @Constraints.Required(groups = BillingAddressDifferentToShippingAddressGroup.class)
+    @Constraints.Email(groups = BillingAddressDifferentToShippingAddressGroup.class)
     private String emailBilling;
 
     public String getTitleBilling() {
@@ -137,14 +151,6 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
 
     public void setEmailBilling(final String emailBilling) {
         this.emailBilling = emailBilling;
-    }
-
-    public String getCsrfToken() {
-        return csrfToken;
-    }
-
-    public void setCsrfToken(final String csrfToken) {
-        this.csrfToken = csrfToken;
     }
 
     public boolean isBillingAddressDifferentToBillingAddress() {
@@ -245,7 +251,7 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
 
     @Override
     @Nullable
-    public Address getBillingAddress() {
+    public Address toBillingAddress() {
         if (isBillingAddressDifferentToBillingAddress()) {
             final CountryCode country = CountryCode.getByCode(countryBilling);
             return AddressBuilder.of(country)
@@ -266,7 +272,7 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
     }
 
     @Override
-    public Address getShippingAddress() {
+    public Address toShippingAddress() {
         final CountryCode country = CountryCode.getByCode(countryShipping);
         return AddressBuilder.of(country)
                 .title(titleShipping)

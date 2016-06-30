@@ -1,9 +1,9 @@
-package com.commercetools.sunrise.shoppingcart.removelineitem;
+package com.commercetools.sunrise.shoppingcart.cart.removelineitem;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.forms.UserFeedback;
+import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
+import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
-import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.RemoveLineItem;
@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
+import static io.sphere.sdk.utils.CompletableFutureUtils.failed;
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
@@ -28,18 +29,16 @@ public abstract class SunriseRemoveLineItemController extends SunriseFrameworkCa
 
     @Inject
     private ReverseRouter reverseRouter;
-    @Inject
-    private Injector injector;
 
     @RequireCSRFCheck
     public CompletionStage<Result> removeLineItem(final String languageTag) {
         return doRequest(() -> {
-            final Form<RemoveLineItemFormData> removeLineItemForm = formFactory().form(RemoveLineItemFormData.class).bindFromRequest();
+            final Form<DefaultRemoveLineItemFormData> removeLineItemForm = formFactory().form(DefaultRemoveLineItemFormData.class).bindFromRequest();
             return removeLineItemForm.hasErrors() ? handleRemoveLineItemFormErrors(removeLineItemForm) : handleValidForm(removeLineItemForm);
         });
     }
 
-    private CompletionStage<Result> handleValidForm(final Form<RemoveLineItemFormData> removeLineItemForm) {
+    private CompletionStage<Result> handleValidForm(final Form<DefaultRemoveLineItemFormData> removeLineItemForm) {
         return getOrCreateCart()
                 .thenComposeAsync(cart -> {
                     final String lineItemId = removeLineItemForm.get().getLineItemId();
@@ -52,7 +51,10 @@ public abstract class SunriseRemoveLineItemController extends SunriseFrameworkCa
 
     protected CompletionStage<Cart> removeLineItem(final String lineItemId, final Cart cart) {
         final RemoveLineItem removeLineItem = RemoveLineItem.of(lineItemId);
-        return sphere().execute(CartUpdateCommand.of(cart, removeLineItem));
+        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, removeLineItem);
+        return executeSphereRequestWithHooks(cmd,
+                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
+                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
     }
 
     //TODO this is duplicated
@@ -61,20 +63,18 @@ public abstract class SunriseRemoveLineItemController extends SunriseFrameworkCa
         return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
     }
 
-    protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<RemoveLineItemFormData> removeLineItemForm) {
-        injector.getInstance(UserFeedback.class).addErrors(removeLineItemForm);
-        return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
+    protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<DefaultRemoveLineItemFormData> form) {
+        return failed(new RuntimeException(form.toString()));//TODO handle form error
     }
 
     protected CompletionStage<Result> handleRemoveLineItemError(final Throwable throwable,
-                                                                final Form<RemoveLineItemFormData> removeLineItemForm,
+                                                                final Form<DefaultRemoveLineItemFormData> removeLineItemForm,
                                                                 final Cart cart) {
-        injector.getInstance(UserFeedback.class).addErrors("The request to change line item quantity raised an exception");// TODO get from i18n
-        return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
+        return failed(throwable);
     }
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart"));
+        return new HashSet<>(asList("cart", "remove-line-item-from-cart"));
     }
 }

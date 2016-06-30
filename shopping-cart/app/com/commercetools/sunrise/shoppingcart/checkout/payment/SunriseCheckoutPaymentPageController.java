@@ -79,7 +79,7 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
-            final Form<CheckoutPaymentFormData> paymentForm = formFactory.form(CheckoutPaymentFormData.class).bindFromRequest();
+            final Form<DefaultCheckoutPaymentFormData> paymentForm = formFactory.form(DefaultCheckoutPaymentFormData.class).bindFromRequest();
             return getOrCreateCart()
                     .thenComposeAsync(cart -> {
                         return getPaymentMethodInfos(cart).thenComposeAsync(paymentMethodInfos -> {
@@ -93,8 +93,8 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
         });
     }
 
-    private CompletionStage<Result> handleValudForm(final Form<CheckoutPaymentFormData> paymentForm, final Cart cart, final List<PaymentMethodInfo> paymentMethodInfos) {
-        final CheckoutPaymentFormData checkoutPaymentFormData = paymentForm.get();
+    private CompletionStage<Result> handleValudForm(final Form<DefaultCheckoutPaymentFormData> paymentForm, final Cart cart, final List<PaymentMethodInfo> paymentMethodInfos) {
+        final DefaultCheckoutPaymentFormData checkoutPaymentFormData = paymentForm.get();
         final List<String> selectedMethodNames = singletonList(checkoutPaymentFormData.getPayment());
         final List<PaymentMethodInfo> selectedPaymentMethods = getSelectedPaymentMethodsInfo(selectedMethodNames, paymentMethodInfos);
         if (selectedPaymentMethods.isEmpty()) {
@@ -168,7 +168,7 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
         return completedFuture(redirect(call));
     }
 
-    protected CompletionStage<Result> handleFormErrors(final Form<CheckoutPaymentFormData> paymentForm,
+    protected CompletionStage<Result> handleFormErrors(final Form<DefaultCheckoutPaymentFormData> paymentForm,
                                                        final List<PaymentMethodInfo> paymentMethods,
                                                        final Cart cart) {
         final ErrorsBean errors = new ErrorsBean(paymentForm);
@@ -176,7 +176,7 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
         return asyncBadRequest(renderCheckoutPaymentPage(cart, pageContent));
     }
 
-    protected CompletionStage<Result> handleInvalidPaymentError(final Form<CheckoutPaymentFormData> paymentForm,
+    protected CompletionStage<Result> handleInvalidPaymentError(final Form<DefaultCheckoutPaymentFormData> paymentForm,
                                                                 final List<PaymentMethodInfo> paymentMethods,
                                                                 final Cart cart) {
         final ErrorsBean errors = new ErrorsBean("Invalid payment error"); // TODO use i18n
@@ -185,7 +185,7 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
     }
 
     protected CompletionStage<Result> handleSetPaymentToCartError(final Throwable throwable,
-                                                                  final Form<CheckoutPaymentFormData> paymentForm,
+                                                                  final Form<DefaultCheckoutPaymentFormData> paymentForm,
                                                                   final List<PaymentMethodInfo> paymentMethods,
                                                                   final Cart cart) {
         if (throwable.getCause() instanceof ErrorResponseException) {
@@ -210,7 +210,7 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
         return pageContent;
     }
 
-    protected CheckoutPaymentPageContent createPageContentWithPaymentError(final Form<CheckoutPaymentFormData> paymentForm,
+    protected CheckoutPaymentPageContent createPageContentWithPaymentError(final Form<DefaultCheckoutPaymentFormData> paymentForm,
                                                                            final ErrorsBean errors, final List<PaymentMethodInfo> paymentMethods) {
         final CheckoutPaymentPageContent pageContent = new CheckoutPaymentPageContent();
         final List<String> selectedPaymentMethodKeys = Optional.ofNullable(extractFormField(paymentForm, "payment"))

@@ -4,8 +4,9 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
+import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
-import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingMethod;
@@ -34,8 +35,6 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
         implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutShippingFormData> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingPageController.class);
 
-    @Inject
-    private Injector injector;
     @Inject
     private CheckoutShippingPageContentFactory pageContentFactory;
 
@@ -79,11 +78,14 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
     protected CompletionStage<Cart> setShippingToCart(final Cart cart, final String shippingMethodId) {
         final Reference<ShippingMethod> shippingMethodRef = ShippingMethod.referenceOfId(shippingMethodId);
         final SetShippingMethod setShippingMethod = SetShippingMethod.of(shippingMethodRef);
-        return sphere().execute(CartUpdateCommand.of(cart, setShippingMethod));
+        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, setShippingMethod);
+        return executeSphereRequestWithHooks(cmd,
+                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
+                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
     }
 
     protected CompletionStage<Result> handleSuccessfulSetShipping() {
-        final Call call = injector.getInstance(CheckoutReverseRouter.class)
+        final Call call = injector().getInstance(CheckoutReverseRouter.class)
                 .checkoutPaymentPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
     }

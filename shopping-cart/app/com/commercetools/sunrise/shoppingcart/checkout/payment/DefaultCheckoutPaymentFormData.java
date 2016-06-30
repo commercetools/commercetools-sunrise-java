@@ -3,7 +3,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.payment;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-public class CheckoutPaymentFormData extends Base {
+public class DefaultCheckoutPaymentFormData extends Base {
     @Constraints.Required
     private String payment;
 

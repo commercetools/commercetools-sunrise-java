@@ -11,9 +11,9 @@ import javax.inject.Inject;
 public class CartLikeBeanFactory extends Base {
     @Inject
     protected UserContext userContext;
-    @com.google.inject.Inject
+    @Inject
     protected ProductDataConfig productDataConfig;
-    @com.google.inject.Inject
+    @Inject
     private ProductReverseRouter productReverseRouter;
 
     public CartLikeBean create(final CartLike<?> cartLike) {

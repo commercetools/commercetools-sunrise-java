@@ -2,7 +2,7 @@ package demo.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.shoppingcart.addtocart.SunriseAddProductToCartController;
+import com.commercetools.sunrise.shoppingcart.cart.addtocart.SunriseAddProductToCartController;
 import play.mvc.Result;
 
 import javax.inject.Inject;

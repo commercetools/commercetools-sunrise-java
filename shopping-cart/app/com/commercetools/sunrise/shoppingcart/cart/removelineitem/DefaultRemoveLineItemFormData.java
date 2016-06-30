@@ -1,10 +1,11 @@
-package com.commercetools.sunrise.shoppingcart.removelineitem;
+package com.commercetools.sunrise.shoppingcart.cart.removelineitem;
 
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-public class RemoveLineItemFormData extends Base {
+public class DefaultRemoveLineItemFormData extends Base {
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String lineItemId;
 
     public String getLineItemId() {

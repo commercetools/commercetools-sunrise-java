@@ -6,6 +6,7 @@ import play.data.validation.Constraints;
 public class DefaultCheckoutShippingFormData extends Base implements CheckoutShippingFormData {
 
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String shippingMethodId;
 
     @Override

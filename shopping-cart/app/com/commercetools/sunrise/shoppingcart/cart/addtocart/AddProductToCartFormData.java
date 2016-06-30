@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.addtocart;
+package com.commercetools.sunrise.shoppingcart.cart.addtocart;
 
 public interface AddProductToCartFormData {
     String getProductId();
