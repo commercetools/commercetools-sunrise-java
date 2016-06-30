@@ -5,8 +5,10 @@ import play.data.validation.Constraints;
 
 public class DefaultAddProductToCartFormData extends Base implements AddProductToCartFormData {
     @Constraints.Required
+    @Constraints.MinLength(1)
     private String productId;
     @Constraints.Required
+    @Constraints.Min(1)
     private Integer variantId;
     @Constraints.Required
     @Constraints.Min(1)
