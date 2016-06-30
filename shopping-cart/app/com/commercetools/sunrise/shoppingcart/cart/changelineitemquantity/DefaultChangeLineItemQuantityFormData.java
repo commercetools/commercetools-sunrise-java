@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.changelineitemquantity;
+package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;

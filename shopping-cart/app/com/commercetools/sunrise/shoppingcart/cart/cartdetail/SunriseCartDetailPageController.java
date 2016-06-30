@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.cartdetail;
+package com.commercetools.sunrise.shoppingcart.cart.cartdetail;
 
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;

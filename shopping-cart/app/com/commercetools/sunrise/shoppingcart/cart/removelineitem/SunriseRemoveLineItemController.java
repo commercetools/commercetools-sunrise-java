@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.removelineitem;
+package com.commercetools.sunrise.shoppingcart.cart.removelineitem;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.forms.UserFeedback;

@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.changelineitemquantity;
+package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
 import com.commercetools.sunrise.common.controllers.FormBindingTrait;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;

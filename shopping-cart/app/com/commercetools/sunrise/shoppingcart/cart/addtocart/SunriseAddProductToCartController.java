@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.addtocart;
+package com.commercetools.sunrise.shoppingcart.cart.addtocart;
 
 import com.commercetools.sunrise.common.controllers.FormBindingTrait;
 import com.commercetools.sunrise.common.forms.UserFeedback;

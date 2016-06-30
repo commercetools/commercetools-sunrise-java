@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.changelineitemquantity;
+package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
 public interface ChangeLineItemQuantityFormData {
     String getLineItemId();

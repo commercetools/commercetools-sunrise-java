@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.addtocart;
+package com.commercetools.sunrise.shoppingcart.cart.addtocart;
 
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
