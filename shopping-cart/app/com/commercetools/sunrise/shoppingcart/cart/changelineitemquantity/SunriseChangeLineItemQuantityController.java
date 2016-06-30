@@ -2,12 +2,13 @@ package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
 import com.commercetools.sunrise.common.controllers.FormBindingTrait;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.forms.UserFeedback;
+import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
+import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
-import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
+import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -29,8 +30,6 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
 
     @Inject
     private ReverseRouter reverseRouter;
-    @Inject
-    private Injector injector;
 
     @RequireCSRFCheck
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
@@ -60,13 +59,14 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
     }
 
     protected CompletionStage<Result> handleInvalidForm(final Form<? extends ChangeLineItemQuantityFormData> form) {
-        injector.getInstance(UserFeedback.class).addErrors(form);
-        return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
+        return CompletableFutureUtils.failed(new RuntimeException(form.toString()));//TODO cover this error
     }
 
     protected CompletionStage<Cart> changeLineItemQuantity(final Cart cart, final String lineItemId, final long quantity) {
         final ChangeLineItemQuantity changeLineItemQuantity = ChangeLineItemQuantity.of(lineItemId, quantity);
-        return sphere().execute(CartUpdateCommand.of(cart, changeLineItemQuantity));
+        return executeSphereRequestWithHooks(CartUpdateCommand.of(cart, changeLineItemQuantity),
+                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
+                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
     }
 
     protected CompletionStage<Result> handleSuccessfulCartChange(final Cart cart) {
@@ -77,12 +77,11 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
     protected CompletionStage<Result> handleChangeLineItemQuantityError(final Throwable throwable,
                                                                         final Form<? extends ChangeLineItemQuantityFormData> form,
                                                                         final Cart cart) {
-        injector.getInstance(UserFeedback.class).addErrors("The request to change line item quantity raised an exception");// TODO get from i18n
-        return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
+        return CompletableFutureUtils.failed(throwable);
     }
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart"));
+        return new HashSet<>(asList("cart", "change-line-item-quantity"));
     }
 }

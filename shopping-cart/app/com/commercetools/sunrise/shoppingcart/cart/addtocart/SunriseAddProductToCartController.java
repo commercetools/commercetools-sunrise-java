@@ -3,7 +3,7 @@ package com.commercetools.sunrise.shoppingcart.cart.addtocart;
 import com.commercetools.sunrise.common.controllers.FormBindingTrait;
 import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
-import com.commercetools.sunrise.hooks.UserCartUpdatedHook;
+import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -77,7 +77,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
         return executeSphereRequestWithHooks(
                 CartUpdateCommand.of(cart, updateAction),
                 CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
-                UserCartUpdatedHook.class, UserCartUpdatedHook::onUserCartUpdated
+                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated
         );
     }
 

@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.hooks.CartQueryFilterHook;
-import com.commercetools.sunrise.hooks.UserCartLoadedHook;
+import com.commercetools.sunrise.hooks.PrimaryCartLoadedHook;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import com.google.inject.Inject;
@@ -19,7 +19,6 @@ import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.carts.queries.CartQuery;
-import io.sphere.sdk.carts.queries.CartQueryBuilder;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
@@ -51,7 +50,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
                     return cart;
                 })
                 .thenApply(cart -> {
-                    hooks().runAsyncHook(UserCartLoadedHook.class, hook -> hook.onUserCartLoaded(cart));
+                    hooks().runAsyncHook(PrimaryCartLoadedHook.class, hook -> hook.onUserCartLoaded(cart));
                     return cart;
                 });
     }
@@ -63,14 +62,14 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
-        final CartQuery query = createQueryForUserCart(session);
+        final CartQuery query = createQueryForPrimaryCart(session);
         return sphere().execute(query).thenComposeAsync(carts -> carts.head()
                         .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
                         .orElseGet(() -> createCart(userContext)),
                 defaultContext());
     }
 
-    private CartQuery createQueryForUserCart(final Http.Session session) {
+    private CartQuery createQueryForPrimaryCart(final Http.Session session) {
         final String nullableCustomerId = CustomerSessionUtils.getCustomerId(session).orElse(null);
         final String nullableCartId = CartSessionUtils.getCartId(session).orElse(null);
         CartQuery query = CartQuery.of();
