@@ -76,7 +76,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
         if (nullableCustomerId != null) {
             query = query.plusPredicates(cart -> cart.customerId().is(nullableCustomerId));
         } else if(nullableCartId != null) {
-            query.plusPredicates(cart -> cart.id().is(nullableCartId));
+            query = query.plusPredicates(cart -> cart.id().is(nullableCartId));
         }
         query = query
                 .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
