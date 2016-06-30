@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
+import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
 import com.commercetools.sunrise.common.models.SunriseDataBeanFactory;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
@@ -13,14 +14,14 @@ import javax.inject.Inject;
 import static com.commercetools.sunrise.common.forms.FormUtils.extractAddress;
 import static com.commercetools.sunrise.common.forms.FormUtils.extractBooleanFormField;
 
-public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
+public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory implements WithOverridablePageContent<CheckoutAddressPageContent> {
     @Inject
     private CheckoutAddressFormBeanFactory formBeanFactory;
     @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
 
     public CheckoutAddressPageContent create(final Cart cart) {
-        final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
+        final CheckoutAddressPageContent pageContent = createPageContent();
         pageContent.setCart(cartLikeBeanFactory.create(cart));
         pageContent.setAddressForm(formBeanFactory.create(cart));
         setCommonData(pageContent);
@@ -29,7 +30,7 @@ public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
 
     public CheckoutAddressPageContent createWithAddressError(final Form<? extends CheckoutAddressFormData> addressForm,
                                                              final ErrorsBean errors, final Cart cart) {
-        final CheckoutAddressPageContent pageContent = new CheckoutAddressPageContent();
+        final CheckoutAddressPageContent pageContent = createPageContent();
         pageContent.setCart(cartLikeBeanFactory.create(cart));
         final Address shippingAddress = extractAddress(addressForm, "Shipping");
         final Address billingAddress = extractAddress(addressForm, "Billing");
@@ -43,5 +44,10 @@ public class CheckoutAddressPageContentFactory extends SunriseDataBeanFactory {
 
     private void setCommonData(final CheckoutAddressPageContent pageContent) {
         pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
+    }
+
+    @Override
+    public CheckoutAddressPageContent createPageContent() {
+        return new CheckoutAddressPageContent();
     }
 }

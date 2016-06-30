@@ -5,7 +5,7 @@ import io.sphere.sdk.models.Address;
 import javax.annotation.Nullable;
 
 public interface CheckoutAddressFormData {
-    Address getShippingAddress();
+    Address toShippingAddress();
 
-    @Nullable Address getBillingAddress();
+    @Nullable Address toBillingAddress();
 }
