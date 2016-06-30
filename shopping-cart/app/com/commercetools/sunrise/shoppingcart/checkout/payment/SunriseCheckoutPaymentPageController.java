@@ -86,14 +86,14 @@ public abstract class SunriseCheckoutPaymentPageController extends SunriseFramew
                             if (paymentForm.hasErrors()) {
                                 return handleFormErrors(paymentForm, paymentMethodInfos, cart);
                             } else {
-                                return handleValudForm(paymentForm, cart, paymentMethodInfos);
+                                return handleValidForm(paymentForm, cart, paymentMethodInfos);
                             }
                         }, defaultContext());
                     }, defaultContext());
         });
     }
 
-    private CompletionStage<Result> handleValudForm(final Form<DefaultCheckoutPaymentFormData> paymentForm, final Cart cart, final List<PaymentMethodInfo> paymentMethodInfos) {
+    private CompletionStage<Result> handleValidForm(final Form<DefaultCheckoutPaymentFormData> paymentForm, final Cart cart, final List<PaymentMethodInfo> paymentMethodInfos) {
         final DefaultCheckoutPaymentFormData checkoutPaymentFormData = paymentForm.get();
         final List<String> selectedMethodNames = singletonList(checkoutPaymentFormData.getPayment());
         final List<PaymentMethodInfo> selectedPaymentMethods = getSelectedPaymentMethodsInfo(selectedMethodNames, paymentMethodInfos);
