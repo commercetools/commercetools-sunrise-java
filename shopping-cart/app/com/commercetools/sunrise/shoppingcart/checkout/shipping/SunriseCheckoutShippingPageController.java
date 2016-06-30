@@ -22,89 +22,67 @@ import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseCheckoutShippingPageController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutShippingFormData> {
+        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutShippingFormData, Cart, Cart> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingPageController.class);
 
     @Inject
     private CheckoutShippingPageContentFactory pageContentFactory;
-
-    @AddCSRFToken
-    public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            final CompletionStage<List<ShippingMethod>> shippingMethodsStage = getShippingMethods();
-            final CompletionStage<Cart> cartStage = getOrCreateCart();
-            return cartStage.thenComposeAsync(cart -> shippingMethodsStage
-                    .thenCompose(shippingMethods -> show(cart, shippingMethods)), defaultContext());
-        });
-    }
-
-    protected CompletionStage<Result> show(final Cart cart, final List<ShippingMethod> shippingMethods) {
-        final CheckoutShippingPageContent pageContent = pageContentFactory.create(cart, shippingMethods);
-        return asyncOk(renderPage(pageContent, getTemplateName()));
-    }
-
-    @RequireCSRFCheck
-    public CompletionStage<Result> process(final String languageTag) {
-        return formProcessingAction(this);
-    }
 
     @Override
     public Class<? extends CheckoutShippingFormData> getFormDataClass() {
         return DefaultCheckoutShippingFormData.class;
     }
 
+    @AddCSRFToken
+    public CompletionStage<Result> show(final String languageTag) {
+        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::showForm, defaultContext()));
+    }
+
+    @RequireCSRFCheck
+    public CompletionStage<Result> process(final String languageTag) {
+        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::validateForm, defaultContext()));
+    }
+
     @Override
-    public CompletionStage<Result> handleValidForm(final Form<? extends CheckoutShippingFormData> form) {
-        return getOrCreateCart()
-                .thenComposeAsync(cart -> {
-        final String shippingMethodId = form.get().getShippingMethodId();
-        final CompletionStage<Result> resultStage = setShippingToCart(cart, shippingMethodId)
-                .thenComposeAsync(updatedCart -> handleSuccessfulSetShipping(), defaultContext());
-                    return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                            handleSetShippingToCartError(throwable, form, cart));
-                }, defaultContext());
+    public CompletionStage<Result> showForm(final Cart cart) {
+        return getShippingMethods().thenComposeAsync(shippingMethods -> {
+            final CheckoutShippingPageContent pageContent = pageContentFactory.create(cart, shippingMethods);
+            return asyncOk(renderPage(pageContent, getTemplateName()));
+        });
     }
 
-    protected CompletionStage<Cart> setShippingToCart(final Cart cart, final String shippingMethodId) {
-        final Reference<ShippingMethod> shippingMethodRef = ShippingMethod.referenceOfId(shippingMethodId);
-        final SetShippingMethod setShippingMethod = SetShippingMethod.of(shippingMethodRef);
-        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, setShippingMethod);
-        return executeSphereRequestWithHooks(cmd,
-                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
-                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
+    @Override
+    public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutShippingFormData> form, final Cart cart) {
+        final ErrorsBean errors = new ErrorsBean(form);
+        return renderErrorForm(form, cart, errors);
     }
 
-    protected CompletionStage<Result> handleSuccessfulSetShipping() {
+    @Override
+    public CompletionStage<? extends Cart> doAction(final CheckoutShippingFormData formData, final Cart cart) {
+        return setShippingToCart(cart, formData.getShippingMethodId());
+    }
+
+    @Override
+    public CompletionStage<Result> handleFailedAction(final CheckoutShippingFormData formData, final Cart cart, final Throwable throwable) {
+        logger.error("The request to set shipping to cart raised an exception", throwable);
+        final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
+        final Form<? extends CheckoutShippingFormData> filledForm = createFilledForm(formData.getShippingMethodId());
+        return renderErrorForm(filledForm, cart, errors);
+    }
+
+    @Override
+    public CompletionStage<Result> handleSuccessfulAction(final CheckoutShippingFormData formData, final Cart oldCart, final Cart updatedCart) {
         final Call call = injector().getInstance(CheckoutReverseRouter.class)
                 .checkoutPaymentPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutShippingFormData> shippingForm) {
-        return getOrCreateCart()
-                .thenComposeAsync(cart -> {
-                    final ErrorsBean errors = new ErrorsBean(shippingForm);
-                    return renderErrorForm(shippingForm, cart, errors);
-                }, defaultContext());
-    }
-
-    protected CompletionStage<Result> handleSetShippingToCartError(final Throwable throwable,
-                                                                   final Form<? extends CheckoutShippingFormData> shippingForm,
-                                                                   final Cart cart) {
-        logger.error("The request to set shipping to cart raised an exception", throwable);
-        final ErrorsBean errors = new ErrorsBean("Something went wrong, please try again"); // TODO get from i18n
-        return renderErrorForm(shippingForm, cart, errors);
     }
 
     protected CompletionStage<Result> renderErrorForm(final Form<? extends CheckoutShippingFormData> shippingForm, final Cart cart, final ErrorsBean errors) {
@@ -115,6 +93,13 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
                 }, defaultContext());
     }
 
+    protected Form<? extends CheckoutShippingFormData> createFilledForm(final String shippingMethodId) {
+        final DefaultCheckoutShippingFormData formData = new DefaultCheckoutShippingFormData();
+        formData.setShippingMethodId(shippingMethodId);
+        return formFactory().form(DefaultCheckoutShippingFormData.class).fill(formData);
+    }
+
+
     @Override
     public String getTemplateName() {
         return "checkout-shipping";
@@ -123,5 +108,14 @@ public abstract class SunriseCheckoutShippingPageController extends SunriseFrame
     @Override
     public Set<String> getFrameworkTags() {
         return new HashSet<>(asList("checkout", "checkout-shipping"));
+    }
+
+    private CompletionStage<Cart> setShippingToCart(final Cart cart, final String shippingMethodId) {
+        final Reference<ShippingMethod> shippingMethodRef = ShippingMethod.referenceOfId(shippingMethodId);
+        final SetShippingMethod setShippingMethod = SetShippingMethod.of(shippingMethodRef);
+        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, setShippingMethod);
+        return executeSphereRequestWithHooks(cmd,
+                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
+                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
     }
 }

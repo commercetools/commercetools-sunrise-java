@@ -21,7 +21,6 @@ import io.sphere.sdk.models.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.data.FormFactory;
 import play.filters.csrf.AddCSRFToken;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
@@ -44,8 +43,6 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
 
     @Inject
     private Injector injector;
-    @Inject
-    private FormFactory formFactory;
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -131,7 +128,7 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     protected Form<? extends AddressBookAddressFormData> createFilledForm(final Customer customer, @Nullable final Address address) {
         final DefaultAddressBookAddressFormData formData = new DefaultAddressBookAddressFormData();
         formData.apply(customer, address);
-        return formFactory.form(DefaultAddressBookAddressFormData.class).fill(formData);
+        return formFactory().form(DefaultAddressBookAddressFormData.class).fill(formData);
     }
 
     protected final CompletionStage<Result> validateInput(@Nullable final Customer nullableCustomer, @Nullable final Address nullableAddress,

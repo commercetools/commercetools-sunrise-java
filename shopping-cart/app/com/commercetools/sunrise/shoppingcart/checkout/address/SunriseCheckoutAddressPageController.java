@@ -84,7 +84,7 @@ public abstract class SunriseCheckoutAddressPageController extends SunriseFramew
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final CheckoutAddressFormData formData, final Cart cart, final Cart result) {
+    public CompletionStage<Result> handleSuccessfulAction(final CheckoutAddressFormData formData, final Cart oldCart, final Cart updatedCart) {
         final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutShippingPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
     }

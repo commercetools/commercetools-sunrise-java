@@ -169,12 +169,6 @@ public abstract class SunriseFrameworkController extends Controller {
         return hookContext;
     }
 
-    protected <X> CompletionStage<Result> formProcessingAction(final SimpleFormBindingControllerTrait<X> controller) {
-        return doRequest(() -> controller.bindForm().thenComposeAsync(form -> {
-            return form.hasErrors() ? controller.handleInvalidForm(form) : controller.handleValidForm(form);
-        }, defaultContext()));
-    }
-
     protected <R, C extends SphereRequest<R>, F extends Hook, U extends Hook> CompletionStage<R>
     executeSphereRequestWithHooks(final C baseCmd,
                                   final Class<F> filterHookClass, final BiFunction<F, C, C> fh,

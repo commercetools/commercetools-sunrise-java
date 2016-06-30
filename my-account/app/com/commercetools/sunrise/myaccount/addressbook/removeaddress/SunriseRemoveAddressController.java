@@ -17,7 +17,6 @@ import io.sphere.sdk.models.SphereException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.data.FormFactory;
 import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
@@ -39,8 +38,6 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
 
     @Inject
     private Injector injector;
-    @Inject
-    private FormFactory formFactory;
     @Inject
     private AddressBookPageContentFactory addressBookPageContentFactory;
 
@@ -113,7 +110,7 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
 
     protected Form<? extends RemoveAddressFormData> createFilledForm() {
         final RemoveAddressFormData formData = new RemoveAddressFormData();
-        return formFactory.form(RemoveAddressFormData.class).fill(formData);
+        return formFactory().form(RemoveAddressFormData.class).fill(formData);
     }
 
     protected final CompletionStage<Result> validateInput(@Nullable final Customer nullableCustomer, @Nullable final Address nullableAddress,
