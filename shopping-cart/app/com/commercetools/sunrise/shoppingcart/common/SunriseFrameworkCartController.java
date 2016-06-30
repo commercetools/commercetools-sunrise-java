@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.hooks.CartLoadedHook;
+import com.commercetools.sunrise.hooks.UserCartLoadedHook;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import com.google.inject.Inject;
@@ -50,7 +50,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
                     return cart;
                 })
                 .thenApply(cart -> {
-                    hooks().runAsyncHook(CartLoadedHook.class, hook -> hook.cartLoaded(cart));
+                    hooks().runAsyncHook(UserCartLoadedHook.class, hook -> hook.onUserCartLoaded(cart));
                     return cart;
                 });
     }

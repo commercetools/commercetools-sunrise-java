@@ -2,8 +2,9 @@ package com.commercetools.sunrise.shoppingcart.cart.addtocart;
 
 import com.commercetools.sunrise.common.controllers.FormBindingTrait;
 import com.commercetools.sunrise.common.forms.UserFeedback;
+import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
+import com.commercetools.sunrise.hooks.UserCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
-import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
@@ -13,7 +14,6 @@ import play.data.Form;
 import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Result;
 
-import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -25,8 +25,6 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseAddProductToCartController extends SunriseFrameworkCartController implements FormBindingTrait<AddProductToCartFormData> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseAddProductToCartController.class);
-    @Inject
-    private Injector injector;
 
     @RequireCSRFCheck
     public CompletionStage<Result> addProductToCart(final String languageTag) {
@@ -56,7 +54,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     }
 
     protected CompletionStage<Result> handleInvalidForm(final Form<? extends AddProductToCartFormData> form) {
-        injector.getInstance(UserFeedback.class).addErrors(form);
+        injector().getInstance(UserFeedback.class).addErrors(form);
         return successfulResult();
     }
 
@@ -70,13 +68,17 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     protected CompletionStage<Result> handleAddProductToCartError(final Throwable throwable,
                                                                   final Form<? extends AddProductToCartFormData> form,
                                                                   final Cart cart) {
-        injector.getInstance(UserFeedback.class).addErrors("an error occurred");// TODO get from i18n
+        injector().getInstance(UserFeedback.class).addErrors("an error occurred");// TODO get from i18n
         return successfulResult();
     }
 
     protected CompletionStage<Cart> addProductToCart(final String productId, final Integer variantId, final Long quantity, final Cart cart) {
         final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
-        return sphere().execute(CartUpdateCommand.of(cart, updateAction));//TODO introduce filter hook hand update session cart, log changed cart
+        return executeSphereRequestWithHooks(
+                CartUpdateCommand.of(cart, updateAction),
+                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
+                UserCartUpdatedHook.class, UserCartUpdatedHook::onUserCartUpdated
+        );
     }
 
     @Override

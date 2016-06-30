@@ -7,17 +7,16 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
+import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SunrisePageDataHook;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.json.SphereJsonUtils;
+import io.sphere.sdk.client.SphereRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.FormFactory;
@@ -32,6 +31,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -106,6 +106,10 @@ public abstract class SunriseFrameworkController extends Controller {
         return injector.getInstance(FormFactory.class);
     }
 
+    public Injector injector() {
+        return injector;
+    }
+
     @Nullable
     public static String getCsrfToken(final Http.Session session) {
         return session.get("csrfToken");
@@ -169,5 +173,17 @@ public abstract class SunriseFrameworkController extends Controller {
         return doRequest(() -> controller.bindForm().thenComposeAsync(form -> {
             return form.hasErrors() ? controller.handleInvalidForm(form) : controller.handleValidForm(form);
         }, defaultContext()));
+    }
+
+    protected <R, C extends SphereRequest<R>, F extends Hook, U extends Hook> CompletionStage<R>
+    executeSphereRequestWithHooks(final C baseCmd,
+                                  final Class<F> filterHookClass, final BiFunction<F, C, C> fh,
+                                  final Class<U> updatedHookClass, final BiFunction<U, R, CompletionStage<?>> fu) {
+        final C command = hooks().runFilterHook(filterHookClass, fh, baseCmd);
+        return sphere().execute(command)
+                .thenApplyAsync(res -> {
+                    hooks().runAsyncHook(updatedHookClass, hook -> fu.apply(hook, res));
+                    return res;
+                });
     }
 }
