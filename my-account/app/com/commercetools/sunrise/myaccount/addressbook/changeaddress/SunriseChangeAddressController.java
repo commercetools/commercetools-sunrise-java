@@ -123,7 +123,7 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     }
 
     protected CompletionStage<Html> renderPage(final Customer customer, final Form<?> form) {
-        final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(customer, form);
+        final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(form, customer);
         return renderPage(pageContent, getTemplateName());
     }
 

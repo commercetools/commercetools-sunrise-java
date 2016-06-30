@@ -33,7 +33,6 @@ public class MyPersonalDetailsPageContentFactory {
         final MyPersonalDetailsFormBean formBean = createForm(form);
         userFeedback.findErrors().ifPresent(formBean::setErrors);
         content.setPersonalDetailsForm(formBean);
-
     }
 
     protected MyPersonalDetailsFormBean createForm(final Form<?> form) {

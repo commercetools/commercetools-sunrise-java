@@ -15,7 +15,7 @@ public class AddAddressPageContentFactory {
     @Inject
     private AddressBookAddressFormBeanFactory addressBookAddressFormBeanFactory;
 
-    public AddAddressPageContent create(final Customer customer, final Form<?> form) {
+    public AddAddressPageContent create(final Form<?> form, final Customer customer) {
         final AddAddressPageContent content = new AddAddressPageContent();
         fillNewAddressForm(content, form);
         return content;

@@ -116,7 +116,7 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     }
 
     protected CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final Customer customer) {
-        final AddAddressPageContent pageContent = injector().getInstance(AddAddressPageContentFactory.class).create(customer, form);
+        final AddAddressPageContent pageContent = injector().getInstance(AddAddressPageContentFactory.class).create(form, customer);
         return renderPage(pageContent, getTemplateName());
     }
 
