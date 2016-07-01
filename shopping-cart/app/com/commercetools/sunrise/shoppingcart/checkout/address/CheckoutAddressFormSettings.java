@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.models.ModelBean;
 import com.commercetools.sunrise.common.models.TitleFormFieldBean;
 
 public class CheckoutAddressFormSettings extends ModelBean {
+
     private TitleFormFieldBean titleShipping;
     private TitleFormFieldBean titleBilling;
     private CountryFormFieldBean countriesShipping;

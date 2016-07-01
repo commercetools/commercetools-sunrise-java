@@ -2,7 +2,6 @@ package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
-import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
@@ -19,14 +18,9 @@ public class CheckoutAddressPageContentFactory extends Base implements WithOverr
     @Inject
     private I18nResolver i18nResolver;
     @Inject
-    private UserFeedback userFeedback;
-    @Inject
-    private CheckoutAddressFormBeanFactory checkoutAddressFormBeanFactory;
-    @Inject
     private CartLikeBeanFactory cartLikeBeanFactory;
     @Inject
     private CheckoutAddressFormSettingsFactory addressFormSettingsFactory;
-
 
     @Override
     public CheckoutAddressPageContent createPageContent() {
@@ -38,17 +32,11 @@ public class CheckoutAddressPageContentFactory extends Base implements WithOverr
         fillTitle(pageContent, cart);
         fillCart(pageContent, cart);
         fillForm(pageContent, form);
-        fillFormSettings(pageContent, form);
         return pageContent;
     }
 
-    protected void fillFormSettings(final CheckoutAddressPageContent pageContent, final Form<?> form) {
-        pageContent.setAddressFormSettings(addressFormSettingsFactory.create(form));
-    }
-
     protected void fillForm(final CheckoutAddressPageContent pageContent, final Form<?> form) {
-        final CheckoutAddressFormBean bean = checkoutAddressFormBeanFactory.create(form);
-        userFeedback.findErrors().ifPresent(bean::setErrors);
+        pageContent.setAddressFormSettings(addressFormSettingsFactory.create(form));
         pageContent.setAddressForm(form);
     }
 

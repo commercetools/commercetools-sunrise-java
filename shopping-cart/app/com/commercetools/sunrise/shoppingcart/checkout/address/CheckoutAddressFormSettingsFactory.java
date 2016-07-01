@@ -37,11 +37,11 @@ public class CheckoutAddressFormSettingsFactory extends Base {
     }
 
     protected void fillCountriesBilling(final CheckoutAddressFormSettings bean, final Form<?> form) {
-        bean.setCountriesBilling(countryFormFieldBeanFactory.createWithDefaultCountries(form, "countriesBilling"));
+        bean.setCountriesBilling(countryFormFieldBeanFactory.createWithDefaultCountries(form, "countryBilling"));
     }
 
     protected void fillCountriesShipping(final CheckoutAddressFormSettings bean, final Form<?> form) {
-        bean.setCountriesShipping(countryFormFieldBeanFactory.create(form, "countriesShipping", singletonList(userContext.country())));
+        bean.setCountriesShipping(countryFormFieldBeanFactory.create(form, "countryShipping", singletonList(userContext.country())));
     }
 
     protected CheckoutAddressFormSettings createAddressFormSettings() {
