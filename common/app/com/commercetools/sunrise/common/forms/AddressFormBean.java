@@ -1,61 +1,18 @@
 package com.commercetools.sunrise.common.forms;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.forms.FormBean;
-import com.commercetools.sunrise.common.models.CountryFormFieldBean;
-import com.commercetools.sunrise.common.models.TitleFormFieldBean;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.models.Address;
-import play.Configuration;
-
-import javax.annotation.Nullable;
-import java.util.List;
-
 public class AddressFormBean extends FormBean {
 
-    private TitleFormFieldBean salutations;
     private String firstName;
     private String lastName;
     private String streetName;
     private String additionalStreetInfo;
     private String city;
     private String postalCode;
-    private CountryFormFieldBean countries;
     private String region;
     private String phone;
     private String email;
 
     public AddressFormBean() {
-    }
-
-    @Deprecated
-    public AddressFormBean(@Nullable final Address address, final List<CountryCode> availableCountries,
-                           final UserContext userContext, final I18nResolver i18nResolver, final Configuration configuration) {
-        if (address != null) {
-            this.salutations = new TitleFormFieldBean(address.getTitle(), userContext, i18nResolver, configuration);
-            this.firstName = address.getFirstName();
-            this.lastName = address.getLastName();
-            this.streetName = address.getStreetName();
-            this.additionalStreetInfo = address.getAdditionalStreetInfo();
-            this.city = address.getCity();
-            this.postalCode = address.getPostalCode();
-            this.region = address.getRegion();
-            this.countries = new CountryFormFieldBean(availableCountries, address.getCountry(), userContext);
-            this.phone = address.getPhone();
-            this.email = address.getEmail();
-        } else {
-            this.salutations = new TitleFormFieldBean(null, userContext, i18nResolver, configuration);
-            this.countries = new CountryFormFieldBean(availableCountries, userContext.country(), userContext);
-        }
-    }
-
-    public TitleFormFieldBean getSalutations() {
-        return salutations;
-    }
-
-    public void setSalutations(final TitleFormFieldBean salutations) {
-        this.salutations = salutations;
     }
 
     public String getFirstName() {
@@ -104,14 +61,6 @@ public class AddressFormBean extends FormBean {
 
     public void setPostalCode(final String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public CountryFormFieldBean getCountries() {
-        return countries;
-    }
-
-    public void setCountries(final CountryFormFieldBean countries) {
-        this.countries = countries;
     }
 
     public String getRegion() {

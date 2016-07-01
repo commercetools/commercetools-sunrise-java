@@ -12,7 +12,7 @@ name := "commercetools-sunrise"
 
 organization in ThisBuild := "com.commercetools.sunrise"
 
-lazy val sunriseDesignVersion = "0.58.1"
+lazy val sunriseDesignVersion = "0.59.0"
 
 lazy val jvmSdkVersion = "1.0.0"
 
@@ -107,7 +107,7 @@ lazy val sunriseThemeSettings = Seq (
 lazy val templateDependencies = Seq (
   libraryDependencies ++= Seq (
     "org.webjars" %% "webjars-play" % "2.5.0-2",
-    "com.github.jknack" % "handlebars" % "2.3.2"
+    "com.github.jknack" % "handlebars" % "4.0.5"
   )
 )
 

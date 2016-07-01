@@ -15,6 +15,7 @@ import io.sphere.sdk.carts.commands.updateactions.SetCustomerEmail;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Address;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -29,6 +30,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.*;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
 
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Arrays.asList;
@@ -93,15 +95,16 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkC
     }
 
     protected Form<? extends CheckoutAddressFormData> createFilledForm(final Cart cart) {
-        final DefaultCheckoutAddressFormData formData = new DefaultCheckoutAddressFormData();
-        if (cart.getShippingAddress() != null) {
-            formData.applyShippingAddress(cart.getShippingAddress());
+        final Class<? extends CheckoutAddressFormData> formDataClass = getFormDataClass();
+        try {
+            final CheckoutAddressFormData checkoutAddressFormData = formDataClass.getConstructor().newInstance();
+            checkoutAddressFormData.setData(cart);
+            final Map<String, String> describe = BeanUtils.describe(checkoutAddressFormData);
+            final Form<? extends CheckoutAddressFormData> result = formFactory().form(DefaultCheckoutAddressFormData.class).bind(describe);
+            return result;
+        } catch (final Exception e) {
+            throw new RuntimeException();
         }
-        if (cart.getBillingAddress() != null) {
-            formData.applyBillingAddress(cart.getBillingAddress());
-            formData.setBillingAddressDifferentToBillingAddress(true);
-        }
-        return formFactory().form(DefaultCheckoutAddressFormData.class).fill(formData);
     }
 
     @Override

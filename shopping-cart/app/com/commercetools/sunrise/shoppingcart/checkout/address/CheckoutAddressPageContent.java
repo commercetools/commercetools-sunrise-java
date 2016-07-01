@@ -1,16 +1,26 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.shoppingcart.common.CheckoutPageContent;
+import play.data.Form;
 
 public class CheckoutAddressPageContent extends CheckoutPageContent {
 
-    private CheckoutAddressFormBean addressForm;
+    private Form<?> addressForm;
+    private CheckoutAddressFormSettings addressFormSettings;
 
-    public CheckoutAddressFormBean getAddressForm() {
+    public Form<?> getAddressForm() {
         return addressForm;
     }
 
-    public void setAddressForm(final CheckoutAddressFormBean addressForm) {
+    public void setAddressForm(final Form<?> addressForm) {
         this.addressForm = addressForm;
+    }
+
+    public CheckoutAddressFormSettings getAddressFormSettings() {
+        return addressFormSettings;
+    }
+
+    public void setAddressFormSettings(final CheckoutAddressFormSettings addressFormSettings) {
+        this.addressFormSettings = addressFormSettings;
     }
 }
