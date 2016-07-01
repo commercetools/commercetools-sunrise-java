@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.cart.removelineitem;
 
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
 import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
@@ -26,9 +27,6 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseRemoveLineItemController extends SunriseFrameworkCartController {
     private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveLineItemController.class);
-
-    @Inject
-    private ReverseRouter reverseRouter;
 
     @RequireCSRFCheck
     public CompletionStage<Result> removeLineItem(final String languageTag) {
@@ -60,7 +58,7 @@ public abstract class SunriseRemoveLineItemController extends SunriseFrameworkCa
     //TODO this is duplicated
     protected CompletionStage<Result> handleSuccessfulCartChange(final Cart cart) {
         overrideCartSessionData(cart);
-        return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
+        return completedFuture(redirect(injector().getInstance(CartReverseRouter.class).showCart(userContext().languageTag())));
     }
 
     protected CompletionStage<Result> handleRemoveLineItemFormErrors(final Form<DefaultRemoveLineItemFormData> form) {

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
 import com.commercetools.sunrise.common.controllers.FormBindingTrait;
-import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
 import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
@@ -15,7 +15,6 @@ import play.data.Form;
 import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Result;
 
-import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -27,9 +26,6 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseChangeLineItemQuantityController extends SunriseFrameworkCartController implements FormBindingTrait<ChangeLineItemQuantityFormData> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeLineItemQuantityController.class);
-
-    @Inject
-    private ReverseRouter reverseRouter;
 
     @RequireCSRFCheck
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
@@ -71,7 +67,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
 
     protected CompletionStage<Result> handleSuccessfulCartChange(final Cart cart) {
         overrideCartSessionData(cart);
-        return completedFuture(redirect(reverseRouter.showCart(userContext().languageTag())));
+        return completedFuture(redirect(injector().getInstance(CartReverseRouter.class).showCart(userContext().languageTag())));
     }
 
     protected CompletionStage<Result> handleChangeLineItemQuantityError(final Throwable throwable,

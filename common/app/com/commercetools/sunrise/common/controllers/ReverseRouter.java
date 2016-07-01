@@ -12,14 +12,6 @@ public interface ReverseRouter {
 
     Call processSearchProductsForm(final String languageTag);
 
-    Call showCart(final String languageTag);
-
-    Call processAddProductToCartForm(final String languageTag);
-
-    Call processDeleteLineItemForm(final String languageTag);
-
-    Call processChangeLineItemQuantityForm(final String languageTag);
-
     Call showLogInForm(final String languageTag);
 
     Call processLogInForm(final String languageTag);
