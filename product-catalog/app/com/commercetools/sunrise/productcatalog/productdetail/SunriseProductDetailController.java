@@ -135,7 +135,7 @@ public abstract class SunriseProductDetailController extends SunriseFrameworkCon
     }
 
     protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
-        return hooks().runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
+        return hooks().runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterQuery(search), productSearch);
     }
 
     protected final void runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {

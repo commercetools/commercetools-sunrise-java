@@ -39,10 +39,10 @@ public abstract class MyAccountController extends SunriseFrameworkController {
     }
 
     protected CompletionStage<Result> ifValidCustomer(@Nullable final Customer customer,
-                                                      final Function<Customer, CompletionStage<Result>> onValidActionData) {
+                                                      final Function<Customer, CompletionStage<Result>> onValidCustomer) {
         return Optional.ofNullable(customer)
                 .map(notNullCustomer -> runHookOnFoundCustomer(notNullCustomer)
-                        .thenComposeAsync(unused -> onValidActionData.apply(notNullCustomer), HttpExecution.defaultContext()))
+                        .thenComposeAsync(unused -> onValidCustomer.apply(notNullCustomer), HttpExecution.defaultContext()))
                 .orElseGet(this::handleNotFoundCustomer);
     }
 

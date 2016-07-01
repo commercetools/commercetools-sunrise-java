@@ -1,13 +1,13 @@
-package com.commercetools.sunrise.myaccount.myorders;
+package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.shoppingcart.CartLikeBean;
 
-public class MyOrderPageContent extends PageContent {
+public class MyOrderDetailPageContent extends PageContent {
 
     private CartLikeBean order;
 
-    public MyOrderPageContent() {
+    public MyOrderDetailPageContent() {
     }
 
     public CartLikeBean getOrder() {

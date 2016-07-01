@@ -36,11 +36,10 @@ public abstract class AddressBookManagementController extends MyAccountControlle
         return completedFuture(null);
     }
 
-    protected final Optional<Address> findAddress(@Nullable final Customer customer, final String addressId) {
-        return Optional.ofNullable(customer)
-                .flatMap(c -> c.getAddresses().stream()
-                        .filter(a -> Objects.equals(a.getId(), addressId))
-                        .findFirst());
+    protected final Optional<Address> findAddress(final Customer customer, final String addressId) {
+        return customer.getAddresses().stream()
+                .filter(address -> Objects.equals(address.getId(), addressId))
+                .findFirst();
     }
 
     protected final CompletionStage<Result> redirectToAddressBook() {

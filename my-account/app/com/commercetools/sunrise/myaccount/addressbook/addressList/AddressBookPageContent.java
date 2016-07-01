@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.myaccount.addressbook;
+package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 
 import com.commercetools.sunrise.common.pages.PageContent;
 

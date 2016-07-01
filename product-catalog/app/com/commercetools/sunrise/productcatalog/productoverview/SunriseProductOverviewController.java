@@ -138,7 +138,7 @@ public abstract class SunriseProductOverviewController extends SunriseFrameworkC
     }
 
     protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
-        return hooks().runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterProductProjectionSearch(search), productSearch);
+        return hooks().runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterQuery(search), productSearch);
     }
 
     protected final CompletionStage<?> runHookOnFoundCategory(final Category category) {

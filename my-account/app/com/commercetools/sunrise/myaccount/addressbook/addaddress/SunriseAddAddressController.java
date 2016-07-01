@@ -24,13 +24,11 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Arrays.asList;
@@ -73,10 +71,8 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
         return doRequest(() -> {
             logger.debug("try to add address with in locale={}", languageTag);
             return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customerOpt -> {
-                        Customer nullableCustomer = customerOpt.orElse(null);
-                        return validateInput(nullableCustomer, this::validateForm);
-                    }, HttpExecution.defaultContext());
+                    .thenComposeAsync(customerOpt ->
+                            ifValidCustomer(customerOpt.orElse(null), this::validateForm), HttpExecution.defaultContext());
         });
     }
 
@@ -120,9 +116,11 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
         return renderPage(pageContent, getTemplateName());
     }
 
-    protected final CompletionStage<Result> validateInput(@Nullable final Customer nullableCustomer,
-                                                          final Function<Customer, CompletionStage<Result>> onValidInput) {
-        return ifValidCustomer(nullableCustomer, onValidInput::apply);
+    protected final Optional<String> findAddressId(final Customer customer, final Address addressWithoutId) {
+        return customer.getAddresses().stream()
+                .filter(address -> address.equalsIgnoreId(addressWithoutId))
+                .findFirst()
+                .map(Address::getId);
     }
 
     private CompletionStage<Customer> addAddress(final Customer customer, final Address address) {
@@ -143,12 +141,5 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
         } else {
             return completedFuture(customer);
         }
-    }
-
-    private Optional<String> findAddressId(final Customer customer, final Address address) {
-        return customer.getAddresses().stream()
-                .filter(a -> a.equalsIgnoreId(address))
-                .findFirst()
-                .map(Address::getId);
     }
 }

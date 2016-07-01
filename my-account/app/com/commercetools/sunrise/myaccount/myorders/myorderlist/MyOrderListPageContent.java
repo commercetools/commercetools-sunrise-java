@@ -1,14 +1,14 @@
-package com.commercetools.sunrise.myaccount.myorders;
+package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
 import com.commercetools.sunrise.common.pages.PageContent;
 
 import java.util.List;
 
-public class MyOrdersPageContent extends PageContent {
+public class MyOrderListPageContent extends PageContent {
 
     private List<OrderOverviewBean> orders;
 
-    public MyOrdersPageContent() {
+    public MyOrderListPageContent() {
     }
 
     public List<OrderOverviewBean> getOrders() {

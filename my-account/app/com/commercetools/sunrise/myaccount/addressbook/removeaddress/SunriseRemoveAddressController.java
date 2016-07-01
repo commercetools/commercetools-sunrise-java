@@ -6,15 +6,14 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookManagementController;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookPageContent;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContent;
+import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContentFactory;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.BadRequestException;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 import io.sphere.sdk.customers.commands.updateactions.RemoveAddress;
 import io.sphere.sdk.models.Address;
-import io.sphere.sdk.models.SphereException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;

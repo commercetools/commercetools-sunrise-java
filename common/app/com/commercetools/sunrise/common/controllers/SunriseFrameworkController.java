@@ -26,6 +26,7 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.mvc.Results;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
@@ -154,11 +155,15 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected CompletionStage<Result> asyncOk(final CompletionStage<Html> htmlCompletionStage) {
-        return htmlCompletionStage.thenApplyAsync(html -> ok(html), HttpExecution.defaultContext());
+        return htmlCompletionStage.thenApplyAsync(Results::ok, HttpExecution.defaultContext());
     }
 
     protected CompletionStage<Result> asyncBadRequest(final CompletionStage<Html> htmlCompletionStage) {
-        return htmlCompletionStage.thenApplyAsync(html -> badRequest(html), HttpExecution.defaultContext());
+        return htmlCompletionStage.thenApplyAsync(Results::badRequest, HttpExecution.defaultContext());
+    }
+
+    protected CompletionStage<Result> asyncInternalServerError(final CompletionStage<Html> htmlCompletionStage) {
+        return htmlCompletionStage.thenApplyAsync(Results::internalServerError, HttpExecution.defaultContext());
     }
 
     protected void setI18nTitle(final PageContent pageContent, final String bundleWithKey) {
