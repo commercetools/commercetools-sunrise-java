@@ -34,7 +34,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
-public abstract class SunriseCheckoutConfirmationPageController extends SunriseFrameworkCartController
+public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkCartController
         implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutConfirmationFormData, Cart, Order> {
 
     @Inject

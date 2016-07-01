@@ -27,7 +27,7 @@ import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-public abstract class SunriseMyOrdersPageController extends MyAccountController {
+public abstract class SunriseMyOrdersController extends MyAccountController {
 
     public static final int PAGE_SIZE = 500; // TODO allow to configure and work with pages
     @Inject

@@ -51,9 +51,9 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * </ul>
  */
 @RequestScoped
-public abstract class SunriseProductDetailPageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
+public abstract class SunriseProductDetailController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
-    protected static final Logger logger = LoggerFactory.getLogger(SunriseProductDetailPageController.class);
+    protected static final Logger logger = LoggerFactory.getLogger(SunriseProductDetailController.class);
 
     @Inject
     private Injector injector;

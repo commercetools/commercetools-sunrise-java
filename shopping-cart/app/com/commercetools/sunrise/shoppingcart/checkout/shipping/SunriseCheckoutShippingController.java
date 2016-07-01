@@ -34,9 +34,9 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
-public abstract class SunriseCheckoutShippingPageController extends SunriseFrameworkCartController
+public abstract class SunriseCheckoutShippingController extends SunriseFrameworkCartController
         implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutShippingFormData, Cart, Cart> {
-    private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingPageController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingController.class);
 
     @Inject
     private CheckoutShippingPageContentFactory pageContentFactory;

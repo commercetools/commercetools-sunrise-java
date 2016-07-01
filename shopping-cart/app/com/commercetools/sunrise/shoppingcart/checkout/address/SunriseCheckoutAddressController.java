@@ -35,8 +35,8 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-public abstract class SunriseCheckoutAddressPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutAddressFormData, Cart, Cart> {
-    protected static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressPageController.class);
+public abstract class SunriseCheckoutAddressController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutAddressFormData, Cart, Cart> {
+    protected static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressController.class);
 
     @Inject
     protected CheckoutAddressPageContentFactory pageContentFactory;

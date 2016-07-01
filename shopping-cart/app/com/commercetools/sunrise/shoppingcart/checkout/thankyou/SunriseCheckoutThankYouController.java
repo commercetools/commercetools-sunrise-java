@@ -37,12 +37,12 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  * </ul>
  * <p>tags</p>
  * <ul>
- *     <li>checkout-thankyou</li>
+ *     <li>checkout-thank-you</li>
  *     <li>checkout</li>
  * </ul>
  */
 @RequestScoped
-public abstract class SunriseCheckoutThankYouPageController extends SunriseFrameworkCartController
+public abstract class SunriseCheckoutThankYouController extends SunriseFrameworkCartController
         implements WithOverwriteableTemplateName {
 
     @Inject
@@ -91,6 +91,6 @@ public abstract class SunriseCheckoutThankYouPageController extends SunriseFrame
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("checkout", "checkout-thankyou"));
+        return new HashSet<>(asList("checkout", "checkout-thank-you"));
     }
 }

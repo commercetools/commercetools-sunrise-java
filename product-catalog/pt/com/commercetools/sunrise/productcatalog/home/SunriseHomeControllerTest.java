@@ -13,12 +13,12 @@ import play.mvc.Result;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SunriseHomePageControllerTest extends WithSunriseApplication {
+public class SunriseHomeControllerTest extends WithSunriseApplication {
 
     @Test
     public void homeIsAlive() {
         setContext(requestBuilder().build());
-        run(application(), HomePageTestController.class, controller -> {
+        run(application(), HomeTestController.class, controller -> {
             final Result result = controller.show("de").toCompletableFuture().join();
             assertThat(result.status()).isEqualTo(Http.Status.OK);
         });
@@ -39,7 +39,7 @@ public class SunriseHomePageControllerTest extends WithSunriseApplication {
         return new ProductCatalogTestModule();
     }
 
-    private static class HomePageTestController extends SunriseHomePageController {
+    private static class HomeTestController extends SunriseHomeController {
 
     }
 }

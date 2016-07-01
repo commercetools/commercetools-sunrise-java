@@ -18,8 +18,8 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 /**
  * Shows and modifies the contents of the cart.
  */
-public abstract class SunriseCartDetailPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
-    private static final Logger logger = LoggerFactory.getLogger(SunriseCartDetailPageController.class);
+public abstract class SunriseCartDetailController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+    private static final Logger logger = LoggerFactory.getLogger(SunriseCartDetailController.class);
 
     @Inject
     private CartDetailPageContentFactory pageContentFactory;

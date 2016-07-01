@@ -42,7 +42,7 @@ import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseLogInPageController extends SunriseFrameworkController {
+public abstract class SunriseLogInController extends SunriseFrameworkController {
 
     @Inject
     private Configuration configuration;

@@ -1,7 +1,7 @@
 package demo.productcatalog;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewPageController;
+import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.PaginationComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.searchbox.SearchBoxComponent;
@@ -10,7 +10,7 @@ import com.commercetools.sunrise.productcatalog.productoverview.search.sort.Sort
 import javax.inject.Inject;
 
 @RequestScoped
-public class ProductOverviewPageController extends SunriseProductOverviewPageController {
+public class ProductOverviewController extends SunriseProductOverviewController {
 
     @Inject
     public void setSortSelectorComponent(final SortSelectorComponent component) {

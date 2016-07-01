@@ -1,4 +1,7 @@
 import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
+import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
+import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
+import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.hooks.Hook;
@@ -14,9 +17,9 @@ import com.commercetools.sunrise.common.contexts.RequestScope;
  * request scoped, implicitly for others
  *
  * <ul>
- *    <li>{@link com.commercetools.sunrise.productcatalog.home.SunriseHomePageController}</li>
- *    <li>{@link com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailPageController}</li>
- *    <li>{@link com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewPageController}</li>
+ *    <li>{@link SunriseHomeController}</li>
+ *    <li>{@link SunriseProductDetailController}</li>
+ *    <li>{@link SunriseProductOverviewController}</li>
  * </ul>
  *
  * <h3>Controller Components</h3>

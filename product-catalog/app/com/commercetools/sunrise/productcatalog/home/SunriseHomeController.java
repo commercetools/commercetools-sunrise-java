@@ -35,7 +35,7 @@ import static java.util.Arrays.asList;
  * </ul>
  */
 @RequestScoped
-public abstract class SunriseHomePageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
+public abstract class SunriseHomeController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
     @Inject
     private HomeReverseRouter homeReverseRouter;

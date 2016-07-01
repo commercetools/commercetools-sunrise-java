@@ -31,27 +31,27 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
 
     @Override
     public Call homePageCall(final String languageTag) {
-        return HomePageController.show(languageTag);
+        return HomeController.show(languageTag);
     }
 
     @Override
     public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
-        return ProductOverviewPageController.searchProductsByCategorySlug(languageTag, categorySlug);
+        return ProductOverviewController.searchProductsByCategorySlug(languageTag, categorySlug);
     }
 
     @Override
     public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
-        return ProductDetailPageController.showProductBySlugAndSku(languageTag, productSlug, sku);
+        return ProductDetailController.showProductBySlugAndSku(languageTag, productSlug, sku);
     }
 
     @Override
     public Call processSearchProductsForm(final String languageTag) {
-        return ProductOverviewPageController.searchProductsBySearchTerm(languageTag);
+        return ProductOverviewController.searchProductsBySearchTerm(languageTag);
     }
 
     @Override
     public Call showCart(final String languageTag) {
-        return CartDetailPageController.show(languageTag);
+        return CartDetailController.show(languageTag);
     }
 
     @Override
@@ -71,77 +71,77 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
 
     @Override
     public Call checkoutAddressesPageCall(final String languageTag) {
-        return CheckoutAddressPageController.show(languageTag);
+        return CheckoutAddressController.show(languageTag);
     }
 
     @Override
     public Call checkoutAddressesProcessFormCall(final String languageTag) {
-        return CheckoutAddressPageController.process(languageTag);
+        return CheckoutAddressController.process(languageTag);
     }
 
     @Override
     public Call checkoutShippingPageCall(final String languageTag) {
-        return CheckoutShippingPageController.show(languageTag);
+        return CheckoutShippingController.show(languageTag);
     }
 
     @Override
     public Call checkoutShippingProcessFormCall(final String languageTag) {
-        return CheckoutShippingPageController.process(languageTag);
+        return CheckoutShippingController.process(languageTag);
     }
 
     @Override
     public Call checkoutPaymentPageCall(final String languageTag) {
-        return CheckoutPaymentPageController.show(languageTag);
+        return CheckoutPaymentController.show(languageTag);
     }
 
     @Override
     public Call checkoutPaymentProcessFormCall(final String languageTag) {
-        return CheckoutPaymentPageController.process(languageTag);
+        return CheckoutPaymentController.process(languageTag);
     }
 
     @Override
     public Call checkoutConfirmationPageCall(final String languageTag) {
-        return CheckoutConfirmationPageController.show(languageTag);
+        return CheckoutConfirmationController.show(languageTag);
     }
 
     @Override
     public Call checkoutConfirmationProcessFormCall(final String languageTag) {
-        return CheckoutConfirmationPageController.process(languageTag);
+        return CheckoutConfirmationController.process(languageTag);
     }
 
     @Override
     public Call checkoutThankYouPageCall(final String languageTag) {
-        return CheckoutThankYouPageController.show(languageTag);
+        return CheckoutThankYouController.show(languageTag);
     }
 
     @Override
     public Call showLogInForm(final String languageTag) {
-        return LogInPageController.show(languageTag);
+        return LogInController.show(languageTag);
     }
 
     @Override
     public Call processLogInForm(final String languageTag) {
-        return LogInPageController.processLogIn(languageTag);
+        return LogInController.processLogIn(languageTag);
     }
 
     @Override
     public Call processSignUpForm(final String languageTag) {
-        return LogInPageController.processSignUp(languageTag);
+        return LogInController.processSignUp(languageTag);
     }
 
     @Override
     public Call processLogOut(final String languageTag) {
-        return LogInPageController.processLogOut(languageTag);
+        return LogInController.processLogOut(languageTag);
     }
 
     @Override
     public Call myPersonalDetailsPageCall(final String languageTag) {
-        return MyPersonalDetailsPageController.show(languageTag);
+        return MyPersonalDetailsController.show(languageTag);
     }
 
     @Override
     public Call myPersonalDetailsProcessFormCall(final String languageTag) {
-        return MyPersonalDetailsPageController.process(languageTag);
+        return MyPersonalDetailsController.process(languageTag);
     }
 
     @Override
@@ -176,12 +176,12 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
 
     @Override
     public Call showMyOrders(final String languageTag) {
-        return MyOrdersPageController.list(languageTag, 1);
+        return MyOrdersController.list(languageTag, 1);
     }
 
     @Override
     public Call showMyOrder(final String languageTag, final String orderNumber) {
-        return MyOrdersPageController.show(languageTag, orderNumber);
+        return MyOrdersController.show(languageTag, orderNumber);
     }
 
     @Override

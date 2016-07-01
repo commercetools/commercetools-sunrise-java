@@ -57,7 +57,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * </ul>
  */
 @RequestScoped
-public abstract class SunriseProductOverviewPageController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
+public abstract class SunriseProductOverviewController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
 
     @Inject
     private UserContext userContext;

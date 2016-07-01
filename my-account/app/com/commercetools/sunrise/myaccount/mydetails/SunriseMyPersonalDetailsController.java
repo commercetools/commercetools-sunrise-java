@@ -41,9 +41,9 @@ import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseMyPersonalDetailsPageController extends MyAccountController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<MyPersonalDetailsFormData, Customer, Customer> {
+public abstract class SunriseMyPersonalDetailsController extends MyAccountController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<MyPersonalDetailsFormData, Customer, Customer> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsPageController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsController.class);
 
     @Inject
     protected ProductDataConfig productDataConfig;

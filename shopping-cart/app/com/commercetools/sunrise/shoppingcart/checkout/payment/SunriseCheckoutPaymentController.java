@@ -51,7 +51,7 @@ import static java.util.stream.Collectors.toList;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
-public abstract class SunriseCheckoutPaymentPageController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
     @Inject
     private FormFactory formFactory;
     @Inject
