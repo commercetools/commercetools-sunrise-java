@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
@@ -186,12 +185,12 @@ public abstract class SunriseFrameworkController extends Controller {
                 });
     }
 
-    protected final void saveFormErrors(final Form<?> form) {
-        injector.getInstance(UserFeedback.class).addErrors(form);
+    protected final void saveFormError(final Form<?> form, final String message) {
+        form.reject(message);
     }
 
-    protected final void saveUnexpectedError(final Logger logger, final Throwable throwable) {
+    protected final void saveUnexpectedFormError(final Form<?> form, final Throwable throwable, final Logger logger) {
+        saveFormError(form, "Something went wrong, please try again"); // TODO get from i18n
         logger.error("The CTP request raised an unexpected exception", throwable);
-        injector.getInstance(UserFeedback.class).addErrors("Something went wrong, please try again"); // TODO get from i18n
     }
 }

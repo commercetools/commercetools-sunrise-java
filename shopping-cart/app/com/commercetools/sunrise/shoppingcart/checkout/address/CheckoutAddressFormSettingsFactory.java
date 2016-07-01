@@ -3,15 +3,11 @@ package com.commercetools.sunrise.shoppingcart.checkout.address;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.forms.CountryFormFieldBeanFactory;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;
-import com.commercetools.sunrise.common.models.TitleFormFieldBean;
-import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Base;
 import play.data.Form;
 
 import javax.inject.Inject;
-import java.util.List;
 
-import static com.neovisionaries.i18n.CountryCode.UNDEFINED;
 import static java.util.Collections.singletonList;
 
 public class CheckoutAddressFormSettingsFactory extends Base {
@@ -25,22 +21,27 @@ public class CheckoutAddressFormSettingsFactory extends Base {
 
     public CheckoutAddressFormSettings create(final Form<?> form) {
         final CheckoutAddressFormSettings bean = createAddressFormSettings();
-        final CountryCode country = userContext.country();
-        final List<CountryCode> shippingCountries = singletonList(country);
-        bean.setCountriesShipping(countryFormFieldBeanFactory.create(shippingCountries, country));
-
-        final CountryCode selectedCountryBilling = CountryCode.getByCode(form.field("countryBilling").valueOr(UNDEFINED.getAlpha3()));
-        bean.setCountriesBilling(countryFormFieldBeanFactory.createWithDefaultCountries(selectedCountryBilling));
-
-        bean.setTitleShipping(createTitleBean(form, "titleShipping"));
-
-        bean.setTitleBilling(createTitleBean(form, "titleBilling"));
-
+        fillCountriesShipping(bean, form);
+        fillCountriesBilling(bean, form);
+        fillTitleShipping(bean, form);
+        fillTitleBilling(bean, form);
         return bean;
     }
 
-    protected TitleFormFieldBean createTitleBean(final Form<?> form, final String fieldName) {
-        return titleFormFieldBeanFactory.createWithDefaultTitles(form.field(fieldName).valueOr(null));
+    protected void fillTitleBilling(final CheckoutAddressFormSettings bean, final Form<?> form) {
+        bean.setTitleBilling(titleFormFieldBeanFactory.createWithDefaultTitles(form, "titleBilling"));
+    }
+
+    protected void fillTitleShipping(final CheckoutAddressFormSettings bean, final Form<?> form) {
+        bean.setTitleShipping(titleFormFieldBeanFactory.createWithDefaultTitles(form, "titleShipping"));
+    }
+
+    protected void fillCountriesBilling(final CheckoutAddressFormSettings bean, final Form<?> form) {
+        bean.setCountriesBilling(countryFormFieldBeanFactory.createWithDefaultCountries(form, "countriesBilling"));
+    }
+
+    protected void fillCountriesShipping(final CheckoutAddressFormSettings bean, final Form<?> form) {
+        bean.setCountriesShipping(countryFormFieldBeanFactory.create(form, "countriesShipping", singletonList(userContext.country())));
     }
 
     protected CheckoutAddressFormSettings createAddressFormSettings() {

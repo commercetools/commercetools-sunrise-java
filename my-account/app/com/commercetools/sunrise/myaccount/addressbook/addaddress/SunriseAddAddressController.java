@@ -84,7 +84,6 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
 
     @Override
     public CompletionStage<Result> handleInvalidForm(final Form<? extends AddressBookAddressFormData> form, final Customer customer) {
-        saveFormErrors(form);
         return asyncBadRequest(renderPage(form, customer));
     }
 
@@ -100,7 +99,7 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     @Override
     public CompletionStage<Result> handleFailedAction(final Form<? extends AddressBookAddressFormData> form, final Customer customer, final Throwable throwable) {
         if (throwable.getCause() instanceof BadRequestException) {
-            saveUnexpectedError(logger, throwable.getCause());
+            saveUnexpectedFormError(form, throwable.getCause(), logger);
             return asyncBadRequest(renderPage(form, customer));
         }
         return exceptionallyCompletedFuture(throwable);

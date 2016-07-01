@@ -6,10 +6,10 @@ import com.commercetools.sunrise.common.models.TitleFormFieldBean;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import play.Configuration;
+import play.data.Form;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -25,15 +25,16 @@ public class TitleFormFieldBeanFactory {
     @Inject
     private UserContext userContext;
 
-    public TitleFormFieldBean create(final List<String> availableTitles, @Nullable final String selectedTitle) {
+    public TitleFormFieldBean create(final Form<?> form, final String fieldName, final List<String> availableTitles) {
         final TitleFormFieldBean bean = new TitleFormFieldBean();
+        final String selectedTitle = form.field(fieldName).valueOr(null);
         fillList(bean, availableTitles, selectedTitle);
         return bean;
     }
 
-    public TitleFormFieldBean createWithDefaultTitles(@Nullable final String selectedTitle) {
+    public TitleFormFieldBean createWithDefaultTitles(final Form<?> form, final String fieldName) {
         final List<String> availableTitles = configuration.getStringList(CONFIG_TITLE_OPTIONS, emptyList());
-        return create(availableTitles, selectedTitle);
+        return create(form, fieldName, availableTitles);
     }
 
     protected void fillList(final TitleFormFieldBean bean, final List<String> availableTitles, final @Nullable String selectedTitle) {

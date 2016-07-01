@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.CountryFormFieldBean;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.neovisionaries.i18n.CountryCode;
+import play.data.Form;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -19,27 +20,29 @@ public class CountryFormFieldBeanFactory {
     @Inject
     private ProjectContext projectContext;
 
-    public CountryFormFieldBean create(final List<CountryCode> availableCountries, @Nullable final CountryCode selectedCountry) {
+    public CountryFormFieldBean create(final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
         final CountryFormFieldBean bean = new CountryFormFieldBean();
-        fillList(bean, availableCountries, selectedCountry);
+        final String selectedCountryCode = form.field(fieldName).valueOr(null);
+        fillList(bean, availableCountries, selectedCountryCode);
         return bean;
     }
 
-    public CountryFormFieldBean createWithDefaultCountries(@Nullable final CountryCode selectedCountry) {
-        return create(projectContext.countries(), selectedCountry);
+    public CountryFormFieldBean createWithDefaultCountries(final Form<?> form, final String fieldName) {
+        return create(form, fieldName, projectContext.countries());
     }
 
-    protected void fillList(final CountryFormFieldBean bean, final List<CountryCode> availableCountries, final @Nullable CountryCode selectedCountry) {
+    protected void fillList(final CountryFormFieldBean bean, final List<CountryCode> availableCountries, final @Nullable String selectedCountryCode) {
         bean.setList(availableCountries.stream()
-                .map(countryOption -> countryToSelectableData(countryOption, selectedCountry))
+                .map(countryOption -> countryToSelectableData(countryOption, selectedCountryCode))
                 .collect(toList()));
     }
 
-    protected FormSelectableOptionBean countryToSelectableData(final CountryCode country, final @Nullable CountryCode selectedCountry) {
+    protected FormSelectableOptionBean countryToSelectableData(final CountryCode country, final @Nullable String selectedCountryCode) {
         final FormSelectableOptionBean bean = new FormSelectableOptionBean();
         bean.setLabel(country.toLocale().getDisplayCountry(userContext.locale()));
-        bean.setValue(country.getAlpha2());
-        if (country.equals(selectedCountry)) {
+        final String countryCode = country.getAlpha2();
+        bean.setValue(countryCode);
+        if (countryCode.equals(selectedCountryCode)) {
             bean.setSelected(true);
         }
         return bean;

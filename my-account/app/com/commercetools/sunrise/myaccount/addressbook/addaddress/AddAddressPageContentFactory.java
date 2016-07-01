@@ -1,9 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
 import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
-import com.commercetools.sunrise.common.forms.UserFeedback;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormBean;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormBeanFactory;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFormSettingsFactory;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Base;
 import play.data.Form;
@@ -13,9 +11,7 @@ import javax.inject.Inject;
 public class AddAddressPageContentFactory extends Base implements WithOverridablePageContent<AddAddressPageContent> {
 
     @Inject
-    private UserFeedback userFeedback;
-    @Inject
-    private AddressBookAddressFormBeanFactory addressBookAddressFormBeanFactory;
+    private AddressFormSettingsFactory addressFormSettingsFactory;
 
     public AddAddressPageContent create(final Form<?> form, final Customer customer) {
         final AddAddressPageContent content = createPageContent();
@@ -24,11 +20,9 @@ public class AddAddressPageContentFactory extends Base implements WithOverridabl
     }
 
     protected void fillNewAddressForm(final AddAddressPageContent content, final Form<?> form) {
-        final AddressBookAddressFormBean bean = addressBookAddressFormBeanFactory.create(form);
-        userFeedback.findErrors().ifPresent(bean::setErrors);
-        content.setNewAddressForm(bean);
+        content.setNewAddressForm(form);
+        content.setNewAddressFormSettings(addressFormSettingsFactory.create(form));
     }
-
 
     @Override
     public AddAddressPageContent createPageContent() {

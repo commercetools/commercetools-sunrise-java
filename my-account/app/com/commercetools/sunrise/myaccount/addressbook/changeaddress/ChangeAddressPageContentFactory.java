@@ -1,8 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
-import com.commercetools.sunrise.common.forms.UserFeedback;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormBean;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormBeanFactory;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFormSettingsFactory;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 
@@ -11,9 +9,7 @@ import javax.inject.Inject;
 public class ChangeAddressPageContentFactory {
 
     @Inject
-    private UserFeedback userFeedback;
-    @Inject
-    private AddressBookAddressFormBeanFactory addressBookAddressFormBeanFactory;
+    private AddressFormSettingsFactory addressFormSettingsFactory;
 
     public ChangeAddressPageContent create(final Form<?> form, final Customer customer) {
         final ChangeAddressPageContent content = new ChangeAddressPageContent();
@@ -22,10 +18,7 @@ public class ChangeAddressPageContentFactory {
     }
 
     protected void fillEditAddressForm(final ChangeAddressPageContent content, final Form<?> form) {
-        final AddressBookAddressFormBean bean = addressBookAddressFormBeanFactory.create(form);
-        userFeedback.findErrors().ifPresent(bean::setErrors);
-        content.setEditAddressForm(bean);
+        content.setEditAddressForm(form);
+        content.setEditAddressFormSettings(addressFormSettingsFactory.create(form));
     }
-
-
 }
