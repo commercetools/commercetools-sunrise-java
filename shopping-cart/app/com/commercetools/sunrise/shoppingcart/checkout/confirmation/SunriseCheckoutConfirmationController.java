@@ -7,6 +7,7 @@ import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.OrderFromCartDraft;
@@ -35,7 +36,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
 public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutConfirmationFormData, Cart, Order> {
+        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutConfirmationFormData, Cart, Order>, WithCartPreconditions {
 
     @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
@@ -47,12 +48,17 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::showForm, defaultContext()));
+        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, defaultContext()));
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::validateForm, defaultContext()));
+        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, defaultContext()));
+    }
+
+    @Override
+    public CompletionStage<Cart> loadCartWithPreconditions() {
+        return requiringExistingPrimaryCartWithLineItem();
     }
 
     @Override

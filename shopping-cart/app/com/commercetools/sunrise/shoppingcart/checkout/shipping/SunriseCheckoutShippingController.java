@@ -6,6 +6,7 @@ import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
 import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingMethod;
@@ -35,7 +36,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseCheckoutShippingController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutShippingFormData, Cart, Cart> {
+        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutShippingFormData, Cart, Cart>, WithCartPreconditions {
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingController.class);
 
     @Inject
@@ -48,12 +49,17 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::showForm, defaultContext()));
+        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, defaultContext()));
     }
 
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::validateForm, defaultContext()));
+        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, defaultContext()));
+    }
+
+    @Override
+    public CompletionStage<Cart> loadCartWithPreconditions() {
+        return requiringExistingPrimaryCartWithLineItem();
     }
 
     @Override

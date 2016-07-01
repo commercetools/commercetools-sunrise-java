@@ -7,6 +7,7 @@ import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
 import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
@@ -30,14 +31,13 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.*;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Supplier;
 
 import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-public abstract class SunriseCheckoutAddressController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutAddressFormData, Cart, Cart> {
+public abstract class SunriseCheckoutAddressController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutAddressFormData, Cart, Cart>, WithCartPreconditions {
     protected static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressController.class);
 
     @Inject
@@ -50,13 +50,18 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkC
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::showForm, HttpExecution.defaultContext()));
+        return doRequest(() -> requiringExistingPrimaryCartWithLineItem().thenComposeAsync(this::showForm, HttpExecution.defaultContext()));
     }
 
     @RequireCSRFCheck
     @SuppressWarnings("unused")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> getOrCreateCart().thenComposeAsync(this::validateForm, HttpExecution.defaultContext()));
+        return doRequest(() -> requiringExistingPrimaryCartWithLineItem().thenComposeAsync(this::validateForm, HttpExecution.defaultContext()));
+    }
+
+    @Override
+    public CompletionStage<Cart> loadCartWithPreconditions() {
+        return requiringExistingPrimaryCartWithLineItem();
     }
 
     @Override

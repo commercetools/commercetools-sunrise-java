@@ -8,6 +8,7 @@ import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.PaymentInfo;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -51,7 +52,8 @@ import static java.util.stream.Collectors.toList;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
-public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkCartController
+        implements WithOverwriteableTemplateName, WithCartPreconditions {
     @Inject
     private FormFactory formFactory;
     @Inject
@@ -61,12 +63,17 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> getOrCreateCart()
+        return doRequest(() -> loadCartWithPreconditions()
                 .thenComposeAsync(cart -> getPaymentMethodInfos(cart)
                         .thenComposeAsync(paymentMethodInfos -> {
                             final CheckoutPaymentPageContent pageContent = createPageContent(cart, paymentMethodInfos);
                             return asyncOk(renderCheckoutPaymentPage(cart, pageContent));
                         }, defaultContext()), defaultContext()));
+    }
+
+    @Override
+    public CompletionStage<Cart> loadCartWithPreconditions() {
+        return requiringExistingPrimaryCartWithLineItem();
     }
 
     //it returns CompletionStage maybe if some (external) fraud protection logic needs to be executed
@@ -78,7 +85,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             final Form<DefaultCheckoutPaymentFormData> paymentForm = formFactory.form(DefaultCheckoutPaymentFormData.class).bindFromRequest();
-            return getOrCreateCart()
+            return loadCartWithPreconditions()
                     .thenComposeAsync(cart -> {
                         return getPaymentMethodInfos(cart).thenComposeAsync(paymentMethodInfos -> {
                             if (paymentForm.hasErrors()) {
