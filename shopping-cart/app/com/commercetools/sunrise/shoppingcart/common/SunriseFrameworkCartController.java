@@ -3,12 +3,12 @@ package com.commercetools.sunrise.shoppingcart.common;
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.hooks.CartQueryFilterHook;
 import com.commercetools.sunrise.hooks.PrimaryCartLoadedHook;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
-import com.google.inject.Inject;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
@@ -23,14 +23,17 @@ import io.sphere.sdk.models.Address;
 import io.sphere.sdk.queries.PagedResult;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
+import org.slf4j.LoggerFactory;
 import play.mvc.Http;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
+import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
@@ -42,15 +45,34 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     @Inject
     private ProductReverseRouter productReverseRouter;
 
+    @Inject
+    private void postInit() {
+        //just prepend another error handler if this does not suffice
+        prependErrorHandler(e -> e instanceof PrimaryCartNotFoundException || e instanceof PrimaryCartEmptyException, e -> {
+            LoggerFactory.getLogger(SunriseFrameworkCartController.class).error("access denied", e);
+            return successful(redirect(injector().getInstance(HomeReverseRouter.class).homePageCall(injector().getInstance(UserContext.class).languageTag())));
+        });
+    }
+
     /**
      * Searches for an existing cart the platform otherwise the stage contains a {@link PrimaryCartNotFoundException}.
      * A cart will not be created if it does not exist.
      * @return stage
      */
-//    protected CompletionStage<Cart> requiringExistingPrimaryCart() {
-//        return findPrimaryCartInCommercetoolsPlatform()
-//                .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new PrimaryCartNotFoundException()), defaultContext());
-//    }
+    protected CompletionStage<Cart> requiringExistingPrimaryCart() {
+        return findPrimaryCartInCommercetoolsPlatform()
+                .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new PrimaryCartNotFoundException()), defaultContext());
+    }
+
+    protected CompletionStage<Cart> requiringExistingPrimaryCartWithLineItem() {
+        return requiringExistingPrimaryCart().thenApplyAsync(cart -> {
+            if (cart.getLineItems().isEmpty()) {
+                throw new PrimaryCartEmptyException(cart);
+            } else {
+                return cart;
+            }
+        }, defaultContext());
+    }
 
     /**
      * Loads the primary cart from commercetools platform without applying side effects like updating the cart or the session.

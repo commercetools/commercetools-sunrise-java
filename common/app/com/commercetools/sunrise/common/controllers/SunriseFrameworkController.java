@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;
+import io.sphere.sdk.models.Base;
+import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -35,11 +37,15 @@ import play.twirl.api.Html;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public abstract class SunriseFrameworkController extends Controller {
@@ -56,7 +62,7 @@ public abstract class SunriseFrameworkController extends Controller {
                 gen.writeObject(value.data());
             }
         });
-        mapper.registerModule(mod);	// Register the module on the mapper
+        mapper.registerModule(mod);
         return mapper;
     }
 
@@ -80,6 +86,7 @@ public abstract class SunriseFrameworkController extends Controller {
     private PageMetaFactory pageMetaFactory;
     @Inject
     private I18nResolver i18nResolver;
+    private final Deque<ErrorHandler> errorHandlers = new LinkedList<>();
 
     protected SunriseFrameworkController() {
     }
@@ -160,10 +167,32 @@ public abstract class SunriseFrameworkController extends Controller {
         return pageData;
     }
 
-    protected final CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> nextSupplier) {
+    protected CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> nextSupplier) {
         final Function<RequestHook, CompletionStage<?>> f = hook -> hook.onRequest(ctx());
         hooks().runAsyncHook(RequestHook.class, f);
-        return nextSupplier.get();
+        final CompletionStage<Result> resultCompletionStage = nextSupplier.get();
+        return CompletableFutureUtils.recoverWith(resultCompletionStage, e -> {
+            final Throwable usefulException = e instanceof CompletionException && e.getCause() != null
+                    ? e.getCause()
+                    : e;
+            return errorHandlers.stream().filter(h -> h.canHandle.test(usefulException)).findFirst()
+                    .map(h -> h.f.apply(usefulException))
+                    .orElse(resultCompletionStage);
+        }, HttpExecution.defaultContext());
+    }
+
+    protected void prependErrorHandler(final Predicate<Throwable> canHandle, final Function<? super Throwable, CompletionStage<Result>> f) {
+        errorHandlers.addFirst(new ErrorHandler(canHandle, f));
+    }
+
+    private static final class ErrorHandler extends Base {
+        final Predicate<Throwable> canHandle;
+        final Function<? super Throwable, CompletionStage<Result>> f;
+
+        public ErrorHandler(final Predicate<Throwable> canHandle, final Function<? super Throwable, CompletionStage<Result>> f) {
+            this.canHandle = canHandle;
+            this.f = f;
+        }
     }
 
     protected CompletionStage<Result> asyncOk(final CompletionStage<Html> htmlCompletionStage) {
