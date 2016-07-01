@@ -1,12 +1,14 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddressFormData {
 
@@ -288,7 +290,14 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
                 .build();
     }
 
-    public void applyShippingAddress(final Address address) {
+    @Override
+    public void setData(final Cart cart) {
+        Optional.ofNullable(cart.getShippingAddress()).ifPresent(this::applyShippingAddress);
+        Optional.ofNullable(cart.getBillingAddress()).ifPresent(this::applyBillingAddress);
+        setBillingAddressDifferentToBillingAddress(cart.getBillingAddress() != null);
+    }
+
+    private void applyShippingAddress(final Address address) {
         this.titleShipping = address.getTitle();
         this.firstNameShipping = address.getFirstName();
         this.lastNameShipping = address.getLastName();
@@ -302,7 +311,7 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
         this.emailShipping = address.getEmail();
     }
 
-    public void applyBillingAddress(final Address address) {
+    private void applyBillingAddress(final Address address) {
         this.titleBilling = address.getTitle();
         this.firstNameBilling = address.getFirstName();
         this.lastNameBilling = address.getLastName();

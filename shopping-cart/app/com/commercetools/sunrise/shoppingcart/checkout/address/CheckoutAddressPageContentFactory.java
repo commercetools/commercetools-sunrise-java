@@ -23,7 +23,10 @@ public class CheckoutAddressPageContentFactory extends Base implements WithOverr
     @Inject
     private CheckoutAddressFormBeanFactory checkoutAddressFormBeanFactory;
     @Inject
-    protected CartLikeBeanFactory cartLikeBeanFactory;
+    private CartLikeBeanFactory cartLikeBeanFactory;
+    @Inject
+    private CheckoutAddressFormSettingsFactory addressFormSettingsFactory;
+
 
     @Override
     public CheckoutAddressPageContent createPageContent() {
@@ -35,13 +38,18 @@ public class CheckoutAddressPageContentFactory extends Base implements WithOverr
         fillTitle(pageContent, cart);
         fillCart(pageContent, cart);
         fillForm(pageContent, form);
+        fillFormSettings(pageContent, form);
         return pageContent;
+    }
+
+    protected void fillFormSettings(final CheckoutAddressPageContent pageContent, final Form<?> form) {
+        pageContent.setAddressFormSettings(addressFormSettingsFactory.create(form));
     }
 
     protected void fillForm(final CheckoutAddressPageContent pageContent, final Form<?> form) {
         final CheckoutAddressFormBean bean = checkoutAddressFormBeanFactory.create(form);
         userFeedback.findErrors().ifPresent(bean::setErrors);
-        pageContent.setAddressForm(bean);
+        pageContent.setAddressForm(form);
     }
 
     protected void fillCart(final CheckoutAddressPageContent pageContent, final Cart cart) {
