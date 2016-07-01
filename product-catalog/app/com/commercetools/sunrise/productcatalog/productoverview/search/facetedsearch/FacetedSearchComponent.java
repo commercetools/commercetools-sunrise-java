@@ -2,19 +2,19 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.faceteds
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.pages.SunrisePageData;
-import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.hooks.ProductProjectionPagedSearchResultHook;
+import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
+import com.commercetools.sunrise.hooks.SingleCategoryHook;
+import com.commercetools.sunrise.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
-import com.commercetools.sunrise.hooks.ProductProjectionPagedSearchResultHook;
-import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
-import com.commercetools.sunrise.hooks.SingleCategoryHook;
-import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -45,7 +45,7 @@ public class FacetedSearchComponent implements ControllerComponent, SunrisePageD
     }
 
     @Override
-    public ProductProjectionSearch filterProductProjectionSearch(final ProductProjectionSearch search) {
+    public ProductProjectionSearch filterQuery(final ProductProjectionSearch search) {
         this.facetedSearchSelectorList = facetedSearchSelectorListFactory.create(selectedCategories);
         return search.plusFacetedSearch(facetedSearchSelectorList.stream()
                 .map(FacetedSearchSelector::getFacetedSearchExpression)

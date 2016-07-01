@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface MyOrdersReverseRouter {
 
-    Call myOrdersPageCall(final String languageTag);
+    Call myOrderListPageCall(final String languageTag);
 
     Call myOrderDetailPageCall(final String languageTag, final String orderNumber);
 

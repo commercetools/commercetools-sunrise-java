@@ -19,7 +19,7 @@ public class SearchBoxComponent implements ControllerComponent, SunrisePageDataH
     private SearchBoxFactory searchBoxFactory;
 
     @Override
-    public ProductProjectionSearch filterProductProjectionSearch(final ProductProjectionSearch search) {
+    public ProductProjectionSearch filterQuery(final ProductProjectionSearch search) {
         this.searchBox = searchBoxFactory.create();
         return searchBox.getSearchTerm()
                 .map(search::withText)

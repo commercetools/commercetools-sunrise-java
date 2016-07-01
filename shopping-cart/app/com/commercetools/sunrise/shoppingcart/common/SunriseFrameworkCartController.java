@@ -47,10 +47,10 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
      * A cart will not be created if it does not exist.
      * @return stage
      */
-    protected CompletionStage<Cart> requiringExistingPrimaryCart() {
-        return findPrimaryCartInCommercetoolsPlatform()
-                .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new PrimaryCartNotFoundException()), defaultContext());
-    }
+//    protected CompletionStage<Cart> requiringExistingPrimaryCart() {
+//        return findPrimaryCartInCommercetoolsPlatform()
+//                .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new PrimaryCartNotFoundException()), defaultContext());
+//    }
 
     /**
      * Loads the primary cart from commercetools platform without applying side effects like updating the cart or the session.

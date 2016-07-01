@@ -3,7 +3,7 @@ package com.commercetools.sunrise.common.controllers;
 import com.commercetools.sunrise.common.reverserouter.*;
 import play.mvc.Call;
 
-public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter {
+public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter {
 
     private String themeAssetsUrl;
     private String changeLanguageUrl;
@@ -37,8 +37,8 @@ public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, 
     private String showChangeAddressInAddressBookUrl;
     private String processChangeAddressInAddressBookFormUrl;
     private String processRemoveAddressFromAddressBookFormUrl;
-    private String showMyOrdersUrl;
-    private String showMyOrderUrl;
+    private String showMyOrderListUrl;
+    private String showMyOrderDetailUrl;
 
     public void setThemeAssetsUrl(final String themeAssetsUrl) {
         this.themeAssetsUrl = themeAssetsUrl;
@@ -168,12 +168,12 @@ public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, 
         this.processRemoveAddressFromAddressBookFormUrl = processRemoveAddressFromAddressBookFormUrl;
     }
 
-    public void setShowMyOrdersUrl(final String showMyOrdersUrl) {
-        this.showMyOrdersUrl = showMyOrdersUrl;
+    public void setShowMyOrderListUrl(final String showMyOrderListUrl) {
+        this.showMyOrderListUrl = showMyOrderListUrl;
     }
 
-    public void setShowMyOrderUrl(final String showMyOrderUrl) {
-        this.showMyOrderUrl = showMyOrderUrl;
+    public void setShowMyOrderDetailUrl(final String showMyOrderDetailUrl) {
+        this.showMyOrderDetailUrl = showMyOrderDetailUrl;
     }
 
     @Override
@@ -337,13 +337,13 @@ public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, 
     }
 
     @Override
-    public Call showMyOrders(final String languageTag) {
-        return createCall(showMyOrdersUrl);
+    public Call myOrderListPageCall(final String languageTag) {
+        return createCall(showMyOrderListUrl);
     }
 
     @Override
-    public Call showMyOrder(final String languageTag, final String orderNumber) {
-        return createCall(showMyOrderUrl);
+    public Call myOrderDetailPageCall(final String languageTag, final String orderNumber) {
+        return createCall(showMyOrderDetailUrl);
     }
 
     private Call createCall(final String url) {

@@ -2,10 +2,7 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.*;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.mvc.Http;
 
@@ -31,6 +28,8 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private AddressBookReverseRouter addressBookReverseRouter;
     @Inject
     private MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
+    @Inject
+    private MyOrdersReverseRouter myOrdersReverseRouter;
 
     @Override
     public PageMeta create() {
@@ -72,7 +71,7 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(addressBookReverseRouter.addressBookCall(language), "myAddressBook")
                 .addHalLink(addressBookReverseRouter.addAddressToAddressBookCall(language), "myAddressBookAddAddress")
                 .addHalLink(addressBookReverseRouter.addAddressToAddressBookProcessFormCall(language), "myAddressBookAddAddressSubmit")
-                .addHalLink(reverseRouter.showMyOrders(language), "myOrders")
+                .addHalLink(myOrdersReverseRouter.myOrderListPageCall(language), "myOrders")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO frameork migration

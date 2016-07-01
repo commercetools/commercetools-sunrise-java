@@ -91,7 +91,7 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
     }
 
     protected final CompletionStage<Result> redirectToMyOrders() {
-        final Call call = injector().getInstance(MyOrdersReverseRouter.class).myOrdersPageCall(userContext().languageTag());
+        final Call call = injector().getInstance(MyOrdersReverseRouter.class).myOrderListPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
     }
 }

@@ -122,9 +122,9 @@ POST        /:languageTag/user/addressbook/:addressId/remove   @demo.myaccount.R
 
 
 # Shows all orders from the customer
-GET         /:languageTag/user/orders                          @demo.myaccount.MyOrdersController.list(languageTag: String, page: Int ?= 1)
+GET         /:languageTag/user/orders                          @demo.myaccount.MyOrderListController.show(languageTag: String)
 # Show an order from the customer
-GET         /:languageTag/user/orders/:orderNumber             @demo.myaccount.MyOrdersController.show(languageTag: String, orderNumber: String)
+GET         /:languageTag/user/orders/:orderNumber             @demo.myaccount.MyOrderDetailController.showByOrderNumber(languageTag: String, orderNumber: String)
 
 
 # PRODUCT DETAIL
