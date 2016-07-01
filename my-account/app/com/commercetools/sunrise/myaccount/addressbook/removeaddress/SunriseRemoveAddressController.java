@@ -73,32 +73,32 @@ public abstract class SunriseRemoveAddressController extends AddressBookManageme
     }
 
     @Override
-    public CompletionStage<Result> showForm(final AddressBookActionData data) {
+    public CompletionStage<Result> showForm(final AddressBookActionData context) {
         return redirectToAddressBook();
     }
 
     @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData data) {
+    public CompletionStage<Result> handleInvalidForm(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData context) {
         saveFormErrors(form);
-        return asyncBadRequest(renderPage(form, data.getCustomer()));
+        return asyncBadRequest(renderPage(form, context.getCustomer()));
     }
 
     @Override
-    public CompletionStage<? extends Customer> doAction(final RemoveAddressFormData formData, final AddressBookActionData data) {
-        final RemoveAddress updateAction = RemoveAddress.of(data.getAddress());
-        return sphere().execute(CustomerUpdateCommand.of(data.getCustomer(), updateAction));
+    public CompletionStage<? extends Customer> doAction(final RemoveAddressFormData formData, final AddressBookActionData context) {
+        final RemoveAddress updateAction = RemoveAddress.of(context.getAddress());
+        return sphere().execute(CustomerUpdateCommand.of(context.getCustomer(), updateAction));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final RemoveAddressFormData formData, final AddressBookActionData data, final Customer result) {
+    public CompletionStage<Result> handleSuccessfulAction(final RemoveAddressFormData formData, final AddressBookActionData context, final Customer result) {
         return redirectToAddressBook();
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData data, final Throwable throwable) {
+    public CompletionStage<Result> handleFailedAction(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData context, final Throwable throwable) {
         if (throwable.getCause() instanceof BadRequestException) {
             saveUnexpectedError(logger, throwable.getCause());
-            return asyncBadRequest(renderPage(form, data.getCustomer()));
+            return asyncBadRequest(renderPage(form, context.getCustomer()));
         }
         return exceptionallyCompletedFuture(throwable);
     }

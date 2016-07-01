@@ -10,30 +10,30 @@ import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 
 public interface SimpleFormBindingControllerTrait<F, T, R> extends FormBindingTrait<F> {
 
-    CompletionStage<Result> showForm(final T data);
+    CompletionStage<Result> showForm(final T context);
 
-    default CompletionStage<Result> validateForm(final T data) {
+    default CompletionStage<Result> validateForm(final T context) {
         return bindForm().thenComposeAsync(form -> {
             if (!form.hasErrors()) {
-                return handleValidForm(form, data);
+                return handleValidForm(form, context);
             } else {
-                return handleInvalidForm(form, data);
+                return handleInvalidForm(form, context);
             }
         }, HttpExecution.defaultContext());
     }
 
-    CompletionStage<Result> handleInvalidForm(final Form<? extends F> form, final T data);
+    CompletionStage<Result> handleInvalidForm(final Form<? extends F> form, final T context);
 
-    default CompletionStage<Result> handleValidForm(final Form<? extends F> form, final T data) {
-        final CompletionStage<Result> resultStage = doAction(form.get(), data)
-                .thenComposeAsync(result -> handleSuccessfulAction(form.get(), data, result), HttpExecution.defaultContext());
+    default CompletionStage<Result> handleValidForm(final Form<? extends F> form, final T context) {
+        final CompletionStage<Result> resultStage = doAction(form.get(), context)
+                .thenComposeAsync(result -> handleSuccessfulAction(form.get(), context, result), HttpExecution.defaultContext());
         return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                handleFailedAction(form, data, throwable));
+                handleFailedAction(form, context, throwable));
     }
 
-    CompletionStage<? extends R> doAction(final F formData, final T data);
+    CompletionStage<? extends R> doAction(final F formData, final T context);
 
-    CompletionStage<Result> handleFailedAction(final Form<? extends F> form, final T data, final Throwable throwable);
+    CompletionStage<Result> handleFailedAction(final Form<? extends F> form, final T context, final Throwable throwable);
 
-    CompletionStage<Result> handleSuccessfulAction(final F formData, final T data, final R result);
+    CompletionStage<Result> handleSuccessfulAction(final F formData, final T context, final R result);
 }
