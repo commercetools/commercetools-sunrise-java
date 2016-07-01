@@ -8,6 +8,12 @@ import java.util.concurrent.CompletionStage;
 
 import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
 
+/**
+ * Approach to handle form data (Template Method Pattern).
+ * @param <F> stereotype of the in a form wrapped class
+ * @param <T> type of the context of the form, possibly a parameter object
+ * @param <R> the type of the updated object if the form is valid
+ */
 public interface SimpleFormBindingControllerTrait<F, T, R> extends FormBindingTrait<F> {
 
     CompletionStage<Result> showForm(final T context);

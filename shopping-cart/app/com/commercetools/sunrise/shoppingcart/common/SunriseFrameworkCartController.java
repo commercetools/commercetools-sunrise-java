@@ -20,10 +20,12 @@ import io.sphere.sdk.carts.commands.updateactions.SetCountry;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.carts.queries.CartQuery;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.queries.PagedResult;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.shippingmethods.queries.ShippingMethodsByCartGet;
 import play.mvc.Http;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
@@ -40,33 +42,52 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     @Inject
     private ProductReverseRouter productReverseRouter;
 
+    /**
+     * Searches for an existing cart the platform otherwise the stage contains a {@link PrimaryCartNotFoundException}.
+     * A cart will not be created if it does not exist.
+     * @return stage
+     */
+    protected CompletionStage<Cart> requiringExistingPrimaryCart() {
+        return findPrimaryCartInCommercetoolsPlatform()
+                .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new PrimaryCartNotFoundException()), defaultContext());
+    }
+
+    /**
+     * Loads the primary cart from commercetools platform without applying side effects like updating the cart or the session.
+     * @return a future of the optional cart
+     */
+    protected CompletionStage<Optional<Cart>> findPrimaryCartInCommercetoolsPlatform() {
+        final CartQuery query = buildQueryForPrimaryCart(session());
+        return sphere().execute(query).thenApplyAsync(PagedResult::head, defaultContext());
+    }
+
+
     protected CompletionStage<Cart> getOrCreateCart() {
-        final UserContext userContext = userContext();
+        final CompletionStage<Cart> cartCompletionStage = findPrimaryCartInCommercetoolsPlatform()
+                .thenComposeAsync(cartOptional -> cartOptional
+                                .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
+                                .orElseGet(() -> createCart(userContext())),
+                        defaultContext());
+        return cartCompletionStage.thenComposeAsync(cart -> applySideEffects(cart), defaultContext());
+
+    }
+
+    protected CompletionStage<Cart> applySideEffects(@Nonnull Cart cart) {
         final Http.Session session = session();
-        return fetchCart(userContext, session)
-                .thenComposeAsync(cart -> updateCartWithUserPreferences(cart, userContext), defaultContext())
-                .thenApply(cart -> {
-                    CartSessionUtils.overwriteCartSessionData(cart, session, userContext, productReverseRouter);
-                    return cart;
-                })
-                .thenApply(cart -> {
-                    hooks().runAsyncHook(PrimaryCartLoadedHook.class, hook -> hook.onUserCartLoaded(cart));
-                    return cart;
-                });
+        return updateCartWithUserPreferences(cart, userContext()).thenApply(updatedCart -> {
+            CartSessionUtils.overwriteCartSessionData(updatedCart, session, userContext(), productReverseRouter);
+            return updatedCart;
+        })
+                .thenApply(updatedCart -> {
+                    hooks().runAsyncHook(PrimaryCartLoadedHook.class, hook -> hook.onUserCartLoaded(updatedCart));
+                    return updatedCart;
+        });
     }
 
     protected CompletionStage<List<ShippingMethod>> getShippingMethods() {
         return CartSessionUtils.getCartId(session())
                 .map(cartId -> sphere().execute(ShippingMethodsByCartGet.of(cartId)))
                 .orElseGet(() -> completedFuture(emptyList()));
-    }
-
-    protected CompletionStage<Cart> fetchCart(final UserContext userContext, final Http.Session session) {
-        final CartQuery query = buildQueryForPrimaryCart(session);
-        return sphere().execute(query).thenComposeAsync(carts -> carts.head()
-                        .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
-                        .orElseGet(() -> createCart(userContext)),
-                defaultContext());
     }
 
     private CartQuery buildQueryForPrimaryCart(final Http.Session session) {
