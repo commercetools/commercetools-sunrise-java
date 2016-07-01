@@ -55,8 +55,6 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     @Inject
     private FormFactory formFactory;
     @Inject
-    private CheckoutReverseRouter checkoutReverseRouter;
-    @Inject
     private PaymentConfiguration paymentConfiguration;
     @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
@@ -164,7 +162,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     }
 
     protected CompletionStage<Result> handleSuccessfulSetPayment(final UserContext userContext) {
-        final Call call = checkoutReverseRouter.checkoutConfirmationPageCall(userContext.languageTag());
+        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutConfirmationPageCall(userContext.languageTag());
         return completedFuture(redirect(call));
     }
 
