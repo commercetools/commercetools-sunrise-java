@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
-import com.commercetools.sunrise.common.models.AddressBean;
+import com.commercetools.sunrise.common.models.AddressBeanFactory;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
@@ -13,9 +13,7 @@ import io.sphere.sdk.orders.Order;
 import javax.inject.Inject;
 import java.time.format.DateTimeFormatter;
 
-import static com.commercetools.sunrise.common.utils.PriceUtils.calculateSalesTax;
-import static com.commercetools.sunrise.common.utils.PriceUtils.calculateSubTotal;
-import static com.commercetools.sunrise.common.utils.PriceUtils.calculateTotalPrice;
+import static com.commercetools.sunrise.common.utils.PriceUtils.*;
 
 public class CartLikeBeanFactory extends Base {
     @Inject
@@ -24,6 +22,8 @@ public class CartLikeBeanFactory extends Base {
     protected ProductDataConfig productDataConfig;
     @Inject
     private ProductReverseRouter productReverseRouter;
+    @Inject
+    private AddressBeanFactory addressBeanFactory;
 
     public CartLikeBean create(final CartLike<?> cartLike) {
         final CartLikeBean cartLikeBean = createCartLikeBean();
@@ -33,11 +33,11 @@ public class CartLikeBeanFactory extends Base {
         cartLikeBean.setTotalPrice(moneyContext.formatOrZero(calculateTotalPrice(cartLike)));
         cartLikeBean.setSubtotalPrice(moneyContext.formatOrZero(calculateSubTotal(cartLike)));
         cartLikeBean.setLineItems(new LineItemsBean(cartLike.getLineItems(), productDataConfig, userContext, productReverseRouter));
-        cartLikeBean.setShippingAddress(new AddressBean(cartLike.getShippingAddress(), userContext.locale()));
+        cartLikeBean.setShippingAddress(addressBeanFactory.create(cartLike.getShippingAddress()));
         if (cartLike.getBillingAddress() != null) {
-            cartLikeBean.setBillingAddress(new AddressBean(cartLike.getBillingAddress(), userContext.locale()));
+            cartLikeBean.setBillingAddress(addressBeanFactory.create(cartLike.getBillingAddress()));
         } else {
-            cartLikeBean.setBillingAddress(new AddressBean(cartLike.getShippingAddress(), userContext.locale()));
+            cartLikeBean.setBillingAddress(addressBeanFactory.create(cartLike.getShippingAddress()));
         }
         cartLikeBean.setShippingMethod(new ShippingInfoBean(cartLike.getShippingInfo(), moneyContext));
         cartLikeBean.setPaymentDetails(new PaymentInfoBean(cartLike.getPaymentInfo(), userContext));

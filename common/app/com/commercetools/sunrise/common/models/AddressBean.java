@@ -23,23 +23,6 @@ public class AddressBean extends Base {
     public AddressBean() {
     }
 
-    @Deprecated
-    public AddressBean(@Nullable final Address address, final Locale locale) {
-        if (address != null) {
-            this.title = address.getTitle();
-            this.firstName = address.getFirstName();
-            this.lastName = address.getLastName();
-            this.streetName = address.getStreetName();
-            this.additionalStreetInfo = address.getAdditionalStreetInfo();
-            this.city = address.getCity();
-            this.region = address.getRegion();
-            this.postalCode = address.getPostalCode();
-            this.country = address.getCountry().toLocale().getDisplayCountry(locale);
-            this.phone = address.getPhone();
-            this.email = address.getEmail();
-        }
-    }
-
     public String getTitle() {
         return title;
     }
