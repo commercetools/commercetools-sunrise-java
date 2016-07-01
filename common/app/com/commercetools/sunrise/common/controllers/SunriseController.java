@@ -7,10 +7,7 @@ import com.commercetools.sunrise.common.contexts.UserContextImpl;
 import com.commercetools.sunrise.common.localization.LocalizationSelectorBean;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.commercetools.sunrise.common.pages.*;
-import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.*;
 import com.commercetools.sunrise.common.template.cms.CmsService;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
@@ -60,6 +57,8 @@ public abstract class SunriseController extends ShopController {
     private CheckoutReverseRouter checkoutReverseRouter;
     @Inject
     private MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
+    @Inject
+    private CartReverseRouter cartReverseRouter;
 
     protected SunriseController(final ControllerDependency controllerDependency) {
         super(controllerDependency.sphere());
@@ -129,10 +128,10 @@ public abstract class SunriseController extends ShopController {
                 .addHalLink(reverseRouter().processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter().processChangeCountryForm(language), "selectCountry")
 
-                .addHalLink(reverseRouter().showCart(language), "cart")
-                .addHalLink(reverseRouter().processAddProductToCartForm(language), "addToCart")
-                .addHalLink(reverseRouter().processChangeLineItemQuantityForm(language), "changeLineItem")
-                .addHalLink(reverseRouter().processDeleteLineItemForm(language), "deleteLineItem")
+                .addHalLink(cartReverseRouter.showCart(language), "cart")
+                .addHalLink(cartReverseRouter.processAddProductToCartForm(language), "addToCart")
+                .addHalLink(cartReverseRouter.processChangeLineItemQuantityForm(language), "changeLineItem")
+                .addHalLink(cartReverseRouter.processDeleteLineItemForm(language), "deleteLineItem")
 
                 .addHalLink(checkoutReverseRouter.checkoutAddressesPageCall(language), "checkout", "editShippingAddress", "editBillingAddress")
                 .addHalLink(checkoutReverseRouter.checkoutAddressesProcessFormCall(language), "checkoutAddressSubmit")

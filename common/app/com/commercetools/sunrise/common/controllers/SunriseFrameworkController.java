@@ -11,9 +11,13 @@ import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SunrisePageDataHook;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;
@@ -30,6 +34,7 @@ import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -44,6 +49,14 @@ public abstract class SunriseFrameworkController extends Controller {
     private static ObjectMapper createObjectMapper() {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        final SimpleModule mod = new SimpleModule("form module");
+        mod.addSerializer(Form.class, new StdScalarSerializer<Form>(Form.class){
+            @Override
+            public void serialize(final Form value, final JsonGenerator gen, final SerializerProvider provider) throws IOException {
+                gen.writeObject(value.data());
+            }
+        });
+        mapper.registerModule(mod);	// Register the module on the mapper
         return mapper;
     }
 

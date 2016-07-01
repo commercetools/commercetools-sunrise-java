@@ -30,6 +30,8 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
     @Inject
     private MyOrdersReverseRouter myOrdersReverseRouter;
+    @Inject
+    private CartReverseRouter cartReverseRouter;
 
     @Override
     public PageMeta create() {
@@ -48,10 +50,10 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter.processChangeCountryForm(language), "selectCountry")
 
-                .addHalLink(reverseRouter.showCart(language), "cart")
-                .addHalLink(reverseRouter.processAddProductToCartForm(language), "addToCart")
-                .addHalLink(reverseRouter.processChangeLineItemQuantityForm(language), "changeLineItem")
-                .addHalLink(reverseRouter.processDeleteLineItemForm(language), "deleteLineItem")
+                .addHalLink(cartReverseRouter.showCart(language), "cart")
+                .addHalLink(cartReverseRouter.processAddProductToCartForm(language), "addToCart")
+                .addHalLink(cartReverseRouter.processChangeLineItemQuantityForm(language), "changeLineItem")
+                .addHalLink(cartReverseRouter.processDeleteLineItemForm(language), "deleteLineItem")
 
                 .addHalLink(checkoutReverseRouter.checkoutAddressesPageCall(language), "checkout", "editShippingAddress", "editBillingAddress")
                 .addHalLink(checkoutReverseRouter.checkoutAddressesProcessFormCall(language), "checkoutAddressSubmit")
@@ -74,7 +76,7 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(myOrdersReverseRouter.myOrderListPageCall(language), "myOrders")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
-        //TODO frameork migration
+        //TODO framework migration
 //        newCategory().flatMap(nc -> reverseRouter.showCategory(userContext.locale(), nc))
 //                .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
 //        pageMeta.setShowInfoModal(showInfoModal);

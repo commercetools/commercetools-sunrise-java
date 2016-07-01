@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.ProductBeanFactory;
 import io.sphere.sdk.models.Base;
@@ -15,7 +15,7 @@ public class ProductDetailPageContentFactory extends Base {
     @Inject
     protected UserContext userContext;
     @Inject
-    protected ReverseRouter reverseRouter;
+    protected CartReverseRouter cartReverseRouter;
     @Inject
     protected BreadcrumbBeanFactory breadcrumbBeanFactory;
     @Inject
@@ -51,6 +51,6 @@ public class ProductDetailPageContentFactory extends Base {
     }
 
     protected String getAddToCartUrl() {
-        return reverseRouter.processAddProductToCartForm(userContext.locale().getLanguage()).url();
+        return cartReverseRouter.processAddProductToCartForm(userContext.locale().getLanguage()).url();
     }
 }

@@ -31,33 +31,6 @@ public class CartLikeBean {
     public CartLikeBean() {
     }
 
-    @Deprecated//use a factory
-    public CartLikeBean(final CartLike<?> cartLike, final UserContext userContext,
-                        final ProductDataConfig productDataConfig, final ProductReverseRouter reverseRouter) {
-        final MoneyContext moneyContext = MoneyContext.of(cartLike.getCurrency(), userContext.locale());
-        this.totalItems = cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum();
-        this.salesTax = moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null));
-        this.totalPrice = moneyContext.formatOrZero(calculateTotalPrice(cartLike));
-        this.subtotalPrice = moneyContext.formatOrZero(calculateSubTotal(cartLike));
-        this.lineItems = new LineItemsBean(cartLike.getLineItems(), productDataConfig, userContext, reverseRouter);
-        this.shippingAddress = new AddressBean(cartLike.getShippingAddress(), userContext.locale());
-        if (cartLike.getBillingAddress() != null) {
-            this.billingAddress = new AddressBean(cartLike.getBillingAddress(), userContext.locale());
-        } else {
-            this.billingAddress = new AddressBean(cartLike.getShippingAddress(), userContext.locale());
-        }
-        this.shippingMethod = new ShippingInfoBean(cartLike.getShippingInfo(), moneyContext);
-        this.paymentDetails = new PaymentInfoBean(cartLike.getPaymentInfo(), userContext);
-
-        if (cartLike instanceof Order) {
-            final Order order = (Order) cartLike;
-            final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", userContext.locale());
-            this.orderDate = dateTimeFormatter.format(order.getCreatedAt());
-            this.orderNumber = order.getOrderNumber();
-            this.customerEmail = order.getCustomerEmail();
-        }
-    }
-
     public String getOrderNumber() {
         return orderNumber;
     }
