@@ -1,18 +1,12 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
-import javax.annotation.Nullable;
-import java.util.Objects;
-
 public class DefaultAddressBookAddressFormData extends Base implements AddressBookAddressFormData {
-
-    private String csrfToken;
 
     private String title;
     @Constraints.Required
@@ -42,14 +36,6 @@ public class DefaultAddressBookAddressFormData extends Base implements AddressBo
             return "Invalid country"; // TODO use i18n version
         }
         return null;
-    }
-
-    public String getCsrfToken() {
-        return csrfToken;
-    }
-
-    public void setCsrfToken(final String csrfToken) {
-        this.csrfToken = csrfToken;
     }
 
     public String getTitle() {

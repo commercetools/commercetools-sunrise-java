@@ -100,7 +100,7 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkC
             final CheckoutAddressFormData checkoutAddressFormData = formDataClass.getConstructor().newInstance();
             checkoutAddressFormData.setData(cart);
             final Map<String, String> describe = BeanUtils.describe(checkoutAddressFormData);
-            final Form<? extends CheckoutAddressFormData> result = formFactory().form(DefaultCheckoutAddressFormData.class).bind(describe);
+            final Form<? extends CheckoutAddressFormData> result = formFactory().form(getFormDataClass()).bind(describe);
             return result;
         } catch (final Exception e) {
             throw new RuntimeException();
