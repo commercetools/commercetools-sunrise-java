@@ -58,7 +58,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
         final CartUpdateCommand command = hooks().runFilterHook(CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand, cmd);
         final CompletionStage<Cart> cartAfterOriginalCommandStage = sphere().execute(command);
         return cartAfterOriginalCommandStage
-                .thenComposeAsync(res -> hooks().runAsyncFilterHook(PrimaryCartUpdateAsyncFilter.class, (h, cart) -> h.c(cart, cmd), res), defaultContext())
+                .thenComposeAsync(res -> hooks().runAsyncFilterHook(PrimaryCartUpdateAsyncFilter.class, (h, cart) -> h.asyncFilterPrimaryCart(cart, cmd), res), defaultContext())
                 .thenApplyAsync(res -> {
                     hooks().runAsyncHook(PrimaryCartUpdatedHook.class, hook -> ((BiFunction<PrimaryCartUpdatedHook, Cart, CompletionStage<?>>) PrimaryCartUpdatedHook::onPrimaryCartUpdated).apply(hook, res));
                     return res;

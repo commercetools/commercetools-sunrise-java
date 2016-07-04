@@ -6,5 +6,5 @@ import io.sphere.sdk.expansion.ExpansionPathContainer;
 import java.util.concurrent.CompletionStage;
 
 public interface PrimaryCartUpdateAsyncFilter extends Hook {
-    CompletionStage<Cart> c(final Cart cart, final ExpansionPathContainer<Cart> expansionPathContainer);
+    CompletionStage<Cart> asyncFilterPrimaryCart(final Cart cart, final ExpansionPathContainer<Cart> expansionPathContainer);
 }
