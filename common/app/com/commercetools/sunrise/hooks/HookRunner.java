@@ -20,6 +20,8 @@ public interface HookRunner {
      */
     <T extends Hook> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f);
 
+    <T extends Hook, R> CompletionStage<R> runAsyncFilterHook(final Class<T> hookClass, final BiFunction<T, R, CompletionStage<R>> f, final R param);
+
     /**
      * Executes a hook with one parameter that returns a value of the same type as the parameter. The execution is synchronous and each
      * implementing component will be called after each other. A typical use case is to use this as filter especially in combination with "withers".

@@ -1,8 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.cart.addtocart;
 
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
-import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
-import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -36,11 +34,8 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
         final int variantId = formData.getVariantId();
         final long quantity = formData.getQuantity();
         final AddLineItem updateAction = AddLineItem.of(productId, variantId, quantity);
-        return executeSphereRequestWithHooks(
-                CartUpdateCommand.of(cart, updateAction),
-                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
-                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated
-        );
+        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, updateAction);
+        return executeCartUpdateCommandWithHooks(cmd);
     }
 
     @Override

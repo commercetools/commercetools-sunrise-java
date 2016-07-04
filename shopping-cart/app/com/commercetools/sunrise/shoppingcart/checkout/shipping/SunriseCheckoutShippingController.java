@@ -3,8 +3,6 @@ package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
-import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -121,9 +119,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
         final Reference<ShippingMethod> shippingMethodRef = ShippingMethod.referenceOfId(shippingMethodId);
         final SetShippingMethod setShippingMethod = SetShippingMethod.of(shippingMethodRef);
         final CartUpdateCommand cmd = CartUpdateCommand.of(cart, setShippingMethod);
-        return executeSphereRequestWithHooks(cmd,
-                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
-                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
+        return executeCartUpdateCommandWithHooks(cmd);
     }
 
     private CompletionStage<Result> redirectToCheckoutPayment() {

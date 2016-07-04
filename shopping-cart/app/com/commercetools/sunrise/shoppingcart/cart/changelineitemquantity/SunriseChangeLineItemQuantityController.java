@@ -60,9 +60,8 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseFra
 
     protected CompletionStage<Cart> changeLineItemQuantity(final Cart cart, final String lineItemId, final long quantity) {
         final ChangeLineItemQuantity changeLineItemQuantity = ChangeLineItemQuantity.of(lineItemId, quantity);
-        return executeSphereRequestWithHooks(CartUpdateCommand.of(cart, changeLineItemQuantity),
-                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
-                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
+        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, changeLineItemQuantity);
+        return executeCartUpdateCommandWithHooks(cmd);
     }
 
     protected CompletionStage<Result> handleSuccessfulCartChange(final Cart cart) {

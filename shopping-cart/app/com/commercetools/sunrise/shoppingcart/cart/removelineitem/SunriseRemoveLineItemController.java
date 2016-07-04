@@ -1,9 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.cart.removelineitem;
 
-import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
-import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
-import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -14,7 +11,6 @@ import play.data.Form;
 import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Result;
 
-import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -50,9 +46,7 @@ public abstract class SunriseRemoveLineItemController extends SunriseFrameworkCa
     protected CompletionStage<Cart> removeLineItem(final String lineItemId, final Cart cart) {
         final RemoveLineItem removeLineItem = RemoveLineItem.of(lineItemId);
         final CartUpdateCommand cmd = CartUpdateCommand.of(cart, removeLineItem);
-        return executeSphereRequestWithHooks(cmd,
-                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
-                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
+        return executeCartUpdateCommandWithHooks(cmd);
     }
 
     //TODO this is duplicated
