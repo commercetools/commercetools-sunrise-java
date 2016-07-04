@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.hooks.OrderByIdGetFilterHook;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SingleOrderHook;
-import com.commercetools.sunrise.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.shoppingcart.OrderSessionUtils;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.orders.Order;
@@ -31,7 +31,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  * <p id="hooks">supported hooks</p>
  * <ul>
  *     <li>{@link RequestHook}</li>
- *     <li>{@link SunrisePageDataHook}</li>
+ *     <li>{@link PageDataHook}</li>
  *     <li>{@link OrderByIdGetFilterHook}</li>
  *     <li>{@link SingleOrderHook}</li>
  * </ul>

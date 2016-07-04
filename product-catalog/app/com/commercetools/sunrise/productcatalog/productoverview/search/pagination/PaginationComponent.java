@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
-import com.commercetools.sunrise.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.common.pages.PageData;
+import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.ProductProjectionPagedSearchResultHook;
 import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import static java.util.stream.Collectors.toList;
 
-public class PaginationComponent extends Base implements ControllerComponent, SunrisePageDataHook, ProductProjectionSearchFilterHook, ProductProjectionPagedSearchResultHook {
+public class PaginationComponent extends Base implements ControllerComponent, PageDataHook, ProductProjectionSearchFilterHook, ProductProjectionPagedSearchResultHook {
 
     @Inject
     private ProductsPerPageSelectorFactory productsPerPageSelectorFactory;
@@ -55,9 +55,9 @@ public class PaginationComponent extends Base implements ControllerComponent, Su
     }
 
     @Override
-    public void acceptSunrisePageData(final SunrisePageData sunrisePageData) {
-        if (pagination != null && productsPerPageSelector != null && pagedSearchResult != null && sunrisePageData.getContent() instanceof ProductOverviewPageContent) {
-            final ProductOverviewPageContent content = (ProductOverviewPageContent) sunrisePageData.getContent();
+    public void acceptPageData(final PageData pageData) {
+        if (pagination != null && productsPerPageSelector != null && pagedSearchResult != null && pageData.getContent() instanceof ProductOverviewPageContent) {
+            final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
             content.setPagination(paginationBeanFactory.create(pagedSearchResult, pagination, productsPerPageSelector.getSelectedPageSize()));
             content.setDisplaySelector(createProductsPerPageSelector(productsPerPageSelectorFactory.create()));
         }

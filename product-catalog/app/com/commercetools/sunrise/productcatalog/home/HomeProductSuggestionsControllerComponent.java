@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.home;
 
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.hooks.RequestHook;
-import com.commercetools.sunrise.hooks.SunrisePageDataHook;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
+import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
@@ -27,7 +27,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public class HomeProductSuggestionsControllerComponent implements ControllerComponent, RequestHook, SunrisePageDataHook {
+public class HomeProductSuggestionsControllerComponent implements ControllerComponent, RequestHook, PageDataHook {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeProductSuggestionsControllerComponent.class);
 
@@ -73,9 +73,9 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
     }
 
     @Override
-    public void acceptSunrisePageData(final SunrisePageData sunrisePageData) {
-        if (sunrisePageData.getContent() instanceof HomePageContent) {
-            final HomePageContent content = (HomePageContent) sunrisePageData.getContent();
+    public void acceptPageData(final PageData pageData) {
+        if (pageData.getContent() instanceof HomePageContent) {
+            final HomePageContent content = (HomePageContent) pageData.getContent();
             final ProductListBean productListBean = productListBeanFactory.create(recommendedProducts);
             content.setSuggestions(new SuggestionsBean(productListBean));
         }

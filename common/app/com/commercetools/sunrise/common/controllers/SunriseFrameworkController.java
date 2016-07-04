@@ -10,7 +10,7 @@ import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.hooks.RequestHook;
-import com.commercetools.sunrise.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.hooks.PageDataHook;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -138,7 +138,7 @@ public abstract class SunriseFrameworkController extends Controller {
     protected CompletionStage<Html> renderPage(final PageContent pageContent, final String templateName) {
         final SunrisePageData pageData = createPageData(pageContent);
         return hooks().allAsyncHooksCompletionStage().thenApply(unused -> {
-            hooks().runVoidHook(SunrisePageDataHook.class, hook -> hook.acceptSunrisePageData(pageData));
+            hooks().runVoidHook(PageDataHook.class, hook -> hook.acceptPageData(pageData));
             logFinalPageData(pageData);
             final String html = templateEngine().render(templateName, pageData, userContext.locales());
             return new Html(html);

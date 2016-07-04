@@ -1,14 +1,14 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.hooks.ProductProjectionPagedSearchResultHook;
 import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
 import com.commercetools.sunrise.hooks.SingleCategoryHook;
-import com.commercetools.sunrise.hooks.SunrisePageDataHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.facets.Facet;
@@ -25,7 +25,7 @@ import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-public class FacetedSearchComponent implements ControllerComponent, SunrisePageDataHook, ProductProjectionSearchFilterHook, ProductProjectionPagedSearchResultHook, SingleCategoryHook {
+public class FacetedSearchComponent implements ControllerComponent, PageDataHook, ProductProjectionSearchFilterHook, ProductProjectionPagedSearchResultHook, SingleCategoryHook {
 
     private List<Category> selectedCategories = emptyList();
     private List<FacetedSearchSelector> facetedSearchSelectorList = emptyList();
@@ -61,9 +61,9 @@ public class FacetedSearchComponent implements ControllerComponent, SunrisePageD
     }
 
     @Override
-    public void acceptSunrisePageData(final SunrisePageData sunrisePageData) {
-        if (sunrisePageData.getContent() instanceof ProductOverviewPageContent) {
-            final ProductOverviewPageContent content = (ProductOverviewPageContent) sunrisePageData.getContent();
+    public void acceptPageData(final PageData pageData) {
+        if (pageData.getContent() instanceof ProductOverviewPageContent) {
+            final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
             content.setFacets(createFacetSelectorList(facetBeans));
         }
     }

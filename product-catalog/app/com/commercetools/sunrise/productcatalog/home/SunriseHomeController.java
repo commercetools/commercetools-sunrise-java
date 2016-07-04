@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.hooks.RequestHook;
-import com.commercetools.sunrise.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import play.mvc.Result;
 
@@ -26,7 +26,7 @@ import static java.util.Arrays.asList;
  * <p id="hooks">supported hooks</p>
  * <ul>
  *     <li>{@link RequestHook}</li>
- *     <li>{@link SunrisePageDataHook}</li>
+ *     <li>{@link PageDataHook}</li>
  * </ul>
  * <p>tags</p>
  * <ul>

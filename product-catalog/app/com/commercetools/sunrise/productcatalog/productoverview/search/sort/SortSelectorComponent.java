@@ -2,12 +2,12 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import com.commercetools.sunrise.common.pages.SunrisePageData;
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
-import com.commercetools.sunrise.hooks.SunrisePageDataHook;
+import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 import static java.util.stream.Collectors.toList;
 
-public class SortSelectorComponent implements ControllerComponent, SunrisePageDataHook, ProductProjectionSearchFilterHook {
+public class SortSelectorComponent implements ControllerComponent, PageDataHook, ProductProjectionSearchFilterHook {
 
     @Nullable
     private SortSelector sortSelector;
@@ -35,9 +35,9 @@ public class SortSelectorComponent implements ControllerComponent, SunrisePageDa
     }
 
     @Override
-    public void acceptSunrisePageData(final SunrisePageData sunrisePageData) {
-        if (sortSelector != null && sunrisePageData.getContent() instanceof ProductOverviewPageContent) {
-            final ProductOverviewPageContent content = (ProductOverviewPageContent) sunrisePageData.getContent();
+    public void acceptPageData(final PageData pageData) {
+        if (sortSelector != null && pageData.getContent() instanceof ProductOverviewPageContent) {
+            final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
             content.setSortSelector(createSortSelector(sortSelector));
         }
     }

@@ -38,7 +38,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * <p id="hooks">supported hooks</p>
  * <ul>
  *     <li>{@link RequestHook}</li>
- *     <li>{@link SunrisePageDataHook}</li>
+ *     <li>{@link PageDataHook}</li>
  *     <li>{@link ProductProjectionSearchFilterHook}</li>
  *     <li>{@link SingleProductProjectionHook}</li>
  *     <li>{@link SingleProductVariantHook}</li>
