@@ -36,7 +36,7 @@ public enum PlayJavaFormResolver implements ValueResolver {
         if (name.equals("errors")) {
             return extractErrors(form);
         } else {
-            final String value = form.field(name).valueOr(null);
+            final String value = form.field(name).value();
             return isFalsy(value) ? false : firstNonNull(value, UNRESOLVED);
         }
     }
