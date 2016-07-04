@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.models.ProductAttributeBeanFactory;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.models.ProductAttributeBeanFactory;
 import com.commercetools.sunrise.common.models.ProductVariantBeanFactory;
 import com.commercetools.sunrise.common.models.SelectableProductAttributeBean;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -26,18 +26,22 @@ import static java.util.stream.Collectors.toList;
 public class ProductBeanFactory extends Base {
 
     @Inject
-    protected UserContext userContext;
+    private UserContext userContext;
     @Inject
-    protected ProductDataConfig productDataConfig;
+    private ProductDataConfig productDataConfig;
     @Inject
-    protected ProductReverseRouter productReverseRouter;
+    private ProductReverseRouter productReverseRouter;
     @Inject
-    protected ProductVariantBeanFactory productVariantBeanFactory;
+    private ProductVariantBeanFactory productVariantBeanFactory;
     @Inject
-    protected ProductAttributeBeanFactory productAttributeBeanFactory;
+    private ProductAttributeBeanFactory productAttributeBeanFactory;
+
+    protected ProductBean createEmptyInstance() {
+        return new ProductBean();
+    }
 
     public ProductBean create(final ProductProjection product, final ProductVariant variant) {
-        final ProductBean productBean = new ProductBean();
+        final ProductBean productBean = createEmptyInstance();
         fillIds(product, variant, productBean);
         fillDescription(product, productBean);
         fillGallery(variant, productBean);

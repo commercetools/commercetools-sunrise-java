@@ -20,11 +20,11 @@ import static java.util.stream.Collectors.toList;
 public class BreadcrumbBeanFactory extends Base {
 
     @Inject
-    protected UserContext userContext;
+    private UserContext userContext;
     @Inject
-    protected CategoryTree categoryTree;
+    private CategoryTree categoryTree;
     @Inject
-    protected ProductReverseRouter productReverseRouter;
+    private ProductReverseRouter productReverseRouter;
 
     public BreadcrumbBean create(final ProductProjection product, final ProductVariant variant) {
         final BreadcrumbBean breadcrumbBean = new BreadcrumbBean();
