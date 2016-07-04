@@ -5,8 +5,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.hooks.CartQueryFilterHook;
-import com.commercetools.sunrise.hooks.PrimaryCartLoadedHook;
+import com.commercetools.sunrise.hooks.*;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import com.neovisionaries.i18n.CountryCode;
@@ -31,6 +30,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiFunction;
 
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
@@ -52,6 +52,17 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
             LoggerFactory.getLogger(SunriseFrameworkCartController.class).error("access denied", e);
             return successful(redirect(injector().getInstance(HomeReverseRouter.class).homePageCall(injector().getInstance(UserContext.class).languageTag())));
         });
+    }
+
+    protected CompletionStage<Cart> executeCartUpdateCommandWithHooks(final CartUpdateCommand cmd) {
+        final CartUpdateCommand command = hooks().runFilterHook(CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand, cmd);
+        final CompletionStage<Cart> cartAfterOriginalCommandStage = sphere().execute(command);
+        return cartAfterOriginalCommandStage
+                .thenComposeAsync(res -> hooks().runAsyncFilterHook(PrimaryCartUpdateAsyncFilter.class, (h, cart) -> h.asyncFilterPrimaryCart(cart, cmd), res), defaultContext())
+                .thenApplyAsync(res -> {
+                    hooks().runAsyncHook(PrimaryCartUpdatedHook.class, hook -> ((BiFunction<PrimaryCartUpdatedHook, Cart, CompletionStage<?>>) PrimaryCartUpdatedHook::onPrimaryCartUpdated).apply(hook, res));
+                    return res;
+                }, defaultContext());
     }
 
     /**

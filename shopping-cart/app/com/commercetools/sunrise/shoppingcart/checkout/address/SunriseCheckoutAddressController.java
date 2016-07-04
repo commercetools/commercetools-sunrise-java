@@ -4,8 +4,6 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
-import com.commercetools.sunrise.hooks.CartUpdateCommandFilterHook;
-import com.commercetools.sunrise.hooks.PrimaryCartUpdatedHook;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -135,9 +133,8 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkC
         updateActions.add(SetBillingAddress.of(billingAddress));
         Optional.ofNullable(shippingAddress.getEmail())
                 .ifPresent(email -> updateActions.add(SetCustomerEmail.of(email)));
-        return executeSphereRequestWithHooks(CartUpdateCommand.of(cart, updateActions),
-                CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand,
-                PrimaryCartUpdatedHook.class, PrimaryCartUpdatedHook::onPrimaryCartUpdated);
+        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, updateActions);
+        return executeCartUpdateCommandWithHooks(cmd);
     }
 
     private boolean isBillingDifferent() {

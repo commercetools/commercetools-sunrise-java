@@ -5,6 +5,7 @@ import io.sphere.sdk.models.Base;
 import io.sphere.sdk.utils.FutureUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.libs.concurrent.HttpExecution;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
 import static java.util.stream.Collectors.toList;
 
 public class HookContextImpl extends Base implements HookContext {
@@ -35,6 +37,20 @@ public class HookContextImpl extends Base implements HookContext {
         final CompletionStage<?> listCompletionStage = FutureUtils.listOfFuturesToFutureOfList(collect);
         final CompletionStage<Object> result = listCompletionStage.thenApply(z -> null);
         asyncHooksCompletionStages.add(result);
+        return result;
+    }
+
+    @Override
+    public <T extends Hook, R> CompletionStage<R> runAsyncFilterHook(final Class<T> hookClass, final BiFunction<T, R, CompletionStage<R>> f, final R param) {
+        hookRunnerLogger.debug("runAsyncFilterHook {}", hookClass.getSimpleName());
+        CompletionStage<R> result = successful(param);
+        final List<T> applicableHooks = controllerComponents.stream()
+                .filter(x -> hookClass.isAssignableFrom(x.getClass()))
+                .map(x -> (T) x)
+                .collect(Collectors.toList());
+        for (final T hook : applicableHooks) {
+            result = result.thenComposeAsync(res -> f.apply(hook, res), HttpExecution.defaultContext());
+        }
         return result;
     }
 
