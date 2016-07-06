@@ -90,10 +90,20 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
      * @return a future of the optional cart
      */
     protected CompletionStage<Optional<Cart>> findPrimaryCartInCommercetoolsPlatform() {
-        final CartQuery query = buildQueryForPrimaryCart(session());
-        return sphere().execute(query).thenApplyAsync(PagedResult::head, defaultContext());
+        final Http.Session session = session();
+        return CustomerSessionUtils.getCustomerId(session)
+                .map(customerId -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId)))
+                .map(Optional::of)
+                .orElseGet(() -> CartSessionUtils.getCartId(session).map(cartId -> CartQuery.of().plusPredicates(cart -> cart.id().is(cartId))))
+                .map(query -> query.plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
+                        .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
+                        .plusExpansionPaths(c -> c.paymentInfo().payments())
+                        .withSort(cart -> cart.lastModifiedAt().sort().desc())
+                        .withLimit(1))
+                .map(query -> hooks().runFilterHook(CartQueryFilterHook.class, (hook, q) -> hook.filterCartQuery(q), query))
+                .map(query -> sphere().execute(query).thenApplyAsync(PagedResult::head, defaultContext()))
+                .orElseGet(() -> completedFuture(Optional.empty()));
     }
-
 
     protected CompletionStage<Cart> getOrCreateCart() {
         final CompletionStage<Cart> cartCompletionStage = findPrimaryCartInCommercetoolsPlatform()
