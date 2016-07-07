@@ -11,8 +11,8 @@ import play.Configuration;
 import play.inject.ApplicationLifecycle;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
-import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class SphereClientProvider implements Provider<SphereClient> {
@@ -20,6 +20,10 @@ public final class SphereClientProvider implements Provider<SphereClient> {
     private static final String CONFIG_PROJECT_KEY = "ctp.projectKey";
     private static final String CONFIG_CLIENT_ID = "ctp.clientId";
     private static final String CONFIG_CLIENT_SECRET = "ctp.clientSecret";
+    private static final String CONFIG_API_URL = "ctp.apiUrl";
+    private static final String CONFIG_AUTH_URL = "ctp.authUrl";
+    private static final String DEFAULT_API_URL = "https://api.sphere.io";
+    private static final String DEFAULT_AUTH_URL = "https://auth.sphere.io";
 
     @Inject
     private ApplicationLifecycle applicationLifecycle;
@@ -56,12 +60,15 @@ public final class SphereClientProvider implements Provider<SphereClient> {
     }
 
     private SphereClientConfig getClientConfig() {
-        final String project = requireNonNull(configuration.getString(CONFIG_PROJECT_KEY),
-                "No CTP project key defined in configuration '" + CONFIG_PROJECT_KEY + "'");
-        final String clientId = requireNonNull(configuration.getString(CONFIG_CLIENT_ID),
-                "No CTP client ID defined in configuration '" + CONFIG_CLIENT_ID + "'");
-        final String clientSecret = requireNonNull(configuration.getString(CONFIG_CLIENT_SECRET),
-                "No CTP client secret defined in configuration '" + CONFIG_CLIENT_SECRET + "'");
-        return SphereClientConfig.of(project, clientId, clientSecret);
+        final String project = getValue(CONFIG_PROJECT_KEY);
+        final String clientId = getValue(CONFIG_CLIENT_ID);
+        final String clientSecret = getValue(CONFIG_CLIENT_SECRET);
+        final String authUrl = configuration.getString(CONFIG_AUTH_URL, DEFAULT_AUTH_URL);
+        final String apiUrl = configuration.getString(CONFIG_API_URL, DEFAULT_API_URL);
+        return SphereClientConfig.of(project, clientId, clientSecret, authUrl, apiUrl);
+    }
+
+    private String getValue(final String key) {
+        return Optional.ofNullable(configuration.getString(key)).orElseThrow(() -> new SphereClientCredentialsException("missing value for configuration key " + key));
     }
 }
