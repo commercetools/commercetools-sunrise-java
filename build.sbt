@@ -14,7 +14,7 @@ organization in ThisBuild := "com.commercetools.sunrise"
 
 lazy val sunriseDesignVersion = "0.59.0"
 
-lazy val jvmSdkVersion = "1.0.0"
+lazy val jvmSdkVersion = "1.1.0"
 
 lazy val jacksonVersion = "2.7.5"
 
