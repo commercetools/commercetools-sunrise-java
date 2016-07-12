@@ -14,10 +14,10 @@ import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.commercetools.sunrise.common.controllers.SunriseController.SESSION_COUNTRY;
 import static java.util.Arrays.asList;
 
 public abstract class SunriseLocalizationController extends SunriseFrameworkController {
+    public static final String SESSION_COUNTRY = "countryCode";
 
     protected static final Logger logger = LoggerFactory.getLogger(SunriseLocalizationController.class);
 
