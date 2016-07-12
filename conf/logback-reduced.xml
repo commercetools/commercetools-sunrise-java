@@ -1,5 +1,5 @@
 <configuration debug="false">
-<!--  run -Dlogger.resource=logback-michael.xml -->
+<!--  run -Dlogger.resource=logback-reduced.xml -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%level %logger - %msg%n%xException</pattern>
