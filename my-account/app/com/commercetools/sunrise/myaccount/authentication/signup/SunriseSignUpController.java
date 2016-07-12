@@ -121,15 +121,12 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
     }
 
     protected final boolean isDuplicatedEmailFieldError(final ClientErrorException clientErrorException) {
-        if (clientErrorException instanceof ErrorResponseException) {
-            final ErrorResponseException errorException = (ErrorResponseException) clientErrorException;
-            return errorException.getErrors().stream()
+        return clientErrorException instanceof ErrorResponseException
+                && ((ErrorResponseException) clientErrorException).getErrors().stream()
                     .filter(error -> error.getCode().equals(DuplicateFieldError.CODE))
                     .map(error -> error.as(DuplicateFieldError.class).getField())
                     .filter(duplicatedField -> duplicatedField != null && duplicatedField.equals("email"))
                     .findFirst()
                     .isPresent();
-        }
-        return false;
     }
 }
