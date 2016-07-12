@@ -121,17 +121,17 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
 
     @Override
     public Call processLogInForm(final String languageTag) {
-        return LogInController.processLogIn(languageTag);
+        return LogInController.process(languageTag);
     }
 
     @Override
     public Call processSignUpForm(final String languageTag) {
-        return LogInController.processSignUp(languageTag);
+        return SignUpController.process(languageTag);
     }
 
     @Override
     public Call processLogOut(final String languageTag) {
-        return LogInController.processLogOut(languageTag);
+        return LogOutController.process(languageTag);
     }
 
     @Override

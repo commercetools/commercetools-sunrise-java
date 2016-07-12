@@ -1,9 +1,7 @@
-package com.commercetools.sunrise.myaccount.login;
+package com.commercetools.sunrise.myaccount.authentication.signup;
 
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
-
-import javax.annotation.Nullable;
 
 public class SignUpFormData extends Base {
 
@@ -31,7 +29,6 @@ public class SignUpFormData extends Base {
         return null;
     }
 
-    @Nullable
     public String getTitle() {
         return title;
     }

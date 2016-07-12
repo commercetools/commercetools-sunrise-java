@@ -27,6 +27,6 @@ public final class SetupApplicationController extends Controller {
     }
 
 //    public Result index() {
-//        return setupController.handleOrFallback(() -> redirectToHomePage(defaultLanguage()));
+//        return setupController.handleOrFallback(() -> redirectToHome(defaultLanguage()));
 //    }
 }

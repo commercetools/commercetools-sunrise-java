@@ -2,6 +2,7 @@ package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.pages.*;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
@@ -9,8 +10,8 @@ import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.HookContext;
-import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.RequestHook;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -28,10 +29,7 @@ import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
-import play.mvc.Controller;
-import play.mvc.Http;
-import play.mvc.Result;
-import play.mvc.Results;
+import play.mvc.*;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
@@ -47,6 +45,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public abstract class SunriseFrameworkController extends Controller {
     private static final Logger pageDataLoggerAsJson = LoggerFactory.getLogger(SunrisePageData.class.getName() + "Json");
@@ -211,6 +211,11 @@ public abstract class SunriseFrameworkController extends Controller {
         pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of(bundleWithKey)));
     }
 
+    protected final CompletionStage<Result> redirectToHome() {
+        final Call call = injector().getInstance(HomeReverseRouter.class).homePageCall(userContext().languageTag());
+        return completedFuture(redirect(call));
+    }
+
     protected final HookContext hooks() {
         return hookContext;
     }
@@ -232,7 +237,7 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected final void saveUnexpectedFormError(final Form<?> form, final Throwable throwable, final Logger logger) {
-        saveFormError(form, "Something went wrong, please try again"); // TODO get from i18n
+        form.reject("Something went wrong, please try again"); // TODO i18n
         logger.error("The CTP request raised an unexpected exception", throwable);
     }
 }

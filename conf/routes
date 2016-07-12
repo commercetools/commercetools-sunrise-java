@@ -91,11 +91,11 @@ GET         /:languageTag/checkout/thankyou                    @demo.shoppingcar
 # Shows log in form
 GET         /:languageTag/user/login                           @demo.myaccount.LogInController.show(languageTag: String)
 # Logs in the user
-POST        /:languageTag/user/login                           @demo.myaccount.LogInController.processLogIn(languageTag: String)
-# Signs up the user
-POST        /:languageTag/user/signup                          @demo.myaccount.LogInController.processSignUp(languageTag: String)
+POST        /:languageTag/user/login                           @demo.myaccount.LogInController.process(languageTag: String)
 # Logs out the user
-GET         /:languageTag/user/logout                          @demo.myaccount.LogInController.processLogOut(languageTag: String)
+GET         /:languageTag/user/logout                          @demo.myaccount.LogOutController.process(languageTag: String)
+# Registers the user
+POST        /:languageTag/user/register                        @demo.myaccount.SignUpController.process(languageTag: String)
 
 
 # MY ACCOUNT
