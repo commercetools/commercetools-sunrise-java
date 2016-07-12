@@ -7,10 +7,7 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
-import com.commercetools.sunrise.hooks.Hook;
-import com.commercetools.sunrise.hooks.HookContext;
-import com.commercetools.sunrise.hooks.RequestHook;
-import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.*;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -69,7 +66,7 @@ public abstract class SunriseFrameworkController extends Controller {
     private SphereClient sphere;
 
     @Inject
-    private HookContext hookContext;
+    private RequestHookContext hookContext;
 
     @Inject
     private void setSphereClient(final SphereClient sphereClient) {
@@ -211,7 +208,7 @@ public abstract class SunriseFrameworkController extends Controller {
         pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of(bundleWithKey)));
     }
 
-    protected final HookContext hooks() {
+    protected final RequestHookContext hooks() {
         return hookContext;
     }
 

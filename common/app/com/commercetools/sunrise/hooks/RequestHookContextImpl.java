@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
 import static java.util.stream.Collectors.toList;
 
-public class HookContextImpl extends Base implements HookContext {
+public class RequestHookContextImpl extends Base implements RequestHookContext {
     private static final Logger hookRunnerLogger = LoggerFactory.getLogger(HookRunner.class);
     private static final Logger componentRegistryLogger = LoggerFactory.getLogger(ComponentRegistry.class);
 

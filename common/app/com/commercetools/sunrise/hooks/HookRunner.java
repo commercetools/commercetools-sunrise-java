@@ -44,6 +44,4 @@ public interface HookRunner {
      * @param <T> the type of the hook
      */
     <T extends Hook> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer);
-
-    CompletionStage<Object> allAsyncHooksCompletionStage();
 }

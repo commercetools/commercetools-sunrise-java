@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.hooks.HookContextImpl;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
