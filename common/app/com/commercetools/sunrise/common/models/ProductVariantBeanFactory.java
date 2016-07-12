@@ -1,14 +1,16 @@
 package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.prices.PriceFinder;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.MoneyContext;
 import com.commercetools.sunrise.common.utils.PriceUtils;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.LocalizedString;
-import io.sphere.sdk.products.*;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import io.sphere.sdk.products.Image;
+import io.sphere.sdk.products.PriceLike;
+import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.ProductVariant;
 
 import javax.inject.Inject;
 import javax.money.MonetaryAmount;
