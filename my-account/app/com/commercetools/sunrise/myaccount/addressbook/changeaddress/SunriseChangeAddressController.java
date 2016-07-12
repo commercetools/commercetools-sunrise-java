@@ -7,10 +7,10 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookManagementController;
+import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
 import com.google.inject.Injector;
-import io.sphere.sdk.client.BadRequestException;
+import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
@@ -36,11 +36,10 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Arrays.asList;
 
 @RequestScoped
-public abstract class SunriseChangeAddressController extends AddressBookManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<AddressBookAddressFormData, AddressBookActionData, Customer> {
+public abstract class SunriseChangeAddressController extends SunriseAddressBookManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<AddressBookAddressFormData, AddressBookActionData, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeAddressController.class);
 
@@ -91,29 +90,15 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
     }
 
     @Override
-    public CompletionStage<Result> showForm(final AddressBookActionData context) {
-        final Form<?> form = createFilledForm(context.getCustomer(), context.getAddress());
-        return asyncOk(renderPage(context.getCustomer(), form));
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData context) {
-        return asyncBadRequest(renderPage(context.getCustomer(), form));
-    }
-
-    @Override
     public CompletionStage<? extends Customer> doAction(final AddressBookAddressFormData formData, final AddressBookActionData context) {
         return changeAddress(context.getCustomer(), context.getAddress(), formData)
                 .thenApplyAsync(updatedCustomer -> updatedCustomer, HttpExecution.defaultContext());
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData context, final Throwable throwable) {
-        if (throwable.getCause() instanceof BadRequestException) {
-            saveUnexpectedFormError(form, throwable.getCause(), logger);
-            return asyncBadRequest(renderPage(context.getCustomer(), form));
-        }
-        return exceptionallyCompletedFuture(throwable);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData context, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException, logger);
+        return asyncBadRequest(renderPage(form, context, null));
     }
 
     @Override
@@ -121,9 +106,18 @@ public abstract class SunriseChangeAddressController extends AddressBookManageme
         return redirectToAddressBook();
     }
 
-    protected CompletionStage<Html> renderPage(final Customer customer, final Form<?> form) {
-        final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(form, customer);
-        return renderPage(pageContent, getTemplateName());
+    @Override
+    public void fillFormData(final AddressBookAddressFormData formData, final AddressBookActionData context) {
+        formData.applyAddress(context.getAddress());
+        formData.setDefaultShippingAddress(isDefaultAddress(context.getAddress().getId(), context.getCustomer().getDefaultShippingAddressId()));
+        formData.setDefaultBillingAddress(isDefaultAddress(context.getAddress().getId(), context.getCustomer().getDefaultBillingAddressId()));
+    }
+
+    @Override
+    public CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData context, @Nullable final Customer updatedCustomer) {
+        final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(context.getCustomer());
+        final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(form, customerToRender);
+        return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     protected final CompletionStage<Result> validateInput(@Nullable final Customer nullableCustomer, @Nullable final Address nullableAddress,

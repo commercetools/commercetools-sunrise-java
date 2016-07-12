@@ -7,4 +7,8 @@ public interface AddressBookAddressFormData extends AddressFormData {
     boolean isDefaultShippingAddress();
 
     boolean isDefaultBillingAddress();
+
+    void setDefaultShippingAddress(final boolean defaultShippingAddress);
+
+    void setDefaultBillingAddress(final boolean defaultBillingAddress);
 }

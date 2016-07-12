@@ -5,9 +5,9 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookManagementController;
+import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
-import io.sphere.sdk.client.BadRequestException;
+import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
@@ -24,18 +24,18 @@ import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-public abstract class SunriseAddAddressController extends AddressBookManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<AddressBookAddressFormData, Customer, Customer> {
+public abstract class SunriseAddAddressController extends SunriseAddressBookManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<AddressBookAddressFormData, Customer, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseAddAddressController.class);
 
@@ -77,17 +77,6 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     }
 
     @Override
-    public CompletionStage<Result> showForm(final Customer customer) {
-        final Form<? extends AddressBookAddressFormData> filledForm = createFilledForm(customer, null);
-        return asyncOk(renderPage(filledForm, customer));
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends AddressBookAddressFormData> form, final Customer customer) {
-        return asyncBadRequest(renderPage(form, customer));
-    }
-
-    @Override
     public CompletionStage<? extends Customer> doAction(final AddressBookAddressFormData formData, final Customer customer) {
         final Address address = formData.toAddress();
         return addAddress(customer, address)
@@ -97,12 +86,9 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final Form<? extends AddressBookAddressFormData> form, final Customer customer, final Throwable throwable) {
-        if (throwable.getCause() instanceof BadRequestException) {
-            saveUnexpectedFormError(form, throwable.getCause(), logger);
-            return asyncBadRequest(renderPage(form, customer));
-        }
-        return exceptionallyCompletedFuture(throwable);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends AddressBookAddressFormData> form, final Customer customer, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException, logger);
+        return asyncBadRequest(renderPage(form, customer, null));
     }
 
     @Override
@@ -110,9 +96,21 @@ public abstract class SunriseAddAddressController extends AddressBookManagementC
         return redirectToAddressBook();
     }
 
-    protected CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final Customer customer) {
-        final AddAddressPageContent pageContent = injector().getInstance(AddAddressPageContentFactory.class).create(form, customer);
-        return renderPage(pageContent, getTemplateName());
+    @Override
+    public CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final Customer customer, @Nullable final Customer updatedCustomer) {
+        final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(customer);
+        final AddAddressPageContent pageContent = injector().getInstance(AddAddressPageContentFactory.class).create(form, customerToRender);
+        return renderPageWithTemplate(pageContent, getTemplateName());
+    }
+
+    @Override
+    public void fillFormData(final AddressBookAddressFormData formData, final Customer customer) {
+        final Address address = Address.of(userContext().country())
+                .withTitle(customer.getTitle())
+                .withFirstName(customer.getFirstName())
+                .withLastName(customer.getLastName())
+                .withEmail(customer.getEmail());
+        formData.applyAddress(address);
     }
 
     protected final Optional<String> findAddressId(final Customer customer, final Address addressWithoutId) {

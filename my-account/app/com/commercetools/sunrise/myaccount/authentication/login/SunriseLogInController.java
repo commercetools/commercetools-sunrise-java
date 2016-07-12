@@ -9,7 +9,7 @@ import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
-import io.sphere.sdk.client.BadRequestException;
+import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
@@ -31,7 +31,6 @@ import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
@@ -72,34 +71,19 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
     }
 
     @Override
-    public CompletionStage<Result> showForm(final Void context) {
-        final Form<? extends LogInFormData> filledForm = createFilledForm(null);
-        return asyncOk(renderPage(filledForm, context, null));
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends LogInFormData> form, final Void context) {
-        return asyncBadRequest(renderPage(form, context, null));
-    }
-
-    @Override
     public CompletionStage<? extends CustomerSignInResult> doAction(final LogInFormData formData, final Void context) {
         final CustomerSignInCommand signInCommand = CustomerSignInCommand.of(formData.getUsername(), formData.getPassword(), anonymousCartId().orElse(null));
         return sphere().execute(signInCommand);
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final Form<? extends LogInFormData> form, final Void context, final Throwable throwable) {
-        if (throwable.getCause() instanceof BadRequestException) {
-            final ErrorResponseException errorResponseException = (ErrorResponseException) throwable.getCause();
-            if (errorResponseException.hasErrorCode(CustomerInvalidCredentials.CODE)) {
-                saveFormError(form, "Invalid credentials"); // TODO i18n
-            } else {
-                saveUnexpectedFormError(form, throwable.getCause(), logger);
-            }
-            return asyncBadRequest(renderPage(form, context, null));
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends LogInFormData> form, final Void context, final ClientErrorException clientErrorException) {
+        if (isInvalidCredentialsError(clientErrorException)) {
+            saveFormError(form, "Invalid credentials"); // TODO i18n
+        } else {
+            saveUnexpectedFormError(form, clientErrorException, logger);
         }
-        return exceptionallyCompletedFuture(throwable);
+        return asyncBadRequest(renderPage(form, context, null));
     }
 
     @Override
@@ -110,23 +94,28 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
         return redirectToMyPersonalDetails();
     }
 
-    protected Optional<String> anonymousCartId() {
-        return CartSessionUtils.getCartId(session());
-    }
-
-    protected CompletionStage<Html> renderPage(final Form<? extends LogInFormData> form, final Void context, @Nullable final CustomerSignInResult result) {
+    @Override
+    public CompletionStage<Html> renderPage(final Form<? extends LogInFormData> form, final Void context, @Nullable final CustomerSignInResult result) {
         final AuthenticationPageContent pageContent = injector().getInstance(AuthenticationPageContentFactory.class).createWithLogInForm(form);
-        return renderPage(pageContent, getTemplateName());
+        return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
-    protected Form<? extends LogInFormData> createFilledForm(final String username) {
-        final DefaultLogInFormData formData = new DefaultLogInFormData();
-        formData.setUsername(username);
-        return formFactory().form(DefaultLogInFormData.class).fill(formData);
+    @Override
+    public void fillFormData(final LogInFormData formData, final Void context) {
+        // Do nothing
+    }
+
+    protected final Optional<String> anonymousCartId() {
+        return CartSessionUtils.getCartId(session());
     }
 
     protected final CompletionStage<Result> redirectToMyPersonalDetails() {
         final Call call = injector().getInstance(MyPersonalDetailsReverseRouter.class).myPersonalDetailsPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
+    }
+
+    protected final boolean isInvalidCredentialsError(final ClientErrorException clientErrorException) {
+        return clientErrorException instanceof ErrorResponseException
+                && ((ErrorResponseException) clientErrorException).hasErrorCode(CustomerInvalidCredentials.CODE);
     }
 }

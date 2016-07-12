@@ -8,7 +8,7 @@ import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRo
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
-import io.sphere.sdk.client.BadRequestException;
+import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.CustomerName;
@@ -29,15 +29,12 @@ import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
@@ -94,17 +91,6 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
     }
 
     @Override
-    public CompletionStage<Result> showForm(final Customer customer) {
-        final Form<? extends MyPersonalDetailsFormData> filledForm = createFilledForm(customer);
-        return asyncOk(renderPage(filledForm, customer));
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer) {
-        return asyncBadRequest(renderPage(form, customer));
-    }
-
-    @Override
     public CompletionStage<? extends Customer> doAction(final MyPersonalDetailsFormData formData, final Customer customer) {
         final CompletionStage<Customer> customerStage = updateCustomer(formData, customer);
         customerStage.thenAcceptAsync(updatedCustomer ->
@@ -113,29 +99,27 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer, final Throwable throwable) {
-        if (throwable.getCause() instanceof BadRequestException) {
-            saveUnexpectedFormError(form, throwable.getCause(), logger);
-            return asyncBadRequest(renderPage(form, customer));
-        }
-        return exceptionallyCompletedFuture(throwable);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException, logger);
+        return asyncBadRequest(renderPage(form, customer, null));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final MyPersonalDetailsFormData formData, final Customer oldCustomer, final Customer updatedCustomer) {
+    public CompletionStage<Result> handleSuccessfulAction(final MyPersonalDetailsFormData formData, final Customer customer, final Customer updatedCustomer) {
         return redirectToMyPersonalDetails();
     }
 
-    protected Form<? extends MyPersonalDetailsFormData> createFilledForm(final Customer customer) {
-        final DefaultMyPersonalDetailsFormData formData = new DefaultMyPersonalDetailsFormData();
-        formData.applyCustomerName(customer.getName());
-        formData.setEmail(customer.getEmail());
-        return formFactory().form(DefaultMyPersonalDetailsFormData.class).fill(formData);
+    @Override
+    public CompletionStage<Html> renderPage(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer, @Nullable final Customer updatedCustomer) {
+        final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(customer);
+        final MyPersonalDetailsPageContent pageContent = injector().getInstance(MyPersonalDetailsPageContentFactory.class).create(form, customerToRender);
+        return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
-    protected CompletionStage<Html> renderPage(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer) {
-        final MyPersonalDetailsPageContent pageContent = injector().getInstance(MyPersonalDetailsPageContentFactory.class).create(form, customer);
-        return renderPage(pageContent, getTemplateName());
+    @Override
+    public void fillFormData(final MyPersonalDetailsFormData formData, final Customer customer) {
+        formData.applyCustomerName(customer.getName());
+        formData.setEmail(customer.getEmail());
     }
 
     protected CompletionStage<Customer> updateCustomer(final MyPersonalDetailsFormData formData, final Customer customer) {

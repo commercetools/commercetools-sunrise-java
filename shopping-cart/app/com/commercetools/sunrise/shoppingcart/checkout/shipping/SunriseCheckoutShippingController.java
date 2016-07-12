@@ -8,7 +8,7 @@ import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingMethod;
-import io.sphere.sdk.client.BadRequestException;
+import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import org.slf4j.Logger;
@@ -22,23 +22,29 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 public abstract class SunriseCheckoutShippingController extends SunriseFrameworkCartController
         implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutShippingFormData, Cart, Cart>, WithCartPreconditions {
+
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingController.class);
 
-    @Inject
-    private CheckoutShippingPageContentFactory pageContentFactory;
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("checkout", "checkout-shipping"));
+    }
+
+    @Override
+    public String getTemplateName() {
+        return "checkout-shipping";
+    }
 
     @Override
     public Class<? extends CheckoutShippingFormData> getFormDataClass() {
@@ -61,29 +67,14 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
     }
 
     @Override
-    public CompletionStage<Result> showForm(final Cart cart) {
-        final String shippingMethodId = findShippingMethodId(cart).orElse(null);
-        final Form<? extends CheckoutShippingFormData> filledForm = createFilledForm(shippingMethodId);
-        return asyncOk(renderPage(filledForm, cart));
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends CheckoutShippingFormData> form, final Cart cart) {
-        return asyncBadRequest(renderPage(form, cart));
-    }
-
-    @Override
     public CompletionStage<? extends Cart> doAction(final CheckoutShippingFormData formData, final Cart cart) {
         return setShippingToCart(cart, formData.getShippingMethodId());
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final Form<? extends CheckoutShippingFormData> form, final Cart cart, final Throwable throwable) {
-        if (throwable.getCause() instanceof BadRequestException) {
-            saveUnexpectedFormError(form, throwable.getCause(), logger);
-            return asyncBadRequest(renderPage(form, cart));
-        }
-        return exceptionallyCompletedFuture(throwable);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends CheckoutShippingFormData> form, final Cart cart, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException, logger);
+        return asyncBadRequest(renderPage(form, cart, null));
     }
 
     @Override
@@ -91,28 +82,30 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
         return redirectToCheckoutPayment();
     }
 
-    protected Form<? extends CheckoutShippingFormData> createFilledForm(@Nullable final String shippingMethodId) {
-        final DefaultCheckoutShippingFormData formData = new DefaultCheckoutShippingFormData();
-        formData.setShippingMethodId(shippingMethodId);
-        return formFactory().form(DefaultCheckoutShippingFormData.class).fill(formData);
-    }
-
-    protected CompletionStage<Html> renderPage(final Form<? extends CheckoutShippingFormData> form, final Cart cart) {
+    @Override
+    public CompletionStage<Html> renderPage(final Form<? extends CheckoutShippingFormData> form, final Cart cart, @Nullable final Cart updatedCart) {
         return getShippingMethods()
                 .thenComposeAsync(shippingMethods -> {
-                    final CheckoutShippingPageContent pageContent = injector().getInstance(CheckoutShippingPageContentFactory.class).create(form, cart, shippingMethods);
-                    return renderPage(pageContent, getTemplateName());
+                    final Cart cartToRender = Optional.ofNullable(updatedCart).orElse(cart);
+                    final CheckoutShippingPageContent pageContent = injector().getInstance(CheckoutShippingPageContentFactory.class).create(form, cartToRender, shippingMethods);
+                    return renderPageWithTemplate(pageContent, getTemplateName());
                 }, HttpExecution.defaultContext());
     }
 
     @Override
-    public String getTemplateName() {
-        return "checkout-shipping";
+    public void fillFormData(final CheckoutShippingFormData formData, final Cart cart) {
+        final String shippingMethodId = findShippingMethodId(cart).orElse(null);
+        formData.setShippingMethodId(shippingMethodId);
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("checkout", "checkout-shipping"));
+    protected final CompletionStage<Result> redirectToCheckoutPayment() {
+        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutPaymentPageCall(userContext().languageTag());
+        return completedFuture(redirect(call));
+    }
+
+    protected final Optional<String> findShippingMethodId(final Cart cart) {
+        return Optional.ofNullable(cart.getShippingInfo())
+                .flatMap(info -> Optional.ofNullable(info.getShippingMethod()).map(Reference::getId));
     }
 
     private CompletionStage<Cart> setShippingToCart(final Cart cart, final String shippingMethodId) {
@@ -120,15 +113,5 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
         final SetShippingMethod setShippingMethod = SetShippingMethod.of(shippingMethodRef);
         final CartUpdateCommand cmd = CartUpdateCommand.of(cart, setShippingMethod);
         return executeCartUpdateCommandWithHooks(cmd);
-    }
-
-    private CompletionStage<Result> redirectToCheckoutPayment() {
-        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutPaymentPageCall(userContext().languageTag());
-        return completedFuture(redirect(call));
-    }
-
-    private Optional<String> findShippingMethodId(final Cart cart) {
-        return Optional.ofNullable(cart.getShippingInfo())
-                .flatMap(info -> Optional.ofNullable(info.getShippingMethod()).map(Reference::getId));
     }
 }

@@ -115,6 +115,7 @@ public class DefaultAddressBookAddressFormData extends Base implements AddressBo
         return defaultShippingAddress;
     }
 
+    @Override
     public void setDefaultShippingAddress(final boolean defaultShippingAddress) {
         this.defaultShippingAddress = defaultShippingAddress;
     }
@@ -124,10 +125,12 @@ public class DefaultAddressBookAddressFormData extends Base implements AddressBo
         return defaultBillingAddress;
     }
 
+    @Override
     public void setDefaultBillingAddress(final boolean defaultBillingAddress) {
         this.defaultBillingAddress = defaultBillingAddress;
     }
 
+    @Override
     public void applyAddress(final Address address) {
         this.title = address.getTitle();
         this.firstName = address.getFirstName();

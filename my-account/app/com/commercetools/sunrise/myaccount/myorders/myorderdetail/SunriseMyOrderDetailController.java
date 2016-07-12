@@ -61,7 +61,7 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
 
     protected CompletionStage<Html> renderPage(final Order order) {
         final MyOrderDetailPageContent pageContent = injector().getInstance(MyOrderDetailPageContentFactory.class).create(order);
-        return renderPage(pageContent, getTemplateName());
+        return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     protected CompletionStage<Result> ifValidOrder(@Nullable final Order order,

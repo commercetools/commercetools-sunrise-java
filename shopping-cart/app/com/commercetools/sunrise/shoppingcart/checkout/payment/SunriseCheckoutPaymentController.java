@@ -230,7 +230,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     protected CompletionStage<Html> renderCheckoutPaymentPage(final Cart cart, final CheckoutPaymentPageContent pageContent) {
         pageContent.setCart(cartLikeBeanFactory.create(cart));
         setI18nTitle(pageContent, "checkout:paymentPage.title");
-        return renderPage(pageContent, getTemplateName());
+        return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     @Override

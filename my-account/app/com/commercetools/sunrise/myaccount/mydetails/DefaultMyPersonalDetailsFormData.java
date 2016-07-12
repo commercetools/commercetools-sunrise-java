@@ -43,6 +43,7 @@ public class DefaultMyPersonalDetailsFormData extends Base implements MyPersonal
         return email;
     }
 
+    @Override
     public void setEmail(final String email) {
         this.email = email;
     }
@@ -52,6 +53,7 @@ public class DefaultMyPersonalDetailsFormData extends Base implements MyPersonal
         return CustomerName.ofTitleFirstAndLastName(title, firstName, lastName);
     }
 
+    @Override
     public void applyCustomerName(final CustomerName customerName) {
         this.title = customerName.getTitle();
         this.firstName = customerName.getFirstName();

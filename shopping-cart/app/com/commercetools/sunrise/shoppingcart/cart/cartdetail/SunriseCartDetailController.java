@@ -19,17 +19,15 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  * Shows and modifies the contents of the cart.
  */
 public abstract class SunriseCartDetailController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+
     private static final Logger logger = LoggerFactory.getLogger(SunriseCartDetailController.class);
 
     @Inject
     private CartDetailPageContentFactory pageContentFactory;
 
-    @AddCSRFToken
-    public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            return getOrCreateCart()
-                    .thenComposeAsync(cart -> asyncOk(renderPage(pageContentFactory.create(cart), getTemplateName())), defaultContext());
-        });
+    @Override
+    public Set<String> getFrameworkTags() {
+        return new HashSet<>(asList("cart", "cart-detail"));
     }
 
     @Override
@@ -37,8 +35,11 @@ public abstract class SunriseCartDetailController extends SunriseFrameworkCartCo
         return "cart";
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart", "cart-detail"));
+    @AddCSRFToken
+    public CompletionStage<Result> show(final String languageTag) {
+        return doRequest(() -> {
+            return getOrCreateCart()
+                    .thenComposeAsync(cart -> asyncOk(renderPageWithTemplate(pageContentFactory.create(cart), getTemplateName())), defaultContext());
+        });
     }
 }

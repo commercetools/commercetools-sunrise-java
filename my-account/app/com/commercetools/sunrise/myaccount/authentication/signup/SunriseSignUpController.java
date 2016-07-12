@@ -9,7 +9,7 @@ import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
-import io.sphere.sdk.client.BadRequestException;
+import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerCreateCommand;
@@ -31,7 +31,6 @@ import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
@@ -72,17 +71,6 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
     }
 
     @Override
-    public CompletionStage<Result> showForm(final Void context) {
-        final Form<? extends SignUpFormData> filledForm = createFilledForm();
-        return asyncOk(renderPage(filledForm, context, null));
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Form<? extends SignUpFormData> form, final Void context) {
-        return asyncBadRequest(renderPage(form, context, null));
-    }
-
-    @Override
     public CompletionStage<? extends CustomerSignInResult> doAction(final SignUpFormData formData, final Void context) {
         final CustomerDraft customerDraft = formData.toCustomerDraftBuilder()
                 .customerNumber(generateCustomerNumber())
@@ -93,13 +81,10 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
     }
 
     @Override
-    public CompletionStage<Result> handleFailedAction(final Form<? extends SignUpFormData> form, final Void context, final Throwable throwable) {
-        if (throwable.getCause() instanceof BadRequestException) {
-            saveFormError(form, "Something went wrong, probably a user with this email already exists"); // TODO i18n
-            logger.error("Unknown error, probably customer already exists", throwable.getCause());
-            return asyncBadRequest(renderPage(form, context, null));
-        }
-        return exceptionallyCompletedFuture(throwable);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends SignUpFormData> form, final Void context, final ClientErrorException clientErrorException) {
+        saveFormError(form, "Something went wrong, probably a user with this email already exists"); // TODO i18n
+        logger.error("Unknown error, probably customer already exists", clientErrorException);
+        return asyncBadRequest(renderPage(form, context, null));
     }
 
     @Override
@@ -111,21 +96,22 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
         return completedFuture(redirect(call));
     }
 
+    @Override
+    public CompletionStage<Html> renderPage(final Form<? extends SignUpFormData> form, final Void context, @Nullable final CustomerSignInResult result) {
+        final AuthenticationPageContent pageContent = injector().getInstance(AuthenticationPageContentFactory.class).createWithSignUpForm(form);
+        return renderPageWithTemplate(pageContent, getTemplateName());
+    }
+
+    @Override
+    public void fillFormData(final SignUpFormData formData, final Void context) {
+        // Do nothing
+    }
+
     protected String generateCustomerNumber() {
         return RandomStringUtils.randomNumeric(6);
     }
 
     protected Optional<String> anonymousCartId() {
         return CartSessionUtils.getCartId(session());
-    }
-
-    protected CompletionStage<Html> renderPage(final Form<? extends SignUpFormData> form, final Void context, @Nullable final CustomerSignInResult result) {
-        final AuthenticationPageContent pageContent = injector().getInstance(AuthenticationPageContentFactory.class).createWithSignUpForm(form);
-        return renderPage(pageContent, getTemplateName());
-    }
-
-    protected Form<? extends SignUpFormData> createFilledForm() {
-        final DefaultSignUpFormData formData = new DefaultSignUpFormData();
-        return formFactory().form(DefaultSignUpFormData.class).fill(formData);
     }
 }

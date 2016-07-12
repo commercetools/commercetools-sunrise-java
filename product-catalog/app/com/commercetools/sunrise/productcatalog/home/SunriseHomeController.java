@@ -60,7 +60,7 @@ public abstract class SunriseHomeController extends SunriseFrameworkController i
 
     protected CompletionStage<Result> showHome() {
         final PageContent pageContent = createPageContent();
-        return asyncOk(renderPage(pageContent, getTemplateName()));
+        return asyncOk(renderPageWithTemplate(pageContent, getTemplateName()));
     }
 
     protected PageContent createPageContent() {

@@ -57,6 +57,6 @@ public abstract class SunriseAddressBookController extends MyAccountController i
 
     protected CompletionStage<Html> renderPage(final Customer customer) {
         final AddressBookPageContent pageContent = addressBookPageContentFactory.create(customer);
-        return renderPage(pageContent, getTemplateName());
+        return renderPageWithTemplate(pageContent, getTemplateName());
     }
 }

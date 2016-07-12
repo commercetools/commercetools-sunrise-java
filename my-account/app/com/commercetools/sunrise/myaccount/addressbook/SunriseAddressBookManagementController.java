@@ -4,7 +4,6 @@ import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
-import play.data.Form;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
@@ -17,7 +16,7 @@ import java.util.function.Function;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AddressBookManagementController extends MyAccountController {
+public abstract class SunriseAddressBookManagementController extends MyAccountController {
 
     protected CompletionStage<Result> handleNotFoundAddress(final Customer customer) {
         return redirectToAddressBook();
@@ -45,16 +44,6 @@ public abstract class AddressBookManagementController extends MyAccountControlle
     protected final CompletionStage<Result> redirectToAddressBook() {
         final Call call = injector().getInstance(AddressBookReverseRouter.class).addressBookCall(userContext().languageTag());
         return completedFuture(redirect(call));
-    }
-
-    protected Form<? extends AddressBookAddressFormData> createFilledForm(final Customer customer, @Nullable final Address address) {
-        final DefaultAddressBookAddressFormData formData = new DefaultAddressBookAddressFormData();
-        if (address != null) {
-            formData.applyAddress(address);
-            formData.setDefaultShippingAddress(isDefaultAddress(address.getId(), customer.getDefaultShippingAddressId()));
-            formData.setDefaultBillingAddress(isDefaultAddress(address.getId(), customer.getDefaultBillingAddressId()));
-        }
-        return formFactory().form(DefaultAddressBookAddressFormData.class).fill(formData);
     }
 
     protected final boolean isDefaultAddress(final String addressId, @Nullable final String defaultAddressId) {

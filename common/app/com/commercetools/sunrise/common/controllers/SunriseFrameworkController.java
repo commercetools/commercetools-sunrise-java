@@ -136,7 +136,7 @@ public abstract class SunriseFrameworkController extends Controller {
         return session.get("csrfToken");
     }
 
-    protected CompletionStage<Html> renderPage(final PageContent pageContent, final String templateName) {
+    protected CompletionStage<Html> renderPageWithTemplate(final PageContent pageContent, final String templateName) {
         final SunrisePageData pageData = createPageData(pageContent);
         return hooks().allAsyncHooksCompletionStage().thenApply(unused -> {
             hooks().runVoidHook(PageDataHook.class, hook -> hook.acceptPageData(pageData));
