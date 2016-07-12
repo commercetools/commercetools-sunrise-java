@@ -15,6 +15,8 @@ import java.util.concurrent.CompletionStage;
 import static com.commercetools.sunrise.common.ctp.MetricAction.KEY;
 
 final class MetricHttpClient implements HttpClient {
+
+    public static final String LOGGER_NAME = "sphere.metrics.simple";
     private final HttpClient underlying;
     private final Http.Context context;
     private final boolean metricsEnabled;
@@ -22,7 +24,7 @@ final class MetricHttpClient implements HttpClient {
     private MetricHttpClient(final HttpClient underlying, final Http.Context context) {
         this.underlying = underlying;
         this.context = context;
-        this.metricsEnabled = LoggerFactory.getLogger("sphere.metrics.simple").isDebugEnabled();
+        this.metricsEnabled = LoggerFactory.getLogger(LOGGER_NAME).isDebugEnabled();
         if (metricsEnabled) {
             final List<ReportRawData> rawData = Collections.synchronizedList(new LinkedList<>());
             context.args.put(KEY, rawData);
