@@ -1,13 +1,17 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.ctp.MetricAction;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
-import com.commercetools.sunrise.hooks.*;
+import com.commercetools.sunrise.hooks.Hook;
+import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.RequestHook;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -165,6 +169,9 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> nextSupplier) {
+
+
+
         final Function<RequestHook, CompletionStage<?>> f = hook -> hook.onRequest(ctx());
         hooks().runAsyncHook(RequestHook.class, f);
         final CompletionStage<Result> resultCompletionStage = nextSupplier.get();
@@ -175,7 +182,11 @@ public abstract class SunriseFrameworkController extends Controller {
             return errorHandlers.stream().filter(h -> h.canHandle.test(usefulException)).findFirst()
                     .map(h -> h.f.apply(usefulException))
                     .orElse(resultCompletionStage);
-        }, HttpExecution.defaultContext());
+        }, HttpExecution.defaultContext())
+                .thenApplyAsync(res -> {
+                    MetricAction.logRequestData(ctx());
+                    return res;
+                }, HttpExecution.defaultContext());
     }
 
     protected void prependErrorHandler(final Predicate<Throwable> canHandle, final Function<? super Throwable, CompletionStage<Result>> f) {
