@@ -84,7 +84,7 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends SignUpFormData> form, final Void context, final ClientErrorException clientErrorException) {
-        if (isDuplicatedFieldError(clientErrorException)) {
+        if (isDuplicatedEmailFieldError(clientErrorException)) {
             saveFormError(form, "A user with this email already exists"); // TODO i18n
         } else {
             saveUnexpectedFormError(form, clientErrorException, logger);
@@ -120,8 +120,16 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
         return CartSessionUtils.getCartId(session());
     }
 
-    protected final boolean isDuplicatedFieldError(final ClientErrorException clientErrorException) {
-        return clientErrorException instanceof ErrorResponseException
-                && ((ErrorResponseException) clientErrorException).hasErrorCode(DuplicateFieldError.CODE);
+    protected final boolean isDuplicatedEmailFieldError(final ClientErrorException clientErrorException) {
+        if (clientErrorException instanceof ErrorResponseException) {
+            final ErrorResponseException errorException = (ErrorResponseException) clientErrorException;
+            return errorException.getErrors().stream()
+                    .filter(error -> error.getCode().equals(DuplicateFieldError.CODE))
+                    .map(error -> error.as(DuplicateFieldError.class).getField())
+                    .filter(duplicatedField -> duplicatedField != null && duplicatedField.equals("email"))
+                    .findFirst()
+                    .isPresent();
+        }
+        return false;
     }
 }
