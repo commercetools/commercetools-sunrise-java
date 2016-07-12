@@ -10,9 +10,11 @@ import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageCont
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import io.sphere.sdk.client.ClientErrorException;
+import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerCreateCommand;
+import io.sphere.sdk.models.errors.DuplicateFieldError;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,8 +84,11 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends SignUpFormData> form, final Void context, final ClientErrorException clientErrorException) {
-        saveFormError(form, "Something went wrong, probably a user with this email already exists"); // TODO i18n
-        logger.error("Unknown error, probably customer already exists", clientErrorException);
+        if (isDuplicatedFieldError(clientErrorException)) {
+            saveFormError(form, "A user with this email already exists"); // TODO i18n
+        } else {
+            saveUnexpectedFormError(form, clientErrorException, logger);
+        }
         return asyncBadRequest(renderPage(form, context, null));
     }
 
@@ -113,5 +118,10 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     protected Optional<String> anonymousCartId() {
         return CartSessionUtils.getCartId(session());
+    }
+
+    protected final boolean isDuplicatedFieldError(final ClientErrorException clientErrorException) {
+        return clientErrorException instanceof ErrorResponseException
+                && ((ErrorResponseException) clientErrorException).hasErrorCode(DuplicateFieldError.CODE);
     }
 }
