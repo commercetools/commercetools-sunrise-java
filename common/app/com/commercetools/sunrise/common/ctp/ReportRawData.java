@@ -1,9 +1,9 @@
-package io.sphere.sdk.play.metrics;
+package com.commercetools.sunrise.common.ctp;
 
-import io.sphere.sdk.http.HttpResponse;
 import io.sphere.sdk.http.HttpRequest;
+import io.sphere.sdk.http.HttpResponse;
 
-public class ReportRawData {
+public final class ReportRawData {
     private final HttpRequest HttpRequest;
     private final HttpResponse httpResponse;
     private final long startTimestamp;

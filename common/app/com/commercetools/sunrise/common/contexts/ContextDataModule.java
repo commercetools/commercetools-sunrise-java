@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.contexts;
 
-import com.commercetools.sunrise.hooks.HookContext;
-import com.commercetools.sunrise.hooks.HookContextImpl;
+import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.RequestHookContextImpl;
 import com.google.inject.AbstractModule;
 import play.mvc.Http;
 
@@ -20,6 +20,6 @@ public class ContextDataModule extends AbstractModule {
         bind(UserContext.class).toProvider(UserContextProvider.class).in(requestScope);
         bind(RequestContext.class).toProvider(RequestContextProvider.class).in(requestScope);
         bind(ProjectContext.class).toProvider(ProjectContextProvider.class).in(Singleton.class);
-        bind(HookContext.class).to(HookContextImpl.class).in(requestScope);
+        bind(RequestHookContext.class).to(RequestHookContextImpl.class).in(requestScope);
     }
 }

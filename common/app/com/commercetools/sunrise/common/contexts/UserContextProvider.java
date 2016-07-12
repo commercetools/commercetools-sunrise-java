@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.common.contexts;
 
-import com.commercetools.sunrise.common.controllers.SunriseController;
 import com.neovisionaries.i18n.CountryCode;
 import play.mvc.Http;
 
@@ -8,9 +7,11 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.money.CurrencyUnit;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import javax.money.Monetary;
+import java.util.*;
+
+import static com.commercetools.sunrise.common.localization.SunriseLocalizationController.SESSION_COUNTRY;
+import static java.util.stream.Collectors.toList;
 
 public final class UserContextProvider implements Provider<UserContext> {
 
@@ -22,10 +23,24 @@ public final class UserContextProvider implements Provider<UserContext> {
     @Override
     public UserContext get() {
         final Locale locale = getLocaleInPath(context);
-        final List<Locale> acceptedLocales = SunriseController.acceptedLocales(locale, context.request(), projectContext);
-        final CountryCode currentCountry = SunriseController.currentCountry(context.session(), projectContext);
-        final CurrencyUnit currentCurrency = SunriseController.currentCurrency(currentCountry, projectContext);
+        final List<Locale> acceptedLocales = acceptedLocales(locale, context.request(), projectContext);
+        final CountryCode currentCountry = currentCountry(context.session(), projectContext);
+        final CurrencyUnit currentCurrency = currentCurrency(currentCountry, projectContext);
         return UserContextImpl.of(acceptedLocales, currentCountry, currentCurrency);
+    }
+
+    private static CountryCode currentCountry(final Http.Session session, final ProjectContext projectContext) {
+        final String countryCodeInSession = session.get(SESSION_COUNTRY);
+        final CountryCode country = CountryCode.getByCode(countryCodeInSession, false);
+        return projectContext.isCountrySupported(country) ? country : projectContext.defaultCountry();
+    }
+
+    private static CurrencyUnit currentCurrency(final CountryCode currentCountry, final ProjectContext projectContext) {
+        return Optional.ofNullable(currentCountry.getCurrency())
+                .map(countryCurrency -> {
+                    final CurrencyUnit currency = Monetary.getCurrency(countryCurrency.getCurrencyCode());
+                    return projectContext.isCurrencySupported(currency) ? currency : projectContext.defaultCurrency();
+                }).orElseGet(projectContext::defaultCurrency);
     }
 
     @Nullable
@@ -42,5 +57,22 @@ public final class UserContextProvider implements Provider<UserContext> {
         final String patternString = context.args.get("ROUTE_PATTERN").toString().replaceAll("<[^>]+>", "");//hack since splitting '$languageTag<[^/]+>' with '/' would create more words
         final List<String> strings = Arrays.asList(patternString.split("/"));
         return strings.indexOf("$languageTag");
+    }
+
+    private static List<Locale> acceptedLocales(@Nullable final Locale locale, final Http.Request request,
+                                               final ProjectContext projectContext) {
+        final ArrayList<Locale> acceptedLocales = new ArrayList<>();
+        if (locale != null) {
+            acceptedLocales.add(currentLocale(locale, projectContext));
+        }
+        acceptedLocales.addAll(request.acceptLanguages().stream()
+                .map(lang -> Locale.forLanguageTag(lang.code()))
+                .collect(toList()));
+        acceptedLocales.addAll(projectContext.locales());
+        return acceptedLocales;
+    }
+
+    private static Locale currentLocale(final Locale locale, final ProjectContext projectContext) {
+        return projectContext.isLocaleSupported(locale) ? locale : projectContext.defaultLocale();
     }
 }

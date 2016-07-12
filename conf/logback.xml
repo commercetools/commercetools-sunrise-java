@@ -23,7 +23,7 @@
     <logger name="com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree" level="INFO" />
     <logger name="com.commercetools.sunrise.common.contexts.ProjectContextProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.common.ctp.ProductDataConfigProvider" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.ctp.SphereClientProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.ctp.RequestScopedSphereClientProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.common.suggestion.SunriseProductRecommendation" level="INFO" />
     <logger name="com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsTemplateEngine" level="INFO" />
     <logger name="com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver" level="INFO" />
