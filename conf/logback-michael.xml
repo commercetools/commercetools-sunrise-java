@@ -1,0 +1,42 @@
+<configuration debug="false">
+<!--  run -Dlogger.resource=logback-michael.xml -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%level %logger - %msg%n%xException</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+      The logger name is typically the Java/Scala package name.
+      This configures the log level to log at for a package and its children packages.
+    -->
+    <logger name="application" level="DEBUG" />
+    <logger name="play" level="INFO" />
+    <logger name="play.requests" level="DEBUG" />
+    <logger name="sphere" level="INFO" />
+    <logger name="sphere.metrics.simple" level="trace" />
+
+    <logger name="com.commercetools.sunrise" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.basicauth.BasicAuthProvider" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeProvider" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.contexts.ProjectContextProvider" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.ctp.ProductDataConfigProvider" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.ctp.SphereClientProvider" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.suggestion.SunriseProductRecommendation" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsTemplateEngine" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.template.i18n.I18nResolverProvider" level="WARN" />
+    <logger name="com.commercetools.sunrise.common.template.engine.TemplateEngineProvider" level="WARN" />
+    <logger name="com.commercetools.sunrise.productcatalog" level="INFO" />
+    <logger name="com.commercetools.sunrise.shoppingcart.CartSessionUtils" level="INFO" />
+    <logger name="com.commercetools.sunrise.theme.WebjarsFilesCopier" level="INFO" />
+    <logger name="com.github.jknack.handlebars.Handlebars" level="ERROR" />
+    <logger name="com.github.jknack.handlebars.HelperRegistry" level="ERROR" />
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
