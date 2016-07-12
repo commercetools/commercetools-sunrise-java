@@ -52,7 +52,7 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
 
     @Override
     public Class<? extends LogInFormData> getFormDataClass() {
-        return LogInFormData.class;
+        return DefaultLogInFormData.class;
     }
 
     @AddCSRFToken
@@ -73,7 +73,7 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
 
     @Override
     public CompletionStage<Result> showForm(final Void context) {
-        final Form<? extends LogInFormData> filledForm = createFilledForm();
+        final Form<? extends LogInFormData> filledForm = createFilledForm(null);
         return asyncOk(renderPage(filledForm, context, null));
     }
 
@@ -119,9 +119,10 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
         return renderPage(pageContent, getTemplateName());
     }
 
-    protected Form<? extends LogInFormData> createFilledForm() {
-        final LogInFormData formData = new LogInFormData();
-        return formFactory().form(LogInFormData.class).fill(formData);
+    protected Form<? extends LogInFormData> createFilledForm(final String username) {
+        final DefaultLogInFormData formData = new DefaultLogInFormData();
+        formData.setUsername(username);
+        return formFactory().form(DefaultLogInFormData.class).fill(formData);
     }
 
     protected final CompletionStage<Result> redirectToMyPersonalDetails() {

@@ -1,29 +1,11 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
-import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints;
+public interface LogInFormData {
 
-public class LogInFormData extends Base {
+    String getUsername();
 
-    @Constraints.Required
-    private String username;
-    @Constraints.Required
-    private String password;
+    String getPassword();
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(final String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(final String password) {
-        this.password = password;
-    }
+    void setUsername(final String username);
 }
 
