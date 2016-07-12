@@ -59,9 +59,6 @@ public class ProductVariantBeanFactory extends Base {
 
     protected Optional<PriceLike> resolvePrice(final ProductVariant variant) {
         PriceLike price = firstNonNull(variant.getPrice(), variant.getScopedPrice());
-        if (price == null) {
-            price = PriceFinder.of(userContext).findPrice(variant.getPrices()).orElse(null);
-        }
         return Optional.ofNullable(price);
     }
 
