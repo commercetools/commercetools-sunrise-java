@@ -1,4 +1,4 @@
-General guidelines about how to successfully develop an application based on [SPHERE JVM SDK](https://github.com/sphereio/sphere-jvm-sdk) with [Play Framework](https://www.playframework.com/).
+General guidelines about how to successfully develop an application based on [commercetools JVM SDK](https://github.com/commercetools/commercetools-jvm-sdk) with [Play Framework](https://www.playframework.com/).
 
 ###Controllers
 Controllers should do all HTTP related stuff.

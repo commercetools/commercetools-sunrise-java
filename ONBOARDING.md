@@ -161,7 +161,7 @@ If you want to provide your own JavaScript file instead, you just have to place 
 ##Advanced Customization
 
 ####Customize search
-Without the need of touching a single line of Java code, you can easily modify how products can be filtered, sorted and displayed. You only have to adapt [`application.conf`](https://github.com/sphereio/commercetools-sunrise-java/blob/master/conf/application.conf) as needed through the following configuration parameters:
+Without the need of touching a single line of Java code, you can easily modify how products can be filtered, sorted and displayed. You only have to adapt [`application.conf`](https://github.com/commercetools/commercetools-sunrise-java/blob/master/conf/application.conf) as needed through the following configuration parameters:
 - `pop.pagination`: to configure how the pagination works
 - `pop.productsPerPage`: to define the amount of products listed per page
 - `pop.sortProducts`: to specify the different sort options

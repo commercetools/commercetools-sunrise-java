@@ -1,13 +1,13 @@
 Sunrise Java :sunrise:
 ==============
 
-[![Build Status](https://travis-ci.org/sphereio/commercetools-sunrise-java.png?branch=master)](https://travis-ci.org/sphereio/commercetools-sunrise-java) [![Stories in Ready](https://badge.waffle.io/sphereio/commercetools-sunrise-java.png?label=ready&title=Ready)](https://waffle.io/sphereio/commercetools-sunrise-java)
+[![Build Status](https://travis-ci.org/commercetools/commercetools-sunrise-java.png?branch=master)](https://travis-ci.org/commercetools/commercetools-sunrise-java) [![Stories in Ready](https://badge.waffle.io/commercetools/commercetools-sunrise-java.png?label=ready&title=Ready)](https://waffle.io/commercetools/commercetools-sunrise-java)
 
 The next generation shop template.
 
 * Demo: https://sunrise.commercetools.com
-* [Documentation](https://github.com/sphereio/commercetools-sunrise-java/blob/master/ONBOARDING.md)
-* [Javadoc](https://sphereio.github.io/commercetools-sunrise-java/javadoc/index.html)
+* [Documentation](https://github.com/commercetools/commercetools-sunrise-java/blob/master/ONBOARDING.md)
+* [Javadoc](https://commercetools.github.io/commercetools-sunrise-java/javadoc/index.html)
 
 ## Preconditions
 
@@ -43,7 +43,7 @@ export SUNRISE_IT_CTP_CLIENT_ID="your-CTP-client-id"
 
 For an easy and fast deployment of your application we recommend [heroku](https://www.heroku.com):
 
-<a href="https://heroku.com/deploy?template=https://github.com/sphereio/commercetools-sunrise-java/tree/v0.6.0"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a>
+<a href="https://heroku.com/deploy?template=https://github.com/commercetools/commercetools-sunrise-java/tree/v0.6.0"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a>
 
 ## Docker
 
@@ -57,6 +57,6 @@ $ docker run -it --rm -p 9000:9000 -e CTP_PROJECT_KEY=YOUR_PROJECT_KEY -e CTP_CL
 
 ## Related projects
 
-* Theme (layout and design sources): https://github.com/sphereio/commercetools-sunrise-theme
-* Data: https://github.com/sphereio/commercetools-sunrise-data
-* Commercetools' JVM SDK: https://github.com/sphereio/sphere-jvm-sdk
+* Theme (layout and design sources): https://github.com/commercetools/commercetools-sunrise-theme
+* Data: https://github.com/commercetools/commercetools-sunrise-data
+* commercetools JVM SDK: https://github.com/commercetools/commercetools-jvm-sdk
