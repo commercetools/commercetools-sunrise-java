@@ -21,9 +21,9 @@ public class CartLikeBeanFactory extends Base {
     @Inject
     protected ProductDataConfig productDataConfig;
     @Inject
-    private ProductReverseRouter productReverseRouter;
-    @Inject
     private AddressBeanFactory addressBeanFactory;
+    @Inject
+    private LineItemsBeanFactory lineItemsBeanFactory;
 
     public CartLikeBean create(final CartLike<?> cartLike) {
         final CartLikeBean cartLikeBean = createCartLikeBean();
@@ -32,7 +32,7 @@ public class CartLikeBeanFactory extends Base {
         cartLikeBean.setSalesTax(moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null)));
         cartLikeBean.setTotalPrice(moneyContext.formatOrZero(calculateTotalPrice(cartLike)));
         cartLikeBean.setSubtotalPrice(moneyContext.formatOrZero(calculateSubTotal(cartLike)));
-        cartLikeBean.setLineItems(new LineItemsBean(cartLike.getLineItems(), productDataConfig, userContext, productReverseRouter));
+        cartLikeBean.setLineItems(lineItemsBeanFactory.create(cartLike.getLineItems()));
         cartLikeBean.setShippingAddress(addressBeanFactory.create(cartLike.getShippingAddress()));
         if (cartLike.getBillingAddress() != null) {
             cartLikeBean.setBillingAddress(addressBeanFactory.create(cartLike.getBillingAddress()));

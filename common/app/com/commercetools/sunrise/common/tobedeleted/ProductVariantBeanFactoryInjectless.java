@@ -2,31 +2,19 @@ package com.commercetools.sunrise.common.tobedeleted;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.ProductVariantBean;
-import com.commercetools.sunrise.common.prices.PriceFinder;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.MoneyContext;
 import com.commercetools.sunrise.common.utils.PriceUtils;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.Image;
 import io.sphere.sdk.products.Price;
-import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import javax.money.MonetaryAmount;
 import java.util.Optional;
 
 public class ProductVariantBeanFactoryInjectless {
-
-    public static ProductVariantBean create(final ProductProjection product, final ProductVariant variant,
-                                            final UserContext userContext, final ProductReverseRouter productReverseRouter) {
-        final ProductVariantBean bean = new ProductVariantBean();
-        fillVariantInfo(bean, variant);
-        PriceFinder.of(userContext).findPrice(variant.getPrices()).ifPresent(price -> fillPriceInfo(bean, price, userContext));
-        bean.setName(createName(product.getName(), userContext));
-        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(userContext.locale(), product, variant));
-        return bean;
-    }
 
     public static ProductVariantBean create(final LineItem lineItem, final ProductReverseRouter productReverseRouter, final UserContext userContext) {
         final ProductVariantBean bean = new ProductVariantBean();
