@@ -11,7 +11,6 @@ import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageCont
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import io.sphere.sdk.client.BadRequestException;
 import io.sphere.sdk.customers.CustomerDraft;
-import io.sphere.sdk.customers.CustomerDraftBuilder;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -53,7 +52,7 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public Class<? extends SignUpFormData> getFormDataClass() {
-        return SignUpFormData.class;
+        return DefaultSignUpFormData.class;
     }
 
     @AddCSRFToken
@@ -85,11 +84,8 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public CompletionStage<? extends CustomerSignInResult> doAction(final SignUpFormData formData, final Void context) {
-        final CustomerDraft customerDraft = CustomerDraftBuilder.of(formData.getEmail(), formData.getPassword())
+        final CustomerDraft customerDraft = formData.toCustomerDraftBuilder()
                 .customerNumber(generateCustomerNumber())
-                .title(formData.getTitle())
-                .firstName(formData.getFirstName())
-                .lastName(formData.getLastName())
                 .anonymousCartId(anonymousCartId().orElse(null))
                 .build();
         final CustomerCreateCommand customerCreateCommand = CustomerCreateCommand.of(customerDraft);
@@ -129,7 +125,7 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
     }
 
     protected Form<? extends SignUpFormData> createFilledForm() {
-        final SignUpFormData formData = new SignUpFormData();
-        return formFactory().form(SignUpFormData.class).fill(formData);
+        final DefaultSignUpFormData formData = new DefaultSignUpFormData();
+        return formFactory().form(DefaultSignUpFormData.class).fill(formData);
     }
 }
