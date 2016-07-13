@@ -70,7 +70,7 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val commonSettings = Seq (
+lazy val commonSettings = Release.publishSettings ++ Seq (
   scalaVersion := "2.11.8",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   dependencyOverrides ++= Set (
