@@ -2,7 +2,7 @@ package com.commercetools.sunrise.hooks;
 
 import com.commercetools.sunrise.framework.SunriseComponent;
 import io.sphere.sdk.models.Base;
-import io.sphere.sdk.utils.FutureUtils;
+import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
@@ -34,7 +34,7 @@ public class RequestHookContextImpl extends Base implements RequestHookContext {
                 .map(hook -> f.apply((T) hook))
                 .map(stage -> (CompletionStage<Void>) stage)
                 .collect(toList());
-        final CompletionStage<?> listCompletionStage = FutureUtils.listOfFuturesToFutureOfList(collect);
+        final CompletionStage<?> listCompletionStage = CompletableFutureUtils.listOfFuturesToFutureOfList(collect);
         final CompletionStage<Object> result = listCompletionStage.thenApply(z -> null);
         asyncHooksCompletionStages.add(result);
         return result;
@@ -78,7 +78,7 @@ public class RequestHookContextImpl extends Base implements RequestHookContext {
 
     @Override
     public CompletionStage<Object> allAsyncHooksCompletionStage() {
-        return FutureUtils.listOfFuturesToFutureOfList(asyncHooksCompletionStages).thenApply(list -> null);
+        return CompletableFutureUtils.listOfFuturesToFutureOfList(asyncHooksCompletionStages).thenApply(list -> null);
     }
 
     @Override

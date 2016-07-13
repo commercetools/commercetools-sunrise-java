@@ -25,7 +25,7 @@ import io.sphere.sdk.payments.PaymentMethodInfo;
 import io.sphere.sdk.payments.commands.PaymentCreateCommand;
 import io.sphere.sdk.payments.commands.PaymentDeleteCommand;
 import io.sphere.sdk.payments.queries.PaymentByIdGet;
-import io.sphere.sdk.utils.FutureUtils;
+import io.sphere.sdk.utils.CompletableFutureUtils;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
@@ -42,8 +42,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.commercetools.sunrise.common.forms.FormUtils.extractFormField;
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
-import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
+import static io.sphere.sdk.utils.CompletableFutureUtils.exceptionallyCompletedFuture;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -107,8 +106,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
         } else {
             final CompletionStage<Result> resultStage = setPaymentToCart(cart, selectedPaymentMethods)
                     .thenComposeAsync(updatedCart -> handleSuccessfulSetPayment(userContext()), defaultContext());
-            return recoverWithAsync(resultStage, defaultContext(), throwable ->
-                    handleSetPaymentToCartError(throwable, paymentForm, paymentMethodInfos, cart));
+            return CompletableFutureUtils.recoverWith(resultStage, throwable -> handleSetPaymentToCartError(throwable, paymentForm, paymentMethodInfos, cart), defaultContext());
         }
     }
 
@@ -134,7 +132,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
         final List<CompletionStage<Payment>> paymentStages = paymentRefs.stream()
                 .map(paymentRef -> sphere().execute(PaymentByIdGet.of(paymentRef)))
                 .collect(toList());
-        return FutureUtils.listOfFuturesToFutureOfList(paymentStages)
+        return CompletableFutureUtils.listOfFuturesToFutureOfList(paymentStages)
                 .thenComposeAsync(payments -> {
                     payments.removeIf(Objects::isNull);
                     final CompletionStage<Cart> updatedCartStage = setPaymentAction.apply(payments);
@@ -155,7 +153,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
                     return sphere().execute(PaymentCreateCommand.of(paymentDraft));
                 })
                 .collect(toList());
-        return FutureUtils.listOfFuturesToFutureOfList(paymentStages)
+        return CompletableFutureUtils.listOfFuturesToFutureOfList(paymentStages)
                 .thenComposeAsync(payments -> {
                     payments.removeIf(Objects::isNull);
                     return setPaymentAction.apply(payments);

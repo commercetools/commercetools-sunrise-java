@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.common.controllers;
 
 import io.sphere.sdk.client.ClientErrorException;
+import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import play.data.Form;
 import play.libs.concurrent.HttpExecution;
@@ -11,9 +12,10 @@ import play.twirl.api.Html;
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
-import static io.sphere.sdk.utils.FutureUtils.exceptionallyCompletedFuture;
-import static io.sphere.sdk.utils.FutureUtils.recoverWithAsync;
+import static io.sphere.sdk.utils.CompletableFutureUtils.*;
+import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
 
 /**
  * Approach to handle form data (Template Method Pattern).
@@ -47,8 +49,7 @@ public interface SimpleFormBindingControllerTrait<F, T, R> extends FormBindingTr
     default CompletionStage<Result> handleValidForm(final Form<? extends F> form, final T context) {
         final CompletionStage<Result> resultStage = doAction(form.get(), context)
                 .thenComposeAsync(result -> handleSuccessfulAction(form.get(), context, result), HttpExecution.defaultContext());
-        return recoverWithAsync(resultStage, HttpExecution.defaultContext(), throwable ->
-                handleFailedAction(form, context, throwable));
+        return recoverWith(resultStage, throwable -> handleFailedAction(form, context, throwable), HttpExecution.defaultContext());
     }
 
     CompletionStage<? extends R> doAction(final F formData, final T context);
