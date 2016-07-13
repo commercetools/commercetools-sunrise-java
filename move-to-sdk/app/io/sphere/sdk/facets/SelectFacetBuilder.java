@@ -7,6 +7,7 @@ import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 import javax.annotation.Nullable;
 
 public final class SelectFacetBuilder<T> extends FacetBuilder<SelectFacetBuilder<T>> implements Builder<SelectFacet<T>> {
+
     private FacetedSearchSearchModel<T> facetedSearchSearchModel;
     private boolean multiSelect = true;
     private boolean matchingAll = false;

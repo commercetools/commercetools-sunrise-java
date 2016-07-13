@@ -25,8 +25,8 @@ form[name=add-to-wishlist] {
 }
 
 /* Hide not yet implemented tabs in my account */
-.my-account-sidebar .my-account-sidebar-items:nth-child(3),
-.my-account-sidebar .my-account-sidebar-items:nth-child(5),
-.my-account-sidebar .my-account-sidebar-items:nth-child(6) {
+.my-account-sidebar .my-account-sidebar-items:nth-child(4),
+.my-account-sidebar .my-account-sidebar-items:nth-child(6),
+.my-account-sidebar .my-account-sidebar-items:nth-child(7) {
     display: none;
 }

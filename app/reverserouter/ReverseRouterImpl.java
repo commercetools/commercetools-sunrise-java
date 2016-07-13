@@ -1,27 +1,18 @@
 package reverserouter;
 
-import common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.*;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
+import setupwidget.controllers.SetupReverseRouter;
 
-import static productcatalog.home.routes.*;
-import static productcatalog.productdetail.routes.*;
-import static productcatalog.productoverview.routes.*;
-import static shoppingcart.cartdetail.routes.*;
-import static shoppingcart.checkout.address.routes.*;
-import static shoppingcart.checkout.confirmation.routes.*;
-import static shoppingcart.checkout.payment.routes.*;
-import static shoppingcart.checkout.shipping.routes.*;
-import static shoppingcart.checkout.thankyou.routes.*;
-import static myaccount.login.routes.*;
-import static myaccount.mydetails.routes.*;
-import static myaccount.myorders.routes.*;
-import static myaccount.myaddressbook.routes.*;
+import static demo.common.routes.*;
+import static demo.myaccount.routes.*;
+import static demo.productcatalog.routes.*;
+import static demo.shoppingcart.routes.*;
+import static setupwidget.controllers.routes.*;
 
-public class ReverseRouterImpl extends Base implements ReverseRouter {
-
-    public ReverseRouterImpl() {
-    }
+public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, SetupReverseRouter, CartReverseRouter {
 
     @Override
     public Call themeAssets(final String file) {
@@ -30,156 +21,171 @@ public class ReverseRouterImpl extends Base implements ReverseRouter {
 
     @Override
     public Call processChangeLanguageForm() {
-        return common.routes.ApplicationController.changeLanguage();
+        return LocalizationController.changeLanguage();
     }
 
     @Override
     public Call processChangeCountryForm(final String languageTag) {
-        return common.routes.ApplicationController.changeCountry(languageTag);
+        return LocalizationController.changeCountry(languageTag);
     }
 
     @Override
-    public Call showHome(final String languageTag) {
-        return HomePageController.show(languageTag);
+    public Call homePageCall(final String languageTag) {
+        return HomeController.show(languageTag);
     }
 
     @Override
-    public Call showCategory(final String languageTag, final String categorySlug) {
-        return ProductOverviewPageController.show(languageTag, 1, categorySlug);
+    public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
+        return ProductOverviewController.searchProductsByCategorySlug(languageTag, categorySlug);
     }
 
     @Override
-    public Call showProduct(final String languageTag, final String productSlug, final String sku) {
-        return ProductDetailPageController.show(languageTag, productSlug, sku);
+    public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
+        return ProductDetailController.showProductBySlugAndSku(languageTag, productSlug, sku);
     }
 
     @Override
     public Call processSearchProductsForm(final String languageTag) {
-        return ProductOverviewPageController.search(languageTag, 1);
+        return ProductOverviewController.searchProductsBySearchTerm(languageTag);
     }
 
     @Override
     public Call showCart(final String languageTag) {
-        return CartDetailPageController.show(languageTag);
+        return CartDetailController.show(languageTag);
     }
 
     @Override
     public Call processAddProductToCartForm(final String languageTag) {
-        return CartDetailPageController.addProductToCart(languageTag);
+        return AddProductToCartController.addProductToCart(languageTag);
     }
 
     @Override
     public Call processChangeLineItemQuantityForm(final String languageTag) {
-        return CartDetailPageController.changeLineItemQuantity(languageTag);
+        return ChangeLineItemQuantityController.changeLineItemQuantity(languageTag);
     }
 
     @Override
     public Call processDeleteLineItemForm(final String languageTag) {
-        return CartDetailPageController.removeLineItem(languageTag);
+        return RemoveLineItemController.removeLineItem(languageTag);
     }
 
     @Override
-    public Call showCheckoutAddressesForm(final String languageTag) {
-        return CheckoutAddressPageController.show(languageTag);
+    public Call checkoutAddressesPageCall(final String languageTag) {
+        return CheckoutAddressController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutAddressesForm(final String languageTag) {
-        return CheckoutAddressPageController.process(languageTag);
+    public Call checkoutAddressesProcessFormCall(final String languageTag) {
+        return CheckoutAddressController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutShippingForm(final String languageTag) {
-        return CheckoutShippingPageController.show(languageTag);
+    public Call checkoutShippingPageCall(final String languageTag) {
+        return CheckoutShippingController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutShippingForm(final String languageTag) {
-        return CheckoutShippingPageController.process(languageTag);
+    public Call checkoutShippingProcessFormCall(final String languageTag) {
+        return CheckoutShippingController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutPaymentForm(final String languageTag) {
-        return CheckoutPaymentPageController.show(languageTag);
+    public Call checkoutPaymentPageCall(final String languageTag) {
+        return CheckoutPaymentController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutPaymentForm(final String languageTag) {
-        return CheckoutPaymentPageController.process(languageTag);
+    public Call checkoutPaymentProcessFormCall(final String languageTag) {
+        return CheckoutPaymentController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutConfirmationForm(final String languageTag) {
-        return CheckoutConfirmationPageController.show(languageTag);
+    public Call checkoutConfirmationPageCall(final String languageTag) {
+        return CheckoutConfirmationController.show(languageTag);
     }
 
     @Override
-    public Call processCheckoutConfirmationForm(final String languageTag) {
-        return CheckoutConfirmationPageController.process(languageTag);
+    public Call checkoutConfirmationProcessFormCall(final String languageTag) {
+        return CheckoutConfirmationController.process(languageTag);
     }
 
     @Override
-    public Call showCheckoutThankYou(final String languageTag) {
-        return CheckoutThankYouPageController.show(languageTag);
+    public Call checkoutThankYouPageCall(final String languageTag) {
+        return CheckoutThankYouController.show(languageTag);
     }
 
     @Override
     public Call showLogInForm(final String languageTag) {
-        return LogInPageController.show(languageTag);
+        return LogInController.show(languageTag);
     }
 
     @Override
     public Call processLogInForm(final String languageTag) {
-        return LogInPageController.processLogIn(languageTag);
+        return LogInController.process(languageTag);
     }
 
     @Override
     public Call processSignUpForm(final String languageTag) {
-        return LogInPageController.processSignUp(languageTag);
+        return SignUpController.process(languageTag);
     }
 
     @Override
     public Call processLogOut(final String languageTag) {
-        return LogInPageController.processLogOut(languageTag);
+        return LogOutController.process(languageTag);
     }
 
     @Override
-    public Call showMyPersonalDetails(final String languageTag) {
-        return MyPersonalDetailsPageController.show(languageTag);
+    public Call myPersonalDetailsPageCall(final String languageTag) {
+        return MyPersonalDetailsController.show(languageTag);
     }
 
     @Override
-    public Call processMyPersonalDetailsForm(final String languageTag) {
-        return MyPersonalDetailsPageController.process(languageTag);
+    public Call myPersonalDetailsProcessFormCall(final String languageTag) {
+        return MyPersonalDetailsController.process(languageTag);
     }
 
     @Override
-    public Call showMyAddressBook(final String languageTag) {
-        return MyAddressBookPageController.show(languageTag);
+    public Call addressBookCall(final String languageTag) {
+        return AddressBookController.show(languageTag);
     }
 
     @Override
-    public Call processAddAddressToMyAddressBookForm(final String languageTag) {
-        return MyAddressBookPageController.processAddAddress(languageTag);
+    public Call addAddressToAddressBookCall(final String languageTag) {
+        return AddAddressController.show(languageTag);
     }
 
     @Override
-    public Call processChangeAddressInMyAddressBookForm(final String languageTag) {
-        return MyAddressBookPageController.processChangeAddress(languageTag);
+    public Call addAddressToAddressBookProcessFormCall(final String languageTag) {
+        return AddAddressController.process(languageTag);
     }
 
     @Override
-    public Call processRemoveAddressFromMyAddressBookForm(final String languageTag) {
-        return MyAddressBookPageController.processRemoveAddress(languageTag);
+    public Call changeAddressInAddressBookCall(final String languageTag, final String addressId) {
+        return ChangeAddressController.show(languageTag, addressId);
     }
 
     @Override
-    public Call showMyOrders(final String languageTag) {
-        return MyOrdersPageController.list(languageTag, 1);
+    public Call changeAddressInAddressBookProcessFormCall(final String languageTag, final String addressId) {
+        return ChangeAddressController.process(languageTag, addressId);
     }
 
     @Override
-    public Call showMyOrder(final String languageTag, final String orderNumber) {
-        return MyOrdersPageController.show(languageTag, orderNumber);
+    public Call removeAddressFromAddressBookProcessFormCall(final String languageTag, final String addressId) {
+        return RemoveAddressController.process(languageTag, addressId);
+    }
+
+    @Override
+    public Call myOrderListPageCall(final String languageTag) {
+        return MyOrderListController.show(languageTag);
+    }
+
+    @Override
+    public Call myOrderDetailPageCall(final String languageTag, final String orderNumber) {
+        return MyOrderDetailController.showByOrderNumber(languageTag, orderNumber);
+    }
+
+    @Override
+    public Call processSetupFormCall() {
+        return SetupController.processForm();
     }
 }

@@ -2,24 +2,21 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import play.sbt.PlayImport
-import complete.DefaultParsers._
-
-import sbt._
 import sbt.Keys._
+import sbt._
+import sbt.complete.DefaultParsers._
 
 import scala.util.{Success, Try}
 
-import ReleaseTransformations._
-
 name := "commercetools-sunrise"
 
-organization := "io.commercetools.sunrise"
+organization in ThisBuild := "com.commercetools.sunrise"
 
-lazy val sunriseDesignVersion = "0.56.0"
+lazy val sunriseDesignVersion = "0.59.0"
 
-lazy val jvmSdkVersion = "1.0.0-RC5"
+lazy val jvmSdkVersion = "1.1.0"
 
-lazy val jacksonVersion = "2.6.0"
+lazy val jacksonVersion = "2.7.5"
 
 
 /**
@@ -57,6 +54,7 @@ lazy val `my-account` = project
 lazy val `setup-widget` = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
   .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ disableDockerPublish: _*)
+  .dependsOn(common % "test->test;it->it;pt->pt")
 
 lazy val `sbt-tasks` = project
   .enablePlugins(PlayJava).configs(IntegrationTest)
@@ -72,8 +70,8 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
-lazy val commonSettings = releaseSettings ++ Seq (
-  scalaVersion := "2.11.7",
+lazy val commonSettings = Seq (
+  scalaVersion := "2.11.8",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   dependencyOverrides ++= Set (
     "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
@@ -102,14 +100,14 @@ lazy val sunriseThemeSettings = Seq (
   unmanagedBase in Test := baseDirectory.value / "test" / "lib",
   resolvers += Resolver.bintrayRepo("commercetools", "maven"),
   libraryDependencies ++= Seq (
-    "io.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseDesignVersion
+    "com.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseDesignVersion
   )
 )
 
 lazy val templateDependencies = Seq (
   libraryDependencies ++= Seq (
-    "org.webjars" %% "webjars-play" % "2.4.0-1",
-    "com.github.jknack" % "handlebars" % "2.3.2"
+    "org.webjars" %% "webjars-play" % "2.5.0-2",
+    "com.github.jknack" % "handlebars" % "4.0.5"
   )
 )
 
@@ -134,11 +132,23 @@ lazy val disableDockerPublish = Seq(
   publishLocal in Docker := {}
 )
 
+publishMavenStyle in ThisBuild := true
+
+publishArtifact in Test in ThisBuild := false
+
+publishTo in ThisBuild <<= version { (v: String) =>
+  val nexus = "https://oss.sonatype.org/"
+  if (v.trim.endsWith("SNAPSHOT"))
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases" at nexus + "service/local/staging/deploy/maven2")
+}
+
 /**
  * TEST SETTINGS
  */
 
-lazy val PlayTest = config("pt") extend(Test)
+lazy val PlayTest = config("pt") extend Test
 
 lazy val commonTestSettings = itBaseTestSettings ++ ptBaseTestSettings ++ configCommonTestSettings("test,it,pt")
 
@@ -195,23 +205,6 @@ resourceGenerators in Compile += Def.task {
 }.taskValue
 
 /**
- * RELEASE SETTINGS
- */
-lazy val releaseSettings = Seq(
-  releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    runTest,
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    setNextVersion,
-    commitNextVersion,
-    pushChanges
-  )
-)
-
-/**
  * HEROKU SETTINGS
  */
 
@@ -256,5 +249,5 @@ copyI18nFiles := Def.inputTaskDyn {
 }.evaluated
 
 def runMainInCompile(dest: String, args: Seq[String]) = Def.taskDyn {
-  (runMain in Compile in `sbt-tasks`).toTask(s" tasks.WebjarsFilesCopier $dest ${args.mkString(" ")}")
+  (runMain in Compile in `sbt-tasks`).toTask(s" com.commercetools.sunrise.theme.WebjarsFilesCopier $dest ${args.mkString(" ")}")
 }
