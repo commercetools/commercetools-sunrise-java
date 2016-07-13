@@ -7,7 +7,7 @@ services:
 before_install:
 - docker pull java:8u92-jdk-alpine
 script:
-- "docker run -it --rm -e SUNRISE_IT_CTP_PROJECT_KEY=$SUNRISE_IT_CTP_PROJECT_KEY -e SUNRISE_IT_CTP_CLIENT_ID=$SUNRISE_IT_CTP_CLIENT_ID -e SUNRISE_IT_CTP_CLIENT_SECRET=$SUNRISE_IT_CTP_CLIENT_SECRET --volume=$(pwd):/src -w "/src" java:8u92-jdk-alpine ./sbt compile test it:test pt:test unidoc"
+- "docker run -it --rm -e SUNRISE_IT_CTP_PROJECT_KEY=$SUNRISE_IT_CTP_PROJECT_KEY -e SUNRISE_IT_CTP_CLIENT_ID=$SUNRISE_IT_CTP_CLIENT_ID -e SUNRISE_IT_CTP_CLIENT_SECRET=$SUNRISE_IT_CTP_CLIENT_SECRET --volume=$(pwd):/src -w /src java:8u92-jdk-alpine ./sbt compile test it:test pt:test unidoc"
 #- rm conf/dev.conf Enable setup widget first
 - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt
   "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git
