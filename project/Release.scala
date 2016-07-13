@@ -24,6 +24,7 @@ object Release {
       } else
         None
     },
+    licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     pomExtra := (
       <scm>
         <url>git@github.com:scommercetools/commercetools-sunrise-java.git</url>
