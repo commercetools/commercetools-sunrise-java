@@ -68,7 +68,7 @@ public class HandlebarsI18NHelperTest {
 
     private static void testTemplate(final String templateName, final Locale locale, final Map<String, Object> parameters,
                                      final Map<String, String> i18nMap, final Consumer<String> test) {
-        final TemplateEngine templateEngine = HandlebarsTemplateEngine.of(singletonList(DEFAULT_LOADER), i18nResolver(i18nMap), CMS_SERVICE);
+        final TemplateEngine templateEngine = HandlebarsTemplateEngine.of(HandlebarsFactory.create(singletonList(DEFAULT_LOADER), i18nResolver(i18nMap), CMS_SERVICE));
         final String html = renderTemplate(templateName, templateEngine, locale);
         test.accept(html);
     }

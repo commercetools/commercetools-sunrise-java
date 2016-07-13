@@ -1,23 +1,20 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
+import com.commercetools.sunrise.common.pages.PageData;
+import com.commercetools.sunrise.common.template.engine.TemplateEngine;
+import com.commercetools.sunrise.common.template.engine.TemplateNotFoundException;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderException;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
 import com.github.jknack.handlebars.context.JavaBeanValueResolver;
 import com.github.jknack.handlebars.context.MapValueResolver;
-import com.github.jknack.handlebars.io.TemplateLoader;
-import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.common.template.cms.CmsService;
-import com.commercetools.sunrise.common.template.engine.TemplateNotFoundException;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderException;
-import com.commercetools.sunrise.common.template.engine.TemplateEngine;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 
 import static java.util.stream.Collectors.toList;
 
@@ -43,18 +40,6 @@ public final class HandlebarsTemplateEngine implements TemplateEngine {
         }
     }
 
-    public static TemplateEngine of(final List<TemplateLoader> templateLoaders, final I18nResolver i18NResolver, final CmsService cmsService) {
-        final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
-        final Handlebars handlebars = new Handlebars()
-                .with(loaders)
-                .with(new HighConcurrencyTemplateCache())
-                .infiniteLoops(true);
-        handlebars.registerHelper("i18n", new HandlebarsI18nHelper(i18NResolver));
-        handlebars.registerHelper("cms", new HandlebarsCmsHelper(cmsService));
-        handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
-        return new HandlebarsTemplateEngine(handlebars);
-    }
-
     private Context createContext(final PageData pageData, final List<Locale> locales) {
         final Context context = Context.newBuilder(pageData)
                 .resolver(
@@ -75,4 +60,7 @@ public final class HandlebarsTemplateEngine implements TemplateEngine {
         }
     }
 
+    public static TemplateEngine of(final Handlebars handlebars) {
+        return new HandlebarsTemplateEngine(handlebars);
+    }
 }
