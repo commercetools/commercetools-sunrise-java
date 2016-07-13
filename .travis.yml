@@ -1,13 +1,13 @@
-sudo: false
-cache:
-  directories:
-  - "$HOME/.ivy2"
-  - "$HOME/.sbt"
+sudo: required
 language: scala
 scala:
 - 2.11.7
+services:
+  - docker
+before_install:
+- docker pull dockerfile/java:oracle-java8
 script:
-- "./sbt compile test it:test pt:test unidoc"
+- "docker run -it --rm -e SUNRISE_IT_CTP_PROJECT_KEY=$SUNRISE_IT_CTP_PROJECT_KEY -e SUNRISE_IT_CTP_CLIENT_ID=$SUNRISE_IT_CTP_CLIENT_ID -e SUNRISE_IT_CTP_CLIENT_SECRET=$SUNRISE_IT_CTP_CLIENT_SECRET dockerfile/java pwd #./sbt compile test it:test pt:test unidoc"
 #- rm conf/dev.conf Enable setup widget first
 - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then sbt
   "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git
