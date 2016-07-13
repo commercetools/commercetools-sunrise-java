@@ -20,24 +20,28 @@ public final class MetricAction {
 
     public static void logRequestData(final Http.Context ctx) {
         final List<ReportRawData> rawDatas = (List<ReportRawData>) ctx.args.get(KEY);
-        final String durations = rawDatas.stream().map(data -> data.getStopTimestamp() - data.getStartTimestamp()).map(l -> Long.toString(l) + " ms").collect(joining(", "));
-        if (LOGGER.isTraceEnabled()) {
-            final String queriesAsString = rawDatas.stream().map(q -> {
-                final String url = q.getHttpRequest().getUrl();
-                final String[] split = StringUtils.split(url, "/", 4);
-                final String shortUrl = split.length == 4 ? "/" + split[3] : url;
-                final HttpMethod httpMethod = q.getHttpRequest().getHttpMethod();
-                final long duration = q.getStopTimestamp() - q.getStartTimestamp();
-                final Integer bodySize = getBodySize(q);
-                return format("  %s %s %dms %dbytes", httpMethod, shortUrl, duration, bodySize);
-            }).collect(joining("\n"));
-            LOGGER.trace(() -> format("commercetools requests in %s: \n%s", ctx.request(), queriesAsString));
+        if (rawDatas != null && rawDatas instanceof List) {
+            final String durations = rawDatas.stream().map(data -> data.getStopTimestamp() - data.getStartTimestamp()).map(l -> Long.toString(l) + " ms").collect(joining(", "));
+            if (LOGGER.isTraceEnabled()) {
+                final String queriesAsString = rawDatas.stream().map(q -> {
+                    final String url = q.getHttpRequest().getUrl();
+                    final String[] split = StringUtils.split(url, "/", 4);
+                    final String shortUrl = split.length == 4 ? "/" + split[3] : url;
+                    final HttpMethod httpMethod = q.getHttpRequest().getHttpMethod();
+                    final long duration = q.getStopTimestamp() - q.getStartTimestamp();
+                    final Integer bodySize = getBodySize(q);
+                    return format("  %s %s %dms %dbytes", httpMethod, shortUrl, duration, bodySize);
+                }).collect(joining("\n"));
+                LOGGER.trace(() -> format("commercetools requests in %s: \n%s", ctx.request(), queriesAsString));
+            } else {
+                final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
+                final List<ReportRawData> queries = queryCommandPair.getLeft();
+                final List<ReportRawData> commands = queryCommandPair.getRight();
+                final int size = calculateTotalSize(rawDatas);
+                LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %dbytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
+            }
         } else {
-            final Pair<List<ReportRawData>, List<ReportRawData>> queryCommandPair = splitByQueriesAndCommands(rawDatas);
-            final List<ReportRawData> queries = queryCommandPair.getLeft();
-            final List<ReportRawData> commands = queryCommandPair.getRight();
-            final int size = calculateTotalSize(rawDatas);
-            LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %dbytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
+            LOGGER.warn(() -> "Metric component could not be properly initialized.");
         }
     }
 

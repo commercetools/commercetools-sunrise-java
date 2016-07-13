@@ -23,12 +23,6 @@ public class MetricHttpClientTest {
     private static final HttpRequest SOME_REQUEST = HttpRequest.of(HttpMethod.GET, "somewhere");
     private static final HttpResponse SOME_RESPONSE = HttpResponse.of(200);
 
-// TODO Do we still need this?
-//    @Test
-//    public void executesRequestWithNoContext() throws Exception {
-//        executeWithoutContext(SOME_REQUEST, response -> assertThat(response).isEqualTo(SOME_RESPONSE));
-//    }
-
     @Test
     public void executesRequest() throws Exception {
         testMetrics(SOME_REQUEST, (response, context) -> assertThat(response).isEqualTo(SOME_RESPONSE));
