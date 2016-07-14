@@ -20,7 +20,10 @@ public class CartDetailPageContentFactory extends Base implements WithOverridabl
     private UserContext userContext;
 
     public CartDetailPageContent create(final Cart cart) {
-        final CartDetailPageContent pageContent = createPageContent();
+        return fillBean(createPageContent(), cart);
+    }
+
+    protected <T extends CartDetailPageContent> T fillBean(final T pageContent, final Cart cart) {
         pageContent.setCart(cartLikeBeanFactory.create(cart));
         fillTitle(pageContent);
         return pageContent;
