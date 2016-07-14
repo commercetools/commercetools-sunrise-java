@@ -2,7 +2,6 @@ package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
 
@@ -19,10 +18,13 @@ public class LineItemsBeanFactory extends Base {
     private LineItemBeanFactory lineItemBeanFactory;
 
     public LineItemsBean create(final List<LineItem> lineItems) {
+        return fillBean(new LineItemsBean(), lineItems);
+    }
+
+    protected <T extends LineItemsBean> T fillBean(final T bean, final List<LineItem> lineItems) {
         final List<LineItemBean> lineItemBeanList = lineItems.stream()
                 .map(lineItem -> lineItemBeanFactory.create(lineItem))
                 .collect(Collectors.toList());
-        final LineItemsBean bean = new LineItemsBean();
         bean.setList(lineItemBeanList);
         return bean;
     }
