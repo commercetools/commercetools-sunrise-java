@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
 
-public class MyOrderDetailPageContentFactory {
+public class MyOrderDetailPageContentFactory extends Base {
 
     @Inject
     private CartLikeBeanFactory cartLikeBeanFactory;
