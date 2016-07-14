@@ -1,25 +1,17 @@
 package com.commercetools.sunrise.common.forms;
 
-import com.commercetools.sunrise.common.contexts.ProjectContext;
-import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import java.util.List;
 
-public abstract class AddressFormBeanFactory {
-
-    @Inject
-    private ProjectContext projectContext;
+public abstract class AddressFormBeanFactory extends Base {
 
     protected AddressFormBean create(final Address address) {
-        final AddressFormBean bean = new AddressFormBean();
-        fillAddressForm(bean, address, projectContext.countries());
-        return bean;
+        return fillBean(new AddressFormBean(), address);
     }
 
-    protected void fillAddressForm(final AddressFormBean bean, @Nullable final Address address, final List<CountryCode> availableCountries) {
+    protected <T extends AddressFormBean> T fillBean(final T bean, @Nullable final Address address) {
         if (address != null) {
             bean.setFirstName(address.getFirstName());
             bean.setLastName(address.getLastName());
@@ -31,5 +23,7 @@ public abstract class AddressFormBeanFactory {
             bean.setPhone(address.getPhone());
             bean.setEmail(address.getEmail());
         }
+        return bean;
     }
+
 }
