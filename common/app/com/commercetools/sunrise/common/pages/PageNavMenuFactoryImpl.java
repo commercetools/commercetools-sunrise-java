@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.models.CategoryBean;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.models.Base;
 import play.Configuration;
 
 import javax.annotation.Nullable;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public class PageNavMenuFactoryImpl implements PageNavMenuFactory {
+public class PageNavMenuFactoryImpl extends Base implements PageNavMenuFactory {
 
     private String saleCategoryExtId;
     @Inject
@@ -32,7 +33,10 @@ public class PageNavMenuFactoryImpl implements PageNavMenuFactory {
 
     @Override
     public PageNavMenu create() {
-        final PageNavMenu bean = new PageNavMenu();
+        return fillBean(new PageNavMenu());
+    }
+
+    protected <T extends PageNavMenu> T fillBean(final T bean) {
         final List<CategoryBean> categories = new LinkedList<>();
         categoryTree.getRoots().forEach(root -> {
             final CategoryBean categoryData = createCategoryData(root, categoryTree, userContext, productReverseRouter, saleCategoryExtId);
