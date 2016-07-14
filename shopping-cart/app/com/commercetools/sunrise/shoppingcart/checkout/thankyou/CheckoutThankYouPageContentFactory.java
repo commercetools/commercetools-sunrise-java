@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
@@ -10,7 +9,7 @@ import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
 
-public class CheckoutThankYouPageContentFactory extends PageContent implements WithOverridablePageContent<CheckoutThankYouPageContent> {
+public class CheckoutThankYouPageContentFactory extends PageContent {
     @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
     @Inject
@@ -19,7 +18,10 @@ public class CheckoutThankYouPageContentFactory extends PageContent implements W
     private UserContext userContext;
 
     public CheckoutThankYouPageContent create(final Order order) {
-        final CheckoutThankYouPageContent pageContent = createPageContent();
+        return fillBean(new CheckoutThankYouPageContent(), order);
+    }
+
+    protected <T extends CheckoutThankYouPageContent> T fillBean(final T pageContent, final Order order) {
         fill(pageContent, order);
         return pageContent;
     }
@@ -33,8 +35,4 @@ public class CheckoutThankYouPageContentFactory extends PageContent implements W
         pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:thankYouPage.title")));
     }
 
-    @Override
-    public CheckoutThankYouPageContent createPageContent() {
-        return new CheckoutThankYouPageContent();
-    }
 }
