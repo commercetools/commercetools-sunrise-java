@@ -36,12 +36,11 @@ public class ProductBeanFactory extends Base {
     @Inject
     private ProductAttributeBeanFactory productAttributeBeanFactory;
 
-    protected ProductBean createEmptyInstance() {
-        return new ProductBean();
+    public ProductBean create(final ProductProjection product, final ProductVariant variant) {
+        return fillBean(new ProductBean(), product, variant);
     }
 
-    public ProductBean create(final ProductProjection product, final ProductVariant variant) {
-        final ProductBean productBean = createEmptyInstance();
+    protected <T extends ProductBean> T fillBean(final T productBean, final ProductProjection product, final ProductVariant variant) {
         fillIds(product, variant, productBean);
         fillDescription(product, productBean);
         fillGallery(variant, productBean);
