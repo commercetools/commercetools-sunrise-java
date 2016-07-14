@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.CountryFormFieldBean;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.neovisionaries.i18n.CountryCode;
+import io.sphere.sdk.models.Base;
 import play.data.Form;
 
 import javax.annotation.Nullable;
@@ -13,7 +14,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class CountryFormFieldBeanFactory {
+public class CountryFormFieldBeanFactory extends Base {
 
     @Inject
     private UserContext userContext;
@@ -22,6 +23,10 @@ public class CountryFormFieldBeanFactory {
 
     public CountryFormFieldBean create(final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
         final CountryFormFieldBean bean = new CountryFormFieldBean();
+        return fillBean(bean, form, fieldName, availableCountries);
+    }
+
+    protected <T extends CountryFormFieldBean> T fillBean(final T bean, final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
         final String selectedCountryCode = form.field(fieldName).valueOr(null);
         fillList(bean, availableCountries, selectedCountryCode);
         return bean;
