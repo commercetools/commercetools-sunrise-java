@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
@@ -11,7 +10,7 @@ import play.data.Form;
 
 import javax.inject.Inject;
 
-public class CheckoutAddressPageContentFactory extends Base implements WithOverridablePageContent<CheckoutAddressPageContent> {
+public class CheckoutAddressPageContentFactory extends Base {
 
     @Inject
     private UserContext userContext;
@@ -22,13 +21,11 @@ public class CheckoutAddressPageContentFactory extends Base implements WithOverr
     @Inject
     private CheckoutAddressFormSettingsFactory addressFormSettingsFactory;
 
-    @Override
-    public CheckoutAddressPageContent createPageContent() {
-        return new CheckoutAddressPageContent();
+    public CheckoutAddressPageContent create(final Form<?> form, final Cart cart) {
+        return fillBean(new CheckoutAddressPageContent(), form, cart);
     }
 
-    public CheckoutAddressPageContent create(final Form<?> form, final Cart cart) {
-        final CheckoutAddressPageContent pageContent = createPageContent();
+    protected <T extends CheckoutAddressPageContent> T fillBean(final T pageContent, final Form<?> form, final Cart cart) {
         fillTitle(pageContent, cart);
         fillCart(pageContent, cart);
         fillForm(pageContent, form);
