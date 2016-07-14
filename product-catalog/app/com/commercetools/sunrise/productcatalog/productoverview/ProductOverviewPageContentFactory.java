@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.InfoData;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
@@ -14,7 +15,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class ProductOverviewPageContentFactory {
+public class ProductOverviewPageContentFactory extends Base {
 
     @Inject
     private UserContext userContext;
@@ -28,17 +29,20 @@ public class ProductOverviewPageContentFactory {
     private ProductListBeanFactory productListBeanFactory;
 
     public ProductOverviewPageContent create(@Nullable final Category category, final PagedSearchResult<ProductProjection> searchResult) {
-        final ProductOverviewPageContent content = new ProductOverviewPageContent();
-        content.setProducts(productListBeanFactory.create(searchResult.getResults()));
-        content.setFilterProductsUrl(requestContext.getPath());
+        return fillBean(new ProductOverviewPageContent(), category, searchResult);
+    }
+
+    protected <T extends ProductOverviewPageContent> T fillBean(final T bean, final @Nullable Category category, final PagedSearchResult<ProductProjection> searchResult) {
+        bean.setProducts(productListBeanFactory.create(searchResult.getResults()));
+        bean.setFilterProductsUrl(requestContext.getPath());
         if (category != null) {
-            content.setBreadcrumb(breadcrumbBeanFactory.create(category));
-            content.setTitle(category.getName().find(userContext.locales()).orElse(""));
-            content.setJumbotron(createJumbotron(category));
-            content.setBanner(createBanner(category));
-            content.setSeo(createSeo(category));
+            bean.setBreadcrumb(breadcrumbBeanFactory.create(category));
+            bean.setTitle(category.getName().find(userContext.locales()).orElse(""));
+            bean.setJumbotron(createJumbotron(category));
+            bean.setBanner(createBanner(category));
+            bean.setSeo(createSeo(category));
         }
-        return content;
+        return bean;
     }
 
     private BannerBean createBanner(final Category category) {
