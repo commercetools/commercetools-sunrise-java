@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.productcatalog.common;
 
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
@@ -10,7 +11,7 @@ import java.util.stream.StreamSupport;
 
 import static java.util.stream.Collectors.toList;
 
-public class ProductListBeanFactory {
+public class ProductListBeanFactory extends Base {
 
     @Inject
     @Named("new")
@@ -19,7 +20,10 @@ public class ProductListBeanFactory {
     private ProductBeanFactory productBeanFactory;
 
     public ProductListBean create(final Iterable<ProductProjection> productList) {
-        final ProductListBean bean = new ProductListBean();
+        return fillBean(new ProductListBean(), productList);
+    }
+
+    protected <T extends ProductListBean> T fillBean(final T bean, final Iterable<ProductProjection> productList) {
         bean.setList(StreamSupport.stream(productList.spliterator(), false)
                 .map(product -> {
                     final ProductVariant matchingVariant = product.findFirstMatchingVariant()
