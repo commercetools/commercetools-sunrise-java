@@ -5,13 +5,14 @@ import com.commercetools.sunrise.common.models.AddressBeanFactory;
 import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.Base;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class AddressBookPageContentFactory {
+public class AddressBookPageContentFactory extends Base {
 
     @Inject
     private AddressBeanFactory addressBeanFactory;
@@ -21,7 +22,10 @@ public class AddressBookPageContentFactory {
     private UserContext userContext;
 
     public AddressBookPageContent create(final Customer customer) {
-        final AddressBookPageContent content = new AddressBookPageContent();
+        return fillBean(new AddressBookPageContent(), customer);
+    }
+
+    protected <T extends AddressBookPageContent> T fillBean(final T content, final Customer customer) {
         fillDefaultShippingAddress(content, customer);
         fillDefaultBillingAddress(content, customer);
         fillAddresses(content, customer);
