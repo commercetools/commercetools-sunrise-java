@@ -27,14 +27,20 @@ public class BreadcrumbBeanFactory extends Base {
     private ProductReverseRouter productReverseRouter;
 
     public BreadcrumbBean create(final ProductProjection product, final ProductVariant variant) {
-        final BreadcrumbBean breadcrumbBean = new BreadcrumbBean();
+        return fillBean(new BreadcrumbBean(), product, variant);
+    }
+
+    protected <T extends BreadcrumbBean> T fillBean(final T breadcrumbBean, final ProductProjection product, final ProductVariant variant) {
         final List<LinkBean> linkBeans = createLinkBeanList(product, variant);
         fillLinks(breadcrumbBean, linkBeans);
         return breadcrumbBean;
     }
 
     public BreadcrumbBean create(final Category category) {
-        final BreadcrumbBean breadcrumbBean = new BreadcrumbBean();
+        return fillBean(new BreadcrumbBean(), category);
+    }
+
+    protected  <T extends BreadcrumbBean> T fillBean(final T breadcrumbBean, final Category category) {
         fillLinks(breadcrumbBean, createCategoryTreeLinks(category));
         return breadcrumbBean;
     }
