@@ -5,11 +5,12 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.models.Base;
 import play.data.Form;
 
 import javax.inject.Inject;
 
-public class CheckoutConfirmationPageContentFactory {
+public class CheckoutConfirmationPageContentFactory extends Base {
 
     @Inject
     private CartLikeBeanFactory cartLikeBeanFactory;
@@ -19,7 +20,10 @@ public class CheckoutConfirmationPageContentFactory {
     private I18nResolver i18nResolver;
 
     public CheckoutConfirmationPageContent create(final Form<?> form, final Cart cart) {
-        final CheckoutConfirmationPageContent pageContent = new CheckoutConfirmationPageContent();
+        return billBean(new CheckoutConfirmationPageContent(), form, cart);
+    }
+
+    protected <T extends CheckoutConfirmationPageContent> T billBean(final T pageContent, final Form<?> form, final Cart cart) {
         fillCart(pageContent, cart);
         fillTitle(pageContent, cart);
         fillForm(pageContent, form);
