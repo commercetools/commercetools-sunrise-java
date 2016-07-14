@@ -3,7 +3,6 @@ package com.commercetools.sunrise.shoppingcart;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.models.AddressBeanFactory;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
@@ -26,7 +25,10 @@ public class CartLikeBeanFactory extends Base {
     private LineItemsBeanFactory lineItemsBeanFactory;
 
     public CartLikeBean create(final CartLike<?> cartLike) {
-        final CartLikeBean cartLikeBean = createCartLikeBean();
+        return fillBean(new CartLikeBean(), cartLike);
+    }
+
+    protected <T extends CartLikeBean> T fillBean(final T cartLikeBean, final CartLike<?> cartLike) {
         final MoneyContext moneyContext = MoneyContext.of(cartLike.getCurrency(), userContext.locale());
         cartLikeBean.setTotalItems(cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum());
         cartLikeBean.setSalesTax(moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null)));
@@ -50,9 +52,5 @@ public class CartLikeBeanFactory extends Base {
             cartLikeBean.setCustomerEmail(order.getCustomerEmail());
         }
         return cartLikeBean;
-    }
-
-    protected CartLikeBean createCartLikeBean() {
-        return new CartLikeBean();
     }
 }
