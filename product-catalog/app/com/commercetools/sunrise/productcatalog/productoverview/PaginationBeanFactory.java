@@ -2,6 +2,7 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.models.LinkBean;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.PagedResult;
 import play.Configuration;
 import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.Pagination;
@@ -13,7 +14,7 @@ import java.util.stream.LongStream;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
-public class PaginationBeanFactory {
+public class PaginationBeanFactory extends Base {
 
     @Inject
     private Configuration configuration;
@@ -21,7 +22,10 @@ public class PaginationBeanFactory {
     private RequestContext requestContext;
 
     public PaginationBean create(final PagedResult<?> searchResult, final Pagination pagination, final int pageSize) {
-        final PaginationBean bean = new PaginationBean();
+        return fillBean(new PaginationBean(), searchResult, pagination, pageSize);
+    }
+
+    protected <T extends PaginationBean> T fillBean(final T bean, final PagedResult<?> searchResult, final Pagination pagination, final int pageSize) {
         fillPages(bean, searchResult, pagination, pageSize);
         if (!searchResult.isFirst()) {
             bean.setPreviousUrl(buildUrlWithPage(pagination.getKey(), pagination.getPage() - 1));
