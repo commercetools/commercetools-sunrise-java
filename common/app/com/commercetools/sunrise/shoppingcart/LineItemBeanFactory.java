@@ -1,9 +1,8 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.models.ProductAttributeBean;
-import com.commercetools.sunrise.common.tobedeleted.ProductAttributeBeanFactoryInjectless;
+import com.commercetools.sunrise.common.models.ProductAttributeBeanFactory;
 import io.sphere.sdk.carts.LineItem;
 
 import javax.inject.Inject;
@@ -15,13 +14,13 @@ public class LineItemBeanFactory extends MiniCartLineItemBeanFactory {
     @Inject
     private ProductDataConfig productDataConfig;
     @Inject
-    private UserContext userContext;
+    private ProductAttributeBeanFactory productAttributeBeanFactory;
 
     public LineItemBean create(final LineItem lineItem) {
         final LineItemBean bean = fillbean(new LineItemBean(), lineItem);
         final List<ProductAttributeBean> attributes = lineItem.getVariant().getAttributes().stream()
                 .filter(attr -> productDataConfig.getSelectableAttributes().contains(attr.getName()))
-                .map(attr -> ProductAttributeBeanFactoryInjectless.create(attr, userContext, productDataConfig))
+                .map(attr -> productAttributeBeanFactory.create(attr))
                 .collect(toList());
         bean.setAttributes(attributes);
         return bean;
