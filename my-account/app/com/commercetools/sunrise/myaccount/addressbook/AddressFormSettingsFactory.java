@@ -15,17 +15,20 @@ public class AddressFormSettingsFactory extends Base {
     private CountryFormFieldBeanFactory countryFormFieldBeanFactory;
 
     public AddressFormSettings create(final Form<?> form) {
-        final AddressFormSettings settings = new AddressFormSettings();
-        fillTitle(settings, form);
-        fillCountries(settings, form);
-        return settings;
+        return fillBean(new AddressFormSettings(), form);
     }
 
-    public void fillCountries(final AddressFormSettings settings, final Form<?> form) {
+    protected <T extends AddressFormSettings> T fillBean(final T bean, final Form<?> form) {
+        fillTitle(bean, form);
+        fillCountries(bean, form);
+        return bean;
+    }
+
+    protected void fillCountries(final AddressFormSettings settings, final Form<?> form) {
         settings.setCountries(countryFormFieldBeanFactory.createWithDefaultCountries(form, "country"));
     }
 
-    public void fillTitle(final AddressFormSettings settings, final Form<?> form) {
+    protected void fillTitle(final AddressFormSettings settings, final Form<?> form) {
         settings.setTitle(titleFormFieldBeanFactory.createWithDefaultTitles(form, "title"));
     }
 }
