@@ -2,17 +2,21 @@ package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-public class AddressBeanFactory {
+public class AddressBeanFactory extends Base {
 
     @Inject
     private UserContext userContext;
 
     public AddressBean create(@Nullable final Address address) {
-        final AddressBean bean = createAddressBean();
+        return fillBean(new AddressBean(), address);
+    }
+
+    protected <T extends AddressBean> T fillBean(final T bean, @Nullable final Address address) {
         if (address != null) {
             bean.setTitle(address.getTitle());
             bean.setFirstName(address.getFirstName());
@@ -29,13 +33,7 @@ public class AddressBeanFactory {
         return bean;
     }
 
-    protected AddressBean createAddressBean() {
-        return new AddressBean();
-    }
-
     private String getDisplayCountry(final Address address) {
         return address.getCountry().toLocale().getDisplayCountry(userContext.locale());
     }
-
-
 }
