@@ -26,7 +26,10 @@ public class ProductVariantBeanFactory extends Base {
     protected ProductReverseRouter productReverseRouter;
 
     public ProductVariantBean create(final ProductProjection product, final ProductVariant variant) {
-        final ProductVariantBean bean = new ProductVariantBean();
+        return fillBean(new ProductVariantBean(), product, variant);
+    }
+
+    protected <T extends ProductVariantBean> T fillBean(final T bean, final ProductProjection product, final ProductVariant variant) {
         fillVariantInfo(bean, variant);
         fillPrices(variant, bean);
         fillName(product, bean);
