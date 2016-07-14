@@ -23,7 +23,10 @@ public class ProductAttributeBeanFactory extends Base {
     protected UserContext userContext;
 
     public ProductAttributeBean create(final Attribute attribute) {
-        final ProductAttributeBean bean = new ProductAttributeBean();
+        return fillBean(new ProductAttributeBean(), attribute);
+    }
+
+    protected <T extends ProductAttributeBean> T fillBean(final T bean, final Attribute attribute) {
         fillAttributeInfo(bean, attribute);
         return bean;
     }
