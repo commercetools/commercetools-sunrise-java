@@ -11,9 +11,12 @@ public class MyOrderDetailPageContentFactory {
     private CartLikeBeanFactory cartLikeBeanFactory;
 
     public MyOrderDetailPageContent create(final Order order) {
-        final MyOrderDetailPageContent content = new MyOrderDetailPageContent();
-        fillOrder(content, order);
-        return content;
+        return fillBean(new MyOrderDetailPageContent(), order);
+    }
+
+    protected <T extends MyOrderDetailPageContent> T fillBean(final T bean, final Order order) {
+        fillOrder(bean, order);
+        return bean;
     }
 
     protected void fillOrder(final MyOrderDetailPageContent content, final Order order) {
