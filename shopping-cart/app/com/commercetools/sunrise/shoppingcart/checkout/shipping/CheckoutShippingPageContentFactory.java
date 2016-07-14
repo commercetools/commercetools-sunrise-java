@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.WithOverridablePageContent;
 import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
@@ -18,7 +17,7 @@ import java.util.List;
 import static com.commercetools.sunrise.common.forms.FormUtils.extractFormField;
 import static java.util.stream.Collectors.toList;
 
-public class CheckoutShippingPageContentFactory extends Base implements WithOverridablePageContent<CheckoutShippingPageContent> {
+public class CheckoutShippingPageContentFactory extends Base {
 
     @Inject
     private UserContext userContext;
@@ -29,13 +28,11 @@ public class CheckoutShippingPageContentFactory extends Base implements WithOver
     @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
 
-    @Override
-    public CheckoutShippingPageContent createPageContent() {
-        return new CheckoutShippingPageContent();
+    public CheckoutShippingPageContent create(final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
+        return fillBean(new CheckoutShippingPageContent(), form, cart, shippingMethods);
     }
 
-    public CheckoutShippingPageContent create(final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
-        final CheckoutShippingPageContent pageContent = createPageContent();
+    protected <T extends CheckoutShippingPageContent> T fillBean(final T pageContent, final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
         fillForm(pageContent, form, shippingMethods);
         fillTitle(pageContent, cart);
         fillCart(pageContent, cart);
