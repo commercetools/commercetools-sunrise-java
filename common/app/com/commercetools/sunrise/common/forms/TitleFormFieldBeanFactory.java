@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.commercetools.sunrise.common.models.TitleFormFieldBean;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import io.sphere.sdk.models.Base;
 import play.Configuration;
 import play.data.Form;
 
@@ -15,7 +16,7 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-public class TitleFormFieldBeanFactory {
+public class TitleFormFieldBeanFactory extends Base {
 
     private static final String CONFIG_TITLE_OPTIONS = "form.titles";
     @Inject
@@ -26,7 +27,10 @@ public class TitleFormFieldBeanFactory {
     private UserContext userContext;
 
     public TitleFormFieldBean create(final Form<?> form, final String fieldName, final List<String> availableTitles) {
-        final TitleFormFieldBean bean = new TitleFormFieldBean();
+        return fillBean(new TitleFormFieldBean(), form, fieldName, availableTitles);
+    }
+
+    protected <T extends TitleFormFieldBean> T fillBean(final T bean, final Form<?> form, final String fieldName, final List<String> availableTitles) {
         final String selectedTitle = form.field(fieldName).valueOr(null);
         fillList(bean, availableTitles, selectedTitle);
         return bean;
