@@ -17,7 +17,7 @@ public class LineItemBeanFactory extends MiniCartLineItemBeanFactory {
     private ProductAttributeBeanFactory productAttributeBeanFactory;
 
     public LineItemBean create(final LineItem lineItem) {
-        final LineItemBean bean = fillbean(new LineItemBean(), lineItem);
+        final LineItemBean bean = fillBean(new LineItemBean(), lineItem);
         final List<ProductAttributeBean> attributes = lineItem.getVariant().getAttributes().stream()
                 .filter(attr -> productDataConfig.getSelectableAttributes().contains(attr.getName()))
                 .map(attr -> productAttributeBeanFactory.create(attr))
