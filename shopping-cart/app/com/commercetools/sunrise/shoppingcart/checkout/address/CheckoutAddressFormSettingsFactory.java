@@ -20,7 +20,10 @@ public class CheckoutAddressFormSettingsFactory extends Base {
     private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
 
     public CheckoutAddressFormSettings create(final Form<?> form) {
-        final CheckoutAddressFormSettings bean = createAddressFormSettings();
+        return fillBean(new CheckoutAddressFormSettings(), form);
+    }
+
+    protected <T extends CheckoutAddressFormSettings> T fillBean(final T bean, final Form<?> form) {
         fillCountriesShipping(bean, form);
         fillCountriesBilling(bean, form);
         fillTitleShipping(bean, form);
@@ -44,7 +47,4 @@ public class CheckoutAddressFormSettingsFactory extends Base {
         bean.setCountriesShipping(countryFormFieldBeanFactory.create(form, "countryShipping", singletonList(userContext.country())));
     }
 
-    protected CheckoutAddressFormSettings createAddressFormSettings() {
-        return new CheckoutAddressFormSettings();
-    }
 }
