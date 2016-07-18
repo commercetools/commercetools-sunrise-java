@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import play.Configuration;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +28,7 @@ public final class ProductDataConfigProvider implements Provider<ProductDataConf
     @Inject
     private Configuration configuration;
     @Inject
+    @Named("singleton")
     private SphereClient client;
 
     @Override

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import play.Configuration;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.util.List;
@@ -30,6 +31,7 @@ public final class ProjectContextProvider implements Provider<ProjectContext> {
     @Inject
     private Configuration configuration;
     @Inject
+    @Named("singleton")
     private SphereClient client;
 
     @Override
