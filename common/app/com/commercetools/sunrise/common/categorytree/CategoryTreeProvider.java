@@ -14,7 +14,7 @@ public final class CategoryTreeProvider implements Provider<CategoryTree> {
     private static final Logger logger = LoggerFactory.getLogger(CategoryTreeProvider.class);
 
     @Inject
-    @Named("singleton")
+    @Named("global")
     private SphereClient client;
 
     @Override

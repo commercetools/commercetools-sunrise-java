@@ -28,7 +28,7 @@ public final class ProductDataConfigProvider implements Provider<ProductDataConf
     @Inject
     private Configuration configuration;
     @Inject
-    @Named("singleton")
+    @Named("global")
     private SphereClient client;
 
     @Override

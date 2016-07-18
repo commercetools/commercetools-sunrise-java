@@ -21,7 +21,7 @@ public class CtpModule extends AbstractModule {
         bind(HttpClient.class).toInstance(SphereClientFactory.of().createHttpClient());
         bind(SphereClientConfig.class).toProvider(SphereClientConfigProvider.class).in(Singleton.class);
         bind(SphereAccessTokenSupplier.class).toProvider(SphereAccessTokenSupplierProvider.class).in(Singleton.class);
-        bind(SphereClient.class).annotatedWith(Names.named("singleton")).toProvider(SphereClientProvider.class).in(Singleton.class);
+        bind(SphereClient.class).annotatedWith(Names.named("global")).toProvider(SphereClientProvider.class).in(Singleton.class);
         bind(SphereClient.class).toProvider(RequestScopedSphereClientProvider.class).in(RequestScoped.class);
         bind(ProductDataConfig.class).toProvider(ProductDataConfigProvider.class).in(Singleton.class);
     }

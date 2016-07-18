@@ -31,7 +31,7 @@ public final class ProjectContextProvider implements Provider<ProjectContext> {
     @Inject
     private Configuration configuration;
     @Inject
-    @Named("singleton")
+    @Named("global")
     private SphereClient client;
 
     @Override
