@@ -9,9 +9,9 @@ import com.commercetools.sunrise.shoppingcart.common.CheckoutCommonComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutStepWidgetComponent;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import io.sphere.sdk.utils.MoneyImpl;
 
 import javax.money.Monetary;
+import javax.money.format.MonetaryFormats;
 
 public class ComponentsModule extends AbstractModule {
 
@@ -23,7 +23,10 @@ public class ComponentsModule extends AbstractModule {
     private void applyJavaMoneyHack() {
         //fixes https://github.com/commercetools/commercetools-sunrise-java/issues/404
         //exception play.api.http.HttpErrorHandlerExceptions$$anon$1: Execution exception[[CompletionException: java.lang.IllegalArgumentException: java.util.concurrent.CompletionException: io.sphere.sdk.json.JsonException: detailMessage: com.fasterxml.jackson.databind.JsonMappingException: Operator failed: javax.money.DefaultMonetaryRoundingsSingletonSpi$DefaultCurrencyRounding@1655879e (through reference chain: io.sphere.sdk.payments.PaymentDraftImpl["amountPlanned"])
-        Monetary.getDefaultRounding().apply(MoneyImpl.ofCents(123, "EUR"));
+        Monetary.getDefaultRounding();
+        Monetary.getDefaultAmountType();
+        MonetaryFormats.getDefaultFormatProviderChain();
+        Monetary.getDefaultCurrencyProviderChain();
     }
 
     @Provides
