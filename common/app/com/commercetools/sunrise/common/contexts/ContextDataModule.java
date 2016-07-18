@@ -14,12 +14,10 @@ public class ContextDataModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        final RequestScope requestScope = new RequestScope();
-        bindScope(RequestScoped.class, requestScope);
-        bind(Http.Context.class).toProvider(HttpContextProvider.class).in(requestScope);
-        bind(UserContext.class).toProvider(UserContextProvider.class).in(requestScope);
-        bind(RequestContext.class).toProvider(RequestContextProvider.class).in(requestScope);
+        bind(Http.Context.class).toProvider(HttpContextProvider.class).in(RequestScoped.class);
+        bind(UserContext.class).toProvider(UserContextProvider.class).in(RequestScoped.class);
+        bind(RequestContext.class).toProvider(RequestContextProvider.class).in(RequestScoped.class);
         bind(ProjectContext.class).toProvider(ProjectContextProvider.class).in(Singleton.class);
-        bind(RequestHookContext.class).to(RequestHookContextImpl.class).in(requestScope);
+        bind(RequestHookContext.class).to(RequestHookContextImpl.class).in(RequestScoped.class);
     }
 }
