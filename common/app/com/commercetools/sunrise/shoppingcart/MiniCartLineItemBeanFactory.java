@@ -15,15 +15,16 @@ public class MiniCartLineItemBeanFactory extends Base {
     private ProductVariantBeanFactory productVariantBeanFactory;
 
     public MiniCartLineItemBean create(final LineItem lineItem) {
-        return fillBean(new MiniCartLineItemBean(), lineItem);
+        final MiniCartLineItemBean bean = new MiniCartLineItemBean();
+        initialize(bean, lineItem);
+        return bean;
     }
 
-    protected <T extends MiniCartLineItemBean> T fillBean(final T bean, final LineItem lineItem) {
+    protected final void initialize(final MiniCartLineItemBean bean, final LineItem lineItem) {
         final MoneyContext moneyContext = MoneyContext.of(lineItem.getPrice().getValue().getCurrency(), userContext.locale());
         bean.setLineItemId(lineItem.getId());
         bean.setQuantity(lineItem.getQuantity());
         bean.setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
         bean.setVariant(productVariantBeanFactory.create(lineItem));
-        return bean;
     }
 }

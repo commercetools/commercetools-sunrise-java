@@ -16,13 +16,23 @@ public class LineItemBeanFactory extends MiniCartLineItemBeanFactory {
     @Inject
     private ProductAttributeBeanFactory productAttributeBeanFactory;
 
+    @Override
     public LineItemBean create(final LineItem lineItem) {
-        final LineItemBean bean = fillBean(new LineItemBean(), lineItem);
+        final LineItemBean bean = new LineItemBean();
+        initialize(bean, lineItem);
+        return bean;
+    }
+
+    protected final void initialize(final LineItemBean bean, LineItem lineItem) {
+        super.initialize(bean, lineItem);
+        fillAttributes(bean, lineItem);
+    }
+
+    protected void fillAttributes(final LineItemBean bean, final LineItem lineItem) {
         final List<ProductAttributeBean> attributes = lineItem.getVariant().getAttributes().stream()
                 .filter(attr -> productDataConfig.getSelectableAttributes().contains(attr.getName()))
                 .map(attr -> productAttributeBeanFactory.create(attr))
                 .collect(toList());
         bean.setAttributes(attributes);
-        return bean;
     }
 }
