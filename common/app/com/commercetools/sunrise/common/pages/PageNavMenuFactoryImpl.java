@@ -33,17 +33,22 @@ public class PageNavMenuFactoryImpl extends Base implements PageNavMenuFactory {
 
     @Override
     public PageNavMenu create() {
-        return fillBean(new PageNavMenu());
+        final PageNavMenu bean = new PageNavMenu();
+        fillBean(bean);
+        return bean;
     }
 
-    protected <T extends PageNavMenu> T fillBean(final T bean) {
+    protected final void fillBean(final PageNavMenu bean) {
+        fillCategories(bean);
+    }
+
+    protected void fillCategories(final PageNavMenu bean) {
         final List<CategoryBean> categories = new LinkedList<>();
         categoryTree.getRoots().forEach(root -> {
             final CategoryBean categoryData = createCategoryData(root, categoryTree, userContext, productReverseRouter, saleCategoryExtId);
             categories.add(categoryData);
         });
         bean.setCategories(categories);
-        return bean;
     }
 
     private static CategoryBean createCategoryData(final Category category, final CategoryTree categoryTree,
