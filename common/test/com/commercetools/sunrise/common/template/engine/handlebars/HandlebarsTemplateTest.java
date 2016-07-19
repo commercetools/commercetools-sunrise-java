@@ -70,11 +70,11 @@ public class HandlebarsTemplateTest {
     }
 
     private static TemplateEngine defaultHandlebars() {
-        return HandlebarsTemplateEngine.of(singletonList(DEFAULT_LOADER), I18N_MESSAGES, CMS_SERVICE);
+        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(singletonList(DEFAULT_LOADER), I18N_MESSAGES, CMS_SERVICE));
     }
 
     private static TemplateEngine handlebarsWithOverride() {
-        return HandlebarsTemplateEngine.of(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES, CMS_SERVICE);
+        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES, CMS_SERVICE));
     }
 
     private static void testTemplate(final String templateName, final TemplateEngine templateEngine, final Consumer<String> test) {

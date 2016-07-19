@@ -4,16 +4,16 @@ import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.cms.CmsService;
 import com.commercetools.sunrise.common.template.cms.filebased.FileBasedCmsService;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
+import com.commercetools.sunrise.common.template.engine.TemplateEngineProvider;
 import com.commercetools.sunrise.common.template.engine.TestablePageData;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.template.i18n.TestableI18nResolver;
-import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
-import com.github.jknack.handlebars.io.TemplateLoader;
 import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import org.junit.Test;
+import play.Configuration;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -27,7 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class HandlebarsCmsHelperTest {
 
-    private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates/cmsHelper");
     private static final PageData SOME_PAGE_DATA = new TestablePageData();
     public static final I18nResolver I18N_RESOLVER = i18nResolver(defaultI18nMap());
 
@@ -60,11 +59,18 @@ public class HandlebarsCmsHelperTest {
         final Injector injector = Guice.createInjector(new Module() {
             @Override
             public void configure(final Binder binder) {
+                binder.bind(TemplateEngine.class).toProvider(TemplateEngineProvider.class);
                 binder.bind(I18nResolver.class).toInstance(I18N_RESOLVER);
+                binder.bind(CmsService.class).to(FileBasedCmsService.class);
+                binder.bind(Configuration.class).toInstance(new Configuration("handlebars.templateLoaders = [\n" +
+                        "  {\n" +
+                        "    \"type\":\"classpath\",\n" +
+                        "    \"path\":\"/templates/cmsHelper\"\n" +
+                        "  }\n" +
+                        "]"));
             }
         });
-        final CmsService cmsService = injector.getInstance(FileBasedCmsService.class);
-        final TemplateEngine templateEngine = HandlebarsTemplateEngine.of(singletonList(DEFAULT_LOADER), I18N_RESOLVER, cmsService);
+        final TemplateEngine templateEngine = injector.getInstance(TemplateEngine.class);
         final String html = renderTemplate(templateName, templateEngine, locale);
         test.accept(html);
     }
