@@ -1,35 +1,34 @@
 package com.commercetools.sunrise.common.forms;
 
-import com.commercetools.sunrise.common.contexts.ProjectContext;
-import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import java.util.List;
 
-public abstract class AddressFormBeanFactory {
-
-    @Inject
-    private ProjectContext projectContext;
+public abstract class AddressFormBeanFactory extends Base {
 
     protected AddressFormBean create(final Address address) {
         final AddressFormBean bean = new AddressFormBean();
-        fillAddressForm(bean, address, projectContext.countries());
+        initialize(bean, address);
         return bean;
     }
 
-    protected void fillAddressForm(final AddressFormBean bean, @Nullable final Address address, final List<CountryCode> availableCountries) {
+    protected final void initialize(final AddressFormBean bean, @Nullable final Address address) {
         if (address != null) {
-            bean.setFirstName(address.getFirstName());
-            bean.setLastName(address.getLastName());
-            bean.setStreetName(address.getStreetName());
-            bean.setAdditionalStreetInfo(address.getAdditionalStreetInfo());
-            bean.setCity(address.getCity());
-            bean.setPostalCode(address.getPostalCode());
-            bean.setRegion(address.getRegion());
-            bean.setPhone(address.getPhone());
-            bean.setEmail(address.getEmail());
+            fillAddressFields(bean, address);
         }
     }
+
+    protected void fillAddressFields(final AddressFormBean bean, final Address address) {
+        bean.setFirstName(address.getFirstName());
+        bean.setLastName(address.getLastName());
+        bean.setStreetName(address.getStreetName());
+        bean.setAdditionalStreetInfo(address.getAdditionalStreetInfo());
+        bean.setCity(address.getCity());
+        bean.setPostalCode(address.getPostalCode());
+        bean.setRegion(address.getRegion());
+        bean.setPhone(address.getPhone());
+        bean.setEmail(address.getEmail());
+    }
+
 }

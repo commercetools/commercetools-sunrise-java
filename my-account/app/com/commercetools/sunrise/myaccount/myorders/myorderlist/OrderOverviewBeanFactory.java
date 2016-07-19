@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.utils.MoneyContext;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import static com.commercetools.sunrise.common.utils.PriceUtils.calculateTotalPrice;
 import static io.sphere.sdk.utils.EnumUtils.enumToCamelCase;
 
-public class OrderOverviewBeanFactory {
+public class OrderOverviewBeanFactory extends Base {
 
     @Inject
     private UserContext userContext;
@@ -25,13 +26,17 @@ public class OrderOverviewBeanFactory {
 
     public OrderOverviewBean create(final Order order) {
         final OrderOverviewBean bean = new OrderOverviewBean();
+        initialize(bean, order);
+        return bean;
+    }
+
+    protected final void initialize(final OrderOverviewBean bean, final Order order) {
         fillTotal(bean, order);
         fillOrderDate(bean, order);
         fillShipping(bean, order);
         fillPaymentStatus(bean, order);
         fillOrderNumber(bean, order);
         fillOrderUrl(bean, order);
-        return bean;
     }
 
     protected void fillOrderUrl(final OrderOverviewBean bean, final Order order) {

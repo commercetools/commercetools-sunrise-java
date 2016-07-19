@@ -2,9 +2,10 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.models.LinkBean;
+import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.Pagination;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.PagedResult;
 import play.Configuration;
-import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.Pagination;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.stream.LongStream;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
-public class PaginationBeanFactory {
+public class PaginationBeanFactory extends Base {
 
     @Inject
     private Configuration configuration;
@@ -22,17 +23,29 @@ public class PaginationBeanFactory {
 
     public PaginationBean create(final PagedResult<?> searchResult, final Pagination pagination, final int pageSize) {
         final PaginationBean bean = new PaginationBean();
-        fillPages(bean, searchResult, pagination, pageSize);
-        if (!searchResult.isFirst()) {
-            bean.setPreviousUrl(buildUrlWithPage(pagination.getKey(), pagination.getPage() - 1));
-        }
-        if (!searchResult.isLast()) {
-            bean.setNextUrl(buildUrlWithPage(pagination.getKey(), pagination.getPage() + 1));
-        }
+        initialize(bean, searchResult, pagination, pageSize);
         return bean;
     }
 
-    private void fillPages(final PaginationBean bean, final PagedResult<?> searchResult, final Pagination pagination, final int pageSize) {
+    protected final void initialize(final PaginationBean bean, final PagedResult<?> searchResult, final Pagination pagination, final int pageSize) {
+        fillPages(bean, searchResult, pagination, pageSize);
+        fillPreviousUrl(bean, searchResult, pagination);
+        fillNextUrl(bean, searchResult, pagination);
+    }
+
+    protected void fillNextUrl(final PaginationBean bean, final PagedResult<?> searchResult, final Pagination pagination) {
+        if (!searchResult.isLast()) {
+            bean.setNextUrl(buildUrlWithPage(pagination.getKey(), pagination.getPage() + 1));
+        }
+    }
+
+    protected void fillPreviousUrl(final PaginationBean bean, final PagedResult<?> searchResult, final Pagination pagination) {
+        if (!searchResult.isFirst()) {
+            bean.setPreviousUrl(buildUrlWithPage(pagination.getKey(), pagination.getPage() - 1));
+        }
+    }
+
+    protected void fillPages(final PaginationBean bean, final PagedResult<?> searchResult, final Pagination pagination, final int pageSize) {
         final int displayedPages = configuration.getInt("pop.pagination.displayedPages", 6);
         final long totalPages = calculateTotalPages(searchResult.getTotal(), pageSize);
         final long thresholdLeft = displayedPages - 1;
@@ -48,33 +61,33 @@ public class PaginationBeanFactory {
         }
     }
 
-    private void fillWithAllPages(final PaginationBean bean, final long totalPages, final Pagination pagination) {
+    protected void fillWithAllPages(final PaginationBean bean, final long totalPages, final Pagination pagination) {
         bean.setPages(createPages(pagination, 1, totalPages));
     }
 
-    private void fillWithFirstAndRestPages(final PaginationBean bean, final long totalPages, final long thresholdRight, final Pagination pagination) {
+    protected void fillWithFirstAndRestPages(final PaginationBean bean, final long totalPages, final long thresholdRight, final Pagination pagination) {
         bean.setPages(createPages(pagination, thresholdRight, totalPages));
         bean.setFirstPage(createLinkData(pagination, 1));
     }
 
-    private void fillWithLastAndRestPages(final PaginationBean bean, final long totalPages, final long thresholdLeft, final Pagination pagination) {
+    protected void fillWithLastAndRestPages(final PaginationBean bean, final long totalPages, final long thresholdLeft, final Pagination pagination) {
         bean.setPages(createPages(pagination, 1, thresholdLeft));
         bean.setLastPage(createLinkData(pagination, totalPages));
     }
 
-    private void fillWithFirstLastAndMiddlePages(final PaginationBean bean, final long totalPages, final Pagination pagination) {
+    protected void fillWithFirstLastAndMiddlePages(final PaginationBean bean, final long totalPages, final Pagination pagination) {
         bean.setPages(createPages(pagination, pagination.getPage() - 1, pagination.getPage() + 1));
         bean.setFirstPage(createLinkData(pagination, 1));
         bean.setLastPage(createLinkData(pagination, totalPages));
     }
 
-    private List<LinkBean> createPages(final Pagination pagination, final long startPage, final long endPage) {
+    protected List<LinkBean> createPages(final Pagination pagination, final long startPage, final long endPage) {
         return LongStream.rangeClosed(startPage, endPage)
                 .mapToObj(page -> createLinkData(pagination, page))
                 .collect(toList());
     }
 
-    private LinkBean createLinkData(final Pagination pagination, final long page) {
+    protected LinkBean createLinkData(final Pagination pagination, final long page) {
         final LinkBean linkBean = new LinkBean(String.valueOf(page), buildUrlWithPage(pagination.getKey(), page));
         if (page == pagination.getPage()) {
             linkBean.setSelected(true);
@@ -82,11 +95,11 @@ public class PaginationBeanFactory {
         return linkBean;
     }
 
-    private String buildUrlWithPage(final String key, final long page) {
+    protected String buildUrlWithPage(final String key, final long page) {
         return requestContext.buildUrl(key, singletonList(String.valueOf(page)));
     }
 
-    private static long calculateTotalPages(final float total, final int pageSize) {
+    protected static long calculateTotalPages(final float total, final int pageSize) {
         final Double totalPages = Math.ceil(total / pageSize);
         return totalPages.longValue();
     }

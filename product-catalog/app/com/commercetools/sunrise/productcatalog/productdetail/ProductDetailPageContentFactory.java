@@ -22,12 +22,16 @@ public class ProductDetailPageContentFactory extends Base {
     protected ProductBeanFactory productBeanFactory;
 
     public ProductDetailPageContent create(final ProductProjection product, final ProductVariant variant) {
-        final ProductDetailPageContent content = new ProductDetailPageContent();
-        fillAdditionalTitle(product, content);
-        fillProduct(product, variant, content);
-        fillBreadCrumb(product, variant, content);
-        fillAddToCartFormUrl(content);
-        return content;
+        final ProductDetailPageContent bean = new ProductDetailPageContent();
+        initialize(bean, product, variant);
+        return bean;
+    }
+
+    protected final void initialize(final ProductDetailPageContent bean, final ProductProjection product, final ProductVariant variant) {
+        fillAdditionalTitle(product, bean);
+        fillProduct(product, variant, bean);
+        fillBreadCrumb(product, variant, bean);
+        fillAddToCartFormUrl(bean);
     }
 
     protected void fillAddToCartFormUrl(final ProductDetailPageContent content) {

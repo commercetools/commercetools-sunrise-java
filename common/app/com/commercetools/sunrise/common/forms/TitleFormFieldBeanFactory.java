@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.commercetools.sunrise.common.models.TitleFormFieldBean;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import io.sphere.sdk.models.Base;
 import play.Configuration;
 import play.data.Form;
 
@@ -15,7 +16,7 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-public class TitleFormFieldBeanFactory {
+public class TitleFormFieldBeanFactory extends Base {
 
     private static final String CONFIG_TITLE_OPTIONS = "form.titles";
     @Inject
@@ -27,17 +28,20 @@ public class TitleFormFieldBeanFactory {
 
     public TitleFormFieldBean create(final Form<?> form, final String fieldName, final List<String> availableTitles) {
         final TitleFormFieldBean bean = new TitleFormFieldBean();
-        final String selectedTitle = form.field(fieldName).valueOr(null);
-        fillList(bean, availableTitles, selectedTitle);
+        initialize(bean, form, fieldName, availableTitles);
         return bean;
     }
 
     public TitleFormFieldBean createWithDefaultTitles(final Form<?> form, final String fieldName) {
-        final List<String> availableTitles = configuration.getStringList(CONFIG_TITLE_OPTIONS, emptyList());
-        return create(form, fieldName, availableTitles);
+        return create(form, fieldName, getDefaultTitles());
     }
 
-    protected void fillList(final TitleFormFieldBean bean, final List<String> availableTitles, final @Nullable String selectedTitle) {
+    protected final void initialize(final TitleFormFieldBean bean, final Form<?> form, final String fieldName, final List<String> availableTitles) {
+        fillList(bean, form, fieldName, availableTitles);
+    }
+
+    protected void fillList(final TitleFormFieldBean bean, final Form<?> form, final String fieldName, final List<String> availableTitles) {
+        final String selectedTitle = form.field(fieldName).valueOr(null);
         bean.setList(availableTitles.stream()
                 .map(title -> titleToSelectableData(title, selectedTitle))
                 .collect(toList()));
@@ -50,5 +54,9 @@ public class TitleFormFieldBeanFactory {
         bean.setValue(title);
         bean.setSelected(title.equals(selectedTitle));
         return bean;
+    }
+
+    protected List<String> getDefaultTitles() {
+        return configuration.getStringList(CONFIG_TITLE_OPTIONS, emptyList());
     }
 }

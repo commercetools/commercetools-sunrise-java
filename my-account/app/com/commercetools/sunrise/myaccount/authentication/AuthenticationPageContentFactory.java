@@ -2,12 +2,13 @@ package com.commercetools.sunrise.myaccount.authentication;
 
 import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;
 import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormSettingsBean;
+import io.sphere.sdk.models.Base;
 import play.data.Form;
 import play.data.FormFactory;
 
 import javax.inject.Inject;
 
-public class AuthenticationPageContentFactory {
+public class AuthenticationPageContentFactory extends Base {
 
     @Inject
     private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
@@ -15,17 +16,25 @@ public class AuthenticationPageContentFactory {
     private FormFactory formFactory;
 
     public AuthenticationPageContent createWithSignUpForm(final Form<?> signUpForm) {
-        final AuthenticationPageContent pageContent = new AuthenticationPageContent();
-        fillSignUpForm(pageContent, signUpForm);
-        fillLogInForm(pageContent, formFactory.form());
-        return pageContent;
+        final AuthenticationPageContent bean = new AuthenticationPageContent();
+        initializeWithSignUpForm(bean, signUpForm);
+        return bean;
     }
 
     public AuthenticationPageContent createWithLogInForm(final Form<?> logInForm) {
-        final AuthenticationPageContent pageContent = new AuthenticationPageContent();
+        final AuthenticationPageContent bean = new AuthenticationPageContent();
+        initializeWithLogInForm(bean, logInForm);
+        return bean;
+    }
+
+    protected final void initializeWithSignUpForm(final AuthenticationPageContent bean, final Form<?> signUpForm) {
+        fillLogInForm(bean, formFactory.form());
+        fillSignUpForm(bean, signUpForm);
+    }
+
+    protected void initializeWithLogInForm(final AuthenticationPageContent pageContent, final Form<?> logInForm) {
         fillSignUpForm(pageContent, formFactory.form());
         fillLogInForm(pageContent, logInForm);
-        return pageContent;
     }
 
     protected void fillLogInForm(final AuthenticationPageContent content, final Form<?> form) {

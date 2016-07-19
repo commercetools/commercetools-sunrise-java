@@ -5,13 +5,14 @@ import com.commercetools.sunrise.common.models.AddressBeanFactory;
 import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
+import io.sphere.sdk.models.Base;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class AddressBookPageContentFactory {
+public class AddressBookPageContentFactory extends Base {
 
     @Inject
     private AddressBeanFactory addressBeanFactory;
@@ -21,29 +22,33 @@ public class AddressBookPageContentFactory {
     private UserContext userContext;
 
     public AddressBookPageContent create(final Customer customer) {
-        final AddressBookPageContent content = new AddressBookPageContent();
+        final AddressBookPageContent bean = new AddressBookPageContent();
+        initialize(bean, customer);
+        return bean;
+    }
+
+    protected final void initialize(final AddressBookPageContent content, final Customer customer) {
         fillDefaultShippingAddress(content, customer);
         fillDefaultBillingAddress(content, customer);
         fillAddresses(content, customer);
-        return content;
     }
 
-    protected void fillDefaultShippingAddress(final AddressBookPageContent content, final Customer customer) {
+    protected void fillDefaultShippingAddress(final AddressBookPageContent bean, final Customer customer) {
         customer.findDefaultShippingAddress()
-                .ifPresent(address -> content.setDefaultShippingAddress(createAddressInfo(address)));
+                .ifPresent(address -> bean.setDefaultShippingAddress(createAddressInfo(address)));
     }
 
-    protected void fillDefaultBillingAddress(final AddressBookPageContent content, final Customer customer) {
+    protected void fillDefaultBillingAddress(final AddressBookPageContent bean, final Customer customer) {
         customer.findDefaultBillingAddress()
-                .ifPresent(address -> content.setDefaultBillingAddress(createAddressInfo(address)));
+                .ifPresent(address -> bean.setDefaultBillingAddress(createAddressInfo(address)));
     }
 
-    protected void fillAddresses(final AddressBookPageContent pageContent, final Customer customer) {
+    protected void fillAddresses(final AddressBookPageContent bean, final Customer customer) {
         final List<AddressInfoBean> beanList = customer.getAddresses().stream()
                 .filter(address -> isNotAnyDefaultAddress(customer, address))
                 .map(this::createAddressInfo)
                 .collect(Collectors.toList());
-        pageContent.setAddresses(beanList);
+        bean.setAddresses(beanList);
     }
 
     protected AddressInfoBean createAddressInfo(final Address address) {

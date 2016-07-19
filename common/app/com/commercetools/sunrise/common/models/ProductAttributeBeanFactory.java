@@ -24,23 +24,31 @@ public class ProductAttributeBeanFactory extends Base {
 
     public ProductAttributeBean create(final Attribute attribute) {
         final ProductAttributeBean bean = new ProductAttributeBean();
-        fillAttributeInfo(bean, attribute);
+        initialize(bean, attribute);
         return bean;
     }
 
     public SelectableProductAttributeBean createSelectableAttribute(final Attribute attribute, final ProductProjection product) {
         final SelectableProductAttributeBean bean = new SelectableProductAttributeBean();
+        initialize(bean, attribute, product);
+        return bean;
+    }
+
+    protected final void initialize(final SelectableProductAttributeBean bean, final Attribute attribute, final ProductProjection product) {
         fillAttributeInfo(bean, attribute);
         fillAttributeCombinations(bean, attribute, product);
         fillReload(attribute, bean);
-        return bean;
+    }
+
+    protected final void initialize(final ProductAttributeBean bean, final Attribute attribute) {
+        fillAttributeInfo(bean, attribute);
     }
 
     protected void fillReload(final Attribute attribute, final SelectableProductAttributeBean bean) {
         bean.setReload(productDataConfig.getHardSelectableAttributes().contains(attribute.getName()));
     }
 
-    protected <T extends ProductAttributeBean> void fillAttributeInfo(final T bean, final Attribute attribute) {
+    protected void fillAttributeInfo(final ProductAttributeBean bean, final Attribute attribute) {
         bean.setKey(attribute.getName());
         bean.setName(attributeLabel(attribute, userContext.locales(), productDataConfig.getMetaProductType()));
         bean.setValue(attributeValue(attribute, userContext.locales(), productDataConfig.getMetaProductType()));
