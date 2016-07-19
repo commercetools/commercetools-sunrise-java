@@ -23,6 +23,7 @@ com.commercetools.sunrise.common.template.i18n.composite
 com.commercetools.sunrise.common.template.i18n.yaml
 com.commercetools.sunrise.common.tobedeleted
 com.commercetools.sunrise.common.utils
+com.commercetools.sunrise.components
 com.commercetools.sunrise.framework
 com.commercetools.sunrise.hooks
 com.commercetools.sunrise.http
