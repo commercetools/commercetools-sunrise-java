@@ -40,8 +40,6 @@ public final class MetricAction {
                 final int size = calculateTotalSize(rawDatas);
                 LOGGER.debug(() -> format("%s used %d requests (%d queries, %d commands, %dbytes fetched, in (%s)).", ctx.request(), rawDatas.size(), queries.size(), commands.size(), size, durations));
             }
-        } else {
-            LOGGER.warn(() -> "Metric component could not be properly initialized.");
         }
     }
 
