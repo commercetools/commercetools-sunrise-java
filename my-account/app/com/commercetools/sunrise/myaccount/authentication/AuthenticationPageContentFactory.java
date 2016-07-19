@@ -16,24 +16,25 @@ public class AuthenticationPageContentFactory extends Base {
     private FormFactory formFactory;
 
     public AuthenticationPageContent createWithSignUpForm(final Form<?> signUpForm) {
-        return fillBeanWithSignUpForm(new AuthenticationPageContent(), signUpForm);
-    }
-
-    protected <T extends AuthenticationPageContent> T fillBeanWithSignUpForm(final T pageContent, final Form<?> signUpForm) {
-        fillLogInForm(pageContent, formFactory.form());
-        fillSignUpForm(pageContent, signUpForm);
-        return pageContent;
+        final AuthenticationPageContent bean = new AuthenticationPageContent();
+        initializeWithSignUpForm(bean, signUpForm);
+        return bean;
     }
 
     public AuthenticationPageContent createWithLogInForm(final Form<?> logInForm) {
-        final AuthenticationPageContent pageContent = new AuthenticationPageContent();
-        return fillBeanWithLogInForm(pageContent, logInForm);
+        final AuthenticationPageContent bean = new AuthenticationPageContent();
+        initializeWithLogInForm(bean, logInForm);
+        return bean;
     }
 
-    protected <T extends AuthenticationPageContent> T fillBeanWithLogInForm(final T pageContent, final Form<?> logInForm) {
+    protected final void initializeWithSignUpForm(final AuthenticationPageContent bean, final Form<?> signUpForm) {
+        fillLogInForm(bean, formFactory.form());
+        fillSignUpForm(bean, signUpForm);
+    }
+
+    protected void initializeWithLogInForm(final AuthenticationPageContent pageContent, final Form<?> logInForm) {
         fillSignUpForm(pageContent, formFactory.form());
         fillLogInForm(pageContent, logInForm);
-        return pageContent;
     }
 
     protected void fillLogInForm(final AuthenticationPageContent content, final Form<?> form) {

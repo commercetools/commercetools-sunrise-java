@@ -34,11 +34,11 @@ public class PageNavMenuFactoryImpl extends Base implements PageNavMenuFactory {
     @Override
     public PageNavMenu create() {
         final PageNavMenu bean = new PageNavMenu();
-        fillBean(bean);
+        initialize(bean);
         return bean;
     }
 
-    protected final void fillBean(final PageNavMenu bean) {
+    protected final void initialize(final PageNavMenu bean) {
         fillCategories(bean);
     }
 
