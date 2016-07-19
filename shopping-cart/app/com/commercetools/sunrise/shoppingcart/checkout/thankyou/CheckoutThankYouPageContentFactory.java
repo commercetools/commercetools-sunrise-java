@@ -20,17 +20,17 @@ public class CheckoutThankYouPageContentFactory extends Base {
 
     public CheckoutThankYouPageContent create(final Order order) {
         final CheckoutThankYouPageContent bean = new CheckoutThankYouPageContent();
-        fillBean(bean, order);
+        initialize(bean, order);
         return bean;
     }
 
-    protected final void fillBean(final CheckoutThankYouPageContent bean, final Order order) {
-        fill(bean, order);
+    protected final void initialize(final CheckoutThankYouPageContent bean, final Order order) {
+        fillOrder(bean, order);
+        fillTitle(bean);
     }
 
-    protected void fill(final CheckoutThankYouPageContent bean, final Order order) {
+    protected void fillOrder(final CheckoutThankYouPageContent bean, final Order order) {
         bean.setOrder(cartLikeBeanFactory.create(order));
-        fillTitle(bean);
     }
 
     protected void fillTitle(final CheckoutThankYouPageContent bean) {

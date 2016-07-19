@@ -3,13 +3,13 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.InfoData;
+import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
+import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
-import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
-import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -29,23 +29,36 @@ public class ProductOverviewPageContentFactory extends Base {
     private ProductListBeanFactory productListBeanFactory;
 
     public ProductOverviewPageContent create(@Nullable final Category category, final PagedSearchResult<ProductProjection> searchResult) {
-        return fillBean(new ProductOverviewPageContent(), category, searchResult);
-    }
-
-    protected <T extends ProductOverviewPageContent> T fillBean(final T bean, final @Nullable Category category, final PagedSearchResult<ProductProjection> searchResult) {
-        bean.setProducts(productListBeanFactory.create(searchResult.getResults()));
-        bean.setFilterProductsUrl(requestContext.getPath());
-        if (category != null) {
-            bean.setBreadcrumb(breadcrumbBeanFactory.create(category));
-            bean.setTitle(category.getName().find(userContext.locales()).orElse(""));
-            bean.setJumbotron(createJumbotron(category));
-            bean.setBanner(createBanner(category));
-            bean.setSeo(createSeo(category));
-        }
+        final ProductOverviewPageContent bean = new ProductOverviewPageContent();
+        initialize(bean, category, searchResult);
         return bean;
     }
 
-    private BannerBean createBanner(final Category category) {
+    protected final void initialize(final ProductOverviewPageContent bean, final @Nullable Category category, final PagedSearchResult<ProductProjection> searchResult) {
+        fillProducts(bean, searchResult);
+        fillFilterProductsUrl(bean);
+        if (category != null) {
+            fillCategoryInfo(bean, category);
+        }
+    }
+
+    protected void fillFilterProductsUrl(final ProductOverviewPageContent bean) {
+        bean.setFilterProductsUrl(requestContext.getPath());
+    }
+
+    protected void fillProducts(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult) {
+        bean.setProducts(productListBeanFactory.create(searchResult.getResults()));
+    }
+
+    protected void fillCategoryInfo(final ProductOverviewPageContent bean, final Category category) {
+        bean.setBreadcrumb(breadcrumbBeanFactory.create(category));
+        bean.setTitle(category.getName().find(userContext.locales()).orElse(""));
+        bean.setJumbotron(createJumbotron(category));
+        bean.setBanner(createBanner(category));
+        bean.setSeo(createSeo(category));
+    }
+
+    protected BannerBean createBanner(final Category category) {
         final BannerBean bean = new BannerBean();
         bean.setTitle(category.getName().find(userContext.locales()).orElse(""));
         Optional.ofNullable(category.getDescription())
@@ -55,7 +68,7 @@ public class ProductOverviewPageContentFactory extends Base {
         return bean;
     }
 
-    private JumbotronBean createJumbotron(final Category category) {
+    protected JumbotronBean createJumbotron(final Category category) {
         final JumbotronBean bean = new JumbotronBean();
         bean.setTitle(category.getName().find(userContext.locales()).orElse(""));
         Optional.ofNullable(category.getParent())
@@ -66,7 +79,7 @@ public class ProductOverviewPageContentFactory extends Base {
         return bean;
     }
 
-    public InfoData createSeo(final Category category) {
+    protected InfoData createSeo(final Category category) {
         final InfoData bean = new InfoData();
         Optional.ofNullable(category.getMetaTitle())
                 .ifPresent(title -> bean.setTitle(title.find(userContext.locales()).orElse("")));
