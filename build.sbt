@@ -12,7 +12,7 @@ name := "commercetools-sunrise"
 
 organization in ThisBuild := "com.commercetools.sunrise"
 
-lazy val sunriseDesignVersion = "0.60.0-SNAPSHOT"
+lazy val sunriseThemeVersion = "0.60.0"
 
 lazy val jvmSdkVersion = "1.1.0"
 
@@ -100,7 +100,7 @@ lazy val sunriseThemeSettings = Seq (
   unmanagedBase in Test := baseDirectory.value / "test" / "lib",
   resolvers += Resolver.bintrayRepo("commercetools", "maven"),
   libraryDependencies ++= Seq (
-    "com.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseDesignVersion
+    "com.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseThemeVersion
   )
 )
 
