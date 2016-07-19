@@ -8,11 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 public final class CategoryTreeProvider implements Provider<CategoryTree> {
     private static final Logger logger = LoggerFactory.getLogger(CategoryTreeProvider.class);
 
     @Inject
+    @Named("global")
     private SphereClient client;
 
     @Override
