@@ -169,9 +169,6 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected CompletionStage<Result> doRequest(final Supplier<CompletionStage<Result>> nextSupplier) {
-
-
-
         final Function<RequestHook, CompletionStage<?>> f = hook -> hook.onRequest(ctx());
         hooks().runAsyncHook(RequestHook.class, f);
         final CompletionStage<Result> resultCompletionStage = nextSupplier.get();
