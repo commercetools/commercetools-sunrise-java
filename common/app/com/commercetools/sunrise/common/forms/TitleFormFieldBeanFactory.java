@@ -27,21 +27,21 @@ public class TitleFormFieldBeanFactory extends Base {
     private UserContext userContext;
 
     public TitleFormFieldBean create(final Form<?> form, final String fieldName, final List<String> availableTitles) {
-        return fillBean(new TitleFormFieldBean(), form, fieldName, availableTitles);
-    }
-
-    protected <T extends TitleFormFieldBean> T fillBean(final T bean, final Form<?> form, final String fieldName, final List<String> availableTitles) {
-        final String selectedTitle = form.field(fieldName).valueOr(null);
-        fillList(bean, availableTitles, selectedTitle);
+        final TitleFormFieldBean bean = new TitleFormFieldBean();
+        initialize(bean, form, fieldName, availableTitles);
         return bean;
     }
 
     public TitleFormFieldBean createWithDefaultTitles(final Form<?> form, final String fieldName) {
-        final List<String> availableTitles = configuration.getStringList(CONFIG_TITLE_OPTIONS, emptyList());
-        return create(form, fieldName, availableTitles);
+        return create(form, fieldName, getDefaultTitles());
     }
 
-    protected void fillList(final TitleFormFieldBean bean, final List<String> availableTitles, final @Nullable String selectedTitle) {
+    protected final void initialize(final TitleFormFieldBean bean, final Form<?> form, final String fieldName, final List<String> availableTitles) {
+        fillList(bean, form, fieldName, availableTitles);
+    }
+
+    protected void fillList(final TitleFormFieldBean bean, final Form<?> form, final String fieldName, final List<String> availableTitles) {
+        final String selectedTitle = form.field(fieldName).valueOr(null);
         bean.setList(availableTitles.stream()
                 .map(title -> titleToSelectableData(title, selectedTitle))
                 .collect(toList()));
@@ -54,5 +54,9 @@ public class TitleFormFieldBeanFactory extends Base {
         bean.setValue(title);
         bean.setSelected(title.equals(selectedTitle));
         return bean;
+    }
+
+    protected List<String> getDefaultTitles() {
+        return configuration.getStringList(CONFIG_TITLE_OPTIONS, emptyList());
     }
 }

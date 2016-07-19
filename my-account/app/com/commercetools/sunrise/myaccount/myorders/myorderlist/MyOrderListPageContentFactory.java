@@ -14,16 +14,17 @@ public class MyOrderListPageContentFactory extends Base {
     private OrderOverviewBeanFactory orderOverviewBeanFactory;
 
     public MyOrderListPageContent create(final PagedQueryResult<Order> orderQueryResult) {
-        return fillBean(new MyOrderListPageContent(), orderQueryResult);
-    }
-
-    protected <T extends MyOrderListPageContent> T fillBean(final T bean, final PagedQueryResult<Order> orderQueryResult) {
-        fillOrders(bean, orderQueryResult);
+        final MyOrderListPageContent bean = new MyOrderListPageContent();
+        initialize(bean, orderQueryResult);
         return bean;
     }
 
-    protected void fillOrders(final MyOrderListPageContent content, final PagedQueryResult<Order> orderQueryResult) {
-        content.setOrders(orderQueryResult.getResults().stream()
+    protected final void initialize(final MyOrderListPageContent bean, final PagedQueryResult<Order> orderQueryResult) {
+        fillOrders(bean, orderQueryResult);
+    }
+
+    protected void fillOrders(final MyOrderListPageContent bean, final PagedQueryResult<Order> orderQueryResult) {
+        bean.setOrders(orderQueryResult.getResults().stream()
                 .map(order -> orderOverviewBeanFactory.create(order))
                 .collect(toList()));
     }

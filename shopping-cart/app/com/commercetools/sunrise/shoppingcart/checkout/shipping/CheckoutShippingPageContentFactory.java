@@ -2,7 +2,6 @@ package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.forms.UserFeedback;
-import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
@@ -29,28 +28,27 @@ public class CheckoutShippingPageContentFactory extends Base {
     protected CartLikeBeanFactory cartLikeBeanFactory;
 
     public CheckoutShippingPageContent create(final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
-        return fillBean(new CheckoutShippingPageContent(), form, cart, shippingMethods);
+        final CheckoutShippingPageContent bean = new CheckoutShippingPageContent();
+        initialize(bean, form, cart, shippingMethods);
+        return bean;
     }
 
-    protected <T extends CheckoutShippingPageContent> T fillBean(final T pageContent, final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
-        fillForm(pageContent, form, shippingMethods);
-        fillTitle(pageContent, cart);
-        fillCart(pageContent, cart);
-        return pageContent;
+    protected final void initialize(final CheckoutShippingPageContent bean, final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
+        fillForm(bean, form, shippingMethods);
+        fillTitle(bean, cart);
+        fillCart(bean, cart);
     }
 
-    protected void fillCart(final CheckoutShippingPageContent pageContent, final Cart cart) {
-        pageContent.setCart(cartLikeBeanFactory.create(cart));
+    protected void fillCart(final CheckoutShippingPageContent bean, final Cart cart) {
+        bean.setCart(cartLikeBeanFactory.create(cart));
     }
 
-    protected void fillTitle(final PageContent pageContent, final Cart cart) {
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
+    protected void fillTitle(final CheckoutShippingPageContent bean, final Cart cart) {
+        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
     }
 
-    protected void fillForm(final CheckoutShippingPageContent pageContent, final Form<?> form, final List<ShippingMethod> shippingMethods) {
-        final CheckoutShippingFormBean bean = createShippingForm(form, shippingMethods);
-        userFeedback.findErrors().ifPresent(bean::setErrors);
-        pageContent.setShippingForm(bean);
+    protected void fillForm(final CheckoutShippingPageContent bean, final Form<?> form, final List<ShippingMethod> shippingMethods) {
+        bean.setShippingForm(createShippingForm(form, shippingMethods)); // TODO Use Play form instead
     }
 
     protected CheckoutShippingFormBean createShippingForm(final Form<?> form, final List<ShippingMethod> shippingMethods) {

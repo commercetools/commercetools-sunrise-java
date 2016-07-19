@@ -22,32 +22,33 @@ public class AddressBookPageContentFactory extends Base {
     private UserContext userContext;
 
     public AddressBookPageContent create(final Customer customer) {
-        return fillBean(new AddressBookPageContent(), customer);
+        final AddressBookPageContent bean = new AddressBookPageContent();
+        initialize(bean, customer);
+        return bean;
     }
 
-    protected <T extends AddressBookPageContent> T fillBean(final T content, final Customer customer) {
+    protected final void initialize(final AddressBookPageContent content, final Customer customer) {
         fillDefaultShippingAddress(content, customer);
         fillDefaultBillingAddress(content, customer);
         fillAddresses(content, customer);
-        return content;
     }
 
-    protected void fillDefaultShippingAddress(final AddressBookPageContent content, final Customer customer) {
+    protected void fillDefaultShippingAddress(final AddressBookPageContent bean, final Customer customer) {
         customer.findDefaultShippingAddress()
-                .ifPresent(address -> content.setDefaultShippingAddress(createAddressInfo(address)));
+                .ifPresent(address -> bean.setDefaultShippingAddress(createAddressInfo(address)));
     }
 
-    protected void fillDefaultBillingAddress(final AddressBookPageContent content, final Customer customer) {
+    protected void fillDefaultBillingAddress(final AddressBookPageContent bean, final Customer customer) {
         customer.findDefaultBillingAddress()
-                .ifPresent(address -> content.setDefaultBillingAddress(createAddressInfo(address)));
+                .ifPresent(address -> bean.setDefaultBillingAddress(createAddressInfo(address)));
     }
 
-    protected void fillAddresses(final AddressBookPageContent pageContent, final Customer customer) {
+    protected void fillAddresses(final AddressBookPageContent bean, final Customer customer) {
         final List<AddressInfoBean> beanList = customer.getAddresses().stream()
                 .filter(address -> isNotAnyDefaultAddress(customer, address))
                 .map(this::createAddressInfo)
                 .collect(Collectors.toList());
-        pageContent.setAddresses(beanList);
+        bean.setAddresses(beanList);
     }
 
     protected AddressInfoBean createAddressInfo(final Address address) {

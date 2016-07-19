@@ -37,19 +37,20 @@ public class ProductBeanFactory extends Base {
     private ProductAttributeBeanFactory productAttributeBeanFactory;
 
     public ProductBean create(final ProductProjection product, final ProductVariant variant) {
-        return fillBean(new ProductBean(), product, variant);
+        final ProductBean bean = new ProductBean();
+        initialize(bean, product, variant);
+        return bean;
     }
 
-    protected <T extends ProductBean> T fillBean(final T productBean, final ProductProjection product, final ProductVariant variant) {
-        fillIds(product, variant, productBean);
-        fillDescription(product, productBean);
-        fillGallery(variant, productBean);
-        fillDetails(variant, productBean);
-        fillVariant(product, variant, productBean);
-        fillVariantIdentifiers(productBean);
-        fillVariants(product, productBean);
-        fillAttributes(product, variant, productBean);
-        return productBean;
+    protected final void initialize(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        fillIds(product, variant, bean);
+        fillDescription(product, bean);
+        fillGallery(variant, bean);
+        fillDetails(variant, bean);
+        fillVariant(product, variant, bean);
+        fillVariantIdentifiers(bean);
+        fillVariants(product, bean);
+        fillAttributes(product, variant, bean);
     }
 
     protected void fillAttributes(final ProductProjection product, final ProductVariant variant, final ProductBean productBean) {

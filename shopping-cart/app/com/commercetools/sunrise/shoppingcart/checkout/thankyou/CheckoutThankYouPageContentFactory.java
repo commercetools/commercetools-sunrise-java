@@ -1,15 +1,16 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
 
-public class CheckoutThankYouPageContentFactory extends PageContent {
+public class CheckoutThankYouPageContentFactory extends Base {
+
     @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
     @Inject
@@ -18,21 +19,22 @@ public class CheckoutThankYouPageContentFactory extends PageContent {
     private UserContext userContext;
 
     public CheckoutThankYouPageContent create(final Order order) {
-        return fillBean(new CheckoutThankYouPageContent(), order);
+        final CheckoutThankYouPageContent bean = new CheckoutThankYouPageContent();
+        fillBean(bean, order);
+        return bean;
     }
 
-    protected <T extends CheckoutThankYouPageContent> T fillBean(final T pageContent, final Order order) {
-        fill(pageContent, order);
-        return pageContent;
+    protected final void fillBean(final CheckoutThankYouPageContent bean, final Order order) {
+        fill(bean, order);
     }
 
-    protected void fill(final CheckoutThankYouPageContent pageContent, final Order order) {
-        pageContent.setOrder(cartLikeBeanFactory.create(order));
-        fillTitle(pageContent);
+    protected void fill(final CheckoutThankYouPageContent bean, final Order order) {
+        bean.setOrder(cartLikeBeanFactory.create(order));
+        fillTitle(bean);
     }
 
-    protected void fillTitle(final PageContent pageContent) {
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:thankYouPage.title")));
+    protected void fillTitle(final CheckoutThankYouPageContent bean) {
+        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:thankYouPage.title")));
     }
 
 }

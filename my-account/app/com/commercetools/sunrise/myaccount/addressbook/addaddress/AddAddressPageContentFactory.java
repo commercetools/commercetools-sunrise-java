@@ -13,12 +13,17 @@ public class AddAddressPageContentFactory extends Base {
     private AddressFormSettingsFactory addressFormSettingsFactory;
 
     public AddAddressPageContent create(final Form<?> form, final Customer customer) {
-        return fillBean(new AddAddressPageContent(), form, customer);
+        final AddAddressPageContent bean = new AddAddressPageContent();
+        initialize(bean, form);
+        return bean;
     }
 
-    protected <T extends AddAddressPageContent> T fillBean(final T content, final Form<?> form, final Customer customer) {
-        content.setNewAddressForm(form);
-        content.setNewAddressFormSettings(addressFormSettingsFactory.create(form));
-        return content;
+    protected final void initialize(final AddAddressPageContent bean, final Form<?> form) {
+        fillNewAddressForm(bean, form);
+    }
+
+    protected void fillNewAddressForm(final AddAddressPageContent bean, final Form<?> form) {
+        bean.setNewAddressForm(form);
+        bean.setNewAddressFormSettings(addressFormSettingsFactory.create(form));
     }
 }

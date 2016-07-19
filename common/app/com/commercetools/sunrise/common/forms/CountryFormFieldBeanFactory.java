@@ -23,20 +23,20 @@ public class CountryFormFieldBeanFactory extends Base {
 
     public CountryFormFieldBean create(final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
         final CountryFormFieldBean bean = new CountryFormFieldBean();
-        return fillBean(bean, form, fieldName, availableCountries);
-    }
-
-    protected <T extends CountryFormFieldBean> T fillBean(final T bean, final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
-        final String selectedCountryCode = form.field(fieldName).valueOr(null);
-        fillList(bean, availableCountries, selectedCountryCode);
+        initialize(bean, form, fieldName, availableCountries);
         return bean;
     }
 
     public CountryFormFieldBean createWithDefaultCountries(final Form<?> form, final String fieldName) {
-        return create(form, fieldName, projectContext.countries());
+        return create(form, fieldName, getDefaultCountries());
     }
 
-    protected void fillList(final CountryFormFieldBean bean, final List<CountryCode> availableCountries, final @Nullable String selectedCountryCode) {
+    protected final void initialize(final CountryFormFieldBean bean, final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
+        fillList(bean, form, fieldName, availableCountries);
+    }
+
+    protected void fillList(final CountryFormFieldBean bean, final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
+        final String selectedCountryCode = form.field(fieldName).valueOr(null);
         bean.setList(availableCountries.stream()
                 .map(countryOption -> countryToSelectableData(countryOption, selectedCountryCode))
                 .collect(toList()));
@@ -53,4 +53,7 @@ public class CountryFormFieldBeanFactory extends Base {
         return bean;
     }
 
+    protected List<CountryCode> getDefaultCountries() {
+        return projectContext.countries();
+    }
 }

@@ -22,26 +22,27 @@ public class CheckoutAddressPageContentFactory extends Base {
     private CheckoutAddressFormSettingsFactory addressFormSettingsFactory;
 
     public CheckoutAddressPageContent create(final Form<?> form, final Cart cart) {
-        return fillBean(new CheckoutAddressPageContent(), form, cart);
+        final CheckoutAddressPageContent bean = new CheckoutAddressPageContent();
+        initialize(bean, form, cart);
+        return bean;
     }
 
-    protected <T extends CheckoutAddressPageContent> T fillBean(final T pageContent, final Form<?> form, final Cart cart) {
-        fillTitle(pageContent, cart);
-        fillCart(pageContent, cart);
-        fillForm(pageContent, form);
-        return pageContent;
+    protected final void initialize(final CheckoutAddressPageContent bean, final Form<?> form, final Cart cart) {
+        fillTitle(bean, cart);
+        fillCart(bean, cart);
+        fillForm(bean, form);
     }
 
-    protected void fillForm(final CheckoutAddressPageContent pageContent, final Form<?> form) {
-        pageContent.setAddressFormSettings(addressFormSettingsFactory.create(form));
-        pageContent.setAddressForm(form);
+    protected void fillForm(final CheckoutAddressPageContent bean, final Form<?> form) {
+        bean.setAddressFormSettings(addressFormSettingsFactory.create(form));
+        bean.setAddressForm(form);
     }
 
-    protected void fillCart(final CheckoutAddressPageContent pageContent, final Cart cart) {
-        pageContent.setCart(cartLikeBeanFactory.create(cart));
+    protected void fillCart(final CheckoutAddressPageContent bean, final Cart cart) {
+        bean.setCart(cartLikeBeanFactory.create(cart));
     }
 
-    protected void fillTitle(final CheckoutAddressPageContent pageContent, final Cart cart) {
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
+    protected void fillTitle(final CheckoutAddressPageContent bean, final Cart cart) {
+        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
     }
 }

@@ -13,27 +13,32 @@ public class AddressBeanFactory extends Base {
     private UserContext userContext;
 
     public AddressBean create(@Nullable final Address address) {
-        return fillBean(new AddressBean(), address);
-    }
-
-    protected <T extends AddressBean> T fillBean(final T bean, @Nullable final Address address) {
-        if (address != null) {
-            bean.setTitle(address.getTitle());
-            bean.setFirstName(address.getFirstName());
-            bean.setLastName(address.getLastName());
-            bean.setStreetName(address.getStreetName());
-            bean.setAdditionalStreetInfo(address.getAdditionalStreetInfo());
-            bean.setCity(address.getCity());
-            bean.setRegion(address.getRegion());
-            bean.setPostalCode(address.getPostalCode());
-            bean.setCountry(getDisplayCountry(address));
-            bean.setPhone(address.getPhone());
-            bean.setEmail(address.getEmail());
-        }
+        final AddressBean bean = new AddressBean();
+        initialize(bean, address);
         return bean;
     }
 
-    private String getDisplayCountry(final Address address) {
+    protected final void initialize(final AddressBean bean, @Nullable final Address address) {
+        if (address != null) {
+            fillAddressFields(bean, address);
+        }
+    }
+
+    protected void fillAddressFields(final AddressBean bean, final Address address) {
+        bean.setTitle(address.getTitle());
+        bean.setFirstName(address.getFirstName());
+        bean.setLastName(address.getLastName());
+        bean.setStreetName(address.getStreetName());
+        bean.setAdditionalStreetInfo(address.getAdditionalStreetInfo());
+        bean.setCity(address.getCity());
+        bean.setRegion(address.getRegion());
+        bean.setPostalCode(address.getPostalCode());
+        bean.setCountry(getDisplayCountry(address));
+        bean.setPhone(address.getPhone());
+        bean.setEmail(address.getEmail());
+    }
+
+    protected String getDisplayCountry(final Address address) {
         return address.getCountry().toLocale().getDisplayCountry(userContext.locale());
     }
 }

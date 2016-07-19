@@ -12,15 +12,16 @@ public class MyOrderDetailPageContentFactory extends Base {
     private CartLikeBeanFactory cartLikeBeanFactory;
 
     public MyOrderDetailPageContent create(final Order order) {
-        return fillBean(new MyOrderDetailPageContent(), order);
-    }
-
-    protected <T extends MyOrderDetailPageContent> T fillBean(final T bean, final Order order) {
-        fillOrder(bean, order);
+        final MyOrderDetailPageContent bean = new MyOrderDetailPageContent();
+        initialize(bean, order);
         return bean;
     }
 
-    protected void fillOrder(final MyOrderDetailPageContent content, final Order order) {
-        content.setOrder(cartLikeBeanFactory.create(order));
+    protected final void initialize(final MyOrderDetailPageContent bean, final Order order) {
+        fillOrder(bean, order);
+    }
+
+    protected void fillOrder(final MyOrderDetailPageContent bean, final Order order) {
+        bean.setOrder(cartLikeBeanFactory.create(order));
     }
 }

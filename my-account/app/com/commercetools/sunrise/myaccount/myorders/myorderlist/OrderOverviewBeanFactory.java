@@ -25,17 +25,18 @@ public class OrderOverviewBeanFactory extends Base {
     private MyOrdersReverseRouter myOrdersReverseRouter;
 
     public OrderOverviewBean create(final Order order) {
-        return fillBean(new OrderOverviewBean(), order);
+        final OrderOverviewBean bean = new OrderOverviewBean();
+        initialize(bean, order);
+        return bean;
     }
 
-    protected <T extends OrderOverviewBean> T fillBean(final T bean, final Order order) {
+    protected final void initialize(final OrderOverviewBean bean, final Order order) {
         fillTotal(bean, order);
         fillOrderDate(bean, order);
         fillShipping(bean, order);
         fillPaymentStatus(bean, order);
         fillOrderNumber(bean, order);
         fillOrderUrl(bean, order);
-        return bean;
     }
 
     protected void fillOrderUrl(final OrderOverviewBean bean, final Order order) {

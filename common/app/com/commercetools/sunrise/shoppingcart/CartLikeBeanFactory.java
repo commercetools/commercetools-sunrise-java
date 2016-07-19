@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import static com.commercetools.sunrise.common.utils.PriceUtils.*;
 
 public class CartLikeBeanFactory extends Base {
+
     @Inject
     protected UserContext userContext;
     @Inject
@@ -25,32 +26,68 @@ public class CartLikeBeanFactory extends Base {
     private LineItemsBeanFactory lineItemsBeanFactory;
 
     public CartLikeBean create(final CartLike<?> cartLike) {
-        return fillBean(new CartLikeBean(), cartLike);
+        final CartLikeBean bean = new CartLikeBean();
+        initialize(bean, cartLike);
+        return bean;
     }
 
-    protected <T extends CartLikeBean> T fillBean(final T cartLikeBean, final CartLike<?> cartLike) {
-        final MoneyContext moneyContext = MoneyContext.of(cartLike.getCurrency(), userContext.locale());
-        cartLikeBean.setTotalItems(cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum());
-        cartLikeBean.setSalesTax(moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null)));
-        cartLikeBean.setTotalPrice(moneyContext.formatOrZero(calculateTotalPrice(cartLike)));
-        cartLikeBean.setSubtotalPrice(moneyContext.formatOrZero(calculateSubTotal(cartLike)));
-        cartLikeBean.setLineItems(lineItemsBeanFactory.create(cartLike.getLineItems()));
-        cartLikeBean.setShippingAddress(addressBeanFactory.create(cartLike.getShippingAddress()));
-        if (cartLike.getBillingAddress() != null) {
-            cartLikeBean.setBillingAddress(addressBeanFactory.create(cartLike.getBillingAddress()));
-        } else {
-            cartLikeBean.setBillingAddress(addressBeanFactory.create(cartLike.getShippingAddress()));
-        }
-        cartLikeBean.setShippingMethod(new ShippingInfoBean(cartLike.getShippingInfo(), moneyContext));
-        cartLikeBean.setPaymentDetails(new PaymentInfoBean(cartLike.getPaymentInfo(), userContext));
-
+    protected final void initialize(final CartLikeBean bean, final CartLike<?> cartLike) {
+        fillPriceInfo(bean, cartLike);
+        fillTotalItems(bean, cartLike);
+        fillLineItems(bean, cartLike);
+        fillShippingAddress(bean, cartLike);
+        fillBillingAddress(bean, cartLike);
+        fillShippingMethod(bean, cartLike);
+        fillPaymentDetails(bean, cartLike);
         if (cartLike instanceof Order) {
-            final Order order = (Order) cartLike;
-            final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", userContext.locale());
-            cartLikeBean.setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
-            cartLikeBean.setOrderNumber(order.getOrderNumber());
-            cartLikeBean.setCustomerEmail(order.getCustomerEmail());
+            fillOrderInfo(bean, (Order) cartLike);
         }
-        return cartLikeBean;
+    }
+
+    protected void fillTotalItems(final CartLikeBean bean, final CartLike<?> cartLike) {
+        bean.setTotalItems(cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum());
+    }
+
+    protected void fillLineItems(final CartLikeBean bean, final CartLike<?> cartLike) {
+        bean.setLineItems(lineItemsBeanFactory.create(cartLike.getLineItems()));
+    }
+
+    protected void fillPriceInfo(final CartLikeBean bean, final CartLike<?> cartLike) {
+        final MoneyContext moneyContext = getMoneyContext(cartLike);
+        bean.setSalesTax(moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null)));
+        bean.setTotalPrice(moneyContext.formatOrZero(calculateTotalPrice(cartLike)));
+        bean.setSubtotalPrice(moneyContext.formatOrZero(calculateSubTotal(cartLike)));
+    }
+
+    protected void fillPaymentDetails(final CartLikeBean bean, final CartLike<?> cartLike) {
+        bean.setPaymentDetails(new PaymentInfoBean(cartLike.getPaymentInfo(), userContext));
+    }
+
+    protected void fillShippingMethod(final CartLikeBean bean, final CartLike<?> cartLike) {
+        final MoneyContext moneyContext = getMoneyContext(cartLike);
+        bean.setShippingMethod(new ShippingInfoBean(cartLike.getShippingInfo(), moneyContext));
+    }
+
+    protected void fillShippingAddress(final CartLikeBean bean, final CartLike<?> cartLike) {
+        bean.setShippingAddress(addressBeanFactory.create(cartLike.getShippingAddress()));
+    }
+
+    protected void fillBillingAddress(final CartLikeBean bean, final CartLike<?> cartLike) {
+        if (cartLike.getBillingAddress() != null) {
+            bean.setBillingAddress(addressBeanFactory.create(cartLike.getBillingAddress()));
+        } else {
+            bean.setBillingAddress(addressBeanFactory.create(cartLike.getShippingAddress()));
+        }
+    }
+
+    protected void fillOrderInfo(final CartLikeBean bean, final Order order) {
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", userContext.locale());
+        bean.setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
+        bean.setOrderNumber(order.getOrderNumber());
+        bean.setCustomerEmail(order.getCustomerEmail());
+    }
+
+    protected MoneyContext getMoneyContext(final CartLike<?> cartLike) {
+        return MoneyContext.of(cartLike.getCurrency(), userContext.locale());
     }
 }

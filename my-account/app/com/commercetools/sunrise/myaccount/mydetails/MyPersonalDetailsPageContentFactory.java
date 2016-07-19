@@ -13,13 +13,14 @@ public class MyPersonalDetailsPageContentFactory extends Base {
     private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
 
     public MyPersonalDetailsPageContent create(final Form<?> form, final Customer customer) {
-        return fillBean(new MyPersonalDetailsPageContent(), form, customer);
+        final MyPersonalDetailsPageContent bean = new MyPersonalDetailsPageContent();
+        initialize(bean, form, customer);
+        return bean;
     }
 
-    protected <T extends MyPersonalDetailsPageContent> T fillBean(final T content, final Form<?> form, final Customer customer) {
-        fillCustomer(content, customer);
-        fillForm(content, form);
-        return content;
+    protected final void initialize(final MyPersonalDetailsPageContent bean, final Form<?> form, final Customer customer) {
+        fillCustomer(bean, customer);
+        fillForm(bean, form);
     }
 
     protected void fillCustomer(final MyPersonalDetailsPageContent content, final Customer customer) {

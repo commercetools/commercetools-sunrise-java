@@ -20,25 +20,26 @@ public class CheckoutConfirmationPageContentFactory extends Base {
     private I18nResolver i18nResolver;
 
     public CheckoutConfirmationPageContent create(final Form<?> form, final Cart cart) {
-        return billBean(new CheckoutConfirmationPageContent(), form, cart);
+        final CheckoutConfirmationPageContent bean = new CheckoutConfirmationPageContent();
+        initialize(bean, form, cart);
+        return bean;
     }
 
-    protected <T extends CheckoutConfirmationPageContent> T billBean(final T pageContent, final Form<?> form, final Cart cart) {
-        fillCart(pageContent, cart);
-        fillTitle(pageContent, cart);
-        fillForm(pageContent, form);
-        return pageContent;
+    protected final void initialize(final CheckoutConfirmationPageContent bean, final Form<?> form, final Cart cart) {
+        fillCart(bean, cart);
+        fillTitle(bean, cart);
+        fillForm(bean, form);
     }
 
-    public void fillForm(final CheckoutConfirmationPageContent pageContent, final Form<?> form) {
-        pageContent.setCheckoutForm(form);
+    protected void fillForm(final CheckoutConfirmationPageContent bean, final Form<?> form) {
+        bean.setCheckoutForm(form);
     }
 
-    public void fillTitle(final CheckoutConfirmationPageContent pageContent, final Cart cart) {
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:confirmationPage.title")));
+    protected void fillTitle(final CheckoutConfirmationPageContent bean, final Cart cart) {
+        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:confirmationPage.title")));
     }
 
-    public void fillCart(final CheckoutConfirmationPageContent pageContent, final Cart cart) {
-        pageContent.setCart(cartLikeBeanFactory.create(cart));
+    protected void fillCart(final CheckoutConfirmationPageContent bean, final Cart cart) {
+        bean.setCart(cartLikeBeanFactory.create(cart));
     }
 }

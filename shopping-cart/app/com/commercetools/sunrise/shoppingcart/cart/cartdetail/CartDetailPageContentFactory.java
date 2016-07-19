@@ -19,16 +19,21 @@ public class CartDetailPageContentFactory extends Base {
     private UserContext userContext;
 
     public CartDetailPageContent create(final Cart cart) {
-        return fillBean(new CartDetailPageContent(), cart);
+        final CartDetailPageContent bean = new CartDetailPageContent();
+        initialize(bean, cart);
+        return bean;
     }
 
-    protected <T extends CartDetailPageContent> T fillBean(final T pageContent, final Cart cart) {
-        pageContent.setCart(cartLikeBeanFactory.create(cart));
-        fillTitle(pageContent);
-        return pageContent;
+    protected final void initialize(final CartDetailPageContent bean, final Cart cart) {
+        fillCart(bean, cart);
+        fillTitle(bean);
     }
 
-    protected void fillTitle(final PageContent pageContent) {
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
+    protected void fillCart(final CartDetailPageContent bean, final Cart cart) {
+        bean.setCart(cartLikeBeanFactory.create(cart));
+    }
+
+    protected void fillTitle(final PageContent bean) {
+        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
     }
 }

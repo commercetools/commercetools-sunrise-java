@@ -20,10 +20,16 @@ public class ProductListBeanFactory extends Base {
     private ProductBeanFactory productBeanFactory;
 
     public ProductListBean create(final Iterable<ProductProjection> productList) {
-        return fillBean(new ProductListBean(), productList);
+        final ProductListBean bean = new ProductListBean();
+        initialize(bean, productList);
+        return bean;
     }
 
-    protected <T extends ProductListBean> T fillBean(final T bean, final Iterable<ProductProjection> productList) {
+    protected final void initialize(final ProductListBean bean, final Iterable<ProductProjection> productList) {
+        fillList(bean, productList);
+    }
+
+    protected void fillList(final ProductListBean bean, final Iterable<ProductProjection> productList) {
         bean.setList(StreamSupport.stream(productList.spliterator(), false)
                 .map(product -> {
                     final ProductVariant matchingVariant = product.findFirstMatchingVariant()
@@ -31,10 +37,9 @@ public class ProductListBeanFactory extends Base {
                     return createThumbnail(product, matchingVariant);
                 })
                 .collect(toList()));
-        return bean;
     }
 
-    private ProductThumbnailBean createThumbnail(final ProductProjection product, final ProductVariant variant) {
+    protected ProductThumbnailBean createThumbnail(final ProductProjection product, final ProductVariant variant) {
         final ProductThumbnailBean bean = new ProductThumbnailBean();
         bean.setProduct(productBeanFactory.create(product, variant));
         bean.setNew(product.getCategories().stream()
@@ -43,7 +48,7 @@ public class ProductListBeanFactory extends Base {
         return bean;
     }
 
-    private static void fillIsSaleInfo(final ProductThumbnailBean bean, final ProductBean productBean) {
+    protected static void fillIsSaleInfo(final ProductThumbnailBean bean, final ProductBean productBean) {
         final boolean isSale = productBean != null && productBean.getVariant() != null && productBean.getVariant().getPriceOld() != null;
         bean.setSale(isSale);
     }

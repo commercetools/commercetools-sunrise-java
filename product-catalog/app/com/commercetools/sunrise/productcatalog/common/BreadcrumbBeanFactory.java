@@ -1,14 +1,14 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.google.inject.Inject;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.LinkBean;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.google.inject.Inject;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,31 +27,27 @@ public class BreadcrumbBeanFactory extends Base {
     private ProductReverseRouter productReverseRouter;
 
     public BreadcrumbBean create(final ProductProjection product, final ProductVariant variant) {
-        return fillBean(new BreadcrumbBean(), product, variant);
-    }
-
-    protected <T extends BreadcrumbBean> T fillBean(final T breadcrumbBean, final ProductProjection product, final ProductVariant variant) {
-        final List<LinkBean> linkBeans = createLinkBeanList(product, variant);
-        fillLinks(breadcrumbBean, linkBeans);
-        return breadcrumbBean;
+        final BreadcrumbBean bean = new BreadcrumbBean();
+        initialize(bean, product, variant);
+        return bean;
     }
 
     public BreadcrumbBean create(final Category category) {
-        return fillBean(new BreadcrumbBean(), category);
+        final BreadcrumbBean bean = new BreadcrumbBean();
+        initialize(bean, category);
+        return bean;
     }
 
-    protected  <T extends BreadcrumbBean> T fillBean(final T breadcrumbBean, final Category category) {
-        fillLinks(breadcrumbBean, createCategoryTreeLinks(category));
-        return breadcrumbBean;
+    protected final void initialize(final BreadcrumbBean bean, final ProductProjection product, final ProductVariant variant) {
+        fillLinks(bean, createLinkBeanList(product, variant));
     }
 
-    protected List<LinkBean> createLinkBeanList(final ProductProjection product, final ProductVariant variant) {
-        final List<LinkBean> linkBeans = createCategoryLinkBeanList(product);
-        final LinkBean productLinkData = createProductLinkData(product, variant);
-        final List<LinkBean> result = new ArrayList<>(1 + linkBeans.size());
-        result.addAll(linkBeans);
-        result.add(productLinkData);
-        return result;
+    protected final void initialize(final BreadcrumbBean bean, final Category category) {
+        fillLinks(bean, createCategoryTreeLinks(category));
+    }
+
+    protected void fillLinks(final BreadcrumbBean breadcrumbBean, final List<LinkBean> linkBeans) {
+        breadcrumbBean.setLinks(linkBeans);
     }
 
     protected List<LinkBean> createCategoryLinkBeanList(final ProductProjection product) {
@@ -62,8 +58,13 @@ public class BreadcrumbBeanFactory extends Base {
                     .orElseGet(Collections::emptyList);
     }
 
-    protected void fillLinks(final BreadcrumbBean breadcrumbBean, final List<LinkBean> linkBeans) {
-        breadcrumbBean.setLinks(linkBeans);
+    protected List<LinkBean> createLinkBeanList(final ProductProjection product, final ProductVariant variant) {
+        final List<LinkBean> linkBeans = createCategoryLinkBeanList(product);
+        final LinkBean productLinkData = createProductLinkData(product, variant);
+        final List<LinkBean> result = new ArrayList<>(1 + linkBeans.size());
+        result.addAll(linkBeans);
+        result.add(productLinkData);
+        return result;
     }
 
     protected List<LinkBean> createCategoryTreeLinks(final Category category) {

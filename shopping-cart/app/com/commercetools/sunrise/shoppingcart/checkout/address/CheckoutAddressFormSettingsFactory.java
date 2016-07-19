@@ -20,15 +20,16 @@ public class CheckoutAddressFormSettingsFactory extends Base {
     private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
 
     public CheckoutAddressFormSettings create(final Form<?> form) {
-        return fillBean(new CheckoutAddressFormSettings(), form);
+        final CheckoutAddressFormSettings bean = new CheckoutAddressFormSettings();
+        initialize(bean, form);
+        return bean;
     }
 
-    protected <T extends CheckoutAddressFormSettings> T fillBean(final T bean, final Form<?> form) {
+    protected final void initialize(final CheckoutAddressFormSettings bean, final Form<?> form) {
         fillCountriesShipping(bean, form);
         fillCountriesBilling(bean, form);
         fillTitleShipping(bean, form);
         fillTitleBilling(bean, form);
-        return bean;
     }
 
     protected void fillTitleBilling(final CheckoutAddressFormSettings bean, final Form<?> form) {

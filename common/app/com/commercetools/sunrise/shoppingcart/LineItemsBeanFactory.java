@@ -18,14 +18,19 @@ public class LineItemsBeanFactory extends Base {
     private LineItemBeanFactory lineItemBeanFactory;
 
     public LineItemsBean create(final List<LineItem> lineItems) {
-        return fillBean(new LineItemsBean(), lineItems);
+        LineItemsBean bean = new LineItemsBean();
+        initialize(bean, lineItems);
+        return bean;
     }
 
-    protected <T extends LineItemsBean> T fillBean(final T bean, final List<LineItem> lineItems) {
+    protected final void initialize(final LineItemsBean bean, final List<LineItem> lineItems) {
+        fillList(bean, lineItems);
+    }
+
+    protected void fillList(final LineItemsBean bean, final List<LineItem> lineItems) {
         final List<LineItemBean> lineItemBeanList = lineItems.stream()
                 .map(lineItem -> lineItemBeanFactory.create(lineItem))
                 .collect(Collectors.toList());
         bean.setList(lineItemBeanList);
-        return bean;
     }
 }

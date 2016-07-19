@@ -9,6 +9,7 @@ import io.sphere.sdk.models.Base;
 import javax.inject.Inject;
 
 public class MiniCartLineItemBeanFactory extends Base {
+
     @Inject
     private UserContext userContext;
     @Inject
@@ -21,10 +22,26 @@ public class MiniCartLineItemBeanFactory extends Base {
     }
 
     protected final void initialize(final MiniCartLineItemBean bean, final LineItem lineItem) {
-        final MoneyContext moneyContext = MoneyContext.of(lineItem.getPrice().getValue().getCurrency(), userContext.locale());
+        fillTotalPrice(bean, lineItem);
+        fillLineItemId(bean, lineItem);
+        fillQuantity(bean, lineItem);
+        fillVariant(bean, lineItem);
+    }
+
+    protected void fillLineItemId(final MiniCartLineItemBean bean, final LineItem lineItem) {
         bean.setLineItemId(lineItem.getId());
+    }
+
+    protected void fillQuantity(final MiniCartLineItemBean bean, final LineItem lineItem) {
         bean.setQuantity(lineItem.getQuantity());
-        bean.setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
+    }
+
+    protected void fillVariant(final MiniCartLineItemBean bean, final LineItem lineItem) {
         bean.setVariant(productVariantBeanFactory.create(lineItem));
+    }
+
+    protected void fillTotalPrice(final MiniCartLineItemBean bean, final LineItem lineItem) {
+        final MoneyContext moneyContext = MoneyContext.of(lineItem.getPrice().getValue().getCurrency(), userContext.locale());
+        bean.setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
     }
 }

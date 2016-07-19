@@ -26,24 +26,29 @@ public class ProductVariantBeanFactory extends Base {
     protected ProductReverseRouter productReverseRouter;
 
     public ProductVariantBean create(final ProductProjection product, final ProductVariant variant) {
-        return fillBean(new ProductVariantBean(), product, variant);
-    }
-
-    protected <T extends ProductVariantBean> T fillBean(final T bean, final ProductProjection product, final ProductVariant variant) {
-        fillVariantInfo(bean, variant);
-        fillPrices(variant, bean);
-        fillName(product, bean);
-        fillUrl(product, variant, bean);
+        final ProductVariantBean bean = new ProductVariantBean();
+        initialize(bean, product, variant);
         return bean;
     }
 
     public ProductVariantBean create(final LineItem lineItem) {
         final ProductVariantBean bean = new ProductVariantBean();
+        initialize(bean, lineItem);
+        return bean;
+    }
+
+    protected final void initialize(final ProductVariantBean bean, final LineItem lineItem) {
         fillVariantInfo(bean, lineItem.getVariant());
         fillPriceInfo(bean, lineItem.getPrice());
         fillName(lineItem, bean);
         fillUrl(lineItem, bean);
-        return bean;
+    }
+
+    protected final void initialize(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
+        fillVariantInfo(bean, variant);
+        fillPrices(variant, bean);
+        fillName(product, bean);
+        fillUrl(product, variant, bean);
     }
 
     protected void fillUrl(final ProductProjection product, final ProductVariant variant, final ProductVariantBean bean) {
