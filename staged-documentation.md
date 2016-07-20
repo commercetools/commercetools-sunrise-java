@@ -179,7 +179,7 @@ play.modules.enabled += "absolute.path.to.your.ComponentsModule"
 
 For `conf/templates/components/summercampaign/banner.hbs` we can use
 
-```
+```handlebars
 <div class="row text-center">
     <a href="{{componentData.href}}">
         <p class="home-suggestions-title">Summer is here - buy sunglasses</p>
