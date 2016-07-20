@@ -205,3 +205,15 @@ To log the page data which is given to the template engine, add this to `logback
 An example output can be found [here](https://gist.github.com/schleichardt/5e8995bbf8a18f155ae01ceabf9d4765).
 
 ## Logging the requests to commercetools platform per web page
+
+To log the requests to the commercetools platform which are used to render one shop page, add this to `logback.xml`:
+
+```xml
+<logger name="sphere.metrics.simple" level="trace" />
+```
+
+This is how it looks like:
+
+```TRACE sphere.metrics.simple - commercetools requests in GET /en/women-shoes-sneakers:
+     POST /product-projections/search 1484ms 1387102bytes
+```
