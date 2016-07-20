@@ -202,4 +202,6 @@ To log the page data which is given to the template engine, add this to `logback
 <logger name="com.commercetools.sunrise.common.pages.SunrisePageDataJson" level="DEBUG" />
 ```
 
+An example output can be found [here](https://gist.github.com/schleichardt/5e8995bbf8a18f155ae01ceabf9d4765).
+
 ## Logging the requests to commercetools platform per web page
