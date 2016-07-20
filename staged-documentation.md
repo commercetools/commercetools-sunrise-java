@@ -195,7 +195,7 @@ And then it looks like
 
 ## Handlebars adding helpers
 
-*We suggest to not add handlebars helpers to use for calculations or logic, this is not what is handlebars designed and selected for.*
+*We suggest to not add handlebars helpers to use for calculations or logic, this is not what is handlebars designed for and selected for.*
 
 Suppose you want to add a helper `hello` which can be called like this:
 
@@ -203,7 +203,7 @@ Suppose you want to add a helper `hello` which can be called like this:
 {{hello "user"}}
 ```
 
-And is supposed to rend this:
+And is supposed to render this:
 
 ```html
 hello, user
@@ -235,7 +235,7 @@ public class ShopHandlebarsFactory extends HandlebarsFactory {
 }
 ```
 
-and then add the factory to a module:
+and then bind the factory in a module:
 
 ```java
 public class FactoryModule extends AbstractModule {
