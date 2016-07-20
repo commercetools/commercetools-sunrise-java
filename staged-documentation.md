@@ -194,6 +194,68 @@ And then it looks like
 
 
 ## Handlebars adding helpers
+
+*We suggest to not add handlebars helpers to use for calculations or logic, this is not what is handlebars designed and selected for.*
+
+Suppose you want to add a helper `hello` which can be called like this:
+
+```handlebars
+{{hello "user"}}
+```
+
+And is supposed to rend this:
+
+```html
+hello, user
+```
+
+You can write a helper like this:
+
+```java
+public final class ShopHandlebarsHelpers {
+    private ShopHandlebarsHelpers() {
+    }
+
+    public static String hello(final Object name) {
+        return "hello, " + Optional.ofNullable(name).orElse("world");
+    }
+}
+```
+
+To register it to Sunrise you need to override the `HandlebarsFactory`:
+
+```java
+public class ShopHandlebarsFactory extends HandlebarsFactory {
+    @Override
+    public Handlebars create() {
+        final Handlebars handlebars = super.create();
+        handlebars.registerHelpers(ShopHandlebarsHelpers.class);
+        return handlebars;
+    }
+}
+```
+
+and then add the factory to a module:
+
+```java
+public class FactoryModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(HandlebarsFactory.class).to(ShopHandlebarsFactory.class);
+
+        //add more bindings here for factories
+    }
+}
+```
+
+To make Play know the module, add it to `application.conf`:
+
+```
+play.modules.enabled += "absolute.path.to.your.FactoryModule"
+```
+
+See also [creating Handlebars.java helpers](http://jknack.github.io/handlebars.java/helpers.html) and [built-in helpers in Handlebars.java](https://github.com/jknack/handlebars.java#built-in-helpers).
+
 ## Logging the page data as JSON
 
 To log the page data which is given to the template engine, add this to `logback.xml`:
