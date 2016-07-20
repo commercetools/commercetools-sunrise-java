@@ -196,7 +196,9 @@ And then it looks like
 ## Handlebars adding helpers
 ## Logging the page data as JSON
 
-```
+To log the page data which is given to the template engine, add this to `logback.xml`:
+
+```xml
 <logger name="com.commercetools.sunrise.common.pages.SunrisePageDataJson" level="DEBUG" />
 ```
 
