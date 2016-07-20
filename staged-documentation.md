@@ -214,6 +214,7 @@ To log the requests to the commercetools platform which are used to render one s
 
 This is how it looks like:
 
-```TRACE sphere.metrics.simple - commercetools requests in GET /en/women-shoes-sneakers:
+```
+TRACE sphere.metrics.simple - commercetools requests in GET /en/women-shoes-sneakers:
      POST /product-projections/search 1484ms 1387102bytes
 ```
