@@ -1,77 +1,4 @@
-## Overriding bean factories
-
-When a bean does not contain all the data required for the template, you can override its factory to produce a subclass of the bean.
-
-In the following example we will see how to add a field `lastUpdated` to the `ProductDetailPageContent`. Notice this procedure is not limited to `PageContent` class beans, but it can be used with any other bean class.
-
-Let's first override the bean to add the desired field, including getters and setters:
-
-```java
-public class MyProductDetailPageContent extends ProductDetailPageContent {
-    private String lastUpdated;
-
-    public String getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(final String lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-}
-```
-
-Then we have to override the `ProductDetailPageContentFactory` so that it creates and initializes our bean instead:
-
-```java
-public class MyProductDetailPageContentFactory extends ProductDetailPageContentFactory {
-
-    //here you can use dependency injection to get instances
-    @Inject
-    private UserContext userContext;
-
-    //do not call here super.create because you would get a bean of the original class and not the subclass
-    @Override
-    public ProductDetailPageContent create(final ProductProjection product, final ProductVariant variant) {
-        final MyProductDetailPageContent bean = new MyProductDetailPageContent();
-        
-        //this initializes our bean as the parent factory did 
-        initialize(bean, product, variant);
-
-        //this initializes our bean with the new data
-        final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(userContext.locale());
-        bean.setLastUpdated(product.getLastModifiedAt().format(formatter));
-
-        return bean;
-    }
-}
-```
-
-Now that we have finished changing the bean and its factory class, we only need to register the new factory so that it is used everywhere instead of the previous one. In order to achieve that, you need to override the binding for the old factory in a [Guice Module](https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Module.html), as follows:
-
-```java
-import com.commercetools.sunrise.productcatalog.productdetail.MyProductDetailPageContentFactory;
-import com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageContentFactory;
-import com.google.inject.AbstractModule;
-
-public class FactoryModule extends AbstractModule {
-    @Override
-    protected void configure() {
-        bind(ProductDetailPageContentFactory.class)//the default factory class for the creation
-                .to(MyProductDetailPageContentFactory.class);//the class you want to use instead
-
-        //add more bindings for factories here
-    }
-}
-
-```
-
-As always, make sure you have the Module enabled in `application.conf`:
-
-```
-play.modules.enabled += "absolute.path.to.your.FactoryModule"
-```
-
-
+# Handlebars
 
 ## Handlebars View Components
 
@@ -189,7 +116,6 @@ If everything went right, all pages except the checkout pages should have a bann
 
 ![result](documentation-images/summercampaign-sungrasses-home.png)
 
-
 ## Adding Helpers to Handlebars
 
 > We strongly suggest not to add Handlebars helpers to enable calculations or any kind of business logic in the templates. Handlebars helpers are only meant to simplify presentation logic (in contrast to a pure logic-less template engine such as [Mustache](https://mustache.github.io/)). Using helpers for other purposes would defeat the logic-less approach we try to promote.
@@ -257,30 +183,3 @@ play.modules.enabled += "absolute.path.to.your.FactoryModule"
 
 See also [how to create helpers](http://jknack.github.io/handlebars.java/helpers.html) and check the existing [built-in helpers](https://github.com/jknack/handlebars.java#built-in-helpers) in Handlebars.java.
 
-## Logging
-
-### Logging the PageData as JSON
-
-To log the `PageData` given to the template engine, add this to your `logback.xml`:
-
-```xml
-<logger name="com.commercetools.sunrise.common.pages.SunrisePageDataJson" level="DEBUG" />
-```
-
-Check this [example output](https://gist.github.com/schleichardt/5e8995bbf8a18f155ae01ceabf9d4765).
-
-## Logging the requests to commercetools platform per web page
-
-To log the requests to the commercetools platform used to render a single shop page, add this to your `logback.xml`:
-
-```xml
-<logger name="sphere.metrics.simple" level="trace" />
-```
-
-It will output something similar to:
-
-```
-TRACE sphere.metrics.simple - commercetools requests in GET /en/women-shoes-sneakers: 
-  POST /product-projections/search 86ms 1387102bytes
-  POST /carts 54ms 507bytes
-```
