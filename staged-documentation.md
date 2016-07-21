@@ -193,7 +193,7 @@ And then it looks like
 
 ## Handlebars adding helpers
 
-*We suggest to not add handlebars helpers to use for calculations or logic, this is not what is handlebars designed for and selected for.*
+We strongly suggest not to add Handlebars helpers to enable calculations or any kind of business logic in the templates. Handlebars helpers are only meant to simplify presentation logic (in contrast of a pure logic-less template such as [Mustache](https://mustache.github.io/)). Using helpers for other purposes would defeat the logic-less approach that we try to promote.
 
 Suppose you want to add a helper `hello` which can be called like this:
 
