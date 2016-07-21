@@ -2,9 +2,9 @@
 
 When a bean does not contain all the data required for the template, you can override its factory to produce a subclass of the bean.
 
-In this example shows how to add a field `lastUpdated` to the `ProductDetailPageContent`. This procedure is not limited to page class beans.
+In the following example we will see how to add a field `lastUpdated` to the `ProductDetailPageContent`. Notice this procedure is not limited to `PageContent` class beans, but it can be used with any other bean class.
 
-First override the bean to add the field including getters and setters:
+Let's first override the bean to add the desired field, including getters and setters:
 
 ```java
 public class MyProductDetailPageContent extends ProductDetailPageContent {
@@ -20,10 +20,11 @@ public class MyProductDetailPageContent extends ProductDetailPageContent {
 }
 ```
 
-Then override the factory for the original bean:
+Then we have to override the `ProductDetailPageContentFactory` so that it creates and initializes our bean instead:
 
 ```java
 public class MyProductDetailPageContentFactory extends ProductDetailPageContentFactory {
+
     //here you can use dependency injection to get instances
     @Inject
     private UserContext userContext;
@@ -32,26 +33,20 @@ public class MyProductDetailPageContentFactory extends ProductDetailPageContentF
     @Override
     public ProductDetailPageContent create(final ProductProjection product, final ProductVariant variant) {
         final MyProductDetailPageContent bean = new MyProductDetailPageContent();
+        
+        //this initializes our bean as the parent factory did 
         initialize(bean, product, variant);
-        return bean;
-    }
 
-    //the new initialize method contains as first parameter the bean of your subclass and then the parameters of the create method
-    protected final void initialize(final MyProductDetailPageContent bean, final ProductProjection product, final ProductVariant variant) {
-        //use the initialize from the super class, don't forget the super, otherwise you get infinite recursion
-        //also the super.initialize is final, don't try to override it
-        super.initialize(bean, product, variant);
-
-        //add here the new data
+        //this initializes our bean with the new data
         final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(userContext.locale());
         bean.setLastUpdated(product.getLastModifiedAt().format(formatter));
+
+        return bean;
     }
 }
 ```
 
-To register the new factory you need a Guice module to override the binding for the old factory.
-You can reuse this module for multiple factories.
-So it could look like:
+Now that we have finished changing the bean and its factory class, we only need to register the new factory so that it is used everywhere instead of the previous one. In order to achieve that, you need to override the binding for the old factory in a [Guice Module](https://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Module.html), as follows:
 
 ```java
 import com.commercetools.sunrise.productcatalog.productdetail.MyProductDetailPageContentFactory;
@@ -70,7 +65,7 @@ public class FactoryModule extends AbstractModule {
 
 ```
 
-To make Play know the module, add it to `application.conf`:
+Remember to add the Module to `application.conf` to enable it in Play:
 
 ```
 play.modules.enabled += "absolute.path.to.your.FactoryModule"
