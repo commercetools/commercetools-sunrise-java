@@ -76,8 +76,6 @@ To make Play know the module, add it to `application.conf`:
 play.modules.enabled += "absolute.path.to.your.FactoryModule"
 ```
 
-The final home page then looks like this:
-
 
 
 ## Handlebars View Components
