@@ -65,7 +65,7 @@ public class FactoryModule extends AbstractModule {
 
 ```
 
-Remember to add the Module to `application.conf` to enable it in Play:
+Always make sure you have the Module enabled in `application.conf`:
 
 ```
 play.modules.enabled += "absolute.path.to.your.FactoryModule"
@@ -153,7 +153,9 @@ public final class SummerCampaignControllerComponent extends Base implements Con
 }
 ```
 
-We still need to wire the `ControllerComponent` to the desired controllers. Let's say that we want to display it on all pages except for the checkout, for that we need to build a `MultiControllerComponentResolver` with our Controller Component included, which is then injected via Dependency Injection. Check the following Guice Module as an example:
+We still need to wire the `ControllerComponent` to the desired controllers. Let's say that we want to display it on all pages except for the checkout, for that we need to build a `MultiControllerComponentResolver` with our Controller Component included, which is then injected via Dependency Injection.
+ 
+Check the following Guice Module as an example:
 
 ```java
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
@@ -177,7 +179,7 @@ public class ComponentsModule extends AbstractModule {
 }
 ```
 
-Remember to add the Module to `application.conf` to enable it in Play:
+Always make sure you have the Module enabled in `application.conf`:
 
 ```
 play.modules.enabled += "absolute.path.to.your.ComponentsModule"
@@ -188,26 +190,27 @@ If everything went right, all pages except the checkout pages should have a bann
 ![result](documentation-images/summercampaign-sungrasses-home.png)
 
 
-## Handlebars adding helpers
+## Adding Helpers to Handlebars
 
-We strongly suggest not to add Handlebars helpers to enable calculations or any kind of business logic in the templates. Handlebars helpers are only meant to simplify presentation logic (in contrast of a pure logic-less template such as [Mustache](https://mustache.github.io/)). Using helpers for other purposes would defeat the logic-less approach that we try to promote.
+> We strongly suggest not to add Handlebars helpers to enable calculations or any kind of business logic in the templates. Handlebars helpers are only meant to simplify presentation logic (in contrast to a pure logic-less template engine such as [Mustache](https://mustache.github.io/)). Using helpers for other purposes would defeat the logic-less approach we try to promote.
 
-Suppose you want to add a helper `hello` which can be called like this:
+Let's suppose we want to add a helper `hello` to display a salutation with the user's name. From a template, we can call this helper as follows:
 
 ```handlebars
 {{hello "user"}}
 ```
 
-And is supposed to render this:
+Which should render:
 
 ```html
 hello, user
 ```
 
-You can write a helper like this:
+In the Sunrise application we can implement the helper like this:
 
 ```java
 public final class ShopHandlebarsHelpers {
+
     private ShopHandlebarsHelpers() {
     }
 
@@ -217,23 +220,26 @@ public final class ShopHandlebarsHelpers {
 }
 ```
 
-To register it to Sunrise you need to override the `HandlebarsFactory`:
+In order to register it to the `HandlebarsTemplateEngine`, we need to override the `HandlebarsFactory` to additionally register our new helper:
 
 ```java
 public class ShopHandlebarsFactory extends HandlebarsFactory {
+
     @Override
     public Handlebars create() {
         final Handlebars handlebars = super.create();
         handlebars.registerHelpers(ShopHandlebarsHelpers.class);
+        //register more helpers here
         return handlebars;
     }
 }
 ```
 
-and then bind the factory in a module:
+And finally we just bind the factory to replace the previous one:
 
 ```java
 public class FactoryModule extends AbstractModule {
+
     @Override
     protected void configure() {
         bind(HandlebarsFactory.class).to(ShopHandlebarsFactory.class);
@@ -243,13 +249,13 @@ public class FactoryModule extends AbstractModule {
 }
 ```
 
-To make Play know the module, add it to `application.conf`:
+Always make sure you have the Module enabled in `application.conf`:
 
 ```
 play.modules.enabled += "absolute.path.to.your.FactoryModule"
 ```
 
-See also [creating Handlebars.java helpers](http://jknack.github.io/handlebars.java/helpers.html) and [built-in helpers in Handlebars.java](https://github.com/jknack/handlebars.java#built-in-helpers).
+See also [how to create helpers](http://jknack.github.io/handlebars.java/helpers.html) and check the existing [built-in helpers](https://github.com/jknack/handlebars.java#built-in-helpers) in Handlebars.java.
 
 ## Logging the page data as JSON
 
