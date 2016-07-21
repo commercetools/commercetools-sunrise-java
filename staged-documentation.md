@@ -132,7 +132,7 @@ public final class SummerCampaignControllerComponent extends Base implements Con
 
     private ComponentBean createComponentBean() {
         final ComponentBean component = new ComponentBean();
-        //the template is in conf/templates/components/summercampaign/banner.hbs or of course your theme
+        //the template is in conf/templates/components/summercampaign/banner.hbs or in your theme project
         component.setTemplateName("components/summercampaign/banner");//without .hbs!!!
         Map<String, Object> data = new HashMap<>();
         data.put("src", configuration.getString("summercampaign.img.src"));
