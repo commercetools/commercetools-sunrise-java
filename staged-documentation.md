@@ -65,7 +65,7 @@ public class FactoryModule extends AbstractModule {
 
 ```
 
-Always make sure you have the Module enabled in `application.conf`:
+As always, make sure you have the Module enabled in `application.conf`:
 
 ```
 play.modules.enabled += "absolute.path.to.your.FactoryModule"
@@ -179,7 +179,7 @@ public class ComponentsModule extends AbstractModule {
 }
 ```
 
-Always make sure you have the Module enabled in `application.conf`:
+As always, make sure you have the Module enabled in `application.conf`:
 
 ```
 play.modules.enabled += "absolute.path.to.your.ComponentsModule"
@@ -249,7 +249,7 @@ public class FactoryModule extends AbstractModule {
 }
 ```
 
-Always make sure you have the Module enabled in `application.conf`:
+As always, make sure you have the Module enabled in `application.conf`:
 
 ```
 play.modules.enabled += "absolute.path.to.your.FactoryModule"
@@ -257,27 +257,30 @@ play.modules.enabled += "absolute.path.to.your.FactoryModule"
 
 See also [how to create helpers](http://jknack.github.io/handlebars.java/helpers.html) and check the existing [built-in helpers](https://github.com/jknack/handlebars.java#built-in-helpers) in Handlebars.java.
 
-## Logging the page data as JSON
+## Logging
 
-To log the page data which is given to the template engine, add this to `logback.xml`:
+### Logging the PageData as JSON
+
+To log the `PageData` given to the template engine, add this to your `logback.xml`:
 
 ```xml
 <logger name="com.commercetools.sunrise.common.pages.SunrisePageDataJson" level="DEBUG" />
 ```
 
-An example output can be found [here](https://gist.github.com/schleichardt/5e8995bbf8a18f155ae01ceabf9d4765).
+Check this [example output](https://gist.github.com/schleichardt/5e8995bbf8a18f155ae01ceabf9d4765).
 
 ## Logging the requests to commercetools platform per web page
 
-To log the requests to the commercetools platform which are used to render one shop page, add this to `logback.xml`:
+To log the requests to the commercetools platform used to render a single shop page, add this to your `logback.xml`:
 
 ```xml
 <logger name="sphere.metrics.simple" level="trace" />
 ```
 
-This is how it looks like:
+It will output something similar to:
 
 ```
-TRACE sphere.metrics.simple - commercetools requests in GET /en/women-shoes-sneakers:
-     POST /product-projections/search 1484ms 1387102bytes
+TRACE sphere.metrics.simple - commercetools requests in GET /en/women-shoes-sneakers: 
+  POST /product-projections/search 86ms 1387102bytes
+  POST /carts 54ms 507bytes
 ```
