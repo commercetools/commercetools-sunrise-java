@@ -75,9 +75,11 @@ play.modules.enabled += "absolute.path.to.your.FactoryModule"
 
 ## Handlebars View Components
 
-The demo theme contains a [call to "components-include"](https://github.com/commercetools/commercetools-sunrise-theme/blob/master/input/templates/partials/common/footer.hbs#L1),
-which contains a [list of components](https://github.com/commercetools/commercetools-sunrise-theme/blob/master/input/templates/partials/components/components-include.hbs).
-A data item for this could look like:
+View Components enables you to include additional templates to the theme without actually modifying the theme, just by providing the desired templates. Currently the usage in the default Theme is limited to inserting elements before the footer, but you can use it anywhere.  
+
+Just include in your template the partial [`components-include.hbs`](https://github.com/commercetools/commercetools-sunrise-theme/blob/master/input/templates/partials/components/components-include.hbs) (as it is done in [`footer.hbs`](https://github.com/commercetools/commercetools-sunrise-theme/blob/master/input/templates/partials/common/footer.hbs#L1)). This template calls the given list of components by its template name. The required template data structure should have the `templateName` and `componentData`, which contains arbitrary data.
+ 
+As an example, let's create a component that shows a banner to a summer campaign with the following data:
 
 ```json
 [
@@ -93,9 +95,19 @@ A data item for this could look like:
 ]
 ```
 
-In the following example we create a component that shows a banner to summer campaign.
+We will use the following template, located in `conf/templates/components/summercampaign/banner.hbs`:
 
-First we create a `ControllerComponent` that adds the handlebars component to the page data:
+```handlebars
+<div class="row text-center">
+    <a href="{{componentData.href}}">
+        <p class="home-suggestions-title">Summer is here - buy sunglasses</p>
+        <img src="{{componentData.src}}" width="{{componentData.width}}" height="{{componentData.height}}" />
+    </a>
+</div>
+<hr class="home-suggestions-hr" />
+```
+
+First we need to create a `ControllerComponent` that adds the View Component to the `PageData`:
 
 ```java
 import com.commercetools.sunrise.common.contexts.UserContext;
@@ -125,21 +137,23 @@ public final class SummerCampaignControllerComponent extends Base implements Con
 
     private ComponentBean createComponentBean() {
         final ComponentBean component = new ComponentBean();
-        //the template is in conf/templates/components/summercampaign/banner.hbs or in your theme project
-        component.setTemplateName("components/summercampaign/banner");//without .hbs!!!
+        component.setTemplateName("components/summercampaign/banner"); //template path without .hbs!!!
+        component.setComponentData(createComponentData());
+        return component;
+    }
+
+    private Map<String, Object> createComponentData() {
         Map<String, Object> data = new HashMap<>();
         data.put("src", configuration.getString("summercampaign.img.src"));
         data.put("width", configuration.getString("summercampaign.img.width"));
         data.put("height", configuration.getString("summercampaign.img.height"));
         data.put("href", demo.productcatalog.routes.SummerCampaignController.show(userContext.languageTag()).url());
-        component.setComponentData(data);
-        return component;
+        return data;
     }
 }
 ```
 
-You still need to wire the `ControllerComponent` to a controller or multiple controllers.
-Since it make sense to put it to all controllers except for checkout, we need a Guice Module:
+We still need to wire the `ControllerComponent` to the desired controllers. Let's say that we want to display it on all pages except for the checkout, for that we need to build a `MultiControllerComponentResolver` with our Controller Component included, which is then injected via Dependency Injection. Check the following Guice Module as an example:
 
 ```java
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
@@ -157,32 +171,20 @@ public class ComponentsModule extends AbstractModule {
     public MultiControllerComponentResolver multiControllerComponentResolver() {
         return new MultiControllerComponentResolverBuilder()
                 .add(SummerCampaignControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
+                //add more controller components here
                 .build();
     }
 }
 ```
 
-The `ComponentsModule` can be reused for multiple components, just add a `add` line for building the `MultiControllerComponentResolver`.
-
-Don't forget to register the module in `application.conf` with
+Remember to add the Module to `application.conf` to enable it in Play:
 
 ```
 play.modules.enabled += "absolute.path.to.your.ComponentsModule"
 ```
 
-For `conf/templates/components/summercampaign/banner.hbs` we can use
+If everything went right, all pages except the checkout pages should have a banner like this:
 
-```handlebars
-<div class="row text-center">
-    <a href="{{componentData.href}}">
-        <p class="home-suggestions-title">Summer is here - buy sunglasses</p>
-        <img src="{{componentData.src}}" width="{{componentData.width}}" height="{{componentData.height}}" />
-    </a>
-</div>
-<hr class="home-suggestions-hr" />
-```
-
-And then it looks like
 ![result](documentation-images/summercampaign-sungrasses-home.png)
 
 
