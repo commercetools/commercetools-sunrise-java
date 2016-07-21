@@ -7,7 +7,7 @@ Sunrise Java :sunrise:
 The next generation shop template.
 
 * Demo: https://sunrise.commercetools.com
-* [Documentation](https://github.com/commercetools/commercetools-sunrise-java/blob/master/ONBOARDING.md)
+* [Documentation](https://github.com/commercetools/commercetools-sunrise-java/blob/master/manual/)
 * [Javadoc](https://commercetools.github.io/commercetools-sunrise-java/javadoc/index.html)
 
 ## Preconditions
