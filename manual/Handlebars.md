@@ -114,7 +114,7 @@ play.modules.enabled += "absolute.path.to.your.ComponentsModule"
 
 If everything went right, all pages except the checkout pages should have a banner like this:
 
-![result](documentation-images/summercampaign-sungrasses-home.png)
+![result](images/summercampaign-sungrasses-home.png)
 
 ## Adding Helpers to Handlebars
 
