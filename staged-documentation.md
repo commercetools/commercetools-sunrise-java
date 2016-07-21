@@ -36,7 +36,7 @@ public class MyProductDetailPageContentFactory extends ProductDetailPageContentF
         return bean;
     }
 
-    //the new initialize method contains as first parameter the bean of you subclass and then the parameters of the create method
+    //the new initialize method contains as first parameter the bean of your subclass and then the parameters of the create method
     protected final void initialize(final MyProductDetailPageContent bean, final ProductProjection product, final ProductVariant variant) {
         //use the initialize from the super class, don't forget the super, otherwise you get infinite recursion
         //also the super.initialize is final, don't try to override it
