@@ -14,7 +14,7 @@ If you have push access to the repository you can fix them directly otherwise ju
 1. fork the repository
 1. produce production code and unit tests
 1. make a pull request
-1. metion and/or assign @lauraluiz and @schleichardt, who will review and optionally merge
+1. mention and/or assign @lauraluiz and @schleichardt, who will review and optionally merge
 
 ## Requirements for a pull request
 
