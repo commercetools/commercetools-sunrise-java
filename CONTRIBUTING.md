@@ -14,7 +14,7 @@ If you have push access to the repository you can fix them directly otherwise ju
 1. fork the repository
 1. produce production code and unit tests
 1. make a pull request
-1. @lauraluiz and @schleichardt will review and optionally merge
+1. mention and/or assign @lauraluiz and @schleichardt, who will review and optionally merge
 
 ## Requirements for a pull request
 
@@ -29,5 +29,5 @@ We want to have a clear and tested code base.
 * your code is from you and not copied from third party sources
 * use [good commit messages](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
 * unit tests have to be passed in Travis CI
-    * the integration tests will fail since we use encrypted credentials which are not available in forks for security reasons
+    * integration tests will fail since we use encrypted credentials which are not available in forks for security reasons
 * the SDK should be backwards compatible when released as 1.0.0
