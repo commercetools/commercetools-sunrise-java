@@ -62,13 +62,14 @@ public final class I18nIdentifier extends Base {
      */
     @Deprecated
     public static I18nIdentifier of(final String bundleWithKey) {
+        final I18nIdentifierFactory i18nIdentifierFactory = new I18nIdentifierFactory();
         final String[] parts = split(bundleWithKey, ":", 2);
         final String key = getArrayElement(parts, 1, bundleWithKey);
         final String bundle;
         if (bundleWithKey.equals(key)) {
-            bundle = I18nIdentifierFactory.DEFAULT_BUNDLE;
+            bundle = i18nIdentifierFactory.getDefaultBundle();
         } else {
-            bundle = getArrayElement(parts, 0, I18nIdentifierFactory.DEFAULT_BUNDLE);
+            bundle = getArrayElement(parts, 0, i18nIdentifierFactory.getDefaultBundle());
         }
         return ofBundleAndKey(bundle, key);
     }

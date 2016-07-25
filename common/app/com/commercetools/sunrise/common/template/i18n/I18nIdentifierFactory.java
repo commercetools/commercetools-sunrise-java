@@ -7,7 +7,7 @@ import static org.apache.commons.lang3.StringUtils.split;
 
 public class I18nIdentifierFactory extends Base {
 
-    public static final String DEFAULT_BUNDLE = "main";
+    private static final String DEFAULT_BUNDLE = "main";
 
     public I18nIdentifier create(final String bundle, final String messageKey) {
         return I18nIdentifier.of(bundle, messageKey);
