@@ -1,0 +1,20 @@
+<!-- start catalog/home/banner-middle.hbs -->
+<div class="aspect-ratio aspect-ratio--8to3">
+  <picture>
+    <source srcset="{{cms "bannerMiddle.imageLarge"}}" media="(min-width: 1200px)">
+    <source srcset="{{cms "bannerMiddle.imageMedium"}}" media="(min-width: 768px)">
+    <img src="{{cms "bannerMiddle.imageSmall"}}" class="img-responsive">
+  </picture>
+</div>
+
+<div class="banner-text">
+  <h4 class="banner-title">
+    {{{cms "bannerMiddle.title"}}}
+  </h4>
+  <p class="banner-subtitle">{{{cms "bannerMiddle.subtitle"}}}</p>
+  <p class="hidden-xs hidden-sm">{{{cms "bannerMiddle.description"}}}</p>
+  <a class="btn banner-btn" href="{{cms "bannerMiddle.linkHref"}}">
+    {{cms "bannerMiddle.linkText"}}
+  </a>
+</div>
+<!-- end catalog/home/banner-middle.hbs -->

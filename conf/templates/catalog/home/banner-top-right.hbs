@@ -1,0 +1,17 @@
+<!-- start catalog/home/banner-top-right.hbs -->
+<div class="aspect-ratio aspect-ratio--4to3">
+  <picture>
+    <source srcset="{{cms "bannerTopRight.imageLarge"}}" media="(min-width: 1200px)">
+    <source srcset="{{cms "bannerTopRight.imageMedium"}}" media="(min-width: 768px)">
+    <img src="{{cms "bannerTopRight.imageSmall"}}" class="img-responsive">
+  </picture>
+</div>
+
+<div class="banner-text">
+  <h4 class="banner-title">{{{cms "bannerTopRight.title"}}}</h4>
+  <p class="banner-paragraph">{{{cms "bannerTopRight.subtitle"}}}</p>
+  <a href="{{cms "bannerTopRight.linkHref"}}" class="btn banner-btn">
+    {{cms "bannerTopRight.linkText"}}
+  </a>
+</div>
+<!-- end catalog/home/banner-top-right.hbs -->
