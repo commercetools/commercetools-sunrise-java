@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.commercetools.sunrise.common.models.TitleFormFieldBean;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
@@ -23,6 +24,8 @@ public class TitleFormFieldBeanFactory extends Base {
     private Configuration configuration;
     @Inject
     private I18nResolver i18nResolver;
+    @Inject
+    private I18nIdentifierFactory i18nIdentifierFactory;
     @Inject
     private UserContext userContext;
 
@@ -49,7 +52,8 @@ public class TitleFormFieldBeanFactory extends Base {
 
     protected FormSelectableOptionBean titleToSelectableData(final String titleKey, @Nullable final String selectedTitle) {
         final FormSelectableOptionBean bean = new FormSelectableOptionBean();
-        final String title = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(titleKey));
+        final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(titleKey);
+        final String title = i18nResolver.getOrKey(userContext.locales(), i18nIdentifier);
         bean.setLabel(title);
         bean.setValue(title);
         bean.setSelected(title.equals(selectedTitle));

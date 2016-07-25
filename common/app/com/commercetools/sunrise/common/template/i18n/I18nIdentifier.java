@@ -15,7 +15,6 @@ import static org.apache.commons.lang3.StringUtils.split;
  */
 public final class I18nIdentifier extends Base {
 
-    private static final String DEFAULT_BUNDLE = "main";
     private final String bundle;
     private final String messageKey;
 
@@ -24,32 +23,62 @@ public final class I18nIdentifier extends Base {
         this.messageKey = messageKey;
     }
 
+    public String bundle() {
+        return bundle;
+    }
+
+    public String messageKey() {
+        return messageKey;
+    }
+
+    /**
+     * @deprecated use {@link #bundle} instead
+     * @return bundle
+     */
+    @Deprecated
     public String getBundle() {
         return bundle;
     }
 
+    /**
+     * @deprecated use {@link #messageKey} instead
+     * @return message key
+     */
+    @Deprecated
     public String getMessageKey() {
         return messageKey;
+    }
+
+
+    public static I18nIdentifier of(final String bundle, final String key) {
+        return new I18nIdentifier(bundle, key);
     }
 
     /**
      * Creates a i18n Identifier, consisting of the message key and the bundle.
      * @param bundleWithKey of the form {@code bundle:key}
      * @return the i18n Identifier for the given input
+     * @deprecated use {@link I18nIdentifierFactory} instead
      */
+    @Deprecated
     public static I18nIdentifier of(final String bundleWithKey) {
+        final I18nIdentifierFactory i18nIdentifierFactory = new I18nIdentifierFactory();
         final String[] parts = split(bundleWithKey, ":", 2);
         final String key = getArrayElement(parts, 1, bundleWithKey);
         final String bundle;
         if (bundleWithKey.equals(key)) {
-            bundle = DEFAULT_BUNDLE;
+            bundle = i18nIdentifierFactory.getDefaultBundle();
         } else {
-            bundle = getArrayElement(parts, 0, DEFAULT_BUNDLE);
+            bundle = getArrayElement(parts, 0, i18nIdentifierFactory.getDefaultBundle());
         }
         return ofBundleAndKey(bundle, key);
     }
 
+    /**
+     * @deprecated use {@link #of} instead
+     */
+    @Deprecated
     public static I18nIdentifier ofBundleAndKey(final String bundle, final String key) {
-        return new I18nIdentifier(bundle, key);
+        return of(bundle, key);
     }
 }

@@ -46,7 +46,7 @@ public class DefaultTestModule extends AbstractModule {
         bind(PageMetaFactory.class).toInstance(PageMeta::new);
         bind(UserContext.class).toInstance(unsupportedUserContext());
         bind(I18nResolver.class).toInstance((l, i, h) -> Optional.empty());
-        bind(TemplateEngine.class).toInstance((t, p, l) -> "");
+        bind(TemplateEngine.class).toInstance((n, c) -> "");
         bind(CmsService.class).toInstance((l, c) -> completedFuture(Optional.empty()));
         bind(RequestHookContext.class).toInstance(unsupportedRequestHookContext());
     }

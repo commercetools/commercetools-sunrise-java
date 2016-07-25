@@ -3,6 +3,7 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.faceteds
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.PageDataHook;
@@ -37,6 +38,9 @@ public class FacetedSearchComponent implements ControllerComponent, PageDataHook
     private UserContext userContext;
     @Inject
     private I18nResolver i18nResolver;
+    @Inject
+    private I18nIdentifierFactory i18nIdentifierFactory;
+
 
     @Override
     public CompletionStage<?> onSingleCategoryLoaded(final Category category) {
@@ -72,7 +76,8 @@ public class FacetedSearchComponent implements ControllerComponent, PageDataHook
         final FacetSelectorBean bean = new FacetSelectorBean();
         final Facet<ProductProjection> facet = facetedSearchSelector.getFacet(searchResult);
         if (facet.getLabel() != null) {
-            final String label = i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(facet.getLabel()));
+            final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(facet.getLabel());
+            final String label = i18nResolver.getOrKey(userContext.locales(), i18nIdentifier);
             bean.setFacet(facet.withLabel(label));
         } else {
             bean.setFacet(facet);

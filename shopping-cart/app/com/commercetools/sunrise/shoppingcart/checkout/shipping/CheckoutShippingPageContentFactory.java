@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.forms.UserFeedback;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import io.sphere.sdk.carts.Cart;
@@ -23,7 +23,7 @@ public class CheckoutShippingPageContentFactory extends Base {
     @Inject
     private I18nResolver i18nResolver;
     @Inject
-    private UserFeedback userFeedback;
+    private I18nIdentifierFactory i18nIdentifierFactory;
     @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
 
@@ -44,7 +44,8 @@ public class CheckoutShippingPageContentFactory extends Base {
     }
 
     protected void fillTitle(final CheckoutShippingPageContent bean, final Cart cart) {
-        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:shippingPage.title")));
+        final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("checkout:shippingPage.title");
+        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), i18nIdentifier));
     }
 
     protected void fillForm(final CheckoutShippingPageContent bean, final Form<?> form, final List<ShippingMethod> shippingMethods) {

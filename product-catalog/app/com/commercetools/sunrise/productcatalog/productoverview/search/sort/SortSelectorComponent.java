@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
@@ -27,6 +28,9 @@ public class SortSelectorComponent implements ControllerComponent, PageDataHook,
     private UserContext userContext;
     @Inject
     private I18nResolver i18nResolver;
+    @Inject
+    private I18nIdentifierFactory i18nIdentifierFactory;
+
 
     @Override
     public ProductProjectionSearch filterQuery(final ProductProjectionSearch search) {
@@ -53,7 +57,8 @@ public class SortSelectorComponent implements ControllerComponent, PageDataHook,
 
     private FormSelectableOptionBean optionToSelectableData(final SortOption option, final SortSelector sortSelector) {
         final FormSelectableOptionBean bean = new FormSelectableOptionBean();
-        bean.setLabel(i18nResolver.getOrKey(userContext.locales(), I18nIdentifier.of(option.getLabel())));
+        final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(option.getLabel());
+        bean.setLabel(i18nResolver.getOrKey(userContext.locales(), i18nIdentifier));
         bean.setValue(option.getValue());
         bean.setSelected(sortSelector.getSelectedOptions().contains(option));
         return bean;

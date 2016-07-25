@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.common.template.cms.filebased;
 
-import com.commercetools.sunrise.common.template.cms.CmsIdentifier;
+import com.commercetools.sunrise.common.template.cms.CmsPage;
 import com.commercetools.sunrise.common.template.cms.CmsService;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -25,20 +25,12 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public final class FileBasedCmsService implements CmsService {
 
     @Inject
+    @Named("cms")
     private I18nResolver i18nResolver;
 
     @Override
-    public CompletionStage<Optional<String>> get(final List<Locale> locales, final CmsIdentifier cmsIdentifier) {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey(cmsIdentifier.getEntryType(), messageKey(cmsIdentifier));
-        return completedFuture(i18nResolver.get(locales, i18nIdentifier));
-    }
-
-    /**
-     * Generates the message key as {@code entryKey.field} (e.g. homeTopLeft.subtitle.text).
-     * @param cmsIdentifier identifier of the CMS content
-     * @return the message key mapped to the entry key and field
-     */
-    private String messageKey(final CmsIdentifier cmsIdentifier) {
-        return cmsIdentifier.getEntryKey() + "." + cmsIdentifier.getFieldName();
+    public CompletionStage<Optional<CmsPage>> page(final String pageKey, final List<Locale> locales) {
+        final CmsPage cmsPage = new FileBasedCmsPage(i18nResolver, pageKey, locales);
+        return completedFuture(Optional.of(cmsPage));
     }
 }

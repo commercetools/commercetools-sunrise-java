@@ -61,7 +61,7 @@ public interface I18nResolver {
      * @return the resolved message in the first found given language, or the message key if it could not be found
      */
     default String getOrKey(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs) {
-        return get(locales, i18nIdentifier, hashArgs).orElse(i18nIdentifier.getMessageKey());
+        return get(locales, i18nIdentifier, hashArgs).orElse(i18nIdentifier.messageKey());
     }
 
     /**
@@ -71,6 +71,6 @@ public interface I18nResolver {
      * @return the resolved message in the any of the given languages, or the message key if it could not be found
      */
     default String getOrKey(final List<Locale> locales, final I18nIdentifier i18nIdentifier) {
-        return get(locales, i18nIdentifier).orElse(i18nIdentifier.getMessageKey());
+        return get(locales, i18nIdentifier).orElse(i18nIdentifier.messageKey());
     }
 }

@@ -3,6 +3,7 @@ package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.models.Base;
@@ -21,6 +22,8 @@ public class OrderOverviewBeanFactory extends Base {
     private UserContext userContext;
     @Inject
     private I18nResolver i18nResolver;
+    @Inject
+    private I18nIdentifierFactory i18nIdentifierFactory;
     @Inject
     private MyOrdersReverseRouter myOrdersReverseRouter;
 
@@ -61,7 +64,7 @@ public class OrderOverviewBeanFactory extends Base {
         bean.setShipping(Optional.ofNullable(order.getShipmentState())
                 .map(state -> {
                     final String stateName = state.name();
-                    final I18nIdentifier i18nIdentifier = I18nIdentifier.of("main:order.shippingStatus." + enumToCamelCase(stateName));
+                    final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("main:order.shippingStatus." + enumToCamelCase(stateName));
                     return i18nResolver.get(userContext.locales(), i18nIdentifier).orElse(stateName);
                 }).orElse("-"));
     }
@@ -70,7 +73,7 @@ public class OrderOverviewBeanFactory extends Base {
         bean.setPaymentStatus(Optional.ofNullable(order.getPaymentState())
                 .map(state -> {
                     final String stateName = state.name();
-                    final I18nIdentifier i18nIdentifier = I18nIdentifier.of("main:order.paymentStatus." + enumToCamelCase(stateName));
+                    final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("main:order.paymentStatus." + enumToCamelCase(stateName));
                     return i18nResolver.get(userContext.locales(), i18nIdentifier).orElse(stateName);
                 }).orElse("-"));
     }

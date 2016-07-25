@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.common.template.cms.filebased;
 
-import com.commercetools.sunrise.common.template.cms.CmsIdentifier;
+import com.commercetools.sunrise.common.template.cms.CmsPage;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver;
-import com.google.inject.Binder;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Module;
+import com.google.inject.name.Names;
 import org.junit.Test;
 
 import java.util.List;
@@ -27,44 +27,44 @@ public class FileBasedCmsPageTest {
 
     @Test
     public void resolvesMessage() throws Exception {
-        final CmsIdentifier cmsIdentifier = CmsIdentifier.of("home:header.title");
-        testCms(DE, cmsIdentifier, content -> assertThat(content).contains("foo"));
+        testCms(DE, "home", "header.title", content -> assertThat(content).contains("foo"));
     }
 
     @Test
     public void resolvesWithRegion() throws Exception {
-        final CmsIdentifier cmsIdentifier = CmsIdentifier.of("home:header.title");
-        testCms(DE_AT, cmsIdentifier, content -> assertThat(content).contains("bar"));
+        testCms(DE_AT, "home", "header.title", content -> assertThat(content).contains("bar"));
     }
 
     @Test
-    public void emptyWhenContentTypeNotFound() throws Exception {
-        final CmsIdentifier cmsIdentifier = CmsIdentifier.of("unknown:header.title");
-        testCms(DE, cmsIdentifier, content -> assertThat(content).isEmpty());
+    public void emptyWhenPageKeyNotFound() throws Exception {
+        testCms(DE, "unknown", "header.title", content -> assertThat(content).isEmpty());
     }
 
     @Test
-    public void emptyWhenMessageKeyNotFound() throws Exception {
-        final CmsIdentifier cmsIdentifier = CmsIdentifier.of("home:wrong.message");
-        testCms(DE, cmsIdentifier, content -> assertThat(content).isEmpty());
+    public void emptyWhenFieldNameNotFound() throws Exception {
+        testCms(DE, "home", "wrong.message", content -> assertThat(content).isEmpty());
     }
 
     @Test
-    public void doesNotFailWithEmptyIdentifier() throws Exception {
-        final CmsIdentifier cmsIdentifier = CmsIdentifier.of("");
-        testCms(DE, cmsIdentifier, content -> assertThat(content).isEmpty());
+    public void doesNotFailWithEmptyPageKey() throws Exception {
+        testCms(DE, "", "header.title", content -> assertThat(content).isEmpty());
     }
 
-    private void testCms(final Locale locale, final CmsIdentifier cmsIdentifier, final Consumer<Optional<String>> test) throws Exception {
+    @Test
+    public void doesNotFailWithEmptyFieldName() throws Exception {
+        testCms(DE, "home", "", content -> assertThat(content).isEmpty());
+    }
+
+    private void testCms(final Locale locale, final String pageKey, final String fieldName, final Consumer<Optional<String>> test) throws Exception {
         final I18nResolver i18nResolver = YamlI18nResolver.of("cms", SUPPORTED_LOCALES, AVAILABLE_BUNDLES);
-        final Injector injector = Guice.createInjector(new Module() {
+        final Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
-            public void configure(final Binder binder) {
-                binder.bind(I18nResolver.class).toInstance(i18nResolver);
+            public void configure() {
+                bind(I18nResolver.class).annotatedWith(Names.named("cms")).toInstance(i18nResolver);
             }
         });
         final FileBasedCmsService cmsService = injector.getInstance(FileBasedCmsService.class);
-        final Optional<String> content = cmsService.get(singletonList(locale), cmsIdentifier).toCompletableFuture().join();
-        test.accept(content);
+        final Optional<CmsPage> page = cmsService.page(pageKey, singletonList(locale)).toCompletableFuture().join();
+        test.accept(page.flatMap(p -> p.field(fieldName)));
     }
 }
