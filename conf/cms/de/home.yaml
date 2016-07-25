@@ -1,4 +1,4 @@
-homeTopLeft:
+bannerTopLeft:
   title: Sommer Essentials
   subtitle: Die wichtigsten Stücke des Sommer Trends 2016
   linkText: Jetzt bestellen
@@ -7,7 +7,7 @@ homeTopLeft:
   imageMedium: /assets/img/cms/leather_medium-4to3.jpg
   imageLarge: /assets/img/cms/leather_large-4to3.jpg
 
-homeTopRight:
+bannerTopRight:
   title: Sommer Fashion
   subtitle: Beste Outfits für die Saison
   linkText: Jetzt bestellen
@@ -16,7 +16,7 @@ homeTopRight:
   imageMedium: /assets/img/cms/woman_medium-4to3.jpg
   imageLarge: /assets/img/cms/woman_large-4to3.jpg
 
-homeMiddle:
+bannerMiddle:
   title: <img class="hidden-xs" src="/assets/img/cms/sun-logo.png"/><br/><br/>Here comes the sun
   subtitle: FABULOUS EVERY DAY - SUMMER CHIC
   description: Die Modetrends für den Sommer 2016 spielen mit Prints, Army- und Safarilooks sowie Pastel Farben. Accessoires wie runde Sonnenbrillen, geschnürte Stiefel und Shopper oder Handtaschen sorgen für Abwechslung. SUNRISE stellt Ihnen die Fashion Trends für den Sommer 2016 vor. Lassen Sie sich inspirieren!<br/><br/>Kaum ist der Frühling vorbei, umfängt uns der warme Sommer. Erfahren Sie, was die wichtigsten Fashion - Trends der kommenden Sommersaison sind und welche traumhaften Stücke Sie besitzen sollen! London, New York, Mailand, Paris – SUNRISE präsentiert die aktuelle Sommermode 2016 aus den Modemetropolen . Die neuesten Kleider, elegante Tops, Hosen, Bademode, exklusive Schuhe und Ballerinas, bezaubernden Schmuck, Sonnenbrillen und Accessoires für den perfekten Sommer.
@@ -26,7 +26,7 @@ homeMiddle:
   imageMedium: /assets/img/cms/man_medium-8to3.jpg
   imageLarge: /assets/img/cms/man_large-8to3.jpg
 
-homeBottomLeft:
+bannerBottomLeft:
   title: Einzigartige Stücke für jede Saison
   subtitle: Lassen Sie sich inspirieren
   linkText: Jetzt kaufen
@@ -35,13 +35,13 @@ homeBottomLeft:
   imageMedium: /assets/img/cms/shoes_medium-4to3.jpg
   imageLarge: /assets/img/cms/shoes_large-4to3.jpg
 
-homeBottomRight1:
+bannerBottomRight1:
   title: <img src="/assets/img/cms/sun-logo.png"/><br/><br/>SOMMER MODE 2016
   imageSmall: /assets/img/cms/blue-bg_small-4to3.png
   imageMedium: /assets/img/cms/blue-bg_medium-4to3.png
   imageLarge: /assets/img/cms/blue-bg_large-4to3.png
 
-homeBottomRight2:
+bannerBottomRight2:
   title: Sonnenbrillen-Trends 2016
   subtitle: Unsere Fashion Must-Haves
   linkText: Jetzt kaufen
@@ -50,7 +50,7 @@ homeBottomRight2:
   imageMedium: /assets/img/cms/sunglass_medium-4to3.jpg
   imageLarge: /assets/img/cms/sunglass_large-4to3.jpg
 
-homeBottomRight3:
+bannerBottomRight3:
   title: Hauptsache überdimensional
   subtitle: Trendy Sommer 2016 - Auffällige Sonnenbrillen
   linkText: Jetzt bestellen
@@ -59,10 +59,10 @@ homeBottomRight3:
   imageMedium: /assets/img/cms/woman_medium-8to3.jpg
   imageLarge: /assets/img/cms/woman_large-8to3.jpg
 
-homeSuggestions:
+suggestions:
   title: Unsere Empfehlungen
   subtitle: Sommer Must-Haves 2016
 
-homeViewProducts:
+viewProducts:
   linkText: View all new products
   linkHref: new

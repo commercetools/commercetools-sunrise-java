@@ -1,10 +1,11 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.common.template.cms.CmsService;
+import com.commercetools.sunrise.common.template.engine.TemplateContext;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.engine.TemplateNotFoundException;
 import com.commercetools.sunrise.common.template.engine.TestablePageData;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
@@ -18,7 +19,6 @@ import java.util.function.Consumer;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -27,7 +27,6 @@ public class HandlebarsTemplateTest {
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
     private static final TemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
     private static final I18nResolver I18N_MESSAGES = ((locale, i18nIdentifier, hashArgs) -> Optional.empty());
-    private static final CmsService CMS_SERVICE = ((locales, cmsIdentifier) -> completedFuture(Optional.empty()));
     private static final List<Locale> LOCALES = emptyList();
     private static final PageData SOME_PAGE_DATA = new TestablePageData();
 
@@ -70,11 +69,11 @@ public class HandlebarsTemplateTest {
     }
 
     private static TemplateEngine defaultHandlebars() {
-        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(singletonList(DEFAULT_LOADER), I18N_MESSAGES, CMS_SERVICE));
+        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(singletonList(DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()));
     }
 
     private static TemplateEngine handlebarsWithOverride() {
-        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES, CMS_SERVICE));
+        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()));
     }
 
     private static void testTemplate(final String templateName, final TemplateEngine templateEngine, final Consumer<String> test) {
@@ -83,6 +82,7 @@ public class HandlebarsTemplateTest {
     }
 
     private static String renderTemplate(final String templateName, final TemplateEngine templateEngine) {
-        return templateEngine.render(templateName, SOME_PAGE_DATA, LOCALES);
+        final TemplateContext templateContext = new TemplateContext(SOME_PAGE_DATA, LOCALES, f -> Optional.empty());
+        return templateEngine.render(templateName, templateContext);
     }
 }

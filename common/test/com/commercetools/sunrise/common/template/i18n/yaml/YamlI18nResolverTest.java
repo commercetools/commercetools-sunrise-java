@@ -17,77 +17,77 @@ public class YamlI18nResolverTest {
 
     @Test
     public void resolvesSimpleKey() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("default", "baz");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("default", "baz");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(ENGLISH), i18nIdentifier);
         assertThat(message).contains("this");
     }
 
     @Test
     public void resolvesNestedKey() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("default", "foo.bar.qux");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("default", "foo.bar.qux");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(ENGLISH), i18nIdentifier);
         assertThat(message).contains("that");
     }
 
     @Test
     public void resolvesSimpleKeyInDifferentLanguage() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("default", "baz");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("default", "baz");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(GERMAN), i18nIdentifier);
         assertThat(message).contains("dies");
     }
 
     @Test
     public void resolvesNestedKeyInDifferentLanguage() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("default", "foo.bar.qux");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("default", "foo.bar.qux");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(GERMAN), i18nIdentifier);
         assertThat(message).contains("das");
     }
 
     @Test
     public void resolvesSimpleKeyInDifferentBundle() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("onlyenglish", "foobar");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("onlyenglish", "foobar");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(ENGLISH), i18nIdentifier);
         assertThat(message).contains("something");
     }
 
     @Test
     public void resolvesLongSinglePath() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("singlelong", "foo.bar.title");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("singlelong", "foo.bar.title");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(ENGLISH), i18nIdentifier);
         assertThat(message).contains("correct");
     }
 
     @Test
     public void emptyWhenKeyIsNotALeaf() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("default", "too.long");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("default", "too.long");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(ENGLISH), i18nIdentifier);
         assertThat(message).isEmpty();
     }
 
     @Test
     public void emptyWhenKeyNotFound() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("default", "unknown");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("default", "unknown");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(ENGLISH), i18nIdentifier);
         assertThat(message).isEmpty();
     }
 
     @Test
     public void emptyWhenKeyNotFoundOnNestedKey() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("default", "foo.bar.unknown");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("default", "foo.bar.unknown");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(ENGLISH), i18nIdentifier);
         assertThat(message).isEmpty();
     }
 
     @Test
     public void emptyWhenLanguageNotFound() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("onlyenglish", "foobar");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("onlyenglish", "foobar");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(GERMAN), i18nIdentifier);
         assertThat(message).isEmpty();
     }
 
     @Test
     public void emptyWhenYamlFileEmpty() throws Exception {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("empty", "foo.bar");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("empty", "foo.bar");
         final Optional<String> message = YAML_I18N_RESOLVER.get(singletonList(ENGLISH), i18nIdentifier);
         assertThat(message).isEmpty();
     }
@@ -119,12 +119,12 @@ public class YamlI18nResolverTest {
     }
 
     private static Optional<String> pluralizedFormOf(final Locale locale, final String key, final int count) {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("pluralized", key);
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("pluralized", key);
         return YAML_I18N_RESOLVER.get(singletonList(locale), i18nIdentifier, singletonMap("count", count));
     }
 
     private static Optional<String> resolveWithParameters(final Locale locale, final String key, final Map<String, Object> hash) {
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("parameters", key);
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("parameters", key);
         return YAML_I18N_RESOLVER.get(singletonList(locale), i18nIdentifier, hash);
     }
 

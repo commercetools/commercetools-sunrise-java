@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
 import com.commercetools.sunrise.common.SunriseInitializationException;
-import com.commercetools.sunrise.common.template.cms.CmsService;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
@@ -22,46 +22,24 @@ import static java.util.stream.Collectors.toList;
 
 public class HandlebarsFactory extends Base {
     private static final Logger logger = LoggerFactory.getLogger(HandlebarsFactory.class);
-    private static final String CONFIG_TEMPLATE_LOADERS = "handlebars.templateLoaders";
+    private static final String CONFIG_TEMPLATE_LOADERS = "templateLoaders";
     private static final String CLASSPATH_TYPE = "classpath";
     private static final String FILE_TYPE = "file";
     private static final String TYPE_ATTR = "type";
     private static final String PATH_ATTR = "path";
 
     @Inject
-    private Configuration configuration;
-    @Inject
     private I18nResolver i18NResolver;
     @Inject
-    private CmsService cmsService;
+    private I18nIdentifierFactory i18nIdentifierFactory;
 
-    private static List<TemplateLoader> initializeTemplateLoaders(final Configuration configuration, final String configKey) {
-        return configuration.getConfigList(configKey, emptyList())
-                .stream()
-                .map(HandlebarsFactory::initializeTemplateLoader)
-                .collect(toList());
-    }
-
-    private static TemplateLoader initializeTemplateLoader(final Configuration loaderConfig) {
-        final String type = loaderConfig.getString(TYPE_ATTR);
-        final String path = loaderConfig.getString(PATH_ATTR);
-        switch (type) {
-            case CLASSPATH_TYPE:
-                return new ClassPathTemplateLoader(path);
-            case FILE_TYPE:
-                return new FileTemplateLoader(path);
-            default:
-                throw new SunriseInitializationException("Not recognized template loader: " + type);
-        }
-    }
-
-    public Handlebars create() {
+    public Handlebars create(final Configuration configuration) {
         final List<TemplateLoader> templateLoaders = initializeTemplateLoaders(configuration, CONFIG_TEMPLATE_LOADERS);
-        return create(templateLoaders, i18NResolver, cmsService);
+        return create(templateLoaders, i18NResolver, i18nIdentifierFactory);
     }
 
     //for testing package scope
-    static Handlebars create(final List<TemplateLoader> templateLoaders, final I18nResolver i18NResolver, final CmsService cmsService) {
+    static Handlebars create(final List<TemplateLoader> templateLoaders, final I18nResolver i18NResolver, final I18nIdentifierFactory i18nIdentifierFactory) {
         if (templateLoaders.isEmpty()) {
             throw new SunriseInitializationException("No Handlebars template loaders found in configuration '" + CONFIG_TEMPLATE_LOADERS + "'");
         }
@@ -72,9 +50,29 @@ public class HandlebarsFactory extends Base {
                 .with(loaders)
                 .with(new HighConcurrencyTemplateCache())
                 .infiniteLoops(true);
-        handlebars.registerHelper("i18n", new HandlebarsI18nHelper(i18NResolver));
-        handlebars.registerHelper("cms", new HandlebarsCmsHelper(cmsService));
+        handlebars.registerHelper("i18n", new HandlebarsI18nHelper(i18NResolver, i18nIdentifierFactory));
+        handlebars.registerHelper("cms", new HandlebarsCmsHelper());
         handlebars.registerHelper("json", new HandlebarsJsonHelper<>());
         return handlebars;
+    }
+
+    protected static List<TemplateLoader> initializeTemplateLoaders(final Configuration configuration, final String configKey) {
+        return configuration.getConfigList(configKey, emptyList())
+                .stream()
+                .map(HandlebarsFactory::initializeTemplateLoader)
+                .collect(toList());
+    }
+
+    protected static TemplateLoader initializeTemplateLoader(final Configuration loaderConfig) {
+        final String type = loaderConfig.getString(TYPE_ATTR);
+        final String path = loaderConfig.getString(PATH_ATTR);
+        switch (type) {
+            case CLASSPATH_TYPE:
+                return new ClassPathTemplateLoader(path);
+            case FILE_TYPE:
+                return new FileTemplateLoader(path);
+            default:
+                throw new SunriseInitializationException("Not recognized template loader: " + type);
+        }
     }
 }

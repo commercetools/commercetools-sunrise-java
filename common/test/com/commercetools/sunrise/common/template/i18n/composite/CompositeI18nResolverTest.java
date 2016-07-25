@@ -37,7 +37,7 @@ public class CompositeI18nResolverTest {
 
     public void testCompositeResolver(final List<I18nResolver> i18nResolverList, final Consumer<Optional<String>> test) {
         final CompositeI18nResolver i18nResolver = CompositeI18nResolver.of(i18nResolverList);
-        final I18nIdentifier i18nIdentifier = I18nIdentifier.ofBundleAndKey("bundle", "key");
+        final I18nIdentifier i18nIdentifier = I18nIdentifier.of("bundle", "key");
         final Optional<String> message = i18nResolver.get(singletonList(ENGLISH), i18nIdentifier);
         test.accept(message);
     }

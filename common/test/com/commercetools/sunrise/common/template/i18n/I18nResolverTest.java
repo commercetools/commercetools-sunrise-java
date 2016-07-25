@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class I18nResolverTest {
 
-    private static final I18nIdentifier I18N_IDENTIFIER = I18nIdentifier.ofBundleAndKey("foo", "bar");
+    private static final I18nIdentifier I18N_IDENTIFIER = new I18nIdentifierFactory().create("foo", "bar");
 
     @Test
     public void resolvesTranslation() throws Exception {
@@ -47,18 +47,19 @@ public class I18nResolverTest {
     @Test
     public void keyWhenNoLanguageFound() throws Exception {
         final String message = i18nOnlyForEnglish().getOrKey(singletonList(Locale.GERMAN), I18N_IDENTIFIER);
-        assertThat(message).isEqualTo(I18N_IDENTIFIER.getMessageKey());
+        assertThat(message).isEqualTo(I18N_IDENTIFIER.messageKey());
     }
 
     @Test
     public void keyWhenNoLanguageDefined() throws Exception {
         final String message = i18nOnlyForEnglish().getOrKey(emptyList(), I18N_IDENTIFIER);
-        assertThat(message).isEqualTo(I18N_IDENTIFIER.getMessageKey());
+        assertThat(message).isEqualTo(I18N_IDENTIFIER.messageKey());
     }
 
     @Test
     public void keyWhenNoMessageKeyProvided() throws Exception {
-        final String message = i18nOnlyForEnglish().getOrKey(emptyList(), I18nIdentifier.of("some text"));
+        final I18nIdentifier i18nIdentifier = new I18nIdentifierFactory().create("some text");
+        final String message = i18nOnlyForEnglish().getOrKey(emptyList(), i18nIdentifier);
         assertThat(message).isEqualTo("some text");
     }
 

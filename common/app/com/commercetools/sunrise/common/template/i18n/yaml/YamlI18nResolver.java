@@ -42,7 +42,7 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
     @Override
     public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs) {
         final String message = findPluralizedTranslation(locales, i18nIdentifier, hashArgs)
-                .orElseGet(() -> findFirstTranslation(locales, i18nIdentifier.getBundle(), i18nIdentifier.getMessageKey())
+                .orElseGet(() -> findFirstTranslation(locales, i18nIdentifier.bundle(), i18nIdentifier.messageKey())
                         .orElse(null));
         return Optional.ofNullable(message).map(resolvedValue -> replaceParameters(resolvedValue, hashArgs));
     }
@@ -61,8 +61,8 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
     private Optional<String> findPluralizedTranslation(final List<Locale> locales, final I18nIdentifier i18nIdentifier,
                                                        final Map<String, Object> hashArgs) {
         if (containsPlural(hashArgs)) {
-            final String pluralizedKey = i18nIdentifier.getMessageKey() + "_plural";
-            return findFirstTranslation(locales, i18nIdentifier.getBundle(), pluralizedKey);
+            final String pluralizedKey = i18nIdentifier.messageKey() + "_plural";
+            return findFirstTranslation(locales, i18nIdentifier.bundle(), pluralizedKey);
         } else {
             return Optional.empty();
         }

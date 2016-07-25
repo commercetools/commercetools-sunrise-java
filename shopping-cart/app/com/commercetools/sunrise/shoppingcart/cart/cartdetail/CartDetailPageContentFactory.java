@@ -3,6 +3,7 @@ package com.commercetools.sunrise.shoppingcart.cart.cartdetail;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import io.sphere.sdk.carts.Cart;
@@ -15,6 +16,8 @@ public class CartDetailPageContentFactory extends Base {
     private CartLikeBeanFactory cartLikeBeanFactory;
     @Inject
     private I18nResolver i18nResolver;
+    @Inject
+    private I18nIdentifierFactory i18nIdentifierFactory;
     @Inject
     private UserContext userContext;
 
@@ -34,6 +37,7 @@ public class CartDetailPageContentFactory extends Base {
     }
 
     protected void fillTitle(final PageContent bean) {
-        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:cartDetailPage.title")));
+        final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("checkout:cartDetailPage.title");
+        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), i18nIdentifier));
     }
 }

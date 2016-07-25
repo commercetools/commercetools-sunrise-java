@@ -2,6 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import io.sphere.sdk.carts.Cart;
@@ -18,6 +19,8 @@ public class CheckoutConfirmationPageContentFactory extends Base {
     private UserContext userContext;
     @Inject
     private I18nResolver i18nResolver;
+    @Inject
+    private I18nIdentifierFactory i18nIdentifierFactory;
 
     public CheckoutConfirmationPageContent create(final Form<?> form, final Cart cart) {
         final CheckoutConfirmationPageContent bean = new CheckoutConfirmationPageContent();
@@ -36,7 +39,8 @@ public class CheckoutConfirmationPageContentFactory extends Base {
     }
 
     protected void fillTitle(final CheckoutConfirmationPageContent bean, final Cart cart) {
-        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), I18nIdentifier.of("checkout:confirmationPage.title")));
+        final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("checkout:confirmationPage.title");
+        bean.setTitle(i18nResolver.getOrEmpty(userContext.locales(), i18nIdentifier));
     }
 
     protected void fillCart(final CheckoutConfirmationPageContent bean, final Cart cart) {

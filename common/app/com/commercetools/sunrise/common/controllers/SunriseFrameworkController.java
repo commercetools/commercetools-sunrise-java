@@ -4,8 +4,11 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.ctp.MetricAction;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.template.cms.CmsPage;
+import com.commercetools.sunrise.common.template.engine.TemplateContext;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
@@ -137,11 +140,16 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected CompletionStage<Html> renderPageWithTemplate(final PageContent pageContent, final String templateName) {
+        return renderPageWithTemplate(pageContent, templateName, null);
+    }
+
+    protected CompletionStage<Html> renderPageWithTemplate(final PageContent pageContent, final String templateName, @Nullable final CmsPage cmsPage) {
         final SunrisePageData pageData = createPageData(pageContent);
         return hooks().allAsyncHooksCompletionStage().thenApply(unused -> {
             hooks().runVoidHook(PageDataHook.class, hook -> hook.acceptPageData(pageData));
             logFinalPageData(pageData);
-            final String html = templateEngine().render(templateName, pageData, userContext.locales());
+            final TemplateContext templateContext = new TemplateContext(pageData, userContext.locales(), cmsPage);
+            final String html = templateEngine().render(templateName, templateContext);
             return new Html(html);
         });
     }
@@ -213,7 +221,8 @@ public abstract class SunriseFrameworkController extends Controller {
     }
 
     protected void setI18nTitle(final PageContent pageContent, final String bundleWithKey) {
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), I18nIdentifier.of(bundleWithKey)));
+        final I18nIdentifier i18nIdentifier = injector.getInstance(I18nIdentifierFactory.class).create(bundleWithKey);
+        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), i18nIdentifier));
     }
 
     protected final CompletionStage<Result> redirectToHome() {
