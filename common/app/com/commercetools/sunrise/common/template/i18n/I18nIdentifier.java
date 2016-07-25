@@ -31,6 +31,25 @@ public final class I18nIdentifier extends Base {
         return messageKey;
     }
 
+    /**
+     * @deprecated use {@link #bundle} instead
+     * @return bundle
+     */
+    @Deprecated
+    public String getBundle() {
+        return bundle;
+    }
+
+    /**
+     * @deprecated use {@link #messageKey} instead
+     * @return message key
+     */
+    @Deprecated
+    public String getMessageKey() {
+        return messageKey;
+    }
+
+
     public static I18nIdentifier of(final String bundle, final String key) {
         return new I18nIdentifier(bundle, key);
     }
