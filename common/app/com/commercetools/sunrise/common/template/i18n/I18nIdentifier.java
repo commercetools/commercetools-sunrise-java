@@ -47,9 +47,9 @@ public final class I18nIdentifier extends Base {
         final String key = getArrayElement(parts, 1, bundleWithKey);
         final String bundle;
         if (bundleWithKey.equals(key)) {
-            bundle = "main";
+            bundle = I18nIdentifierFactory.DEFAULT_BUNDLE;
         } else {
-            bundle = getArrayElement(parts, 0, "main");
+            bundle = getArrayElement(parts, 0, I18nIdentifierFactory.DEFAULT_BUNDLE);
         }
         return ofBundleAndKey(bundle, key);
     }
