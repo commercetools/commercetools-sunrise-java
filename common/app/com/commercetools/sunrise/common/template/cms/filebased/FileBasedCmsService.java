@@ -29,7 +29,7 @@ public final class FileBasedCmsService implements CmsService {
     private I18nResolver i18nResolver;
 
     @Override
-    public CompletionStage<Optional<CmsPage>> get(final String pageKey, final List<Locale> locales) {
+    public CompletionStage<Optional<CmsPage>> page(final String pageKey, final List<Locale> locales) {
         final CmsPage cmsPage = new FileBasedCmsPage(i18nResolver, pageKey, locales);
         return completedFuture(Optional.of(cmsPage));
     }

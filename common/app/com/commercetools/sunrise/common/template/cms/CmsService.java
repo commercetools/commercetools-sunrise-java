@@ -20,6 +20,6 @@ public interface CmsService {
      * {@link RuntimeException}s or {@link Error}s besides {@link CmsServiceException} may be contained in the
      * {@link CompletionStage}.)
      */
-    CompletionStage<Optional<CmsPage>> get(final String pageKey, final List<Locale> locales);
+    CompletionStage<Optional<CmsPage>> page(final String pageKey, final List<Locale> locales);
 
 }

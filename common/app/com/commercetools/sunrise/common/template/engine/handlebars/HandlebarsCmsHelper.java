@@ -13,6 +13,6 @@ final class HandlebarsCmsHelper extends Base implements Helper<String> {
     @Override
     public CharSequence apply(final String context, final Options options) throws IOException {
         final Optional<CmsPage> cmsPage = HelperUtils.getCmsPageFromContext(options.context);
-        return cmsPage.map(page -> page.getOrEmpty(context)).orElse("");
+        return cmsPage.map(page -> page.fieldOrEmpty(context)).orElse("");
     }
 }

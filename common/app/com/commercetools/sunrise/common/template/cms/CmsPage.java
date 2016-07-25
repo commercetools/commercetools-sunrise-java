@@ -9,14 +9,14 @@ public interface CmsPage {
      * @param fieldName identifying the field (e.g. banner.image.url)
      * @return the content identified by the key, or absent if not found
      */
-    Optional<String> get(final String fieldName);
+    Optional<String> field(final String fieldName);
 
     /**
      * Gets the content corresponding to the given field name.
      * @param fieldName identifying the field (e.g. banner.image.url)
      * @return the content identified by the key, or empty string if not found
      */
-    default String getOrEmpty(final String fieldName) {
-        return get(fieldName).orElse("");
+    default String fieldOrEmpty(final String fieldName) {
+        return field(fieldName).orElse("");
     }
 }

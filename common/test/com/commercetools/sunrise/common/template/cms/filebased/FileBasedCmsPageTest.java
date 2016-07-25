@@ -64,7 +64,7 @@ public class FileBasedCmsPageTest {
             }
         });
         final FileBasedCmsService cmsService = injector.getInstance(FileBasedCmsService.class);
-        final Optional<CmsPage> page = cmsService.get(pageKey, singletonList(locale)).toCompletableFuture().join();
-        test.accept(page.flatMap(p -> p.get(fieldName)));
+        final Optional<CmsPage> page = cmsService.page(pageKey, singletonList(locale)).toCompletableFuture().join();
+        test.accept(page.flatMap(p -> p.field(fieldName)));
     }
 }

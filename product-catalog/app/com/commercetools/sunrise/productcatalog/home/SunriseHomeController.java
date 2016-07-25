@@ -52,7 +52,7 @@ public abstract class SunriseHomeController extends SunriseFrameworkController i
     @Override
     public CompletionStage<Optional<CmsPage>> cmsPage() {
         final CmsService cmsService = injector().getInstance(CmsService.class);
-        return cmsService.get("home", userContext().locales());
+        return cmsService.page("home", userContext().locales());
     }
 
     @Override
