@@ -73,7 +73,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(addressBookReverseRouter.addressBookCall(language), "myAddressBook")
                 .addHalLink(addressBookReverseRouter.addAddressToAddressBookCall(language), "myAddressBookAddAddress")
                 .addHalLink(addressBookReverseRouter.addAddressToAddressBookProcessFormCall(language), "myAddressBookAddAddressSubmit")
-                .addHalLink(myOrdersReverseRouter.myOrderListPageCall(language), "myOrders")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO framework migration

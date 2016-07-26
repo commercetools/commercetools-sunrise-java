@@ -38,6 +38,7 @@ import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.IOException;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -98,7 +99,16 @@ public abstract class SunriseFrameworkController extends Controller {
     public abstract Set<String> getFrameworkTags();
 
     @Inject
+    public void setRoutesMultiControllerComponents(@Named("controllers") final MultiControllerComponentResolver multiComponent, final Injector injector) {
+        addMultiComponents(multiComponent, injector);
+    }
+
+    @Inject
     public void setMultiControllerComponents(final MultiControllerComponentResolver multiComponent, final Injector injector) {
+        addMultiComponents(multiComponent, injector);
+    }
+
+    protected void addMultiComponents(final MultiControllerComponentResolver multiComponent, final Injector injector) {
         final List<Class<? extends ControllerComponent>> components = multiComponent.findMatchingComponents(this);
         components.forEach(clazz -> {
             final ControllerComponent instance = injector.getInstance(clazz);
