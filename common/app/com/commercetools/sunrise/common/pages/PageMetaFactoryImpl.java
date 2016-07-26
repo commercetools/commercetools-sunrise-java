@@ -29,8 +29,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     @Inject
     private MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
     @Inject
-    private MyOrdersReverseRouter myOrdersReverseRouter;
-    @Inject
     private CartReverseRouter cartReverseRouter;
 
     @Override
