@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
 
 import javax.inject.Inject;
 
-final class SunriseMyOrderListComponent extends DefaultWhateverComponent {
+final class SunriseMyOrderListHeroldComponent extends DefaultWhateverComponent {
     @Inject
     private MyOrdersReverseRouter reverseRouter;
 

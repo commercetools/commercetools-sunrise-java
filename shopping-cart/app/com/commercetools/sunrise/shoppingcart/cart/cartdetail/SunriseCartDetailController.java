@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.cart.cartdetail;
 
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 /**
  * Shows and modifies the contents of the cart.
  */
+@IntroducingMultiControllerComponents(SunriseCartDetailHeroldComponent.class)
 public abstract class SunriseCartDetailController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCartDetailController.class);
