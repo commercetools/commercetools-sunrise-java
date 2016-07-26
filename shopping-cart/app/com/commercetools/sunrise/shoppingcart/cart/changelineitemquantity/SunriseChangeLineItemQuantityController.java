@@ -12,7 +12,6 @@ import io.sphere.sdk.client.ClientErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -44,7 +43,6 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
         return DefaultChangeLineItemQuantityFormData.class;
     }
 
-    @RequireCSRFCheck
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process change line item quantity form in locale={}", languageTag);

@@ -4,7 +4,6 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import play.filters.csrf.AddCSRFToken;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -35,7 +34,6 @@ public abstract class SunriseCartDetailController extends SunriseFrameworkCartCo
         return "cart";
     }
 
-    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             return getOrCreateCart()

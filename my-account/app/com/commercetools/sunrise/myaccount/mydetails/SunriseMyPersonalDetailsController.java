@@ -22,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import play.Configuration;
 import play.data.Form;
 import play.data.FormFactory;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
@@ -70,7 +68,6 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
         return DefaultMyPersonalDetailsFormData.class;
     }
 
-    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show my personal details form in locale={}", languageTag);
@@ -80,7 +77,6 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
         });
     }
 
-    @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process my personal details form in locale={}", languageTag);

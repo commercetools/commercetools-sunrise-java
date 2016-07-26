@@ -9,7 +9,6 @@ import com.google.inject.Injector;
 import io.sphere.sdk.customers.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import play.filters.csrf.AddCSRFToken;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
@@ -42,7 +41,6 @@ public abstract class SunriseAddressBookController extends MyAccountController i
         return "my-account-address-book";
     }
 
-    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show address book in locale={}", languageTag);

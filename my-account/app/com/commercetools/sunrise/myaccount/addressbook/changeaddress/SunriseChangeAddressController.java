@@ -21,8 +21,6 @@ import io.sphere.sdk.models.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -63,7 +61,6 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
         return DefaultAddressBookAddressFormData.class;
     }
 
-    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("show edit form for address with id={} in locale={}", addressId, languageTag);
@@ -76,7 +73,6 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
         });
     }
 
-    @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("try to change address with id={} in locale={}", addressId, languageTag);

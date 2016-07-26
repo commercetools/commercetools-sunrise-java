@@ -19,8 +19,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -56,7 +54,6 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
         return DefaultSignUpFormData.class;
     }
 
-    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show sign up form in locale={}", languageTag);
@@ -64,7 +61,6 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
         });
     }
 
-    @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process sign up form in locale={}", languageTag);
