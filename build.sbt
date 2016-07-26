@@ -33,7 +33,7 @@ lazy val `commercetools-sunrise` = (project in file("."))
 
 lazy val common = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
-  .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ templateDependencies ++ commonDependencies ++ disableDockerPublish: _*)
+  .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ templateDependencies ++ sunriseModuleDependencies ++ commonDependencies ++ disableDockerPublish: _*)
   .dependsOn(`move-to-sdk`)
 
 lazy val `product-catalog` = project
@@ -79,6 +79,17 @@ lazy val commonSettings = Release.publishSettings ++ Seq (
     "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
     "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
     "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
+  )
+)
+
+lazy val sunriseModuleDependencies = Seq (
+  resolvers in ThisBuild ++= Seq (
+    Resolver.sonatypeRepo("releases"),
+    Resolver.sonatypeRepo("snapshots"),
+    Resolver.mavenLocal
+  ),
+  libraryDependencies ++= Seq (
+    "com.commercetools.sunrise.cms" % "cms-api" % "0.1.0"
   )
 )
 

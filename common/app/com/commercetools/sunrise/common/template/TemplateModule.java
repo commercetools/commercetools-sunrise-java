@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.template;
 
-import com.commercetools.sunrise.common.template.cms.CmsService;
+import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.template.cms.filebased.CmsI18nResolverProvider;
 import com.commercetools.sunrise.common.template.cms.filebased.FileBasedCmsService;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
