@@ -70,6 +70,12 @@ lazy val `move-to-sdk` = project
 
 javaUnidocSettings
 
+resolvers in ThisBuild ++= Seq (
+  Resolver.sonatypeRepo("releases"),
+  Resolver.sonatypeRepo("snapshots"),
+  Resolver.mavenLocal
+)
+
 lazy val commonSettings = Release.publishSettings ++ Seq (
   scalaVersion := "2.11.8",
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
@@ -83,22 +89,12 @@ lazy val commonSettings = Release.publishSettings ++ Seq (
 )
 
 lazy val sunriseModuleDependencies = Seq (
-  resolvers in ThisBuild ++= Seq (
-    Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots"),
-    Resolver.mavenLocal
-  ),
   libraryDependencies ++= Seq (
     "com.commercetools.sunrise.cms" % "cms-api" % "0.1.0"
   )
 )
 
 lazy val jvmSdkDependencies = Seq (
-  resolvers in ThisBuild ++= Seq (
-    Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots"),
-    Resolver.mavenLocal
-  ),
   libraryDependencies ++= Seq (
     "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
     "com.commercetools.sdk.jvm.core" % "commercetools-java-client" % jvmSdkVersion,
