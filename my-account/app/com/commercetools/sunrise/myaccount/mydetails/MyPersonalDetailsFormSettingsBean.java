@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
 import com.commercetools.sunrise.common.forms.FormBean;
-import com.commercetools.sunrise.common.models.TitleFormFieldBean;
+import com.commercetools.sunrise.common.forms.TitleFormFieldBean;
 
 public class MyPersonalDetailsFormSettingsBean extends FormBean {
 

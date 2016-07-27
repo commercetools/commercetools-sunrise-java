@@ -2,7 +2,6 @@ package com.commercetools.sunrise.common.forms;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.models.CountryFormFieldBean;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Base;

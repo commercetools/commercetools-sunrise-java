@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.cms.CmsPage;
+import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.ctp.MetricAction;
 import com.commercetools.sunrise.common.pages.*;
@@ -128,6 +129,10 @@ public abstract class SunriseFrameworkController extends Controller {
 
     public FormFactory formFactory() {
         return injector.getInstance(FormFactory.class);
+    }
+
+    public CmsService cmsService() {
+        return injector().getInstance(CmsService.class);
     }
 
     public Injector injector() {
