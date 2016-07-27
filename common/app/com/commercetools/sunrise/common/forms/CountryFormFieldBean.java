@@ -1,17 +1,12 @@
-package com.commercetools.sunrise.common.models;
+package com.commercetools.sunrise.common.forms;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
 
 import java.util.List;
 
-public class TitleFormFieldBean extends Base {
-
-    private static final String CONFIG_TITLE_OPTIONS = "form.titles";
+public class CountryFormFieldBean {
 
     private List<FormSelectableOptionBean> list;
-
-    public TitleFormFieldBean() {
-    }
 
     public List<FormSelectableOptionBean> getList() {
         return list;

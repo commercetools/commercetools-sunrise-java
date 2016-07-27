@@ -53,11 +53,6 @@ public abstract class SunriseHomeController extends SunriseFrameworkController i
     }
 
     @Override
-    public CmsService cmsService() {
-        return injector().getInstance(CmsService.class);
-    }
-
-    @Override
     public Set<String> getFrameworkTags() {
         return new HashSet<>(asList("home", "product-catalog"));
     }
