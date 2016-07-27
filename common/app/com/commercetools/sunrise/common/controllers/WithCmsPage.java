@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.controllers;
 
+import com.commercetools.sunrise.cms.CmsPage;
+import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.template.cms.CmsPage;
-import com.commercetools.sunrise.common.template.cms.CmsService;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;

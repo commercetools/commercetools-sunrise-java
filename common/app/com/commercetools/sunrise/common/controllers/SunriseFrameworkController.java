@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.common.controllers;
 
+import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.ctp.MetricAction;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.template.cms.CmsPage;
 import com.commercetools.sunrise.common.template.engine.TemplateContext;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
