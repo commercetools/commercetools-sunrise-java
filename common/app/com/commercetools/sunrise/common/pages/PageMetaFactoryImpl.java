@@ -51,8 +51,7 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
 
 
 
-                .addHalLink(checkoutReverseRouter.checkoutPaymentPageCall(language), "editPaymentInfo")
-                .addHalLink(checkoutReverseRouter.checkoutPaymentProcessFormCall(language), "checkoutPaymentSubmit")
+
 
                 .addHalLink(checkoutReverseRouter.checkoutConfirmationProcessFormCall(language), "checkoutConfirmationSubmit")
 

@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
@@ -51,6 +52,7 @@ import static java.util.stream.Collectors.toList;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
+@IntroducingMultiControllerComponents(SunriseCheckoutPaymentHeroldComponent.class)
 public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkCartController
         implements WithOverwriteableTemplateName, WithCartPreconditions {
     @Inject
