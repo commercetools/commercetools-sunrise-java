@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
-public class UserBean extends Base {
+public class UserBean extends ModelBean {
 
     private boolean loggedIn;
     private String name;

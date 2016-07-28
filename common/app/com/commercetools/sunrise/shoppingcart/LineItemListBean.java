@@ -1,14 +1,14 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
 import java.util.List;
 
-public class LineItemsBean extends Base {
+public class LineItemListBean extends ModelBean {
 
     private List<LineItemBean> list;
 
-    public LineItemsBean() {
+    public LineItemListBean() {
     }
 
     public List<LineItemBean> getList() {

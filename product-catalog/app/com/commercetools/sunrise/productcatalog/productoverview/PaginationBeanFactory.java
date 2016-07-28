@@ -88,7 +88,9 @@ public class PaginationBeanFactory extends Base {
     }
 
     protected LinkBean createLinkData(final Pagination pagination, final long page) {
-        final LinkBean linkBean = new LinkBean(String.valueOf(page), buildUrlWithPage(pagination.getKey(), page));
+        final LinkBean linkBean = new LinkBean();
+        linkBean.setText(String.valueOf(page));
+        linkBean.setUrl(buildUrlWithPage(pagination.getKey(), page));
         if (page == pagination.getPage()) {
             linkBean.setSelected(true);
         }

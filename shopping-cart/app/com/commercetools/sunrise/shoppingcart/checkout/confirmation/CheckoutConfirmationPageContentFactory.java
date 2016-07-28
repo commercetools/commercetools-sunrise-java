@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
+import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Base;
 import play.data.Form;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 public class CheckoutConfirmationPageContentFactory extends Base {
 
     @Inject
-    private CartLikeBeanFactory cartLikeBeanFactory;
+    private CartBeanFactory cartLikeBeanFactory;
     @Inject
     private UserContext userContext;
     @Inject

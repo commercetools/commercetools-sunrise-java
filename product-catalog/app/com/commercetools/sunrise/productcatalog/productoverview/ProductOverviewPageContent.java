@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.models.InfoData;
+import com.commercetools.sunrise.common.models.TitleDescriptionBean;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
@@ -15,7 +15,7 @@ public class ProductOverviewPageContent extends PageContent {
     private BannerBean banner;
     private JumbotronBean jumbotron;
     // TODO searchResult
-    private InfoData seo;
+    private TitleDescriptionBean seo;
     private BreadcrumbBean breadcrumb;
     private FacetSelectorListBean facets;
     private PaginationBean pagination;
@@ -59,11 +59,11 @@ public class ProductOverviewPageContent extends PageContent {
         this.jumbotron = jumbotron;
     }
 
-    public InfoData getSeo() {
+    public TitleDescriptionBean getSeo() {
         return seo;
     }
 
-    public void setSeo(final InfoData seo) {
+    public void setSeo(final TitleDescriptionBean seo) {
         this.seo = seo;
     }
 

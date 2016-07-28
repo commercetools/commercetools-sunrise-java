@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
+import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Base;
 
@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 public class CartDetailPageContentFactory extends Base {
     @Inject
-    private CartLikeBeanFactory cartLikeBeanFactory;
+    private CartBeanFactory cartLikeBeanFactory;
     @Inject
     private I18nResolver i18nResolver;
     @Inject

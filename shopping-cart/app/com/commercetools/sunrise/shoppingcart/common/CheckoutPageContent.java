@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.common;
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.shoppingcart.CartLikeBean;
+import com.commercetools.sunrise.shoppingcart.CartBean;
 
 public abstract class CheckoutPageContent extends PageContent {
 
     private StepWidgetBean stepWidget;
-    private CartLikeBean cart;
+    private CartBean cart;
 
     public StepWidgetBean getStepWidget() {
         return stepWidget;
@@ -16,11 +16,11 @@ public abstract class CheckoutPageContent extends PageContent {
         this.stepWidget = stepWidget;
     }
 
-    public CartLikeBean getCart() {
+    public CartBean getCart() {
         return cart;
     }
 
-    public void setCart(final CartLikeBean cart) {
+    public void setCart(final CartBean cart) {
         this.cart = cart;
     }
 }
