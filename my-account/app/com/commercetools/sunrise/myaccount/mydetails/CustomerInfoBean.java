@@ -1,11 +1,14 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
+import com.commercetools.sunrise.common.models.ModelBean;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.models.Base;
 
-public class CustomerInfoBean extends Base {
+public class CustomerInfoBean extends ModelBean {
 
     private Customer customer;
+
+    public CustomerInfoBean() {
+    }
 
     public Customer getCustomer() {
         return customer;

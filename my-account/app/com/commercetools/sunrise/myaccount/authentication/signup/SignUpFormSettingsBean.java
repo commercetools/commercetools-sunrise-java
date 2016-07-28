@@ -7,6 +7,9 @@ public class SignUpFormSettingsBean extends FormBean {
 
     private TitleFormFieldBean title;
 
+    public SignUpFormSettingsBean() {
+    }
+
     public TitleFormFieldBean getTitle() {
         return title;
     }

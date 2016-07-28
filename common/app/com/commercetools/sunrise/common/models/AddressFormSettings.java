@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.myaccount.addressbook;
+package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.forms.CountryFormFieldBean;
 import com.commercetools.sunrise.common.models.ModelBean;
@@ -8,6 +8,9 @@ public class AddressFormSettings extends ModelBean {
 
     private TitleFormFieldBean title;
     private CountryFormFieldBean countries;
+
+    public AddressFormSettings() {
+    }
 
     public TitleFormFieldBean getTitle() {
         return title;

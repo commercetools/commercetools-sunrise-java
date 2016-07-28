@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.myaccount.addressbook;
+package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.forms.CountryFormFieldBeanFactory;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;

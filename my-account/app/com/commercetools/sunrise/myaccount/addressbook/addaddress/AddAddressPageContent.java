@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFormSettings;
+import com.commercetools.sunrise.common.models.AddressFormSettings;
 import play.data.Form;
 
 public class AddAddressPageContent extends PageContent {

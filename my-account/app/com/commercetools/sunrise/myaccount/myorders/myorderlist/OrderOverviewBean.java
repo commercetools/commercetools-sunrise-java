@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
-public class OrderOverviewBean {
+import com.commercetools.sunrise.common.models.ModelBean;
+
+public class OrderOverviewBean extends ModelBean {
 
     private String orderNumber;
     private String orderDate;
@@ -8,6 +10,9 @@ public class OrderOverviewBean {
     private String paymentStatus;
     private String shipping;
     private String showOrderUrl;
+
+    public OrderOverviewBean() {
+    }
 
     public String getOrderNumber() {
         return orderNumber;
