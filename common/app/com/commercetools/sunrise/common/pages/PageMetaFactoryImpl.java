@@ -42,7 +42,7 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter.processChangeCountryForm(language), "selectCountry")
 
-                .addHalLink(cartReverseRouter.processChangeLineItemQuantityForm(language), "changeLineItem")
+
                 .addHalLink(cartReverseRouter.processDeleteLineItemForm(language), "deleteLineItem")
 
                 .addHalLink(reverseRouter.showLogInForm(language), "signIn", "logIn", "signUp")
