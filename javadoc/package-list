@@ -3,7 +3,6 @@ com.commercetools.sunrise.common
 com.commercetools.sunrise.common.basicauth
 com.commercetools.sunrise.common.cache
 com.commercetools.sunrise.common.categorytree
-com.commercetools.sunrise.common.configuration
 com.commercetools.sunrise.common.contexts
 com.commercetools.sunrise.common.controllers
 com.commercetools.sunrise.common.ctp
@@ -41,6 +40,7 @@ com.commercetools.sunrise.myaccount.mydetails
 com.commercetools.sunrise.myaccount.myorders.myorderdetail
 com.commercetools.sunrise.myaccount.myorders.myorderlist
 com.commercetools.sunrise.payments
+com.commercetools.sunrise.play
 com.commercetools.sunrise.productcatalog.common
 com.commercetools.sunrise.productcatalog.home
 com.commercetools.sunrise.productcatalog.productdetail
