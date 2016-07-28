@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
-import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
+import com.commercetools.sunrise.shoppingcart.OrderBeanFactory;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.orders.Order;
 
@@ -9,7 +9,7 @@ import javax.inject.Inject;
 public class MyOrderDetailPageContentFactory extends Base {
 
     @Inject
-    private CartLikeBeanFactory cartLikeBeanFactory;
+    private OrderBeanFactory orderBeanFactory;
 
     public MyOrderDetailPageContent create(final Order order) {
         final MyOrderDetailPageContent bean = new MyOrderDetailPageContent();
@@ -22,6 +22,6 @@ public class MyOrderDetailPageContentFactory extends Base {
     }
 
     protected void fillOrder(final MyOrderDetailPageContent bean, final Order order) {
-        bean.setOrder(cartLikeBeanFactory.create(order));
+        bean.setOrder(orderBeanFactory.create(order));
     }
 }

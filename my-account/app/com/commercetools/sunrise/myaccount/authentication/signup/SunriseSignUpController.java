@@ -5,10 +5,10 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
+import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerDraft;
@@ -94,8 +94,8 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final SignUpFormData formData, final Void context, final CustomerSignInResult result) {
-        final ProductReverseRouter productReverseRouter = injector().getInstance(ProductReverseRouter.class);
-        overwriteCartSessionData(result.getCart(), session(), userContext(), productReverseRouter);
+        final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
+        overwriteCartSessionData(result.getCart(), session(), miniCartBeanFactory);
         overwriteCustomerSessionData(result.getCustomer(), session());
         final Call call = injector().getInstance(MyPersonalDetailsReverseRouter.class).myPersonalDetailsPageCall(userContext().languageTag());
         return completedFuture(redirect(call));

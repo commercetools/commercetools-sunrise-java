@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
-import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
+import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -58,7 +58,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     @Inject
     private PaymentConfiguration paymentConfiguration;
     @Inject
-    protected CartLikeBeanFactory cartLikeBeanFactory;
+    protected CartBeanFactory cartBeanFactory;
 
     @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
@@ -226,7 +226,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     }
 
     protected CompletionStage<Html> renderCheckoutPaymentPage(final Cart cart, final CheckoutPaymentPageContent pageContent) {
-        pageContent.setCart(cartLikeBeanFactory.create(cart));
+        pageContent.setCart(cartBeanFactory.create(cart));
         setI18nTitle(pageContent, "checkout:paymentPage.title");
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
