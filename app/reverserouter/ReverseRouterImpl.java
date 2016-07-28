@@ -1,5 +1,6 @@
 package reverserouter;
 
+import com.commercetools.sunrise.common.controllers.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.*;
 import io.sphere.sdk.models.Base;
@@ -12,7 +13,7 @@ import static demo.productcatalog.routes.*;
 import static demo.shoppingcart.routes.*;
 import static setupwidget.controllers.routes.*;
 
-public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, SetupReverseRouter, CartReverseRouter {
+public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, SetupReverseRouter, CartReverseRouter, AuthenticationReverseRouter {
 
     @Override
     public Call themeAssets(final String file) {

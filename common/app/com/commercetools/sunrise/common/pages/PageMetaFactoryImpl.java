@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.*;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
@@ -22,6 +23,8 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private ReverseRouter reverseRouter;
     @Inject
     private HomeReverseRouter homeReverseRouter;
+    @Inject
+    private AuthenticationReverseRouter authenticationReverseRouter;
 
     @Override
     public PageMeta create() {
@@ -40,10 +43,10 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter.processChangeCountryForm(language), "selectCountry")
 
-                .addHalLink(reverseRouter.showLogInForm(language), "signIn", "logIn", "signUp")
-                .addHalLink(reverseRouter.processLogInForm(language), "logInSubmit")
-                .addHalLink(reverseRouter.processSignUpForm(language), "signUpSubmit")
-                .addHalLink(reverseRouter.processLogOut(language), "logOut")
+                .addHalLink(authenticationReverseRouter.showLogInForm(language), "signIn", "logIn", "signUp")
+                .addHalLink(authenticationReverseRouter.processLogInForm(language), "logInSubmit")
+                .addHalLink(authenticationReverseRouter.processSignUpForm(language), "signUpSubmit")
+                .addHalLink(authenticationReverseRouter.processLogOut(language), "logOut")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO framework migration

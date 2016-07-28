@@ -2,6 +2,7 @@ package com.commercetools.sunrise.myaccount.common;
 
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.controllers.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
@@ -48,7 +49,7 @@ public abstract class MyAccountController extends SunriseFrameworkController {
 
     protected CompletionStage<Result> handleNotFoundCustomer() {
         final UserContext userContext = injector.getInstance(UserContext.class);
-        final ReverseRouter reverseRouter = injector.getInstance(ReverseRouter.class);
+        final AuthenticationReverseRouter reverseRouter = injector.getInstance(AuthenticationReverseRouter.class);
         final Call call = reverseRouter.showLogInForm(userContext.languageTag());
         return completedFuture(redirect(call));
     }

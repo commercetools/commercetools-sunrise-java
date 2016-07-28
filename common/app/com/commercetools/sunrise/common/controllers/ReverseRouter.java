@@ -11,12 +11,4 @@ public interface ReverseRouter {
     Call processChangeCountryForm(final String languageTag);
 
     Call processSearchProductsForm(final String languageTag);
-
-    Call showLogInForm(final String languageTag);
-
-    Call processLogInForm(final String languageTag);
-
-    Call processSignUpForm(final String languageTag);
-
-    Call processLogOut(final String languageTag);
 }

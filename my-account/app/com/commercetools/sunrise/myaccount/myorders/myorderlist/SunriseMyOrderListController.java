@@ -34,8 +34,6 @@ public abstract class SunriseMyOrderListController extends MyAccountController i
     @Inject
     protected ProductDataConfig productDataConfig;
     @Inject
-    protected ReverseRouter reverseRouter;
-    @Inject
     protected I18nResolver i18nResolver;
     @Inject
     protected ProductReverseRouter productReverseRouter;

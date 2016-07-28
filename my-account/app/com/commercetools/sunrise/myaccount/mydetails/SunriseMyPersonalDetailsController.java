@@ -52,8 +52,6 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
     protected I18nResolver i18nResolver;
     @Inject
     protected Configuration configuration;
-    @Inject
-    protected ReverseRouter reverseRouter;//TODO framework use smaller router
 
     @Override
     public Set<String> getFrameworkTags() {

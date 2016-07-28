@@ -1,5 +1,6 @@
 package reverserouter;
 
+import com.commercetools.sunrise.common.controllers.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.*;
 import com.google.inject.AbstractModule;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
@@ -19,5 +20,6 @@ public class ReverseRouterModule extends AbstractModule {
         bind(MyOrdersReverseRouter.class).toInstance(reverseRouter);
         bind(SetupReverseRouter.class).toInstance(reverseRouter);
         bind(CartReverseRouter.class).toInstance(reverseRouter);
+        bind(AuthenticationReverseRouter.class).toInstance(reverseRouter);
     }
 }
