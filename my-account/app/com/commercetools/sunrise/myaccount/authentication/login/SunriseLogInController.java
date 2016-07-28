@@ -17,8 +17,6 @@ import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -54,7 +52,6 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
         return DefaultLogInFormData.class;
     }
 
-    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show sign up form in locale={}", languageTag);
@@ -62,7 +59,6 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
         });
     }
 
-    @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process sign up form in locale={}", languageTag);

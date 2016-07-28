@@ -29,8 +29,6 @@ import io.sphere.sdk.utils.CompletableFutureUtils;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -60,7 +58,6 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     @Inject
     protected CartLikeBeanFactory cartLikeBeanFactory;
 
-    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions()
                 .thenComposeAsync(cart -> getPaymentMethodInfos(cart)
@@ -80,7 +77,6 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
         return completedFuture(paymentConfiguration.getPaymentMethodInfoList());
     }
 
-    @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             final Form<DefaultCheckoutPaymentFormData> paymentForm = formFactory.form(DefaultCheckoutPaymentFormData.class).bindFromRequest();
