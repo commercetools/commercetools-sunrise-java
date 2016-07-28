@@ -6,6 +6,7 @@ import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
@@ -35,6 +36,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
+@IntroducingMultiControllerComponents(SunriseLogInHeroldComponent.class)
 public abstract class SunriseLogInController extends SunriseFrameworkController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<LogInFormData, Void, CustomerSignInResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseLogInController.class);
