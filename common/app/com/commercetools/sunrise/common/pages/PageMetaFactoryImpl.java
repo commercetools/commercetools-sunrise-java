@@ -23,8 +23,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     @Inject
     private HomeReverseRouter homeReverseRouter;
     @Inject
-    private CheckoutReverseRouter checkoutReverseRouter;
-    @Inject
     private CartReverseRouter cartReverseRouter;
 
     @Override
@@ -47,20 +45,10 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(cartReverseRouter.processChangeLineItemQuantityForm(language), "changeLineItem")
                 .addHalLink(cartReverseRouter.processDeleteLineItemForm(language), "deleteLineItem")
 
-
-
-
-
-
-
-                .addHalLink(checkoutReverseRouter.checkoutConfirmationProcessFormCall(language), "checkoutConfirmationSubmit")
-
                 .addHalLink(reverseRouter.showLogInForm(language), "signIn", "logIn", "signUp")
                 .addHalLink(reverseRouter.processLogInForm(language), "logInSubmit")
                 .addHalLink(reverseRouter.processSignUpForm(language), "signUpSubmit")
                 .addHalLink(reverseRouter.processLogOut(language), "logOut")
-
-
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO framework migration
