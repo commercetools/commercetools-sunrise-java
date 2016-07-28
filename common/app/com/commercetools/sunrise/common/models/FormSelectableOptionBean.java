@@ -1,8 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-import io.sphere.sdk.models.Base;
-
-public class FormSelectableOptionBean extends Base {
+public class FormSelectableOptionBean extends ModelBean {
 
     private String label;
     private String value;
