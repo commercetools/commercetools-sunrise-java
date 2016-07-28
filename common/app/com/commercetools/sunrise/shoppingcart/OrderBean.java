@@ -1,7 +1,5 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.shoppingcart.CartBean;
-
 public class OrderBean extends CartBean {
 
     private String orderNumber;

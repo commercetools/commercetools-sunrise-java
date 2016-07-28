@@ -5,7 +5,7 @@ import io.sphere.sdk.carts.LineItem;
 
 import javax.inject.Inject;
 
-public class CartBeanFactory extends MiniCartBeanFactory {
+public class CartBeanFactory extends CartLikeBeanFactory {
 
     @Inject
     private LineItemExtendedBeanFactory lineItemExtendedBeanFactory;
@@ -17,14 +17,7 @@ public class CartBeanFactory extends MiniCartBeanFactory {
     }
 
     protected final void initialize(final CartBean bean, final Cart cart) {
-        super.initialize(bean, cart);
-        fillSalesTax(bean, cart);
-        fillSubtotalPrice(bean, cart);
-        fillCustomerEmail(bean, cart);
-        fillShippingAddress(bean, cart);
-        fillBillingAddress(bean, cart);
-        fillShippingMethod(bean, cart);
-        fillPaymentDetails(bean, cart);
+        fillCartInfo(bean, cart);
     }
 
     @Override

@@ -29,9 +29,7 @@ public class MiniCartBeanFactory extends CartLikeBeanFactory {
     }
 
     protected final void initialize(final MiniCartBean bean, final Cart cart) {
-        fillTotalPrice(bean, cart);
-        fillTotalItems(bean, cart);
-        fillLineItems(bean, cart);
+        fillMiniCartInfo(bean, cart);
     }
 
     protected final void initializeWithEmptyCart(final MiniCartBean bean) {

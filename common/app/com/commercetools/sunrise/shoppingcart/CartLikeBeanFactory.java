@@ -22,6 +22,23 @@ public abstract class CartLikeBeanFactory extends Base {
 
     protected abstract LineItemBean createLineItem(final LineItem lineItem);
 
+    protected void fillMiniCartInfo(final MiniCartBean bean, final CartLike<?> cartLike) {
+        fillTotalPrice(bean, cartLike);
+        fillTotalItems(bean, cartLike);
+        fillLineItems(bean, cartLike);
+    }
+
+    protected void fillCartInfo(final CartBean bean, final CartLike<?> cartLike) {
+        fillMiniCartInfo(bean, cartLike);
+        fillSalesTax(bean, cartLike);
+        fillSubtotalPrice(bean, cartLike);
+        fillCustomerEmail(bean, cartLike);
+        fillShippingAddress(bean, cartLike);
+        fillBillingAddress(bean, cartLike);
+        fillShippingMethod(bean, cartLike);
+        fillPaymentDetails(bean, cartLike);
+    }
+
     protected void fillTotalItems(final MiniCartBean bean, final CartLike<?> cartLike) {
         bean.setTotalItems(cartLike.getLineItems().stream().mapToLong(LineItem::getQuantity).sum());
     }

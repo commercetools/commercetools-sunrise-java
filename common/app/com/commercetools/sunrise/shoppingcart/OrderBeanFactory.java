@@ -21,17 +21,7 @@ public class OrderBeanFactory extends CartLikeBeanFactory {
     }
 
     protected final void initialize(final OrderBean bean, final Order order) {
-        fillTotalPrice(bean, order);
-        fillTotalItems(bean, order);
-        fillLineItems(bean, order);
-        fillTotalPrice(bean, order);
-        fillSalesTax(bean, order);
-        fillSubtotalPrice(bean, order);
-        fillCustomerEmail(bean, order);
-        fillShippingAddress(bean, order);
-        fillBillingAddress(bean, order);
-        fillShippingMethod(bean, order);
-        fillPaymentDetails(bean, order);
+        fillCartInfo(bean, order);
         fillOrderDate(bean, order);
         fillOrderNumber(bean, order);
     }
