@@ -42,9 +42,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processSearchProductsForm(language), "search")
                 .addHalLink(reverseRouter.processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter.processChangeCountryForm(language), "selectCountry")
-
-                .addHalLink(authenticationReverseRouter.processLogOut(language), "logOut")
-
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO framework migration
 //        newCategory().flatMap(nc -> reverseRouter.showCategory(userContext.locale(), nc))
