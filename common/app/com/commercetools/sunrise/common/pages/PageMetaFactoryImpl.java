@@ -47,12 +47,14 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(cartReverseRouter.processChangeLineItemQuantityForm(language), "changeLineItem")
                 .addHalLink(cartReverseRouter.processDeleteLineItemForm(language), "deleteLineItem")
 
-                .addHalLink(checkoutReverseRouter.checkoutAddressesPageCall(language), "checkout", "editShippingAddress", "editBillingAddress")
-                .addHalLink(checkoutReverseRouter.checkoutAddressesProcessFormCall(language), "checkoutAddressSubmit")
+
+
                 .addHalLink(checkoutReverseRouter.checkoutShippingPageCall(language), "editShippingMethod")
                 .addHalLink(checkoutReverseRouter.checkoutShippingProcessFormCall(language), "checkoutShippingSubmit")
+
                 .addHalLink(checkoutReverseRouter.checkoutPaymentPageCall(language), "editPaymentInfo")
                 .addHalLink(checkoutReverseRouter.checkoutPaymentProcessFormCall(language), "checkoutPaymentSubmit")
+
                 .addHalLink(checkoutReverseRouter.checkoutConfirmationProcessFormCall(language), "checkoutConfirmationSubmit")
 
                 .addHalLink(reverseRouter.showLogInForm(language), "signIn", "logIn", "signUp")
