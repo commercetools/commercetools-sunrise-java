@@ -22,8 +22,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private ReverseRouter reverseRouter;
     @Inject
     private HomeReverseRouter homeReverseRouter;
-    @Inject
-    private CartReverseRouter cartReverseRouter;
 
     @Override
     public PageMeta create() {
@@ -41,9 +39,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processSearchProductsForm(language), "search")
                 .addHalLink(reverseRouter.processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter.processChangeCountryForm(language), "selectCountry")
-
-
-                .addHalLink(cartReverseRouter.processDeleteLineItemForm(language), "deleteLineItem")
 
                 .addHalLink(reverseRouter.showLogInForm(language), "signIn", "logIn", "signUp")
                 .addHalLink(reverseRouter.processLogInForm(language), "logInSubmit")
