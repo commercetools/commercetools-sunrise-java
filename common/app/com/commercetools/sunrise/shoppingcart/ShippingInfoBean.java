@@ -1,15 +1,8 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.utils.MoneyContext;
-import io.sphere.sdk.carts.CartShippingInfo;
-import io.sphere.sdk.models.Base;
-import io.sphere.sdk.models.Reference;
-import io.sphere.sdk.shippingmethods.ShippingMethod;
+import com.commercetools.sunrise.common.models.ModelBean;
 
-import javax.annotation.Nullable;
-import javax.money.MonetaryAmount;
-
-public class ShippingInfoBean extends Base {
+public class ShippingInfoBean extends ModelBean {
 
     private String label;
     private String description;
@@ -17,19 +10,6 @@ public class ShippingInfoBean extends Base {
     private String deliveryDays;
 
     public ShippingInfoBean() {
-    }
-
-    public ShippingInfoBean(final @Nullable CartShippingInfo shippingInfo, final MoneyContext moneyContext) {
-        MonetaryAmount shippingPrice = null;
-        if (shippingInfo != null) {
-            this.label = shippingInfo.getShippingMethodName();
-            shippingPrice = shippingInfo.getPrice();
-            final Reference<ShippingMethod> shippingMethodRef = shippingInfo.getShippingMethod();
-            if (shippingMethodRef != null && shippingMethodRef.getObj() != null) {
-                this.description = shippingMethodRef.getObj().getDescription();
-            }
-        }
-        this.price = moneyContext.formatOrZero(shippingPrice);
     }
 
     public String getLabel() {
