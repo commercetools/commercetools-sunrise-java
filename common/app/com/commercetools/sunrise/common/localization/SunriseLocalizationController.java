@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.localization;
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -18,6 +19,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
+@IntroducingMultiControllerComponents(SunriseLocalizationHeroldComponent.class)
 public abstract class SunriseLocalizationController extends SunriseFrameworkController {
     public static final String SESSION_COUNTRY = "countryCode";
 

@@ -23,8 +23,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private ReverseRouter reverseRouter;
     @Inject
     private HomeReverseRouter homeReverseRouter;
-    @Inject
-    private AuthenticationReverseRouter authenticationReverseRouter;
 
     @Override
     public PageMeta create() {
@@ -39,8 +37,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
         pageMeta.setCsrfToken(getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(homeReverseRouter.homePageCall(language), "home", "continueShopping")
-                .addHalLink(reverseRouter.processChangeLanguageForm(), "selectLanguage")
-                .addHalLink(reverseRouter.processChangeCountryForm(language), "selectCountry")
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO framework migration
 //        newCategory().flatMap(nc -> reverseRouter.showCategory(userContext.locale(), nc))
