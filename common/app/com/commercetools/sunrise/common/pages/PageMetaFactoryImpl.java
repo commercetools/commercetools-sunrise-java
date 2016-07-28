@@ -67,8 +67,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall(language), "myPersonalDetails", "myAccount")
                 .addHalLink(myPersonalDetailsReverseRouter.myPersonalDetailsProcessFormCall(language), "editMyPersonalDetails")
                 .addHalLink(addressBookReverseRouter.addressBookCall(language), "myAddressBook")
-                .addHalLink(addressBookReverseRouter.addAddressToAddressBookCall(language), "myAddressBookAddAddress")
-                .addHalLink(addressBookReverseRouter.addAddressToAddressBookProcessFormCall(language), "myAddressBookAddAddressSubmit")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO framework migration

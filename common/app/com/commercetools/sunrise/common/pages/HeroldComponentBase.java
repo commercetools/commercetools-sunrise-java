@@ -7,7 +7,7 @@ import io.sphere.sdk.models.Base;
 
 import javax.inject.Inject;
 
-public abstract class DefaultWhateverComponent extends Base implements ControllerComponent, PageDataHook {
+public abstract class HeroldComponentBase extends Base implements ControllerComponent, PageDataHook {
     @Inject
     private UserContext userContext;
 

@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.cart.addtocart;
 
-import com.commercetools.sunrise.common.pages.DefaultWhateverComponent;
+import com.commercetools.sunrise.common.pages.HeroldComponentBase;
 import com.commercetools.sunrise.common.pages.PageMeta;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 
 import javax.inject.Inject;
 
-public class SunriseAddProductToCartHeroldComponent extends DefaultWhateverComponent {
+public class SunriseAddProductToCartHeroldComponent extends HeroldComponentBase {
     @Inject
     private CartReverseRouter reverseRouter;
 
