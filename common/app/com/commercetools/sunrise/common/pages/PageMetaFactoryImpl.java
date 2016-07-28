@@ -43,8 +43,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter.processChangeCountryForm(language), "selectCountry")
 
-                .addHalLink(authenticationReverseRouter.showLogInForm(language), "signUp")
-                .addHalLink(authenticationReverseRouter.processSignUpForm(language), "signUpSubmit")
                 .addHalLink(authenticationReverseRouter.processLogOut(language), "logOut")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
