@@ -24,8 +24,7 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private HomeReverseRouter homeReverseRouter;
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
-    @Inject
-    private AddressBookReverseRouter addressBookReverseRouter;
+
     @Inject
     private MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
     @Inject
@@ -66,7 +65,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
 
                 .addHalLink(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall(language), "myPersonalDetails", "myAccount")
                 .addHalLink(myPersonalDetailsReverseRouter.myPersonalDetailsProcessFormCall(language), "editMyPersonalDetails")
-                .addHalLink(addressBookReverseRouter.addressBookCall(language), "myAddressBook")
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO framework migration
