@@ -6,6 +6,7 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.client.ClientErrorException;
@@ -38,6 +39,7 @@ import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwrite
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
+@IntroducingMultiControllerComponents(SunriseMyPersonalDetailsHeroldComponent.class)
 public abstract class SunriseMyPersonalDetailsController extends MyAccountController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<MyPersonalDetailsFormData, Customer, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsController.class);

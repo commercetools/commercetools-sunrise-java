@@ -99,12 +99,8 @@ public abstract class SunriseFrameworkController extends Controller {
     public abstract Set<String> getFrameworkTags();
 
     @Inject
-    public void setRoutesMultiControllerComponents(@Named("controllers") final MultiControllerComponentResolver multiComponent, final Injector injector) {
-        addMultiComponents(multiComponent, injector);
-    }
-
-    @Inject
-    public void setMultiControllerComponents(final MultiControllerComponentResolver multiComponent, final Injector injector) {
+    private void setMultiControllerComponents(@Named("controllers") final MultiControllerComponentResolver controllersMultiComponent, final MultiControllerComponentResolver multiComponent, final Injector injector) {
+        addMultiComponents(controllersMultiComponent, injector);
         addMultiComponents(multiComponent, injector);
     }
 

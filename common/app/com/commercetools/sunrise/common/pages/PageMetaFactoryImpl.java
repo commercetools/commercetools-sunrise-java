@@ -24,9 +24,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private HomeReverseRouter homeReverseRouter;
     @Inject
     private CheckoutReverseRouter checkoutReverseRouter;
-
-    @Inject
-    private MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
     @Inject
     private CartReverseRouter cartReverseRouter;
 
@@ -63,8 +60,7 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
                 .addHalLink(reverseRouter.processSignUpForm(language), "signUpSubmit")
                 .addHalLink(reverseRouter.processLogOut(language), "logOut")
 
-                .addHalLink(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall(language), "myPersonalDetails", "myAccount")
-                .addHalLink(myPersonalDetailsReverseRouter.myPersonalDetailsProcessFormCall(language), "editMyPersonalDetails")
+
 
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
         //TODO framework migration
