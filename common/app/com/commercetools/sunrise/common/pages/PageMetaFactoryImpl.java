@@ -39,7 +39,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
         pageMeta.setCsrfToken(getCsrfToken(ctx.session()));
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(homeReverseRouter.homePageCall(language), "home", "continueShopping")
-                .addHalLink(reverseRouter.processSearchProductsForm(language), "search")
                 .addHalLink(reverseRouter.processChangeLanguageForm(), "selectLanguage")
                 .addHalLink(reverseRouter.processChangeCountryForm(language), "selectCountry")
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");

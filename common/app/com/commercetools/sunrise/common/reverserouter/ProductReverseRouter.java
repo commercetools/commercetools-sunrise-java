@@ -15,6 +15,8 @@ public interface ProductReverseRouter {
 
     Call productOverviewPageCall(final String languageTag, final String categorySlug);
 
+    Call processSearchProductsForm(final String languageTag);
+
     default Optional<Call> productDetailPageCall(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
         return product.getSlug().find(locale)
                 .map(slug -> productDetailPageCall(locale.toLanguageTag(), slug, productVariant.getSku()));

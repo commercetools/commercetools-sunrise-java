@@ -9,6 +9,4 @@ public interface ReverseRouter {
     Call processChangeLanguageForm();
 
     Call processChangeCountryForm(final String languageTag);
-
-    Call processSearchProductsForm(final String languageTag);
 }
