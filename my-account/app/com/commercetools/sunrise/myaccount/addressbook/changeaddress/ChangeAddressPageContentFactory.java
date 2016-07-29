@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
-import com.commercetools.sunrise.common.models.AddressFormSettingsFactory;
+import com.commercetools.sunrise.common.models.AddressFormSettingsBeanFactory;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Base;
 import play.data.Form;
@@ -10,7 +10,7 @@ import javax.inject.Inject;
 public class ChangeAddressPageContentFactory extends Base {
 
     @Inject
-    private AddressFormSettingsFactory addressFormSettingsFactory;
+    private AddressFormSettingsBeanFactory addressFormSettingsFactory;
 
     public ChangeAddressPageContent create(final Form<?> form, final Customer customer) {
         final ChangeAddressPageContent bean = new ChangeAddressPageContent();

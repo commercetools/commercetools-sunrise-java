@@ -7,29 +7,29 @@ import play.data.Form;
 
 import javax.inject.Inject;
 
-public class AddressFormSettingsFactory extends Base {
+public class AddressFormSettingsBeanFactory extends Base {
 
     @Inject
     private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
     @Inject
     private CountryFormFieldBeanFactory countryFormFieldBeanFactory;
 
-    public AddressFormSettings create(final Form<?> form) {
-        final AddressFormSettings bean = new AddressFormSettings();
+    public AddressFormSettingsBean create(final Form<?> form) {
+        final AddressFormSettingsBean bean = new AddressFormSettingsBean();
         initialize(bean, form);
         return bean;
     }
 
-    protected final void initialize(final AddressFormSettings bean, final Form<?> form) {
+    protected final void initialize(final AddressFormSettingsBean bean, final Form<?> form) {
         fillTitle(bean, form);
         fillCountries(bean, form);
     }
 
-    protected void fillCountries(final AddressFormSettings bean, final Form<?> form) {
+    protected void fillCountries(final AddressFormSettingsBean bean, final Form<?> form) {
         bean.setCountries(countryFormFieldBeanFactory.createWithDefaultCountries(form, "country"));
     }
 
-    protected void fillTitle(final AddressFormSettings bean, final Form<?> form) {
+    protected void fillTitle(final AddressFormSettingsBean bean, final Form<?> form) {
         bean.setTitle(titleFormFieldBeanFactory.createWithDefaultTitles(form, "title"));
     }
 }

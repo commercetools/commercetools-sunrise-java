@@ -22,7 +22,7 @@ public class CheckoutAddressPageContentFactory extends Base {
     @Inject
     private CartBeanFactory cartLikeBeanFactory;
     @Inject
-    private CheckoutAddressFormSettingsFactory addressFormSettingsFactory;
+    private CheckoutAddressFormSettingsBeanFactory addressFormSettingsFactory;
 
     public CheckoutAddressPageContent create(final Form<?> form, final Cart cart) {
         final CheckoutAddressPageContent bean = new CheckoutAddressPageContent();

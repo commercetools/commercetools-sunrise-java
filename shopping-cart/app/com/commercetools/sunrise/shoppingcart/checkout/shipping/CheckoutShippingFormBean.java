@@ -6,6 +6,9 @@ public class CheckoutShippingFormBean extends FormBean {
 
     private ShippingMethodsFormBean shippingMethods;
 
+    public CheckoutShippingFormBean() {
+    }
+
     public ShippingMethodsFormBean getShippingMethods() {
         return shippingMethods;
     }

@@ -4,14 +4,14 @@ import com.commercetools.sunrise.common.forms.CountryFormFieldBean;
 import com.commercetools.sunrise.common.models.ModelBean;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBean;
 
-public class CheckoutAddressFormSettings extends ModelBean {
+public class CheckoutAddressFormSettingsBean extends ModelBean {
 
     private TitleFormFieldBean titleShipping;
     private TitleFormFieldBean titleBilling;
     private CountryFormFieldBean countriesShipping;
     private CountryFormFieldBean countriesBilling;
 
-    public CheckoutAddressFormSettings() {
+    public CheckoutAddressFormSettingsBean() {
     }
 
     public CountryFormFieldBean getCountriesBilling() {
