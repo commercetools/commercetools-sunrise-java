@@ -2,8 +2,7 @@ package com.commercetools.sunrise.myaccount.common;
 
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.AuthenticationReverseRouter;
-import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.google.inject.Injector;

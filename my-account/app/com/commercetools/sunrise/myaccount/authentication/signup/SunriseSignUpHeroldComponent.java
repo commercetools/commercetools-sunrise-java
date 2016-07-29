@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import com.commercetools.sunrise.common.controllers.AuthenticationReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.pages.HeroldComponentBase;
 import com.commercetools.sunrise.common.pages.PageMeta;
 

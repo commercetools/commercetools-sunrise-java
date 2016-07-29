@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.controllers;
+package com.commercetools.sunrise.common.reverserouter;
 
 import play.mvc.Call;
 

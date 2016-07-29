@@ -1,6 +1,6 @@
 package reverserouter;
 
-import com.commercetools.sunrise.common.controllers.AuthenticationReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.*;
 import com.google.inject.AbstractModule;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;

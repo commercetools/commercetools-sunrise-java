@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.*;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;

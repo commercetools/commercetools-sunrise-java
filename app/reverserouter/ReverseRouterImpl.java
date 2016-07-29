@@ -1,6 +1,6 @@
 package reverserouter;
 
-import com.commercetools.sunrise.common.controllers.AuthenticationReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.*;
 import io.sphere.sdk.models.Base;
