@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.models.TitleDescriptionBean;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
+import com.commercetools.sunrise.common.pagination.PaginationBean;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorBean;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetSelectorListBean;
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortSelectorBean;
@@ -14,7 +15,6 @@ public class ProductOverviewPageContent extends PageContent {
     private String searchTerm;
     private BannerBean banner;
     private JumbotronBean jumbotron;
-    // TODO searchResult
     private TitleDescriptionBean seo;
     private BreadcrumbBean breadcrumb;
     private FacetSelectorListBean facets;
@@ -22,7 +22,6 @@ public class ProductOverviewPageContent extends PageContent {
     private ProductsPerPageSelectorBean displaySelector;
     private SortSelectorBean sortSelector;
     private ProductListBean products;
-    // TODO wishlist
 
     public ProductOverviewPageContent() {
     }

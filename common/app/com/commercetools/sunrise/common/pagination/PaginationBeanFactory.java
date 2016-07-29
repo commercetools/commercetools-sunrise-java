@@ -1,8 +1,7 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.common.pagination;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.models.LinkBean;
-import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.Pagination;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.PagedResult;
 import play.Configuration;

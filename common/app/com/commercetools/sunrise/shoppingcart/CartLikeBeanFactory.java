@@ -6,9 +6,14 @@ import com.commercetools.sunrise.common.utils.MoneyContext;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
+import io.sphere.sdk.models.Reference;
+import io.sphere.sdk.payments.PaymentMethodInfo;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import javax.inject.Inject;
+import javax.money.MonetaryAmount;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.commercetools.sunrise.common.utils.PriceUtils.*;
@@ -69,12 +74,11 @@ public abstract class CartLikeBeanFactory extends Base {
     }
 
     protected void fillPaymentDetails(final CartBean bean, final CartLike<?> cartLike) {
-        bean.setPaymentDetails(new PaymentInfoBean(cartLike.getPaymentInfo(), userContext));
+        bean.setPaymentDetails(createPaymentInfo(cartLike));
     }
 
     protected void fillShippingMethod(final CartBean bean, final CartLike<?> cartLike) {
-        final MoneyContext moneyContext = getMoneyContext(cartLike);
-        bean.setShippingMethod(new ShippingInfoBean(cartLike.getShippingInfo(), moneyContext));
+        bean.setShippingMethod(createShippingInfo(cartLike));
     }
 
     protected void fillShippingAddress(final CartBean bean, final CartLike<?> cartLike) {
@@ -93,6 +97,60 @@ public abstract class CartLikeBeanFactory extends Base {
         return cartLike.getLineItems().stream()
                 .map(this::createLineItem)
                 .collect(Collectors.toList());
+    }
+
+    protected PaymentInfoBean createPaymentInfo(final CartLike<?> cartLike) {
+        final PaymentInfoBean bean = new PaymentInfoBean();
+        fillPaymentInfoType(bean, cartLike);
+        return bean;
+    }
+
+    protected void fillPaymentInfoType(final PaymentInfoBean bean, final CartLike<?> cartLike) {
+        if (cartLike.getPaymentInfo() != null) {
+            final String paymentType = cartLike.getPaymentInfo().getPayments().stream()
+                    .map(Reference::getObj)
+                    .filter(payment -> payment != null)
+                    .map(payment -> {
+                        final PaymentMethodInfo methodInfo = payment.getPaymentMethodInfo();
+                        return Optional.ofNullable(methodInfo.getName())
+                                .flatMap(name -> name.find(userContext.locales()))
+                                .orElse(methodInfo.getMethod());
+                    })
+                    .findFirst()
+                    .orElse(null);
+            bean.setType(paymentType);
+        }
+    }
+
+    protected ShippingInfoBean createShippingInfo(final CartLike<?> cartLike) {
+        final ShippingInfoBean bean = new ShippingInfoBean();
+        fillShippingInfoLabel(bean, cartLike);
+        fillShippingInfoDescription(bean, cartLike);
+        fillShippingInfoPrice(bean, cartLike);
+        return bean;
+    }
+
+    protected void fillShippingInfoLabel(final ShippingInfoBean bean, final CartLike<?> cartLike) {
+        if (cartLike.getShippingInfo() != null) {
+            bean.setLabel(cartLike.getShippingInfo().getShippingMethodName());
+        }
+    }
+
+    protected void fillShippingInfoDescription(final ShippingInfoBean bean, final CartLike<?> cartLike) {
+        if (cartLike.getShippingInfo() != null) {
+            final Reference<ShippingMethod> ref = cartLike.getShippingInfo().getShippingMethod();
+            if (ref != null && ref.getObj() != null) {
+                bean.setDescription(ref.getObj().getDescription());
+            }
+        }
+    }
+
+    protected void fillShippingInfoPrice(final ShippingInfoBean bean, final CartLike<?> cartLike) {
+        MonetaryAmount price = null;
+        if (cartLike.getShippingInfo() != null) {
+            price = cartLike.getShippingInfo().getPrice();
+        }
+        bean.setPrice(getMoneyContext(cartLike).formatOrZero(price));
     }
 
     protected MoneyContext getMoneyContext(final CartLike<?> cartLike) {

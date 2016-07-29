@@ -1,10 +1,11 @@
 package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.models.LinkBean;
+import com.commercetools.sunrise.common.models.ModelBean;
 
 import java.util.List;
 
-public class BreadcrumbBean {
+public class BreadcrumbBean extends ModelBean {
 
     private List<LinkBean> links;
 
