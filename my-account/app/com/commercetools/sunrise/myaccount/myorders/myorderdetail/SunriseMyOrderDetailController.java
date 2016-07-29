@@ -2,6 +2,7 @@ package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import com.commercetools.sunrise.hooks.OrderQueryFilterHook;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
@@ -40,6 +41,7 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
         return "my-account-my-orders-order";
     }
 
+    @ReverseRoute("myOrderDetailPageCall")
     public CompletionStage<Result> showByOrderNumber(final String languageTag, final String orderNumber) {
         return doRequest(() -> {
             logger.debug("show order with order number={} in locale={}", orderNumber, languageTag);

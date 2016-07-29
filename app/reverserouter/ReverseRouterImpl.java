@@ -11,7 +11,7 @@ import static demo.productcatalog.routes.*;
 import static demo.shoppingcart.routes.*;
 import static setupwidget.controllers.routes.*;
 
-public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, SetupReverseRouter, CartReverseRouter {
+public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, SetupReverseRouter, CartReverseRouter {
 
     @Override
     public Call themeAssets(final String file) {
@@ -141,16 +141,6 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
     @Override
     public Call removeAddressFromAddressBookProcessFormCall(final String languageTag, final String addressId) {
         return RemoveAddressController.process(languageTag, addressId);
-    }
-
-    @Override
-    public Call myOrderListPageCall(final String languageTag) {
-        return MyOrderListController.show(languageTag);
-    }
-
-    @Override
-    public Call myOrderDetailPageCall(final String languageTag, final String orderNumber) {
-        return MyOrderDetailController.showByOrderNumber(languageTag, orderNumber);
     }
 
     @Override

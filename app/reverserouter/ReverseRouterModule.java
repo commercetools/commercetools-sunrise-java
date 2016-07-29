@@ -16,7 +16,6 @@ public class ReverseRouterModule extends AbstractModule {
         bind(HomeReverseRouter.class).toInstance(reverseRouter);
         bind(AddressBookReverseRouter.class).toInstance(reverseRouter);
         bind(MyPersonalDetailsReverseRouter.class).toInstance(reverseRouter);
-        bind(MyOrdersReverseRouter.class).toInstance(reverseRouter);
         bind(SetupReverseRouter.class).toInstance(reverseRouter);
         bind(CartReverseRouter.class).toInstance(reverseRouter);
     }
