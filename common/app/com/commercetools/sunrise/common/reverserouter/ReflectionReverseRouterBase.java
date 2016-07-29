@@ -21,10 +21,7 @@ abstract class ReflectionReverseRouterBase extends Base {
             final ReverseCaller reverseCaller = parsedRoutes.getRoutes().stream()
                     .filter(r -> r.getControllerClass() != null)
                     .map((parsedRoute) -> getParsedRouteRFunction(parsedRoute, tag))
-                    .filter(x -> {
-                        final boolean present = x.isPresent();
-                        return present;
-                    })
+                    .filter(Optional::isPresent)
                     .map(x -> x.get())
                     .map(p -> new ReverseCaller(p.getRight(), p.getLeft()))
                     .findFirst()
