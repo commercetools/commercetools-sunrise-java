@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.reverserouter;
 
 import com.commercetools.sunrise.common.pages.ParsedRoute;
 import com.commercetools.sunrise.common.pages.ParsedRoutes;
-import com.commercetools.sunrise.framework.annotations.RouteTodoRename;
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -68,7 +68,7 @@ abstract class ReflectionReverseRouterBase extends Base {
             if (method.getName().equals("changeLanguage")) {
                 System.err.println("here");
             }
-            final RouteTodoRename annotationsByTypeOption = method.getDeclaredAnnotation(RouteTodoRename.class);
+            final ReverseRoute annotationsByTypeOption = method.getDeclaredAnnotation(ReverseRoute.class);
             return Optional.ofNullable(annotationsByTypeOption).map(annotationsByType -> Arrays.stream(annotationsByType.value())
                     .anyMatch(value -> tag.equals(value))).orElse(false);
         } catch (final Exception e) {

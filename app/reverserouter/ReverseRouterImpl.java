@@ -1,19 +1,17 @@
 package reverserouter;
 
-import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.*;
 import io.sphere.sdk.models.Base;
 import play.mvc.Call;
 import setupwidget.controllers.SetupReverseRouter;
 
-import static demo.common.routes.*;
 import static demo.myaccount.routes.*;
 import static demo.productcatalog.routes.*;
 import static demo.shoppingcart.routes.*;
 import static setupwidget.controllers.routes.*;
 
-public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, SetupReverseRouter, CartReverseRouter, AuthenticationReverseRouter {
+public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, SetupReverseRouter, CartReverseRouter {
 
     @Override
     public Call themeAssets(final String file) {
@@ -103,26 +101,6 @@ public class ReverseRouterImpl extends Base implements ReverseRouter, HomeRevers
     @Override
     public Call checkoutThankYouPageCall(final String languageTag) {
         return CheckoutThankYouController.show(languageTag);
-    }
-
-    @Override
-    public Call showLogInForm(final String languageTag) {
-        return LogInController.show(languageTag);
-    }
-
-    @Override
-    public Call processLogInForm(final String languageTag) {
-        return LogInController.process(languageTag);
-    }
-
-    @Override
-    public Call processSignUpForm(final String languageTag) {
-        return SignUpController.process(languageTag);
-    }
-
-    @Override
-    public Call processLogOut(final String languageTag) {
-        return LogOutController.process(languageTag);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.commercetools.sunrise.myaccount.authentication.logout;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import play.mvc.Result;
 
 import java.util.HashSet;
@@ -22,6 +23,7 @@ public abstract class SunriseLogOutController extends SunriseFrameworkController
         return new HashSet<>(asList("my-account", "log-out", "customer", "user"));
     }
 
+    @ReverseRoute("processLogOut")
     public CompletionStage<Result> process(final String languageTag) {
         removeCustomerSessionData(session());
         removeCartSessionData(session());
