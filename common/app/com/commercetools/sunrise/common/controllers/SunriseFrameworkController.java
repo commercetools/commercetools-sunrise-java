@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;
@@ -37,7 +38,6 @@ import play.mvc.*;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
 import java.util.Deque;
@@ -98,13 +98,17 @@ public abstract class SunriseFrameworkController extends Controller {
 
     public abstract Set<String> getFrameworkTags();
 
-    @Inject
-    private void setMultiControllerComponents(@Named("controllers") final MultiControllerComponentResolver controllersMultiComponent, final MultiControllerComponentResolver multiComponent, final Injector injector) {
-        addMultiComponents(controllersMultiComponent, injector);
-        addMultiComponents(multiComponent, injector);
+    @Inject(optional=true)
+    private void setMultiControllerComponents(@Nullable @Named("controllers") final MultiControllerComponentResolver controllersMultiComponent, final MultiControllerComponentResolver multiComponent, final Injector injector) {
+        if (controllersMultiComponent != null) {
+            addMultiComponents(controllersMultiComponent, injector);
+        }
+        if (multiComponent != null) {
+            addMultiComponents(multiComponent, injector);
+        }
     }
 
-    protected void addMultiComponents(final MultiControllerComponentResolver multiComponent, final Injector injector) {
+    private void addMultiComponents(final MultiControllerComponentResolver multiComponent, final Injector injector) {
         final List<Class<? extends ControllerComponent>> components = multiComponent.findMatchingComponents(this);
         components.forEach(clazz -> {
             final ControllerComponent instance = injector.getInstance(clazz);
