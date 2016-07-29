@@ -3,6 +3,7 @@ package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import com.commercetools.sunrise.shoppingcart.cart.SunriseCartManagementController;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
@@ -47,6 +48,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
     }
 
     @RequireCSRFCheck
+    @ReverseRoute("processChangeLineItemQuantityForm")
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process change line item quantity form in locale={}", languageTag);

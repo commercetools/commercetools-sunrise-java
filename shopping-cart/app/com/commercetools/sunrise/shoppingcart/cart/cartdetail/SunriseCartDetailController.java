@@ -2,6 +2,7 @@ package com.commercetools.sunrise.shoppingcart.cart.cartdetail;
 
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,7 @@ public abstract class SunriseCartDetailController extends SunriseFrameworkCartCo
     }
 
     @AddCSRFToken
+    @ReverseRoute("showCart")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             return getOrCreateCart()

@@ -3,6 +3,7 @@ package com.commercetools.sunrise.shoppingcart.cart.removelineitem;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import com.commercetools.sunrise.shoppingcart.cart.SunriseCartManagementController;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
@@ -47,6 +48,7 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
     }
 
     @RequireCSRFCheck
+    @ReverseRoute("processDeleteLineItemForm")
     public CompletionStage<Result> removeLineItem(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process remove line item form in locale={}", languageTag);
