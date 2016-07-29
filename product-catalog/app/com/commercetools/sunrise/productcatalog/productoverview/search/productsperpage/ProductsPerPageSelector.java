@@ -4,21 +4,21 @@ import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 
 public final class ProductsPerPageSelector extends Base {
 
     private final String key;
     private final List<ProductsPerPageOption> options;
     private final int defaultAmount;
-    private final Optional<ProductsPerPageOption> selectedOption;
+    @Nullable
+    private final ProductsPerPageOption selectedOption;
 
     private ProductsPerPageSelector(final String key, final List<ProductsPerPageOption> options, final int defaultAmount,
                                     @Nullable final ProductsPerPageOption selectedOption) {
         this.key = key;
         this.options = options;
         this.defaultAmount = defaultAmount;
-        this.selectedOption = Optional.ofNullable(selectedOption);
+        this.selectedOption = selectedOption;
     }
 
     public String getKey() {
@@ -34,7 +34,7 @@ public final class ProductsPerPageSelector extends Base {
     }
 
     public int getSelectedPageSize() {
-        return selectedOption.map(ProductsPerPageOption::getAmount).orElse(defaultAmount);
+        return selectedOption != null ? selectedOption.getAmount() : defaultAmount;
     }
 
     public static ProductsPerPageSelector of(final String key, final List<ProductsPerPageOption> options, final int defaultAmount,

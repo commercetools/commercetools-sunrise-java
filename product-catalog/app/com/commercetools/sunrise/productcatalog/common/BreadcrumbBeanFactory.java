@@ -52,10 +52,10 @@ public class BreadcrumbBeanFactory extends Base {
 
     protected List<LinkBean> createCategoryLinkBeanList(final ProductProjection product) {
         return product.getCategories().stream()
-                    .findFirst()
-                    .flatMap(ref -> categoryTree.findById(ref.getId())
-                            .map(this::createCategoryTreeLinks))
-                    .orElseGet(Collections::emptyList);
+                .findFirst()
+                .flatMap(ref -> categoryTree.findById(ref.getId())
+                        .map(this::createCategoryTreeLinks))
+                .orElseGet(Collections::emptyList);
     }
 
     protected List<LinkBean> createLinkBeanList(final ProductProjection product, final ProductVariant variant) {
@@ -80,10 +80,10 @@ public class BreadcrumbBeanFactory extends Base {
         return linkBean;
     }
 
-    protected LinkBean createProductLinkData(final ProductProjection currentProduct, final ProductVariant variant) {
+    protected LinkBean createProductLinkData(final ProductProjection product, final ProductVariant variant) {
         final LinkBean linkBean = new LinkBean();
-        linkBean.setText(currentProduct.getName().find(userContext.locales()).orElse(""));
-        linkBean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(userContext.locale(), currentProduct, variant));
+        linkBean.setText(product.getName().find(userContext.locales()).orElse(""));
+        linkBean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(userContext.locale(), product, variant));
         return linkBean;
     }
 

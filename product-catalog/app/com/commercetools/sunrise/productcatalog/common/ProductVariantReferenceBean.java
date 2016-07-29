@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
-public class ProductVariantReferenceBean extends Base {
+public class ProductVariantReferenceBean extends ModelBean {
 
     private int id;
     private String url;

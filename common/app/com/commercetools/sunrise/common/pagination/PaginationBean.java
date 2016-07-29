@@ -1,11 +1,11 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.common.pagination;
 
 import com.commercetools.sunrise.common.models.LinkBean;
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
 import java.util.List;
 
-public class PaginationBean extends Base {
+public class PaginationBean extends ModelBean {
 
     private String previousUrl;
     private String nextUrl;

@@ -7,6 +7,7 @@ import com.commercetools.sunrise.common.models.ProductVariantBeanFactory;
 import com.commercetools.sunrise.common.models.SelectableProductAttributeBean;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import io.sphere.sdk.models.Base;
+import io.sphere.sdk.products.Image;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
@@ -43,64 +44,60 @@ public class ProductBeanFactory extends Base {
     }
 
     protected final void initialize(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        fillIds(product, variant, bean);
-        fillDescription(product, bean);
-        fillGallery(variant, bean);
-        fillDetails(variant, bean);
-        fillVariant(product, variant, bean);
-        fillVariantIdentifiers(bean);
-        fillVariants(product, bean);
-        fillAttributes(product, variant, bean);
+        fillIds(bean, product, variant);
+        fillDescription(bean, product, variant);
+        fillGallery(bean, product, variant);
+        fillDetails(bean, product, variant);
+        fillVariant(bean, product, variant);
+        fillVariantIdentifiers(bean, product, variant);
+        fillVariants(bean, product, variant);
+        fillAttributes(bean, product, variant);
     }
 
-    protected void fillAttributes(final ProductProjection product, final ProductVariant variant, final ProductBean productBean) {
-        productBean.setAttributes(createSelectableAttributes(product, variant));
+    protected void fillAttributes(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setAttributes(createSelectableAttributes(product, variant));
     }
 
-    protected void fillVariants(final ProductProjection product, final ProductBean productBean) {
-        productBean.setVariants(createAttributeCombinationToVariantMap(product));
+    protected void fillVariants(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setVariants(createAttributeCombinationToVariantMap(product));
     }
 
-    protected void fillVariantIdentifiers(final ProductBean productBean) {
-        productBean.setVariantIdentifiers(productDataConfig.getSelectableAttributes());
+    protected void fillVariantIdentifiers(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setVariantIdentifiers(productDataConfig.getSelectableAttributes());
     }
 
-    protected void fillVariant(final ProductProjection product, final ProductVariant variant, final ProductBean productBean) {
-        productBean.setVariant(productVariantBeanFactory.create(product, variant));
+    protected void fillVariant(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setVariant(productVariantBeanFactory.create(product, variant));
     }
 
-    protected void fillDetails(final ProductVariant variant, final ProductBean productBean) {
-        productBean.setDetails(createProductDetails(variant));
+    protected void fillDetails(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setDetails(createProductDetails(product, variant));
     }
 
-    protected void fillGallery(final ProductVariant variant, final ProductBean productBean) {
-        productBean.setGallery(createGallery(variant));
+    protected void fillGallery(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setGallery(createGallery(product, variant));
     }
 
-    protected void fillDescription(final ProductProjection product, final ProductBean productBean) {
-        productBean.setDescription(createDescription(product));
-    }
-
-    protected void fillIds(final ProductProjection product, final ProductVariant variant, final ProductBean productBean) {
-        productBean.setProductId(product.getId());
-        productBean.setVariantId(variant.getId());
-    }
-
-    protected String createDescription(final ProductProjection product) {
-        return Optional.ofNullable(product.getDescription())
+    protected void fillDescription(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setDescription(Optional.ofNullable(product.getDescription())
                 .flatMap(locText -> locText.find(userContext.locales()))
-                .orElse("");
+                .orElse(""));
     }
 
-    protected ProductGalleryBean createGallery(final ProductVariant variant) {
+    protected void fillIds(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setProductId(product.getId());
+        bean.setVariantId(variant.getId());
+    }
+
+    protected ProductGalleryBean createGallery(final ProductProjection product, final ProductVariant variant) {
         final ProductGalleryBean bean = new ProductGalleryBean();
         bean.setList(variant.getImages().stream()
-                .map(ProductImageBean::new)
+                .map(this::createProductImage)
                 .collect(toList()));
         return bean;
     }
 
-    protected ProductDetailsBean createProductDetails(final ProductVariant variant) {
+    protected ProductDetailsBean createProductDetails(final ProductProjection product, final ProductVariant variant) {
         final ProductDetailsBean bean = new ProductDetailsBean();
         bean.setFeatures(productDataConfig.getDisplayedAttributes().stream()
                 .map(variant::getAttribute)
@@ -143,5 +140,12 @@ public class ProductBeanFactory extends Base {
         bean.setId(variant.getId());
         bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(userContext.locale(), product, variant));
         return bean;
+    }
+
+    protected ProductImageBean createProductImage(final Image image) {
+        final ProductImageBean imageBean = new ProductImageBean();
+        imageBean.setThumbImage(image.getUrl());
+        imageBean.setBigImage(image.getUrl());
+        return imageBean;
     }
 }

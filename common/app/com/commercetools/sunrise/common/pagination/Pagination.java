@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
+package com.commercetools.sunrise.common.pagination;
 
 import io.sphere.sdk.models.Base;
 

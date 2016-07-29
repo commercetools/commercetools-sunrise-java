@@ -1,16 +1,15 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.common.pagination;
 
+import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.models.LinkBean;
 import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.commercetools.sunrise.common.contexts.RequestContext;
-import com.commercetools.sunrise.common.models.LinkBean;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
 import org.junit.Test;
 import play.Configuration;
-import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.Pagination;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
