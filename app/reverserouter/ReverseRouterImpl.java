@@ -13,21 +13,11 @@ import static demo.productcatalog.routes.*;
 import static demo.shoppingcart.routes.*;
 import static setupwidget.controllers.routes.*;
 
-public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, SetupReverseRouter, CartReverseRouter, AuthenticationReverseRouter, LocalizationReverseRouter {
+public class ReverseRouterImpl extends Base implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, SetupReverseRouter, CartReverseRouter, AuthenticationReverseRouter {
 
     @Override
     public Call themeAssets(final String file) {
         return controllers.routes.WebJarAssets.at(file);
-    }
-
-    @Override
-    public Call processChangeLanguageForm() {
-        return LocalizationController.changeLanguage();
-    }
-
-    @Override
-    public Call processChangeCountryForm(final String languageTag) {
-        return LocalizationController.changeCountry(languageTag);
     }
 
     @Override

@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import static org.apache.commons.lang3.StringUtils.countMatches;
 
 @Singleton
-final class ParsedRoutes extends Base {
+public final class ParsedRoutes extends Base {
     private List<ParsedRoute> routes;
 
     @Inject

@@ -3,7 +3,7 @@ package com.commercetools.sunrise.common.pages;
 import io.sphere.sdk.models.Base;
 import play.routing.Router;
 
-final class ParsedRoute extends Base {
+public final class ParsedRoute extends Base {
     private Router.RouteDocumentation routeDocumentation;
     private Class<?> controllerClass;
 
