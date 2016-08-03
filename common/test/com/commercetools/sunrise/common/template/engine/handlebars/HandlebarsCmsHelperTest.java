@@ -45,7 +45,6 @@ public class HandlebarsCmsHelperTest {
 
     private static CmsPage cmsPage() {
         return fieldName -> {
-            System.out.println(fieldName);
             if (fieldName.equals("someid.somefield")) return Optional.of("something");
             else return Optional.empty();
         };
