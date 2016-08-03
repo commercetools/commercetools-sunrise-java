@@ -17,7 +17,7 @@ public class CartBeanFactory extends CartLikeBeanFactory {
         return bean;
     }
 
-    public CartBean createWithEmptyCart(){
+    public CartBean createWithEmptyCart() {
         final CartBean bean = new CartBean();
         initializeWithEmptyCart(bean);
         return bean;

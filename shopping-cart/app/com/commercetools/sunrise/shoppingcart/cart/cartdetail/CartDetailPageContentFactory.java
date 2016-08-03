@@ -34,9 +34,9 @@ public class CartDetailPageContentFactory extends Base {
     }
 
     protected void fillCart(final CartDetailPageContent bean, @Nullable final Cart cart) {
-        if (cart != null){
+        if (cart != null) {
             bean.setCart(cartLikeBeanFactory.create(cart));
-        }else{
+        } else {
             bean.setCart(cartLikeBeanFactory.createWithEmptyCart());
         }
     }
