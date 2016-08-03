@@ -46,8 +46,10 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
     public CompletionStage<Result> removeLineItem(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process remove line item form in locale={}", languageTag);
-            return getOrCreateCart()
-                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
+            return doRequest(() -> findPrimaryCart()
+                    .thenComposeAsync(cartOptional -> cartOptional
+                            .map(this::validateForm)
+                            .orElseGet(this::redirectToCartDetail), HttpExecution.defaultContext()));
         });
     }
 
