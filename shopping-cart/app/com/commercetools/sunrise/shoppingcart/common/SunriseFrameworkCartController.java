@@ -71,7 +71,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
      * @return stage
      */
     protected CompletionStage<Cart> requiringExistingPrimaryCart() {
-        return findPrimaryCartInCommercetoolsPlatform()
+        return findPrimaryCart()
                 .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new PrimaryCartNotFoundException()), defaultContext());
     }
 
@@ -89,7 +89,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
      * Loads the primary cart from commercetools platform without applying side effects like updating the cart or the session.
      * @return a future of the optional cart
      */
-    protected CompletionStage<Optional<Cart>> findPrimaryCartInCommercetoolsPlatform() {
+    protected CompletionStage<Optional<Cart>> findPrimaryCart() {
         final Http.Session session = session();
         return CustomerSessionUtils.getCustomerId(session)
                 .map(customerId -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId)))
@@ -106,7 +106,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Cart> getOrCreateCart() {
-        final CompletionStage<Cart> cartCompletionStage = findPrimaryCartInCommercetoolsPlatform()
+        final CompletionStage<Cart> cartCompletionStage = findPrimaryCart()
                 .thenComposeAsync(cartOptional -> cartOptional
                                 .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
                                 .orElseGet(() -> createCart(userContext())),

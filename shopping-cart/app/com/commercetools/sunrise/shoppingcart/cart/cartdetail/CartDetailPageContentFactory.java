@@ -9,6 +9,7 @@ import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Base;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 public class CartDetailPageContentFactory extends Base {
@@ -21,19 +22,23 @@ public class CartDetailPageContentFactory extends Base {
     @Inject
     private UserContext userContext;
 
-    public CartDetailPageContent create(final Cart cart) {
+    public CartDetailPageContent create(@Nullable final Cart cart) {
         final CartDetailPageContent bean = new CartDetailPageContent();
         initialize(bean, cart);
         return bean;
     }
 
-    protected final void initialize(final CartDetailPageContent bean, final Cart cart) {
+    protected final void initialize(final CartDetailPageContent bean, @Nullable final Cart cart) {
         fillCart(bean, cart);
         fillTitle(bean);
     }
 
-    protected void fillCart(final CartDetailPageContent bean, final Cart cart) {
-        bean.setCart(cartLikeBeanFactory.create(cart));
+    protected void fillCart(final CartDetailPageContent bean, @Nullable final Cart cart) {
+        if (cart != null){
+            bean.setCart(cartLikeBeanFactory.create(cart));
+        }else{
+            bean.setCart(cartLikeBeanFactory.createWithEmptyCart());
+        }
     }
 
     protected void fillTitle(final PageContent bean) {

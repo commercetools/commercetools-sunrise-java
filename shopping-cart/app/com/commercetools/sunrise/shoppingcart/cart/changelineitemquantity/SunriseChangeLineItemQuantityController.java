@@ -44,11 +44,10 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
     }
 
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("process change line item quantity form in locale={}", languageTag);
-            return getOrCreateCart()
-                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
-        });
+        return doRequest(() -> findPrimaryCart()
+                .thenComposeAsync(cartOptional -> cartOptional
+                        .map(this::validateForm)
+                        .orElseGet(this::redirectToCartDetail), HttpExecution.defaultContext()));
     }
 
     @Override

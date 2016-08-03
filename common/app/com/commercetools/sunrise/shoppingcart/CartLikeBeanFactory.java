@@ -31,6 +31,12 @@ public class CartLikeBeanFactory extends Base {
         return bean;
     }
 
+    public CartLikeBean createWithEmptyCart(){
+        final CartLikeBean bean = new CartLikeBean();
+        initializeWithEmptyCart(bean);
+        return bean;
+    }
+
     protected final void initialize(final CartLikeBean bean, final CartLike<?> cartLike) {
         fillPriceInfo(bean, cartLike);
         fillTotalItems(bean, cartLike);
@@ -42,6 +48,14 @@ public class CartLikeBeanFactory extends Base {
         if (cartLike instanceof Order) {
             fillOrderInfo(bean, (Order) cartLike);
         }
+    }
+
+    protected final void initializeWithEmptyCart(final CartLikeBean bean) {
+        bean.setTotalItems(0L);
+        final MoneyContext moneyContext = MoneyContext.of(userContext.currency(), userContext.locale());
+        bean.setSalesTax(moneyContext.formatOrZero(null));
+        bean.setTotalPrice(moneyContext.formatOrZero(null));
+        bean.setSubtotalPrice(moneyContext.formatOrZero(null));
     }
 
     protected void fillTotalItems(final CartLikeBean bean, final CartLike<?> cartLike) {
