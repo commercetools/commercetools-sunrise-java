@@ -35,21 +35,28 @@ public class CountryFormFieldBeanFactory extends Base {
     }
 
     protected void fillList(final CountryFormFieldBean bean, final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
-        final String selectedCountryCode = form.field(fieldName).valueOr(null);
+        final String selectedCountryCode = getSelectedCountry(form, fieldName);
         bean.setList(availableCountries.stream()
-                .map(countryOption -> countryToSelectableData(countryOption, selectedCountryCode))
+                .map(countryOption -> createFormSelectableOption(countryOption, selectedCountryCode))
                 .collect(toList()));
     }
 
-    protected FormSelectableOptionBean countryToSelectableData(final CountryCode country, final @Nullable String selectedCountryCode) {
+    protected FormSelectableOptionBean createFormSelectableOption(final CountryCode country, final @Nullable String selectedCountryCode) {
         final FormSelectableOptionBean bean = new FormSelectableOptionBean();
-        bean.setLabel(country.toLocale().getDisplayCountry(userContext.locale()));
-        final String countryCode = country.getAlpha2();
-        bean.setValue(countryCode);
-        if (countryCode.equals(selectedCountryCode)) {
-            bean.setSelected(true);
-        }
+        initializeFormSelectableOption(bean, country, selectedCountryCode);
         return bean;
+    }
+
+    protected final void initializeFormSelectableOption(final FormSelectableOptionBean bean, final CountryCode country, final @Nullable String selectedCountryCode) {
+        final String countryCode = country.getAlpha2();
+        bean.setLabel(country.toLocale().getDisplayCountry(userContext.locale()));
+        bean.setValue(countryCode);
+        bean.setSelected(countryCode.equals(selectedCountryCode));
+    }
+
+    @Nullable
+    protected String getSelectedCountry(final Form<?> form, final String fieldName) {
+        return form.field(fieldName).value();
     }
 
     protected List<CountryCode> getDefaultCountries() {

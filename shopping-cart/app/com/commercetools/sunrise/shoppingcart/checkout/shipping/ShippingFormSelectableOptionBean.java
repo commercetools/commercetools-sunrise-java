@@ -1,22 +1,13 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import io.sphere.sdk.shippingmethods.ShippingMethod;
 
-import javax.annotation.Nullable;
-
-public class ShippingMethodBean extends FormSelectableOptionBean {
+public class ShippingFormSelectableOptionBean extends FormSelectableOptionBean {
 
     private String deliveryDays;
     private String price;
 
-    public ShippingMethodBean() {
-    }
-
-    public ShippingMethodBean(final ShippingMethod shippingMethod, final @Nullable String selectedShippingMethodId) {
-        setLabel(shippingMethod.getName());
-        setValue(shippingMethod.getId());
-        setSelected(shippingMethod.getId().equals(selectedShippingMethodId));
+    public ShippingFormSelectableOptionBean() {
     }
 
     public String getDeliveryDays() {
