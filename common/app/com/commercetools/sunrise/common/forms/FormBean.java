@@ -1,11 +1,14 @@
 package com.commercetools.sunrise.common.forms;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
-public class FormBean extends Base {
+public class FormBean extends ModelBean {
 
     private ErrorsBean errors;
     private MessagesBean messages;
+
+    public FormBean() {
+    }
 
     public ErrorsBean getErrors() {
         return errors;

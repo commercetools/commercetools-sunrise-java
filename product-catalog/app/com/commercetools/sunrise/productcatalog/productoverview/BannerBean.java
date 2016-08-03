@@ -1,11 +1,14 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.models.InfoData;
+import com.commercetools.sunrise.common.models.TitleDescriptionBean;
 
-public class BannerBean extends InfoData {
+public class BannerBean extends TitleDescriptionBean {
 
     private String imageMobile;
     private String imageDesktop;
+
+    public BannerBean() {
+    }
 
     public String getImageMobile() {
         return imageMobile;

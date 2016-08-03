@@ -1,19 +1,11 @@
 package com.commercetools.sunrise.common.models;
 
-import io.sphere.sdk.models.Base;
-
-public class InfoData extends Base {
+public class TitleDescriptionBean extends ModelBean {
 
     private String title;
-    private String text;
     private String description;
 
-    public InfoData() {
-    }
-
-    public InfoData(final String title) {
-        this.title = title;
-        this.text = title;
+    public TitleDescriptionBean() {
     }
 
     public String getTitle() {
@@ -22,14 +14,6 @@ public class InfoData extends Base {
 
     public void setTitle(final String title) {
         this.title = title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(final String text) {
-        this.text = text;
     }
 
     public String getDescription() {

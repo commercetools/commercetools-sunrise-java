@@ -1,12 +1,13 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
-import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.pages.PageData;
+import com.commercetools.sunrise.common.pagination.Pagination;
+import com.commercetools.sunrise.common.pagination.PaginationBeanFactory;
 import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.hooks.ProductProjectionPagedSearchResultHook;
 import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
-import com.commercetools.sunrise.productcatalog.productoverview.PaginationBeanFactory;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageSelector;
@@ -44,8 +45,9 @@ public class PaginationComponent extends Base implements ControllerComponent, Pa
         pagination = paginationFactory.create();
         productsPerPageSelector = productsPerPageSelectorFactory.create();
         final int pageSize = productsPerPageSelector.getSelectedPageSize();
+        final int page = pagination != null ? pagination.getPage() : PaginationFactory.DEFAULT_PAGE;
         return search
-                .withOffset((pagination.getPage() - 1) * pageSize)
+                .withOffset((page - 1) * pageSize)
                 .withLimit(pageSize);
     }
 

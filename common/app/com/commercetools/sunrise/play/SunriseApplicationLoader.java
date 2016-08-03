@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.configuration;
+package com.commercetools.sunrise.play;
 
 import play.ApplicationLoader;
 import play.Configuration;

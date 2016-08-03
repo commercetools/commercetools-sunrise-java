@@ -1,13 +1,15 @@
-package com.commercetools.sunrise.myaccount.addressbook;
+package com.commercetools.sunrise.common.models;
 
-import com.commercetools.sunrise.common.models.CountryFormFieldBean;
-import com.commercetools.sunrise.common.models.ModelBean;
-import com.commercetools.sunrise.common.models.TitleFormFieldBean;
+import com.commercetools.sunrise.common.forms.CountryFormFieldBean;
+import com.commercetools.sunrise.common.forms.TitleFormFieldBean;
 
-public class AddressFormSettings extends ModelBean {
+public class AddressFormSettingsBean extends ModelBean {
 
     private TitleFormFieldBean title;
     private CountryFormFieldBean countries;
+
+    public AddressFormSettingsBean() {
+    }
 
     public TitleFormFieldBean getTitle() {
         return title;

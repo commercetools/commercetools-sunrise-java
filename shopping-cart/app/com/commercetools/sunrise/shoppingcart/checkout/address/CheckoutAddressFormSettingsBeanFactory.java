@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import static java.util.Collections.singletonList;
 
-public class CheckoutAddressFormSettingsFactory extends Base {
+public class CheckoutAddressFormSettingsBeanFactory extends Base {
 
     @Inject
     private UserContext userContext;
@@ -19,32 +19,32 @@ public class CheckoutAddressFormSettingsFactory extends Base {
     @Inject
     private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
 
-    public CheckoutAddressFormSettings create(final Form<?> form) {
-        final CheckoutAddressFormSettings bean = new CheckoutAddressFormSettings();
+    public CheckoutAddressFormSettingsBean create(final Form<?> form) {
+        final CheckoutAddressFormSettingsBean bean = new CheckoutAddressFormSettingsBean();
         initialize(bean, form);
         return bean;
     }
 
-    protected final void initialize(final CheckoutAddressFormSettings bean, final Form<?> form) {
+    protected final void initialize(final CheckoutAddressFormSettingsBean bean, final Form<?> form) {
         fillCountriesShipping(bean, form);
         fillCountriesBilling(bean, form);
         fillTitleShipping(bean, form);
         fillTitleBilling(bean, form);
     }
 
-    protected void fillTitleBilling(final CheckoutAddressFormSettings bean, final Form<?> form) {
+    protected void fillTitleBilling(final CheckoutAddressFormSettingsBean bean, final Form<?> form) {
         bean.setTitleBilling(titleFormFieldBeanFactory.createWithDefaultTitles(form, "titleBilling"));
     }
 
-    protected void fillTitleShipping(final CheckoutAddressFormSettings bean, final Form<?> form) {
+    protected void fillTitleShipping(final CheckoutAddressFormSettingsBean bean, final Form<?> form) {
         bean.setTitleShipping(titleFormFieldBeanFactory.createWithDefaultTitles(form, "titleShipping"));
     }
 
-    protected void fillCountriesBilling(final CheckoutAddressFormSettings bean, final Form<?> form) {
+    protected void fillCountriesBilling(final CheckoutAddressFormSettingsBean bean, final Form<?> form) {
         bean.setCountriesBilling(countryFormFieldBeanFactory.createWithDefaultCountries(form, "countryBilling"));
     }
 
-    protected void fillCountriesShipping(final CheckoutAddressFormSettings bean, final Form<?> form) {
+    protected void fillCountriesShipping(final CheckoutAddressFormSettingsBean bean, final Form<?> form) {
         bean.setCountriesShipping(countryFormFieldBeanFactory.create(form, "countryShipping", singletonList(userContext.country())));
     }
 

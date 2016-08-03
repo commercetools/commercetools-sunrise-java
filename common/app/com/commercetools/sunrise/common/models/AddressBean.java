@@ -1,12 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-import io.sphere.sdk.models.Address;
-import io.sphere.sdk.models.Base;
-
-import javax.annotation.Nullable;
-import java.util.Locale;
-
-public class AddressBean extends Base {
+public class AddressBean extends ModelBean {
 
     private String title;
     private String firstName;

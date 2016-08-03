@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.configuration;
+package com.commercetools.sunrise.play;
 
 import com.typesafe.config.ConfigException;
 import play.Configuration;

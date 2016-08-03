@@ -1,9 +1,10 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.models.InfoData;
+import com.commercetools.sunrise.common.models.TitleDescriptionBean;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
+import com.commercetools.sunrise.common.pagination.PaginationBean;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorBean;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetSelectorListBean;
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortSelectorBean;
@@ -14,15 +15,13 @@ public class ProductOverviewPageContent extends PageContent {
     private String searchTerm;
     private BannerBean banner;
     private JumbotronBean jumbotron;
-    // TODO searchResult
-    private InfoData seo;
+    private TitleDescriptionBean seo;
     private BreadcrumbBean breadcrumb;
     private FacetSelectorListBean facets;
     private PaginationBean pagination;
     private ProductsPerPageSelectorBean displaySelector;
     private SortSelectorBean sortSelector;
     private ProductListBean products;
-    // TODO wishlist
 
     public ProductOverviewPageContent() {
     }
@@ -59,11 +58,11 @@ public class ProductOverviewPageContent extends PageContent {
         this.jumbotron = jumbotron;
     }
 
-    public InfoData getSeo() {
+    public TitleDescriptionBean getSeo() {
         return seo;
     }
 
-    public void setSeo(final InfoData seo) {
+    public void setSeo(final TitleDescriptionBean seo) {
         this.seo = seo;
     }
 

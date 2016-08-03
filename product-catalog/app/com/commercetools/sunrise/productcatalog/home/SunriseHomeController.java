@@ -1,13 +1,12 @@
 package com.commercetools.sunrise.productcatalog.home;
 
+import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithCmsPage;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.template.cms.CmsPage;
-import com.commercetools.sunrise.common.template.cms.CmsService;
 import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
@@ -15,7 +14,6 @@ import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
@@ -52,17 +50,6 @@ public abstract class SunriseHomeController extends SunriseFrameworkController i
     @Override
     public String getCmsPageKey() {
         return "home";
-    }
-
-    @Override
-    public CmsService cmsService() {
-        return injector().getInstance(CmsService.class);
-    }
-
-    @Override
-    public CompletionStage<Optional<CmsPage>> cmsPage() {
-        final CmsService cmsService = injector().getInstance(CmsService.class);
-        return cmsService.page("home", userContext().locales());
     }
 
     @Override

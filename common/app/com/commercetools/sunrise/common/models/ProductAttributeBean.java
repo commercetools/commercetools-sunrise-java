@@ -1,8 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-import io.sphere.sdk.models.Base;
-
-public class ProductAttributeBean extends Base {
+public class ProductAttributeBean extends ModelBean {
 
     private String key;
     private String name;

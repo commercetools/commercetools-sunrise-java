@@ -5,13 +5,10 @@ import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductBean;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
 
-import java.util.List;
-
 public class ProductDetailPageContent extends PageContent {
 
     private BreadcrumbBean breadcrumb;
     private ProductBean product;
-    private List<ShippingRateBean> shippingRates;
     private SuggestionsBean suggestions;
     private String addToCartFormUrl;
 
@@ -32,14 +29,6 @@ public class ProductDetailPageContent extends PageContent {
 
     public void setProduct(final ProductBean product) {
         this.product = product;
-    }
-
-    public List<ShippingRateBean> getShippingRates() {
-        return shippingRates;
-    }
-
-    public void setShippingRates(final List<ShippingRateBean> shippingRates) {
-        this.shippingRates = shippingRates;
     }
 
     public SuggestionsBean getSuggestions() {

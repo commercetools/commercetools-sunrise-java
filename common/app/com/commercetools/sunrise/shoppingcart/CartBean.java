@@ -1,22 +1,9 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.models.AddressBean;
-import com.commercetools.sunrise.common.utils.MoneyContext;
-import io.sphere.sdk.carts.CartLike;
-import io.sphere.sdk.carts.LineItem;
-import io.sphere.sdk.orders.Order;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
-import java.time.format.DateTimeFormatter;
+public class CartBean extends MiniCartBean {
 
-import static com.commercetools.sunrise.common.utils.PriceUtils.*;
-
-public class CartLikeBean {
-
-    private String orderNumber;
-    private String orderDate;
     private String customerEmail;
     private AddressBean shippingAddress;
     private AddressBean billingAddress;
@@ -24,27 +11,8 @@ public class CartLikeBean {
     private PaymentInfoBean paymentDetails;
     private String subtotalPrice;
     private String salesTax;
-    private String totalPrice;
-    private Long totalItems;
-    private LineItemsBean lineItems;
 
-    public CartLikeBean() {
-    }
-
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(final String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(final String orderDate) {
-        this.orderDate = orderDate;
+    public CartBean() {
     }
 
     public String getCustomerEmail() {
@@ -101,29 +69,5 @@ public class CartLikeBean {
 
     public void setSalesTax(final String salesTax) {
         this.salesTax = salesTax;
-    }
-
-    public String getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(final String totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public Long getTotalItems() {
-        return totalItems;
-    }
-
-    public void setTotalItems(final Long totalItems) {
-        this.totalItems = totalItems;
-    }
-
-    public LineItemsBean getLineItems() {
-        return lineItems;
-    }
-
-    public void setLineItems(final LineItemsBean lineItems) {
-        this.lineItems = lineItems;
     }
 }

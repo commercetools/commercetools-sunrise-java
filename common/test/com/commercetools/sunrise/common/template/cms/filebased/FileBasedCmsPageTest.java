@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.template.cms.filebased;
 
-import com.commercetools.sunrise.common.template.cms.CmsPage;
+import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver;
 import com.google.inject.AbstractModule;

@@ -1,8 +1,7 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.common.pagination;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.models.LinkBean;
-import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.Pagination;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.PagedResult;
 import play.Configuration;
@@ -88,7 +87,9 @@ public class PaginationBeanFactory extends Base {
     }
 
     protected LinkBean createLinkData(final Pagination pagination, final long page) {
-        final LinkBean linkBean = new LinkBean(String.valueOf(page), buildUrlWithPage(pagination.getKey(), page));
+        final LinkBean linkBean = new LinkBean();
+        linkBean.setText(String.valueOf(page));
+        linkBean.setUrl(buildUrlWithPage(pagination.getKey(), page));
         if (page == pagination.getPage()) {
             linkBean.setSelected(true);
         }

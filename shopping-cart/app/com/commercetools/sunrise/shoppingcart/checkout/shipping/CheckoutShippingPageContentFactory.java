@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
+import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
@@ -25,7 +25,7 @@ public class CheckoutShippingPageContentFactory extends Base {
     @Inject
     private I18nIdentifierFactory i18nIdentifierFactory;
     @Inject
-    protected CartLikeBeanFactory cartLikeBeanFactory;
+    protected CartBeanFactory cartLikeBeanFactory;
 
     public CheckoutShippingPageContent create(final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
         final CheckoutShippingPageContent bean = new CheckoutShippingPageContent();
