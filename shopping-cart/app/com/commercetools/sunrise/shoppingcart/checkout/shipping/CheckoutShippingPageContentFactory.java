@@ -31,7 +31,6 @@ public class CheckoutShippingPageContentFactory extends Base {
     public CheckoutShippingPageContent create(final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
         final CheckoutShippingPageContent bean = new CheckoutShippingPageContent();
         initialize(bean, form, cart, shippingMethods);
-        System.out.println(bean);
         return bean;
     }
 
