@@ -6,17 +6,14 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 import play.data.Form;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
 
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-
-public class CheckoutPaymentPageContentFactory {
+public class CheckoutPaymentPageContentFactory extends Base {
 
     @Inject
     private UserContext userContext;
@@ -26,6 +23,8 @@ public class CheckoutPaymentPageContentFactory {
     private I18nIdentifierFactory i18nIdentifierFactory;
     @Inject
     private CartBeanFactory cartLikeBeanFactory;
+    @Inject
+    private PaymentMethodFormFieldBeanFactory paymentMethodFormFieldBeanFactory;
 
     public CheckoutPaymentPageContent create(final Form<?> form, final Cart cart, final List<PaymentMethodInfo> paymentMethods) {
         final CheckoutPaymentPageContent bean = new CheckoutPaymentPageContent();
@@ -49,15 +48,19 @@ public class CheckoutPaymentPageContentFactory {
     }
 
     protected void fillForm(final CheckoutPaymentPageContent bean, final Form<?> form, final Cart cart, final List<PaymentMethodInfo> paymentMethods) {
-//        bean.setShippingForm(form);
-//        bean.setShippingFormSettings(createShippingFormSettings(form, cart, shippingMethods));
-        final List<String> selectedPaymentMethods = Optional.ofNullable(cart.getPaymentInfo())
-                .map(info -> info.getPayments().stream()
-                        .filter(ref -> ref.getObj() != null)
-                        .map(ref -> ref.getObj().getPaymentMethodInfo().getMethod())
-                        .collect(toList()))
-                .orElse(emptyList());
-        bean.setPaymentForm(new CheckoutPaymentFormBean(paymentMethods, selectedPaymentMethods, userContext));
+        bean.setPaymentForm(form);
+        bean.setPaymentFormSettings(createPaymentFormSettings(form, cart, paymentMethods));
+    }
+
+    protected CheckoutPaymentFormSettingsBean createPaymentFormSettings(final Form<?> form, final Cart cart, final List<PaymentMethodInfo> paymentMethods) {
+        final CheckoutPaymentFormSettingsBean bean = new CheckoutPaymentFormSettingsBean();
+        initializePaymentFormSettings(bean, form, cart, paymentMethods);
+        return bean;
+    }
+
+    protected void initializePaymentFormSettings(final CheckoutPaymentFormSettingsBean bean, final Form<?> form, final Cart cart, final List<PaymentMethodInfo> paymentMethods) {
+        final String fieldName = getPaymentMethodFormFieldName();
+        bean.setPaymentMethod(paymentMethodFormFieldBeanFactory.create(form, fieldName, cart, paymentMethods));
     }
 
     protected String getPaymentMethodFormFieldName() {

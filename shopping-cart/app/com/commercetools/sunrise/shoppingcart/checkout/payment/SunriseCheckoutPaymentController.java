@@ -5,7 +5,6 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
-import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -28,7 +27,6 @@ import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.data.FormFactory;
 import play.libs.concurrent.HttpExecutionContext;
 import play.mvc.Call;
 import play.mvc.Result;
@@ -55,11 +53,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutPaymentController.class);
 
     @Inject
-    private FormFactory formFactory;
-    @Inject
     private PaymentConfiguration paymentConfiguration;
-    @Inject
-    private CartBeanFactory cartBeanFactory;
     @Inject
     private HttpExecutionContext httpExecutionContext;
 
@@ -119,8 +113,9 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     }
 
     @Override
-    public void fillFormData(final CheckoutPaymentFormData formData, final Cart context) {
-
+    public void fillFormData(final CheckoutPaymentFormData formData, final Cart cart) {
+        final String paymentMethodId = findPaymentMethodId(cart).orElse(null);
+        formData.setPayment(paymentMethodId);
     }
 
     @Override
@@ -209,5 +204,14 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     protected final CompletionStage<Result> redirectToCheckoutConfirmation() {
         final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutConfirmationPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
+    }
+
+    protected final Optional<String> findPaymentMethodId(final Cart cart) {
+        return Optional.ofNullable(cart.getPaymentInfo())
+                .flatMap(info -> info.getPayments().stream()
+                        .map(Reference::getObj)
+                        .filter(obj -> obj != null)
+                        .map(obj -> obj.getPaymentMethodInfo().getMethod())
+                        .findAny());
     }
 }
