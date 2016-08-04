@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.http;
+package com.commercetools.sunrise.play.http;
 
 import com.commercetools.sunrise.common.ctp.SphereClientCredentialsException;
 import com.google.inject.ProvisionException;

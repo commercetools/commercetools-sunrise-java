@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.utils;
 
-import com.commercetools.sunrise.play.SunriseConfiguration;
+import com.commercetools.sunrise.play.inject.SunriseConfiguration;
 import org.junit.Test;
 import play.Configuration;
 
