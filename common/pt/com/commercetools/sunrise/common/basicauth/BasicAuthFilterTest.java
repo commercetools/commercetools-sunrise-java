@@ -86,7 +86,7 @@ public class BasicAuthFilterTest extends WithSunriseApplication {
     }
 
     private Configuration configurationWithBasicAuthFilterEnabled() {
-        final Map<String, Object> configMap = singletonMap("play.http.filters", "com.commercetools.sunrise.play.SunriseHttpFilters");
+        final Map<String, Object> configMap = singletonMap("play.http.filters", "com.commercetools.sunrise.play.http.SunriseHttpFilters");
         return new Configuration(configMap).withFallback(testConfiguration());
     }
 }

@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.play;
+package com.commercetools.sunrise.play.http;
 
 import com.commercetools.sunrise.common.basicauth.BasicAuthFilter;
 import play.filters.csrf.CSRFFilter;

@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.play;
+package com.commercetools.sunrise.play.inject;
 
 import play.ApplicationLoader;
 import play.Configuration;
@@ -7,7 +7,7 @@ import play.inject.guice.GuiceApplicationLoader;
 
 import static play.inject.Bindings.bind;
 
-public class SunriseApplicationLoader extends GuiceApplicationLoader {
+public class SunriseGuiceApplicationLoader extends GuiceApplicationLoader {
 
     @Override
     public GuiceApplicationBuilder builder(final ApplicationLoader.Context context) {
