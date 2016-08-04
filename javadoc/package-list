@@ -24,7 +24,6 @@ com.commercetools.sunrise.common.utils
 com.commercetools.sunrise.components
 com.commercetools.sunrise.framework
 com.commercetools.sunrise.hooks
-com.commercetools.sunrise.http
 com.commercetools.sunrise.myaccount
 com.commercetools.sunrise.myaccount.addressbook
 com.commercetools.sunrise.myaccount.addressbook.addaddress
@@ -40,7 +39,8 @@ com.commercetools.sunrise.myaccount.mydetails
 com.commercetools.sunrise.myaccount.myorders.myorderdetail
 com.commercetools.sunrise.myaccount.myorders.myorderlist
 com.commercetools.sunrise.payments
-com.commercetools.sunrise.play
+com.commercetools.sunrise.play.http
+com.commercetools.sunrise.play.inject
 com.commercetools.sunrise.productcatalog.common
 com.commercetools.sunrise.productcatalog.home
 com.commercetools.sunrise.productcatalog.productdetail
