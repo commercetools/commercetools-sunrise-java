@@ -74,7 +74,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final CheckoutShippingFormData formData, final Cart oldCart, final Cart updatedCart) {
+    public CompletionStage<Result> handleSuccessfulAction(final CheckoutShippingFormData formData, final Cart cart, final Cart updatedCart) {
         return redirectToCheckoutPayment();
     }
 
