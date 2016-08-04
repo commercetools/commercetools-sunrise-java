@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.forms.ErrorBean;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.github.jknack.handlebars.ValueResolver;
 import play.data.Form;
+import play.data.validation.ValidationError;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,9 +51,17 @@ public enum PlayJavaFormResolver implements ValueResolver {
         final List<ErrorBean> errorList = new ArrayList<>();
         if (form != null) {
             form.errors().forEach((field, errors) ->
-                    errors.forEach(error -> errorList.add(new ErrorBean(error.key() + ": " + error.message()))));
+                    errors.forEach(error -> errorList.add(new ErrorBean(errorMessage(error)))));
         }
         errorsBean.setGlobalErrors(errorList);
         return errorsBean;
+    }
+
+    private String errorMessage(final ValidationError error) {
+        String message = error.message();
+        if (!error.key().isEmpty()) {
+            message = error.key() + ": " + message;
+        }
+        return message;
     }
 }

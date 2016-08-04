@@ -120,15 +120,19 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
 
     @Override
     public CompletionStage<Form<? extends CheckoutPaymentFormData>> asyncValidation(final Form<? extends CheckoutPaymentFormData> filledForm) {
-        return getPaymentMethodInfos()
-                .thenApply(paymentMethods -> {
-                    final String selectedPaymentMethod = filledForm.field("payment").valueOr("");
-                    final boolean isValidPaymentMethod = isValidPaymentMethod(paymentMethods, selectedPaymentMethod);
-                    if (!isValidPaymentMethod) {
-                        filledForm.reject("Invalid payment error"); // TODO get from i18n
-                    }
-                    return filledForm;
-                });
+        final String selectedPaymentMethod = filledForm.field("payment").valueOr("");
+        if (!selectedPaymentMethod.isEmpty()) {
+            return getPaymentMethodInfos()
+                    .thenApply(paymentMethods -> {
+                        final boolean isValidPaymentMethod = isValidPaymentMethod(paymentMethods, selectedPaymentMethod);
+                        if (!isValidPaymentMethod) {
+                            filledForm.reject("Invalid payment error"); // TODO get from i18n
+                        }
+                        return filledForm;
+                    });
+        } else {
+            return completedFuture(filledForm);
+        }
     }
 
     @Override
