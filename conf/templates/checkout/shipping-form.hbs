@@ -3,6 +3,10 @@
   <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
   <div class="shipping-method input-block" id="shipping-methods-setting">
     <div class="text-uppercase shipping-method-title">{{i18n "checkout:shippingForm"}}</div>
+      <div class="row">
+          {{> form/global-messages messages=content.shippingForm.messages}}
+          {{> form/global-errors errors=content.shippingForm.errors}}
+      </div>
     {{#each content.shippingFormSettings.shippingMethod.list}}
       <div class="shipping-method-option">
         <label for="shipping-method-{{@index}}">

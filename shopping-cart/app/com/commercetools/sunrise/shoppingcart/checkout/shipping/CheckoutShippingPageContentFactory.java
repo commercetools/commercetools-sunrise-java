@@ -65,7 +65,7 @@ public class CheckoutShippingPageContentFactory extends Base {
         bean.setShippingMethod(shippingMethodFormFieldBeanFactory.create(form, fieldName, cart, shippingMethods));
     }
 
-    private String getShippingMethodFormFieldName() {
+    protected String getShippingMethodFormFieldName() {
         return "shippingMethodId";
     }
 
