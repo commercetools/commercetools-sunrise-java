@@ -124,11 +124,6 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     }
 
     @Override
-    public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringExistingPrimaryCartWithLineItem();
-    }
-
-    @Override
     public CompletionStage<Form<? extends CheckoutPaymentFormData>> asyncValidation(final Form<? extends CheckoutPaymentFormData> filledForm) {
         return getPaymentMethodInfos()
                 .thenApply(paymentMethods -> {
@@ -139,6 +134,11 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
                     }
                     return filledForm;
                 });
+    }
+
+    @Override
+    public CompletionStage<Cart> loadCartWithPreconditions() {
+        return requiringExistingPrimaryCartWithLineItem();
     }
 
     protected CompletionStage<Cart> setPaymentToCart(final Cart cart, final PaymentMethodInfo selectedPaymentMethod) {
@@ -158,7 +158,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
         final List<Reference<Payment>> paymentRefs = Optional.ofNullable(cart.getPaymentInfo())
                 .map(PaymentInfo::getPayments)
                 .orElseGet(() -> {
-                    Logger.error("Payment info is not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
+                    logger.error("Payment info is not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
                     return emptyList();
                 });
         final List<CompletionStage<Payment>> paymentStages = paymentRefs.stream()
