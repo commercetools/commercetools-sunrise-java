@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import com.commercetools.sunrise.common.forms.FormBean;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBean;
+import com.commercetools.sunrise.common.models.ModelBean;
 
-public class SignUpFormSettingsBean extends FormBean {
+public class SignUpFormSettingsBean extends ModelBean {
 
     private TitleFormFieldBean title;
 
