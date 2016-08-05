@@ -10,8 +10,11 @@ import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.framework.SunriseComponent;
-import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.actions.ActionHook;
+import com.commercetools.sunrise.hooks.consumers.ConsumerHook;
+import com.commercetools.sunrise.hooks.events.EventHook;
+import com.commercetools.sunrise.hooks.requests.SphereRequestHook;
 import com.google.inject.AbstractModule;
 import com.google.inject.util.Providers;
 import com.neovisionaries.i18n.CountryCode;
@@ -88,22 +91,22 @@ public class DefaultTestModule extends AbstractModule {
             }
 
             @Override
-            public <T extends Hook> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
+            public <H extends EventHook> CompletionStage<?> runEventHook(final Class<H> hookClass, final Function<H, CompletionStage<?>> f) {
                 return completedFuture(null);
             }
 
             @Override
-            public <T extends Hook, R> CompletionStage<R> runAsyncFilterHook(final Class<T> hookClass, final BiFunction<T, R, CompletionStage<R>> f, final R param) {
+            public <H extends ActionHook, R> CompletionStage<R> runActionHook(final Class<H> hookClass, final BiFunction<H, R, CompletionStage<R>> f, final R param) {
                 return completedFuture(param);
             }
 
             @Override
-            public <T extends Hook, R> R runFilterHook(final Class<T> hookClass, final BiFunction<T, R, R> f, final R param) {
+            public <H extends SphereRequestHook, R> R runSphereRequestHook(final Class<H> hookClass, final BiFunction<H, R, R> f, final R param) {
                 return param;
             }
 
             @Override
-            public <T extends Hook> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer) {
+            public <H extends ConsumerHook> void runConsumerHook(final Class<H> hookClass, final Consumer<H> consumer) {
 
             }
 

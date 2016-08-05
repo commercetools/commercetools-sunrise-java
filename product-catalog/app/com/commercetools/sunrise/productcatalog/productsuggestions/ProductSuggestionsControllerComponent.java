@@ -1,13 +1,13 @@
 package com.commercetools.sunrise.productcatalog.productsuggestions;
 
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.events.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
-import com.commercetools.sunrise.hooks.SingleProductProjectionHook;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageContent;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
 /**
  * Loads some other products that are related to the loaded product in the controller.
  */
-public class ProductSuggestionsControllerComponent implements ControllerComponent, SingleProductProjectionHook, PageDataHook {
+public class ProductSuggestionsControllerComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataHook {
 
     //this part contains fields which are initialized by Google Guice and mostly are in the scope of the HTTP request
     //an example for a singleton scope dependency
@@ -57,10 +57,10 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
     }
 
     /* (non-Javadoc)
-        Implements the hook SingleProductProjectionHook and stores the result inside the field "suggestions".
+        Implements the hook ProductProjectionLoadedHook and stores the result inside the field "suggestions".
      */
     @Override
-    public CompletionStage<?> onSingleProductProjectionLoaded(final ProductProjection product) {
+    public CompletionStage<?> onProductProjectionLoaded(final ProductProjection product) {
         return productRecommendation.relatedToProduct(product, numSuggestions)
                 .thenAccept(m -> suggestions = m);//this method needs to return a CompletionStage which is completed when everything is done.
     }
@@ -69,7 +69,7 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
       Implements the hook SunrisePageDataHook which is executed after all asynchronous tasks related to this HTTP request are completed.
     */
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataCreated(final PageData pageData) {
         //it is a very good practice to check if the field is not null before using it
         //in this example it is required that the content is of type ProductDetailPageContent
         if (suggestions != null && pageData.getContent() instanceof ProductDetailPageContent) {

@@ -2,7 +2,8 @@ package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
-import com.commercetools.sunrise.hooks.OrderQueryFilterHook;
+import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
+import com.commercetools.sunrise.hooks.requests.OrderQueryHook;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.customers.Customer;
@@ -67,7 +68,7 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
     protected CompletionStage<Result> ifValidOrder(@Nullable final Order order,
                                                    final Function<Order, CompletionStage<Result>> onValidOrder) {
         return Optional.ofNullable(order)
-                .map(notNullOrder -> runHookOnFoundOrder(notNullOrder)
+                .map(notNullOrder -> OrderLoadedHook.runHook(hooks(), notNullOrder)
                         .thenComposeAsync(unused -> onValidOrder.apply(notNullOrder), HttpExecution.defaultContext()))
                 .orElseGet(this::handleNotFoundOrder);
     }
@@ -82,12 +83,7 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
     }
 
     protected final OrderQuery runHookOnOrderQuery(final OrderQuery orderQuery) {
-        return hooks().runFilterHook(OrderQueryFilterHook.class, (hook, query) -> hook.filterQuery(query), orderQuery);
-    }
-
-    protected final CompletionStage<?> runHookOnFoundOrder(final Order order) {
-        //return runAsyncHook(SingleCustomerHook.class, hook -> hook.onSingleCustomerLoaded(customer));
-        return completedFuture(null);
+        return OrderQueryHook.runHook(hooks(), orderQuery);
     }
 
     protected final CompletionStage<Result> redirectToMyOrders() {

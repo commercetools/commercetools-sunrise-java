@@ -5,9 +5,9 @@ import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.pagination.Pagination;
 import com.commercetools.sunrise.common.pagination.PaginationBeanFactory;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.PageDataHook;
-import com.commercetools.sunrise.hooks.ProductProjectionPagedSearchResultHook;
-import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
+import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageOption;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageSelector;
@@ -20,10 +20,12 @@ import io.sphere.sdk.search.PagedSearchResult;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.util.concurrent.CompletionStage;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-public class PaginationComponent extends Base implements ControllerComponent, PageDataHook, ProductProjectionSearchFilterHook, ProductProjectionPagedSearchResultHook {
+public class PaginationComponent extends Base implements ControllerComponent, PageDataHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
 
     @Inject
     private ProductsPerPageSelectorFactory productsPerPageSelectorFactory;
@@ -41,7 +43,7 @@ public class PaginationComponent extends Base implements ControllerComponent, Pa
 
 
     @Override
-    public ProductProjectionSearch filterQuery(final ProductProjectionSearch search) {
+    public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
         pagination = paginationFactory.create();
         productsPerPageSelector = productsPerPageSelectorFactory.create();
         final int pageSize = productsPerPageSelector.getSelectedPageSize();
@@ -52,12 +54,13 @@ public class PaginationComponent extends Base implements ControllerComponent, Pa
     }
 
     @Override
-    public void acceptProductProjectionPagedSearchResult(final PagedSearchResult<ProductProjection> pagedSearchResult) {
+    public CompletionStage<?> onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult) {
         this.pagedSearchResult = pagedSearchResult;
+        return completedFuture(null);
     }
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataCreated(final PageData pageData) {
         if (pagination != null && productsPerPageSelector != null && pagedSearchResult != null && pageData.getContent() instanceof ProductOverviewPageContent) {
             final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
             content.setPagination(paginationBeanFactory.create(pagedSearchResult, pagination, productsPerPageSelector.getSelectedPageSize()));

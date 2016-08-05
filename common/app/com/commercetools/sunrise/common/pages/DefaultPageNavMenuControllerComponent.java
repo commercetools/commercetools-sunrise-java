@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
 
 import javax.inject.Inject;
 
@@ -11,7 +11,7 @@ public class DefaultPageNavMenuControllerComponent implements ControllerComponen
     private PageNavMenuFactory pageNavMenuFactory;
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataCreated(final PageData pageData) {
         pageData.getHeader().setNavMenu(pageNavMenuFactory.create());
     }
 }

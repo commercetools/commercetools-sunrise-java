@@ -4,7 +4,11 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.hooks.*;
+import com.commercetools.sunrise.hooks.actions.CartUpdatedActionHook;
+import com.commercetools.sunrise.hooks.events.CartLoadedHook;
+import com.commercetools.sunrise.hooks.events.CartUpdatedHook;
+import com.commercetools.sunrise.hooks.requests.CartQueryHook;
+import com.commercetools.sunrise.hooks.requests.CartUpdateCommandHook;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
@@ -30,7 +34,6 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
@@ -52,13 +55,13 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Cart> executeCartUpdateCommandWithHooks(final CartUpdateCommand cmd) {
-        final CartUpdateCommand command = hooks().runFilterHook(CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand, cmd);
+        final CartUpdateCommand command = CartUpdateCommandHook.runHook(hooks(), cmd);
         final CompletionStage<Cart> cartAfterOriginalCommandStage = sphere().execute(command);
         return cartAfterOriginalCommandStage
-                .thenComposeAsync(res -> hooks().runAsyncFilterHook(PrimaryCartUpdateAsyncFilter.class, (h, cart) -> h.asyncFilterPrimaryCart(cart, cmd), res), defaultContext())
-                .thenApplyAsync(res -> {
-                    hooks().runAsyncHook(PrimaryCartUpdatedHook.class, hook -> ((BiFunction<PrimaryCartUpdatedHook, Cart, CompletionStage<?>>) PrimaryCartUpdatedHook::onPrimaryCartUpdated).apply(hook, res));
-                    return res;
+                .thenComposeAsync(cart -> CartUpdatedActionHook.runHook(hooks(), cart, cmd), defaultContext())
+                .thenApplyAsync(cart -> {
+                    CartUpdatedHook.runHook(hooks(), cart);
+                    return cart;
                 }, defaultContext());
     }
 
@@ -97,7 +100,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
                         .plusExpansionPaths(c -> c.paymentInfo().payments())
                         .withSort(cart -> cart.lastModifiedAt().sort().desc())
                         .withLimit(1))
-                .map(query -> hooks().runFilterHook(CartQueryFilterHook.class, (hook, q) -> hook.filterCartQuery(q), query))
+                .map(query -> CartQueryHook.runHook(hooks(), query))
                 .map(query -> sphere().execute(query).thenApplyAsync(PagedResult::head, defaultContext()))
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
@@ -120,7 +123,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
                     CartSessionUtils.overwriteCartSessionData(updatedCart, session, miniCartBeanFactory);
                     return updatedCart;
                 }).thenApply(updatedCart -> {
-                    hooks().runAsyncHook(PrimaryCartLoadedHook.class, hook -> hook.onUserCartLoaded(updatedCart));
+                    CartLoadedHook.runHook(hooks(), updatedCart);
                     return updatedCart;
                 });
     }
@@ -129,25 +132,6 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
         return CartSessionUtils.getCartId(session())
                 .map(cartId -> sphere().execute(ShippingMethodsByCartGet.of(cartId)))
                 .orElseGet(() -> completedFuture(emptyList()));
-    }
-
-    private CartQuery buildQueryForPrimaryCart(final Http.Session session) {
-        final String nullableCustomerId = CustomerSessionUtils.getCustomerId(session).orElse(null);
-        final String nullableCartId = CartSessionUtils.getCartId(session).orElse(null);
-        CartQuery query = CartQuery.of();
-        if (nullableCustomerId != null) {
-            query = query.plusPredicates(cart -> cart.customerId().is(nullableCustomerId));
-        } else if(nullableCartId != null) {
-            query = query.plusPredicates(cart -> cart.id().is(nullableCartId));
-        }
-        query = query
-                .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
-                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
-                .plusExpansionPaths(c -> c.paymentInfo().payments())
-                .withSort(cart -> cart.lastModifiedAt().sort().desc())
-                .withLimit(1);
-        query = hooks().runFilterHook(CartQueryFilterHook.class, (hook, q) -> hook.filterCartQuery(q), query);
-        return query;
     }
 
     protected CompletionStage<Cart> createCart(final UserContext userContext) {

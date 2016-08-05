@@ -1,6 +1,10 @@
 package com.commercetools.sunrise.hooks;
 
 import com.commercetools.sunrise.framework.SunriseComponent;
+import com.commercetools.sunrise.hooks.actions.ActionHook;
+import com.commercetools.sunrise.hooks.consumers.ConsumerHook;
+import com.commercetools.sunrise.hooks.events.EventHook;
+import com.commercetools.sunrise.hooks.requests.SphereRequestHook;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
@@ -26,8 +30,8 @@ public class RequestHookContextImpl extends Base implements RequestHookContext {
     private final List<CompletionStage<Object>> asyncHooksCompletionStages = new LinkedList<>();
 
     @Override
-    public <T extends Hook> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
-        hookRunnerLogger.debug("runAsyncHook {}", hookClass.getSimpleName());
+    public <T extends EventHook> CompletionStage<?> runEventHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
+        hookRunnerLogger.debug("runEventHook {}", hookClass.getSimpleName());
         //TODO throw a helpful NPE if component returns null instead of CompletionStage
         final List<CompletionStage<Void>> collect = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
@@ -41,8 +45,8 @@ public class RequestHookContextImpl extends Base implements RequestHookContext {
     }
 
     @Override
-    public <T extends Hook, R> CompletionStage<R> runAsyncFilterHook(final Class<T> hookClass, final BiFunction<T, R, CompletionStage<R>> f, final R param) {
-        hookRunnerLogger.debug("runAsyncFilterHook {}", hookClass.getSimpleName());
+    public <T extends ActionHook, R> CompletionStage<R> runActionHook(final Class<T> hookClass, final BiFunction<T, R, CompletionStage<R>> f, final R param) {
+        hookRunnerLogger.debug("runActionHook {}", hookClass.getSimpleName());
         CompletionStage<R> result = successful(param);
         final List<T> applicableHooks = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
@@ -55,25 +59,25 @@ public class RequestHookContextImpl extends Base implements RequestHookContext {
     }
 
     @Override
-    public <T extends Hook, R> R runFilterHook(final Class<T> hookClass, final BiFunction<T, R, R> f, final R param) {
-        hookRunnerLogger.debug("runFilterHook {}", hookClass.getSimpleName());
+    public <H extends SphereRequestHook, R> R runSphereRequestHook(final Class<H> hookClass, final BiFunction<H, R, R> f, final R param) {
+        hookRunnerLogger.debug("runSphereRequestHook {}", hookClass.getSimpleName());
         R result = param;
-        final List<T> applicableHooks = controllerComponents.stream()
+        final List<H> applicableHooks = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
-                .map(x -> (T) x)
+                .map(x -> (H) x)
                 .collect(Collectors.toList());
-        for (final T hook : applicableHooks) {
+        for (final H hook : applicableHooks) {
             result = f.apply(hook, result);
         }
         return result;
     }
 
     @Override
-    public <T extends Hook> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer) {
-        hookRunnerLogger.debug("runVoidHook {}", hookClass.getSimpleName());
+    public <H extends ConsumerHook> void runConsumerHook(final Class<H> hookClass, final Consumer<H> consumer) {
+        hookRunnerLogger.debug("runConsumerHook {}", hookClass.getSimpleName());
         controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
-                .forEach(action -> consumer.accept((T) action));
+                .forEach(action -> consumer.accept((H) action));
     }
 
     @Override

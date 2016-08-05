@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.commercetools.sunrise.hooks.OrderQueryFilterHook;
+import com.commercetools.sunrise.hooks.requests.OrderQueryHook;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.customers.Customer;
@@ -78,6 +78,6 @@ public abstract class SunriseMyOrderListController extends MyAccountController i
     }
 
     protected final OrderQuery runHookOnOrderQuery(final OrderQuery orderQuery) {
-        return hooks().runFilterHook(OrderQueryFilterHook.class, (hook, query) -> hook.filterQuery(query), orderQuery);
+        return OrderQueryHook.runHook(hooks(), orderQuery);
     }
 }

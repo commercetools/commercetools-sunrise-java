@@ -1,14 +1,13 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithCmsPage;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.hooks.PageDataHook;
-import com.commercetools.sunrise.hooks.RequestHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import play.mvc.Result;
 
@@ -27,7 +26,7 @@ import static java.util.Arrays.asList;
  * </ul>
  * <p id="hooks">supported hooks</p>
  * <ul>
- *     <li>{@link RequestHook}</li>
+ *     <li>{@link RequestStartedHook}</li>
  *     <li>{@link PageDataHook}</li>
  * </ul>
  * <p>tags</p>

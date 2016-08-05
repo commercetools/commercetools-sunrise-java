@@ -5,7 +5,11 @@ import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.hooks.*;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.events.ProductProjectionLoadedHook;
+import com.commercetools.sunrise.hooks.events.ProductVariantLoadedHook;
+import com.commercetools.sunrise.hooks.events.RequestStartedHook;
+import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import com.google.inject.Injector;
 import io.sphere.sdk.products.ProductProjection;
@@ -37,11 +41,11 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * </ul>
  * <p id="hooks">supported hooks</p>
  * <ul>
- *     <li>{@link RequestHook}</li>
+ *     <li>{@link RequestStartedHook}</li>
  *     <li>{@link PageDataHook}</li>
- *     <li>{@link ProductProjectionSearchFilterHook}</li>
- *     <li>{@link SingleProductProjectionHook}</li>
- *     <li>{@link SingleProductVariantHook}</li>
+ *     <li>{@link ProductProjectionSearchHook}</li>
+ *     <li>{@link ProductProjectionLoadedHook}</li>
+ *     <li>{@link ProductVariantLoadedHook}</li>
  * </ul>
  * <p>tags</p>
  * <ul>
@@ -135,12 +139,12 @@ public abstract class SunriseProductDetailController extends SunriseFrameworkCon
     }
 
     protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
-        return hooks().runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterQuery(search), productSearch);
+        return ProductProjectionSearchHook.runHook(hooks(), productSearch);
     }
 
     protected final void runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {
-        hooks().runAsyncHook(SingleProductProjectionHook.class, hook -> hook.onSingleProductProjectionLoaded(product));
-        hooks().runAsyncHook(SingleProductVariantHook.class, hook -> hook.onSingleProductVariantLoaded(product, variant));
+        ProductProjectionLoadedHook.runHook(hooks(), product);
+        ProductVariantLoadedHook.runHook(hooks(), product, variant);
     }
 
     protected final Optional<String> productSlug() {

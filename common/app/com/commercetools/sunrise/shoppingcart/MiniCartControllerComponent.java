@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
 import play.mvc.Http;
 
 import javax.inject.Inject;
@@ -15,7 +15,7 @@ public class MiniCartControllerComponent implements ControllerComponent, PageDat
     private MiniCartBeanFactory miniCartBeanFactory;
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataCreated(final PageData pageData) {
         pageData.getHeader()
                 .setMiniCart(CartSessionUtils.getMiniCart(context.session(), miniCartBeanFactory));
     }

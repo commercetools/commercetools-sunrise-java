@@ -7,8 +7,8 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
-import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import static java.util.stream.Collectors.toList;
 
-public class SortSelectorComponent implements ControllerComponent, PageDataHook, ProductProjectionSearchFilterHook {
+public class SortSelectorComponent implements ControllerComponent, PageDataHook, ProductProjectionSearchHook {
 
     @Nullable
     private SortSelector sortSelector;
@@ -33,13 +33,13 @@ public class SortSelectorComponent implements ControllerComponent, PageDataHook,
 
 
     @Override
-    public ProductProjectionSearch filterQuery(final ProductProjectionSearch search) {
+    public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
         this.sortSelector = sortSelectorFactory.create();
         return search.plusSort(sortSelector.getSelectedSortExpressions());
     }
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataCreated(final PageData pageData) {
         if (sortSelector != null && pageData.getContent() instanceof ProductOverviewPageContent) {
             final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
             content.setSortSelector(createSortSelector(sortSelector));

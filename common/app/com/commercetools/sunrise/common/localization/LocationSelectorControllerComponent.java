@@ -2,10 +2,10 @@ package com.commercetools.sunrise.common.localization;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -21,7 +21,7 @@ public class LocationSelectorControllerComponent implements ControllerComponent,
     private ProjectContext projectContext;
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataCreated(final PageData pageData) {
         final LocalizationSelectorBean bean = createLocalizationSelector();
         pageData.getHeader().setLocation(bean);
     }

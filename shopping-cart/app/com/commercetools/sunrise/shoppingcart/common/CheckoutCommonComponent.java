@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.common;
 
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import play.Configuration;
 
@@ -12,7 +12,7 @@ public class CheckoutCommonComponent implements ControllerComponent, PageDataHoo
     private Configuration configuration;
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataCreated(final PageData pageData) {
         pageData.getHeader().setCustomerServiceNumber(configuration.getString("checkout.customerServiceNumber"));
     }
 }

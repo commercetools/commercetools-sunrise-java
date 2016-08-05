@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.common;
 
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressPageContent;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationPageContent;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentPageContent;
@@ -26,7 +26,7 @@ public class CheckoutStepWidgetComponent implements ControllerComponent, PageDat
     }
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataCreated(final PageData pageData) {
         if (pageData.getContent() instanceof CheckoutPageContent) {
             final CheckoutPageContent content = (CheckoutPageContent) pageData.getContent();
             final StepWidgetBean stepWidgetBean = mapping.entrySet().stream()

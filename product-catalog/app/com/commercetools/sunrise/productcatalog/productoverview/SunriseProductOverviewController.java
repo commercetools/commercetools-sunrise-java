@@ -5,7 +5,11 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.hooks.*;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.events.CategoryLoadedHook;
+import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
+import com.commercetools.sunrise.hooks.events.RequestStartedHook;
+import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.PaginationComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.searchbox.SearchBoxComponent;
@@ -41,11 +45,11 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * </ul>
  * <p id="hooks">supported hooks</p>
  * <ul>
- *     <li>{@link RequestHook}</li>
+ *     <li>{@link RequestStartedHook}</li>
  *     <li>{@link PageDataHook}</li>
- *     <li>{@link ProductProjectionSearchFilterHook}</li>
- *     <li>{@link SingleCategoryHook}</li>
- *     <li>{@link ProductProjectionPagedSearchResultHook}</li>
+ *     <li>{@link ProductProjectionSearchHook}</li>
+ *     <li>{@link CategoryLoadedHook}</li>
+ *     <li>{@link ProductProjectionPagedSearchResultLoadedHook}</li>
  * </ul>
  * <p>tags</p>
  * <ul>
@@ -138,15 +142,15 @@ public abstract class SunriseProductOverviewController extends SunriseFrameworkC
     }
 
     protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
-        return hooks().runFilterHook(ProductProjectionSearchFilterHook.class, (hook, search) -> hook.filterQuery(search), productSearch);
+        return ProductProjectionSearchHook.runHook(hooks(), productSearch);
     }
 
     protected final CompletionStage<?> runHookOnFoundCategory(final Category category) {
-        return hooks().runAsyncHook(SingleCategoryHook.class, hook -> hook.onSingleCategoryLoaded(category));
+        return CategoryLoadedHook.runHook(hooks(), category);
     }
 
-    protected final void runHookOnProductSearchResult(final PagedSearchResult<ProductProjection> pagedSearchResult) {
-        hooks().runVoidHook(ProductProjectionPagedSearchResultHook.class, hook -> hook.acceptProductProjectionPagedSearchResult(pagedSearchResult));
+    protected final CompletionStage<?> runHookOnProductSearchResult(final PagedSearchResult<ProductProjection> pagedSearchResult) {
+        return ProductProjectionPagedSearchResultLoadedHook.runHook(hooks(), pagedSearchResult);
     }
 
     protected final Optional<Category> category() {

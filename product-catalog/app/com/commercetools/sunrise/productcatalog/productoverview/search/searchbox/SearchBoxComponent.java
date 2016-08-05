@@ -1,16 +1,16 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.searchbox;
 
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import io.sphere.sdk.products.search.ProductProjectionSearch;
-import com.commercetools.sunrise.hooks.ProductProjectionSearchFilterHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
+import io.sphere.sdk.products.search.ProductProjectionSearch;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-public class SearchBoxComponent implements ControllerComponent, PageDataHook, ProductProjectionSearchFilterHook {
+public class SearchBoxComponent implements ControllerComponent, PageDataHook, ProductProjectionSearchHook {
 
     @Nullable
     private SearchBox searchBox;
@@ -19,7 +19,7 @@ public class SearchBoxComponent implements ControllerComponent, PageDataHook, Pr
     private SearchBoxFactory searchBoxFactory;
 
     @Override
-    public ProductProjectionSearch filterQuery(final ProductProjectionSearch search) {
+    public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
         this.searchBox = searchBoxFactory.create();
         return searchBox.getSearchTerm()
                 .map(search::withText)
@@ -27,7 +27,7 @@ public class SearchBoxComponent implements ControllerComponent, PageDataHook, Pr
     }
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataCreated(final PageData pageData) {
         if (searchBox != null && searchBox.getSearchTerm().isPresent() && pageData.getContent() instanceof ProductOverviewPageContent) {
             final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
             final String searchTerm = searchBox.getSearchTerm().get().getValue();
