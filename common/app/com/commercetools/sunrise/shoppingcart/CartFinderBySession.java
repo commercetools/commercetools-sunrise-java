@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartState;
@@ -46,9 +46,8 @@ public class CartFinderBySession implements CartFinder<Http.Session> {
     }
 
     private Optional<CartQuery> buildQuery(final Http.Session session) {
-        return CustomerSessionUtils.getCustomerId(session)
-                .map(this::buildQueryByCustomerId)
-                .map(Optional::of)
+        return injector.getInstance(CustomerSessionHandler.class).findInSession(session)
+                .map(customerInfo -> Optional.of(buildQueryByCustomerId(customerInfo.getId())))
                 .orElseGet(() -> CartSessionUtils.getCartId(session)
                         .map(this::buildQueryByCartId))
                 .map(query -> query

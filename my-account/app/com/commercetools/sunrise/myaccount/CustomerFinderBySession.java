@@ -17,6 +17,8 @@ public final class CustomerFinderBySession implements CustomerFinder<Http.Sessio
 
     @Inject
     private SphereClient sphereClient;
+    @Inject
+    private CustomerSessionHandler customerSessionHandler;
 
     @Override
     public CompletionStage<Optional<Customer>> findCustomer(final Http.Session session) {
@@ -26,8 +28,8 @@ public final class CustomerFinderBySession implements CustomerFinder<Http.Sessio
     }
 
     private CompletionStage<Optional<Customer>> fetchCustomer(final Http.Session session) {
-        return CustomerSessionUtils.getCustomerId(session)
-                .map(this::fetchCustomerById)
+        return customerSessionHandler.findInSession(session)
+                .map(customerInfo -> fetchCustomerById(customerInfo.getId()))
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 

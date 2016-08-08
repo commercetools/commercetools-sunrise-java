@@ -5,13 +5,14 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.hooks.*;
-import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.myaccount.CustomerInfo;
+import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
 import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.CartDraft;
 import io.sphere.sdk.carts.CartDraftBuilder;
+import io.sphere.sdk.carts.CartDraftDsl;
 import io.sphere.sdk.carts.CartState;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -88,8 +89,9 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
      */
     protected CompletionStage<Optional<Cart>> findPrimaryCart() {
         final Http.Session session = session();
-        return CustomerSessionUtils.getCustomerId(session)
-                .map(customerId -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId)))
+        final Optional<CustomerInfo> customerInfoOpt = injector().getInstance(CustomerSessionHandler.class).findInSession(session);
+        return customerInfoOpt
+                .map(customerInfo -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerInfo.getId())))
                 .map(Optional::of)
                 .orElseGet(() -> CartSessionUtils.getCartId(session).map(cartId -> CartQuery.of().plusPredicates(cart -> cart.id().is(cartId))))
                 .map(query -> query.plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
@@ -131,33 +133,18 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
                 .orElseGet(() -> completedFuture(emptyList()));
     }
 
-    private CartQuery buildQueryForPrimaryCart(final Http.Session session) {
-        final String nullableCustomerId = CustomerSessionUtils.getCustomerId(session).orElse(null);
-        final String nullableCartId = CartSessionUtils.getCartId(session).orElse(null);
-        CartQuery query = CartQuery.of();
-        if (nullableCustomerId != null) {
-            query = query.plusPredicates(cart -> cart.customerId().is(nullableCustomerId));
-        } else if(nullableCartId != null) {
-            query = query.plusPredicates(cart -> cart.id().is(nullableCartId));
-        }
-        query = query
-                .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
-                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
-                .plusExpansionPaths(c -> c.paymentInfo().payments())
-                .withSort(cart -> cart.lastModifiedAt().sort().desc())
-                .withLimit(1);
-        query = hooks().runFilterHook(CartQueryFilterHook.class, (hook, q) -> hook.filterCartQuery(q), query);
-        return query;
-    }
-
     protected CompletionStage<Cart> createCart(final UserContext userContext) {
         final Address address = Address.of(userContext.country());
-        final CartDraft cartDraft = CartDraftBuilder.of(userContext.currency())
+        final Optional<CustomerInfo> customerInfoOpt = injector().getInstance(CustomerSessionHandler.class).findInSession(session());
+        final CartDraftBuilder cartDraftBuilder = CartDraftBuilder.of(userContext.currency())
                 .country(address.getCountry())
-                .shippingAddress(address)
-                .customerId(CustomerSessionUtils.getCustomerId(session()).orElse(null))
-                .customerEmail(CustomerSessionUtils.getCustomerEmail(session()).orElse(null))
-                .build();
+                .shippingAddress(address);
+        final CartDraftDsl cartDraft = customerInfoOpt
+                .map(customerInfo -> cartDraftBuilder
+                        .customerId(customerInfo.getId())
+                        .customerEmail(customerInfo.getEmail())
+                        .build())
+                .orElse(cartDraftBuilder.build());
         return sphere().execute(CartCreateCommand.of(cartDraft));
     }
 
