@@ -60,16 +60,20 @@ $ docker run -it --rm -p 9000:9000 -e CTP_PROJECT_KEY=YOUR_PROJECT_KEY -e CTP_CL
 
 ### Sunrise Starter
 The starting point to build your own online shop project
+
 https://github.com/commercetools/commercetools-sunrise-java-starter
 
 ### Sunrise Theme
 Handlebars templates + i18n messages + web assets
+
 https://github.com/commercetools/commercetools-sunrise-theme
 
 ### Sunrise Data
 Example data used on our demo
+
 https://github.com/commercetools/commercetools-sunrise-data
 
 ### commercetools JVM SDK
 SDK for JVM languages to communicate with comercetools projects
+
 https://github.com/commercetools/commercetools-jvm-sdk
