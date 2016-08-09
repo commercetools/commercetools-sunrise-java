@@ -5,7 +5,6 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.myaccount.CustomerInfo;
 import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
@@ -87,7 +86,7 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
     public CompletionStage<Result> handleSuccessfulAction(final LogInFormData formData, final Void context, final CustomerSignInResult result) {
         final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
         overwriteCartSessionData(result.getCart(), session(), miniCartBeanFactory);
-        injector().getInstance(CustomerSessionHandler.class).overwriteSession(session(), CustomerInfo.of(result.getCustomer()));
+        injector().getInstance(CustomerSessionHandler.class).overwriteSession(session(), result.getCustomer());
         return redirectToMyPersonalDetails();
     }
 

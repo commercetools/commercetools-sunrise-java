@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.myaccount;
 
+import com.commercetools.sunrise.common.sessions.DefaultSessionHandler;
 import io.sphere.sdk.customers.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

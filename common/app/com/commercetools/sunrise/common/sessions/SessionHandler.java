@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.myaccount;
+package com.commercetools.sunrise.common.sessions;
 
 import play.mvc.Http;
 

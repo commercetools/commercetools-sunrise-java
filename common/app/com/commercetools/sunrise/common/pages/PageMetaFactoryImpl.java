@@ -88,13 +88,11 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     }
 
     private void fillUser(final PageMeta pageMeta, final Http.Context ctx) {
+        final Http.Session session = ctx.session();
+        final CustomerSessionHandler customerSessionHandler = injector.getInstance(CustomerSessionHandler.class);
         final UserBean bean = new UserBean();
-        bean.setLoggedIn(false);
-        injector.getInstance(CustomerSessionHandler.class).findInSession(ctx.session())
-                .ifPresent(customerInfo -> {
-                    bean.setLoggedIn(true);
-                    customerInfo.getName().ifPresent(bean::setName);
-                });
+        bean.setLoggedIn(customerSessionHandler.findCustomerId(session).isPresent());
+        customerSessionHandler.findCustomerName(session).ifPresent(bean::setName);
         pageMeta.setUser(bean);
     }
 

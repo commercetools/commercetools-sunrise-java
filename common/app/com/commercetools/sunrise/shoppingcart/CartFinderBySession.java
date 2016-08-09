@@ -46,8 +46,8 @@ public class CartFinderBySession implements CartFinder<Http.Session> {
     }
 
     private Optional<CartQuery> buildQuery(final Http.Session session) {
-        return injector.getInstance(CustomerSessionHandler.class).findInSession(session)
-                .map(customerInfo -> Optional.of(buildQueryByCustomerId(customerInfo.getId())))
+        return injector.getInstance(CustomerSessionHandler.class).findCustomerId(session)
+                .map(customerId -> Optional.of(buildQueryByCustomerId(customerId)))
                 .orElseGet(() -> CartSessionUtils.getCartId(session)
                         .map(this::buildQueryByCartId))
                 .map(query -> query
