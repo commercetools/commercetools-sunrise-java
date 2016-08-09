@@ -23,14 +23,14 @@ public final class CustomerFinderBySession implements CustomerFinder<Http.Sessio
     public CompletionStage<Optional<Customer>> findCustomer(final Http.Session session) {
         final CompletionStage<Optional<Customer>> customerStage = fetchCustomer(session);
         customerStage.thenAcceptAsync(customer ->
-                customerSessionHandler.overwriteSession(session, CustomerInfo.of(customer.orElse(null))),
+                customerSessionHandler.overwriteSession(session, customer.orElse(null)),
                 HttpExecution.defaultContext());
         return customerStage;
     }
 
     private CompletionStage<Optional<Customer>> fetchCustomer(final Http.Session session) {
-        return customerSessionHandler.findInSession(session)
-                .map(customerInfo -> fetchCustomerById(customerInfo.getId()))
+        return customerSessionHandler.findCustomerId(session)
+                .map(this::fetchCustomerById)
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
