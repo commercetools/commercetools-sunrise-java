@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class CustomerFinderBySession implements CustomerFinder<Http.Session> {
@@ -23,7 +22,9 @@ public final class CustomerFinderBySession implements CustomerFinder<Http.Sessio
     @Override
     public CompletionStage<Optional<Customer>> findCustomer(final Http.Session session) {
         final CompletionStage<Optional<Customer>> customerStage = fetchCustomer(session);
-        customerStage.thenAcceptAsync(customer -> overwriteCustomerSessionData(customer.orElse(null), session), HttpExecution.defaultContext());
+        customerStage.thenAcceptAsync(customer ->
+                customerSessionHandler.overwriteSession(session, CustomerInfo.of(customer.orElse(null))),
+                HttpExecution.defaultContext());
         return customerStage;
     }
 

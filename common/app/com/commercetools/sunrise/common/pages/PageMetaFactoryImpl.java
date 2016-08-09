@@ -3,7 +3,9 @@ package com.commercetools.sunrise.common.pages;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.*;
-import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
+import com.commercetools.sunrise.myaccount.UserBean;
+import com.google.inject.Injector;
 import play.mvc.Http;
 
 import javax.inject.Inject;
@@ -32,6 +34,8 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private MyOrdersReverseRouter myOrdersReverseRouter;
     @Inject
     private CartReverseRouter cartReverseRouter;
+    @Inject
+    private Injector injector;
 
     @Override
     public PageMeta create() {
@@ -40,7 +44,7 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
 
     private PageMeta getPageMeta(final UserContext userContext, final Http.Context ctx) {
         final PageMeta pageMeta = new PageMeta();
-        pageMeta.setUser(CustomerSessionUtils.getUserBean(ctx.session()));
+        fillUser(pageMeta, ctx);
         pageMeta.setAssetsPath(reverseRouter.themeAssets("").url());
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
         pageMeta.setCsrfToken(getCsrfToken(ctx.session()));
@@ -81,6 +85,17 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
 //                .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
 //        pageMeta.setShowInfoModal(showInfoModal);
         return pageMeta;
+    }
+
+    private void fillUser(final PageMeta pageMeta, final Http.Context ctx) {
+        final UserBean bean = new UserBean();
+        bean.setLoggedIn(false);
+        injector.getInstance(CustomerSessionHandler.class).findInSession(ctx.session())
+                .ifPresent(customerInfo -> {
+                    bean.setLoggedIn(true);
+                    customerInfo.getName().ifPresent(bean::setName);
+                });
+        pageMeta.setUser(bean);
     }
 
 }

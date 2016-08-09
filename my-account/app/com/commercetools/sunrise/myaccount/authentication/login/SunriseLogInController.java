@@ -5,6 +5,8 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
+import com.commercetools.sunrise.myaccount.CustomerInfo;
+import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
@@ -27,7 +29,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
@@ -86,7 +87,7 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
     public CompletionStage<Result> handleSuccessfulAction(final LogInFormData formData, final Void context, final CustomerSignInResult result) {
         final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
         overwriteCartSessionData(result.getCart(), session(), miniCartBeanFactory);
-        overwriteCustomerSessionData(result.getCustomer(), session());
+        injector().getInstance(CustomerSessionHandler.class).overwriteSession(session(), CustomerInfo.of(result.getCustomer()));
         return redirectToMyPersonalDetails();
     }
 
