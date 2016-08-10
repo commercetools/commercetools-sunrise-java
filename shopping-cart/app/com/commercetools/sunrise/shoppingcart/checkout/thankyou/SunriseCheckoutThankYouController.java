@@ -4,10 +4,10 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.hooks.OrderByIdGetFilterHook;
+import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.SingleOrderHook;
-import com.commercetools.sunrise.hooks.PageDataHook;
-import com.commercetools.sunrise.shoppingcart.OrderSessionUtils;
+import com.commercetools.sunrise.shoppingcart.OrderSessionHandler;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderByIdGet;
@@ -56,9 +56,8 @@ public abstract class SunriseCheckoutThankYouController extends SunriseFramework
     }
 
     protected CompletionStage<Optional<Order>> findLastOrder() {
-        final Optional<String> lastOrderId = OrderSessionUtils.getLastOrderId(session());
-        return lastOrderId
-                .map(orderId -> findOrderById(orderId))
+        return injector().getInstance(OrderSessionHandler.class).findLastOrderId(session())
+                .map(this::findOrderById)
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 

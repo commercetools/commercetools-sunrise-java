@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
+import com.commercetools.sunrise.shoppingcart.OrderSessionHandler;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.mvc.Call;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
@@ -26,7 +28,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.shoppingcart.OrderSessionUtils.overwriteLastOrderIdSessionData;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
@@ -106,8 +107,9 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
         final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, orderInitialPaymentState(cart));
         return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
                 .thenApplyAsync(order -> {
-                    overwriteLastOrderIdSessionData(order, session());
-                    injector().getInstance(CartSessionHandler.class).removeFromSession(session());
+                    final Http.Session session = session();
+                    injector().getInstance(OrderSessionHandler.class).overwriteInSession(session, order);
+                    injector().getInstance(CartSessionHandler.class).removeFromSession(session);
                     return order;
                 }, defaultContext());
     }
