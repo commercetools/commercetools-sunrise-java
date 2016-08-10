@@ -42,6 +42,7 @@ public abstract class SessionHandlerBase<T> implements SessionHandler<T> {
                     try {
                         return Optional.of(SphereJsonUtils.readObject(valueAsJson, clazz));
                     } catch (JsonException e) {
+                        logger().error("Could not parse value in session key \"{}\"", key, e);
                         return Optional.empty();
                     }
                 });
