@@ -4,7 +4,6 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.ReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.*;
 import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
-import com.commercetools.sunrise.myaccount.UserBean;
 import com.google.inject.Injector;
 import play.mvc.Http;
 
@@ -44,10 +43,11 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
 
     private PageMeta getPageMeta(final UserContext userContext, final Http.Context ctx) {
         final PageMeta pageMeta = new PageMeta();
-        fillUser(pageMeta, ctx);
+        final Http.Session session = ctx.session();
+        fillUser(pageMeta, session);
         pageMeta.setAssetsPath(reverseRouter.themeAssets("").url());
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
-        pageMeta.setCsrfToken(getCsrfToken(ctx.session()));
+        pageMeta.setCsrfToken(getCsrfToken(session));
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(homeReverseRouter.homePageCall(language), "home", "continueShopping")
                 .addHalLink(reverseRouter.processSearchProductsForm(language), "search")
@@ -87,13 +87,9 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
         return pageMeta;
     }
 
-    private void fillUser(final PageMeta pageMeta, final Http.Context ctx) {
-        final Http.Session session = ctx.session();
-        final CustomerSessionHandler customerSessionHandler = injector.getInstance(CustomerSessionHandler.class);
-        final UserBean bean = new UserBean();
-        bean.setLoggedIn(customerSessionHandler.findCustomerId(session).isPresent());
-        customerSessionHandler.findCustomerName(session).ifPresent(bean::setName);
-        pageMeta.setUser(bean);
+    private void fillUser(final PageMeta pageMeta, final Http.Session session) {
+        injector.getInstance(CustomerSessionHandler.class).findUserInfo(session)
+                .ifPresent(pageMeta::setUser);
     }
 
 }

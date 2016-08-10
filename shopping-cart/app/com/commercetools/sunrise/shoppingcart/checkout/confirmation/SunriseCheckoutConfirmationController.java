@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -25,7 +26,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.removeCartSessionData;
 import static com.commercetools.sunrise.shoppingcart.OrderSessionUtils.overwriteLastOrderIdSessionData;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
@@ -107,7 +107,7 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
         return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
                 .thenApplyAsync(order -> {
                     overwriteLastOrderIdSessionData(order, session());
-                    removeCartSessionData(session());
+                    injector().getInstance(CartSessionHandler.class).removeFromSession(session());
                     return order;
                 }, defaultContext());
     }

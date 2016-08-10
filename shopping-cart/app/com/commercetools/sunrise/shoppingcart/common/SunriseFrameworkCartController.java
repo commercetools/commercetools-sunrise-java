@@ -6,8 +6,7 @@ import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.hooks.*;
 import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
-import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
-import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
+import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
@@ -32,7 +31,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 
-import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -91,7 +89,8 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
         return injector().getInstance(CustomerSessionHandler.class).findCustomerId(session)
                 .map(customerId -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId)))
                 .map(Optional::of)
-                .orElseGet(() -> CartSessionUtils.getCartId(session).map(cartId -> CartQuery.of().plusPredicates(cart -> cart.id().is(cartId))))
+                .orElseGet(() -> injector().getInstance(CartSessionHandler.class).findCartId(session)
+                        .map(cartId -> CartQuery.of().plusPredicates(cart -> cart.id().is(cartId))))
                 .map(query -> query.plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
                         .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO pass as an optional parameter to avoid expanding always
                         .plusExpansionPaths(c -> c.paymentInfo().payments())
@@ -113,20 +112,16 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Cart> applySideEffects(@Nonnull Cart cart) {
-        final Http.Session session = session();
         return updateCartWithUserPreferences(cart, userContext())
                 .thenApply(updatedCart -> {
-                    final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
-                    CartSessionUtils.overwriteCartSessionData(updatedCart, session, miniCartBeanFactory);
-                    return updatedCart;
-                }).thenApply(updatedCart -> {
+                    overwriteCartInSession(updatedCart);
                     hooks().runAsyncHook(PrimaryCartLoadedHook.class, hook -> hook.onUserCartLoaded(updatedCart));
                     return updatedCart;
                 });
     }
 
     protected CompletionStage<List<ShippingMethod>> getShippingMethods() {
-        return CartSessionUtils.getCartId(session())
+        return injector().getInstance(CartSessionHandler.class).findCartId(session())
                 .map(cartId -> sphere().execute(ShippingMethodsByCartGet.of(cartId)))
                 .orElseGet(() -> completedFuture(emptyList()));
     }
@@ -135,13 +130,11 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
         final Address address = Address.of(userContext.country());
         final CustomerSessionHandler customerSessionHandler = injector().getInstance(CustomerSessionHandler.class);
         final Http.Session session = session();
-        final String customerId = customerSessionHandler.findCustomerId(session).orElse(null);
-        final String customerEmail = customerSessionHandler.findCustomerEmail(session).orElse(null);
         final CartDraft cartDraft = CartDraftBuilder.of(userContext.currency())
                 .country(address.getCountry())
                 .shippingAddress(address)
-                .customerId(customerId)
-                .customerEmail(customerEmail)
+                .customerId(customerSessionHandler.findCustomerId(session).orElse(null))
+                .customerEmail(customerSessionHandler.findCustomerEmail(session).orElse(null))
                 .build();
         return sphere().execute(CartCreateCommand.of(cartDraft));
     }
@@ -166,10 +159,5 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
         final CartUpdateCommand updateCommand = CartUpdateCommand.of(cart,
                 asList(SetShippingAddress.of(shippingAddress), SetCountry.of(country)));
         return sphere().execute(updateCommand);
-    }
-
-    protected void overrideCartSessionData(final Cart cart) {
-        final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
-        overwriteCartSessionData(cart, session(), miniCartBeanFactory);
     }
 }

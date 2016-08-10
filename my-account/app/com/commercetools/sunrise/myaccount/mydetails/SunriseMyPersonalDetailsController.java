@@ -7,7 +7,6 @@ import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
-import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
@@ -99,7 +98,7 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final MyPersonalDetailsFormData formData, final Customer customer, final Customer updatedCustomer) {
-        injector().getInstance(CustomerSessionHandler.class).overwriteSession(session(), updatedCustomer);
+        overwriteCustomerInSession(updatedCustomer);
         return redirectToMyPersonalDetails();
     }
 

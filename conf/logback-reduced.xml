@@ -30,7 +30,8 @@
     <logger name="com.commercetools.sunrise.common.template.i18n.I18nResolverProvider" level="WARN" />
     <logger name="com.commercetools.sunrise.common.template.engine.TemplateEngineProvider" level="WARN" />
     <logger name="com.commercetools.sunrise.productcatalog" level="INFO" />
-    <logger name="com.commercetools.sunrise.shoppingcart.CartSessionUtils" level="INFO" />
+    <logger name="com.commercetools.sunrise.shoppingcart.CartSessionHandler" level="INFO" />
+    <logger name="com.commercetools.sunrise.myaccount.CustomerSessionHandler" level="INFO" />
     <logger name="com.commercetools.sunrise.theme.WebjarsFilesCopier" level="INFO" />
     <logger name="com.github.jknack.handlebars.Handlebars" level="ERROR" />
     <logger name="com.github.jknack.handlebars.HelperRegistry" level="ERROR" />

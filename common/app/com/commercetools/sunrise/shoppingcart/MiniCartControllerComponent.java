@@ -12,11 +12,14 @@ public class MiniCartControllerComponent implements ControllerComponent, PageDat
     @Inject
     private Http.Context context;
     @Inject
+    private CartSessionHandler cartSessionHandler;
+    @Inject
     private MiniCartBeanFactory miniCartBeanFactory;
 
     @Override
     public void acceptPageData(final PageData pageData) {
-        pageData.getHeader()
-                .setMiniCart(CartSessionUtils.getMiniCart(context.session(), miniCartBeanFactory));
+        final MiniCartBean miniCart = cartSessionHandler.findMiniCart(context.session())
+                .orElseGet(() -> miniCartBeanFactory.createWithEmptyCart());
+        pageData.getHeader().setMiniCart(miniCart);
     }
 }

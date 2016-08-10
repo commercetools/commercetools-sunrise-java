@@ -17,6 +17,8 @@ import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
+import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -25,8 +27,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import com.google.inject.Injector;
+import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;
+import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
@@ -258,5 +262,13 @@ public abstract class SunriseFrameworkController extends Controller {
     protected final void saveUnexpectedFormError(final Form<?> form, final Throwable throwable, final Logger logger) {
         form.reject("Something went wrong, please try again"); // TODO i18n
         logger.error("The CTP request raised an unexpected exception", throwable);
+    }
+
+    protected final void overwriteCartInSession(final Cart cart) {
+        injector().getInstance(CartSessionHandler.class).overwriteInSession(session(), cart);
+    }
+
+    protected final void overwriteCustomerInSession(final Customer customer) {
+        injector().getInstance(CustomerSessionHandler.class).overwriteInSession(session(), customer);
     }
 }

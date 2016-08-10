@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
-import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartState;
 import io.sphere.sdk.carts.queries.CartQuery;
@@ -15,7 +14,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.UnaryOperator;
 
-import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class CartFinderBySession implements CartFinder<Http.Session> {
@@ -23,17 +21,18 @@ public class CartFinderBySession implements CartFinder<Http.Session> {
     @Inject
     private SphereClient sphereClient;
     @Inject
-    private Injector injector;
-    @Inject
     private HttpExecutionContext httpExecutionContext;
+    @Inject
+    private CartSessionHandler cartSessionHandler;
+    @Inject
+    private CustomerSessionHandler customerSessionHandler;
 
     @Override
     public CompletionStage<Optional<Cart>> findCart(final Http.Session session, final UnaryOperator<CartQuery> runHookOnCartQuery) {
         final CompletionStage<Optional<Cart>> cartStage = fetchCart(session, runHookOnCartQuery);
-        cartStage.thenAcceptAsync(cart -> {
-            final MiniCartBeanFactory miniCartBeanFactory = injector.getInstance(MiniCartBeanFactory.class);
-            overwriteCartSessionData(cart.orElse(null), session, miniCartBeanFactory);
-        }, httpExecutionContext.current());
+        cartStage.thenAcceptAsync(cart ->
+                cartSessionHandler.overwriteInSession(session, cart.orElse(null)),
+                httpExecutionContext.current());
         return cartStage;
     }
 
@@ -46,9 +45,9 @@ public class CartFinderBySession implements CartFinder<Http.Session> {
     }
 
     private Optional<CartQuery> buildQuery(final Http.Session session) {
-        return injector.getInstance(CustomerSessionHandler.class).findCustomerId(session)
+        return customerSessionHandler.findCustomerId(session)
                 .map(customerId -> Optional.of(buildQueryByCustomerId(customerId)))
-                .orElseGet(() -> CartSessionUtils.getCartId(session)
+                .orElseGet(() -> cartSessionHandler.findCartId(session)
                         .map(this::buildQueryByCartId))
                 .map(query -> query
                         .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))

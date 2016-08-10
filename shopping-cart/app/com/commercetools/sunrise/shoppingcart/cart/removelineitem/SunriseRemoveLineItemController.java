@@ -66,7 +66,7 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final RemoveLineItemFormData formData, final Cart cart, final Cart updatedCart) {
-        overrideCartSessionData(updatedCart); //TODO this is duplicated
+        overwriteCartInSession(updatedCart); //TODO this is duplicated
         return redirectToCartDetail();
     }
 

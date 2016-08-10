@@ -65,7 +65,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final AddProductToCartFormData formData, final Cart context, final Cart result) {
-        overrideCartSessionData(result);
+        overwriteCartInSession(result);
         return successfulResult();
     }
 

@@ -63,7 +63,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final ChangeLineItemQuantityFormData formData, final Cart cart, final Cart updatedCart) {
-        overrideCartSessionData(updatedCart);
+        overwriteCartInSession(updatedCart);
         return redirectToCartDetail();
     }
 
