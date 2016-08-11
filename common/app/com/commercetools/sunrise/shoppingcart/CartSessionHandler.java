@@ -8,9 +8,7 @@ import org.slf4j.LoggerFactory;
 import play.mvc.Http;
 
 import javax.inject.Inject;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import static java.util.Arrays.asList;
 
@@ -38,8 +36,8 @@ public class CartSessionHandler extends SessionHandlerBase<Cart> {
     }
 
     @Override
-    protected Set<String> sessionKeys() {
-        return new HashSet<>(asList(getCartIdSessionKey(), getMiniCartSessionKey()));
+    protected void removeRelatedValuesFromSession(final Http.Session session) {
+        removeValues(session, asList(getCartIdSessionKey(), getMiniCartSessionKey()));
     }
 
     @Override

@@ -6,11 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.mvc.Http;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-
-import static java.util.Collections.singletonList;
 
 public class OrderSessionHandler extends SessionHandlerBase<Order> {
 
@@ -27,8 +23,8 @@ public class OrderSessionHandler extends SessionHandlerBase<Order> {
     }
 
     @Override
-    protected Set<String> sessionKeys() {
-        return new HashSet<>(singletonList(getLastOrderIdSessionKey()));
+    protected void removeRelatedValuesFromSession(final Http.Session session) {
+        removeValues(session, getLastOrderIdSessionKey());
     }
 
     @Override

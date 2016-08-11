@@ -7,8 +7,8 @@ import play.libs.Json;
 import play.mvc.Http;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public abstract class SessionHandlerBase<T> implements SessionHandler<T> {
 
@@ -28,9 +28,7 @@ public abstract class SessionHandlerBase<T> implements SessionHandler<T> {
 
     protected abstract void overwriteRelatedValuesInSession(final Http.Session session, final T value);
 
-    protected void removeRelatedValuesFromSession(final Http.Session session) {
-        sessionKeys().forEach(key -> removeValue(session, key));
-    }
+    protected abstract void removeRelatedValuesFromSession(final Http.Session session);
 
     protected Optional<String> findValue(final Http.Session session, final String key) {
         return Optional.ofNullable(session.get(key));
@@ -58,12 +56,14 @@ public abstract class SessionHandlerBase<T> implements SessionHandler<T> {
         overwriteValue(session, key, valueAsJson);
     }
 
-    protected void removeValue(final Http.Session session, final String key) {
+    protected void removeValues(final Http.Session session, final List<String> keys) {
+        keys.forEach(key -> removeValues(session, key));
+    }
+
+    protected void removeValues(final Http.Session session, final String key) {
         session.remove(key);
         logger().debug("Removed from session \"{}\"", key);
     }
-
-    protected abstract Set<String> sessionKeys();
 
     protected abstract Logger logger();
 }
