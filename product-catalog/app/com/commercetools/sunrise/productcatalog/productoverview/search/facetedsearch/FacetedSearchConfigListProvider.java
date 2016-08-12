@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import com.commercetools.sunrise.common.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseConfigurationException;
 import io.sphere.sdk.facets.*;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.model.FacetedSearchSearchModel;
@@ -57,7 +57,7 @@ public final class FacetedSearchConfigListProvider implements Provider<FacetedSe
                     break;
                 // missing range facets
                 default:
-                    throw new SunriseInitializationException("Not supported facet type: " + type);
+                    throw new SunriseConfigurationException("Unsupported facet type \"" + type + "\"", TYPE_ATTR, CONFIG_FACETS);
             }
         });
         logger.debug("Provide SelectFacetConfigs: {}", selectFacetConfigs.stream()
@@ -71,7 +71,7 @@ public final class FacetedSearchConfigListProvider implements Provider<FacetedSe
         return Arrays.stream(SunriseFacetType.values())
                 .filter(typeValue -> typeValue.name().equals(configType))
                 .findFirst()
-                .orElseThrow(() -> new SunriseInitializationException("Not recognized facet type: " + configType));
+                .orElseThrow(() -> new SunriseConfigurationException("Unrecognized facet type \"" + configType + "\"", TYPE_ATTR, CONFIG_FACETS));
     }
 
     private static SelectFacetedSearchConfig getSelectFacetConfig(final FacetType type, final Configuration facetConfig, final int position) {
@@ -80,10 +80,10 @@ public final class FacetedSearchConfigListProvider implements Provider<FacetedSe
 
     private static SelectFacetBuilder<ProductProjection> getSelectFacetBuilder(final FacetType type, final Configuration facetConfig) {
         final String key = Optional.ofNullable(facetConfig.getString(KEY_ATTR))
-                .orElseThrow(() -> new SunriseInitializationException("Missing facet key: " + facetConfig));
+                .orElseThrow(() -> new SunriseConfigurationException("Missing facet key", KEY_ATTR, CONFIG_FACETS));
         final String label = facetConfig.getString(LABEL_ATTR, "");
         final String attrPath = Optional.ofNullable(facetConfig.getString(EXPR_ATTR))
-                .orElseThrow(() -> new SunriseInitializationException("Missing facet attribute path expression: " + facetConfig));
+                .orElseThrow(() -> new SunriseConfigurationException("Missing facet attribute path expression", EXPR_ATTR, CONFIG_FACETS));
         final boolean countHidden = !facetConfig.getBoolean(COUNT_ATTR, true);
         final boolean matchingAll = facetConfig.getBoolean(MATCHING_ALL_ATTR, false);
         final boolean multiSelect = facetConfig.getBoolean(MULTI_SELECT_ATTR, true);

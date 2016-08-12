@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.contexts;
 
-import com.commercetools.sunrise.common.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseConfigurationException;
 import com.google.inject.Provider;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.SphereClient;
@@ -51,7 +51,7 @@ public final class ProjectContextProvider implements Provider<ProjectContext> {
                     + " Currencies " + currencies);
             return ProjectContextImpl.of(languages, countries, currencies);
         } catch (SphereTimeoutException e) {
-            throw new SunriseInitializationException("Could not fetch project information", e);
+            throw new RuntimeException("Could not fetch project information", e);
         }
     }
 
@@ -73,7 +73,7 @@ public final class ProjectContextProvider implements Provider<ProjectContext> {
                 .collect(toList());
         final List<T> values = valuesFromConfig.isEmpty() ? fallbackValues : valuesFromConfig;
         if (values.isEmpty()) {
-            throw new SunriseInitializationException("No '" + configKey + "' defined and CTP project information was empty");
+            throw new SunriseConfigurationException("No configuration defined and CTP project information was empty", configKey);
         }
         return values;
     }

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
-import com.commercetools.sunrise.common.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseConfigurationException;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.github.jknack.handlebars.Handlebars;
@@ -41,7 +41,7 @@ public class HandlebarsFactory extends Base {
     //for testing package scope
     static Handlebars create(final List<TemplateLoader> templateLoaders, final I18nResolver i18NResolver, final I18nIdentifierFactory i18nIdentifierFactory) {
         if (templateLoaders.isEmpty()) {
-            throw new SunriseInitializationException("No Handlebars template loaders found in configuration '" + CONFIG_TEMPLATE_LOADERS + "'");
+            throw new SunriseConfigurationException("Could not initialize Handlebars due to missing template loaders configuration", CONFIG_TEMPLATE_LOADERS);
         }
         logger.info("Provide Handlebars: template loaders [{}]]",
                 templateLoaders.stream().map(TemplateLoader::getPrefix).collect(joining(", ")));
@@ -72,7 +72,7 @@ public class HandlebarsFactory extends Base {
             case FILE_TYPE:
                 return new FileTemplateLoader(path);
             default:
-                throw new SunriseInitializationException("Not recognized template loader: " + type);
+                throw new SunriseConfigurationException("Could not initialize Handlebars due to unrecognized template loader \"" + type + "\"", CONFIG_TEMPLATE_LOADERS);
         }
     }
 }
