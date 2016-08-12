@@ -1,4 +1,4 @@
-Sunrise Java Framework :sunrise:
+Sunrise Java Shop Framework :sunrise:
 ==============
 
 [![Build Status](https://travis-ci.org/commercetools/commercetools-sunrise-java.png?branch=master)](https://travis-ci.org/commercetools/commercetools-sunrise-java) [![Stories in Ready](https://badge.waffle.io/commercetools/commercetools-sunrise-java.png?label=ready&title=Ready)](https://waffle.io/commercetools/commercetools-sunrise-java)
@@ -58,7 +58,7 @@ $ docker run -it --rm -p 9000:9000 -e CTP_PROJECT_KEY=YOUR_PROJECT_KEY -e CTP_CL
 
 ## Related projects
 
-### Sunrise Starter
+### Sunrise Project Starter
 The starting point to build your own online shop project
 
 https://github.com/commercetools/commercetools-sunrise-java-starter
