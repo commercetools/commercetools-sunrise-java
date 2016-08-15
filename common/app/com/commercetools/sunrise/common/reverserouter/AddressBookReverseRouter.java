@@ -1,7 +1,9 @@
 package com.commercetools.sunrise.common.reverserouter;
 
+import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
+@ImplementedBy(ReflectionAddressBookReverseRouter.class)
 public interface AddressBookReverseRouter {
 
     Call addressBookCall(final String languageTag);

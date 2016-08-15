@@ -4,6 +4,7 @@ package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import com.google.inject.Injector;
@@ -45,6 +46,7 @@ public abstract class SunriseAddressBookController extends MyAccountController i
     }
 
     @AddCSRFToken
+    @ReverseRoute("addressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show address book in locale={}", languageTag);

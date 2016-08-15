@@ -4,6 +4,7 @@ package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
@@ -64,6 +65,7 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
     }
 
     @AddCSRFToken
+    @ReverseRoute("changeAddressInAddressBookCall")
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("show edit form for address with id={} in locale={}", addressId, languageTag);
@@ -76,6 +78,7 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
         });
     }
 
+    @ReverseRoute("changeAddressInAddressBookProcessFormCall")
     @RequireCSRFCheck
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
