@@ -12,7 +12,6 @@ public class ReverseRouterModule extends AbstractModule {
         final ReverseRouterImpl reverseRouter = new ReverseRouterImpl();
         bind(ReverseRouter.class).toInstance(reverseRouter);
         bind(ProductReverseRouter.class).toInstance(reverseRouter);
-        bind(CheckoutReverseRouter.class).toInstance(reverseRouter);
         bind(HomeReverseRouter.class).toInstance(reverseRouter);
         bind(SetupReverseRouter.class).toInstance(reverseRouter);
     }
