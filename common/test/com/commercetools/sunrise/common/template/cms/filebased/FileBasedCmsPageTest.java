@@ -3,10 +3,6 @@ package com.commercetools.sunrise.common.template.cms.filebased;
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.name.Names;
 import org.junit.Test;
 
 import java.util.List;
@@ -57,13 +53,7 @@ public class FileBasedCmsPageTest {
 
     private void testCms(final Locale locale, final String pageKey, final String fieldName, final Consumer<Optional<String>> test) throws Exception {
         final I18nResolver i18nResolver = YamlI18nResolver.of("cms", SUPPORTED_LOCALES, AVAILABLE_BUNDLES);
-        final Injector injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            public void configure() {
-                bind(I18nResolver.class).annotatedWith(Names.named("cms")).toInstance(i18nResolver);
-            }
-        });
-        final FileBasedCmsService cmsService = injector.getInstance(FileBasedCmsService.class);
+        final FileBasedCmsService cmsService = FileBasedCmsService.of(i18nResolver);
         final Optional<CmsPage> page = cmsService.page(pageKey, singletonList(locale)).toCompletableFuture().join();
         test.accept(page.flatMap(p -> p.field(fieldName)));
     }

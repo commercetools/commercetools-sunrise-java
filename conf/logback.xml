@@ -27,8 +27,8 @@
     <logger name="com.commercetools.sunrise.common.suggestion.SunriseProductRecommendation" level="INFO" />
     <logger name="com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsTemplateEngine" level="INFO" />
     <logger name="com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.template.i18n.I18nResolverProvider" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.template.engine.TemplateEngineProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.template.i18n.ConfigurableI18nResolverProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.template.engine.HandlebarsTemplateEngineProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.productcatalog" level="INFO" />
     <logger name="com.commercetools.sunrise.shoppingcart.CartSessionUtils" level="INFO" />
     <logger name="com.commercetools.sunrise.theme.WebjarsFilesCopier" level="INFO" />

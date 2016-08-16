@@ -9,9 +9,9 @@ import play.Configuration;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public final class TemplateEngineProvider implements Provider<TemplateEngine> {
+public final class HandlebarsTemplateEngineProvider implements Provider<TemplateEngine> {
 
-    public static final String CONFIG_HANDLEBARS = "handlebars";
+    private static final String CONFIG_HANDLEBARS = "handlebars";
     @Inject
     private HandlebarsFactory handlebarsFactory;
     @Inject

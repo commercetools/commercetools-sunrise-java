@@ -5,31 +5,51 @@ import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Reference;
+import play.mvc.Http;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-public final class UserContextImpl extends Base implements UserContext {
+import static com.commercetools.sunrise.common.localization.SunriseLocalizationController.SESSION_COUNTRY;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+
+@RequestScoped
+final class UserContextImpl extends Base implements UserContext {
 
     private final List<Locale> locales;
     private final CountryCode country;
     private final CurrencyUnit currency;
-    private final Optional<Reference<CustomerGroup>> customerGroup;
-    private final Optional<Reference<Channel>> channel;
+    @Nullable
+    private final Reference<CustomerGroup> customerGroup;
+    @Nullable
+    private final Reference<Channel> channel;
 
-    private UserContextImpl(final List<Locale> locales, final CountryCode country, final CurrencyUnit currency,
-                            @Nullable final Reference<CustomerGroup> customerGroup, @Nullable final Reference<Channel> channel) {
+    UserContextImpl(final List<Locale> locales, final CountryCode country, final CurrencyUnit currency,
+                    @Nullable final Reference<CustomerGroup> customerGroup, @Nullable final Reference<Channel> channel) {
         this.locales = locales;
         this.country = country;
         this.currency = currency;
-        this.customerGroup = Optional.ofNullable(customerGroup);
-        this.channel = Optional.ofNullable(channel);
+        this.customerGroup = customerGroup;
+        this.channel = channel;
         if (locales.isEmpty() || locales.get(0) == null) {
             throw new IllegalArgumentException("Locales must contain at least one valid locale.");
         }
+    }
+
+    @Inject
+    private UserContextImpl(final Http.Context context, final ProjectContext projectContext) {
+        this.locales = acceptedLocales(context, projectContext);
+        this.country = userCountry(context, projectContext);
+        this.currency = userCurrency(context, projectContext, country);
+        this.customerGroup = null;
+        this.channel = null;
     }
 
     @Override
@@ -49,20 +69,72 @@ public final class UserContextImpl extends Base implements UserContext {
 
     @Override
     public Optional<Reference<CustomerGroup>> customerGroup() {
-        return customerGroup;
+        return Optional.ofNullable(customerGroup);
     }
 
     @Override
     public Optional<Reference<Channel>> channel() {
-        return channel;
+        return Optional.ofNullable(channel);
     }
 
-    public static UserContext of(final List<Locale> locales, final CountryCode country, final CurrencyUnit currency) {
-        return of(locales, country, currency, null, null);
+    private static List<Locale> acceptedLocales(final Http.Context context, final ProjectContext projectContext) {
+        final ArrayList<Locale> acceptedLocales = new ArrayList<>();
+        acceptedLocales.add(userLanguage(context, projectContext));
+        acceptedLocales.addAll(requestAcceptedLanguages(context, projectContext));
+        return acceptedLocales;
     }
 
-    public static UserContext of(final List<Locale> locales, final CountryCode country, final CurrencyUnit currency,
-                                 @Nullable final Reference<CustomerGroup> customerGroup, @Nullable final Reference<Channel> channel) {
-        return new UserContextImpl(locales, country, currency, customerGroup, channel);
+    private static List<Locale> requestAcceptedLanguages(final Http.Context context, final ProjectContext projectContext) {
+        return context.request().acceptLanguages().stream()
+                .map(lang -> Locale.forLanguageTag(lang.code()))
+                .filter(projectContext::isLocaleSupported)
+                .collect(toList());
     }
+
+    private static Optional<CountryCode> findCurrentCountry(final Http.Context context) {
+        return Optional.ofNullable(context.session().get(SESSION_COUNTRY))
+                .map(countryInSession -> CountryCode.getByCode(countryInSession, false));
+    }
+
+    private static Optional<CurrencyUnit> findCurrentCurrency(final Http.Context context, final CountryCode currentCountry) {
+        return Optional.ofNullable(currentCountry.getCurrency())
+                .map(countryCurrency -> Monetary.getCurrency(countryCurrency.getCurrencyCode()));
+    }
+
+    private static Optional<Locale> findCurrentLanguage(final Http.Context context) {
+        return indexOfLanguageTagInRoutePattern(context)
+                .map(index -> {
+                    final String languageTag = context.request().path().split("/")[index];
+                    return Locale.forLanguageTag(languageTag);
+                });
+    }
+
+    private static Locale userLanguage(final Http.Context context, final ProjectContext projectContext) {
+        return findCurrentLanguage(context)
+                .filter(projectContext::isLocaleSupported)
+                .orElseGet(projectContext::defaultLocale);
+    }
+
+    private static CountryCode userCountry(final Http.Context context, final ProjectContext projectContext) {
+        return findCurrentCountry(context)
+                .filter(projectContext::isCountrySupported)
+                .orElseGet(projectContext::defaultCountry);
+    }
+
+    private static CurrencyUnit userCurrency(final Http.Context context, final ProjectContext projectContext, final CountryCode currentCountry) {
+        return findCurrentCurrency(context, currentCountry)
+                .filter(projectContext::isCurrencySupported)
+                .orElseGet(projectContext::defaultCurrency);
+    }
+
+    private static Optional<Integer> indexOfLanguageTagInRoutePattern(final Http.Context context) {
+        return Optional.ofNullable(context.args.get("ROUTE_PATTERN"))
+                .map(routePattern -> routePattern.toString().replaceAll("<[^>]+>", "")) //hack since splitting '$languageTag<[^/]+>' with '/' would create more words
+                .map(routePattern -> {
+                    final List<String> paths = asList(routePattern.split("/"));
+                    return paths.indexOf("$languageTag");
+                })
+                .filter(index -> index >= 0);
+    }
+
 }
