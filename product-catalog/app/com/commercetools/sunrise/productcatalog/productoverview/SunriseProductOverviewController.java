@@ -6,6 +6,7 @@ import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import com.commercetools.sunrise.hooks.*;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.PaginationComponent;
@@ -85,6 +86,7 @@ public abstract class SunriseProductOverviewController extends SunriseFrameworkC
         return new HashSet<>(asList("product-overview", "product-catalog", "search", "product", "category"));
     }
 
+    @ReverseRoute("productOverviewPageCall")
     public CompletionStage<Result> searchProductsByCategorySlug(final String languageTag, final String categorySlug) {
         return doRequest(() -> {
             this.categorySlug = categorySlug;
@@ -99,6 +101,7 @@ public abstract class SunriseProductOverviewController extends SunriseFrameworkC
         });
     }
 
+    @ReverseRoute("processSearchProductsForm")
     public CompletionStage<Result> searchProductsBySearchTerm(final String languageTag) {
         return searchProducts();
     }

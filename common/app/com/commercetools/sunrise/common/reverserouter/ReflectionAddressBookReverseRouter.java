@@ -4,7 +4,9 @@ import com.commercetools.sunrise.common.pages.ParsedRoutes;
 import play.mvc.Call;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 final class ReflectionAddressBookReverseRouter extends ReflectionReverseRouterBase implements AddressBookReverseRouter {
 
     private ReverseCaller addressBookCaller;
