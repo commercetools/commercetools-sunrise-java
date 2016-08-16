@@ -54,7 +54,7 @@ lazy val `my-account` = project
 lazy val `setup-widget` = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
   .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ disableDockerPublish: _*)
-  .dependsOn(common % "test->test;it->it;pt->pt")
+  .dependsOn(common)
 
 lazy val `sbt-tasks` = project
   .enablePlugins(PlayJava).configs(IntegrationTest)

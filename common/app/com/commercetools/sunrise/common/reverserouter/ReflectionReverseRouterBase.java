@@ -16,7 +16,7 @@ import java.util.concurrent.CompletionException;
 
 import static java.lang.String.format;
 
-abstract class ReflectionReverseRouterBase extends Base {
+public abstract class ReflectionReverseRouterBase extends Base {
 
 
     protected final ReverseCaller getCallerForRoute(final ParsedRoutes parsedRoutes, final String tag) {

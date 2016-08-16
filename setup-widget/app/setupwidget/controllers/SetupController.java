@@ -1,5 +1,6 @@
 package setupwidget.controllers;
 
+import com.commercetools.sunrise.framework.annotations.ReverseRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.Configuration;
@@ -47,6 +48,7 @@ public class SetupController extends Controller {
         return onSetupEnabled(() -> ok(setup.render(formFactory.form(SphereCredentials.class), setupReverseRouter.processSetupFormCall())));
     }
 
+    @ReverseRoute("processSetupFormCall")
     public Result processForm() {
         return onSetupEnabled(() -> {
             final Form<SphereCredentials> form = formFactory.form(SphereCredentials.class).bindFromRequest();
