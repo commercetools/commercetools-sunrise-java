@@ -28,8 +28,8 @@ lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;tes
 lazy val `commercetools-sunrise` = (project in file("."))
   .enablePlugins(PlayJava, DockerPlugin).configs(IntegrationTest, PlayTest)
   .settings(commonSettings ++ commonTestSettings ++ sunriseThemeSettings ++ dockerSettings: _*)
-  .dependsOn(commonWithTests, `product-catalog`, `shopping-cart`, `my-account`, `setup-widget`)
-  .aggregate(common, `product-catalog`, `shopping-cart`, `my-account`, `setup-widget`, `sbt-tasks`, `move-to-sdk`)
+  .dependsOn(commonWithTests, `product-catalog`, `shopping-cart`, `my-account`)
+  .aggregate(common, `product-catalog`, `shopping-cart`, `my-account`, `sbt-tasks`, `move-to-sdk`)
 
 lazy val common = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
@@ -50,11 +50,6 @@ lazy val `my-account` = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
   .settings(commonSettings ++ commonTestSettings ++ disableDockerPublish: _*)
   .dependsOn(commonWithTests)
-
-lazy val `setup-widget` = project
-  .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
-  .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ disableDockerPublish: _*)
-  .dependsOn(common)
 
 lazy val `sbt-tasks` = project
   .enablePlugins(PlayJava).configs(IntegrationTest)
