@@ -3,7 +3,7 @@ package com.commercetools.sunrise.common.controllers;
 import com.commercetools.sunrise.common.reverserouter.*;
 import play.mvc.Call;
 
-public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, CartReverseRouter, AuthenticationReverseRouter, LocalizationReverseRouter {
+public class TestableReverseRouter implements WebJarAssetsReverseRouter, HomeReverseRouter, ProductReverseRouter, CheckoutReverseRouter, AddressBookReverseRouter, MyPersonalDetailsReverseRouter, MyOrdersReverseRouter, CartReverseRouter, AuthenticationReverseRouter, LocalizationReverseRouter {
 
     private String themeAssetsUrl;
     private String changeLanguageUrl;
@@ -177,7 +177,7 @@ public class TestableReverseRouter implements ReverseRouter, HomeReverseRouter, 
     }
 
     @Override
-    public Call themeAssets(final String file) {
+    public Call webJarAssetsCall(final String file) {
         return createCall(themeAssetsUrl);
     }
 
