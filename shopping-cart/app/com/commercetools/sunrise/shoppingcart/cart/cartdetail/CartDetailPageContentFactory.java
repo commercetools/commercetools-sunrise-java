@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 public class CartDetailPageContentFactory extends Base {
+
     @Inject
     private CartBeanFactory cartLikeBeanFactory;
     @Inject
@@ -34,11 +35,7 @@ public class CartDetailPageContentFactory extends Base {
     }
 
     protected void fillCart(final CartDetailPageContent bean, @Nullable final Cart cart) {
-        if (cart != null) {
-            bean.setCart(cartLikeBeanFactory.create(cart));
-        } else {
-            bean.setCart(cartLikeBeanFactory.createWithEmptyCart());
-        }
+        bean.setCart(cartLikeBeanFactory.create(cart));
     }
 
     protected void fillTitle(final PageContent bean) {
