@@ -9,10 +9,10 @@ import javax.inject.Singleton;
 @Singleton
 final class ReflectionHomeReverseRouter extends ReflectionReverseRouterBase implements HomeReverseRouter {
 
-    private ReverseCaller homePageCaller;
+    private final ReverseCaller homePageCaller;
 
     @Inject
-    private void setRoutes(final ParsedRoutes parsedRoutes) {
+    private ReflectionHomeReverseRouter(final ParsedRoutes parsedRoutes) {
         homePageCaller = getCallerForRoute(parsedRoutes, "homePageCall");
     }
 

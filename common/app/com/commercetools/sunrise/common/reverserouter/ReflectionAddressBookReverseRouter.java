@@ -9,15 +9,15 @@ import javax.inject.Singleton;
 @Singleton
 final class ReflectionAddressBookReverseRouter extends ReflectionReverseRouterBase implements AddressBookReverseRouter {
 
-    private ReverseCaller addressBookCaller;
-    private ReverseCaller addAddressToAddressBookCaller;
-    private ReverseCaller addAddressToAddressBookProcessFormCaller;
-    private ReverseCaller changeAddressInAddressBookCaller;
-    private ReverseCaller changeAddressInAddressBookProcessFormCaller;
-    private ReverseCaller removeAddressFromAddressBookProcessFormCaller;
+    private final ReverseCaller addressBookCaller;
+    private final ReverseCaller addAddressToAddressBookCaller;
+    private final ReverseCaller addAddressToAddressBookProcessFormCaller;
+    private final ReverseCaller changeAddressInAddressBookCaller;
+    private final ReverseCaller changeAddressInAddressBookProcessFormCaller;
+    private final ReverseCaller removeAddressFromAddressBookProcessFormCaller;
 
     @Inject
-    private void setRoutes(final ParsedRoutes parsedRoutes) {
+    private ReflectionAddressBookReverseRouter(final ParsedRoutes parsedRoutes) {
         addressBookCaller = getCallerForRoute(parsedRoutes, "addressBookCall");
         addAddressToAddressBookCaller = getCallerForRoute(parsedRoutes, "addAddressToAddressBookCall");
         addAddressToAddressBookProcessFormCaller = getCallerForRoute(parsedRoutes, "addAddressToAddressBookProcessFormCall");

@@ -9,11 +9,11 @@ import javax.inject.Singleton;
 @Singleton
 final class ReflectionLocalizationReverseRouter extends ReflectionReverseRouterBase implements LocalizationReverseRouter {
 
-    private ReverseCaller processChangeLanguageForm;
-    private ReverseCaller processChangeCountryForm;
+    private final ReverseCaller processChangeLanguageForm;
+    private final ReverseCaller processChangeCountryForm;
 
     @Inject
-    private void setRoutes(final ParsedRoutes parsedRoutes) {
+    private ReflectionLocalizationReverseRouter(final ParsedRoutes parsedRoutes) {
         processChangeLanguageForm = getCallerForRoute(parsedRoutes, "processChangeLanguageForm");
         processChangeCountryForm = getCallerForRoute(parsedRoutes, "processChangeCountryForm");
     }

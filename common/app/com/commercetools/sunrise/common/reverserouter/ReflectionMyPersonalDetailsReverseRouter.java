@@ -9,11 +9,11 @@ import javax.inject.Singleton;
 @Singleton
 final class ReflectionMyPersonalDetailsReverseRouter extends ReflectionReverseRouterBase implements MyPersonalDetailsReverseRouter {
 
-    private ReverseCaller myPersonalDetailsPageCall;
-    private ReverseCaller myPersonalDetailsProcessFormCall;
+    private final ReverseCaller myPersonalDetailsPageCall;
+    private final ReverseCaller myPersonalDetailsProcessFormCall;
 
     @Inject
-    private void setRoutes(final ParsedRoutes parsedRoutes) {
+    private ReflectionMyPersonalDetailsReverseRouter(final ParsedRoutes parsedRoutes) {
         myPersonalDetailsPageCall = getCallerForRoute(parsedRoutes, "myPersonalDetailsPageCall");
         myPersonalDetailsProcessFormCall = getCallerForRoute(parsedRoutes, "myPersonalDetailsProcessFormCall");
     }

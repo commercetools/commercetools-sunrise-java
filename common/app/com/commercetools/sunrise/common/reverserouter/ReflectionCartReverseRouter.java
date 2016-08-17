@@ -9,13 +9,13 @@ import javax.inject.Singleton;
 @Singleton
 final class ReflectionCartReverseRouter extends ReflectionReverseRouterBase implements CartReverseRouter {
 
-    private ReverseCaller showCart;
-    private ReverseCaller processAddProductToCartForm;
-    private ReverseCaller processDeleteLineItemForm;
-    private ReverseCaller processChangeLineItemQuantityForm;
+    private final ReverseCaller showCart;
+    private final ReverseCaller processAddProductToCartForm;
+    private final ReverseCaller processDeleteLineItemForm;
+    private final ReverseCaller processChangeLineItemQuantityForm;
 
     @Inject
-    private void setRoutes(final ParsedRoutes parsedRoutes) {
+    private ReflectionCartReverseRouter(final ParsedRoutes parsedRoutes) {
         showCart = getCallerForRoute(parsedRoutes, "showCart");
         processAddProductToCartForm = getCallerForRoute(parsedRoutes, "processAddProductToCartForm");
         processDeleteLineItemForm = getCallerForRoute(parsedRoutes, "processDeleteLineItemForm");

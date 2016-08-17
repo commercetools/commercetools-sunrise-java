@@ -9,13 +9,13 @@ import javax.inject.Singleton;
 @Singleton
 final class ReflectionAuthenticationReverseRouter extends ReflectionReverseRouterBase implements AuthenticationReverseRouter {
 
-    private ReverseCaller showLogInForm;
-    private ReverseCaller processLogInForm;
-    private ReverseCaller processSignUpForm;
-    private ReverseCaller processLogOut;
+    private final ReverseCaller showLogInForm;
+    private final ReverseCaller processLogInForm;
+    private final ReverseCaller processSignUpForm;
+    private final ReverseCaller processLogOut;
 
     @Inject
-    private void setRoutes(final ParsedRoutes parsedRoutes) {
+    private ReflectionAuthenticationReverseRouter(final ParsedRoutes parsedRoutes) {
         showLogInForm = getCallerForRoute(parsedRoutes, "showLogInForm");
         processLogInForm = getCallerForRoute(parsedRoutes, "processLogInForm");
         processSignUpForm = getCallerForRoute(parsedRoutes, "processSignUpForm");

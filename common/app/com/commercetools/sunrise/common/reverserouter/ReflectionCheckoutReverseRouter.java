@@ -9,18 +9,18 @@ import javax.inject.Singleton;
 @Singleton
 final class ReflectionCheckoutReverseRouter extends ReflectionReverseRouterBase implements CheckoutReverseRouter {
 
-    private ReverseCaller checkoutAddressesPageCaller;
-    private ReverseCaller checkoutAddressesProcessFormCaller;
-    private ReverseCaller checkoutShippingPageCaller;
-    private ReverseCaller checkoutShippingProcessFormCaller;
-    private ReverseCaller checkoutPaymentPageCaller;
-    private ReverseCaller checkoutPaymentProcessFormCaller;
-    private ReverseCaller checkoutConfirmationPageCaller;
-    private ReverseCaller checkoutConfirmationProcessFormCaller;
-    private ReverseCaller checkoutThankYouPageCaller;
+    private final ReverseCaller checkoutAddressesPageCaller;
+    private final ReverseCaller checkoutAddressesProcessFormCaller;
+    private final ReverseCaller checkoutShippingPageCaller;
+    private final ReverseCaller checkoutShippingProcessFormCaller;
+    private final ReverseCaller checkoutPaymentPageCaller;
+    private final ReverseCaller checkoutPaymentProcessFormCaller;
+    private final ReverseCaller checkoutConfirmationPageCaller;
+    private final ReverseCaller checkoutConfirmationProcessFormCaller;
+    private final ReverseCaller checkoutThankYouPageCaller;
 
     @Inject
-    private void setRoutes(final ParsedRoutes parsedRoutes) {
+    private ReflectionCheckoutReverseRouter(final ParsedRoutes parsedRoutes) {
         checkoutAddressesPageCaller = getCallerForRoute(parsedRoutes, "checkoutAddressesPageCall");
         checkoutAddressesProcessFormCaller = getCallerForRoute(parsedRoutes, "checkoutAddressesProcessFormCall");
         checkoutShippingPageCaller = getCallerForRoute(parsedRoutes, "checkoutShippingPageCall");
