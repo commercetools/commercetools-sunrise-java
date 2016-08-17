@@ -23,7 +23,7 @@ public abstract class ReflectionReverseRouterBase extends Base {
         try {
             final ReverseCaller reverseCaller = parsedRoutes.getRoutes().stream()
                     .filter(r -> r.getControllerClass() != null)
-                    .map((parsedRoute) -> getParsedRouteRFunction(parsedRoute, tag))
+                    .map((parsedRoute) -> findReverseRouterMethod(parsedRoute, tag))
                     .filter(Optional::isPresent)
                     .map(x -> x.get())
                     .map(p -> (ReverseCaller) new ReflectionReverseCaller(p.getRight(), p.getLeft()))
@@ -38,7 +38,7 @@ public abstract class ReflectionReverseRouterBase extends Base {
         }
     }
 
-    private Optional<Pair<Object, Method>> getParsedRouteRFunction(final ParsedRoute parsedRoute, final String tag) {
+    private Optional<Pair<Object, Method>> findReverseRouterMethod(final ParsedRoute parsedRoute, final String tag) {
         final Class<?> controllerClass = parsedRoute.getControllerClass();
         Optional<Method> controllerMethodOptional = findControllerMethod(controllerClass, tag);
         return controllerMethodOptional.flatMap(m -> createPair(m, controllerClass));
