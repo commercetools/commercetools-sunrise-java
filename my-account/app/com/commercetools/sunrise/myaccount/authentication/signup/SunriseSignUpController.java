@@ -7,7 +7,7 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
-import com.commercetools.sunrise.framework.annotations.ReverseRoute;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
@@ -68,7 +68,7 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
     }
 
     @RequireCSRFCheck
-    @ReverseRoute("processSignUpForm")
+    @SunriseRoute("processSignUpForm")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process sign up form in locale={}", languageTag);

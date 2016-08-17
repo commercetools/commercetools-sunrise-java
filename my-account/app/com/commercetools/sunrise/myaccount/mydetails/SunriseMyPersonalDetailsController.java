@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
-import com.commercetools.sunrise.framework.annotations.ReverseRoute;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.client.ClientErrorException;
@@ -71,7 +71,7 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
     }
 
     @AddCSRFToken
-    @ReverseRoute("myPersonalDetailsPageCall")
+    @SunriseRoute("myPersonalDetailsPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show my personal details form in locale={}", languageTag);
@@ -82,7 +82,7 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
     }
 
     @RequireCSRFCheck
-    @ReverseRoute("myPersonalDetailsProcessFormCall")
+    @SunriseRoute("myPersonalDetailsProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process my personal details form in locale={}", languageTag);

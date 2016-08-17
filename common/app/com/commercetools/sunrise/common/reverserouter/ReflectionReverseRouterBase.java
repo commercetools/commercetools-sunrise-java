@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.reverserouter;
 
 import com.commercetools.sunrise.common.pages.ParsedRoute;
 import com.commercetools.sunrise.common.pages.ParsedRoutes;
-import com.commercetools.sunrise.framework.annotations.ReverseRoute;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -70,7 +70,7 @@ public abstract class ReflectionReverseRouterBase extends Base {
 
     private boolean methodFilter(final Method method, final String tag) {
         try {
-            final ReverseRoute annotationsByTypeOption = method.getDeclaredAnnotation(ReverseRoute.class);
+            final SunriseRoute annotationsByTypeOption = method.getDeclaredAnnotation(SunriseRoute.class);
             return Optional.ofNullable(annotationsByTypeOption).map(annotationsByType -> Arrays.stream(annotationsByType.value())
                     .anyMatch(value -> tag.equals(value))).orElse(false);
         } catch (final Exception e) {

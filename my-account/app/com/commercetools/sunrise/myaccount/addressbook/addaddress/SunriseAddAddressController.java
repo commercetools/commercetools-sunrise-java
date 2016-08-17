@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
-import com.commercetools.sunrise.framework.annotations.ReverseRoute;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
@@ -60,7 +60,7 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
     }
 
     @AddCSRFToken
-    @ReverseRoute("addAddressToAddressBookCall")
+    @SunriseRoute("addAddressToAddressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show new address form for address in locale={}", languageTag);
@@ -71,7 +71,7 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
     }
 
     @RequireCSRFCheck
-    @ReverseRoute("addAddressToAddressBookProcessFormCall")
+    @SunriseRoute("addAddressToAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("try to add address with in locale={}", languageTag);

@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.common.forms.ErrorsBean;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
-import com.commercetools.sunrise.framework.annotations.ReverseRoute;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
 import com.commercetools.sunrise.shoppingcart.CartLikeBeanFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
@@ -64,7 +64,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     protected CartLikeBeanFactory cartLikeBeanFactory;
 
     @AddCSRFToken
-    @ReverseRoute("checkoutPaymentPageCall")
+    @SunriseRoute("checkoutPaymentPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions()
                 .thenComposeAsync(cart -> getPaymentMethodInfos(cart)
@@ -85,7 +85,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
     }
 
     @RequireCSRFCheck
-    @ReverseRoute("checkoutPaymentProcessFormCall")
+    @SunriseRoute("checkoutPaymentProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             final Form<DefaultCheckoutPaymentFormData> paymentForm = formFactory.form(DefaultCheckoutPaymentFormData.class).bindFromRequest();

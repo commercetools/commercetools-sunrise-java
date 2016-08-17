@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
-import com.commercetools.sunrise.framework.annotations.ReverseRoute;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -55,13 +55,13 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
     }
 
     @AddCSRFToken
-    @ReverseRoute("checkoutShippingPageCall")
+    @SunriseRoute("checkoutShippingPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, defaultContext()));
     }
 
     @RequireCSRFCheck
-    @ReverseRoute("checkoutShippingProcessFormCall")
+    @SunriseRoute("checkoutShippingProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, defaultContext()));
     }
