@@ -5,6 +5,8 @@ import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.mvc.Http;
 
 import javax.annotation.Nullable;
@@ -20,9 +22,19 @@ import static com.commercetools.sunrise.common.localization.SunriseLocalizationC
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Extracts the selected language from the URL and completes the list of available locales with those received
+ * in the AcceptedLanguage HTTP header. The country is obtained from the session and the currency corresponds
+ * to the selected country.
+ *
+ * Any value not supported by the {@link ProjectContext} or duplicated is discarded. In the case of selected values,
+ * these are replaced by the default values for the project.
+ */
+
 @RequestScoped
 final class UserContextImpl extends Base implements UserContext {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserContext.class);
     private final List<Locale> locales;
     private final CountryCode country;
     private final CurrencyUnit currency;
@@ -50,6 +62,7 @@ final class UserContextImpl extends Base implements UserContext {
         this.currency = userCurrency(context, projectContext, country);
         this.customerGroup = null;
         this.channel = null;
+        logger.debug("Provided UserContext: Languages {}, Country {}, Currency {}", locales, country, currency);
     }
 
     @Override
@@ -81,7 +94,9 @@ final class UserContextImpl extends Base implements UserContext {
         final ArrayList<Locale> acceptedLocales = new ArrayList<>();
         acceptedLocales.add(userLanguage(context, projectContext));
         acceptedLocales.addAll(requestAcceptedLanguages(context, projectContext));
-        return acceptedLocales;
+        return acceptedLocales.stream()
+                .distinct()
+                .collect(toList());
     }
 
     private static List<Locale> requestAcceptedLanguages(final Http.Context context, final ProjectContext projectContext) {

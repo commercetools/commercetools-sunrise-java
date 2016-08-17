@@ -16,7 +16,6 @@ public class ContextDataModule extends AbstractModule {
     protected void configure() {
         bind(Http.Context.class).toProvider(HttpContextProvider.class).in(RequestScoped.class);
         bind(RequestContext.class).toProvider(RequestContextProvider.class).in(RequestScoped.class);
-        bind(ProjectContext.class).toProvider(ProjectContextProvider.class).in(Singleton.class);
         bind(RequestHookContext.class).to(RequestHookContextImpl.class).in(RequestScoped.class);
     }
 }

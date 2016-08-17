@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.common.contexts;
 
+import com.google.inject.ImplementedBy;
 import com.neovisionaries.i18n.CountryCode;
 
 import javax.money.CurrencyUnit;
@@ -9,6 +10,7 @@ import java.util.Locale;
 /**
  * A container for all information related to the project, such as supported countries, languages or currencies.
  */
+@ImplementedBy(ProjectContextImpl.class)
 public interface ProjectContext {
 
     /**
