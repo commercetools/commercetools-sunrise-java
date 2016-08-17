@@ -23,13 +23,13 @@ final class RoutesMultiControllerComponentResolverProvider implements Provider<M
         final List<Class<? extends ControllerComponent>> components = parsedRoutes.getRoutes().stream()
                 .map(route -> route.getControllerClass())
                 .filter(x -> x != null)
-                .flatMap(this::findContollerComponentClasses)
+                .flatMap(this::findControllerComponentClasses)
                 .distinct()
                 .collect(Collectors.toList());
         return controller -> components;
     }
 
-    protected Stream<? extends Class<? extends ControllerComponent>> findContollerComponentClasses(final Class<?> x) {
+    protected Stream<? extends Class<? extends ControllerComponent>> findControllerComponentClasses(final Class<?> x) {
         final IntroducingMultiControllerComponents[] annotationsByType = x.getSuperclass().getAnnotationsByType(IntroducingMultiControllerComponents.class);
         return Arrays.stream(annotationsByType)
                 .flatMap(sunriseControllerComponents -> Arrays.stream(sunriseControllerComponents.value()));
