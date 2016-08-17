@@ -26,7 +26,7 @@ public final class CartSessionUtils {
     public static MiniCartBean getMiniCart(final Session session, final MiniCartBeanFactory miniCartBeanFactory) {
         return Optional.ofNullable(session.get(MINI_CART_SESSION_KEY))
                 .map(miniCartAsJson -> SphereJsonUtils.readObject(miniCartAsJson, MiniCartBean.class))
-                .orElseGet(miniCartBeanFactory::createWithEmptyCart);
+                .orElseGet(() -> miniCartBeanFactory.create(null));
     }
 
     public static void overwriteCartSessionData(@Nullable final Cart cart, final Session session,
