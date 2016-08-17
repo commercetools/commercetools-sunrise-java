@@ -21,12 +21,6 @@ export SUNRISE_IT_CTP_CLIENT_ID="your-CTP-client-id"
 ```
 * `sbt it:test`
 
-## Deployment
-
-For an easy and fast deployment of your application we recommend [heroku](https://www.heroku.com):
-
-<a href="https://heroku.com/deploy?template=https://github.com/commercetools/commercetools-sunrise-java/tree/v0.6.0"><img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></a>
-
 ## Docker
 
 [![Docker build](http://dockeri.co/image/sphereio/sunrise)](https://registry.hub.docker.com/u/sphereio/sunrise/)
