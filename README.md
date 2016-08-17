@@ -10,25 +10,6 @@ The next generation shop template.
 * [Documentation](manual/)
 * [Javadoc](https://commercetools.github.io/commercetools-sunrise-java/javadoc/index.html)
 
-## Preconditions
-
-* install [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* install [SBT](http://www.scala-sbt.org/release/docs/Setup.html), Mac/Linux users can use the SBT script in the base folder (use `./sbt` instead of `sbt` in commands)
-
-## Run it locally
-
-* on Linux/Mac: `./activator ~run` 
-* on Windows: `activator ~run`
-
-The output will be like
-
-```
-[info] play - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
-(Server started, use Ctrl+D to stop and go back to the console...)
-```
-
-* open <a href="http://localhost:9000">http://localhost:9000</a> in your browser and set the commercetools platform project credentials
-
 ## Integration tests against commercetools platform
 
 * Setup your environment variables (use a test project), so you need not to put your shop credentials under version control:
