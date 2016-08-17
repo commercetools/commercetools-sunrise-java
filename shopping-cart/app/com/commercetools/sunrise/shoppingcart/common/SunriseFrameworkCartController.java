@@ -4,10 +4,10 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.hooks.*;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
+import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
@@ -43,9 +43,6 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 public abstract class SunriseFrameworkCartController extends SunriseFrameworkController {
 
     @Inject
-    private ProductReverseRouter productReverseRouter;
-
-    @Inject
     private void postInit() {
         //just prepend another error handler if this does not suffice
         prependErrorHandler(e -> e instanceof PrimaryCartNotFoundException || e instanceof PrimaryCartEmptyException, e -> {
@@ -71,7 +68,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
      * @return stage
      */
     protected CompletionStage<Cart> requiringExistingPrimaryCart() {
-        return findPrimaryCartInCommercetoolsPlatform()
+        return findPrimaryCart()
                 .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new PrimaryCartNotFoundException()), defaultContext());
     }
 
@@ -89,7 +86,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
      * Loads the primary cart from commercetools platform without applying side effects like updating the cart or the session.
      * @return a future of the optional cart
      */
-    protected CompletionStage<Optional<Cart>> findPrimaryCartInCommercetoolsPlatform() {
+    protected CompletionStage<Optional<Cart>> findPrimaryCart() {
         final Http.Session session = session();
         return CustomerSessionUtils.getCustomerId(session)
                 .map(customerId -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId)))
@@ -106,7 +103,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Cart> getOrCreateCart() {
-        final CompletionStage<Cart> cartCompletionStage = findPrimaryCartInCommercetoolsPlatform()
+        final CompletionStage<Cart> cartCompletionStage = findPrimaryCart()
                 .thenComposeAsync(cartOptional -> cartOptional
                                 .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
                                 .orElseGet(() -> createCart(userContext())),
@@ -117,14 +114,15 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
 
     protected CompletionStage<Cart> applySideEffects(@Nonnull Cart cart) {
         final Http.Session session = session();
-        return updateCartWithUserPreferences(cart, userContext()).thenApply(updatedCart -> {
-            CartSessionUtils.overwriteCartSessionData(updatedCart, session, userContext(), productReverseRouter);
-            return updatedCart;
-        })
+        return updateCartWithUserPreferences(cart, userContext())
                 .thenApply(updatedCart -> {
+                    final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
+                    CartSessionUtils.overwriteCartSessionData(updatedCart, session, miniCartBeanFactory);
+                    return updatedCart;
+                }).thenApply(updatedCart -> {
                     hooks().runAsyncHook(PrimaryCartLoadedHook.class, hook -> hook.onUserCartLoaded(updatedCart));
                     return updatedCart;
-        });
+                });
     }
 
     protected CompletionStage<List<ShippingMethod>> getShippingMethods() {
@@ -186,6 +184,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected void overrideCartSessionData(final Cart cart) {
-        overwriteCartSessionData(cart, session(), userContext(), productReverseRouter);
+        final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
+        overwriteCartSessionData(cart, session(), miniCartBeanFactory);
     }
 }

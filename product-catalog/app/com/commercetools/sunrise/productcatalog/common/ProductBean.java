@@ -1,15 +1,14 @@
 package com.commercetools.sunrise.productcatalog.common;
 
+import com.commercetools.sunrise.common.models.ModelBean;
 import com.commercetools.sunrise.common.models.ProductVariantBean;
 import com.commercetools.sunrise.common.models.SelectableProductAttributeBean;
-import io.sphere.sdk.models.Base;
 
 import java.util.List;
 import java.util.Map;
 
-public class ProductBean extends Base {
-    // TODO ratingX
-    // TODO delivery
+public class ProductBean extends ModelBean {
+
     private String productId;
     private int variantId;
     private String description;

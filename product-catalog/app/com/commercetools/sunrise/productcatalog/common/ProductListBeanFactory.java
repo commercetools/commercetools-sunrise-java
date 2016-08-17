@@ -31,25 +31,35 @@ public class ProductListBeanFactory extends Base {
 
     protected void fillList(final ProductListBean bean, final Iterable<ProductProjection> productList) {
         bean.setList(StreamSupport.stream(productList.spliterator(), false)
-                .map(product -> {
-                    final ProductVariant matchingVariant = product.findFirstMatchingVariant()
-                            .orElseGet(product::getMasterVariant);
-                    return createThumbnail(product, matchingVariant);
-                })
+                .map(product -> createThumbnail(product, getSelectedVariant(product)))
                 .collect(toList()));
     }
 
     protected ProductThumbnailBean createThumbnail(final ProductProjection product, final ProductVariant variant) {
         final ProductThumbnailBean bean = new ProductThumbnailBean();
-        bean.setProduct(productBeanFactory.create(product, variant));
-        bean.setNew(product.getCategories().stream()
-                .anyMatch(category -> categoryTreeInNew.findById(category.getId()).isPresent()));
-        fillIsSaleInfo(bean, bean.getProduct());
+        fillProduct(bean, product, variant);
+        fillNew(bean, product, variant);
+        fillSale(bean, product, variant);
         return bean;
     }
 
-    protected static void fillIsSaleInfo(final ProductThumbnailBean bean, final ProductBean productBean) {
-        final boolean isSale = productBean != null && productBean.getVariant() != null && productBean.getVariant().getPriceOld() != null;
+    protected void fillProduct(final ProductThumbnailBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setProduct(productBeanFactory.create(product, variant));
+    }
+
+    protected void fillNew(final ProductThumbnailBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setNew(product.getCategories().stream()
+                .anyMatch(category -> categoryTreeInNew.findById(category.getId()).isPresent()));
+    }
+
+    protected void fillSale(final ProductThumbnailBean bean, final ProductProjection product, final ProductVariant variant) {
+        final boolean isSale = bean.getProduct() != null && bean.getProduct().getVariant() != null
+                && bean.getProduct().getVariant().getPriceOld() != null;
         bean.setSale(isSale);
+    }
+
+    protected ProductVariant getSelectedVariant(final ProductProjection product) {
+        return product.findFirstMatchingVariant()
+                .orElseGet(product::getMasterVariant);
     }
 }

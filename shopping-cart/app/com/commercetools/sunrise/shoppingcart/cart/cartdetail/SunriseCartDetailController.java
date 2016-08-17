@@ -6,11 +6,12 @@ import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import play.filters.csrf.AddCSRFToken;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
@@ -38,12 +39,10 @@ public abstract class SunriseCartDetailController extends SunriseFrameworkCartCo
         return "cart";
     }
 
-    @AddCSRFToken
     @SunriseRoute("showCart")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            return getOrCreateCart()
-                    .thenComposeAsync(cart -> asyncOk(renderPageWithTemplate(pageContentFactory.create(cart), getTemplateName())), defaultContext());
-        });
+        return doRequest(() -> findPrimaryCart()
+                .thenApplyAsync(cartOptional -> pageContentFactory.create(cartOptional.orElse(null)), defaultContext())
+                .thenComposeAsync(pageContent -> asyncOk(renderPageWithTemplate(pageContent, getTemplateName())), HttpExecution.defaultContext()));
     }
 }

@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
 import java.util.List;
 
-public class SortSelectorBean extends Base {
+public class SortSelectorBean extends ModelBean {
 
     private String key;
     private List<FormSelectableOptionBean> list;

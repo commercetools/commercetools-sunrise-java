@@ -20,8 +20,6 @@ import io.sphere.sdk.models.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -59,7 +57,6 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
         return DefaultAddressBookAddressFormData.class;
     }
 
-    @AddCSRFToken
     @SunriseRoute("addAddressToAddressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
@@ -70,7 +67,6 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
         });
     }
 
-    @RequireCSRFCheck
     @SunriseRoute("addAddressToAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {

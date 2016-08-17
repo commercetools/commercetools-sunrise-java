@@ -16,8 +16,6 @@ import io.sphere.sdk.shippingmethods.ShippingMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
@@ -54,13 +52,11 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
         return DefaultCheckoutShippingFormData.class;
     }
 
-    @AddCSRFToken
     @SunriseRoute("checkoutShippingPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, defaultContext()));
     }
 
-    @RequireCSRFCheck
     @SunriseRoute("checkoutShippingProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, defaultContext()));
@@ -83,7 +79,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final CheckoutShippingFormData formData, final Cart oldCart, final Cart updatedCart) {
+    public CompletionStage<Result> handleSuccessfulAction(final CheckoutShippingFormData formData, final Cart cart, final Cart updatedCart) {
         return redirectToCheckoutPayment();
     }
 
@@ -92,9 +88,10 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
         return getShippingMethods()
                 .thenComposeAsync(shippingMethods -> {
                     final Cart cartToRender = Optional.ofNullable(updatedCart).orElse(cart);
-                    final CheckoutShippingPageContent pageContent = injector().getInstance(CheckoutShippingPageContentFactory.class).create(form, cartToRender, shippingMethods);
+                    final CheckoutShippingPageContentFactory pageContentFactory = injector().getInstance(CheckoutShippingPageContentFactory.class);
+                    final CheckoutShippingPageContent pageContent = pageContentFactory.create(form, cartToRender, shippingMethods);
                     return renderPageWithTemplate(pageContent, getTemplateName());
-                }, HttpExecution.defaultContext());
+            }, HttpExecution.defaultContext());
     }
 
     @Override

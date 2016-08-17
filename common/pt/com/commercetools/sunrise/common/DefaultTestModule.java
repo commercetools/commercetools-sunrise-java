@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.common;
 
+import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.basicauth.BasicAuth;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.TestableSphereClient;
 import com.commercetools.sunrise.common.pages.PageMeta;
 import com.commercetools.sunrise.common.pages.PageMetaFactory;
-import com.commercetools.sunrise.common.template.cms.CmsService;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;

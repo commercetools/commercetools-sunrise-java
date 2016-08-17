@@ -14,7 +14,6 @@ import io.sphere.sdk.client.ClientErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
@@ -47,7 +46,6 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     }
 
     @SuppressWarnings("unused")
-    @RequireCSRFCheck
     @SunriseRoute("processAddProductToCartForm")
     public CompletionStage<Result> addProductToCart(final String languageTag) {
         return doRequest(() -> getOrCreateCart().thenComposeAsync(this::validateForm, defaultContext()));

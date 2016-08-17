@@ -1,13 +1,11 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.json.SphereJsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.Json;
 import play.mvc.Http.Session;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -25,17 +23,17 @@ public final class CartSessionUtils {
         return Optional.ofNullable(session.get(CART_ID_SESSION_KEY));
     }
 
-    public static MiniCartBean getMiniCart(final Session session) {
+    public static MiniCartBean getMiniCart(final Session session, final MiniCartBeanFactory miniCartBeanFactory) {
         return Optional.ofNullable(session.get(MINI_CART_SESSION_KEY))
                 .map(miniCartAsJson -> SphereJsonUtils.readObject(miniCartAsJson, MiniCartBean.class))
-                .orElseGet(MiniCartBean::new);
+                .orElseGet(miniCartBeanFactory::createWithEmptyCart);
     }
 
     public static void overwriteCartSessionData(@Nullable final Cart cart, final Session session,
-                                                final UserContext userContext, final ProductReverseRouter reverseRouter) {
+                                                final MiniCartBeanFactory miniCartBeanFactory) {
         if (cart != null) {
             final String id = cart.getId();
-            final MiniCartBean miniCart = new MiniCartBean(cart, userContext, reverseRouter);
+            final MiniCartBean miniCart = miniCartBeanFactory.create(cart);
             final String miniCartAsJson = Json.stringify(SphereJsonUtils.toJsonNode(miniCart));
             session.put(CART_ID_SESSION_KEY, id);
             session.put(MINI_CART_SESSION_KEY, miniCartAsJson);

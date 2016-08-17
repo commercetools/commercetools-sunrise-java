@@ -2,7 +2,6 @@ package com.commercetools.sunrise.common.forms;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import com.commercetools.sunrise.common.models.TitleFormFieldBean;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
@@ -44,20 +43,29 @@ public class TitleFormFieldBeanFactory extends Base {
     }
 
     protected void fillList(final TitleFormFieldBean bean, final Form<?> form, final String fieldName, final List<String> availableTitles) {
-        final String selectedTitle = form.field(fieldName).valueOr(null);
+        final String selectedTitle = getSelectedTitle(form, fieldName);
         bean.setList(availableTitles.stream()
-                .map(title -> titleToSelectableData(title, selectedTitle))
+                .map(title -> createFormSelectableOption(title, selectedTitle))
                 .collect(toList()));
     }
 
-    protected FormSelectableOptionBean titleToSelectableData(final String titleKey, @Nullable final String selectedTitle) {
+    protected FormSelectableOptionBean createFormSelectableOption(final String titleKey, @Nullable final String selectedTitle) {
         final FormSelectableOptionBean bean = new FormSelectableOptionBean();
+        initializeFormSelectableOption(bean, titleKey, selectedTitle);
+        return bean;
+    }
+
+    protected final void initializeFormSelectableOption(final FormSelectableOptionBean bean, final String titleKey, final @Nullable String selectedTitle) {
         final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(titleKey);
         final String title = i18nResolver.getOrKey(userContext.locales(), i18nIdentifier);
         bean.setLabel(title);
         bean.setValue(title);
         bean.setSelected(title.equals(selectedTitle));
-        return bean;
+    }
+
+    @Nullable
+    protected String getSelectedTitle(final Form<?> form, final String fieldName) {
+        return form.field(fieldName).value();
     }
 
     protected List<String> getDefaultTitles() {

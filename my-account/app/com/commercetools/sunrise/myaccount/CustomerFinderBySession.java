@@ -31,7 +31,7 @@ public final class CustomerFinderBySession implements CustomerFinder<Http.Sessio
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
-    protected CompletionStage<Optional<Customer>> fetchCustomerById(final String customerId) {
+    private CompletionStage<Optional<Customer>> fetchCustomerById(final String customerId) {
         final CustomerByIdGet query = CustomerByIdGet.of(customerId);
         return sphereClient.execute(query).thenApply(Optional::ofNullable);
     }

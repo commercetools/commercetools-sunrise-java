@@ -6,11 +6,10 @@ import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
+import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerDraft;
@@ -21,8 +20,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -59,7 +56,6 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
         return DefaultSignUpFormData.class;
     }
 
-    @AddCSRFToken
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show sign up form in locale={}", languageTag);
@@ -67,7 +63,6 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
         });
     }
 
-    @RequireCSRFCheck
     @SunriseRoute("processSignUpForm")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
@@ -98,8 +93,8 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final SignUpFormData formData, final Void context, final CustomerSignInResult result) {
-        final ProductReverseRouter productReverseRouter = injector().getInstance(ProductReverseRouter.class);
-        overwriteCartSessionData(result.getCart(), session(), userContext(), productReverseRouter);
+        final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
+        overwriteCartSessionData(result.getCart(), session(), miniCartBeanFactory);
         overwriteCustomerSessionData(result.getCustomer(), session());
         final Call call = injector().getInstance(MyPersonalDetailsReverseRouter.class).myPersonalDetailsPageCall(userContext().languageTag());
         return completedFuture(redirect(call));

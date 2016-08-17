@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
-import com.commercetools.sunrise.common.template.cms.CmsPage;
+import com.commercetools.sunrise.cms.CmsPage;
 import com.github.jknack.handlebars.Context;
 import io.sphere.sdk.models.Base;
 

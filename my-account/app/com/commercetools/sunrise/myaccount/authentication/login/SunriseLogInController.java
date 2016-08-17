@@ -11,6 +11,7 @@ import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
+import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -19,8 +20,6 @@ import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -57,7 +56,6 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
         return DefaultLogInFormData.class;
     }
 
-    @AddCSRFToken
     @SunriseRoute("showLogInForm")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
@@ -66,7 +64,6 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
         });
     }
 
-    @RequireCSRFCheck
     @SunriseRoute("processLogInForm")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
@@ -93,8 +90,8 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final LogInFormData formData, final Void context, final CustomerSignInResult result) {
-        final ProductReverseRouter productReverseRouter = injector().getInstance(ProductReverseRouter.class);
-        overwriteCartSessionData(result.getCart(), session(), userContext(), productReverseRouter);
+        final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
+        overwriteCartSessionData(result.getCart(), session(), miniCartBeanFactory);
         overwriteCustomerSessionData(result.getCustomer(), session());
         return redirectToMyPersonalDetails();
     }

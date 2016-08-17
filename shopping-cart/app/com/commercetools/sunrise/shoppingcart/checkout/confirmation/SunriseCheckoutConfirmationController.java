@@ -18,8 +18,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -57,13 +55,11 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
         return DefaultCheckoutConfirmationFormData.class;
     }
 
-    @AddCSRFToken
     @SunriseRoute("checkoutConfirmationPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, defaultContext()));
     }
 
-    @RequireCSRFCheck
     @SunriseRoute("checkoutConfirmationProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, defaultContext()));

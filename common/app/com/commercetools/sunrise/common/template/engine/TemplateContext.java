@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.template.engine;
 
+import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.common.template.cms.CmsPage;
 
 import javax.annotation.Nullable;
 import java.util.List;

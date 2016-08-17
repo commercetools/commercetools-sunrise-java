@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
 import java.util.List;
 
-public class SuggestionsBean extends Base {
+public class SuggestionsBean extends ModelBean {
 
     private List<ProductThumbnailBean> list;
 

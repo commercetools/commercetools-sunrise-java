@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ModelBean;
 
-public class ProductThumbnailBean extends Base {
+public class ProductThumbnailBean extends ModelBean {
 
     private ProductBean product;
     private boolean sale;

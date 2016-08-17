@@ -1,18 +1,13 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import io.sphere.sdk.products.Image;
+import com.commercetools.sunrise.common.models.ModelBean;
 
-public class ProductImageBean {
+public class ProductImageBean extends ModelBean {
 
     private String thumbImage;
     private String bigImage;
 
     public ProductImageBean() {
-    }
-
-    public ProductImageBean(final Image image) {
-        this.thumbImage = image.getUrl();
-        this.bigImage = image.getUrl();
     }
 
     public String getThumbImage() {

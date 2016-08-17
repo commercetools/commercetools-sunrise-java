@@ -14,7 +14,6 @@ import io.sphere.sdk.client.ClientErrorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -47,13 +46,14 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
         return "cart";
     }
 
-    @RequireCSRFCheck
     @SunriseRoute("processDeleteLineItemForm")
     public CompletionStage<Result> removeLineItem(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process remove line item form in locale={}", languageTag);
-            return getOrCreateCart()
-                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
+            return doRequest(() -> findPrimaryCart()
+                    .thenComposeAsync(cartOptional -> cartOptional
+                            .map(this::validateForm)
+                            .orElseGet(this::redirectToCartDetail), HttpExecution.defaultContext()));
         });
     }
 

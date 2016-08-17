@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
-import com.commercetools.sunrise.myaccount.addressbook.AddressFormSettingsFactory;
+import com.commercetools.sunrise.common.models.AddressFormSettingsBeanFactory;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Base;
 import play.data.Form;
@@ -10,7 +10,7 @@ import javax.inject.Inject;
 public class AddAddressPageContentFactory extends Base {
 
     @Inject
-    private AddressFormSettingsFactory addressFormSettingsFactory;
+    private AddressFormSettingsBeanFactory addressFormSettingsBeanFactory;
 
     public AddAddressPageContent create(final Form<?> form, final Customer customer) {
         final AddAddressPageContent bean = new AddAddressPageContent();
@@ -24,6 +24,6 @@ public class AddAddressPageContentFactory extends Base {
 
     protected void fillNewAddressForm(final AddAddressPageContent bean, final Form<?> form) {
         bean.setNewAddressForm(form);
-        bean.setNewAddressFormSettings(addressFormSettingsFactory.create(form));
+        bean.setNewAddressFormSettings(addressFormSettingsBeanFactory.create(form));
     }
 }

@@ -3,6 +3,7 @@ package com.commercetools.sunrise.components;
 import io.sphere.sdk.models.Base;
 
 public class ComponentBean extends Base {
+
     private String templateName;
     private Object componentData;
 

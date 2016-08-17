@@ -20,8 +20,6 @@ import io.sphere.sdk.models.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.filters.csrf.AddCSRFToken;
-import play.filters.csrf.RequireCSRFCheck;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
@@ -55,13 +53,11 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkC
         return DefaultCheckoutAddressFormData.class;
     }
 
-    @AddCSRFToken
     @SunriseRoute("checkoutAddressesPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> requiringExistingPrimaryCartWithLineItem().thenComposeAsync(this::showForm, HttpExecution.defaultContext()));
     }
 
-    @RequireCSRFCheck
     @SunriseRoute("checkoutAddressesProcessFormCall")
     @SuppressWarnings("unused")
     public CompletionStage<Result> process(final String languageTag) {

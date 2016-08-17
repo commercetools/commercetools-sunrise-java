@@ -1,19 +1,12 @@
 package com.commercetools.sunrise.common.models;
 
-import io.sphere.sdk.models.Base;
-
-public class LinkBean extends Base {
+public class LinkBean extends ModelBean {
 
     private String text;
     private String url;
     private boolean selected;
 
     public LinkBean() {
-    }
-
-    public LinkBean(final String text, final String url) {
-        this.text = text;
-        this.url = url;
     }
 
     public String getText() {
