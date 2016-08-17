@@ -34,7 +34,7 @@ public abstract class ReflectionReverseRouterBase extends Base {
                     });
             return reverseCaller;
         } catch (final Exception e) {
-            throw new RuntimeException(e);
+            throw new CompletionException(e);
         }
     }
 
