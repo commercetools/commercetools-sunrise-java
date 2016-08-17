@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 
 import javax.inject.Inject;
 
-public class SunriseAddProductToCartHeroldComponent extends HeroldComponentBase {
+final class SunriseAddProductToCartHeroldComponent extends HeroldComponentBase {
     @Inject
     private CartReverseRouter reverseRouter;
 
