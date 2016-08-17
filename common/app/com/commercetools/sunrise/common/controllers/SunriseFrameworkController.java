@@ -98,7 +98,7 @@ public abstract class SunriseFrameworkController extends Controller {
 
     public abstract Set<String> getFrameworkTags();
 
-    @Inject(optional=true)
+    @Inject(optional = true)
     private void setMultiControllerComponents(@Nullable @Named("controllers") final MultiControllerComponentResolver controllersMultiComponent, final MultiControllerComponentResolver multiComponent, final Injector injector) {
         if (controllersMultiComponent != null) {
             addMultiComponents(controllersMultiComponent, injector);
