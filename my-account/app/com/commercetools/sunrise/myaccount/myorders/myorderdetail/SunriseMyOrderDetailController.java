@@ -4,12 +4,10 @@ import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateNam
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
-import com.commercetools.sunrise.hooks.requests.OrderQueryHook;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.orders.Order;
-import io.sphere.sdk.orders.queries.OrderQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
@@ -81,12 +79,9 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
 
     protected CompletionStage<Optional<Order>> findOrder(final Customer customer, final String orderNumber) {
         final CustomerIdOrderNumberPair customerIdOrderNumberPair = new CustomerIdOrderNumberPair(customer.getId(), orderNumber);
-        return injector().getInstance(OrderFinderByCustomerIdAndOrderNumber.class).findOrder(customerIdOrderNumberPair, this::runHookOnOrderQuery);
+        return injector().getInstance(OrderFinderByCustomerIdAndOrderNumber.class).findOrder(customerIdOrderNumberPair);
     }
 
-    protected final OrderQuery runHookOnOrderQuery(final OrderQuery orderQuery) {
-        return OrderQueryHook.runHook(hooks(), orderQuery);
-    }
 
     protected final CompletionStage<Result> redirectToMyOrders() {
         final Call call = injector().getInstance(MyOrdersReverseRouter.class).myOrderListPageCall(userContext().languageTag());

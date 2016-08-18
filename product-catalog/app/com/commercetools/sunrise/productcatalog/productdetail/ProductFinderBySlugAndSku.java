@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
@@ -29,7 +29,7 @@ public final class ProductFinderBySlugAndSku implements ProductFinder<String, St
     @Inject
     private UserContext userContext;
     @Inject
-    private HookContext hookContext;
+    private RequestHookContext hookContext;
 
     @Override
     public CompletionStage<ProductFinderResult> findProduct(final String productIdentifier,

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ByIdVariantIdentifier;
@@ -17,7 +17,7 @@ public final class ProductFinderByProductIdAndVariantId implements ProductFinder
     @Inject
     private SphereClient sphereClient;
     @Inject
-    private HookContext hookContext;
+    private RequestHookContext hookContext;
 
     @Override
     public CompletionStage<ProductFinderResult> findProduct(final String productId, final Integer variantId) {
