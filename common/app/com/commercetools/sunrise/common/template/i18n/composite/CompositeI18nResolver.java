@@ -4,7 +4,6 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Base;
 
-import javax.inject.Singleton;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.Optional;
  * Resolves the i18n messages by trying to resolve them with each given i18n resolver until one of them succeeds.
  * This class allows to override i18n resolvers.
  */
-@Singleton
 public final class CompositeI18nResolver extends Base implements I18nResolver {
 
     private final List<I18nResolver> i18nResolvers;
