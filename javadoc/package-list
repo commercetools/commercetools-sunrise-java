@@ -23,6 +23,7 @@ com.commercetools.sunrise.common.template.i18n.yaml
 com.commercetools.sunrise.common.utils
 com.commercetools.sunrise.components
 com.commercetools.sunrise.framework
+com.commercetools.sunrise.framework.annotations
 com.commercetools.sunrise.hooks
 com.commercetools.sunrise.myaccount
 com.commercetools.sunrise.myaccount.addressbook
@@ -73,7 +74,3 @@ demo.productcatalog
 demo.shoppingcart
 io.sphere.sdk.facets
 io.sphere.sdk.utils
-reverserouter
-setupcontroller
-setupwidget.controllers
-setupwidget.models
