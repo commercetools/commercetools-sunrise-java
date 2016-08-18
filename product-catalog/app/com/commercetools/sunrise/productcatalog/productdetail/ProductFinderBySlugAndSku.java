@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -15,7 +17,6 @@ import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.UnaryOperator;
 
 import static com.commercetools.sunrise.common.utils.PriceUtils.createPriceSelection;
 
@@ -27,12 +28,13 @@ public final class ProductFinderBySlugAndSku implements ProductFinder<String, St
     private SphereClient sphereClient;
     @Inject
     private UserContext userContext;
+    @Inject
+    private HookContext hookContext;
 
     @Override
     public CompletionStage<ProductFinderResult> findProduct(final String productIdentifier,
-                                                            final String variantIdentifier,
-                                                            final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
-        return findProduct(productIdentifier, runHookOnProductSearch)
+                                                            final String variantIdentifier) {
+        return findProduct(productIdentifier)
                 .thenApplyAsync(productOpt -> productOpt
                 .map(product -> findVariant(variantIdentifier, product)
                         .map(variant -> ProductFinderResult.of(product, variant))
@@ -41,9 +43,8 @@ public final class ProductFinderBySlugAndSku implements ProductFinder<String, St
                 HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Optional<ProductProjection>> findProduct(final String productIdentifier,
-                                                                     final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
-        return findProductBySlug(productIdentifier, userContext.locale(), runHookOnProductSearch);
+    private CompletionStage<Optional<ProductProjection>> findProduct(final String productIdentifier) {
+        return findProductBySlug(productIdentifier, userContext.locale());
     }
 
     private Optional<ProductVariant> findVariant(final String variantIdentifier, final ProductProjection product) {
@@ -54,16 +55,14 @@ public final class ProductFinderBySlugAndSku implements ProductFinder<String, St
      * Gets a product, uniquely identified by a slug for a given locale.
      * @param slug the product slug
      * @param locale the locale in which you provide the slug
-     * @param runHookOnProductSearch
      * @return A CompletionStage of an optionally found ProductProjection
      */
-    private CompletionStage<Optional<ProductProjection>> findProductBySlug(final String slug, final Locale locale,
-                                                                           final UnaryOperator<ProductProjectionSearch> runHookOnProductSearch) {
+    private CompletionStage<Optional<ProductProjection>> findProductBySlug(final String slug, final Locale locale) {
         final PriceSelection priceSelection = createPriceSelection(userContext);
         final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
                 .withQueryFilters(m -> m.slug().locale(locale).is(slug))
                 .withPriceSelection(priceSelection);
-        return sphereClient.execute(runHookOnProductSearch.apply(request))
+        return sphereClient.execute(ProductProjectionSearchHook.runHook(hookContext, request))
                 .thenApplyAsync(PagedSearchResult::head, HttpExecution.defaultContext())
                 .whenCompleteAsync((productOpt, t) -> {
                     if (productOpt.isPresent()) {

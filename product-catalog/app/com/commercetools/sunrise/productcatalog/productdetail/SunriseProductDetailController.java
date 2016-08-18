@@ -14,7 +14,6 @@ import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSugges
 import com.google.inject.Injector;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
-import io.sphere.sdk.products.search.ProductProjectionSearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
@@ -84,7 +83,7 @@ public abstract class SunriseProductDetailController extends SunriseFrameworkCon
             logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);
             this.productSlug = slug;
             this.variantSku = sku;
-            return injector.getInstance(ProductFinderBySlugAndSku.class).findProduct(slug, sku, this::runHookOnProductSearch)
+            return injector.getInstance(ProductFinderBySlugAndSku.class).findProduct(slug, sku)
                     .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
         });
     }
@@ -92,7 +91,7 @@ public abstract class SunriseProductDetailController extends SunriseFrameworkCon
     public CompletionStage<Result> showProductByProductIdAndVariantId(final String languageTag, final String productId, final int variantId) {
         return doRequest(() -> {
             logger.debug("look for product with productId={} and variantId={}", productId, variantId);
-            return injector.getInstance(ProductFinderByProductIdAndVariantId.class).findProduct(productId, variantId, this::runHookOnProductSearch)
+            return injector.getInstance(ProductFinderByProductIdAndVariantId.class).findProduct(productId, variantId)
                     .thenComposeAsync(this::showProduct, HttpExecution.defaultContext());
         });
     }
@@ -136,10 +135,6 @@ public abstract class SunriseProductDetailController extends SunriseFrameworkCon
 
     protected Result notFoundProductResult() {
         return notFound();
-    }
-
-    protected final ProductProjectionSearch runHookOnProductSearch(final ProductProjectionSearch productSearch) {
-        return ProductProjectionSearchHook.runHook(hooks(), productSearch);
     }
 
     protected final void runHookOnFoundProduct(final ProductProjection product, final ProductVariant variant) {
