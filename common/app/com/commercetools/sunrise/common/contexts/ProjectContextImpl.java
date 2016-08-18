@@ -43,6 +43,12 @@ final class ProjectContextImpl extends Base implements ProjectContext {
     private final List<CountryCode> countryCodes;
     private final List<CurrencyUnit> currencies;
 
+    ProjectContextImpl(final List<Locale> locales, final List<CountryCode> countryCodes, final List<CurrencyUnit> currencies) {
+        this.locales = locales;
+        this.countryCodes = countryCodes;
+        this.currencies = currencies;
+    }
+
     @Inject
     private ProjectContextImpl(final Configuration configuration, @Named("global") final SphereClient client) {
         try {

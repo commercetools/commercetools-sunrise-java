@@ -20,7 +20,7 @@ public class ProjectContextTest {
     private static final CurrencyUnit EUR = Monetary.getCurrency("EUR");
     private static final CurrencyUnit USD = Monetary.getCurrency("USD");
     private static final List<CurrencyUnit> AVAILABLE_CURRENCIES = asList(GBP, CNY, EUR);
-    private static final ProjectContext PROJECT_CONTEXT = ProjectContextImpl.of(AVAILABLE_LANGUAGES, AVAILABLE_COUNTRIES, AVAILABLE_CURRENCIES);
+    private static final ProjectContext PROJECT_CONTEXT = new ProjectContextImpl(AVAILABLE_LANGUAGES, AVAILABLE_COUNTRIES, AVAILABLE_CURRENCIES);
 
     @Test
     public void worksWithLocales() throws Exception {
