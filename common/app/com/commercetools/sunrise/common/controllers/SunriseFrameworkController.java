@@ -14,7 +14,7 @@ import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.hooks.RequestHookContext;
-import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.hooks.events.EventHook;
 import com.commercetools.sunrise.hooks.requests.SphereRequestHook;
@@ -152,7 +152,7 @@ public abstract class SunriseFrameworkController extends Controller {
     protected CompletionStage<Html> renderPageWithTemplate(final PageContent pageContent, final String templateName, @Nullable final CmsPage cmsPage) {
         final SunrisePageData pageData = createPageData(pageContent);
         return hooks().allAsyncHooksCompletionStage().thenApply(unused -> {
-            PageDataHook.runHook(hooks(), pageData);
+            PageDataReadyHook.runHook(hooks(), pageData);
             logFinalPageData(pageData);
             final TemplateContext templateContext = new TemplateContext(pageData, userContext.locales(), cmsPage);
             final String html = templateEngine().render(templateName, templateContext);

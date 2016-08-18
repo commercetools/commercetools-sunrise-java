@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.searchbo
 
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -10,7 +10,7 @@ import io.sphere.sdk.products.search.ProductProjectionSearch;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-public class SearchBoxComponent implements ControllerComponent, PageDataHook, ProductProjectionSearchHook {
+public class SearchBoxComponent implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook {
 
     @Nullable
     private SearchBox searchBox;
@@ -27,7 +27,7 @@ public class SearchBoxComponent implements ControllerComponent, PageDataHook, Pr
     }
 
     @Override
-    public void onPageDataCreated(final PageData pageData) {
+    public void onPageDataReady(final PageData pageData) {
         if (searchBox != null && searchBox.getSearchTerm().isPresent() && pageData.getContent() instanceof ProductOverviewPageContent) {
             final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
             final String searchTerm = searchBox.getSearchTerm().get().getValue();

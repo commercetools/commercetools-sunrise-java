@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.CategoryLoadedHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
@@ -46,7 +46,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * <p id="hooks">supported hooks</p>
  * <ul>
  *     <li>{@link RequestStartedHook}</li>
- *     <li>{@link PageDataHook}</li>
+ *     <li>{@link PageDataReadyHook}</li>
  *     <li>{@link ProductProjectionSearchHook}</li>
  *     <li>{@link CategoryLoadedHook}</li>
  *     <li>{@link ProductProjectionPagedSearchResultLoadedHook}</li>

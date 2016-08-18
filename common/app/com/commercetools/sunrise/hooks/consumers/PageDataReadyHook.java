@@ -3,11 +3,11 @@ package com.commercetools.sunrise.hooks.consumers;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.hooks.HookRunner;
 
-public interface PageDataHook extends ConsumerHook {
+public interface PageDataReadyHook extends ConsumerHook {
 
-    void onPageDataCreated(final PageData pageData);
+    void onPageDataReady(final PageData pageData);
 
     static void runHook(final HookRunner hookRunner, final PageData pageData) {
-        hookRunner.runConsumerHook(PageDataHook.class, hook -> hook.onPageDataCreated(pageData));
+        hookRunner.runConsumerHook(PageDataReadyHook.class, hook -> hook.onPageDataReady(pageData));
     }
 }

@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.pagination.Pagination;
 import com.commercetools.sunrise.common.pagination.PaginationBeanFactory;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
@@ -25,7 +25,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-public class PaginationComponent extends Base implements ControllerComponent, PageDataHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
+public class PaginationComponent extends Base implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
 
     @Inject
     private ProductsPerPageSelectorFactory productsPerPageSelectorFactory;
@@ -60,7 +60,7 @@ public class PaginationComponent extends Base implements ControllerComponent, Pa
     }
 
     @Override
-    public void onPageDataCreated(final PageData pageData) {
+    public void onPageDataReady(final PageData pageData) {
         if (pagination != null && productsPerPageSelector != null && pagedSearchResult != null && pageData.getContent() instanceof ProductOverviewPageContent) {
             final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
             content.setPagination(paginationBeanFactory.create(pagedSearchResult, pagination, productsPerPageSelector.getSelectedPageSize()));

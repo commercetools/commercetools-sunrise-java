@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.CategoryLoadedHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
@@ -26,7 +26,7 @@ import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-public class FacetedSearchComponent implements ControllerComponent, PageDataHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook, CategoryLoadedHook {
+public class FacetedSearchComponent implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook, CategoryLoadedHook {
 
     private List<Category> selectedCategories = emptyList();
     private List<FacetedSearchSelector> facetedSearchSelectorList = emptyList();
@@ -65,7 +65,7 @@ public class FacetedSearchComponent implements ControllerComponent, PageDataHook
     }
 
     @Override
-    public void onPageDataCreated(final PageData pageData) {
+    public void onPageDataReady(final PageData pageData) {
         if (pageData.getContent() instanceof ProductOverviewPageContent) {
             final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
             content.setFacets(createFacetSelectorList(facetBeans));

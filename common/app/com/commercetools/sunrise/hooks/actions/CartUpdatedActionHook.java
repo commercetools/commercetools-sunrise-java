@@ -8,10 +8,10 @@ import java.util.concurrent.CompletionStage;
 
 public interface CartUpdatedActionHook extends ActionHook {
 
-    CompletionStage<Cart> onCartUpdated(final Cart cart, final ExpansionPathContainer<Cart> expansionPathContainer);
+    CompletionStage<Cart> onCartUpdatedAction(final Cart cart, final ExpansionPathContainer<Cart> expansionPathContainer);
 
     static CompletionStage<Cart> runHook(final HookRunner hookRunner, final Cart cart, final ExpansionPathContainer<Cart> expansionPathContainer) {
-        return hookRunner.runActionHook(CartUpdatedActionHook.class, (hook, updatedCart) -> hook.onCartUpdated(updatedCart, expansionPathContainer), cart);
+        return hookRunner.runActionHook(CartUpdatedActionHook.class, (hook, updatedCart) -> hook.onCartUpdatedAction(updatedCart, expansionPathContainer), cart);
     }
 
 }

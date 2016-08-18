@@ -3,7 +3,7 @@ package com.commercetools.sunrise.productcatalog.productsuggestions;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
 /**
  * Loads some other products that are related to the loaded product in the controller.
  */
-public class ProductSuggestionsControllerComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataHook {
+public class ProductSuggestionsControllerComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataReadyHook {
 
     //this part contains fields which are initialized by Google Guice and mostly are in the scope of the HTTP request
     //an example for a singleton scope dependency
@@ -69,7 +69,7 @@ public class ProductSuggestionsControllerComponent implements ControllerComponen
       Implements the hook SunrisePageDataHook which is executed after all asynchronous tasks related to this HTTP request are completed.
     */
     @Override
-    public void onPageDataCreated(final PageData pageData) {
+    public void onPageDataReady(final PageData pageData) {
         //it is a very good practice to check if the field is not null before using it
         //in this example it is required that the content is of type ProductDetailPageContent
         if (suggestions != null && pageData.getContent() instanceof ProductDetailPageContent) {

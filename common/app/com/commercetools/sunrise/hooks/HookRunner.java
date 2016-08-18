@@ -2,7 +2,7 @@ package com.commercetools.sunrise.hooks;
 
 import com.commercetools.sunrise.hooks.actions.ActionHook;
 import com.commercetools.sunrise.hooks.consumers.ConsumerHook;
-import com.commercetools.sunrise.hooks.consumers.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.EventHook;
 import com.commercetools.sunrise.hooks.requests.SphereRequestHook;
 
@@ -17,7 +17,7 @@ public interface HookRunner {
      * The execution (just the creation of the {@link CompletionStage}) is synchronous and each implementing component will be called after each other and does not wait for the {@link CompletionStage} to be completed.
      * The underlying computation to complete the {@link CompletionStage} can be asynchronous and should run in parallel for the components.
      * The result should be completed at some point and a successful completion can also contain the value {@code null} hence the successful result is not used directly by the framework.
-     * Before the hook {@link PageDataHook} is called, all asynchronous computations for the requests need to be completed successfully.
+     * Before the hook {@link PageDataReadyHook} is called, all asynchronous computations for the requests need to be completed successfully.
      *
      * @param hookClass the class which represents the hook
      * @param f         a possible asynchronous computation using the hook
