@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.common.models;
 
-public class HalLink {
+import io.sphere.sdk.models.Base;
+
+public class HalLink extends Base {
 
     private String href;
 
