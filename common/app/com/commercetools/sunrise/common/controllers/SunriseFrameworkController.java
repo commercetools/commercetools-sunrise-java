@@ -16,8 +16,6 @@ import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
-import com.commercetools.sunrise.hooks.events.EventHook;
-import com.commercetools.sunrise.hooks.requests.SphereRequestHook;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -27,7 +25,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.client.SphereRequest;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
@@ -47,7 +44,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -237,18 +233,6 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected final RequestHookContext hooks() {
         return hookContext;
-    }
-
-    protected <R, C extends SphereRequest<R>, F extends SphereRequestHook, U extends EventHook> CompletionStage<R>
-    executeSphereRequestWithHooks(final C baseCmd,
-                                  final Class<F> filterHookClass, final BiFunction<F, C, C> fh,
-                                  final Class<U> updatedHookClass, final BiFunction<U, R, CompletionStage<?>> fu) {
-        final C command = hooks().runSphereRequestHook(filterHookClass, fh, baseCmd);
-        return sphere().execute(command)
-                .thenApplyAsync(res -> {
-                    hooks().runEventHook(updatedHookClass, hook -> fu.apply(hook, res));
-                    return res;
-                });
     }
 
     protected final void saveFormError(final Form<?> form, final String message) {
