@@ -26,6 +26,10 @@ com.commercetools.sunrise.components
 com.commercetools.sunrise.framework
 com.commercetools.sunrise.framework.annotations
 com.commercetools.sunrise.hooks
+com.commercetools.sunrise.hooks.actions
+com.commercetools.sunrise.hooks.consumers
+com.commercetools.sunrise.hooks.events
+com.commercetools.sunrise.hooks.requests
 com.commercetools.sunrise.myaccount
 com.commercetools.sunrise.myaccount.addressbook
 com.commercetools.sunrise.myaccount.addressbook.addaddress
