@@ -2,17 +2,17 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import io.sphere.sdk.models.Base;
 
 import javax.inject.Inject;
 
-public abstract class HeroldComponentBase extends Base implements ControllerComponent, PageDataHook {
+public abstract class HeroldComponentBase extends Base implements ControllerComponent, PageDataReadyHook {
     @Inject
     private UserContext userContext;
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataReady(final PageData pageData) {
         updateMeta(pageData.getMeta());
     }
 
