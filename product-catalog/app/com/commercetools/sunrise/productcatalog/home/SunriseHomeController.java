@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithCmsPage;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.hooks.RequestHook;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
@@ -61,6 +61,7 @@ public abstract class SunriseHomeController extends SunriseFrameworkController i
         return redirect(homeReverseRouter.homePageCall(userContext().languageTag()));
     }
 
+    @SunriseRoute("homePageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(this::showHome);
     }

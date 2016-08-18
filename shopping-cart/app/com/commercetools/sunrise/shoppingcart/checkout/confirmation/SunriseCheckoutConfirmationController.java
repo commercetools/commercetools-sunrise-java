@@ -4,6 +4,8 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -32,6 +34,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
+@IntroducingMultiControllerComponents(SunriseCheckoutConfirmationHeroldComponent.class)
 public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkCartController
         implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutConfirmationFormData, Cart, Order>, WithCartPreconditions {
 
@@ -52,10 +55,12 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
         return DefaultCheckoutConfirmationFormData.class;
     }
 
+    @SunriseRoute("checkoutConfirmationPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, defaultContext()));
     }
 
+    @SunriseRoute("checkoutConfirmationProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, defaultContext()));
     }

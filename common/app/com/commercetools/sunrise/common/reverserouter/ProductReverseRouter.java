@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
+import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
@@ -9,11 +10,14 @@ import play.mvc.Call;
 import java.util.Locale;
 import java.util.Optional;
 
+@ImplementedBy(ReflectionProductReverseRouter.class)
 public interface ProductReverseRouter {
 
     Call productDetailPageCall(final String languageTag, final String productSlug, final String sku);
 
     Call productOverviewPageCall(final String languageTag, final String categorySlug);
+
+    Call processSearchProductsForm(final String languageTag);
 
     default Optional<Call> productDetailPageCall(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
         return product.getSlug().find(locale)

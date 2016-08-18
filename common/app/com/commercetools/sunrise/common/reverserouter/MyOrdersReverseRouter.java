@@ -1,11 +1,13 @@
 package com.commercetools.sunrise.common.reverserouter;
 
+import com.google.inject.ImplementedBy;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Call;
 
 import java.util.Locale;
 import java.util.Optional;
 
+@ImplementedBy(ReflectionMyOrdersReverseRouter.class)
 public interface MyOrdersReverseRouter {
 
     Call myOrderListPageCall(final String languageTag);

@@ -5,6 +5,9 @@ import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerT
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
@@ -35,6 +38,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
+@IntroducingMultiControllerComponents(SunriseSignUpHeroldComponent.class)
 public abstract class SunriseSignUpController extends SunriseFrameworkController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<SignUpFormData, Void, CustomerSignInResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseSignUpController.class);
@@ -61,6 +65,7 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
         });
     }
 
+    @SunriseRoute("processSignUpForm")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process sign up form in locale={}", languageTag);
