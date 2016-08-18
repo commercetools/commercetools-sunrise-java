@@ -6,14 +6,12 @@ import com.commercetools.sunrise.framework.annotations.IntroducingMultiControlle
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Singleton
-final class RoutesMultiControllerComponentResolverProvider implements Provider<MultiControllerComponentResolver> {
+public final class RoutesMultiControllerComponentResolverProvider implements Provider<MultiControllerComponentResolver> {
 
     @Inject
     private ParsedRoutes parsedRoutes;

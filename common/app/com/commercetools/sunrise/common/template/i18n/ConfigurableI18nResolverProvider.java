@@ -7,7 +7,7 @@ import play.Configuration;
 
 import javax.inject.Inject;
 
-public final class I18nResolverProvider implements Provider<I18nResolver> {
+public final class ConfigurableI18nResolverProvider implements Provider<I18nResolver> {
 
     @Inject
     private Configuration configuration;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
-import com.commercetools.sunrise.common.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseConfigurationException;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.SortExpression;
 import org.slf4j.Logger;
@@ -53,7 +53,7 @@ public final class SortConfigProvider implements Provider<SortConfig> {
 
     private static String getValue(final Configuration optionConfig) {
         return Optional.ofNullable(optionConfig.getString(OPTION_VALUE_ATTR))
-                .orElseThrow(() -> new SunriseInitializationException("Missing sort value: " + optionConfig));
+                .orElseThrow(() -> new SunriseConfigurationException("Missing sort value", OPTION_VALUE_ATTR, CONFIG_OPTIONS));
     }
 
     private static List<SortExpression<ProductProjection>> getExpressions(final Configuration optionConfig) {
@@ -61,7 +61,7 @@ public final class SortConfigProvider implements Provider<SortConfig> {
                 .map(SortExpression::<ProductProjection>of)
                 .collect(toList());
         if (expressions.isEmpty()) {
-            throw new SunriseInitializationException("Missing sort expression: " + optionConfig);
+            throw new SunriseConfigurationException("Missing sort expression", OPTION_EXPR_ATTR, CONFIG_OPTIONS);
         }
         return expressions;
     }

@@ -1,26 +1,22 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
-import com.commercetools.sunrise.common.contexts.UserContextImpl;
-import com.google.inject.Binder;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.UserContextTestProvider;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import io.sphere.sdk.search.SearchExpression;
 import io.sphere.sdk.search.SortExpression;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import javax.money.Monetary;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
-import static java.util.Locale.ENGLISH;
 
 public class SortSelectorFactoryTest {
 
@@ -29,7 +25,6 @@ public class SortSelectorFactoryTest {
             SortOption.of("foo-asc", "Foo Asc", singletonList(SortExpression.of("{{locale}}.foo.{{locale}} asc")), false),
             SortOption.of("foo-desc", "Foo Desc", singletonList(SortExpression.of("foo desc")), true),
             SortOption.of("foobar-asc", "Foo Bar Asc", asList(SortExpression.of("foo asc"), SortExpression.of("bar asc")), false));
-    private static final UserContext USER_CONTEXT = UserContextImpl.of(singletonList(ENGLISH), CountryCode.DE, Monetary.getCurrency("EUR"));
 
     @Test
     public void getsSelectedSort() throws Exception {
@@ -88,12 +83,12 @@ public class SortSelectorFactoryTest {
     }
 
     private SortSelectorFactory createSortSelectorFactory(final SortConfig config, final Map<String, List<String>> queryString) {
-        final Injector injector = Guice.createInjector(new Module() {
+        final Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
-            public void configure(final Binder binder) {
-                binder.bind(UserContext.class).toInstance(USER_CONTEXT);
-                binder.bind(RequestContext.class).toInstance(RequestContext.of(queryString, ""));
-                binder.bind(SortConfig.class).toInstance(config);
+            public void configure() {
+                bind(UserContext.class).toProvider(UserContextTestProvider.class);
+                bind(RequestContext.class).toInstance(RequestContext.of(queryString, ""));
+                bind(SortConfig.class).toInstance(config);
             }
         });
         return injector.getInstance(SortSelectorFactory.class);

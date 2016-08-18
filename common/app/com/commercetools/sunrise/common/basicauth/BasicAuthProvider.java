@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.basicauth;
 
-import com.commercetools.sunrise.common.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.Configuration;
@@ -32,7 +32,7 @@ public final class BasicAuthProvider implements Provider<BasicAuth> {
                 logger.info("Basic authentication: enabled for realm \"{}\"", realm);
                 return BasicAuth.of(realm, credentials);
             } else {
-                throw new SunriseInitializationException("Basic access authentication credentials must be of the form 'username:password', matching: " + REGEX_CREDENTIALS);
+                throw new SunriseConfigurationException("Basic access authentication credentials must be of the form 'username:password', matching: " + REGEX_CREDENTIALS, CONFIG_CREDENTIALS);
             }
         } else {
             logger.info("Basic authentication: disabled");
