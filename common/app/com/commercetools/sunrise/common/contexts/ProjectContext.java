@@ -33,20 +33,23 @@ public interface ProjectContext {
 
     default Locale defaultLocale() {
         return locales().stream()
+                .filter(locale -> locale != null)
                 .findFirst()
-                .orElseThrow(() -> new NoLocaleFoundException("Project does not have valid locale associated."));
+                .orElseThrow(() -> new NoLocaleFoundException("Project does not have any valid locale associated"));
     }
 
     default CountryCode defaultCountry() {
         return countries().stream()
+                .filter(country -> country != null)
                 .findFirst()
-                .orElseThrow(() -> new NoCountryFoundException("Project does not have any valid country code associated."));
+                .orElseThrow(() -> new NoCountryFoundException("Project does not have any valid country code associated"));
     }
 
     default CurrencyUnit defaultCurrency() {
         return currencies().stream()
+                .filter(country -> country != null)
                 .findFirst()
-                .orElseThrow(() -> new NoCurrencyFoundException("Project does not have any valid currency unit associated."));
+                .orElseThrow(() -> new NoCurrencyFoundException("Project does not have any valid currency unit associated"));
     }
 
     default boolean isLocaleSupported(final Locale locale) {

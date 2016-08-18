@@ -50,8 +50,9 @@ public interface UserContext {
 
     default Locale locale() {
         return locales().stream()
+                .filter(locale -> locale != null)
                 .findFirst()
-                .orElseThrow(() -> new NoLocaleFoundException("User does not have any valid locale associated."));
+                .orElseThrow(() -> new NoLocaleFoundException("User does not have any valid locale associated"));
     }
 
     default String languageTag() {

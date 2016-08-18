@@ -43,18 +43,6 @@ final class UserContextImpl extends Base implements UserContext {
     @Nullable
     private final Reference<Channel> channel;
 
-    UserContextImpl(final List<Locale> locales, final CountryCode country, final CurrencyUnit currency,
-                    @Nullable final Reference<CustomerGroup> customerGroup, @Nullable final Reference<Channel> channel) {
-        this.locales = locales;
-        this.country = country;
-        this.currency = currency;
-        this.customerGroup = customerGroup;
-        this.channel = channel;
-        if (locales.isEmpty() || locales.get(0) == null) {
-            throw new IllegalArgumentException("Locales must contain at least one valid locale.");
-        }
-    }
-
     @Inject
     private UserContextImpl(final Http.Context context, final ProjectContext projectContext) {
         this.locales = acceptedLocales(context, projectContext);
