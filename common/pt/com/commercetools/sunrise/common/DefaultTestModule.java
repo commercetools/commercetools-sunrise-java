@@ -88,22 +88,22 @@ public class DefaultTestModule extends AbstractModule {
             }
 
             @Override
-            public <T extends Hook> CompletionStage<Object> runAsyncHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
+            public <H extends Hook> CompletionStage<?> runEventHook(final Class<H> hookClass, final Function<H, CompletionStage<?>> f) {
                 return completedFuture(null);
             }
 
             @Override
-            public <T extends Hook, R> CompletionStage<R> runAsyncFilterHook(final Class<T> hookClass, final BiFunction<T, R, CompletionStage<R>> f, final R param) {
+            public <H extends Hook, R> CompletionStage<R> runActionHook(final Class<H> hookClass, final BiFunction<H, R, CompletionStage<R>> f, final R param) {
                 return completedFuture(param);
             }
 
             @Override
-            public <T extends Hook, R> R runFilterHook(final Class<T> hookClass, final BiFunction<T, R, R> f, final R param) {
+            public <H extends Hook, R> R runUnaryOperatorHook(final Class<H> hookClass, final BiFunction<H, R, R> f, final R param) {
                 return param;
             }
 
             @Override
-            public <T extends Hook> void runVoidHook(final Class<T> hookClass, final Consumer<T> consumer) {
+            public <H extends Hook> void runConsumerHook(final Class<H> hookClass, final Consumer<H> consumer) {
 
             }
 

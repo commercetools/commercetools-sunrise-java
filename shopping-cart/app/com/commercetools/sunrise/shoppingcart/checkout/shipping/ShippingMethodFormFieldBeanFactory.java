@@ -80,7 +80,7 @@ public class ShippingMethodFormFieldBeanFactory extends Base {
         // Need to do this since zones are not expanded in shipping methods yet (but will be soon)
         // Rather this (even though it's expensive -one request per shipping method-) but it will mean less breaking changes in the future
         final ZoneFinderByCart zoneFinder = injector.getInstance(ZoneFinderByCart.class);
-        return blockingWait(zoneFinder.findZone(cart, q -> q), Duration.ofMinutes(1));
+        return blockingWait(zoneFinder.findZone(cart), Duration.ofMinutes(1));
     }
 
     protected boolean isFreeShipping(final Cart cart, final ShippingRate shippingRate) {

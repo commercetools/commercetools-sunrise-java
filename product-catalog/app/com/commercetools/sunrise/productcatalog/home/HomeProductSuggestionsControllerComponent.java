@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.productcatalog.home;
 
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.hooks.RequestHook;
-import com.commercetools.sunrise.hooks.PageDataHook;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
+import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
@@ -27,7 +27,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public class HomeProductSuggestionsControllerComponent implements ControllerComponent, RequestHook, PageDataHook {
+public class HomeProductSuggestionsControllerComponent implements ControllerComponent, RequestStartedHook, PageDataReadyHook {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeProductSuggestionsControllerComponent.class);
 
@@ -50,7 +50,7 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
 
 
     @Override
-    public CompletionStage<?> onRequest(final Http.Context context) {
+    public CompletionStage<?> onRequestStarted(final Http.Context context) {
         final List<Category> suggestedCategories = suggestionsExternalIds.stream()
                 .map(extId -> categoryTree.findByExternalId(extId))
                 .filter(Optional::isPresent)
@@ -73,7 +73,7 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
     }
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void onPageDataReady(final PageData pageData) {
         if (pageData.getContent() instanceof HomePageContent) {
             final HomePageContent content = (HomePageContent) pageData.getContent();
             final ProductListBean productListBean = productListBeanFactory.create(recommendedProducts);
