@@ -8,7 +8,7 @@ import java.util.concurrent.CompletionStage;
 /**
  * Hook called for components with read access to the cart. The cart should not be changed here.
  */
-public interface CartUpdatedHook extends EventHook { // Why did it extend SphereRequestHook?
+public interface CartUpdatedHook extends EventHook {
 
     CompletionStage<?> onCartUpdated(final Cart cart);
 
