@@ -3,12 +3,11 @@ package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.OrderQueryFilterHook;
+import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.orders.Order;
-import io.sphere.sdk.orders.queries.OrderQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
@@ -69,7 +68,7 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
     protected CompletionStage<Result> ifValidOrder(@Nullable final Order order,
                                                    final Function<Order, CompletionStage<Result>> onValidOrder) {
         return Optional.ofNullable(order)
-                .map(notNullOrder -> runHookOnFoundOrder(notNullOrder)
+                .map(notNullOrder -> OrderLoadedHook.runHook(hooks(), notNullOrder)
                         .thenComposeAsync(unused -> onValidOrder.apply(notNullOrder), HttpExecution.defaultContext()))
                 .orElseGet(this::handleNotFoundOrder);
     }
@@ -80,17 +79,9 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
 
     protected CompletionStage<Optional<Order>> findOrder(final Customer customer, final String orderNumber) {
         final CustomerIdOrderNumberPair customerIdOrderNumberPair = new CustomerIdOrderNumberPair(customer.getId(), orderNumber);
-        return injector().getInstance(OrderFinderByCustomerIdAndOrderNumber.class).findOrder(customerIdOrderNumberPair, this::runHookOnOrderQuery);
+        return injector().getInstance(OrderFinderByCustomerIdAndOrderNumber.class).findOrder(customerIdOrderNumberPair);
     }
 
-    protected final OrderQuery runHookOnOrderQuery(final OrderQuery orderQuery) {
-        return hooks().runFilterHook(OrderQueryFilterHook.class, (hook, query) -> hook.filterQuery(query), orderQuery);
-    }
-
-    protected final CompletionStage<?> runHookOnFoundOrder(final Order order) {
-        //return runAsyncHook(SingleCustomerHook.class, hook -> hook.onSingleCustomerLoaded(customer));
-        return completedFuture(null);
-    }
 
     protected final CompletionStage<Result> redirectToMyOrders() {
         final Call call = injector().getInstance(MyOrdersReverseRouter.class).myOrderListPageCall(userContext().languageTag());

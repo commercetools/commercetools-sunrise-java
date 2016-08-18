@@ -4,10 +4,10 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.OrderByIdGetFilterHook;
-import com.commercetools.sunrise.hooks.RequestHook;
-import com.commercetools.sunrise.hooks.SingleOrderHook;
-import com.commercetools.sunrise.hooks.PageDataHook;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
+import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
+import com.commercetools.sunrise.hooks.events.RequestStartedHook;
+import com.commercetools.sunrise.hooks.requests.OrderByIdGetHook;
 import com.commercetools.sunrise.shoppingcart.OrderSessionUtils;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.orders.Order;
@@ -31,10 +31,10 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  *
  * <p id="hooks">supported hooks</p>
  * <ul>
- *     <li>{@link RequestHook}</li>
- *     <li>{@link PageDataHook}</li>
- *     <li>{@link OrderByIdGetFilterHook}</li>
- *     <li>{@link SingleOrderHook}</li>
+ *     <li>{@link RequestStartedHook}</li>
+ *     <li>{@link PageDataReadyHook}</li>
+ *     <li>{@link OrderByIdGetHook}</li>
+ *     <li>{@link OrderLoadedHook}</li>
  * </ul>
  * <p>tags</p>
  * <ul>
@@ -66,11 +66,11 @@ public abstract class SunriseCheckoutThankYouController extends SunriseFramework
 
     protected CompletionStage<Optional<Order>> findOrderById(final String orderId) {
         final OrderByIdGet baseRequest = OrderByIdGet.of(orderId).plusExpansionPaths(m -> m.paymentInfo().payments());
-        final OrderByIdGet orderByIdGet = hooks().runFilterHook(OrderByIdGetFilterHook.class, (hook, getter) -> hook.filterOrderByIdGet(getter), baseRequest);
+        final OrderByIdGet orderByIdGet = OrderByIdGetHook.runHook(hooks(), baseRequest);
         return sphere().execute(orderByIdGet)
                 .thenApplyAsync(nullableOrder -> {
                     if (nullableOrder != null) {
-                        hooks().runAsyncHook(SingleOrderHook.class, hook -> hook.onSingleOrderLoaded(nullableOrder));
+                        OrderLoadedHook.runHook(hooks(), nullableOrder);
                     }
                     return Optional.ofNullable(nullableOrder);
                 }, defaultContext());

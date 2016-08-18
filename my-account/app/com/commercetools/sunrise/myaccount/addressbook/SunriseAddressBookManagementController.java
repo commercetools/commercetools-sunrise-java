@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
+import com.commercetools.sunrise.hooks.events.AddressLoadedHook;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
@@ -25,14 +26,9 @@ public abstract class SunriseAddressBookManagementController extends MyAccountCo
     protected CompletionStage<Result> ifValidAddress(final Customer customer, @Nullable final Address address,
                                                      final Function<Address, CompletionStage<Result>> onValidAddress) {
         return Optional.ofNullable(address)
-                .map(notNullAddress -> runHookOnFoundAddress(notNullAddress)
+                .map(notNullAddress -> AddressLoadedHook.runHook(hooks(), notNullAddress)
                         .thenComposeAsync(unused -> onValidAddress.apply(address), HttpExecution.defaultContext()))
                 .orElseGet(() -> handleNotFoundAddress(customer));
-    }
-
-    protected final CompletionStage<?> runHookOnFoundAddress(final Address address) {
-        //return runAsyncHook(SingleCustomerHook.class, hook -> hook.onSingleCustomerLoaded(customer));
-        return completedFuture(null);
     }
 
     protected final Optional<Address> findAddress(final Customer customer, final String addressId) {
