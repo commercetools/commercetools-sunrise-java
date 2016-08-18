@@ -1,5 +1,7 @@
 package com.commercetools.sunrise.common.basicauth;
 
+import com.google.inject.ProvidedBy;
+import com.google.inject.Singleton;
 import io.sphere.sdk.models.Base;
 
 import java.util.Base64;
@@ -7,6 +9,8 @@ import java.util.Base64;
 /**
  * Contains information related to the HTTP basic access authentication.
  */
+@ProvidedBy(BasicAuthProvider.class)
+@Singleton
 public class BasicAuth extends Base {
 
     private final String realm;
