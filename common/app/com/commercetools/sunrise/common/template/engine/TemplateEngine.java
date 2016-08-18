@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.template.engine;
 /**
  * Service that provides HTML pages, using some sort of template engine.
  */
+@FunctionalInterface
 public interface TemplateEngine {
 
     /**

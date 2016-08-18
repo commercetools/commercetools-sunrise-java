@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import com.commercetools.sunrise.common.contexts.UserContextImpl;
-import com.neovisionaries.i18n.CountryCode;
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.UserContextTestProvider;
+import com.google.inject.Guice;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.AlphabeticallySortedFacetOptionMapper;
 import io.sphere.sdk.facets.Facet;
@@ -17,22 +17,20 @@ import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import javax.money.Monetary;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
 import static java.util.Arrays.asList;
-import static java.util.Collections.*;
-import static java.util.Locale.ENGLISH;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SelectFacetedSearchSelectorFactoryTest {
 
     private static final String KEY = "key";
     private static final String LABEL = "Some Facet";
-    private static final UserContext USER_CONTEXT = UserContextImpl.of(singletonList(ENGLISH), CountryCode.DE, Monetary.getCurrency("EUR"));
 
     @Test
     public void initializesFacet() throws Exception {
@@ -98,7 +96,7 @@ public class SelectFacetedSearchSelectorFactoryTest {
 
     private void test(final SelectFacetedSearchConfig config, final List<String> selectedValues, final Consumer<FacetedSearchSelector> test) {
         final Map<String, List<String>> queryString = singletonMap(config.getFacetBuilder().getKey(), selectedValues);
-        final UserContext userContext = USER_CONTEXT;
+        final UserContext userContext = Guice.createInjector().getInstance(UserContextTestProvider.class).get();
         final RequestContext requestContext = RequestContext.of(queryString, "");
         final SelectFacetedSearchSelectorFactory factory = SelectFacetedSearchSelectorFactory.of(config, userContext, requestContext, CategoryTree.of(emptyList()), emptyList());
         test.accept(factory.create());

@@ -33,6 +33,10 @@ public abstract class CartLikeBeanFactory extends Base {
         fillLineItems(bean, cartLike);
     }
 
+    protected void fillEmptyMiniCartInfo(final MiniCartBean bean) {
+        bean.setTotalItems(0L);
+    }
+
     protected void fillCartInfo(final CartBean bean, final CartLike<?> cartLike) {
         fillMiniCartInfo(bean, cartLike);
         fillSalesTax(bean, cartLike);
@@ -42,6 +46,17 @@ public abstract class CartLikeBeanFactory extends Base {
         fillBillingAddress(bean, cartLike);
         fillShippingMethod(bean, cartLike);
         fillPaymentDetails(bean, cartLike);
+    }
+
+    protected void fillEmptyCartInfo(final CartBean bean) {
+        fillEmptyMiniCartInfo(bean);
+        final MoneyContext moneyContext = MoneyContext.of(userContext.currency(), userContext.locale());
+        bean.setSalesTax(moneyContext.formatOrZero(null));
+        bean.setTotalPrice(moneyContext.formatOrZero(null));
+        bean.setSubtotalPrice(moneyContext.formatOrZero(null));
+        final ShippingInfoBean shippingMethod = new ShippingInfoBean();
+        shippingMethod.setPrice(moneyContext.formatOrZero(null));
+        bean.setShippingMethod(shippingMethod);
     }
 
     protected void fillTotalItems(final MiniCartBean bean, final CartLike<?> cartLike) {

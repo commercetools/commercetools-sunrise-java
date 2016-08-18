@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.hooks.events.ProductVariantLoadedHook;
@@ -78,6 +79,7 @@ public abstract class SunriseProductDetailController extends SunriseFrameworkCon
         return new HashSet<>(asList("product-detail", "product", "product-catalog"));
     }
 
+    @SunriseRoute("productDetailPageCall")
     public CompletionStage<Result> showProductBySlugAndSku(final String languageTag, final String slug, final String sku) {
         return doRequest(() -> {
             logger.debug("look for product with slug={} in locale={} and sku={}", slug, languageTag, sku);

@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.common.contexts;
 
+import com.google.inject.ImplementedBy;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.customergroups.CustomerGroup;
@@ -13,6 +14,7 @@ import java.util.Optional;
 /**
  * A container for all information related to the current user, such as selected country, language or customer group.
  */
+@ImplementedBy(UserContextImpl.class)
 public interface UserContext {
 
 
@@ -48,8 +50,9 @@ public interface UserContext {
 
     default Locale locale() {
         return locales().stream()
+                .filter(locale -> locale != null)
                 .findFirst()
-                .orElseThrow(() -> new NoLocaleFoundException("User does not have any valid locale associated."));
+                .orElseThrow(() -> new NoLocaleFoundException("User does not have any valid locale associated"));
     }
 
     default String languageTag() {

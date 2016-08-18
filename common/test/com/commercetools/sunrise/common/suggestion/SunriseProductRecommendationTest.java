@@ -1,27 +1,21 @@
 package com.commercetools.sunrise.common.suggestion;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.contexts.UserContextImpl;
+import com.commercetools.sunrise.common.contexts.UserContextTestProvider;
 import com.commercetools.sunrise.common.controllers.TestableSphereClient;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import org.junit.Test;
 
-import java.util.Locale;
 import java.util.Set;
 
-import static io.sphere.sdk.models.DefaultCurrencyUnits.EUR;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SunriseProductRecommendationTest {
-
-    private static final UserContext USER_CONTEXT = UserContextImpl.of(singletonList(Locale.GERMAN), CountryCode.DE, EUR);
 
     @Test
     public void getsNoSuggestionsOnEmptyCategories() throws Exception {
@@ -35,7 +29,7 @@ public class SunriseProductRecommendationTest {
             @Override
             protected void configure() {
                 bind(SphereClient.class).toInstance(sphereClient);
-                bind(UserContext.class).toInstance(USER_CONTEXT);
+                bind(UserContext.class).toProvider(UserContextTestProvider.class);
             }
         });
         return injector.getInstance(SunriseProductRecommendation.class);

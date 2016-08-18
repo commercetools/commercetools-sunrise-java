@@ -3,10 +3,11 @@ package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.hooks.requests.OrderByIdGetHook;
-import com.commercetools.sunrise.hooks.events.RequestStartedHook;
-import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
+import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
+import com.commercetools.sunrise.hooks.events.RequestStartedHook;
+import com.commercetools.sunrise.hooks.requests.OrderByIdGetHook;
 import com.commercetools.sunrise.shoppingcart.OrderSessionUtils;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import io.sphere.sdk.orders.Order;
@@ -48,6 +49,7 @@ public abstract class SunriseCheckoutThankYouController extends SunriseFramework
     @Inject
     private CheckoutThankYouPageContentFactory pageContentFactory;
 
+    @SunriseRoute("checkoutThankYouPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> findLastOrder().
                 thenComposeAsync(orderOpt -> orderOpt

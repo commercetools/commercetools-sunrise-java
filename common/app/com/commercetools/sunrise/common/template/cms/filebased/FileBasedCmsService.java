@@ -4,8 +4,6 @@ import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -24,13 +22,19 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  */
 public final class FileBasedCmsService implements CmsService {
 
-    @Inject
-    @Named("cms")
     private I18nResolver i18nResolver;
+
+    private FileBasedCmsService(final I18nResolver i18nResolver) {
+        this.i18nResolver = i18nResolver;
+    }
 
     @Override
     public CompletionStage<Optional<CmsPage>> page(final String pageKey, final List<Locale> locales) {
         final CmsPage cmsPage = new FileBasedCmsPage(i18nResolver, pageKey, locales);
         return completedFuture(Optional.of(cmsPage));
+    }
+
+    public static FileBasedCmsService of(final I18nResolver i18nResolver) {
+        return new FileBasedCmsService(i18nResolver);
     }
 }

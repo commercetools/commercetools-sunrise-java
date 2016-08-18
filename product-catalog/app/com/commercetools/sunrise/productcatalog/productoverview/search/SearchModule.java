@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search;
 
-import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfigProvider;
-import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigListProvider;
-import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfigProvider;
-import com.google.inject.AbstractModule;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
+import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigListProvider;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
+import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfigProvider;
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfig;
+import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfigProvider;
+import com.google.inject.AbstractModule;
 
 import javax.inject.Singleton;
 

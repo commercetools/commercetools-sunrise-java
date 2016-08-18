@@ -7,8 +7,6 @@ GET         /*path/                                            @demo.common.Appl
 # Main entry point that decides whether to go to home page or to setup wizard
 GET         /                                                  @demo.productcatalog.HomeController.index()
 
-->          /setup                                             setupwidget.Routes
-
 
 # ADMIN
 # ~~~~~
