@@ -4,7 +4,7 @@ import com.commercetools.sunrise.framework.SunriseComponent;
 import com.commercetools.sunrise.hooks.actions.ActionHook;
 import com.commercetools.sunrise.hooks.consumers.ConsumerHook;
 import com.commercetools.sunrise.hooks.events.EventHook;
-import com.commercetools.sunrise.hooks.requests.SphereRequestHook;
+import com.commercetools.sunrise.hooks.requests.RequestHook;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
@@ -59,8 +59,8 @@ public class RequestHookContextImpl extends Base implements RequestHookContext {
     }
 
     @Override
-    public <H extends SphereRequestHook, R> R runSphereRequestHook(final Class<H> hookClass, final BiFunction<H, R, R> f, final R param) {
-        hookRunnerLogger.debug("runSphereRequestHook {}", hookClass.getSimpleName());
+    public <H extends RequestHook, R> R runUnaryOperatorHook(final Class<H> hookClass, final BiFunction<H, R, R> f, final R param) {
+        hookRunnerLogger.debug("runUnaryOperatorHook {}", hookClass.getSimpleName());
         R result = param;
         final List<H> applicableHooks = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))

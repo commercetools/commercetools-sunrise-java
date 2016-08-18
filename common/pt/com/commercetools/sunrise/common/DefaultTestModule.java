@@ -14,7 +14,7 @@ import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.actions.ActionHook;
 import com.commercetools.sunrise.hooks.consumers.ConsumerHook;
 import com.commercetools.sunrise.hooks.events.EventHook;
-import com.commercetools.sunrise.hooks.requests.SphereRequestHook;
+import com.commercetools.sunrise.hooks.requests.RequestHook;
 import com.google.inject.AbstractModule;
 import com.google.inject.util.Providers;
 import com.neovisionaries.i18n.CountryCode;
@@ -101,7 +101,7 @@ public class DefaultTestModule extends AbstractModule {
             }
 
             @Override
-            public <H extends SphereRequestHook, R> R runSphereRequestHook(final Class<H> hookClass, final BiFunction<H, R, R> f, final R param) {
+            public <H extends RequestHook, R> R runUnaryOperatorHook(final Class<H> hookClass, final BiFunction<H, R, R> f, final R param) {
                 return param;
             }
 
