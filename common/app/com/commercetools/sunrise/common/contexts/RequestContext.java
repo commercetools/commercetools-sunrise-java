@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
 
-public class RequestContext extends Base {
+public final class RequestContext extends Base {
 
     private final String path;
     private final Map<String, List<String>> queryString;
