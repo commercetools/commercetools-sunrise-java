@@ -1,12 +1,13 @@
 
 com.commercetools.sunrise.common
-com.commercetools.sunrise.common.basicauth
 com.commercetools.sunrise.common.cache
 com.commercetools.sunrise.common.categorytree
 com.commercetools.sunrise.common.contexts
 com.commercetools.sunrise.common.controllers
 com.commercetools.sunrise.common.ctp
 com.commercetools.sunrise.common.forms
+com.commercetools.sunrise.common.httpauth
+com.commercetools.sunrise.common.httpauth.basic
 com.commercetools.sunrise.common.injection
 com.commercetools.sunrise.common.localization
 com.commercetools.sunrise.common.models
