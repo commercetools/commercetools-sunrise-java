@@ -43,7 +43,7 @@ public class BasicHttpAuthenticationFilterTest extends WithSunriseApplication {
                     .setAuth(USERNAME, "wrong", WSAuthScheme.BASIC)
                     .get().toCompletableFuture().join();
             assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
-            assertThat(response.getHeader(Http.HeaderNames.WWW_AUTHENTICATE)).isEmpty();
+            assertThat(response.getHeader(Http.HeaderNames.WWW_AUTHENTICATE)).isNull();
         });
     }
 
