@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.basicauth;
+package com.commercetools.sunrise.common.httpauth.basic;
 
 import org.junit.Test;
 
@@ -6,11 +6,11 @@ import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BasicAuthTest {
+public class BasicHttpAuthenticationTest {
 
     private static final String MY_REALM = "My Realm";
     private static final String CREDENTIALS = "username:password";
-    private static final BasicAuth BASIC_AUTH = BasicAuth.of(MY_REALM, CREDENTIALS);
+    private static final BasicHttpAuthentication BASIC_AUTH = new BasicHttpAuthentication(MY_REALM, CREDENTIALS);
 
     @Test
     public void isAuthorizedWithCorrectCredentials() throws Exception {

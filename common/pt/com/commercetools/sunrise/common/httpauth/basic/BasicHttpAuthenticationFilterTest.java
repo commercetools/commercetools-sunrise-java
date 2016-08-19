@@ -1,9 +1,9 @@
-package com.commercetools.sunrise.common.basicauth;
+package com.commercetools.sunrise.common.httpauth.basic;
 
 import com.commercetools.sunrise.common.WithSunriseApplication;
+import com.commercetools.sunrise.common.httpauth.HttpAuthentication;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.google.inject.util.Providers;
 import org.junit.Test;
 import play.Application;
 import play.Configuration;
@@ -13,36 +13,18 @@ import play.mvc.Http;
 import play.routing.Router;
 import play.routing.RoutingDsl;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static play.mvc.Results.ok;
 
-public class BasicAuthFilterTest extends WithSunriseApplication {
+public class BasicHttpAuthenticationFilterTest extends WithSunriseApplication {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private static final String REALM = "My Realm";
     private static final Router ROUTER = new RoutingDsl().GET("/").routeTo(() -> ok()).build();
-    private static final BasicAuth BASIC_AUTH_ENABLED = BasicAuth.of("My Realm", USERNAME + ":" + PASSWORD);
-    private static final BasicAuth BASIC_AUTH_DISABLED = null;
-
-    @Test
-    public void allowsAccessWhenDisabled() throws Exception {
-        run(appWithBasicAuthDisabled(), "/", request -> {
-            final WSResponse response = request.get().toCompletableFuture().join();
-            assertThat(response.getStatus()).isEqualTo(Http.Status.OK);
-        });
-    }
-
-    @Test
-    public void unauthorizedWhenEnabled() throws Exception {
-        run(appWithBasicAuthEnabled(), "/", request -> {
-            final WSResponse response = request.get().toCompletableFuture().join();
-            assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
-        });
-    }
 
     @Test
     public void authorizedWhenEnabledAndCredentialsProvided() throws Exception {
@@ -61,22 +43,28 @@ public class BasicAuthFilterTest extends WithSunriseApplication {
                     .setAuth(USERNAME, "wrong", WSAuthScheme.BASIC)
                     .get().toCompletableFuture().join();
             assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
+            assertThat(response.getHeader(Http.HeaderNames.WWW_AUTHENTICATE)).isNull();
+        });
+    }
+
+    @Test
+    public void unauthorizedWhenEnabledAndNoCredentialsProvided() throws Exception {
+        run(appWithBasicAuthEnabled(), "/", request -> {
+            final WSResponse response = request.get().toCompletableFuture().join();
+            assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
+            assertThat(response.getHeader(Http.HeaderNames.WWW_AUTHENTICATE)).contains(REALM);
         });
     }
 
     private Application appWithBasicAuthEnabled() {
-        return application(BASIC_AUTH_ENABLED);
+        return application(new BasicHttpAuthentication(REALM, USERNAME + ":" + PASSWORD));
     }
 
-    private Application appWithBasicAuthDisabled() {
-        return application(BASIC_AUTH_DISABLED);
-    }
-
-    private Application application(final @Nullable BasicAuth basicAuth) {
+    private Application application(final HttpAuthentication httpAuthentication) {
         final Module module = new AbstractModule() {
             @Override
             protected void configure() {
-                bind(BasicAuth.class).toProvider(Providers.of(basicAuth));
+                bind(HttpAuthentication.class).toInstance(httpAuthentication);
                 bind(play.api.routing.Router.class).toInstance(ROUTER.asScala());
             }
         };
