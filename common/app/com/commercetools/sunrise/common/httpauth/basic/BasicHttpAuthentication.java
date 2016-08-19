@@ -32,7 +32,7 @@ final class BasicHttpAuthentication extends Base implements HttpAuthentication {
     }
 
     @Override
-    public String getWwwAuthenticateHeader() {
+    public String getWwwAuthenticateHeaderValue() {
         return "Basic realm=\"" + realm + "\"";
     }
 

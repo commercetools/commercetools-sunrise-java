@@ -64,7 +64,7 @@ public class HttpAuthorizationFilter extends Filter {
     private CompletableFuture<Result> missingAuthentication() {
         logger.debug("Missing authentication");
         final Result result = unauthorized()
-                .withHeader(WWW_AUTHENTICATE, httpAuthentication.getWwwAuthenticateHeader());
+                .withHeader(WWW_AUTHENTICATE, httpAuthentication.getWwwAuthenticateHeaderValue());
         return completedFuture(result);
     }
 

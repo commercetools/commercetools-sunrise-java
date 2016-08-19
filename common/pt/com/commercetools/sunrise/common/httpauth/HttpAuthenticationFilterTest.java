@@ -73,7 +73,7 @@ public class HttpAuthenticationFilterTest extends WithSunriseApplication {
             }
 
             @Override
-            public String getWwwAuthenticateHeader() {
+            public String getWwwAuthenticateHeaderValue() {
                 return AUTHENTICATE_HEADER_CONTENT;
             }
 

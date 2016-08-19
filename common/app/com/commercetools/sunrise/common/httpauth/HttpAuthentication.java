@@ -12,7 +12,7 @@ public interface HttpAuthentication {
      * Content of the WWW-Authenticate HTTP Header for a no authenticated request.
      * @return the content of the WWW-Authenticate HTTP Header
      */
-    String getWwwAuthenticateHeader();
+    String getWwwAuthenticateHeaderValue();
 
     /**
      * Decides whether the Authorization HTTP Header has valid authorized information, thus the request can be granted access.
