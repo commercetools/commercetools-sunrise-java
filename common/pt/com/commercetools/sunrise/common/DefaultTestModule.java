@@ -59,7 +59,7 @@ public class DefaultTestModule extends AbstractModule {
 
             @Override
             public String getWwwAuthenticateHeader() {
-                return null;
+                return "";
             }
 
             @Override

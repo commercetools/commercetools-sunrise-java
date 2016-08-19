@@ -45,8 +45,6 @@ public class HttpAuthorizationFilter extends Filter {
 
     private CompletionStage<Result> authenticate(final Function<Http.RequestHeader, CompletionStage<Result>> nextFilter,
                                                  final Http.RequestHeader requestHeader) {
-        System.out.println(requestHeader);
-        System.out.println(requestHeader.headers());
         return findAuthorizationHeader(requestHeader)
                 .map(authorizationHeader -> {
                     if (httpAuthentication.isAuthorized(authorizationHeader)) {
@@ -65,14 +63,14 @@ public class HttpAuthorizationFilter extends Filter {
 
     private CompletableFuture<Result> missingAuthentication() {
         logger.debug("Missing authentication");
-        return completedFuture(unauthorized())
-                .thenApply(result -> result
-                        .withHeader(WWW_AUTHENTICATE, httpAuthentication.getWwwAuthenticateHeader()));
+        final Result result = unauthorized()
+                .withHeader(WWW_AUTHENTICATE, httpAuthentication.getWwwAuthenticateHeader());
+        return completedFuture(result);
     }
 
     private CompletableFuture<Result> failedAuthentication() {
         logger.info("Failed authentication");
-        return completedFuture(unauthorized());
+        return completedFuture(unauthorized("Unauthorized"));
     }
 
     private Optional<String> findAuthorizationHeader(final Http.RequestHeader requestHeader) {
