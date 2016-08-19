@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common;
 
 import com.commercetools.sunrise.cms.CmsService;
-import com.commercetools.sunrise.common.basicauth.BasicAuth;
+import com.commercetools.sunrise.common.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.TestableSphereClient;
 import com.commercetools.sunrise.common.pages.PageMeta;
@@ -13,7 +13,6 @@ import com.commercetools.sunrise.framework.SunriseComponent;
 import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.google.inject.AbstractModule;
-import com.google.inject.util.Providers;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.client.SphereClient;
@@ -40,7 +39,7 @@ public class DefaultTestModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(play.api.routing.Router.class).toInstance(new RoutingDsl().build().asScala()); // TODO Removes all routes to avoid having to resolve all injections while we have routes, remove later!
-        bind(BasicAuth.class).toProvider(Providers.of(null));
+        bind(HttpAuthentication.class).toInstance(disabledHttpAuth());
         bind(SphereClient.class).toInstance(TestableSphereClient.ofEmptyResponse());
         bind(MultiControllerComponentResolver.class).toInstance(c -> emptyList());
         bind(PageMetaFactory.class).toInstance(PageMeta::new);
@@ -49,6 +48,25 @@ public class DefaultTestModule extends AbstractModule {
         bind(TemplateEngine.class).toInstance((n, c) -> "");
         bind(CmsService.class).toInstance((l, c) -> completedFuture(Optional.empty()));
         bind(RequestHookContext.class).toInstance(unsupportedRequestHookContext());
+    }
+
+    private HttpAuthentication disabledHttpAuth() {
+        return new HttpAuthentication() {
+            @Override
+            public boolean isEnabled() {
+                return false;
+            }
+
+            @Override
+            public String getWwwAuthenticateHeader() {
+                return null;
+            }
+
+            @Override
+            public boolean isAuthorized(final String rawAuthorizationHttpHeader) {
+                return true;
+            }
+        };
     }
 
     private UserContext unsupportedUserContext() {

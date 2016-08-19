@@ -17,7 +17,7 @@
     <logger name="sphere.metrics.simple" level="trace" />
     <logger name="com.github.jknack.handlebars.Handlebars" level="ERROR" />
     <logger name="com.commercetools.sunrise" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.basicauth.BasicAuthProvider" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.httpauth.basic.BasicAuthenticationProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree" level="INFO" />

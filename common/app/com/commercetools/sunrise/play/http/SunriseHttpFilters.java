@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.play.http;
 
-import com.commercetools.sunrise.common.basicauth.BasicAuthFilter;
+import com.commercetools.sunrise.common.httpauth.HttpAuthorizationFilter;
 import play.filters.csrf.CSRFFilter;
 import play.http.HttpFilters;
 import play.mvc.EssentialFilter;
@@ -16,8 +16,8 @@ public class SunriseHttpFilters implements HttpFilters {
     private final EssentialFilter[] filters;
 
     @Inject
-    public SunriseHttpFilters(final BasicAuthFilter basicAuthFilter, final CSRFFilter csrfFilter) {
-        this.filters = new EssentialFilter[] {basicAuthFilter.asJava(), csrfFilter.asJava()};
+    public SunriseHttpFilters(final HttpAuthorizationFilter httpAuthorizationFilter, final CSRFFilter csrfFilter) {
+        this.filters = new EssentialFilter[] {httpAuthorizationFilter.asJava(), csrfFilter.asJava()};
     }
 
     @Override
