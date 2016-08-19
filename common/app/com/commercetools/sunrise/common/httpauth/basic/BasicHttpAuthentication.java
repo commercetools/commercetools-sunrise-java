@@ -17,13 +17,11 @@ final class BasicHttpAuthentication extends Base implements HttpAuthentication {
     private final String encodedCredentials;
 
     BasicHttpAuthentication() {
-        System.err.println("!!!!! CREATE EMPTY INSTANCE !!!!!!");
         this.realm = null;
         this.encodedCredentials = null;
     }
 
     BasicHttpAuthentication(final String realm, final String credentials) {
-        System.err.println("!!!!! CREATE INSTANCE !!!!!!");
         this.realm = realm;
         this.encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
     }
