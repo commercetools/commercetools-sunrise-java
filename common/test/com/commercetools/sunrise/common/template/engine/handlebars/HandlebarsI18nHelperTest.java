@@ -22,7 +22,7 @@ import static java.util.Locale.ENGLISH;
 import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HandlebarsI18nHelperFooTest {
+public class HandlebarsI18nHelperTest {
 
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates/i18nHelper");
     private static final PageData SOME_PAGE_DATA = new TestablePageData();
