@@ -54,6 +54,6 @@ public class HandlebarsCmsHelperTest {
         final TestableI18nResolver i18nResolver = new TestableI18nResolver(emptyMap());
         final List<TemplateLoader> templateLoaders = singletonList(new ClassPathTemplateLoader("/templates/cmsHelper"));
         final Handlebars handlebars = HandlebarsFactory.create(templateLoaders, i18nResolver, new I18nIdentifierFactory());
-        return HandlebarsTemplateEngine.of(handlebars);
+        return HandlebarsTemplateEngine.of(handlebars, new HandlebarsContextFactory());
     }
 }
