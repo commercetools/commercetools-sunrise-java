@@ -26,7 +26,7 @@ public class Module extends AbstractModule {
     }
 
     @Provides
-    public MultiControllerComponentResolver foo() {
+    public MultiControllerComponentResolver provideMultiControllerComponentResolver() {
         //here are also instanceof checks possible
         return new MultiControllerComponentResolverBuilder()
                 .add(CheckoutCommonComponent.class, controller -> controller.getFrameworkTags().contains("checkout"))
