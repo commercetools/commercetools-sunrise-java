@@ -2,6 +2,8 @@ package com.commercetools.sunrise.common.template.engine.handlebars;
 
 import com.commercetools.sunrise.common.forms.ErrorBean;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
+import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
+import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.github.jknack.handlebars.ValueResolver;
 import play.data.Form;
 import play.data.validation.ValidationError;
@@ -15,8 +17,18 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 /**
  * Resolves the values form a {@link Form} instance.
  */
-public enum PlayJavaFormResolver implements ValueResolver {
-    INSTANCE;
+public class PlayJavaFormResolver implements ValueResolver {
+
+    private I18nResolver i18nResolver;
+    private I18nIdentifierFactory i18nIdentifierFactory;
+    private List<Locale> locales;
+
+    public PlayJavaFormResolver(final I18nResolver i18nResolver, final I18nIdentifierFactory i18nIdentifierFactory,
+                                final List<Locale> locales) {
+        this.i18nResolver = i18nResolver;
+        this.i18nIdentifierFactory = i18nIdentifierFactory;
+        this.locales = locales;
+    }
 
     @Override
     public Object resolve(final Object context, final String name) {
@@ -33,7 +45,7 @@ public enum PlayJavaFormResolver implements ValueResolver {
         return Collections.emptySet();
     }
 
-    private Object resolveImpl(@Nonnull final Form<?> form, final String name) {
+    protected Object resolveImpl(@Nonnull final Form<?> form, final String name) {
         if (name.equals("errors")) {
             return extractErrors(form);
         } else {
@@ -42,11 +54,11 @@ public enum PlayJavaFormResolver implements ValueResolver {
         }
     }
 
-    private boolean isFalsy(@Nullable final String value) {
+    protected boolean isFalsy(@Nullable final String value) {
         return value != null && value.equals("false");
     }
 
-    private ErrorsBean extractErrors(@Nullable final Form<?> form) {
+    protected ErrorsBean extractErrors(@Nullable final Form<?> form) {
         final ErrorsBean errorsBean = new ErrorsBean();
         final List<ErrorBean> errorList = new ArrayList<>();
         if (form != null) {
@@ -57,11 +69,18 @@ public enum PlayJavaFormResolver implements ValueResolver {
         return errorsBean;
     }
 
-    private String errorMessage(final ValidationError error) {
-        String message = error.message();
-        if (!error.key().isEmpty()) {
-            message = error.key() + ": " + message;
-        }
-        return message;
+    protected String errorMessage(final ValidationError error) {
+        final String message = error.message();
+        return i18nResolver.get(locales, i18nIdentifierFactory.create(message))
+                .map(localizedMsg -> localizedError(error, localizedMsg))
+                .orElseGet(() -> unlocalizedError(error, message));
+    }
+
+    protected String localizedError(final ValidationError error, final String message) {
+        return unlocalizedError(error, message);
+    }
+
+    protected String unlocalizedError(final ValidationError error, final String message) {
+        return !error.key().isEmpty() ?  error.key() + ": " + message : message;
     }
 }

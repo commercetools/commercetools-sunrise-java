@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import static com.commercetools.sunrise.common.template.engine.handlebars.HelperUtils.getLocalesFromContext;
+import static com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsHelperUtils.getLocalesFromContext;
 
 final class HandlebarsI18nHelper extends Base implements Helper<String> {
 
