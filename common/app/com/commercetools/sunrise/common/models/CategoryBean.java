@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.models;
 
 import java.util.List;
 
-public class CategoryBean extends ModelBean {
+public class CategoryBean extends ViewModel {
 
     private String text;
     private String url;

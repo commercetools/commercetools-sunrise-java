@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 import com.commercetools.sunrise.common.models.ProductAttributeBean;
 
 import java.util.List;
 
-public class ProductDetailsBean extends ModelBean {
+public class ProductDetailsBean extends ViewModel {
 
     private List<ProductAttributeBean> features;
 

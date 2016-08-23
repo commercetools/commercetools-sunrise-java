@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
 
-public class FacetSelectorListBean extends ModelBean {
+public class FacetSelectorListBean extends ViewModel {
 
     private List<FacetSelectorBean> list;
 

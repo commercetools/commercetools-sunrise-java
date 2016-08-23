@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 import io.sphere.sdk.customers.Customer;
 
-public class CustomerInfoBean extends ModelBean {
+public class CustomerInfoBean extends ViewModel {
 
     private Customer customer;
 

@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public final class SunrisePageData extends ModelBean implements PageData {
+public final class SunrisePageData extends ViewModel implements PageData {
 
     private PageHeader header;
     private PageFooter footer;

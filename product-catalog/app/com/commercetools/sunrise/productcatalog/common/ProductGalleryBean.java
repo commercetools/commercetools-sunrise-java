@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
 
-public class ProductGalleryBean extends ModelBean {
+public class ProductGalleryBean extends ViewModel {
 
     private List<ProductImageBean> list;
 

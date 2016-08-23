@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.common.forms.CountryFormFieldBean;
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBean;
 
-public class CheckoutAddressFormSettingsBean extends ModelBean {
+public class CheckoutAddressFormSettingsBean extends ViewModel {
 
     private TitleFormFieldBean titleShipping;
     private TitleFormFieldBean titleBilling;

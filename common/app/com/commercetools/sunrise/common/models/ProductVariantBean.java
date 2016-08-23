@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-public class ProductVariantBean extends ModelBean {
+public class ProductVariantBean extends ViewModel {
 
     private String name;
     private String sku;

@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class ProductThumbnailBean extends ModelBean {
+public class ProductThumbnailBean extends ViewModel {
 
     private ProductBean product;
     private boolean sale;

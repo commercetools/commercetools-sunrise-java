@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 import com.commercetools.sunrise.components.ComponentBean;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class PageContent extends ModelBean {
+public abstract class PageContent extends ViewModel {
 
     private String title;
     private List<ComponentBean> components;

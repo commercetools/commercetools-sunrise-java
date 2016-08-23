@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 import com.commercetools.sunrise.common.models.AddressBean;
 
-public class AddressInfoBean extends ModelBean {
+public class AddressInfoBean extends ViewModel {
 
     private AddressBean address;
     private String addressEditUrl;
