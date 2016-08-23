@@ -69,16 +69,10 @@ public abstract class SunriseFrameworkController extends Controller {
         return mapper;
     }
 
+    @Inject
     private SphereClient sphere;
-
     @Inject
     private RequestHookContext hookContext;
-
-    @Inject
-    private void setSphereClient(final SphereClient sphereClient) {
-        sphere = new HookedSphereClient(sphereClient, this);
-    }
-
     @Inject
     private Injector injector;
     @Inject
