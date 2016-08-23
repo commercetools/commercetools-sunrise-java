@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.facets.FacetType;
 
-public class FacetSelectorBean extends ModelBean {
+public class FacetSelectorBean extends ViewModel {
 
     private Facet facet;
 

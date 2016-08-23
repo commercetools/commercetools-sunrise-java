@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class ShippingInfoBean extends ModelBean {
+public class ShippingInfoBean extends ViewModel {
 
     private String label;
     private String description;

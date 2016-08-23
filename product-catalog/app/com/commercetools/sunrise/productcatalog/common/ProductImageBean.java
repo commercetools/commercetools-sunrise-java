@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class ProductImageBean extends ModelBean {
+public class ProductImageBean extends ViewModel {
 
     private String thumbImage;
     private String bigImage;

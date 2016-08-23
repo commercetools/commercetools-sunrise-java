@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 import com.commercetools.sunrise.common.models.ProductVariantBean;
 
-public class LineItemBean extends ModelBean {
+public class LineItemBean extends ViewModel {
 
     private String lineItemId;
     private long quantity;

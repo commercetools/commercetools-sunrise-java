@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class PageFooter extends ModelBean {
+public class PageFooter extends ViewModel {
 }

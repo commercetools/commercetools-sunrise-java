@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-public class AddressBean extends ModelBean {
+public class AddressBean extends ViewModel {
 
     private String title;
     private String firstName;

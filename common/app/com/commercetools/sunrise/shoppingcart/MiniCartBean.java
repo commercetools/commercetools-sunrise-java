@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class MiniCartBean extends ModelBean {
+public class MiniCartBean extends ViewModel {
 
     private Long totalItems;
     private String totalPrice;

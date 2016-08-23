@@ -3,7 +3,7 @@ package com.commercetools.sunrise.common.models;
 import com.commercetools.sunrise.common.forms.CountryFormFieldBean;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBean;
 
-public class AddressFormSettingsBean extends ModelBean {
+public class AddressFormSettingsBean extends ViewModel {
 
     private TitleFormFieldBean title;
     private CountryFormFieldBean countries;
