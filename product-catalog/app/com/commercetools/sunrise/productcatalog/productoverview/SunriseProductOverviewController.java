@@ -3,7 +3,7 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
@@ -64,7 +64,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  */
 @RequestScoped
 @IntroducingMultiControllerComponents(ProductOverviewHeroldComponent.class)
-public abstract class SunriseProductOverviewController extends SunriseFrameworkController implements WithOverwriteableTemplateName {
+public abstract class SunriseProductOverviewController extends SunriseFrameworkController implements WithTemplateName {
 
     @Inject
     private UserContext userContext;

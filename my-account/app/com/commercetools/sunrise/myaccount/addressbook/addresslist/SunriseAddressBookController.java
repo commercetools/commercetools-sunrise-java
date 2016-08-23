@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
@@ -23,7 +23,7 @@ import static java.util.Arrays.asList;
 
 @RequestScoped
 @IntroducingMultiControllerComponents(SunriseAddressBookHeroldComponent.class)
-public abstract class SunriseAddressBookController extends MyAccountController implements WithOverwriteableTemplateName {
+public abstract class SunriseAddressBookController extends MyAccountController implements WithTemplateName {
 
     protected static final Logger logger = LoggerFactory.getLogger(SunriseAddressBookController.class);
 

@@ -3,7 +3,7 @@ package com.commercetools.sunrise.productcatalog.home;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithCmsPage;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
@@ -37,7 +37,7 @@ import static java.util.Arrays.asList;
  * </ul>
  */
 @RequestScoped
-public abstract class SunriseHomeController extends SunriseFrameworkController implements WithOverwriteableTemplateName, WithCmsPage {
+public abstract class SunriseHomeController extends SunriseFrameworkController implements WithTemplateName, WithCmsPage {
 
     @Inject
     private HomeReverseRouter homeReverseRouter;

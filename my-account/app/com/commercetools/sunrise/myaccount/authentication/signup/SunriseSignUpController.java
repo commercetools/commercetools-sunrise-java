@@ -1,11 +1,10 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
@@ -39,7 +38,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
 @IntroducingMultiControllerComponents(SunriseSignUpHeroldComponent.class)
-public abstract class SunriseSignUpController extends SunriseFrameworkController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<SignUpFormData, Void, CustomerSignInResult> {
+public abstract class SunriseSignUpController extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<SignUpFormData, Void, CustomerSignInResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseSignUpController.class);
 

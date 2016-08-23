@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
@@ -44,7 +44,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  */
 @RequestScoped
 public abstract class SunriseCheckoutThankYouController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName {
+        implements WithTemplateName {
 
     @Inject
     private CheckoutThankYouPageContentFactory pageContentFactory;

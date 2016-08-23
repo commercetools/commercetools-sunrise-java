@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.common.controllers;
 
 import io.sphere.sdk.client.ClientErrorException;
-import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import play.data.Form;
 import play.libs.concurrent.HttpExecution;
@@ -12,7 +11,6 @@ import play.twirl.api.Html;
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 import static io.sphere.sdk.utils.CompletableFutureUtils.*;
 import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
@@ -23,7 +21,7 @@ import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
  * @param <T> type of the context of the form, possibly a parameter object
  * @param <R> the type of the updated object if the form is valid
  */
-public interface SimpleFormBindingControllerTrait<F, T, R> extends FormBindingTrait<F> {
+public interface WithFormFlow<F, T, R> extends WithForm<F> {
 
     default CompletionStage<Result> showForm(final T context) {
         final Form<? extends F> form = createNewFilledForm(context);

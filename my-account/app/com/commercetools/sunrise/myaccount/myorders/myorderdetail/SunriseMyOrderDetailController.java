@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
@@ -24,7 +24,7 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseMyOrderDetailController extends MyAccountController implements WithOverwriteableTemplateName {
+public abstract class SunriseMyOrderDetailController extends MyAccountController implements WithTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyOrderDetailController.class);
 
