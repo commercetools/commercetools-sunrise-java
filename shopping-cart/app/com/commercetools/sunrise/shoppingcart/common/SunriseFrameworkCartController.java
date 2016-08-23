@@ -48,7 +48,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     @Inject
     private void postInit() {
         //just prepend another error handler if this does not suffice
-        prependErrorHandler(e -> e instanceof PrimaryCartNotFoundException || e instanceof PrimaryCartEmptyException, e -> {
+        prependErrorHandler(e -> e instanceof CartNotFoundException || e instanceof CartEmptyException, e -> {
             LoggerFactory.getLogger(SunriseFrameworkCartController.class).error("access denied", e);
             return successful(redirect(injector().getInstance(HomeReverseRouter.class).homePageCall(injector().getInstance(UserContext.class).languageTag())));
         });
@@ -66,19 +66,19 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     /**
-     * Searches for an existing cart the platform otherwise the stage contains a {@link PrimaryCartNotFoundException}.
+     * Searches for an existing cart the platform otherwise the stage contains a {@link CartNotFoundException}.
      * A cart will not be created if it does not exist.
      * @return stage
      */
-    protected CompletionStage<Cart> requiringExistingPrimaryCart() {
-        return findPrimaryCart()
-                .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new PrimaryCartNotFoundException()), defaultContext());
+    protected CompletionStage<Cart> requiringExistingCart() {
+        return findCart()
+                .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new CartNotFoundException()), defaultContext());
     }
 
-    protected CompletionStage<Cart> requiringExistingPrimaryCartWithLineItem() {
-        return requiringExistingPrimaryCart().thenApplyAsync(cart -> {
+    protected CompletionStage<Cart> requiringNonEmptyCart() {
+        return requiringExistingCart().thenApplyAsync(cart -> {
             if (cart.getLineItems().isEmpty()) {
-                throw new PrimaryCartEmptyException(cart);
+                throw new CartEmptyException(cart);
             } else {
                 return cart;
             }
@@ -89,7 +89,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
      * Loads the primary cart from commercetools platform without applying side effects like updating the cart or the session.
      * @return a future of the optional cart
      */
-    protected CompletionStage<Optional<Cart>> findPrimaryCart() {
+    protected CompletionStage<Optional<Cart>> findCart() {
         final Http.Session session = session();
         return CustomerSessionUtils.getCustomerId(session)
                 .map(customerId -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId)))
@@ -106,7 +106,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Cart> getOrCreateCart() {
-        final CompletionStage<Cart> cartCompletionStage = findPrimaryCart()
+        final CompletionStage<Cart> cartCompletionStage = findCart()
                 .thenComposeAsync(cartOptional -> cartOptional
                                 .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
                                 .orElseGet(() -> createCart(userContext())),

@@ -48,7 +48,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
 
     @SunriseRoute("processChangeLineItemQuantityForm")
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
-        return doRequest(() -> findPrimaryCart()
+        return doRequest(() -> findCart()
                 .thenComposeAsync(cartOptional -> cartOptional
                         .map(this::validateForm)
                         .orElseGet(this::redirectToCartDetail), HttpExecution.defaultContext()));

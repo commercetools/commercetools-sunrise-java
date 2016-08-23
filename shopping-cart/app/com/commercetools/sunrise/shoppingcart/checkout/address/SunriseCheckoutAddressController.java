@@ -55,18 +55,18 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkC
 
     @SunriseRoute("checkoutAddressesPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requiringExistingPrimaryCartWithLineItem().thenComposeAsync(this::showForm, HttpExecution.defaultContext()));
+        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, HttpExecution.defaultContext()));
     }
 
     @SunriseRoute("checkoutAddressesProcessFormCall")
     @SuppressWarnings("unused")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requiringExistingPrimaryCartWithLineItem().thenComposeAsync(this::validateForm, HttpExecution.defaultContext()));
+        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, HttpExecution.defaultContext()));
     }
 
     @Override
     public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringExistingPrimaryCartWithLineItem();
+        return requiringNonEmptyCart();
     }
 
     @Override

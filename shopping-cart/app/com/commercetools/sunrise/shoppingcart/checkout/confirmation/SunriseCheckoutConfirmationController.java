@@ -67,7 +67,7 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
 
     @Override
     public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringExistingPrimaryCartWithLineItem();
+        return requiringNonEmptyCart();
     }
 
     @Override
