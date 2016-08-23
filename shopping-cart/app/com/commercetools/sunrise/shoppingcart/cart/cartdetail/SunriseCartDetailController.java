@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.cart.cartdetail;
 
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
@@ -11,7 +11,6 @@ import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
@@ -22,7 +21,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  * Shows and modifies the contents of the cart.
  */
 @IntroducingMultiControllerComponents(SunriseCartDetailHeroldComponent.class)
-public abstract class SunriseCartDetailController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName {
+public abstract class SunriseCartDetailController extends SunriseFrameworkCartController implements WithTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCartDetailController.class);
 

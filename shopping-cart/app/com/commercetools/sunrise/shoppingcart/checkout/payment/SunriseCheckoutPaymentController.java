@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
@@ -49,7 +49,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
 public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutPaymentFormData, Cart, Cart>, WithCartPreconditions {
+        implements WithTemplateName, SimpleFormBindingControllerTrait<CheckoutPaymentFormData, Cart, Cart>, WithCartPreconditions {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutPaymentController.class);
 

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
@@ -25,7 +25,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(SunriseMyOrderListHeroldComponent.class)
-public abstract class SunriseMyOrderListController extends MyAccountController implements WithOverwriteableTemplateName {
+public abstract class SunriseMyOrderListController extends MyAccountController implements WithTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyOrderListController.class);
 
