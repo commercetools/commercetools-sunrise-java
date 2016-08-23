@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
@@ -30,7 +30,7 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 
 @RequestScoped
-public abstract class SunriseRemoveAddressController extends SunriseAddressBookManagementController implements WithTemplateName, SimpleFormBindingControllerTrait<RemoveAddressFormData, AddressBookActionData, Customer> {
+public abstract class SunriseRemoveAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<RemoveAddressFormData, AddressBookActionData, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveAddressController.class);
 

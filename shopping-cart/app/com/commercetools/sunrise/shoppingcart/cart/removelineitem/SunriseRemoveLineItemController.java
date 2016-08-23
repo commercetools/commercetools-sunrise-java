@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.cart.removelineitem;
 
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
@@ -27,7 +27,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(SunriseRemoveLineItemHeroldComponent.class)
-public abstract class SunriseRemoveLineItemController extends SunriseCartManagementController implements WithTemplateName, SimpleFormBindingControllerTrait<RemoveLineItemFormData, Cart, Cart> {
+public abstract class SunriseRemoveLineItemController extends SunriseCartManagementController implements WithTemplateName, WithFormFlow<RemoveLineItemFormData, Cart, Cart> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveLineItemController.class);
 

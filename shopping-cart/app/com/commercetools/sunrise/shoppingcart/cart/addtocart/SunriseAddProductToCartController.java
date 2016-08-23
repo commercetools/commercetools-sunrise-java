@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.cart.addtocart;
 
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
@@ -27,7 +27,7 @@ import static java.util.Arrays.asList;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @IntroducingMultiControllerComponents(SunriseAddProductToCartHeroldComponent.class)
-public abstract class SunriseAddProductToCartController extends SunriseFrameworkCartController implements WithTemplateName, SimpleFormBindingControllerTrait<AddProductToCartFormData, Cart, Cart> {
+public abstract class SunriseAddProductToCartController extends SunriseFrameworkCartController implements WithTemplateName, WithFormFlow<AddProductToCartFormData, Cart, Cart> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseAddProductToCartController.class);
 
     @Override

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
@@ -38,7 +38,7 @@ import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @IntroducingMultiControllerComponents(SunriseMyPersonalDetailsHeroldComponent.class)
-public abstract class SunriseMyPersonalDetailsController extends MyAccountController implements WithTemplateName, SimpleFormBindingControllerTrait<MyPersonalDetailsFormData, Customer, Customer> {
+public abstract class SunriseMyPersonalDetailsController extends MyAccountController implements WithTemplateName, WithFormFlow<MyPersonalDetailsFormData, Customer, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsController.class);
 

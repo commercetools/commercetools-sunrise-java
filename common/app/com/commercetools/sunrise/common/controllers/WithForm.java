@@ -7,7 +7,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public interface FormBindingTrait<T> {
+public interface WithForm<T> {
 
     default CompletionStage<Form<? extends T>> bindForm() {
         final Form<? extends T> form = createForm().bindFromRequest();

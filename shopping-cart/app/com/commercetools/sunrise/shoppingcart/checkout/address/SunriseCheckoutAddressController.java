@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
@@ -34,7 +34,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
 @IntroducingMultiControllerComponents(SunriseCheckoutAddressHeroldComponent.class)
-public abstract class SunriseCheckoutAddressController extends SunriseFrameworkCartController implements WithTemplateName, SimpleFormBindingControllerTrait<CheckoutAddressFormData, Cart, Cart>, WithCartPreconditions {
+public abstract class SunriseCheckoutAddressController extends SunriseFrameworkCartController implements WithTemplateName, WithFormFlow<CheckoutAddressFormData, Cart, Cart>, WithCartPreconditions {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressController.class);
 

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
@@ -36,7 +36,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
 @IntroducingMultiControllerComponents(SunriseLogInHeroldComponent.class)
-public abstract class SunriseLogInController extends SunriseFrameworkController implements WithTemplateName, SimpleFormBindingControllerTrait<LogInFormData, Void, CustomerSignInResult> {
+public abstract class SunriseLogInController extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<LogInFormData, Void, CustomerSignInResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseLogInController.class);
 

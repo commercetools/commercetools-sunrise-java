@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
@@ -38,7 +38,7 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 
 @RequestScoped
-public abstract class SunriseChangeAddressController extends SunriseAddressBookManagementController implements WithTemplateName, SimpleFormBindingControllerTrait<AddressBookAddressFormData, AddressBookActionData, Customer> {
+public abstract class SunriseChangeAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<AddressBookAddressFormData, AddressBookActionData, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeAddressController.class);
 
