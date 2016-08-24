@@ -18,6 +18,7 @@ public class ProductBean extends ModelBean {
     private Map<String, ProductVariantReferenceBean> variants;
     private List<String> variantIdentifiers;
     private ProductDetailsBean details;
+    private String availability;
 
     public ProductBean() {
     }
@@ -92,5 +93,13 @@ public class ProductBean extends ModelBean {
 
     public void setDetails(final ProductDetailsBean details) {
         this.details = details;
+    }
+
+    public String getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(final String availability) {
+        this.availability = availability;
     }
 }
