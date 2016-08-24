@@ -12,7 +12,7 @@ name := "commercetools-sunrise"
 
 organization in ThisBuild := "com.commercetools.sunrise"
 
-lazy val sunriseThemeVersion = "0.60.0"
+lazy val sunriseThemeVersion = "0.61.1"
 
 lazy val jvmSdkVersion = "1.1.0"
 
