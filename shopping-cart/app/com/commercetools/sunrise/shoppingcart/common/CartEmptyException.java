@@ -4,15 +4,15 @@ import io.sphere.sdk.carts.Cart;
 
 import javax.annotation.Nullable;
 
-public class PrimaryCartEmptyException extends RuntimeException {
+public class CartEmptyException extends RuntimeException {
     @Nullable
     private final Cart cart;
 
-    public PrimaryCartEmptyException() {
+    public CartEmptyException() {
         this(null);
     }
 
-    public PrimaryCartEmptyException(@Nullable final Cart cart) {
+    public CartEmptyException(@Nullable final Cart cart) {
         this.cart = cart;
     }
 

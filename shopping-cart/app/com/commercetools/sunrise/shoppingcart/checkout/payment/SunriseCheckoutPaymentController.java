@@ -140,7 +140,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
 
     @Override
     public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringExistingPrimaryCartWithLineItem();
+        return requiringNonEmptyCart();
     }
 
     protected CompletionStage<Cart> setPaymentToCart(final Cart cart, final PaymentMethodInfo selectedPaymentMethod) {
