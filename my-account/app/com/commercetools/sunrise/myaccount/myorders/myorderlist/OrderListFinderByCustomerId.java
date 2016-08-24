@@ -19,7 +19,9 @@ public class OrderListFinderByCustomerId implements OrderListFinder<String> {
 
     @Override
     public CompletionStage<PagedQueryResult<Order>> findOrderList(final String customerId) {
-        final OrderQuery baseQuery = OrderQuery.of().byCustomerId(customerId);
+        final OrderQuery baseQuery = OrderQuery.of()
+                .byCustomerId(customerId)
+                .withSort(order -> order.createdAt().sort().desc());
         final OrderQuery query = OrderQueryHook.runHook(hookContext, baseQuery);
         return sphereClient.execute(query);
     }
