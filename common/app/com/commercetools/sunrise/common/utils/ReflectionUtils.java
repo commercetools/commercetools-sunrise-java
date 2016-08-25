@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.reverserouter;
+package com.commercetools.sunrise.common.utils;
 
 public final class ReflectionUtils {
 
