@@ -12,7 +12,9 @@ before_install:
 - docker pull java:8u92-jdk-alpine
 - wget https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar
 - echo 'java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar sbt-launch.jar "$@"' > sbt.sh
-- "docker run --name=sunrise-test -it --rm -p 9000:9000 -e SUNRISE_IT_CTP_PROJECT_KEY=$SUNRISE_IT_CTP_PROJECT_KEY -e SUNRISE_IT_CTP_CLIENT_ID=$SUNRISE_IT_CTP_CLIENT_ID -e SUNRISE_IT_CTP_CLIENT_SECRET=$SUNRISE_IT_CTP_CLIENT_SECRET --volume=$(pwd):/src --volume=/home/travis/.ivy2:/ivy2  --volume=/home/travis/.sbt:/sbt -w /src java:8u92-jdk-alpine sh sbt.sh compile run"
+- "docker run --name=sunrise-test -it -d -p 9000:9000 -e SUNRISE_IT_CTP_PROJECT_KEY=$SUNRISE_IT_CTP_PROJECT_KEY -e SUNRISE_IT_CTP_CLIENT_ID=$SUNRISE_IT_CTP_CLIENT_ID -e SUNRISE_IT_CTP_CLIENT_SECRET=$SUNRISE_IT_CTP_CLIENT_SECRET --volume=$(pwd):/src --volume=/home/travis/.ivy2:/ivy2  --volume=/home/travis/.sbt:/sbt -w /src java:8u92-jdk-alpine sh"
+- "docker exec sunrise-test sh sbt.sh compile"
+- "docker exec -itd sunrise-test sh sbt.sh run"
 - npm i
 script:
 - "docker exec sunrise-test sh sbt.sh test it:test pt:test unidoc"
@@ -26,6 +28,7 @@ script:
   javadoc sphere-oss automation@commercetools.de"; fi
 after_script:
 - docker kill sunrise-test
+- docker rm sunrise-test
 jdk:
 - oraclejdk8
 addons:
