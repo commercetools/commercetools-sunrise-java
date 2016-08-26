@@ -4,12 +4,19 @@ scala:
 - 2.11.7
 services:
   - docker
+cache:
+  directories:
+  - node_modules
 before_install:
+- nvm install 6.0.0
 - docker pull java:8u92-jdk-alpine
 - wget https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar
 - echo 'java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar sbt-launch.jar "$@"' > sbt.sh
+- "docker run --name=sunrise-test -it --rm -p 9000:9000 -e SUNRISE_IT_CTP_PROJECT_KEY=$SUNRISE_IT_CTP_PROJECT_KEY -e SUNRISE_IT_CTP_CLIENT_ID=$SUNRISE_IT_CTP_CLIENT_ID -e SUNRISE_IT_CTP_CLIENT_SECRET=$SUNRISE_IT_CTP_CLIENT_SECRET --volume=$(pwd):/src --volume=/home/travis/.ivy2:/ivy2  --volume=/home/travis/.sbt:/sbt -w /src java:8u92-jdk-alpine sh sbt.sh compile run"
+- npm i
 script:
-- "docker run -it --rm -e SUNRISE_IT_CTP_PROJECT_KEY=$SUNRISE_IT_CTP_PROJECT_KEY -e SUNRISE_IT_CTP_CLIENT_ID=$SUNRISE_IT_CTP_CLIENT_ID -e SUNRISE_IT_CTP_CLIENT_SECRET=$SUNRISE_IT_CTP_CLIENT_SECRET --volume=$(pwd):/src --volume=/home/travis/.ivy2:/ivy2  --volume=/home/travis/.sbt:/sbt -w /src java:8u92-jdk-alpine sh sbt.sh compile test it:test pt:test unidoc"
+- "docker exec sunrise-test sh sbt.sh test it:test pt:test unidoc"
+- npm run test:remote
 #- rm conf/dev.conf Enable setup widget first
 - ls -l
 - sudo chown -R travis:travis /home/travis
@@ -17,11 +24,15 @@ script:
 - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then ./sbt
   "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git
   javadoc sphere-oss automation@commercetools.de"; fi
+after_script:
+- docker kill sunrise-test
 jdk:
 - oraclejdk8
+addons:
+  sauce_connect: true
 env:
   matrix:
-  - SBT_OPTS="-XX:PermSize=512M -XX:MaxPermSize=1024M"
+  - TEST_NAME="Sunrise Java Travis" BASE_URL=http://127.0.0.1:9000 SBT_OPTS="-XX:PermSize=512M -XX:MaxPermSize=1024M"
 notifications:
   email:
     on_success: never
