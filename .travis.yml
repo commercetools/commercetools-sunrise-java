@@ -1,4 +1,4 @@
-#sudo: required
+sudo: required
 language: scala
 scala:
 - 2.11.7
@@ -23,9 +23,9 @@ script:
 - "docker exec sunrise-test sh sbt.sh test it:test pt:test unidoc"
 - npm run test:remote
 #- rm conf/dev.conf Enable setup widget first
-#- ls -l
-#- sudo chown -R travis:travis /home/travis
-#- ls -l
+- ls -l
+- sudo chown -R travis:travis /home/travis
+- ls -l
 - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then ./sbt
   "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git
   javadoc sphere-oss automation@commercetools.de"; fi
