@@ -40,7 +40,7 @@ public abstract class SunriseCartDetailController extends SunriseFrameworkCartCo
 
     @SunriseRoute("showCart")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> findPrimaryCart()
+        return doRequest(() -> findCart()
                 .thenApplyAsync(cartOptional -> pageContentFactory.create(cartOptional.orElse(null)), defaultContext())
                 .thenComposeAsync(pageContent -> asyncOk(renderPageWithTemplate(pageContent, getTemplateName())), HttpExecution.defaultContext()));
     }
