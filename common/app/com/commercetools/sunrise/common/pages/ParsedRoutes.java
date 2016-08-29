@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CompletionException;
 import java.util.stream.Collectors;
 
-import static com.commercetools.sunrise.common.reverserouter.ReflectionUtils.getClassByName;
+import static com.commercetools.sunrise.common.utils.ReflectionUtils.getClassByName;
 import static org.apache.commons.lang3.StringUtils.countMatches;
 
 @Singleton
