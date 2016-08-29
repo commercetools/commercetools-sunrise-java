@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.concurrent.CompletionException;
 
-import static com.commercetools.sunrise.common.reverserouter.ReflectionUtils.getClassByName;
+import static com.commercetools.sunrise.common.utils.ReflectionUtils.getClassByName;
 
 @Singleton
 final class ReflectionWebJarAssetsReverseRouter extends Base implements WebJarAssetsReverseRouter {
