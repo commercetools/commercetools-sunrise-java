@@ -19,8 +19,7 @@
     <logger name="com.commercetools.sunrise" level="INFO" />
     <logger name="com.commercetools.sunrise.common.httpauth.basic.BasicAuthenticationProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.categorytree.RefreshableCategoryTreeProvider" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree" level="INFO" />
+    <logger name="com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree" level="DEBUG" />
     <logger name="com.commercetools.sunrise.common.contexts.ProjectContext" level="DEBUG" />
     <logger name="com.commercetools.sunrise.common.contexts.UserContext" level="DEBUG" />
     <logger name="com.commercetools.sunrise.common.ctp.ProductDataConfigProvider" level="INFO" />
