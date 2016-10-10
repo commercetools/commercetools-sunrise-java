@@ -20,9 +20,10 @@ import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
 import static java.util.stream.Collectors.toList;
 
 public final class RefreshableCategoryTree extends Base implements CategoryTree {
+
     private static final Logger logger = LoggerFactory.getLogger(RefreshableCategoryTree.class);
+    private final SphereClient sphereClient;
     private CategoryTree categoryTree;
-    private SphereClient sphereClient;
 
     private RefreshableCategoryTree(final SphereClient sphereClient) {
         this.sphereClient = sphereClient;
@@ -89,7 +90,7 @@ public final class RefreshableCategoryTree extends Base implements CategoryTree 
 
     private static CategoryTree fetchFreshCategoryTree(final SphereClient client) {
         final List<Category> categories = fetchCategories(client);
-        logger.debug("Provide CategoryTree with " + categories.size() + " categories");
+        logger.debug("Provide RefreshableCategoryTree with " + categories.size() + " categories");
         return CategoryTree.of(categories);
     }
 
