@@ -75,7 +75,6 @@ com.commercetools.sunrise.theme
 controllers
 demo.common
 demo.myaccount
-demo.payments
 demo.productcatalog
 demo.shoppingcart
 io.sphere.sdk.facets
