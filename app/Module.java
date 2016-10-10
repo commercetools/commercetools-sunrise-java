@@ -14,6 +14,12 @@ import com.commercetools.sunrise.common.template.i18n.ConfigurableI18nResolverPr
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuilder;
+import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
+import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigListProvider;
+import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
+import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfigProvider;
+import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfig;
+import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfigProvider;
 import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutCommonComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutStepWidgetComponent;
@@ -36,6 +42,9 @@ public class Module extends AbstractModule {
         bind(I18nResolver.class).toProvider(ConfigurableI18nResolverProvider.class).in(Singleton.class);
         bind(HttpAuthentication.class).toProvider(BasicAuthenticationProvider.class).in(Singleton.class);
         bind(CategoryTree.class).annotatedWith(Names.named("new")).toProvider(CategoryTreeInNewProvider.class).in(Singleton.class);
+        bind(ProductsPerPageConfig.class).toProvider(ProductsPerPageConfigProvider.class).in(Singleton.class);
+        bind(SortConfig.class).toProvider(SortConfigProvider.class).in(Singleton.class);
+        bind(FacetedSearchConfigList.class).toProvider(FacetedSearchConfigListProvider.class).in(Singleton.class);
     }
 
     @Provides
