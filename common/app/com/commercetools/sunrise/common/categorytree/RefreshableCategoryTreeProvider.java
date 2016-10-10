@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public final class CategoryTreeProvider implements Provider<CategoryTree> {
-    private static final Logger logger = LoggerFactory.getLogger(CategoryTreeProvider.class);
+public final class RefreshableCategoryTreeProvider implements Provider<CategoryTree> {
+    private static final Logger logger = LoggerFactory.getLogger(RefreshableCategoryTreeProvider.class);
 
     @Inject
     @Named("global")
