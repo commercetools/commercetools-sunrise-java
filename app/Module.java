@@ -14,6 +14,7 @@ import com.commercetools.sunrise.common.template.i18n.ConfigurableI18nResolverPr
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuilder;
+import com.commercetools.sunrise.payments.PaymentConfiguration;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigListProvider;
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfig;
@@ -28,9 +29,14 @@ import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.models.LocalizedString;
+import io.sphere.sdk.payments.PaymentMethodInfoBuilder;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.Locale;
+
+import static java.util.Collections.singletonList;
 
 public class Module extends AbstractModule {
 
@@ -51,6 +57,15 @@ public class Module extends AbstractModule {
     @Singleton
     public CategoryTree provideRefreshableCategoryTree(@Named("global") final SphereClient sphereClient) {
         return RefreshableCategoryTree.of(sphereClient);
+    }
+
+    @Provides
+    @Singleton
+    public PaymentConfiguration provideStaticPaymentConfiguration() {
+        return () -> singletonList(PaymentMethodInfoBuilder.of()
+                .name(LocalizedString.of(Locale.ENGLISH, "Prepaid", Locale.GERMAN, "Vorkasse"))
+                .method("prepaid")
+                .build());
     }
 
     @Provides
