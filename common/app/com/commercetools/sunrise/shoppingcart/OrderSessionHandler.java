@@ -14,17 +14,17 @@ public class OrderSessionHandler extends SessionHandlerBase<Order> {
     private static final String LAST_ORDER_ID_SESSION_KEY = "sunrise-last-order-id";
 
     public Optional<String> findLastOrderId(final Http.Session session) {
-        return findValue(session, getLastOrderIdSessionKey());
+        return findValueByKey(session, getLastOrderIdSessionKey());
     }
 
     @Override
     protected void overwriteRelatedValuesInSession(final Http.Session session, final Order order) {
-        overwriteValue(session, getLastOrderIdSessionKey(), order.getId());
+        overwriteStringValueByKey(session, getLastOrderIdSessionKey(), order.getId());
     }
 
     @Override
     protected void removeRelatedValuesFromSession(final Http.Session session) {
-        removeValues(session, getLastOrderIdSessionKey());
+        removeValuesByKey(session, getLastOrderIdSessionKey());
     }
 
     @Override

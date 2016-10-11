@@ -22,22 +22,22 @@ public class CartSessionHandler extends SessionHandlerBase<Cart> {
     private Injector injector;
 
     public Optional<String> findCartId(final Http.Session session) {
-        return findValue(session, getCartIdSessionKey());
+        return findValueByKey(session, getCartIdSessionKey());
     }
 
     public Optional<MiniCartBean> findMiniCart(final Http.Session session) {
-        return findValue(session, getMiniCartSessionKey(), MiniCartBean.class);
+        return findValueByKey(session, getMiniCartSessionKey(), MiniCartBean.class);
     }
 
     @Override
     protected void overwriteRelatedValuesInSession(final Http.Session session, final Cart cart) {
-        overwriteValue(session, getCartIdSessionKey(), cart.getId());
-        overwriteValue(session, getMiniCartSessionKey(), injector.getInstance(MiniCartBeanFactory.class).create(cart));
+        overwriteStringValueByKey(session, getCartIdSessionKey(), cart.getId());
+        overwriteValueByKey(session, getMiniCartSessionKey(), injector.getInstance(MiniCartBeanFactory.class).create(cart));
     }
 
     @Override
     protected void removeRelatedValuesFromSession(final Http.Session session) {
-        removeValues(session, asList(getCartIdSessionKey(), getMiniCartSessionKey()));
+        removeValuesByKey(session, asList(getCartIdSessionKey(), getMiniCartSessionKey()));
     }
 
     @Override

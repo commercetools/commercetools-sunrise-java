@@ -23,27 +23,27 @@ public class CustomerSessionHandler extends SessionHandlerBase<Customer> {
     private Injector injector;
 
     public Optional<String> findCustomerId(final Http.Session session) {
-        return findValue(session, getCustomerIdSessionKey());
+        return findValueByKey(session, getCustomerIdSessionKey());
     }
 
     public Optional<String> findCustomerEmail(final Http.Session session) {
-        return findValue(session, getCustomerEmailSessionKey());
+        return findValueByKey(session, getCustomerEmailSessionKey());
     }
 
     public Optional<UserInfoBean> findUserInfo(final Http.Session session) {
-        return findValue(session, getUserInfoSessionKey(), UserInfoBean.class);
+        return findValueByKey(session, getUserInfoSessionKey(), UserInfoBean.class);
     }
 
     @Override
     protected void overwriteRelatedValuesInSession(final Http.Session session, final Customer customer) {
-        overwriteValue(session, getCustomerIdSessionKey(), customer.getId());
-        overwriteValue(session, getCustomerEmailSessionKey(), customer.getEmail());
-        overwriteValue(session, getUserInfoSessionKey(), injector.getInstance(UserInfoBeanFactory.class).create(customer));
+        overwriteStringValueByKey(session, getCustomerIdSessionKey(), customer.getId());
+        overwriteStringValueByKey(session, getCustomerEmailSessionKey(), customer.getEmail());
+        overwriteValueByKey(session, getUserInfoSessionKey(), injector.getInstance(UserInfoBeanFactory.class).create(customer));
     }
 
     @Override
     protected void removeRelatedValuesFromSession(final Http.Session session) {
-        removeValues(session, asList(getCustomerIdSessionKey(), getCustomerEmailSessionKey(), getUserInfoSessionKey()));
+        removeValuesByKey(session, asList(getCustomerIdSessionKey(), getCustomerEmailSessionKey(), getUserInfoSessionKey()));
     }
 
     @Override

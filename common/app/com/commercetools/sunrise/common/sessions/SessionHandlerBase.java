@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.sessions;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.sphere.sdk.json.JsonException;
-import io.sphere.sdk.json.SphereJsonUtils;
 import org.slf4j.Logger;
 import play.libs.Json;
 import play.mvc.Http;
@@ -30,15 +30,16 @@ public abstract class SessionHandlerBase<T> implements SessionHandler<T> {
 
     protected abstract void removeRelatedValuesFromSession(final Http.Session session);
 
-    protected Optional<String> findValue(final Http.Session session, final String key) {
+    protected Optional<String> findValueByKey(final Http.Session session, final String key) {
         return Optional.ofNullable(session.get(key));
     }
 
-    protected <U> Optional<U> findValue(final Http.Session session, final String key, final Class<U> clazz) {
-        return findValue(session, key)
+    protected <U> Optional<U> findValueByKey(final Http.Session session, final String key, final Class<U> clazz) {
+        return findValueByKey(session, key)
                 .flatMap(valueAsJson -> {
                     try {
-                        return Optional.of(SphereJsonUtils.readObject(valueAsJson, clazz));
+                        final JsonNode jsonNode = Json.parse(valueAsJson);
+                        return Optional.of(Json.fromJson(jsonNode, clazz));
                     } catch (JsonException e) {
                         logger().error("Could not parse value in session key \"{}\"", key, e);
                         return Optional.empty();
@@ -46,21 +47,21 @@ public abstract class SessionHandlerBase<T> implements SessionHandler<T> {
                 });
     }
 
-    protected void overwriteValue(final Http.Session session, final String key, final String value) {
+    protected void overwriteStringValueByKey(final Http.Session session, final String key, final String value) {
         session.put(key, value);
         logger().debug("Saved in session \"{}\" = {}", key, value);
     }
 
-    protected <U> void overwriteValue(final Http.Session session, final String key, final U value) {
-        final String valueAsJson = Json.stringify(SphereJsonUtils.toJsonNode(value));
-        overwriteValue(session, key, valueAsJson);
+    protected <U> void overwriteValueByKey(final Http.Session session, final String key, final U value) {
+        final String valueAsJson = Json.stringify(Json.toJson(value));
+        overwriteStringValueByKey(session, key, valueAsJson);
     }
 
-    protected void removeValues(final Http.Session session, final List<String> keys) {
-        keys.forEach(key -> removeValues(session, key));
+    protected void removeValuesByKey(final Http.Session session, final List<String> keys) {
+        keys.forEach(key -> removeValuesByKey(session, key));
     }
 
-    protected void removeValues(final Http.Session session, final String key) {
+    protected void removeValuesByKey(final Http.Session session, final String key) {
         session.remove(key);
         logger().debug("Removed from session \"{}\"", key);
     }
