@@ -33,7 +33,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart", "change-line-item-quantity"));
+        return new HashSet<>(asList("cart", "manage-cart", "change-line-item-quantity"));
     }
 
     @Override
@@ -67,7 +67,6 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final ChangeLineItemQuantityFormData formData, final Cart cart, final Cart updatedCart) {
-        overwriteCartInSession(updatedCart);
         return redirectToCartDetail();
     }
 

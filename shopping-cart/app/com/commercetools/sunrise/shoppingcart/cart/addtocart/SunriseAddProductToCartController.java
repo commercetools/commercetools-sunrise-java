@@ -32,7 +32,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart", "add-line-item-to-cart"));
+        return new HashSet<>(asList("cart", "manage-cart", "add-line-item-to-cart"));
     }
 
     @Override
@@ -68,8 +68,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final AddProductToCartFormData formData, final Cart context, final Cart result) {
-        overwriteCartInSession(result);
+    public CompletionStage<Result> handleSuccessfulAction(final AddProductToCartFormData formData, final Cart cart, final Cart updatedCart) {
         return successfulResult();
     }
 

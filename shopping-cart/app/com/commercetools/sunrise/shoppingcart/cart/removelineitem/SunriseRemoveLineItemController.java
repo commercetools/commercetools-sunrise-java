@@ -33,7 +33,7 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart", "remove-line-item-from-cart"));
+        return new HashSet<>(asList("cart", "manage-cart", "remove-line-item-from-cart"));
     }
 
     @Override
@@ -70,7 +70,6 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final RemoveLineItemFormData formData, final Cart cart, final Cart updatedCart) {
-        overwriteCartInSession(updatedCart); //TODO this is duplicated
         return redirectToCartDetail();
     }
 

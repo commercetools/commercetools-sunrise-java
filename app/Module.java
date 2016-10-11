@@ -22,6 +22,7 @@ import com.commercetools.sunrise.productcatalog.productoverview.search.productsp
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfig;
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfigProvider;
 import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
+import com.commercetools.sunrise.shoppingcart.CustomerCartSessionUpdaterComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutCommonComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutStepWidgetComponent;
 import com.google.inject.AbstractModule;
@@ -77,6 +78,7 @@ public class Module extends AbstractModule {
                 .add(MiniCartControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
                 .add(DefaultPageNavMenuControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
                 .add(LocationSelectorControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
+                .add(CustomerCartSessionUpdaterComponent.class, controller -> !controller.getFrameworkTags().contains("checkout-address"))
                 .build();
     }
 }

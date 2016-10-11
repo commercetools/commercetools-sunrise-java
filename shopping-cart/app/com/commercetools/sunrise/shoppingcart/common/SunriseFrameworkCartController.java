@@ -117,7 +117,6 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     protected CompletionStage<Cart> applySideEffects(@Nonnull Cart cart) {
         return updateCartWithUserPreferences(cart, userContext())
                 .thenApply(updatedCart -> {
-                    overwriteCartInSession(updatedCart);
                     CartLoadedHook.runHook(hooks(), updatedCart);
                     return updatedCart;
                 });

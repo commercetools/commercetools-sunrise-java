@@ -1,12 +1,13 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
@@ -40,7 +41,7 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("my-account", "log-in", "customer", "user"));
+        return new HashSet<>(asList("my-account", "sign-up", "authentication", "customer", "user"));
     }
 
     @Override
@@ -91,8 +92,7 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final SignUpFormData formData, final Void context, final CustomerSignInResult result) {
-        overwriteCartInSession(result.getCart());
-        overwriteCustomerInSession(result.getCustomer());
+        CustomerSignInResultLoadedHook.runHook(hooks(), result);
         return redirectToMyAccount();
     }
 
