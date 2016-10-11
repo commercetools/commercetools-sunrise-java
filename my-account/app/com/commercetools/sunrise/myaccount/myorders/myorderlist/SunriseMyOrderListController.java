@@ -1,16 +1,15 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
-import com.commercetools.sunrise.common.controllers.ReverseRouter;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.commercetools.sunrise.hooks.OrderQueryFilterHook;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.orders.Order;
-import io.sphere.sdk.orders.queries.OrderQuery;
 import io.sphere.sdk.queries.PagedQueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +24,13 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-public abstract class SunriseMyOrderListController extends MyAccountController implements WithOverwriteableTemplateName {
+@IntroducingMultiControllerComponents(SunriseMyOrderListHeroldComponent.class)
+public abstract class SunriseMyOrderListController extends MyAccountController implements WithTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyOrderListController.class);
 
     @Inject
     protected ProductDataConfig productDataConfig;
-    @Inject
-    protected ReverseRouter reverseRouter;
     @Inject
     protected I18nResolver i18nResolver;
     @Inject
@@ -50,6 +48,7 @@ public abstract class SunriseMyOrderListController extends MyAccountController i
         return "my-account-my-orders";
     }
 
+    @SunriseRoute("myOrderListPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show my orders in locale={}", languageTag);
@@ -74,10 +73,6 @@ public abstract class SunriseMyOrderListController extends MyAccountController i
     }
 
     protected CompletionStage<PagedQueryResult<Order>> findOrderList(final Customer customer) {
-        return injector().getInstance(OrderListFinderByCustomerId.class).findOrderList(customer.getId(), this::runHookOnOrderQuery);
-    }
-
-    protected final OrderQuery runHookOnOrderQuery(final OrderQuery orderQuery) {
-        return hooks().runFilterHook(OrderQueryFilterHook.class, (hook, query) -> hook.filterQuery(query), orderQuery);
+        return injector().getInstance(OrderListFinderByCustomerId.class).findOrderList(customer.getId());
     }
 }

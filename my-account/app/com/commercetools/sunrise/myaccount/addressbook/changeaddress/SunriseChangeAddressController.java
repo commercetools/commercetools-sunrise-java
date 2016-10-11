@@ -2,8 +2,9 @@ package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
@@ -37,7 +38,7 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 
 @RequestScoped
-public abstract class SunriseChangeAddressController extends SunriseAddressBookManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<AddressBookAddressFormData, AddressBookActionData, Customer> {
+public abstract class SunriseChangeAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<AddressBookAddressFormData, AddressBookActionData, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeAddressController.class);
 
@@ -61,6 +62,7 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
         return DefaultAddressBookAddressFormData.class;
     }
 
+    @SunriseRoute("changeAddressInAddressBookCall")
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("show edit form for address with id={} in locale={}", addressId, languageTag);
@@ -73,6 +75,7 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
         });
     }
 
+    @SunriseRoute("changeAddressInAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("try to change address with id={} in locale={}", addressId, languageTag);

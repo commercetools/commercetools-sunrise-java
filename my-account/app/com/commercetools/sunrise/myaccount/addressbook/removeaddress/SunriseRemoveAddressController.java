@@ -1,8 +1,9 @@
 package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
@@ -29,7 +30,7 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 
 @RequestScoped
-public abstract class SunriseRemoveAddressController extends SunriseAddressBookManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<RemoveAddressFormData, AddressBookActionData, Customer> {
+public abstract class SunriseRemoveAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<RemoveAddressFormData, AddressBookActionData, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveAddressController.class);
 
@@ -50,6 +51,7 @@ public abstract class SunriseRemoveAddressController extends SunriseAddressBookM
         return RemoveAddressFormData.class;
     }
 
+    @SunriseRoute("removeAddressFromAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("try to remove address with id={} in locale={}", addressId, languageTag);

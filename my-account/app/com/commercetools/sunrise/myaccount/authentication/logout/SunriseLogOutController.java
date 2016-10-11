@@ -2,6 +2,8 @@ package com.commercetools.sunrise.myaccount.authentication.logout;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
 import play.mvc.Http;
@@ -14,6 +16,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @RequestScoped
+@IntroducingMultiControllerComponents(SunriseLogOutHeroldComponent.class)
 public abstract class SunriseLogOutController extends SunriseFrameworkController {
 
     @Override
@@ -21,6 +24,7 @@ public abstract class SunriseLogOutController extends SunriseFrameworkController
         return new HashSet<>(asList("my-account", "log-out", "customer", "user"));
     }
 
+    @SunriseRoute("processLogOut")
     public CompletionStage<Result> process(final String languageTag) {
         final Http.Session session = session();
         doAction(session);

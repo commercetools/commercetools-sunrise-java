@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class CheckoutShippingFormSettingsBean extends ModelBean {
+public class CheckoutShippingFormSettingsBean extends ViewModel {
 
     private ShippingMethodFormFieldBean shippingMethod;
 

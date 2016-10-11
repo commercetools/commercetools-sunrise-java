@@ -12,7 +12,6 @@ import io.sphere.sdk.zones.queries.ZoneQuery;
 import javax.inject.Inject;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.UnaryOperator;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
@@ -22,7 +21,7 @@ public class ZoneFinderByCart implements ZoneFinder<Cart> {
     private SphereClient sphereClient;
 
     @Override
-    public CompletionStage<Optional<Zone>> findZone(final Cart cart, final UnaryOperator<ZoneQuery> runHookOnZoneQuery) {
+    public CompletionStage<Optional<Zone>> findZone(final Cart cart) {
         return Optional.ofNullable(cart.getShippingAddress())
                 .map(this::createLocation)
                 .map(this::fetchZoneByCountry)

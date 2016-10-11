@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class OrderOverviewBean extends ModelBean {
+public class OrderOverviewBean extends ViewModel {
 
     private String orderNumber;
     private String orderDate;

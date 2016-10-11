@@ -1,9 +1,11 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -31,7 +33,8 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-public abstract class SunriseCheckoutAddressController extends SunriseFrameworkCartController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutAddressFormData, Cart, Cart>, WithCartPreconditions {
+@IntroducingMultiControllerComponents(SunriseCheckoutAddressHeroldComponent.class)
+public abstract class SunriseCheckoutAddressController extends SunriseFrameworkCartController implements WithTemplateName, WithFormFlow<CheckoutAddressFormData, Cart, Cart>, WithCartPreconditions {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressController.class);
 
@@ -50,18 +53,20 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkC
         return DefaultCheckoutAddressFormData.class;
     }
 
+    @SunriseRoute("checkoutAddressesPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requiringExistingPrimaryCartWithLineItem().thenComposeAsync(this::showForm, HttpExecution.defaultContext()));
+        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, HttpExecution.defaultContext()));
     }
 
+    @SunriseRoute("checkoutAddressesProcessFormCall")
     @SuppressWarnings("unused")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requiringExistingPrimaryCartWithLineItem().thenComposeAsync(this::validateForm, HttpExecution.defaultContext()));
+        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, HttpExecution.defaultContext()));
     }
 
     @Override
     public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringExistingPrimaryCartWithLineItem();
+        return requiringNonEmptyCart();
     }
 
     @Override

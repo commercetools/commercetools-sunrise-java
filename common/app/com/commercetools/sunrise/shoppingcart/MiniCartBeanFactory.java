@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.LineItem;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 public class MiniCartBeanFactory extends CartLikeBeanFactory {
@@ -16,24 +17,18 @@ public class MiniCartBeanFactory extends CartLikeBeanFactory {
     @Inject
     private LineItemBeanFactory lineItemBeanFactory;
 
-    public MiniCartBean createWithEmptyCart() {
-        final MiniCartBean bean = new MiniCartBean();
-        initializeWithEmptyCart(bean);
-        return bean;
-    }
-
-    public MiniCartBean create(final Cart cart) {
+    public MiniCartBean create(@Nullable final Cart cart) {
         final MiniCartBean bean = new MiniCartBean();
         initialize(bean, cart);
         return bean;
     }
 
-    protected final void initialize(final MiniCartBean bean, final Cart cart) {
-        fillMiniCartInfo(bean, cart);
-    }
-
-    protected final void initializeWithEmptyCart(final MiniCartBean bean) {
-        bean.setTotalItems(0L);
+    protected final void initialize(final MiniCartBean bean, @Nullable final Cart cart) {
+        if (cart != null) {
+            fillMiniCartInfo(bean, cart);
+        } else {
+            fillEmptyMiniCartInfo(bean);
+        }
     }
 
     @Override

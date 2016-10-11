@@ -4,7 +4,11 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.hooks.*;
+import com.commercetools.sunrise.hooks.actions.CartUpdatedActionHook;
+import com.commercetools.sunrise.hooks.events.CartLoadedHook;
+import com.commercetools.sunrise.hooks.events.CartUpdatedHook;
+import com.commercetools.sunrise.hooks.requests.CartQueryHook;
+import com.commercetools.sunrise.hooks.requests.CartUpdateCommandHook;
 import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
 import com.neovisionaries.i18n.CountryCode;
@@ -29,7 +33,6 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
 import static java.util.Arrays.asList;
@@ -43,37 +46,37 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
     @Inject
     private void postInit() {
         //just prepend another error handler if this does not suffice
-        prependErrorHandler(e -> e instanceof PrimaryCartNotFoundException || e instanceof PrimaryCartEmptyException, e -> {
+        prependErrorHandler(e -> e instanceof CartNotFoundException || e instanceof CartEmptyException, e -> {
             LoggerFactory.getLogger(SunriseFrameworkCartController.class).error("access denied", e);
             return successful(redirect(injector().getInstance(HomeReverseRouter.class).homePageCall(injector().getInstance(UserContext.class).languageTag())));
         });
     }
 
     protected CompletionStage<Cart> executeCartUpdateCommandWithHooks(final CartUpdateCommand cmd) {
-        final CartUpdateCommand command = hooks().runFilterHook(CartUpdateCommandFilterHook.class, CartUpdateCommandFilterHook::filterCartUpdateCommand, cmd);
+        final CartUpdateCommand command = CartUpdateCommandHook.runHook(hooks(), cmd);
         final CompletionStage<Cart> cartAfterOriginalCommandStage = sphere().execute(command);
         return cartAfterOriginalCommandStage
-                .thenComposeAsync(res -> hooks().runAsyncFilterHook(PrimaryCartUpdateAsyncFilter.class, (h, cart) -> h.asyncFilterPrimaryCart(cart, cmd), res), defaultContext())
-                .thenApplyAsync(res -> {
-                    hooks().runAsyncHook(PrimaryCartUpdatedHook.class, hook -> ((BiFunction<PrimaryCartUpdatedHook, Cart, CompletionStage<?>>) PrimaryCartUpdatedHook::onPrimaryCartUpdated).apply(hook, res));
-                    return res;
+                .thenComposeAsync(cart -> CartUpdatedActionHook.runHook(hooks(), cart, cmd), defaultContext())
+                .thenApplyAsync(cart -> {
+                    CartUpdatedHook.runHook(hooks(), cart);
+                    return cart;
                 }, defaultContext());
     }
 
     /**
-     * Searches for an existing cart the platform otherwise the stage contains a {@link PrimaryCartNotFoundException}.
+     * Searches for an existing cart the platform otherwise the stage contains a {@link CartNotFoundException}.
      * A cart will not be created if it does not exist.
      * @return stage
      */
-    protected CompletionStage<Cart> requiringExistingPrimaryCart() {
-        return findPrimaryCart()
-                .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new PrimaryCartNotFoundException()), defaultContext());
+    protected CompletionStage<Cart> requiringExistingCart() {
+        return findCart()
+                .thenApplyAsync(cartOptional -> cartOptional.orElseThrow(() -> new CartNotFoundException()), defaultContext());
     }
 
-    protected CompletionStage<Cart> requiringExistingPrimaryCartWithLineItem() {
-        return requiringExistingPrimaryCart().thenApplyAsync(cart -> {
+    protected CompletionStage<Cart> requiringNonEmptyCart() {
+        return requiringExistingCart().thenApplyAsync(cart -> {
             if (cart.getLineItems().isEmpty()) {
-                throw new PrimaryCartEmptyException(cart);
+                throw new CartEmptyException(cart);
             } else {
                 return cart;
             }
@@ -84,7 +87,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
      * Loads the primary cart from commercetools platform without applying side effects like updating the cart or the session.
      * @return a future of the optional cart
      */
-    protected CompletionStage<Optional<Cart>> findPrimaryCart() {
+    protected CompletionStage<Optional<Cart>> findCart() {
         final Http.Session session = session();
         return injector().getInstance(CustomerSessionHandler.class).findCustomerId(session)
                 .map(customerId -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId)))
@@ -96,13 +99,13 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
                         .plusExpansionPaths(c -> c.paymentInfo().payments())
                         .withSort(cart -> cart.lastModifiedAt().sort().desc())
                         .withLimit(1))
-                .map(query -> hooks().runFilterHook(CartQueryFilterHook.class, (hook, q) -> hook.filterCartQuery(q), query))
+                .map(query -> CartQueryHook.runHook(hooks(), query))
                 .map(query -> sphere().execute(query).thenApplyAsync(PagedResult::head, defaultContext()))
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
     protected CompletionStage<Cart> getOrCreateCart() {
-        final CompletionStage<Cart> cartCompletionStage = findPrimaryCart()
+        final CompletionStage<Cart> cartCompletionStage = findCart()
                 .thenComposeAsync(cartOptional -> cartOptional
                                 .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
                                 .orElseGet(() -> createCart(userContext())),
@@ -115,7 +118,7 @@ public abstract class SunriseFrameworkCartController extends SunriseFrameworkCon
         return updateCartWithUserPreferences(cart, userContext())
                 .thenApply(updatedCart -> {
                     overwriteCartInSession(updatedCart);
-                    hooks().runAsyncHook(PrimaryCartLoadedHook.class, hook -> hook.onUserCartLoaded(updatedCart));
+                    CartLoadedHook.runHook(hooks(), updatedCart);
                     return updatedCart;
                 });
     }

@@ -1,7 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.cart.removelineitem;
 
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.cart.SunriseCartManagementController;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
@@ -24,7 +26,8 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-public abstract class SunriseRemoveLineItemController extends SunriseCartManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<RemoveLineItemFormData, Cart, Cart> {
+@IntroducingMultiControllerComponents(SunriseRemoveLineItemHeroldComponent.class)
+public abstract class SunriseRemoveLineItemController extends SunriseCartManagementController implements WithTemplateName, WithFormFlow<RemoveLineItemFormData, Cart, Cart> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveLineItemController.class);
 
@@ -43,10 +46,11 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
         return "cart";
     }
 
+    @SunriseRoute("processDeleteLineItemForm")
     public CompletionStage<Result> removeLineItem(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process remove line item form in locale={}", languageTag);
-            return doRequest(() -> findPrimaryCart()
+            return doRequest(() -> findCart()
                     .thenComposeAsync(cartOptional -> cartOptional
                             .map(this::validateForm)
                             .orElseGet(this::redirectToCartDetail), HttpExecution.defaultContext()));

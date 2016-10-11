@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage;
 
-import com.commercetools.sunrise.common.SunriseInitializationException;
+import com.commercetools.sunrise.common.SunriseConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.Configuration;
@@ -47,20 +47,20 @@ public final class ProductsPerPageConfigProvider implements Provider<ProductsPer
     private static ProductsPerPageOption initializeOption(final Configuration optionConfig) {
         final String label = optionConfig.getString(OPTION_LABEL_ATTR, "");
         final String value = Optional.ofNullable(optionConfig.getString(OPTION_VALUE_ATTR))
-                .orElseThrow(() -> new SunriseInitializationException("Missing value for products per page: " + optionConfig));
+                .orElseThrow(() -> new SunriseConfigurationException("Missing products per page value", OPTION_VALUE_ATTR, CONFIG_OPTIONS));
         final int amount = Optional.ofNullable(optionConfig.getInt(OPTION_AMOUNT_ATTR))
-                .orElseThrow(() -> new SunriseInitializationException("Missing amount for products per page: " + optionConfig));
+                .orElseThrow(() -> new SunriseConfigurationException("Missing products per page amount", OPTION_AMOUNT_ATTR, CONFIG_OPTIONS));
         if (isValidAmount(amount)) {
             return ProductsPerPageOption.of(value, label, amount);
         } else {
-            throw new SunriseInitializationException(String.format("Products per page options are not within bounds [%d, %d]: %s",
-                    MIN_PAGE_SIZE, MAX_PAGE_SIZE, optionConfig));
+            throw new SunriseConfigurationException(String.format("Products per page options are not within bounds [%d, %d]: %s",
+                    MIN_PAGE_SIZE, MAX_PAGE_SIZE, optionConfig), OPTION_AMOUNT_ATTR, CONFIG_OPTIONS);
         }
     }
 
     private Integer getDefaultAmount() {
         return Optional.ofNullable(configuration.getInt(CONFIG_DEFAULT))
-                .orElseThrow(() -> new SunriseInitializationException("Missing default amount for products per page"));
+                .orElseThrow(() -> new SunriseConfigurationException("Missing products per page default amount", CONFIG_DEFAULT));
     }
 
     private static boolean isValidAmount(final int amount) {

@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class UserInfoBean extends ModelBean {
+public class UserInfoBean extends ViewModel {
 
     private boolean loggedIn;
     private String name;

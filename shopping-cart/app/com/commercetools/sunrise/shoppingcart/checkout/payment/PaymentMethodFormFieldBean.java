@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
 
-public class PaymentMethodFormFieldBean extends ModelBean {
+public class PaymentMethodFormFieldBean extends ViewModel {
 
     private List<PaymentFormSelectableOptionBean> list;
 

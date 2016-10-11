@@ -2,7 +2,9 @@ package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.common.MyAccountController;
 import com.google.inject.Injector;
@@ -20,7 +22,8 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @RequestScoped
-public abstract class SunriseAddressBookController extends MyAccountController implements WithOverwriteableTemplateName {
+@IntroducingMultiControllerComponents(SunriseAddressBookHeroldComponent.class)
+public abstract class SunriseAddressBookController extends MyAccountController implements WithTemplateName {
 
     protected static final Logger logger = LoggerFactory.getLogger(SunriseAddressBookController.class);
 
@@ -41,6 +44,7 @@ public abstract class SunriseAddressBookController extends MyAccountController i
         return "my-account-address-book";
     }
 
+    @SunriseRoute("addressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show address book in locale={}", languageTag);

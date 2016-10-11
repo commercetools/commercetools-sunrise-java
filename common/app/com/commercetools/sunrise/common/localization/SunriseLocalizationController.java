@@ -3,6 +3,8 @@ package com.commercetools.sunrise.common.localization;
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -18,6 +20,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
+@IntroducingMultiControllerComponents(SunriseLocalizationHeroldComponent.class)
 public abstract class SunriseLocalizationController extends SunriseFrameworkController {
     public static final String SESSION_COUNTRY = "countryCode";
 
@@ -31,6 +34,7 @@ public abstract class SunriseLocalizationController extends SunriseFrameworkCont
         return new HashSet<>(asList("localization-controller", "country", "language"));
     }
 
+    @SunriseRoute("processChangeLanguageForm")
     public CompletionStage<Result> changeLanguage() {
         final Form<LanguageFormData> languageForm = formFactory.form(LanguageFormData.class).bindFromRequest();
         final String languageTag = languageForm.hasErrors() ? defaultLanguage() : languageForm.get().getLanguage();
@@ -38,6 +42,7 @@ public abstract class SunriseLocalizationController extends SunriseFrameworkCont
         return redirectToLanguage(languageTag);
     }
 
+    @SunriseRoute("processChangeCountryForm")
     public CompletionStage<Result> changeCountry(final String languageTag) {
         final Form<CountryFormData> boundForm = formFactory.form(CountryFormData.class).bindFromRequest();
         final String country = boundForm.hasErrors() ? defaultCountry() : boundForm.get().getCountry();

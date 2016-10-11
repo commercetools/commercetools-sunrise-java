@@ -1,3 +1,0 @@
-
-GET         /      @setupwidget.controllers.SetupController.renderForm()
-POST        /      @setupwidget.controllers.SetupController.processForm()

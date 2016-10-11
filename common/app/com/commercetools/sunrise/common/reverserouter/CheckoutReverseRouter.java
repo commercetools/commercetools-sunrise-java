@@ -1,7 +1,9 @@
 package com.commercetools.sunrise.common.reverserouter;
 
+import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
+@ImplementedBy(ReflectionCheckoutReverseRouter.class)
 public interface CheckoutReverseRouter {
 
     Call checkoutAddressesPageCall(final String languageTag);

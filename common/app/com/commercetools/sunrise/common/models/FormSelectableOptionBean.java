@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-public class FormSelectableOptionBean extends ModelBean {
+public class FormSelectableOptionBean extends ViewModel {
 
     private String label;
     private String value;

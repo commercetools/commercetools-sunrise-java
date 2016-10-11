@@ -2,8 +2,9 @@ package com.commercetools.sunrise.myaccount.common;
 
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.controllers.ReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.hooks.events.CustomerLoadedHook;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.google.inject.Injector;
 import io.sphere.sdk.customers.Customer;
@@ -41,20 +42,15 @@ public abstract class MyAccountController extends SunriseFrameworkController {
     protected CompletionStage<Result> ifValidCustomer(@Nullable final Customer customer,
                                                       final Function<Customer, CompletionStage<Result>> onValidCustomer) {
         return Optional.ofNullable(customer)
-                .map(notNullCustomer -> runHookOnFoundCustomer(notNullCustomer)
+                .map(notNullCustomer -> CustomerLoadedHook.runHook(hooks(), customer)
                         .thenComposeAsync(unused -> onValidCustomer.apply(notNullCustomer), HttpExecution.defaultContext()))
                 .orElseGet(this::handleNotFoundCustomer);
     }
 
     protected CompletionStage<Result> handleNotFoundCustomer() {
         final UserContext userContext = injector.getInstance(UserContext.class);
-        final ReverseRouter reverseRouter = injector.getInstance(ReverseRouter.class);
+        final AuthenticationReverseRouter reverseRouter = injector.getInstance(AuthenticationReverseRouter.class);
         final Call call = reverseRouter.showLogInForm(userContext.languageTag());
         return completedFuture(redirect(call));
-    }
-
-    protected final CompletionStage<?> runHookOnFoundCustomer(final Customer customer) {
-        //return runAsyncHook(SingleCustomerHook.class, hook -> hook.onSingleCustomerLoaded(customer));
-        return completedFuture(null);
     }
 }

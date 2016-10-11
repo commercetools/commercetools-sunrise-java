@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.contexts;
 import com.commercetools.sunrise.common.WithSunriseApplication;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import com.google.inject.Provides;
 import org.junit.Test;
 import play.Application;
 import play.Configuration;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RequestScopedTest extends WithSunriseApplication {
 
     @Test
-    public void allowsAccessWhenDisabled() throws Exception {
+    public void keepsAliveDuringRequestWhenUsed() throws Exception {
         final Application application = application();
         final Injector injector = application.injector();
         run(application, "/de/home", request -> {
@@ -48,8 +49,12 @@ public class RequestScopedTest extends WithSunriseApplication {
             protected void configure() {
                 final RequestScope requestScope = new RequestScope();
                 bindScope(RequestScoped.class, requestScope);
-                bind(Http.Context.class).toProvider(HttpContextProvider.class).in(requestScope);
+            }
 
+            @Provides
+            @RequestScoped
+            public Http.Context httpContext() {
+                return Http.Context.current();
             }
         };
         return appBuilder(module).build();

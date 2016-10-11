@@ -1,10 +1,12 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
@@ -29,7 +31,8 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-public abstract class SunriseLogInController extends SunriseFrameworkController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<LogInFormData, Void, CustomerSignInResult> {
+@IntroducingMultiControllerComponents(SunriseLogInHeroldComponent.class)
+public abstract class SunriseLogInController extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<LogInFormData, Void, CustomerSignInResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseLogInController.class);
 
@@ -48,6 +51,7 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
         return DefaultLogInFormData.class;
     }
 
+    @SunriseRoute("showLogInForm")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show sign up form in locale={}", languageTag);
@@ -55,6 +59,7 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
         });
     }
 
+    @SunriseRoute("processLogInForm")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process sign up form in locale={}", languageTag);

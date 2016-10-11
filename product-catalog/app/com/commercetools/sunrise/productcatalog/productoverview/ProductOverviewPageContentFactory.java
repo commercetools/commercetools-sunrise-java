@@ -63,8 +63,6 @@ public class ProductOverviewPageContentFactory extends Base {
         bean.setTitle(category.getName().find(userContext.locales()).orElse(""));
         Optional.ofNullable(category.getDescription())
                 .ifPresent(description -> bean.setDescription(description.find(userContext.locales()).orElse("")));
-        bean.setImageMobile("/assets/img/banner_mobile-0a9241da249091a023ecfadde951a53b.jpg"); // TODO obtain from category?
-        bean.setImageDesktop("/assets/img/banner_desktop-9ffd148c48068ce2666d6533b4a87d11.jpg"); // TODO obtain from category?
         return bean;
     }
 

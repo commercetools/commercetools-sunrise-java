@@ -1,7 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
+import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.cart.SunriseCartManagementController;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
@@ -24,7 +26,8 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-public abstract class SunriseChangeLineItemQuantityController extends SunriseCartManagementController implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<ChangeLineItemQuantityFormData, Cart, Cart> {
+@IntroducingMultiControllerComponents(SunriseChangeLineItemQuantityHeroldComponent.class)
+public abstract class SunriseChangeLineItemQuantityController extends SunriseCartManagementController implements WithTemplateName, WithFormFlow<ChangeLineItemQuantityFormData, Cart, Cart> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeLineItemQuantityController.class);
 
@@ -43,8 +46,9 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
         return DefaultChangeLineItemQuantityFormData.class;
     }
 
+    @SunriseRoute("processChangeLineItemQuantityForm")
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
-        return doRequest(() -> findPrimaryCart()
+        return doRequest(() -> findCart()
                 .thenComposeAsync(cartOptional -> cartOptional
                         .map(this::validateForm)
                         .orElseGet(this::redirectToCartDetail), HttpExecution.defaultContext()));

@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage;
 
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
 
-public class ProductsPerPageSelectorBean extends ModelBean {
+public class ProductsPerPageSelectorBean extends ViewModel {
 
     private String key;
     private List<FormSelectableOptionBean> list;
