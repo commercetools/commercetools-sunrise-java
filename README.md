@@ -21,16 +21,6 @@ export SUNRISE_IT_CTP_CLIENT_ID="your-CTP-client-id"
 ```
 * `sbt it:test`
 
-## Docker
-
-[![Docker build](http://dockeri.co/image/sphereio/sunrise)](https://registry.hub.docker.com/u/sphereio/sunrise/)
-
-You can also use a ready-to-run docker container.
-
-```bash
-$ docker run -it --rm -p 9000:9000 -e CTP_PROJECT_KEY=YOUR_PROJECT_KEY -e CTP_CLIENT_ID=YOUR_CLIENT_ID -e CTP_CLIENT_SECRET=YOUR_CLIENT_SECRET -e APPLICATION_SECRET=YOUR_PLAY_APPLICATION_SECRET sphereio/sunrise
-```
-
 ## Related projects
 
 ### Sunrise Project Starter
