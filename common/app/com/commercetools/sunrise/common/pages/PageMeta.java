@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.models.HalLink;
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 import com.commercetools.sunrise.myaccount.UserBean;
 import play.mvc.Call;
 
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PageMeta extends ModelBean {
+public class PageMeta extends ViewModel {
 
     private String assetsPath;
     private String csrfToken;

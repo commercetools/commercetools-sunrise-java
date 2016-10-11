@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class CheckoutPaymentFormSettingsBean extends ModelBean {
+public class CheckoutPaymentFormSettingsBean extends ViewModel {
 
     private PaymentMethodFormFieldBean paymentMethod;
 

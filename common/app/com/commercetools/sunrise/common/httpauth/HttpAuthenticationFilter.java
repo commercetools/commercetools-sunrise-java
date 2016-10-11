@@ -21,15 +21,15 @@ import static play.mvc.Results.unauthorized;
 /**
  * Request filter that enables HTTP Access Authentication.
  */
-public class HttpAuthorizationFilter extends Filter {
+public class HttpAuthenticationFilter extends Filter {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpAuthorizationFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpAuthenticationFilter.class);
 
     @Inject
     private HttpAuthentication httpAuthentication;
 
     @Inject
-    public HttpAuthorizationFilter(final Materializer mat) {
+    public HttpAuthenticationFilter(final Materializer mat) {
         super(mat);
     }
 

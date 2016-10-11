@@ -1,5 +1,5 @@
 package com.commercetools.sunrise.common.controllers;
 
-public interface WithOverwriteableTemplateName {
+public interface WithTemplateName {
     String getTemplateName();
 }

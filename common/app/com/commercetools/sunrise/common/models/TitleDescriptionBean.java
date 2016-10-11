@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-public class TitleDescriptionBean extends ModelBean {
+public class TitleDescriptionBean extends ViewModel {
 
     private String title;
     private String description;

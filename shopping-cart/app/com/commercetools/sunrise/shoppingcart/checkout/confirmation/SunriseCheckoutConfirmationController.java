@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SimpleFormBindingControllerTrait;
-import com.commercetools.sunrise.common.controllers.WithOverwriteableTemplateName;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
@@ -36,7 +36,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 @RequestScoped
 @IntroducingMultiControllerComponents(SunriseCheckoutConfirmationHeroldComponent.class)
 public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkCartController
-        implements WithOverwriteableTemplateName, SimpleFormBindingControllerTrait<CheckoutConfirmationFormData, Cart, Order>, WithCartPreconditions {
+        implements WithTemplateName, WithFormFlow<CheckoutConfirmationFormData, Cart, Order>, WithCartPreconditions {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutConfirmationController.class);
 
@@ -67,7 +67,7 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
 
     @Override
     public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringExistingPrimaryCartWithLineItem();
+        return requiringNonEmptyCart();
     }
 
     @Override

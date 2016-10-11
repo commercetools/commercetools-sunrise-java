@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-public class ProductAttributeBean extends ModelBean {
+public class ProductAttributeBean extends ViewModel {
 
     private String key;
     private String name;

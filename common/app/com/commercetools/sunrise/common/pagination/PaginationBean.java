@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.common.pagination;
 
 import com.commercetools.sunrise.common.models.LinkBean;
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
 
-public class PaginationBean extends ModelBean {
+public class PaginationBean extends ViewModel {
 
     private String previousUrl;
     private String nextUrl;

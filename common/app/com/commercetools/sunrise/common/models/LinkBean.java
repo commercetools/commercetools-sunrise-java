@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-public class LinkBean extends ModelBean {
+public class LinkBean extends ViewModel {
 
     private String text;
     private String url;

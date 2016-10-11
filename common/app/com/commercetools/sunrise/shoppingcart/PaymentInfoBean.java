@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class PaymentInfoBean extends ModelBean {
+public class PaymentInfoBean extends ViewModel {
 
     private String type;
 

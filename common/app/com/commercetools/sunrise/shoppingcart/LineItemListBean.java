@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
 
-public class LineItemListBean extends ModelBean {
+public class LineItemListBean extends ViewModel {
 
     private List<LineItemBean> list;
 

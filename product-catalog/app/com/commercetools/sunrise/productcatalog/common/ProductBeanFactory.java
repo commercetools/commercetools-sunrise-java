@@ -52,6 +52,7 @@ public class ProductBeanFactory extends Base {
         fillVariantIdentifiers(bean, product, variant);
         fillVariants(bean, product, variant);
         fillAttributes(bean, product, variant);
+        fillAvailability(bean, product, variant);
     }
 
     protected void fillAttributes(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
@@ -87,6 +88,22 @@ public class ProductBeanFactory extends Base {
     protected void fillIds(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
         bean.setProductId(product.getId());
         bean.setVariantId(variant.getId());
+    }
+
+    protected void fillAvailability(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
+        Optional.ofNullable(variant.getAvailability())
+                .flatMap(productVariantAvailability -> Optional.ofNullable(productVariantAvailability.getAvailableQuantity()))
+                .ifPresent(quantity -> {
+                    final String status;
+                    if (quantity < 4) {
+                        status = "notAvailable";
+                    } else if (quantity > 10) {
+                        status = "available";
+                    } else {
+                        status = "fewItemsLeft";
+                    }
+                    bean.setAvailability(status);
+                });
     }
 
     protected ProductGalleryBean createGallery(final ProductProjection product, final ProductVariant variant) {

@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.models.ModelBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
-public class ProductVariantReferenceBean extends ModelBean {
+public class ProductVariantReferenceBean extends ViewModel {
 
     private int id;
     private String url;
