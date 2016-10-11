@@ -13,13 +13,12 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Locale;
 
+import static com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsCmsHelper.CMS_PAGE_IN_CONTEXT_KEY;
+import static com.commercetools.sunrise.common.template.engine.handlebars.HandlebarsI18nHelper.LANGUAGE_TAGS_IN_CONTEXT_KEY;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 public class HandlebarsContextFactory extends Base {
-
-    public static final String LANGUAGE_TAGS_IN_CONTEXT_KEY = "context-language-tags";
-    public static final String CMS_PAGE_IN_CONTEXT_KEY = "context-cms-page";
 
     @Inject
     private I18nResolver i18nResolver;
