@@ -14,6 +14,7 @@ import com.commercetools.sunrise.common.template.i18n.ConfigurableI18nResolverPr
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuilder;
+import com.commercetools.sunrise.myaccount.CustomerComponent;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigList;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchConfigListProvider;
@@ -22,7 +23,7 @@ import com.commercetools.sunrise.productcatalog.productoverview.search.productsp
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfig;
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfigProvider;
 import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
-import com.commercetools.sunrise.shoppingcart.CustomerCartSessionUpdaterComponent;
+import com.commercetools.sunrise.shoppingcart.CartComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutCommonComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutStepWidgetComponent;
 import com.google.inject.AbstractModule;
@@ -78,7 +79,8 @@ public class Module extends AbstractModule {
                 .add(MiniCartControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
                 .add(DefaultPageNavMenuControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
                 .add(LocationSelectorControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
-                .add(CustomerCartSessionUpdaterComponent.class, controller -> !controller.getFrameworkTags().contains("checkout-address"))
+                .add(CartComponent.class, controller -> controller.getFrameworkTags().contains("shopping-cart") || controller.getFrameworkTags().contains("authentication"))
+                .add(CustomerComponent.class, controller -> controller.getFrameworkTags().contains("my-account"))
                 .build();
     }
 }

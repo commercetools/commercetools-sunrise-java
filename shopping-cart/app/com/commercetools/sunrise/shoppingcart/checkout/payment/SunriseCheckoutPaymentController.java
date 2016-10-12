@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.PaymentInfo;
@@ -35,7 +35,10 @@ import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -48,7 +51,7 @@ import static java.util.stream.Collectors.toList;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
-public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkCartController
+public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkShoppingCartController
         implements WithTemplateName, WithFormFlow<CheckoutPaymentFormData, Cart, Cart>, WithCartPreconditions {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutPaymentController.class);
@@ -60,7 +63,9 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("checkout", "checkout-payment"));
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(asList("checkout", "checkout-payment"));
+        return frameworkTags;
     }
 
     @Override
@@ -140,7 +145,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkC
 
     @Override
     public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringNonEmptyCart();
+        return requireNonEmptyCart();
     }
 
     protected CompletionStage<Cart> setPaymentToCart(final Cart cart, final PaymentMethodInfo selectedPaymentMethod) {

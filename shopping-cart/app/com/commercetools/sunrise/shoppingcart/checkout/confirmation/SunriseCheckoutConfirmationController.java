@@ -8,7 +8,7 @@ import com.commercetools.sunrise.framework.annotations.IntroducingMultiControlle
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
 import com.commercetools.sunrise.shoppingcart.OrderSessionHandler;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
@@ -26,7 +26,6 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
@@ -36,14 +35,16 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
 @IntroducingMultiControllerComponents(SunriseCheckoutConfirmationHeroldComponent.class)
-public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkCartController
+public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkShoppingCartController
         implements WithTemplateName, WithFormFlow<CheckoutConfirmationFormData, Cart, Order>, WithCartPreconditions {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutConfirmationController.class);
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("checkout", "checkout-confirmation"));
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(asList("checkout", "checkout-confirmation"));
+        return frameworkTags;
     }
 
     @Override
@@ -68,7 +69,7 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
 
     @Override
     public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringNonEmptyCart();
+        return requireNonEmptyCart();
     }
 
     @Override

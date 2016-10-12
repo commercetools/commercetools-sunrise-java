@@ -4,7 +4,6 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
 import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContent;
@@ -13,7 +12,6 @@ import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 import io.sphere.sdk.customers.commands.updateactions.RemoveAddress;
-import io.sphere.sdk.models.Address;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -25,7 +23,6 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 
@@ -55,12 +52,8 @@ public abstract class SunriseRemoveAddressController extends SunriseAddressBookM
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("try to remove address with id={} in locale={}", addressId, languageTag);
-            return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customerOpt -> {
-                        Customer nullableCustomer = customerOpt.orElse(null);
-                        Address nullableAddress = customerOpt.flatMap(customer -> findAddress(customer, addressId)).orElse(null);
-                        return validateInput(nullableCustomer, nullableAddress, this::validateForm);
-                    }, HttpExecution.defaultContext());
+            return requireAddressBookActionData(addressId)
+                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
         });
     }
 
@@ -91,12 +84,5 @@ public abstract class SunriseRemoveAddressController extends SunriseAddressBookM
         final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(context.getCustomer());
         final AddressBookPageContent pageContent = injector().getInstance(AddressBookPageContentFactory.class).create(customerToRender);
         return renderPageWithTemplate(pageContent, getTemplateName());
-    }
-
-    protected final CompletionStage<Result> validateInput(@Nullable final Customer nullableCustomer, @Nullable final Address nullableAddress,
-                                                          final Function<AddressBookActionData, CompletionStage<Result>> onValidInput) {
-        return ifValidCustomer(nullableCustomer, customer ->
-                ifValidAddress(customer, nullableAddress, address ->
-                        onValidInput.apply(new AddressBookActionData(customer, address))));
     }
 }

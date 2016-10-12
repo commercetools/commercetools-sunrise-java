@@ -3,8 +3,6 @@ package com.commercetools.sunrise.shoppingcart;
 import com.commercetools.sunrise.common.sessions.SessionHandlerBase;
 import com.google.inject.Injector;
 import io.sphere.sdk.carts.Cart;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.mvc.Http;
 
 import javax.inject.Inject;
@@ -14,7 +12,6 @@ import static java.util.Arrays.asList;
 
 public class CartSessionHandler extends SessionHandlerBase<Cart> {
 
-    private static final Logger logger = LoggerFactory.getLogger(CartSessionHandler.class);
     private static final String CART_ID_SESSION_KEY = "sunrise-cart-id";
     private static final String MINI_CART_SESSION_KEY = "sunrise-mini-cart";
 
@@ -38,11 +35,6 @@ public class CartSessionHandler extends SessionHandlerBase<Cart> {
     @Override
     protected void removeRelatedValuesFromSession(final Http.Session session) {
         removeValuesByKey(session, asList(getCartIdSessionKey(), getMiniCartSessionKey()));
-    }
-
-    @Override
-    protected Logger logger() {
-        return logger;
     }
 
     protected String getCartIdSessionKey() {

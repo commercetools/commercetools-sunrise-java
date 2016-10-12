@@ -9,14 +9,13 @@ import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.hooks.requests.OrderByIdGetHook;
 import com.commercetools.sunrise.shoppingcart.OrderSessionHandler;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderByIdGet;
 import play.mvc.Call;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -43,7 +42,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  * </ul>
  */
 @RequestScoped
-public abstract class SunriseCheckoutThankYouController extends SunriseFrameworkCartController
+public abstract class SunriseCheckoutThankYouController extends SunriseFrameworkShoppingCartController
         implements WithTemplateName {
 
     @Inject
@@ -92,6 +91,8 @@ public abstract class SunriseCheckoutThankYouController extends SunriseFramework
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("checkout", "checkout-thank-you"));
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(asList("checkout", "checkout-thank-you"));
+        return frameworkTags;
     }
 }

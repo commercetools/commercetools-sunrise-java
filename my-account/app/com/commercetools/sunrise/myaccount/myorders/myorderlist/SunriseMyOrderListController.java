@@ -6,9 +6,7 @@ import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
-import com.commercetools.sunrise.myaccount.common.MyAccountController;
-import io.sphere.sdk.customers.Customer;
+import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.queries.PagedQueryResult;
 import org.slf4j.Logger;
@@ -18,14 +16,13 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.inject.Inject;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(SunriseMyOrderListHeroldComponent.class)
-public abstract class SunriseMyOrderListController extends MyAccountController implements WithTemplateName {
+public abstract class SunriseMyOrderListController extends SunriseFrameworkMyAccountController implements WithTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyOrderListController.class);
 
@@ -52,10 +49,8 @@ public abstract class SunriseMyOrderListController extends MyAccountController i
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show my orders in locale={}", languageTag);
-            return findCustomer().thenComposeAsync(customerOpt ->
-                    ifValidCustomer(customerOpt.orElse(null), customer ->
-                            findOrderList(customer).thenComposeAsync(this::showOrders, HttpExecution.defaultContext())),
-                    HttpExecution.defaultContext());
+            return findOrderList()
+                    .thenComposeAsync(this::showOrders, HttpExecution.defaultContext());
         });
     }
 
@@ -68,11 +63,8 @@ public abstract class SunriseMyOrderListController extends MyAccountController i
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
-    protected CompletionStage<Optional<Customer>> findCustomer() {
-        return injector().getInstance(CustomerFinderBySession.class).findCustomer(session());
-    }
-
-    protected CompletionStage<PagedQueryResult<Order>> findOrderList(final Customer customer) {
-        return injector().getInstance(OrderListFinderByCustomerId.class).findOrderList(customer.getId());
+    protected CompletionStage<PagedQueryResult<Order>> findOrderList() {
+        final String customerId = requireExistingCustomerId();
+        return injector().getInstance(OrderListFinderByCustomerId.class).findOrderList(customerId);
     }
 }

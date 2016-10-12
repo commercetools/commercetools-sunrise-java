@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.events.CartLoadedHook;
 import com.commercetools.sunrise.hooks.requests.CartQueryHook;
 import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import io.sphere.sdk.carts.Cart;
@@ -8,7 +9,7 @@ import io.sphere.sdk.carts.CartState;
 import io.sphere.sdk.carts.queries.CartQuery;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.queries.PagedResult;
-import play.libs.concurrent.HttpExecutionContext;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 
 import javax.inject.Inject;
@@ -22,8 +23,6 @@ public class CartFinderBySession implements CartFinder<Http.Session> {
     @Inject
     private SphereClient sphereClient;
     @Inject
-    private HttpExecutionContext httpExecutionContext;
-    @Inject
     private CartSessionHandler cartSessionHandler;
     @Inject
     private CustomerSessionHandler customerSessionHandler;
@@ -33,8 +32,8 @@ public class CartFinderBySession implements CartFinder<Http.Session> {
     @Override
     public CompletionStage<Optional<Cart>> findCart(final Http.Session session) {
         final CompletionStage<Optional<Cart>> cartStage = fetchCart(session);
-        cartStage.thenAcceptAsync(cart -> cartSessionHandler.overwriteInSession(session, cart.orElse(null)),
-                httpExecutionContext.current());
+        cartStage.thenAcceptAsync(cartOpt ->
+                cartOpt.ifPresent(cart -> CartLoadedHook.runHook(hookContext, cart)), HttpExecution.defaultContext());
         return cartStage;
     }
 
@@ -42,7 +41,7 @@ public class CartFinderBySession implements CartFinder<Http.Session> {
         return buildQuery(session)
                 .map(query -> CartQueryHook.runHook(hookContext, query))
                 .map(query -> sphereClient.execute(query)
-                        .thenApply(PagedResult::head))
+                        .thenApplyAsync(PagedResult::head, HttpExecution.defaultContext()))
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 

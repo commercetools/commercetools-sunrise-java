@@ -1,5 +1,7 @@
 package com.commercetools.sunrise.myaccount;
 
+import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.events.CustomerLoadedHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.queries.CustomerByIdGet;
@@ -18,13 +20,14 @@ public final class CustomerFinderBySession implements CustomerFinder<Http.Sessio
     private SphereClient sphereClient;
     @Inject
     private CustomerSessionHandler customerSessionHandler;
+    @Inject
+    private RequestHookContext hookContext;
 
     @Override
     public CompletionStage<Optional<Customer>> findCustomer(final Http.Session session) {
         final CompletionStage<Optional<Customer>> customerStage = fetchCustomer(session);
-        customerStage.thenAcceptAsync(customer ->
-                customerSessionHandler.overwriteInSession(session, customer.orElse(null)),
-                HttpExecution.defaultContext());
+        customerStage.thenAcceptAsync(customerOpt ->
+                        customerOpt.ifPresent(customer -> CustomerLoadedHook.runHook(hookContext, customer)), HttpExecution.defaultContext());
         return customerStage;
     }
 

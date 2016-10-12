@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.sessions;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.sphere.sdk.json.JsonException;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import play.libs.Json;
 import play.mvc.Http;
 
@@ -66,5 +67,7 @@ public abstract class SessionHandlerBase<T> implements SessionHandler<T> {
         logger().debug("Removed from session \"{}\"", key);
     }
 
-    protected abstract Logger logger();
+    public Logger logger() {
+        return LoggerFactory.getLogger(getClass());
+    }
 }

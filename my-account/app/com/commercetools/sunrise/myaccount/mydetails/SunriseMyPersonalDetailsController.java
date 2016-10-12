@@ -8,8 +8,7 @@ import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.events.CustomerUpdatedHook;
-import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
-import com.commercetools.sunrise.myaccount.common.MyAccountController;
+import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
@@ -38,7 +37,7 @@ import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @IntroducingMultiControllerComponents(SunriseMyPersonalDetailsHeroldComponent.class)
-public abstract class SunriseMyPersonalDetailsController extends MyAccountController implements WithTemplateName, WithFormFlow<MyPersonalDetailsFormData, Customer, Customer> {
+public abstract class SunriseMyPersonalDetailsController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<MyPersonalDetailsFormData, Customer, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsController.class);
 
@@ -72,9 +71,8 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show my personal details form in locale={}", languageTag);
-            return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customerOpt ->
-                            ifValidCustomer(customerOpt.orElse(null), this::showForm), HttpExecution.defaultContext());
+            return requireExistingCustomer()
+                    .thenComposeAsync(this::showForm, HttpExecution.defaultContext());
         });
     }
 
@@ -82,9 +80,8 @@ public abstract class SunriseMyPersonalDetailsController extends MyAccountContro
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("process my personal details form in locale={}", languageTag);
-            return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customerOpt ->
-                            ifValidCustomer(customerOpt.orElse(null), this::validateForm), HttpExecution.defaultContext());
+            return requireExistingCustomer()
+                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
         });
     }
 
