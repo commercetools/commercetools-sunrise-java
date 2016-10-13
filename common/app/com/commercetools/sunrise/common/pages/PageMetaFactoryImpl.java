@@ -43,7 +43,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
         //TODO framework migration
 //        newCategory().flatMap(nc -> reverseRouter.showCategory(userContext.locale(), nc))
 //                .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
-//        pageMeta.setShowInfoModal(showInfoModal);
         return pageMeta;
     }
 }
