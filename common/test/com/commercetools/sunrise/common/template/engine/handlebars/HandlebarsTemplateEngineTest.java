@@ -22,7 +22,7 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class HandlebarsTemplateTest {
+public class HandlebarsTemplateEngineTest {
 
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates");
     private static final TemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
@@ -69,11 +69,11 @@ public class HandlebarsTemplateTest {
     }
 
     private static TemplateEngine defaultHandlebars() {
-        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(singletonList(DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()));
+        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(singletonList(DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()), new HandlebarsContextFactory());
     }
 
     private static TemplateEngine handlebarsWithOverride() {
-        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()));
+        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()), new HandlebarsContextFactory());
     }
 
     private static void testTemplate(final String templateName, final TemplateEngine templateEngine, final Consumer<String> test) {
