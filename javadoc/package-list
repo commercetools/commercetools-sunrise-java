@@ -14,6 +14,7 @@ com.commercetools.sunrise.common.models
 com.commercetools.sunrise.common.pages
 com.commercetools.sunrise.common.pagination
 com.commercetools.sunrise.common.reverserouter
+com.commercetools.sunrise.common.sessions
 com.commercetools.sunrise.common.suggestion
 com.commercetools.sunrise.common.template.cms
 com.commercetools.sunrise.common.template.cms.filebased
