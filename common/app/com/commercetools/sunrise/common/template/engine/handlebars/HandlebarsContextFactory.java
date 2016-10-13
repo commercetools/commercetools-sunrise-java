@@ -1,8 +1,7 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
 import com.commercetools.sunrise.common.template.engine.TemplateContext;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.utils.ErrorFormatter;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.ValueResolver;
 import com.github.jknack.handlebars.context.JavaBeanValueResolver;
@@ -21,9 +20,7 @@ import static java.util.stream.Collectors.toList;
 public class HandlebarsContextFactory extends Base {
 
     @Inject
-    private I18nResolver i18nResolver;
-    @Inject
-    private I18nIdentifierFactory i18nIdentifierFactory;
+    private ErrorFormatter errorFormatter;
 
     public Context create(final TemplateContext templateContext) {
         final List<ValueResolver> valueResolvers = valueResolvers(templateContext);
@@ -56,6 +53,6 @@ public class HandlebarsContextFactory extends Base {
     }
 
     protected PlayJavaFormResolver createPlayJavaFormResolver(final TemplateContext templateContext) {
-        return new PlayJavaFormResolver(i18nResolver, i18nIdentifierFactory, templateContext.locales());
+        return new PlayJavaFormResolver(templateContext.locales(), errorFormatter);
     }
 }
