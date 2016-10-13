@@ -1,16 +1,16 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
-import com.commercetools.sunrise.shoppingcart.CartSessionUtils;
-import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
+import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerDraft;
@@ -27,12 +27,9 @@ import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
-import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
@@ -44,7 +41,7 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("my-account", "log-in", "customer", "user"));
+        return new HashSet<>(asList("my-account", "sign-up", "authentication", "customer", "user"));
     }
 
     @Override
@@ -74,9 +71,10 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public CompletionStage<? extends CustomerSignInResult> doAction(final SignUpFormData formData, final Void context) {
+        final String cartId = injector().getInstance(CartSessionHandler.class).findCartId(session()).orElse(null);
         final CustomerDraft customerDraft = formData.toCustomerDraftBuilder()
                 .customerNumber(generateCustomerNumber())
-                .anonymousCartId(anonymousCartId().orElse(null))
+                .anonymousCartId(cartId)
                 .build();
         final CustomerCreateCommand customerCreateCommand = CustomerCreateCommand.of(customerDraft);
         return sphere().execute(customerCreateCommand);
@@ -94,11 +92,8 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final SignUpFormData formData, final Void context, final CustomerSignInResult result) {
-        final MiniCartBeanFactory miniCartBeanFactory = injector().getInstance(MiniCartBeanFactory.class);
-        overwriteCartSessionData(result.getCart(), session(), miniCartBeanFactory);
-        overwriteCustomerSessionData(result.getCustomer(), session());
-        final Call call = injector().getInstance(MyPersonalDetailsReverseRouter.class).myPersonalDetailsPageCall(userContext().languageTag());
-        return completedFuture(redirect(call));
+        CustomerSignInResultLoadedHook.runHook(hooks(), result);
+        return redirectToMyAccount();
     }
 
     @Override
@@ -116,17 +111,18 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
         return RandomStringUtils.randomNumeric(6);
     }
 
-    protected Optional<String> anonymousCartId() {
-        return CartSessionUtils.getCartId(session());
-    }
-
     protected final boolean isDuplicatedEmailFieldError(final ClientErrorException clientErrorException) {
         return clientErrorException instanceof ErrorResponseException
                 && ((ErrorResponseException) clientErrorException).getErrors().stream()
                     .filter(error -> error.getCode().equals(DuplicateFieldError.CODE))
                     .map(error -> error.as(DuplicateFieldError.class).getField())
                     .filter(duplicatedField -> duplicatedField != null && duplicatedField.equals("email"))
-                    .findFirst()
+                    .findAny()
                     .isPresent();
+    }
+
+    protected CompletionStage<Result> redirectToMyAccount() {
+        final Call call = injector().getInstance(MyPersonalDetailsReverseRouter.class).myPersonalDetailsPageCall(userContext().languageTag());
+        return completedFuture(redirect(call));
     }
 }

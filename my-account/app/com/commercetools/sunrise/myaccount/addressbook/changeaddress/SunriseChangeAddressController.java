@@ -5,11 +5,10 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
@@ -66,12 +65,8 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("show edit form for address with id={} in locale={}", addressId, languageTag);
-            return injector.getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customerOpt -> {
-                        Customer nullableCustomer = customerOpt.orElse(null);
-                        Address nullableAddress = customerOpt.flatMap(customer -> findAddress(customer, addressId)).orElse(null);
-                        return validateInput(nullableCustomer, nullableAddress, this::showForm);
-                    }, HttpExecution.defaultContext());
+            return requireAddressBookActionData(addressId)
+                    .thenComposeAsync(this::showForm, HttpExecution.defaultContext());
         });
     }
 
@@ -79,12 +74,8 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("try to change address with id={} in locale={}", addressId, languageTag);
-            return injector.getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customerOpt -> {
-                        Customer nullableCustomer = customerOpt.orElse(null);
-                        Address nullableAddress = customerOpt.flatMap(customer -> findAddress(customer, addressId)).orElse(null);
-                        return validateInput(nullableCustomer, nullableAddress, this::validateForm);
-                    }, HttpExecution.defaultContext());
+            return requireAddressBookActionData(addressId)
+                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
         });
     }
 
@@ -117,13 +108,6 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
         final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(context.getCustomer());
         final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(form, customerToRender);
         return renderPageWithTemplate(pageContent, getTemplateName());
-    }
-
-    protected final CompletionStage<Result> validateInput(@Nullable final Customer nullableCustomer, @Nullable final Address nullableAddress,
-                                                          final Function<AddressBookActionData, CompletionStage<Result>> onValidInput) {
-        return ifValidCustomer(nullableCustomer, customer ->
-                ifValidAddress(customer, nullableAddress, address ->
-                        onValidInput.apply(new AddressBookActionData(customer, address))));
     }
 
     private CompletionStage<Customer> changeAddress(final Customer customer, final Address oldAddress, final AddressBookAddressFormData formData) {

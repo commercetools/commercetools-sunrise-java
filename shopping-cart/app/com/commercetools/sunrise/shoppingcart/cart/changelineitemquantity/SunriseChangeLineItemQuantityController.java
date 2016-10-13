@@ -19,7 +19,6 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -33,7 +32,9 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart", "change-line-item-quantity"));
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(asList("cart", "manage-cart", "change-line-item-quantity"));
+        return frameworkTags;
     }
 
     @Override
@@ -67,7 +68,6 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final ChangeLineItemQuantityFormData formData, final Cart cart, final Cart updatedCart) {
-        overrideCartSessionData(updatedCart);
         return redirectToCartDetail();
     }
 

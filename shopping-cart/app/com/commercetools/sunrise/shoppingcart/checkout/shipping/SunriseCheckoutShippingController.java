@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -22,7 +22,6 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -32,14 +31,16 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @IntroducingMultiControllerComponents(SunriseCheckoutShippingHeroldComponent.class)
-public abstract class SunriseCheckoutShippingController extends SunriseFrameworkCartController
+public abstract class SunriseCheckoutShippingController extends SunriseFrameworkShoppingCartController
         implements WithTemplateName, WithFormFlow<CheckoutShippingFormData, Cart, Cart>, WithCartPreconditions {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingController.class);
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("checkout", "checkout-shipping"));
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(asList("checkout", "checkout-shipping"));
+        return frameworkTags;
     }
 
     @Override
@@ -64,7 +65,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
 
     @Override
     public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringNonEmptyCart();
+        return requireNonEmptyCart();
     }
 
     @Override

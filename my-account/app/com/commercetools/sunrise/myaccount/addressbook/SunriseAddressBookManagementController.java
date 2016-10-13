@@ -2,39 +2,51 @@ package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.hooks.events.AddressLoadedHook;
-import com.commercetools.sunrise.myaccount.common.MyAccountController;
+import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
+import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Call;
 import play.mvc.Result;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseAddressBookManagementController extends MyAccountController {
+public abstract class SunriseAddressBookManagementController extends SunriseFrameworkMyAccountController {
 
-    protected CompletionStage<Result> handleNotFoundAddress(final Customer customer) {
+    @Inject
+    private void postInit() {
+        //just prepend another error handler if this does not suffice
+        prependErrorHandler(e -> e instanceof AddressNotFoundException, e -> {
+            LoggerFactory.getLogger(SunriseAddressBookManagementController.class).error("access denied", e);
+            return handleNotFoundAddress();
+        });
+    }
+
+    protected CompletionStage<AddressBookActionData> requireAddressBookActionData(final String addressId) {
+        return requireExistingCustomer()
+                .thenApplyAsync(customer -> {
+                    final Address address = requireAddress(customer, addressId);
+                    return new AddressBookActionData(customer, address);
+                }, HttpExecution.defaultContext());
+    }
+
+    protected Address requireAddress(final Customer customer, final String addressId) {
+        final Address address = customer.getAddresses().stream()
+                .filter(a -> Objects.equals(a.getId(), addressId))
+                .findAny()
+                .orElseThrow(AddressNotFoundException::new);
+        AddressLoadedHook.runHook(hooks(), address);
+        return address;
+    }
+
+    protected CompletionStage<Result> handleNotFoundAddress() {
         return redirectToAddressBook();
-    }
-
-    protected CompletionStage<Result> ifValidAddress(final Customer customer, @Nullable final Address address,
-                                                     final Function<Address, CompletionStage<Result>> onValidAddress) {
-        return Optional.ofNullable(address)
-                .map(notNullAddress -> AddressLoadedHook.runHook(hooks(), notNullAddress)
-                        .thenComposeAsync(unused -> onValidAddress.apply(address), HttpExecution.defaultContext()))
-                .orElseGet(() -> handleNotFoundAddress(customer));
-    }
-
-    protected final Optional<Address> findAddress(final Customer customer, final String addressId) {
-        return customer.getAddresses().stream()
-                .filter(address -> Objects.equals(address.getId(), addressId))
-                .findFirst();
     }
 
     protected final CompletionStage<Result> redirectToAddressBook() {

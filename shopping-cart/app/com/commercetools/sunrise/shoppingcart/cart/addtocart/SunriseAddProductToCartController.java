@@ -6,7 +6,7 @@ import com.commercetools.sunrise.framework.annotations.IntroducingMultiControlle
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
@@ -18,21 +18,23 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @IntroducingMultiControllerComponents(SunriseAddProductToCartHeroldComponent.class)
-public abstract class SunriseAddProductToCartController extends SunriseFrameworkCartController implements WithTemplateName, WithFormFlow<AddProductToCartFormData, Cart, Cart> {
+public abstract class SunriseAddProductToCartController extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<AddProductToCartFormData, Cart, Cart> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseAddProductToCartController.class);
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart", "add-line-item-to-cart"));
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(asList("cart", "add-line-item-to-cart"));
+        return frameworkTags;
     }
 
     @Override
@@ -68,8 +70,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final AddProductToCartFormData formData, final Cart context, final Cart result) {
-        overrideCartSessionData(result);
+    public CompletionStage<Result> handleSuccessfulAction(final AddProductToCartFormData formData, final Cart cart, final Cart updatedCart) {
         return successfulResult();
     }
 
@@ -85,4 +86,12 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     }
 
     protected abstract CompletableFuture<Result> successfulResult();
+
+    protected final CompletionStage<Cart> getOrCreateCart() {
+        return findCart()
+                .thenComposeAsync(cartOptional -> cartOptional
+                                .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
+                                .orElseGet(this::createCart),
+                        defaultContext());
+    }
 }

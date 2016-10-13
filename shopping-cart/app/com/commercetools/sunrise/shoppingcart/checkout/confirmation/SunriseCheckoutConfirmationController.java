@@ -6,7 +6,9 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
+import com.commercetools.sunrise.shoppingcart.OrderSessionHandler;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
@@ -19,30 +21,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.mvc.Call;
+import play.mvc.Http;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.removeCartSessionData;
-import static com.commercetools.sunrise.shoppingcart.OrderSessionUtils.overwriteLastOrderIdSessionData;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
 @IntroducingMultiControllerComponents(SunriseCheckoutConfirmationHeroldComponent.class)
-public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkCartController
+public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkShoppingCartController
         implements WithTemplateName, WithFormFlow<CheckoutConfirmationFormData, Cart, Order>, WithCartPreconditions {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutConfirmationController.class);
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("checkout", "checkout-confirmation"));
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(asList("checkout", "checkout-confirmation"));
+        return frameworkTags;
     }
 
     @Override
@@ -67,7 +69,7 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
 
     @Override
     public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requiringNonEmptyCart();
+        return requireNonEmptyCart();
     }
 
     @Override
@@ -111,8 +113,9 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
         final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, orderInitialPaymentState(cart));
         return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
                 .thenApplyAsync(order -> {
-                    overwriteLastOrderIdSessionData(order, session());
-                    removeCartSessionData(session());
+                    final Http.Session session = session();
+                    injector().getInstance(OrderSessionHandler.class).overwriteInSession(session, order);
+                    injector().getInstance(CartSessionHandler.class).removeFromSession(session);
                     return order;
                 }, defaultContext());
     }

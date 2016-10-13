@@ -19,7 +19,6 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -33,7 +32,9 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart", "remove-line-item-from-cart"));
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(asList("cart", "manage-cart", "remove-line-item-from-cart"));
+        return frameworkTags;
     }
 
     @Override
@@ -70,7 +71,6 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final RemoveLineItemFormData formData, final Cart cart, final Cart updatedCart) {
-        overrideCartSessionData(updatedCart); //TODO this is duplicated
         return redirectToCartDetail();
     }
 
