@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.*;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
 import play.mvc.Http;
 
@@ -40,7 +40,6 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
         //TODO framework migration
 //        newCategory().flatMap(nc -> reverseRouter.showCategory(userContext.locale(), nc))
 //                .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
-//        pageMeta.setShowInfoModal(showInfoModal);
         return pageMeta;
     }
 
