@@ -5,10 +5,9 @@ import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
@@ -61,9 +60,8 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show new address form for address in locale={}", languageTag);
-            return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customerOpt ->
-                            ifValidCustomer(customerOpt.orElse(null), this::showForm), HttpExecution.defaultContext());
+            return requireExistingCustomer()
+                    .thenComposeAsync(this::showForm, HttpExecution.defaultContext());
         });
     }
 
@@ -71,9 +69,8 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
             logger.debug("try to add address with in locale={}", languageTag);
-            return injector().getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customerOpt ->
-                            ifValidCustomer(customerOpt.orElse(null), this::validateForm), HttpExecution.defaultContext());
+            return requireExistingCustomer()
+                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
         });
     }
 

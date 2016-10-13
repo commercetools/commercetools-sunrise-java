@@ -5,16 +5,14 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
-import com.commercetools.sunrise.myaccount.common.MyAccountController;
-import com.google.inject.Injector;
+import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.customers.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -23,12 +21,10 @@ import static java.util.Arrays.asList;
 
 @RequestScoped
 @IntroducingMultiControllerComponents(SunriseAddressBookHeroldComponent.class)
-public abstract class SunriseAddressBookController extends MyAccountController implements WithTemplateName {
+public abstract class SunriseAddressBookController extends SunriseFrameworkMyAccountController implements WithTemplateName {
 
     protected static final Logger logger = LoggerFactory.getLogger(SunriseAddressBookController.class);
 
-    @Inject
-    private Injector injector;
     @Inject
     private AddressBookPageContentFactory addressBookPageContentFactory;
 
@@ -48,13 +44,13 @@ public abstract class SunriseAddressBookController extends MyAccountController i
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> {
             logger.debug("show address book in locale={}", languageTag);
-            return injector.getInstance(CustomerFinderBySession.class).findCustomer(session())
-                    .thenComposeAsync(customer -> showAddressBook(customer.orElse(null)));
+            return requireExistingCustomer()
+                    .thenComposeAsync(this::showAddressBook, HttpExecution.defaultContext());
         });
     }
 
-    protected CompletionStage<Result> showAddressBook(@Nullable final Customer customer) {
-        return ifValidCustomer(customer, notNullCustomer -> asyncOk(renderPage(customer)));
+    protected CompletionStage<Result> showAddressBook(final Customer customer) {
+        return asyncOk(renderPage(customer));
     }
 
     protected CompletionStage<Html> renderPage(final Customer customer) {

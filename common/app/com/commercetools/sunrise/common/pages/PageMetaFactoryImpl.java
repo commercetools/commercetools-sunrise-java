@@ -2,8 +2,8 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.*;
-import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import play.mvc.Http;
 
 import javax.inject.Inject;
@@ -22,6 +22,8 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
     private WebJarAssetsReverseRouter webJarAssetsReverseRouter;
     @Inject
     private HomeReverseRouter homeReverseRouter;
+    @Inject
+    private CustomerSessionHandler customerSessionHandler;
 
     @Override
     public PageMeta create() {
@@ -30,10 +32,11 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
 
     private PageMeta getPageMeta(final UserContext userContext, final Http.Context ctx) {
         final PageMeta pageMeta = new PageMeta();
-        pageMeta.setUser(CustomerSessionUtils.getUserBean(ctx.session()));
+        final Http.Session session = ctx.session();
+        customerSessionHandler.findUserInfo(session).ifPresent(pageMeta::setUser);
         pageMeta.setAssetsPath(webJarAssetsReverseRouter.webJarAssetsCall("").url());
         pageMeta.setBagQuantityOptions(IntStream.rangeClosed(1, 9).boxed().collect(toList()));
-        pageMeta.setCsrfToken(getCsrfToken(ctx.session()));
+        pageMeta.setCsrfToken(getCsrfToken(session));
         final String language = userContext.locale().getLanguage();
         pageMeta.addHalLink(homeReverseRouter.homePageCall(language), "home", "continueShopping")
                 .addHalLinkOfHrefAndRel(ctx.request().uri(), "self");
@@ -43,5 +46,4 @@ public class PageMetaFactoryImpl implements PageMetaFactory {
 //        pageMeta.setShowInfoModal(showInfoModal);
         return pageMeta;
     }
-
 }
