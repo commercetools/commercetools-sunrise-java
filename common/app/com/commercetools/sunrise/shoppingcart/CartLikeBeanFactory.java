@@ -50,7 +50,7 @@ public abstract class CartLikeBeanFactory extends Base {
 
     protected void fillEmptyCartInfo(final CartBean bean) {
         fillEmptyMiniCartInfo(bean);
-        final MoneyContext moneyContext = MoneyContext.of(userContext.currency(), userContext.locale());
+        final MoneyContext moneyContext = getMoneyContext();
         bean.setSalesTax(moneyContext.formatOrZero(null));
         bean.setTotalPrice(moneyContext.formatOrZero(null));
         bean.setSubtotalPrice(moneyContext.formatOrZero(null));
@@ -170,5 +170,9 @@ public abstract class CartLikeBeanFactory extends Base {
 
     protected MoneyContext getMoneyContext(final CartLike<?> cartLike) {
         return MoneyContext.of(cartLike.getCurrency(), userContext.locale());
+    }
+
+    protected MoneyContext getMoneyContext() {
+        return MoneyContext.of(userContext.currency(), userContext.locale());
     }
 }

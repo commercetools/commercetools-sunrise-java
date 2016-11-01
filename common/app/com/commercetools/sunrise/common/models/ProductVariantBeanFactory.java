@@ -82,7 +82,7 @@ public class ProductVariantBeanFactory extends Base {
     }
 
     protected void fillPriceInfo(final ProductVariantBean bean, final PriceLike price) {
-        final MoneyContext moneyContext = MoneyContext.of(price.getValue().getCurrency(), userContext.locale());
+        final MoneyContext moneyContext = getMoneyContext(price);
         final MonetaryAmount currentPrice = PriceUtils.calculateFinalPrice(price);
         final boolean hasDiscount = currentPrice.isLessThan(price.getValue());
         if (hasDiscount) {
@@ -97,5 +97,9 @@ public class ProductVariantBeanFactory extends Base {
 
     protected String createName(final LocalizedString name) {
         return name.find(userContext.locales()).orElse("");
+    }
+
+    protected MoneyContext getMoneyContext(final PriceLike price) {
+        return MoneyContext.of(price.getValue().getCurrency(), userContext.locale());
     }
 }

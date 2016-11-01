@@ -45,7 +45,7 @@ public class LineItemBeanFactory extends Base {
         bean.setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
     }
 
-    private MoneyContext getMoneyContext(final LineItem lineItem) {
+    protected MoneyContext getMoneyContext(final LineItem lineItem) {
         return MoneyContext.of(lineItem.getPrice().getValue().getCurrency(), userContext.locale());
     }
 }
