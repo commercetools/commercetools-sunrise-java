@@ -1,9 +1,11 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.productcatalog.ProductCatalogTestModule;
 import com.commercetools.sunrise.common.DefaultTestModule;
 import com.commercetools.sunrise.common.WithSunriseApplication;
-import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
+import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
+import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.productcatalog.ProductCatalogTestModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import org.junit.Test;
@@ -28,7 +30,10 @@ public class SunriseHomeControllerTest extends WithSunriseApplication {
         final Module module = new AbstractModule() {
             @Override
             protected void configure() {
-                bind(ProductListBeanFactory.class).toInstance(new ProductListBeanFactory());
+                final TestableReverseRouter reverseRouter = reverseRouter();
+                bind(WebJarAssetsReverseRouter.class).toInstance(reverseRouter);
+                bind(HomeReverseRouter.class).toInstance(reverseRouter);
+                bind(Http.Context.class).toInstance(Http.Context.current());
             }
         };
         return appBuilder(module).build();
@@ -37,6 +42,13 @@ public class SunriseHomeControllerTest extends WithSunriseApplication {
     @Override
     protected DefaultTestModule defaultModule() {
         return new ProductCatalogTestModule();
+    }
+
+    private static TestableReverseRouter reverseRouter() {
+        final TestableReverseRouter reverseRouter = new TestableReverseRouter();
+        reverseRouter.setThemeAssetsUrl("assets");
+        reverseRouter.setShowHomeUrl("/");
+        return reverseRouter;
     }
 
     private static class HomeTestController extends SunriseHomeController {

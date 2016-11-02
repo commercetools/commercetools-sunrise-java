@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.data.FormFactory;
+import play.filters.csrf.CSRF;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.*;
 import play.twirl.api.Html;
@@ -79,8 +80,6 @@ public abstract class SunriseFrameworkController extends Controller {
     private UserContext userContext;
     @Inject
     private TemplateEngine templateEngine;
-    @Inject
-    private PageMetaFactory pageMetaFactory;
     @Inject
     private I18nResolver i18nResolver;
     private final Deque<ErrorHandler> errorHandlers = new LinkedList<>();
@@ -140,6 +139,13 @@ public abstract class SunriseFrameworkController extends Controller {
         return injector;
     }
 
+    /**
+     * Returns the CSRF Token associated with this request.
+     * @param session current HTTP session
+     * @return CSRF Token to use for this request
+     * @deprecated use {@link CSRF} instead (e.g. {@code CSRF.getToken(request)}
+     */
+    @Deprecated
     @Nullable
     public static String getCsrfToken(final Http.Session session) {
         return session.get("csrfToken");
@@ -178,7 +184,7 @@ public abstract class SunriseFrameworkController extends Controller {
         pageData.setHeader(new PageHeader(pageContent.getTitle()));
         pageData.setContent(pageContent);
         pageData.setFooter(new PageFooter());
-        pageData.setMeta(pageMetaFactory.create());
+        pageData.setMeta(injector().getInstance(PageMetaFactory.class).create());
         return pageData;
     }
 

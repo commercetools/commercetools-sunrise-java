@@ -1,11 +1,9 @@
 package com.commercetools.sunrise.common;
 
 import com.commercetools.sunrise.cms.CmsService;
-import com.commercetools.sunrise.common.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.TestableSphereClient;
-import com.commercetools.sunrise.common.pages.PageMeta;
-import com.commercetools.sunrise.common.pages.PageMetaFactory;
+import com.commercetools.sunrise.common.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
@@ -42,7 +40,6 @@ public class DefaultTestModule extends AbstractModule {
         bind(HttpAuthentication.class).toInstance(disabledHttpAuth());
         bind(SphereClient.class).toInstance(TestableSphereClient.ofEmptyResponse());
         bind(MultiControllerComponentResolver.class).toInstance(c -> emptyList());
-        bind(PageMetaFactory.class).toInstance(PageMeta::new);
         bind(UserContext.class).toInstance(unsupportedUserContext());
         bind(I18nResolver.class).toInstance((l, i, h) -> Optional.empty());
         bind(TemplateEngine.class).toInstance((n, c) -> "");

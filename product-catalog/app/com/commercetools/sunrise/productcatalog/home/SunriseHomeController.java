@@ -5,14 +5,13 @@ import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithCmsPage;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
-import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -39,9 +38,6 @@ import static java.util.Arrays.asList;
 @RequestScoped
 public abstract class SunriseHomeController extends SunriseFrameworkController implements WithTemplateName, WithCmsPage {
 
-    @Inject
-    private HomeReverseRouter homeReverseRouter;
-
     @Override
     public String getTemplateName() {
         return "home";
@@ -57,8 +53,8 @@ public abstract class SunriseHomeController extends SunriseFrameworkController i
         return new HashSet<>(asList("home", "product-catalog"));
     }
 
-    public Result index() {
-        return redirect(homeReverseRouter.homePageCall(userContext().languageTag()));
+    public CompletionStage<Result> index() {
+        return redirectToHome();
     }
 
     @SunriseRoute("homePageCall")
@@ -68,7 +64,8 @@ public abstract class SunriseHomeController extends SunriseFrameworkController i
 
     protected CompletionStage<Result> showHome() {
         return cmsPage().thenComposeAsync(cmsPage ->
-                asyncOk(renderPageWithTemplate(createPageContent(), getTemplateName(), cmsPage.orElse(null))));
+                        asyncOk(renderPageWithTemplate(createPageContent(), getTemplateName(), cmsPage.orElse(null))),
+                HttpExecution.defaultContext());
     }
 
     protected PageContent createPageContent() {
