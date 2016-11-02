@@ -157,13 +157,13 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected CompletionStage<Html> renderPageWithTemplate(final PageContent pageContent, final String templateName, @Nullable final CmsPage cmsPage) {
         final SunrisePageData pageData = createPageData(pageContent);
-        return hooks().allAsyncHooksCompletionStage().thenApply(unused -> {
+        return hooks().allAsyncHooksCompletionStage().thenApplyAsync(unused -> {
             PageDataReadyHook.runHook(hooks(), pageData);
             logFinalPageData(pageData);
             final TemplateContext templateContext = new TemplateContext(pageData, userContext.locales(), cmsPage);
             final String html = templateEngine().render(templateName, templateContext);
             return new Html(html);
-        });
+        }, HttpExecution.defaultContext());
     }
 
     private static void logFinalPageData(final SunrisePageData pageData) {
