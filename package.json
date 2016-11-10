@@ -4,7 +4,7 @@
   "description": "Sunrise Java Shop Framework :sunrise: ==============",
   "scripts": {
     "test": "BASE_URL=http://127.0.0.1:9000 node_modules/.bin/features_run",
-    "test:remote": "NODE_ENV=remote cucumber.js node_modules/sunrise-scenarios/features"
+    "test:remote": "NODE_ENV=remote cucumber-js node_modules/sunrise-scenarios/features"
   },
   "repository": {
     "type": "git",
