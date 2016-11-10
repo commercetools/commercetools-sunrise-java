@@ -1,5 +1,7 @@
 package com.commercetools.sunrise.myaccount;
 
+import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.events.CustomerLoadedHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.queries.CustomerByIdGet;
@@ -10,23 +12,27 @@ import javax.inject.Inject;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.myaccount.CustomerSessionUtils.overwriteCustomerSessionData;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class CustomerFinderBySession implements CustomerFinder<Http.Session> {
 
     @Inject
     private SphereClient sphereClient;
+    @Inject
+    private CustomerSessionHandler customerSessionHandler;
+    @Inject
+    private RequestHookContext hookContext;
 
     @Override
     public CompletionStage<Optional<Customer>> findCustomer(final Http.Session session) {
         final CompletionStage<Optional<Customer>> customerStage = fetchCustomer(session);
-        customerStage.thenAcceptAsync(customer -> overwriteCustomerSessionData(customer.orElse(null), session), HttpExecution.defaultContext());
+        customerStage.thenAcceptAsync(customerOpt ->
+                        customerOpt.ifPresent(customer -> CustomerLoadedHook.runHook(hookContext, customer)), HttpExecution.defaultContext());
         return customerStage;
     }
 
     private CompletionStage<Optional<Customer>> fetchCustomer(final Http.Session session) {
-        return CustomerSessionUtils.getCustomerId(session)
+        return customerSessionHandler.findCustomerId(session)
                 .map(this::fetchCustomerById)
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }

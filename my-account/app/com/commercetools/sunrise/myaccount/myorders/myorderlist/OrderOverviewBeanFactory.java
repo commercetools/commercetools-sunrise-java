@@ -51,7 +51,7 @@ public class OrderOverviewBeanFactory extends Base {
     }
 
     protected void fillTotal(final OrderOverviewBean bean, final Order order) {
-        final MoneyContext moneyContext = MoneyContext.of(order.getCurrency(), userContext.locale());
+        final MoneyContext moneyContext = getMoneyContext(order);
         bean.setTotal(moneyContext.formatOrZero(calculateTotalPrice(order)));
     }
 
@@ -76,5 +76,9 @@ public class OrderOverviewBeanFactory extends Base {
                     final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("main:order.paymentStatus." + enumToCamelCase(stateName));
                     return i18nResolver.get(userContext.locales(), i18nIdentifier).orElse(stateName);
                 }).orElse("-"));
+    }
+
+    protected MoneyContext getMoneyContext(final Order order) {
+        return MoneyContext.of(order.getCurrency(), userContext.locale());
     }
 }

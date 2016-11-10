@@ -2,9 +2,9 @@ package com.commercetools.sunrise.common.template.engine.handlebars;
 
 import com.commercetools.sunrise.common.forms.ErrorBean;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
+import com.commercetools.sunrise.common.utils.ErrorFormatter;
 import com.github.jknack.handlebars.ValueResolver;
 import play.data.Form;
-import play.data.validation.ValidationError;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -15,8 +15,15 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 /**
  * Resolves the values form a {@link Form} instance.
  */
-public enum PlayJavaFormResolver implements ValueResolver {
-    INSTANCE;
+public class PlayJavaFormResolver implements ValueResolver {
+
+    private final ErrorFormatter errorFormatter;
+    private final List<Locale> locales;
+
+    public PlayJavaFormResolver(final List<Locale> locales, final ErrorFormatter errorFormatter) {
+        this.locales = locales;
+        this.errorFormatter = errorFormatter;
+    }
 
     @Override
     public Object resolve(final Object context, final String name) {
@@ -51,17 +58,12 @@ public enum PlayJavaFormResolver implements ValueResolver {
         final List<ErrorBean> errorList = new ArrayList<>();
         if (form != null) {
             form.errors().forEach((field, errors) ->
-                    errors.forEach(error -> errorList.add(new ErrorBean(errorMessage(error)))));
+                    errors.forEach(error -> {
+                        final String errorMessage = errorFormatter.format(locales, error);
+                        errorList.add(new ErrorBean(errorMessage));
+                    }));
         }
         errorsBean.setGlobalErrors(errorList);
         return errorsBean;
-    }
-
-    private String errorMessage(final ValidationError error) {
-        String message = error.message();
-        if (!error.key().isEmpty()) {
-            message = error.key() + ": " + message;
-        }
-        return message;
     }
 }

@@ -1,21 +1,21 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.events.CartLoadedHook;
 import com.commercetools.sunrise.hooks.requests.CartQueryHook;
-import com.commercetools.sunrise.myaccount.CustomerSessionUtils;
+import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartState;
 import io.sphere.sdk.carts.queries.CartQuery;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.queries.PagedResult;
-import play.libs.concurrent.HttpExecutionContext;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.shoppingcart.CartSessionUtils.overwriteCartSessionData;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class CartFinderBySession implements CartFinder<Http.Session> {
@@ -23,17 +23,17 @@ public class CartFinderBySession implements CartFinder<Http.Session> {
     @Inject
     private SphereClient sphereClient;
     @Inject
-    private HttpExecutionContext httpExecutionContext;
+    private CartSessionHandler cartSessionHandler;
+    @Inject
+    private CustomerSessionHandler customerSessionHandler;
     @Inject
     private RequestHookContext hookContext;
-    @Inject
-    private MiniCartBeanFactory miniCartBeanFactory;
 
     @Override
     public CompletionStage<Optional<Cart>> findCart(final Http.Session session) {
         final CompletionStage<Optional<Cart>> cartStage = fetchCart(session);
-        cartStage.thenAcceptAsync(cart ->
-                overwriteCartSessionData(cart.orElse(null), session, miniCartBeanFactory), httpExecutionContext.current());
+        cartStage.thenAcceptAsync(cartOpt ->
+                cartOpt.ifPresent(cart -> CartLoadedHook.runHook(hookContext, cart)), HttpExecution.defaultContext());
         return cartStage;
     }
 
@@ -41,15 +41,14 @@ public class CartFinderBySession implements CartFinder<Http.Session> {
         return buildQuery(session)
                 .map(query -> CartQueryHook.runHook(hookContext, query))
                 .map(query -> sphereClient.execute(query)
-                        .thenApply(PagedResult::head))
+                        .thenApplyAsync(PagedResult::head, HttpExecution.defaultContext()))
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
     private Optional<CartQuery> buildQuery(final Http.Session session) {
-        return CustomerSessionUtils.getCustomerId(session)
-                .map(this::buildQueryByCustomerId)
-                .map(Optional::of)
-                .orElseGet(() -> CartSessionUtils.getCartId(session)
+        return customerSessionHandler.findCustomerId(session)
+                .map(customerId -> Optional.of(buildQueryByCustomerId(customerId)))
+                .orElseGet(() -> cartSessionHandler.findCartId(session)
                         .map(this::buildQueryByCartId))
                 .map(query -> query
                         .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))

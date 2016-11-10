@@ -12,6 +12,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.concurrent.CompletionException;
 
+import static com.commercetools.sunrise.common.utils.ReflectionUtils.getClassByName;
+
 @Singleton
 final class ReflectionWebJarAssetsReverseRouter extends Base implements WebJarAssetsReverseRouter {
 
@@ -25,8 +27,8 @@ final class ReflectionWebJarAssetsReverseRouter extends Base implements WebJarAs
                 .map(p -> p).isPresent();
         if (routeIsPresent) {
             try {
-                final Class<?> routesClass = Class.forName("controllers.routes");
-                final Class<?> reverseControllerClass = Class.forName("controllers.ReverseWebJarAssets");
+                final Class<?> routesClass = getClassByName("controllers.routes");
+                final Class<?> reverseControllerClass = getClassByName("controllers.ReverseWebJarAssets");
                 final Field field = routesClass.getField("WebJarAssets");
                 final Object o = field.get(null);
                 final Method reverseRouteMethod = reverseControllerClass.getMethod("at", new Class<?>[]{String.class});

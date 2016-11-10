@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.common.suggestion;
 
+import com.google.inject.ImplementedBy;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 
@@ -10,6 +11,7 @@ import java.util.concurrent.CompletionStage;
 /**
  * Provides recommendation of products.
  */
+@ImplementedBy(SunriseProductRecommendation.class)
 public interface ProductRecommendation {
 
     /**

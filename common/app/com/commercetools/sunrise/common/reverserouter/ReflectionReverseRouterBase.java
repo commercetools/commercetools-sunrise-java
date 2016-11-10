@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.CompletionException;
 
+import static com.commercetools.sunrise.common.utils.ReflectionUtils.getClassByName;
 import static java.lang.String.format;
 
 public abstract class ReflectionReverseRouterBase extends Base {
@@ -47,7 +48,7 @@ public abstract class ReflectionReverseRouterBase extends Base {
     private Optional<Pair<Object, Method>> createPair(final Method controllerMethod, final Class<?> controllerClass) {
         try {
             final String packageName = controllerClass.getPackage().getName();
-            final Class<?> reverseRouter = Class.forName(packageName + ".routes");
+            final Class<?> reverseRouter = getClassByName(packageName + ".routes");
             final Field field = reverseRouter.getField(controllerClass.getSimpleName());
             final Object o = field.get(null);
             final Method reverseRouteMethod = o.getClass().getMethod(controllerMethod.getName(), controllerMethod.getParameterTypes());

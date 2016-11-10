@@ -4,9 +4,7 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
-import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
-import com.commercetools.sunrise.myaccount.common.MyAccountController;
-import io.sphere.sdk.customers.Customer;
+import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.orders.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,16 +13,14 @@ import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
+import javax.inject.Inject;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseMyOrderDetailController extends MyAccountController implements WithTemplateName {
+public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyAccountController implements WithTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyOrderDetailController.class);
 
@@ -44,11 +40,8 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
     public CompletionStage<Result> showByOrderNumber(final String languageTag, final String orderNumber) {
         return doRequest(() -> {
             logger.debug("show order with order number={} in locale={}", orderNumber, languageTag);
-            return findCustomer().thenComposeAsync(customerOpt ->
-                    ifValidCustomer(customerOpt.orElse(null), customer ->
-                            findOrder(customer, orderNumber).thenComposeAsync(orderOpt ->
-                                    ifValidOrder(orderOpt.orElse(null), this::showOrder), HttpExecution.defaultContext())),
-                    HttpExecution.defaultContext());
+            return requireOrder(orderNumber)
+                    .thenComposeAsync(this::showOrder, HttpExecution.defaultContext());
         });
     }
 
@@ -65,26 +58,28 @@ public abstract class SunriseMyOrderDetailController extends MyAccountController
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
-    protected CompletionStage<Result> ifValidOrder(@Nullable final Order order,
-                                                   final Function<Order, CompletionStage<Result>> onValidOrder) {
-        return Optional.ofNullable(order)
-                .map(notNullOrder -> OrderLoadedHook.runHook(hooks(), notNullOrder)
-                        .thenComposeAsync(unused -> onValidOrder.apply(notNullOrder), HttpExecution.defaultContext()))
-                .orElseGet(this::handleNotFoundOrder);
+    protected CompletionStage<Order> requireOrder(final String orderNumber) {
+        final String customerId = requireExistingCustomerId();
+        final CustomerIdOrderNumberPair customerIdOrderNumberPair = new CustomerIdOrderNumberPair(customerId, orderNumber);
+        return injector().getInstance(OrderFinderByCustomerIdAndOrderNumber.class).findOrder(customerIdOrderNumberPair)
+                .thenApplyAsync(orderOpt -> {
+                    final Order order = orderOpt.orElseThrow(OrderNotFoundException::new);
+                    OrderLoadedHook.runHook(hooks(), order);
+                    return order;
+                }, HttpExecution.defaultContext());
     }
-
-    protected CompletionStage<Optional<Customer>> findCustomer() {
-        return injector().getInstance(CustomerFinderBySession.class).findCustomer(session());
-    }
-
-    protected CompletionStage<Optional<Order>> findOrder(final Customer customer, final String orderNumber) {
-        final CustomerIdOrderNumberPair customerIdOrderNumberPair = new CustomerIdOrderNumberPair(customer.getId(), orderNumber);
-        return injector().getInstance(OrderFinderByCustomerIdAndOrderNumber.class).findOrder(customerIdOrderNumberPair);
-    }
-
 
     protected final CompletionStage<Result> redirectToMyOrders() {
         final Call call = injector().getInstance(MyOrdersReverseRouter.class).myOrderListPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
+    }
+
+    @Inject
+    private void postInit() {
+        //just prepend another error handler if this does not suffice
+        prependErrorHandler(e -> e instanceof OrderNotFoundException, e -> {
+            logger.error("Order not found", e);
+            return handleNotFoundOrder();
+        });
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.CompletionException;
 import java.util.stream.Collectors;
 
+import static com.commercetools.sunrise.common.utils.ReflectionUtils.getClassByName;
 import static org.apache.commons.lang3.StringUtils.countMatches;
 
 @Singleton
@@ -34,7 +35,7 @@ public final class ParsedRoutes extends Base {
             final String s = StringUtils.removeStart(rd.getControllerMethodInvocation(), "@");
             final String controllerClassName = s.substring(0, s.indexOf("@"));
             try {
-                final Class<?> clazz = Class.forName(controllerClassName);
+                final Class<?> clazz = getClassByName(controllerClassName);
                 parsedRoute.setControllerClass(clazz);
             } catch (ClassNotFoundException e) {
                 throw new CompletionException(e);

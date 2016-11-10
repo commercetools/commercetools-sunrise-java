@@ -22,7 +22,7 @@ import static java.util.Locale.ENGLISH;
 import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class HandlebarsI18NHelperTest {
+public class HandlebarsI18nHelperTest {
 
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates/i18nHelper");
     private static final PageData SOME_PAGE_DATA = new TestablePageData();
@@ -62,7 +62,7 @@ public class HandlebarsI18NHelperTest {
     private static void testTemplate(final String templateName, final Locale locale, final Map<String, String> i18nMap,
                                      final Consumer<String> test) {
         final Handlebars handlebars = HandlebarsFactory.create(singletonList(DEFAULT_LOADER), i18nResolver(i18nMap), new I18nIdentifierFactory());
-        final TemplateEngine templateEngine = HandlebarsTemplateEngine.of(handlebars);
+        final TemplateEngine templateEngine = HandlebarsTemplateEngine.of(handlebars, new HandlebarsContextFactory());
         final String html = renderTemplate(templateName, templateEngine, locale);
         test.accept(html);
     }

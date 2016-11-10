@@ -3,14 +3,13 @@ package com.commercetools.sunrise.shoppingcart.cart.cartdetail;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkCartController;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
@@ -21,7 +20,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  * Shows and modifies the contents of the cart.
  */
 @IntroducingMultiControllerComponents(SunriseCartDetailHeroldComponent.class)
-public abstract class SunriseCartDetailController extends SunriseFrameworkCartController implements WithTemplateName {
+public abstract class SunriseCartDetailController extends SunriseFrameworkShoppingCartController implements WithTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCartDetailController.class);
 
@@ -30,7 +29,9 @@ public abstract class SunriseCartDetailController extends SunriseFrameworkCartCo
 
     @Override
     public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("cart", "cart-detail"));
+        final Set<String> frameworkTags = super.getFrameworkTags();
+        frameworkTags.addAll(asList("cart", "cart-detail"));
+        return frameworkTags;
     }
 
     @Override
