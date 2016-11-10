@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/sphereio/commercetools-sunrise-java#readme",
   "devDependencies": {
-    "sunrise-scenarios": "^0.1.2"
+    "sunrise-scenarios": "^0.1.4"
   }
 }
