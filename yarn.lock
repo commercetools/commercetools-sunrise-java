@@ -979,8 +979,8 @@ querystring@0.2.0:
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
 
 readable-stream@^2.0.0, readable-stream@^2.0.5:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.1.5.tgz#66fa8b720e1438b364681f2ad1a63c618448c9d0"
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.2.0.tgz#bb2d810631416edf095ebdadc246f68cec65bf2c"
   dependencies:
     buffer-shims "^1.0.0"
     core-util-is "~1.0.0"
@@ -1216,8 +1216,8 @@ strip-ansi@^3.0.0:
     ansi-regex "^2.0.0"
 
 sunrise-scenarios@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/sunrise-scenarios/-/sunrise-scenarios-0.1.4.tgz#bee14c79b5957e888942f68f03471c6ce7d13f81"
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/sunrise-scenarios/-/sunrise-scenarios-0.1.5.tgz#3aed0720e60c84f583bfe608db9eb3ec6095b5a8"
   dependencies:
     colors "^1.1.2"
     cucumber "^1.2.1"

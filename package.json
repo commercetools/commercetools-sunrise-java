@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Sunrise Java Shop Framework :sunrise: ==============",
   "scripts": {
-    "test": "BASE_URL=http://127.0.0.1:9000 node_modules/.bin/features_run",
+    "pretest": "selenium-standalone install",
+    "test": "BASE_URL=http://127.0.0.1:9000 features_run",
     "test:remote": "NODE_ENV=remote cucumber-js node_modules/sunrise-scenarios/features"
   },
   "repository": {
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/sphereio/commercetools-sunrise-java#readme",
   "devDependencies": {
-    "sunrise-scenarios": "^0.1.4"
+    "selenium-standalone": "^5.5.0",
+    "sunrise-scenarios": "^0.1.5"
   }
 }
