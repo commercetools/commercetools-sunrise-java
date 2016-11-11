@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
-import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
+import com.commercetools.sunrise.myaccount.CustomerInSession;
 import com.google.inject.Injector;
 import io.sphere.sdk.customers.Customer;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ public abstract class SunriseFrameworkMyAccountController extends SunriseFramewo
     }
 
     protected CompletionStage<Optional<Customer>> findCustomer() {
-        return injector().getInstance(CustomerFinderBySession.class).findCustomer(session());
+        return injector().getInstance(CustomerFinderBySession.class).findCustomer(null);
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class SunriseFrameworkMyAccountController extends SunriseFramewo
     }
 
     protected String requireExistingCustomerId() {
-        return injector().getInstance(CustomerSessionHandler.class).findCustomerId(session())
+        return injector().getInstance(CustomerInSession.class).findCustomerId()
                 .orElseThrow(CustomerNotFoundException::new);
     }
 

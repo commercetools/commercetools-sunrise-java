@@ -6,8 +6,8 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
-import com.commercetools.sunrise.shoppingcart.OrderSessionHandler;
+import com.commercetools.sunrise.shoppingcart.CartInSession;
+import com.commercetools.sunrise.shoppingcart.OrderInSession;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.mvc.Call;
-import play.mvc.Http;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
@@ -113,9 +112,8 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
         final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, orderInitialPaymentState(cart));
         return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
                 .thenApplyAsync(order -> {
-                    final Http.Session session = session();
-                    injector().getInstance(OrderSessionHandler.class).overwriteInSession(session, order);
-                    injector().getInstance(CartSessionHandler.class).removeFromSession(session);
+                    injector().getInstance(OrderInSession.class).store(order);
+                    injector().getInstance(CartInSession.class).remove();
                     return order;
                 }, defaultContext());
     }

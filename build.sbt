@@ -73,14 +73,7 @@ resolvers in ThisBuild ++= Seq (
 
 lazy val commonSettings = Release.publishSettings ++ Seq (
   scalaVersion := "2.11.8",
-  javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
-  dependencyOverrides ++= Set (
-    "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
-    "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
-    "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
-    "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
-    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
-  )
+  javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 )
 
 lazy val sunriseModuleDependencies = Seq (
@@ -94,6 +87,13 @@ lazy val jvmSdkDependencies = Seq (
     "com.commercetools.sdk.jvm.core" % "commercetools-models" % jvmSdkVersion,
     "com.commercetools.sdk.jvm.core" % "commercetools-java-client" % jvmSdkVersion,
     "com.commercetools.sdk.jvm.core" % "commercetools-convenience" % jvmSdkVersion
+  ),
+  dependencyOverrides ++= Set (
+    "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
+    "com.fasterxml.jackson.core" % "jackson-core" % jacksonVersion,
+    "com.fasterxml.jackson.core" % "jackson-databind" % jacksonVersion,
+    "com.fasterxml.jackson.module" % "jackson-module-parameter-names" % jacksonVersion,
+    "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion
   )
 )
 
@@ -116,6 +116,7 @@ lazy val templateDependencies = Seq (
 lazy val commonDependencies = Seq (
   libraryDependencies ++= Seq (
     filters,
+    cache,
     "commons-beanutils" % "commons-beanutils" % "1.9.2",
     "commons-io" % "commons-io" % "2.4"
   )

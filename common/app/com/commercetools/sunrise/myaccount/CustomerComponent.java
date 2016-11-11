@@ -6,7 +6,6 @@ import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
 import com.commercetools.sunrise.hooks.events.CustomerUpdatedHook;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.CustomerSignInResult;
-import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
@@ -17,9 +16,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public class CustomerComponent implements ControllerComponent, CustomerSignInResultLoadedHook, CustomerUpdatedHook {
 
     @Inject
-    private CustomerSessionHandler customerSessionHandler;
-    @Inject
-    private Http.Context httpContext;
+    private CustomerInSession customerInSession;
 
     @Override
     public CompletionStage<?> onCustomerSignInResultLoaded(final CustomerSignInResult customerSignInResult) {
@@ -34,6 +31,6 @@ public class CustomerComponent implements ControllerComponent, CustomerSignInRes
     }
 
     private void overwriteCustomerInSession(final Customer customer) {
-        customerSessionHandler.overwriteInSession(httpContext.session(), customer);
+        customerInSession.store(customer);
     }
 }

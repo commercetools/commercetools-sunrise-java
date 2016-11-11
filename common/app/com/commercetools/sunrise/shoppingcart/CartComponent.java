@@ -9,7 +9,7 @@ import com.commercetools.sunrise.hooks.events.CartLoadedHook;
 import com.commercetools.sunrise.hooks.events.CartUpdatedHook;
 import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
 import com.commercetools.sunrise.hooks.requests.CartCreateCommandHook;
-import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
+import com.commercetools.sunrise.myaccount.CustomerInSession;
 import com.google.inject.Injector;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
@@ -23,7 +23,6 @@ import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.expansion.ExpansionPathContainer;
 import io.sphere.sdk.models.Address;
-import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -35,8 +34,6 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @RequestScoped
 public class CartComponent implements ControllerComponent, CustomerSignInResultLoadedHook, CartLoadedHook, CartUpdatedHook, CartCreatedHook, CartCreateCommandHook, CartLoadedActionHook {
 
-    @Inject
-    private Http.Context httpContext;
     @Inject
     private Injector injector;
 
@@ -74,19 +71,19 @@ public class CartComponent implements ControllerComponent, CustomerSignInResultL
     @Override
     public CartCreateCommand onCartCreateCommand(final CartCreateCommand cartCreateCommand) {
         final CountryCode country = injector.getInstance(UserContext.class).country();
-        final CustomerSessionHandler customerSessionHandler = injector.getInstance(CustomerSessionHandler.class);
+        final CustomerInSession customerInSession = injector.getInstance(CustomerInSession.class);
         final CartDraft cartDraft = CartDraftBuilder.of(cartCreateCommand.getDraft())
                 .country(country)
                 .shippingAddress(Address.of(country))
-                .customerId(customerSessionHandler.findCustomerId(httpContext.session()).orElse(null))
-                .customerEmail(customerSessionHandler.findCustomerEmail(httpContext.session()).orElse(null))
+                .customerId(customerInSession.findCustomerId().orElse(null))
+                .customerEmail(customerInSession.findCustomerEmail().orElse(null))
                 .build();
         return CartCreateCommand.of(cartDraft)
                 .withExpansionPaths(cartCreateCommand.expansionPaths());
     }
 
     private void overwriteCartInSession(final Cart cart) {
-        injector.getInstance(CartSessionHandler.class).overwriteInSession(httpContext.session(), cart);
+        injector.getInstance(CartInSession.class).store(cart);
     }
 
     /**

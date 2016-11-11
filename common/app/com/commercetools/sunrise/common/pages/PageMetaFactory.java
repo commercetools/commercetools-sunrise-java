@@ -3,7 +3,7 @@ package com.commercetools.sunrise.common.pages;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
+import com.commercetools.sunrise.myaccount.CustomerInSession;
 import com.google.inject.Injector;
 import io.sphere.sdk.models.Base;
 import play.filters.csrf.CSRF;
@@ -54,7 +54,7 @@ public class PageMetaFactory extends Base {
     }
 
     protected void fillUserInfo(final PageMeta bean) {
-        injector.getInstance(CustomerSessionHandler.class).findUserInfo(httpContext.session())
+        injector.getInstance(CustomerInSession.class).findUserInfo()
                 .ifPresent(bean::setUser);
     }
 

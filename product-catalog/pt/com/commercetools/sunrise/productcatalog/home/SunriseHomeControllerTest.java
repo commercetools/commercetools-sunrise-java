@@ -2,6 +2,8 @@ package com.commercetools.sunrise.productcatalog.home;
 
 import com.commercetools.sunrise.common.DefaultTestModule;
 import com.commercetools.sunrise.common.WithSunriseApplication;
+import com.commercetools.sunrise.common.contexts.RequestScope;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
@@ -34,6 +36,8 @@ public class SunriseHomeControllerTest extends WithSunriseApplication {
                 bind(WebJarAssetsReverseRouter.class).toInstance(reverseRouter);
                 bind(HomeReverseRouter.class).toInstance(reverseRouter);
                 bind(Http.Context.class).toInstance(Http.Context.current());
+                bind(Http.Session.class).toInstance(Http.Context.current().session());
+                bindScope(RequestScoped.class, new RequestScope());
             }
         };
         return appBuilder(module).build();

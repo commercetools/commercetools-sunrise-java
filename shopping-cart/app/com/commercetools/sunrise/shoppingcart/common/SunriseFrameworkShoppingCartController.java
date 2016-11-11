@@ -8,7 +8,7 @@ import com.commercetools.sunrise.hooks.events.CartUpdatedHook;
 import com.commercetools.sunrise.hooks.requests.CartCreateCommandHook;
 import com.commercetools.sunrise.hooks.requests.CartUpdateCommandHook;
 import com.commercetools.sunrise.shoppingcart.CartFinderBySession;
-import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
+import com.commercetools.sunrise.shoppingcart.CartInSession;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
 import io.sphere.sdk.carts.CartDraftBuilder;
@@ -59,7 +59,7 @@ public abstract class SunriseFrameworkShoppingCartController extends SunriseFram
     }
 
     protected CompletionStage<Optional<Cart>> findCart() {
-        return injector().getInstance(CartFinderBySession.class).findCart(session());
+        return injector().getInstance(CartFinderBySession.class).findCart(null);
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class SunriseFrameworkShoppingCartController extends SunriseFram
     }
 
     protected CompletionStage<List<ShippingMethod>> getShippingMethods() {
-        return injector().getInstance(CartSessionHandler.class).findCartId(session())
+        return injector().getInstance(CartInSession.class).findCartId()
                 .map(cartId -> sphere().execute(ShippingMethodsByCartGet.of(cartId)))
                 .orElseGet(() -> completedFuture(emptyList()));
     }

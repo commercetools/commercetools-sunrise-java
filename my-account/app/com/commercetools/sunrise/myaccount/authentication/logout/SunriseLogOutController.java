@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.CustomerSessionHandler;
-import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
-import play.mvc.Http;
+import com.commercetools.sunrise.myaccount.CustomerInSession;
+import com.commercetools.sunrise.shoppingcart.CartInSession;
 import play.mvc.Result;
 
 import java.util.HashSet;
@@ -26,14 +25,13 @@ public abstract class SunriseLogOutController extends SunriseFrameworkController
 
     @SunriseRoute("processLogOut")
     public CompletionStage<Result> process(final String languageTag) {
-        final Http.Session session = session();
-        doAction(session);
+        doAction();
         return handleSuccessfulAction();
     }
 
-    protected void doAction(final Http.Session session) {
-        injector().getInstance(CustomerSessionHandler.class).removeFromSession(session);
-        injector().getInstance(CartSessionHandler.class).removeFromSession(session);
+    protected void doAction() {
+        injector().getInstance(CustomerInSession.class).remove();
+        injector().getInstance(CartInSession.class).remove();
     }
 
     protected CompletionStage<Result> handleSuccessfulAction() {

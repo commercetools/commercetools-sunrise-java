@@ -49,6 +49,12 @@ public class SunriseModule extends AbstractModule {
         return Http.Context.current();
     }
 
+    @Provides
+    @RequestScoped
+    public Http.Session httpSession() {
+        return httpContext().session();
+    }
+
     private void applyJavaMoneyHack() {
         //fixes https://github.com/commercetools/commercetools-sunrise-java/issues/404
         //exception play.api.http.HttpErrorHandlerExceptions$$anon$1: Execution exception[[CompletionException: java.lang.IllegalArgumentException: java.util.concurrent.CompletionException: io.sphere.sdk.json.JsonException: detailMessage: com.fasterxml.jackson.databind.JsonMappingException: Operator failed: javax.money.DefaultMonetaryRoundingsSingletonSpi$DefaultCurrencyRounding@1655879e (through reference chain: io.sphere.sdk.payments.PaymentDraftImpl["amountPlanned"])

@@ -30,9 +30,6 @@
     <logger name="com.commercetools.sunrise.common.template.i18n.ConfigurableI18nResolverProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.common.template.engine.HandlebarsTemplateEngineProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.productcatalog" level="INFO" />
-    <logger name="com.commercetools.sunrise.shoppingcart.CartSessionHandler" level="INFO" />
-    <logger name="com.commercetools.sunrise.shoppingcart.OrderSessionHandler" level="INFO" />
-    <logger name="com.commercetools.sunrise.myaccount.CustomerSessionHandler" level="INFO" />
     <logger name="com.commercetools.sunrise.theme.WebjarsFilesCopier" level="INFO" />
 
 

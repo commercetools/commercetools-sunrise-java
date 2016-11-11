@@ -10,7 +10,7 @@ import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
-import com.commercetools.sunrise.shoppingcart.CartSessionHandler;
+import com.commercetools.sunrise.shoppingcart.CartInSession;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -70,7 +70,7 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
 
     @Override
     public CompletionStage<? extends CustomerSignInResult> doAction(final LogInFormData formData, final Void context) {
-        final String cartId = injector().getInstance(CartSessionHandler.class).findCartId(session()).orElse(null);
+        final String cartId = injector().getInstance(CartInSession.class).findCartId().orElse(null);
         final CustomerSignInCommand signInCommand = CustomerSignInCommand.of(formData.getUsername(), formData.getPassword(), cartId);
         return sphere().execute(signInCommand);
     }

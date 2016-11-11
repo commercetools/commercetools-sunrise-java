@@ -6,7 +6,6 @@ import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.queries.CustomerByIdGet;
 import play.libs.concurrent.HttpExecution;
-import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -14,25 +13,25 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public final class CustomerFinderBySession implements CustomerFinder<Http.Session> {
+public final class CustomerFinderBySession implements CustomerFinder<Void> {
 
     @Inject
     private SphereClient sphereClient;
     @Inject
-    private CustomerSessionHandler customerSessionHandler;
+    private CustomerInSession customerInSession;
     @Inject
     private RequestHookContext hookContext;
 
     @Override
-    public CompletionStage<Optional<Customer>> findCustomer(final Http.Session session) {
-        final CompletionStage<Optional<Customer>> customerStage = fetchCustomer(session);
+    public CompletionStage<Optional<Customer>> findCustomer(final Void unused) {
+        final CompletionStage<Optional<Customer>> customerStage = fetchCustomer();
         customerStage.thenAcceptAsync(customerOpt ->
                         customerOpt.ifPresent(customer -> CustomerLoadedHook.runHook(hookContext, customer)), HttpExecution.defaultContext());
         return customerStage;
     }
 
-    private CompletionStage<Optional<Customer>> fetchCustomer(final Http.Session session) {
-        return customerSessionHandler.findCustomerId(session)
+    private CompletionStage<Optional<Customer>> fetchCustomer() {
+        return customerInSession.findCustomerId()
                 .map(this::fetchCustomerById)
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
