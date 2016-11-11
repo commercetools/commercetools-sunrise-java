@@ -6,6 +6,7 @@ import com.commercetools.sunrise.common.sessions.SessionStrategy;
 import io.sphere.sdk.orders.Order;
 import play.Configuration;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Optional;
 
@@ -27,6 +28,16 @@ public class OrderInSession extends DataFromResourceStoringOperations<Order> {
 
     public Optional<String> findLastOrderId() {
         return session.findValueByKey(lastOrderIdSessionKey);
+    }
+
+    @Override
+    public void store(@Nullable final Order order) {
+        super.store(order);
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
     }
 
     @Override

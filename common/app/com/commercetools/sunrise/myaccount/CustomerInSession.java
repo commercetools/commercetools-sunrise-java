@@ -7,6 +7,7 @@ import com.google.inject.Injector;
 import io.sphere.sdk.customers.Customer;
 import play.Configuration;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Optional;
 
@@ -44,6 +45,16 @@ public class CustomerInSession extends DataFromResourceStoringOperations<Custome
 
     public Optional<UserInfoBean> findUserInfo() {
         return session.findObjectByKey(userInfoSessionKey, UserInfoBean.class);
+    }
+
+    @Override
+    public void store(@Nullable final Customer customer) {
+        super.store(customer);
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
     }
 
     @Override

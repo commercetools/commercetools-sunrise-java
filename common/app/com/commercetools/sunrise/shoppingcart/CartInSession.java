@@ -42,8 +42,8 @@ public class CartInSession extends DataFromResourceStoringOperations<Cart> {
     }
 
     @Override
-    public void store(@Nullable final Cart value) {
-        super.store(value);
+    public void store(@Nullable final Cart cart) {
+        super.store(cart);
     }
 
     @Override
