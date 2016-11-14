@@ -47,11 +47,15 @@ public class SunriseProductRecommendation implements ProductRecommendation {
         final Set<String> categoryIds = product.getCategories().stream()
                 .map(Reference::getId)
                 .collect(toSet());
-        return productsFromCategoryIds(categoryIds, numProducts + 1)
-                .thenApply(products -> products.stream()
-                        .filter(p -> !p.getId().equals(product.getId()))
-                        .limit(numProducts)
-                        .collect(toSet()));
+        if (categoryIds.isEmpty()) {
+            return CompletableFuture.completedFuture(emptySet());
+        } else {
+            return productsFromCategoryIds(categoryIds, numProducts + 1)
+                    .thenApply(products -> products.stream()
+                            .filter(p -> !p.getId().equals(product.getId()))
+                            .limit(numProducts)
+                            .collect(toSet()));
+        }
     }
 
     /**

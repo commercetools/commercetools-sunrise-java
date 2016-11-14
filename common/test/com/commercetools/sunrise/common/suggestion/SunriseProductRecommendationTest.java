@@ -7,6 +7,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.products.ProductProjection;
 import org.junit.Test;
 
@@ -24,6 +25,13 @@ public class SunriseProductRecommendationTest {
         assertThat(recommendedProducts).isEmpty();
     }
 
+    @Test
+    public void getsNoSuggestionsOnEmptyProductCategories() throws Exception {
+        final Set<ProductProjection> recommendedProducts = productRecommendation(TestableSphereClient.ofEmptyResponse())
+                .relatedToProduct(productWithNoCategories(), 5).toCompletableFuture().join();
+        assertThat(recommendedProducts).isEmpty();
+    }
+
     private SunriseProductRecommendation productRecommendation(final SphereClient sphereClient) {
         final Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
@@ -34,4 +42,9 @@ public class SunriseProductRecommendationTest {
         });
         return injector.getInstance(SunriseProductRecommendation.class);
     }
+
+    private ProductProjection productWithNoCategories() {
+        return SphereJsonUtils.readObject("{\"categories\": [], \"variants\": []}", ProductProjection.class);
+    }
+
 }
