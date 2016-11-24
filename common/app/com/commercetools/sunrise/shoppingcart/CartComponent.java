@@ -15,16 +15,23 @@ import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
 import io.sphere.sdk.carts.CartDraftBuilder;
+import io.sphere.sdk.carts.CartDraftDsl;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
+import io.sphere.sdk.carts.commands.updateactions.SetCustomerEmail;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.commands.UpdateAction;
+import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.expansion.ExpansionPathContainer;
 import io.sphere.sdk.models.Address;
+import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
@@ -39,8 +46,10 @@ public class CartComponent implements ControllerComponent, CustomerSignInResultL
 
     @Override
     public CompletionStage<?> onCustomerSignInResultLoaded(final CustomerSignInResult customerSignInResult) {
-        overwriteCartInSession(customerSignInResult.getCart());
-        return completedFuture(null);
+        return Optional.ofNullable(customerSignInResult.getCart())
+                .map(cart -> updateCartWithMissingInfoOnSignIn(cart, customerSignInResult.getCustomer()))
+                .orElseGet(() -> completedFuture(null))
+                .thenAcceptAsync(this::overwriteCartInSession, HttpExecution.defaultContext());
     }
 
     @Override
@@ -70,16 +79,38 @@ public class CartComponent implements ControllerComponent, CustomerSignInResultL
 
     @Override
     public CartCreateCommand onCartCreateCommand(final CartCreateCommand cartCreateCommand) {
+        final CartDraft cartDraft = cartDraftWithAdditionalInfo(cartCreateCommand.getDraft());
+        return CartCreateCommand.of(cartDraft)
+                .withExpansionPaths(cartCreateCommand.expansionPaths());
+    }
+
+    CompletionStage<Cart> updateCartWithMissingInfoOnSignIn(final Cart cart, final Customer customer) {
+        final List<UpdateAction<Cart>> updateActions = actionsToUpdateCartOnSignIn(cart, customer);
+        if (!updateActions.isEmpty()) {
+            final CartUpdateCommand command = CartUpdateCommand.of(cart, updateActions);
+            return injector.getInstance(SphereClient.class).execute(command);
+        } else {
+            return completedFuture(cart);
+        }
+    }
+
+    private List<UpdateAction<Cart>> actionsToUpdateCartOnSignIn(final Cart cart, final Customer customer) {
+        final List<UpdateAction<Cart>> updateActions = new ArrayList<>();
+        if (cart.getCustomerEmail() == null) {
+            updateActions.add(SetCustomerEmail.of(customer.getEmail()));
+        }
+        return updateActions;
+    }
+
+    private CartDraftDsl cartDraftWithAdditionalInfo(final CartDraft cartDraft) {
         final CountryCode country = injector.getInstance(UserContext.class).country();
         final CustomerInSession customerInSession = injector.getInstance(CustomerInSession.class);
-        final CartDraft cartDraft = CartDraftBuilder.of(cartCreateCommand.getDraft())
+        return CartDraftBuilder.of(cartDraft)
                 .country(country)
                 .shippingAddress(Address.of(country))
                 .customerId(customerInSession.findCustomerId().orElse(null))
                 .customerEmail(customerInSession.findCustomerEmail().orElse(null))
                 .build();
-        return CartCreateCommand.of(cartDraft)
-                .withExpansionPaths(cartCreateCommand.expansionPaths());
     }
 
     private void overwriteCartInSession(final Cart cart) {

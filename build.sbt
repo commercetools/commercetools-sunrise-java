@@ -175,6 +175,7 @@ def configCommonTestSettings(scopes: String) = Seq(
   testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
   libraryDependencies ++= Seq (
     "org.assertj" % "assertj-core" % "3.0.0" % scopes,
+    "com.commercetools.sdk.jvm.core" % "commercetools-test-lib" % "1.0.0-RC2" % scopes,
     PlayImport.component("play-test") % scopes
   ),
   dependencyOverrides ++= Set (

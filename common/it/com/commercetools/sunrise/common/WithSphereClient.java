@@ -44,7 +44,7 @@ public abstract class WithSphereClient {
         return getValueForEnvVar(IT_CTP_CLIENT_SECRET);
     }
 
-    private synchronized static BlockingSphereClient sphereClient() {
+    protected synchronized static BlockingSphereClient sphereClient() {
         if (sphereClient == null) {
             final SphereClient client = SphereClientFactory.of(SphereAsyncHttpClientFactory::create)
                     .createClient(projectKey(), clientId(), clientSecret());

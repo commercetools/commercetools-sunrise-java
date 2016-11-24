@@ -45,23 +45,36 @@ public class CartFinderBySession implements CartFinder<Void> {
     }
 
     private Optional<CartQuery> buildQuery() {
-        return customerInSession.findCustomerId()
-                .map(customerId -> Optional.of(buildQueryByCustomerId(customerId)))
-                .orElseGet(() -> cartInSession.findCartId()
-                        .map(this::buildQueryByCartId))
-                .map(query -> query
-                        .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
-                        .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO use run hook on cart query instead
-                        .plusExpansionPaths(c -> c.paymentInfo().payments())
-                        .withSort(cart -> cart.lastModifiedAt().sort().desc())
-                        .withLimit(1));
+        return tryBuildQueryByCustomerId()
+                .map(Optional::of)
+                .orElseGet(this::tryBuildQueryByCartId)
+                .map(this::decorateQueryWithAdditionalInfo);
+    }
+
+    private Optional<CartQuery> tryBuildQueryByCartId() {
+        return cartInSession.findCartId()
+                .map(this::buildQueryByCartId);
     }
 
     private CartQuery buildQueryByCartId(final String cartId) {
         return CartQuery.of().plusPredicates(cart -> cart.id().is(cartId));
     }
 
+    private Optional<CartQuery> tryBuildQueryByCustomerId() {
+        return customerInSession.findCustomerId()
+                .map(this::buildQueryByCustomerId);
+    }
+
     private CartQuery buildQueryByCustomerId(final String customerId) {
         return CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId));
+    }
+
+    private CartQuery decorateQueryWithAdditionalInfo(final CartQuery query) {
+        return query
+                .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
+                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO use run hook on cart query instead
+                .plusExpansionPaths(c -> c.paymentInfo().payments())
+                .withSort(cart -> cart.lastModifiedAt().sort().desc())
+                .withLimit(1);
     }
 }
