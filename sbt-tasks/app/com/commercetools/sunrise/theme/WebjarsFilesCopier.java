@@ -28,15 +28,21 @@ public class WebjarsFilesCopier {
 
     static void copyTemplateFiles(final String destBasePath, final List<String> filesToCopy) {
         filesToCopy.forEach(fileToCopy -> {
-            final String origFilePath = WEBJARS_PATH + fileToCopy;
-            final InputStream origResource = Thread.currentThread().getContextClassLoader().getResourceAsStream(origFilePath);
-            if (origResource != null) {
-                final Path destPath = FILE_SYSTEM.getPath(destBasePath, fileToCopy);
-                copyFile(origResource, destPath);
-            } else {
-                logger.error("Could not find file \"{}\" in classpath", origFilePath);
-            }
+            //the sbt task will always split arguments by white space, not even escaping with quotes works
+            //so it replaced whitespaces with §
+            copyTemplateFile(destBasePath.replace("§", " "), fileToCopy.replace("§", " "));
         });
+    }
+
+    private static void copyTemplateFile(final String destBasePath, final String fileToCopy) {
+        final String origFilePath = WEBJARS_PATH + fileToCopy;
+        final InputStream origResource = Thread.currentThread().getContextClassLoader().getResourceAsStream(origFilePath);
+        if (origResource != null) {
+            final Path destPath = FILE_SYSTEM.getPath(destBasePath, fileToCopy);
+            copyFile(origResource, destPath);
+        } else {
+            logger.error("Could not find file \"{}\" in classpath", origFilePath);
+        }
     }
 
     private static void copyFile(final InputStream origResource, final Path destPath) {

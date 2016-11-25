@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.theme;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -15,12 +15,14 @@ import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WebjarsFilesCopierTest {
-    private static final String DEST_PATH = WebjarsFilesCopierTest.class.getClass().getResource("/com/commercetools/sunrise/theme").getPath();
+
+    private static final String DEST_PATH = WebjarsFilesCopierTest.class.getClass().getResource("/").getPath() + "webjarsFilesCopierDestFolder";
 
     @Before
     @After
-    public void setUp() throws Exception {
-        FileUtils.cleanDirectory(new File(DEST_PATH));
+    public void deleteFolderWithAllCopiedFiles() throws Exception {
+        final File directory = new File(DEST_PATH);
+        FileUtils.deleteDirectory(directory);
     }
 
     @Test
@@ -54,6 +56,11 @@ public class WebjarsFilesCopierTest {
                 copiedFiles.forEach(copiedFile -> assertThat(copiedFile).exists()));
     }
 
+    @Test
+    public void honorsFolderNamesWithSpaces() throws Exception {
+        testCopy("folder/folder/evil & folder/folder 5/file", copiedFile -> assertThat(copiedFile).exists().hasContent("level 5"));
+    }
+
     private void testCopy(final String originPath, final Consumer<File> test) {
         test.accept(copyFiles(singletonList(originPath)).get(0));
     }
@@ -65,7 +72,7 @@ public class WebjarsFilesCopierTest {
     private static List<File> copyFiles(final List<String> originPaths) {
         WebjarsFilesCopier.copyTemplateFiles(DEST_PATH, originPaths);
         return originPaths.stream()
-                .map(originPath -> new File(DEST_PATH + "/" + originPath))
+                .map(originPath -> new File(DEST_PATH + File.separator + originPath))
                 .collect(toList());
     }
 }
