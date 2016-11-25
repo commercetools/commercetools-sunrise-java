@@ -59,7 +59,7 @@ export SUNRISE_IT_CTP_CLIENT_ID="your-CTP-client-id"
 
 ## Related projects
 
-### Sunrise Project Starter
+### Sunrise Starter Project
 The starting point to build your own online shop project
 
 https://github.com/commercetools/commercetools-sunrise-java-starter
