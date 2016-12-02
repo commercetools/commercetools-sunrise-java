@@ -26,7 +26,7 @@ public final class HandlebarsTemplateEngine implements TemplateEngine {
     @Override
     public String render(final String templateName, final TemplateContext templateContext) {
         final Template template = compileTemplate(templateName);
-        final Context context = contextFactory.create(templateContext);
+        final Context context = contextFactory.create(handlebars, templateName, templateContext);
         try {
             logger.debug("Rendering template " + templateName);
             return template.apply(context);
