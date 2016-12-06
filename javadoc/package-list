@@ -1,4 +1,3 @@
-
 com.commercetools.sunrise.common
 com.commercetools.sunrise.common.cache
 com.commercetools.sunrise.common.categorytree
@@ -73,10 +72,5 @@ com.commercetools.sunrise.shoppingcart.checkout.shipping
 com.commercetools.sunrise.shoppingcart.checkout.thankyou
 com.commercetools.sunrise.shoppingcart.common
 com.commercetools.sunrise.theme
-controllers
-demo.common
-demo.myaccount
-demo.productcatalog
-demo.shoppingcart
 io.sphere.sdk.facets
 io.sphere.sdk.utils
