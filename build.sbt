@@ -27,13 +27,15 @@ lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;tes
 
 lazy val `commercetools-sunrise` = (project in file("."))
   .enablePlugins(PlayJava, DockerPlugin).configs(IntegrationTest, PlayTest)
-  .settings(commonSettings ++ commonTestSettings ++ sunriseThemeSettings ++ dockerSettings: _*)
+  .settings(commonSettings ++ commonTestSettings ++ dockerSettings: _*)
   .dependsOn(commonWithTests, `product-catalog`, `shopping-cart`, `my-account`)
   .aggregate(common, `product-catalog`, `shopping-cart`, `my-account`, `sbt-tasks`, `move-to-sdk`)
+  .settings(sunriseDefaultThemeDependencies)
 
 lazy val common = project
   .enablePlugins(PlayJava).configs(IntegrationTest, PlayTest)
-  .settings(commonSettings ++ commonTestSettings ++ jvmSdkDependencies ++ templateDependencies ++ sunriseModuleDependencies ++ commonDependencies ++ disableDockerPublish: _*)
+  .settings(commonSettings ++ commonTestSettings ++ disableDockerPublish: _*)
+  .settings(jvmSdkDependencies ++ templateDependencies ++ sunriseModuleDependencies ++ commonDependencies: _*)
   .dependsOn(`move-to-sdk`)
 
 lazy val `product-catalog` = project
@@ -53,7 +55,8 @@ lazy val `my-account` = project
 
 lazy val `sbt-tasks` = project
   .enablePlugins(PlayJava).configs(IntegrationTest)
-  .settings(commonSettings ++ testSettingsWithoutPt ++ sunriseThemeSettings ++ disableDockerPublish : _*)
+  .settings(commonSettings ++ testSettingsWithoutPt ++ disableDockerPublish : _*)
+  .settings(unmanagedBase in Test := baseDirectory.value / "test" / "lib")
 
 lazy val `move-to-sdk` = project
   .enablePlugins(PlayJava).configs(IntegrationTest)
@@ -97,9 +100,7 @@ lazy val jvmSdkDependencies = Seq (
   )
 )
 
-lazy val sunriseThemeSettings = Seq (
-  unmanagedBase in Compile := (baseDirectory in ThisBuild).value / "lib",
-  unmanagedBase in Test := baseDirectory.value / "test" / "lib",
+lazy val sunriseDefaultThemeDependencies = Seq (
   resolvers += Resolver.bintrayRepo("commercetools", "maven"),
   libraryDependencies ++= Seq (
     "com.commercetools.sunrise" % "commercetools-sunrise-theme" % sunriseThemeVersion

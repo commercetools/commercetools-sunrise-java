@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.theme;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WebjarsFilesCopier {
+
     private static final Logger logger = LoggerFactory.getLogger(WebjarsFilesCopier.class);
     private static final String WEBJARS_PATH = "META-INF/resources/webjars/";
     private static final FileSystem FILE_SYSTEM = FileSystems.getDefault();
