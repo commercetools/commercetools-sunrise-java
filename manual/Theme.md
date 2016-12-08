@@ -36,7 +36,7 @@ Sunrise uses [YAML](http://www.yaml.org/) files by default to provide text in di
 The following structure would be used to have translations in German and English for the home and checkout bundles:
 
 ```
-locales
+i18n
 +-- de
 |   +-- home.yaml
 |   +-- checkout.yaml
@@ -45,7 +45,7 @@ locales
     +-- checkout.yaml
 ```
 
-Similarly as it works with templates, the application tries to find the translated text first inside the classpath `/locales`. If that particular translation is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/locales`). This enables a practical way to override a particular translation without the need of replacing them all, as it is explained in the section _[Customize Internationalization](#customize-internationalization)_.
+Similarly as it works with templates, the application tries to find the translated text first inside the classpath `/i18n`. If that particular translation is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/i18n`). This enables a practical way to override a particular translation without the need of replacing them all, as it is explained in the section _[Customize Internationalization](#customize-internationalization)_.
 
 Learn how to modify this behaviour in _[Change i18n resource loaders](Configuration.md#change-i18n-source-loaders)_.
 
