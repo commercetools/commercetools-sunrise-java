@@ -86,7 +86,7 @@ public class ProductVariantBeanFactory extends Base {
         final MonetaryAmount currentPrice = PriceUtils.calculateFinalPrice(price);
         final boolean hasDiscount = currentPrice.isLessThan(price.getValue());
         if (hasDiscount) {
-            bean.setPriceOld(moneyContext.formatOrNull(price));
+            bean.setPriceOld(moneyContext.formatOrNull(price.getValue()));
         }
         bean.setPrice(moneyContext.formatOrNull(currentPrice));
     }

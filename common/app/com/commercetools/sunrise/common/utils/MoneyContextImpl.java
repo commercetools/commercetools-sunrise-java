@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.common.utils;
 
-import io.sphere.sdk.products.PriceLike;
 import io.sphere.sdk.utils.MoneyImpl;
 
 import javax.annotation.Nullable;
@@ -10,6 +9,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 final class MoneyContextImpl implements MoneyContext {
+
     private final CurrencyUnit currency;
     private final Locale locale;
 
@@ -31,14 +31,6 @@ final class MoneyContextImpl implements MoneyContext {
     public String formatOrZero(@Nullable final MonetaryAmount monetaryAmount) {
         final MonetaryAmount concreteAmount = Optional.ofNullable(monetaryAmount).orElseGet(this::zero);
         return format(concreteAmount);
-    }
-
-    @Override
-    public String formatOrNull(@Nullable final PriceLike price) {
-        final MonetaryAmount concreteAmount = Optional.ofNullable(price)
-                .map(PriceLike::getValue)
-                .orElseGet(this::zero);
-        return formatOrNull(concreteAmount);
     }
 
     @Override
