@@ -2,28 +2,39 @@ package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.AddressBeanFactory;
-import com.commercetools.sunrise.common.utils.MoneyContext;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
+import com.commercetools.sunrise.common.utils.PriceFormatter;
+import com.commercetools.sunrise.common.utils.PriceUtils;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
-import javax.inject.Inject;
+import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.commercetools.sunrise.common.utils.PriceUtils.*;
 
-public abstract class CartLikeBeanFactory extends Base {
+public abstract class CartLikeBeanFactory extends ViewModelFactory {
 
-    @Inject
-    protected UserContext userContext;
-    @Inject
-    private AddressBeanFactory addressBeanFactory;
+    private final AddressBeanFactory addressBeanFactory;
+    private final PriceFormatter priceFormatter;
+    private final List<Locale> locales;
+    private final CurrencyUnit currency;
+
+    protected CartLikeBeanFactory(final UserContext userContext, final PriceFormatter priceFormatter,
+                                  final AddressBeanFactory addressBeanFactory) {
+        this.addressBeanFactory = addressBeanFactory;
+        this.priceFormatter = priceFormatter;
+        this.locales = userContext.locales();
+        this.currency = userContext.currency();
+    }
 
     protected abstract LineItemBean createLineItem(final LineItem lineItem);
 
@@ -50,12 +61,12 @@ public abstract class CartLikeBeanFactory extends Base {
 
     protected void fillEmptyCartInfo(final CartBean bean) {
         fillEmptyMiniCartInfo(bean);
-        final MoneyContext moneyContext = getMoneyContext();
-        bean.setSalesTax(moneyContext.formatOrZero(null));
-        bean.setTotalPrice(moneyContext.formatOrZero(null));
-        bean.setSubtotalPrice(moneyContext.formatOrZero(null));
+        final MonetaryAmount zeroAmount = zeroAmount();
+        bean.setSalesTax(priceFormatter.format(zeroAmount));
+        bean.setTotalPrice(priceFormatter.format(zeroAmount));
+        bean.setSubtotalPrice(priceFormatter.format(zeroAmount));
         final ShippingInfoBean shippingMethod = new ShippingInfoBean();
-        shippingMethod.setPrice(moneyContext.formatOrZero(null));
+        shippingMethod.setPrice(priceFormatter.format(zeroAmount));
         bean.setShippingMethod(shippingMethod);
     }
 
@@ -70,18 +81,16 @@ public abstract class CartLikeBeanFactory extends Base {
     }
 
     protected void fillTotalPrice(final MiniCartBean bean, final CartLike<?> cartLike) {
-        final MoneyContext moneyContext = getMoneyContext(cartLike);
-        bean.setTotalPrice(moneyContext.formatOrZero(calculateTotalPrice(cartLike)));
+        bean.setTotalPrice(priceFormatter.format(calculateTotalPrice(cartLike)));
     }
 
     protected void fillSalesTax(final CartBean bean, final CartLike<?> cartLike) {
-        final MoneyContext moneyContext = getMoneyContext(cartLike);
-        bean.setSalesTax(moneyContext.formatOrZero(calculateSalesTax(cartLike).orElse(null)));
+        final MonetaryAmount amount = calculateSalesTax(cartLike).orElseGet(this::zeroAmount);
+        bean.setSalesTax(priceFormatter.format(amount));
     }
 
     protected void fillSubtotalPrice(final CartBean bean, final CartLike<?> cartLike) {
-        final MoneyContext moneyContext = getMoneyContext(cartLike);
-        bean.setSubtotalPrice(moneyContext.formatOrZero(calculateSubTotal(cartLike)));
+        bean.setSubtotalPrice(priceFormatter.format(calculateSubTotal(cartLike)));
     }
 
     protected void fillCustomerEmail(final CartBean bean, final CartLike<?> cartLike) {
@@ -124,11 +133,11 @@ public abstract class CartLikeBeanFactory extends Base {
         if (cartLike.getPaymentInfo() != null) {
             final String paymentType = cartLike.getPaymentInfo().getPayments().stream()
                     .map(Reference::getObj)
-                    .filter(payment -> payment != null)
+                    .filter(Objects::nonNull)
                     .map(payment -> {
                         final PaymentMethodInfo methodInfo = payment.getPaymentMethodInfo();
                         return Optional.ofNullable(methodInfo.getName())
-                                .flatMap(name -> name.find(userContext.locales()))
+                                .flatMap(name -> name.find(locales))
                                 .orElse(methodInfo.getMethod());
                     })
                     .findFirst()
@@ -161,18 +170,11 @@ public abstract class CartLikeBeanFactory extends Base {
     }
 
     protected void fillShippingInfoPrice(final ShippingInfoBean bean, final CartLike<?> cartLike) {
-        MonetaryAmount price = null;
-        if (cartLike.getShippingInfo() != null) {
-            price = cartLike.getShippingInfo().getPrice();
-        }
-        bean.setPrice(getMoneyContext(cartLike).formatOrZero(price));
+        final MonetaryAmount amount = PriceUtils.findAppliedShippingPrice(cartLike).orElseGet(this::zeroAmount);
+        bean.setPrice(priceFormatter.format(amount));
     }
 
-    protected MoneyContext getMoneyContext(final CartLike<?> cartLike) {
-        return MoneyContext.of(cartLike.getCurrency(), userContext.locale());
-    }
-
-    protected MoneyContext getMoneyContext() {
-        return MoneyContext.of(userContext.currency(), userContext.locale());
+    private MonetaryAmount zeroAmount() {
+        return PriceUtils.zeroAmount(currency);
     }
 }

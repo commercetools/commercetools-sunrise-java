@@ -1,17 +1,30 @@
 package com.commercetools.sunrise.shoppingcart;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.models.AddressBeanFactory;
+import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartLike;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@RequestScoped
 public class TruncatedMiniCartBeanFactory extends MiniCartBeanFactory {
 
     @Nullable
     private Integer lineItemsLimit;
+
+    @Inject
+    public TruncatedMiniCartBeanFactory(final UserContext userContext, final PriceFormatter priceFormatter,
+                                        final AddressBeanFactory addressBeanFactory,
+                                        final LineItemBeanFactory lineItemBeanFactory) {
+        super(userContext, priceFormatter, addressBeanFactory, lineItemBeanFactory);
+    }
 
     public MiniCartBean create(@Nullable final Cart cart, final int lineItemsLimit) {
         this.lineItemsLimit = lineItemsLimit;

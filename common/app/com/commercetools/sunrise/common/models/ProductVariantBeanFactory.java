@@ -1,29 +1,37 @@
 package com.commercetools.sunrise.common.models;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.common.utils.MoneyContext;
+import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.common.utils.PriceUtils;
 import io.sphere.sdk.carts.LineItem;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.Image;
-import io.sphere.sdk.products.PriceLike;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 import javax.inject.Inject;
-import javax.money.MonetaryAmount;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
-import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
+@RequestScoped
+public class ProductVariantBeanFactory extends ViewModelFactory {
 
-public class ProductVariantBeanFactory extends Base {
+    private final Locale locale;
+    private final List<Locale> locales;
+    private final PriceFormatter priceFormatter;
+    private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    protected UserContext userContext;
-    @Inject
-    protected ProductReverseRouter productReverseRouter;
+    public ProductVariantBeanFactory(final UserContext userContext, final PriceFormatter priceFormatter,
+                                     final ProductReverseRouter productReverseRouter) {
+        this.locale = userContext.locale();
+        this.locales = userContext.locales();
+        this.priceFormatter = priceFormatter;
+        this.productReverseRouter = productReverseRouter;
+    }
 
     public ProductVariantBean create(final ProductProjection product, final ProductVariant variant) {
         final ProductVariantBean bean = new ProductVariantBean();
@@ -38,68 +46,60 @@ public class ProductVariantBeanFactory extends Base {
     }
 
     protected final void initialize(final ProductVariantBean bean, final LineItem lineItem) {
-        fillVariantInfo(bean, lineItem.getVariant());
-        fillPriceInfo(bean, lineItem.getPrice());
-        fillName(lineItem, bean);
-        fillUrl(lineItem, bean);
+        fillSku(bean, lineItem.getVariant());
+        fillImage(bean, lineItem.getVariant());
+        fillPrices(bean, lineItem);
+        fillName(bean, lineItem);
+        fillUrl(bean, lineItem);
     }
 
     protected final void initialize(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
-        fillVariantInfo(bean, variant);
-        fillPrices(variant, bean);
-        fillName(product, bean);
-        fillUrl(product, variant, bean);
+        fillSku(bean, variant);
+        fillImage(bean, variant);
+        fillPrices(bean, product, variant);
+        fillName(bean, product, variant);
+        fillUrl(bean, product, variant);
     }
 
-    protected void fillUrl(final ProductProjection product, final ProductVariant variant, final ProductVariantBean bean) {
-        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(userContext.locale(), product, variant));
+    protected void fillUrl(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
+        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, product, variant));
     }
 
-    protected void fillUrl(final LineItem lineItem, final ProductVariantBean bean) {
-        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(userContext.locale(), lineItem));
+    protected void fillUrl(final ProductVariantBean bean, final LineItem lineItem) {
+        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, lineItem));
     }
 
-    protected void fillName(final ProductProjection product, final ProductVariantBean bean) {
+    protected void fillName(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
         bean.setName(createName(product.getName()));
     }
 
-    protected void fillPrices(final ProductVariant variant, final ProductVariantBean bean) {
-        resolvePrice(variant).ifPresent(price -> fillPriceInfo(bean, price));
-    }
-
-    protected Optional<PriceLike> resolvePrice(final ProductVariant variant) {
-        PriceLike price = firstNonNull(variant.getPrice(), variant.getScopedPrice());
-        return Optional.ofNullable(price);
-    }
-
-    protected void fillName(final LineItem lineItem, final ProductVariantBean bean) {
+    protected void fillName(final ProductVariantBean bean, final LineItem lineItem) {
         bean.setName(createName(lineItem.getName()));
     }
 
-    protected void fillVariantInfo(final ProductVariantBean bean, final ProductVariant variant) {
-        bean.setSku(variant.getSku());
+    protected void fillPrices(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
+        PriceUtils.findAppliedProductPrice(variant).ifPresent(price -> bean.setPrice(priceFormatter.format(price)));
+        PriceUtils.findPreviousProductPrice(variant).ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
+    }
+
+    protected void fillImage(final ProductVariantBean bean, final ProductVariant variant) {
         createImage(variant).ifPresent(bean::setImage);
     }
 
-    protected void fillPriceInfo(final ProductVariantBean bean, final PriceLike price) {
-        final MoneyContext moneyContext = getMoneyContext(price);
-        final MonetaryAmount currentPrice = PriceUtils.calculateFinalPrice(price);
-        final boolean hasDiscount = currentPrice.isLessThan(price.getValue());
-        if (hasDiscount) {
-            bean.setPriceOld(moneyContext.formatOrNull(price.getValue()));
-        }
-        bean.setPrice(moneyContext.formatOrNull(currentPrice));
+    protected void fillSku(final ProductVariantBean bean, final ProductVariant variant) {
+        bean.setSku(variant.getSku());
     }
 
-    protected Optional<String> createImage(final ProductVariant variant) {
+    protected void fillPrices(final ProductVariantBean bean, final LineItem lineItem) {
+        bean.setPrice(priceFormatter.format(PriceUtils.findAppliedProductPrice(lineItem)));
+        PriceUtils.findPreviousProductPrice(lineItem).ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
+    }
+
+    private Optional<String> createImage(final ProductVariant variant) {
         return variant.getImages().stream().findFirst().map(Image::getUrl);
     }
 
-    protected String createName(final LocalizedString name) {
-        return name.find(userContext.locales()).orElse("");
-    }
-
-    protected MoneyContext getMoneyContext(final PriceLike price) {
-        return MoneyContext.of(price.getValue().getCurrency(), userContext.locale());
+    private String createName(final LocalizedString name) {
+        return name.find(locales).orElse("");
     }
 }

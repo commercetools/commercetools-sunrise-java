@@ -1,31 +1,45 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.commercetools.sunrise.common.utils.MoneyContext;
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static com.commercetools.sunrise.common.utils.PriceUtils.calculateTotalPrice;
 import static io.sphere.sdk.utils.EnumUtils.enumToCamelCase;
 
-public class OrderOverviewBeanFactory extends Base {
+@RequestScoped
+public class OrderOverviewBeanFactory extends ViewModelFactory {
+
+    private final Locale locale;
+    private final List<Locale> locales;
+    private final PriceFormatter priceFormatter;
+    private final I18nResolver i18nResolver;
+    private final I18nIdentifierFactory i18nIdentifierFactory;
+    private final MyOrdersReverseRouter myOrdersReverseRouter;
 
     @Inject
-    private UserContext userContext;
-    @Inject
-    private I18nResolver i18nResolver;
-    @Inject
-    private I18nIdentifierFactory i18nIdentifierFactory;
-    @Inject
-    private MyOrdersReverseRouter myOrdersReverseRouter;
+    public OrderOverviewBeanFactory(final UserContext userContext, final PriceFormatter priceFormatter,
+                                    final I18nResolver i18nResolver, final I18nIdentifierFactory i18nIdentifierFactory,
+                                    final MyOrdersReverseRouter myOrdersReverseRouter) {
+        this.locale = userContext.locale();
+        this.locales = userContext.locales();
+        this.priceFormatter = priceFormatter;
+        this.i18nResolver = i18nResolver;
+        this.i18nIdentifierFactory = i18nIdentifierFactory;
+        this.myOrdersReverseRouter = myOrdersReverseRouter;
+    }
 
     public OrderOverviewBean create(final Order order) {
         final OrderOverviewBean bean = new OrderOverviewBean();
@@ -43,7 +57,7 @@ public class OrderOverviewBeanFactory extends Base {
     }
 
     protected void fillOrderUrl(final OrderOverviewBean bean, final Order order) {
-        bean.setShowOrderUrl(myOrdersReverseRouter.myOrderDetailPageUrlOrEmpty(userContext.locale(), order));
+        bean.setShowOrderUrl(myOrdersReverseRouter.myOrderDetailPageUrlOrEmpty(locale, order));
     }
 
     protected void fillOrderNumber(final OrderOverviewBean bean, final Order order) {
@@ -51,12 +65,11 @@ public class OrderOverviewBeanFactory extends Base {
     }
 
     protected void fillTotal(final OrderOverviewBean bean, final Order order) {
-        final MoneyContext moneyContext = getMoneyContext(order);
-        bean.setTotal(moneyContext.formatOrZero(calculateTotalPrice(order)));
+        bean.setTotal(priceFormatter.format(calculateTotalPrice(order)));
     }
 
     protected void fillOrderDate(final OrderOverviewBean bean, final Order order) {
-        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", userContext.locale());
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", locale);
         bean.setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
     }
 
@@ -65,7 +78,7 @@ public class OrderOverviewBeanFactory extends Base {
                 .map(state -> {
                     final String stateName = state.name();
                     final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("main:order.shippingStatus." + enumToCamelCase(stateName));
-                    return i18nResolver.get(userContext.locales(), i18nIdentifier).orElse(stateName);
+                    return i18nResolver.get(locales, i18nIdentifier).orElse(stateName);
                 }).orElse("-"));
     }
 
@@ -74,11 +87,7 @@ public class OrderOverviewBeanFactory extends Base {
                 .map(state -> {
                     final String stateName = state.name();
                     final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("main:order.paymentStatus." + enumToCamelCase(stateName));
-                    return i18nResolver.get(userContext.locales(), i18nIdentifier).orElse(stateName);
+                    return i18nResolver.get(locales, i18nIdentifier).orElse(stateName);
                 }).orElse("-"));
-    }
-
-    protected MoneyContext getMoneyContext(final Order order) {
-        return MoneyContext.of(order.getCurrency(), userContext.locale());
     }
 }

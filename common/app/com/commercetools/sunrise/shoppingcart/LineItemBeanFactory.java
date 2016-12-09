@@ -1,19 +1,24 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.models.ProductVariantBeanFactory;
-import com.commercetools.sunrise.common.utils.MoneyContext;
+import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.LineItem;
-import io.sphere.sdk.models.Base;
 
 import javax.inject.Inject;
 
-public class LineItemBeanFactory extends Base {
+@RequestScoped
+public class LineItemBeanFactory extends ViewModelFactory {
+
+    private final PriceFormatter priceFormatter;
+    private final ProductVariantBeanFactory productVariantBeanFactory;
 
     @Inject
-    private UserContext userContext;
-    @Inject
-    private ProductVariantBeanFactory productVariantBeanFactory;
+    public LineItemBeanFactory(final PriceFormatter priceFormatter, final ProductVariantBeanFactory productVariantBeanFactory) {
+        this.priceFormatter = priceFormatter;
+        this.productVariantBeanFactory = productVariantBeanFactory;
+    }
 
     public LineItemBean create(final LineItem lineItem) {
         final LineItemBean bean = new LineItemBean();
@@ -41,11 +46,6 @@ public class LineItemBeanFactory extends Base {
     }
 
     protected void fillTotalPrice(final LineItemBean bean, final LineItem lineItem) {
-        final MoneyContext moneyContext = getMoneyContext(lineItem);
-        bean.setTotalPrice(moneyContext.formatOrZero(lineItem.getTotalPrice()));
-    }
-
-    protected MoneyContext getMoneyContext(final LineItem lineItem) {
-        return MoneyContext.of(lineItem.getPrice().getValue().getCurrency(), userContext.locale());
+        bean.setTotalPrice(priceFormatter.format(lineItem.getTotalPrice()));
     }
 }
