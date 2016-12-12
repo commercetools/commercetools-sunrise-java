@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.common.utils.PriceUtils.createPriceSelection;
+import static com.commercetools.sunrise.common.utils.CartPriceUtils.createPriceSelection;
 
 public final class ProductFinderBySlugAndSku implements ProductFinder<String, String> {
 

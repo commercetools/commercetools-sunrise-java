@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
-import static com.commercetools.sunrise.common.utils.PriceUtils.calculateShippingPrice;
+import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateApplicableShippingCosts;
 import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
 import static java.util.stream.Collectors.toList;
 
@@ -72,7 +72,7 @@ public class ShippingMethodFormFieldBeanFactory extends ViewModelFactory {
                 .flatMap(zone -> shippingMethod.getShippingRatesForZone(zone).stream()
                         .filter(shippingRate -> shippingRate.getPrice().getCurrency().equals(cart.getCurrency()))
                         .findAny()
-                        .map(shippingRate -> priceFormatter.format(calculateShippingPrice(cart, shippingRate))));
+                        .map(shippingRate -> priceFormatter.format(calculateApplicableShippingCosts(cart, shippingRate))));
     }
 
     @Nullable

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import static com.commercetools.sunrise.common.utils.PriceUtils.calculateTotalPrice;
+import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateTotalPrice;
 import static io.sphere.sdk.utils.EnumUtils.enumToCamelCase;
 
 @RequestScoped

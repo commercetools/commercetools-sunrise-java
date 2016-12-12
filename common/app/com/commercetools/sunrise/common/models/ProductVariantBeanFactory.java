@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
-import com.commercetools.sunrise.common.utils.PriceUtils;
+import com.commercetools.sunrise.common.utils.ProductPriceUtils;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.Image;
@@ -78,8 +78,8 @@ public class ProductVariantBeanFactory extends ViewModelFactory {
     }
 
     protected void fillPrices(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
-        PriceUtils.findAppliedProductPrice(variant).ifPresent(price -> bean.setPrice(priceFormatter.format(price)));
-        PriceUtils.findPreviousProductPrice(variant).ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
+        ProductPriceUtils.calculateAppliedProductPrice(variant).ifPresent(price -> bean.setPrice(priceFormatter.format(price)));
+        ProductPriceUtils.calculatePreviousProductPrice(variant).ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
     }
 
     protected void fillImage(final ProductVariantBean bean, final ProductVariant variant) {
@@ -91,8 +91,8 @@ public class ProductVariantBeanFactory extends ViewModelFactory {
     }
 
     protected void fillPrices(final ProductVariantBean bean, final LineItem lineItem) {
-        bean.setPrice(priceFormatter.format(PriceUtils.findAppliedProductPrice(lineItem)));
-        PriceUtils.findPreviousProductPrice(lineItem).ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
+        bean.setPrice(priceFormatter.format(ProductPriceUtils.calculateAppliedProductPrice(lineItem)));
+        ProductPriceUtils.calculatePreviousProductPrice(lineItem).ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
     }
 
     private Optional<String> createImage(final ProductVariant variant) {

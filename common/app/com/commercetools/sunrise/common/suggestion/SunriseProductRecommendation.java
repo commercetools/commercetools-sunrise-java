@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.suggestion;
 
 import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.utils.PriceUtils;
+import com.commercetools.sunrise.common.utils.CartPriceUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Reference;
@@ -88,7 +88,7 @@ public class SunriseProductRecommendation implements ProductRecommendation {
                 .withLimit(numProducts)
                 .withQueryFilters(product -> product.categories().id().containsAny(categoryIds))
                 .withSort(product -> product.allVariants().price().desc())
-                .withPriceSelection(PriceUtils.createPriceSelection(userContext));
+                .withPriceSelection(CartPriceUtils.createPriceSelection(userContext));
         return sphereClient.execute(request)
                 .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, request, result), HttpExecution.defaultContext())
                 .thenApply(SunriseProductRecommendation::resultToProductSet);

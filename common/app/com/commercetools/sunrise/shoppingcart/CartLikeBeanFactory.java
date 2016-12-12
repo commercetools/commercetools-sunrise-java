@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.models.AddressBeanFactory;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
-import com.commercetools.sunrise.common.utils.PriceUtils;
+import com.commercetools.sunrise.common.utils.CartPriceUtils;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Reference;
@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.commercetools.sunrise.common.utils.PriceUtils.*;
+import static com.commercetools.sunrise.common.utils.CartPriceUtils.*;
 
 public abstract class CartLikeBeanFactory extends ViewModelFactory {
 
@@ -85,12 +85,12 @@ public abstract class CartLikeBeanFactory extends ViewModelFactory {
     }
 
     protected void fillSalesTax(final CartBean bean, final CartLike<?> cartLike) {
-        final MonetaryAmount amount = calculateSalesTax(cartLike).orElseGet(this::zeroAmount);
+        final MonetaryAmount amount = calculateAppliedTaxes(cartLike).orElseGet(this::zeroAmount);
         bean.setSalesTax(priceFormatter.format(amount));
     }
 
     protected void fillSubtotalPrice(final CartBean bean, final CartLike<?> cartLike) {
-        bean.setSubtotalPrice(priceFormatter.format(calculateSubTotal(cartLike)));
+        bean.setSubtotalPrice(priceFormatter.format(calculateSubTotalPrice(cartLike)));
     }
 
     protected void fillCustomerEmail(final CartBean bean, final CartLike<?> cartLike) {
@@ -170,11 +170,11 @@ public abstract class CartLikeBeanFactory extends ViewModelFactory {
     }
 
     protected void fillShippingInfoPrice(final ShippingInfoBean bean, final CartLike<?> cartLike) {
-        final MonetaryAmount amount = PriceUtils.findAppliedShippingPrice(cartLike).orElseGet(this::zeroAmount);
+        final MonetaryAmount amount = CartPriceUtils.calculateAppliedShippingPrice(cartLike).orElseGet(this::zeroAmount);
         bean.setPrice(priceFormatter.format(amount));
     }
 
     private MonetaryAmount zeroAmount() {
-        return PriceUtils.zeroAmount(currency);
+        return CartPriceUtils.zeroAmount(currency);
     }
 }

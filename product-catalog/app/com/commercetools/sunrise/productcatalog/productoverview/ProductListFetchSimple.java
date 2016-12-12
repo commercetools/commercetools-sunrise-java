@@ -14,7 +14,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.UnaryOperator;
 
 import static com.commercetools.sunrise.common.utils.LogUtils.logProductRequest;
-import static com.commercetools.sunrise.common.utils.PriceUtils.createPriceSelection;
+import static com.commercetools.sunrise.common.utils.CartPriceUtils.createPriceSelection;
 
 public class ProductListFetchSimple implements ProductListFetch<Void> {
 
