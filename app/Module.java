@@ -2,7 +2,7 @@ import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider;
 import com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.ctp.RequestScopedSphereClientProvider;
+import com.commercetools.sunrise.common.ctp.MetricSphereClientProvider;
 import com.commercetools.sunrise.common.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.common.httpauth.basic.BasicAuthenticationProvider;
 import com.commercetools.sunrise.common.localization.LocationSelectorControllerComponent;
@@ -44,7 +44,7 @@ public class Module extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(SphereClient.class).toProvider(RequestScopedSphereClientProvider.class).in(RequestScoped.class);
+        bind(SphereClient.class).toProvider(MetricSphereClientProvider.class).in(RequestScoped.class);
         bind(CmsService.class).toProvider(FileBasedCmsServiceProvider.class).in(Singleton.class);
         bind(TemplateEngine.class).toProvider(HandlebarsTemplateEngineProvider.class).in(Singleton.class);
         bind(I18nResolver.class).toProvider(ConfigurableI18nResolverProvider.class).in(Singleton.class);
