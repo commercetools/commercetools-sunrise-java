@@ -97,8 +97,7 @@ public abstract class SunriseProductOverviewController extends SunriseFrameworkC
             final Optional<Category> category = categoryTree.findBySlug(userContext.locale(), categorySlug);
             if (category.isPresent()) {
                 this.category = category.get();
-                runHookOnFoundCategory(category.get());
-                return searchProducts();
+                return handleFoundCategory(category.get());
             } else {
                 return handleNotFoundCategory();
             }
@@ -107,6 +106,11 @@ public abstract class SunriseProductOverviewController extends SunriseFrameworkC
 
     @SunriseRoute("processSearchProductsForm")
     public CompletionStage<Result> searchProductsBySearchTerm(final String languageTag) {
+        return searchProducts();
+    }
+
+    protected CompletionStage<Result> handleFoundCategory(final Category category) {
+        runHookOnFoundCategory(category);
         return searchProducts();
     }
 

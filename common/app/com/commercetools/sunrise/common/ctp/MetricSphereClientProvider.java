@@ -11,8 +11,8 @@ import play.mvc.Http;
 
 import javax.inject.Inject;
 
-public final class RequestScopedSphereClientProvider implements Provider<SphereClient> {
-    private static final Logger logger = LoggerFactory.getLogger(RequestScopedSphereClientProvider.class);
+public final class MetricSphereClientProvider implements Provider<SphereClient> {
+    private static final Logger logger = LoggerFactory.getLogger(MetricSphereClientProvider.class);
 
     @Inject
     private HttpClient httpClient;
