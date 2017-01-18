@@ -1,28 +1,38 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerInSession;
-import com.google.inject.Injector;
-import io.sphere.sdk.models.Base;
 import play.filters.csrf.CSRF;
 import play.mvc.Call;
 import play.mvc.Http;
 
 import javax.inject.Inject;
+import java.util.Locale;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 
-public class PageMetaFactory extends Base {
+@RequestScoped
+public class PageMetaFactory extends ViewModelFactory {
+
+    private final Locale locale;
+    private final Http.Context httpContext;
+    private final CustomerInSession customerInSession;
+    private final HomeReverseRouter homeReverseRouter;
+    private final WebJarAssetsReverseRouter webJarAssetsReverseRouter;
 
     @Inject
-    private UserContext userContext;
-    @Inject
-    private Http.Context httpContext;
-    @Inject
-    private Injector injector;
+    public PageMetaFactory(final Locale locale, final Http.Context httpContext, final CustomerInSession customerInSession,
+                           final HomeReverseRouter homeReverseRouter, final WebJarAssetsReverseRouter webJarAssetsReverseRouter) {
+        this.locale = locale;
+        this.httpContext = httpContext;
+        this.customerInSession = customerInSession;
+        this.homeReverseRouter = homeReverseRouter;
+        this.webJarAssetsReverseRouter = webJarAssetsReverseRouter;
+    }
 
     public PageMeta create() {
         final PageMeta bean = new PageMeta();
@@ -54,17 +64,17 @@ public class PageMetaFactory extends Base {
     }
 
     protected void fillUserInfo(final PageMeta bean) {
-        injector.getInstance(CustomerInSession.class).findUserInfo()
+        customerInSession.findUserInfo()
                 .ifPresent(bean::setUser);
     }
 
     protected void fillAssetsPath(final PageMeta bean) {
-        final Call call = injector.getInstance(WebJarAssetsReverseRouter.class).webJarAssetsCall("");
+        final Call call = webJarAssetsReverseRouter.webJarAssetsCall("");
         bean.setAssetsPath(call.url());
     }
 
     protected void fillHomePageUrl(final PageMeta bean) {
-        final Call call = injector.getInstance(HomeReverseRouter.class).homePageCall(userContext.languageTag());
+        final Call call = homeReverseRouter.homePageCall(locale.toLanguageTag());
         bean.addHalLink(call, "home", "continueShopping");
     }
 

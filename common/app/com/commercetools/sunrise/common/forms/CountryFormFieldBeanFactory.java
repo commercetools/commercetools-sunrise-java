@@ -1,24 +1,30 @@
 package com.commercetools.sunrise.common.forms;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
-import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.models.Base;
 import play.data.Form;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Locale;
 
 import static java.util.stream.Collectors.toList;
 
-public class CountryFormFieldBeanFactory extends Base {
+@RequestScoped
+public class CountryFormFieldBeanFactory extends ViewModelFactory {
+
+    private final Locale locale;
+    private final List<CountryCode> defaultCountries;
 
     @Inject
-    private UserContext userContext;
-    @Inject
-    private ProjectContext projectContext;
+    public CountryFormFieldBeanFactory(final Locale locale, final ProjectContext projectContext) {
+        this.locale = locale;
+        this.defaultCountries = projectContext.countries();
+    }
 
     public CountryFormFieldBean create(final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
         final CountryFormFieldBean bean = new CountryFormFieldBean();
@@ -27,7 +33,7 @@ public class CountryFormFieldBeanFactory extends Base {
     }
 
     public CountryFormFieldBean createWithDefaultCountries(final Form<?> form, final String fieldName) {
-        return create(form, fieldName, getDefaultCountries());
+        return create(form, fieldName, defaultCountries);
     }
 
     protected final void initialize(final CountryFormFieldBean bean, final Form<?> form, final String fieldName, final List<CountryCode> availableCountries) {
@@ -41,25 +47,17 @@ public class CountryFormFieldBeanFactory extends Base {
                 .collect(toList()));
     }
 
-    protected FormSelectableOptionBean createFormSelectableOption(final CountryCode country, final @Nullable String selectedCountryCode) {
-        final FormSelectableOptionBean bean = new FormSelectableOptionBean();
-        initializeFormSelectableOption(bean, country, selectedCountryCode);
-        return bean;
-    }
-
-    protected final void initializeFormSelectableOption(final FormSelectableOptionBean bean, final CountryCode country, final @Nullable String selectedCountryCode) {
-        final String countryCode = country.getAlpha2();
-        bean.setLabel(country.toLocale().getDisplayCountry(userContext.locale()));
-        bean.setValue(countryCode);
-        bean.setSelected(countryCode.equals(selectedCountryCode));
-    }
-
     @Nullable
-    protected String getSelectedCountry(final Form<?> form, final String fieldName) {
+    private String getSelectedCountry(final Form<?> form, final String fieldName) {
         return form.field(fieldName).value();
     }
 
-    protected List<CountryCode> getDefaultCountries() {
-        return projectContext.countries();
+    private FormSelectableOptionBean createFormSelectableOption(final CountryCode country, final @Nullable String selectedCountryCode) {
+        final FormSelectableOptionBean bean = new FormSelectableOptionBean();
+        final String countryCode = country.getAlpha2();
+        bean.setLabel(country.toLocale().getDisplayCountry(locale));
+        bean.setValue(countryCode);
+        bean.setSelected(countryCode.equals(selectedCountryCode));
+        return bean;
     }
 }

@@ -13,7 +13,9 @@ import java.util.Optional;
 
 /**
  * A container for all information related to the current user, such as selected country, language or customer group.
+ * @deprecated Use injectable {@link Locale}, {@link CurrencyUnit} and {@link CountryCode} instead
  */
+@Deprecated
 @ImplementedBy(UserContextImpl.class)
 public interface UserContext {
 

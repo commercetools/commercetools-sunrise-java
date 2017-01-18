@@ -1,6 +1,9 @@
 import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider;
 import com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree;
+import com.commercetools.sunrise.common.contexts.CountryFromSessionProvider;
+import com.commercetools.sunrise.common.contexts.CurrencyFromCountryProvider;
+import com.commercetools.sunrise.common.contexts.LocaleFromUrlProvider;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.ctp.MetricSphereClientProvider;
 import com.commercetools.sunrise.common.httpauth.HttpAuthentication;
@@ -29,6 +32,7 @@ import com.commercetools.sunrise.shoppingcart.common.CheckoutStepWidgetComponent
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
+import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.LocalizedString;
@@ -36,6 +40,8 @@ import io.sphere.sdk.payments.PaymentMethodInfoBuilder;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.money.CurrencyUnit;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import static java.util.Collections.singletonList;
@@ -45,6 +51,7 @@ public class Module extends AbstractModule {
     @Override
     protected void configure() {
         bind(SphereClient.class).toProvider(MetricSphereClientProvider.class).in(RequestScoped.class);
+        bindUserContext();
         bind(CmsService.class).toProvider(FileBasedCmsServiceProvider.class).in(Singleton.class);
         bind(TemplateEngine.class).toProvider(HandlebarsTemplateEngineProvider.class).in(Singleton.class);
         bind(I18nResolver.class).toProvider(ConfigurableI18nResolverProvider.class).in(Singleton.class);
@@ -68,6 +75,18 @@ public class Module extends AbstractModule {
                 .name(LocalizedString.of(Locale.ENGLISH, "Prepaid", Locale.GERMAN, "Vorkasse"))
                 .method("prepaid")
                 .build());
+    }
+
+    @Provides
+    @RequestScoped
+    public DateTimeFormatter dateTimeFormatter(final Locale locale) {
+        return DateTimeFormatter.ofPattern("MMM d, yyyy", locale);
+    }
+
+    private void bindUserContext() {
+        bind(Locale.class).toProvider(LocaleFromUrlProvider.class).in(RequestScoped.class);
+        bind(CountryCode.class).toProvider(CountryFromSessionProvider.class).in(RequestScoped.class);
+        bind(CurrencyUnit.class).toProvider(CurrencyFromCountryProvider.class).in(RequestScoped.class);
     }
 
     @Provides

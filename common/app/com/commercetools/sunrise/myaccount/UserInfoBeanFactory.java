@@ -1,11 +1,13 @@
 package com.commercetools.sunrise.myaccount;
 
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
+import javax.inject.Singleton;
 
-public class UserInfoBeanFactory extends Base {
+@Singleton
+public class UserInfoBeanFactory extends ViewModelFactory {
 
     public UserInfoBean create(@Nullable final Customer customer) {
         final UserInfoBean bean = new UserInfoBean();

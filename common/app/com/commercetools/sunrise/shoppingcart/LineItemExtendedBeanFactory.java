@@ -20,9 +20,8 @@ public class LineItemExtendedBeanFactory extends LineItemBeanFactory {
     private final ProductAttributeBeanFactory productAttributeBeanFactory;
 
     @Inject
-    public LineItemExtendedBeanFactory(final PriceFormatter priceFormatter, final ProductDataConfig productDataConfig,
-                                       final ProductVariantBeanFactory productVariantBeanFactory,
-                                       final ProductAttributeBeanFactory productAttributeBeanFactory) {
+    public LineItemExtendedBeanFactory(final PriceFormatter priceFormatter, final ProductVariantBeanFactory productVariantBeanFactory,
+                                       final ProductDataConfig productDataConfig, final ProductAttributeBeanFactory productAttributeBeanFactory) {
         super(priceFormatter, productVariantBeanFactory);
         this.productDataConfig = productDataConfig;
         this.productAttributeBeanFactory = productAttributeBeanFactory;

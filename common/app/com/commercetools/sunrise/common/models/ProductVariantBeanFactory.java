@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.common.utils.ProductPriceUtils;
 import io.sphere.sdk.carts.LineItem;
@@ -12,7 +12,6 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -20,15 +19,15 @@ import java.util.Optional;
 public class ProductVariantBeanFactory extends ViewModelFactory {
 
     private final Locale locale;
-    private final List<Locale> locales;
+    private final LocalizedStringResolver localizedStringResolver;
     private final PriceFormatter priceFormatter;
     private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public ProductVariantBeanFactory(final UserContext userContext, final PriceFormatter priceFormatter,
-                                     final ProductReverseRouter productReverseRouter) {
-        this.locale = userContext.locale();
-        this.locales = userContext.locales();
+    public ProductVariantBeanFactory(final Locale locale, final LocalizedStringResolver localizedStringResolver,
+                                     final PriceFormatter priceFormatter, final ProductReverseRouter productReverseRouter) {
+        this.locale = locale;
+        this.localizedStringResolver = localizedStringResolver;
         this.priceFormatter = priceFormatter;
         this.productReverseRouter = productReverseRouter;
     }
@@ -100,6 +99,6 @@ public class ProductVariantBeanFactory extends ViewModelFactory {
     }
 
     private String createName(final LocalizedString name) {
-        return name.find(locales).orElse("");
+        return localizedStringResolver.getOrEmpty(name);
     }
 }

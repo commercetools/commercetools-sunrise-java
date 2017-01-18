@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.pagination.Pagination;
 import io.sphere.sdk.models.Base;
 import play.Configuration;
@@ -10,16 +11,17 @@ import javax.inject.Inject;
 
 import static com.commercetools.sunrise.productcatalog.productoverview.search.SearchUtils.selectedValues;
 
+@RequestScoped
 public class PaginationFactory extends Base {
 
-    public static final int DEFAULT_PAGE = 1;
-    private String key;
-    @Inject
-    private RequestContext requestContext;
+    private static final int DEFAULT_PAGE = 1;
+    private final String key;
+    private final RequestContext requestContext;
 
     @Inject
-    public void setConfiguration(final Configuration configuration) {
+    public PaginationFactory(final Configuration configuration, final RequestContext requestContext) {
         this.key = configuration.getString("pop.pagination.key", "page");
+        this.requestContext = requestContext;
     }
 
     @Nonnull

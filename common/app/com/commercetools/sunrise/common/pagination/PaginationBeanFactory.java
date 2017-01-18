@@ -1,8 +1,9 @@
 package com.commercetools.sunrise.common.pagination;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.LinkBean;
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.queries.PagedResult;
 import play.Configuration;
 
@@ -13,12 +14,17 @@ import java.util.stream.LongStream;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
-public class PaginationBeanFactory extends Base {
+@RequestScoped
+public class PaginationBeanFactory extends ViewModelFactory {
+
+    private final int displayedPages;
+    private final RequestContext requestContext;
 
     @Inject
-    private Configuration configuration;
-    @Inject
-    private RequestContext requestContext;
+    public PaginationBeanFactory(final Configuration configuration, final RequestContext requestContext) {
+        this.displayedPages = configuration.getInt("pop.pagination.displayedPages", 6);
+        this.requestContext = requestContext;
+    }
 
     public PaginationBean create(final PagedResult<?> searchResult, final Pagination pagination, final int pageSize) {
         final PaginationBean bean = new PaginationBean();
@@ -45,7 +51,6 @@ public class PaginationBeanFactory extends Base {
     }
 
     protected void fillPages(final PaginationBean bean, final PagedResult<?> searchResult, final Pagination pagination, final int pageSize) {
-        final int displayedPages = configuration.getInt("pop.pagination.displayedPages", 6);
         final long totalPages = calculateTotalPages(searchResult.getTotal(), pageSize);
         final long thresholdLeft = displayedPages - 1;
         final long thresholdRight = totalPages - displayedPages + 2;

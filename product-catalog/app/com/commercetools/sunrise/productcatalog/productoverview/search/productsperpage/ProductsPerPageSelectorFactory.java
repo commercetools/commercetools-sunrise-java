@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
+import io.sphere.sdk.models.Base;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -8,12 +10,17 @@ import java.util.Optional;
 
 import static com.commercetools.sunrise.productcatalog.productoverview.search.SearchUtils.selectedValues;
 
-public class ProductsPerPageSelectorFactory {
+@RequestScoped
+public class ProductsPerPageSelectorFactory extends Base {
+
+    private final ProductsPerPageConfig config;
+    private final RequestContext requestContext;
 
     @Inject
-    private ProductsPerPageConfig config;
-    @Inject
-    private RequestContext requestContext;
+    public ProductsPerPageSelectorFactory(final ProductsPerPageConfig config, final RequestContext requestContext) {
+        this.config = config;
+        this.requestContext = requestContext;
+    }
 
     public ProductsPerPageSelector create() {
         final List<ProductsPerPageOption> options = config.getOptions();
@@ -21,8 +28,7 @@ public class ProductsPerPageSelectorFactory {
         return ProductsPerPageSelector.of(config.getKey(), options, config.getDefaultAmount(), selectedOption);
     }
 
-    protected Optional<ProductsPerPageOption> findFirstSelectedOption(final List<String> selectedValues,
-                                                                      final List<ProductsPerPageOption> options) {
+    private Optional<ProductsPerPageOption> findFirstSelectedOption(final List<String> selectedValues, final List<ProductsPerPageOption> options) {
         return options.stream()
                 .filter(option -> selectedValues.contains(option.getValue()))
                 .findFirst();

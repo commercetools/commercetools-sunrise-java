@@ -1,8 +1,6 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.models.AddressBeanFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.LineItem;
@@ -16,9 +14,8 @@ public class MiniCartBeanFactory extends CartLikeBeanFactory {
     private final LineItemBeanFactory lineItemBeanFactory;
 
     @Inject
-    public MiniCartBeanFactory(final UserContext userContext, final PriceFormatter priceFormatter,
-                               final AddressBeanFactory addressBeanFactory, final LineItemBeanFactory lineItemBeanFactory) {
-        super(userContext, priceFormatter, addressBeanFactory);
+    public MiniCartBeanFactory(final PriceFormatter priceFormatter, final LineItemBeanFactory lineItemBeanFactory) {
+        super(priceFormatter);
         this.lineItemBeanFactory = lineItemBeanFactory;
     }
 
@@ -32,7 +29,7 @@ public class MiniCartBeanFactory extends CartLikeBeanFactory {
         if (cart != null) {
             fillMiniCartInfo(bean, cart);
         } else {
-            fillEmptyMiniCartInfo(bean);
+            bean.setTotalItems(0L);
         }
     }
 

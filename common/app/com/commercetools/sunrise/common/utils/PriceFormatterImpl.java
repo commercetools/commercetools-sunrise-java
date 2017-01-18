@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.common.utils;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import org.javamoney.moneta.format.CurrencyStyle;
 
 import javax.inject.Inject;
@@ -21,8 +20,8 @@ class PriceFormatterImpl implements PriceFormatter {
     private final Locale locale;
 
     @Inject
-    PriceFormatterImpl(final UserContext userContext) {
-        this.locale = userContext.locale();
+    PriceFormatterImpl(final Locale locale) {
+        this.locale = locale;
     }
 
     @Override

@@ -1,30 +1,36 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.LinkBean;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.google.inject.Inject;
+import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import javax.inject.Inject;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
-public class BreadcrumbBeanFactory extends Base {
+@RequestScoped
+public class BreadcrumbBeanFactory extends ViewModelFactory {
+
+    private final Locale locale;
+    private final LocalizedStringResolver localizedStringResolver;
+    private final CategoryTree categoryTree;
+    private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    private UserContext userContext;
-    @Inject
-    private CategoryTree categoryTree;
-    @Inject
-    private ProductReverseRouter productReverseRouter;
+    public BreadcrumbBeanFactory(final Locale locale, final LocalizedStringResolver localizedStringResolver,
+                                 final CategoryTree categoryTree, final ProductReverseRouter productReverseRouter) {
+        this.locale = locale;
+        this.localizedStringResolver = localizedStringResolver;
+        this.categoryTree = categoryTree;
+        this.productReverseRouter = productReverseRouter;
+    }
 
     public BreadcrumbBean create(final ProductProjection product, final ProductVariant variant) {
         final BreadcrumbBean bean = new BreadcrumbBean();
@@ -39,26 +45,22 @@ public class BreadcrumbBeanFactory extends Base {
     }
 
     protected final void initialize(final BreadcrumbBean bean, final ProductProjection product, final ProductVariant variant) {
-        fillLinks(bean, createLinkBeanList(product, variant));
+        fillLinks(bean, product, variant);
     }
 
     protected final void initialize(final BreadcrumbBean bean, final Category category) {
-        fillLinks(bean, createCategoryTreeLinks(category));
+        fillLinks(bean, category);
     }
 
-    protected void fillLinks(final BreadcrumbBean breadcrumbBean, final List<LinkBean> linkBeans) {
-        breadcrumbBean.setLinks(linkBeans);
+    protected void fillLinks(final BreadcrumbBean breadcrumbBean, final ProductProjection product, final ProductVariant variant) {
+        breadcrumbBean.setLinks(createLinkBeanList(product, variant));
     }
 
-    protected List<LinkBean> createCategoryLinkBeanList(final ProductProjection product) {
-        return product.getCategories().stream()
-                .findFirst()
-                .flatMap(ref -> categoryTree.findById(ref.getId())
-                        .map(this::createCategoryTreeLinks))
-                .orElseGet(Collections::emptyList);
+    protected void fillLinks(final BreadcrumbBean breadcrumbBean, final Category category) {
+        breadcrumbBean.setLinks(createCategoryTreeLinks(category));
     }
 
-    protected List<LinkBean> createLinkBeanList(final ProductProjection product, final ProductVariant variant) {
+    private List<LinkBean> createLinkBeanList(final ProductProjection product, final ProductVariant variant) {
         final List<LinkBean> linkBeans = createCategoryLinkBeanList(product);
         final LinkBean productLinkData = createProductLinkData(product, variant);
         final List<LinkBean> result = new ArrayList<>(1 + linkBeans.size());
@@ -67,27 +69,35 @@ public class BreadcrumbBeanFactory extends Base {
         return result;
     }
 
-    protected List<LinkBean> createCategoryTreeLinks(final Category category) {
+    private List<LinkBean> createCategoryLinkBeanList(final ProductProjection product) {
+        return product.getCategories().stream()
+                .findFirst()
+                .flatMap(ref -> categoryTree.findById(ref.getId())
+                        .map(this::createCategoryTreeLinks))
+                .orElseGet(Collections::emptyList);
+    }
+
+    private List<LinkBean> createCategoryTreeLinks(final Category category) {
         return getCategoryWithAncestors(category).stream()
                 .map(this::createCategoryLinkData)
                 .collect(toList());
     }
 
-    protected LinkBean createCategoryLinkData(final Category category) {
+    private LinkBean createCategoryLinkData(final Category category) {
         final LinkBean linkBean = new LinkBean();
-        linkBean.setText(category.getName().find(userContext.locales()).orElse(""));
-        linkBean.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(userContext.locale(), category));
+        linkBean.setText(localizedStringResolver.getOrEmpty(category.getName()));
+        linkBean.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(locale, category));
         return linkBean;
     }
 
-    protected LinkBean createProductLinkData(final ProductProjection product, final ProductVariant variant) {
+    private LinkBean createProductLinkData(final ProductProjection product, final ProductVariant variant) {
         final LinkBean linkBean = new LinkBean();
-        linkBean.setText(product.getName().find(userContext.locales()).orElse(""));
-        linkBean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(userContext.locale(), product, variant));
+        linkBean.setText(localizedStringResolver.getOrEmpty(product.getName()));
+        linkBean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, product, variant));
         return linkBean;
     }
 
-    protected List<Category> getCategoryWithAncestors(final Category category) {
+    private List<Category> getCategoryWithAncestors(final Category category) {
         final List<Category> ancestors = category.getAncestors().stream()
                 .map(ref -> categoryTree.findById(ref.getId()))
                 .filter(Optional::isPresent)
