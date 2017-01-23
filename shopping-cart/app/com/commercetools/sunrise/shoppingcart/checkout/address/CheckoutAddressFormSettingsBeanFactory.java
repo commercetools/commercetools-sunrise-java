@@ -1,23 +1,30 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.forms.CountryFormFieldBeanFactory;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
+import com.neovisionaries.i18n.CountryCode;
 import play.data.Form;
 
 import javax.inject.Inject;
 
 import static java.util.Collections.singletonList;
 
-public class CheckoutAddressFormSettingsBeanFactory extends Base {
+@RequestScoped
+public class CheckoutAddressFormSettingsBeanFactory extends ViewModelFactory {
+
+    private final CountryCode country;
+    private final CountryFormFieldBeanFactory countryFormFieldBeanFactory;
+    private final TitleFormFieldBeanFactory titleFormFieldBeanFactory;
 
     @Inject
-    private UserContext userContext;
-    @Inject
-    private CountryFormFieldBeanFactory countryFormFieldBeanFactory;
-    @Inject
-    private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
+    public CheckoutAddressFormSettingsBeanFactory(final CountryCode country, final CountryFormFieldBeanFactory countryFormFieldBeanFactory,
+                                                  final TitleFormFieldBeanFactory titleFormFieldBeanFactory) {
+        this.country = country;
+        this.countryFormFieldBeanFactory = countryFormFieldBeanFactory;
+        this.titleFormFieldBeanFactory = titleFormFieldBeanFactory;
+    }
 
     public CheckoutAddressFormSettingsBean create(final Form<?> form) {
         final CheckoutAddressFormSettingsBean bean = new CheckoutAddressFormSettingsBean();
@@ -45,7 +52,7 @@ public class CheckoutAddressFormSettingsBeanFactory extends Base {
     }
 
     protected void fillCountriesShipping(final CheckoutAddressFormSettingsBean bean, final Form<?> form) {
-        bean.setCountriesShipping(countryFormFieldBeanFactory.create(form, "countryShipping", singletonList(userContext.country())));
+        bean.setCountriesShipping(countryFormFieldBeanFactory.create(form, "countryShipping", singletonList(country)));
     }
 
 }

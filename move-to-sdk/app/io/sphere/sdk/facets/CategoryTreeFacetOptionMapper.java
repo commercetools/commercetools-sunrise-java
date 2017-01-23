@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toList;
  * Any facet option that is not represented in the list of categories or doesn't contain a name for the locales, is discarded.
  */
 public class CategoryTreeFacetOptionMapper implements FacetOptionMapper {
+
     private final List<Category> selectedCategories;
     private final CategoryTree categoryTree;
     private final List<Locale> locales;

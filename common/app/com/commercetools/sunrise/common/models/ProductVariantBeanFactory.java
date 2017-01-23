@@ -6,17 +6,18 @@ import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.common.utils.ProductPriceUtils;
 import io.sphere.sdk.carts.LineItem;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.Image;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Locale;
-import java.util.Optional;
 
 @RequestScoped
-public class ProductVariantBeanFactory extends ViewModelFactory {
+public class ProductVariantBeanFactory extends ViewModelFactory<ProductVariantBean, ProductVariantBeanFactory.Data> {
 
     private final Locale locale;
     private final LocalizedStringResolver localizedStringResolver;
@@ -32,73 +33,96 @@ public class ProductVariantBeanFactory extends ViewModelFactory {
         this.productReverseRouter = productReverseRouter;
     }
 
-    public ProductVariantBean create(final ProductProjection product, final ProductVariant variant) {
-        final ProductVariantBean bean = new ProductVariantBean();
-        initialize(bean, product, variant);
-        return bean;
+    public final ProductVariantBean create(final ProductProjection product, final ProductVariant variant) {
+        final Data data = new Data(product, variant);
+        return initializedViewModel(data);
     }
 
-    public ProductVariantBean create(final LineItem lineItem) {
-        final ProductVariantBean bean = new ProductVariantBean();
-        initialize(bean, lineItem);
-        return bean;
+    public final ProductVariantBean create(final LineItem lineItem) {
+        final Data data = new Data(lineItem);
+        return initializedViewModel(data);
     }
 
-    protected final void initialize(final ProductVariantBean bean, final LineItem lineItem) {
-        fillSku(bean, lineItem.getVariant());
-        fillImage(bean, lineItem.getVariant());
-        fillPrices(bean, lineItem);
-        fillName(bean, lineItem);
-        fillUrl(bean, lineItem);
+    @Override
+    protected ProductVariantBean getViewModelInstance() {
+        return new ProductVariantBean();
     }
 
-    protected final void initialize(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
-        fillSku(bean, variant);
-        fillImage(bean, variant);
-        fillPrices(bean, product, variant);
-        fillName(bean, product, variant);
-        fillUrl(bean, product, variant);
+    @Override
+    protected final void initialize(final ProductVariantBean bean, final Data data) {
+        fillSku(bean, data);
+        fillName(bean, data);
+        fillUrl(bean, data);
+        fillImage(bean, data);
+        fillPrice(bean, data);
+        fillPriceOld(bean, data);
     }
 
-    protected void fillUrl(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, product, variant));
+    protected void fillSku(final ProductVariantBean bean, final Data data) {
+        bean.setSku(data.variant.getSku());
     }
 
-    protected void fillUrl(final ProductVariantBean bean, final LineItem lineItem) {
-        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, lineItem));
+    protected void fillName(final ProductVariantBean bean, final Data data) {
+        if (data.product != null) {
+            bean.setName(createName(data.product.getName()));
+        } else if (data.lineItem != null) {
+            bean.setName(createName(data.lineItem.getName()));
+        }
     }
 
-    protected void fillName(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setName(createName(product.getName()));
+    protected void fillUrl(final ProductVariantBean bean, final Data data) {
+        if (data.product != null) {
+            bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, data.product, data.variant));
+        } else if (data.lineItem != null) {
+            bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, data.lineItem));
+        }
     }
 
-    protected void fillName(final ProductVariantBean bean, final LineItem lineItem) {
-        bean.setName(createName(lineItem.getName()));
+    protected void fillImage(final ProductVariantBean bean, final Data data) {
+        data.variant.getImages().stream().findFirst().map(Image::getUrl).ifPresent(bean::setImage);
     }
 
-    protected void fillPrices(final ProductVariantBean bean, final ProductProjection product, final ProductVariant variant) {
-        ProductPriceUtils.calculateAppliedProductPrice(variant).ifPresent(price -> bean.setPrice(priceFormatter.format(price)));
-        ProductPriceUtils.calculatePreviousProductPrice(variant).ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
+    protected void fillPrice(final ProductVariantBean bean, final Data data) {
+        if (data.lineItem != null) {
+            bean.setPrice(priceFormatter.format(ProductPriceUtils.calculateAppliedProductPrice(data.lineItem)));
+        } else {
+            ProductPriceUtils.calculateAppliedProductPrice(data.variant)
+                    .ifPresent(price -> bean.setPrice(priceFormatter.format(price)));
+        }
     }
 
-    protected void fillImage(final ProductVariantBean bean, final ProductVariant variant) {
-        createImage(variant).ifPresent(bean::setImage);
-    }
-
-    protected void fillSku(final ProductVariantBean bean, final ProductVariant variant) {
-        bean.setSku(variant.getSku());
-    }
-
-    protected void fillPrices(final ProductVariantBean bean, final LineItem lineItem) {
-        bean.setPrice(priceFormatter.format(ProductPriceUtils.calculateAppliedProductPrice(lineItem)));
-        ProductPriceUtils.calculatePreviousProductPrice(lineItem).ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
-    }
-
-    private Optional<String> createImage(final ProductVariant variant) {
-        return variant.getImages().stream().findFirst().map(Image::getUrl);
+    protected void fillPriceOld(final ProductVariantBean bean, final Data data) {
+        if (data.lineItem != null) {
+            ProductPriceUtils.calculatePreviousProductPrice(data.lineItem)
+                    .ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
+        } else {
+            ProductPriceUtils.calculatePreviousProductPrice(data.variant)
+                    .ifPresent(oldPrice -> bean.setPriceOld(priceFormatter.format(oldPrice)));
+        }
     }
 
     private String createName(final LocalizedString name) {
         return localizedStringResolver.getOrEmpty(name);
+    }
+
+    protected final static class Data extends Base {
+
+        @Nullable
+        public final ProductProjection product;
+        @Nullable
+        public final LineItem lineItem;
+        public final ProductVariant variant;
+
+        public Data(final ProductProjection product, final ProductVariant variant) {
+            this.product = product;
+            this.lineItem = null;
+            this.variant = variant;
+        }
+
+        public Data(final LineItem lineItem) {
+            this.product = null;
+            this.lineItem = lineItem;
+            this.variant = lineItem.getVariant();
+        }
     }
 }

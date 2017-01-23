@@ -17,23 +17,21 @@ public class UserInfoBeanFactory extends ViewModelFactory {
 
     protected final void initialize(final UserInfoBean bean, @Nullable final Customer customer) {
         fillLoggedIn(bean, customer);
-        fillName(bean, customer);
-        fillEmail(bean, customer);
+        if (customer != null) {
+            fillName(bean, customer);
+            fillEmail(bean, customer);
+        }
     }
 
     protected void fillLoggedIn(final UserInfoBean bean, @Nullable final Customer customer) {
         bean.setLoggedIn(customer != null);
     }
 
-    protected void fillName(final UserInfoBean bean, @Nullable final Customer customer) {
-        if (customer != null) {
-            bean.setName(customer.getFirstName());
-        }
+    protected void fillName(final UserInfoBean bean, final Customer customer) {
+        bean.setName(customer.getFirstName());
     }
 
-    protected void fillEmail(final UserInfoBean bean, @Nullable final Customer customer) {
-        if (customer != null) {
-            bean.setEmail(customer.getEmail());
-        }
+    protected void fillEmail(final UserInfoBean bean, final Customer customer) {
+        bean.setEmail(customer.getEmail());
     }
 }

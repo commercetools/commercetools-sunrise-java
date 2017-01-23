@@ -8,7 +8,7 @@ import java.util.Map;
 public class SelectableProductAttributeBean extends ProductAttributeBean {
 
     private boolean reload;
-    private List<FormSelectableOptionBean> list = new ArrayList<>();
+    private List<ProductAttributeFormSelectableOptionBean> list = new ArrayList<>();
     private Map<String, Map<String, List<String>>> selectData = new HashMap<>();
 
     public SelectableProductAttributeBean() {
@@ -22,11 +22,11 @@ public class SelectableProductAttributeBean extends ProductAttributeBean {
         this.reload = reload;
     }
 
-    public List<FormSelectableOptionBean> getList() {
+    public List<ProductAttributeFormSelectableOptionBean> getList() {
         return list;
     }
 
-    public void setList(final List<FormSelectableOptionBean> list) {
+    public void setList(final List<ProductAttributeFormSelectableOptionBean> list) {
         this.list = list;
     }
 

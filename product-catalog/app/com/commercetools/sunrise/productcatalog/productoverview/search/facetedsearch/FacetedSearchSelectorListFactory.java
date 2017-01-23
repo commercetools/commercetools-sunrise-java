@@ -1,9 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
-import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.categories.CategoryTree;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -11,16 +9,18 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@RequestScoped
 public class FacetedSearchSelectorListFactory {
 
+    private final SelectFacetedSearchSelectorFactory selectFacetedSearchSelectorFactory;
+    private final FacetedSearchConfigList facetedSearchConfigList;
+
     @Inject
-    private FacetedSearchConfigList facetedSearchConfigList;
-    @Inject
-    private UserContext userContext;
-    @Inject
-    private CategoryTree categoryTree;
-    @Inject
-    private RequestContext requestContext;
+    public FacetedSearchSelectorListFactory(final SelectFacetedSearchSelectorFactory selectFacetedSearchSelectorFactory,
+                                            final FacetedSearchConfigList facetedSearchConfigList) {
+        this.selectFacetedSearchSelectorFactory = selectFacetedSearchSelectorFactory;
+        this.facetedSearchConfigList = facetedSearchConfigList;
+    }
 
     public List<FacetedSearchSelector> create(final List<Category> selectedCategories) {
         final List<FacetedSearchSelector> selectors = createSelectFacetSelectors(selectedCategories);
@@ -30,7 +30,7 @@ public class FacetedSearchSelectorListFactory {
 
     private List<FacetedSearchSelector> createSelectFacetSelectors(final List<Category> selectedCategories) {
         return facetedSearchConfigList.getSelectFacetedSearchConfigList().stream()
-                .map(facetConfig -> SelectFacetedSearchSelectorFactory.of(facetConfig, userContext, requestContext, categoryTree, selectedCategories).create())
+                .map(facetConfig -> selectFacetedSearchSelectorFactory.create(facetConfig, selectedCategories))
                 .collect(toList());
     }
 

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-public abstract class ViewModelFactory<T, D> {
+public abstract class FormFieldFactory<T, D> {
 
     protected abstract T getViewModelInstance();
 
@@ -11,5 +11,4 @@ public abstract class ViewModelFactory<T, D> {
         initialize(bean, data);
         return bean;
     }
-
 }

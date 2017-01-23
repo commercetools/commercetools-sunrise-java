@@ -1,18 +1,18 @@
 package com.commercetools.sunrise.common.forms;
 
-import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
 
-public class CountryFormFieldBean {
+public class CountryFormFieldBean extends ViewModel {
 
-    private List<FormSelectableOptionBean> list;
+    private List<CountryFormSelectableOptionBean> list;
 
-    public List<FormSelectableOptionBean> getList() {
+    public List<CountryFormSelectableOptionBean> getList() {
         return list;
     }
 
-    public void setList(final List<FormSelectableOptionBean> list) {
+    public void setList(final List<CountryFormSelectableOptionBean> list) {
         this.list = list;
     }
 }

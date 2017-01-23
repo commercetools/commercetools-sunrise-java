@@ -25,14 +25,11 @@ import java.util.concurrent.CompletionStage;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-public class PaginationComponent extends Base implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
+public final class PaginationComponent extends Base implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
 
-    @Inject
-    private ProductsPerPageSelectorFactory productsPerPageSelectorFactory;
-    @Inject
-    private PaginationFactory paginationFactory;
-    @Inject
-    private PaginationBeanFactory paginationBeanFactory;
+    private final ProductsPerPageSelectorFactory productsPerPageSelectorFactory;
+    private final PaginationFactory paginationFactory;
+    private final PaginationBeanFactory paginationBeanFactory;
 
     @Nullable
     private ProductsPerPageSelector productsPerPageSelector;
@@ -41,6 +38,13 @@ public class PaginationComponent extends Base implements ControllerComponent, Pa
     @Nullable
     private PagedSearchResult<ProductProjection> pagedSearchResult;
 
+    @Inject
+    public PaginationComponent(final ProductsPerPageSelectorFactory productsPerPageSelectorFactory,
+                               final PaginationFactory paginationFactory, final PaginationBeanFactory paginationBeanFactory) {
+        this.productsPerPageSelectorFactory = productsPerPageSelectorFactory;
+        this.paginationFactory = paginationFactory;
+        this.paginationBeanFactory = paginationBeanFactory;
+    }
 
     @Override
     public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {

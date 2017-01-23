@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
-import com.commercetools.sunrise.common.models.ViewModelFactory;
+import com.commercetools.sunrise.common.models.CommonViewModelFactory;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerInSession;
 import play.filters.csrf.CSRF;
@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class PageMetaFactory extends ViewModelFactory {
+public class PageMetaFactory extends CommonViewModelFactory<PageMeta> {
 
     private final Locale locale;
     private final Http.Context httpContext;
@@ -34,12 +34,16 @@ public class PageMetaFactory extends ViewModelFactory {
         this.webJarAssetsReverseRouter = webJarAssetsReverseRouter;
     }
 
-    public PageMeta create() {
-        final PageMeta bean = new PageMeta();
-        initialize(bean);
-        return bean;
+    public final PageMeta create() {
+        return initializedViewModel();
     }
 
+    @Override
+    protected PageMeta getViewModelInstance() {
+        return new PageMeta();
+    }
+
+    @Override
     protected final void initialize(final PageMeta bean) {
         fillUserInfo(bean);
         fillAssetsPath(bean);
@@ -47,7 +51,6 @@ public class PageMetaFactory extends ViewModelFactory {
         fillCsrfToken(bean);
         fillHomePageUrl(bean);
         fillSelfPageUrl(bean);
-        fillNewProductsUrl(bean);
     }
 
     protected void fillCsrfToken(final PageMeta bean) {
@@ -80,11 +83,5 @@ public class PageMetaFactory extends ViewModelFactory {
 
     protected void fillSelfPageUrl(final PageMeta bean) {
         bean.addHalLinkOfHrefAndRel(httpContext.request().uri(), "self");
-    }
-
-    protected void fillNewProductsUrl(final PageMeta bean) {
-        //TODO framework migration
-//        newCategory().flatMap(nc -> reverseRouter.showCategory(userContext.locale(), nc))
-//                .ifPresent(call -> pageMeta.addHalLink(call, "newProducts"));
     }
 }

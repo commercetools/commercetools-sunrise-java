@@ -1,62 +1,63 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.forms.FormUtils;
+import com.commercetools.sunrise.common.models.FormFieldFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 import play.data.Form;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public class PaymentMethodFormFieldBeanFactory extends Base {
+@RequestScoped
+public class PaymentMethodFormFieldBeanFactory extends FormFieldFactory<PaymentMethodFormFieldBean, PaymentMethodFormFieldBeanFactory.Data> {
+
+    private final PaymentFormSelectableOptionBeanFactory paymentFormSelectableOptionBeanFactory;
 
     @Inject
-    private UserContext userContext;
-
-    protected PaymentMethodFormFieldBean create(final Form<?> form, final String fieldName, final Cart cart,
-                                                final List<PaymentMethodInfo> paymentMethods) {
-        final PaymentMethodFormFieldBean bean = new PaymentMethodFormFieldBean();
-        initialize(bean, form, fieldName, cart, paymentMethods);
-        return bean;
+    public PaymentMethodFormFieldBeanFactory(final PaymentFormSelectableOptionBeanFactory paymentFormSelectableOptionBeanFactory) {
+        this.paymentFormSelectableOptionBeanFactory = paymentFormSelectableOptionBeanFactory;
     }
 
-    protected final void initialize(final PaymentMethodFormFieldBean bean, final Form<?> form, final String fieldName,
-                                    final Cart cart, final List<PaymentMethodInfo> paymentMethods) {
-        fillPaymentMethodFormFieldList(bean, form, fieldName, cart, paymentMethods);
+    public final PaymentMethodFormFieldBean create(final Form<?> form, final String formFieldName, final Cart cart,
+                                                   final List<PaymentMethodInfo> paymentMethodInfoList) {
+        final Data data = new Data(form, formFieldName, cart, paymentMethodInfoList);
+        return initializedViewModel(data);
     }
 
-    protected void fillPaymentMethodFormFieldList(final PaymentMethodFormFieldBean bean, final Form<?> form, final String fieldName,
-                                                  final Cart cart, final List<PaymentMethodInfo> paymentMethods) {
-        final String selectedPaymentMethodId = getSelectedMethodId(form, fieldName);
-        bean.setList(paymentMethods.stream()
-                .map(shippingMethod -> createPaymentFormSelectableOption(cart, shippingMethod, selectedPaymentMethodId))
+    @Override
+    protected PaymentMethodFormFieldBean getViewModelInstance() {
+        return new PaymentMethodFormFieldBean();
+    }
+
+    @Override
+    protected final void initialize(final PaymentMethodFormFieldBean bean, final Data data) {
+        fillList(bean, data);
+    }
+
+    protected void fillList(final PaymentMethodFormFieldBean bean, final Data data) {
+        final String selectedPaymentMethodId = FormUtils.extractFormField(data.form, data.formFieldName);
+        bean.setList(data.paymentMethodInfoList.stream()
+                .map(paymentMethodInfo -> paymentFormSelectableOptionBeanFactory.create(paymentMethodInfo, selectedPaymentMethodId))
                 .collect(toList()));
     }
 
-    protected PaymentFormSelectableOptionBean createPaymentFormSelectableOption(final Cart cart, final PaymentMethodInfo paymentMethod,
-                                                                                @Nullable final String selectedPaymentMethodId) {
-        final PaymentFormSelectableOptionBean bean = new PaymentFormSelectableOptionBean();
-        initializePaymentFormSelectableOption(bean, cart, paymentMethod, selectedPaymentMethodId);
-        return bean;
-    }
+    protected final static class Data extends Base {
 
-    protected void initializePaymentFormSelectableOption(final PaymentFormSelectableOptionBean bean, final Cart cart, final PaymentMethodInfo paymentMethod,
-                                                         final @Nullable String selectedPaymentMethodId) {
-        bean.setLabel(Optional.ofNullable(paymentMethod.getName())
-                .flatMap(locString -> locString.find(userContext.locales()))
-                .orElse("-"));
-        bean.setValue(paymentMethod.getMethod());
-        bean.setSelected(Objects.equals(paymentMethod.getMethod(), selectedPaymentMethodId));
-    }
+        public final Form<?> form;
+        public final String formFieldName;
+        public final Cart cart;
+        public final List<PaymentMethodInfo> paymentMethodInfoList;
 
-    @Nullable
-    protected String getSelectedMethodId(final Form<?> form, final String fieldName) {
-        return form.field(fieldName).value();
+        public Data(final Form<?> form, final String formFieldName, final Cart cart, final List<PaymentMethodInfo> paymentMethodInfoList) {
+            this.form = form;
+            this.formFieldName = formFieldName;
+            this.cart = cart;
+            this.paymentMethodInfoList = paymentMethodInfoList;
+        }
     }
 }

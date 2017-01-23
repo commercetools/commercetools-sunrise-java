@@ -1,72 +1,66 @@
 package com.commercetools.sunrise.common.forms;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.common.models.FormFieldFactory;
+import io.sphere.sdk.models.Base;
 import play.Configuration;
 import play.data.Form;
 
-import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.util.List;
-import java.util.Locale;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class TitleFormFieldBeanFactory extends ViewModelFactory {
+public class TitleFormFieldBeanFactory extends FormFieldFactory<TitleFormFieldBean, TitleFormFieldBeanFactory.Data> {
 
-    private static final String CONFIG_TITLE_OPTIONS = "form.titles";
-    private final List<String> defaultTitles;
-    private final Locale locale;
-    private final I18nResolver i18nResolver;
-    private final I18nIdentifierFactory i18nIdentifierFactory;
+    private final List<String> defaultTitleKeys;
+    private final TitleFormSelectableOptionBeanFactory titleFormSelectableOptionBeanFactory;
 
-    public TitleFormFieldBeanFactory(final Locale locale, final I18nResolver i18nResolver,
-                                     final I18nIdentifierFactory i18nIdentifierFactory, final Configuration configuration) {
-        this.defaultTitles = configuration.getStringList(CONFIG_TITLE_OPTIONS, emptyList());
-        this.locale = locale;
-        this.i18nResolver = i18nResolver;
-        this.i18nIdentifierFactory = i18nIdentifierFactory;
+    @Inject
+    public TitleFormFieldBeanFactory(final Configuration configuration, final TitleFormSelectableOptionBeanFactory titleFormSelectableOptionBeanFactory) {
+        this.defaultTitleKeys = configuration.getStringList("form.titles", emptyList());
+        this.titleFormSelectableOptionBeanFactory = titleFormSelectableOptionBeanFactory;
     }
 
-    public TitleFormFieldBean create(final Form<?> form, final String fieldName, final List<String> availableTitles) {
-        final TitleFormFieldBean bean = new TitleFormFieldBean();
-        initialize(bean, form, fieldName, availableTitles);
-        return bean;
+    public final TitleFormFieldBean create(final Form<?> form, final String formFieldName, final List<String> availableTitleKeys) {
+        final Data data = new Data(form, formFieldName, availableTitleKeys);
+        return initializedViewModel(data);
     }
 
-    public TitleFormFieldBean createWithDefaultTitles(final Form<?> form, final String fieldName) {
-        return create(form, fieldName, defaultTitles);
+    public final TitleFormFieldBean createWithDefaultTitles(final Form<?> form, final String formFieldName) {
+        final Data data = new Data(form, formFieldName, defaultTitleKeys);
+        return initializedViewModel(data);
     }
 
-    protected final void initialize(final TitleFormFieldBean bean, final Form<?> form, final String fieldName, final List<String> availableTitles) {
-        fillList(bean, form, fieldName, availableTitles);
+    @Override
+    protected TitleFormFieldBean getViewModelInstance() {
+        return new TitleFormFieldBean();
     }
 
-    protected void fillList(final TitleFormFieldBean bean, final Form<?> form, final String fieldName, final List<String> availableTitles) {
-        final String selectedTitle = getSelectedTitle(form, fieldName);
-        bean.setList(availableTitles.stream()
-                .map(title -> createFormSelectableOption(title, selectedTitle))
+    @Override
+    protected final void initialize(final TitleFormFieldBean bean, final Data data) {
+        fillList(bean, data);
+    }
+
+    protected void fillList(final TitleFormFieldBean bean, final Data data) {
+        final String selectedTitleKey = FormUtils.extractFormField(data.form, data.formFieldName);
+        bean.setList(data.availableTitleKeys.stream()
+                .map(titleKey -> titleFormSelectableOptionBeanFactory.create(titleKey, selectedTitleKey))
                 .collect(toList()));
     }
 
-    @Nullable
-    private String getSelectedTitle(final Form<?> form, final String fieldName) {
-        return form.field(fieldName).value();
-    }
+    protected final static class Data extends Base {
 
-    private FormSelectableOptionBean createFormSelectableOption(final String titleKey, @Nullable final String selectedTitle) {
-        final FormSelectableOptionBean bean = new FormSelectableOptionBean();
-        final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(titleKey);
-        final String title = i18nResolver.getOrKey(singletonList(locale), i18nIdentifier);
-        bean.setLabel(title);
-        bean.setValue(title);
-        bean.setSelected(title.equals(selectedTitle));
-        return bean;
+        public final Form<?> form;
+        public final String formFieldName;
+        public final List<String> availableTitleKeys;
+
+        public Data(final Form<?> form, final String formFieldName, final List<String> availableTitleKeys) {
+            this.form = form;
+            this.formFieldName = formFieldName;
+            this.availableTitleKeys = availableTitleKeys;
+        }
     }
 }

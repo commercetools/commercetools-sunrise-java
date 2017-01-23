@@ -1,19 +1,18 @@
 package com.commercetools.sunrise.common.forms;
 
-import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
 
-public class TitleFormFieldBean extends Base {
+public class TitleFormFieldBean extends ViewModel {
 
-    private List<FormSelectableOptionBean> list;
+    private List<TitleFormSelectableOptionBean> list;
 
-    public List<FormSelectableOptionBean> getList() {
+    public List<TitleFormSelectableOptionBean> getList() {
         return list;
     }
 
-    public void setList(final List<FormSelectableOptionBean> list) {
+    public void setList(final List<TitleFormSelectableOptionBean> list) {
         this.list = list;
     }
 }

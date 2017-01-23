@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
@@ -18,7 +17,9 @@ import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
 
 import javax.inject.Inject;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.emptyList;
@@ -26,20 +27,25 @@ import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
-public class FacetedSearchComponent implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook, CategoryLoadedHook {
+public final class FacetedSearchComponent implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook, CategoryLoadedHook {
+
+    private final Locale locale;
+    private final I18nResolver i18nResolver;
+    private final I18nIdentifierFactory i18nIdentifierFactory;
+    private final FacetedSearchSelectorListFactory facetedSearchSelectorListFactory;
 
     private List<Category> selectedCategories = emptyList();
     private List<FacetedSearchSelector> facetedSearchSelectorList = emptyList();
     private List<FacetSelectorBean> facetBeans = emptyList();
 
     @Inject
-    private FacetedSearchSelectorListFactory facetedSearchSelectorListFactory;
-    @Inject
-    private UserContext userContext;
-    @Inject
-    private I18nResolver i18nResolver;
-    @Inject
-    private I18nIdentifierFactory i18nIdentifierFactory;
+    public FacetedSearchComponent(final Locale locale, final I18nResolver i18nResolver, final I18nIdentifierFactory i18nIdentifierFactory,
+                                  final FacetedSearchSelectorListFactory facetedSearchSelectorListFactory) {
+        this.locale = locale;
+        this.i18nResolver = i18nResolver;
+        this.i18nIdentifierFactory = i18nIdentifierFactory;
+        this.facetedSearchSelectorListFactory = facetedSearchSelectorListFactory;
+    }
 
     @Override
     public CompletionStage<?> onCategoryLoaded(final Category category) {
@@ -58,7 +64,7 @@ public class FacetedSearchComponent implements ControllerComponent, PageDataRead
     @Override
     public CompletionStage<?> onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult) {
         facetBeans = facetedSearchSelectorList.stream()
-                .sorted((f1, f2) -> Double.compare(f1.getPosition(), f2.getPosition()))
+                .sorted(Comparator.comparingDouble(FacetedSearchSelector::getPosition))
                 .map(facetedSearchSelector -> createFacetSelectorBean(facetedSearchSelector, pagedSearchResult))
                 .collect(toList());
         return completedFuture(null);
@@ -77,7 +83,7 @@ public class FacetedSearchComponent implements ControllerComponent, PageDataRead
         final Facet<ProductProjection> facet = facetedSearchSelector.getFacet(searchResult);
         if (facet.getLabel() != null) {
             final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(facet.getLabel());
-            final String label = i18nResolver.getOrKey(userContext.locales(), i18nIdentifier);
+            final String label = i18nResolver.getOrKey(singletonList(locale), i18nIdentifier);
             bean.setFacet(facet.withLabel(label));
         } else {
             bean.setFacet(facet);

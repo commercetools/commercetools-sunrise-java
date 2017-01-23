@@ -14,7 +14,7 @@ import static com.commercetools.sunrise.productcatalog.productoverview.search.Se
 @RequestScoped
 public class PaginationFactory extends Base {
 
-    private static final int DEFAULT_PAGE = 1;
+    public static final int DEFAULT_PAGE = 1;
     private final String key;
     private final RequestContext requestContext;
 

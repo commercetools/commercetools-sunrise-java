@@ -54,7 +54,7 @@ public class ProductBeanFactory extends ViewModelFactory {
     }
 
     protected void fillAttributes(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setAttributes(selectableProductAttributeBeanFactory.createList(variant, product));
+        bean.setAttributes(selectableProductAttributeBeanFactory.createList(product, variant));
     }
 
     protected void fillAttributeCombination(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {

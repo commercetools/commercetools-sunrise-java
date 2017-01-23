@@ -1,9 +1,10 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.ViewModelFactory;
+import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
+import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.ProductBeanFactory;
 import io.sphere.sdk.products.ProductProjection;
@@ -13,20 +14,22 @@ import javax.inject.Inject;
 import java.util.Locale;
 
 @RequestScoped
-public class ProductDetailPageContentFactory extends ViewModelFactory {
+public class ProductDetailPageContentFactory extends PageContentFactory {
 
     private final Locale locale;
     private final LocalizedStringResolver localizedStringResolver;
+    private final PageTitleResolver pageTitleResolver;
     private final CartReverseRouter cartReverseRouter;
     private final BreadcrumbBeanFactory breadcrumbBeanFactory;
     private final ProductBeanFactory productBeanFactory;
 
     @Inject
     public ProductDetailPageContentFactory(final Locale locale, final LocalizedStringResolver localizedStringResolver,
-                                           final CartReverseRouter cartReverseRouter, final BreadcrumbBeanFactory breadcrumbBeanFactory,
-                                           final ProductBeanFactory productBeanFactory) {
+                                           final PageTitleResolver pageTitleResolver, final CartReverseRouter cartReverseRouter,
+                                           final BreadcrumbBeanFactory breadcrumbBeanFactory, final ProductBeanFactory productBeanFactory) {
         this.locale = locale;
         this.localizedStringResolver = localizedStringResolver;
+        this.pageTitleResolver = pageTitleResolver;
         this.cartReverseRouter = cartReverseRouter;
         this.breadcrumbBeanFactory = breadcrumbBeanFactory;
         this.productBeanFactory = productBeanFactory;
@@ -39,7 +42,7 @@ public class ProductDetailPageContentFactory extends ViewModelFactory {
     }
 
     protected final void initialize(final ProductDetailPageContent bean, final ProductProjection product, final ProductVariant variant) {
-        fillAdditionalTitle(product, bean);
+        fillTitle(bean, product);
         fillProduct(product, variant, bean);
         fillBreadCrumb(product, variant, bean);
         fillAddToCartFormUrl(bean);
@@ -49,8 +52,11 @@ public class ProductDetailPageContentFactory extends ViewModelFactory {
         content.setAddToCartFormUrl(cartReverseRouter.processAddProductToCartForm(locale.toLanguageTag()).url()); // TODO move to page meta
     }
 
-    protected void fillAdditionalTitle(final ProductProjection product, final ProductDetailPageContent content) {
-        content.setTitle(localizedStringResolver.getOrEmpty(product.getName()));
+    protected void fillTitle(final ProductDetailPageContent content, final ProductProjection product) {
+        final String title = String.format("%s %s",
+                localizedStringResolver.getOrEmpty(product.getName()),
+                pageTitleResolver.getOrEmpty("catalog:productDetailPage.title"));
+        content.setTitle(title);
     }
 
     protected void fillBreadCrumb(final ProductProjection product, final ProductVariant variant, final ProductDetailPageContent content) {

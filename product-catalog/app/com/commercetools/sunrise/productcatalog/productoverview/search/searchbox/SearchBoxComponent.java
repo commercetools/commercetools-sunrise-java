@@ -10,13 +10,17 @@ import io.sphere.sdk.products.search.ProductProjectionSearch;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-public class SearchBoxComponent implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook {
+public final class SearchBoxComponent implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook {
+
+    private final SearchBoxFactory searchBoxFactory;
 
     @Nullable
     private SearchBox searchBox;
 
     @Inject
-    private SearchBoxFactory searchBoxFactory;
+    public SearchBoxComponent(final SearchBoxFactory searchBoxFactory) {
+        this.searchBoxFactory = searchBoxFactory;
+    }
 
     @Override
     public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {

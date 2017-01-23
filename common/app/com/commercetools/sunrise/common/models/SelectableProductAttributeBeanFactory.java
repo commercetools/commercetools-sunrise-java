@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.models;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.utils.AttributeFormatter;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
@@ -13,70 +14,79 @@ import java.util.*;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class SelectableProductAttributeBeanFactory extends ViewModelFactory {
+public class SelectableProductAttributeBeanFactory extends ViewModelFactory<SelectableProductAttributeBean, SelectableProductAttributeBeanFactory.Data> {
 
     private final AttributeFormatter attributeFormatter;
     private final ProductDataConfig productDataConfig;
+    private final ProductAttributeFormSelectableOptionBeanFactory productAttributeFormSelectableOptionBeanFactory;
 
     @Inject
-    public SelectableProductAttributeBeanFactory(final AttributeFormatter attributeFormatter, final ProductDataConfig productDataConfig) {
+    public SelectableProductAttributeBeanFactory(final AttributeFormatter attributeFormatter, final ProductDataConfig productDataConfig,
+                                                 final ProductAttributeFormSelectableOptionBeanFactory productAttributeFormSelectableOptionBeanFactory) {
         this.attributeFormatter = attributeFormatter;
         this.productDataConfig = productDataConfig;
+        this.productAttributeFormSelectableOptionBeanFactory = productAttributeFormSelectableOptionBeanFactory;
     }
 
-    public SelectableProductAttributeBean create(final Attribute attribute, final ProductProjection product) {
-        final SelectableProductAttributeBean bean = new SelectableProductAttributeBean();
-        initialize(bean, attribute, product);
-        return bean;
+    public final SelectableProductAttributeBean create(final Attribute attribute, final ProductProjection product) {
+        final Data data = new Data(attribute, product);
+        return initializedViewModel(data);
     }
 
-    public List<SelectableProductAttributeBean> createList(final ProductVariant variant, final ProductProjection product) {
+    public final List<SelectableProductAttributeBean> createList(final ProductProjection product, final ProductVariant variant) {
         return productDataConfig.getSelectableAttributes().stream()
                 .map(variant::getAttribute)
                 .filter(Objects::nonNull)
-                .map(attr -> create(attr, product))
+                .map(attribute -> create(attribute, product))
                 .collect(toList());
     }
 
-    protected final void initialize(final SelectableProductAttributeBean bean, final Attribute attribute, final ProductProjection product) {
-        fillAttributeInfo(bean, attribute);
-        fillReload(bean, attribute);
-        fillAttributeCombinations(bean, attribute, product);
+    @Override
+    protected SelectableProductAttributeBean getViewModelInstance() {
+        return new SelectableProductAttributeBean();
     }
 
-    protected void fillAttributeInfo(final SelectableProductAttributeBean bean, final Attribute attribute) {
-        bean.setKey(attribute.getName());
-        bean.setName(attributeFormatter.label(attribute));
-        bean.setValue(attributeFormatter.value(attribute));
+    @Override
+    protected final void initialize(final SelectableProductAttributeBean bean, final Data data) {
+        fillKey(bean, data);
+        fillName(bean, data);
+        fillValue(bean, data);
+        fillReload(bean, data);
+        fillList(bean, data);
+        fillSelectData(bean, data);
     }
 
-    protected void fillReload(final SelectableProductAttributeBean bean, final Attribute attribute) {
-        bean.setReload(productDataConfig.getHardSelectableAttributes().contains(attribute.getName()));
+    protected void fillKey(final SelectableProductAttributeBean bean, final Data data) {
+        bean.setKey(data.attribute.getName());
     }
 
-    protected void fillAttributeCombinations(final SelectableProductAttributeBean bean, final Attribute attribute, final ProductProjection product) {
-        final Map<String, Map<String, List<String>>> selectableData = new HashMap<>();
-        final List<FormSelectableOptionBean> formOptions = new ArrayList<>();
-        product.getAllVariants().stream()
-                .map(variant -> variant.getAttribute(attribute.getName()))
-                .filter(Objects::nonNull)
-                .distinct()
-                .forEach(attrOption -> {
-                    final String attrOptionValue = attributeFormatter.value(attrOption);
-                    formOptions.add(createFormOption(attribute, attrOption, attrOptionValue));
-                    selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attrOption, product));
-                });
+    protected void fillName(final SelectableProductAttributeBean bean, final Data data) {
+        bean.setName(attributeFormatter.label(data.attribute));
+    }
+
+    protected void fillValue(final SelectableProductAttributeBean bean, final Data data) {
+        bean.setValue(attributeFormatter.value(data.attribute));
+    }
+
+    protected void fillReload(final SelectableProductAttributeBean bean, final Data data) {
+        bean.setReload(productDataConfig.getHardSelectableAttributes().contains(data.attribute.getName()));
+    }
+
+    protected void fillList(final SelectableProductAttributeBean bean, final Data data) {
+        final List<ProductAttributeFormSelectableOptionBean> formOptions = new ArrayList<>();
+        final String selectedAttributeValue = attributeFormatter.valueAsKey(data.attribute);
+        data.distinctAttributeOptions.forEach(attribute ->
+                formOptions.add(productAttributeFormSelectableOptionBeanFactory.create(attribute, selectedAttributeValue)));
         bean.setList(formOptions);
-        bean.setSelectData(selectableData);
     }
 
-    private FormSelectableOptionBean createFormOption(final Attribute attribute, final Attribute attributeOption,
-                                                      final String attributeOptionValue) {
-        final FormSelectableOptionBean bean = new FormSelectableOptionBean();
-        bean.setLabel(attributeOptionValue);
-        bean.setValue(attributeFormatter.valueAsKey(attribute));
-        bean.setSelected(attributeOption.equals(attribute));
-        return bean;
+    protected void fillSelectData(final SelectableProductAttributeBean bean, final Data data) {
+        final Map<String, Map<String, List<String>>> selectableData = new HashMap<>();
+        data.distinctAttributeOptions.forEach(attrOption -> {
+            final String attrOptionValue = attributeFormatter.value(attrOption);
+            selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attrOption, data.product));
+        });
+        bean.setSelectData(selectableData);
     }
 
     private Map<String, List<String>> createAllowedAttributeCombinations(final Attribute fixedAttribute, final ProductProjection product) {
@@ -102,5 +112,22 @@ public class SelectableProductAttributeBeanFactory extends ViewModelFactory {
                 .map(variant -> attributeFormatter.value(variant.getAttribute(attributeKey)))
                 .distinct()
                 .collect(toList());
+    }
+
+    protected final static class Data extends Base {
+
+        public final Attribute attribute;
+        public final ProductProjection product;
+        public final List<Attribute> distinctAttributeOptions;
+
+        public Data(final Attribute attribute, final ProductProjection product) {
+            this.attribute = attribute;
+            this.product = product;
+            this.distinctAttributeOptions = product.getAllVariants().stream()
+                    .map(variant -> variant.getAttribute(attribute.getName()))
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(toList());
+        }
     }
 }

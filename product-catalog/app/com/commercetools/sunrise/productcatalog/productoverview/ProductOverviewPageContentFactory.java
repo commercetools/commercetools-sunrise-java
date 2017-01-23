@@ -2,8 +2,8 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.models.TitleDescriptionBean;
-import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @RequestScoped
-public class ProductOverviewPageContentFactory extends ViewModelFactory {
+public class ProductOverviewPageContentFactory extends PageContentFactory {
 
     private final LocalizedStringResolver localizedStringResolver;
     private final CategoryTree categoryTree;
@@ -36,49 +36,49 @@ public class ProductOverviewPageContentFactory extends ViewModelFactory {
         this.productListBeanFactory = productListBeanFactory;
     }
 
-    public ProductOverviewPageContent create(@Nullable final Category category, final PagedSearchResult<ProductProjection> searchResult) {
+    public ProductOverviewPageContent create(final PagedSearchResult<ProductProjection> searchResult, @Nullable final Category category) {
         final ProductOverviewPageContent bean = new ProductOverviewPageContent();
-        initialize(bean, category, searchResult);
+        initialize(bean, searchResult, category);
         return bean;
     }
 
-    protected final void initialize(final ProductOverviewPageContent bean, final @Nullable Category category, final PagedSearchResult<ProductProjection> searchResult) {
-        fillProducts(bean, searchResult);
-        fillFilterProductsUrl(bean);
+    protected final void initialize(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult, @Nullable final Category category) {
+        fillProducts(bean, searchResult, category);
+        fillFilterProductsUrl(bean, searchResult, category);
         if (category != null) {
-            fillBanner(bean, category);
-            fillBreadcrumb(bean, category);
-            fillTitle(bean, category);
-            fillJumbotron(bean, category);
-            fillSeo(bean, category);
+            fillBanner(bean, searchResult, category);
+            fillBreadcrumb(bean, searchResult, category);
+            fillTitle(bean, searchResult, category);
+            fillJumbotron(bean, searchResult, category);
+            fillSeo(bean, searchResult, category);
         }
     }
 
-    protected void fillFilterProductsUrl(final ProductOverviewPageContent bean) {
+    protected void fillFilterProductsUrl(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult, @Nullable final Category category) {
         bean.setFilterProductsUrl(requestContext.getPath());
     }
 
-    protected void fillProducts(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult) {
+    protected void fillProducts(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult, @Nullable final Category category) {
         bean.setProducts(productListBeanFactory.create(searchResult.getResults()));
     }
 
-    protected void fillSeo(final ProductOverviewPageContent bean, final Category category) {
+    protected void fillSeo(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult, final Category category) {
         bean.setSeo(createSeo(category));
     }
 
-    protected void fillBreadcrumb(final ProductOverviewPageContent bean, final Category category) {
+    protected void fillBreadcrumb(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult, final Category category) {
         bean.setBreadcrumb(breadcrumbBeanFactory.create(category));
     }
 
-    protected void fillTitle(final ProductOverviewPageContent bean, final Category category) {
+    protected void fillTitle(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult, final Category category) {
         bean.setTitle(localizedStringResolver.getOrEmpty(category.getName()));
     }
 
-    protected void fillJumbotron(final ProductOverviewPageContent bean, final Category category) {
+    protected void fillJumbotron(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult, final Category category) {
         bean.setJumbotron(createJumbotron(category));
     }
 
-    protected void fillBanner(final ProductOverviewPageContent bean, final Category category) {
+    protected void fillBanner(final ProductOverviewPageContent bean, final PagedSearchResult<ProductProjection> searchResult, final Category category) {
         bean.setBanner(createBanner(category));
     }
 
