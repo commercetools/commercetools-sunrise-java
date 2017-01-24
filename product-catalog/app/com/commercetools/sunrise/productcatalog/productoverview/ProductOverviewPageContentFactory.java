@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.models.TitleDescriptionBean;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
-import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
+import com.commercetools.sunrise.productcatalog.common.CategoryBreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
@@ -22,12 +22,12 @@ public class ProductOverviewPageContentFactory extends PageContentFactory {
     private final LocalizedStringResolver localizedStringResolver;
     private final CategoryTree categoryTree;
     private final RequestContext requestContext;
-    private final BreadcrumbBeanFactory breadcrumbBeanFactory;
+    private final CategoryBreadcrumbBeanFactory breadcrumbBeanFactory;
     private final ProductListBeanFactory productListBeanFactory;
 
     @Inject
     public ProductOverviewPageContentFactory(final LocalizedStringResolver localizedStringResolver, final CategoryTree categoryTree,
-                                             final RequestContext requestContext, final BreadcrumbBeanFactory breadcrumbBeanFactory,
+                                             final RequestContext requestContext, final CategoryBreadcrumbBeanFactory breadcrumbBeanFactory,
                                              final ProductListBeanFactory productListBeanFactory) {
         this.localizedStringResolver = localizedStringResolver;
         this.categoryTree = categoryTree;

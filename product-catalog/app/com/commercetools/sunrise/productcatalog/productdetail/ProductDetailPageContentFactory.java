@@ -5,8 +5,8 @@ import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
-import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.ProductBeanFactory;
+import com.commercetools.sunrise.productcatalog.common.ProductBreadcrumbBeanFactory;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
@@ -20,13 +20,13 @@ public class ProductDetailPageContentFactory extends PageContentFactory {
     private final LocalizedStringResolver localizedStringResolver;
     private final PageTitleResolver pageTitleResolver;
     private final CartReverseRouter cartReverseRouter;
-    private final BreadcrumbBeanFactory breadcrumbBeanFactory;
+    private final ProductBreadcrumbBeanFactory breadcrumbBeanFactory;
     private final ProductBeanFactory productBeanFactory;
 
     @Inject
     public ProductDetailPageContentFactory(final Locale locale, final LocalizedStringResolver localizedStringResolver,
                                            final PageTitleResolver pageTitleResolver, final CartReverseRouter cartReverseRouter,
-                                           final BreadcrumbBeanFactory breadcrumbBeanFactory, final ProductBeanFactory productBeanFactory) {
+                                           final ProductBreadcrumbBeanFactory breadcrumbBeanFactory, final ProductBeanFactory productBeanFactory) {
         this.locale = locale;
         this.localizedStringResolver = localizedStringResolver;
         this.pageTitleResolver = pageTitleResolver;

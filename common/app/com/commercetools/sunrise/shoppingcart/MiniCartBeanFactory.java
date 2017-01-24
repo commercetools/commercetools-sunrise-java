@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import javax.money.CurrencyUnit;
 
 @RequestScoped
-public class MiniCartBeanFactory extends AbstractMiniCartBeanFactory<MiniCartBean, Cart> {
+public class MiniCartBeanFactory extends AbstractMiniCartBeanFactory<MiniCartBean, MiniCartBeanFactory.Data, Cart> {
 
     private final LineItemBeanFactory lineItemBeanFactory;
 
@@ -21,12 +21,12 @@ public class MiniCartBeanFactory extends AbstractMiniCartBeanFactory<MiniCartBea
     }
 
     public final MiniCartBean create(@Nullable final Cart cart) {
-        final Data<Cart> data = new Data<>(cart);
+        final Data data = new Data(cart);
         return initializedViewModel(data);
     }
 
     @Override
-    protected final void initialize(final MiniCartBean bean, final Data<Cart> data) {
+    protected final void initialize(final MiniCartBean bean, final Data data) {
         super.initialize(bean, data);
     }
 
@@ -36,7 +36,18 @@ public class MiniCartBeanFactory extends AbstractMiniCartBeanFactory<MiniCartBea
     }
 
     @Override
-    protected final LineItemBean createLineItem(final LineItem lineItem) {
+    LineItemBean createLineItem(final LineItem lineItem) {
         return lineItemBeanFactory.create(lineItem);
+    }
+
+    protected final static class Data extends AbstractMiniCartBeanFactory.Data<Cart> {
+
+        @Nullable
+        public final Cart cart;
+
+        public Data(@Nullable final Cart cart) {
+            super(cart);
+            this.cart = cart;
+        }
     }
 }

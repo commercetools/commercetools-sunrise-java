@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
 import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
-import com.commercetools.sunrise.productcatalog.common.BreadcrumbBeanFactory;
+import com.commercetools.sunrise.productcatalog.common.CategoryBreadcrumbBeanFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -24,7 +24,7 @@ import static com.commercetools.sunrise.common.utils.JsonUtils.readCtpObject;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BreadcrumbBeanFactoryTest {
+public class CategoryBreadcrumbBeanFactoryTest {
 
     private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("breadcrumb/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
     private static final ProductProjection PRODUCT = readCtpObject("breadcrumb/breadcrumbProduct.json", ProductProjection.typeReference());
@@ -51,7 +51,7 @@ public class BreadcrumbBeanFactoryTest {
                 urls -> assertThat(urls).containsExactly("category-1st-level", "category-2nd-level", "product-some-product-some-sku"));
     }
 
-    private static BreadcrumbBeanFactory createBreadcrumbBeanFactory() {
+    private static CategoryBreadcrumbBeanFactory createBreadcrumbBeanFactory() {
         final Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
             public void configure() {
@@ -60,11 +60,11 @@ public class BreadcrumbBeanFactoryTest {
                 bind(ProductReverseRouter.class).toInstance(REVERSE_ROUTER);
             }
         });
-        return injector.getInstance(BreadcrumbBeanFactory.class);
+        return injector.getInstance(CategoryBreadcrumbBeanFactory.class);
     }
 
     private void testCategoryBreadcrumb(final String extId, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        final BreadcrumbBeanFactory breadcrumbBeanFactory = createBreadcrumbBeanFactory();
+        final CategoryBreadcrumbBeanFactory breadcrumbBeanFactory = createBreadcrumbBeanFactory();
         final Category category = CATEGORY_TREE.findByExternalId(extId).get();
         final BreadcrumbBean breadcrumb = breadcrumbBeanFactory.create(category);
         testBreadcrumb(breadcrumb, texts, urls);

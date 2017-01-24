@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.models.Base;
 
-public abstract class AbstractLineItemBeanFactory<T extends LineItemBean> extends ViewModelFactory<T, AbstractLineItemBeanFactory.Data> {
+abstract class AbstractLineItemBeanFactory<T extends LineItemBean> extends ViewModelFactory<T, AbstractLineItemBeanFactory.Data> {
 
     private final PriceFormatter priceFormatter;
     private final ProductVariantBeanFactory productVariantBeanFactory;

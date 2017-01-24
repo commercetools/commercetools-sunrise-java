@@ -1,91 +1,107 @@
 package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.ProductAttributeBeanFactory;
+import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.models.ProductVariantBeanFactory;
 import com.commercetools.sunrise.common.models.SelectableProductAttributeBeanFactory;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
-import io.sphere.sdk.products.Image;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 import javax.inject.Inject;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
-
 @RequestScoped
-public class ProductBeanFactory extends ViewModelFactory {
+public class ProductBeanFactory extends ViewModelFactory<ProductBean, ProductBeanFactory.Data> {
 
     private final LocalizedStringResolver localizedStringResolver;
+    private final ProductDataConfig productDataConfig;
     private final ProductVariantBeanFactory productVariantBeanFactory;
-    private final ProductAttributeBeanFactory productAttributeBeanFactory;
+    private final ProductDetailsBeanFactory productDetailsBeanFactory;
+    private final ProductGalleryBeanFactory productGalleryBeanFactory;
     private final SelectableProductAttributeBeanFactory selectableProductAttributeBeanFactory;
-    private final ProductBeanWithAttributeCombinationFactory productBeanWithAttributeCombinationFactory;
+    private final ProductVariantReferenceBeanMapFactory productVariantReferenceBeanMapFactory;
 
     @Inject
-    public ProductBeanFactory(final LocalizedStringResolver localizedStringResolver, final ProductVariantBeanFactory productVariantBeanFactory,
-                              final ProductAttributeBeanFactory productAttributeBeanFactory,
-                              final SelectableProductAttributeBeanFactory selectableProductAttributeBeanFactory,
-                              final ProductBeanWithAttributeCombinationFactory productBeanWithAttributeCombinationFactory) {
+    public ProductBeanFactory(final LocalizedStringResolver localizedStringResolver, final ProductDataConfig productDataConfig,
+                              final ProductVariantBeanFactory productVariantBeanFactory, final ProductDetailsBeanFactory productDetailsBeanFactory,
+                              final ProductGalleryBeanFactory productGalleryBeanFactory, final SelectableProductAttributeBeanFactory selectableProductAttributeBeanFactory,
+                              final ProductVariantReferenceBeanMapFactory productVariantReferenceBeanMapFactory) {
         this.localizedStringResolver = localizedStringResolver;
+        this.productDataConfig = productDataConfig;
         this.productVariantBeanFactory = productVariantBeanFactory;
-        this.productAttributeBeanFactory = productAttributeBeanFactory;
+        this.productDetailsBeanFactory = productDetailsBeanFactory;
+        this.productGalleryBeanFactory = productGalleryBeanFactory;
         this.selectableProductAttributeBeanFactory = selectableProductAttributeBeanFactory;
-        this.productBeanWithAttributeCombinationFactory = productBeanWithAttributeCombinationFactory;
+        this.productVariantReferenceBeanMapFactory = productVariantReferenceBeanMapFactory;
     }
 
-    public ProductBean create(final ProductProjection product, final ProductVariant variant) {
-        final ProductBean bean = new ProductBean();
-        initialize(bean, product, variant);
-        return bean;
+    public final ProductBean create(final ProductProjection product, final ProductVariant variant) {
+        final Data data = new Data(product, variant);
+        return initializedViewModel(data);
     }
 
-    protected final void initialize(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        fillIds(bean, product, variant);
-        fillDescription(bean, product, variant);
-        fillGallery(bean, product, variant);
-        fillDetails(bean, product, variant);
-        fillVariant(bean, product, variant);
-        fillAttributes(bean, product, variant);
-        fillAvailability(bean, product, variant);
-        fillAttributeCombination(bean, product, variant);
+    @Override
+    protected ProductBean getViewModelInstance() {
+        return new ProductBean();
     }
 
-    protected void fillAttributes(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setAttributes(selectableProductAttributeBeanFactory.createList(product, variant));
+    @Override
+    protected final void initialize(final ProductBean bean, final Data data) {
+        fillProductId(bean, data);
+        fillVariantId(bean, data);
+        fillDescription(bean, data);
+        fillGallery(bean, data);
+        fillDetails(bean, data);
+        fillVariant(bean, data);
+        fillAttributes(bean, data);
+        fillAvailability(bean, data);
+        fillVariantIdentifiers(bean, data);
+        fillAttributeCombination(bean, data);
     }
 
-    protected void fillAttributeCombination(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        productBeanWithAttributeCombinationFactory.fill(bean, product, variant);
+    protected void fillProductId(final ProductBean bean, final Data data) {
+        bean.setProductId(data.product.getId());
     }
 
-    protected void fillVariant(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setVariant(productVariantBeanFactory.create(product, variant));
+    protected void fillVariantId(final ProductBean bean, final Data data) {
+        bean.setVariantId(data.variant.getId());
     }
 
-    protected void fillDetails(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setDetails(createProductDetails(variant));
-    }
-
-    protected void fillGallery(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setGallery(createGallery(variant));
-    }
-
-    protected void fillDescription(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setDescription(Optional.ofNullable(product.getDescription())
+    protected void fillDescription(final ProductBean bean, final Data data) {
+        bean.setDescription(Optional.ofNullable(data.product.getDescription())
                 .flatMap(localizedStringResolver::find)
                 .orElse(""));
     }
 
-    protected void fillIds(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setProductId(product.getId());
-        bean.setVariantId(variant.getId());
+    protected void fillGallery(final ProductBean bean, final Data data) {
+        bean.setGallery(productGalleryBeanFactory.create(data.product, data.variant));
     }
 
-    protected void fillAvailability(final ProductBean bean, final ProductProjection product, final ProductVariant variant) {
-        Optional.ofNullable(variant.getAvailability())
+    protected void fillDetails(final ProductBean bean, final Data data) {
+        bean.setDetails(productDetailsBeanFactory.create(data.product, data.variant));
+    }
+
+    protected void fillVariant(final ProductBean bean, final Data data) {
+        bean.setVariant(productVariantBeanFactory.create(data.product, data.variant));
+    }
+
+    protected void fillAttributes(final ProductBean bean, final Data data) {
+        bean.setAttributes(selectableProductAttributeBeanFactory.createList(data.product, data.variant));
+    }
+
+    protected void fillAttributeCombination(final ProductBean bean, final Data data) {
+        bean.setVariants(productVariantReferenceBeanMapFactory.create(data.product, data.variant));
+    }
+
+    protected void fillVariantIdentifiers(final ProductBean bean, final Data data) {
+        bean.setVariantIdentifiers(productDataConfig.getSelectableAttributes());
+    }
+
+    protected void fillAvailability(final ProductBean bean, final Data data) {
+        Optional.ofNullable(data.variant.getAvailability())
                 .flatMap(productVariantAvailability -> Optional.ofNullable(productVariantAvailability.getAvailableQuantity()))
                 .ifPresent(quantity -> {
                     final String status;
@@ -100,25 +116,15 @@ public class ProductBeanFactory extends ViewModelFactory {
                 });
     }
 
-    private ProductGalleryBean createGallery(final ProductVariant variant) {
-        final ProductGalleryBean bean = new ProductGalleryBean();
-        bean.setList(variant.getImages().stream()
-                .map(this::createProductImage)
-                .collect(toList()));
-        return bean;
-    }
+    protected final static class Data extends Base {
 
-    private ProductImageBean createProductImage(final Image image) {
-        final ProductImageBean imageBean = new ProductImageBean();
-        imageBean.setThumbImage(image.getUrl());
-        imageBean.setBigImage(image.getUrl());
-        return imageBean;
-    }
+        public final ProductProjection product;
+        public final ProductVariant variant;
 
-    private ProductDetailsBean createProductDetails(final ProductVariant variant) {
-        final ProductDetailsBean bean = new ProductDetailsBean();
-        bean.setFeatures(productAttributeBeanFactory.createList(variant));
-        return bean;
+        public Data(final ProductProjection product, final ProductVariant variant) {
+            this.product = product;
+            this.variant = variant;
+        }
     }
 
 }

@@ -33,6 +33,16 @@ public final class ProductPriceUtils {
         return calculatePreviousPrice(lineItem.getPrice());
     }
 
+    public static boolean hasDiscount(final ProductVariant variant) {
+        return findSelectedPrice(variant)
+                .map(ProductPriceUtils::hasDiscount)
+                .orElse(false);
+    }
+
+    public static boolean hasDiscount(final LineItem lineItem) {
+        return hasDiscount(lineItem.getPrice());
+    }
+
     private static MonetaryAmount calculateAppliedPrice(final PriceLike price) {
         return findPriceWithDiscount(price)
                 .orElseGet(price::getValue);
@@ -46,6 +56,10 @@ public final class ProductPriceUtils {
     private static Optional<MonetaryAmount> findPriceWithDiscount(final PriceLike price) {
         return Optional.ofNullable(price.getDiscounted())
                 .map(DiscountedPrice::getValue);
+    }
+
+    private static boolean hasDiscount(final PriceLike price) {
+        return price.getDiscounted() != null;
     }
 
     private static Optional<PriceLike> findSelectedPrice(final ProductVariant variant) {

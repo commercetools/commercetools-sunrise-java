@@ -3,14 +3,17 @@ package com.commercetools.sunrise.productcatalog.common;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.categories.CategoryTree;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.commercetools.sunrise.common.utils.ProductPriceUtils.hasDiscount;
+
 @RequestScoped
-public class ProductThumbnailFactory extends ViewModelFactory {
+public class ProductThumbnailFactory extends ViewModelFactory<ProductThumbnailBean, ProductThumbnailFactory.Data> {
 
     private final CategoryTree categoryTreeInNew;
     private final ProductBeanFactory productBeanFactory;
@@ -21,30 +24,44 @@ public class ProductThumbnailFactory extends ViewModelFactory {
         this.productBeanFactory = productBeanFactory;
     }
 
-    public ProductThumbnailBean create(final ProductProjection product, final ProductVariant variant) {
-        final ProductThumbnailBean bean = new ProductThumbnailBean();
-        initialize(bean, product, variant);
-        return bean;
+    public final ProductThumbnailBean create(final ProductProjection product, final ProductVariant variant) {
+        final Data data = new Data(product, variant);
+        return initializedViewModel(data);
     }
 
-    protected final void initialize(final ProductThumbnailBean bean, final ProductProjection product, final ProductVariant variant) {
-        fillProduct(bean, product, variant);
-        fillNew(bean, product, variant);
-        fillSale(bean, product, variant);
+    @Override
+    protected ProductThumbnailBean getViewModelInstance() {
+        return new ProductThumbnailBean();
     }
 
-    protected void fillProduct(final ProductThumbnailBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setProduct(productBeanFactory.create(product, variant));
+    @Override
+    protected final void initialize(final ProductThumbnailBean bean, final Data data) {
+        fillProduct(bean, data);
+        fillNew(bean, data);
+        fillSale(bean, data);
     }
 
-    protected void fillNew(final ProductThumbnailBean bean, final ProductProjection product, final ProductVariant variant) {
-        bean.setNew(product.getCategories().stream()
+    protected void fillProduct(final ProductThumbnailBean bean, final Data data) {
+        bean.setProduct(productBeanFactory.create(data.product, data.variant));
+    }
+
+    protected void fillNew(final ProductThumbnailBean bean, final Data data) {
+        bean.setNew(data.product.getCategories().stream()
                 .anyMatch(category -> categoryTreeInNew.findById(category.getId()).isPresent()));
     }
 
-    protected void fillSale(final ProductThumbnailBean bean, final ProductProjection product, final ProductVariant variant) {
-        final boolean isSale = bean.getProduct() != null && bean.getProduct().getVariant() != null
-                && bean.getProduct().getVariant().getPriceOld() != null;
-        bean.setSale(isSale);
+    protected void fillSale(final ProductThumbnailBean bean, final Data data) {
+        bean.setSale(hasDiscount(data.variant));
+    }
+
+    protected final static class Data extends Base {
+
+        public final ProductProjection product;
+        public final ProductVariant variant;
+
+        public Data(final ProductProjection product, final ProductVariant variant) {
+            this.product = product;
+            this.variant = variant;
+        }
     }
 }

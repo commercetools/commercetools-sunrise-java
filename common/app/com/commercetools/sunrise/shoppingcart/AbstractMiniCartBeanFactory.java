@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateTotalPrice;
 
-public abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, C extends CartLike<?>> extends ViewModelFactory<T, AbstractMiniCartBeanFactory.Data<C>> {
+abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, D extends AbstractMiniCartBeanFactory.Data<C>, C extends CartLike<?>> extends ViewModelFactory<T, D> {
 
     private final CurrencyUnit currency;
     private final PriceFormatter priceFormatter;
@@ -24,16 +24,14 @@ public abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, C exte
         this.priceFormatter = priceFormatter;
     }
 
-    protected abstract LineItemBean createLineItem(final LineItem lineItem);
-
     @Override
-    protected void initialize(final T bean, final Data<C> data) {
+    protected void initialize(final T bean, final D data) {
         fillTotalPrice(bean, data);
         fillTotalItems(bean, data);
         fillLineItems(bean, data);
     }
 
-    protected void fillTotalItems(final T bean, final Data<C> data) {
+    protected void fillTotalItems(final T bean, final D data) {
         final long totalItems;
         if (data.cartLike != null) {
             totalItems = data.cartLike.getLineItems().stream()
@@ -45,13 +43,13 @@ public abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, C exte
         bean.setTotalItems(totalItems);
     }
 
-    protected void fillLineItems(final T bean, final Data<C> data) {
+    protected void fillLineItems(final T bean, final D data) {
         if (data.cartLike != null) {
             bean.setLineItems(createLineItemList(data.cartLike));
         }
     }
 
-    protected void fillTotalPrice(final T bean, final Data<C> data) {
+    protected void fillTotalPrice(final T bean, final D data) {
         final MonetaryAmount totalPrice;
         if (data.cartLike != null) {
             totalPrice = calculateTotalPrice(data.cartLike);
@@ -69,14 +67,16 @@ public abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, C exte
         return lineItemListBean;
     }
 
-    private MonetaryAmount zeroAmount(final CurrencyUnit currency) {
+    abstract LineItemBean createLineItem(final LineItem lineItem);
+
+    MonetaryAmount zeroAmount(final CurrencyUnit currency) {
         return PriceUtils.zeroAmount(currency);
     }
 
-    protected final static class Data<C> extends Base {
+    abstract static class Data<C> extends Base {
 
         @Nullable
-        public final C cartLike;
+        final C cartLike;
 
         public Data(@Nullable final C cartLike) {
             this.cartLike = cartLike;

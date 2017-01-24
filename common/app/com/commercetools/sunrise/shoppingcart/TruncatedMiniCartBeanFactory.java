@@ -28,7 +28,7 @@ public class TruncatedMiniCartBeanFactory extends MiniCartBeanFactory {
     }
 
     @Override
-    protected void fillLineItems(final MiniCartBean bean, final Data<Cart> data) {
+    protected void fillLineItems(final MiniCartBean bean, final Data data) {
         super.fillLineItems(bean, data);
         if (lineItemsLimit != null) {
             bean.getLineItems().setList(truncateLineItems(bean.getLineItems().getList(), lineItemsLimit));

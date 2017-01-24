@@ -10,7 +10,7 @@ import javax.money.CurrencyUnit;
 import java.time.format.DateTimeFormatter;
 
 @RequestScoped
-public class OrderBeanFactory extends AbstractCartBeanFactory<OrderBean, Order> {
+public class OrderBeanFactory extends AbstractCartLikeBeanFactory<OrderBean, OrderBeanFactory.Data, Order> {
 
     private final DateTimeFormatter dateTimeFormatter;
     private final LineItemExtendedBeanFactory lineItemExtendedBeanFactory;
@@ -24,7 +24,7 @@ public class OrderBeanFactory extends AbstractCartBeanFactory<OrderBean, Order> 
     }
 
     public final OrderBean create(final Order order) {
-        final Data<Order> data = new Data<>(order);
+        final Data data = new Data(order);
         return initializedViewModel(data);
     }
 
@@ -34,26 +34,32 @@ public class OrderBeanFactory extends AbstractCartBeanFactory<OrderBean, Order> 
     }
 
     @Override
-    protected final void initialize(final OrderBean bean, final Data<Order> data) {
+    protected final void initialize(final OrderBean bean, final Data data) {
         super.initialize(bean, data);
         fillOrderDate(bean, data);
         fillOrderNumber(bean, data);
     }
 
-    protected void fillOrderNumber(final OrderBean bean, final Data<Order> data) {
-        if (data.cartLike != null) {
-            bean.setOrderNumber(data.cartLike.getOrderNumber());
-        }
+    protected void fillOrderNumber(final OrderBean bean, final Data data) {
+        bean.setOrderNumber(data.order.getOrderNumber());
     }
 
-    protected void fillOrderDate(final OrderBean bean, final Data<Order> data) {
-        if (data.cartLike != null) {
-            bean.setOrderDate(dateTimeFormatter.format(data.cartLike.getCreatedAt()));
-        }
+    protected void fillOrderDate(final OrderBean bean, final Data data) {
+        bean.setOrderDate(dateTimeFormatter.format(data.order.getCreatedAt()));
     }
 
     @Override
-    protected final LineItemBean createLineItem(final LineItem lineItem) {
+    LineItemBean createLineItem(final LineItem lineItem) {
         return lineItemExtendedBeanFactory.create(lineItem);
+    }
+
+    protected final static class Data extends AbstractMiniCartBeanFactory.Data<Order> {
+
+        public final Order order;
+
+        public Data(final Order order) {
+            super(order);
+            this.order = order;
+        }
     }
 }

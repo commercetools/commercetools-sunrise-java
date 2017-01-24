@@ -2,6 +2,7 @@ package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
+import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
@@ -11,7 +12,7 @@ import java.util.stream.StreamSupport;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class ProductListBeanFactory extends ViewModelFactory {
+public class ProductListBeanFactory extends ViewModelFactory<ProductListBean, ProductListBeanFactory.Data> {
 
     private final ProductThumbnailFactory productThumbnailFactory;
 
@@ -20,18 +21,23 @@ public class ProductListBeanFactory extends ViewModelFactory {
         this.productThumbnailFactory = productThumbnailFactory;
     }
 
-    public ProductListBean create(final Iterable<ProductProjection> productList) {
-        final ProductListBean bean = new ProductListBean();
-        initialize(bean, productList);
-        return bean;
+    public final ProductListBean create(final Iterable<ProductProjection> productList) {
+        final Data data = new Data(productList);
+        return initializedViewModel(data);
     }
 
-    protected final void initialize(final ProductListBean bean, final Iterable<ProductProjection> productList) {
-        fillList(bean, productList);
+    @Override
+    protected ProductListBean getViewModelInstance() {
+        return new ProductListBean();
     }
 
-    protected void fillList(final ProductListBean bean, final Iterable<ProductProjection> productList) {
-        bean.setList(StreamSupport.stream(productList.spliterator(), false)
+    @Override
+    protected final void initialize(final ProductListBean bean, final Data data) {
+        fillList(bean, data);
+    }
+
+    protected void fillList(final ProductListBean bean, final Data data) {
+        bean.setList(StreamSupport.stream(data.products.spliterator(), false)
                 .map(product -> productThumbnailFactory.create(product, getSelectedVariant(product)))
                 .collect(toList()));
     }
@@ -39,5 +45,14 @@ public class ProductListBeanFactory extends ViewModelFactory {
     private ProductVariant getSelectedVariant(final ProductProjection product) {
         return product.findFirstMatchingVariant()
                 .orElseGet(product::getMasterVariant);
+    }
+
+    protected final static class Data extends Base {
+
+        public final Iterable<ProductProjection> products;
+
+        public Data(final Iterable<ProductProjection> products) {
+            this.products = products;
+        }
     }
 }
