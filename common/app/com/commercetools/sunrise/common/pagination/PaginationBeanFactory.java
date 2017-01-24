@@ -33,10 +33,17 @@ public class PaginationBeanFactory extends ViewModelFactory<PaginationBean, Pagi
     }
 
     @Override
+    protected PaginationBean getViewModelInstance() {
+        return new PaginationBean();
+    }
+
+    @Override
     protected final void initialize(final PaginationBean bean, final Data data) {
-        fillPages(bean, data);
-        fillPreviousUrl(bean, data);
         fillNextUrl(bean, data);
+        fillPreviousUrl(bean, data);
+        fillFirstPage(bean, data);
+        fillLastPage(bean, data);
+        fillPages(bean, data);
     }
 
     protected void fillNextUrl(final PaginationBean bean, final Data data) {
@@ -51,48 +58,44 @@ public class PaginationBeanFactory extends ViewModelFactory<PaginationBean, Pagi
         }
     }
 
-    protected void fillPages(final PaginationBean bean, final Data data) {
-        if (canDisplayAllPages(data)) {
-            fillWithAllPages(bean, data);
-        } else if (data.currentPage < data.thresholdLeft) {
-            fillWithLastAndRestPages(bean, data);
-        } else if (data.currentPage > data.thresholdRight) {
-            fillWithFirstAndRestPages(bean, data);
-        } else {
-            fillWithFirstLastAndMiddlePages(bean, data);
+    protected void fillFirstPage(final PaginationBean bean, final Data data) {
+        if (firstPageIsDisplayed(data)) {
+            bean.setFirstPage(createLinkData(data, 1));
         }
     }
 
-    private boolean canDisplayAllPages(final Data data) {
-        return data.totalPages <= displayedPages;
-    }
-
-
-    // TODO
     protected void fillLastPage(final PaginationBean bean, final Data data) {
-        if (!canDisplayAllPages(data) && data.currentPage > data.thresholdRight) {
+        if (lastPageIsDisplayed(data)) {
             bean.setLastPage(createLinkData(data, data.totalPages));
         }
     }
 
-    protected void fillWithAllPages(final PaginationBean bean, final Data data) {
-        bean.setPages(createPages(data, 1, data.totalPages));
+    protected void fillPages(final PaginationBean bean, final Data data) {
+        long startPage = 1;
+        long endPage = data.totalPages;
+        if (firstPageIsDisplayed(data) && lastPageIsDisplayed(data)) {
+            startPage = data.currentPage - 1;
+            endPage = data.currentPage + 1;
+        } else if (firstPageIsDisplayed(data)) {
+            startPage = data.topThreshold;
+        } else if (lastPageIsDisplayed(data)) {
+            endPage = data.bottomThreshold;
+        }
+        bean.setPages(createPages(data, startPage, endPage));
     }
 
-    protected void fillWithFirstAndRestPages(final PaginationBean bean, final Data data) {
-        bean.setPages(createPages(data, data.thresholdRight, data.totalPages));
-        bean.setFirstPage(createLinkData(data, 1));
+    private boolean notAllPagesAreDisplayed(final Data data) {
+        return data.totalPages > displayedPages;
     }
 
-    protected void fillWithLastAndRestPages(final PaginationBean bean, final Data data) {
-        bean.setPages(createPages(data, 1, data.thresholdLeft));
-        bean.setLastPage(createLinkData(data, data.totalPages));
+    private boolean firstPageIsDisplayed(final Data data) {
+        final boolean currentPageIsAboveBottomThreshold = data.currentPage > data.bottomThreshold;
+        return notAllPagesAreDisplayed(data) && currentPageIsAboveBottomThreshold;
     }
 
-    protected void fillWithFirstLastAndMiddlePages(final PaginationBean bean, final Data data) {
-        bean.setPages(createPages(data, data.currentPage - 1, data.currentPage + 1));
-        bean.setFirstPage(createLinkData(data, 1));
-        bean.setLastPage(createLinkData(data, data.totalPages));
+    private boolean lastPageIsDisplayed(final Data data) {
+        final boolean currentPageIsBelowTopThreshold = data.currentPage < data.topThreshold;
+        return notAllPagesAreDisplayed(data) && currentPageIsBelowTopThreshold;
     }
 
     private List<LinkBean> createPages(final Data data, final long startPage, final long endPage) {
@@ -122,8 +125,8 @@ public class PaginationBeanFactory extends ViewModelFactory<PaginationBean, Pagi
         public final int currentPage;
         public final int pageSize;
         public final long totalPages;
-        public final long thresholdLeft;
-        public final long thresholdRight;
+        public final long bottomThreshold;
+        public final long topThreshold;
 
         public Data(final PagedResult<?> searchResult, final Pagination pagination, final int pageSize, final int displayedPages) {
             this.searchResult = searchResult;
@@ -131,8 +134,8 @@ public class PaginationBeanFactory extends ViewModelFactory<PaginationBean, Pagi
             this.currentPage = pagination.getPage();
             this.pageSize = pageSize;
             this.totalPages = calculateTotalPages(searchResult.getTotal(), pageSize);
-            this.thresholdLeft = displayedPages - 1;
-            this.thresholdRight = totalPages - displayedPages + 2;
+            this.bottomThreshold = displayedPages - 1;
+            this.topThreshold = totalPages - displayedPages + 2;
         }
 
         private static long calculateTotalPages(final float total, final int pageSize) {

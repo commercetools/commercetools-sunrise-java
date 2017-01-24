@@ -14,33 +14,37 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class LineItemExtendedBeanFactory extends LineItemBeanFactory {
+public class LineItemExtendedBeanFactory extends AbstractLineItemBeanFactory<LineItemExtendedBean> {
 
     private final ProductDataConfig productDataConfig;
     private final ProductAttributeBeanFactory productAttributeBeanFactory;
 
     @Inject
-    public LineItemExtendedBeanFactory(final PriceFormatter priceFormatter, final ProductVariantBeanFactory productVariantBeanFactory,
-                                       final ProductDataConfig productDataConfig, final ProductAttributeBeanFactory productAttributeBeanFactory) {
+    public LineItemExtendedBeanFactory(final PriceFormatter priceFormatter, final ProductDataConfig productDataConfig,
+                                       final ProductVariantBeanFactory productVariantBeanFactory, final ProductAttributeBeanFactory productAttributeBeanFactory) {
         super(priceFormatter, productVariantBeanFactory);
         this.productDataConfig = productDataConfig;
         this.productAttributeBeanFactory = productAttributeBeanFactory;
     }
 
+    public final LineItemExtendedBean create(final LineItem lineItem) {
+        final Data data = new Data(lineItem);
+        return initializedViewModel(data);
+    }
+
     @Override
-    public LineItemExtendedBean create(final LineItem lineItem) {
-        final LineItemExtendedBean bean = new LineItemExtendedBean();
-        initialize(bean, lineItem);
-        return bean;
+    protected LineItemExtendedBean getViewModelInstance() {
+        return new LineItemExtendedBean();
     }
 
-    protected final void initialize(final LineItemExtendedBean bean, LineItem lineItem) {
-        super.initialize(bean, lineItem);
-        fillAttributes(bean, lineItem);
+    @Override
+    protected final void initialize(final LineItemExtendedBean bean, final Data data) {
+        super.initialize(bean, data);
+        fillAttributes(bean, data);
     }
 
-    protected void fillAttributes(final LineItemExtendedBean bean, final LineItem lineItem) {
-        final List<ProductAttributeBean> attributes = lineItem.getVariant().getAttributes().stream()
+    protected void fillAttributes(final LineItemExtendedBean bean, final Data data) {
+        final List<ProductAttributeBean> attributes = data.lineItem.getVariant().getAttributes().stream()
                 .filter(attr -> productDataConfig.getSelectableAttributes().contains(attr.getName()))
                 .map(productAttributeBeanFactory::create)
                 .collect(toList());

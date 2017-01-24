@@ -10,7 +10,6 @@ import io.sphere.sdk.models.Base;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 import static java.util.Collections.singletonList;
 
@@ -54,56 +53,70 @@ public class AddressBeanFactory extends ViewModelFactory<AddressBean, AddressBea
     }
 
     protected void fillTitle(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> {
-            final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(address.getTitle());
+        if (data.address != null) {
+            final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(data.address.getTitle());
             final String title = i18nResolver.getOrKey(singletonList(locale), i18nIdentifier);
             bean.setTitle(title);
-        });
+        }
     }
 
     protected void fillFirstName(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setFirstName(address.getFirstName()));
+        if (data.address != null) {
+            bean.setFirstName(data.address.getFirstName());
+        }
     }
 
     protected void fillLastName(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setLastName(address.getLastName()));
+        if (data.address != null) {
+            bean.setLastName(data.address.getLastName());
+        }
     }
 
     protected void fillStreetName(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setStreetName(address.getStreetName()));
+        if (data.address != null) {
+            bean.setStreetName(data.address.getStreetName());
+        }
     }
 
     protected void fillAdditionalStreetInfo(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setAdditionalStreetInfo(address.getAdditionalStreetInfo()));
+        if (data.address != null) {
+            bean.setAdditionalStreetInfo(data.address.getAdditionalStreetInfo());
+        }
     }
 
     protected void fillCity(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setCity(address.getCity()));
+        if (data.address != null) {
+            bean.setCity(data.address.getCity());
+        }
     }
 
     protected void fillRegion(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setRegion(address.getRegion()));
+        if (data.address != null) {
+            bean.setRegion(data.address.getRegion());
+        }
     }
 
     protected void fillPostalCode(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setPostalCode(address.getPostalCode()));
+        if (data.address != null) {
+            bean.setPostalCode(data.address.getPostalCode());
+        }
     }
 
     protected void fillEmail(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setEmail(address.getEmail()));
+        if (data.address != null) {
+            bean.setEmail(data.address.getEmail());
+        }
     }
 
     protected void fillPhone(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setPhone(address.getPhone()));
+        if (data.address != null) {
+            bean.setPhone(data.address.getPhone());
+        }
     }
 
     protected void fillCountry(final AddressBean bean, final Data data) {
-        ifAddressPresent(data, address -> bean.setCountry(address.getCountry().toLocale().getDisplayCountry(locale)));
-    }
-
-    private void ifAddressPresent(final Data data, final Consumer<Address> consumer) {
         if (data.address != null) {
-            consumer.accept(data.address);
+            bean.setCountry(data.address.getCountry().toLocale().getDisplayCountry(locale));
         }
     }
 

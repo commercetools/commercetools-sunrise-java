@@ -2,50 +2,31 @@ package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ProductVariantBeanFactory;
-import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.LineItem;
 
 import javax.inject.Inject;
 
 @RequestScoped
-public class LineItemBeanFactory extends ViewModelFactory {
-
-    private final PriceFormatter priceFormatter;
-    private final ProductVariantBeanFactory productVariantBeanFactory;
+public class LineItemBeanFactory extends AbstractLineItemBeanFactory<LineItemBean> {
 
     @Inject
     public LineItemBeanFactory(final PriceFormatter priceFormatter, final ProductVariantBeanFactory productVariantBeanFactory) {
-        this.priceFormatter = priceFormatter;
-        this.productVariantBeanFactory = productVariantBeanFactory;
+        super(priceFormatter, productVariantBeanFactory);
     }
 
-    public LineItemBean create(final LineItem lineItem) {
-        final LineItemBean bean = new LineItemBean();
-        initialize(bean, lineItem);
-        return bean;
+    public final LineItemBean create(final LineItem lineItem) {
+        final Data data = new Data(lineItem);
+        return initializedViewModel(data);
     }
 
-    protected final void initialize(final LineItemBean bean, final LineItem lineItem) {
-        fillTotalPrice(bean, lineItem);
-        fillLineItemId(bean, lineItem);
-        fillQuantity(bean, lineItem);
-        fillVariant(bean, lineItem);
+    @Override
+    protected LineItemBean getViewModelInstance() {
+        return new LineItemBean();
     }
 
-    protected void fillLineItemId(final LineItemBean bean, final LineItem lineItem) {
-        bean.setLineItemId(lineItem.getId());
-    }
-
-    protected void fillQuantity(final LineItemBean bean, final LineItem lineItem) {
-        bean.setQuantity(lineItem.getQuantity());
-    }
-
-    protected void fillVariant(final LineItemBean bean, final LineItem lineItem) {
-        bean.setVariant(productVariantBeanFactory.create(lineItem));
-    }
-
-    protected void fillTotalPrice(final LineItemBean bean, final LineItem lineItem) {
-        bean.setTotalPrice(priceFormatter.format(lineItem.getTotalPrice()));
+    @Override
+    protected final void initialize(final LineItemBean bean, final Data data) {
+        super.initialize(bean, data);
     }
 }
