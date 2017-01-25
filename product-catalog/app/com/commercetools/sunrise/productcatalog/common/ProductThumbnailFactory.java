@@ -35,10 +35,10 @@ public class ProductThumbnailFactory extends ViewModelFactory<ProductThumbnailBe
     }
 
     @Override
-    protected final void initialize(final ProductThumbnailBean bean, final Data data) {
-        fillProduct(bean, data);
-        fillNew(bean, data);
-        fillSale(bean, data);
+    protected final void initialize(final ProductThumbnailBean model, final Data data) {
+        fillProduct(model, data);
+        fillNew(model, data);
+        fillSale(model, data);
     }
 
     protected void fillProduct(final ProductThumbnailBean bean, final Data data) {

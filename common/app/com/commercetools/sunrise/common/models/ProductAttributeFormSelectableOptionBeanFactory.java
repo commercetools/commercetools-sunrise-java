@@ -29,10 +29,10 @@ public class ProductAttributeFormSelectableOptionBeanFactory extends ViewModelFa
     }
 
     @Override
-    protected final void initialize(final ProductAttributeFormSelectableOptionBean bean, final Data data) {
-        fillLabel(bean, data);
-        fillValue(bean, data);
-        fillSelected(bean, data);
+    protected final void initialize(final ProductAttributeFormSelectableOptionBean model, final Data data) {
+        fillLabel(model, data);
+        fillValue(model, data);
+        fillSelected(model, data);
     }
 
     protected void fillLabel(final ProductAttributeFormSelectableOptionBean bean, final Data data) {

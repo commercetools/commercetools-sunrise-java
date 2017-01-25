@@ -5,7 +5,6 @@ import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.utils.CartPriceUtils;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.CartLike;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
@@ -16,7 +15,7 @@ import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 
 @RequestScoped
-public class ShippingInfoBeanFactory extends ViewModelFactory<ShippingInfoBean, ShippingInfoBeanFactory.Data> {
+public class ShippingInfoBeanFactory extends ViewModelFactory<ShippingInfoBean, CartLike<?>> {
 
     private final CurrencyUnit currency;
     private final PriceFormatter priceFormatter;
@@ -27,42 +26,42 @@ public class ShippingInfoBeanFactory extends ViewModelFactory<ShippingInfoBean, 
         this.priceFormatter = priceFormatter;
     }
 
-    public final ShippingInfoBean create(@Nullable final CartLike<?> cartLike) {
-        final Data data = new Data(cartLike);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected ShippingInfoBean getViewModelInstance() {
         return new ShippingInfoBean();
     }
 
     @Override
-    protected final void initialize(final ShippingInfoBean bean, final Data data) {
-        fillLabel(bean, data);
-        fillDescription(bean, data);
-        fillPrice(bean, data);
+    public final ShippingInfoBean create(@Nullable final CartLike<?> data) {
+        return super.create(data);
     }
 
-    protected void fillLabel(final ShippingInfoBean bean, final Data data) {
-        if (data.cartLike != null && data.cartLike.getShippingInfo() != null) {
-            bean.setLabel(data.cartLike.getShippingInfo().getShippingMethodName());
+    @Override
+    protected final void initialize(final ShippingInfoBean model, final CartLike<?> data) {
+        fillLabel(model, data);
+        fillDescription(model, data);
+        fillPrice(model, data);
+    }
+
+    protected void fillLabel(final ShippingInfoBean bean, @Nullable final CartLike<?> cartLike) {
+        if (cartLike != null && cartLike.getShippingInfo() != null) {
+            bean.setLabel(cartLike.getShippingInfo().getShippingMethodName());
         }
     }
 
-    protected void fillDescription(final ShippingInfoBean bean, final Data data) {
-        if (data.cartLike != null && data.cartLike.getShippingInfo() != null) {
-            final Reference<ShippingMethod> ref = data.cartLike.getShippingInfo().getShippingMethod();
+    protected void fillDescription(final ShippingInfoBean bean, @Nullable final CartLike<?> cartLike) {
+        if (cartLike != null && cartLike.getShippingInfo() != null) {
+            final Reference<ShippingMethod> ref = cartLike.getShippingInfo().getShippingMethod();
             if (ref != null && ref.getObj() != null) {
                 bean.setDescription(ref.getObj().getDescription());
             }
         }
     }
 
-    protected void fillPrice(final ShippingInfoBean bean, final Data data) {
-        if (data.cartLike != null) {
-            final MonetaryAmount amount = CartPriceUtils.calculateAppliedShippingPrice(data.cartLike)
-                    .orElseGet(() -> zeroAmount(data.cartLike.getCurrency()));
+    protected void fillPrice(final ShippingInfoBean bean, @Nullable final CartLike<?> cartLike) {
+        if (cartLike != null) {
+            final MonetaryAmount amount = CartPriceUtils.calculateAppliedShippingPrice(cartLike)
+                    .orElseGet(() -> zeroAmount(cartLike.getCurrency()));
             bean.setPrice(priceFormatter.format(amount));
         } else {
             bean.setPrice(priceFormatter.format(zeroAmount(currency)));
@@ -71,15 +70,5 @@ public class ShippingInfoBeanFactory extends ViewModelFactory<ShippingInfoBean, 
 
     private static MonetaryAmount zeroAmount(final CurrencyUnit currency) {
         return PriceUtils.zeroAmount(currency);
-    }
-
-    protected final static class Data extends Base {
-
-        @Nullable
-        public final CartLike<?> cartLike;
-
-        public Data(@Nullable final CartLike<?> cartLike) {
-            this.cartLike = cartLike;
-        }
     }
 }

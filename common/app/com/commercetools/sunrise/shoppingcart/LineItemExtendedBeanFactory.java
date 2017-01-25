@@ -2,9 +2,9 @@ package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.models.LineItemProductVariantBeanFactory;
 import com.commercetools.sunrise.common.models.ProductAttributeBean;
 import com.commercetools.sunrise.common.models.ProductAttributeBeanFactory;
-import com.commercetools.sunrise.common.models.ProductVariantBeanFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.LineItem;
 
@@ -20,16 +20,11 @@ public class LineItemExtendedBeanFactory extends AbstractLineItemBeanFactory<Lin
     private final ProductAttributeBeanFactory productAttributeBeanFactory;
 
     @Inject
-    public LineItemExtendedBeanFactory(final PriceFormatter priceFormatter, final ProductDataConfig productDataConfig,
-                                       final ProductVariantBeanFactory productVariantBeanFactory, final ProductAttributeBeanFactory productAttributeBeanFactory) {
-        super(priceFormatter, productVariantBeanFactory);
+    public LineItemExtendedBeanFactory(final PriceFormatter priceFormatter, final LineItemProductVariantBeanFactory lineItemProductVariantBeanFactory,
+                                       final ProductDataConfig productDataConfig, final ProductAttributeBeanFactory productAttributeBeanFactory) {
+        super(priceFormatter, lineItemProductVariantBeanFactory);
         this.productDataConfig = productDataConfig;
         this.productAttributeBeanFactory = productAttributeBeanFactory;
-    }
-
-    public final LineItemExtendedBean create(final LineItem lineItem) {
-        final Data data = new Data(lineItem);
-        return initializedViewModel(data);
     }
 
     @Override
@@ -38,16 +33,21 @@ public class LineItemExtendedBeanFactory extends AbstractLineItemBeanFactory<Lin
     }
 
     @Override
-    protected final void initialize(final LineItemExtendedBean bean, final Data data) {
-        super.initialize(bean, data);
-        fillAttributes(bean, data);
+    public final LineItemExtendedBean create(final LineItem data) {
+        return super.create(data);
     }
 
-    protected void fillAttributes(final LineItemExtendedBean bean, final Data data) {
-        final List<ProductAttributeBean> attributes = data.lineItem.getVariant().getAttributes().stream()
+    @Override
+    protected final void initialize(final LineItemExtendedBean model, final LineItem data) {
+        super.initialize(model, data);
+        fillAttributes(model, data);
+    }
+
+    protected void fillAttributes(final LineItemExtendedBean model, final LineItem lineItem) {
+        final List<ProductAttributeBean> attributes = lineItem.getVariant().getAttributes().stream()
                 .filter(attr -> productDataConfig.getSelectableAttributes().contains(attr.getName()))
                 .map(productAttributeBeanFactory::create)
                 .collect(toList());
-        bean.setAttributes(attributes);
+        model.setAttributes(attributes);
     }
 }

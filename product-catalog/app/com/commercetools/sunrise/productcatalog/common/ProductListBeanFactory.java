@@ -32,8 +32,8 @@ public class ProductListBeanFactory extends ViewModelFactory<ProductListBean, Pr
     }
 
     @Override
-    protected final void initialize(final ProductListBean bean, final Data data) {
-        fillList(bean, data);
+    protected final void initialize(final ProductListBean model, final Data data) {
+        fillList(model, data);
     }
 
     protected void fillList(final ProductListBean bean, final Data data) {

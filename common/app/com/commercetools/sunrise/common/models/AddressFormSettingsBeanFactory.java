@@ -3,14 +3,13 @@ package com.commercetools.sunrise.common.models;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.forms.CountryFormFieldBeanFactory;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;
-import io.sphere.sdk.models.Base;
 import play.Configuration;
 import play.data.Form;
 
 import javax.inject.Inject;
 
 @RequestScoped
-public class AddressFormSettingsBeanFactory extends ViewModelFactory<AddressFormSettingsBean, AddressFormSettingsBeanFactory.Data> {
+public class AddressFormSettingsBeanFactory extends ViewModelFactory<AddressFormSettingsBean, Form<?>> {
 
     private final String titleFormFieldName;
     private final String countryFormFieldName;
@@ -26,36 +25,27 @@ public class AddressFormSettingsBeanFactory extends ViewModelFactory<AddressForm
         this.countryFormFieldBeanFactory = countryFormFieldBeanFactory;
     }
 
-    public final AddressFormSettingsBean create(final Form<?> form) {
-        final Data data = new Data(form);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected AddressFormSettingsBean getViewModelInstance() {
         return new AddressFormSettingsBean();
     }
 
     @Override
-    protected final void initialize(final AddressFormSettingsBean bean, final Data data) {
-        fillTitle(bean, data);
-        fillCountries(bean, data);
+    public final AddressFormSettingsBean create(final Form<?> data) {
+        return super.create(data);
     }
 
-    protected void fillTitle(final AddressFormSettingsBean bean, final Data data) {
-        bean.setTitle(titleFormFieldBeanFactory.createWithDefaultTitles(data.form, titleFormFieldName));
+    @Override
+    protected final void initialize(final AddressFormSettingsBean model, final Form<?> data) {
+        fillTitle(model, data);
+        fillCountries(model, data);
     }
 
-    protected void fillCountries(final AddressFormSettingsBean bean, final Data data) {
-        bean.setCountries(countryFormFieldBeanFactory.createWithDefaultCountries(data.form, countryFormFieldName));
+    protected void fillTitle(final AddressFormSettingsBean model, final Form<?> form) {
+        model.setTitle(titleFormFieldBeanFactory.createWithDefaultTitles(form, titleFormFieldName));
     }
 
-    protected final static class Data extends Base {
-
-        public final Form<?> form;
-
-        public Data(final Form<?> form) {
-            this.form = form;
-        }
+    protected void fillCountries(final AddressFormSettingsBean model, final Form<?> form) {
+        model.setCountries(countryFormFieldBeanFactory.createWithDefaultCountries(form, countryFormFieldName));
     }
 }

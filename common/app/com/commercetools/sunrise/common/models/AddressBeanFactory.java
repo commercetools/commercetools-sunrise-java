@@ -5,7 +5,6 @@ import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Address;
-import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -14,7 +13,7 @@ import java.util.Locale;
 import static java.util.Collections.singletonList;
 
 @RequestScoped
-public class AddressBeanFactory extends ViewModelFactory<AddressBean, AddressBeanFactory.Data> {
+public class AddressBeanFactory extends ViewModelFactory<AddressBean, Address> {
 
     private final Locale locale;
     private final I18nResolver i18nResolver;
@@ -27,106 +26,96 @@ public class AddressBeanFactory extends ViewModelFactory<AddressBean, AddressBea
         this.i18nIdentifierFactory = i18nIdentifierFactory;
     }
 
-    public final AddressBean create(@Nullable final Address address) {
-        final Data data = new Data(address);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected AddressBean getViewModelInstance() {
         return new AddressBean();
     }
 
     @Override
-    protected final void initialize(final AddressBean bean, final Data data) {
-        fillTitle(bean, data);
-        fillFirstName(bean, data);
-        fillLastName(bean, data);
-        fillStreetName(bean, data);
-        fillAdditionalStreetInfo(bean, data);
-        fillCity(bean, data);
-        fillRegion(bean, data);
-        fillPostalCode(bean, data);
-        fillCountry(bean, data);
-        fillPhone(bean, data);
-        fillEmail(bean, data);
+    public final AddressBean create(final Address data) {
+        return super.create(data);
     }
 
-    protected void fillTitle(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(data.address.getTitle());
+    @Override
+    protected final void initialize(final AddressBean model, final Address data) {
+        fillTitle(model, data);
+        fillFirstName(model, data);
+        fillLastName(model, data);
+        fillStreetName(model, data);
+        fillAdditionalStreetInfo(model, data);
+        fillCity(model, data);
+        fillRegion(model, data);
+        fillPostalCode(model, data);
+        fillCountry(model, data);
+        fillPhone(model, data);
+        fillEmail(model, data);
+    }
+
+    protected void fillTitle(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(address.getTitle());
             final String title = i18nResolver.getOrKey(singletonList(locale), i18nIdentifier);
-            bean.setTitle(title);
+            model.setTitle(title);
         }
     }
 
-    protected void fillFirstName(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setFirstName(data.address.getFirstName());
+    protected void fillFirstName(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setFirstName(address.getFirstName());
         }
     }
 
-    protected void fillLastName(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setLastName(data.address.getLastName());
+    protected void fillLastName(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setLastName(address.getLastName());
         }
     }
 
-    protected void fillStreetName(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setStreetName(data.address.getStreetName());
+    protected void fillStreetName(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setStreetName(address.getStreetName());
         }
     }
 
-    protected void fillAdditionalStreetInfo(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setAdditionalStreetInfo(data.address.getAdditionalStreetInfo());
+    protected void fillAdditionalStreetInfo(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setAdditionalStreetInfo(address.getAdditionalStreetInfo());
         }
     }
 
-    protected void fillCity(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setCity(data.address.getCity());
+    protected void fillCity(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setCity(address.getCity());
         }
     }
 
-    protected void fillRegion(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setRegion(data.address.getRegion());
+    protected void fillRegion(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setRegion(address.getRegion());
         }
     }
 
-    protected void fillPostalCode(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setPostalCode(data.address.getPostalCode());
+    protected void fillPostalCode(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setPostalCode(address.getPostalCode());
         }
     }
 
-    protected void fillEmail(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setEmail(data.address.getEmail());
+    protected void fillEmail(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setEmail(address.getEmail());
         }
     }
 
-    protected void fillPhone(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setPhone(data.address.getPhone());
+    protected void fillPhone(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setPhone(address.getPhone());
         }
     }
 
-    protected void fillCountry(final AddressBean bean, final Data data) {
-        if (data.address != null) {
-            bean.setCountry(data.address.getCountry().toLocale().getDisplayCountry(locale));
-        }
-    }
-
-    protected final static class Data extends Base {
-
-        @Nullable
-        public final Address address;
-
-        public Data(final Address address) {
-            this.address = address;
+    protected void fillCountry(final AddressBean model, @Nullable final Address address) {
+        if (address != null) {
+            model.setCountry(address.getCountry().toLocale().getDisplayCountry(locale));
         }
     }
 }

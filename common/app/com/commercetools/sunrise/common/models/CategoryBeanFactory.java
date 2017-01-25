@@ -5,7 +5,6 @@ import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import io.sphere.sdk.models.Base;
 import play.Configuration;
 
 import javax.annotation.Nullable;
@@ -16,7 +15,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class CategoryBeanFactory extends ViewModelFactory<CategoryBean, CategoryBeanFactory.Data> {
+public class CategoryBeanFactory extends ViewModelFactory<CategoryBean, Category> {
 
     @Nullable
     private final String saleCategoryExtId;
@@ -35,50 +34,41 @@ public class CategoryBeanFactory extends ViewModelFactory<CategoryBean, Category
         this.productReverseRouter = productReverseRouter;
     }
 
-    public final CategoryBean create(final Category category) {
-        final Data data = new Data(category);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected CategoryBean getViewModelInstance() {
         return new CategoryBean();
     }
 
     @Override
-    protected final void initialize(final CategoryBean bean, final Data data) {
-        fillText(bean, data);
-        fillUrl(bean, data);
-        fillSale(bean, data);
-        fillChildren(bean, data);
+    public final CategoryBean create(final Category data) {
+        return super.create(data);
     }
 
-    protected void fillText(final CategoryBean bean, final Data data) {
-        bean.setText(localizedStringResolver.getOrEmpty(data.category.getName()));
+    @Override
+    protected final void initialize(final CategoryBean model, final Category data) {
+        fillText(model, data);
+        fillUrl(model, data);
+        fillSale(model, data);
+        fillChildren(model, data);
     }
 
-    protected void fillUrl(final CategoryBean bean, final Data data) {
-        bean.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(locale, data.category));
+    protected void fillText(final CategoryBean model, final Category category) {
+        model.setText(localizedStringResolver.getOrEmpty(category.getName()));
     }
 
-    protected void fillSale(final CategoryBean bean, final Data data) {
-        bean.setSale(Optional.ofNullable(data.category.getExternalId())
+    protected void fillUrl(final CategoryBean model, final Category category) {
+        model.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(locale, category));
+    }
+
+    protected void fillSale(final CategoryBean model, final Category category) {
+        model.setSale(Optional.ofNullable(category.getExternalId())
                 .map(id -> id.equals(saleCategoryExtId))
                 .orElse(false));
     }
 
-    protected void fillChildren(final CategoryBean bean, final Data data) {
-        bean.setChildren(categoryTree.findChildren(data.category).stream()
+    protected void fillChildren(final CategoryBean model, final Category category) {
+        model.setChildren(categoryTree.findChildren(category).stream()
                 .map(this::create)
                 .collect(toList()));
-    }
-
-    protected final static class Data extends Base {
-
-        public final Category category;
-
-        public Data(final Category category) {
-            this.category = category;
-        }
     }
 }

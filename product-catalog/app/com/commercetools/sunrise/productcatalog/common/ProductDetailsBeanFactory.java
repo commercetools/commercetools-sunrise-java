@@ -4,10 +4,8 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.models.ProductAttributeBean;
 import com.commercetools.sunrise.common.models.ProductAttributeBeanFactory;
+import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import io.sphere.sdk.models.Base;
-import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -16,7 +14,7 @@ import java.util.Objects;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class ProductDetailsBeanFactory extends ViewModelFactory<ProductDetailsBean, ProductDetailsBeanFactory.Data> {
+public class ProductDetailsBeanFactory extends ViewModelFactory<ProductDetailsBean, ProductWithVariant> {
 
     private final ProductDataConfig productDataConfig;
     private final ProductAttributeBeanFactory productAttributeBeanFactory;
@@ -27,9 +25,9 @@ public class ProductDetailsBeanFactory extends ViewModelFactory<ProductDetailsBe
         this.productAttributeBeanFactory = productAttributeBeanFactory;
     }
 
-    public final ProductDetailsBean create(final ProductProjection product, final ProductVariant variant) {
-        final Data data = new Data(product, variant);
-        return initializedViewModel(data);
+    @Override
+    public final ProductDetailsBean create(final ProductWithVariant data) {
+        return super.create(data);
     }
 
     @Override
@@ -38,27 +36,16 @@ public class ProductDetailsBeanFactory extends ViewModelFactory<ProductDetailsBe
     }
 
     @Override
-    protected final void initialize(final ProductDetailsBean bean, final Data data) {
-        fillList(bean, data);
+    protected final void initialize(final ProductDetailsBean model, final ProductWithVariant data) {
+        fillList(model, data);
     }
 
-    protected void fillList(final ProductDetailsBean bean, final Data data) {
+    protected void fillList(final ProductDetailsBean bean, final ProductWithVariant productWithVariant) {
         final List<ProductAttributeBean> attributes = productDataConfig.getDisplayedAttributes().stream()
-                .map(data.variant::getAttribute)
+                .map(productWithVariant.getVariant()::getAttribute)
                 .filter(Objects::nonNull)
                 .map(productAttributeBeanFactory::create)
                 .collect(toList());
         bean.setFeatures(attributes);
-    }
-
-    protected final static class Data extends Base {
-
-        public final ProductProjection product;
-        public final ProductVariant variant;
-
-        public Data(final ProductProjection product, final ProductVariant variant) {
-            this.product = product;
-            this.variant = variant;
-        }
     }
 }

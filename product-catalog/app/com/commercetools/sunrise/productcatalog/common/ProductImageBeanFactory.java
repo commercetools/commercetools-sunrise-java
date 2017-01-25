@@ -1,20 +1,19 @@
 package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.Image;
 
 import javax.inject.Singleton;
 
 @Singleton
-public class ProductImageBeanFactory extends ViewModelFactory<ProductImageBean, ProductImageBeanFactory.Data> {
+public class ProductImageBeanFactory extends ViewModelFactory<ProductImageBean, Image> {
 
     public ProductImageBeanFactory() {
     }
 
-    public final ProductImageBean create(final Image image) {
-        final Data data = new Data(image);
-        return initializedViewModel(data);
+    @Override
+    public final ProductImageBean create(final Image data) {
+        return super.create(data);
     }
 
     @Override
@@ -23,25 +22,16 @@ public class ProductImageBeanFactory extends ViewModelFactory<ProductImageBean, 
     }
 
     @Override
-    protected final void initialize(final ProductImageBean bean, final Data data) {
-        fillThumbImage(bean, data);
-        fillBigImage(bean, data);
+    protected final void initialize(final ProductImageBean model, final Image image) {
+        fillThumbImage(model, image);
+        fillBigImage(model, image);
     }
 
-    protected void fillBigImage(final ProductImageBean bean, final Data data) {
-        bean.setBigImage(data.image.getUrl());
+    protected void fillBigImage(final ProductImageBean bean, final Image image) {
+        bean.setBigImage(image.getUrl());
     }
 
-    protected void fillThumbImage(final ProductImageBean bean, final Data data) {
-        bean.setThumbImage(data.image.getUrl());
-    }
-
-    protected final static class Data extends Base {
-
-        public final Image image;
-
-        public Data(final Image image) {
-            this.image = image;
-        }
+    protected void fillThumbImage(final ProductImageBean bean, final Image image) {
+        bean.setThumbImage(image.getUrl());
     }
 }

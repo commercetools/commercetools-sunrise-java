@@ -4,7 +4,6 @@ import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.PriceUtils;
 
 import javax.annotation.Nullable;
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateTotalPrice;
 
-abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, D extends AbstractMiniCartBeanFactory.Data<C>, C extends CartLike<?>> extends ViewModelFactory<T, D> {
+abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, D extends CartLike<?>> extends ViewModelFactory<T, D> {
 
     private final CurrencyUnit currency;
     private final PriceFormatter priceFormatter;
@@ -25,16 +24,16 @@ abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, D extends Abs
     }
 
     @Override
-    protected void initialize(final T bean, final D data) {
-        fillTotalPrice(bean, data);
-        fillTotalItems(bean, data);
-        fillLineItems(bean, data);
+    protected void initialize(final T model, final D data) {
+        fillTotalPrice(model, data);
+        fillTotalItems(model, data);
+        fillLineItems(model, data);
     }
 
-    protected void fillTotalItems(final T bean, final D data) {
+    protected void fillTotalItems(final T bean, @Nullable final D cartLike) {
         final long totalItems;
-        if (data.cartLike != null) {
-            totalItems = data.cartLike.getLineItems().stream()
+        if (cartLike != null) {
+            totalItems = cartLike.getLineItems().stream()
                     .mapToLong(LineItem::getQuantity)
                     .sum();
         } else {
@@ -43,16 +42,16 @@ abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, D extends Abs
         bean.setTotalItems(totalItems);
     }
 
-    protected void fillLineItems(final T bean, final D data) {
-        if (data.cartLike != null) {
-            bean.setLineItems(createLineItemList(data.cartLike));
+    protected void fillLineItems(final T bean, @Nullable final D cartLike) {
+        if (cartLike != null) {
+            bean.setLineItems(createLineItemList(cartLike));
         }
     }
 
-    protected void fillTotalPrice(final T bean, final D data) {
+    protected void fillTotalPrice(final T bean, @Nullable final D cartLike) {
         final MonetaryAmount totalPrice;
-        if (data.cartLike != null) {
-            totalPrice = calculateTotalPrice(data.cartLike);
+        if (cartLike != null) {
+            totalPrice = calculateTotalPrice(cartLike);
         } else {
             totalPrice = zeroAmount(currency);
         }
@@ -71,15 +70,5 @@ abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, D extends Abs
 
     MonetaryAmount zeroAmount(final CurrencyUnit currency) {
         return PriceUtils.zeroAmount(currency);
-    }
-
-    abstract static class Data<C> extends Base {
-
-        @Nullable
-        final C cartLike;
-
-        public Data(@Nullable final C cartLike) {
-            this.cartLike = cartLike;
-        }
     }
 }

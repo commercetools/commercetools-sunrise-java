@@ -2,11 +2,10 @@ package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.AttributeFormatter;
-import io.sphere.sdk.models.Base;
-import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
 
@@ -20,7 +19,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 
 @RequestScoped
-public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<String, ProductVariantReferenceBean>, ProductVariantReferenceBeanMapFactory.Data> {
+public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<String, ProductVariantReferenceBean>, ProductWithVariant> {
 
     private final Locale locale;
     private final ProductDataConfig productDataConfig;
@@ -36,9 +35,9 @@ public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<
         this.attributeFormatter = attributeFormatter;
     }
 
-    public final Map<String, ProductVariantReferenceBean> create(final ProductProjection product, final ProductVariant variant) {
-        final Data data = new Data(product, variant);
-        return initializedViewModel(data);
+    @Override
+    public final Map<String, ProductVariantReferenceBean> create(final ProductWithVariant data) {
+        return super.create(data);
     }
 
     @Override
@@ -47,23 +46,23 @@ public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<
     }
 
     @Override
-    protected final void initialize(final Map<String, ProductVariantReferenceBean> map, final Data data) {
-        fillVariants(map, data);
+    protected final void initialize(final Map<String, ProductVariantReferenceBean> model, final ProductWithVariant productWithVariant) {
+        fillVariants(model, productWithVariant);
     }
 
-    protected void fillVariants(final Map<String, ProductVariantReferenceBean> map, final Data data) {
-        data.product.getAllVariants()
+    protected void fillVariants(final Map<String, ProductVariantReferenceBean> map, final ProductWithVariant productWithVariant) {
+        productWithVariant.getProduct().getAllVariants()
                 .forEach(productVariant -> {
                     final String attributeCombination = createAttributeCombination(productVariant);
-                    final ProductVariantReferenceBean variantReference = createVariantReference(data);
+                    final ProductVariantReferenceBean variantReference = createVariantReference(productWithVariant);
                     map.put(attributeCombination, variantReference);
                 });
     }
 
-    private ProductVariantReferenceBean createVariantReference(final Data data) {
+    private ProductVariantReferenceBean createVariantReference(final ProductWithVariant productWithVariant) {
         final ProductVariantReferenceBean bean = new ProductVariantReferenceBean();
-        bean.setId(data.variant.getId());
-        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, data.product, data.variant));
+        bean.setId(productWithVariant.getVariant().getId());
+        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, productWithVariant.getProduct(), productWithVariant.getVariant()));
         return bean;
     }
 
@@ -77,16 +76,5 @@ public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<
         return Optional.ofNullable(nullableAttribute)
                 .map(attributeFormatter::valueAsKey)
                 .orElse("");
-    }
-
-    protected final static class Data extends Base {
-
-        public final ProductProjection product;
-        public final ProductVariant variant;
-
-        public Data(final ProductProjection product, final ProductVariant variant) {
-            this.product = product;
-            this.variant = variant;
-        }
     }
 }

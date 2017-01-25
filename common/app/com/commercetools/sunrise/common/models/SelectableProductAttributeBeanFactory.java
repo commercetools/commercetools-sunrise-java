@@ -5,7 +5,6 @@ import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.utils.AttributeFormatter;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
-import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
 
 import javax.inject.Inject;
@@ -33,11 +32,11 @@ public class SelectableProductAttributeBeanFactory extends ViewModelFactory<Sele
         return initializedViewModel(data);
     }
 
-    public final List<SelectableProductAttributeBean> createList(final ProductProjection product, final ProductVariant variant) {
+    public final List<SelectableProductAttributeBean> createList(final ProductWithVariant productWithVariant) {
         return productDataConfig.getSelectableAttributes().stream()
-                .map(variant::getAttribute)
+                .map(productWithVariant.getVariant()::getAttribute)
                 .filter(Objects::nonNull)
-                .map(attribute -> create(attribute, product))
+                .map(attribute -> create(attribute, productWithVariant.getProduct()))
                 .collect(toList());
     }
 
@@ -47,13 +46,13 @@ public class SelectableProductAttributeBeanFactory extends ViewModelFactory<Sele
     }
 
     @Override
-    protected final void initialize(final SelectableProductAttributeBean bean, final Data data) {
-        fillKey(bean, data);
-        fillName(bean, data);
-        fillValue(bean, data);
-        fillReload(bean, data);
-        fillList(bean, data);
-        fillSelectData(bean, data);
+    protected final void initialize(final SelectableProductAttributeBean model, final Data data) {
+        fillKey(model, data);
+        fillName(model, data);
+        fillValue(model, data);
+        fillReload(model, data);
+        fillList(model, data);
+        fillSelectData(model, data);
     }
 
     protected void fillKey(final SelectableProductAttributeBean bean, final Data data) {

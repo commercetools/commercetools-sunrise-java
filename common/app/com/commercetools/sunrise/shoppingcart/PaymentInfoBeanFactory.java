@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RequestScoped
-public class PaymentInfoBeanFactory extends ViewModelFactory<PaymentInfoBean, PaymentInfoBeanFactory.Data> {
+public class PaymentInfoBeanFactory extends ViewModelFactory<PaymentInfoBean, CartLike<?>> {
 
     private final LocalizedStringResolver localizedStringResolver;
 
@@ -23,24 +23,24 @@ public class PaymentInfoBeanFactory extends ViewModelFactory<PaymentInfoBean, Pa
         this.localizedStringResolver = localizedStringResolver;
     }
 
-    public final PaymentInfoBean create(@Nullable final CartLike<?> cartLike) {
-        final Data data = new Data(cartLike);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected PaymentInfoBean getViewModelInstance() {
         return new PaymentInfoBean();
     }
 
     @Override
-    protected final void initialize(final PaymentInfoBean bean, final Data data) {
-        fillType(bean, data);
+    public final PaymentInfoBean create(@Nullable final CartLike<?> data) {
+        return super.create(data);
     }
 
-    protected void fillType(final PaymentInfoBean bean, final Data data) {
-        if (data.cartLike != null && data.cartLike.getPaymentInfo() != null) {
-            final String paymentType = data.cartLike.getPaymentInfo().getPayments().stream()
+    @Override
+    protected final void initialize(final PaymentInfoBean model, final CartLike<?> data) {
+        fillType(model, data);
+    }
+
+    protected void fillType(final PaymentInfoBean bean, @Nullable final CartLike<?> cartLike) {
+        if (cartLike != null && cartLike.getPaymentInfo() != null) {
+            final String paymentType = cartLike.getPaymentInfo().getPayments().stream()
                     .map(Reference::getObj)
                     .filter(Objects::nonNull)
                     .map(this::toPaymentName)
@@ -55,15 +55,5 @@ public class PaymentInfoBeanFactory extends ViewModelFactory<PaymentInfoBean, Pa
         return Optional.ofNullable(methodInfo.getName())
                 .flatMap(localizedStringResolver::find)
                 .orElse(methodInfo.getMethod());
-    }
-
-    protected final static class Data {
-
-        @Nullable
-        public final CartLike<?> cartLike;
-
-        public Data(@Nullable final CartLike<?> cartLike) {
-            this.cartLike = cartLike;
-        }
     }
 }

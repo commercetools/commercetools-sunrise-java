@@ -3,6 +3,7 @@ package com.commercetools.sunrise.productcatalog.productdetail;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
@@ -131,7 +132,8 @@ public abstract class SunriseProductDetailController extends SunriseFrameworkCon
     }
 
     private CompletionStage<Html> renderPage(final ProductProjection product, final ProductVariant variant) {
-        final PageContent pageContent = productDetailPageContentFactory.create(product, variant);
+        final ProductDetailPageData productDetailPageData = new ProductDetailPageData(new ProductWithVariant(product, variant));
+        final PageContent pageContent = productDetailPageContentFactory.create(productDetailPageData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

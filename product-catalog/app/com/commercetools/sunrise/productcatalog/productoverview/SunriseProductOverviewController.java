@@ -143,7 +143,8 @@ public abstract class SunriseProductOverviewController extends SunriseFrameworkC
     }
 
     protected PageContent createPageContent(final PagedSearchResult<ProductProjection> pagedSearchResult) {
-        return productOverviewPageContentFactory.create(pagedSearchResult, category);
+        final ProductOverviewPageData productOverviewPageData = new ProductOverviewPageData(pagedSearchResult, category);
+        return productOverviewPageContentFactory.create(productOverviewPageData);
     }
 
     protected Result notFoundCategoryResult() {

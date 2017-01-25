@@ -38,12 +38,12 @@ public class PaginationBeanFactory extends ViewModelFactory<PaginationBean, Pagi
     }
 
     @Override
-    protected final void initialize(final PaginationBean bean, final Data data) {
-        fillNextUrl(bean, data);
-        fillPreviousUrl(bean, data);
-        fillFirstPage(bean, data);
-        fillLastPage(bean, data);
-        fillPages(bean, data);
+    protected final void initialize(final PaginationBean model, final Data data) {
+        fillNextUrl(model, data);
+        fillPreviousUrl(model, data);
+        fillFirstPage(model, data);
+        fillLastPage(model, data);
+        fillPages(model, data);
     }
 
     protected void fillNextUrl(final PaginationBean bean, final Data data) {

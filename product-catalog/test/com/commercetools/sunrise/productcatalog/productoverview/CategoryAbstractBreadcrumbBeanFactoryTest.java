@@ -6,7 +6,6 @@ import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
 import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
-import com.commercetools.sunrise.productcatalog.common.CategoryBreadcrumbBeanFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -24,7 +23,7 @@ import static com.commercetools.sunrise.common.utils.JsonUtils.readCtpObject;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CategoryBreadcrumbBeanFactoryTest {
+public class CategoryAbstractBreadcrumbBeanFactoryTest {
 
     private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("breadcrumb/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
     private static final ProductProjection PRODUCT = readCtpObject("breadcrumb/breadcrumbProduct.json", ProductProjection.typeReference());

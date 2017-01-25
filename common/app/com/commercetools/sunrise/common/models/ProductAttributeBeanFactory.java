@@ -2,13 +2,12 @@ package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.utils.AttributeFormatter;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.attributes.Attribute;
 
 import javax.inject.Inject;
 
 @RequestScoped
-public class ProductAttributeBeanFactory extends ViewModelFactory<ProductAttributeBean, ProductAttributeBeanFactory.Data> {
+public class ProductAttributeBeanFactory extends ViewModelFactory<ProductAttributeBean, Attribute> {
 
     private final AttributeFormatter attributeFormatter;
 
@@ -17,41 +16,32 @@ public class ProductAttributeBeanFactory extends ViewModelFactory<ProductAttribu
         this.attributeFormatter = attributeFormatter;
     }
 
-    public final ProductAttributeBean create(final Attribute attribute) {
-        final Data data = new Data(attribute);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected ProductAttributeBean getViewModelInstance() {
         return new ProductAttributeBean();
     }
 
     @Override
-    protected final void initialize(final ProductAttributeBean bean, final Data data) {
-        fillKey(bean, data);
-        fillName(bean, data);
-        fillValue(bean, data);
+    public final ProductAttributeBean create(final Attribute data) {
+        return super.create(data);
     }
 
-    protected void fillKey(final ProductAttributeBean bean, final Data data) {
-        bean.setKey(data.attribute.getName());
+    @Override
+    protected final void initialize(final ProductAttributeBean model, final Attribute data) {
+        fillKey(model, data);
+        fillName(model, data);
+        fillValue(model, data);
     }
 
-    protected void fillName(final ProductAttributeBean bean, final Data data) {
-        bean.setName(attributeFormatter.label(data.attribute));
+    protected void fillKey(final ProductAttributeBean bean, final Attribute attribute) {
+        bean.setKey(attribute.getName());
     }
 
-    protected void fillValue(final ProductAttributeBean bean, final Data data) {
-        bean.setValue(attributeFormatter.value(data.attribute));
+    protected void fillName(final ProductAttributeBean bean, final Attribute attribute) {
+        bean.setName(attributeFormatter.label(attribute));
     }
 
-    protected final static class Data extends Base {
-
-        private final Attribute attribute;
-
-        public Data(final Attribute attribute) {
-            this.attribute = attribute;
-        }
+    protected void fillValue(final ProductAttributeBean bean, final Attribute attribute) {
+        bean.setValue(attributeFormatter.value(attribute));
     }
 }

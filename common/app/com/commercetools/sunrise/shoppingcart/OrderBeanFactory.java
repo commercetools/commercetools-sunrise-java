@@ -10,7 +10,7 @@ import javax.money.CurrencyUnit;
 import java.time.format.DateTimeFormatter;
 
 @RequestScoped
-public class OrderBeanFactory extends AbstractCartLikeBeanFactory<OrderBean, OrderBeanFactory.Data, Order> {
+public class OrderBeanFactory extends AbstractCartLikeBeanFactory<OrderBean, Order> {
 
     private final DateTimeFormatter dateTimeFormatter;
     private final LineItemExtendedBeanFactory lineItemExtendedBeanFactory;
@@ -23,43 +23,68 @@ public class OrderBeanFactory extends AbstractCartLikeBeanFactory<OrderBean, Ord
         this.lineItemExtendedBeanFactory = lineItemExtendedBeanFactory;
     }
 
-    public final OrderBean create(final Order order) {
-        final Data data = new Data(order);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected OrderBean getViewModelInstance() {
         return new OrderBean();
     }
 
     @Override
-    protected final void initialize(final OrderBean bean, final Data data) {
-        super.initialize(bean, data);
-        fillOrderDate(bean, data);
-        fillOrderNumber(bean, data);
+    public final OrderBean create(final Order data) {
+        return super.create(data);
     }
 
-    protected void fillOrderNumber(final OrderBean bean, final Data data) {
-        bean.setOrderNumber(data.order.getOrderNumber());
+    @Override
+    protected final void initialize(final OrderBean model, final Order data) {
+        super.initialize(model, data);
+        fillOrderDate(model, data);
+        fillOrderNumber(model, data);
     }
 
-    protected void fillOrderDate(final OrderBean bean, final Data data) {
-        bean.setOrderDate(dateTimeFormatter.format(data.order.getCreatedAt()));
+    protected void fillOrderNumber(final OrderBean bean, final Order order) {
+        bean.setOrderNumber(order.getOrderNumber());
+    }
+
+    protected void fillOrderDate(final OrderBean bean, final Order order) {
+        bean.setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
+    }
+
+    @Override
+    protected void fillSalesTax(final OrderBean bean, final Order cartLike) {
+        super.fillSalesTax(bean, cartLike);
+    }
+
+    @Override
+    protected void fillSubtotalPrice(final OrderBean bean, final Order cartLike) {
+        super.fillSubtotalPrice(bean, cartLike);
+    }
+
+    @Override
+    protected void fillCustomerEmail(final OrderBean bean, final Order cartLike) {
+        super.fillCustomerEmail(bean, cartLike);
+    }
+
+    @Override
+    protected void fillPaymentDetails(final OrderBean bean, final Order cartLike) {
+        super.fillPaymentDetails(bean, cartLike);
+    }
+
+    @Override
+    protected void fillShippingMethod(final OrderBean bean, final Order cartLike) {
+        super.fillShippingMethod(bean, cartLike);
+    }
+
+    @Override
+    protected void fillShippingAddress(final OrderBean bean, final Order cartLike) {
+        super.fillShippingAddress(bean, cartLike);
+    }
+
+    @Override
+    protected void fillBillingAddress(final OrderBean bean, final Order cartLike) {
+        super.fillBillingAddress(bean, cartLike);
     }
 
     @Override
     LineItemBean createLineItem(final LineItem lineItem) {
         return lineItemExtendedBeanFactory.create(lineItem);
-    }
-
-    protected final static class Data extends AbstractMiniCartBeanFactory.Data<Order> {
-
-        public final Order order;
-
-        public Data(final Order order) {
-            super(order);
-            this.order = order;
-        }
     }
 }

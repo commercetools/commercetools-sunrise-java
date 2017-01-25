@@ -3,12 +3,12 @@ package com.commercetools.sunrise.shoppingcart;
 import com.commercetools.sunrise.common.models.AddressBeanFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.CartLike;
-import io.sphere.sdk.products.PriceUtils;
 
+import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 
-abstract class AbstractCartLikeBeanFactory<T extends CartBean, D extends AbstractMiniCartBeanFactory.Data<C>, C extends CartLike<?>> extends AbstractMiniCartBeanFactory<T, D, C> {
+abstract class AbstractCartLikeBeanFactory<T extends CartBean, D extends CartLike<?>> extends AbstractMiniCartBeanFactory<T, D> {
 
     private final CurrencyUnit currency;
     private final PriceFormatter priceFormatter;
@@ -27,68 +27,68 @@ abstract class AbstractCartLikeBeanFactory<T extends CartBean, D extends Abstrac
     }
 
     @Override
-    protected void initialize(final T bean, final D data) {
-        super.initialize(bean, data);
-        fillSalesTax(bean, data);
-        fillSubtotalPrice(bean, data);
-        fillCustomerEmail(bean, data);
-        fillShippingAddress(bean, data);
-        fillBillingAddress(bean, data);
-        fillShippingMethod(bean, data);
-        fillPaymentDetails(bean, data);
+    protected void initialize(final T model, final D data) {
+        super.initialize(model, data);
+        fillSalesTax(model, data);
+        fillSubtotalPrice(model, data);
+        fillCustomerEmail(model, data);
+        fillShippingAddress(model, data);
+        fillBillingAddress(model, data);
+        fillShippingMethod(model, data);
+        fillPaymentDetails(model, data);
     }
 
-    protected void fillSalesTax(final T bean, final D data) {
+    protected void fillSalesTax(final T bean, @Nullable final D cartLike) {
         final MonetaryAmount salesTax;
-        if (data.cartLike != null) {
-            salesTax = data.cartLike.calculateTotalAppliedTaxes()
-                    .orElseGet(() -> zeroAmount(data.cartLike.getCurrency()));
+        if (cartLike != null) {
+            salesTax = cartLike.calculateTotalAppliedTaxes()
+                    .orElseGet(() -> zeroAmount(cartLike.getCurrency()));
         } else {
             salesTax = zeroAmount(currency);
         }
         bean.setSalesTax(priceFormatter.format(salesTax));
     }
 
-    protected void fillSubtotalPrice(final T bean, final D data) {
+    protected void fillSubtotalPrice(final T bean, @Nullable final D cartLike) {
         final MonetaryAmount subtotal;
-        if (data.cartLike != null) {
-            subtotal = data.cartLike.calculateSubTotalPrice();
+        if (cartLike != null) {
+            subtotal = cartLike.calculateSubTotalPrice();
         } else {
             subtotal = zeroAmount(currency);
         }
         bean.setSubtotalPrice(priceFormatter.format(subtotal));
     }
 
-    protected void fillCustomerEmail(final T bean, final D data) {
-        if (data.cartLike != null) {
-            bean.setCustomerEmail(data.cartLike.getCustomerEmail());
+    protected void fillCustomerEmail(final T bean, @Nullable final D cartLike) {
+        if (cartLike != null) {
+            bean.setCustomerEmail(cartLike.getCustomerEmail());
         }
     }
 
-    protected void fillPaymentDetails(final T bean, final D data) {
-        if (data.cartLike != null) {
-            bean.setPaymentDetails(paymentInfoBeanFactory.create(data.cartLike));
+    protected void fillPaymentDetails(final T bean, @Nullable final D cartLike) {
+        if (cartLike != null) {
+            bean.setPaymentDetails(paymentInfoBeanFactory.create(cartLike));
         }
     }
 
-    protected void fillShippingMethod(final T bean, final D data) {
-        if (data.cartLike != null) {
-            bean.setShippingMethod(shippingInfoBeanFactory.create(data.cartLike));
+    protected void fillShippingMethod(final T bean, @Nullable final D cartLike) {
+        if (cartLike != null) {
+            bean.setShippingMethod(shippingInfoBeanFactory.create(cartLike));
         }
     }
 
-    protected void fillShippingAddress(final T bean, final D data) {
-        if (data.cartLike != null) {
-            bean.setShippingAddress(addressBeanFactory.create(data.cartLike.getShippingAddress()));
+    protected void fillShippingAddress(final T bean, @Nullable final D cartLike) {
+        if (cartLike != null) {
+            bean.setShippingAddress(addressBeanFactory.create(cartLike.getShippingAddress()));
         }
     }
 
-    protected void fillBillingAddress(final T bean, final D data) {
-        if (data.cartLike != null) {
-            if (data.cartLike.getBillingAddress() != null) {
-                bean.setBillingAddress(addressBeanFactory.create(data.cartLike.getBillingAddress()));
+    protected void fillBillingAddress(final T bean, @Nullable final D cartLike) {
+        if (cartLike != null) {
+            if (cartLike.getBillingAddress() != null) {
+                bean.setBillingAddress(addressBeanFactory.create(cartLike.getBillingAddress()));
             } else {
-                bean.setBillingAddress(addressBeanFactory.create(data.cartLike.getShippingAddress()));
+                bean.setBillingAddress(addressBeanFactory.create(cartLike.getShippingAddress()));
             }
         }
     }

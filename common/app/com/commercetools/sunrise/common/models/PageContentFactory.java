@@ -1,5 +1,13 @@
 package com.commercetools.sunrise.common.models;
 
-public abstract class PageContentFactory {
+import com.commercetools.sunrise.common.pages.PageContent;
 
+public abstract class PageContentFactory<T extends PageContent, D> extends ViewModelFactory<T, D> {
+
+    @Override
+    protected void initialize(final T model, final D data) {
+        fillTitle(model, data);
+    }
+
+    protected abstract void fillTitle(final T model, final D data);
 }
