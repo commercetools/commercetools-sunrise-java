@@ -4,13 +4,12 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
-import io.sphere.sdk.carts.Cart;
-import play.data.Form;
+import com.commercetools.sunrise.shoppingcart.checkout.CheckoutPageData;
 
 import javax.inject.Inject;
 
 @RequestScoped
-public class CheckoutAddressPageContentFactory extends PageContentFactory {
+public class CheckoutAddressPageContentFactory extends PageContentFactory<CheckoutAddressPageContent, CheckoutPageData> {
 
     private final PageTitleResolver pageTitleResolver;
     private final CartBeanFactory cartBeanFactory;
@@ -24,32 +23,38 @@ public class CheckoutAddressPageContentFactory extends PageContentFactory {
         this.addressFormSettingsFactory = addressFormSettingsFactory;
     }
 
-    public CheckoutAddressPageContent create(final Form<?> form, final Cart cart) {
-        final CheckoutAddressPageContent bean = new CheckoutAddressPageContent();
-        initialize(bean, form, cart);
-        return bean;
+    @Override
+    protected CheckoutAddressPageContent getViewModelInstance() {
+        return new CheckoutAddressPageContent();
     }
 
-    protected final void initialize(final CheckoutAddressPageContent bean, final Form<?> form, final Cart cart) {
-        fillTitle(bean, form, cart);
-        fillCart(bean, form, cart);
-        fillForm(bean, form, cart);
-        fillFormSettings(bean, form, cart);
+    @Override
+    public final CheckoutAddressPageContent create(final CheckoutPageData data) {
+        return super.create(data);
     }
 
-    protected void fillTitle(final CheckoutAddressPageContent bean, final Form<?> form, final Cart cart) {
-        bean.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
+    @Override
+    protected final void initialize(final CheckoutAddressPageContent model, final CheckoutPageData data) {
+        super.initialize(model, data);
+        fillCart(model, data);
+        fillForm(model, data);
+        fillFormSettings(model, data);
     }
 
-    protected void fillCart(final CheckoutAddressPageContent bean, final Form<?> form, final Cart cart) {
-        bean.setCart(cartBeanFactory.create(cart));
+    @Override
+    protected void fillTitle(final CheckoutAddressPageContent model, final CheckoutPageData data) {
+        model.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
     }
 
-    protected void fillForm(final CheckoutAddressPageContent bean, final Form<?> form, final Cart cart) {
-        bean.setAddressForm(form);
+    protected void fillCart(final CheckoutAddressPageContent model, final CheckoutPageData data) {
+        model.setCart(cartBeanFactory.create(data.cart));
     }
 
-    protected void fillFormSettings(final CheckoutAddressPageContent bean, final Form<?> form, final Cart cart) {
-        bean.setAddressFormSettings(addressFormSettingsFactory.create(form));
+    protected void fillForm(final CheckoutAddressPageContent model, final CheckoutPageData data) {
+        model.setAddressForm(data.form);
+    }
+
+    protected void fillFormSettings(final CheckoutAddressPageContent model, final CheckoutPageData data) {
+        model.setAddressFormSettings(addressFormSettingsFactory.create(data.form));
     }
 }

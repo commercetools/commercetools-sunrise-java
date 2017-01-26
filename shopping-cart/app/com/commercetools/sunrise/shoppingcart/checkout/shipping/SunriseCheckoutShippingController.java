@@ -90,7 +90,8 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
                 .thenComposeAsync(shippingMethods -> {
                     final Cart cartToRender = Optional.ofNullable(updatedCart).orElse(cart);
                     final CheckoutShippingPageContentFactory pageContentFactory = injector().getInstance(CheckoutShippingPageContentFactory.class);
-                    final CheckoutShippingPageContent pageContent = pageContentFactory.create(form, cartToRender, shippingMethods);
+                    final CheckoutShippingPageData pageData = new CheckoutShippingPageData(form, cartToRender, shippingMethods);
+                    final CheckoutShippingPageContent pageContent = pageContentFactory.create(pageData);
                     return renderPageWithTemplate(pageContent, getTemplateName());
             }, HttpExecution.defaultContext());
     }

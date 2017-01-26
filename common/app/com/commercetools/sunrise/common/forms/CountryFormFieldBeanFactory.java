@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.FormFieldViewModelFactory;
 import com.neovisionaries.i18n.CountryCode;
+import play.data.Form;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -38,7 +39,7 @@ public class CountryFormFieldBeanFactory extends FormFieldViewModelFactory<Count
     }
 
     @Override
-    public final CountryFormFieldBean createWithDefaultOptions(final FormField data) {
+    public final CountryFormFieldBean createWithDefaultOptions(final Form.Field data) {
         return super.createWithDefaultOptions(data);
     }
 
@@ -47,9 +48,9 @@ public class CountryFormFieldBeanFactory extends FormFieldViewModelFactory<Count
         fillList(model, data);
     }
 
-    protected void fillList(final CountryFormFieldBean bean, final FormFieldWithOptions<CountryCode> formModelData) {
-        bean.setList(formModelData.formOptions.stream()
-                .map(country -> countryFormSelectableOptionBeanFactory.create(country, formModelData.selectedValue))
+    protected void fillList(final CountryFormFieldBean bean, final FormFieldWithOptions<CountryCode> formFieldWithOptions) {
+        bean.setList(formFieldWithOptions.formOptions.stream()
+                .map(country -> countryFormSelectableOptionBeanFactory.create(country, formFieldWithOptions.formField.value()))
                 .collect(toList()));
     }
 }

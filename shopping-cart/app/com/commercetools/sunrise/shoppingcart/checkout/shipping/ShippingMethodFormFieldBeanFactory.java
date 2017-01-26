@@ -1,56 +1,64 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.ViewModelFactory;
+import com.commercetools.sunrise.common.forms.FormFieldWithOptions;
+import com.commercetools.sunrise.common.models.FormFieldViewModelFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
-import com.commercetools.sunrise.shoppingcart.ZoneFinderByCart;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import io.sphere.sdk.zones.Zone;
-import play.Configuration;
 import play.data.Form;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.commercetools.sunrise.common.forms.FormUtils.extractFormField;
 import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateApplicableShippingCosts;
 import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class ShippingMethodFormFieldBeanFactory extends ViewModelFactory {
+public class ShippingMethodFormFieldBeanFactory extends FormFieldViewModelFactory<ShippingMethodFormFieldBean, ShippingMethod> {
 
-    private final String formFieldName;
     private final PriceFormatter priceFormatter;
     private final ZoneFinderByCart zoneFinderByCart;
 
     @Inject
-    public ShippingMethodFormFieldBeanFactory(final PriceFormatter priceFormatter, final ZoneFinderByCart zoneFinderByCart,
-                                              final Configuration configuration) {
-        this.formFieldName = configuration.getString("checkout.shipping.formFieldName", "shippingMethodId");
+    public ShippingMethodFormFieldBeanFactory(final PriceFormatter priceFormatter, final ZoneFinderByCart zoneFinderByCart) {
         this.priceFormatter = priceFormatter;
         this.zoneFinderByCart = zoneFinderByCart;
     }
 
-    public ShippingMethodFormFieldBean create(final Form<?> form, final Cart cart, final List<ShippingMethod> shippingMethods) {
-        final ShippingMethodFormFieldBean bean = new ShippingMethodFormFieldBean();
-        initialize(bean, form, cart, shippingMethods);
-        return bean;
+    @Override
+    protected ShippingMethodFormFieldBean getViewModelInstance() {
+        return new ShippingMethodFormFieldBean();
     }
 
-    protected final void initialize(final ShippingMethodFormFieldBean bean, final Form<?> form,
-                                    final Cart cart, final List<ShippingMethod> shippingMethods) {
-        fillList(bean, form, cart, shippingMethods);
+    @Override
+    protected List<ShippingMethod> defaultOptions() {
+        return Collections.emptyList();
     }
 
-    protected void fillList(final ShippingMethodFormFieldBean bean, final Form<?> form,
-                            final Cart cart, final List<ShippingMethod> shippingMethods) {
-        final String selectedShippingMethodId = extractFormField(form, formFieldName);
-        bean.setList(shippingMethods.stream()
+    @Override
+    public final ShippingMethodFormFieldBean create(final FormFieldWithOptions<ShippingMethod> data) {
+        return super.create(data);
+    }
+
+    @Override
+    public final ShippingMethodFormFieldBean createWithDefaultOptions(final Form.Field formField) {
+        return super.createWithDefaultOptions(formField);
+    }
+
+    @Override
+    protected void initialize(final ShippingMethodFormFieldBean model, final FormFieldWithOptions<ShippingMethod> data) {
+        fillList(model, data);
+    }
+
+    protected void fillList(final ShippingMethodFormFieldBean model, final FormFieldWithOptions<ShippingMethod> data) {
+        model.setList(data.formOptions.stream()
                 .map(shippingMethod -> createFormOption(cart, shippingMethod, selectedShippingMethodId))
                 .collect(toList()));
     }

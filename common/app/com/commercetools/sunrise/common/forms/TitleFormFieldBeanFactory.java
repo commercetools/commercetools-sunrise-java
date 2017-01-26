@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.forms;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.FormFieldViewModelFactory;
 import play.Configuration;
+import play.data.Form;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -38,7 +39,7 @@ public class TitleFormFieldBeanFactory extends FormFieldViewModelFactory<TitleFo
     }
 
     @Override
-    public final TitleFormFieldBean createWithDefaultOptions(final FormField data) {
+    public final TitleFormFieldBean createWithDefaultOptions(final Form.Field data) {
         return super.createWithDefaultOptions(data);
     }
 
@@ -47,9 +48,9 @@ public class TitleFormFieldBeanFactory extends FormFieldViewModelFactory<TitleFo
         fillList(model, data);
     }
 
-    protected void fillList(final TitleFormFieldBean model, final FormFieldWithOptions<String> data) {
-        model.setList(data.formOptions.stream()
-                .map(titleKey -> titleFormSelectableOptionBeanFactory.create(titleKey, data.selectedValue))
+    protected void fillList(final TitleFormFieldBean model, final FormFieldWithOptions<String> formFieldWithOptions) {
+        model.setList(formFieldWithOptions.formOptions.stream()
+                .map(titleKey -> titleFormSelectableOptionBeanFactory.create(titleKey, formFieldWithOptions.formField.value()))
                 .collect(toList()));
     }
 }

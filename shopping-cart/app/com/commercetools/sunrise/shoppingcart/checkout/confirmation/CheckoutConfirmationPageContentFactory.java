@@ -4,13 +4,12 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
-import io.sphere.sdk.carts.Cart;
-import play.data.Form;
+import com.commercetools.sunrise.shoppingcart.checkout.CheckoutPageData;
 
 import javax.inject.Inject;
 
 @RequestScoped
-public class CheckoutConfirmationPageContentFactory extends PageContentFactory {
+public class CheckoutConfirmationPageContentFactory extends PageContentFactory<CheckoutConfirmationPageContent, CheckoutPageData> {
 
     private final PageTitleResolver pageTitleResolver;
     private final CartBeanFactory cartBeanFactory;
@@ -21,27 +20,33 @@ public class CheckoutConfirmationPageContentFactory extends PageContentFactory {
         this.cartBeanFactory = cartBeanFactory;
     }
 
-    public CheckoutConfirmationPageContent create(final Form<?> form, final Cart cart) {
-        final CheckoutConfirmationPageContent bean = new CheckoutConfirmationPageContent();
-        initialize(bean, form, cart);
-        return bean;
+    @Override
+    protected CheckoutConfirmationPageContent getViewModelInstance() {
+        return new CheckoutConfirmationPageContent();
     }
 
-    protected final void initialize(final CheckoutConfirmationPageContent bean, final Form<?> form, final Cart cart) {
-        fillCart(bean, form, cart);
-        fillTitle(bean, form, cart);
-        fillForm(bean, form, cart);
+    @Override
+    public final CheckoutConfirmationPageContent create(final CheckoutPageData data) {
+        return super.create(data);
     }
 
-    protected void fillTitle(final CheckoutConfirmationPageContent bean, final Form<?> form, final Cart cart) {
-        bean.setTitle(pageTitleResolver.getOrEmpty("checkout:confirmationPage.title"));
+    @Override
+    protected final void initialize(final CheckoutConfirmationPageContent model, final CheckoutPageData data) {
+        fillCart(model, data);
+        fillTitle(model, data);
+        fillForm(model, data);
     }
 
-    protected void fillCart(final CheckoutConfirmationPageContent bean, final Form<?> form, final Cart cart) {
-        bean.setCart(cartBeanFactory.create(cart));
+    @Override
+    protected void fillTitle(final CheckoutConfirmationPageContent model, final CheckoutPageData data) {
+        model.setTitle(pageTitleResolver.getOrEmpty("checkout:confirmationPage.title"));
     }
 
-    protected void fillForm(final CheckoutConfirmationPageContent bean, final Form<?> form, final Cart cart) {
-        bean.setCheckoutForm(form);
+    protected void fillCart(final CheckoutConfirmationPageContent model, final CheckoutPageData data) {
+        model.setCart(cartBeanFactory.create(data.cart));
+    }
+
+    protected void fillForm(final CheckoutConfirmationPageContent model, final CheckoutPageData data) {
+        model.setCheckoutForm(data.form);
     }
 }

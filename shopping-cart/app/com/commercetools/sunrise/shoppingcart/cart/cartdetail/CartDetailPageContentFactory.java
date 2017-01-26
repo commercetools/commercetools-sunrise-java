@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 @RequestScoped
-public class CartDetailPageContentFactory extends PageContentFactory {
+public class CartDetailPageContentFactory extends PageContentFactory<CartDetailPageContent, Cart> {
 
     private final PageTitleResolver pageTitleResolver;
     private final CartBeanFactory cartBeanFactory;
@@ -21,22 +21,27 @@ public class CartDetailPageContentFactory extends PageContentFactory {
         this.cartBeanFactory = cartBeanFactory;
     }
 
-    public CartDetailPageContent create(@Nullable final Cart cart) {
-        final CartDetailPageContent bean = new CartDetailPageContent();
-        initialize(bean, cart);
-        return bean;
+    @Override
+    protected CartDetailPageContent getViewModelInstance() {
+        return new CartDetailPageContent();
     }
 
-    protected final void initialize(final CartDetailPageContent bean, @Nullable final Cart cart) {
-        fillCart(bean, cart);
-        fillTitle(bean, cart);
+    @Override
+    public final CartDetailPageContent create(@Nullable final Cart data) {
+        return super.create(data);
     }
 
-    protected void fillCart(final CartDetailPageContent bean, @Nullable final Cart cart) {
-        bean.setCart(cartBeanFactory.create(cart));
+    protected final void initialize(final CartDetailPageContent model, final Cart cart) {
+        super.initialize(model, cart);
+        fillCart(model, cart);
     }
 
-    protected void fillTitle(final CartDetailPageContent bean, @Nullable final Cart cart) {
-        bean.setTitle(pageTitleResolver.getOrEmpty("checkout:cartDetailPage.title"));
+    @Override
+    protected void fillTitle(final CartDetailPageContent model, @Nullable final Cart cart) {
+        model.setTitle(pageTitleResolver.getOrEmpty("checkout:cartDetailPage.title"));
+    }
+
+    protected void fillCart(final CartDetailPageContent model, @Nullable final Cart cart) {
+        model.setCart(cartBeanFactory.create(cart));
     }
 }

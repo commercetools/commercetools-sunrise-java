@@ -1,18 +1,16 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.FormFieldViewModelFactory;
+import com.commercetools.sunrise.common.models.SelectableOptionViewModelFactory;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.Objects;
 import java.util.Optional;
 
 @RequestScoped
-public class PaymentFormSelectableOptionBeanFactory extends FormFieldViewModelFactory<PaymentFormSelectableOptionBean, PaymentFormSelectableOptionBeanFactory.Data> {
+public class PaymentFormSelectableOptionBeanFactory extends SelectableOptionViewModelFactory<PaymentFormSelectableOptionBean, PaymentMethodInfo> {
 
     private final LocalizedStringResolver localizedStringResolver;
 
@@ -21,46 +19,34 @@ public class PaymentFormSelectableOptionBeanFactory extends FormFieldViewModelFa
         this.localizedStringResolver = localizedStringResolver;
     }
 
-    public final PaymentFormSelectableOptionBean create(final PaymentMethodInfo paymentMethod, @Nullable final String selectedPaymentMethodId) {
-        final Data data = new Data(paymentMethod, selectedPaymentMethodId);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected PaymentFormSelectableOptionBean getViewModelInstance() {
         return new PaymentFormSelectableOptionBean();
     }
 
     @Override
-    protected final void initialize(final PaymentFormSelectableOptionBean bean, final Data data) {
-        fillLabel(bean, data);
-        fillValue(bean, data);
-        fillSelected(bean, data);
+    public final PaymentFormSelectableOptionBean create(final PaymentMethodInfo option, @Nullable final String selectedValue) {
+        return super.create(option, selectedValue);
     }
 
-    protected void fillLabel(final PaymentFormSelectableOptionBean bean, final Data data) {
-        bean.setLabel(Optional.ofNullable(data.paymentMethodInfo.getName())
+    @Override
+    protected final void initialize(final PaymentFormSelectableOptionBean model, final PaymentMethodInfo option, @Nullable final String selectedValue) {
+        fillLabel(model, option, selectedValue);
+        fillValue(model, option, selectedValue);
+        fillSelected(model, option, selectedValue);
+    }
+
+    protected void fillLabel(final PaymentFormSelectableOptionBean model, final PaymentMethodInfo option, @Nullable final String selectedValue) {
+        model.setLabel(Optional.ofNullable(option.getName())
                 .flatMap(localizedStringResolver::find)
                 .orElse("-"));
     }
 
-    protected void fillValue(final PaymentFormSelectableOptionBean bean, final Data data) {
-        bean.setValue(data.paymentMethodInfo.getMethod());
+    protected void fillValue(final PaymentFormSelectableOptionBean model, final PaymentMethodInfo option, @Nullable final String selectedValue) {
+        model.setValue(option.getMethod());
     }
 
-    protected void fillSelected(final PaymentFormSelectableOptionBean bean, final Data data) {
-        bean.setSelected(Objects.equals(data.paymentMethodInfo.getMethod(), data.selectedPaymentMethodId));
-    }
-
-    protected final static class Data extends Base {
-
-        public final PaymentMethodInfo paymentMethodInfo;
-        @Nullable
-        public final String selectedPaymentMethodId;
-
-        public Data(final PaymentMethodInfo paymentMethodInfo, final String selectedPaymentMethodId) {
-            this.paymentMethodInfo = paymentMethodInfo;
-            this.selectedPaymentMethodId = selectedPaymentMethodId;
-        }
+    protected void fillSelected(final PaymentFormSelectableOptionBean model, final PaymentMethodInfo option, @Nullable final String selectedValue) {
+        model.setSelected(option.getMethod() != null && option.getMethod().equals(selectedValue));
     }
 }

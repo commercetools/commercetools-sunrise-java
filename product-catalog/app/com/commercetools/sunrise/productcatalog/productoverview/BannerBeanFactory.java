@@ -18,13 +18,13 @@ public class BannerBeanFactory extends ViewModelFactory<BannerBean, ProductOverv
     }
 
     @Override
-    public final BannerBean create(final ProductOverviewPageData data) {
-        return super.create(data);
+    protected BannerBean getViewModelInstance() {
+        return new BannerBean();
     }
 
     @Override
-    protected BannerBean getViewModelInstance() {
-        return new BannerBean();
+    public final BannerBean create(final ProductOverviewPageData data) {
+        return super.create(data);
     }
 
     @Override
