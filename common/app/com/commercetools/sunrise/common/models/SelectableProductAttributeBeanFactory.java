@@ -13,7 +13,7 @@ import java.util.*;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class SelectableProductAttributeBeanFactory extends ViewModelFactory<SelectableProductAttributeBean, SelectableProductAttributeBeanFactory.Data> {
+public class SelectableProductAttributeBeanFactory extends ViewModelFactory<List<SelectableProductAttributeBean>, Attribute> {
 
     private final AttributeFormatter attributeFormatter;
     private final ProductDataConfig productDataConfig;
@@ -46,7 +46,7 @@ public class SelectableProductAttributeBeanFactory extends ViewModelFactory<Sele
     }
 
     @Override
-    protected final void initialize(final SelectableProductAttributeBean model, final Data data) {
+    protected final void initialize(final SelectableProductAttributeBean model, final Attribute data) {
         fillKey(model, data);
         fillName(model, data);
         fillValue(model, data);
@@ -55,37 +55,37 @@ public class SelectableProductAttributeBeanFactory extends ViewModelFactory<Sele
         fillSelectData(model, data);
     }
 
-    protected void fillKey(final SelectableProductAttributeBean bean, final Data data) {
-        bean.setKey(data.attribute.getName());
+    protected void fillKey(final SelectableProductAttributeBean model, final Attribute attribute) {
+        model.setKey(attribute.getName());
     }
 
-    protected void fillName(final SelectableProductAttributeBean bean, final Data data) {
-        bean.setName(attributeFormatter.label(data.attribute));
+    protected void fillName(final SelectableProductAttributeBean model, final Attribute attribute) {
+        model.setName(attributeFormatter.label(attribute));
     }
 
-    protected void fillValue(final SelectableProductAttributeBean bean, final Data data) {
-        bean.setValue(attributeFormatter.value(data.attribute));
+    protected void fillValue(final SelectableProductAttributeBean model, final Attribute attribute) {
+        model.setValue(attributeFormatter.value(attribute));
     }
 
-    protected void fillReload(final SelectableProductAttributeBean bean, final Data data) {
-        bean.setReload(productDataConfig.getHardSelectableAttributes().contains(data.attribute.getName()));
+    protected void fillReload(final SelectableProductAttributeBean model, final Attribute attribute) {
+        model.setReload(productDataConfig.getHardSelectableAttributes().contains(attribute.getName()));
     }
 
-    protected void fillList(final SelectableProductAttributeBean bean, final Data data) {
+    protected void fillList(final SelectableProductAttributeBean model, final Attribute attribute) {
         final List<ProductAttributeFormSelectableOptionBean> formOptions = new ArrayList<>();
-        final String selectedAttributeValue = attributeFormatter.valueAsKey(data.attribute);
+        final String selectedAttributeValue = attributeFormatter.valueAsKey(attribute);
         data.distinctAttributeOptions.forEach(attribute ->
                 formOptions.add(productAttributeFormSelectableOptionBeanFactory.create(attribute, selectedAttributeValue)));
-        bean.setList(formOptions);
+        model.setList(formOptions);
     }
 
-    protected void fillSelectData(final SelectableProductAttributeBean bean, final Data data) {
+    protected void fillSelectData(final SelectableProductAttributeBean model, final Attribute attribute) {
         final Map<String, Map<String, List<String>>> selectableData = new HashMap<>();
         data.distinctAttributeOptions.forEach(attrOption -> {
             final String attrOptionValue = attributeFormatter.value(attrOption);
             selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attrOption, data.product));
         });
-        bean.setSelectData(selectableData);
+        model.setSelectData(selectableData);
     }
 
     private Map<String, List<String>> createAllowedAttributeCombinations(final Attribute fixedAttribute, final ProductProjection product) {

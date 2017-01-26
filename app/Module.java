@@ -25,8 +25,8 @@ import com.commercetools.sunrise.productcatalog.productoverview.search.productsp
 import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageConfigProvider;
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfig;
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortConfigProvider;
-import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
 import com.commercetools.sunrise.shoppingcart.CartComponent;
+import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutCommonComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutStepWidgetComponent;
 import com.google.inject.AbstractModule;

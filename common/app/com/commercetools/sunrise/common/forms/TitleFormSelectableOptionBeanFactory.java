@@ -1,11 +1,10 @@
 package com.commercetools.sunrise.common.forms;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.FormFieldFactory;
+import com.commercetools.sunrise.common.models.SelectableOptionViewModelFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -14,7 +13,7 @@ import java.util.Locale;
 import static java.util.Collections.singletonList;
 
 @RequestScoped
-public class TitleFormSelectableOptionBeanFactory extends FormFieldFactory<TitleFormSelectableOptionBean, TitleFormSelectableOptionBeanFactory.Data> {
+public class TitleFormSelectableOptionBeanFactory extends SelectableOptionViewModelFactory<TitleFormSelectableOptionBean, String> {
 
     private final Locale locale;
     private final I18nResolver i18nResolver;
@@ -27,46 +26,34 @@ public class TitleFormSelectableOptionBeanFactory extends FormFieldFactory<Title
         this.i18nIdentifierFactory = i18nIdentifierFactory;
     }
 
-    public final TitleFormSelectableOptionBean create(final String titleKey, @Nullable final String selectedTitleKey) {
-        final Data data = new Data(titleKey, selectedTitleKey);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected TitleFormSelectableOptionBean getViewModelInstance() {
         return new TitleFormSelectableOptionBean();
     }
 
     @Override
-    protected final void initialize(final TitleFormSelectableOptionBean bean, final Data data) {
-        fillLabel(bean, data);
-        fillValue(bean, data);
-        fillSelected(bean, data);
+    public final TitleFormSelectableOptionBean create(final String option, @Nullable final String selectedValue) {
+        return super.create(option, selectedValue);
     }
 
-    protected void fillLabel(final TitleFormSelectableOptionBean bean, final Data data) {
-        final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(data.titleKey);
+    @Override
+    protected final void initialize(final TitleFormSelectableOptionBean model, final String option, @Nullable final String selectedValue) {
+        fillLabel(model, option, selectedValue);
+        fillValue(model, option, selectedValue);
+        fillSelected(model, option, selectedValue);
+    }
+
+    protected void fillLabel(final TitleFormSelectableOptionBean model, final String option, @Nullable final String selectedValue) {
+        final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(option);
         final String title = i18nResolver.getOrKey(singletonList(locale), i18nIdentifier);
-        bean.setLabel(title);
+        model.setLabel(title);
     }
 
-    protected void fillValue(final TitleFormSelectableOptionBean bean, final Data data) {
-        bean.setValue(data.titleKey);
+    protected void fillValue(final TitleFormSelectableOptionBean model, final String option, @Nullable final String selectedValue) {
+        model.setValue(option);
     }
 
-    protected void fillSelected(final TitleFormSelectableOptionBean bean, final Data data) {
-        bean.setSelected(data.titleKey.equals(data.selectedTitleKey));
-    }
-
-    protected final static class Data extends Base {
-
-        public final String titleKey;
-        @Nullable
-        public final String selectedTitleKey;
-
-        public Data(final String titleKey, final String selectedTitleKey) {
-            this.titleKey = titleKey;
-            this.selectedTitleKey = selectedTitleKey;
-        }
+    protected void fillSelected(final TitleFormSelectableOptionBean model, final String option, @Nullable final String selectedValue) {
+        model.setSelected(option.equals(selectedValue));
     }
 }

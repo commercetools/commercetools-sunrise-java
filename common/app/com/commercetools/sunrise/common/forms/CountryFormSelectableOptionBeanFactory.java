@@ -1,16 +1,15 @@
 package com.commercetools.sunrise.common.forms;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.FormFieldFactory;
+import com.commercetools.sunrise.common.models.SelectableOptionViewModelFactory;
 import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.models.Base;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Locale;
 
 @RequestScoped
-public class CountryFormSelectableOptionBeanFactory extends FormFieldFactory<CountryFormSelectableOptionBean, CountryFormSelectableOptionBeanFactory.Data> {
+public class CountryFormSelectableOptionBeanFactory extends SelectableOptionViewModelFactory<CountryFormSelectableOptionBean, CountryCode> {
 
     private final Locale locale;
 
@@ -19,44 +18,33 @@ public class CountryFormSelectableOptionBeanFactory extends FormFieldFactory<Cou
         this.locale = locale;
     }
 
-    public final CountryFormSelectableOptionBean create(final CountryCode country, @Nullable final String selectedCountryCode) {
-        final Data data = new Data(country, selectedCountryCode);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected CountryFormSelectableOptionBean getViewModelInstance() {
         return new CountryFormSelectableOptionBean();
     }
 
     @Override
-    protected final void initialize(final CountryFormSelectableOptionBean bean, final Data data) {
-        fillLabel(bean, data);
-        fillValue(bean, data);
-        fillSelected(bean, data);
+    public final CountryFormSelectableOptionBean create(final CountryCode option, @Nullable final String selectedValue) {
+        return super.create(option, selectedValue);
     }
 
-    protected void fillSelected(final CountryFormSelectableOptionBean bean, final Data data) {
-        bean.setSelected(data.country.getAlpha2().equals(data.selectedCountryCode));
+    @Override
+    protected final void initialize(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final String selectedValue) {
+        fillLabel(model, option, selectedValue);
+        fillValue(model, option, selectedValue);
+        fillSelected(model, option, selectedValue);
     }
 
-    protected void fillValue(final CountryFormSelectableOptionBean bean, final Data data) {
-        bean.setValue(data.country.getAlpha2());
+    protected void fillLabel(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final String selectedValue) {
+        model.setLabel(option.toLocale().getDisplayCountry(locale));
     }
 
-    protected void fillLabel(final CountryFormSelectableOptionBean bean, final Data data) {
-        bean.setLabel(data.country.toLocale().getDisplayCountry(locale));
+    protected void fillValue(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final String selectedValue) {
+        model.setValue(option.getAlpha2());
     }
 
-    protected static final class Data extends Base {
-
-        public final CountryCode country;
-        @Nullable
-        public final String selectedCountryCode;
-
-        public Data(final CountryCode country, final String selectedCountryCode) {
-            this.country = country;
-            this.selectedCountryCode = selectedCountryCode;
-        }
+    protected void fillSelected(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final String selectedValue) {
+        model.setSelected(option.getAlpha2().equals(selectedValue));
     }
+
 }

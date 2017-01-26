@@ -2,14 +2,13 @@ package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.utils.AttributeFormatter;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.attributes.Attribute;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 @RequestScoped
-public class ProductAttributeFormSelectableOptionBeanFactory extends ViewModelFactory<ProductAttributeFormSelectableOptionBean, ProductAttributeFormSelectableOptionBeanFactory.Data> {
+public class ProductAttributeFormSelectableOptionBeanFactory extends SelectableOptionViewModelFactory<ProductAttributeFormSelectableOptionBean, Attribute> {
 
     private final AttributeFormatter attributeFormatter;
 
@@ -18,44 +17,32 @@ public class ProductAttributeFormSelectableOptionBeanFactory extends ViewModelFa
         this.attributeFormatter = attributeFormatter;
     }
 
-    public final ProductAttributeFormSelectableOptionBean create(final Attribute attribute, @Nullable final String selectedAttributeValue) {
-        final Data data = new Data(attribute, selectedAttributeValue);
-        return initializedViewModel(data);
-    }
-
     @Override
     protected ProductAttributeFormSelectableOptionBean getViewModelInstance() {
         return new ProductAttributeFormSelectableOptionBean();
     }
 
     @Override
-    protected final void initialize(final ProductAttributeFormSelectableOptionBean model, final Data data) {
-        fillLabel(model, data);
-        fillValue(model, data);
-        fillSelected(model, data);
+    public final ProductAttributeFormSelectableOptionBean create(final Attribute option, @Nullable final String selectedValue) {
+        return super.create(option, selectedValue);
     }
 
-    protected void fillLabel(final ProductAttributeFormSelectableOptionBean bean, final Data data) {
-        bean.setLabel(attributeFormatter.value(data.attribute));
+    @Override
+    protected final void initialize(final ProductAttributeFormSelectableOptionBean model, final Attribute option, @Nullable final String selectedValue) {
+        fillLabel(model, option, selectedValue);
+        fillValue(model, option, selectedValue);
+        fillSelected(model, option, selectedValue);
     }
 
-    protected void fillValue(final ProductAttributeFormSelectableOptionBean bean, final Data data) {
-        bean.setValue(attributeFormatter.valueAsKey(data.attribute));
+    protected void fillLabel(final ProductAttributeFormSelectableOptionBean model, final Attribute option, @Nullable final String selectedValue) {
+        model.setLabel(attributeFormatter.value(option));
     }
 
-    protected void fillSelected(final ProductAttributeFormSelectableOptionBean bean, final Data data) {
-        bean.setSelected(attributeFormatter.valueAsKey(data.attribute).equals(data.selectedAttributeValue));
+    protected void fillValue(final ProductAttributeFormSelectableOptionBean model, final Attribute option, @Nullable final String selectedValue) {
+        model.setValue(attributeFormatter.valueAsKey(option));
     }
 
-    protected final static class Data extends Base {
-
-        public final Attribute attribute;
-        @Nullable
-        public final String selectedAttributeValue;
-
-        public Data(final Attribute attribute, @Nullable final String selectedAttributeValue) {
-            this.attribute = attribute;
-            this.selectedAttributeValue = selectedAttributeValue;
-        }
+    protected void fillSelected(final ProductAttributeFormSelectableOptionBean model, final Attribute option, @Nullable final String selectedValue) {
+        model.setSelected(attributeFormatter.valueAsKey(option).equals(selectedValue));
     }
 }

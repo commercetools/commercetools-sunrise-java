@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.forms.FormUtils;
-import com.commercetools.sunrise.common.models.FormFieldFactory;
+import com.commercetools.sunrise.common.models.FormFieldViewModelFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.payments.PaymentMethodInfo;
@@ -14,7 +14,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class PaymentMethodFormFieldBeanFactory extends FormFieldFactory<PaymentMethodFormFieldBean, PaymentMethodFormFieldBeanFactory.Data> {
+public class PaymentMethodFormFieldBeanFactory extends FormFieldViewModelFactory<PaymentMethodFormFieldBean, PaymentMethodFormFieldBeanFactory.Data> {
 
     private final PaymentFormSelectableOptionBeanFactory paymentFormSelectableOptionBeanFactory;
 
