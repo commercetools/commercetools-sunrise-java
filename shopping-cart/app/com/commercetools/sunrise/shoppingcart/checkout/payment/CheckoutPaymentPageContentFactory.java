@@ -8,7 +8,7 @@ import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 import javax.inject.Inject;
 
 @RequestScoped
-public class CheckoutPaymentPageContentFactory extends PageContentFactory<CheckoutPaymentPageContent, CheckoutPaymentPageData> {
+public class CheckoutPaymentPageContentFactory extends PageContentFactory<CheckoutPaymentPageContent, CheckoutPaymentControllerData> {
 
     private final PageTitleResolver pageTitleResolver;
     private final CartBeanFactory cartBeanFactory;
@@ -28,11 +28,11 @@ public class CheckoutPaymentPageContentFactory extends PageContentFactory<Checko
     }
 
     @Override
-    public final CheckoutPaymentPageContent create(final CheckoutPaymentPageData data) {
+    public final CheckoutPaymentPageContent create(final CheckoutPaymentControllerData data) {
         return super.create(data);
     }
 
-    protected final void initialize(final CheckoutPaymentPageContent model, final CheckoutPaymentPageData data) {
+    protected final void initialize(final CheckoutPaymentPageContent model, final CheckoutPaymentControllerData data) {
         super.initialize(model, data);
         fillCart(model, data);
         fillForm(model, data);
@@ -40,19 +40,19 @@ public class CheckoutPaymentPageContentFactory extends PageContentFactory<Checko
     }
 
     @Override
-    protected void fillTitle(final CheckoutPaymentPageContent model, final CheckoutPaymentPageData data) {
+    protected void fillTitle(final CheckoutPaymentPageContent model, final CheckoutPaymentControllerData data) {
         model.setTitle(pageTitleResolver.getOrEmpty("checkout:paymentPage.title"));
     }
 
-    protected void fillCart(final CheckoutPaymentPageContent model, final CheckoutPaymentPageData data) {
-        model.setCart(cartBeanFactory.create(data.cart));
+    protected void fillCart(final CheckoutPaymentPageContent model, final CheckoutPaymentControllerData data) {
+        model.setCart(cartBeanFactory.create(data.getCart()));
     }
 
-    protected void fillForm(final CheckoutPaymentPageContent model, final CheckoutPaymentPageData data) {
-        model.setPaymentForm(data.form);
+    protected void fillForm(final CheckoutPaymentPageContent model, final CheckoutPaymentControllerData data) {
+        model.setPaymentForm(data.getForm());
     }
 
-    protected void fillFormSettings(final CheckoutPaymentPageContent model, final CheckoutPaymentPageData data) {
+    protected void fillFormSettings(final CheckoutPaymentPageContent model, final CheckoutPaymentControllerData data) {
         model.setPaymentFormSettings(checkoutPaymentFormSettingsBeanFactory.create(data));
     }
 }

@@ -114,7 +114,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkS
         return getPaymentMethodInfos()
                 .thenComposeAsync(paymentMethods -> {
                     final CheckoutPaymentPageContentFactory pageContentFactory = injector().getInstance(CheckoutPaymentPageContentFactory.class);
-                    final CheckoutPaymentPageData checkoutPaymentPageData = new CheckoutPaymentPageData(form, cart, updatedCart, paymentMethods);
+                    final CheckoutPaymentControllerData checkoutPaymentPageData = new CheckoutPaymentControllerData(form, cart, updatedCart, paymentMethods);
                     final CheckoutPaymentPageContent pageContent = pageContentFactory.create(checkoutPaymentPageData);
                     return renderPageWithTemplate(pageContent, getTemplateName());
                 }, defaultContext());

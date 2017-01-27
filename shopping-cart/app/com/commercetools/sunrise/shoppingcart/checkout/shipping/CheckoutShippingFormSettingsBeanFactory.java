@@ -7,7 +7,7 @@ import io.sphere.sdk.shippingmethods.ShippingMethod;
 import play.Configuration;
 
 @RequestScoped
-public class CheckoutShippingFormSettingsBeanFactory extends ViewModelFactory<CheckoutShippingFormSettingsBean, CheckoutShippingPageData> {
+public class CheckoutShippingFormSettingsBeanFactory extends ViewModelFactory<CheckoutShippingFormSettingsBean, CheckoutShippingControllerData> {
 
     private final String shippingFormFieldName;
     private final ShippingMethodFormFieldBeanFactory shippingMethodFormFieldBeanFactory;
@@ -23,16 +23,16 @@ public class CheckoutShippingFormSettingsBeanFactory extends ViewModelFactory<Ch
     }
 
     @Override
-    public final CheckoutShippingFormSettingsBean create(final CheckoutShippingPageData data) {
+    public final CheckoutShippingFormSettingsBean create(final CheckoutShippingControllerData data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final CheckoutShippingFormSettingsBean model, final CheckoutShippingPageData data) {
+    protected final void initialize(final CheckoutShippingFormSettingsBean model, final CheckoutShippingControllerData data) {
         fillPaymentMethod(model, data);
     }
 
-    protected void fillPaymentMethod(final CheckoutShippingFormSettingsBean model, final CheckoutShippingPageData data) {
+    protected void fillPaymentMethod(final CheckoutShippingFormSettingsBean model, final CheckoutShippingControllerData data) {
         final FormFieldWithOptions<ShippingMethod> formFieldWithOptions = new FormFieldWithOptions<>(data.form.field(shippingFormFieldName), data.shippingMethods);
         model.setShippingMethod(shippingMethodFormFieldBeanFactory.create(formFieldWithOptions));
     }

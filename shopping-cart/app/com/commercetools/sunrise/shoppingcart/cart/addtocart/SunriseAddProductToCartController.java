@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailControllerData;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
@@ -76,7 +77,8 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends AddProductToCartFormData> form, final Cart cart, @Nullable final Cart updatedCart) {
-        final CartDetailPageContent pageContent = injector().getInstance(CartDetailPageContentFactory.class).create(cart);
+        final CartDetailControllerData cartDetailControllerData = new CartDetailControllerData(cart, updatedCart);
+        final CartDetailPageContent pageContent = injector().getInstance(CartDetailPageContentFactory.class).create(cartDetailControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName()); // TODO abstract results better instead of forcing HTML, to support this use case properly
     }
 

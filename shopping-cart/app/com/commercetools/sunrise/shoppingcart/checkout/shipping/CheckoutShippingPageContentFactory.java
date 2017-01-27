@@ -8,7 +8,7 @@ import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 import javax.inject.Inject;
 
 @RequestScoped
-public class CheckoutShippingPageContentFactory extends PageContentFactory<CheckoutShippingPageContent, CheckoutShippingPageData> {
+public class CheckoutShippingPageContentFactory extends PageContentFactory<CheckoutShippingPageContent, CheckoutShippingControllerData> {
 
     private final PageTitleResolver pageTitleResolver;
     private final CartBeanFactory cartBeanFactory;
@@ -28,12 +28,12 @@ public class CheckoutShippingPageContentFactory extends PageContentFactory<Check
     }
 
     @Override
-    public final CheckoutShippingPageContent create(final CheckoutShippingPageData data) {
+    public final CheckoutShippingPageContent create(final CheckoutShippingControllerData data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final CheckoutShippingPageContent model, final CheckoutShippingPageData data) {
+    protected final void initialize(final CheckoutShippingPageContent model, final CheckoutShippingControllerData data) {
         super.initialize(model, data);
         fillCart(model, data);
         fillForm(model, data);
@@ -41,19 +41,19 @@ public class CheckoutShippingPageContentFactory extends PageContentFactory<Check
     }
 
     @Override
-    protected void fillTitle(final CheckoutShippingPageContent model, final CheckoutShippingPageData data) {
+    protected void fillTitle(final CheckoutShippingPageContent model, final CheckoutShippingControllerData data) {
         model.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
     }
 
-    protected void fillCart(final CheckoutShippingPageContent model, final CheckoutShippingPageData data) {
-        model.setCart(cartBeanFactory.create(data.cart));
+    protected void fillCart(final CheckoutShippingPageContent model, final CheckoutShippingControllerData data) {
+        model.setCart(cartBeanFactory.create(data.getCart()));
     }
 
-    protected void fillForm(final CheckoutShippingPageContent model, final CheckoutShippingPageData data) {
-        model.setShippingForm(data.form);
+    protected void fillForm(final CheckoutShippingPageContent model, final CheckoutShippingControllerData data) {
+        model.setShippingForm(data.getForm());
     }
 
-    protected void fillFormSettings(final CheckoutShippingPageContent model, final CheckoutShippingPageData data) {
+    protected void fillFormSettings(final CheckoutShippingPageContent model, final CheckoutShippingControllerData data) {
         model.setShippingFormSettings(checkoutShippingFormSettingsBeanFactory.create(data));
     }
 }

@@ -42,7 +42,10 @@ public abstract class SunriseCartDetailController extends SunriseFrameworkShoppi
     @SunriseRoute("showCart")
     public CompletionStage<Result> show(final String languageTag) {
         return doRequest(() -> findCart()
-                .thenApplyAsync(cartOptional -> pageContentFactory.create(cartOptional.orElse(null)), defaultContext())
+                .thenApplyAsync(cartOptional -> {
+                    final CartDetailControllerData cartDetailControllerData = new CartDetailControllerData(cartOptional.orElse(null), null);
+                    return pageContentFactory.create(cartDetailControllerData);
+                }, defaultContext())
                 .thenComposeAsync(pageContent -> asyncOk(renderPageWithTemplate(pageContent, getTemplateName())), HttpExecution.defaultContext()));
     }
 }

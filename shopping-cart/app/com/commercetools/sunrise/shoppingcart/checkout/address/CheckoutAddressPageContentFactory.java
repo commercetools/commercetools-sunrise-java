@@ -4,12 +4,11 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
-import com.commercetools.sunrise.shoppingcart.checkout.CheckoutPageData;
 
 import javax.inject.Inject;
 
 @RequestScoped
-public class CheckoutAddressPageContentFactory extends PageContentFactory<CheckoutAddressPageContent, CheckoutPageData> {
+public class CheckoutAddressPageContentFactory extends PageContentFactory<CheckoutAddressPageContent, CheckoutAddressControllerData> {
 
     private final PageTitleResolver pageTitleResolver;
     private final CartBeanFactory cartBeanFactory;
@@ -29,12 +28,12 @@ public class CheckoutAddressPageContentFactory extends PageContentFactory<Checko
     }
 
     @Override
-    public final CheckoutAddressPageContent create(final CheckoutPageData data) {
+    public final CheckoutAddressPageContent create(final CheckoutAddressControllerData data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final CheckoutAddressPageContent model, final CheckoutPageData data) {
+    protected final void initialize(final CheckoutAddressPageContent model, final CheckoutAddressControllerData data) {
         super.initialize(model, data);
         fillCart(model, data);
         fillForm(model, data);
@@ -42,19 +41,19 @@ public class CheckoutAddressPageContentFactory extends PageContentFactory<Checko
     }
 
     @Override
-    protected void fillTitle(final CheckoutAddressPageContent model, final CheckoutPageData data) {
+    protected void fillTitle(final CheckoutAddressPageContent model, final CheckoutAddressControllerData data) {
         model.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
     }
 
-    protected void fillCart(final CheckoutAddressPageContent model, final CheckoutPageData data) {
-        model.setCart(cartBeanFactory.create(data.cart));
+    protected void fillCart(final CheckoutAddressPageContent model, final CheckoutAddressControllerData data) {
+        model.setCart(cartBeanFactory.create(data.getCart()));
     }
 
-    protected void fillForm(final CheckoutAddressPageContent model, final CheckoutPageData data) {
-        model.setAddressForm(data.form);
+    protected void fillForm(final CheckoutAddressPageContent model, final CheckoutAddressControllerData data) {
+        model.setAddressForm(data.getForm());
     }
 
-    protected void fillFormSettings(final CheckoutAddressPageContent model, final CheckoutPageData data) {
-        model.setAddressFormSettings(addressFormSettingsFactory.create(data.form));
+    protected void fillFormSettings(final CheckoutAddressPageContent model, final CheckoutAddressControllerData data) {
+        model.setAddressFormSettings(addressFormSettingsFactory.create(data.getForm()));
     }
 }

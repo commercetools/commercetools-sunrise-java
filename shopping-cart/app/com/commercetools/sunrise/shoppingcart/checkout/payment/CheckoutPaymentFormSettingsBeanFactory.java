@@ -9,7 +9,7 @@ import play.Configuration;
 import javax.inject.Inject;
 
 @RequestScoped
-public class CheckoutPaymentFormSettingsBeanFactory extends ViewModelFactory<CheckoutPaymentFormSettingsBean, CheckoutPaymentPageData> {
+public class CheckoutPaymentFormSettingsBeanFactory extends ViewModelFactory<CheckoutPaymentFormSettingsBean, CheckoutPaymentControllerData> {
 
     private final String paymentFormFieldName;
     private final PaymentMethodFormFieldBeanFactory paymentMethodFormFieldBeanFactory;
@@ -26,17 +26,17 @@ public class CheckoutPaymentFormSettingsBeanFactory extends ViewModelFactory<Che
     }
 
     @Override
-    public final CheckoutPaymentFormSettingsBean create(final CheckoutPaymentPageData data) {
+    public final CheckoutPaymentFormSettingsBean create(final CheckoutPaymentControllerData data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final CheckoutPaymentFormSettingsBean model, final CheckoutPaymentPageData data) {
+    protected final void initialize(final CheckoutPaymentFormSettingsBean model, final CheckoutPaymentControllerData data) {
         fillPaymentMethod(model, data);
     }
 
-    protected void fillPaymentMethod(final CheckoutPaymentFormSettingsBean model, final CheckoutPaymentPageData data) {
-        final FormFieldWithOptions<PaymentMethodInfo> formFieldWithOptions = new FormFieldWithOptions<>(data.form.field(paymentFormFieldName), data.paymentMethods);
+    protected void fillPaymentMethod(final CheckoutPaymentFormSettingsBean model, final CheckoutPaymentControllerData data) {
+        final FormFieldWithOptions<PaymentMethodInfo> formFieldWithOptions = new FormFieldWithOptions<>(data.getForm().field(paymentFormFieldName), data.getPaymentMethods());
         model.setPaymentMethod(paymentMethodFormFieldBeanFactory.create(formFieldWithOptions));
     }
 }

@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import java.util.Locale;
 
 @RequestScoped
-public class ProductDetailPageContentFactory extends PageContentFactory<ProductDetailPageContent, ProductDetailPageData> {
+public class ProductDetailPageContentFactory extends PageContentFactory<ProductDetailPageContent, ProductDetailControllerData> {
 
     private final Locale locale;
     private final LocalizedStringResolver localizedStringResolver;
@@ -38,12 +38,12 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
     }
 
     @Override
-    public final ProductDetailPageContent create(final ProductDetailPageData data) {
+    public final ProductDetailPageContent create(final ProductDetailControllerData data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final ProductDetailPageContent model, final ProductDetailPageData data) {
+    protected final void initialize(final ProductDetailPageContent model, final ProductDetailControllerData data) {
         super.initialize(model, data);
         fillProduct(model, data);
         fillBreadCrumb(model, data);
@@ -51,22 +51,22 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
     }
 
     @Override
-    protected void fillTitle(final ProductDetailPageContent model, final ProductDetailPageData data) {
+    protected void fillTitle(final ProductDetailPageContent model, final ProductDetailControllerData data) {
         final String title = String.format("%s %s",
-                localizedStringResolver.getOrEmpty(data.productWithVariant.getProduct().getName()),
+                localizedStringResolver.getOrEmpty(data.getProductWithVariant().getProduct().getName()),
                 pageTitleResolver.getOrEmpty("catalog:productDetailPage.title"));
         model.setTitle(title);
     }
 
-    protected void fillAddToCartFormUrl(final ProductDetailPageContent content, final ProductDetailPageData data) {
+    protected void fillAddToCartFormUrl(final ProductDetailPageContent content, final ProductDetailControllerData data) {
         content.setAddToCartFormUrl(cartReverseRouter.processAddProductToCartForm(locale.toLanguageTag()).url()); // TODO move to page meta
     }
 
-    protected void fillBreadCrumb(final ProductDetailPageContent content, final ProductDetailPageData data) {
+    protected void fillBreadCrumb(final ProductDetailPageContent content, final ProductDetailControllerData data) {
         content.setBreadcrumb(productBreadcrumbBeanFactory.create(data));
     }
 
-    protected void fillProduct(final ProductDetailPageContent content, final ProductDetailPageData data) {
-        content.setProduct(productBeanFactory.create(data.productWithVariant));
+    protected void fillProduct(final ProductDetailPageContent content, final ProductDetailControllerData data) {
+        content.setProduct(productBeanFactory.create(data.getProductWithVariant()));
     }
 }

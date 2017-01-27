@@ -8,7 +8,7 @@ import com.commercetools.sunrise.shoppingcart.OrderBeanFactory;
 import javax.inject.Inject;
 
 @RequestScoped
-public class CheckoutThankYouPageContentFactory extends PageContentFactory<CheckoutThankYouPageContent, CheckoutThankYouPageData> {
+public class CheckoutThankYouPageContentFactory extends PageContentFactory<CheckoutThankYouPageContent, CheckoutThankYouPageControllerData> {
 
     private final PageTitleResolver pageTitleResolver;
     private final OrderBeanFactory orderBeanFactory;
@@ -25,22 +25,22 @@ public class CheckoutThankYouPageContentFactory extends PageContentFactory<Check
     }
 
     @Override
-    public final CheckoutThankYouPageContent create(final CheckoutThankYouPageData data) {
+    public final CheckoutThankYouPageContent create(final CheckoutThankYouPageControllerData data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final CheckoutThankYouPageContent model, final CheckoutThankYouPageData data) {
+    protected final void initialize(final CheckoutThankYouPageContent model, final CheckoutThankYouPageControllerData data) {
         super.initialize(model, data);
         fillOrder(model, data);
     }
 
     @Override
-    protected void fillTitle(final CheckoutThankYouPageContent model, final CheckoutThankYouPageData data) {
+    protected void fillTitle(final CheckoutThankYouPageContent model, final CheckoutThankYouPageControllerData data) {
         model.setTitle(pageTitleResolver.getOrEmpty("checkout:thankYouPage.title"));
     }
 
-    protected void fillOrder(final CheckoutThankYouPageContent model, final CheckoutThankYouPageData data) {
-        model.setOrder(orderBeanFactory.create(data.order));
+    protected void fillOrder(final CheckoutThankYouPageContent model, final CheckoutThankYouPageControllerData data) {
+        model.setOrder(orderBeanFactory.create(data.getOrder()));
     }
 }

@@ -90,7 +90,7 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends CheckoutConfirmationFormData> form, final Cart cart, @Nullable final Order order) {
-        final CheckoutConfirmationPageData checkoutConfirmationPageData = new CheckoutConfirmationPageData(form, cart, order);
+        final CheckoutConfirmationControllerData checkoutConfirmationPageData = new CheckoutConfirmationControllerData(form, cart, order);
         final CheckoutConfirmationPageContent pageContent = injector().getInstance(CheckoutConfirmationPageContentFactory.class).create(checkoutConfirmationPageData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }

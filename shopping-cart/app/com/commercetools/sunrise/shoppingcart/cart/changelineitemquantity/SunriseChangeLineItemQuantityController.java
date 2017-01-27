@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.cart.SunriseCartManagementController;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailControllerData;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
 import io.sphere.sdk.carts.Cart;
@@ -19,7 +20,6 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
@@ -73,8 +73,8 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends ChangeLineItemQuantityFormData> form, final Cart cart, @Nullable final Cart updatedCart) {
-        final Cart cartToRender = Optional.ofNullable(updatedCart).orElse(cart);
-        final CartDetailPageContent pageContent = injector().getInstance(CartDetailPageContentFactory.class).create(cartToRender);
+        final CartDetailControllerData cartDetailControllerData = new CartDetailControllerData(cart, updatedCart);
+        final CartDetailPageContent pageContent = injector().getInstance(CartDetailPageContentFactory.class).create(cartDetailControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

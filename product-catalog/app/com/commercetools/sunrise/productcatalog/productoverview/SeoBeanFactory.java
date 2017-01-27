@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @RequestScoped
-public class SeoBeanFactory extends ViewModelFactory<SeoBean, ProductOverviewPageData> {
+public class SeoBeanFactory extends ViewModelFactory<SeoBean, ProductOverviewControllerData> {
 
     private final LocalizedStringResolver localizedStringResolver;
 
@@ -23,24 +23,24 @@ public class SeoBeanFactory extends ViewModelFactory<SeoBean, ProductOverviewPag
     }
 
     @Override
-    public final SeoBean create(final ProductOverviewPageData data) {
+    public final SeoBean create(final ProductOverviewControllerData data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final SeoBean model, final ProductOverviewPageData data) {
+    protected final void initialize(final SeoBean model, final ProductOverviewControllerData data) {
         fillTitle(model, data);
         fillDescription(model, data);
     }
 
-    protected void fillTitle(final SeoBean model, final ProductOverviewPageData data) {
+    protected void fillTitle(final SeoBean model, final ProductOverviewControllerData data) {
         if (data.category != null) {
             Optional.ofNullable(data.category.getMetaTitle())
                     .ifPresent(title -> model.setTitle(localizedStringResolver.getOrEmpty(title)));
         }
     }
 
-    protected void fillDescription(final SeoBean model, final ProductOverviewPageData data) {
+    protected void fillDescription(final SeoBean model, final ProductOverviewControllerData data) {
         if (data.category != null) {
             Optional.ofNullable(data.category.getMetaDescription())
                     .ifPresent(description -> model.setDescription(localizedStringResolver.getOrEmpty(description)));

@@ -89,7 +89,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
         return getShippingMethods()
                 .thenComposeAsync(shippingMethods -> {
                     final CheckoutShippingPageContentFactory pageContentFactory = injector().getInstance(CheckoutShippingPageContentFactory.class);
-                    final CheckoutShippingPageData pageData = new CheckoutShippingPageData(form, cart, updatedCart, shippingMethods);
+                    final CheckoutShippingControllerData pageData = new CheckoutShippingControllerData(form, cart, updatedCart, shippingMethods);
                     final CheckoutShippingPageContent pageContent = pageContentFactory.create(pageData);
                     return renderPageWithTemplate(pageContent, getTemplateName());
             }, HttpExecution.defaultContext());

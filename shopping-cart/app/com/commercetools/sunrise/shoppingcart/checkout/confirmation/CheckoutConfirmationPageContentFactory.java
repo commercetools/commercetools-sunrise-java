@@ -8,7 +8,7 @@ import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 import javax.inject.Inject;
 
 @RequestScoped
-public class CheckoutConfirmationPageContentFactory extends PageContentFactory<CheckoutConfirmationPageContent, CheckoutConfirmationPageData> {
+public class CheckoutConfirmationPageContentFactory extends PageContentFactory<CheckoutConfirmationPageContent, CheckoutConfirmationControllerData> {
 
     private final PageTitleResolver pageTitleResolver;
     private final CartBeanFactory cartBeanFactory;
@@ -25,27 +25,27 @@ public class CheckoutConfirmationPageContentFactory extends PageContentFactory<C
     }
 
     @Override
-    public final CheckoutConfirmationPageContent create(final CheckoutConfirmationPageData data) {
+    public final CheckoutConfirmationPageContent create(final CheckoutConfirmationControllerData data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final CheckoutConfirmationPageContent model, final CheckoutConfirmationPageData data) {
+    protected final void initialize(final CheckoutConfirmationPageContent model, final CheckoutConfirmationControllerData data) {
         fillCart(model, data);
         fillTitle(model, data);
         fillForm(model, data);
     }
 
     @Override
-    protected void fillTitle(final CheckoutConfirmationPageContent model, final CheckoutConfirmationPageData data) {
+    protected void fillTitle(final CheckoutConfirmationPageContent model, final CheckoutConfirmationControllerData data) {
         model.setTitle(pageTitleResolver.getOrEmpty("checkout:confirmationPage.title"));
     }
 
-    protected void fillCart(final CheckoutConfirmationPageContent model, final CheckoutConfirmationPageData data) {
-        model.setCart(cartBeanFactory.create(data.cart));
+    protected void fillCart(final CheckoutConfirmationPageContent model, final CheckoutConfirmationControllerData data) {
+        model.setCart(cartBeanFactory.create(data.getCart()));
     }
 
-    protected void fillForm(final CheckoutConfirmationPageContent model, final CheckoutConfirmationPageData data) {
-        model.setCheckoutForm(data.form);
+    protected void fillForm(final CheckoutConfirmationPageContent model, final CheckoutConfirmationControllerData data) {
+        model.setCheckoutForm(data.getForm());
     }
 }

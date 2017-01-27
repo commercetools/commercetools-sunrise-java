@@ -9,7 +9,7 @@ import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 import javax.inject.Inject;
 
 @RequestScoped
-public class ProductOverviewPageContentFactory extends PageContentFactory<ProductOverviewPageContent, ProductOverviewPageData> {
+public class ProductOverviewPageContentFactory extends PageContentFactory<ProductOverviewPageContent, ProductOverviewControllerData> {
 
     private final LocalizedStringResolver localizedStringResolver;
     private final RequestContext requestContext;
@@ -40,12 +40,12 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
 
 
     @Override
-    public final ProductOverviewPageContent create(final ProductOverviewPageData data) {
+    public final ProductOverviewPageContent create(final ProductOverviewControllerData data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final ProductOverviewPageContent model, final ProductOverviewPageData data) {
+    protected final void initialize(final ProductOverviewPageContent model, final ProductOverviewControllerData data) {
         super.initialize(model, data);
         fillProducts(model, data);
         fillFilterProductsUrl(model, data);
@@ -56,33 +56,33 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     }
 
     @Override
-    protected void fillTitle(final ProductOverviewPageContent model, final ProductOverviewPageData data) {
-        if (data.category != null) {
-            model.setTitle(localizedStringResolver.getOrEmpty(data.category.getName()));
+    protected void fillTitle(final ProductOverviewPageContent model, final ProductOverviewControllerData data) {
+        if (data.getCategory() != null) {
+            model.setTitle(localizedStringResolver.getOrEmpty(data.getCategory().getName()));
         }
     }
 
-    protected void fillFilterProductsUrl(final ProductOverviewPageContent bean, final ProductOverviewPageData data) {
+    protected void fillFilterProductsUrl(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
         bean.setFilterProductsUrl(requestContext.getPath());
     }
 
-    protected void fillProducts(final ProductOverviewPageContent bean, final ProductOverviewPageData data) {
-        bean.setProducts(productListBeanFactory.create(data.searchResult.getResults()));
+    protected void fillProducts(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
+        bean.setProducts(productListBeanFactory.create(data.getSearchResult().getResults()));
     }
 
-    protected void fillSeo(final ProductOverviewPageContent bean, final ProductOverviewPageData data) {
+    protected void fillSeo(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
         bean.setSeo(seoBeanFactory.create(data));
     }
 
-    protected void fillBreadcrumb(final ProductOverviewPageContent bean, final ProductOverviewPageData data) {
+    protected void fillBreadcrumb(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
         bean.setBreadcrumb(categoryBreadcrumbBeanFactory.create(data));
     }
 
-    protected void fillJumbotron(final ProductOverviewPageContent bean, final ProductOverviewPageData data) {
+    protected void fillJumbotron(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
         bean.setJumbotron(jumbotronBeanFactory.create(data));
     }
 
-    protected void fillBanner(final ProductOverviewPageContent bean, final ProductOverviewPageData data) {
+    protected void fillBanner(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
         bean.setBanner(bannerBeanFactory.create(data));
     }
 }

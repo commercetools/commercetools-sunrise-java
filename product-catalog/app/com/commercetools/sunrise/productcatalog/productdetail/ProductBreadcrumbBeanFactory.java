@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import java.util.Locale;
 
 @RequestScoped
-public class ProductBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<ProductDetailPageData> {
+public class ProductBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<ProductDetailControllerData> {
 
     @Inject
     public ProductBreadcrumbBeanFactory(final Locale locale, final CategoryTree categoryTree,
@@ -20,7 +20,7 @@ public class ProductBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<
     }
 
     @Override
-    public final BreadcrumbBean create(final ProductDetailPageData data) {
+    public final BreadcrumbBean create(final ProductDetailControllerData data) {
         return super.create(data);
     }
 
@@ -30,12 +30,12 @@ public class ProductBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<
     }
 
     @Override
-    protected final void initialize(final BreadcrumbBean model, final ProductDetailPageData data) {
+    protected final void initialize(final BreadcrumbBean model, final ProductDetailControllerData data) {
         super.initialize(model, data);
     }
 
     @Override
-    protected void fillLinks(final BreadcrumbBean bean, final ProductDetailPageData data) {
+    protected void fillLinks(final BreadcrumbBean bean, final ProductDetailControllerData data) {
         bean.setLinks(createProductLinks(data.productWithVariant));
     }
 }

@@ -75,8 +75,8 @@ public abstract class SunriseCheckoutThankYouController extends SunriseFramework
     }
 
     protected CompletionStage<Result> handleFoundOrder(final Order order) {
-        final CheckoutThankYouPageData checkoutThankYouPageData = new CheckoutThankYouPageData(order);
-        final CheckoutThankYouPageContent pageContent = pageContentFactory.create(checkoutThankYouPageData);
+        final CheckoutThankYouPageControllerData checkoutThankYouPageControllerData = new CheckoutThankYouPageControllerData(order);
+        final CheckoutThankYouPageContent pageContent = pageContentFactory.create(checkoutThankYouPageControllerData);
         return asyncOk(renderPageWithTemplate(pageContent, getTemplateName()));
     }
 
