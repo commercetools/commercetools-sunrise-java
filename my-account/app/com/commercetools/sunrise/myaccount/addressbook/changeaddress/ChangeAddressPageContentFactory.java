@@ -1,29 +1,51 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.AddressFormSettingsBeanFactory;
-import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.models.Base;
-import play.data.Form;
+import com.commercetools.sunrise.common.models.PageContentFactory;
+import com.commercetools.sunrise.common.utils.PageTitleResolver;
 
 import javax.inject.Inject;
 
-public class ChangeAddressPageContentFactory extends Base {
+@RequestScoped
+public class ChangeAddressPageContentFactory extends PageContentFactory<ChangeAddressPageContent, ChangeAddressControllerData> {
+
+    private final PageTitleResolver pageTitleResolver;
+    private final AddressFormSettingsBeanFactory addressFormSettingsFactory;
 
     @Inject
-    private AddressFormSettingsBeanFactory addressFormSettingsFactory;
-
-    public ChangeAddressPageContent create(final Form<?> form, final Customer customer) {
-        final ChangeAddressPageContent bean = new ChangeAddressPageContent();
-        initialize(bean, form);
-        return bean;
+    public ChangeAddressPageContentFactory(final PageTitleResolver pageTitleResolver, final AddressFormSettingsBeanFactory addressFormSettingsFactory) {
+        this.pageTitleResolver = pageTitleResolver;
+        this.addressFormSettingsFactory = addressFormSettingsFactory;
     }
 
-    protected final void initialize(final ChangeAddressPageContent bean, final Form<?> form) {
-        fillEditAddressForm(bean, form);
+    @Override
+    protected ChangeAddressPageContent getViewModelInstance() {
+        return new ChangeAddressPageContent();
     }
 
-    protected void fillEditAddressForm(final ChangeAddressPageContent bean, final Form<?> form) {
-        bean.setEditAddressForm(form);
-        bean.setEditAddressFormSettings(addressFormSettingsFactory.create(form));
+    @Override
+    public final ChangeAddressPageContent create(final ChangeAddressControllerData data) {
+        return super.create(data);
+    }
+
+    @Override
+    protected final void initialize(final ChangeAddressPageContent model, final ChangeAddressControllerData data) {
+        super.initialize(model, data);
+        fillEditAddressForm(model, data);
+        fillEditAddressFormSettings(model, data);
+    }
+
+    @Override
+    protected void fillTitle(final ChangeAddressPageContent model, final ChangeAddressControllerData data) {
+        model.setTitle(pageTitleResolver.getOrEmpty("myAccount:changeAddressPage.title"));
+    }
+
+    protected void fillEditAddressForm(final ChangeAddressPageContent model, final ChangeAddressControllerData data) {
+        model.setEditAddressForm(data.getForm());
+    }
+
+    protected void fillEditAddressFormSettings(final ChangeAddressPageContent model, final ChangeAddressControllerData data) {
+        model.setEditAddressFormSettings(addressFormSettingsFactory.create(data.getForm()));
     }
 }

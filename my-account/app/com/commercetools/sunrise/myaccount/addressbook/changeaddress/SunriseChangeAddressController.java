@@ -105,8 +105,8 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData context, @Nullable final Customer updatedCustomer) {
-        final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(context.getCustomer());
-        final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(form, customerToRender);
+        final ChangeAddressControllerData addAddressControllerData = new ChangeAddressControllerData(form, context.getCustomer(), updatedCustomer);
+        final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(addAddressControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

@@ -6,6 +6,7 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
+import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookControllerData;
 import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContent;
 import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
@@ -20,7 +21,6 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
@@ -81,8 +81,8 @@ public abstract class SunriseRemoveAddressController extends SunriseAddressBookM
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData context, @Nullable final Customer updatedCustomer) {
-        final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(context.getCustomer());
-        final AddressBookPageContent pageContent = injector().getInstance(AddressBookPageContentFactory.class).create(customerToRender);
+        final AddressBookControllerData addressBookControllerData = new AddressBookControllerData(context.getCustomer(), updatedCustomer);
+        final AddressBookPageContent pageContent = injector().getInstance(AddressBookPageContentFactory.class).create(addressBookControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 }

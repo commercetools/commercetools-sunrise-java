@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.common;
+package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.models.ControllerData;
 import play.data.Form;

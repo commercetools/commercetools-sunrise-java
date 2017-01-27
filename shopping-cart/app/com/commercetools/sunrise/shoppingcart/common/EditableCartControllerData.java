@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.common;
 
+import com.commercetools.sunrise.common.models.EditableResourceControllerData;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 

@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
 import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;
+import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormSettingsBean;
 import io.sphere.sdk.models.Base;
 import play.data.Form;
@@ -8,7 +9,7 @@ import play.data.FormFactory;
 
 import javax.inject.Inject;
 
-public class AuthenticationPageContentFactory extends Base {
+public class AuthenticationPageContentFactory extends PageContentFactory<AuthenticationPageContent, AuthenticationControllerData> {
 
     @Inject
     private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
