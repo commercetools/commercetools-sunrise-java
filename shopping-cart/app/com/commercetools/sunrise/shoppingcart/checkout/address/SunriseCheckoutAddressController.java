@@ -93,8 +93,8 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkS
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends CheckoutAddressFormData> form, final Cart cart, @Nullable final Cart updatedCart) {
-        final Cart cartToRender = Optional.ofNullable(updatedCart).orElse(cart);
-        final CheckoutAddressPageContent pageContent = injector().getInstance(CheckoutAddressPageContentFactory.class).create(form, cartToRender);
+        final CheckoutAddressPageData checkoutAddressPageData = new CheckoutAddressPageData(form, cart, updatedCart);
+        final CheckoutAddressPageContent pageContent = injector().getInstance(CheckoutAddressPageContentFactory.class).create(checkoutAddressPageData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

@@ -3,7 +3,8 @@ package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.SelectableOptionViewModelFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
-import com.neovisionaries.i18n.CountryCode;
+import com.commercetools.sunrise.shoppingcart.CartFinderBySession;
+import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.queries.PagedResult;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
@@ -13,25 +14,23 @@ import io.sphere.sdk.zones.queries.ZoneQuery;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateApplicableShippingCosts;
-import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
-import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
 public class ShippingFormSelectableOptionBeanFactory extends SelectableOptionViewModelFactory<ShippingFormSelectableOptionBean, ShippingMethod> {
 
-    private final Location location;
+    private final CartFinderBySession cartFinderBySession;
     private final PriceFormatter priceFormatter;
     private final SphereClient sphereClient;
 
     @Inject
-    public ShippingFormSelectableOptionBeanFactory(final CountryCode country, final PriceFormatter priceFormatter) {
-        this.location = Location.of(country);
+    public ShippingFormSelectableOptionBeanFactory(final CartFinderBySession cartFinderBySession, final PriceFormatter priceFormatter, final SphereClient sphereClient) {
+        this.cartFinderBySession = cartFinderBySession;
         this.priceFormatter = priceFormatter;
+        this.sphereClient = sphereClient;
     }
 
     @Override
@@ -70,23 +69,32 @@ public class ShippingFormSelectableOptionBeanFactory extends SelectableOptionVie
     }
 
     protected void fillPrice(final ShippingFormSelectableOptionBean model, final ShippingMethod option, @Nullable final String selectedValue) {
-        findShippingMethodPrice(cart, shippingMethod).ifPresent(model::setPrice);
-    }
-
-    private Optional<Zone> fetchZone() {
         // Need to do this since zones are not expanded in shipping methods yet (but will be soon)
-        // Rather this (even though it's expensive -one request per shipping method-) but it will mean less breaking changes in the future
-        final ZoneQuery request = ZoneQuery.of().byLocation(location);
-        final CompletionStage<Optional<Zone>> zoneStage = sphereClient.execute(request)
-                .thenApplyAsync(PagedResult::head);
-        return blockingWait(zoneStage, Duration.ofMinutes(1));
+        // Rather this (even though it's expensive -two requests per shipping method-) but it will mean less breaking changes in the future
+        cartFinderBySession.findCart(null)
+                .thenAccept(cartOpt -> cartOpt
+                        .ifPresent(cart -> findLocation(cart)
+                                .ifPresent(location -> fetchZone(location)
+                                        .thenAccept(zoneOpt -> zoneOpt
+                                                .ifPresent(zone -> findShippingMethodPrice(option, zone, cart)
+                                                        .ifPresent(model::setPrice))))));
     }
 
-    private Optional<String> findShippingMethodPrice(final ShippingMethod shippingMethod) {
-        return fetchZone()
-                .flatMap(zone -> shippingMethod.getShippingRatesForZone(zone).stream()
-                        .filter(shippingRate -> shippingRate.getPrice().getCurrency().equals(cart.getCurrency()))
-                        .findAny()
-                        .map(shippingRate -> priceFormatter.format(calculateApplicableShippingCosts(cart, shippingRate))));
+    private CompletionStage<Optional<Zone>> fetchZone(final Location location) {
+        final ZoneQuery request = ZoneQuery.of().byLocation(location);
+        return sphereClient.execute(request)
+                .thenApplyAsync(PagedResult::head);
+    }
+
+    private Optional<Location> findLocation(final Cart cart) {
+        return Optional.ofNullable(cart.getShippingAddress())
+                .map(address -> Location.of(address.getCountry(), address.getState()));
+    }
+
+    private Optional<String> findShippingMethodPrice(final ShippingMethod shippingMethod, final Zone zone, final Cart cart) {
+        return shippingMethod.getShippingRatesForZone(zone).stream()
+                .filter(shippingRate -> shippingRate.getPrice().getCurrency().equals(cart.getCurrency()))
+                .findAny()
+                .map(shippingRate -> priceFormatter.format(calculateApplicableShippingCosts(cart, shippingRate)));
     }
 }
