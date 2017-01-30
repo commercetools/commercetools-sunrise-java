@@ -30,8 +30,8 @@ public class PageNavMenuFactory extends CommonViewModelFactory<PageNavMenu> {
     }
 
     @Override
-    protected final void initialize(final PageNavMenu bean) {
-        fillCategories(bean);
+    protected final void initialize(final PageNavMenu model) {
+        fillCategories(model);
     }
 
     protected void fillCategories(final PageNavMenu bean) {

@@ -44,13 +44,13 @@ public class PageMetaFactory extends CommonViewModelFactory<PageMeta> {
     }
 
     @Override
-    protected final void initialize(final PageMeta bean) {
-        fillUserInfo(bean);
-        fillAssetsPath(bean);
-        fillBagQuantityOptions(bean);
-        fillCsrfToken(bean);
-        fillHomePageUrl(bean);
-        fillSelfPageUrl(bean);
+    protected final void initialize(final PageMeta model) {
+        fillUserInfo(model);
+        fillAssetsPath(model);
+        fillBagQuantityOptions(model);
+        fillCsrfToken(model);
+        fillHomePageUrl(model);
+        fillSelfPageUrl(model);
     }
 
     protected void fillCsrfToken(final PageMeta bean) {

@@ -4,12 +4,16 @@ public abstract class CommonViewModelFactory<T> {
 
     protected abstract T getViewModelInstance();
 
-    protected abstract void initialize(final T bean);
+    public T create() {
+        return initializedViewModel();
+    }
+
+    protected abstract void initialize(final T model);
 
     protected final T initializedViewModel() {
-        final T bean = getViewModelInstance();
-        initialize(bean);
-        return bean;
+        final T model = getViewModelInstance();
+        initialize(model);
+        return model;
     }
 
 }
