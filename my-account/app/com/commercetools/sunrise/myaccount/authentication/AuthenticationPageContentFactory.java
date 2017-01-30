@@ -1,55 +1,54 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;
 import com.commercetools.sunrise.common.models.PageContentFactory;
-import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormSettingsBean;
-import io.sphere.sdk.models.Base;
-import play.data.Form;
-import play.data.FormFactory;
+import com.commercetools.sunrise.common.utils.PageTitleResolver;
+import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormSettingsBeanFactory;
 
 import javax.inject.Inject;
 
 public class AuthenticationPageContentFactory extends PageContentFactory<AuthenticationPageContent, AuthenticationControllerData> {
 
+    private final PageTitleResolver pageTitleResolver;
+    private final SignUpFormSettingsBeanFactory signUpFormSettingsBeanFactory;
+
     @Inject
-    private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
-    @Inject
-    private FormFactory formFactory;
-
-    public AuthenticationPageContent createWithSignUpForm(final Form<?> signUpForm) {
-        final AuthenticationPageContent bean = new AuthenticationPageContent();
-        initializeWithSignUpForm(bean, signUpForm);
-        return bean;
+    public AuthenticationPageContentFactory(final PageTitleResolver pageTitleResolver, final SignUpFormSettingsBeanFactory signUpFormSettingsBeanFactory) {
+        this.pageTitleResolver = pageTitleResolver;
+        this.signUpFormSettingsBeanFactory = signUpFormSettingsBeanFactory;
     }
 
-    public AuthenticationPageContent createWithLogInForm(final Form<?> logInForm) {
-        final AuthenticationPageContent bean = new AuthenticationPageContent();
-        initializeWithLogInForm(bean, logInForm);
-        return bean;
+    @Override
+    protected AuthenticationPageContent getViewModelInstance() {
+        return new AuthenticationPageContent();
     }
 
-    protected final void initializeWithSignUpForm(final AuthenticationPageContent bean, final Form<?> signUpForm) {
-        fillLogInForm(bean, formFactory.form());
-        fillSignUpForm(bean, signUpForm);
+    @Override
+    public final AuthenticationPageContent create(final AuthenticationControllerData data) {
+        return super.create(data);
     }
 
-    protected void initializeWithLogInForm(final AuthenticationPageContent pageContent, final Form<?> logInForm) {
-        fillSignUpForm(pageContent, formFactory.form());
-        fillLogInForm(pageContent, logInForm);
+    @Override
+    protected final void initialize(final AuthenticationPageContent model, final AuthenticationControllerData data) {
+        super.initialize(model, data);
+        fillLogInForm(model, data);
+        fillSignUpForm(model, data);
+        fillSignUpFormSettings(model, data);
     }
 
-    protected void fillLogInForm(final AuthenticationPageContent content, final Form<?> form) {
-        content.setLogInForm(form);
+    @Override
+    protected void fillTitle(final AuthenticationPageContent model, final AuthenticationControllerData data) {
+        pageTitleResolver.getOrEmpty("myAccount:authenticationPage.title");
     }
 
-    protected void fillSignUpForm(final AuthenticationPageContent content, final Form<?> form) {
-        content.setSignUpFormSettings(createFormSettings(form));
-        content.setSignUpForm(form);
+    protected void fillLogInForm(final AuthenticationPageContent model, final AuthenticationControllerData data) {
+        model.setLogInForm(data.getLogInForm());
     }
 
-    protected SignUpFormSettingsBean createFormSettings(final Form<?> form) {
-        final SignUpFormSettingsBean bean = new SignUpFormSettingsBean();
-        bean.setTitle(titleFormFieldBeanFactory.createWithDefaultTitles(form, "title"));
-        return bean;
+    protected void fillSignUpForm(final AuthenticationPageContent model, final AuthenticationControllerData data) {
+        model.setSignUpForm(data.getSignUpForm());
+    }
+
+    protected void fillSignUpFormSettings(final AuthenticationPageContent model, final AuthenticationControllerData data) {
+        model.setSignUpFormSettings(signUpFormSettingsBeanFactory.create(data));
     }
 }

@@ -59,7 +59,8 @@ public abstract class SunriseMyOrderListController extends SunriseFrameworkMyAcc
     }
 
     protected CompletionStage<Html> renderPage(final PagedQueryResult<Order> orderQueryResult) {
-        final MyOrderListPageContent pageContent = injector().getInstance(MyOrderListPageContentFactory.class).create(orderQueryResult);
+        final MyOrderListControllerData myOrderListControllerData = new MyOrderListControllerData(orderQueryResult);
+        final MyOrderListPageContent pageContent = injector().getInstance(MyOrderListPageContentFactory.class).create(myOrderListControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

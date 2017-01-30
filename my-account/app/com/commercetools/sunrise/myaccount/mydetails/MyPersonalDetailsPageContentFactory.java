@@ -1,42 +1,56 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;
-import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.models.Base;
-import play.data.Form;
+import com.commercetools.sunrise.common.models.PageContentFactory;
+import com.commercetools.sunrise.common.utils.PageTitleResolver;
 
 import javax.inject.Inject;
 
-public class MyPersonalDetailsPageContentFactory extends Base {
+public class MyPersonalDetailsPageContentFactory extends PageContentFactory<MyPersonalDetailsPageContent, MyPersonalDetailsControllerData> {
+
+    private final PageTitleResolver pageTitleResolver;
+    private final CustomerInfoBeanFactory customerInfoBeanFactory;
+    private final MyPersonalDetailsFormSettingsBeanFactory myPersonalDetailsFormSettingsBeanFactory;
 
     @Inject
-    private TitleFormFieldBeanFactory titleFormFieldBeanFactory;
-
-    public MyPersonalDetailsPageContent create(final Form<?> form, final Customer customer) {
-        final MyPersonalDetailsPageContent bean = new MyPersonalDetailsPageContent();
-        initialize(bean, form, customer);
-        return bean;
+    public MyPersonalDetailsPageContentFactory(final PageTitleResolver pageTitleResolver, final CustomerInfoBeanFactory customerInfoBeanFactory,
+                                               final MyPersonalDetailsFormSettingsBeanFactory myPersonalDetailsFormSettingsBeanFactory) {
+        this.pageTitleResolver = pageTitleResolver;
+        this.customerInfoBeanFactory = customerInfoBeanFactory;
+        this.myPersonalDetailsFormSettingsBeanFactory = myPersonalDetailsFormSettingsBeanFactory;
     }
 
-    protected final void initialize(final MyPersonalDetailsPageContent bean, final Form<?> form, final Customer customer) {
-        fillCustomer(bean, customer);
-        fillForm(bean, form);
+    @Override
+    protected MyPersonalDetailsPageContent getViewModelInstance() {
+        return new MyPersonalDetailsPageContent();
     }
 
-    protected void fillCustomer(final MyPersonalDetailsPageContent content, final Customer customer) {
-        final CustomerInfoBean bean = new CustomerInfoBean();
-        bean.setCustomer(customer);
-        content.setCustomerInfo(bean);
+    @Override
+    public final MyPersonalDetailsPageContent create(final MyPersonalDetailsControllerData data) {
+        return super.create(data);
     }
 
-    protected void fillForm(final MyPersonalDetailsPageContent content, final Form<?> form) {
-        content.setPersonalDetailsFormSettings(createFormSettings(form));
-        content.setPersonalDetailsForm(form);
+    @Override
+    protected final void initialize(final MyPersonalDetailsPageContent model, final MyPersonalDetailsControllerData data) {
+        super.initialize(model, data);
+        fillCustomer(model, data);
+        fillPersonalDetailsForm(model, data);
+        fillPersonalDetailsFormSettings(model, data);
     }
 
-    protected MyPersonalDetailsFormSettingsBean createFormSettings(final Form<?> form) {
-        final MyPersonalDetailsFormSettingsBean bean = new MyPersonalDetailsFormSettingsBean();
-        bean.setTitle(titleFormFieldBeanFactory.createWithDefaultTitles(form, "title"));
-        return bean;
+    @Override
+    protected void fillTitle(final MyPersonalDetailsPageContent model, final MyPersonalDetailsControllerData data) {
+        model.setTitle(pageTitleResolver.getOrEmpty("myAccount:myPersonalDetailsPage.title"));
+    }
+
+    protected void fillCustomer(final MyPersonalDetailsPageContent model, final MyPersonalDetailsControllerData data) {
+        model.setCustomerInfo(customerInfoBeanFactory.create(data.getCustomer()));
+    }
+
+    protected void fillPersonalDetailsForm(final MyPersonalDetailsPageContent model, final MyPersonalDetailsControllerData data) {
+        model.setPersonalDetailsForm(data.getForm());
+    }
+
+    protected void fillPersonalDetailsFormSettings(final MyPersonalDetailsPageContent model, final MyPersonalDetailsControllerData data) {
+        model.setPersonalDetailsFormSettings(myPersonalDetailsFormSettingsBeanFactory.create(data));
     }
 }

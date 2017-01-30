@@ -1,13 +1,11 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 
 import javax.inject.Inject;
 
-@RequestScoped
 public class CheckoutShippingPageContentFactory extends PageContentFactory<CheckoutShippingPageContent, CheckoutShippingControllerData> {
 
     private final PageTitleResolver pageTitleResolver;

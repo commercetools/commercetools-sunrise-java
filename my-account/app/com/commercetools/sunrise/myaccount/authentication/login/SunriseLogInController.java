@@ -8,6 +8,7 @@ import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRo
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
+import com.commercetools.sunrise.myaccount.authentication.AuthenticationControllerData;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.CartInSession;
@@ -93,7 +94,8 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends LogInFormData> form, final Void context, @Nullable final CustomerSignInResult result) {
-        final AuthenticationPageContent pageContent = injector().getInstance(AuthenticationPageContentFactory.class).createWithLogInForm(form);
+        final AuthenticationControllerData authenticationControllerData = new AuthenticationControllerData(null, form, result);
+        final AuthenticationPageContent pageContent = injector().getInstance(AuthenticationPageContentFactory.class).create(authenticationControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

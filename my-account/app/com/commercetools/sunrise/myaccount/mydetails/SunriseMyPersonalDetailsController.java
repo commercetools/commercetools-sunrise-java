@@ -30,7 +30,10 @@ import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.singletonList;
@@ -104,8 +107,8 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseFramewor
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer, @Nullable final Customer updatedCustomer) {
-        final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(customer);
-        final MyPersonalDetailsPageContent pageContent = injector().getInstance(MyPersonalDetailsPageContentFactory.class).create(form, customerToRender);
+        final MyPersonalDetailsControllerData myPersonalDetailsControllerData = new MyPersonalDetailsControllerData(form, customer, updatedCustomer);
+        final MyPersonalDetailsPageContent pageContent = injector().getInstance(MyPersonalDetailsPageContentFactory.class).create(myPersonalDetailsControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

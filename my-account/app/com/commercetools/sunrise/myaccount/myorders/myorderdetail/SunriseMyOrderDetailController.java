@@ -54,7 +54,8 @@ public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyA
     }
 
     protected CompletionStage<Html> renderPage(final Order order) {
-        final MyOrderDetailPageContent pageContent = injector().getInstance(MyOrderDetailPageContentFactory.class).create(order);
+        final MyOrderDetailControllerData myOrderDetailControllerData = new MyOrderDetailControllerData(order);
+        final MyOrderDetailPageContent pageContent = injector().getInstance(MyOrderDetailPageContentFactory.class).create(myOrderDetailControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

@@ -1,13 +1,11 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.shoppingcart.CartBeanFactory;
 
 import javax.inject.Inject;
 
-@RequestScoped
 public class CheckoutAddressPageContentFactory extends PageContentFactory<CheckoutAddressPageContent, CheckoutAddressControllerData> {
 
     private final PageTitleResolver pageTitleResolver;

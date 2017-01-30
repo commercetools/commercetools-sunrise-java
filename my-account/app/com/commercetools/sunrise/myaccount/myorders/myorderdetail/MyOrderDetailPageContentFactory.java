@@ -1,27 +1,44 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
+import com.commercetools.sunrise.common.models.PageContentFactory;
+import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.shoppingcart.OrderBeanFactory;
-import io.sphere.sdk.models.Base;
-import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
 
-public class MyOrderDetailPageContentFactory extends Base {
+public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderDetailPageContent, MyOrderDetailControllerData> {
+
+    private final PageTitleResolver pageTitleResolver;
+    private final OrderBeanFactory orderBeanFactory;
 
     @Inject
-    private OrderBeanFactory orderBeanFactory;
-
-    public MyOrderDetailPageContent create(final Order order) {
-        final MyOrderDetailPageContent bean = new MyOrderDetailPageContent();
-        initialize(bean, order);
-        return bean;
+    public MyOrderDetailPageContentFactory(final PageTitleResolver pageTitleResolver, final OrderBeanFactory orderBeanFactory) {
+        this.pageTitleResolver = pageTitleResolver;
+        this.orderBeanFactory = orderBeanFactory;
     }
 
-    protected final void initialize(final MyOrderDetailPageContent bean, final Order order) {
-        fillOrder(bean, order);
+    @Override
+    protected MyOrderDetailPageContent getViewModelInstance() {
+        return null;
     }
 
-    protected void fillOrder(final MyOrderDetailPageContent bean, final Order order) {
-        bean.setOrder(orderBeanFactory.create(order));
+    @Override
+    public final MyOrderDetailPageContent create(final MyOrderDetailControllerData data) {
+        return super.create(data);
+    }
+
+    @Override
+    protected final void initialize(final MyOrderDetailPageContent model, final MyOrderDetailControllerData data) {
+        super.initialize(model, data);
+        fillOrder(model, data);
+    }
+
+    @Override
+    protected void fillTitle(final MyOrderDetailPageContent model, final MyOrderDetailControllerData data) {
+        model.setTitle(pageTitleResolver.getOrEmpty("myAccount:myOrderDetailPage.title"));
+    }
+
+    protected void fillOrder(final MyOrderDetailPageContent model, final MyOrderDetailControllerData data) {
+        model.setOrder(orderBeanFactory.create(data.getOrder()));
     }
 }

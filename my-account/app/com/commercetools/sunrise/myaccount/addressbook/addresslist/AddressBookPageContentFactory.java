@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import io.sphere.sdk.customers.Customer;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-@RequestScoped
 public class AddressBookPageContentFactory extends PageContentFactory<AddressBookPageContent, AddressBookControllerData> {
 
     private final PageTitleResolver pageTitleResolver;

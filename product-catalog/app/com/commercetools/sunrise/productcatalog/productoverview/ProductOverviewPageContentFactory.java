@@ -1,14 +1,12 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 
 import javax.inject.Inject;
 
-@RequestScoped
 public class ProductOverviewPageContentFactory extends PageContentFactory<ProductOverviewPageContent, ProductOverviewControllerData> {
 
     private final LocalizedStringResolver localizedStringResolver;
@@ -67,7 +65,7 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     }
 
     protected void fillProducts(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
-        bean.setProducts(productListBeanFactory.create(data.getSearchResult().getResults()));
+        bean.setProducts(productListBeanFactory.create(data.getProductSearchResult().getResults()));
     }
 
     protected void fillSeo(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {

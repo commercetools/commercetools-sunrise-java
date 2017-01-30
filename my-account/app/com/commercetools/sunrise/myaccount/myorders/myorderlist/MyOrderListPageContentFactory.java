@@ -1,32 +1,44 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
-import io.sphere.sdk.models.Base;
-import io.sphere.sdk.orders.Order;
-import io.sphere.sdk.queries.PagedQueryResult;
+import com.commercetools.sunrise.common.models.PageContentFactory;
 
 import javax.inject.Inject;
 
 import static java.util.stream.Collectors.toList;
 
-public class MyOrderListPageContentFactory extends Base {
+public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderListPageContent, MyOrderListControllerData> {
+
+    private final OrderOverviewBeanFactory orderOverviewBeanFactory;
 
     @Inject
-    private OrderOverviewBeanFactory orderOverviewBeanFactory;
-
-    public MyOrderListPageContent create(final PagedQueryResult<Order> orderQueryResult) {
-        final MyOrderListPageContent bean = new MyOrderListPageContent();
-        initialize(bean, orderQueryResult);
-        return bean;
+    public MyOrderListPageContentFactory(final OrderOverviewBeanFactory orderOverviewBeanFactory) {
+        this.orderOverviewBeanFactory = orderOverviewBeanFactory;
     }
 
-    protected final void initialize(final MyOrderListPageContent bean, final PagedQueryResult<Order> orderQueryResult) {
-        fillOrders(bean, orderQueryResult);
+    @Override
+    protected MyOrderListPageContent getViewModelInstance() {
+        return new MyOrderListPageContent();
     }
 
-    protected void fillOrders(final MyOrderListPageContent bean, final PagedQueryResult<Order> orderQueryResult) {
-        bean.setOrders(orderQueryResult.getResults().stream()
-                .map(order -> orderOverviewBeanFactory.create(order))
+    @Override
+    public final MyOrderListPageContent create(final MyOrderListControllerData data) {
+        return super.create(data);
+    }
+
+    @Override
+    protected final void initialize(final MyOrderListPageContent model, final MyOrderListControllerData data) {
+        super.initialize(model, data);
+        fillOrders(model, data);
+    }
+
+    @Override
+    protected void fillTitle(final MyOrderListPageContent model, final MyOrderListControllerData data) {
+
+    }
+
+    protected void fillOrders(final MyOrderListPageContent model, final MyOrderListControllerData data) {
+        model.setOrders(data.getOrderQueryResult().getResults().stream()
+                .map(orderOverviewBeanFactory::create)
                 .collect(toList()));
     }
-
 }

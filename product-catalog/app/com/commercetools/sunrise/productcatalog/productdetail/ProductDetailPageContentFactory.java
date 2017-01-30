@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
@@ -10,7 +9,6 @@ import com.commercetools.sunrise.productcatalog.common.ProductBeanFactory;
 import javax.inject.Inject;
 import java.util.Locale;
 
-@RequestScoped
 public class ProductDetailPageContentFactory extends PageContentFactory<ProductDetailPageContent, ProductDetailControllerData> {
 
     private final Locale locale;
