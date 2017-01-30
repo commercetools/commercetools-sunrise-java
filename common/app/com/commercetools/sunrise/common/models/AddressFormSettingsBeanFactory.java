@@ -42,10 +42,10 @@ public class AddressFormSettingsBeanFactory extends ViewModelFactory<AddressForm
     }
 
     protected void fillTitle(final AddressFormSettingsBean model, final Form<?> form) {
-        model.setTitle(titleFormFieldBeanFactory.createWithDefaultTitles(form, titleFormFieldName));
+        model.setTitle(titleFormFieldBeanFactory.createWithDefaultOptions(form.field(titleFormFieldName)));
     }
 
     protected void fillCountries(final AddressFormSettingsBean model, final Form<?> form) {
-        model.setCountries(countryFormFieldBeanFactory.createWithDefaultCountries(form, countryFormFieldName));
+        model.setCountries(countryFormFieldBeanFactory.createWithDefaultOptions(form.field(countryFormFieldName)));
     }
 }

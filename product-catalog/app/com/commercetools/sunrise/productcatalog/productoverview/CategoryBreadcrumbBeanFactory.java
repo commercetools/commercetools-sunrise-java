@@ -36,6 +36,8 @@ public class CategoryBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory
 
     @Override
     protected void fillLinks(final BreadcrumbBean bean, final ProductOverviewControllerData data) {
-        bean.setLinks(createCategoryTreeLinks(data.category));
+        if (data.getCategory() != null) {
+            bean.setLinks(createCategoryTreeLinks(data.getCategory()));
+        }
     }
 }

@@ -19,7 +19,7 @@ public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderD
 
     @Override
     protected MyOrderDetailPageContent getViewModelInstance() {
-        return null;
+        return new MyOrderDetailPageContent();
     }
 
     @Override

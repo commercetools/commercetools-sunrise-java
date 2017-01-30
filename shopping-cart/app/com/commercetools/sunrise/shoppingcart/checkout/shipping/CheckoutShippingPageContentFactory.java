@@ -22,7 +22,7 @@ public class CheckoutShippingPageContentFactory extends PageContentFactory<Check
 
     @Override
     protected CheckoutShippingPageContent getViewModelInstance() {
-        return null;
+        return new CheckoutShippingPageContent();
     }
 
     @Override

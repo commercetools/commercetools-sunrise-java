@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.SelectableOptionViewModelFactory;
+import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
 import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 
@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @RequestScoped
-public class PaymentFormSelectableOptionBeanFactory extends SelectableOptionViewModelFactory<PaymentFormSelectableOptionBean, PaymentMethodInfo> {
+public class PaymentFormSelectableOptionBeanFactory extends SelectableViewModelFactory<PaymentFormSelectableOptionBean, PaymentMethodInfo, String> {
 
     private final LocalizedStringResolver localizedStringResolver;
 

@@ -3,17 +3,17 @@ package com.commercetools.sunrise.common.models;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.utils.AttributeFormatter;
-import io.sphere.sdk.models.Base;
-import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
 
 import javax.inject.Inject;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-public class SelectableProductAttributeBeanFactory extends ViewModelFactory<List<SelectableProductAttributeBean>, Attribute> {
+public class SelectableProductAttributeBeanFactory extends SelectableViewModelFactory<SelectableProductAttributeBean, List<ProductVariant>, Attribute> {
 
     private final AttributeFormatter attributeFormatter;
     private final ProductDataConfig productDataConfig;
@@ -27,73 +27,73 @@ public class SelectableProductAttributeBeanFactory extends ViewModelFactory<List
         this.productAttributeFormSelectableOptionBeanFactory = productAttributeFormSelectableOptionBeanFactory;
     }
 
-    public final SelectableProductAttributeBean create(final Attribute attribute, final ProductProjection product) {
-        final Data data = new Data(attribute, product);
-        return initializedViewModel(data);
-    }
-
-    public final List<SelectableProductAttributeBean> createList(final ProductWithVariant productWithVariant) {
-        return productDataConfig.getSelectableAttributes().stream()
-                .map(productWithVariant.getVariant()::getAttribute)
-                .filter(Objects::nonNull)
-                .map(attribute -> create(attribute, productWithVariant.getProduct()))
-                .collect(toList());
-    }
-
     @Override
     protected SelectableProductAttributeBean getViewModelInstance() {
         return new SelectableProductAttributeBean();
     }
 
     @Override
-    protected final void initialize(final SelectableProductAttributeBean model, final Attribute data) {
-        fillKey(model, data);
-        fillName(model, data);
-        fillValue(model, data);
-        fillReload(model, data);
-        fillList(model, data);
-        fillSelectData(model, data);
+    public final SelectableProductAttributeBean create(final List<ProductVariant> option, final Attribute selectedValue) {
+        return super.create(option, selectedValue);
     }
 
-    protected void fillKey(final SelectableProductAttributeBean model, final Attribute attribute) {
-        model.setKey(attribute.getName());
+    public final List<SelectableProductAttributeBean> createList(final ProductWithVariant productWithVariant) {
+        return productDataConfig.getSelectableAttributes().stream()
+                .map(productWithVariant.getVariant()::getAttribute)
+                .filter(Objects::nonNull)
+                .map(attribute -> create(productWithVariant.getProduct().getAllVariants(), attribute))
+                .collect(toList());
     }
 
-    protected void fillName(final SelectableProductAttributeBean model, final Attribute attribute) {
-        model.setName(attributeFormatter.label(attribute));
+    @Override
+    protected void initialize(final SelectableProductAttributeBean model, final List<ProductVariant> option, final Attribute selectedValue) {
+        fillKey(model, option, selectedValue);
+        fillName(model, option, selectedValue);
+        fillValue(model, option, selectedValue);
+        fillReload(model, option, selectedValue);
+        fillList(model, option, selectedValue);
+        fillSelectData(model, option, selectedValue);
     }
 
-    protected void fillValue(final SelectableProductAttributeBean model, final Attribute attribute) {
-        model.setValue(attributeFormatter.value(attribute));
+    protected void fillKey(final SelectableProductAttributeBean model, final List<ProductVariant> variants, final Attribute selectedAttribute) {
+        model.setKey(selectedAttribute.getName());
     }
 
-    protected void fillReload(final SelectableProductAttributeBean model, final Attribute attribute) {
-        model.setReload(productDataConfig.getHardSelectableAttributes().contains(attribute.getName()));
+    protected void fillName(final SelectableProductAttributeBean model, final List<ProductVariant> variants, final Attribute selectedAttribute) {
+        model.setName(attributeFormatter.label(selectedAttribute));
     }
 
-    protected void fillList(final SelectableProductAttributeBean model, final Attribute attribute) {
+    protected void fillValue(final SelectableProductAttributeBean model, final List<ProductVariant> variants, final Attribute selectedAttribute) {
+        model.setValue(attributeFormatter.value(selectedAttribute));
+    }
+
+    protected void fillReload(final SelectableProductAttributeBean model, final List<ProductVariant> variants, final Attribute selectedAttribute) {
+        model.setReload(productDataConfig.getHardSelectableAttributes().contains(selectedAttribute.getName()));
+    }
+
+    protected void fillList(final SelectableProductAttributeBean model, final List<ProductVariant> variants, final Attribute selectedAttribute) {
         final List<ProductAttributeFormSelectableOptionBean> formOptions = new ArrayList<>();
-        final String selectedAttributeValue = attributeFormatter.valueAsKey(attribute);
-        data.distinctAttributeOptions.forEach(attribute ->
+        final String selectedAttributeValue = attributeFormatter.valueAsKey(selectedAttribute);
+        findDistinctAttributeOptions(variants, selectedAttribute).forEach(attribute ->
                 formOptions.add(productAttributeFormSelectableOptionBeanFactory.create(attribute, selectedAttributeValue)));
         model.setList(formOptions);
     }
 
-    protected void fillSelectData(final SelectableProductAttributeBean model, final Attribute attribute) {
+    protected void fillSelectData(final SelectableProductAttributeBean model, final List<ProductVariant> variants, final Attribute selectedAttribute) {
         final Map<String, Map<String, List<String>>> selectableData = new HashMap<>();
-        data.distinctAttributeOptions.forEach(attrOption -> {
+        findDistinctAttributeOptions(variants, selectedAttribute).forEach(attrOption -> {
             final String attrOptionValue = attributeFormatter.value(attrOption);
-            selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attrOption, data.product));
+            selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attrOption, variants));
         });
         model.setSelectData(selectableData);
     }
 
-    private Map<String, List<String>> createAllowedAttributeCombinations(final Attribute fixedAttribute, final ProductProjection product) {
+    private Map<String, List<String>> createAllowedAttributeCombinations(final Attribute fixedAttribute, final List<ProductVariant> variants) {
         final Map<String, List<String>> attrCombination = new HashMap<>();
         productDataConfig.getSelectableAttributes().stream()
                 .filter(enabledAttrKey -> !fixedAttribute.getName().equals(enabledAttrKey))
                 .forEach(enabledAttrKey -> {
-                    final List<String> allowedAttrValues = attributeCombination(enabledAttrKey, fixedAttribute, product);
+                    final List<String> allowedAttrValues = attributeCombination(enabledAttrKey, fixedAttribute, variants);
                     if (!allowedAttrValues.isEmpty()) {
                         attrCombination.put(enabledAttrKey, allowedAttrValues);
                     }
@@ -101,8 +101,8 @@ public class SelectableProductAttributeBeanFactory extends ViewModelFactory<List
         return attrCombination;
     }
 
-    private List<String> attributeCombination(final String attributeKey, final Attribute fixedAttribute, final ProductProjection product) {
-        return product.getAllVariants().stream()
+    private List<String> attributeCombination(final String attributeKey, final Attribute fixedAttribute, final List<ProductVariant> variants) {
+        return variants.stream()
                 .filter(variant -> variant.getAttribute(attributeKey) != null)
                 .filter(variant -> {
                     final Attribute variantAttribute = variant.getAttribute(fixedAttribute.getName());
@@ -113,20 +113,10 @@ public class SelectableProductAttributeBeanFactory extends ViewModelFactory<List
                 .collect(toList());
     }
 
-    protected final static class Data extends Base {
-
-        public final Attribute attribute;
-        public final ProductProjection product;
-        public final List<Attribute> distinctAttributeOptions;
-
-        public Data(final Attribute attribute, final ProductProjection product) {
-            this.attribute = attribute;
-            this.product = product;
-            this.distinctAttributeOptions = product.getAllVariants().stream()
-                    .map(variant -> variant.getAttribute(attribute.getName()))
-                    .filter(Objects::nonNull)
-                    .distinct()
-                    .collect(toList());
-        }
+    private static Stream<Attribute> findDistinctAttributeOptions(final List<ProductVariant> variants, final Attribute selectedValue) {
+        return variants.stream()
+                .map(variant -> variant.getAttribute(selectedValue.getName()))
+                .filter(Objects::nonNull)
+                .distinct();
     }
 }

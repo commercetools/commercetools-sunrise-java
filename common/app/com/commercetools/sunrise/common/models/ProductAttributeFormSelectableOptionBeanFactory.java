@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 @RequestScoped
-public class ProductAttributeFormSelectableOptionBeanFactory extends SelectableOptionViewModelFactory<ProductAttributeFormSelectableOptionBean, Attribute> {
+public class ProductAttributeFormSelectableOptionBeanFactory extends SelectableViewModelFactory<ProductAttributeFormSelectableOptionBean, Attribute, String> {
 
     private final AttributeFormatter attributeFormatter;
 

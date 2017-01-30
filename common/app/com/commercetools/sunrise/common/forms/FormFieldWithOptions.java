@@ -7,11 +7,19 @@ import java.util.List;
 
 public class FormFieldWithOptions<T> extends Base {
 
-    public final Form.Field formField;
-    public final List<T> formOptions;
+    private final Form.Field formField;
+    private final List<T> formOptions;
 
     public FormFieldWithOptions(final Form.Field formField, final List<T> formOptions) {
         this.formField = formField;
         this.formOptions = formOptions;
+    }
+
+    public Form.Field getFormField() {
+        return formField;
+    }
+
+    public List<T> getFormOptions() {
+        return formOptions;
     }
 }

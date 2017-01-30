@@ -34,15 +34,15 @@ public class SeoBeanFactory extends ViewModelFactory<SeoBean, ProductOverviewCon
     }
 
     protected void fillTitle(final SeoBean model, final ProductOverviewControllerData data) {
-        if (data.category != null) {
-            Optional.ofNullable(data.category.getMetaTitle())
+        if (data.getCategory() != null) {
+            Optional.ofNullable(data.getCategory().getMetaTitle())
                     .ifPresent(title -> model.setTitle(localizedStringResolver.getOrEmpty(title)));
         }
     }
 
     protected void fillDescription(final SeoBean model, final ProductOverviewControllerData data) {
-        if (data.category != null) {
-            Optional.ofNullable(data.category.getMetaDescription())
+        if (data.getCategory() != null) {
+            Optional.ofNullable(data.getCategory().getMetaDescription())
                     .ifPresent(description -> model.setDescription(localizedStringResolver.getOrEmpty(description)));
         }
     }

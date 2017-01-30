@@ -36,6 +36,6 @@ public class ProductBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<
 
     @Override
     protected void fillLinks(final BreadcrumbBean bean, final ProductDetailControllerData data) {
-        bean.setLinks(createProductLinks(data.productWithVariant));
+        bean.setLinks(createProductLinks(data.getProductWithVariant()));
     }
 }

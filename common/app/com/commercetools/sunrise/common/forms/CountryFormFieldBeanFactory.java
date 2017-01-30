@@ -49,8 +49,8 @@ public class CountryFormFieldBeanFactory extends FormFieldViewModelFactory<Count
     }
 
     protected void fillList(final CountryFormFieldBean bean, final FormFieldWithOptions<CountryCode> formFieldWithOptions) {
-        bean.setList(formFieldWithOptions.formOptions.stream()
-                .map(country -> countryFormSelectableOptionBeanFactory.create(country, formFieldWithOptions.formField.value()))
+        bean.setList(formFieldWithOptions.getFormOptions().stream()
+                .map(country -> countryFormSelectableOptionBeanFactory.create(country, formFieldWithOptions.getFormField().value()))
                 .collect(toList()));
     }
 }

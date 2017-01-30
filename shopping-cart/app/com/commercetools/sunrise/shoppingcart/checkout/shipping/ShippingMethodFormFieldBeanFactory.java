@@ -48,8 +48,8 @@ public class ShippingMethodFormFieldBeanFactory extends FormFieldViewModelFactor
     }
 
     protected void fillList(final ShippingMethodFormFieldBean model, final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {
-        model.setList(formFieldWithOptions.formOptions.stream()
-                .map(shippingMethod -> shippingFormSelectableOptionBeanFactory.create(shippingMethod, formFieldWithOptions.formField.value()))
+        model.setList(formFieldWithOptions.getFormOptions().stream()
+                .map(shippingMethod -> shippingFormSelectableOptionBeanFactory.create(shippingMethod, formFieldWithOptions.getFormField().value()))
                 .collect(toList()));
     }
 }

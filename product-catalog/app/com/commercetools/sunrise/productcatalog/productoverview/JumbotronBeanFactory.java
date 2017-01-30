@@ -37,21 +37,21 @@ public class JumbotronBeanFactory extends ViewModelFactory<JumbotronBean, Produc
     }
 
     protected void fillTitle(final JumbotronBean model, final ProductOverviewControllerData data) {
-        if (data.category != null) {
-            model.setTitle(localizedStringResolver.getOrEmpty(data.category.getName()));
+        if (data.getCategory() != null) {
+            model.setTitle(localizedStringResolver.getOrEmpty(data.getCategory().getName()));
         }
     }
 
     protected void fillSubtitle(final JumbotronBean model, final ProductOverviewControllerData data) {
-        if (data.category != null && data.category.getParent() != null) {
-            categoryTree.findById(data.category.getParent().getId())
+        if (data.getCategory() != null && data.getCategory().getParent() != null) {
+            categoryTree.findById(data.getCategory().getParent().getId())
                     .ifPresent(parent -> model.setSubtitle(localizedStringResolver.getOrEmpty(parent.getName())));
         }
     }
 
     protected void fillDescription(final JumbotronBean model, final ProductOverviewControllerData data) {
-        if (data.category != null && data.category.getDescription() != null) {
-            model.setDescription(localizedStringResolver.getOrEmpty(data.category.getDescription()));
+        if (data.getCategory() != null && data.getCategory().getDescription() != null) {
+            model.setDescription(localizedStringResolver.getOrEmpty(data.getCategory().getDescription()));
         }
     }
 }

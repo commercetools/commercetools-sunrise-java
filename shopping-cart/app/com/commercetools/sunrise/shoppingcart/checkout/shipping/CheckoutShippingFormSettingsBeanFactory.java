@@ -6,12 +6,15 @@ import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 import play.Configuration;
 
+import javax.inject.Inject;
+
 @RequestScoped
 public class CheckoutShippingFormSettingsBeanFactory extends ViewModelFactory<CheckoutShippingFormSettingsBean, CheckoutShippingControllerData> {
 
     private final String shippingFormFieldName;
     private final ShippingMethodFormFieldBeanFactory shippingMethodFormFieldBeanFactory;
 
+    @Inject
     public CheckoutShippingFormSettingsBeanFactory(final Configuration configuration, final ShippingMethodFormFieldBeanFactory shippingMethodFormFieldBeanFactory) {
         this.shippingFormFieldName =  configuration.getString("checkout.shipping.formFieldName", "shippingMethodId");;
         this.shippingMethodFormFieldBeanFactory = shippingMethodFormFieldBeanFactory;
@@ -33,7 +36,7 @@ public class CheckoutShippingFormSettingsBeanFactory extends ViewModelFactory<Ch
     }
 
     protected void fillPaymentMethod(final CheckoutShippingFormSettingsBean model, final CheckoutShippingControllerData data) {
-        final FormFieldWithOptions<ShippingMethod> formFieldWithOptions = new FormFieldWithOptions<>(data.form.field(shippingFormFieldName), data.shippingMethods);
+        final FormFieldWithOptions<ShippingMethod> formFieldWithOptions = new FormFieldWithOptions<>(data.getForm().field(shippingFormFieldName), data.getShippingMethods());
         model.setShippingMethod(shippingMethodFormFieldBeanFactory.create(formFieldWithOptions));
     }
 }

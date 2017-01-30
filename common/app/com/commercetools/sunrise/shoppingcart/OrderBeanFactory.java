@@ -6,6 +6,7 @@ import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.orders.Order;
 
+import javax.inject.Inject;
 import javax.money.CurrencyUnit;
 import java.time.format.DateTimeFormatter;
 
@@ -15,6 +16,7 @@ public class OrderBeanFactory extends AbstractCartLikeBeanFactory<OrderBean, Ord
     private final DateTimeFormatter dateTimeFormatter;
     private final LineItemExtendedBeanFactory lineItemExtendedBeanFactory;
 
+    @Inject
     public OrderBeanFactory(final CurrencyUnit currency, final PriceFormatter priceFormatter, final DateTimeFormatter dateTimeFormatter,
                             final ShippingInfoBeanFactory shippingInfoBeanFactory, final PaymentInfoBeanFactory paymentInfoBeanFactory,
                             final AddressBeanFactory addressBeanFactory, final LineItemExtendedBeanFactory lineItemExtendedBeanFactory) {

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.SelectableOptionViewModelFactory;
+import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.shoppingcart.CartFinderBySession;
 import io.sphere.sdk.carts.Cart;
@@ -20,7 +20,7 @@ import java.util.concurrent.CompletionStage;
 import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateApplicableShippingCosts;
 
 @RequestScoped
-public class ShippingFormSelectableOptionBeanFactory extends SelectableOptionViewModelFactory<ShippingFormSelectableOptionBean, ShippingMethod> {
+public class ShippingFormSelectableOptionBeanFactory extends SelectableViewModelFactory<ShippingFormSelectableOptionBean, ShippingMethod, String> {
 
     private final CartFinderBySession cartFinderBySession;
     private final PriceFormatter priceFormatter;

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.forms;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.SelectableOptionViewModelFactory;
+import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
 import com.neovisionaries.i18n.CountryCode;
 
 import javax.annotation.Nullable;
@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import java.util.Locale;
 
 @RequestScoped
-public class CountryFormSelectableOptionBeanFactory extends SelectableOptionViewModelFactory<CountryFormSelectableOptionBean, CountryCode> {
+public class CountryFormSelectableOptionBeanFactory extends SelectableViewModelFactory<CountryFormSelectableOptionBean, CountryCode, String> {
 
     private final Locale locale;
 

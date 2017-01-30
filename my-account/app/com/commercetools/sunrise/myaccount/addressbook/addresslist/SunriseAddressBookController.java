@@ -54,7 +54,7 @@ public abstract class SunriseAddressBookController extends SunriseFrameworkMyAcc
     }
 
     protected CompletionStage<Html> renderPage(final Customer customer) {
-        final AddressBookControllerData addressBookControllerData = new AddressBookControllerData(customer);
+        final AddressBookControllerData addressBookControllerData = new AddressBookControllerData(customer, null);
         final AddressBookPageContent pageContent = addressBookPageContentFactory.create(addressBookControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }

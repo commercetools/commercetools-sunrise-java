@@ -48,8 +48,8 @@ public class PaymentMethodFormFieldBeanFactory extends FormFieldViewModelFactory
     }
 
     protected void fillList(final PaymentMethodFormFieldBean model, final FormFieldWithOptions<PaymentMethodInfo> data) {
-        model.setList(data.formOptions.stream()
-                .map(paymentMethodInfo -> paymentFormSelectableOptionBeanFactory.create(paymentMethodInfo, data.formField.value()))
+        model.setList(data.getFormOptions().stream()
+                .map(paymentMethodInfo -> paymentFormSelectableOptionBeanFactory.create(paymentMethodInfo, data.getFormField().value()))
                 .collect(toList()));
     }
 }

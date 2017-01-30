@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.utils.AttributeFormatter;
+import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
 
@@ -47,7 +48,7 @@ public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<
 
     protected void fillMap(final Map<String, ProductVariantReferenceBean> map, final ProductWithVariant productWithVariant) {
         productWithVariant.getProduct().getAllVariants()
-                .forEach(productVariant -> map.put(createMapKey(productVariant), createMapValue(productWithVariant)));
+                .forEach(productVariant -> map.put(createMapKey(productVariant), createMapValue(productWithVariant.getProduct(), productVariant)));
     }
 
     private String createMapKey(final ProductVariant variant) {
@@ -56,7 +57,8 @@ public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<
                 .collect(joining("-"));
     }
 
-    private ProductVariantReferenceBean createMapValue(final ProductWithVariant productWithVariant) {
+    private ProductVariantReferenceBean createMapValue(final ProductProjection product, final ProductVariant productVariant) {
+        final ProductWithVariant productWithVariant = new ProductWithVariant(product, productVariant);
         return productVariantReferenceBeanFactory.create(productWithVariant);
     }
 

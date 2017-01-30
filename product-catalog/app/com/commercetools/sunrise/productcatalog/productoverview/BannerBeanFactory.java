@@ -34,15 +34,15 @@ public class BannerBeanFactory extends ViewModelFactory<BannerBean, ProductOverv
     }
 
     protected void fillDescription(final BannerBean bean, final ProductOverviewControllerData data) {
-        if (data.category != null) {
-            Optional.ofNullable(data.category.getDescription())
+        if (data.getCategory() != null) {
+            Optional.ofNullable(data.getCategory().getDescription())
                     .ifPresent(description -> bean.setDescription(localizedStringResolver.getOrEmpty(description)));
         }
     }
 
     protected void fillTitle(final BannerBean bean, final ProductOverviewControllerData data) {
-        if (data.category != null) {
-            bean.setTitle(localizedStringResolver.getOrEmpty(data.category.getName()));
+        if (data.getCategory() != null) {
+            bean.setTitle(localizedStringResolver.getOrEmpty(data.getCategory().getName()));
         }
     }
 }

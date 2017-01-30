@@ -52,7 +52,7 @@ public class AddressBeanFactory extends ViewModelFactory<AddressBean, Address> {
     }
 
     protected void fillTitle(final AddressBean model, @Nullable final Address address) {
-        if (address != null) {
+        if (address != null && address.getTitle() != null) {
             final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(address.getTitle());
             final String title = i18nResolver.getOrKey(singletonList(locale), i18nIdentifier);
             model.setTitle(title);
