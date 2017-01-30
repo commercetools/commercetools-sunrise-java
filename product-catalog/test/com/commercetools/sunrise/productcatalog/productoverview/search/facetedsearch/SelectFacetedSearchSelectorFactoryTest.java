@@ -1,9 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.contexts.UserContextTestProvider;
-import com.google.inject.Guice;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.AlphabeticallySortedFacetOptionMapper;
 import io.sphere.sdk.facets.Facet;
@@ -18,6 +15,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -96,10 +94,9 @@ public class SelectFacetedSearchSelectorFactoryTest {
 
     private void test(final SelectFacetedSearchConfig config, final List<String> selectedValues, final Consumer<FacetedSearchSelector> test) {
         final Map<String, List<String>> queryString = singletonMap(config.getFacetBuilder().getKey(), selectedValues);
-        final UserContext userContext = Guice.createInjector().getInstance(UserContextTestProvider.class).get();
         final RequestContext requestContext = RequestContext.of(queryString, "");
-        final SelectFacetedSearchSelectorFactory factory = SelectFacetedSearchSelectorFactory.of(config, userContext, requestContext, CategoryTree.of(emptyList()), emptyList());
-        test.accept(factory.create());
+        final SelectFacetedSearchSelectorFactory factory = new SelectFacetedSearchSelectorFactory(Locale.ENGLISH, CategoryTree.of(emptyList()), requestContext);
+        test.accept(factory.create(config, emptyList()));
     }
 
     private static PagedSearchResult<ProductProjection> searchResult() {

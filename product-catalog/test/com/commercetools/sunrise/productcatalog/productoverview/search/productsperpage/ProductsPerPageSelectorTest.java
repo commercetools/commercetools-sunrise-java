@@ -1,9 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -62,13 +59,6 @@ public class ProductsPerPageSelectorTest {
     }
 
     private ProductsPerPageSelectorFactory createProductsPerPageSelectorFactory(final ProductsPerPageConfig config, final Map<String, List<String>> queryString) {
-        final Injector injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            public void configure() {
-                bind(RequestContext.class).toInstance(RequestContext.of(queryString, ""));
-                bind(ProductsPerPageConfig.class).toInstance(config);
-            }
-        });
-        return injector.getInstance(ProductsPerPageSelectorFactory.class);
+        return new ProductsPerPageSelectorFactory(config, RequestContext.of(queryString, ""));
     }
 }

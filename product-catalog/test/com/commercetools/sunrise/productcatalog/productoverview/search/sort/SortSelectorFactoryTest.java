@@ -1,17 +1,13 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.contexts.UserContextTestProvider;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import io.sphere.sdk.search.SearchExpression;
 import io.sphere.sdk.search.SortExpression;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -83,14 +79,6 @@ public class SortSelectorFactoryTest {
     }
 
     private SortSelectorFactory createSortSelectorFactory(final SortConfig config, final Map<String, List<String>> queryString) {
-        final Injector injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            public void configure() {
-                bind(UserContext.class).toProvider(UserContextTestProvider.class);
-                bind(RequestContext.class).toInstance(RequestContext.of(queryString, ""));
-                bind(SortConfig.class).toInstance(config);
-            }
-        });
-        return injector.getInstance(SortSelectorFactory.class);
+        return new SortSelectorFactory(Locale.ENGLISH, config, RequestContext.of(queryString, ""));
     }
 }
