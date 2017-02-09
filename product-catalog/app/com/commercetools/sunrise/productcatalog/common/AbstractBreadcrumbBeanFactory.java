@@ -1,10 +1,8 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 
@@ -16,14 +14,11 @@ public abstract class AbstractBreadcrumbBeanFactory<D> extends ViewModelFactory<
 
     private final Locale locale;
     private final CategoryTree categoryTree;
-    private final LocalizedStringResolver localizedStringResolver;
     private final ProductReverseRouter productReverseRouter;
 
-    public AbstractBreadcrumbBeanFactory(final Locale locale, final CategoryTree categoryTree,
-                                         final LocalizedStringResolver localizedStringResolver, final ProductReverseRouter productReverseRouter) {
+    protected AbstractBreadcrumbBeanFactory(final Locale locale, final CategoryTree categoryTree, final ProductReverseRouter productReverseRouter) {
         this.locale = locale;
         this.categoryTree = categoryTree;
-        this.localizedStringResolver = localizedStringResolver;
         this.productReverseRouter = productReverseRouter;
     }
 
@@ -39,7 +34,7 @@ public abstract class AbstractBreadcrumbBeanFactory<D> extends ViewModelFactory<
 
     protected abstract void fillLinks(final BreadcrumbBean bean, final D data);
 
-    protected List<LinkBean> createCategoryTreeLinks(final Category category) {
+    protected List<BreadcrumbLinkBean> createCategoryTreeLinks(final Category category) {
         return getCategoryWithAncestors(category).stream()
                     .map(this::createCategoryLinkData)
                     .collect(toList());
@@ -55,15 +50,15 @@ public abstract class AbstractBreadcrumbBeanFactory<D> extends ViewModelFactory<
         return ancestors;
     }
 
-    protected List<LinkBean> createProductLinks(final ProductWithVariant productWithVariant) {
-        final List<LinkBean> categoryTreeLinks = createCategoryTreeLinks(productWithVariant);
-        final List<LinkBean> result = new ArrayList<>(1 + categoryTreeLinks.size());
+    protected List<BreadcrumbLinkBean> createProductLinks(final ProductWithVariant productWithVariant) {
+        final List<BreadcrumbLinkBean> categoryTreeLinks = createCategoryTreeLinks(productWithVariant);
+        final List<BreadcrumbLinkBean> result = new ArrayList<>(1 + categoryTreeLinks.size());
         result.addAll(categoryTreeLinks);
         result.add(createProductLink(productWithVariant));
         return result;
     }
 
-    private List<LinkBean> createCategoryTreeLinks(final ProductWithVariant productWithVariant) {
+    private List<BreadcrumbLinkBean> createCategoryTreeLinks(final ProductWithVariant productWithVariant) {
         return productWithVariant.getProduct().getCategories().stream()
                 .findFirst()
                 .flatMap(ref -> categoryTree.findById(ref.getId())
@@ -71,16 +66,16 @@ public abstract class AbstractBreadcrumbBeanFactory<D> extends ViewModelFactory<
                 .orElseGet(Collections::emptyList);
     }
 
-    private LinkBean createCategoryLinkData(final Category category) {
-        final LinkBean linkBean = new LinkBean();
-        linkBean.setText(localizedStringResolver.getOrEmpty(category.getName()));
+    private BreadcrumbLinkBean createCategoryLinkData(final Category category) {
+        final BreadcrumbLinkBean linkBean = new BreadcrumbLinkBean();
+        linkBean.setText(category.getName());
         linkBean.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(locale, category));
         return linkBean;
     }
 
-    private LinkBean createProductLink(final ProductWithVariant productWithVariant) {
-        final LinkBean linkBean = new LinkBean();
-        linkBean.setText(localizedStringResolver.getOrEmpty(productWithVariant.getProduct().getName()));
+    private BreadcrumbLinkBean createProductLink(final ProductWithVariant productWithVariant) {
+        final BreadcrumbLinkBean linkBean = new BreadcrumbLinkBean();
+        linkBean.setText(productWithVariant.getProduct().getName());
         linkBean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, productWithVariant.getProduct(), productWithVariant.getVariant()));
         return linkBean;
     }

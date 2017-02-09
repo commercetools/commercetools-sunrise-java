@@ -1,22 +1,21 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
 
 public class BreadcrumbBean extends ViewModel {
 
-    private List<LinkBean> links;
+    private List<BreadcrumbLinkBean> links;
 
     public BreadcrumbBean() {
     }
 
-    public List<LinkBean> getLinks() {
+    public List<BreadcrumbLinkBean> getLinks() {
         return links;
     }
 
-    public void setLinks(final List<LinkBean> links) {
+    public void setLinks(final List<BreadcrumbLinkBean> links) {
         this.links = links;
     }
 }

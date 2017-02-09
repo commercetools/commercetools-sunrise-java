@@ -1,8 +1,9 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.models.ViewModel;
 import com.commercetools.sunrise.common.models.ProductVariantBean;
 import com.commercetools.sunrise.common.models.SelectableProductAttributeBean;
+import com.commercetools.sunrise.common.models.ViewModel;
+import io.sphere.sdk.models.LocalizedString;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ public class ProductBean extends ViewModel {
 
     private String productId;
     private int variantId;
-    private String description;
+    private LocalizedString description;
     private ProductGalleryBean gallery;
     private List<SelectableProductAttributeBean> attributes;
     private ProductVariantBean variant;
@@ -39,11 +40,11 @@ public class ProductBean extends ViewModel {
         this.variantId = variantId;
     }
 
-    public String getDescription() {
+    public LocalizedString getDescription() {
         return description;
     }
 
-    public void setDescription(final String description) {
+    public void setDescription(final LocalizedString description) {
         this.description = description;
     }
 

@@ -1,12 +1,14 @@
-package com.commercetools.sunrise.common.models;
+package com.commercetools.sunrise.common.search.pagination;
 
-public class LinkBean extends ViewModel {
+import com.commercetools.sunrise.common.models.ViewModel;
+
+public class PaginationLinkBean extends ViewModel {
 
     private String text;
     private String url;
     private boolean selected;
 
-    public LinkBean() {
+    public PaginationLinkBean() {
     }
 
     public String getText() {

@@ -1,19 +1,20 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.models.TitleDescriptionBean;
+import io.sphere.sdk.models.LocalizedString;
 
 public class JumbotronBean extends TitleDescriptionBean {
 
-    private String subtitle;
+    private LocalizedString subtitle;
 
     public JumbotronBean() {
     }
 
-    public String getSubtitle() {
+    public LocalizedString getSubtitle() {
         return subtitle;
     }
 
-    public void setSubtitle(final String subtitle) {
+    public void setSubtitle(final LocalizedString subtitle) {
         this.subtitle = subtitle;
     }
 }

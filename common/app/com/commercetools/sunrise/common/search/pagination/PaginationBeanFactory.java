@@ -2,7 +2,6 @@ package com.commercetools.sunrise.common.search.pagination;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.queries.PagedResult;
 import play.Configuration;
@@ -110,14 +109,14 @@ public class PaginationBeanFactory extends ViewModelFactory<PaginationBean, Page
         return notAllPagesAreDisplayed(totalPages) && currentPageIsBelowTopThreshold;
     }
 
-    private List<LinkBean> createPages(final long startPage, final long endPage) {
+    private List<PaginationLinkBean> createPages(final long startPage, final long endPage) {
         return LongStream.rangeClosed(startPage, endPage)
                 .mapToObj(this::createLinkData)
                 .collect(toList());
     }
 
-    private LinkBean createLinkData(final long page) {
-        final LinkBean linkBean = new LinkBean();
+    private PaginationLinkBean createLinkData(final long page) {
+        final PaginationLinkBean linkBean = new PaginationLinkBean();
         linkBean.setText(String.valueOf(page));
         linkBean.setUrl(buildUrlWithPage(settings.getFieldName(), page));
         if (page == currentPage) {

@@ -2,28 +2,26 @@ package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.productcatalog.common.ProductBeanFactory;
 
 import javax.inject.Inject;
 import java.util.Locale;
 
+import static java.util.Collections.singletonList;
+
 public class ProductDetailPageContentFactory extends PageContentFactory<ProductDetailPageContent, ProductDetailControllerData> {
 
     private final Locale locale;
-    private final LocalizedStringResolver localizedStringResolver;
     private final PageTitleResolver pageTitleResolver;
     private final CartReverseRouter cartReverseRouter;
     private final ProductBreadcrumbBeanFactory productBreadcrumbBeanFactory;
     private final ProductBeanFactory productBeanFactory;
 
     @Inject
-    public ProductDetailPageContentFactory(final Locale locale, final LocalizedStringResolver localizedStringResolver,
-                                           final PageTitleResolver pageTitleResolver, final CartReverseRouter cartReverseRouter,
+    public ProductDetailPageContentFactory(final Locale locale, final PageTitleResolver pageTitleResolver, final CartReverseRouter cartReverseRouter,
                                            final ProductBreadcrumbBeanFactory productBreadcrumbBeanFactory, final ProductBeanFactory productBeanFactory) {
         this.locale = locale;
-        this.localizedStringResolver = localizedStringResolver;
         this.pageTitleResolver = pageTitleResolver;
         this.cartReverseRouter = cartReverseRouter;
         this.productBreadcrumbBeanFactory = productBreadcrumbBeanFactory;
@@ -51,7 +49,7 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
     @Override
     protected void fillTitle(final ProductDetailPageContent model, final ProductDetailControllerData data) {
         final String title = String.format("%s %s",
-                localizedStringResolver.getOrEmpty(data.getProductWithVariant().getProduct().getName()),
+                data.getProductWithVariant().getProduct().getName().find(singletonList(locale)).orElse(""),
                 pageTitleResolver.getOrEmpty("catalog:productDetailPage.title"));
         model.setTitle(title);
     }

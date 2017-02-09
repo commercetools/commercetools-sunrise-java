@@ -6,7 +6,6 @@ import com.commercetools.sunrise.common.models.ProductVariantBeanFactory;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.SelectableProductAttributeBeanFactory;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -14,7 +13,6 @@ import java.util.Optional;
 @RequestScoped
 public class ProductBeanFactory extends ViewModelFactory<ProductBean, ProductWithVariant> {
 
-    private final LocalizedStringResolver localizedStringResolver;
     private final AttributeSettings attributeSettings;
     private final ProductVariantBeanFactory productVariantBeanFactory;
     private final ProductDetailsBeanFactory productDetailsBeanFactory;
@@ -23,11 +21,10 @@ public class ProductBeanFactory extends ViewModelFactory<ProductBean, ProductWit
     private final ProductVariantReferenceBeanMapFactory productVariantReferenceBeanMapFactory;
 
     @Inject
-    public ProductBeanFactory(final LocalizedStringResolver localizedStringResolver, final AttributeSettings attributeSettings,
-                              final ProductVariantBeanFactory productVariantBeanFactory, final ProductDetailsBeanFactory productDetailsBeanFactory,
-                              final ProductGalleryBeanFactory productGalleryBeanFactory, final SelectableProductAttributeBeanFactory selectableProductAttributeBeanFactory,
+    public ProductBeanFactory(final AttributeSettings attributeSettings, final ProductVariantBeanFactory productVariantBeanFactory,
+                              final ProductDetailsBeanFactory productDetailsBeanFactory, final ProductGalleryBeanFactory productGalleryBeanFactory,
+                              final SelectableProductAttributeBeanFactory selectableProductAttributeBeanFactory,
                               final ProductVariantReferenceBeanMapFactory productVariantReferenceBeanMapFactory) {
-        this.localizedStringResolver = localizedStringResolver;
         this.attributeSettings = attributeSettings;
         this.productVariantBeanFactory = productVariantBeanFactory;
         this.productDetailsBeanFactory = productDetailsBeanFactory;
@@ -69,9 +66,7 @@ public class ProductBeanFactory extends ViewModelFactory<ProductBean, ProductWit
     }
 
     protected void fillDescription(final ProductBean model, final ProductWithVariant productWithVariant) {
-        model.setDescription(Optional.ofNullable(productWithVariant.getProduct().getDescription())
-                .flatMap(localizedStringResolver::find)
-                .orElse(""));
+        model.setDescription(productWithVariant.getProduct().getDescription());
     }
 
     protected void fillGallery(final ProductBean model, final ProductWithVariant productWithVariant) {

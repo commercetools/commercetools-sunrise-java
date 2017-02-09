@@ -2,21 +2,21 @@ package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.util.Locale;
 import java.util.Optional;
 
 @RequestScoped
 public class PaymentFormSelectableOptionBeanFactory extends SelectableViewModelFactory<PaymentFormSelectableOptionBean, PaymentMethodInfo, String> {
 
-    private final LocalizedStringResolver localizedStringResolver;
+    private final Locale locale;
 
     @Inject
-    public PaymentFormSelectableOptionBeanFactory(final LocalizedStringResolver localizedStringResolver) {
-        this.localizedStringResolver = localizedStringResolver;
+    public PaymentFormSelectableOptionBeanFactory(final Locale locale) {
+        this.locale = locale;
     }
 
     @Override
@@ -37,9 +37,10 @@ public class PaymentFormSelectableOptionBeanFactory extends SelectableViewModelF
     }
 
     protected void fillLabel(final PaymentFormSelectableOptionBean model, final PaymentMethodInfo option, @Nullable final String selectedValue) {
-        model.setLabel(Optional.ofNullable(option.getName())
-                .flatMap(localizedStringResolver::find)
-                .orElse("-"));
+        final String label = Optional.ofNullable(option.getName())
+                .flatMap(name -> name.find(locale))
+                .orElseGet(option::getMethod);
+        model.setLabel(label);
     }
 
     protected void fillValue(final PaymentFormSelectableOptionBean model, final PaymentMethodInfo option, @Nullable final String selectedValue) {

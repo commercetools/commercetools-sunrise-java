@@ -1,21 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 
-import javax.inject.Inject;
-import java.util.Optional;
+import javax.inject.Singleton;
 
-@RequestScoped
+@Singleton
 public class SeoBeanFactory extends ViewModelFactory<SeoBean, ProductOverviewControllerData> {
-
-    private final LocalizedStringResolver localizedStringResolver;
-
-    @Inject
-    public SeoBeanFactory(final LocalizedStringResolver localizedStringResolver) {
-        this.localizedStringResolver = localizedStringResolver;
-    }
 
     @Override
     protected SeoBean getViewModelInstance() {
@@ -34,16 +24,14 @@ public class SeoBeanFactory extends ViewModelFactory<SeoBean, ProductOverviewCon
     }
 
     protected void fillTitle(final SeoBean model, final ProductOverviewControllerData data) {
-        if (data.getCategory() != null) {
-            Optional.ofNullable(data.getCategory().getMetaTitle())
-                    .ifPresent(title -> model.setTitle(localizedStringResolver.getOrEmpty(title)));
+        if (data.getCategory() != null && data.getCategory().getMetaTitle() != null) {
+            model.setTitle(data.getCategory().getMetaTitle());
         }
     }
 
     protected void fillDescription(final SeoBean model, final ProductOverviewControllerData data) {
-        if (data.getCategory() != null) {
-            Optional.ofNullable(data.getCategory().getMetaDescription())
-                    .ifPresent(description -> model.setDescription(localizedStringResolver.getOrEmpty(description)));
+        if (data.getCategory() != null && data.getCategory().getMetaDescription() != null) {
+            model.setDescription(data.getCategory().getMetaDescription());
         }
     }
 }

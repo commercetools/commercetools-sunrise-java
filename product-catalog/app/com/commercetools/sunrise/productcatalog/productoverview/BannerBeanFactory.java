@@ -1,21 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 
-import javax.inject.Inject;
-import java.util.Optional;
+import javax.inject.Singleton;
 
-@RequestScoped
+@Singleton
 public class BannerBeanFactory extends ViewModelFactory<BannerBean, ProductOverviewControllerData> {
-
-    private final LocalizedStringResolver localizedStringResolver;
-
-    @Inject
-    public BannerBeanFactory(final LocalizedStringResolver localizedStringResolver) {
-        this.localizedStringResolver = localizedStringResolver;
-    }
 
     @Override
     protected BannerBean getViewModelInstance() {
@@ -34,15 +24,14 @@ public class BannerBeanFactory extends ViewModelFactory<BannerBean, ProductOverv
     }
 
     protected void fillDescription(final BannerBean bean, final ProductOverviewControllerData data) {
-        if (data.getCategory() != null) {
-            Optional.ofNullable(data.getCategory().getDescription())
-                    .ifPresent(description -> bean.setDescription(localizedStringResolver.getOrEmpty(description)));
+        if (data.getCategory() != null && data.getCategory().getDescription() != null) {
+            bean.setDescription(data.getCategory().getDescription());
         }
     }
 
     protected void fillTitle(final BannerBean bean, final ProductOverviewControllerData data) {
         if (data.getCategory() != null) {
-            bean.setTitle(localizedStringResolver.getOrEmpty(data.getCategory().getName()));
+            bean.setTitle(data.getCategory().getName());
         }
     }
 }

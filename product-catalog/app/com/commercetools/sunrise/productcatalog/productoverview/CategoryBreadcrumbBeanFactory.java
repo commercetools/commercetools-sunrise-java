@@ -2,7 +2,6 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.productcatalog.common.AbstractBreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import io.sphere.sdk.categories.CategoryTree;
@@ -14,9 +13,8 @@ import java.util.Locale;
 public class CategoryBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<ProductOverviewControllerData> {
 
     @Inject
-    public CategoryBreadcrumbBeanFactory(final Locale locale, final CategoryTree categoryTree,
-                                         final LocalizedStringResolver localizedStringResolver, final ProductReverseRouter productReverseRouter) {
-        super(locale, categoryTree, localizedStringResolver, productReverseRouter);
+    public CategoryBreadcrumbBeanFactory(final Locale locale, final CategoryTree categoryTree, final ProductReverseRouter productReverseRouter) {
+        super(locale, categoryTree, productReverseRouter);
     }
 
     @Override

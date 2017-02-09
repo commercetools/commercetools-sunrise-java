@@ -1,11 +1,10 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
-import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
+import com.commercetools.sunrise.productcatalog.common.BreadcrumbLinkBean;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductBreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductDetailControllerData;
 import io.sphere.sdk.categories.CategoryTree;
@@ -40,14 +39,16 @@ public class ProductBreadcrumbBeanFactoryTest {
         testBreadcrumb(breadcrumb, texts, urls);
     }
 
-    private static ProductBreadcrumbBeanFactory createBreadcrumbFactory() {
-        final LocalizedStringResolver dummyResolver = localizedString -> localizedString.find(Locale.ENGLISH);
-        return new ProductBreadcrumbBeanFactory(Locale.ENGLISH, CATEGORY_TREE, dummyResolver, REVERSE_ROUTER);
+    private void testBreadcrumb(final BreadcrumbBean breadcrumb, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
+        texts.accept(breadcrumb.getLinks().stream()
+                .map(BreadcrumbLinkBean::getText)
+                .map(link -> link.get(Locale.ENGLISH))
+                .collect(toList()));
+        urls.accept(breadcrumb.getLinks().stream().map(BreadcrumbLinkBean::getUrl).collect(toList()));
     }
 
-    private void testBreadcrumb(final BreadcrumbBean breadcrumb, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        texts.accept(breadcrumb.getLinks().stream().map(LinkBean::getText).collect(toList()));
-        urls.accept(breadcrumb.getLinks().stream().map(LinkBean::getUrl).collect(toList()));
+    private static ProductBreadcrumbBeanFactory createBreadcrumbFactory() {
+        return new ProductBreadcrumbBeanFactory(Locale.ENGLISH, CATEGORY_TREE, REVERSE_ROUTER);
     }
 
     private static ProductReverseRouter reverseRouter() {

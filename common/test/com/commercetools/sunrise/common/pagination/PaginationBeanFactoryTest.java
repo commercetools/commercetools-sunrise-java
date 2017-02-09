@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.common.pagination;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
-import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.common.search.pagination.PaginationBean;
 import com.commercetools.sunrise.common.search.pagination.PaginationBeanFactory;
+import com.commercetools.sunrise.common.search.pagination.PaginationLinkBean;
 import com.commercetools.sunrise.common.search.pagination.PaginationSettings;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
@@ -21,6 +21,7 @@ import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PaginationBeanFactoryTest {
+
     private static final String URL_PATH = "www.url.dom/path/to/";
     private static final Long PAGE_SIZE = 9L;
 
@@ -35,10 +36,10 @@ public class PaginationBeanFactoryTest {
         assertThat(pagination.getFirstPage()).isNull();
         assertThat(pagination.getLastPage()).isNull();
         assertThat(pagination.getPages())
-                .extracting(LinkBean::getText)
+                .extracting(PaginationLinkBean::getText)
                 .containsExactly("1", "2", "3", "4", "5");
         assertThat(pagination.getPages())
-                .extracting(LinkBean::isSelected)
+                .extracting(PaginationLinkBean::isSelected)
                 .containsExactly(false, false, true, false, false);
     }
 
@@ -74,7 +75,7 @@ public class PaginationBeanFactoryTest {
                 .forEach(page -> {
                     final PaginationBean pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
                     assertThat(pagination.getPages())
-                            .extracting(LinkBean::getText)
+                            .extracting(PaginationLinkBean::getText)
                             .containsExactly("1", "2", "3", "4");
                 });
     }
@@ -87,7 +88,7 @@ public class PaginationBeanFactoryTest {
                 .forEach(page -> {
                     final PaginationBean pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
                     assertThat(pagination.getPages())
-                            .extracting(LinkBean::getText)
+                            .extracting(PaginationLinkBean::getText)
                             .containsExactly("7", "8", "9", "10");
                 });
     }

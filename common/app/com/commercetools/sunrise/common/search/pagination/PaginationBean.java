@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.common.search.pagination;
 
-import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;
@@ -9,34 +8,34 @@ public class PaginationBean extends ViewModel {
 
     private String previousUrl;
     private String nextUrl;
-    private LinkBean firstPage;
-    private LinkBean lastPage;
-    private List<LinkBean> pages;
+    private PaginationLinkBean firstPage;
+    private PaginationLinkBean lastPage;
+    private List<PaginationLinkBean> pages;
 
     public PaginationBean() {
     }
 
-    public List<LinkBean> getPages() {
+    public List<PaginationLinkBean> getPages() {
         return pages;
     }
 
-    public void setPages(final List<LinkBean> pages) {
+    public void setPages(final List<PaginationLinkBean> pages) {
         this.pages = pages;
     }
 
-    public LinkBean getFirstPage() {
+    public PaginationLinkBean getFirstPage() {
         return firstPage;
     }
 
-    public void setFirstPage(final LinkBean firstPage) {
+    public void setFirstPage(final PaginationLinkBean firstPage) {
         this.firstPage = firstPage;
     }
 
-    public LinkBean getLastPage() {
+    public PaginationLinkBean getLastPage() {
         return lastPage;
     }
 
-    public void setLastPage(final LinkBean lastPage) {
+    public void setLastPage(final PaginationLinkBean lastPage) {
         this.lastPage = lastPage;
     }
 

@@ -1,19 +1,20 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.models.ViewModel;
+import io.sphere.sdk.models.LocalizedString;
 
 public class PaymentInfoBean extends ViewModel {
 
-    private String type;
+    private LocalizedString type;
 
     public PaymentInfoBean() {
     }
 
-    public String getType() {
+    public LocalizedString getType() {
         return type;
     }
 
-    public void setType(final String type) {
+    public void setType(final LocalizedString type) {
         this.type = type;
     }
 }

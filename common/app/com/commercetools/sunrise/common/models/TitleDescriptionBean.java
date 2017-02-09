@@ -1,26 +1,28 @@
 package com.commercetools.sunrise.common.models;
 
-public class TitleDescriptionBean extends ViewModel {
+import io.sphere.sdk.models.LocalizedString;
 
-    private String title;
-    private String description;
+public abstract class TitleDescriptionBean extends ViewModel {
+
+    private LocalizedString title;
+    private LocalizedString description;
 
     public TitleDescriptionBean() {
     }
 
-    public String getTitle() {
+    public LocalizedString getTitle() {
         return title;
     }
 
-    public void setTitle(final String title) {
+    public void setTitle(final LocalizedString title) {
         this.title = title;
     }
 
-    public String getDescription() {
+    public LocalizedString getDescription() {
         return description;
     }
 
-    public void setDescription(final String description) {
+    public void setDescription(final LocalizedString description) {
         this.description = description;
     }
 }

@@ -2,7 +2,6 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import io.sphere.sdk.categories.CategoryTree;
 
 import javax.inject.Inject;
@@ -10,12 +9,10 @@ import javax.inject.Inject;
 @RequestScoped
 public class JumbotronBeanFactory extends ViewModelFactory<JumbotronBean, ProductOverviewControllerData> {
 
-    private final LocalizedStringResolver localizedStringResolver;
     private final CategoryTree categoryTree;
 
     @Inject
-    public JumbotronBeanFactory(final LocalizedStringResolver localizedStringResolver, final CategoryTree categoryTree) {
-        this.localizedStringResolver = localizedStringResolver;
+    public JumbotronBeanFactory(final CategoryTree categoryTree) {
         this.categoryTree = categoryTree;
     }
 
@@ -38,20 +35,20 @@ public class JumbotronBeanFactory extends ViewModelFactory<JumbotronBean, Produc
 
     protected void fillTitle(final JumbotronBean model, final ProductOverviewControllerData data) {
         if (data.getCategory() != null) {
-            model.setTitle(localizedStringResolver.getOrEmpty(data.getCategory().getName()));
+            model.setTitle(data.getCategory().getName());
         }
     }
 
     protected void fillSubtitle(final JumbotronBean model, final ProductOverviewControllerData data) {
         if (data.getCategory() != null && data.getCategory().getParent() != null) {
             categoryTree.findById(data.getCategory().getParent().getId())
-                    .ifPresent(parent -> model.setSubtitle(localizedStringResolver.getOrEmpty(parent.getName())));
+                    .ifPresent(parent -> model.setSubtitle(parent.getName()));
         }
     }
 
     protected void fillDescription(final JumbotronBean model, final ProductOverviewControllerData data) {
         if (data.getCategory() != null && data.getCategory().getDescription() != null) {
-            model.setDescription(localizedStringResolver.getOrEmpty(data.getCategory().getDescription()));
+            model.setDescription(data.getCategory().getDescription());
         }
     }
 }

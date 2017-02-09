@@ -2,14 +2,16 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.models.PageContentFactory;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 
 import javax.inject.Inject;
+import java.util.Locale;
+
+import static java.util.Collections.singletonList;
 
 public class ProductOverviewPageContentFactory extends PageContentFactory<ProductOverviewPageContent, ProductOverviewControllerData> {
 
-    private final LocalizedStringResolver localizedStringResolver;
+    private final Locale locale;
     private final RequestContext requestContext;
     private final CategoryBreadcrumbBeanFactory categoryBreadcrumbBeanFactory;
     private final ProductListBeanFactory productListBeanFactory;
@@ -18,11 +20,11 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     private final SeoBeanFactory seoBeanFactory;
 
     @Inject
-    public ProductOverviewPageContentFactory(final LocalizedStringResolver localizedStringResolver, final RequestContext requestContext,
+    public ProductOverviewPageContentFactory(final Locale locale, final RequestContext requestContext,
                                              final CategoryBreadcrumbBeanFactory categoryBreadcrumbBeanFactory,
                                              final ProductListBeanFactory productListBeanFactory, final BannerBeanFactory bannerBeanFactory,
                                              final JumbotronBeanFactory jumbotronBeanFactory, final SeoBeanFactory seoBeanFactory) {
-        this.localizedStringResolver = localizedStringResolver;
+        this.locale = locale;
         this.requestContext = requestContext;
         this.categoryBreadcrumbBeanFactory = categoryBreadcrumbBeanFactory;
         this.productListBeanFactory = productListBeanFactory;
@@ -56,7 +58,7 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     @Override
     protected void fillTitle(final ProductOverviewPageContent model, final ProductOverviewControllerData data) {
         if (data.getCategory() != null) {
-            model.setTitle(localizedStringResolver.getOrEmpty(data.getCategory().getName()));
+            model.setTitle(data.getCategory().getName().find(singletonList(locale)).orElse(""));
         }
     }
 

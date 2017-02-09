@@ -1,10 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
-import com.commercetools.sunrise.common.models.LinkBean;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
+import com.commercetools.sunrise.productcatalog.common.BreadcrumbLinkBean;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
@@ -44,14 +43,16 @@ public class CategoryBreadcrumbBeanFactoryTest {
         testBreadcrumb(breadcrumb, texts, urls);
     }
 
-    private static CategoryBreadcrumbBeanFactory createBreadcrumbFactory() {
-        final LocalizedStringResolver dummyResolver = localizedString -> localizedString.find(Locale.ENGLISH);
-        return new CategoryBreadcrumbBeanFactory(Locale.ENGLISH, CATEGORY_TREE, dummyResolver, REVERSE_ROUTER);
+    private void testBreadcrumb(final BreadcrumbBean breadcrumb, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
+        texts.accept(breadcrumb.getLinks().stream()
+                .map(BreadcrumbLinkBean::getText)
+                .map(link -> link.get(Locale.ENGLISH))
+                .collect(toList()));
+        urls.accept(breadcrumb.getLinks().stream().map(BreadcrumbLinkBean::getUrl).collect(toList()));
     }
 
-    private void testBreadcrumb(final BreadcrumbBean breadcrumb, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        texts.accept(breadcrumb.getLinks().stream().map(LinkBean::getText).collect(toList()));
-        urls.accept(breadcrumb.getLinks().stream().map(LinkBean::getUrl).collect(toList()));
+    private static CategoryBreadcrumbBeanFactory createBreadcrumbFactory() {
+        return new CategoryBreadcrumbBeanFactory(Locale.ENGLISH, CATEGORY_TREE, REVERSE_ROUTER);
     }
 
     private static ProductReverseRouter reverseRouter() {
