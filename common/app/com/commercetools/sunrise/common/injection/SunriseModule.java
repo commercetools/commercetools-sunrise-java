@@ -4,7 +4,9 @@ import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.RequestContextProvider;
 import com.commercetools.sunrise.common.contexts.RequestScope;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.ctp.*;
+import com.commercetools.sunrise.common.ctp.SphereAccessTokenSupplierProvider;
+import com.commercetools.sunrise.common.ctp.SphereClientConfigProvider;
+import com.commercetools.sunrise.common.ctp.SphereClientProvider;
 import com.commercetools.sunrise.common.pages.RoutesMultiControllerComponentResolverProvider;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.hooks.RequestHookContext;
@@ -34,7 +36,6 @@ public class SunriseModule extends AbstractModule {
         bind(SphereClientConfig.class).toProvider(SphereClientConfigProvider.class).in(Singleton.class);
         bind(SphereAccessTokenSupplier.class).toProvider(SphereAccessTokenSupplierProvider.class).in(Singleton.class);
         bind(SphereClient.class).annotatedWith(Names.named("global")).toProvider(SphereClientProvider.class).in(Singleton.class);
-        bind(ProductDataConfig.class).toProvider(ProductDataConfigProvider.class).in(Singleton.class);
         bind(RequestContext.class).toProvider(RequestContextProvider.class).in(RequestScoped.class);
         bind(RequestHookContext.class).to(RequestHookContextImpl.class).in(RequestScoped.class);
         bind(MultiControllerComponentResolver.class)

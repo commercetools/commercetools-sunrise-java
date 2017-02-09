@@ -2,7 +2,6 @@ package com.commercetools.sunrise.productcatalog;
 
 import com.commercetools.sunrise.common.DefaultTestModule;
 import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
-import com.commercetools.sunrise.common.ctp.ProductDataConfig;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
@@ -23,7 +22,6 @@ public class ProductCatalogTestModule extends DefaultTestModule {
     @Override
     protected void configure() {
         super.configure();
-        bind(ProductDataConfig.class).toInstance(ProductDataConfig.of(null, emptyList(), emptyList(), emptyList()));
         bind(CategoryTree.class).toInstance(CategoryTree.of(emptyList()));
         bind(CategoryTree.class).annotatedWith(Names.named("new")).toInstance(CategoryTree.of(emptyList()));
         bind(HomeReverseRouter.class).toInstance(new TestableReverseRouter());

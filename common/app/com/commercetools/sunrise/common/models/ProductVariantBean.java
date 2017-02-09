@@ -1,8 +1,10 @@
 package com.commercetools.sunrise.common.models;
 
+import io.sphere.sdk.models.LocalizedString;
+
 public class ProductVariantBean extends ViewModel {
 
-    private String name;
+    private LocalizedString name;
     private String sku;
     private String url;
     private String image;
@@ -20,11 +22,11 @@ public class ProductVariantBean extends ViewModel {
         this.image = image;
     }
 
-    public String getName() {
+    public LocalizedString getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(final LocalizedString name) {
         this.name = name;
     }
 

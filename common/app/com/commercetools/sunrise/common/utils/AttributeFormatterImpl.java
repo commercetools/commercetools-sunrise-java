@@ -1,50 +1,50 @@
 package com.commercetools.sunrise.common.utils;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.ctp.ProductDataConfig;
-import io.sphere.sdk.models.EnumValue;
-import io.sphere.sdk.products.attributes.Attribute;
-import io.sphere.sdk.products.attributes.AttributeAccess;
-import io.sphere.sdk.products.attributes.AttributeExtraction;
+import com.commercetools.sunrise.common.models.AttributeWithProductType;
+import io.sphere.sdk.models.LocalizedString;
+import io.sphere.sdk.products.attributes.AttributeDefinition;
+import io.sphere.sdk.products.attributes.DefaultProductAttributeFormatter;
+import io.sphere.sdk.products.attributes.ProductAttributeConverter;
+import io.sphere.sdk.producttypes.ProductTypeLocalRepository;
 
 import javax.inject.Inject;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Pattern;
+
+import static java.util.Collections.singletonList;
 
 @RequestScoped
 final class AttributeFormatterImpl implements AttributeFormatter {
 
     private static final Pattern ATTR_WHITELIST = Pattern.compile("[^0-9a-zA-Z]+");
-    private final LocalizedStringResolver localizedStringResolver;
-    private final ProductDataConfig productDataConfig;
+    private final ProductAttributeConverter<String> formatter;
+    private final ProductTypeLocalRepository productTypeLocalRepository;
 
     @Inject
-    AttributeFormatterImpl(final LocalizedStringResolver localizedStringResolver, final ProductDataConfig productDataConfig) {
-        this.localizedStringResolver = localizedStringResolver;
-        this.productDataConfig = productDataConfig;
+    AttributeFormatterImpl(final ProductTypeLocalRepository productTypeLocalRepository, final Locale locale) {
+        this.formatter = new DefaultProductAttributeFormatter(productTypeLocalRepository, singletonList(locale));
+        this.productTypeLocalRepository = productTypeLocalRepository;
     }
 
     @Override
-    public String label(final Attribute attribute) {
-        return productDataConfig.getMetaProductType()
-                .findAttribute(attribute.getName())
-                .map(def -> localizedStringResolver.getOrEmpty(def.getLabel()))
+    public LocalizedString label(final AttributeWithProductType attributeWithProductType) {
+        final String productTypeId = attributeWithProductType.getProductTypeRef().toReference().getId();
+        return productTypeLocalRepository.findById(productTypeId)
+                .flatMap(productType -> productType.findAttribute(attributeWithProductType.getAttribute().getName()))
+                .map(AttributeDefinition::getLabel)
+                .orElseGet(LocalizedString::empty);
+    }
+
+    @Override
+    public String value(final AttributeWithProductType attributeWithProductType) {
+        return Optional.ofNullable(formatter.convert(attributeWithProductType.getAttribute(), attributeWithProductType.getProductTypeRef()))
                 .orElse("");
     }
 
     @Override
-    public String value(final Attribute attribute) {
-        final AttributeExtraction<String> attributeExtraction = AttributeExtraction.of(productDataConfig.getMetaProductType(), attribute);
-        return attributeExtraction
-                .ifIs(AttributeAccess.ofLocalizedString(), localizedStringResolver::getOrEmpty)
-                .ifIs(AttributeAccess.ofLocalizedEnumValue(), v -> localizedStringResolver.getOrEmpty(v.getLabel()))
-                .ifIs(AttributeAccess.ofEnumValue(), EnumValue::getLabel)
-                .ifIs(AttributeAccess.ofString(), v -> v)
-                .findValue()
-                .orElse("");
-    }
-
-    @Override
-    public String valueAsKey(final Attribute attribute) {
-        return ATTR_WHITELIST.matcher(value(attribute)).replaceAll("");
+    public String valueAsKey(final AttributeWithProductType attributeWithProductType) {
+        return ATTR_WHITELIST.matcher(value(attributeWithProductType)).replaceAll("");
     }
 }

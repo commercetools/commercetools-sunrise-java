@@ -33,13 +33,20 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.payments.PaymentMethodInfoBuilder;
+import io.sphere.sdk.producttypes.ProductType;
+import io.sphere.sdk.producttypes.ProductTypeLocalRepository;
+import io.sphere.sdk.producttypes.queries.ProductTypeQuery;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.money.CurrencyUnit;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
+import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
+import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
 import static java.util.Collections.singletonList;
 
 public class Module extends AbstractModule {
@@ -60,6 +67,14 @@ public class Module extends AbstractModule {
     @Singleton
     public CategoryTree provideRefreshableCategoryTree(@Named("global") final SphereClient sphereClient) {
         return RefreshableCategoryTree.of(sphereClient);
+    }
+
+    @Provides
+    @Singleton
+    private ProductTypeLocalRepository fetchProductTypeLocalRepository(@Named("global") final SphereClient sphereClient) {
+        final ProductTypeQuery query = ProductTypeQuery.of();
+        final List<ProductType> productTypes = blockingWait(queryAll(sphereClient, query), 30, TimeUnit.SECONDS);
+        return ProductTypeLocalRepository.of(productTypes);
     }
 
     @Provides

@@ -1,10 +1,12 @@
 package com.commercetools.sunrise.common.models;
 
+import io.sphere.sdk.models.LocalizedString;
+
 import java.util.List;
 
 public class CategoryBean extends ViewModel {
 
-    private String text;
+    private LocalizedString text;
     private String url;
     private boolean selected;
     private List<CategoryBean> children;
@@ -13,11 +15,11 @@ public class CategoryBean extends ViewModel {
     public CategoryBean() {
     }
 
-    public String getText() {
+    public LocalizedString getText() {
         return text;
     }
 
-    public void setText(final String text) {
+    public void setText(final LocalizedString text) {
         this.text = text;
     }
 

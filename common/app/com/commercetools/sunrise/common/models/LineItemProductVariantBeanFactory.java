@@ -2,7 +2,6 @@ package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.common.utils.ProductPriceUtils;
 import io.sphere.sdk.carts.LineItem;
@@ -18,9 +17,9 @@ public class LineItemProductVariantBeanFactory extends AbstractProductVariantBea
     private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public LineItemProductVariantBeanFactory(final LocalizedStringResolver localizedStringResolver, final Locale locale,
-                                             final PriceFormatter priceFormatter, final ProductReverseRouter productReverseRouter) {
-        super(localizedStringResolver);
+    public LineItemProductVariantBeanFactory(final Locale locale, final PriceFormatter priceFormatter,
+                                             final ProductReverseRouter productReverseRouter) {
+        super();
         this.locale = locale;
         this.priceFormatter = priceFormatter;
         this.productReverseRouter = productReverseRouter;
@@ -43,7 +42,7 @@ public class LineItemProductVariantBeanFactory extends AbstractProductVariantBea
 
     @Override
     protected void fillName(final ProductVariantBean bean, final LineItem lineItem) {
-        bean.setName(createName(lineItem.getName()));
+        bean.setName(lineItem.getName());
     }
 
     @Override

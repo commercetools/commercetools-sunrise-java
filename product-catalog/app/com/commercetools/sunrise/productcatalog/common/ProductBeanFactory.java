@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.ctp.AttributeSettings;
 import com.commercetools.sunrise.common.models.ProductVariantBeanFactory;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.SelectableProductAttributeBeanFactory;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class ProductBeanFactory extends ViewModelFactory<ProductBean, ProductWithVariant> {
 
     private final LocalizedStringResolver localizedStringResolver;
-    private final ProductDataConfig productDataConfig;
+    private final AttributeSettings attributeSettings;
     private final ProductVariantBeanFactory productVariantBeanFactory;
     private final ProductDetailsBeanFactory productDetailsBeanFactory;
     private final ProductGalleryBeanFactory productGalleryBeanFactory;
@@ -23,12 +23,12 @@ public class ProductBeanFactory extends ViewModelFactory<ProductBean, ProductWit
     private final ProductVariantReferenceBeanMapFactory productVariantReferenceBeanMapFactory;
 
     @Inject
-    public ProductBeanFactory(final LocalizedStringResolver localizedStringResolver, final ProductDataConfig productDataConfig,
+    public ProductBeanFactory(final LocalizedStringResolver localizedStringResolver, final AttributeSettings attributeSettings,
                               final ProductVariantBeanFactory productVariantBeanFactory, final ProductDetailsBeanFactory productDetailsBeanFactory,
                               final ProductGalleryBeanFactory productGalleryBeanFactory, final SelectableProductAttributeBeanFactory selectableProductAttributeBeanFactory,
                               final ProductVariantReferenceBeanMapFactory productVariantReferenceBeanMapFactory) {
         this.localizedStringResolver = localizedStringResolver;
-        this.productDataConfig = productDataConfig;
+        this.attributeSettings = attributeSettings;
         this.productVariantBeanFactory = productVariantBeanFactory;
         this.productDetailsBeanFactory = productDetailsBeanFactory;
         this.productGalleryBeanFactory = productGalleryBeanFactory;
@@ -95,7 +95,7 @@ public class ProductBeanFactory extends ViewModelFactory<ProductBean, ProductWit
     }
 
     protected void fillVariantIdentifiers(final ProductBean model, final ProductWithVariant productWithVariant) {
-        model.setVariantIdentifiers(productDataConfig.getSelectableAttributes());
+        model.setVariantIdentifiers(attributeSettings.getSelectableAttributes());
     }
 
     protected void fillAvailability(final ProductBean model, final ProductWithVariant productWithVariant) {

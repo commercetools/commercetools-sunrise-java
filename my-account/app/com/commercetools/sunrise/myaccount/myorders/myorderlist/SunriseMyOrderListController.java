@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.ctp.AttributeSettings;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
@@ -27,7 +27,7 @@ public abstract class SunriseMyOrderListController extends SunriseFrameworkMyAcc
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyOrderListController.class);
 
     @Inject
-    protected ProductDataConfig productDataConfig;
+    protected AttributeSettings attributeSettings;
     @Inject
     protected I18nResolver i18nResolver;
     @Inject

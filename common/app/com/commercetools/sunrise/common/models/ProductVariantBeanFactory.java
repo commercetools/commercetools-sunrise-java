@@ -2,7 +2,6 @@ package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.common.utils.ProductPriceUtils;
 
@@ -17,9 +16,8 @@ public class ProductVariantBeanFactory extends AbstractProductVariantBeanFactory
     private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public ProductVariantBeanFactory(final LocalizedStringResolver localizedStringResolver, final Locale locale,
-                                     final PriceFormatter priceFormatter, final ProductReverseRouter productReverseRouter) {
-        super(localizedStringResolver);
+    public ProductVariantBeanFactory(final Locale locale, final PriceFormatter priceFormatter, final ProductReverseRouter productReverseRouter) {
+        super();
         this.locale = locale;
         this.priceFormatter = priceFormatter;
         this.productReverseRouter = productReverseRouter;
@@ -42,7 +40,7 @@ public class ProductVariantBeanFactory extends AbstractProductVariantBeanFactory
 
     @Override
     protected void fillName(final ProductVariantBean model, final ProductWithVariant productWithVariant) {
-        model.setName(createName(productWithVariant.getProduct().getName()));
+        model.setName(productWithVariant.getProduct().getName());
     }
 
     @Override

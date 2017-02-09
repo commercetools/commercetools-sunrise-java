@@ -1,7 +1,5 @@
 package com.commercetools.sunrise.common.models;
 
-import com.commercetools.sunrise.common.utils.LocalizedStringResolver;
-import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.Image;
 import io.sphere.sdk.products.ProductVariant;
 
@@ -9,10 +7,7 @@ import java.util.Optional;
 
 abstract class AbstractProductVariantBeanFactory<D> extends ViewModelFactory<ProductVariantBean, D> {
 
-    private final LocalizedStringResolver localizedStringResolver;
-
-    protected AbstractProductVariantBeanFactory(final LocalizedStringResolver localizedStringResolver) {
-        this.localizedStringResolver = localizedStringResolver;
+    protected AbstractProductVariantBeanFactory() {
     }
 
     @Override
@@ -50,9 +45,5 @@ abstract class AbstractProductVariantBeanFactory<D> extends ViewModelFactory<Pro
         return variant.getImages().stream()
                 .findFirst()
                 .map(Image::getUrl);
-    }
-
-    protected String createName(final LocalizedString name) {
-        return localizedStringResolver.getOrEmpty(name);
     }
 }

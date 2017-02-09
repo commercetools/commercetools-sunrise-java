@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.mydetails;
 
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.ctp.ProductDataConfig;
+import com.commercetools.sunrise.common.ctp.AttributeSettings;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
@@ -45,7 +45,7 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseFramewor
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsController.class);
 
     @Inject
-    protected ProductDataConfig productDataConfig;
+    protected AttributeSettings attributeSettings;
     @Inject
     protected FormFactory formFactory;
     @Inject
