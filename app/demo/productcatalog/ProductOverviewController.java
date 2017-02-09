@@ -1,15 +1,13 @@
 package demo.productcatalog;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchComponent;
+import com.commercetools.sunrise.common.search.pagination.PaginationComponent;
+import com.commercetools.sunrise.common.search.searchbox.SearchBoxComponent;
+import com.commercetools.sunrise.common.search.sort.SortSelectorComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
-import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetedSearchComponent;
-import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.PaginationComponent;
-import com.commercetools.sunrise.productcatalog.productoverview.search.searchbox.SearchBoxComponent;
-import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortSelectorComponent;
 
 import javax.inject.Inject;
 
-@RequestScoped
 public class ProductOverviewController extends SunriseProductOverviewController {
 
     @Inject

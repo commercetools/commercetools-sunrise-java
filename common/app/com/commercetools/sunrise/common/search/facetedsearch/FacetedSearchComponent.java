@@ -9,7 +9,6 @@ import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.CategoryLoadedHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
-import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewPageContent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.facets.Facet;
 import io.sphere.sdk.products.ProductProjection;
@@ -72,8 +71,8 @@ public final class FacetedSearchComponent implements ControllerComponent, PageDa
 
     @Override
     public void onPageDataReady(final PageData pageData) {
-        if (pageData.getContent() instanceof ProductOverviewPageContent) {
-            final ProductOverviewPageContent content = (ProductOverviewPageContent) pageData.getContent();
+        if (pageData.getContent() instanceof WithFacetedSearchViewModel) {
+            final WithFacetedSearchViewModel content = (WithFacetedSearchViewModel) pageData.getContent();
             content.setFacets(createFacetSelectorList(facetBeans));
         }
     }

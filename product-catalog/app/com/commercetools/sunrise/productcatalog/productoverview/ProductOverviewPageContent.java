@@ -3,6 +3,7 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 import com.commercetools.sunrise.common.models.TitleDescriptionBean;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.search.facetedsearch.FacetSelectorListBean;
+import com.commercetools.sunrise.common.search.facetedsearch.WithFacetedSearchViewModel;
 import com.commercetools.sunrise.common.search.pagination.PaginationBean;
 import com.commercetools.sunrise.common.search.pagination.WithPaginationViewModel;
 import com.commercetools.sunrise.common.search.pagination.ProductsPerPageSelectorBean;
@@ -12,7 +13,7 @@ import com.commercetools.sunrise.common.search.sort.WithSortSelectorViewModel;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 
-public class ProductOverviewPageContent extends PageContent implements WithPaginationViewModel, WithSearchBoxViewModel, WithSortSelectorViewModel {
+public class ProductOverviewPageContent extends PageContent implements WithPaginationViewModel, WithSearchBoxViewModel, WithSortSelectorViewModel, WithFacetedSearchViewModel {
 
     private String filterProductsUrl;
     private String searchTerm;
@@ -79,10 +80,12 @@ public class ProductOverviewPageContent extends PageContent implements WithPagin
         this.breadcrumb = breadcrumb;
     }
 
+    @Override
     public FacetSelectorListBean getFacets() {
         return facets;
     }
 
+    @Override
     public void setFacets(final FacetSelectorListBean facets) {
         this.facets = facets;
     }

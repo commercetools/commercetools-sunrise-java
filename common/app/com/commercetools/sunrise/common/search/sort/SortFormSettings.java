@@ -64,8 +64,8 @@ public final class SortFormSettings extends FormSettingsWithOptions<SortFormOpti
 
     private static SortFormOption initializeFormOption(final Configuration optionConfig) {
         return SortFormOption.of(
-                extractValue(optionConfig),
                 extractLabel(optionConfig),
+                extractValue(optionConfig),
                 extractExpressions(optionConfig),
                 extractIsDefault(optionConfig));
     }

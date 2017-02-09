@@ -2,7 +2,6 @@ package com.commercetools.sunrise.common.search.facetedsearch;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.search.SearchUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.CategoryTreeFacetOptionMapper;
@@ -21,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import static com.commercetools.sunrise.common.forms.FormUtils.findAllSelectedValues;
 import static com.commercetools.sunrise.common.search.SearchUtils.localizeExpression;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -77,7 +77,7 @@ public class SelectFacetedSearchSelectorFactory extends Base {
                     .distinct()
                     .collect(toList());
         } else {
-            return SearchUtils.findAllSelectedValues(facetConfig.getFacetBuilder().getKey(), requestContext);
+            return findAllSelectedValues(facetConfig.getFacetBuilder().getKey(), requestContext);
         }
     }
 

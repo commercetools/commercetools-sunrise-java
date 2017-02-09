@@ -65,8 +65,8 @@ public final class ProductsPerPageFormSettings extends FormSettingsWithOptions<P
 
     private static ProductsPerPageFormOption initializeOption(final Configuration optionConfig) {
         return ProductsPerPageFormOption.of(
-                extractValue(optionConfig),
                 extractLabel(optionConfig),
+                extractValue(optionConfig),
                 extractAmount(optionConfig),
                 extractIsDefault(optionConfig));
     }

@@ -19,8 +19,12 @@ public final class FormUtils {
         return form != null ? form.field(fieldName).value() : null;
     }
 
+    public static List<String> findAllSelectedValues(final String fieldName, final RequestContext requestContext) {
+        return requestContext.getQueryString().getOrDefault(fieldName, emptyList());
+    }
+
     public static List<String> findAllSelectedValues(final WithFormFieldName<?> settings, final RequestContext requestContext) {
-        return requestContext.getQueryString().getOrDefault(settings.getFieldName(), emptyList());
+        return findAllSelectedValues(settings.getFieldName(), requestContext);
     }
 
     public static <T> T findSelectedValueFromRequest(final FormSettings<T> settings, final RequestContext requestContext) {
@@ -34,7 +38,7 @@ public final class FormUtils {
     public static <T extends FormOption> Optional<T> findSelectedValueFromRequest(final FormSettingsWithOptions<T> settings, final RequestContext requestContext) {
         final List<String> selectedValues = findAllSelectedValues(settings, requestContext);
         return settings.getOptions().stream()
-                .filter(option -> selectedValues.contains(option.getValue().toString()))
+                .filter(option -> selectedValues.contains(option.getFieldValue()))
                 .findFirst()
                 .map(Optional::of)
                 .orElseGet(settings::findDefaultOption);
