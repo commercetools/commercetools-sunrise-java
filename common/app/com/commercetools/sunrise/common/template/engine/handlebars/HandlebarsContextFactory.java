@@ -67,7 +67,12 @@ public class HandlebarsContextFactory extends Base {
 
     protected List<ValueResolver> valueResolversInContext(final TemplateContext templateContext) {
         final PlayJavaFormResolver playJavaFormResolver = createPlayJavaFormResolver(templateContext);
-        return asList(MapValueResolver.INSTANCE, JavaBeanValueResolver.INSTANCE, playJavaFormResolver);
+        final SunriseJavaBeanValueResolver javaBeanValueResolver = createJavaBeanValueResolver(templateContext);
+        return asList(MapValueResolver.INSTANCE, javaBeanValueResolver, playJavaFormResolver);
+    }
+
+    protected final SunriseJavaBeanValueResolver createJavaBeanValueResolver(final TemplateContext templateContext) {
+        return new SunriseJavaBeanValueResolver(JavaBeanValueResolver.INSTANCE, templateContext.locales());
     }
 
     protected final PlayJavaFormResolver createPlayJavaFormResolver(final TemplateContext templateContext) {
