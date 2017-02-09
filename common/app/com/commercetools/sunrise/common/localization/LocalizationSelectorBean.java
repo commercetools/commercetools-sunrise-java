@@ -1,31 +1,31 @@
 package com.commercetools.sunrise.common.localization;
 
-import com.commercetools.sunrise.common.models.FormSelectableOptionBean;
+import com.commercetools.sunrise.common.forms.CountryFormSelectableOptionBean;
 import io.sphere.sdk.models.Base;
 
 import java.util.List;
 
 public class LocalizationSelectorBean extends Base {
 
-    private List<FormSelectableOptionBean> language;
-    private List<FormSelectableOptionBean> country;
+    private List<LanguageFormSelectableOptionBean> language;
+    private List<CountryFormSelectableOptionBean> country;
 
     public LocalizationSelectorBean() {
     }
 
-    public List<FormSelectableOptionBean> getLanguage() {
+    public List<LanguageFormSelectableOptionBean> getLanguage() {
         return language;
     }
 
-    public void setLanguage(final List<FormSelectableOptionBean> language) {
+    public void setLanguage(final List<LanguageFormSelectableOptionBean> language) {
         this.language = language;
     }
 
-    public List<FormSelectableOptionBean> getCountry() {
+    public List<CountryFormSelectableOptionBean> getCountry() {
         return country;
     }
 
-    public void setCountry(final List<FormSelectableOptionBean> country) {
+    public void setCountry(final List<CountryFormSelectableOptionBean> country) {
         this.country = country;
     }
 }

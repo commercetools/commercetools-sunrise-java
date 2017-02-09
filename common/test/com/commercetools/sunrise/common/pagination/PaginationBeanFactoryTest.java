@@ -2,10 +2,9 @@ package com.commercetools.sunrise.common.pagination;
 
 import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.models.LinkBean;
-import com.google.inject.Binder;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
+import com.commercetools.sunrise.common.search.pagination.PaginationBean;
+import com.commercetools.sunrise.common.search.pagination.PaginationBeanFactory;
+import com.commercetools.sunrise.common.search.pagination.PaginationSettings;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
 import org.junit.Test;
@@ -99,17 +98,8 @@ public class PaginationBeanFactoryTest {
 
     private PaginationBean createPaginationData(final int currentPage, final int displayedPages, final PagedResult<ProductProjection> searchResult) {
         final RequestContext requestContext = RequestContext.of(buildQueryString(currentPage), URL_PATH);
-        final Map<String, Object> configMap = singletonMap("pop.pagination.displayedPages", displayedPages);
-        final Configuration configuration = new Configuration(configMap);
-        final Injector injector = Guice.createInjector(new Module() {
-            @Override
-            public void configure(final Binder binder) {
-                binder.bind(RequestContext.class).toInstance(requestContext);
-                binder.bind(Configuration.class).toInstance(configuration);
-            }
-        });
-        final Pagination pagination = Pagination.of("page", currentPage);
-        return injector.getInstance(PaginationBeanFactory.class).create(searchResult, pagination, PAGE_SIZE.intValue());
+        final Configuration configuration = new Configuration(singletonMap("pop.pagination.displayedPages", displayedPages));
+        return new PaginationBeanFactory(configuration, new PaginationSettings(configuration), requestContext).create(searchResult);
     }
 
     private PagedResult<ProductProjection> pagedResult(final int page, final int totalPages) {

@@ -57,8 +57,6 @@ public class Module extends AbstractModule {
         bind(I18nResolver.class).toProvider(ConfigurableI18nResolverProvider.class).in(Singleton.class);
         bind(HttpAuthentication.class).toProvider(BasicAuthenticationProvider.class).in(Singleton.class);
         bind(CategoryTree.class).annotatedWith(Names.named("new")).toProvider(CategoryTreeInNewProvider.class).in(Singleton.class);
-        bind(ProductsPerPageConfig.class).toProvider(ProductsPerPageConfigProvider.class).in(Singleton.class);
-        bind(SortConfig.class).toProvider(SortConfigProvider.class).in(Singleton.class);
         bind(FacetedSearchConfigList.class).toProvider(FacetedSearchConfigListProvider.class).in(Singleton.class);
     }
 

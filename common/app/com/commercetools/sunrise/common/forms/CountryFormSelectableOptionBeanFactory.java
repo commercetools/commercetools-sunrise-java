@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import java.util.Locale;
 
 @RequestScoped
-public class CountryFormSelectableOptionBeanFactory extends SelectableViewModelFactory<CountryFormSelectableOptionBean, CountryCode, String> {
+public class CountryFormSelectableOptionBeanFactory extends SelectableViewModelFactory<CountryFormSelectableOptionBean, CountryCode, CountryCode> {
 
     private final Locale locale;
 
@@ -24,27 +24,27 @@ public class CountryFormSelectableOptionBeanFactory extends SelectableViewModelF
     }
 
     @Override
-    public final CountryFormSelectableOptionBean create(final CountryCode option, @Nullable final String selectedValue) {
+    public final CountryFormSelectableOptionBean create(final CountryCode option, @Nullable final CountryCode selectedValue) {
         return super.create(option, selectedValue);
     }
 
     @Override
-    protected final void initialize(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final String selectedValue) {
+    protected final void initialize(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final CountryCode selectedValue) {
         fillLabel(model, option, selectedValue);
         fillValue(model, option, selectedValue);
         fillSelected(model, option, selectedValue);
     }
 
-    protected void fillLabel(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final String selectedValue) {
+    protected void fillLabel(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final CountryCode selectedValue) {
         model.setLabel(option.toLocale().getDisplayCountry(locale));
     }
 
-    protected void fillValue(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final String selectedValue) {
+    protected void fillValue(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final CountryCode selectedValue) {
         model.setValue(option.getAlpha2());
     }
 
-    protected void fillSelected(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final String selectedValue) {
-        model.setSelected(option.getAlpha2().equals(selectedValue));
+    protected void fillSelected(final CountryFormSelectableOptionBean model, final CountryCode option, @Nullable final CountryCode selectedValue) {
+        model.setSelected(option.equals(selectedValue));
     }
 
 }

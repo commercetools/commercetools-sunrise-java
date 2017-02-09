@@ -2,14 +2,17 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.models.TitleDescriptionBean;
 import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.search.facetedsearch.FacetSelectorListBean;
+import com.commercetools.sunrise.common.search.pagination.PaginationBean;
+import com.commercetools.sunrise.common.search.pagination.WithPaginationViewModel;
+import com.commercetools.sunrise.common.search.pagination.ProductsPerPageSelectorBean;
+import com.commercetools.sunrise.common.search.searchbox.WithSearchBoxViewModel;
+import com.commercetools.sunrise.common.search.sort.SortSelectorBean;
+import com.commercetools.sunrise.common.search.sort.WithSortSelectorViewModel;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
-import com.commercetools.sunrise.common.pagination.PaginationBean;
-import com.commercetools.sunrise.productcatalog.productoverview.search.productsperpage.ProductsPerPageSelectorBean;
-import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.FacetSelectorListBean;
-import com.commercetools.sunrise.productcatalog.productoverview.search.sort.SortSelectorBean;
 
-public class ProductOverviewPageContent extends PageContent {
+public class ProductOverviewPageContent extends PageContent implements WithPaginationViewModel, WithSearchBoxViewModel, WithSortSelectorViewModel {
 
     private String filterProductsUrl;
     private String searchTerm;
@@ -34,10 +37,12 @@ public class ProductOverviewPageContent extends PageContent {
         this.filterProductsUrl = filterProductsUrl;
     }
 
+    @Override
     public String getSearchTerm() {
         return searchTerm;
     }
 
+    @Override
     public void setSearchTerm(final String searchTerm) {
         this.searchTerm = searchTerm;
     }
@@ -82,26 +87,32 @@ public class ProductOverviewPageContent extends PageContent {
         this.facets = facets;
     }
 
+    @Override
     public PaginationBean getPagination() {
         return pagination;
     }
 
+    @Override
     public void setPagination(final PaginationBean pagination) {
         this.pagination = pagination;
     }
 
+    @Override
     public ProductsPerPageSelectorBean getDisplaySelector() {
         return displaySelector;
     }
 
+    @Override
     public void setDisplaySelector(final ProductsPerPageSelectorBean displaySelector) {
         this.displaySelector = displaySelector;
     }
 
+    @Override
     public SortSelectorBean getSortSelector() {
         return sortSelector;
     }
 
+    @Override
     public void setSortSelector(final SortSelectorBean sortSelector) {
         this.sortSelector = sortSelector;
     }

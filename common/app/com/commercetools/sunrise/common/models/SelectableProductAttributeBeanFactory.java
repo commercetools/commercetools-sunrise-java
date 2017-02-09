@@ -73,9 +73,8 @@ public class SelectableProductAttributeBeanFactory extends SelectableViewModelFa
 
     protected void fillList(final SelectableProductAttributeBean model, final List<ProductVariant> variants, final Attribute selectedAttribute) {
         final List<ProductAttributeFormSelectableOptionBean> formOptions = new ArrayList<>();
-        final String selectedAttributeValue = attributeFormatter.valueAsKey(selectedAttribute);
         findDistinctAttributeOptions(variants, selectedAttribute).forEach(attribute ->
-                formOptions.add(productAttributeFormSelectableOptionBeanFactory.create(attribute, selectedAttributeValue)));
+                formOptions.add(productAttributeFormSelectableOptionBeanFactory.create(attribute, selectedAttribute)));
         model.setList(formOptions);
     }
 
