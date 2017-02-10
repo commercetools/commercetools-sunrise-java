@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.MyOrdersLocalizedReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.orders.Order;
@@ -16,14 +15,10 @@ import static java.util.Arrays.asList;
 
 public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyAccountController implements WithTemplateName {
 
-    private final MyOrdersLocalizedReverseRouter myOrdersLocalizedReverseRouter;
     private final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory;
     private final OrderFinder orderFinder;
 
-    protected SunriseMyOrderDetailController(final MyOrdersLocalizedReverseRouter myOrdersLocalizedReverseRouter,
-                                             final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory,
-                                             final OrderFinder orderFinder) {
-        this.myOrdersLocalizedReverseRouter = myOrdersLocalizedReverseRouter;
+    protected SunriseMyOrderDetailController(final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory, final OrderFinder orderFinder) {
         this.myOrderDetailPageContentFactory = myOrderDetailPageContentFactory;
         this.orderFinder = orderFinder;
     }
@@ -53,15 +48,11 @@ public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyA
         return asyncOk(renderPage(order));
     }
 
-    protected abstract CompletionStage<Result> handleNotFoundOrder()
-
     protected CompletionStage<Html> renderPage(final Order order) {
         final MyOrderDetailControllerData myOrderDetailControllerData = new MyOrderDetailControllerData(order);
         final MyOrderDetailPageContent pageContent = myOrderDetailPageContentFactory.create(myOrderDetailControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
-    protected final CompletionStage<Result> redirectToMyOrders() {
-        return redirectTo(myOrdersLocalizedReverseRouter.myOrderListPageCall());
-    }
+    protected abstract CompletionStage<Result> handleNotFoundOrder();
 }

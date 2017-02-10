@@ -2,12 +2,10 @@ package com.commercetools.sunrise.myaccount.mydetails;
 
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.ctp.AttributeSettings;
-import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsLocalizedReverseRouter;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.events.CustomerUpdatedHook;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
@@ -18,17 +16,12 @@ import io.sphere.sdk.customers.commands.updateactions.ChangeEmail;
 import io.sphere.sdk.customers.commands.updateactions.SetFirstName;
 import io.sphere.sdk.customers.commands.updateactions.SetLastName;
 import io.sphere.sdk.customers.commands.updateactions.SetTitle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import play.Configuration;
 import play.data.Form;
-import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,18 +34,13 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @IntroducingMultiControllerComponents(MyPersonalDetailsThemeLinksControllerComponent.class)
 public abstract class SunriseMyPersonalDetailsController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<MyPersonalDetailsFormData, Customer, Customer> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsController.class);
+    private final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory;
+    private final CustomerFinder customerFinder;
 
-    @Inject
-    protected AttributeSettings attributeSettings;
-    @Inject
-    protected FormFactory formFactory;
-    @Inject
-    protected I18nResolver i18nResolver;
-    @Inject
-    protected Configuration configuration;
-    @Inject
-    private MyPersonalDetailsLocalizedReverseRouter myPersonalDetailsLocalizedReverseRouter;
+    protected SunriseMyPersonalDetailsController(final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory, final CustomerFinder customerFinder) {
+        this.myPersonalDetailsPageContentFactory = myPersonalDetailsPageContentFactory;
+        this.customerFinder = customerFinder;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -73,20 +61,20 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseFramewor
 
     @SunriseRoute("myPersonalDetailsPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("show my personal details form in locale={}", languageTag);
-            return requireExistingCustomer()
-                    .thenComposeAsync(this::showForm, HttpExecution.defaultContext());
-        });
+        return doRequest(() -> customerFinder.findCustomer()
+                .thenComposeAsync(customer -> customer
+                            .map(this::showForm)
+                            .orElseGet(this::handleNotFoundCustomer),
+                        HttpExecution.defaultContext()));
     }
 
     @SunriseRoute("myPersonalDetailsProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("process my personal details form in locale={}", languageTag);
-            return requireExistingCustomer()
-                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
-        });
+        return doRequest(() -> customerFinder.findCustomer()
+                .thenComposeAsync(customer -> customer
+                                .map(this::validateForm)
+                                .orElseGet(this::handleNotFoundCustomer),
+                        HttpExecution.defaultContext()));
     }
 
     @Override
@@ -96,20 +84,17 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseFramewor
 
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+        saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, customer, null));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final MyPersonalDetailsFormData formData, final Customer customer, final Customer updatedCustomer) {
-        CustomerUpdatedHook.runHook(hooks(), updatedCustomer);
-        return redirectToMyPersonalDetails();
-    }
+    public abstract CompletionStage<Result> handleSuccessfulAction(final MyPersonalDetailsFormData formData, final Customer customer, final Customer updatedCustomer);
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer, @Nullable final Customer updatedCustomer) {
         final MyPersonalDetailsControllerData myPersonalDetailsControllerData = new MyPersonalDetailsControllerData(form, customer, updatedCustomer);
-        final MyPersonalDetailsPageContent pageContent = injector().getInstance(MyPersonalDetailsPageContentFactory.class).create(myPersonalDetailsControllerData);
+        final MyPersonalDetailsPageContent pageContent = myPersonalDetailsPageContentFactory.create(myPersonalDetailsControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
@@ -122,7 +107,11 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseFramewor
     protected CompletionStage<Customer> updateCustomer(final MyPersonalDetailsFormData formData, final Customer customer) {
         final List<UpdateAction<Customer>> updateActions = buildUpdateActions(formData, customer);
         if (!updateActions.isEmpty()) {
-            return sphere().execute(CustomerUpdateCommand.of(customer, updateActions));
+            return sphere().execute(CustomerUpdateCommand.of(customer, updateActions))
+                    .thenApplyAsync(updatedCustomer -> {
+                        CustomerUpdatedHook.runHook(hooks(), updatedCustomer);
+                        return updatedCustomer;
+                    }, HttpExecution.defaultContext());
         } else {
             return completedFuture(customer);
         }
@@ -144,9 +133,5 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseFramewor
             updateActions.add(ChangeEmail.of(formData.getEmail()));
         }
         return updateActions;
-    }
-
-    protected final CompletionStage<Result> redirectToMyPersonalDetails() {
-        return redirectTo(myPersonalDetailsLocalizedReverseRouter.myPersonalDetailsPageCall());
     }
 }

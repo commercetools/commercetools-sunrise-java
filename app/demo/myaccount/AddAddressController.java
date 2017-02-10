@@ -26,4 +26,7 @@ public class AddAddressController extends SunriseAddAddressController {
     protected CompletionStage<Result> handleNotFoundCustomer() {
         return redirectTo(authenticationReverseRouter.showLogInForm());
     }
+
+            return redirectTo(addressBookReverseRouter.addressBookCall());
+
 }

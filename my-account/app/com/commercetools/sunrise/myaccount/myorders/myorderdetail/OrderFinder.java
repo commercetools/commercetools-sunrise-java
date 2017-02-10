@@ -1,12 +1,14 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
+import com.google.inject.ImplementedBy;
 import io.sphere.sdk.orders.Order;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public interface OrderFinder<T> {
+@ImplementedBy(OrderFinderByCustomerAndOrderNumber.class)
+public interface OrderFinder {
 
-    CompletionStage<Optional<Order>> findOrder(final T criteria);
+    CompletionStage<Optional<Order>> findOrder(final String identifier);
 
 }

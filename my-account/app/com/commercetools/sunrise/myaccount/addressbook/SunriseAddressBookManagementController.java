@@ -2,6 +2,7 @@ package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
 import com.commercetools.sunrise.hooks.events.AddressLoadedHook;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
@@ -22,16 +23,9 @@ public abstract class SunriseAddressBookManagementController extends SunriseFram
         this.addressBookReverseRouter = addressBookReverseRouter;
     }
 
-    @Inject
-    private void postInit() {
-        //just prepend another error handler if this does not suffice
-        prependErrorHandler(e -> e instanceof AddressNotFoundException, e -> {
-            LoggerFactory.getLogger(SunriseAddressBookManagementController.class).error("access denied", e);
-            return handleNotFoundAddress();
-        });
-    }
-
-    protected CompletionStage<AddressBookActionData> requireAddressBookActionData(final String addressId) {
+    protected CompletionStage<AddressBookActionData> requireAddressBookActionData(final CustomerFinder customerFinder, final String addressId) {
+        customerFinder.findCustomer()
+                .thenComposeAsync(customerOpt -> customerOpt.map(customer -> requireAddress(customer, addressId)).orElseGet())
         return requireExistingCustomer()
                 .thenApplyAsync(customer -> {
                     final Address address = requireAddress(customer, addressId);
@@ -48,13 +42,7 @@ public abstract class SunriseAddressBookManagementController extends SunriseFram
         return address;
     }
 
-    protected CompletionStage<Result> handleNotFoundAddress() {
-        return redirectToAddressBook();
-    }
-
-    protected final CompletionStage<Result> redirectToAddressBook() {
-        return redirectTo(addressBookReverseRouter.addressBookCall());
-    }
+    protected abstract CompletionStage<Result> handleNotFoundAddress();
 
     protected final boolean isDefaultAddress(final String addressId, @Nullable final String defaultAddressId) {
         return Objects.equals(defaultAddressId, addressId);
