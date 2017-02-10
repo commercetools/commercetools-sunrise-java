@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.forms.FormOption;
 
 public final class ProductsPerPageFormOption extends FormOption<Integer> {
 
-    private ProductsPerPageFormOption(final String fieldLabel, final String fieldValue, final Integer value, final boolean isDefault) {
+    public ProductsPerPageFormOption(final String fieldLabel, final String fieldValue, final Integer value, final boolean isDefault) {
         super(fieldLabel, fieldValue, value, isDefault);
     }
 
@@ -26,9 +26,5 @@ public final class ProductsPerPageFormOption extends FormOption<Integer> {
     @Override
     public boolean isDefault() {
         return super.isDefault();
-    }
-
-    public static ProductsPerPageFormOption of(final String value, final String label, final int amount, final boolean isDefault) {
-        return new ProductsPerPageFormOption(value, label, amount, isDefault);
     }
 }

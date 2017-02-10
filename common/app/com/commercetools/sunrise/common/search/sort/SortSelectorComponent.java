@@ -1,7 +1,5 @@
 package com.commercetools.sunrise.common.search.sort;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
-import com.commercetools.sunrise.common.forms.FormUtils;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
@@ -12,6 +10,7 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.SortExpression;
+import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.common.forms.FormUtils.findSelectedValueFromRequest;
+import static com.commercetools.sunrise.common.forms.QueryStringUtils.findSelectedValueFromQueryString;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
@@ -32,9 +31,9 @@ public final class SortSelectorComponent extends Base implements ControllerCompo
     private PagedSearchResult<ProductProjection> pagedSearchResult;
 
     @Inject
-    public SortSelectorComponent(final Locale locale, final SortFormSettings settings, final RequestContext requestContext,
+    public SortSelectorComponent(final Locale locale, final SortFormSettings settings, final Http.Request httpRequest,
                                  final SortSelectorBeanFactory sortSelectorBeanFactory) {
-        this.selectedSortExpressions = findSelectedValueFromRequest(settings, requestContext)
+        this.selectedSortExpressions = findSelectedValueFromQueryString(settings, httpRequest)
                 .map(option -> option.getLocalizedValue(locale))
                 .orElse(emptyList());
         this.sortSelectorBeanFactory = sortSelectorBeanFactory;

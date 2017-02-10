@@ -1,16 +1,16 @@
 package com.commercetools.sunrise.common.search.searchbox;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
+import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.Locale;
 
-import static com.commercetools.sunrise.common.forms.FormUtils.findSelectedValueFromRequest;
+import static com.commercetools.sunrise.common.forms.QueryStringUtils.findSelectedValueFromQueryString;
 
 public final class SearchBoxComponent implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook {
 
@@ -18,9 +18,9 @@ public final class SearchBoxComponent implements ControllerComponent, PageDataRe
     private final String searchText;
 
     @Inject
-    public SearchBoxComponent(final Locale locale, final SearchBoxSettings searchBoxSettings, final RequestContext requestContext) {
+    public SearchBoxComponent(final Locale locale, final SearchBoxSettings searchBoxSettings, final Http.Request httpRequest) {
         this.locale = locale;
-        this.searchText = findSelectedValueFromRequest(searchBoxSettings, requestContext);
+        this.searchText = findSelectedValueFromQueryString(searchBoxSettings, httpRequest);
     }
 
     @Override

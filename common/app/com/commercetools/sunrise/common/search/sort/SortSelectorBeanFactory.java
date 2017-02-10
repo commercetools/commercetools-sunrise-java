@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.common.search.sort;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
+import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-import static com.commercetools.sunrise.common.forms.FormUtils.findSelectedValueFromRequest;
+import static com.commercetools.sunrise.common.forms.QueryStringUtils.findSelectedValueFromQueryString;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
@@ -21,9 +21,9 @@ public class SortSelectorBeanFactory extends ViewModelFactory<SortSelectorBean, 
     private final SortFormSelectableOptionBeanFactory sortFormSelectableOptionBeanFactory;
 
     @Inject
-    public SortSelectorBeanFactory(final SortFormSettings settings, final RequestContext requestContext,
+    public SortSelectorBeanFactory(final SortFormSettings settings, final Http.Request httpRequest,
                                    final SortFormSelectableOptionBeanFactory sortFormSelectableOptionBeanFactory) {
-        this.selectedOptionValue = findSelectedValueFromRequest(settings, requestContext)
+        this.selectedOptionValue = findSelectedValueFromQueryString(settings, httpRequest)
                 .map(SortFormOption::getFieldValue)
                 .orElse(null);
         this.settings = settings;

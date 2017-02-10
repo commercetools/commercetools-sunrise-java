@@ -28,7 +28,12 @@ public final class SearchBoxSettings extends FormSettings<String> {
     }
 
     @Override
-    public String mapToValue(final String optionValueAsString) {
-        return optionValueAsString;
+    public String mapToValue(final String valueAsString) {
+        return valueAsString;
+    }
+
+    @Override
+    public boolean isValidValue(final String value) {
+        return value != null && !value.isEmpty();
     }
 }

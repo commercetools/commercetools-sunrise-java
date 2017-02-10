@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.common.search.pagination;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
@@ -10,12 +9,13 @@ import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
+import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.common.forms.FormUtils.findSelectedValueFromRequest;
+import static com.commercetools.sunrise.common.forms.QueryStringUtils.findSelectedValueFromQueryString;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class PaginationComponent extends Base implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
@@ -30,11 +30,11 @@ public final class PaginationComponent extends Base implements ControllerCompone
     private PagedSearchResult<ProductProjection> pagedSearchResult;
 
     @Inject
-    public PaginationComponent(final RequestContext requestContext, final PaginationSettings paginationSettings,
+    public PaginationComponent(final Http.Request httpRequest, final PaginationSettings paginationSettings,
                                final ProductsPerPageFormSettings productsPerPageFormSettings,
                                final PaginationBeanFactory paginationBeanFactory, final ProductsPerPageSelectorBeanFactory productsPerPageSelectorBeanFactory) {
-        this.currentPage = findSelectedValueFromRequest(paginationSettings, requestContext);
-        this.pageSize = findSelectedValueFromRequest(productsPerPageFormSettings, requestContext)
+        this.currentPage = findSelectedValueFromQueryString(paginationSettings, httpRequest);
+        this.pageSize = findSelectedValueFromQueryString(productsPerPageFormSettings, httpRequest)
                 .map(ProductsPerPageFormOption::getValue)
                 .orElse(CTP_DEFAULT_PAGE_SIZE);
         this.paginationBeanFactory = paginationBeanFactory;

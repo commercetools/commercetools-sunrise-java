@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.pagination;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.forms.QueryStringUtils;
 import com.commercetools.sunrise.common.search.pagination.PaginationBean;
 import com.commercetools.sunrise.common.search.pagination.PaginationBeanFactory;
 import com.commercetools.sunrise.common.search.pagination.PaginationLinkBean;
@@ -9,6 +9,7 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
 import org.junit.Test;
 import play.Configuration;
+import play.mvc.Http;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -98,9 +99,11 @@ public class PaginationBeanFactoryTest {
     }
 
     private PaginationBean createPaginationData(final int currentPage, final int displayedPages, final PagedResult<ProductProjection> searchResult) {
-        final RequestContext requestContext = RequestContext.of(buildQueryString(currentPage), URL_PATH);
+        final Http.Request request = new Http.RequestBuilder()
+                .uri(QueryStringUtils.buildUri(URL_PATH, buildQueryString(currentPage)))
+                .build();
         final Configuration configuration = new Configuration(singletonMap("pop.pagination.displayedPages", displayedPages));
-        return new PaginationBeanFactory(configuration, new PaginationSettings(configuration), requestContext).create(searchResult);
+        return new PaginationBeanFactory(configuration, new PaginationSettings(configuration), request).create(searchResult);
     }
 
     private PagedResult<ProductProjection> pagedResult(final int page, final int totalPages) {

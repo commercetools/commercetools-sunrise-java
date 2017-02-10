@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
+import com.commercetools.sunrise.common.controllers.TestableCall;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbLinkBean;
@@ -8,6 +8,7 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import org.junit.Test;
+import play.mvc.Call;
 
 import java.util.List;
 import java.util.Locale;
@@ -20,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CategoryBreadcrumbBeanFactoryTest {
 
     private static final CategoryTree CATEGORY_TREE = CategoryTree.of(readCtpObject("breadcrumb/breadcrumbCategories.json", CategoryQuery.resultTypeReference()).getResults());
-    private static final ProductReverseRouter REVERSE_ROUTER = reverseRouter();
 
     @Test
     public void createCategoryBreadcrumbOfOneLevel() {
@@ -52,12 +52,25 @@ public class CategoryBreadcrumbBeanFactoryTest {
     }
 
     private static CategoryBreadcrumbBeanFactory createBreadcrumbFactory() {
-        return new CategoryBreadcrumbBeanFactory(Locale.ENGLISH, CATEGORY_TREE, REVERSE_ROUTER);
+        return new CategoryBreadcrumbBeanFactory(Locale.ENGLISH, CATEGORY_TREE, reverseRouter());
     }
 
     private static ProductReverseRouter reverseRouter() {
-        final TestableReverseRouter reverseRouter = new TestableReverseRouter();
-        reverseRouter.setShowCategoryUrl("category-");
-        return reverseRouter;
+        return new ProductReverseRouter() {
+            @Override
+            public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
+                return new TestableCall("pdp");
+            }
+
+            @Override
+            public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
+                return new TestableCall("pop");
+            }
+
+            @Override
+            public Call processSearchProductsForm(final String languageTag) {
+                return new TestableCall("search");
+            }
+        };
     }
 }

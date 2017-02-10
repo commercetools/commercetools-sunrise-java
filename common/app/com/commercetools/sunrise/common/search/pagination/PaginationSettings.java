@@ -30,11 +30,16 @@ public final class PaginationSettings extends FormSettings<Integer> {
     }
 
     @Override
-    public Integer mapToValue(final String optionValueAsString) {
+    public Integer mapToValue(final String valueAsString) {
         try {
-            return Integer.valueOf(optionValueAsString);
+            return Integer.valueOf(valueAsString);
         } catch (NumberFormatException e) {
             return getDefaultValue();
         }
+    }
+
+    @Override
+    public boolean isValidValue(final Integer value) {
+        return value != null && value > 0;
     }
 }

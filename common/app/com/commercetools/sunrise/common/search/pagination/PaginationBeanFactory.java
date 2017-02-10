@@ -1,16 +1,17 @@
 package com.commercetools.sunrise.common.search.pagination;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.queries.PagedResult;
 import play.Configuration;
+import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.LongStream;
 
-import static com.commercetools.sunrise.common.forms.FormUtils.findSelectedValueFromRequest;
+import static com.commercetools.sunrise.common.forms.QueryStringUtils.*;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
@@ -23,15 +24,15 @@ public class PaginationBeanFactory extends ViewModelFactory<PaginationBean, Page
     private final int currentPage;
     private final int displayedPages;
     private final PaginationSettings settings;
-    private final RequestContext requestContext;
+    private final Http.Request httpRequest;
 
     @Inject
     public PaginationBeanFactory(final Configuration configuration, final PaginationSettings settings,
-                                 final RequestContext requestContext) {
+                                 final Http.Request httpRequest) {
         this.settings = settings;
-        this.currentPage = findSelectedValueFromRequest(settings, requestContext);
+        this.currentPage = findSelectedValueFromQueryString(settings, httpRequest);
         this.displayedPages = configuration.getInt(CONFIG_DISPLAYED_PAGES, DEFAULT_DISPLAYED_PAGES);
-        this.requestContext = requestContext;
+        this.httpRequest = httpRequest;
 
     }
 
@@ -56,13 +57,13 @@ public class PaginationBeanFactory extends ViewModelFactory<PaginationBean, Page
 
     protected void fillNextUrl(final PaginationBean bean, final PagedResult<?> pagedResult) {
         if (!pagedResult.isLast()) {
-            bean.setNextUrl(buildUrlWithPage(settings.getFieldName(), currentPage + 1));
+            bean.setNextUrl(buildUriWithPage(settings.getFieldName(), currentPage + 1));
         }
     }
 
     protected void fillPreviousUrl(final PaginationBean bean, final PagedResult<?> pagedResult) {
         if (!pagedResult.isFirst()) {
-            bean.setPreviousUrl(buildUrlWithPage(settings.getFieldName(), currentPage - 1));
+            bean.setPreviousUrl(buildUriWithPage(settings.getFieldName(), currentPage - 1));
         }
     }
 
@@ -118,15 +119,17 @@ public class PaginationBeanFactory extends ViewModelFactory<PaginationBean, Page
     private PaginationLinkBean createLinkData(final long page) {
         final PaginationLinkBean linkBean = new PaginationLinkBean();
         linkBean.setText(String.valueOf(page));
-        linkBean.setUrl(buildUrlWithPage(settings.getFieldName(), page));
+        linkBean.setUrl(buildUriWithPage(settings.getFieldName(), page));
         if (page == currentPage) {
             linkBean.setSelected(true);
         }
         return linkBean;
     }
 
-    private String buildUrlWithPage(final String key, final long page) {
-        return requestContext.buildUrl(key, singletonList(String.valueOf(page)));
+    private String buildUriWithPage(final String key, final long page) {
+        final Map<String, List<String>> queryString = extractQueryString(httpRequest);
+        queryString.put(key, singletonList(String.valueOf(page)));
+        return buildUri(httpRequest.path(), queryString);
     }
 
     private int calculateBottomThreshold() {

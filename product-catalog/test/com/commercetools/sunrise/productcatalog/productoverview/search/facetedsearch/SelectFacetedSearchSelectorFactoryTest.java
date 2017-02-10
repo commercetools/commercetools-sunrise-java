@@ -1,6 +1,10 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
+import com.commercetools.sunrise.common.forms.QueryStringUtils;
+import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchSelector;
+import com.commercetools.sunrise.common.search.facetedsearch.SelectFacetedSearchConfig;
+import com.commercetools.sunrise.common.search.facetedsearch.SelectFacetedSearchSelectorFactory;
+import com.commercetools.sunrise.common.search.facetedsearch.SunriseFacetType;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.facets.AlphabeticallySortedFacetOptionMapper;
 import io.sphere.sdk.facets.Facet;
@@ -13,10 +17,10 @@ import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
+import play.mvc.Http;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import static io.sphere.sdk.json.SphereJsonUtils.readObjectFromResource;
@@ -93,9 +97,9 @@ public class SelectFacetedSearchSelectorFactoryTest {
     }
 
     private void test(final SelectFacetedSearchConfig config, final List<String> selectedValues, final Consumer<FacetedSearchSelector> test) {
-        final Map<String, List<String>> queryString = singletonMap(config.getFacetBuilder().getKey(), selectedValues);
-        final RequestContext requestContext = RequestContext.of(queryString, "");
-        final SelectFacetedSearchSelectorFactory factory = new SelectFacetedSearchSelectorFactory(Locale.ENGLISH, CategoryTree.of(emptyList()), requestContext);
+        final String url = QueryStringUtils.buildUri("path", singletonMap(config.getFacetBuilder().getKey(), selectedValues));
+        final Http.Request request = new Http.RequestBuilder().uri(url).build();
+        final SelectFacetedSearchSelectorFactory factory = new SelectFacetedSearchSelectorFactory(Locale.ENGLISH, CategoryTree.of(emptyList()), request);
         test.accept(factory.create(config, emptyList()));
     }
 

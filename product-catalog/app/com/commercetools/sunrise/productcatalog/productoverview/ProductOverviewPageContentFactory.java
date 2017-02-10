@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
+import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.Locale;
@@ -12,7 +12,7 @@ import static java.util.Collections.singletonList;
 public class ProductOverviewPageContentFactory extends PageContentFactory<ProductOverviewPageContent, ProductOverviewControllerData> {
 
     private final Locale locale;
-    private final RequestContext requestContext;
+    private final Http.Request httpRequest;
     private final CategoryBreadcrumbBeanFactory categoryBreadcrumbBeanFactory;
     private final ProductListBeanFactory productListBeanFactory;
     private final BannerBeanFactory bannerBeanFactory;
@@ -20,12 +20,12 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     private final SeoBeanFactory seoBeanFactory;
 
     @Inject
-    public ProductOverviewPageContentFactory(final Locale locale, final RequestContext requestContext,
+    public ProductOverviewPageContentFactory(final Locale locale, final Http.Request httpRequest,
                                              final CategoryBreadcrumbBeanFactory categoryBreadcrumbBeanFactory,
                                              final ProductListBeanFactory productListBeanFactory, final BannerBeanFactory bannerBeanFactory,
                                              final JumbotronBeanFactory jumbotronBeanFactory, final SeoBeanFactory seoBeanFactory) {
         this.locale = locale;
-        this.requestContext = requestContext;
+        this.httpRequest = httpRequest;
         this.categoryBreadcrumbBeanFactory = categoryBreadcrumbBeanFactory;
         this.productListBeanFactory = productListBeanFactory;
         this.bannerBeanFactory = bannerBeanFactory;
@@ -63,7 +63,7 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     }
 
     protected void fillFilterProductsUrl(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
-        bean.setFilterProductsUrl(requestContext.getPath());
+        bean.setFilterProductsUrl(httpRequest.path());
     }
 
     protected void fillProducts(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {

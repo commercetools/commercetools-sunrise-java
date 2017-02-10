@@ -21,6 +21,8 @@ public abstract class FormSettings<T> extends Base implements WithFormFieldName<
         return defaultValue;
     }
 
-    public abstract T mapToValue(final String optionValueAsString);
+    public abstract T mapToValue(final String valueAsString);
+
+    public abstract boolean isValidValue(final T value);
 }
 

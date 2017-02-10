@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.common.search.facetedsearch;
 
-import com.commercetools.sunrise.common.contexts.RequestContext;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
@@ -12,6 +11,7 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.model.FacetedSearchSearchModel;
 import io.sphere.sdk.search.model.SearchModel;
 import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
+import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import static com.commercetools.sunrise.common.forms.FormUtils.findAllSelectedValues;
+import static com.commercetools.sunrise.common.forms.QueryStringUtils.findAllSelectedValuesFromQueryString;
 import static com.commercetools.sunrise.common.search.SearchUtils.localizeExpression;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
@@ -30,13 +30,13 @@ public class SelectFacetedSearchSelectorFactory extends Base {
 
     private final Locale locale;
     private final CategoryTree categoryTree;
-    private final RequestContext requestContext;
+    private final Http.Request httpRequest;
 
     @Inject
-    public SelectFacetedSearchSelectorFactory(final Locale locale, final CategoryTree categoryTree, final RequestContext requestContext) {
+    public SelectFacetedSearchSelectorFactory(final Locale locale, final CategoryTree categoryTree, final Http.Request httpRequest) {
         this.locale = locale;
         this.categoryTree = categoryTree;
-        this.requestContext = requestContext;
+        this.httpRequest = httpRequest;
     }
 
     public FacetedSearchSelector create(final SelectFacetedSearchConfig facetConfig, final List<Category> selectedCategories) {
@@ -77,7 +77,7 @@ public class SelectFacetedSearchSelectorFactory extends Base {
                     .distinct()
                     .collect(toList());
         } else {
-            return findAllSelectedValues(facetConfig.getFacetBuilder().getKey(), requestContext);
+            return findAllSelectedValuesFromQueryString(facetConfig.getFacetBuilder().getKey(), httpRequest);
         }
     }
 
