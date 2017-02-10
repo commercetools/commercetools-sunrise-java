@@ -59,7 +59,7 @@ public abstract class SunriseRemoveAddressController extends SunriseAddressBookM
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
             LOGGER.debug("try to remove address with id={} in locale={}", addressId, languageTag);
-            return requireAddressBookActionData(addressId)
+            return findAddressBookActionData(addressId)
                     .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
         });
     }

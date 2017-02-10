@@ -5,6 +5,7 @@ import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
@@ -38,6 +39,7 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeAddressController.class);
 
+    private final CustomerFinder customerFinder;
     private final ChangeAddressPageContentFactory changeAddressPageContentFactory;
 
     protected SunriseChangeAddressController(final AddressBookLocalizedReverseRouter addressBookReverseRouter,
@@ -67,7 +69,7 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("show edit form for address with id={} in locale={}", addressId, languageTag);
-            return requireAddressBookActionData(addressId)
+            return findAddressBookActionData(customerFinder, addressId)
                     .thenComposeAsync(this::showForm, HttpExecution.defaultContext());
         });
     }
@@ -76,7 +78,7 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
             logger.debug("try to change address with id={} in locale={}", addressId, languageTag);
-            return requireAddressBookActionData(addressId)
+            return findAddressBookActionData(customerFinder, addressId)
                     .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
         });
     }
@@ -89,14 +91,12 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
 
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData context, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+        saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, context, null));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final AddressBookActionData context, final Customer updatedCustomer) {
-        return redirectToAddressBook();
-    }
+    public abstract CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final AddressBookActionData context, final Customer updatedCustomer);
 
     @Override
     public void fillFormData(final AddressBookAddressFormData formData, final AddressBookActionData context) {

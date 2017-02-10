@@ -37,13 +37,13 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public abstract class SunriseAddAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<AddressBookAddressFormData, Customer, Customer> {
 
     private final CountryCode country;
-    private final AddAddressPageContentFactory addAddressPageContentFactory;
     private final CustomerFinder customerFinder;
+    private final AddAddressPageContentFactory addAddressPageContentFactory;
 
-    protected SunriseAddAddressController(final AddressBookLocalizedReverseRouter addressBookReverseRouter, final CountryCode country,
+    protected SunriseAddAddressController(final CountryCode country, final CustomerFinder customerFinder,
                                           final AddAddressPageContentFactory addAddressPageContentFactory) {
-        super(addressBookReverseRouter);
         this.country = country;
+        this.customerFinder = customerFinder;
         this.addAddressPageContentFactory = addAddressPageContentFactory;
     }
 
@@ -98,9 +98,7 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final Customer oldCustomer, final Customer updatedCustomer) {
-        return redirectToAddressBook();
-    }
+    public abstract CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final Customer oldCustomer, final Customer updatedCustomer);
 
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final Customer customer, @Nullable final Customer updatedCustomer) {
