@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.common;
 
 import com.commercetools.sunrise.cms.CmsService;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.TestableSphereClient;
 import com.commercetools.sunrise.common.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
@@ -11,17 +10,9 @@ import com.commercetools.sunrise.framework.SunriseComponent;
 import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.google.inject.AbstractModule;
-import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.channels.Channel;
 import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.customergroups.CustomerGroup;
-import io.sphere.sdk.models.Reference;
 import play.routing.RoutingDsl;
 
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
@@ -29,7 +20,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class DefaultTestModule extends AbstractModule {
@@ -40,7 +30,6 @@ public class DefaultTestModule extends AbstractModule {
         bind(HttpAuthentication.class).toInstance(disabledHttpAuth());
         bind(SphereClient.class).toInstance(TestableSphereClient.ofEmptyResponse());
         bind(MultiControllerComponentResolver.class).toInstance(c -> emptyList());
-        bind(UserContext.class).toInstance(unsupportedUserContext());
         bind(I18nResolver.class).toInstance((l, i, h) -> Optional.empty());
         bind(TemplateEngine.class).toInstance((n, c) -> "");
         bind(CmsService.class).toInstance((l, c) -> completedFuture(Optional.empty()));
@@ -62,35 +51,6 @@ public class DefaultTestModule extends AbstractModule {
             @Override
             public boolean isAuthorized(final String rawAuthorizationHttpHeader) {
                 return true;
-            }
-        };
-    }
-
-    private UserContext unsupportedUserContext() {
-        return new UserContext() {
-            @Override
-            public CountryCode country() {
-                return CountryCode.DE;
-            }
-
-            @Override
-            public List<Locale> locales() {
-                return singletonList(Locale.GERMANY);
-            }
-
-            @Override
-            public CurrencyUnit currency() {
-                return Monetary.getCurrency(Locale.GERMANY);
-            }
-
-            @Override
-            public Optional<Reference<CustomerGroup>> customerGroup() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public Optional<Reference<Channel>> channel() {
-                throw new UnsupportedOperationException();
             }
         };
     }

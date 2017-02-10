@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-final class ReflectionHomeReverseRouter extends ReflectionReverseRouterBase implements HomeReverseRouter {
+final class ReflectionHomeReverseRouter extends AbstractReflectionReverseRouter implements HomeReverseRouter {
 
     private final ReverseCaller homePageCaller;
 

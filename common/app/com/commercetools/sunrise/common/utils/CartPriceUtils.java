@@ -1,11 +1,9 @@
 package com.commercetools.sunrise.common.utils;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.cartdiscounts.DiscountedLineItemPrice;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.TaxedPrice;
-import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.shippingmethods.ShippingRate;
 
 import javax.money.MonetaryAmount;
@@ -35,13 +33,6 @@ public final class CartPriceUtils {
         return Optional.ofNullable(cartLike.getShippingInfo())
                 .flatMap(shippingInfo -> Optional.ofNullable(shippingInfo.getDiscountedPrice())
                         .map(discountedPrice -> shippingInfo.getPrice()));
-    }
-
-    public static PriceSelection createPriceSelection(final UserContext userContext) {
-        return PriceSelection.of(userContext.currency())
-                .withPriceCountry(userContext.country())
-                .withPriceCustomerGroup(userContext.customerGroup().orElse(null))
-                .withPriceChannel(userContext.channel().orElse(null));
     }
 
     public static MonetaryAmount calculateApplicableShippingCosts(final Cart cart, final ShippingRate shippingRate) {

@@ -1,7 +1,5 @@
 package com.commercetools.sunrise.common.suggestion;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.contexts.UserContextTestProvider;
 import com.commercetools.sunrise.common.controllers.TestableSphereClient;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -37,7 +35,6 @@ public class SunriseProductRecommendationTest {
             @Override
             protected void configure() {
                 bind(SphereClient.class).toInstance(sphereClient);
-                bind(UserContext.class).toProvider(UserContextTestProvider.class);
             }
         });
         return injector.getInstance(SunriseProductRecommendation.class);

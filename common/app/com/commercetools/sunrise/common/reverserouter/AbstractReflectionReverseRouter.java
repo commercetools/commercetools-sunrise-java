@@ -17,23 +17,21 @@ import java.util.concurrent.CompletionException;
 import static com.commercetools.sunrise.common.utils.ReflectionUtils.getClassByName;
 import static java.lang.String.format;
 
-public abstract class ReflectionReverseRouterBase extends Base {
-
+public abstract class AbstractReflectionReverseRouter extends Base {
 
     protected final ReverseCaller getCallerForRoute(final ParsedRoutes parsedRoutes, final String tag) {
         try {
-            final ReverseCaller reverseCaller = parsedRoutes.getRoutes().stream()
+            return parsedRoutes.getRoutes().stream()
                     .filter(r -> r.getControllerClass() != null)
                     .map((parsedRoute) -> findReverseRouterMethod(parsedRoute, tag))
                     .filter(Optional::isPresent)
-                    .map(x -> x.get())
+                    .map(Optional::get)
                     .map(p -> (ReverseCaller) new ReflectionReverseCaller(p.getRight(), p.getLeft()))
                     .findFirst()
                     .orElseGet(() -> {
                         LoggerFactory.getLogger(this.getClass()).warn(format("Cannot find route for %s, falling back to GET /.", tag));
                         return RootReverseCaller.INSTANCE;
                     });
-            return reverseCaller;
         } catch (final Exception e) {
             throw new CompletionException(e);
         }
@@ -52,7 +50,7 @@ public abstract class ReflectionReverseRouterBase extends Base {
             final Field field = reverseRouter.getField(controllerClass.getSimpleName());
             final Object o = field.get(null);
             final Method reverseRouteMethod = o.getClass().getMethod(controllerMethod.getName(), controllerMethod.getParameterTypes());
-            return Optional.ofNullable(ImmutablePair.of(o, reverseRouteMethod));
+            return Optional.of(ImmutablePair.of(o, reverseRouteMethod));
         } catch (final NoSuchMethodException e) {
             return Optional.empty();
         } catch (final Exception e) {
@@ -73,7 +71,7 @@ public abstract class ReflectionReverseRouterBase extends Base {
         try {
             final SunriseRoute annotationsByTypeOption = method.getDeclaredAnnotation(SunriseRoute.class);
             return Optional.ofNullable(annotationsByTypeOption).map(annotationsByType -> Arrays.stream(annotationsByType.value())
-                    .anyMatch(value -> tag.equals(value))).orElse(false);
+                    .anyMatch(tag::equals)).orElse(false);
         } catch (final Exception e) {
             throw new CompletionException("failed in methodFilter", e);
         }

@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import io.sphere.sdk.client.SphereClient;
@@ -18,16 +17,16 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.common.utils.CartPriceUtils.createPriceSelection;
-
 public final class ProductFinderBySlugAndSku implements ProductFinder<String, String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductFinderBySlugAndSku.class);
 
     @Inject
+    private Locale locale;
+    @Inject
     private SphereClient sphereClient;
     @Inject
-    private UserContext userContext;
+    private PriceSelection priceSelection;
     @Inject
     private RequestHookContext hookContext;
 
@@ -44,7 +43,7 @@ public final class ProductFinderBySlugAndSku implements ProductFinder<String, St
     }
 
     private CompletionStage<Optional<ProductProjection>> findProduct(final String productIdentifier) {
-        return findProductBySlug(productIdentifier, userContext.locale());
+        return findProductBySlug(productIdentifier, locale);
     }
 
     private Optional<ProductVariant> findVariant(final String variantIdentifier, final ProductProjection product) {
@@ -58,7 +57,6 @@ public final class ProductFinderBySlugAndSku implements ProductFinder<String, St
      * @return A CompletionStage of an optionally found ProductProjection
      */
     private CompletionStage<Optional<ProductProjection>> findProductBySlug(final String slug, final Locale locale) {
-        final PriceSelection priceSelection = createPriceSelection(userContext);
         final ProductProjectionSearch request = ProductProjectionSearch.ofCurrent()
                 .withQueryFilters(m -> m.slug().locale(locale).is(slug))
                 .withPriceSelection(priceSelection);

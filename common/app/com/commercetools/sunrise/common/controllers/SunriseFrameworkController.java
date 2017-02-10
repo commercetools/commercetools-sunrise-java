@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.cms.CmsService;
-import com.commercetools.sunrise.common.contexts.UserContext;
+import com.commercetools.sunrise.common.contexts.UserLanguage;
 import com.commercetools.sunrise.common.ctp.MetricAction;
 import com.commercetools.sunrise.common.pages.*;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
@@ -73,11 +73,11 @@ public abstract class SunriseFrameworkController extends Controller {
     @Inject
     private SphereClient sphere;
     @Inject
+    private UserLanguage userLanguage;
+    @Inject
     private RequestHookContext hookContext;
     @Inject
     private Injector injector;
-    @Inject
-    private UserContext userContext;
     @Inject
     private TemplateEngine templateEngine;
     @Inject
@@ -115,10 +115,6 @@ public abstract class SunriseFrameworkController extends Controller {
         return sphere;
     }
 
-    public UserContext userContext() {
-        return userContext;
-    }
-
     public TemplateEngine templateEngine() {
         return templateEngine;
     }
@@ -133,6 +129,10 @@ public abstract class SunriseFrameworkController extends Controller {
 
     public CmsService cmsService() {
         return injector().getInstance(CmsService.class);
+    }
+
+    public UserLanguage userLanguage() {
+        return userLanguage;
     }
 
     public Injector injector() {
@@ -160,7 +160,7 @@ public abstract class SunriseFrameworkController extends Controller {
         return hooks().allAsyncHooksCompletionStage().thenApplyAsync(unused -> {
             PageDataReadyHook.runHook(hooks(), pageData);
             logFinalPageData(pageData);
-            final TemplateContext templateContext = new TemplateContext(pageData, userContext.locales(), cmsPage);
+            final TemplateContext templateContext = new TemplateContext(pageData, userLanguage.locales(), cmsPage);
             final String html = templateEngine().render(templateName, templateContext);
             return new Html(html);
         }, HttpExecution.defaultContext());
@@ -233,11 +233,11 @@ public abstract class SunriseFrameworkController extends Controller {
 
     protected void setI18nTitle(final PageContent pageContent, final String bundleWithKey) {
         final I18nIdentifier i18nIdentifier = injector.getInstance(I18nIdentifierFactory.class).create(bundleWithKey);
-        pageContent.setTitle(i18nResolver.getOrEmpty(userContext().locales(), i18nIdentifier));
+        pageContent.setTitle(i18nResolver.getOrEmpty(userLanguage().locales(), i18nIdentifier));
     }
 
     protected final CompletionStage<Result> redirectToHome() {
-        final Call call = injector().getInstance(HomeReverseRouter.class).homePageCall(userContext().languageTag());
+        final Call call = injector().getInstance(HomeReverseRouter.class).homePageCall(userLanguage.locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

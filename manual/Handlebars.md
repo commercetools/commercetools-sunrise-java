@@ -37,7 +37,6 @@ We will use the following template, located in `conf/templates/components/summer
 First we need to create a `ControllerComponent` that adds the View Component to the `PageData`:
 
 ```java
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.components.ComponentBean;
 import com.commercetools.sunrise.framework.ControllerComponent;
@@ -48,13 +47,14 @@ import play.Configuration;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Locale;
 
 public final class SummerCampaignControllerComponent extends Base implements ControllerComponent, PageDataHook {
 
     @Inject
     private Configuration configuration;
     @Inject
-    private UserContext userContext;
+    private Locale locale;
 
     @Override
     public void acceptPageData(final PageData pageData) {
@@ -74,7 +74,7 @@ public final class SummerCampaignControllerComponent extends Base implements Con
         data.put("src", configuration.getString("summercampaign.img.src"));
         data.put("width", configuration.getString("summercampaign.img.width"));
         data.put("height", configuration.getString("summercampaign.img.height"));
-        data.put("href", demo.productcatalog.routes.SummerCampaignController.show(userContext.languageTag()).url());
+        data.put("href", demo.productcatalog.routes.SummerCampaignController.show(locale.toLanguageTag()).url());
         return data;
     }
 }

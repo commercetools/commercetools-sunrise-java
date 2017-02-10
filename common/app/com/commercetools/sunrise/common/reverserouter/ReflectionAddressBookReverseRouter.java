@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-final class ReflectionAddressBookReverseRouter extends ReflectionReverseRouterBase implements AddressBookReverseRouter {
+final class ReflectionAddressBookReverseRouter extends AbstractReflectionReverseRouter implements AddressBookReverseRouter {
 
     private final ReverseCaller addressBookCaller;
     private final ReverseCaller addAddressToAddressBookCaller;

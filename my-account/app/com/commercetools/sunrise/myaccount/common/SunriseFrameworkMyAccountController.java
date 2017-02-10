@@ -1,12 +1,10 @@
 package com.commercetools.sunrise.myaccount.common;
 
 import com.commercetools.sunrise.common.cache.NoCache;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinderBySession;
 import com.commercetools.sunrise.myaccount.CustomerInSession;
-import com.google.inject.Injector;
 import io.sphere.sdk.customers.Customer;
 import org.slf4j.LoggerFactory;
 import play.mvc.Call;
@@ -14,6 +12,7 @@ import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -26,7 +25,9 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 public abstract class SunriseFrameworkMyAccountController extends SunriseFrameworkController {
 
     @Inject
-    private Injector injector;
+    private Locale locale;
+    @Inject
+    private AuthenticationReverseRouter authenticationReverseRouter;
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -62,9 +63,7 @@ public abstract class SunriseFrameworkMyAccountController extends SunriseFramewo
     }
 
     protected CompletionStage<Result> handleNotFoundCustomer() {
-        final UserContext userContext = injector.getInstance(UserContext.class);
-        final AuthenticationReverseRouter reverseRouter = injector.getInstance(AuthenticationReverseRouter.class);
-        final Call call = reverseRouter.showLogInForm(userContext.languageTag());
+        final Call call = authenticationReverseRouter.showLogInForm(locale.toLanguageTag());
         return completedFuture(redirect(call));
     }
 }

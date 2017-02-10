@@ -25,11 +25,13 @@ public class MyProductDetailPageContent extends ProductDetailPageContent {
 Then we have to override the `ProductDetailPageContentFactory` so that it creates and initializes our bean instead:
 
 ```java
+import java.util.Locale;
+
 public class MyProductDetailPageContentFactory extends ProductDetailPageContentFactory {
 
     //here you can use dependency injection to get instances
     @Inject
-    private UserContext userContext;
+    private Locale locale;
 
     //do not call here super.create because you would get a bean of the original class and not the subclass
     @Override
@@ -40,7 +42,7 @@ public class MyProductDetailPageContentFactory extends ProductDetailPageContentF
         initialize(bean, product, variant);
 
         //this initializes our bean with the new data
-        final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(userContext.locale());
+        final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).withLocale(locale);
         bean.setLastUpdated(product.getLastModifiedAt().format(formatter));
 
         return bean;

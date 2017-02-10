@@ -81,7 +81,7 @@ public abstract class SunriseCheckoutThankYouController extends SunriseFramework
     }
 
     protected CompletionStage<Result> handleNotFoundOrder() {
-        final Call call = injector().getInstance(HomeReverseRouter.class).homePageCall(userContext().languageTag());
+        final Call call = injector().getInstance(HomeReverseRouter.class).homePageCall(userLanguage().locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

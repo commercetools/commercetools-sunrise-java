@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
 import org.slf4j.Logger;
@@ -14,7 +14,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.UnaryOperator;
 
 import static com.commercetools.sunrise.common.utils.LogUtils.logProductRequest;
-import static com.commercetools.sunrise.common.utils.CartPriceUtils.createPriceSelection;
 
 public class ProductListFetchSimple implements ProductListFetch<Void> {
 
@@ -23,11 +22,11 @@ public class ProductListFetchSimple implements ProductListFetch<Void> {
     @Inject
     private SphereClient sphereClient;
     @Inject
-    private UserContext userContext;
+    private PriceSelection priceSelection;
 
     public CompletionStage<PagedSearchResult<ProductProjection>> searchProducts(final Void criteria, final UnaryOperator<ProductProjectionSearch> filter) {
         final ProductProjectionSearch baseRequest = ProductProjectionSearch.ofCurrent()
-                .withPriceSelection(createPriceSelection(userContext));
+                .withPriceSelection(priceSelection);
         final ProductProjectionSearch request = filter.apply(baseRequest);
         return sphereClient.execute(request)
                 .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, request, result), HttpExecution.defaultContext());

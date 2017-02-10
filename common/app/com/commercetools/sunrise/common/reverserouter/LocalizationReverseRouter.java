@@ -5,6 +5,7 @@ import play.mvc.Call;
 
 @ImplementedBy(ReflectionLocalizationReverseRouter.class)
 public interface LocalizationReverseRouter {
+
     Call processChangeLanguageForm();
 
     Call processChangeCountryForm(final String languageTag);

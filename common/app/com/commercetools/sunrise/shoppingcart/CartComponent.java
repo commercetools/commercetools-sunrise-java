@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.actions.CartLoadedActionHook;
 import com.commercetools.sunrise.hooks.events.CartCreatedHook;
@@ -10,7 +9,6 @@ import com.commercetools.sunrise.hooks.events.CartUpdatedHook;
 import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
 import com.commercetools.sunrise.hooks.requests.CartCreateCommandHook;
 import com.commercetools.sunrise.myaccount.CustomerInSession;
-import com.google.inject.Injector;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
@@ -41,8 +39,19 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @RequestScoped
 public class CartComponent implements ControllerComponent, CustomerSignInResultLoadedHook, CartLoadedHook, CartUpdatedHook, CartCreatedHook, CartCreateCommandHook, CartLoadedActionHook {
 
+    private final CountryCode country;
+    private final SphereClient sphereClient;
+    private final CartInSession cartInSession;
+    private final CustomerInSession customerInSession;
+
     @Inject
-    private Injector injector;
+    public CartComponent(final CountryCode country, final SphereClient sphereClient, final CartInSession cartInSession,
+                         final CustomerInSession customerInSession) {
+        this.country = country;
+        this.sphereClient = sphereClient;
+        this.cartInSession = cartInSession;
+        this.customerInSession = customerInSession;
+    }
 
     @Override
     public CompletionStage<?> onCustomerSignInResultLoaded(final CustomerSignInResult customerSignInResult) {
@@ -72,7 +81,6 @@ public class CartComponent implements ControllerComponent, CustomerSignInResultL
 
     @Override
     public CompletionStage<Cart> onCartLoadedAction(final Cart cart, final ExpansionPathContainer<Cart> expansionPathContainer) {
-        final CountryCode country = injector.getInstance(UserContext.class).country();
         final boolean hasDifferentCountry = !country.equals(cart.getCountry());
         return hasDifferentCountry ? updateCartCountry(cart, country, expansionPathContainer) : completedFuture(cart);
     }
@@ -88,7 +96,7 @@ public class CartComponent implements ControllerComponent, CustomerSignInResultL
         final List<UpdateAction<Cart>> updateActions = actionsToUpdateCartOnSignIn(cart, customer);
         if (!updateActions.isEmpty()) {
             final CartUpdateCommand command = CartUpdateCommand.of(cart, updateActions);
-            return injector.getInstance(SphereClient.class).execute(command);
+            return sphereClient.execute(command);
         } else {
             return completedFuture(cart);
         }
@@ -103,8 +111,6 @@ public class CartComponent implements ControllerComponent, CustomerSignInResultL
     }
 
     private CartDraftDsl cartDraftWithAdditionalInfo(final CartDraft cartDraft) {
-        final CountryCode country = injector.getInstance(UserContext.class).country();
-        final CustomerInSession customerInSession = injector.getInstance(CustomerInSession.class);
         return CartDraftBuilder.of(cartDraft)
                 .country(country)
                 .shippingAddress(Address.of(country))
@@ -114,7 +120,7 @@ public class CartComponent implements ControllerComponent, CustomerSignInResultL
     }
 
     private void overwriteCartInSession(final Cart cart) {
-        injector.getInstance(CartInSession.class).store(cart);
+        cartInSession.store(cart);
     }
 
     /**
@@ -134,6 +140,6 @@ public class CartComponent implements ControllerComponent, CustomerSignInResultL
         final CartUpdateCommand updateCommand = CartUpdateCommand.of(cart,
                 asList(SetShippingAddress.of(shippingAddress), SetCountry.of(country)))
                 .withExpansionPaths(expansionPathContainer);
-        return injector.getInstance(SphereClient.class).execute(updateCommand);
+        return sphereClient.execute(updateCommand);
     }
 }

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-final class ReflectionLocalizationReverseRouter extends ReflectionReverseRouterBase implements LocalizationReverseRouter {
+final class ReflectionLocalizationReverseRouter extends AbstractReflectionReverseRouter implements LocalizationReverseRouter {
 
     private final ReverseCaller processChangeLanguageForm;
     private final ReverseCaller processChangeCountryForm;

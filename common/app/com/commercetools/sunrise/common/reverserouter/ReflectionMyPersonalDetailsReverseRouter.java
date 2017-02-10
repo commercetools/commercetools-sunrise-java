@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-final class ReflectionMyPersonalDetailsReverseRouter extends ReflectionReverseRouterBase implements MyPersonalDetailsReverseRouter {
+final class ReflectionMyPersonalDetailsReverseRouter extends AbstractReflectionReverseRouter implements MyPersonalDetailsReverseRouter {
 
     private final ReverseCaller myPersonalDetailsPageCall;
     private final ReverseCaller myPersonalDetailsProcessFormCall;

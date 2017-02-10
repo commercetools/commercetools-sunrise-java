@@ -33,6 +33,7 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.payments.PaymentMethodInfoBuilder;
+import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.ProductTypeLocalRepository;
 import io.sphere.sdk.producttypes.queries.ProductTypeQuery;
@@ -96,6 +97,13 @@ public class Module extends AbstractModule {
         bind(Locale.class).toProvider(LocaleFromUrlProvider.class).in(RequestScoped.class);
         bind(CountryCode.class).toProvider(CountryFromSessionProvider.class).in(RequestScoped.class);
         bind(CurrencyUnit.class).toProvider(CurrencyFromCountryProvider.class).in(RequestScoped.class);
+    }
+
+    @Provides
+    @RequestScoped
+    public PriceSelection providePriceSelection(final CurrencyUnit currency, final CountryCode country) {
+        return PriceSelection.of(currency)
+                .withPriceCountry(country);
     }
 
     @Provides

@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.pages.PageContent;
@@ -28,6 +27,7 @@ import play.mvc.Result;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -67,7 +67,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public abstract class SunriseProductOverviewController extends SunriseFrameworkController implements WithTemplateName {
 
     @Inject
-    private UserContext userContext;
+    private Locale locale;
     @Inject
     private CategoryTree categoryTree;
     @Inject
@@ -94,7 +94,7 @@ public abstract class SunriseProductOverviewController extends SunriseFrameworkC
     public CompletionStage<Result> searchProductsByCategorySlug(final String languageTag, final String categorySlug) {
         return doRequest(() -> {
             this.categorySlug = categorySlug;
-            final Optional<Category> category = categoryTree.findBySlug(userContext.locale(), categorySlug);
+            final Optional<Category> category = categoryTree.findBySlug(locale, categorySlug);
             if (category.isPresent()) {
                 this.category = category.get();
                 return handleFoundCategory(category.get());

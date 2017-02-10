@@ -1,11 +1,10 @@
 package com.commercetools.sunrise.common.suggestion;
 
-import com.commercetools.sunrise.common.contexts.UserContext;
-import com.commercetools.sunrise.common.utils.CartPriceUtils;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ public class SunriseProductRecommendation implements ProductRecommendation {
     @Inject
     private SphereClient sphereClient;
     @Inject
-    private UserContext userContext;
+    private PriceSelection priceSelection;
 
     /**
      * Gets products from the same categories as the given product, excluding the product itself, up to {@code numProducts}.
@@ -88,7 +87,7 @@ public class SunriseProductRecommendation implements ProductRecommendation {
                 .withLimit(numProducts)
                 .withQueryFilters(product -> product.categories().id().containsAny(categoryIds))
                 .withSort(product -> product.allVariants().price().desc())
-                .withPriceSelection(CartPriceUtils.createPriceSelection(userContext));
+                .withPriceSelection(priceSelection);
         return sphereClient.execute(request)
                 .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, request, result), HttpExecution.defaultContext())
                 .thenApply(SunriseProductRecommendation::resultToProductSet);

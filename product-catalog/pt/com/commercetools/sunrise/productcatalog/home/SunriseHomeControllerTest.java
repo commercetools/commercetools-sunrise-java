@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.DefaultTestModule;
 import com.commercetools.sunrise.common.WithSunriseApplication;
 import com.commercetools.sunrise.common.contexts.RequestScope;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.TestableReverseRouter;
+import com.commercetools.sunrise.common.controllers.TestableCall;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.productcatalog.ProductCatalogTestModule;
@@ -32,9 +32,8 @@ public class SunriseHomeControllerTest extends WithSunriseApplication {
         final Module module = new AbstractModule() {
             @Override
             protected void configure() {
-                final TestableReverseRouter reverseRouter = reverseRouter();
-                bind(WebJarAssetsReverseRouter.class).toInstance(reverseRouter);
-                bind(HomeReverseRouter.class).toInstance(reverseRouter);
+                bind(WebJarAssetsReverseRouter.class).toInstance(file -> new TestableCall("assets"));
+                bind(HomeReverseRouter.class).toInstance(languageTag -> new TestableCall("/"));
                 bind(Http.Context.class).toInstance(Http.Context.current());
                 bind(Http.Session.class).toInstance(Http.Context.current().session());
                 bindScope(RequestScoped.class, new RequestScope());
@@ -46,13 +45,6 @@ public class SunriseHomeControllerTest extends WithSunriseApplication {
     @Override
     protected DefaultTestModule defaultModule() {
         return new ProductCatalogTestModule();
-    }
-
-    private static TestableReverseRouter reverseRouter() {
-        final TestableReverseRouter reverseRouter = new TestableReverseRouter();
-        reverseRouter.setThemeAssetsUrl("assets");
-        reverseRouter.setShowHomeUrl("/");
-        return reverseRouter;
     }
 
     private static class HomeTestController extends SunriseHomeController {
