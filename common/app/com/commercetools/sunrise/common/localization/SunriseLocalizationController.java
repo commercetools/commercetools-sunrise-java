@@ -20,7 +20,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-@IntroducingMultiControllerComponents(SunriseLocalizationHeroldComponent.class)
+@IntroducingMultiControllerComponents(LocalizationThemeLinksControllerComponent.class)
 public abstract class SunriseLocalizationController extends SunriseFrameworkController {
     public static final String SESSION_COUNTRY = "countryCode";
 

@@ -19,7 +19,7 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 /**
  * Shows and modifies the contents of the cart.
  */
-@IntroducingMultiControllerComponents(SunriseCartDetailHeroldComponent.class)
+@IntroducingMultiControllerComponents(CartDetailThemeLinksControllerComponent.class)
 public abstract class SunriseCartDetailController extends SunriseFrameworkShoppingCartController implements WithTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCartDetailController.class);

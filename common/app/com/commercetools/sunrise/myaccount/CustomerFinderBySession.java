@@ -13,21 +13,30 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public final class CustomerFinderBySession implements CustomerFinder<Void> {
+final class CustomerFinderBySession implements CustomerFinder {
+
+    private final SphereClient sphereClient;
+    private final CustomerInSession customerInSession;
+    private final RequestHookContext hookContext;
 
     @Inject
-    private SphereClient sphereClient;
-    @Inject
-    private CustomerInSession customerInSession;
-    @Inject
-    private RequestHookContext hookContext;
+    CustomerFinderBySession(final SphereClient sphereClient, final CustomerInSession customerInSession, final RequestHookContext hookContext) {
+        this.sphereClient = sphereClient;
+        this.customerInSession = customerInSession;
+        this.hookContext = hookContext;
+    }
 
     @Override
-    public CompletionStage<Optional<Customer>> findCustomer(final Void unused) {
+    public CompletionStage<Optional<Customer>> findCustomer() {
         final CompletionStage<Optional<Customer>> customerStage = fetchCustomer();
         customerStage.thenAcceptAsync(customerOpt ->
                         customerOpt.ifPresent(customer -> CustomerLoadedHook.runHook(hookContext, customer)), HttpExecution.defaultContext());
         return customerStage;
+    }
+
+    @Override
+    public CompletionStage<Optional<String>> findCustomerId() {
+        return completedFuture(customerInSession.findCustomerId());
     }
 
     private CompletionStage<Optional<Customer>> fetchCustomer() {

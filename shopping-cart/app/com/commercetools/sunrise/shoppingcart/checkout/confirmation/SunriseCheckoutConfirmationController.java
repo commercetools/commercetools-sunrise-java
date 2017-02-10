@@ -33,7 +33,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
 @RequestScoped
-@IntroducingMultiControllerComponents(SunriseCheckoutConfirmationHeroldComponent.class)
+@IntroducingMultiControllerComponents(CheckoutConfirmationThemeLinksControllerComponent.class)
 public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkShoppingCartController
         implements WithTemplateName, WithFormFlow<CheckoutConfirmationFormData, Cart, Order>, WithCartPreconditions {
 

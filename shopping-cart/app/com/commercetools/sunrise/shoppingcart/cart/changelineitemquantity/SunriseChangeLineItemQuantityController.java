@@ -25,7 +25,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-@IntroducingMultiControllerComponents(SunriseChangeLineItemQuantityHeroldComponent.class)
+@IntroducingMultiControllerComponents(ChangeLineItemQuantityThemeLinksControllerComponent.class)
 public abstract class SunriseChangeLineItemQuantityController extends SunriseCartManagementController implements WithTemplateName, WithFormFlow<ChangeLineItemQuantityFormData, Cart, Cart> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeLineItemQuantityController.class);

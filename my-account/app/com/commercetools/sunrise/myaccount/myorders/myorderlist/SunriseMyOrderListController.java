@@ -21,7 +21,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-@IntroducingMultiControllerComponents(SunriseMyOrderListHeroldComponent.class)
+@IntroducingMultiControllerComponents(MyOrderListThemeLinksControllerComponent.class)
 public abstract class SunriseMyOrderListController extends SunriseFrameworkMyAccountController implements WithTemplateName {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyOrderListController.class);

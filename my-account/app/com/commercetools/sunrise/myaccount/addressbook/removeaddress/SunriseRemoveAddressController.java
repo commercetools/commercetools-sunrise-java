@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
@@ -26,10 +26,17 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-@RequestScoped
 public abstract class SunriseRemoveAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<RemoveAddressFormData, AddressBookActionData, Customer> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveAddressController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SunriseRemoveAddressController.class);
+
+    private final AddressBookPageContentFactory addressBookPageContentFactory;
+
+    protected SunriseRemoveAddressController(final AddressBookLocalizedReverseRouter addressBookReverseRouter,
+                                             final AddressBookPageContentFactory addressBookPageContentFactory) {
+        super(addressBookReverseRouter);
+        this.addressBookPageContentFactory = addressBookPageContentFactory;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -51,7 +58,7 @@ public abstract class SunriseRemoveAddressController extends SunriseAddressBookM
     @SunriseRoute("removeAddressFromAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return doRequest(() -> {
-            logger.debug("try to remove address with id={} in locale={}", addressId, languageTag);
+            LOGGER.debug("try to remove address with id={} in locale={}", addressId, languageTag);
             return requireAddressBookActionData(addressId)
                     .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
         });
@@ -70,7 +77,7 @@ public abstract class SunriseRemoveAddressController extends SunriseAddressBookM
 
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData context, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+        saveUnexpectedFormError(form, clientErrorException, LOGGER);
         return asyncBadRequest(renderPage(form, context, null));
     }
 
@@ -82,7 +89,7 @@ public abstract class SunriseRemoveAddressController extends SunriseAddressBookM
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData context, @Nullable final Customer updatedCustomer) {
         final AddressBookControllerData addressBookControllerData = new AddressBookControllerData(context.getCustomer(), updatedCustomer);
-        final AddressBookPageContent pageContent = injector().getInstance(AddressBookPageContentFactory.class).create(addressBookControllerData);
+        final AddressBookPageContent pageContent = addressBookPageContentFactory.create(addressBookControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 }

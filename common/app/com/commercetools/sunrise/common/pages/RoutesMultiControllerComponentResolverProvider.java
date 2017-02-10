@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,8 +20,8 @@ public final class RoutesMultiControllerComponentResolverProvider implements Pro
     @Override
     public MultiControllerComponentResolver get() {
         final List<Class<? extends ControllerComponent>> components = parsedRoutes.getRoutes().stream()
-                .map(route -> route.getControllerClass())
-                .filter(x -> x != null)
+                .map(ParsedRoute::getControllerClass)
+                .filter(Objects::nonNull)
                 .flatMap(this::findControllerComponentClasses)
                 .distinct()
                 .collect(Collectors.toList());

@@ -63,7 +63,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * </ul>
  */
 @RequestScoped
-@IntroducingMultiControllerComponents(ProductOverviewHeroldComponent.class)
+@IntroducingMultiControllerComponents(ProductOverviewThemeLinksControllerComponent.class)
 public abstract class SunriseProductOverviewController extends SunriseFrameworkController implements WithTemplateName {
 
     @Inject

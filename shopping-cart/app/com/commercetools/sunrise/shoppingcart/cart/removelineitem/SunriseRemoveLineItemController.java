@@ -25,7 +25,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-@IntroducingMultiControllerComponents(SunriseRemoveLineItemHeroldComponent.class)
+@IntroducingMultiControllerComponents(RemoveLineItemThemeLinksControllerComponent.class)
 public abstract class SunriseRemoveLineItemController extends SunriseCartManagementController implements WithTemplateName, WithFormFlow<RemoveLineItemFormData, Cart, Cart> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveLineItemController.class);

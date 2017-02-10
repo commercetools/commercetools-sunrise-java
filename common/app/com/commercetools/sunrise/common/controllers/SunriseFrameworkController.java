@@ -5,7 +5,6 @@ import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.contexts.UserLanguage;
 import com.commercetools.sunrise.common.ctp.MetricAction;
 import com.commercetools.sunrise.common.pages.*;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateContext;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
@@ -53,8 +52,11 @@ import java.util.function.Supplier;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public abstract class SunriseFrameworkController extends Controller {
+
     private static final Logger pageDataLoggerAsJson = LoggerFactory.getLogger(SunrisePageData.class.getName() + "Json");
     private static final ObjectMapper objectMapper = createObjectMapper();
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static ObjectMapper createObjectMapper() {
         final ObjectMapper mapper = new ObjectMapper();
@@ -133,10 +135,6 @@ public abstract class SunriseFrameworkController extends Controller {
 
     public UserLanguage userLanguage() {
         return userLanguage;
-    }
-
-    public Injector injector() {
-        return injector;
     }
 
     /**
@@ -236,9 +234,8 @@ public abstract class SunriseFrameworkController extends Controller {
         pageContent.setTitle(i18nResolver.getOrEmpty(userLanguage().locales(), i18nIdentifier));
     }
 
-    protected final CompletionStage<Result> redirectToHome() {
-        final Call call = injector().getInstance(HomeReverseRouter.class).homePageCall(userLanguage.locale().toLanguageTag());
-        return completedFuture(redirect(call));
+    protected final CompletionStage<Result> redirectTo(final Call call) {
+        return completedFuture(Results.redirect(call));
     }
 
     protected final RequestHookContext hooks() {
@@ -249,7 +246,7 @@ public abstract class SunriseFrameworkController extends Controller {
         form.reject(message);
     }
 
-    protected final void saveUnexpectedFormError(final Form<?> form, final Throwable throwable, final Logger logger) {
+    protected final void saveUnexpectedFormError(final Form<?> form, final Throwable throwable) {
         form.reject("Something went wrong, please try again"); // TODO i18n
         logger.error("The CTP request raised an unexpected exception", throwable);
     }

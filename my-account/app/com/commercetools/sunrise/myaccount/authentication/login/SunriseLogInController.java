@@ -33,7 +33,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-@IntroducingMultiControllerComponents(SunriseLogInHeroldComponent.class)
+@IntroducingMultiControllerComponents(LogInThemeLinksControllerComponent.class)
 public abstract class SunriseLogInController extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<LogInFormData, Void, CustomerSignInResult> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseLogInController.class);

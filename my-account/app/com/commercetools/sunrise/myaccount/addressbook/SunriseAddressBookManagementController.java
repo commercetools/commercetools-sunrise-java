@@ -1,13 +1,12 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
-import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
 import com.commercetools.sunrise.hooks.events.AddressLoadedHook;
 import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
-import play.mvc.Call;
 import play.mvc.Result;
 
 import javax.annotation.Nullable;
@@ -15,9 +14,13 @@ import javax.inject.Inject;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
 public abstract class SunriseAddressBookManagementController extends SunriseFrameworkMyAccountController {
+
+    private final AddressBookLocalizedReverseRouter addressBookReverseRouter;
+
+    protected SunriseAddressBookManagementController(final AddressBookLocalizedReverseRouter addressBookReverseRouter) {
+        this.addressBookReverseRouter = addressBookReverseRouter;
+    }
 
     @Inject
     private void postInit() {
@@ -50,8 +53,7 @@ public abstract class SunriseAddressBookManagementController extends SunriseFram
     }
 
     protected final CompletionStage<Result> redirectToAddressBook() {
-        final Call call = injector().getInstance(AddressBookReverseRouter.class).addressBookCall(userContext().languageTag());
-        return completedFuture(redirect(call));
+        return redirectTo(addressBookReverseRouter.addressBookCall());
     }
 
     protected final boolean isDefaultAddress(final String addressId, @Nullable final String defaultAddressId) {

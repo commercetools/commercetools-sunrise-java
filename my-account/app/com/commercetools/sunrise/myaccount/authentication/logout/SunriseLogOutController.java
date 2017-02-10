@@ -15,7 +15,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @RequestScoped
-@IntroducingMultiControllerComponents(SunriseLogOutHeroldComponent.class)
+@IntroducingMultiControllerComponents(LogOutThemeLinksControllerComponent.class)
 public abstract class SunriseLogOutController extends SunriseFrameworkController {
 
     @Override

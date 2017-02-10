@@ -20,7 +20,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @RequestScoped
-@IntroducingMultiControllerComponents(SunriseAddressBookHeroldComponent.class)
+@IntroducingMultiControllerComponents(AddressBookThemeLinksControllerComponent.class)
 public abstract class SunriseAddressBookController extends SunriseFrameworkMyAccountController implements WithTemplateName {
 
     protected static final Logger logger = LoggerFactory.getLogger(SunriseAddressBookController.class);

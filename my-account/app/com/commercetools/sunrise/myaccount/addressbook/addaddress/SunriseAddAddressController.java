@@ -1,13 +1,15 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
+import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
@@ -16,8 +18,6 @@ import io.sphere.sdk.customers.commands.updateactions.AddAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
 import io.sphere.sdk.models.Address;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
@@ -33,11 +33,19 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-@RequestScoped
-@IntroducingMultiControllerComponents(SunriseAddAddressHeroldComponent.class)
+@IntroducingMultiControllerComponents(AddAddressThemeLinksControllerComponent.class)
 public abstract class SunriseAddAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<AddressBookAddressFormData, Customer, Customer> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseAddAddressController.class);
+    private final CountryCode country;
+    private final AddAddressPageContentFactory addAddressPageContentFactory;
+    private final CustomerFinder customerFinder;
+
+    protected SunriseAddAddressController(final AddressBookLocalizedReverseRouter addressBookReverseRouter, final CountryCode country,
+                                          final AddAddressPageContentFactory addAddressPageContentFactory) {
+        super(addressBookReverseRouter);
+        this.country = country;
+        this.addAddressPageContentFactory = addAddressPageContentFactory;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -58,20 +66,20 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
 
     @SunriseRoute("addAddressToAddressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("show new address form for address in locale={}", languageTag);
-            return requireExistingCustomer()
-                    .thenComposeAsync(this::showForm, HttpExecution.defaultContext());
-        });
+        return doRequest(() -> customerFinder.findCustomer()
+                .thenComposeAsync(customer -> customer
+                                .map(this::showForm)
+                                .orElseGet(this::handleNotFoundCustomer),
+                        HttpExecution.defaultContext()));
     }
 
     @SunriseRoute("addAddressToAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("try to add address with in locale={}", languageTag);
-            return requireExistingCustomer()
-                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
-        });
+        return doRequest(() -> customerFinder.findCustomer()
+                .thenComposeAsync(customer -> customer
+                                .map(this::validateForm)
+                                .orElseGet(this::handleNotFoundCustomer),
+                        HttpExecution.defaultContext()));
     }
 
     @Override
@@ -85,7 +93,7 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
 
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends AddressBookAddressFormData> form, final Customer customer, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+        saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, customer, null));
     }
 
@@ -97,13 +105,13 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final Customer customer, @Nullable final Customer updatedCustomer) {
         final AddAddressControllerData addAddressControllerData = new AddAddressControllerData(form, customer, updatedCustomer);
-        final AddAddressPageContent pageContent = injector().getInstance(AddAddressPageContentFactory.class).create(addAddressControllerData);
+        final AddAddressPageContent pageContent = addAddressPageContentFactory.create(addAddressControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     @Override
     public void fillFormData(final AddressBookAddressFormData formData, final Customer customer) {
-        final Address address = Address.of(userContext().country())
+        final Address address = Address.of(country)
                 .withTitle(customer.getTitle())
                 .withFirstName(customer.getFirstName())
                 .withLastName(customer.getLastName())

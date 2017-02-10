@@ -1,15 +1,14 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
-import com.google.inject.Injector;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
@@ -26,7 +25,6 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,13 +34,17 @@ import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 
-@RequestScoped
 public abstract class SunriseChangeAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<AddressBookAddressFormData, AddressBookActionData, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseChangeAddressController.class);
 
-    @Inject
-    private Injector injector;
+    private final ChangeAddressPageContentFactory changeAddressPageContentFactory;
+
+    protected SunriseChangeAddressController(final AddressBookLocalizedReverseRouter addressBookReverseRouter,
+                                             final ChangeAddressPageContentFactory changeAddressPageContentFactory) {
+        super(addressBookReverseRouter);
+        this.changeAddressPageContentFactory = changeAddressPageContentFactory;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -106,7 +108,7 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
     @Override
     public CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData context, @Nullable final Customer updatedCustomer) {
         final ChangeAddressControllerData addAddressControllerData = new ChangeAddressControllerData(form, context.getCustomer(), updatedCustomer);
-        final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(addAddressControllerData);
+        final ChangeAddressPageContent pageContent = changeAddressPageContentFactory.create(addAddressControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

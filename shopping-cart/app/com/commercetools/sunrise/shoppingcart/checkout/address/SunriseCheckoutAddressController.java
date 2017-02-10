@@ -36,7 +36,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-@IntroducingMultiControllerComponents(SunriseCheckoutAddressHeroldComponent.class)
+@IntroducingMultiControllerComponents(CheckoutAddressThemeLinksControllerComponent.class)
 public abstract class SunriseCheckoutAddressController extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<CheckoutAddressFormData, Cart, Cart>, WithCartPreconditions {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressController.class);

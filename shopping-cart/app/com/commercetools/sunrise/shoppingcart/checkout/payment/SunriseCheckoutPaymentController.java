@@ -3,7 +3,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.payment;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CheckoutLocalizedReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
@@ -54,12 +54,14 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
 public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkShoppingCartController
         implements WithTemplateName, WithFormFlow<CheckoutPaymentFormData, Cart, Cart>, WithCartPreconditions {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutPaymentController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SunriseCheckoutPaymentController.class);
 
     @Inject
     private PaymentConfiguration paymentConfiguration;
     @Inject
     private HttpExecutionContext httpExecutionContext;
+    @Inject
+    private CheckoutLocalizedReverseRouter checkoutLocalizedReverseRouter;
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -100,7 +102,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkS
 
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends CheckoutPaymentFormData> form, final Cart cart, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+        saveUnexpectedFormError(form, clientErrorException, LOGGER);
         return asyncBadRequest(renderPage(form, cart, null));
     }
 
@@ -165,7 +167,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkS
         final List<Reference<Payment>> paymentRefs = Optional.ofNullable(cart.getPaymentInfo())
                 .map(PaymentInfo::getPayments)
                 .orElseGet(() -> {
-                    logger.error("Payment info is not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
+                    LOGGER.error("Payment info is not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
                     return emptyList();
                 });
         final List<CompletionStage<Payment>> paymentStages = paymentRefs.stream()
@@ -214,7 +216,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkS
     }
 
     protected final CompletionStage<Result> redirectToCheckoutConfirmation() {
-        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutConfirmationPageCall(userContext().languageTag());
+        final Call call = checkoutLocalizedReverseRouter.checkoutConfirmationPageCall();
         return completedFuture(redirect(call));
     }
 
@@ -222,7 +224,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkS
         return Optional.ofNullable(cart.getPaymentInfo())
                 .flatMap(info -> info.getPayments().stream()
                         .map(Reference::getObj)
-                        .filter(obj -> obj != null)
+                        .filter(Objects::nonNull)
                         .map(obj -> obj.getPaymentMethodInfo().getMethod())
                         .findAny());
     }

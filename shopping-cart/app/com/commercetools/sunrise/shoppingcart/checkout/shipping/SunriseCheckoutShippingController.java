@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CheckoutLocalizedReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
@@ -22,6 +22,7 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -30,11 +31,14 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
-@IntroducingMultiControllerComponents(SunriseCheckoutShippingHeroldComponent.class)
+@IntroducingMultiControllerComponents(CheckoutShippingThemeLinksControllerComponent.class)
 public abstract class SunriseCheckoutShippingController extends SunriseFrameworkShoppingCartController
         implements WithTemplateName, WithFormFlow<CheckoutShippingFormData, Cart, Cart>, WithCartPreconditions {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutShippingController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SunriseCheckoutShippingController.class);
+
+    @Inject
+    private CheckoutLocalizedReverseRouter checkoutLocalizedReverseRouter;
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -75,7 +79,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
 
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends CheckoutShippingFormData> form, final Cart cart, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+        saveUnexpectedFormError(form, clientErrorException, LOGGER);
         return asyncBadRequest(renderPage(form, cart, null));
     }
 
@@ -102,7 +106,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
     }
 
     protected final CompletionStage<Result> redirectToCheckoutPayment() {
-        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutPaymentPageCall(userContext().languageTag());
+        final Call call = checkoutLocalizedReverseRouter.checkoutPaymentPageCall();
         return completedFuture(redirect(call));
     }
 

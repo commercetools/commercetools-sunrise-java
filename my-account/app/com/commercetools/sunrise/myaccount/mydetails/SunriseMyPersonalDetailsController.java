@@ -3,7 +3,7 @@ package com.commercetools.sunrise.myaccount.mydetails;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.ctp.AttributeSettings;
-import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsLocalizedReverseRouter;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
@@ -24,7 +24,6 @@ import play.Configuration;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
-import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
@@ -39,7 +38,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-@IntroducingMultiControllerComponents(SunriseMyPersonalDetailsHeroldComponent.class)
+@IntroducingMultiControllerComponents(MyPersonalDetailsThemeLinksControllerComponent.class)
 public abstract class SunriseMyPersonalDetailsController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<MyPersonalDetailsFormData, Customer, Customer> {
 
     private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsController.class);
@@ -52,6 +51,8 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseFramewor
     protected I18nResolver i18nResolver;
     @Inject
     protected Configuration configuration;
+    @Inject
+    private MyPersonalDetailsLocalizedReverseRouter myPersonalDetailsLocalizedReverseRouter;
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -146,7 +147,6 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseFramewor
     }
 
     protected final CompletionStage<Result> redirectToMyPersonalDetails() {
-        final Call call = injector().getInstance(MyPersonalDetailsReverseRouter.class).myPersonalDetailsPageCall(userContext().languageTag());
-        return completedFuture(redirect(call));
+        return redirectTo(myPersonalDetailsLocalizedReverseRouter.myPersonalDetailsPageCall());
     }
 }

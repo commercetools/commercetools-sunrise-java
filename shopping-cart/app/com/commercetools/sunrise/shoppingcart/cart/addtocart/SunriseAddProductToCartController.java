@@ -27,7 +27,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
-@IntroducingMultiControllerComponents(SunriseAddProductToCartHeroldComponent.class)
+@IntroducingMultiControllerComponents(AddProductToCartThemeLinksControllerComponent.class)
 public abstract class SunriseAddProductToCartController extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<AddProductToCartFormData, Cart, Cart> {
     private static final Logger logger = LoggerFactory.getLogger(SunriseAddProductToCartController.class);
 
