@@ -1,7 +1,7 @@
 package demo.myaccount;
 
-import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.AuthenticationLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressPageContentFactory;
@@ -15,27 +15,27 @@ import java.util.concurrent.CompletionStage;
 
 public class AddAddressController extends SunriseAddAddressController {
 
-    private final AuthenticationLocalizedReverseRouter authenticationReverseRouter;
-    private final AddressBookLocalizedReverseRouter addressBookLocalizedReverseRouter;
+    private final AuthenticationReverseRouter authenticationReverseRouter;
+    private final AddressBookReverseRouter addressBookReverseRouter;
 
     @Inject
     public AddAddressController(final CountryCode country, final CustomerFinder customerFinder,
                                 final AddAddressPageContentFactory addAddressPageContentFactory,
-                                final AuthenticationLocalizedReverseRouter authenticationReverseRouter,
-                                final AddressBookLocalizedReverseRouter addressBookLocalizedReverseRouter) {
+                                final AuthenticationReverseRouter authenticationReverseRouter,
+                                final AddressBookReverseRouter addressBookReverseRouter) {
         super(country, customerFinder, addAddressPageContentFactory);
         this.authenticationReverseRouter = authenticationReverseRouter;
-        this.addressBookLocalizedReverseRouter = addressBookLocalizedReverseRouter;
+        this.addressBookReverseRouter = addressBookReverseRouter;
     }
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final Customer oldCustomer, final Customer updatedCustomer) {
-        return redirectTo(addressBookLocalizedReverseRouter.addressBookCall());
+        return redirectTo(addressBookReverseRouter.addressBookCall());
     }
 
     @Override
     protected CompletionStage<Result> handleNotFoundAddress() {
-        return redirectTo(addressBookLocalizedReverseRouter.addressBookCall());
+        return redirectTo(addressBookReverseRouter.addressBookCall());
     }
 
     @Override

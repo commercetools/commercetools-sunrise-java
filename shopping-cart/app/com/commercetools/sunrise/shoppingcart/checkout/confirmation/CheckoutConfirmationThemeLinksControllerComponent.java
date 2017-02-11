@@ -2,16 +2,16 @@ package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.common.pages.AbstractThemeLinksControllerComponent;
 import com.commercetools.sunrise.common.pages.PageMeta;
-import com.commercetools.sunrise.common.reverserouter.CheckoutLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 
 import javax.inject.Inject;
 
 final class CheckoutConfirmationThemeLinksControllerComponent extends AbstractThemeLinksControllerComponent {
 
-    private final CheckoutLocalizedReverseRouter checkoutReverseRouter;
+    private final CheckoutReverseRouter checkoutReverseRouter;
 
     @Inject
-    CheckoutConfirmationThemeLinksControllerComponent(final CheckoutLocalizedReverseRouter checkoutReverseRouter) {
+    CheckoutConfirmationThemeLinksControllerComponent(final CheckoutReverseRouter checkoutReverseRouter) {
         this.checkoutReverseRouter = checkoutReverseRouter;
     }
 

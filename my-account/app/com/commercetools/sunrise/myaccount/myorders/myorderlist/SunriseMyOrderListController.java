@@ -3,6 +3,7 @@ package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.queries.PagedQueryResult;
@@ -18,11 +19,13 @@ import static java.util.Arrays.asList;
 @IntroducingMultiControllerComponents(MyOrderListThemeLinksControllerComponent.class)
 public abstract class SunriseMyOrderListController extends SunriseFrameworkMyAccountController implements WithTemplateName {
 
-    private final OrderListFinder orderListFinder;
+    private final MyOrderListFinder myOrderListFinder;
     private final MyOrderListPageContentFactory myOrderListPageContentFactory;
 
-    protected SunriseMyOrderListController(final OrderListFinder orderListFinder, final MyOrderListPageContentFactory myOrderListPageContentFactory) {
-        this.orderListFinder = orderListFinder;
+    protected SunriseMyOrderListController(final CustomerFinder customerFinder, final MyOrderListFinder myOrderListFinder,
+                                           final MyOrderListPageContentFactory myOrderListPageContentFactory) {
+        super(customerFinder);
+        this.myOrderListFinder = myOrderListFinder;
         this.myOrderListPageContentFactory = myOrderListPageContentFactory;
     }
 
@@ -40,8 +43,10 @@ public abstract class SunriseMyOrderListController extends SunriseFrameworkMyAcc
 
     @SunriseRoute("myOrderListPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> orderListFinder.findOrders()
-                .thenComposeAsync(this::showOrders, HttpExecution.defaultContext()));
+        return doRequest(() ->
+                requireCustomer(customer ->
+                        myOrderListFinder.findOrders(customer)
+                                .thenComposeAsync(this::showOrders, HttpExecution.defaultContext())));
     }
 
     protected CompletionStage<Result> showOrders(final PagedQueryResult<Order> orders) {

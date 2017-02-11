@@ -3,13 +3,22 @@ package com.commercetools.sunrise.common.reverserouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
-@ImplementedBy(ReflectionAuthenticationReverseRouter.class)
-public interface AuthenticationReverseRouter {
-    Call showLogInForm(final String languageTag);
+@ImplementedBy(ReflectionAuthenticationLocalizedReverseRouter.class)
+public interface AuthenticationReverseRouter extends AuthenticationSimpleReverseRouter, LocalizedReverseRouter {
 
-    Call processLogInForm(final String languageTag);
+    default Call showLogInForm() {
+        return showLogInForm(languageTag());
+    }
 
-    Call processSignUpForm(final String languageTag);
+    default Call processLogInForm() {
+        return processLogInForm(languageTag());
+    }
 
-    Call processLogOut(final String languageTag);
+    default Call processSignUpForm() {
+        return processSignUpForm(languageTag());
+    }
+
+    default Call processLogOut() {
+        return processLogOut(languageTag());
+    }
 }

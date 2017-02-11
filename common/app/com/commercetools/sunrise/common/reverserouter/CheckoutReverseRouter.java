@@ -3,24 +3,42 @@ package com.commercetools.sunrise.common.reverserouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
-@ImplementedBy(ReflectionCheckoutReverseRouter.class)
-public interface CheckoutReverseRouter {
+@ImplementedBy(ReflectionCheckoutLocalizedReverseRouter.class)
+public interface CheckoutReverseRouter extends CheckoutSimpleReverseRouter, LocalizedReverseRouter {
 
-    Call checkoutAddressesPageCall(final String languageTag);
+    default Call checkoutAddressesPageCall() {
+        return checkoutAddressesPageCall(languageTag());
+    }
 
-    Call checkoutAddressesProcessFormCall(final String languageTag);
+    default Call checkoutAddressesProcessFormCall() {
+        return checkoutAddressesProcessFormCall(languageTag());
+    }
 
-    Call checkoutShippingPageCall(final String languageTag);
+    default Call checkoutShippingPageCall() {
+        return checkoutShippingPageCall(languageTag());
+    }
 
-    Call checkoutShippingProcessFormCall(final String languageTag);
+    default Call checkoutShippingProcessFormCall() {
+        return checkoutShippingProcessFormCall(languageTag());
+    }
 
-    Call checkoutPaymentPageCall(final String languageTag);
+    default Call checkoutPaymentPageCall() {
+        return checkoutPaymentPageCall(languageTag());
+    }
 
-    Call checkoutPaymentProcessFormCall(final String languageTag);
+    default Call checkoutPaymentProcessFormCall() {
+        return checkoutPaymentProcessFormCall(languageTag());
+    }
 
-    Call checkoutConfirmationPageCall(final String languageTag);
+    default Call checkoutConfirmationPageCall() {
+        return checkoutConfirmationPageCall(languageTag());
+    }
 
-    Call checkoutConfirmationProcessFormCall(final String languageTag);
+    default Call checkoutConfirmationProcessFormCall() {
+        return checkoutConfirmationProcessFormCall(languageTag());
+    }
 
-    Call checkoutThankYouPageCall(final String languageTag);
+    default Call checkoutThankYouPageCall() {
+        return checkoutThankYouPageCall(languageTag());
+    }
 }

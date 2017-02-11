@@ -3,7 +3,7 @@ package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.AddressBeanFactory;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AddressBookSimpleReverseRouter;
 import io.sphere.sdk.models.Address;
 
 import javax.inject.Inject;
@@ -14,10 +14,10 @@ public class AddressInfoBeanFactory extends ViewModelFactory<AddressInfoBean, Ad
 
     private final Locale locale;
     private final AddressBeanFactory addressBeanFactory;
-    private final AddressBookReverseRouter addressBookReverseRouter;
+    private final AddressBookSimpleReverseRouter addressBookReverseRouter;
 
     @Inject
-    public AddressInfoBeanFactory(final Locale locale, final AddressBeanFactory addressBeanFactory, final AddressBookReverseRouter addressBookReverseRouter) {
+    public AddressInfoBeanFactory(final Locale locale, final AddressBeanFactory addressBeanFactory, final AddressBookSimpleReverseRouter addressBookReverseRouter) {
         this.locale = locale;
         this.addressBeanFactory = addressBeanFactory;
         this.addressBookReverseRouter = addressBookReverseRouter;

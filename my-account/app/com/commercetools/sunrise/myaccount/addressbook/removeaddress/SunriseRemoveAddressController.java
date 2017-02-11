@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
@@ -32,7 +32,7 @@ public abstract class SunriseRemoveAddressController extends SunriseAddressBookM
 
     private final AddressBookPageContentFactory addressBookPageContentFactory;
 
-    protected SunriseRemoveAddressController(final AddressBookLocalizedReverseRouter addressBookReverseRouter,
+    protected SunriseRemoveAddressController(final AddressBookReverseRouter addressBookReverseRouter,
                                              final AddressBookPageContentFactory addressBookPageContentFactory) {
         super(addressBookReverseRouter);
         this.addressBookPageContentFactory = addressBookPageContentFactory;

@@ -12,12 +12,12 @@ import java.util.Locale;
 import java.util.Optional;
 
 @RequestScoped
-final class ReflectionProductLocalizedReverseRouter extends AbstractLocalizedReverseRouter implements ProductLocalizedReverseRouter {
+final class ReflectionProductLocalizedReverseRouter extends AbstractLocalizedReverseRouter implements ProductReverseRouter {
 
-    private final ProductReverseRouter delegate;
+    private final ProductSimpleReverseRouter delegate;
 
     @Inject
-    private ReflectionProductLocalizedReverseRouter(final Locale locale, final ProductReverseRouter reverseRouter) {
+    private ReflectionProductLocalizedReverseRouter(final Locale locale, final ProductSimpleReverseRouter reverseRouter) {
         super(locale);
         this.delegate = reverseRouter;
     }

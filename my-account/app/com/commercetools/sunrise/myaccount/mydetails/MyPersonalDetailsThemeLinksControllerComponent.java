@@ -2,16 +2,16 @@ package com.commercetools.sunrise.myaccount.mydetails;
 
 import com.commercetools.sunrise.common.pages.AbstractThemeLinksControllerComponent;
 import com.commercetools.sunrise.common.pages.PageMeta;
-import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 
 import javax.inject.Inject;
 
 final class MyPersonalDetailsThemeLinksControllerComponent extends AbstractThemeLinksControllerComponent {
 
-    private final MyPersonalDetailsLocalizedReverseRouter reverseRouter;
+    private final MyPersonalDetailsReverseRouter reverseRouter;
 
     @Inject
-    MyPersonalDetailsThemeLinksControllerComponent(final MyPersonalDetailsLocalizedReverseRouter reverseRouter) {
+    MyPersonalDetailsThemeLinksControllerComponent(final MyPersonalDetailsReverseRouter reverseRouter) {
         this.reverseRouter = reverseRouter;
     }
 

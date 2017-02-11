@@ -3,7 +3,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.address;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CheckoutSimpleReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
@@ -87,7 +87,7 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkS
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final CheckoutAddressFormData formData, final Cart oldCart, final Cart updatedCart) {
-        final Call call = injector().getInstance(CheckoutReverseRouter.class).checkoutShippingPageCall(userContext().languageTag());
+        final Call call = injector().getInstance(CheckoutSimpleReverseRouter.class).checkoutShippingPageCall(userContext().languageTag());
         return completedFuture(redirect(call));
     }
 

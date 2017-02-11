@@ -3,10 +3,14 @@ package com.commercetools.sunrise.common.reverserouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
-@ImplementedBy(ReflectionMyPersonalDetailsReverseRouter.class)
-public interface MyPersonalDetailsReverseRouter {
+@ImplementedBy(ReflectionMyPersonalDetailsLocalizedReverseRouter.class)
+public interface MyPersonalDetailsReverseRouter extends MyPersonalDetailsSimpleReverseRouter, LocalizedReverseRouter {
 
-    Call myPersonalDetailsPageCall(final String languageTag);
+    default Call myPersonalDetailsPageCall() {
+        return myPersonalDetailsPageCall(languageTag());
+    }
 
-    Call myPersonalDetailsProcessFormCall(final String languageTag);
+    default Call myPersonalDetailsProcessFormCall() {
+        return myPersonalDetailsProcessFormCall(languageTag());
+    }
 }

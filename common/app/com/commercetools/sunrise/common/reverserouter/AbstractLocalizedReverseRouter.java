@@ -4,15 +4,20 @@ import io.sphere.sdk.models.Base;
 
 import java.util.Locale;
 
-public abstract class AbstractLocalizedReverseRouter extends Base {
+public abstract class AbstractLocalizedReverseRouter extends Base implements LocalizedReverseRouter {
 
-    private final String languageTag;
+    private final Locale locale;
 
     protected AbstractLocalizedReverseRouter(final Locale locale) {
-        this.languageTag = locale.toLanguageTag();
+        this.locale = locale;
     }
 
     public String languageTag() {
-        return languageTag;
+        return locale.toLanguageTag();
+    }
+
+    @Override
+    public Locale locale() {
+        return locale;
     }
 }

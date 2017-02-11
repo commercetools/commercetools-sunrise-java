@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.common.utils.ProductPriceUtils;
 
@@ -13,10 +13,10 @@ public class ProductVariantBeanFactory extends AbstractProductVariantBeanFactory
 
     private final Locale locale;
     private final PriceFormatter priceFormatter;
-    private final ProductReverseRouter productReverseRouter;
+    private final ProductSimpleReverseRouter productReverseRouter;
 
     @Inject
-    public ProductVariantBeanFactory(final Locale locale, final PriceFormatter priceFormatter, final ProductReverseRouter productReverseRouter) {
+    public ProductVariantBeanFactory(final Locale locale, final PriceFormatter priceFormatter, final ProductSimpleReverseRouter productReverseRouter) {
         super();
         this.locale = locale;
         this.priceFormatter = priceFormatter;

@@ -4,22 +4,24 @@ import com.google.inject.ImplementedBy;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Call;
 
-import java.util.Locale;
 import java.util.Optional;
 
-@ImplementedBy(ReflectionMyOrdersReverseRouter.class)
-public interface MyOrdersReverseRouter {
+@ImplementedBy(ReflectionMyOrdersLocalizedReverseRouter.class)
+public interface MyOrdersReverseRouter extends MyOrdersSimpleReverseRouter, LocalizedReverseRouter {
 
-    Call myOrderListPageCall(final String languageTag);
-
-    Call myOrderDetailPageCall(final String languageTag, final String orderNumber);
-
-    default Optional<Call> myOrderDetailPageCall(final Locale locale, final Order order) {
-        return Optional.ofNullable(order.getOrderNumber())
-                .map(orderNumber -> myOrderDetailPageCall(locale.toLanguageTag(), orderNumber));
+    default Call myOrderListPageCall() {
+        return myOrderListPageCall(languageTag());
     }
 
-    default String myOrderDetailPageUrlOrEmpty(final Locale locale, final Order order) {
-        return myOrderDetailPageCall(locale, order).map(Call::url).orElse("");
+    default Call myOrderDetailPageCall(final String orderNumber) {
+        return myOrderDetailPageCall(languageTag(), orderNumber);
+    }
+
+    default Optional<Call> myOrderDetailPageCall(final Order order) {
+        return myOrderDetailPageCall(locale(), order);
+    }
+
+    default String myOrderDetailPageUrlOrEmpty(final Order order) {
+        return myOrderDetailPageUrlOrEmpty(locale(), order);
     }
 }

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
-import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CartSimpleReverseRouter;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.productcatalog.common.ProductBeanFactory;
 
@@ -14,12 +14,12 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
 
     private final Locale locale;
     private final PageTitleResolver pageTitleResolver;
-    private final CartReverseRouter cartReverseRouter;
+    private final CartSimpleReverseRouter cartReverseRouter;
     private final ProductBreadcrumbBeanFactory productBreadcrumbBeanFactory;
     private final ProductBeanFactory productBeanFactory;
 
     @Inject
-    public ProductDetailPageContentFactory(final Locale locale, final PageTitleResolver pageTitleResolver, final CartReverseRouter cartReverseRouter,
+    public ProductDetailPageContentFactory(final Locale locale, final PageTitleResolver pageTitleResolver, final CartSimpleReverseRouter cartReverseRouter,
                                            final ProductBreadcrumbBeanFactory productBreadcrumbBeanFactory, final ProductBeanFactory productBeanFactory) {
         this.locale = locale;
         this.pageTitleResolver = pageTitleResolver;

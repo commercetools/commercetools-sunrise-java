@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionLoadedHook;
@@ -155,12 +155,12 @@ public abstract class SunriseProductDetailController extends SunriseFrameworkCon
     }
 
     private Result redirectToNewSlug(final String newSlug, final String sku) {
-        final ProductReverseRouter productReverseRouter = injector.getInstance(ProductReverseRouter.class);
+        final ProductSimpleReverseRouter productReverseRouter = injector.getInstance(ProductSimpleReverseRouter.class);
         return movedPermanently(productReverseRouter.productDetailPageCall(userContext().languageTag(), newSlug, sku));
     }
 
     private CompletionStage<Result> redirectToMasterVariant(final ProductProjection product) {
-        final ProductReverseRouter productReverseRouter = injector.getInstance(ProductReverseRouter.class);
+        final ProductSimpleReverseRouter productReverseRouter = injector.getInstance(ProductSimpleReverseRouter.class);
         return productReverseRouter.productDetailPageCall(userContext().locale(), product, product.getMasterVariant())
                 .map(call -> completedFuture(redirect(call)))
                 .orElseGet(() -> completedFuture(notFoundProductResult()));

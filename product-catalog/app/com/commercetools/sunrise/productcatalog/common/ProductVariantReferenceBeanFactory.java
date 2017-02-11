@@ -3,7 +3,7 @@ package com.commercetools.sunrise.productcatalog.common;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
 
 import javax.inject.Inject;
 import java.util.Locale;
@@ -12,10 +12,10 @@ import java.util.Locale;
 public class ProductVariantReferenceBeanFactory extends ViewModelFactory<ProductVariantReferenceBean, ProductWithVariant> {
 
     private final Locale locale;
-    private final ProductReverseRouter productReverseRouter;
+    private final ProductSimpleReverseRouter productReverseRouter;
 
     @Inject
-    public ProductVariantReferenceBeanFactory(final Locale locale, final ProductReverseRouter productReverseRouter) {
+    public ProductVariantReferenceBeanFactory(final Locale locale, final ProductSimpleReverseRouter productReverseRouter) {
         this.locale = locale;
         this.productReverseRouter = productReverseRouter;
     }

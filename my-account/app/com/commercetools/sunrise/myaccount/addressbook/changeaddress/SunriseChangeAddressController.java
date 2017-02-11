@@ -3,7 +3,7 @@ package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
@@ -42,7 +42,7 @@ public abstract class SunriseChangeAddressController extends SunriseAddressBookM
     private final CustomerFinder customerFinder;
     private final ChangeAddressPageContentFactory changeAddressPageContentFactory;
 
-    protected SunriseChangeAddressController(final AddressBookLocalizedReverseRouter addressBookReverseRouter,
+    protected SunriseChangeAddressController(final AddressBookReverseRouter addressBookReverseRouter,
                                              final ChangeAddressPageContentFactory changeAddressPageContentFactory) {
         super(addressBookReverseRouter);
         this.changeAddressPageContentFactory = changeAddressPageContentFactory;

@@ -7,43 +7,44 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.mvc.Call;
 
-import java.util.Locale;
 import java.util.Optional;
 
-@ImplementedBy(ReflectionProductReverseRouter.class)
-public interface ProductReverseRouter {
+@ImplementedBy(ReflectionProductLocalizedReverseRouter.class)
+public interface ProductReverseRouter extends ProductSimpleReverseRouter, LocalizedReverseRouter {
 
-    Call productDetailPageCall(final String languageTag, final String productSlug, final String sku);
-
-    Call productOverviewPageCall(final String languageTag, final String categorySlug);
-
-    Call processSearchProductsForm(final String languageTag);
-
-    default Optional<Call> productDetailPageCall(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
-        return product.getSlug().find(locale)
-                .map(slug -> productDetailPageCall(locale.toLanguageTag(), slug, productVariant.getSku()));
+    default Call productDetailPageCall(final String productSlug, final String sku) {
+        return productDetailPageCall(languageTag(), productSlug, sku);
     }
 
-    default String productDetailPageUrlOrEmpty(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
-        return productDetailPageCall(locale, product, productVariant).map(Call::url).orElse("");
+    default Call productOverviewPageCall(final String categorySlug) {
+        return productOverviewPageCall(languageTag(), categorySlug);
     }
 
-    default Optional<Call> productDetailPageCall(final Locale locale, final LineItem lineItem) {
-        return Optional.ofNullable(lineItem.getProductSlug())
-                .flatMap(slugs -> slugs.find(locale)
-                        .map(slug -> productDetailPageCall(locale.toLanguageTag(), slug, lineItem.getVariant().getSku())));
+    default Call processSearchProductsForm() {
+        return processSearchProductsForm(languageTag());
     }
 
-    default String productDetailPageUrlOrEmpty(final Locale locale, final LineItem lineItem) {
-        return productDetailPageCall(locale, lineItem).map(Call::url).orElse("");
+    default Optional<Call> productDetailPageCall(final ProductProjection product, final ProductVariant productVariant) {
+        return productDetailPageCall(locale(), product, productVariant);
     }
 
-    default Optional<Call> productOverviewPageCall(final Locale locale, final Category category) {
-        return category.getSlug().find(locale)
-                .map(slug -> productOverviewPageCall(locale.toLanguageTag(), slug));
+    default String productDetailPageUrlOrEmpty(final ProductProjection product, final ProductVariant productVariant) {
+        return productDetailPageUrlOrEmpty(locale(), product, productVariant);
     }
 
-    default String productOverviewPageUrlOrEmpty(final Locale locale, final Category category) {
-        return productOverviewPageCall(locale, category).map(Call::url).orElse("");
+    default Optional<Call> productDetailPageCall(final LineItem lineItem) {
+        return productDetailPageCall(locale(), lineItem);
+    }
+
+    default String productDetailPageUrlOrEmpty(final LineItem lineItem) {
+        return productDetailPageUrlOrEmpty(locale(), lineItem);
+    }
+
+    default Optional<Call> productOverviewPageCall(final Category category) {
+        return productOverviewPageCall(locale(), category);
+    }
+
+    default String productOverviewPageUrlOrEmpty(final Category category) {
+        return productOverviewPageUrlOrEmpty(locale(), category);
     }
 }

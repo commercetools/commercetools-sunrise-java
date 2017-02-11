@@ -2,8 +2,8 @@ package com.commercetools.sunrise.productcatalog;
 
 import com.commercetools.sunrise.common.DefaultTestModule;
 import com.commercetools.sunrise.common.controllers.TestableCall;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeSimpleReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.google.inject.name.Names;
 import io.sphere.sdk.categories.Category;
@@ -25,13 +25,13 @@ public class ProductCatalogTestModule extends DefaultTestModule {
         super.configure();
         bind(CategoryTree.class).toInstance(CategoryTree.of(emptyList()));
         bind(CategoryTree.class).annotatedWith(Names.named("new")).toInstance(CategoryTree.of(emptyList()));
-        bind(HomeReverseRouter.class).toInstance(languageTag -> new TestableCall("/"));
-        bind(ProductReverseRouter.class).toInstance(productReverseRouter());
+        bind(HomeSimpleReverseRouter.class).toInstance(languageTag -> new TestableCall("/"));
+        bind(ProductSimpleReverseRouter.class).toInstance(productReverseRouter());
         bind(ProductRecommendation.class).toInstance(unsupportedProductRecommendation());
     }
 
-    private ProductReverseRouter productReverseRouter() {
-        return new ProductReverseRouter() {
+    private ProductSimpleReverseRouter productReverseRouter() {
+        return new ProductSimpleReverseRouter() {
             @Override
             public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
                 throw new UnsupportedOperationException();

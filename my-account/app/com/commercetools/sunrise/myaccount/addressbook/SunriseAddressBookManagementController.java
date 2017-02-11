@@ -15,7 +15,8 @@ import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseAddressBookManagementController extends SunriseFrameworkMyAccountController {
 
-    protected CompletionStage<Optional<AddressBookActionData>> findAddressBookActionData(final CustomerFinder customerFinder, final String addressId) {
+    protected CompletionStage<Optional<AddressBookActionData>> findAddressBookActionData(final String addressId) {
+
         return customerFinder.findCustomer()
                 .thenApplyAsync(customerOpt -> customerOpt
                         .flatMap(customer -> findAddress(customer, addressId)

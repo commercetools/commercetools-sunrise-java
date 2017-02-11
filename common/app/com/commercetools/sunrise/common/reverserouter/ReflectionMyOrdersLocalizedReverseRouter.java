@@ -9,12 +9,12 @@ import java.util.Locale;
 import java.util.Optional;
 
 @RequestScoped
-final class ReflectionMyOrdersLocalizedReverseRouter extends AbstractLocalizedReverseRouter implements MyOrdersLocalizedReverseRouter {
+final class ReflectionMyOrdersLocalizedReverseRouter extends AbstractLocalizedReverseRouter implements MyOrdersReverseRouter {
 
-    private final MyOrdersReverseRouter delegate;
+    private final MyOrdersSimpleReverseRouter delegate;
 
     @Inject
-    private ReflectionMyOrdersLocalizedReverseRouter(final Locale locale, final MyOrdersReverseRouter reverseRouter) {
+    private ReflectionMyOrdersLocalizedReverseRouter(final Locale locale, final MyOrdersSimpleReverseRouter reverseRouter) {
         super(locale);
         this.delegate = reverseRouter;
     }

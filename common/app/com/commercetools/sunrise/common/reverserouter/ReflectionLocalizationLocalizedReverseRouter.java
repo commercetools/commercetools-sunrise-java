@@ -7,12 +7,12 @@ import javax.inject.Inject;
 import java.util.Locale;
 
 @RequestScoped
-final class ReflectionLocalizationLocalizedReverseRouter extends AbstractLocalizedReverseRouter implements LocalizationLocalizedReverseRouter {
+final class ReflectionLocalizationLocalizedReverseRouter extends AbstractLocalizedReverseRouter implements LocalizationReverseRouter {
 
-    private final LocalizationReverseRouter delegate;
+    private final LocalizationSimpleReverseRouter delegate;
 
     @Inject
-    private ReflectionLocalizationLocalizedReverseRouter(final Locale locale, final LocalizationReverseRouter reverseRouter) {
+    private ReflectionLocalizationLocalizedReverseRouter(final Locale locale, final LocalizationSimpleReverseRouter reverseRouter) {
         super(locale);
         this.delegate = reverseRouter;
     }

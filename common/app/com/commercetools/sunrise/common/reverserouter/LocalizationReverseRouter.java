@@ -3,10 +3,10 @@ package com.commercetools.sunrise.common.reverserouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
-@ImplementedBy(ReflectionLocalizationReverseRouter.class)
-public interface LocalizationReverseRouter {
+@ImplementedBy(ReflectionLocalizationLocalizedReverseRouter.class)
+public interface LocalizationReverseRouter extends LocalizationSimpleReverseRouter, LocalizedReverseRouter {
 
-    Call processChangeLanguageForm();
-
-    Call processChangeCountryForm(final String languageTag);
+    default Call processChangeCountryForm() {
+        return processChangeCountryForm(languageTag());
+    }
 }

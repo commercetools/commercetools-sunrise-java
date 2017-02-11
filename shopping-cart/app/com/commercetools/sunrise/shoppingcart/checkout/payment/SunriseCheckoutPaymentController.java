@@ -3,7 +3,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.payment;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.CheckoutLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.payments.PaymentConfiguration;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
@@ -61,7 +61,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkS
     @Inject
     private HttpExecutionContext httpExecutionContext;
     @Inject
-    private CheckoutLocalizedReverseRouter checkoutLocalizedReverseRouter;
+    private CheckoutReverseRouter checkoutReverseRouter;
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -216,7 +216,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkS
     }
 
     protected final CompletionStage<Result> redirectToCheckoutConfirmation() {
-        final Call call = checkoutLocalizedReverseRouter.checkoutConfirmationPageCall();
+        final Call call = checkoutReverseRouter.checkoutConfirmationPageCall();
         return completedFuture(redirect(call));
     }
 

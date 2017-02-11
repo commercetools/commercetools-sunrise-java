@@ -1,29 +1,30 @@
 package demo.myaccount;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.reverserouter.AuthenticationLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.myaccount.myorders.myorderlist.MyOrderListFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.MyOrderListPageContentFactory;
-import com.commercetools.sunrise.myaccount.myorders.myorderlist.OrderListFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.SunriseMyOrderListController;
 import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-@RequestScoped
 public class MyOrderListController extends SunriseMyOrderListController {
 
-    private final AuthenticationLocalizedReverseRouter authenticationLocalizedReverseRouter;
+    private final AuthenticationReverseRouter authenticationReverseRouter;
 
     @Inject
-    public MyOrderListController(final OrderListFinder orderListFinder, final MyOrderListPageContentFactory myOrderListPageContentFactory,
-                                 final AuthenticationLocalizedReverseRouter authenticationLocalizedReverseRouter) {
-        super(orderListFinder, myOrderListPageContentFactory);
-        this.authenticationLocalizedReverseRouter = authenticationLocalizedReverseRouter;
+    public MyOrderListController(final CustomerFinder customerFinder,
+                                 final MyOrderListFinder myOrderListFinder,
+                                 final MyOrderListPageContentFactory myOrderListPageContentFactory,
+                                 final AuthenticationReverseRouter authenticationReverseRouter) {
+        super(customerFinder, myOrderListFinder, myOrderListPageContentFactory);
+        this.authenticationReverseRouter = authenticationReverseRouter;
     }
 
     @Override
     protected CompletionStage<Result> handleNotFoundCustomer() {
-        return redirectTo(authenticationLocalizedReverseRouter.showLogInForm());
+        return redirectTo(authenticationReverseRouter.showLogInForm());
     }
 }

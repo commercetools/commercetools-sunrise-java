@@ -1,7 +1,7 @@
 package demo.shoppingcart;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CartSimpleReverseRouter;
 import com.commercetools.sunrise.shoppingcart.cart.addtocart.SunriseAddProductToCartController;
 import play.mvc.Result;
 
@@ -14,6 +14,6 @@ public final class AddProductToCartController extends SunriseAddProductToCartCon
 
     @Override
     protected CompletableFuture<Result> successfulResult() {
-        return completedFuture(redirect(injector().getInstance(CartReverseRouter.class).showCart(userContext().languageTag())));
+        return completedFuture(redirect(injector().getInstance(CartSimpleReverseRouter.class).showCart(userContext().languageTag())));
     }
 }

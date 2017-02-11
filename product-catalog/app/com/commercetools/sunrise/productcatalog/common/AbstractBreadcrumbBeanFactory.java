@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 
@@ -14,9 +14,9 @@ public abstract class AbstractBreadcrumbBeanFactory<D> extends ViewModelFactory<
 
     private final Locale locale;
     private final CategoryTree categoryTree;
-    private final ProductReverseRouter productReverseRouter;
+    private final ProductSimpleReverseRouter productReverseRouter;
 
-    protected AbstractBreadcrumbBeanFactory(final Locale locale, final CategoryTree categoryTree, final ProductReverseRouter productReverseRouter) {
+    protected AbstractBreadcrumbBeanFactory(final Locale locale, final CategoryTree categoryTree, final ProductSimpleReverseRouter productReverseRouter) {
         this.locale = locale;
         this.categoryTree = categoryTree;
         this.productReverseRouter = productReverseRouter;

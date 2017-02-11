@@ -2,7 +2,6 @@ package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;

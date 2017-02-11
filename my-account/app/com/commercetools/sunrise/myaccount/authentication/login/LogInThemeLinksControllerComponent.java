@@ -2,16 +2,16 @@ package com.commercetools.sunrise.myaccount.authentication.login;
 
 import com.commercetools.sunrise.common.pages.AbstractThemeLinksControllerComponent;
 import com.commercetools.sunrise.common.pages.PageMeta;
-import com.commercetools.sunrise.common.reverserouter.AuthenticationLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 
 import javax.inject.Inject;
 
 final class LogInThemeLinksControllerComponent extends AbstractThemeLinksControllerComponent {
 
-    private final AuthenticationLocalizedReverseRouter reverseRouter;
+    private final AuthenticationReverseRouter reverseRouter;
 
     @Inject
-    LogInThemeLinksControllerComponent(final AuthenticationLocalizedReverseRouter reverseRouter) {
+    LogInThemeLinksControllerComponent(final AuthenticationReverseRouter reverseRouter) {
         this.reverseRouter = reverseRouter;
     }
 

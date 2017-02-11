@@ -3,9 +3,10 @@ package com.commercetools.sunrise.common.reverserouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
-@ImplementedBy(ReflectionHomeReverseRouter.class)
-public interface HomeReverseRouter {
+@ImplementedBy(ReflectionHomeLocalizedReverseRouter.class)
+public interface HomeReverseRouter extends HomeSimpleReverseRouter, LocalizedReverseRouter {
 
-    Call homePageCall(final String languageTag);
-
+    default Call homePageCall() {
+        return homePageCall(languageTag());
+    }
 }

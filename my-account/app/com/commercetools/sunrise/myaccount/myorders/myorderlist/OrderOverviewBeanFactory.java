@@ -60,7 +60,7 @@ public class OrderOverviewBeanFactory extends ViewModelFactory<OrderOverviewBean
     }
 
     protected void fillOrderUrl(final OrderOverviewBean model, final Order order) {
-        model.setShowOrderUrl(myOrdersReverseRouter.myOrderDetailPageUrlOrEmpty(locale, order));
+        model.setShowOrderUrl(myOrdersReverseRouter.myOrderDetailPageUrlOrEmpty(order));
     }
 
     protected void fillOrderNumber(final OrderOverviewBean model, final Order order) {

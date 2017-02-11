@@ -2,16 +2,16 @@ package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 
 import com.commercetools.sunrise.common.pages.AbstractThemeLinksControllerComponent;
 import com.commercetools.sunrise.common.pages.PageMeta;
-import com.commercetools.sunrise.common.reverserouter.AddressBookLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 
 import javax.inject.Inject;
 
 final class AddressBookThemeLinksControllerComponent extends AbstractThemeLinksControllerComponent {
 
-    private final AddressBookLocalizedReverseRouter reverseRouter;
+    private final AddressBookReverseRouter reverseRouter;
 
     @Inject
-    AddressBookThemeLinksControllerComponent(final AddressBookLocalizedReverseRouter reverseRouter) {
+    AddressBookThemeLinksControllerComponent(final AddressBookReverseRouter reverseRouter) {
         this.reverseRouter = reverseRouter;
     }
 

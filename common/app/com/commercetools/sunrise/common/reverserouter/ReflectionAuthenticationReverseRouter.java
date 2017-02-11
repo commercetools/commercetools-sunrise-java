@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-final class ReflectionAuthenticationReverseRouter extends AbstractReflectionReverseRouter implements AuthenticationReverseRouter {
+final class ReflectionAuthenticationReverseRouter extends AbstractReflectionReverseRouter implements AuthenticationSimpleReverseRouter {
 
     private final ReverseCaller showLogInForm;
     private final ReverseCaller processLogInForm;

@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-final class ReflectionCartReverseRouter extends AbstractReflectionReverseRouter implements CartReverseRouter {
+final class ReflectionCartReverseRouter extends AbstractReflectionReverseRouter implements CartSimpleReverseRouter {
 
     private final ReverseCaller showCart;
     private final ReverseCaller processAddProductToCartForm;

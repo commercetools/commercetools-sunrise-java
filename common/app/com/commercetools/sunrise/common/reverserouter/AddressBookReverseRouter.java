@@ -3,19 +3,30 @@ package com.commercetools.sunrise.common.reverserouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
-@ImplementedBy(ReflectionAddressBookReverseRouter.class)
-public interface AddressBookReverseRouter {
+@ImplementedBy(ReflectionAddressBookLocalizedReverseRouter.class)
+public interface AddressBookReverseRouter extends AddressBookSimpleReverseRouter, LocalizedReverseRouter {
 
-    Call addressBookCall(final String languageTag);
+    default Call addressBookCall() {
+        return addressBookCall(languageTag());
+    }
 
-    Call addAddressToAddressBookCall(final String languageTag);
+    default Call addAddressToAddressBookCall() {
+        return addAddressToAddressBookCall(languageTag());
+    }
 
-    Call addAddressToAddressBookProcessFormCall(final String languageTag);
+    default Call addAddressToAddressBookProcessFormCall() {
+        return addAddressToAddressBookProcessFormCall(languageTag());
+    }
 
-    Call changeAddressInAddressBookCall(final String languageTag, final String addressId);
+    default Call changeAddressInAddressBookCall(final String addressId) {
+        return changeAddressInAddressBookCall(languageTag(), addressId);
+    }
 
-    Call changeAddressInAddressBookProcessFormCall(final String languageTag, final String addressId);
+    default Call changeAddressInAddressBookProcessFormCall(final String addressId) {
+        return changeAddressInAddressBookProcessFormCall(languageTag(), addressId);
+    }
 
-    Call removeAddressFromAddressBookProcessFormCall(final String languageTag, final String addressId);
-
+    default Call removeAddressFromAddressBookProcessFormCall(final String addressId) {
+        return removeAddressFromAddressBookProcessFormCall(languageTag(), addressId);
+    }
 }

@@ -2,16 +2,16 @@ package com.commercetools.sunrise.common.localization;
 
 import com.commercetools.sunrise.common.pages.AbstractThemeLinksControllerComponent;
 import com.commercetools.sunrise.common.pages.PageMeta;
-import com.commercetools.sunrise.common.reverserouter.LocalizationLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.LocalizationReverseRouter;
 
 import javax.inject.Inject;
 
 final class LocalizationThemeLinksControllerComponent extends AbstractThemeLinksControllerComponent {
 
-    private final LocalizationLocalizedReverseRouter reverseRouter;
+    private final LocalizationReverseRouter reverseRouter;
 
     @Inject
-    LocalizationThemeLinksControllerComponent(final LocalizationLocalizedReverseRouter reverseRouter) {
+    LocalizationThemeLinksControllerComponent(final LocalizationReverseRouter reverseRouter) {
         this.reverseRouter = reverseRouter;
     }
 

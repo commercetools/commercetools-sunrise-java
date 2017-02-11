@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.controllers.TestableCall;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbLinkBean;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductBreadcrumbBeanFactory;
@@ -51,8 +51,8 @@ public class ProductBreadcrumbBeanFactoryTest {
         return new ProductBreadcrumbBeanFactory(Locale.ENGLISH, CATEGORY_TREE, reverseRouter());
     }
 
-    private static ProductReverseRouter reverseRouter() {
-        return new ProductReverseRouter() {
+    private static ProductSimpleReverseRouter reverseRouter() {
+        return new ProductSimpleReverseRouter() {
             @Override
             public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
                 return new TestableCall("pdp");

@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.localization;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeSimpleReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ public abstract class SunriseLocalizationController extends SunriseFrameworkCont
     }
 
     protected CompletionStage<Result> redirectToLanguage(final String languageTag) {
-        final Call call = injector().getInstance(HomeReverseRouter.class).homePageCall(languageTag);
+        final Call call = injector().getInstance(HomeSimpleReverseRouter.class).homePageCall(languageTag);
         return completedFuture(redirect(call));
     }
 

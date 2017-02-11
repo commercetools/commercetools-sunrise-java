@@ -2,6 +2,7 @@ package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.orders.Order;
 import play.libs.concurrent.HttpExecution;
@@ -15,12 +16,14 @@ import static java.util.Arrays.asList;
 
 public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyAccountController implements WithTemplateName {
 
+    private final MyOrderFinder myOrderFinder;
     private final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory;
-    private final OrderFinder orderFinder;
 
-    protected SunriseMyOrderDetailController(final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory, final OrderFinder orderFinder) {
+    protected SunriseMyOrderDetailController(final CustomerFinder customerFinder, final MyOrderFinder myOrderFinder,
+                                             final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory) {
+        super(customerFinder);
+        this.myOrderFinder = myOrderFinder;
         this.myOrderDetailPageContentFactory = myOrderDetailPageContentFactory;
-        this.orderFinder = orderFinder;
     }
 
     @Override
@@ -37,11 +40,13 @@ public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyA
 
     @SunriseRoute("myOrderDetailPageCall")
     public CompletionStage<Result> showByOrderNumber(final String languageTag, final String orderNumber) {
-        return doRequest(() -> orderFinder.findOrder(orderNumber)
-                .thenComposeAsync(order -> order
-                                .map(this::showOrder)
-                                .orElseGet(this::handleNotFoundOrder),
-                        HttpExecution.defaultContext()));
+        return doRequest(() ->
+                requireCustomer(customer ->
+                        myOrderFinder.findOrder(customer, orderNumber)
+                                .thenComposeAsync(order -> order
+                                                .map(this::showOrder)
+                                                .orElseGet(this::handleNotFoundOrder),
+                                        HttpExecution.defaultContext())));
     }
 
     protected CompletionStage<Result> showOrder(final Order order) {

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import play.Configuration;
@@ -20,11 +20,11 @@ public class CategoryBeanFactory extends ViewModelFactory<CategoryBean, Category
     private final String saleCategoryExtId;
     private final Locale locale;
     private final CategoryTree categoryTree;
-    private final ProductReverseRouter productReverseRouter;
+    private final ProductSimpleReverseRouter productReverseRouter;
 
     @Inject
     public CategoryBeanFactory(final Configuration configuration, final Locale locale, final CategoryTree categoryTree,
-                               final ProductReverseRouter productReverseRouter) {
+                               final ProductSimpleReverseRouter productReverseRouter) {
         this.saleCategoryExtId = configuration.getString("common.saleCategoryExternalId");
         this.locale = locale;
         this.categoryTree = categoryTree;

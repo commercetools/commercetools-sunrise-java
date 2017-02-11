@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeSimpleReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
@@ -81,7 +81,7 @@ public abstract class SunriseCheckoutThankYouController extends SunriseFramework
     }
 
     protected CompletionStage<Result> handleNotFoundOrder() {
-        final Call call = injector().getInstance(HomeReverseRouter.class).homePageCall(userLanguage().locale().toLanguageTag());
+        final Call call = injector().getInstance(HomeSimpleReverseRouter.class).homePageCall(userLanguage().locale().toLanguageTag());
         return completedFuture(redirect(call));
     }
 

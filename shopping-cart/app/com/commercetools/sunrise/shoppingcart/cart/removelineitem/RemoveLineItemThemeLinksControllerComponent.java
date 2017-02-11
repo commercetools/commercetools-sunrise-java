@@ -2,16 +2,16 @@ package com.commercetools.sunrise.shoppingcart.cart.removelineitem;
 
 import com.commercetools.sunrise.common.pages.AbstractThemeLinksControllerComponent;
 import com.commercetools.sunrise.common.pages.PageMeta;
-import com.commercetools.sunrise.common.reverserouter.CartLocalizedReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 
 import javax.inject.Inject;
 
 final class RemoveLineItemThemeLinksControllerComponent extends AbstractThemeLinksControllerComponent {
 
-    private final CartLocalizedReverseRouter reverseRouter;
+    private final CartReverseRouter reverseRouter;
 
     @Inject
-    RemoveLineItemThemeLinksControllerComponent(final CartLocalizedReverseRouter reverseRouter) {
+    RemoveLineItemThemeLinksControllerComponent(final CartReverseRouter reverseRouter) {
         this.reverseRouter = reverseRouter;
     }
 

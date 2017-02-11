@@ -9,20 +9,20 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public interface WithForm<T> {
 
-    default CompletionStage<Form<? extends T>> bindForm() {
-        final Form<? extends T> form = createForm().bindFromRequest();
+    default CompletionStage<Form<T>> bindForm() {
+        final Form<T> form = createForm().bindFromRequest();
         return asyncValidation(form);
     }
 
-    default Form<? extends T> createForm() {
+    default Form<T> createForm() {
         return formFactory().form(getFormDataClass());
     }
 
-    default CompletionStage<Form<? extends T>> asyncValidation(final Form<? extends T> filledForm) {
+    default CompletionStage<Form<T>> asyncValidation(final Form<T> filledForm) {
         return completedFuture(filledForm);
     }
 
-    Class<? extends T> getFormDataClass();
+    Class<T> getFormDataClass();
 
     FormFactory formFactory();
 }

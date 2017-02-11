@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
 
-import static io.sphere.sdk.utils.CompletableFutureUtils.*;
+import static io.sphere.sdk.utils.CompletableFutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
 
 /**
@@ -24,7 +24,7 @@ import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
 public interface WithFormFlow<F, T, R> extends WithForm<F> {
 
     default CompletionStage<Result> showForm(final T context) {
-        final Form<? extends F> form = createNewFilledForm(context);
+        final Form<F> form = createNewFilledForm(context);
         return renderPage(form, context, null)
                 .thenApplyAsync(Results::ok, HttpExecution.defaultContext());
     }
@@ -39,12 +39,12 @@ public interface WithFormFlow<F, T, R> extends WithForm<F> {
         }, HttpExecution.defaultContext());
     }
 
-    default CompletionStage<Result> handleInvalidForm(final Form<? extends F> form, final T context) {
+    default CompletionStage<Result> handleInvalidForm(final Form<F> form, final T context) {
         return renderPage(form, context, null)
                 .thenApplyAsync(Results::badRequest, HttpExecution.defaultContext());
     }
 
-    default CompletionStage<Result> handleValidForm(final Form<? extends F> form, final T context) {
+    default CompletionStage<Result> handleValidForm(final Form<F> form, final T context) {
         final CompletionStage<Result> resultStage = doAction(form.get(), context)
                 .thenComposeAsync(result -> handleSuccessfulAction(form.get(), context, result), HttpExecution.defaultContext());
         return recoverWith(resultStage, throwable -> handleFailedAction(form, context, throwable), HttpExecution.defaultContext());
@@ -52,7 +52,7 @@ public interface WithFormFlow<F, T, R> extends WithForm<F> {
 
     CompletionStage<? extends R> doAction(final F formData, final T context);
 
-    default CompletionStage<Result> handleFailedAction(final Form<? extends F> form, final T context, final Throwable throwable) {
+    default CompletionStage<Result> handleFailedAction(final Form<F> form, final T context, final Throwable throwable) {
         final Throwable causeThrowable = throwable.getCause();
         if (causeThrowable instanceof ClientErrorException) {
             return handleClientErrorFailedAction(form, context, (ClientErrorException) causeThrowable);
@@ -60,7 +60,7 @@ public interface WithFormFlow<F, T, R> extends WithForm<F> {
         return handleGeneralFailedAction(throwable);
     }
 
-    CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends F> form, final T context, final ClientErrorException clientErrorException);
+    CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final T context, final ClientErrorException clientErrorException);
 
     default CompletionStage<Result> handleGeneralFailedAction(final Throwable throwable) {
         return exceptionallyCompletedFuture(throwable);
@@ -68,14 +68,14 @@ public interface WithFormFlow<F, T, R> extends WithForm<F> {
 
     CompletionStage<Result> handleSuccessfulAction(final F formData, final T context, final R result);
 
-    CompletionStage<Html> renderPage(final Form<? extends F> form, final T context, @Nullable final R result);
+    CompletionStage<Html> renderPage(final Form<F> form, final T context, @Nullable final R result);
 
-    default Form<? extends F> createNewFilledForm(final T context) {
+    default Form<F> createNewFilledForm(final T context) {
         try {
             final F formData = getFormDataClass().getConstructor().newInstance();
             fillFormData(formData, context);
             final Map<String, String> classFieldValues = BeanUtils.describe(formData);
-            final Form<? extends F> filledForm = formFactory().form(getFormDataClass()).bind(classFieldValues);
+            final Form<F> filledForm = formFactory().form(getFormDataClass()).bind(classFieldValues);
             filledForm.discardErrors();
             return filledForm;
         } catch (ReflectiveOperationException e) {

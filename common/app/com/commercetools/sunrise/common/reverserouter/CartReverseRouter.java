@@ -3,13 +3,22 @@ package com.commercetools.sunrise.common.reverserouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
-@ImplementedBy(ReflectionCartReverseRouter.class)
-public interface CartReverseRouter {
-    Call showCart(final String languageTag);
+@ImplementedBy(ReflectionCartLocalizedReverseRouter.class)
+public interface CartReverseRouter extends CartSimpleReverseRouter, LocalizedReverseRouter {
 
-    Call processAddProductToCartForm(final String languageTag);
+    default Call showCart() {
+        return showCart(languageTag());
+    }
 
-    Call processDeleteLineItemForm(final String languageTag);
+    default Call processAddProductToCartForm() {
+        return processAddProductToCartForm(languageTag());
+    }
 
-    Call processChangeLineItemQuantityForm(final String languageTag);
+    default Call processDeleteLineItemForm() {
+        return processDeleteLineItemForm(languageTag());
+    }
+
+    default Call processChangeLineItemQuantityForm() {
+        return processChangeLineItemQuantityForm(languageTag());
+    }
 }
