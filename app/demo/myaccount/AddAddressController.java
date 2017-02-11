@@ -3,7 +3,8 @@ package demo.myaccount;
 import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressPageContentFactory;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.SunriseAddAddressController;
 import com.neovisionaries.i18n.CountryCode;
@@ -13,28 +14,30 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-public class AddAddressController extends SunriseAddAddressController {
+public class AddAddressController extends SunriseAddAddressController<DefaultAddressBookAddressFormData> {
 
     private final AuthenticationReverseRouter authenticationReverseRouter;
     private final AddressBookReverseRouter addressBookReverseRouter;
 
     @Inject
-    public AddAddressController(final CountryCode country, final CustomerFinder customerFinder,
+    public AddAddressController(final CustomerFinder customerFinder,
+                                final AddAddressExecutor addAddressExecutor,
                                 final AddAddressPageContentFactory addAddressPageContentFactory,
+                                final CountryCode country,
                                 final AuthenticationReverseRouter authenticationReverseRouter,
                                 final AddressBookReverseRouter addressBookReverseRouter) {
-        super(country, customerFinder, addAddressPageContentFactory);
+        super(customerFinder, addAddressExecutor, addAddressPageContentFactory, country);
         this.authenticationReverseRouter = authenticationReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final Customer oldCustomer, final Customer updatedCustomer) {
-        return redirectTo(addressBookReverseRouter.addressBookCall());
+    public Class<DefaultAddressBookAddressFormData> getFormDataClass() {
+        return DefaultAddressBookAddressFormData.class;
     }
 
     @Override
-    protected CompletionStage<Result> handleNotFoundAddress() {
+    public CompletionStage<Result> handleSuccessfulAction(final DefaultAddressBookAddressFormData formData, final Customer oldCustomer, final Customer updatedCustomer) {
         return redirectTo(addressBookReverseRouter.addressBookCall());
     }
 

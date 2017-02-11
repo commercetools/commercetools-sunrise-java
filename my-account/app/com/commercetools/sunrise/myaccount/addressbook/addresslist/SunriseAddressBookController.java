@@ -1,32 +1,29 @@
 package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.customers.Customer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
-import javax.inject.Inject;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-@RequestScoped
 @IntroducingMultiControllerComponents(AddressBookThemeLinksControllerComponent.class)
 public abstract class SunriseAddressBookController extends SunriseFrameworkMyAccountController implements WithTemplateName {
 
-    protected static final Logger logger = LoggerFactory.getLogger(SunriseAddressBookController.class);
+    private final AddressBookPageContentFactory addressBookPageContentFactory;
 
-    @Inject
-    private AddressBookPageContentFactory addressBookPageContentFactory;
+    protected SunriseAddressBookController(final CustomerFinder customerFinder, final AddressBookPageContentFactory addressBookPageContentFactory) {
+        super(customerFinder);
+        this.addressBookPageContentFactory = addressBookPageContentFactory;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -42,11 +39,7 @@ public abstract class SunriseAddressBookController extends SunriseFrameworkMyAcc
 
     @SunriseRoute("addressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("show address book in locale={}", languageTag);
-            return requireExistingCustomer()
-                    .thenComposeAsync(this::showAddressBook, HttpExecution.defaultContext());
-        });
+        return doRequest(() -> requireCustomer(this::showAddressBook));
     }
 
     protected CompletionStage<Result> showAddressBook(final Customer customer) {

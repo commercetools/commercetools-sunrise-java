@@ -24,12 +24,12 @@ public class DefaultMyOrderListFinder implements MyOrderListFinder {
 
     @Override
     public CompletionStage<PagedQueryResult<Order>> findOrders(final Customer customer) {
-        final OrderQuery baseQuery = buildQuery(customer);
+        final OrderQuery baseQuery = buildRequest(customer);
         final OrderQuery query = runHookOnOrderQuery(baseQuery);
         return sphereClient.execute(query);
     }
 
-    protected OrderQuery buildQuery(final Customer customer) {
+    protected OrderQuery buildRequest(final Customer customer) {
         return OrderQuery.of()
                     .byCustomerId(customer.getId())
                     .withSort(order -> order.createdAt().sort().desc());

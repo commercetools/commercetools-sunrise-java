@@ -34,9 +34,9 @@ public class DefaultMyPersonalDetailsUpdater implements MyPersonalDetailsUpdater
 
     @Override
     public CompletionStage<Customer> updateCustomer(final Customer customer, final MyPersonalDetailsFormData formData) {
-        final List<UpdateAction<Customer>> updateActions = buildUpdateActions(customer, formData);
-        if (!updateActions.isEmpty()) {
-            return sphereClient.execute(CustomerUpdateCommand.of(customer, updateActions))
+        final CustomerUpdateCommand sphereRequest = buildRequest(customer, formData);
+        if (!sphereRequest.getUpdateActions().isEmpty()) {
+            return sphereClient.execute(sphereRequest)
                     .thenApplyAsync(updatedCustomer -> {
                         runHookOnCustomerUpdated(updatedCustomer);
                         return updatedCustomer;
@@ -46,7 +46,11 @@ public class DefaultMyPersonalDetailsUpdater implements MyPersonalDetailsUpdater
         }
     }
 
-    protected List<UpdateAction<Customer>> buildUpdateActions(final Customer customer, final MyPersonalDetailsFormData formData) {
+    protected CustomerUpdateCommand buildRequest(final Customer customer, final MyPersonalDetailsFormData formData) {
+        return CustomerUpdateCommand.of(customer, buildUpdateActions(customer, formData));
+    }
+
+    private List<UpdateAction<Customer>> buildUpdateActions(final Customer customer, final MyPersonalDetailsFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
         final CustomerName customerName = formData.toCustomerName();
         if (!Objects.equals(customer.getTitle(), customerName.getTitle())) {

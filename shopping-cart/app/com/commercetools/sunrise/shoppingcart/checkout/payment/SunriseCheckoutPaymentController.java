@@ -123,7 +123,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkS
     }
 
     @Override
-    public void fillFormData(final CheckoutPaymentFormData formData, final Cart cart) {
+    public void preFillFormData(final CheckoutPaymentFormData formData, final Cart cart) {
         final String paymentMethodId = findPaymentMethodId(cart).orElse(null);
         formData.setPayment(paymentMethodId);
     }

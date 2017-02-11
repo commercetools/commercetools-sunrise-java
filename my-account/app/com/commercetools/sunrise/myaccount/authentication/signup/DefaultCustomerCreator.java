@@ -10,6 +10,7 @@ import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
 import play.libs.concurrent.HttpExecution;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -28,7 +29,7 @@ public class DefaultCustomerCreator implements CustomerCreator {
 
     @Override
     public CompletionStage<CustomerSignInResult> createCustomer(final SignUpFormData formData) {
-        final CustomerCreateCommand command = buildCommand(formData);
+        final CustomerCreateCommand command = buildRequest(formData);
         return sphereClient.execute(command)
                 .thenApplyAsync(customer -> {
                     runHookOnCustomerSignedIn(customer);
@@ -36,20 +37,21 @@ public class DefaultCustomerCreator implements CustomerCreator {
                 }, HttpExecution.defaultContext());
     }
 
-    protected CustomerCreateCommand buildCommand(final SignUpFormData formData) {
+    protected CustomerCreateCommand buildRequest(final SignUpFormData formData) {
         return CustomerCreateCommand.of(buildDraft(formData));
     }
 
-    protected CustomerDraft buildDraft(final SignUpFormData formData) {
+    @Nullable
+    protected String generateCustomerNumber() {
+        return RandomStringUtils.randomNumeric(6);
+    }
+
+    private CustomerDraft buildDraft(final SignUpFormData formData) {
         final String cartId = cartInSession.findCartId().orElse(null);
         return formData.toCustomerDraftBuilder()
                 .customerNumber(generateCustomerNumber())
                 .anonymousCartId(cartId)
                 .build();
-    }
-
-    protected String generateCustomerNumber() {
-        return RandomStringUtils.randomNumeric(6);
     }
 
     private void runHookOnCustomerSignedIn(final CustomerSignInResult customer) {

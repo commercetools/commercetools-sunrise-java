@@ -81,7 +81,7 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
     }
 
     @Override
-    public void fillFormData(final F formData, final Void context) {
+    public void preFillFormData(final F formData, final Void context) {
         // Do not pre-fill anything
     }
 

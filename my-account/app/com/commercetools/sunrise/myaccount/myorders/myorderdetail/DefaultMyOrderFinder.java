@@ -27,7 +27,7 @@ public class DefaultMyOrderFinder implements MyOrderFinder {
 
     @Override
     public CompletionStage<Optional<Order>> findOrder(final Customer customer, final String identifier) {
-        final OrderQuery baseQuery = buildQuery(customer, identifier);
+        final OrderQuery baseQuery = buildRequest(customer, identifier);
         final OrderQuery query = runHookOnOrderQuery(baseQuery);
         return sphereClient.execute(query)
                 .thenApply(PagedQueryResult::head)
@@ -37,7 +37,7 @@ public class DefaultMyOrderFinder implements MyOrderFinder {
                 }, HttpExecution.defaultContext());
     }
 
-    protected OrderQuery buildQuery(final Customer customer, final String identifier) {
+    protected OrderQuery buildRequest(final Customer customer, final String identifier) {
         return OrderQuery.of().byCustomerId(customer.getId())
                 .plusPredicates(order -> order.orderNumber().is(identifier))
                 .plusExpansionPaths(order -> order.shippingInfo().shippingMethod())

@@ -106,7 +106,7 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkS
     }
 
     @Override
-    public void fillFormData(final CheckoutAddressFormData formData, final Cart cart) {
+    public void preFillFormData(final CheckoutAddressFormData formData, final Cart cart) {
         formData.setData(cart);
     }
 

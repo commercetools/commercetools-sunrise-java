@@ -8,6 +8,7 @@ import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
+import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.commands.UpdateAction;
@@ -33,17 +34,18 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @IntroducingMultiControllerComponents(AddAddressThemeLinksControllerComponent.class)
-public abstract class SunriseAddAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<AddressBookAddressFormData, Customer, Customer> {
+public abstract class SunriseAddAddressController<F extends AddressBookAddressFormData> extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<F, Customer, Customer> {
 
-    private final CountryCode country;
-    private final CustomerFinder customerFinder;
+    private final AddAddressExecutor addAddressExecutor;
     private final AddAddressPageContentFactory addAddressPageContentFactory;
+    private final CountryCode country;
 
-    protected SunriseAddAddressController(final CountryCode country, final CustomerFinder customerFinder,
-                                          final AddAddressPageContentFactory addAddressPageContentFactory) {
-        this.country = country;
-        this.customerFinder = customerFinder;
+    protected SunriseAddAddressController(final CustomerFinder customerFinder, final AddAddressExecutor addAddressExecutor,
+                                          final AddAddressPageContentFactory addAddressPageContentFactory, final CountryCode country) {
+        super(customerFinder);
+        this.addAddressExecutor = addAddressExecutor;
         this.addAddressPageContentFactory = addAddressPageContentFactory;
+        this.country = country;
     }
 
     @Override
@@ -58,88 +60,44 @@ public abstract class SunriseAddAddressController extends SunriseAddressBookMana
         return "my-account-new-address";
     }
 
-    @Override
-    public Class<? extends AddressBookAddressFormData> getFormDataClass() {
-        return DefaultAddressBookAddressFormData.class;
-    }
-
     @SunriseRoute("addAddressToAddressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> customerFinder.findCustomer()
-                .thenComposeAsync(customer -> customer
-                                .map(this::showForm)
-                                .orElseGet(this::handleNotFoundCustomer),
-                        HttpExecution.defaultContext()));
+        return doRequest(() -> requireCustomer(this::showForm));
     }
 
     @SunriseRoute("addAddressToAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> customerFinder.findCustomer()
-                .thenComposeAsync(customer -> customer
-                                .map(this::validateForm)
-                                .orElseGet(this::handleNotFoundCustomer),
-                        HttpExecution.defaultContext()));
+        return doRequest(() -> requireCustomer(this::validateForm));
     }
 
     @Override
-    public CompletionStage<? extends Customer> doAction(final AddressBookAddressFormData formData, final Customer customer) {
-        final Address address = formData.toAddress();
-        return addAddress(customer, address)
-                .thenComposeAsync(updatedCustomer -> findAddressId(updatedCustomer, address)
-                        .map(addressId -> setAddressAsDefault(updatedCustomer, addressId, formData))
-                        .orElseGet(() -> completedFuture(updatedCustomer)));
+    public CompletionStage<? extends Customer> doAction(final F formData, final Customer customer) {
+        return addAddressExecutor.addAddress(customer, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends AddressBookAddressFormData> form, final Customer customer, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Customer customer, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, customer, null));
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final Customer oldCustomer, final Customer updatedCustomer);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Customer oldCustomer, final Customer updatedCustomer);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final Customer customer, @Nullable final Customer updatedCustomer) {
+    public CompletionStage<Html> renderPage(final Form<F> form, final Customer customer, @Nullable final Customer updatedCustomer) {
         final AddAddressControllerData addAddressControllerData = new AddAddressControllerData(form, customer, updatedCustomer);
         final AddAddressPageContent pageContent = addAddressPageContentFactory.create(addAddressControllerData);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     @Override
-    public void fillFormData(final AddressBookAddressFormData formData, final Customer customer) {
+    public void preFillFormData(final F formData, final Customer customer) {
         final Address address = Address.of(country)
                 .withTitle(customer.getTitle())
                 .withFirstName(customer.getFirstName())
                 .withLastName(customer.getLastName())
                 .withEmail(customer.getEmail());
         formData.applyAddress(address);
-    }
-
-    protected final Optional<String> findAddressId(final Customer customer, final Address addressWithoutId) {
-        return customer.getAddresses().stream()
-                .filter(address -> address.equalsIgnoreId(addressWithoutId))
-                .findFirst()
-                .map(Address::getId);
-    }
-
-    private CompletionStage<Customer> addAddress(final Customer customer, final Address address) {
-        final AddAddress addAddressAction = AddAddress.of(address);
-        return sphere().execute(CustomerUpdateCommand.of(customer, addAddressAction));
-    }
-
-    private <T extends AddressBookAddressFormData> CompletionStage<Customer> setAddressAsDefault(final Customer customer, final String addressId, final T formData) {
-        final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        if (formData.isDefaultShippingAddress()) {
-            updateActions.add(SetDefaultShippingAddress.of(addressId));
-        }
-        if (formData.isDefaultBillingAddress()) {
-            updateActions.add(SetDefaultBillingAddress.of(addressId));
-        }
-        if (!updateActions.isEmpty()) {
-            return sphere().execute(CustomerUpdateCommand.of(customer, updateActions));
-        } else {
-            return completedFuture(customer);
-        }
     }
 }

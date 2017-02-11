@@ -5,23 +5,23 @@ import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 public abstract class SunriseAddressBookManagementController extends SunriseFrameworkMyAccountController {
 
-    protected CompletionStage<Optional<AddressBookActionData>> findAddressBookActionData(final String addressId) {
+    protected SunriseAddressBookManagementController(final CustomerFinder customerFinder) {
+        super(customerFinder);
+    }
 
-        return customerFinder.findCustomer()
-                .thenApplyAsync(customerOpt -> customerOpt
-                        .flatMap(customer -> findAddress(customer, addressId)
-                                .map(address -> new AddressBookActionData(customer, address))),
-                        HttpExecution.defaultContext());
+    protected CompletionStage<Result> requireAddress(final String addressId, final Function<AddressBookActionData, CompletionStage<Result>> nextAction) {
+        return requireCustomer(customer -> findAddress(customer, addressId)
+                .map(address -> nextAction.apply(new AddressBookActionData(customer, address)))
+                .orElseGet(this::handleNotFoundAddress));
     }
 
     protected Optional<Address> findAddress(final Customer customer, final String addressId) {
@@ -35,8 +35,4 @@ public abstract class SunriseAddressBookManagementController extends SunriseFram
     }
 
     protected abstract CompletionStage<Result> handleNotFoundAddress();
-
-    protected final boolean isDefaultAddress(final String addressId, @Nullable final String defaultAddressId) {
-        return Objects.equals(defaultAddressId, addressId);
-    }
 }

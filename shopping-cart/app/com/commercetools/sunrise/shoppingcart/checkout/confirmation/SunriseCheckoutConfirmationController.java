@@ -96,7 +96,7 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
     }
 
     @Override
-    public void fillFormData(final CheckoutConfirmationFormData formData, final Cart context) {
+    public void preFillFormData(final CheckoutConfirmationFormData formData, final Cart context) {
         // Do nothing
     }
 

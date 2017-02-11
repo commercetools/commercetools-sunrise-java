@@ -79,7 +79,7 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
     }
 
     @Override
-    public void fillFormData(final ChangeLineItemQuantityFormData formData, final Cart cart) {
+    public void preFillFormData(final ChangeLineItemQuantityFormData formData, final Cart cart) {
         // Do nothing
     }
 

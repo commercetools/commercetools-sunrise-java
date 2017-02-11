@@ -75,7 +75,7 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     }
 
     @Override
-    public void fillFormData(final F formData, final Customer customer) {
+    public void preFillFormData(final F formData, final Customer customer) {
         formData.applyCustomerName(customer.getName());
         formData.setEmail(customer.getEmail());
     }

@@ -100,7 +100,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseFramework
     }
 
     @Override
-    public void fillFormData(final CheckoutShippingFormData formData, final Cart cart) {
+    public void preFillFormData(final CheckoutShippingFormData formData, final Cart cart) {
         final String shippingMethodId = findShippingMethodId(cart).orElse(null);
         formData.setShippingMethodId(shippingMethodId);
     }

@@ -80,7 +80,7 @@ public abstract class SunriseLogInController<F extends LogInFormData> extends Su
     }
 
     @Override
-    public void fillFormData(final F formData, final Void context) {
+    public void preFillFormData(final F formData, final Void context) {
         // Do nothing
     }
 

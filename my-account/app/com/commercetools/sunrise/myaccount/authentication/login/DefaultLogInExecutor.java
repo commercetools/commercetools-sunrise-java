@@ -26,7 +26,7 @@ public class DefaultLogInExecutor implements LogInExecutor {
 
     @Override
     public CompletionStage<CustomerSignInResult> logIn(final LogInFormData formData) {
-        final CustomerSignInCommand signInCommand = buildCommand(formData);
+        final CustomerSignInCommand signInCommand = buildRequest(formData);
         return sphereClient.execute(signInCommand)
                 .thenApplyAsync(result -> {
                     runHookOnSignedIn(result);
@@ -34,7 +34,7 @@ public class DefaultLogInExecutor implements LogInExecutor {
                 }, HttpExecution.defaultContext());
     }
 
-    protected CustomerSignInCommand buildCommand(final LogInFormData formData) {
+    protected CustomerSignInCommand buildRequest(final LogInFormData formData) {
         final String cartId = cartInSession.findCartId().orElse(null);
         return CustomerSignInCommand.of(formData.getUsername(), formData.getPassword(), cartId);
     }
