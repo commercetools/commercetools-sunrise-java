@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.commercetools.sunrise.hooks.events.AddressLoadedHook;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
+import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import play.mvc.Result;
@@ -18,9 +18,9 @@ public abstract class SunriseAddressBookManagementController extends SunriseFram
         super(customerFinder);
     }
 
-    protected CompletionStage<Result> requireAddress(final String addressId, final Function<AddressBookActionData, CompletionStage<Result>> nextAction) {
+    protected CompletionStage<Result> requireAddress(final String addressId, final Function<AddressWithCustomer, CompletionStage<Result>> nextAction) {
         return requireCustomer(customer -> findAddress(customer, addressId)
-                .map(address -> nextAction.apply(new AddressBookActionData(customer, address)))
+                .map(address -> nextAction.apply(new AddressWithCustomer(customer, address)))
                 .orElseGet(this::handleNotFoundAddress));
     }
 

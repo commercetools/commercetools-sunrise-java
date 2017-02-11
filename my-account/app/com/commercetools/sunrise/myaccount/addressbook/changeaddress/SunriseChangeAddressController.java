@@ -5,9 +5,11 @@ import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
+import com.commercetools.sunrise.myaccount.addressbook.changeaddress.view.ChangeAddressPageContent;
+import com.commercetools.sunrise.myaccount.addressbook.changeaddress.view.ChangeAddressPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
@@ -21,16 +23,17 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
-public abstract class SunriseChangeAddressController<F extends AddressBookAddressFormData> extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<F, AddressBookActionData, Customer> {
+public abstract class SunriseChangeAddressController<F extends AddressBookAddressFormData> extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<F, AddressWithCustomer, Customer> {
 
-    private final ChangeAddressExecutor changeAddressExecutor;
+    private final ChangeAddressFunction changeAddressFunction;
     private final ChangeAddressPageContentFactory changeAddressPageContentFactory;
 
-    protected SunriseChangeAddressController(final CustomerFinder customerFinder, final ChangeAddressExecutor changeAddressExecutor,
+    protected SunriseChangeAddressController(final CustomerFinder customerFinder, final ChangeAddressFunction changeAddressFunction,
                                              final ChangeAddressPageContentFactory changeAddressPageContentFactory) {
         super(customerFinder);
-        this.changeAddressExecutor = changeAddressExecutor;
+        this.changeAddressFunction = changeAddressFunction;
         this.changeAddressPageContentFactory = changeAddressPageContentFactory;
     }
 
@@ -57,30 +60,29 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
     }
 
     @Override
-    public CompletionStage<? extends Customer> doAction(final F formData, final AddressBookActionData context) {
-        return changeAddressExecutor.changeAddress(context.getCustomer(), context.getAddress(), formData);
+    public CompletionStage<Customer> doAction(final F formData, final AddressWithCustomer addressWithCustomer) {
+        return changeAddressFunction.apply(addressWithCustomer, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final AddressBookActionData context, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final AddressWithCustomer addressWithCustomer, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, context, null));
+        return asyncBadRequest(renderPage(form, addressWithCustomer, null));
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final AddressBookActionData context, final Customer updatedCustomer);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final AddressWithCustomer addressWithCustomer, final Customer updatedCustomer);
 
     @Override
-    public void preFillFormData(final F formData, final AddressBookActionData context) {
-        formData.applyAddress(context.getAddress());
-        formData.setDefaultShippingAddress(isDefaultAddress(context.getAddress(), context.getCustomer().getDefaultShippingAddressId()));
-        formData.setDefaultBillingAddress(isDefaultAddress(context.getAddress(), context.getCustomer().getDefaultBillingAddressId()));
+    public void preFillFormData(final F formData, final AddressWithCustomer input) {
+        formData.applyAddress(input.getAddress());
+        formData.setDefaultShippingAddress(isDefaultAddress(input.getAddress(), input.getCustomer().getDefaultShippingAddressId()));
+        formData.setDefaultBillingAddress(isDefaultAddress(input.getAddress(), input.getCustomer().getDefaultBillingAddressId()));
     }
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final AddressBookActionData context, @Nullable final Customer updatedCustomer) {
-        final ChangeAddressControllerData addAddressControllerData = new ChangeAddressControllerData(form, context.getCustomer(), updatedCustomer);
-        final ChangeAddressPageContent pageContent = changeAddressPageContentFactory.create(addAddressControllerData);
+    public CompletionStage<Html> renderPage(final Form<F> form, final AddressWithCustomer addressWithCustomer, @Nullable final Customer updatedCustomer) {
+        final ChangeAddressPageContent pageContent = changeAddressPageContentFactory.create(firstNonNull(updatedCustomer, addressWithCustomer.getCustomer()), form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

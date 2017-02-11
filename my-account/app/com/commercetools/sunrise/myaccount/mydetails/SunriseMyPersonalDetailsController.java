@@ -5,7 +5,9 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
+import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
+import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContent;
+import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
@@ -17,17 +19,18 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.singletonList;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 @IntroducingMultiControllerComponents(MyPersonalDetailsThemeLinksControllerComponent.class)
 public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<F, Customer, Customer> {
 
-    private final MyPersonalDetailsUpdater myPersonalDetailsUpdater;
+    private final MyPersonalDetailsFunction myPersonalDetailsFunction;
     private final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory;
 
-    protected SunriseMyPersonalDetailsController(final CustomerFinder customerFinder, final MyPersonalDetailsUpdater myPersonalDetailsUpdater,
+    protected SunriseMyPersonalDetailsController(final CustomerFinder customerFinder, final MyPersonalDetailsFunction myPersonalDetailsFunction,
                                                  final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory) {
         super(customerFinder);
-        this.myPersonalDetailsUpdater = myPersonalDetailsUpdater;
+        this.myPersonalDetailsFunction = myPersonalDetailsFunction;
         this.myPersonalDetailsPageContentFactory = myPersonalDetailsPageContentFactory;
     }
 
@@ -54,8 +57,8 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     }
 
     @Override
-    public CompletionStage<? extends Customer> doAction(final F formData, final Customer customer) {
-        return myPersonalDetailsUpdater.updateCustomer(customer, formData);
+    public CompletionStage<Customer> doAction(final F formData, final Customer customer) {
+        return myPersonalDetailsFunction.apply(customer, formData);
     }
 
     @Override
@@ -65,12 +68,11 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Customer customer, final Customer updatedCustomer);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Customer oldCustomer, final Customer updatedCustomer);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final Customer customer, @Nullable final Customer updatedCustomer) {
-        final MyPersonalDetailsControllerData myPersonalDetailsControllerData = new MyPersonalDetailsControllerData(form, customer, updatedCustomer);
-        final MyPersonalDetailsPageContent pageContent = myPersonalDetailsPageContentFactory.create(myPersonalDetailsControllerData);
+    public CompletionStage<Html> renderPage(final Form<F> form, final Customer oldCustomer, @Nullable final Customer updatedCustomer) {
+        final MyPersonalDetailsPageContent pageContent = myPersonalDetailsPageContentFactory.create(firstNonNull(updatedCustomer, oldCustomer), form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

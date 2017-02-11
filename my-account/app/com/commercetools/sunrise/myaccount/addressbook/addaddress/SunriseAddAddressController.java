@@ -6,44 +6,35 @@ import com.commercetools.sunrise.framework.annotations.IntroducingMultiControlle
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
-import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
+import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContent;
+import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContentFactory;
+import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.ClientErrorException;
-import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
-import io.sphere.sdk.customers.commands.updateactions.AddAddress;
-import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
-import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 @IntroducingMultiControllerComponents(AddAddressThemeLinksControllerComponent.class)
 public abstract class SunriseAddAddressController<F extends AddressBookAddressFormData> extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<F, Customer, Customer> {
 
-    private final AddAddressExecutor addAddressExecutor;
+    private final AddAddressFunction addAddressFunction;
     private final AddAddressPageContentFactory addAddressPageContentFactory;
     private final CountryCode country;
 
-    protected SunriseAddAddressController(final CustomerFinder customerFinder, final AddAddressExecutor addAddressExecutor,
+    protected SunriseAddAddressController(final CustomerFinder customerFinder, final AddAddressFunction addAddressFunction,
                                           final AddAddressPageContentFactory addAddressPageContentFactory, final CountryCode country) {
         super(customerFinder);
-        this.addAddressExecutor = addAddressExecutor;
+        this.addAddressFunction = addAddressFunction;
         this.addAddressPageContentFactory = addAddressPageContentFactory;
         this.country = country;
     }
@@ -71,8 +62,8 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
     }
 
     @Override
-    public CompletionStage<? extends Customer> doAction(final F formData, final Customer customer) {
-        return addAddressExecutor.addAddress(customer, formData);
+    public CompletionStage<Customer> doAction(final F formData, final Customer customer) {
+        return addAddressFunction.apply(customer, formData);
     }
 
     @Override
@@ -86,8 +77,7 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
 
     @Override
     public CompletionStage<Html> renderPage(final Form<F> form, final Customer customer, @Nullable final Customer updatedCustomer) {
-        final AddAddressControllerData addAddressControllerData = new AddAddressControllerData(form, customer, updatedCustomer);
-        final AddAddressPageContent pageContent = addAddressPageContentFactory.create(addAddressControllerData);
+        final AddAddressPageContent pageContent = addAddressPageContentFactory.create(firstNonNull(updatedCustomer, customer), form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

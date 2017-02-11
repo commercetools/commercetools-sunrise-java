@@ -26,7 +26,7 @@ public class DefaultMyOrderFinder implements MyOrderFinder {
     }
 
     @Override
-    public CompletionStage<Optional<Order>> findOrder(final Customer customer, final String identifier) {
+    public CompletionStage<Optional<Order>> apply(final Customer customer, final String identifier) {
         final OrderQuery baseQuery = buildRequest(customer, identifier);
         final OrderQuery query = runHookOnOrderQuery(baseQuery);
         return sphereClient.execute(query)

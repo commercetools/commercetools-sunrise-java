@@ -1,14 +1,12 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.authentication.AuthenticationControllerData;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
-import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
+import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -24,16 +22,15 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-@RequestScoped
 @IntroducingMultiControllerComponents(SignUpThemeLinksControllerComponent.class)
 public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<F, Void, CustomerSignInResult> {
 
-    private final CustomerCreator customerCreator;
-    private final AuthenticationPageContentFactory authenticationPageContentFactory;
+    private final SignUpFunction signUpFunction;
+    private final SignUpPageContentFactory signUpPageContentFactory;
 
-    protected SunriseSignUpController(final CustomerCreator customerCreator, final AuthenticationPageContentFactory authenticationPageContentFactory) {
-        this.customerCreator = customerCreator;
-        this.authenticationPageContentFactory = authenticationPageContentFactory;
+    protected SunriseSignUpController(final SignUpFunction signUpFunction, final SignUpPageContentFactory signUpPageContentFactory) {
+        this.signUpFunction = signUpFunction;
+        this.signUpPageContentFactory = signUpPageContentFactory;
     }
 
     @Override
@@ -56,32 +53,31 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
     }
 
     @Override
-    public CompletionStage<? extends CustomerSignInResult> doAction(final F formData, final Void context) {
-        return customerCreator.createCustomer(formData);
+    public CompletionStage<CustomerSignInResult> doAction(final F formData, final Void input) {
+        return signUpFunction.apply(formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Void context, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Void input, final ClientErrorException clientErrorException) {
         if (isDuplicatedEmailFieldError(clientErrorException)) {
             saveFormError(form, "A user with this email already exists"); // TODO i18n
         } else {
             saveUnexpectedFormError(form, clientErrorException);
         }
-        return asyncBadRequest(renderPage(form, context, null));
+        return asyncBadRequest(renderPage(form, input, null));
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Void context, final CustomerSignInResult result);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Void input, final CustomerSignInResult result);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final Void context, @Nullable final CustomerSignInResult result) {
-        final AuthenticationControllerData authenticationControllerData = new AuthenticationControllerData(form, null, result);
-        final AuthenticationPageContent pageContent = authenticationPageContentFactory.create(authenticationControllerData);
+    public CompletionStage<Html> renderPage(final Form<F> form, final Void input, @Nullable final CustomerSignInResult result) {
+        final AuthenticationPageContent pageContent = signUpPageContentFactory.create(result, form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     @Override
-    public void preFillFormData(final F formData, final Void context) {
+    public void preFillFormData(final F formData, final Void input) {
         // Do not pre-fill anything
     }
 

@@ -6,10 +6,11 @@ import io.sphere.sdk.orders.Order;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiFunction;
 
 @ImplementedBy(DefaultMyOrderFinder.class)
-public interface MyOrderFinder {
+public interface MyOrderFinder extends BiFunction<Customer, String, CompletionStage<Optional<Order>>> {
 
-    CompletionStage<Optional<Order>> findOrder(final Customer customer, final String identifier);
-
+    @Override
+    CompletionStage<Optional<Order>> apply(final Customer customer, final String identifier);
 }
