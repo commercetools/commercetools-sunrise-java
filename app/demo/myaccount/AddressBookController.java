@@ -2,7 +2,7 @@ package demo.myaccount;
 
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContentFactory;
 import com.commercetools.sunrise.myaccount.addressbook.addresslist.SunriseAddressBookController;
 import play.mvc.Result;
 

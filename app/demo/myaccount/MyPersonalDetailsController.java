@@ -4,8 +4,8 @@ import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRoute
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.mydetails.DefaultMyPersonalDetailsFormData;
-import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsPageContentFactory;
-import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsUpdater;
+import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
+import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFunction;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
 import io.sphere.sdk.customers.Customer;
 import play.mvc.Result;
@@ -20,11 +20,11 @@ public class MyPersonalDetailsController extends SunriseMyPersonalDetailsControl
 
     @Inject
     public MyPersonalDetailsController(final CustomerFinder customerFinder,
-                                       final MyPersonalDetailsUpdater myPersonalDetailsUpdater,
+                                       final MyPersonalDetailsFunction myPersonalDetailsFunction,
                                        final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory,
                                        final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter,
                                        final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(customerFinder, myPersonalDetailsUpdater, myPersonalDetailsPageContentFactory);
+        super(customerFinder, myPersonalDetailsFunction, myPersonalDetailsPageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
         this.authenticationReverseRouter = authenticationReverseRouter;
     }
@@ -35,7 +35,7 @@ public class MyPersonalDetailsController extends SunriseMyPersonalDetailsControl
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final DefaultMyPersonalDetailsFormData formData, final Customer customer, final Customer updatedCustomer) {
+    public CompletionStage<Result> handleSuccessfulAction(final DefaultMyPersonalDetailsFormData formData, final Customer oldCustomer, final Customer updatedCustomer) {
         return redirectTo(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall());
     }
 

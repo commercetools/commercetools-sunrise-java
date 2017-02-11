@@ -1,0 +1,20 @@
+package com.commercetools.sunrise.myaccount.mydetails.view;
+
+import com.commercetools.sunrise.common.models.ViewModel;
+import io.sphere.sdk.customers.Customer;
+
+public class CustomerInfoBean extends ViewModel {
+
+    private Customer customer;
+
+    public CustomerInfoBean() {
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(final Customer customer) {
+        this.customer = customer;
+    }
+}

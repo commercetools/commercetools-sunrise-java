@@ -1,11 +1,14 @@
 package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 
 
+import com.commercetools.sunrise.common.controllers.WithFetchFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
+import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContent;
+import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContentFactory;
+import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
 import io.sphere.sdk.customers.Customer;
 import play.mvc.Result;
 import play.twirl.api.Html;
@@ -16,7 +19,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(AddressBookThemeLinksControllerComponent.class)
-public abstract class SunriseAddressBookController extends SunriseFrameworkMyAccountController implements WithTemplateName {
+public abstract class SunriseAddressBookController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFetchFlow<Customer> {
 
     private final AddressBookPageContentFactory addressBookPageContentFactory;
 
@@ -39,16 +42,12 @@ public abstract class SunriseAddressBookController extends SunriseFrameworkMyAcc
 
     @SunriseRoute("addressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::showAddressBook));
+        return doRequest(() -> requireCustomer(this::showPage));
     }
 
-    protected CompletionStage<Result> showAddressBook(final Customer customer) {
-        return asyncOk(renderPage(customer));
-    }
-
-    protected CompletionStage<Html> renderPage(final Customer customer) {
-        final AddressBookControllerData addressBookControllerData = new AddressBookControllerData(customer, null);
-        final AddressBookPageContent pageContent = addressBookPageContentFactory.create(addressBookControllerData);
+    @Override
+    public CompletionStage<Html> renderPage(final Customer customer) {
+        final AddressBookPageContent pageContent = addressBookPageContentFactory.create(customer);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 }

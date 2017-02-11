@@ -83,7 +83,7 @@ public abstract class SunriseAddProductToCartController extends SunriseFramework
     }
 
     @Override
-    public void preFillFormData(final AddProductToCartFormData formData, final Cart context) {
+    public void preFillFormData(final AddProductToCartFormData formData, final Cart input) {
         // Do nothing
     }
 

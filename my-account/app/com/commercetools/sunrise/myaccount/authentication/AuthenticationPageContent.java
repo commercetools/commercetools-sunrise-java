@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormSettingsBean;
+import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpFormSettingsBean;
 import play.data.Form;
 
 public class AuthenticationPageContent extends PageContent {

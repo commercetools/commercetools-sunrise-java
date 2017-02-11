@@ -3,8 +3,8 @@ package demo.myaccount;
 import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
-import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
+import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContentFactory;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.DefaultRemoveAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressFunction;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.SunriseRemoveAddressController;
@@ -46,7 +46,7 @@ public class RemoveAddressController extends SunriseRemoveAddressController<Defa
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final DefaultRemoveAddressFormData formData, final AddressBookActionData context, final Customer updatedCustomer) {
+    public CompletionStage<Result> handleSuccessfulAction(final DefaultRemoveAddressFormData formData, final AddressWithCustomer addressWithCustomer, final Customer updatedCustomer) {
         return redirectTo(addressBookReverseRouter.addressBookCall());
     }
 }

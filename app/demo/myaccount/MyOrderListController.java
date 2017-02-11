@@ -2,8 +2,8 @@ package demo.myaccount;
 
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.myorders.myorderlist.MyOrderListFinder;
-import com.commercetools.sunrise.myaccount.myorders.myorderlist.MyOrderListPageContentFactory;
+import com.commercetools.sunrise.myaccount.myorders.myorderlist.MyOrderListQuery;
+import com.commercetools.sunrise.myaccount.myorders.myorderlist.view.MyOrderListPageContentFactory;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.SunriseMyOrderListController;
 import play.mvc.Result;
 
@@ -16,10 +16,10 @@ public class MyOrderListController extends SunriseMyOrderListController {
 
     @Inject
     public MyOrderListController(final CustomerFinder customerFinder,
-                                 final MyOrderListFinder myOrderListFinder,
+                                 final MyOrderListQuery myOrderListQuery,
                                  final MyOrderListPageContentFactory myOrderListPageContentFactory,
                                  final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(customerFinder, myOrderListFinder, myOrderListPageContentFactory);
+        super(customerFinder, myOrderListQuery, myOrderListPageContentFactory);
         this.authenticationReverseRouter = authenticationReverseRouter;
     }
 

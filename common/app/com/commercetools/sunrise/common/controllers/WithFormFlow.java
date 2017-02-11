@@ -18,62 +18,62 @@ import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
 /**
  * Approach to handle form data (Template Method Pattern).
  * @param <F> stereotype of the in a form wrapped class
- * @param <T> type of the context of the form, possibly a parameter object
- * @param <R> the type of the updated object if the form is valid
+ * @param <I> type of the input data of the form, possibly a parameter object
+ * @param <O> type of the output object, normally the updated object if the form is valid
  */
-public interface WithFormFlow<F, T, R> extends WithForm<F> {
+public interface WithFormFlow<F, I, O> extends WithForm<F> {
 
-    default CompletionStage<Result> showForm(final T context) {
-        final Form<F> form = createNewFilledForm(context);
-        return renderPage(form, context, null)
+    default CompletionStage<Result> showForm(final I input) {
+        final Form<F> form = createNewFilledForm(input);
+        return renderPage(form, input, null)
                 .thenApplyAsync(Results::ok, HttpExecution.defaultContext());
     }
 
-    default CompletionStage<Result> validateForm(final T context) {
+    default CompletionStage<Result> validateForm(final I input) {
         return bindForm().thenComposeAsync(form -> {
             if (!form.hasErrors()) {
-                return handleValidForm(form, context);
+                return handleValidForm(form, input);
             } else {
-                return handleInvalidForm(form, context);
+                return handleInvalidForm(form, input);
             }
         }, HttpExecution.defaultContext());
     }
 
-    default CompletionStage<Result> handleInvalidForm(final Form<F> form, final T context) {
-        return renderPage(form, context, null)
+    default CompletionStage<Result> handleInvalidForm(final Form<F> form, final I input) {
+        return renderPage(form, input, null)
                 .thenApplyAsync(Results::badRequest, HttpExecution.defaultContext());
     }
 
-    default CompletionStage<Result> handleValidForm(final Form<F> form, final T context) {
-        final CompletionStage<Result> resultStage = doAction(form.get(), context)
-                .thenComposeAsync(result -> handleSuccessfulAction(form.get(), context, result), HttpExecution.defaultContext());
-        return recoverWith(resultStage, throwable -> handleFailedAction(form, context, throwable), HttpExecution.defaultContext());
+    default CompletionStage<Result> handleValidForm(final Form<F> form, final I input) {
+        final CompletionStage<Result> resultStage = doAction(form.get(), input)
+                .thenComposeAsync(output -> handleSuccessfulAction(form.get(), input, output), HttpExecution.defaultContext());
+        return recoverWith(resultStage, throwable -> handleFailedAction(form, input, throwable), HttpExecution.defaultContext());
     }
 
-    CompletionStage<? extends R> doAction(final F formData, final T context);
+    CompletionStage<O> doAction(final F formData, final I input);
 
-    default CompletionStage<Result> handleFailedAction(final Form<F> form, final T context, final Throwable throwable) {
+    default CompletionStage<Result> handleFailedAction(final Form<F> form, final I input, final Throwable throwable) {
         final Throwable causeThrowable = throwable.getCause();
         if (causeThrowable instanceof ClientErrorException) {
-            return handleClientErrorFailedAction(form, context, (ClientErrorException) causeThrowable);
+            return handleClientErrorFailedAction(form, input, (ClientErrorException) causeThrowable);
         }
         return handleGeneralFailedAction(throwable);
     }
 
-    CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final T context, final ClientErrorException clientErrorException);
+    CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final I input, final ClientErrorException clientErrorException);
 
     default CompletionStage<Result> handleGeneralFailedAction(final Throwable throwable) {
         return exceptionallyCompletedFuture(throwable);
     }
 
-    CompletionStage<Result> handleSuccessfulAction(final F formData, final T context, final R result);
+    CompletionStage<Result> handleSuccessfulAction(final F formData, final I input, final O output);
 
-    CompletionStage<Html> renderPage(final Form<F> form, final T context, @Nullable final R result);
+    CompletionStage<Html> renderPage(final Form<F> form, final I input, @Nullable final O output);
 
-    default Form<F> createNewFilledForm(final T context) {
+    default Form<F> createNewFilledForm(final I input) {
         try {
             final F formData = getFormDataClass().getConstructor().newInstance();
-            preFillFormData(formData, context);
+            preFillFormData(formData, input);
             final Map<String, String> classFieldValues = BeanUtils.describe(formData);
             final Form<F> filledForm = formFactory().form(getFormDataClass()).bind(classFieldValues);
             filledForm.discardErrors();
@@ -83,5 +83,5 @@ public interface WithFormFlow<F, T, R> extends WithForm<F> {
         }
     }
 
-    void preFillFormData(final F formData, final T context);
+    void preFillFormData(final F formData, final I input);
 }

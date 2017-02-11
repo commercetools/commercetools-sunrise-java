@@ -4,11 +4,10 @@ import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
+import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
-import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookControllerData;
-import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContent;
-import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContent;
+import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
@@ -20,8 +19,9 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
-public abstract class SunriseRemoveAddressController<F extends RemoveAddressFormData> extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<F, AddressBookActionData, Customer> {
+public abstract class SunriseRemoveAddressController<F extends RemoveAddressFormData> extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<F, AddressWithCustomer, Customer> {
 
     private final RemoveAddressFunction removeAddressFunction;
     private final AddressBookPageContentFactory addressBookPageContentFactory;
@@ -51,28 +51,27 @@ public abstract class SunriseRemoveAddressController<F extends RemoveAddressForm
     }
 
     @Override
-    public CompletionStage<Customer> doAction(final F formData, final AddressBookActionData context) {
-        return removeAddressFunction.apply(formData, context);
+    public CompletionStage<Customer> doAction(final F formData, final AddressWithCustomer addressWithCustomer) {
+        return removeAddressFunction.apply(formData, addressWithCustomer);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final AddressBookActionData context, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final AddressWithCustomer addressWithCustomer, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, context, null));
+        return asyncBadRequest(renderPage(form, addressWithCustomer, null));
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final AddressBookActionData context, final Customer updatedCustomer);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final AddressWithCustomer addressWithCustomer, final Customer updatedCustomer);
 
     @Override
-    public void preFillFormData(final F formData, final AddressBookActionData context) {
+    public void preFillFormData(final F formData, final AddressWithCustomer input) {
         // Do not pre-fill anything
     }
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final AddressBookActionData context, @Nullable final Customer updatedCustomer) {
-        final AddressBookControllerData addressBookControllerData = new AddressBookControllerData(context.getCustomer(), updatedCustomer);
-        final AddressBookPageContent pageContent = addressBookPageContentFactory.create(addressBookControllerData);
+    public CompletionStage<Html> renderPage(final Form<F> form, final AddressWithCustomer addressWithCustomer, @Nullable final Customer updatedCustomer) {
+        final AddressBookPageContent pageContent = addressBookPageContentFactory.create(firstNonNull(updatedCustomer, addressWithCustomer.getCustomer()));
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 }

@@ -1,9 +1,12 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
+import com.commercetools.sunrise.common.controllers.WithFetchFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
+import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
+import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContent;
+import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContentFactory;
 import io.sphere.sdk.orders.Order;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
@@ -11,10 +14,11 @@ import play.twirl.api.Html;
 
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 
-public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyAccountController implements WithTemplateName {
+public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFetchFlow<Order> {
 
     private final MyOrderFinder myOrderFinder;
     private final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory;
@@ -40,24 +44,23 @@ public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyA
 
     @SunriseRoute("myOrderDetailPageCall")
     public CompletionStage<Result> showByOrderNumber(final String languageTag, final String orderNumber) {
-        return doRequest(() ->
-                requireCustomer(customer ->
-                        myOrderFinder.findOrder(customer, orderNumber)
-                                .thenComposeAsync(order -> order
-                                                .map(this::showOrder)
-                                                .orElseGet(this::handleNotFoundOrder),
-                                        HttpExecution.defaultContext())));
+        return doRequest(() -> requireOrder(orderNumber, this::showPage));
     }
 
-    protected CompletionStage<Result> showOrder(final Order order) {
-        return asyncOk(renderPage(order));
-    }
-
-    protected CompletionStage<Html> renderPage(final Order order) {
-        final MyOrderDetailControllerData myOrderDetailControllerData = new MyOrderDetailControllerData(order);
-        final MyOrderDetailPageContent pageContent = myOrderDetailPageContentFactory.create(myOrderDetailControllerData);
+    @Override
+    public CompletionStage<Html> renderPage(final Order order) {
+        final MyOrderDetailPageContent pageContent = myOrderDetailPageContentFactory.create(order);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     protected abstract CompletionStage<Result> handleNotFoundOrder();
+
+    protected final CompletionStage<Result> requireOrder(final String orderNumber, final Function<Order, CompletionStage<Result>> nextAction) {
+        return requireCustomer(customer ->
+                myOrderFinder.apply(customer, orderNumber)
+                        .thenComposeAsync(order -> order
+                                        .map(nextAction)
+                                        .orElseGet(this::handleNotFoundOrder),
+                                HttpExecution.defaultContext()));
+    }
 }

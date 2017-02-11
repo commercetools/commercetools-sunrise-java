@@ -32,12 +32,12 @@ public abstract class SunriseLogOutController extends SunriseFrameworkController
     @SunriseRoute("processLogOut")
     public CompletionStage<Result> process(final String languageTag) {
         return doRequest(() -> {
-            doAction();
+            logOut();
             return handleSuccessfulAction();
         });
     }
 
-    protected void doAction() {
+    protected void logOut() {
         customerInSession.remove();
         cartInSession.remove();
     }

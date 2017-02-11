@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
 import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.hooks.events.CustomerUpdatedHook;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
+import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
@@ -24,7 +24,7 @@ public class DefaultRemoveAddressFunction implements RemoveAddressFunction {
     }
 
     @Override
-    public CompletionStage<Customer> apply(final RemoveAddressFormData formData, final AddressBookActionData actionData) {
+    public CompletionStage<Customer> apply(final RemoveAddressFormData formData, final AddressWithCustomer actionData) {
         final CustomerUpdateCommand request = buildRequest(actionData, formData);
         return sphereClient.execute(request)
                 .thenApplyAsync(updatedCustomer -> {
@@ -33,7 +33,7 @@ public class DefaultRemoveAddressFunction implements RemoveAddressFunction {
                 }, HttpExecution.defaultContext());
     }
 
-    protected CustomerUpdateCommand buildRequest(final AddressBookActionData actionData, final RemoveAddressFormData formData) {
+    protected CustomerUpdateCommand buildRequest(final AddressWithCustomer actionData, final RemoveAddressFormData formData) {
         final RemoveAddress updateAction = RemoveAddress.of(actionData.getAddress());
         return CustomerUpdateCommand.of(actionData.getCustomer(), updateAction);
     }

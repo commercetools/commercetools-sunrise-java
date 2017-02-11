@@ -83,7 +83,7 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
     }
 
     @Override
-    public void preFillFormData(final RemoveLineItemFormData formData, final Cart context) {
+    public void preFillFormData(final RemoveLineItemFormData formData, final Cart input) {
         // Do nothing
     }
 
