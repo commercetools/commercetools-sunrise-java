@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 import com.commercetools.sunrise.hooks.HookContext;
-import com.commercetools.sunrise.hooks.events.CustomerUpdatedHook;
+import com.commercetools.sunrise.myaccount.AbstractCustomerUpdater;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
 import io.sphere.sdk.client.SphereClient;
@@ -11,7 +11,6 @@ import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 import io.sphere.sdk.customers.commands.updateactions.ChangeAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
-import play.libs.concurrent.HttpExecution;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -22,25 +21,16 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-public class DefaultChangeAddressFunction implements ChangeAddressFunction {
-
-    private final SphereClient sphereClient;
-    private final HookContext hookContext;
+public class DefaultChangeAddressFunction extends AbstractCustomerUpdater implements ChangeAddressFunction {
 
     @Inject
     protected DefaultChangeAddressFunction(final SphereClient sphereClient, final HookContext hookContext) {
-        this.sphereClient = sphereClient;
-        this.hookContext = hookContext;
+        super(sphereClient, hookContext);
     }
 
     @Override
     public CompletionStage<Customer> apply(final AddressWithCustomer addressWithCustomer, final AddressBookAddressFormData formData) {
-        final CustomerUpdateCommand request = buildRequest(addressWithCustomer, formData);
-        return sphereClient.execute(request)
-                .thenApplyAsync(updatedCustomer -> {
-                    runHookOnCustomerUpdated(updatedCustomer);
-                    return updatedCustomer;
-                }, HttpExecution.defaultContext());
+        return executeRequest(addressWithCustomer.getCustomer(), buildRequest(addressWithCustomer, formData));
     }
 
     protected CustomerUpdateCommand buildRequest(final AddressWithCustomer addressWithCustomer, final AddressBookAddressFormData formData) {
@@ -73,10 +63,6 @@ public class DefaultChangeAddressFunction implements ChangeAddressFunction {
             return Optional.of(actionCreator.apply(addressIdToSetAsDefault));
         }
         return Optional.empty();
-    }
-
-    private CompletionStage<?> runHookOnCustomerUpdated(final Customer updatedCustomer) {
-        return CustomerUpdatedHook.runHook(hookContext, updatedCustomer);
     }
 
     protected final boolean isDefaultAddressDifferent(final String addressId, final boolean isNewDefaultAddress, @Nullable final String defaultAddressId) {

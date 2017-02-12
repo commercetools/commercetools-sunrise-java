@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart;
 
+import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.events.CartLoadedHook;
 import com.commercetools.sunrise.hooks.requests.CartQueryHook;
@@ -17,19 +18,24 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public class CartFinderBySession implements CartFinder<Void> {
+final class CartFinderBySession implements CartFinder {
+
+    private final CartInSession cartInSession;
+    private final CustomerInSession customerInSession;
+    private final SphereClient sphereClient;
+    private final HookContext hookContext;
 
     @Inject
-    private SphereClient sphereClient;
-    @Inject
-    private CartInSession cartInSession;
-    @Inject
-    private CustomerInSession customerInSession;
-    @Inject
-    private RequestHookContext hookContext;
+    CartFinderBySession(final CartInSession cartInSession, final CustomerInSession customerInSession,
+                        final SphereClient sphereClient, final HookContext hookContext) {
+        this.cartInSession = cartInSession;
+        this.customerInSession = customerInSession;
+        this.sphereClient = sphereClient;
+        this.hookContext = hookContext;
+    }
 
     @Override
-    public CompletionStage<Optional<Cart>> findCart(final Void unused) {
+    public CompletionStage<Optional<Cart>> get() {
         final CompletionStage<Optional<Cart>> cartStage = fetchCart();
         cartStage.thenAcceptAsync(cartOpt ->
                 cartOpt.ifPresent(cart -> CartLoadedHook.runHook(hookContext, cart)), HttpExecution.defaultContext());

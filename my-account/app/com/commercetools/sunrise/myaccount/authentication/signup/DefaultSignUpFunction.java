@@ -1,40 +1,31 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
 import com.commercetools.sunrise.hooks.HookContext;
-import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
+import com.commercetools.sunrise.myaccount.authentication.AbstractCustomerInSigner;
 import com.commercetools.sunrise.shoppingcart.CartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
-import play.libs.concurrent.HttpExecution;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-public class DefaultSignUpFunction implements SignUpFunction {
+public class DefaultSignUpFunction extends AbstractCustomerInSigner implements SignUpFunction {
 
     private final CartInSession cartInSession;
-    private final SphereClient sphereClient;
-    private final HookContext hookContext;
 
     @Inject
-    protected DefaultSignUpFunction(final CartInSession cartInSession, final SphereClient sphereClient, final HookContext hookContext) {
+    protected DefaultSignUpFunction(final SphereClient sphereClient, final HookContext hookContext, final CartInSession cartInSession) {
+        super(sphereClient, hookContext);
         this.cartInSession = cartInSession;
-        this.sphereClient = sphereClient;
-        this.hookContext = hookContext;
     }
 
     @Override
     public CompletionStage<CustomerSignInResult> apply(final SignUpFormData formData) {
-        final CustomerCreateCommand command = buildRequest(formData);
-        return sphereClient.execute(command)
-                .thenApplyAsync(customer -> {
-                    runHookOnCustomerSignedIn(customer);
-                    return customer;
-                }, HttpExecution.defaultContext());
+        return executeRequest(buildRequest(formData));
     }
 
     protected CustomerCreateCommand buildRequest(final SignUpFormData formData) {
@@ -52,9 +43,5 @@ public class DefaultSignUpFunction implements SignUpFunction {
                 .customerNumber(generateCustomerNumber())
                 .anonymousCartId(cartId)
                 .build();
-    }
-
-    private void runHookOnCustomerSignedIn(final CustomerSignInResult customer) {
-        CustomerSignInResultLoadedHook.runHook(hookContext, customer);
     }
 }

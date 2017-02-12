@@ -9,8 +9,8 @@ import java.util.function.BiFunction;
 
 @ImplementedBy(DefaultRemoveAddressFunction.class)
 @FunctionalInterface
-public interface RemoveAddressFunction extends BiFunction<RemoveAddressFormData, AddressWithCustomer, CompletionStage<Customer>> {
+public interface RemoveAddressFunction extends BiFunction<AddressWithCustomer, RemoveAddressFormData, CompletionStage<Customer>> {
 
     @Override
-    CompletionStage<Customer> apply(final RemoveAddressFormData formData, final AddressWithCustomer actionData);
+    CompletionStage<Customer> apply(final AddressWithCustomer addressWithCustomer, final RemoveAddressFormData formData);
 }

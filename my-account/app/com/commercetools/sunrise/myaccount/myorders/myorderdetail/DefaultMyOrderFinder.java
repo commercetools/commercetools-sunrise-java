@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
-import com.commercetools.sunrise.hooks.requests.OrderQueryHook;
+import com.commercetools.sunrise.myaccount.myorders.AbstractOrderQuerier;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.orders.Order;
@@ -14,22 +14,16 @@ import javax.inject.Inject;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public class DefaultMyOrderFinder implements MyOrderFinder {
-
-    private final SphereClient sphereClient;
-    private final RequestHookContext hookContext;
+public class DefaultMyOrderFinder extends AbstractOrderQuerier implements MyOrderFinder {
 
     @Inject
     protected DefaultMyOrderFinder(final SphereClient sphereClient, final RequestHookContext hookContext) {
-        this.sphereClient = sphereClient;
-        this.hookContext = hookContext;
+        super(sphereClient, hookContext);
     }
 
     @Override
     public CompletionStage<Optional<Order>> apply(final Customer customer, final String identifier) {
-        final OrderQuery baseQuery = buildRequest(customer, identifier);
-        final OrderQuery query = runHookOnOrderQuery(baseQuery);
-        return sphereClient.execute(query)
+        return executeRequest(buildRequest(customer, identifier))
                 .thenApply(PagedQueryResult::head)
                 .thenApplyAsync(order -> {
                     order.ifPresent(this::runHookOnLoadedOrder);
@@ -45,11 +39,7 @@ public class DefaultMyOrderFinder implements MyOrderFinder {
                 .withLimit(1);
     }
 
-    private OrderQuery runHookOnOrderQuery(final OrderQuery baseOrderQuery) {
-        return OrderQueryHook.runHook(hookContext, baseOrderQuery);
-    }
-
     private CompletionStage<?> runHookOnLoadedOrder(final Order order) {
-        return OrderLoadedHook.runHook(hookContext, order);
+        return OrderLoadedHook.runHook(getHookContext(), order);
     }
 }

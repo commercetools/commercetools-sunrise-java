@@ -13,40 +13,38 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-final class CustomerFinderBySession implements CustomerFinder {
+public class CustomerFinderBySession implements CustomerFinder {
 
-    private final SphereClient sphereClient;
     private final CustomerInSession customerInSession;
+    private final SphereClient sphereClient;
     private final RequestHookContext hookContext;
 
     @Inject
-    CustomerFinderBySession(final SphereClient sphereClient, final CustomerInSession customerInSession, final RequestHookContext hookContext) {
+    protected CustomerFinderBySession(final CustomerInSession customerInSession, final SphereClient sphereClient,
+                                      final RequestHookContext hookContext) {
         this.sphereClient = sphereClient;
         this.customerInSession = customerInSession;
         this.hookContext = hookContext;
     }
 
     @Override
-    public CompletionStage<Optional<Customer>> findCustomer() {
-        final CompletionStage<Optional<Customer>> customerStage = fetchCustomer();
-        customerStage.thenAcceptAsync(customerOpt ->
-                        customerOpt.ifPresent(customer -> CustomerLoadedHook.runHook(hookContext, customer)), HttpExecution.defaultContext());
-        return customerStage;
-    }
-
-    @Override
-    public CompletionStage<Optional<String>> findCustomerId() {
-        return completedFuture(customerInSession.findCustomerId());
-    }
-
-    private CompletionStage<Optional<Customer>> fetchCustomer() {
-        return customerInSession.findCustomerId()
-                .map(this::fetchCustomerById)
+    public CompletionStage<Optional<Customer>> get() {
+        return buildRequest()
+                .map(request -> sphereClient.execute(request)
+                        .thenApply(Optional::ofNullable)
+                        .thenApplyAsync(customer -> {
+                            customer.ifPresent(this::runHookOnCustomerLoaded);
+                            return customer;
+                        }, HttpExecution.defaultContext()))
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
-    private CompletionStage<Optional<Customer>> fetchCustomerById(final String customerId) {
-        final CustomerByIdGet query = CustomerByIdGet.of(customerId);
-        return sphereClient.execute(query).thenApply(Optional::ofNullable);
+    protected Optional<CustomerByIdGet> buildRequest() {
+        return customerInSession.findCustomerId()
+                .map(CustomerByIdGet::of);
+    }
+
+    private CompletionStage<?> runHookOnCustomerLoaded(final Customer customer) {
+        return CustomerLoadedHook.runHook(hookContext, customer);
     }
 }

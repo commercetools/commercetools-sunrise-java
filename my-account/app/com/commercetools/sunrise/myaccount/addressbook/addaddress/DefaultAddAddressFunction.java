@@ -1,5 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
+import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.myaccount.AbstractCustomerUpdater;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.commands.UpdateAction;
@@ -17,32 +19,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
-public class DefaultAddAddressFunction implements AddAddressFunction {
-
-    private final SphereClient sphereClient;
+public class DefaultAddAddressFunction extends AbstractCustomerUpdater implements AddAddressFunction {
 
     @Inject
-    protected DefaultAddAddressFunction(final SphereClient sphereClient) {
-        this.sphereClient = sphereClient;
+    protected DefaultAddAddressFunction(final SphereClient sphereClient, final HookContext hookContext) {
+        super(sphereClient, hookContext);
     }
 
     @Override
     public CompletionStage<Customer> apply(final Customer customer, final AddressBookAddressFormData formData) {
-        return sphereClient.execute(buildRequest(customer, formData))
-                .thenComposeAsync(updatedCustomer ->
-                        setAddressAsDefault(updatedCustomer, formData),
-                        HttpExecution.defaultContext());
-    }
-
-    private CompletionStage<Customer> setAddressAsDefault(final Customer customer, final AddressBookAddressFormData formData) {
-        final CustomerUpdateCommand command = buildPostRequest(customer, formData);
-        if (!command.getUpdateActions().isEmpty()) {
-            return sphereClient.execute(command);
-        } else {
-            return completedFuture(customer);
-        }
+        return executeRequest(customer, buildRequest(customer, formData))
+                .thenComposeAsync(updatedCustomer -> executeRequest(updatedCustomer, buildPostRequest(updatedCustomer, formData)), HttpExecution.defaultContext());
     }
 
     protected CustomerUpdateCommand buildRequest(final Customer customer, final AddressBookAddressFormData formData) {

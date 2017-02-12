@@ -2,7 +2,6 @@ package com.commercetools.sunrise.myaccount;
 
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.myaccount.CustomerFinder;
 import io.sphere.sdk.customers.Customer;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
@@ -29,7 +28,7 @@ public abstract class SunriseFrameworkMyAccountController extends SunriseFramewo
     }
 
     protected final CompletionStage<Result> requireCustomer(final Function<Customer, CompletionStage<Result>> nextAction) {
-        return customerFinder.findCustomer()
+        return customerFinder.get()
                 .thenComposeAsync(customer -> customer
                                 .map(nextAction)
                                 .orElseGet(this::handleNotFoundCustomer),

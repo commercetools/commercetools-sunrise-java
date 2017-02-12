@@ -5,11 +5,12 @@ import io.sphere.sdk.customers.Customer;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
 
 @ImplementedBy(CustomerFinderBySession.class)
-public interface CustomerFinder {
+@FunctionalInterface
+public interface CustomerFinder extends Supplier<CompletionStage<Optional<Customer>>> {
 
-    CompletionStage<Optional<Customer>> findCustomer();
-
-    CompletionStage<Optional<String>> findCustomerId();
+    @Override
+    CompletionStage<Optional<Customer>> get();
 }

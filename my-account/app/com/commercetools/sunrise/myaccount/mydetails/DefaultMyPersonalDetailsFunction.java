@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
 import com.commercetools.sunrise.hooks.HookContext;
-import com.commercetools.sunrise.hooks.events.CustomerUpdatedHook;
+import com.commercetools.sunrise.myaccount.AbstractCustomerUpdater;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
@@ -11,7 +11,6 @@ import io.sphere.sdk.customers.commands.updateactions.ChangeEmail;
 import io.sphere.sdk.customers.commands.updateactions.SetFirstName;
 import io.sphere.sdk.customers.commands.updateactions.SetLastName;
 import io.sphere.sdk.customers.commands.updateactions.SetTitle;
-import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -19,31 +18,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
-public class DefaultMyPersonalDetailsFunction implements MyPersonalDetailsFunction {
-
-    private final SphereClient sphereClient;
-    private final HookContext hookContext;
+public class DefaultMyPersonalDetailsFunction extends AbstractCustomerUpdater implements MyPersonalDetailsFunction {
 
     @Inject
     protected DefaultMyPersonalDetailsFunction(final SphereClient sphereClient, final HookContext hookContext) {
-        this.sphereClient = sphereClient;
-        this.hookContext = hookContext;
+        super(sphereClient, hookContext);
     }
 
     @Override
     public CompletionStage<Customer> apply(final Customer customer, final MyPersonalDetailsFormData formData) {
-        final CustomerUpdateCommand sphereRequest = buildRequest(customer, formData);
-        if (!sphereRequest.getUpdateActions().isEmpty()) {
-            return sphereClient.execute(sphereRequest)
-                    .thenApplyAsync(updatedCustomer -> {
-                        runHookOnCustomerUpdated(updatedCustomer);
-                        return updatedCustomer;
-                    }, HttpExecution.defaultContext());
-        } else {
-            return completedFuture(customer);
-        }
+        return executeRequest(customer, buildRequest(customer, formData));
     }
 
     protected CustomerUpdateCommand buildRequest(final Customer customer, final MyPersonalDetailsFormData formData) {
@@ -66,9 +50,5 @@ public class DefaultMyPersonalDetailsFunction implements MyPersonalDetailsFuncti
             updateActions.add(ChangeEmail.of(formData.getEmail()));
         }
         return updateActions;
-    }
-
-    private CompletionStage<?> runHookOnCustomerUpdated(final Customer customer) {
-        return CustomerUpdatedHook.runHook(hookContext, customer);
     }
 }
