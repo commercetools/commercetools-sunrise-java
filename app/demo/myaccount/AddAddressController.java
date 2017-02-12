@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressFunction;
+import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContentFactory;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.SunriseAddAddressController;
 import com.neovisionaries.i18n.CountryCode;
@@ -21,12 +21,12 @@ public class AddAddressController extends SunriseAddAddressController<DefaultAdd
 
     @Inject
     public AddAddressController(final CustomerFinder customerFinder,
-                                final AddAddressFunction addAddressFunction,
+                                final AddAddressExecutor addAddressExecutor,
                                 final AddAddressPageContentFactory addAddressPageContentFactory,
                                 final CountryCode country,
                                 final AuthenticationReverseRouter authenticationReverseRouter,
                                 final AddressBookReverseRouter addressBookReverseRouter) {
-        super(customerFinder, addAddressFunction, addAddressPageContentFactory, country);
+        super(customerFinder, addAddressExecutor, addAddressPageContentFactory, country);
         this.authenticationReverseRouter = authenticationReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
     }

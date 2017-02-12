@@ -4,18 +4,13 @@ import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.shoppingcart.cart.SunriseCartManagementController;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailControllerData;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContent;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.commands.CartUpdateCommand;
-import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
 import io.sphere.sdk.client.ClientErrorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
@@ -24,11 +19,20 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 @IntroducingMultiControllerComponents(ChangeLineItemQuantityThemeLinksControllerComponent.class)
-public abstract class SunriseChangeLineItemQuantityController extends SunriseCartManagementController implements WithTemplateName, WithFormFlow<ChangeLineItemQuantityFormData, Cart, Cart> {
+public abstract class SunriseChangeLineItemQuantityController<F extends ChangeLineItemQuantityFormData> extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<F, Cart, Cart> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseChangeLineItemQuantityController.class);
+    private final CartDetailPageContentFactory cartDetailPageContentFactory;
+    private final ChangeLineItemQuantityExecutor changeLineItemQuantityExecutor;
+
+    protected SunriseChangeLineItemQuantityController(final CartFinder cartFinder, final CartDetailPageContentFactory cartDetailPageContentFactory,
+                                                      final ChangeLineItemQuantityExecutor changeLineItemQuantityExecutor) {
+        super(cartFinder);
+        this.cartDetailPageContentFactory = cartDetailPageContentFactory;
+        this.changeLineItemQuantityExecutor = changeLineItemQuantityExecutor;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -42,50 +46,33 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseCar
         return "cart";
     }
 
-    @Override
-    public Class<? extends ChangeLineItemQuantityFormData> getFormDataClass() {
-        return DefaultChangeLineItemQuantityFormData.class;
-    }
-
     @SunriseRoute("processChangeLineItemQuantityForm")
     public CompletionStage<Result> changeLineItemQuantity(final String languageTag) {
-        return doRequest(() -> findCart()
-                .thenComposeAsync(cartOptional -> cartOptional
-                        .map(this::validateForm)
-                        .orElseGet(this::redirectToCartDetail), HttpExecution.defaultContext()));
+        return doRequest(() -> requireNonEmptyCart(this::processForm));
     }
 
     @Override
-    public CompletionStage<? extends Cart> doAction(final ChangeLineItemQuantityFormData formData, final Cart cart) {
-        return changeLineItemQuantity(cart, formData.getLineItemId(), formData.getQuantity());
+    public CompletionStage<Cart> doAction(final F formData, final Cart cart) {
+        return changeLineItemQuantityExecutor.apply(cart, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends ChangeLineItemQuantityFormData> form, final Cart cart, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Cart cart, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, cart, null));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final ChangeLineItemQuantityFormData formData, final Cart cart, final Cart updatedCart) {
-        return redirectToCartDetail();
-    }
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Cart oldCart, final Cart updatedCart);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<? extends ChangeLineItemQuantityFormData> form, final Cart cart, @Nullable final Cart updatedCart) {
-        final CartDetailControllerData cartDetailControllerData = new CartDetailControllerData(cart, updatedCart);
-        final CartDetailPageContent pageContent = injector().getInstance(CartDetailPageContentFactory.class).create(cartDetailControllerData);
+    public CompletionStage<Html> renderPage(final Form<F> form, final Cart cart, @Nullable final Cart updatedCart) {
+        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(firstNonNull(updatedCart, cart));
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     @Override
-    public void preFillFormData(final ChangeLineItemQuantityFormData formData, final Cart cart) {
-        // Do nothing
-    }
-
-    protected CompletionStage<Cart> changeLineItemQuantity(final Cart cart, final String lineItemId, final long quantity) {
-        final ChangeLineItemQuantity changeLineItemQuantity = ChangeLineItemQuantity.of(lineItemId, quantity);
-        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, changeLineItemQuantity);
-        return executeCartUpdateCommandWithHooks(cmd);
+    public void preFillFormData(final F formData, final Cart cart) {
+        // Do not pre-fill anything
     }
 }

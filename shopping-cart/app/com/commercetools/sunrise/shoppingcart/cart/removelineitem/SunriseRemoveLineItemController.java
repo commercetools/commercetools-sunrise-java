@@ -4,18 +4,13 @@ import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.shoppingcart.cart.SunriseCartManagementController;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailControllerData;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContent;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.commands.CartUpdateCommand;
-import io.sphere.sdk.carts.commands.updateactions.RemoveLineItem;
 import io.sphere.sdk.client.ClientErrorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
@@ -24,11 +19,20 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 @IntroducingMultiControllerComponents(RemoveLineItemThemeLinksControllerComponent.class)
-public abstract class SunriseRemoveLineItemController extends SunriseCartManagementController implements WithTemplateName, WithFormFlow<RemoveLineItemFormData, Cart, Cart> {
+public abstract class SunriseRemoveLineItemController<F extends RemoveLineItemFormData> extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<F, Cart, Cart> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveLineItemController.class);
+    private final RemoveLineItemExecutor removeLineItemExecutor;
+    private final CartDetailPageContentFactory cartDetailPageContentFactory;
+
+    protected SunriseRemoveLineItemController(final CartFinder cartFinder, final RemoveLineItemExecutor removeLineItemExecutor,
+                                              final CartDetailPageContentFactory cartDetailPageContentFactory) {
+        super(cartFinder);
+        this.removeLineItemExecutor = removeLineItemExecutor;
+        this.cartDetailPageContentFactory = cartDetailPageContentFactory;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -38,58 +42,37 @@ public abstract class SunriseRemoveLineItemController extends SunriseCartManagem
     }
 
     @Override
-    public Class<? extends RemoveLineItemFormData> getFormDataClass() {
-        return DefaultRemoveLineItemFormData.class;
-    }
-
-    @Override
     public String getTemplateName() {
         return "cart";
     }
 
     @SunriseRoute("processDeleteLineItemForm")
     public CompletionStage<Result> removeLineItem(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("process remove line item form in locale={}", languageTag);
-            return doRequest(() -> findCart()
-                    .thenComposeAsync(cartOptional -> cartOptional
-                            .map(this::validateForm)
-                            .orElseGet(this::redirectToCartDetail), HttpExecution.defaultContext()));
-        });
+        return doRequest(() -> requireNonEmptyCart(this::processForm));
     }
 
     @Override
-    public CompletionStage<? extends Cart> doAction(final RemoveLineItemFormData formData, final Cart cart) {
-        return removeLineItem(formData.getLineItemId(), cart);
+    public CompletionStage<Cart> doAction(final F formData, final Cart cart) {
+        return removeLineItemExecutor.apply(cart, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends RemoveLineItemFormData> form, final Cart cart, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Cart cart, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, cart, null));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final RemoveLineItemFormData formData, final Cart cart, final Cart updatedCart) {
-        return redirectToCartDetail();
-    }
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Cart oldCart, final Cart updatedCart);
 
-    // TODO duplicated
     @Override
-    public CompletionStage<Html> renderPage(final Form<? extends RemoveLineItemFormData> form, final Cart cart, @Nullable final Cart updatedCart) {
-        final CartDetailControllerData cartDetailControllerData = new CartDetailControllerData(cart, updatedCart);
-        final CartDetailPageContent pageContent = injector().getInstance(CartDetailPageContentFactory.class).create(cartDetailControllerData);
+    public CompletionStage<Html> renderPage(final Form<F> form, final Cart cart, @Nullable final Cart updatedCart) {
+        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(firstNonNull(updatedCart, cart));
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     @Override
-    public void preFillFormData(final RemoveLineItemFormData formData, final Cart input) {
+    public void preFillFormData(final F formData, final Cart input) {
         // Do nothing
-    }
-
-    protected CompletionStage<Cart> removeLineItem(final String lineItemId, final Cart cart) {
-        final RemoveLineItem removeLineItem = RemoveLineItem.of(lineItemId);
-        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, removeLineItem);
-        return executeCartUpdateCommandWithHooks(cmd);
     }
 }

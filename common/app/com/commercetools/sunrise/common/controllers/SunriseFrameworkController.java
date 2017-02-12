@@ -225,10 +225,6 @@ public abstract class SunriseFrameworkController extends Controller {
         return htmlCompletionStage.thenApplyAsync(Results::badRequest, HttpExecution.defaultContext());
     }
 
-    protected CompletionStage<Result> asyncInternalServerError(final CompletionStage<Html> htmlCompletionStage) {
-        return htmlCompletionStage.thenApplyAsync(Results::internalServerError, HttpExecution.defaultContext());
-    }
-
     protected void setI18nTitle(final PageContent pageContent, final String bundleWithKey) {
         final I18nIdentifier i18nIdentifier = injector.getInstance(I18nIdentifierFactory.class).create(bundleWithKey);
         pageContent.setTitle(i18nResolver.getOrEmpty(userLanguage().locales(), i18nIdentifier));

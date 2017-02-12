@@ -23,13 +23,13 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 public abstract class SunriseRemoveAddressController<F extends RemoveAddressFormData> extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<F, AddressWithCustomer, Customer> {
 
-    private final RemoveAddressFunction removeAddressFunction;
+    private final RemoveAddressExecutor removeAddressExecutor;
     private final AddressBookPageContentFactory addressBookPageContentFactory;
 
-    protected SunriseRemoveAddressController(final CustomerFinder customerFinder, final RemoveAddressFunction removeAddressFunction,
+    protected SunriseRemoveAddressController(final CustomerFinder customerFinder, final RemoveAddressExecutor removeAddressExecutor,
                                              final AddressBookPageContentFactory addressBookPageContentFactory) {
         super(customerFinder);
-        this.removeAddressFunction = removeAddressFunction;
+        this.removeAddressExecutor = removeAddressExecutor;
         this.addressBookPageContentFactory = addressBookPageContentFactory;
     }
 
@@ -47,12 +47,12 @@ public abstract class SunriseRemoveAddressController<F extends RemoveAddressForm
 
     @SunriseRoute("removeAddressFromAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
-        return doRequest(() -> requireAddress(addressId, this::validateForm));
+        return doRequest(() -> requireAddress(addressId, this::processForm));
     }
 
     @Override
     public CompletionStage<Customer> doAction(final F formData, final AddressWithCustomer addressWithCustomer) {
-        return removeAddressFunction.apply(formData, addressWithCustomer);
+        return removeAddressExecutor.apply(addressWithCustomer, formData);
     }
 
     @Override

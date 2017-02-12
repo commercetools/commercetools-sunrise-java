@@ -1,7 +1,7 @@
 package demo.myaccount;
 
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFunction;
+import com.commercetools.sunrise.myaccount.authentication.signup.SignUpExecutor;
 import com.commercetools.sunrise.myaccount.authentication.signup.DefaultSignUpFormData;
 import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpPageContentFactory;
 import com.commercetools.sunrise.myaccount.authentication.signup.SunriseSignUpController;
@@ -16,10 +16,10 @@ public class SignUpController extends SunriseSignUpController<DefaultSignUpFormD
     private final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
 
     @Inject
-    public SignUpController(final SignUpFunction signUpFunction,
+    public SignUpController(final SignUpExecutor signUpExecutor,
                             final SignUpPageContentFactory signUpPageContentFactory,
                             final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter) {
-        super(signUpFunction, signUpPageContentFactory);
+        super(signUpExecutor, signUpPageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
     }
 

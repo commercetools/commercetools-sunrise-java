@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRo
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.mydetails.DefaultMyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
-import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFunction;
+import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsExecutor;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
 import io.sphere.sdk.customers.Customer;
 import play.mvc.Result;
@@ -20,11 +20,11 @@ public class MyPersonalDetailsController extends SunriseMyPersonalDetailsControl
 
     @Inject
     public MyPersonalDetailsController(final CustomerFinder customerFinder,
-                                       final MyPersonalDetailsFunction myPersonalDetailsFunction,
+                                       final MyPersonalDetailsExecutor myPersonalDetailsExecutor,
                                        final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory,
                                        final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter,
                                        final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(customerFinder, myPersonalDetailsFunction, myPersonalDetailsPageContentFactory);
+        super(customerFinder, myPersonalDetailsExecutor, myPersonalDetailsPageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
         this.authenticationReverseRouter = authenticationReverseRouter;
     }

@@ -14,6 +14,7 @@ import java.util.concurrent.CompletionStage;
 
 import static io.sphere.sdk.utils.CompletableFutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * Approach to handle form data (Template Method Pattern).
@@ -23,20 +24,24 @@ import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
  */
 public interface WithFormFlow<F, I, O> extends WithForm<F> {
 
-    default CompletionStage<Result> showForm(final I input) {
+    default CompletionStage<Result> showFormPage(final I input) {
         final Form<F> form = createNewFilledForm(input);
         return renderPage(form, input, null)
                 .thenApplyAsync(Results::ok, HttpExecution.defaultContext());
     }
 
-    default CompletionStage<Result> validateForm(final I input) {
-        return bindForm().thenComposeAsync(form -> {
+    default CompletionStage<Result> processForm(final I input) {
+        return validateForm(input, bindForm()).thenComposeAsync(form -> {
             if (!form.hasErrors()) {
                 return handleValidForm(form, input);
             } else {
                 return handleInvalidForm(form, input);
             }
         }, HttpExecution.defaultContext());
+    }
+
+    default CompletionStage<Form<F>> validateForm(final I input, final Form<F> form) {
+        return completedFuture(form);
     }
 
     default CompletionStage<Result> handleInvalidForm(final Form<F> form, final I input) {

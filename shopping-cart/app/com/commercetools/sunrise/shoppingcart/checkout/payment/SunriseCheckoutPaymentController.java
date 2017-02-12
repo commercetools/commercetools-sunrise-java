@@ -1,67 +1,49 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.payments.PaymentConfiguration;
+import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.checkout.payment.view.CheckoutPaymentPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.payment.view.CheckoutPaymentPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
-import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.PaymentInfo;
-import io.sphere.sdk.carts.commands.CartUpdateCommand;
-import io.sphere.sdk.carts.commands.updateactions.AddPayment;
-import io.sphere.sdk.carts.commands.updateactions.RemovePayment;
 import io.sphere.sdk.client.ClientErrorException;
-import io.sphere.sdk.commands.UpdateAction;
-import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.payments.Payment;
-import io.sphere.sdk.payments.PaymentDraft;
-import io.sphere.sdk.payments.PaymentDraftBuilder;
 import io.sphere.sdk.payments.PaymentMethodInfo;
-import io.sphere.sdk.payments.commands.PaymentCreateCommand;
-import io.sphere.sdk.payments.commands.PaymentDeleteCommand;
-import io.sphere.sdk.payments.queries.PaymentByIdGet;
-import io.sphere.sdk.utils.CompletableFutureUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.libs.concurrent.HttpExecutionContext;
-import play.mvc.Call;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
-import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 import static play.libs.concurrent.HttpExecution.defaultContext;
 
-@RequestScoped
-public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkShoppingCartController
-        implements WithTemplateName, WithFormFlow<CheckoutPaymentFormData, Cart, Cart>, WithCartPreconditions {
+@IntroducingMultiControllerComponents(CheckoutPaymentThemeLinksControllerComponent.class)
+public abstract class SunriseCheckoutPaymentController<F extends CheckoutPaymentFormData> extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<F, Cart, Cart> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SunriseCheckoutPaymentController.class);
+    private final CheckoutPaymentExecutor checkoutPaymentExecutor;
+    private final CheckoutPaymentPageContentFactory checkoutPaymentPageContentFactory;
+    private final PaymentSettings paymentSettings;
 
-    @Inject
-    private PaymentConfiguration paymentConfiguration;
-    @Inject
-    private HttpExecutionContext httpExecutionContext;
-    @Inject
-    private CheckoutReverseRouter checkoutReverseRouter;
+    protected SunriseCheckoutPaymentController(final CartFinder cartFinder, final CheckoutPaymentExecutor checkoutPaymentExecutor,
+                                               final CheckoutPaymentPageContentFactory checkoutPaymentPageContentFactory,
+                                               final PaymentSettings paymentSettings) {
+        super(cartFinder);
+        this.checkoutPaymentExecutor = checkoutPaymentExecutor;
+        this.checkoutPaymentPageContentFactory = checkoutPaymentPageContentFactory;
+        this.paymentSettings = paymentSettings;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -75,157 +57,74 @@ public abstract class SunriseCheckoutPaymentController extends SunriseFrameworkS
         return "checkout-payment";
     }
 
-    @Override
-    public Class<? extends CheckoutPaymentFormData> getFormDataClass() {
-        return DefaultCheckoutPaymentFormData.class;
-    }
-
     @SunriseRoute("checkoutPaymentPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, defaultContext()));
+        return doRequest(() -> requireNonEmptyCart(this::showFormPage));
     }
 
     @SunriseRoute("checkoutPaymentProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, defaultContext()));
+        return doRequest(() -> requireNonEmptyCart(this::processForm));
     }
 
     @Override
-    public CompletionStage<? extends Cart> doAction(final CheckoutPaymentFormData formData, final Cart cart) {
-        final String selectedPaymentMethod = formData.getPayment();
-        return getPaymentMethodInfos()
-                .thenComposeAsync(paymentMethods -> findSelectedPaymentMethod(paymentMethods, selectedPaymentMethod)
-                        .map(paymentMethod -> setPaymentToCart(cart, paymentMethod))
-                        .orElseThrow(() -> new RuntimeException("No valid payment method found")), // Should not happen after validation
-                        httpExecutionContext.current());
+    public CompletionStage<Cart> doAction(final F formData, final Cart cart) {
+        return checkoutPaymentExecutor.apply(cart, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends CheckoutPaymentFormData> form, final Cart cart, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, LOGGER);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Cart cart, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, cart, null));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final CheckoutPaymentFormData formData, final Cart input, final Cart result) {
-        return redirectToCheckoutConfirmation();
-    }
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Cart oldCart, final Cart updatedCart);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<? extends CheckoutPaymentFormData> form, final Cart cart, @Nullable final Cart updatedCart) {
-        return getPaymentMethodInfos()
+    public CompletionStage<Html> renderPage(final Form<F> form, final Cart oldCart, @Nullable final Cart updatedCart) {
+        final Cart cart = firstNonNull(updatedCart, oldCart);
+        return paymentSettings.getPaymentMethods(cart)
                 .thenComposeAsync(paymentMethods -> {
-                    final CheckoutPaymentPageContentFactory pageContentFactory = injector().getInstance(CheckoutPaymentPageContentFactory.class);
-                    final CheckoutPaymentControllerData checkoutPaymentPageData = new CheckoutPaymentControllerData(form, cart, updatedCart, paymentMethods);
-                    final CheckoutPaymentPageContent pageContent = pageContentFactory.create(checkoutPaymentPageData);
+                    final PaymentMethodsWithCart paymentMethodsWithCart = new PaymentMethodsWithCart(paymentMethods, cart);
+                    final CheckoutPaymentPageContent pageContent = checkoutPaymentPageContentFactory.create(paymentMethodsWithCart, form);
                     return renderPageWithTemplate(pageContent, getTemplateName());
                 }, defaultContext());
     }
 
     @Override
-    public void preFillFormData(final CheckoutPaymentFormData formData, final Cart cart) {
-        final String paymentMethodId = findPaymentMethodId(cart).orElse(null);
+    public void preFillFormData(final F formData, final Cart cart) {
+        final String paymentMethodId = findPaymentMethodInfo(cart)
+                .map(PaymentMethodInfo::getMethod)
+                .orElse(null);
         formData.setPayment(paymentMethodId);
     }
 
-    @Override
-    public CompletionStage<Form<? extends CheckoutPaymentFormData>> asyncValidation(final Form<? extends CheckoutPaymentFormData> filledForm) {
-        final String selectedPaymentMethod = filledForm.field("payment").valueOr("");
-        if (!selectedPaymentMethod.isEmpty()) {
-            return getPaymentMethodInfos()
-                    .thenApply(paymentMethods -> {
-                        final boolean isValidPaymentMethod = isValidPaymentMethod(paymentMethods, selectedPaymentMethod);
-                        if (!isValidPaymentMethod) {
-                            filledForm.reject("Invalid payment error"); // TODO get from i18n
-                        }
-                        return filledForm;
-                    });
-        } else {
-            return completedFuture(filledForm);
-        }
-    }
-
-    @Override
-    public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requireNonEmptyCart();
-    }
-
-    protected CompletionStage<Cart> setPaymentToCart(final Cart cart, final PaymentMethodInfo selectedPaymentMethod) {
-        final List<PaymentMethodInfo> selectedPaymentMethods = singletonList(selectedPaymentMethod);
-        return withPaymentsToRemove(cart, selectedPaymentMethods, paymentsToRemove ->
-                withPaymentsToAdd(cart, selectedPaymentMethods, paymentsToAdd -> {
-                    final Stream<RemovePayment> removePaymentStream = paymentsToRemove.stream().map(RemovePayment::of);
-                    final Stream<AddPayment> addPaymentStream = paymentsToAdd.stream().map(AddPayment::of);
-                    final List<UpdateAction<Cart>> updateActions = Stream.concat(removePaymentStream, addPaymentStream).collect(toList());
-                    return sphere().execute(CartUpdateCommand.of(cart, updateActions));
-                })
-        );
-    }
-
-    protected CompletionStage<Cart> withPaymentsToRemove(final Cart cart, final List<PaymentMethodInfo> selectedPaymentMethods,
-                                                         final Function<List<Payment>, CompletionStage<Cart>> setPaymentAction) {
-        final List<Reference<Payment>> paymentRefs = Optional.ofNullable(cart.getPaymentInfo())
-                .map(PaymentInfo::getPayments)
-                .orElseGet(() -> {
-                    LOGGER.error("Payment info is not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
-                    return emptyList();
-                });
-        final List<CompletionStage<Payment>> paymentStages = paymentRefs.stream()
-                .map(paymentRef -> sphere().execute(PaymentByIdGet.of(paymentRef)))
-                .collect(toList());
-        return CompletableFutureUtils.listOfFuturesToFutureOfList(paymentStages)
-                .thenComposeAsync(payments -> {
-                    payments.removeIf(Objects::isNull);
-                    final CompletionStage<Cart> updatedCartStage = setPaymentAction.apply(payments);
-                    updatedCartStage.thenAccept(updatedCart ->
-                            payments.forEach(payment -> sphere().execute(PaymentDeleteCommand.of(payment))));
-                    return updatedCartStage;
-                });
-    }
-
-    protected CompletionStage<Cart> withPaymentsToAdd(final Cart cart, final List<PaymentMethodInfo> selectedPaymentMethods,
-                                                      final Function<List<Payment>, CompletionStage<Cart>> setPaymentAction) {
-        final List<CompletionStage<Payment>> paymentStages = selectedPaymentMethods.stream()
-                .map(selectedPaymentMethod -> {
-                    final PaymentDraft paymentDraft = PaymentDraftBuilder.of(cart.getTotalPrice())
-                            .paymentMethodInfo(selectedPaymentMethod)
-                            .customer(Optional.ofNullable(cart.getCustomerId()).map(Customer::referenceOfId).orElse(null))
-                            .build();
-                    return sphere().execute(PaymentCreateCommand.of(paymentDraft));
-                })
-                .collect(toList());
-        return CompletableFutureUtils.listOfFuturesToFutureOfList(paymentStages)
-                .thenComposeAsync(payments -> {
-                    payments.removeIf(Objects::isNull);
-                    return setPaymentAction.apply(payments);
-                });
-    }
-
-    protected CompletionStage<List<PaymentMethodInfo>> getPaymentMethodInfos() {
-        return completedFuture(paymentConfiguration.getPaymentMethodInfoList());
-    }
-
-    protected boolean isValidPaymentMethod(final List<PaymentMethodInfo> paymentMethods, final String selectedPaymentMethod) {
-        return findSelectedPaymentMethod(paymentMethods, selectedPaymentMethod).isPresent();
-    }
-
-    protected Optional<PaymentMethodInfo> findSelectedPaymentMethod(final List<PaymentMethodInfo> paymentMethods, final String selectedPaymentMethod) {
-        return paymentMethods.stream()
-                .filter(paymentMethod -> Objects.equals(paymentMethod.getMethod(), selectedPaymentMethod))
-                .findAny();
-    }
-
-    protected final CompletionStage<Result> redirectToCheckoutConfirmation() {
-        final Call call = checkoutReverseRouter.checkoutConfirmationPageCall();
-        return completedFuture(redirect(call));
-    }
-
-    protected final Optional<String> findPaymentMethodId(final Cart cart) {
+    protected final Optional<PaymentMethodInfo> findPaymentMethodInfo(final Cart cart) {
         return Optional.ofNullable(cart.getPaymentInfo())
                 .flatMap(info -> info.getPayments().stream()
                         .map(Reference::getObj)
                         .filter(Objects::nonNull)
-                        .map(obj -> obj.getPaymentMethodInfo().getMethod())
+                        .map(Payment::getPaymentMethodInfo)
                         .findAny());
+    }
+
+    @Override
+    public CompletionStage<Form<F>> validateForm(final Cart cart, final Form<F> filledForm) {
+        final String selectedPaymentMethod = filledForm.field("payment").valueOr("");
+        if (!selectedPaymentMethod.isEmpty()) {
+            isValidPaymentMethod(cart, selectedPaymentMethod).thenAcceptAsync(isValid -> {
+                if (!isValid) {
+                    filledForm.reject("Invalid payment error"); // TODO get from i18n
+                }
+            }, HttpExecution.defaultContext());
+        }
+        return completedFuture(filledForm);
+    }
+
+    private CompletionStage<Boolean> isValidPaymentMethod(final Cart cart, final String method) {
+        return paymentSettings.getPaymentMethods(cart)
+                .thenApply(paymentMethods -> paymentMethods.stream()
+                        .anyMatch(paymentMethod -> Objects.equals(paymentMethod.getMethod(), method)));
     }
 }

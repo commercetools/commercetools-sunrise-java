@@ -3,10 +3,10 @@ package demo.shoppingcart;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartCreator;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.cart.addtocart.AddProductToCartFunction;
+import com.commercetools.sunrise.shoppingcart.cart.addtocart.AddProductToCartExecutor;
 import com.commercetools.sunrise.shoppingcart.cart.addtocart.DefaultAddProductToCartFormData;
 import com.commercetools.sunrise.shoppingcart.cart.addtocart.SunriseAddProductToCartController;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.mvc.Result;
 
@@ -20,10 +20,10 @@ public final class AddProductToCartController extends SunriseAddProductToCartCon
     @Inject
     public AddProductToCartController(final CartCreator cartCreator,
                                       final CartFinder cartFinder,
-                                      final AddProductToCartFunction addProductToCartFunction,
+                                      final AddProductToCartExecutor addProductToCartExecutor,
                                       final CartDetailPageContentFactory cartDetailPageContentFactory,
                                       final CartReverseRouter cartReverseRouter) {
-        super(cartCreator, cartFinder, addProductToCartFunction, cartDetailPageContentFactory);
+        super(cartCreator, cartFinder, addProductToCartExecutor, cartDetailPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
     }
 

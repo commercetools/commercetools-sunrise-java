@@ -1,26 +1,17 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.CheckoutSimpleReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.shoppingcart.CartInSession;
-import com.commercetools.sunrise.shoppingcart.OrderInSession;
+import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
-import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.orders.Order;
-import io.sphere.sdk.orders.OrderFromCartDraft;
-import io.sphere.sdk.orders.PaymentState;
-import io.sphere.sdk.orders.commands.OrderFromCartCreateCommand;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
@@ -29,15 +20,19 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
-import static play.libs.concurrent.HttpExecution.defaultContext;
 
-@RequestScoped
 @IntroducingMultiControllerComponents(CheckoutConfirmationThemeLinksControllerComponent.class)
-public abstract class SunriseCheckoutConfirmationController extends SunriseFrameworkShoppingCartController
-        implements WithTemplateName, WithFormFlow<CheckoutConfirmationFormData, Cart, Order>, WithCartPreconditions {
+public abstract class SunriseCheckoutConfirmationController<F extends CheckoutConfirmationFormData> extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<F, Cart, Order> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutConfirmationController.class);
+    private final CheckoutConfirmationExecutor checkoutConfirmationExecutor;
+    private final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory;
+
+    protected SunriseCheckoutConfirmationController(final CartFinder cartFinder, final CheckoutConfirmationExecutor checkoutConfirmationExecutor,
+                                                    final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory) {
+        super(cartFinder);
+        this.checkoutConfirmationExecutor = checkoutConfirmationExecutor;
+        this.checkoutConfirmationPageContentFactory = checkoutConfirmationPageContentFactory;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -51,71 +46,38 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseFrame
         return "checkout-confirmation";
     }
 
-    @Override
-    public Class<? extends CheckoutConfirmationFormData> getFormDataClass() {
-        return DefaultCheckoutConfirmationFormData.class;
-    }
-
     @SunriseRoute("checkoutConfirmationPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, defaultContext()));
+        return doRequest(() -> requireNonEmptyCart(this::showFormPage));
     }
 
     @SunriseRoute("checkoutConfirmationProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, defaultContext()));
+        return doRequest(() -> requireNonEmptyCart(this::processForm));
     }
 
     @Override
-    public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requireNonEmptyCart();
+    public CompletionStage<Order> doAction(final F formData, final Cart cart) {
+        return checkoutConfirmationExecutor.apply(cart, formData);
     }
 
     @Override
-    public CompletionStage<? extends Order> doAction(final CheckoutConfirmationFormData formData, final Cart cart) {
-        return createOrder(cart);
-    }
-
-    @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends CheckoutConfirmationFormData> form, final Cart cart, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Cart cart, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, cart, null));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final CheckoutConfirmationFormData formData, final Cart cart, final Order order) {
-        final Call call = injector().getInstance(CheckoutSimpleReverseRouter.class).checkoutThankYouPageCall(userContext().languageTag());
-        return completedFuture(redirect(call));
-    }
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Cart cart, final Order order);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<? extends CheckoutConfirmationFormData> form, final Cart cart, @Nullable final Order order) {
-        final CheckoutConfirmationControllerData checkoutConfirmationPageData = new CheckoutConfirmationControllerData(form, cart, order);
-        final CheckoutConfirmationPageContent pageContent = injector().getInstance(CheckoutConfirmationPageContentFactory.class).create(checkoutConfirmationPageData);
+    public CompletionStage<Html> renderPage(final Form<F> form, final Cart cart, @Nullable final Order order) {
+        final CheckoutConfirmationPageContent pageContent = checkoutConfirmationPageContentFactory.create(cart, form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     @Override
-    public void preFillFormData(final CheckoutConfirmationFormData formData, final Cart input) {
-        // Do nothing
-    }
-
-    protected PaymentState orderInitialPaymentState(final Cart cart) {
-        return PaymentState.PENDING;
-    }
-
-    protected String generateOrderNumber() {
-        return RandomStringUtils.randomNumeric(8);
-    }
-
-    private CompletionStage<Order> createOrder(final Cart cart) {
-        final String orderNumber = generateOrderNumber();
-        final OrderFromCartDraft orderDraft = OrderFromCartDraft.of(cart, orderNumber, orderInitialPaymentState(cart));
-        return sphere().execute(OrderFromCartCreateCommand.of(orderDraft))
-                .thenApplyAsync(order -> {
-                    injector().getInstance(OrderInSession.class).store(order);
-                    injector().getInstance(CartInSession.class).remove();
-                    return order;
-                }, defaultContext());
+    public void preFillFormData(final F formData, final Cart cart) {
+        // Do not pre-fill anything
     }
 }

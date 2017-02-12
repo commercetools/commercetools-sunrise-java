@@ -20,7 +20,6 @@ import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuilder;
 import com.commercetools.sunrise.myaccount.CustomerComponent;
-import com.commercetools.sunrise.payments.PaymentConfiguration;
 import com.commercetools.sunrise.shoppingcart.CartComponent;
 import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
 import com.commercetools.sunrise.shoppingcart.common.CheckoutCommonComponent;
@@ -31,8 +30,6 @@ import com.google.inject.name.Names;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.models.LocalizedString;
-import io.sphere.sdk.payments.PaymentMethodInfoBuilder;
 import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.ProductTypeLocalRepository;
@@ -48,7 +45,6 @@ import java.util.concurrent.TimeUnit;
 
 import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
 import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
-import static java.util.Collections.singletonList;
 
 public class Module extends AbstractModule {
 
@@ -76,15 +72,6 @@ public class Module extends AbstractModule {
         final ProductTypeQuery query = ProductTypeQuery.of();
         final List<ProductType> productTypes = blockingWait(queryAll(sphereClient, query), 30, TimeUnit.SECONDS);
         return ProductTypeLocalRepository.of(productTypes);
-    }
-
-    @Provides
-    @Singleton
-    public PaymentConfiguration provideStaticPaymentConfiguration() {
-        return () -> singletonList(PaymentMethodInfoBuilder.of()
-                .name(LocalizedString.of(Locale.ENGLISH, "Prepaid", Locale.GERMAN, "Vorkasse"))
-                .method("prepaid")
-                .build());
     }
 
     @Provides

@@ -4,6 +4,7 @@ import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
 public class DefaultRemoveLineItemFormData extends Base implements RemoveLineItemFormData {
+
     @Constraints.Required
     @Constraints.MinLength(1)
     private String lineItemId;

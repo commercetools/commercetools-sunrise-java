@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRoute
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.changeaddress.ChangeAddressFunction;
+import com.commercetools.sunrise.myaccount.addressbook.changeaddress.ChangeAddressExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.view.ChangeAddressPageContentFactory;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.SunriseChangeAddressController;
 import io.sphere.sdk.customers.Customer;
@@ -20,8 +20,8 @@ public class ChangeAddressController extends SunriseChangeAddressController<Defa
     private final AddressBookReverseRouter addressBookReverseRouter;
 
     @Inject
-    public ChangeAddressController(final CustomerFinder customerFinder, final ChangeAddressFunction changeAddressFunction, final ChangeAddressPageContentFactory changeAddressPageContentFactory, final AuthenticationReverseRouter authenticationReverseRouter, final AddressBookReverseRouter addressBookReverseRouter) {
-        super(customerFinder, changeAddressFunction, changeAddressPageContentFactory);
+    public ChangeAddressController(final CustomerFinder customerFinder, final ChangeAddressExecutor changeAddressExecutor, final ChangeAddressPageContentFactory changeAddressPageContentFactory, final AuthenticationReverseRouter authenticationReverseRouter, final AddressBookReverseRouter addressBookReverseRouter) {
+        super(customerFinder, changeAddressExecutor, changeAddressPageContentFactory);
         this.authenticationReverseRouter = authenticationReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
     }

@@ -27,14 +27,14 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 @IntroducingMultiControllerComponents(AddAddressThemeLinksControllerComponent.class)
 public abstract class SunriseAddAddressController<F extends AddressBookAddressFormData> extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<F, Customer, Customer> {
 
-    private final AddAddressFunction addAddressFunction;
+    private final AddAddressExecutor addAddressExecutor;
     private final AddAddressPageContentFactory addAddressPageContentFactory;
     private final CountryCode country;
 
-    protected SunriseAddAddressController(final CustomerFinder customerFinder, final AddAddressFunction addAddressFunction,
+    protected SunriseAddAddressController(final CustomerFinder customerFinder, final AddAddressExecutor addAddressExecutor,
                                           final AddAddressPageContentFactory addAddressPageContentFactory, final CountryCode country) {
         super(customerFinder);
-        this.addAddressFunction = addAddressFunction;
+        this.addAddressExecutor = addAddressExecutor;
         this.addAddressPageContentFactory = addAddressPageContentFactory;
         this.country = country;
     }
@@ -53,17 +53,17 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
 
     @SunriseRoute("addAddressToAddressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::showForm));
+        return doRequest(() -> requireCustomer(this::showFormPage));
     }
 
     @SunriseRoute("addAddressToAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::validateForm));
+        return doRequest(() -> requireCustomer(this::processForm));
     }
 
     @Override
     public CompletionStage<Customer> doAction(final F formData, final Customer customer) {
-        return addAddressFunction.apply(customer, formData);
+        return addAddressExecutor.apply(customer, formData);
     }
 
     @Override

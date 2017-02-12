@@ -6,6 +6,7 @@ import io.sphere.sdk.models.Address;
 import javax.annotation.Nullable;
 
 public interface CheckoutAddressFormData {
+
     void setData(final Cart cart);
 
     Address toShippingAddress();

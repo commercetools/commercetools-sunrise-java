@@ -24,13 +24,13 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 @IntroducingMultiControllerComponents(MyPersonalDetailsThemeLinksControllerComponent.class)
 public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<F, Customer, Customer> {
 
-    private final MyPersonalDetailsFunction myPersonalDetailsFunction;
+    private final MyPersonalDetailsExecutor myPersonalDetailsExecutor;
     private final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory;
 
-    protected SunriseMyPersonalDetailsController(final CustomerFinder customerFinder, final MyPersonalDetailsFunction myPersonalDetailsFunction,
+    protected SunriseMyPersonalDetailsController(final CustomerFinder customerFinder, final MyPersonalDetailsExecutor myPersonalDetailsExecutor,
                                                  final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory) {
         super(customerFinder);
-        this.myPersonalDetailsFunction = myPersonalDetailsFunction;
+        this.myPersonalDetailsExecutor = myPersonalDetailsExecutor;
         this.myPersonalDetailsPageContentFactory = myPersonalDetailsPageContentFactory;
     }
 
@@ -48,17 +48,17 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
 
     @SunriseRoute("myPersonalDetailsPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::showForm));
+        return doRequest(() -> requireCustomer(this::showFormPage));
     }
 
     @SunriseRoute("myPersonalDetailsProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::validateForm));
+        return doRequest(() -> requireCustomer(this::processForm));
     }
 
     @Override
     public CompletionStage<Customer> doAction(final F formData, final Customer customer) {
-        return myPersonalDetailsFunction.apply(customer, formData);
+        return myPersonalDetailsExecutor.apply(customer, formData);
     }
 
     @Override

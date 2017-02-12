@@ -1,45 +1,38 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.CheckoutSimpleReverseRouter;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
-import com.commercetools.sunrise.shoppingcart.common.WithCartPreconditions;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.commands.CartUpdateCommand;
-import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
-import io.sphere.sdk.carts.commands.updateactions.SetCountry;
-import io.sphere.sdk.carts.commands.updateactions.SetCustomerEmail;
-import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 import io.sphere.sdk.client.ClientErrorException;
-import io.sphere.sdk.commands.UpdateAction;
-import io.sphere.sdk.models.Address;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.libs.concurrent.HttpExecution;
-import play.mvc.Call;
 import play.mvc.Result;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
-@RequestScoped
 @IntroducingMultiControllerComponents(CheckoutAddressThemeLinksControllerComponent.class)
-public abstract class SunriseCheckoutAddressController extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<CheckoutAddressFormData, Cart, Cart>, WithCartPreconditions {
+public abstract class SunriseCheckoutAddressController<F extends CheckoutAddressFormData> extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<F, Cart, Cart> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseCheckoutAddressController.class);
+    private final CheckoutAddressExecutor checkoutAddressExecutor;
+    private final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
+
+    protected SunriseCheckoutAddressController(final CartFinder cartFinder, final CheckoutAddressExecutor checkoutAddressExecutor,
+                                               final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory) {
+        super(cartFinder);
+        this.checkoutAddressExecutor = checkoutAddressExecutor;
+        this.checkoutAddressPageContentFactory = checkoutAddressPageContentFactory;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -53,60 +46,46 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkS
         return "checkout-address";
     }
 
-    @Override
-    public Class<? extends CheckoutAddressFormData> getFormDataClass() {
-        return DefaultCheckoutAddressFormData.class;
-    }
-
     @SunriseRoute("checkoutAddressesPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::showForm, HttpExecution.defaultContext()));
+        return doRequest(() -> requireNonEmptyCart(this::showFormPage));
     }
 
-    @SunriseRoute("checkoutAddressesProcessFormCall")
     @SuppressWarnings("unused")
+    @SunriseRoute("checkoutAddressesProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> loadCartWithPreconditions().thenComposeAsync(this::validateForm, HttpExecution.defaultContext()));
+        return doRequest(() -> requireNonEmptyCart(this::processForm));
     }
 
     @Override
-    public CompletionStage<Cart> loadCartWithPreconditions() {
-        return requireNonEmptyCart();
+    public CompletionStage<Cart> doAction(final F formData, final Cart cart) {
+        return checkoutAddressExecutor.apply(cart, formData);
     }
 
     @Override
-    public CompletionStage<? extends Cart> doAction(final CheckoutAddressFormData formData, final Cart cart) {
-        return setAddressToCart(cart, formData.toShippingAddress(), formData.toBillingAddress());
-    }
-
-    @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends CheckoutAddressFormData> form, final Cart cart, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
+    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Cart cart, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, cart, null));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final CheckoutAddressFormData formData, final Cart oldCart, final Cart updatedCart) {
-        final Call call = injector().getInstance(CheckoutSimpleReverseRouter.class).checkoutShippingPageCall(userContext().languageTag());
-        return completedFuture(redirect(call));
-    }
+    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Cart oldCart, final Cart updatedCart);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<? extends CheckoutAddressFormData> form, final Cart cart, @Nullable final Cart updatedCart) {
-        final CheckoutAddressControllerData checkoutAddressPageData = new CheckoutAddressControllerData(form, cart, updatedCart);
-        final CheckoutAddressPageContent pageContent = injector().getInstance(CheckoutAddressPageContentFactory.class).create(checkoutAddressPageData);
+    public CompletionStage<Html> renderPage(final Form<F> form, final Cart cart, @Nullable final Cart updatedCart) {
+        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.create(firstNonNull(updatedCart, cart), form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     @Override
-    public Form<? extends CheckoutAddressFormData> createForm() {
+    public Form<F> createForm() {
         return isBillingDifferent()
                 ? formFactory().form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class)
                 : formFactory().form(getFormDataClass());
     }
 
     @Override
-    public void preFillFormData(final CheckoutAddressFormData formData, final Cart cart) {
+    public void preFillFormData(final F formData, final Cart cart) {
         formData.setData(cart);
     }
 
@@ -114,16 +93,5 @@ public abstract class SunriseCheckoutAddressController extends SunriseFrameworkS
         final String flagFieldName = "billingAddressDifferentToBillingAddress";
         final String fieldValue = formFactory().form().bindFromRequest().get(flagFieldName);
         return "true".equals(fieldValue);
-    }
-
-    private CompletionStage<Cart> setAddressToCart(final Cart cart, final Address shippingAddress, @Nullable final Address billingAddress) {
-        final List<UpdateAction<Cart>> updateActions = new ArrayList<>();
-        updateActions.add(SetCountry.of(shippingAddress.getCountry()));
-        updateActions.add(SetShippingAddress.of(shippingAddress));
-        updateActions.add(SetBillingAddress.of(billingAddress));
-        Optional.ofNullable(shippingAddress.getEmail())
-                .ifPresent(email -> updateActions.add(SetCustomerEmail.of(email)));
-        final CartUpdateCommand cmd = CartUpdateCommand.of(cart, updateActions);
-        return executeCartUpdateCommandWithHooks(cmd);
     }
 }

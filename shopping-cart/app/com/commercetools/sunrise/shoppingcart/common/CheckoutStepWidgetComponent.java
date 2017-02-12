@@ -3,10 +3,10 @@ package com.commercetools.sunrise.shoppingcart.common;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
-import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressPageContent;
-import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationPageContent;
-import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentPageContent;
-import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.payment.view.CheckoutPaymentPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.shipping.view.CheckoutShippingPageContent;
 
 import java.util.HashMap;
 import java.util.Map;

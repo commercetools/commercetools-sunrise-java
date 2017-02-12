@@ -1,31 +1,31 @@
 package com.commercetools.sunrise.shoppingcart.cart.cartdetail;
 
+import com.commercetools.sunrise.common.controllers.WithFetchFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContent;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import play.libs.concurrent.HttpExecution;
+import io.sphere.sdk.carts.Cart;
 import play.mvc.Result;
+import play.twirl.api.Html;
 
-import javax.inject.Inject;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static play.libs.concurrent.HttpExecution.defaultContext;
 
-/**
- * Shows and modifies the contents of the cart.
- */
 @IntroducingMultiControllerComponents(CartDetailThemeLinksControllerComponent.class)
-public abstract class SunriseCartDetailController extends SunriseFrameworkShoppingCartController implements WithTemplateName {
+public abstract class SunriseCartDetailController extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFetchFlow<Cart> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseCartDetailController.class);
+    private final CartDetailPageContentFactory cartDetailPageContentFactory;
 
-    @Inject
-    private CartDetailPageContentFactory pageContentFactory;
+    protected SunriseCartDetailController(final CartFinder cartFinder, final CartDetailPageContentFactory cartDetailPageContentFactory) {
+        super(cartFinder);
+        this.cartDetailPageContentFactory = cartDetailPageContentFactory;
+    }
 
     @Override
     public Set<String> getFrameworkTags() {
@@ -41,11 +41,18 @@ public abstract class SunriseCartDetailController extends SunriseFrameworkShoppi
 
     @SunriseRoute("showCart")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> findCart()
-                .thenApplyAsync(cartOptional -> {
-                    final CartDetailControllerData cartDetailControllerData = new CartDetailControllerData(cartOptional.orElse(null), null);
-                    return pageContentFactory.create(cartDetailControllerData);
-                }, defaultContext())
-                .thenComposeAsync(pageContent -> asyncOk(renderPageWithTemplate(pageContent, getTemplateName())), HttpExecution.defaultContext()));
+        return doRequest(() -> requireNonEmptyCart(this::showPage));
+    }
+
+    @Override
+    protected CompletionStage<Result> handleNotFoundCart() {
+        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(null);
+        return asyncOk(renderPageWithTemplate(pageContent, getTemplateName()));
+    }
+
+    @Override
+    public CompletionStage<Html> renderPage(final Cart cart) {
+        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(cart);
+        return renderPageWithTemplate(pageContent, getTemplateName());
     }
 }

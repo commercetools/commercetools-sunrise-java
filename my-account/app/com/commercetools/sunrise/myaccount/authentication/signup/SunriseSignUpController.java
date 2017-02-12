@@ -25,11 +25,11 @@ import static java.util.Arrays.asList;
 @IntroducingMultiControllerComponents(SignUpThemeLinksControllerComponent.class)
 public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<F, Void, CustomerSignInResult> {
 
-    private final SignUpFunction signUpFunction;
+    private final SignUpExecutor signUpExecutor;
     private final SignUpPageContentFactory signUpPageContentFactory;
 
-    protected SunriseSignUpController(final SignUpFunction signUpFunction, final SignUpPageContentFactory signUpPageContentFactory) {
-        this.signUpFunction = signUpFunction;
+    protected SunriseSignUpController(final SignUpExecutor signUpExecutor, final SignUpPageContentFactory signUpPageContentFactory) {
+        this.signUpExecutor = signUpExecutor;
         this.signUpPageContentFactory = signUpPageContentFactory;
     }
 
@@ -44,17 +44,17 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
     }
 
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> showForm(null));
+        return doRequest(() -> showFormPage(null));
     }
 
     @SunriseRoute("processSignUpForm")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> validateForm(null));
+        return doRequest(() -> processForm(null));
     }
 
     @Override
     public CompletionStage<CustomerSignInResult> doAction(final F formData, final Void input) {
-        return signUpFunction.apply(formData);
+        return signUpExecutor.apply(formData);
     }
 
     @Override

@@ -27,13 +27,13 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 public abstract class SunriseChangeAddressController<F extends AddressBookAddressFormData> extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<F, AddressWithCustomer, Customer> {
 
-    private final ChangeAddressFunction changeAddressFunction;
+    private final ChangeAddressExecutor changeAddressExecutor;
     private final ChangeAddressPageContentFactory changeAddressPageContentFactory;
 
-    protected SunriseChangeAddressController(final CustomerFinder customerFinder, final ChangeAddressFunction changeAddressFunction,
+    protected SunriseChangeAddressController(final CustomerFinder customerFinder, final ChangeAddressExecutor changeAddressExecutor,
                                              final ChangeAddressPageContentFactory changeAddressPageContentFactory) {
         super(customerFinder);
-        this.changeAddressFunction = changeAddressFunction;
+        this.changeAddressExecutor = changeAddressExecutor;
         this.changeAddressPageContentFactory = changeAddressPageContentFactory;
     }
 
@@ -51,17 +51,17 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
 
     @SunriseRoute("changeAddressInAddressBookCall")
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
-        return doRequest(() -> requireAddress(addressId, this::showForm));
+        return doRequest(() -> requireAddress(addressId, this::showFormPage));
     }
 
     @SunriseRoute("changeAddressInAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
-        return doRequest(() -> requireAddress(addressId, this::validateForm));
+        return doRequest(() -> requireAddress(addressId, this::processForm));
     }
 
     @Override
     public CompletionStage<Customer> doAction(final F formData, final AddressWithCustomer addressWithCustomer) {
-        return changeAddressFunction.apply(addressWithCustomer, formData);
+        return changeAddressExecutor.apply(addressWithCustomer, formData);
     }
 
     @Override

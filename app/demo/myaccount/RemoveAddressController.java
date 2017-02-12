@@ -6,7 +6,7 @@ import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContentFactory;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.DefaultRemoveAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressFunction;
+import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.SunriseRemoveAddressController;
 import io.sphere.sdk.customers.Customer;
 import play.mvc.Result;
@@ -21,11 +21,11 @@ public class RemoveAddressController extends SunriseRemoveAddressController<Defa
 
     @Inject
     public RemoveAddressController(final CustomerFinder customerFinder,
-                                   final RemoveAddressFunction removeAddressFunction,
+                                   final RemoveAddressExecutor removeAddressExecutor,
                                    final AddressBookPageContentFactory addressBookPageContentFactory,
                                    final AuthenticationReverseRouter authenticationReverseRouter,
                                    final AddressBookReverseRouter addressBookReverseRouter) {
-        super(customerFinder, removeAddressFunction, addressBookPageContentFactory);
+        super(customerFinder, removeAddressExecutor, addressBookPageContentFactory);
         this.authenticationReverseRouter = authenticationReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
     }

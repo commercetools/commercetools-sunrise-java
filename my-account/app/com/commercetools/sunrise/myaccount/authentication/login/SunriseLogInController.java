@@ -25,11 +25,11 @@ import static java.util.Arrays.asList;
 @IntroducingMultiControllerComponents(LogInThemeLinksControllerComponent.class)
 public abstract class SunriseLogInController<F extends LogInFormData> extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<F, Void, CustomerSignInResult> {
 
-    private final LogInFunction logInFunction;
+    private final LogInExecutor logInExecutor;
     private final LogInPageContentFactory logInPageContentFactory;
 
-    protected SunriseLogInController(final LogInFunction logInFunction, final LogInPageContentFactory logInPageContentFactory) {
-        this.logInFunction = logInFunction;
+    protected SunriseLogInController(final LogInExecutor logInExecutor, final LogInPageContentFactory logInPageContentFactory) {
+        this.logInExecutor = logInExecutor;
         this.logInPageContentFactory = logInPageContentFactory;
     }
 
@@ -45,17 +45,17 @@ public abstract class SunriseLogInController<F extends LogInFormData> extends Su
 
     @SunriseRoute("showLogInForm")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> showForm(null));
+        return doRequest(() -> showFormPage(null));
     }
 
     @SunriseRoute("processLogInForm")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> validateForm(null));
+        return doRequest(() -> processForm(null));
     }
 
     @Override
     public CompletionStage<CustomerSignInResult> doAction(final F formData, final Void input) {
-        return logInFunction.apply(formData);
+        return logInExecutor.apply(formData);
     }
 
     @Override

@@ -4,6 +4,7 @@ import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 
 public class DefaultChangeLineItemQuantityFormData extends Base implements ChangeLineItemQuantityFormData {
+
     @Constraints.Required
     @Constraints.MinLength(1)
     private String lineItemId;

@@ -7,11 +7,9 @@ import com.commercetools.sunrise.framework.annotations.IntroducingMultiControlle
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.CartCreator;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContent;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.CartDetailPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContent;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.commands.CartUpdateCommand;
-import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
 import io.sphere.sdk.client.ClientErrorException;
 import play.data.Form;
 import play.libs.concurrent.HttpExecution;
@@ -33,15 +31,15 @@ public abstract class SunriseAddProductToCartController<F extends AddProductToCa
 
     private final CartCreator cartCreator;
     private final CartFinder cartFinder;
-    private final AddProductToCartFunction addProductToCartFunction;
+    private final AddProductToCartExecutor addProductToCartExecutor;
     private final CartDetailPageContentFactory cartDetailPageContentFactory;
 
     protected SunriseAddProductToCartController(final CartCreator cartCreator, final CartFinder cartFinder,
-                                                final AddProductToCartFunction addProductToCartFunction,
+                                                final AddProductToCartExecutor addProductToCartExecutor,
                                                 final CartDetailPageContentFactory cartDetailPageContentFactory) {
         this.cartCreator = cartCreator;
         this.cartFinder = cartFinder;
-        this.addProductToCartFunction = addProductToCartFunction;
+        this.addProductToCartExecutor = addProductToCartExecutor;
         this.cartDetailPageContentFactory = cartDetailPageContentFactory;
     }
 
@@ -60,7 +58,7 @@ public abstract class SunriseAddProductToCartController<F extends AddProductToCa
     @SuppressWarnings("unused")
     @SunriseRoute("processAddProductToCartForm")
     public CompletionStage<Result> addProductToCart(final String languageTag) {
-        return doRequest(() -> getOrCreateCart(this::validateForm));
+        return doRequest(() -> getOrCreateCart(this::processForm));
     }
 
     protected final CompletionStage<Result> getOrCreateCart(final Function<Cart, CompletionStage<Result>> nextAction) {
@@ -74,7 +72,7 @@ public abstract class SunriseAddProductToCartController<F extends AddProductToCa
 
     @Override
     public CompletionStage<Cart> doAction(final F formData, final Cart cart) {
-        return addProductToCartFunction.apply(cart, formData);
+        return addProductToCartExecutor.apply(cart, formData);
     }
 
     @Override
@@ -88,12 +86,12 @@ public abstract class SunriseAddProductToCartController<F extends AddProductToCa
 
     @Override
     public CompletionStage<Html> renderPage(final Form<F> form, final Cart oldCart, @Nullable final Cart updatedCart) {
-        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(firstNonNull(updatedCart, oldCart), form);
+        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(firstNonNull(updatedCart, oldCart));
         return renderPageWithTemplate(pageContent, getTemplateName()); // TODO abstract results better instead of forcing HTML, to support this use case properly
     }
 
     @Override
     public void preFillFormData(final F formData, final Cart cart) {
-        // Do nothing
+        // Do not pre-fill with anything
     }
 }

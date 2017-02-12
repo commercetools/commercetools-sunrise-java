@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
-import com.commercetools.sunrise.myaccount.myorders.AbstractOrderQuerier;
+import com.commercetools.sunrise.myaccount.myorders.AbstractOrderQueryExecutor;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.orders.Order;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public class DefaultMyOrderFinder extends AbstractOrderQuerier implements MyOrderFinder {
+public class DefaultMyOrderFinder extends AbstractOrderQueryExecutor implements MyOrderFinder {
 
     @Inject
     protected DefaultMyOrderFinder(final SphereClient sphereClient, final RequestHookContext hookContext) {

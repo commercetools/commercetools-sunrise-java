@@ -29,13 +29,13 @@ public class CartBeanFactory extends AbstractCartLikeBeanFactory<CartBean, Cart>
     }
 
     @Override
-    public final CartBean create(@Nullable final Cart data) {
-        return super.create(data);
+    public final CartBean create(@Nullable final Cart cart) {
+        return super.create(cart);
     }
 
     @Override
-    protected final void initialize(final CartBean model, final Cart data) {
-        super.initialize(model, data);
+    protected final void initialize(final CartBean model, final Cart cart) {
+        super.initialize(model, cart);
     }
 
     @Override
