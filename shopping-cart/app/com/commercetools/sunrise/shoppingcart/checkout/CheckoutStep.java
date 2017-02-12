@@ -1,6 +1,6 @@
-package com.commercetools.sunrise.shoppingcart.common;
+package com.commercetools.sunrise.shoppingcart.checkout;
 
-public enum StepWidgetBean {
+public enum CheckoutStep {
 
     ADDRESS, SHIPPING, PAYMENT, CONFIRMATION;
 
@@ -20,7 +20,7 @@ public enum StepWidgetBean {
         return isStep(CONFIRMATION);
     }
 
-    private boolean isStep(final StepWidgetBean what) {
+    private boolean isStep(final CheckoutStep what) {
         return name().equals(what.name());
     }
 }

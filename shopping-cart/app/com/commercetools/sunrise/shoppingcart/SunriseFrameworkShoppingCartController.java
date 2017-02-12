@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.common;
+package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;

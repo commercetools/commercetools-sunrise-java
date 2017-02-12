@@ -1,18 +1,18 @@
-package com.commercetools.sunrise.shoppingcart.common;
+package com.commercetools.sunrise.shoppingcart.checkout;
 
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.shoppingcart.CartBean;
 
-public abstract class CheckoutPageContent extends PageContent {
+public abstract class AbstractCheckoutPageContent extends PageContent {
 
-    private StepWidgetBean stepWidget;
+    private CheckoutStep stepWidget;
     private CartBean cart;
 
-    public StepWidgetBean getStepWidget() {
+    public CheckoutStep getStepWidget() {
         return stepWidget;
     }
 
-    public void setStepWidget(final StepWidgetBean stepWidget) {
+    public void setStepWidget(final CheckoutStep stepWidget) {
         this.stepWidget = stepWidget;
     }
 

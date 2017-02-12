@@ -15,6 +15,7 @@ import com.commercetools.sunrise.hooks.events.CategoryLoadedHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
+import com.commercetools.sunrise.productcatalog.productoverview.view.ProductOverviewPageContentFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;

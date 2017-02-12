@@ -5,10 +5,8 @@ import com.commercetools.sunrise.myaccount.authentication.AbstractAuthentication
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.login.LogInFormData;
 import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpFormSettingsBeanFactory;
-import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.Form;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 public class LogInPageContentFactory extends AbstractAuthenticationPageContentFactory<LogInFormData> {
@@ -22,17 +20,17 @@ public class LogInPageContentFactory extends AbstractAuthenticationPageContentFa
     }
 
     @Override
-    protected void fillLogInForm(final AuthenticationPageContent model, @Nullable final CustomerSignInResult result, final Form<? extends LogInFormData> form) {
+    protected void fillLogInForm(final AuthenticationPageContent model, final Form<? extends LogInFormData> form) {
         model.setLogInForm(form);
     }
 
     @Override
-    protected void fillSignUpForm(final AuthenticationPageContent model, @Nullable final CustomerSignInResult result, final Form<? extends LogInFormData> form) {
+    protected void fillSignUpForm(final AuthenticationPageContent model, final Form<? extends LogInFormData> form) {
         model.setSignUpForm(null);
     }
 
     @Override
-    protected void fillSignUpFormSettings(final AuthenticationPageContent model, @Nullable final CustomerSignInResult result, final Form<? extends LogInFormData> form) {
+    protected void fillSignUpFormSettings(final AuthenticationPageContent model, final Form<? extends LogInFormData> form) {
         model.setSignUpFormSettings(signUpFormSettingsBeanFactory.create(null));
     }
 }

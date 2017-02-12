@@ -5,21 +5,19 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.SunriseFrameworkShoppingCartController;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContent;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
 import play.data.Form;
 import play.mvc.Result;
-import play.twirl.api.Html;
+import play.twirl.api.Content;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 @IntroducingMultiControllerComponents(ChangeLineItemQuantityThemeLinksControllerComponent.class)
 public abstract class SunriseChangeLineItemQuantityController<F extends ChangeLineItemQuantityFormData> extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<F, Cart, Cart> {
@@ -59,15 +57,15 @@ public abstract class SunriseChangeLineItemQuantityController<F extends ChangeLi
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Cart cart, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, cart, null));
+        return asyncBadRequest(renderPage(form, cart));
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Cart oldCart, final Cart updatedCart);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final Cart cart, @Nullable final Cart updatedCart) {
-        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(firstNonNull(updatedCart, cart));
+    public CompletionStage<Content> renderPage(final Form<F> form, final Cart cart) {
+        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(cart);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

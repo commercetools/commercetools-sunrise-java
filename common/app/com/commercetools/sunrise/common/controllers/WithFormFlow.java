@@ -6,9 +6,8 @@ import play.data.Form;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.mvc.Results;
-import play.twirl.api.Html;
+import play.twirl.api.Content;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
 
@@ -26,7 +25,7 @@ public interface WithFormFlow<F, I, O> extends WithForm<F> {
 
     default CompletionStage<Result> showFormPage(final I input) {
         final Form<F> form = createNewFilledForm(input);
-        return renderPage(form, input, null)
+        return renderPage(form, input)
                 .thenApplyAsync(Results::ok, HttpExecution.defaultContext());
     }
 
@@ -45,7 +44,7 @@ public interface WithFormFlow<F, I, O> extends WithForm<F> {
     }
 
     default CompletionStage<Result> handleInvalidForm(final Form<F> form, final I input) {
-        return renderPage(form, input, null)
+        return renderPage(form, input)
                 .thenApplyAsync(Results::badRequest, HttpExecution.defaultContext());
     }
 
@@ -73,7 +72,7 @@ public interface WithFormFlow<F, I, O> extends WithForm<F> {
 
     CompletionStage<Result> handleSuccessfulAction(final F formData, final I input, final O output);
 
-    CompletionStage<Html> renderPage(final Form<F> form, final I input, @Nullable final O output);
+    CompletionStage<Content> renderPage(final Form<F> form, final I input);
 
     default Form<F> createNewFilledForm(final I input) {
         try {

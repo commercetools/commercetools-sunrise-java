@@ -11,10 +11,10 @@ import io.sphere.sdk.queries.PagedQueryResult;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-public class DefaultMyOrderListQuery extends AbstractOrderQueryExecutor implements MyOrderListQuery {
+public class DefaultMyOrderListFinder extends AbstractOrderQueryExecutor implements MyOrderListFinder {
 
     @Inject
-    protected DefaultMyOrderListQuery(final SphereClient sphereClient, final RequestHookContext hookContext) {
+    protected DefaultMyOrderListFinder(final SphereClient sphereClient, final RequestHookContext hookContext) {
         super(sphereClient, hookContext);
     }
 

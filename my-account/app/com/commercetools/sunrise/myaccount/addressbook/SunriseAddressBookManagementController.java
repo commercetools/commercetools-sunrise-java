@@ -18,9 +18,10 @@ public abstract class SunriseAddressBookManagementController extends SunriseFram
         super(customerFinder);
     }
 
-    protected CompletionStage<Result> requireAddress(final String addressId, final Function<AddressWithCustomer, CompletionStage<Result>> nextAction) {
+    protected CompletionStage<Result> requireAddressWithCustomer(final String addressId, final Function<AddressWithCustomer, CompletionStage<Result>> nextAction) {
         return requireCustomer(customer -> findAddress(customer, addressId)
-                .map(address -> nextAction.apply(new AddressWithCustomer(customer, address)))
+                .map(address -> AddressWithCustomer.of(address, customer))
+                .map(nextAction)
                 .orElseGet(this::handleNotFoundAddress));
     }
 

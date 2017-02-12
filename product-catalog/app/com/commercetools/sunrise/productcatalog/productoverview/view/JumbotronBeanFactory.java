@@ -1,7 +1,8 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.productcatalog.productoverview.view;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewControllerData;
 import io.sphere.sdk.categories.CategoryTree;
 
 import javax.inject.Inject;

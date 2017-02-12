@@ -1,13 +1,10 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.common.models.FormPageContentFactory;
+import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
-import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.Form;
 
-import javax.annotation.Nullable;
-
-public abstract class AbstractAuthenticationPageContentFactory<F> extends FormPageContentFactory<AuthenticationPageContent, CustomerSignInResult, F> {
+public abstract class AbstractAuthenticationPageContentFactory<F> extends PageContentFactory<AuthenticationPageContent, Form<? extends F>> {
 
     private final PageTitleResolver pageTitleResolver;
 
@@ -21,21 +18,21 @@ public abstract class AbstractAuthenticationPageContentFactory<F> extends FormPa
     }
 
     @Override
-    protected final void initialize(final AuthenticationPageContent model, @Nullable final CustomerSignInResult result, final Form<? extends F> form) {
-        super.initialize(model, result, form);
-        fillLogInForm(model, result, form);
-        fillSignUpForm(model, result, form);
-        fillSignUpFormSettings(model, result, form);
+    protected final void initialize(final AuthenticationPageContent model, final Form<? extends F> form) {
+        super.initialize(model, form);
+        fillLogInForm(model, form);
+        fillSignUpForm(model, form);
+        fillSignUpFormSettings(model, form);
     }
 
     @Override
-    protected void fillTitle(final AuthenticationPageContent model, @Nullable final CustomerSignInResult result, final Form<? extends F> form) {
+    protected void fillTitle(final AuthenticationPageContent model, final Form<? extends F> form) {
         pageTitleResolver.getOrEmpty("myAccount:authenticationPage.title");
     }
 
-    protected abstract void fillLogInForm(final AuthenticationPageContent model, @Nullable final CustomerSignInResult result, final Form<? extends F> form);
+    protected abstract void fillLogInForm(final AuthenticationPageContent model, final Form<? extends F> form);
 
-    protected abstract void fillSignUpForm(final AuthenticationPageContent model, @Nullable final CustomerSignInResult result, final Form<? extends F> form);
+    protected abstract void fillSignUpForm(final AuthenticationPageContent model, final Form<? extends F> form);
 
-    protected abstract void fillSignUpFormSettings(final AuthenticationPageContent model, @Nullable final CustomerSignInResult result, final Form<? extends F> form);
+    protected abstract void fillSignUpFormSettings(final AuthenticationPageContent model, final Form<? extends F> form);
 }

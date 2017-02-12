@@ -5,24 +5,22 @@ import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContent;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContentFactory;
-import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
 import play.mvc.Result;
-import play.twirl.api.Html;
+import play.twirl.api.Content;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 @IntroducingMultiControllerComponents(AddAddressThemeLinksControllerComponent.class)
 public abstract class SunriseAddAddressController<F extends AddressBookAddressFormData> extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<F, Customer, Customer> {
@@ -69,15 +67,15 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Customer customer, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, customer, null));
+        return asyncBadRequest(renderPage(form, customer));
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Customer oldCustomer, final Customer updatedCustomer);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final Customer customer, @Nullable final Customer updatedCustomer) {
-        final AddAddressPageContent pageContent = addAddressPageContentFactory.create(firstNonNull(updatedCustomer, customer), form);
+    public CompletionStage<Content> renderPage(final Form<F> form, final Customer customer) {
+        final AddAddressPageContent pageContent = addAddressPageContentFactory.create(customer, form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

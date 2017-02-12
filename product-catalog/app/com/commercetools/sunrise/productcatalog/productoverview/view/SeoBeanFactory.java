@@ -1,6 +1,7 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.productcatalog.productoverview.view;
 
 import com.commercetools.sunrise.common.models.ViewModelFactory;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewControllerData;
 
 import javax.inject.Singleton;
 

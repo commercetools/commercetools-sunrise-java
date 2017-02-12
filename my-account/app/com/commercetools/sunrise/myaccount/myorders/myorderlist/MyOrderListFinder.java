@@ -8,9 +8,9 @@ import io.sphere.sdk.queries.PagedQueryResult;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-@ImplementedBy(DefaultMyOrderListQuery.class)
+@ImplementedBy(DefaultMyOrderListFinder.class)
 @FunctionalInterface
-public interface MyOrderListQuery extends Function<Customer, CompletionStage<PagedQueryResult<Order>>> {
+public interface MyOrderListFinder extends Function<Customer, CompletionStage<PagedQueryResult<Order>>> {
 
     @Override
     CompletionStage<PagedQueryResult<Order>> apply(final Customer customer);

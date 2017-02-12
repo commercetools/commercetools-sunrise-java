@@ -8,8 +8,8 @@ import java.util.function.BiFunction;
 
 @ImplementedBy(DefaultCheckoutShippingExecutor.class)
 @FunctionalInterface
-public interface CheckoutShippingExecutor extends BiFunction<Cart, CheckoutShippingFormData, CompletionStage<Cart>> {
+public interface CheckoutShippingExecutor extends BiFunction<ShippingMethodsWithCart, CheckoutShippingFormData, CompletionStage<Cart>> {
 
     @Override
-    CompletionStage<Cart> apply(Cart cart, CheckoutShippingFormData formData);
+    CompletionStage<Cart> apply(ShippingMethodsWithCart shippingMethodsWithCart, CheckoutShippingFormData formData);
 }

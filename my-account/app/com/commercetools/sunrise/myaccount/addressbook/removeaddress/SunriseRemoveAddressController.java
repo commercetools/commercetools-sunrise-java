@@ -12,7 +12,7 @@ import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 import play.mvc.Result;
-import play.twirl.api.Html;
+import play.twirl.api.Content;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -47,7 +47,7 @@ public abstract class SunriseRemoveAddressController<F extends RemoveAddressForm
 
     @SunriseRoute("removeAddressFromAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
-        return doRequest(() -> requireAddress(addressId, this::processForm));
+        return doRequest(() -> requireAddressWithCustomer(addressId, this::processForm));
     }
 
     @Override
@@ -58,7 +58,7 @@ public abstract class SunriseRemoveAddressController<F extends RemoveAddressForm
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final AddressWithCustomer addressWithCustomer, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, addressWithCustomer, null));
+        return asyncBadRequest(renderPage(form, addressWithCustomer));
     }
 
     @Override
@@ -70,8 +70,8 @@ public abstract class SunriseRemoveAddressController<F extends RemoveAddressForm
     }
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final AddressWithCustomer addressWithCustomer, @Nullable final Customer updatedCustomer) {
-        final AddressBookPageContent pageContent = addressBookPageContentFactory.create(firstNonNull(updatedCustomer, addressWithCustomer.getCustomer()));
+    public CompletionStage<Content> renderPage(final Form<F> form, final AddressWithCustomer addressWithCustomer) {
+        final AddressBookPageContent pageContent = addressBookPageContentFactory.create(addressWithCustomer.getCustomer());
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 }

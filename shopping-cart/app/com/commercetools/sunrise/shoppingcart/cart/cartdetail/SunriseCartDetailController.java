@@ -7,7 +7,7 @@ import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContent;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
+import com.commercetools.sunrise.shoppingcart.SunriseFrameworkShoppingCartController;
 import io.sphere.sdk.carts.Cart;
 import play.mvc.Result;
 import play.twirl.api.Html;

@@ -13,9 +13,8 @@ import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
 import play.data.Form;
 import play.mvc.Result;
-import play.twirl.api.Html;
+import play.twirl.api.Content;
 
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -65,15 +64,15 @@ public abstract class SunriseLogInController<F extends LogInFormData> extends Su
         } else {
             saveUnexpectedFormError(form, clientErrorException);
         }
-        return asyncBadRequest(renderPage(form, input, null));
+        return asyncBadRequest(renderPage(form, input));
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Void input, final CustomerSignInResult result);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final Void input, @Nullable final CustomerSignInResult result) {
-        final AuthenticationPageContent pageContent = logInPageContentFactory.create(result, form);
+    public CompletionStage<Content> renderPage(final Form<F> form, final Void input) {
+        final AuthenticationPageContent pageContent = logInPageContentFactory.create(form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

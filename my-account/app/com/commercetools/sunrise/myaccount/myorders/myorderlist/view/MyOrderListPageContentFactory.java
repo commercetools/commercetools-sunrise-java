@@ -1,14 +1,13 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist.view;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
-import io.sphere.sdk.orders.Order;
-import io.sphere.sdk.queries.PagedQueryResult;
+import com.commercetools.sunrise.myaccount.myorders.myorderlist.OrderListWithCustomer;
 
 import javax.inject.Inject;
 
 import static java.util.stream.Collectors.toList;
 
-public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderListPageContent, PagedQueryResult<Order>> {
+public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderListPageContent, OrderListWithCustomer> {
 
     private final OrderOverviewBeanFactory orderOverviewBeanFactory;
 
@@ -23,23 +22,23 @@ public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderLis
     }
 
     @Override
-    public final MyOrderListPageContent create(final PagedQueryResult<Order> orders) {
-        return super.create(orders);
+    public final MyOrderListPageContent create(final OrderListWithCustomer orderListWithCustomer) {
+        return super.create(orderListWithCustomer);
     }
 
     @Override
-    protected final void initialize(final MyOrderListPageContent model, final PagedQueryResult<Order> orders) {
-        super.initialize(model, orders);
-        fillOrders(model, orders);
+    protected final void initialize(final MyOrderListPageContent model, final OrderListWithCustomer orderListWithCustomer) {
+        super.initialize(model, orderListWithCustomer);
+        fillOrders(model, orderListWithCustomer);
     }
 
     @Override
-    protected void fillTitle(final MyOrderListPageContent model, final PagedQueryResult<Order> orders) {
+    protected void fillTitle(final MyOrderListPageContent model, final OrderListWithCustomer orderListWithCustomer) {
 
     }
 
-    protected void fillOrders(final MyOrderListPageContent model, final PagedQueryResult<Order> orders) {
-        model.setOrders(orders.getResults().stream()
+    protected void fillOrders(final MyOrderListPageContent model, final OrderListWithCustomer orderListWithCustomer) {
+        model.setOrders(orderListWithCustomer.getOrders().getResults().stream()
                 .map(orderOverviewBeanFactory::create)
                 .collect(toList()));
     }

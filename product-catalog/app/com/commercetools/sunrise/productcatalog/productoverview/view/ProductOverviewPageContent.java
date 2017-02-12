@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.productcatalog.productoverview.view;
 
 import com.commercetools.sunrise.common.models.TitleDescriptionBean;
 import com.commercetools.sunrise.common.pages.PageContent;
@@ -12,6 +12,8 @@ import com.commercetools.sunrise.common.search.sort.SortSelectorBean;
 import com.commercetools.sunrise.common.search.sort.WithSortSelectorViewModel;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
+import com.commercetools.sunrise.productcatalog.productoverview.view.BannerBean;
+import com.commercetools.sunrise.productcatalog.productoverview.view.JumbotronBean;
 
 public class ProductOverviewPageContent extends PageContent implements WithPaginationViewModel, WithSearchBoxViewModel, WithSortSelectorViewModel, WithFacetedSearchViewModel {
 

@@ -12,14 +12,12 @@ import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 import play.mvc.Result;
-import play.twirl.api.Html;
+import play.twirl.api.Content;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.singletonList;
-import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 @IntroducingMultiControllerComponents(MyPersonalDetailsThemeLinksControllerComponent.class)
 public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<F, Customer, Customer> {
@@ -64,15 +62,15 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Customer customer, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, customer, null));
+        return asyncBadRequest(renderPage(form, customer));
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Customer oldCustomer, final Customer updatedCustomer);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final Customer oldCustomer, @Nullable final Customer updatedCustomer) {
-        final MyPersonalDetailsPageContent pageContent = myPersonalDetailsPageContentFactory.create(firstNonNull(updatedCustomer, oldCustomer), form);
+    public CompletionStage<Content> renderPage(final Form<F> form, final Customer customer) {
+        final MyPersonalDetailsPageContent pageContent = myPersonalDetailsPageContentFactory.create(customer, form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

@@ -10,7 +10,7 @@ public final class PaymentMethodsWithCart {
     private final List<PaymentMethodInfo> paymentMethods;
     private final Cart cart;
 
-    public PaymentMethodsWithCart(final List<PaymentMethodInfo> paymentMethods, final Cart cart) {
+    private PaymentMethodsWithCart(final List<PaymentMethodInfo> paymentMethods, final Cart cart) {
         this.paymentMethods = paymentMethods;
         this.cart = cart;
     }
@@ -21,5 +21,9 @@ public final class PaymentMethodsWithCart {
 
     public Cart getCart() {
         return cart;
+    }
+
+    public static PaymentMethodsWithCart of(final List<PaymentMethodInfo> paymentMethods, final Cart cart) {
+        return new PaymentMethodsWithCart(paymentMethods, cart);
     }
 }

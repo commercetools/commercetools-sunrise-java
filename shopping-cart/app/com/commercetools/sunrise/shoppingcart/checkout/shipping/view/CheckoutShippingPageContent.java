@@ -1,10 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.view;
 
-import com.commercetools.sunrise.shoppingcart.checkout.shipping.view.CheckoutShippingFormSettingsBean;
-import com.commercetools.sunrise.shoppingcart.common.CheckoutPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.AbstractCheckoutPageContent;
 import play.data.Form;
 
-public class CheckoutShippingPageContent extends CheckoutPageContent {
+public class CheckoutShippingPageContent extends AbstractCheckoutPageContent {
 
     private Form<?> shippingForm;
     private CheckoutShippingFormSettingsBean shippingFormSettings;

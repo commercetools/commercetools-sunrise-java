@@ -20,13 +20,13 @@ public class DefaultCheckoutShippingExecutor extends AbstractCartUpdateExecutor 
     }
 
     @Override
-    public CompletionStage<Cart> apply(final Cart cart, final CheckoutShippingFormData formData) {
-        return executeRequest(cart, buildRequest(cart, formData));
+    public CompletionStage<Cart> apply(final ShippingMethodsWithCart shippingMethodsWithCart, final CheckoutShippingFormData formData) {
+        return executeRequest(shippingMethodsWithCart.getCart(), buildRequest(shippingMethodsWithCart, formData));
     }
 
-    protected CartUpdateCommand buildRequest(final Cart cart, final CheckoutShippingFormData formData) {
+    protected CartUpdateCommand buildRequest(final ShippingMethodsWithCart shippingMethodsWithCart, final CheckoutShippingFormData formData) {
         final Reference<ShippingMethod> shippingMethodRef = ShippingMethod.referenceOfId(formData.getShippingMethodId());
         final SetShippingMethod setShippingMethod = SetShippingMethod.of(shippingMethodRef);
-        return CartUpdateCommand.of(cart, setShippingMethod);
+        return CartUpdateCommand.of(shippingMethodsWithCart.getCart(), setShippingMethod);
     }
 }

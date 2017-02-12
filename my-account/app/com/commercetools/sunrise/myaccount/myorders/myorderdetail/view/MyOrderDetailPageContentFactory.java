@@ -2,12 +2,12 @@ package com.commercetools.sunrise.myaccount.myorders.myorderdetail.view;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
+import com.commercetools.sunrise.myaccount.myorders.myorderdetail.OrderWithCustomer;
 import com.commercetools.sunrise.shoppingcart.OrderBeanFactory;
-import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
 
-public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderDetailPageContent, Order> {
+public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderDetailPageContent, OrderWithCustomer> {
 
     private final PageTitleResolver pageTitleResolver;
     private final OrderBeanFactory orderBeanFactory;
@@ -24,22 +24,22 @@ public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderD
     }
 
     @Override
-    public final MyOrderDetailPageContent create(final Order order) {
-        return super.create(order);
+    public final MyOrderDetailPageContent create(final OrderWithCustomer orderWithCustomer) {
+        return super.create(orderWithCustomer);
     }
 
     @Override
-    protected final void initialize(final MyOrderDetailPageContent model, final Order order) {
-        super.initialize(model, order);
-        fillOrder(model, order);
+    protected final void initialize(final MyOrderDetailPageContent model, final OrderWithCustomer orderWithCustomer) {
+        super.initialize(model, orderWithCustomer);
+        fillOrder(model, orderWithCustomer);
     }
 
     @Override
-    protected void fillTitle(final MyOrderDetailPageContent model, final Order order) {
+    protected void fillTitle(final MyOrderDetailPageContent model, final OrderWithCustomer orderWithCustomer) {
         model.setTitle(pageTitleResolver.getOrEmpty("myAccount:myOrderDetailPage.title"));
     }
 
-    protected void fillOrder(final MyOrderDetailPageContent model, final Order order) {
-        model.setOrder(orderBeanFactory.create(order));
+    protected void fillOrder(final MyOrderDetailPageContent model, final OrderWithCustomer orderWithCustomer) {
+        model.setOrder(orderBeanFactory.create(orderWithCustomer.getOrder()));
     }
 }

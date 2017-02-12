@@ -34,6 +34,7 @@ import play.data.FormFactory;
 import play.filters.csrf.CSRF;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.*;
+import play.twirl.api.Content;
 import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
@@ -149,11 +150,11 @@ public abstract class SunriseFrameworkController extends Controller {
         return session.get("csrfToken");
     }
 
-    protected CompletionStage<Html> renderPageWithTemplate(final PageContent pageContent, final String templateName) {
+    protected CompletionStage<Content> renderPageWithTemplate(final PageContent pageContent, final String templateName) {
         return renderPageWithTemplate(pageContent, templateName, null);
     }
 
-    protected CompletionStage<Html> renderPageWithTemplate(final PageContent pageContent, final String templateName, @Nullable final CmsPage cmsPage) {
+    protected CompletionStage<Content> renderPageWithTemplate(final PageContent pageContent, final String templateName, @Nullable final CmsPage cmsPage) {
         final SunrisePageData pageData = createPageData(pageContent);
         return hooks().allAsyncHooksCompletionStage().thenApplyAsync(unused -> {
             PageDataReadyHook.runHook(hooks(), pageData);
@@ -183,6 +184,7 @@ public abstract class SunriseFrameworkController extends Controller {
         pageData.setContent(pageContent);
         pageData.setFooter(new PageFooter());
         pageData.setMeta(injector().getInstance(PageMetaFactory.class).create());
+        pageData.getHeader().setCustomerServiceNumber(configuration.getString("checkout.customerServiceNumber"));
         return pageData;
     }
 
@@ -217,11 +219,11 @@ public abstract class SunriseFrameworkController extends Controller {
         }
     }
 
-    protected CompletionStage<Result> asyncOk(final CompletionStage<Html> htmlCompletionStage) {
+    protected CompletionStage<Result> asyncOk(final CompletionStage<Content> htmlCompletionStage) {
         return htmlCompletionStage.thenApplyAsync(Results::ok, HttpExecution.defaultContext());
     }
 
-    protected CompletionStage<Result> asyncBadRequest(final CompletionStage<Html> htmlCompletionStage) {
+    protected CompletionStage<Result> asyncBadRequest(final CompletionStage<Content> htmlCompletionStage) {
         return htmlCompletionStage.thenApplyAsync(Results::badRequest, HttpExecution.defaultContext());
     }
 

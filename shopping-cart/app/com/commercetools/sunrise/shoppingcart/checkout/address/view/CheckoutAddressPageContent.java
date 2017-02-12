@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address.view;
 
-import com.commercetools.sunrise.shoppingcart.common.CheckoutPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.AbstractCheckoutPageContent;
 import play.data.Form;
 
-public class CheckoutAddressPageContent extends CheckoutPageContent {
+public class CheckoutAddressPageContent extends AbstractCheckoutPageContent {
 
     private Form<?> addressForm;
     private CheckoutAddressFormSettingsBean addressFormSettings;

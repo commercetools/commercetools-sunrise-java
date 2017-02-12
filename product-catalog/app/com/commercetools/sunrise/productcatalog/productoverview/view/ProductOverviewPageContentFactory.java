@@ -1,7 +1,8 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.productcatalog.productoverview.view;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewControllerData;
 import play.mvc.Http;
 
 import javax.inject.Inject;

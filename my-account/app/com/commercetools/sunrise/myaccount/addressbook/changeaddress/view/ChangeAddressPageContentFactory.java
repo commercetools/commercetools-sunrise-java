@@ -4,12 +4,12 @@ import com.commercetools.sunrise.common.models.AddressFormSettingsBeanFactory;
 import com.commercetools.sunrise.common.models.FormPageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import io.sphere.sdk.customers.Customer;
+import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
 import play.data.Form;
 
 import javax.inject.Inject;
 
-public class ChangeAddressPageContentFactory extends FormPageContentFactory<ChangeAddressPageContent, Customer, AddressBookAddressFormData> {
+public class ChangeAddressPageContentFactory extends FormPageContentFactory<ChangeAddressPageContent, AddressWithCustomer, AddressBookAddressFormData> {
 
     private final PageTitleResolver pageTitleResolver;
     private final AddressFormSettingsBeanFactory addressFormSettingsFactory;
@@ -26,27 +26,27 @@ public class ChangeAddressPageContentFactory extends FormPageContentFactory<Chan
     }
 
     @Override
-    public final ChangeAddressPageContent create(final Customer customer, final Form<? extends AddressBookAddressFormData> form) {
-        return super.create(customer, form);
+    public final ChangeAddressPageContent create(final AddressWithCustomer addressWithCustomer, final Form<? extends AddressBookAddressFormData> form) {
+        return super.create(addressWithCustomer, form);
     }
 
     @Override
-    protected final void initialize(final ChangeAddressPageContent model, final Customer customer, final Form<? extends AddressBookAddressFormData> form) {
-        super.initialize(model, customer, form);
-        fillEditAddressForm(model, customer, form);
-        fillEditAddressFormSettings(model, customer, form);
+    protected final void initialize(final ChangeAddressPageContent model, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressBookAddressFormData> form) {
+        super.initialize(model, addressWithCustomer, form);
+        fillEditAddressForm(model, addressWithCustomer, form);
+        fillEditAddressFormSettings(model, addressWithCustomer, form);
     }
 
     @Override
-    protected void fillTitle(final ChangeAddressPageContent model, final Customer customer, final Form<? extends AddressBookAddressFormData> form) {
+    protected void fillTitle(final ChangeAddressPageContent model, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressBookAddressFormData> form) {
         model.setTitle(pageTitleResolver.getOrEmpty("myAccount:changeAddressPage.title"));
     }
 
-    protected void fillEditAddressForm(final ChangeAddressPageContent model, final Customer customer, final Form<? extends AddressBookAddressFormData> form) {
+    protected void fillEditAddressForm(final ChangeAddressPageContent model, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressBookAddressFormData> form) {
         model.setEditAddressForm(form);
     }
 
-    protected void fillEditAddressFormSettings(final ChangeAddressPageContent model, final Customer customer, final Form<? extends AddressBookAddressFormData> form) {
+    protected void fillEditAddressFormSettings(final ChangeAddressPageContent model, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressBookAddressFormData> form) {
         model.setEditAddressFormSettings(addressFormSettingsFactory.create(form));
     }
 }

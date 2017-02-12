@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation.view;
 
-import com.commercetools.sunrise.shoppingcart.common.CheckoutPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.AbstractCheckoutPageContent;
 import play.data.Form;
 
-public class CheckoutConfirmationPageContent extends CheckoutPageContent {
+public class CheckoutConfirmationPageContent extends AbstractCheckoutPageContent {
 
     private Form<?> checkoutForm;
 

@@ -22,8 +22,7 @@ import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuild
 import com.commercetools.sunrise.myaccount.CustomerComponent;
 import com.commercetools.sunrise.shoppingcart.CartComponent;
 import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
-import com.commercetools.sunrise.shoppingcart.common.CheckoutCommonComponent;
-import com.commercetools.sunrise.shoppingcart.common.CheckoutStepWidgetComponent;
+import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
@@ -97,8 +96,7 @@ public class Module extends AbstractModule {
     public MultiControllerComponentResolver provideMultiControllerComponentResolver() {
         //here are also instanceof checks possible
         return new MultiControllerComponentResolverBuilder()
-                .add(CheckoutCommonComponent.class, controller -> controller.getFrameworkTags().contains("checkout"))
-                .add(CheckoutStepWidgetComponent.class, controller -> controller.getFrameworkTags().contains("checkout"))
+                .add(CheckoutStepControllerComponent.class, controller -> controller.getFrameworkTags().contains("checkout"))
                 .add(MiniCartControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
                 .add(DefaultPageNavMenuControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
                 .add(LocationSelectorControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))

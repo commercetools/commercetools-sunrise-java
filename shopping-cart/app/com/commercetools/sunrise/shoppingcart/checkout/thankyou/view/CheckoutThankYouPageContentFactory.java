@@ -1,12 +1,13 @@
-package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
+package com.commercetools.sunrise.shoppingcart.checkout.thankyou.view;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.shoppingcart.OrderBeanFactory;
+import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
 
-public class CheckoutThankYouPageContentFactory extends PageContentFactory<CheckoutThankYouPageContent, CheckoutThankYouPageControllerData> {
+public class CheckoutThankYouPageContentFactory extends PageContentFactory<CheckoutThankYouPageContent, Order> {
 
     private final PageTitleResolver pageTitleResolver;
     private final OrderBeanFactory orderBeanFactory;
@@ -23,22 +24,22 @@ public class CheckoutThankYouPageContentFactory extends PageContentFactory<Check
     }
 
     @Override
-    public final CheckoutThankYouPageContent create(final CheckoutThankYouPageControllerData data) {
-        return super.create(data);
+    public final CheckoutThankYouPageContent create(final Order order) {
+        return super.create(order);
     }
 
     @Override
-    protected final void initialize(final CheckoutThankYouPageContent model, final CheckoutThankYouPageControllerData data) {
-        super.initialize(model, data);
-        fillOrder(model, data);
+    protected final void initialize(final CheckoutThankYouPageContent model, final Order order) {
+        super.initialize(model, order);
+        fillOrder(model, order);
     }
 
     @Override
-    protected void fillTitle(final CheckoutThankYouPageContent model, final CheckoutThankYouPageControllerData data) {
+    protected void fillTitle(final CheckoutThankYouPageContent model, final Order order) {
         model.setTitle(pageTitleResolver.getOrEmpty("checkout:thankYouPage.title"));
     }
 
-    protected void fillOrder(final CheckoutThankYouPageContent model, final CheckoutThankYouPageControllerData data) {
-        model.setOrder(orderBeanFactory.create(data.getOrder()));
+    protected void fillOrder(final CheckoutThankYouPageContent model, final Order order) {
+        model.setOrder(orderBeanFactory.create(order));
     }
 }

@@ -1,28 +1,26 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.WithFetchFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.HomeSimpleReverseRouter;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.hooks.requests.OrderByIdGetHook;
-import com.commercetools.sunrise.shoppingcart.OrderInSession;
-import com.commercetools.sunrise.shoppingcart.common.SunriseFrameworkShoppingCartController;
+import com.commercetools.sunrise.shoppingcart.checkout.thankyou.view.CheckoutThankYouPageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.thankyou.view.CheckoutThankYouPageContentFactory;
 import io.sphere.sdk.orders.Order;
-import io.sphere.sdk.orders.queries.OrderByIdGet;
-import play.mvc.Call;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
+import play.twirl.api.Content;
 
-import javax.inject.Inject;
-import java.util.Optional;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 import static java.util.Arrays.asList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
-import static play.libs.concurrent.HttpExecution.defaultContext;
 
 /**
  * Controller to show as last checkout step the confirmation of the order data.
@@ -41,48 +39,22 @@ import static play.libs.concurrent.HttpExecution.defaultContext;
  *     <li>checkout</li>
  * </ul>
  */
-@RequestScoped
-public abstract class SunriseCheckoutThankYouController extends SunriseFrameworkShoppingCartController
-        implements WithTemplateName {
+public abstract class SunriseCheckoutThankYouController extends SunriseFrameworkController implements WithTemplateName, WithFetchFlow<Order> {
 
-    @Inject
-    private CheckoutThankYouPageContentFactory pageContentFactory;
+    private final OrderFinder orderFinder;
+    private final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory;
 
-    @SunriseRoute("checkoutThankYouPageCall")
-    public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> findLastOrder().
-                thenComposeAsync(orderOpt -> orderOpt
-                        .map(this::handleFoundOrder)
-                        .orElseGet(this::handleNotFoundOrder), defaultContext()));
+    protected SunriseCheckoutThankYouController(final OrderFinder orderFinder,
+                                                final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory) {
+        this.orderFinder = orderFinder;
+        this.checkoutThankYouPageContentFactory = checkoutThankYouPageContentFactory;
     }
 
-    protected CompletionStage<Optional<Order>> findLastOrder() {
-        return injector().getInstance(OrderInSession.class).findLastOrderId()
-                .map(this::findOrderById)
-                .orElseGet(() -> completedFuture(Optional.empty()));
-    }
-
-    protected CompletionStage<Optional<Order>> findOrderById(final String orderId) {
-        final OrderByIdGet baseRequest = OrderByIdGet.of(orderId).plusExpansionPaths(m -> m.paymentInfo().payments());
-        final OrderByIdGet orderByIdGet = OrderByIdGetHook.runHook(hooks(), baseRequest);
-        return sphere().execute(orderByIdGet)
-                .thenApplyAsync(nullableOrder -> {
-                    if (nullableOrder != null) {
-                        OrderLoadedHook.runHook(hooks(), nullableOrder);
-                    }
-                    return Optional.ofNullable(nullableOrder);
-                }, defaultContext());
-    }
-
-    protected CompletionStage<Result> handleFoundOrder(final Order order) {
-        final CheckoutThankYouPageControllerData checkoutThankYouPageControllerData = new CheckoutThankYouPageControllerData(order);
-        final CheckoutThankYouPageContent pageContent = pageContentFactory.create(checkoutThankYouPageControllerData);
-        return asyncOk(renderPageWithTemplate(pageContent, getTemplateName()));
-    }
-
-    protected CompletionStage<Result> handleNotFoundOrder() {
-        final Call call = injector().getInstance(HomeSimpleReverseRouter.class).homePageCall(userLanguage().locale().toLanguageTag());
-        return completedFuture(redirect(call));
+    @Override
+    public Set<String> getFrameworkTags() {
+        final Set<String> frameworkTags = new HashSet<>();
+        frameworkTags.addAll(asList("checkout", "checkout-thank-you"));
+        return frameworkTags;
     }
 
     @Override
@@ -90,10 +62,24 @@ public abstract class SunriseCheckoutThankYouController extends SunriseFramework
         return "checkout-thankyou";
     }
 
+    @SunriseRoute("checkoutThankYouPageCall")
+    public CompletionStage<Result> show(final String languageTag) {
+        return doRequest(() -> requireOrder(this::showPage));
+    }
+
+    protected abstract CompletionStage<Result> handleNotFoundOrder();
+
     @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
-        frameworkTags.addAll(asList("checkout", "checkout-thank-you"));
-        return frameworkTags;
+    public CompletionStage<Content> renderPage(final Order order) {
+        final CheckoutThankYouPageContent pageContent = checkoutThankYouPageContentFactory.create(order);
+        return renderPageWithTemplate(pageContent, getTemplateName());
+    }
+
+    private CompletionStage<Result> requireOrder(final Function<Order, CompletionStage<Result>> nextAction) {
+        return orderFinder.get()
+                .thenComposeAsync(order -> order
+                                .map(nextAction)
+                                .orElseGet(this::handleNotFoundOrder),
+                        HttpExecution.defaultContext());
     }
 }

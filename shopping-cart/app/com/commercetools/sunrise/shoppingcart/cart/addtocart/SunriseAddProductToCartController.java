@@ -14,9 +14,8 @@ import io.sphere.sdk.client.ClientErrorException;
 import play.data.Form;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
-import play.twirl.api.Html;
+import play.twirl.api.Content;
 
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -24,7 +23,6 @@ import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
-import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 @IntroducingMultiControllerComponents(AddProductToCartThemeLinksControllerComponent.class)
 public abstract class SunriseAddProductToCartController<F extends AddProductToCartFormData> extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<F, Cart, Cart> {
@@ -61,15 +59,6 @@ public abstract class SunriseAddProductToCartController<F extends AddProductToCa
         return doRequest(() -> getOrCreateCart(this::processForm));
     }
 
-    protected final CompletionStage<Result> getOrCreateCart(final Function<Cart, CompletionStage<Result>> nextAction) {
-        return cartFinder.get()
-                .thenComposeAsync(cartOpt -> cartOpt
-                                .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
-                                .orElseGet(cartCreator)
-                                .thenComposeAsync(nextAction, HttpExecution.defaultContext()),
-                        HttpExecution.defaultContext());
-    }
-
     @Override
     public CompletionStage<Cart> doAction(final F formData, final Cart cart) {
         return addProductToCartExecutor.apply(cart, formData);
@@ -78,20 +67,29 @@ public abstract class SunriseAddProductToCartController<F extends AddProductToCa
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Cart cart, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, cart, null));
+        return asyncBadRequest(renderPage(form, cart));
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Cart oldCart, final Cart updatedCart);
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final Cart oldCart, @Nullable final Cart updatedCart) {
-        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(firstNonNull(updatedCart, oldCart));
-        return renderPageWithTemplate(pageContent, getTemplateName()); // TODO abstract results better instead of forcing HTML, to support this use case properly
+    public CompletionStage<Content> renderPage(final Form<F> form, final Cart cart) {
+        final CartDetailPageContent pageContent = cartDetailPageContentFactory.create(cart);
+        return renderPageWithTemplate(pageContent, getTemplateName());
     }
 
     @Override
     public void preFillFormData(final F formData, final Cart cart) {
         // Do not pre-fill with anything
+    }
+
+    protected final CompletionStage<Result> getOrCreateCart(final Function<Cart, CompletionStage<Result>> nextAction) {
+        return cartFinder.get()
+                .thenComposeAsync(cartOpt -> cartOpt
+                                .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
+                                .orElseGet(cartCreator)
+                                .thenComposeAsync(nextAction, HttpExecution.defaultContext()),
+                        HttpExecution.defaultContext());
     }
 }

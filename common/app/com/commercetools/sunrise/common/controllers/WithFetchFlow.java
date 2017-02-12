@@ -3,7 +3,7 @@ package com.commercetools.sunrise.common.controllers;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.mvc.Results;
-import play.twirl.api.Html;
+import play.twirl.api.Content;
 
 import java.util.concurrent.CompletionStage;
 
@@ -18,5 +18,5 @@ public interface WithFetchFlow<O> {
                 .thenApplyAsync(Results::ok, HttpExecution.defaultContext());
     }
 
-    CompletionStage<Html> renderPage(final O output);
+    CompletionStage<Content> renderPage(final O output);
 }

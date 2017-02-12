@@ -3,7 +3,6 @@ package com.commercetools.sunrise.shoppingcart.checkout.payment;
 import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.shoppingcart.AbstractCartUpdateExecutor;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.PaymentInfo;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddPayment;
 import io.sphere.sdk.carts.commands.updateactions.RemovePayment;
@@ -28,92 +27,79 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 public class DefaultCheckoutPaymentExecutor extends AbstractCartUpdateExecutor implements CheckoutPaymentExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckoutPaymentExecutor.class);
 
-    private final PaymentSettings paymentSettings;
-
     @Inject
-    protected DefaultCheckoutPaymentExecutor(final SphereClient sphereClient, final HookContext hookContext,
-                                             final PaymentSettings paymentSettings) {
+    protected DefaultCheckoutPaymentExecutor(final SphereClient sphereClient, final HookContext hookContext) {
         super(sphereClient, hookContext);
-        this.paymentSettings = paymentSettings;
     }
 
     @Override
-    public CompletionStage<Cart> apply(final Cart cart, final CheckoutPaymentFormData formData) {
-        final String selectedMethod = formData.getPayment();
-        return findPaymentMethod(cart, selectedMethod)
-                .thenComposeAsync(paymentMethodOpt -> paymentMethodOpt
-                                .map(paymentMethod -> setPaymentToCart(cart, paymentMethod))
-                                .orElseThrow(() -> new RuntimeException("No valid payment method found")), // Should not happen after validation
-                        HttpExecution.defaultContext());
+    public CompletionStage<Cart> apply(final PaymentMethodsWithCart paymentMethodsWithCart, final CheckoutPaymentFormData formData) {
+        return createPayment(paymentMethodsWithCart, formData)
+                .thenComposeAsync(payment -> {
+                    final CartUpdateCommand command = buildRequest(paymentMethodsWithCart, formData, payment);
+                    return executeRequest(paymentMethodsWithCart.getCart(), command)
+                            .thenCompose(cart -> deletePreviousPayments(cart, payment));
+                }, HttpExecution.defaultContext());
     }
 
-    protected CompletionStage<Cart> setPaymentToCart(final Cart cart, final PaymentMethodInfo selectedPaymentMethod) {
-        final List<PaymentMethodInfo> selectedPaymentMethods = singletonList(selectedPaymentMethod);
-        return withPaymentsToRemove(cart, selectedPaymentMethods, paymentsToRemove ->
-                withPaymentsToAdd(cart, selectedPaymentMethods, paymentsToAdd -> {
-                    final Stream<RemovePayment> removePaymentStream = paymentsToRemove.stream().map(RemovePayment::of);
-                    final Stream<AddPayment> addPaymentStream = paymentsToAdd.stream().map(AddPayment::of);
-                    final List<UpdateAction<Cart>> updateActions = Stream.concat(removePaymentStream, addPaymentStream).collect(toList());
-                    return getSphereClient().execute(CartUpdateCommand.of(cart, updateActions));
-                })
-        );
+    protected CartUpdateCommand buildRequest(final PaymentMethodsWithCart paymentMethodsWithCart, final CheckoutPaymentFormData formData, final Payment payment) {
+        return CartUpdateCommand.of(paymentMethodsWithCart.getCart(), AddPayment.of(payment));
     }
 
-    private CompletionStage<Optional<PaymentMethodInfo>> findPaymentMethod(final Cart cart, final String method) {
-        return paymentSettings.getPaymentMethods(cart)
-                .thenApplyAsync(paymentMethods -> paymentMethods.stream()
-                                .filter(paymentMethod -> Objects.equals(paymentMethod.getMethod(), method))
-                                .findAny(),
-                        HttpExecution.defaultContext());
-    }
-
-    protected CompletionStage<Cart> withPaymentsToRemove(final Cart cart, final List<PaymentMethodInfo> selectedPaymentMethods,
-                                                         final Function<List<Payment>, CompletionStage<Cart>> setPaymentAction) {
-        final List<Reference<Payment>> paymentRefs = Optional.ofNullable(cart.getPaymentInfo())
-                .map(PaymentInfo::getPayments)
-                .orElseGet(() -> {
-                    LOGGER.error("Payment info is not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
-                    return emptyList();
-                });
-        final List<CompletionStage<Payment>> paymentStages = paymentRefs.stream()
+    private CompletionStage<Cart> deletePreviousPayments(final Cart cart, final Payment payment) {
+        final List<CompletionStage<Payment>> paymentStages = findPaymentsToRemove(cart, payment).stream()
                 .map(paymentRef -> getSphereClient().execute(PaymentByIdGet.of(paymentRef)))
                 .collect(toList());
         return CompletableFutureUtils.listOfFuturesToFutureOfList(paymentStages)
                 .thenComposeAsync(payments -> {
                     payments.removeIf(Objects::isNull);
-                    final CompletionStage<Cart> updatedCartStage = setPaymentAction.apply(payments);
-                    updatedCartStage.thenAccept(updatedCart ->
-                            payments.forEach(payment -> getSphereClient().execute(PaymentDeleteCommand.of(payment))));
-                    return updatedCartStage;
+                    return removePaymentsFormCart(cart, payments).thenApply(updatedCart -> {
+                        payments.forEach(paymentToDelete -> getSphereClient().execute(PaymentDeleteCommand.of(paymentToDelete)));
+                        return updatedCart;
+                    });
                 });
     }
 
-    protected CompletionStage<Cart> withPaymentsToAdd(final Cart cart, final List<PaymentMethodInfo> selectedPaymentMethods,
-                                                      final Function<List<Payment>, CompletionStage<Cart>> setPaymentAction) {
-        final List<CompletionStage<Payment>> paymentStages = selectedPaymentMethods.stream()
-                .map(selectedPaymentMethod -> {
-                    final PaymentDraft paymentDraft = PaymentDraftBuilder.of(cart.getTotalPrice())
-                            .paymentMethodInfo(selectedPaymentMethod)
-                            .customer(Optional.ofNullable(cart.getCustomerId()).map(Customer::referenceOfId).orElse(null))
-                            .build();
-                    return getSphereClient().execute(PaymentCreateCommand.of(paymentDraft));
-                })
-                .collect(toList());
-        return CompletableFutureUtils.listOfFuturesToFutureOfList(paymentStages)
-                .thenComposeAsync(payments -> {
-                    payments.removeIf(Objects::isNull);
-                    return setPaymentAction.apply(payments);
+    private List<Reference<Payment>> findPaymentsToRemove(final Cart cart, final Payment payment) {
+        return Optional.ofNullable(cart.getPaymentInfo())
+                .map(paymentInfo -> paymentInfo.getPayments().stream()
+                        .filter(paymentRef -> !paymentRef.referencesSameResource(payment))
+                        .collect(toList()))
+                .orElseGet(() -> {
+                    LOGGER.warn("Payment info is not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
+                    return emptyList();
                 });
+    }
+
+    private CompletionStage<Cart> removePaymentsFormCart(final Cart cart, final List<Payment> paymentsToRemove) {
+        final List<UpdateAction<Cart>> updateActions = paymentsToRemove.stream()
+                .map(RemovePayment::of)
+                .collect(toList());
+        return getSphereClient().execute(CartUpdateCommand.of(cart, updateActions));
+    }
+
+    private CompletionStage<Payment> createPayment(final PaymentMethodsWithCart paymentMethodsWithCart, final CheckoutPaymentFormData formData) {
+        final Cart cart = paymentMethodsWithCart.getCart();
+        final PaymentMethodInfo paymentMethod = findPaymentMethod(paymentMethodsWithCart.getPaymentMethods(), formData);
+        final PaymentDraft paymentDraft = PaymentDraftBuilder.of(cart.getTotalPrice())
+                .paymentMethodInfo(paymentMethod)
+                .customer(Optional.ofNullable(cart.getCustomerId()).map(Customer::referenceOfId).orElse(null))
+                .build();
+        return getSphereClient().execute(PaymentCreateCommand.of(paymentDraft));
+    }
+
+    private PaymentMethodInfo findPaymentMethod(final List<PaymentMethodInfo> paymentMethods, final CheckoutPaymentFormData formData) {
+        return paymentMethods.stream()
+                .filter(paymentMethod -> Objects.equals(paymentMethod.getMethod(), formData.getPayment()))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("No valid payment method found")); // Should not happen after validation
     }
 }

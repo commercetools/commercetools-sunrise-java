@@ -15,7 +15,7 @@ import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
 import play.mvc.Result;
-import play.twirl.api.Html;
+import play.twirl.api.Content;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 public abstract class SunriseChangeAddressController<F extends AddressBookAddressFormData> extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<F, AddressWithCustomer, Customer> {
 
@@ -51,12 +50,12 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
 
     @SunriseRoute("changeAddressInAddressBookCall")
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
-        return doRequest(() -> requireAddress(addressId, this::showFormPage));
+        return doRequest(() -> requireAddressWithCustomer(addressId, this::showFormPage));
     }
 
     @SunriseRoute("changeAddressInAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
-        return doRequest(() -> requireAddress(addressId, this::processForm));
+        return doRequest(() -> requireAddressWithCustomer(addressId, this::processForm));
     }
 
     @Override
@@ -67,22 +66,24 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final AddressWithCustomer addressWithCustomer, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, addressWithCustomer, null));
+        return asyncBadRequest(renderPage(form, addressWithCustomer));
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final AddressWithCustomer addressWithCustomer, final Customer updatedCustomer);
 
     @Override
-    public void preFillFormData(final F formData, final AddressWithCustomer input) {
-        formData.applyAddress(input.getAddress());
-        formData.setDefaultShippingAddress(isDefaultAddress(input.getAddress(), input.getCustomer().getDefaultShippingAddressId()));
-        formData.setDefaultBillingAddress(isDefaultAddress(input.getAddress(), input.getCustomer().getDefaultBillingAddressId()));
+    public void preFillFormData(final F formData, final AddressWithCustomer addressWithCustomer) {
+        final Address address = addressWithCustomer.getAddress();
+        final Customer customer = addressWithCustomer.getCustomer();
+        formData.applyAddress(address);
+        formData.setDefaultShippingAddress(isDefaultAddress(address, customer.getDefaultShippingAddressId()));
+        formData.setDefaultBillingAddress(isDefaultAddress(address, customer.getDefaultBillingAddressId()));
     }
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<F> form, final AddressWithCustomer addressWithCustomer, @Nullable final Customer updatedCustomer) {
-        final ChangeAddressPageContent pageContent = changeAddressPageContentFactory.create(firstNonNull(updatedCustomer, addressWithCustomer.getCustomer()), form);
+    public CompletionStage<Content> renderPage(final Form<F> form, final AddressWithCustomer addressWithCustomer) {
+        final ChangeAddressPageContent pageContent = changeAddressPageContentFactory.create(addressWithCustomer, form);
         return renderPageWithTemplate(pageContent, getTemplateName());
     }
 

@@ -4,6 +4,7 @@ import com.commercetools.sunrise.common.controllers.TestableCall;
 import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbLinkBean;
+import com.commercetools.sunrise.productcatalog.productoverview.view.CategoryBreadcrumbBeanFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;

@@ -10,7 +10,7 @@ public final class ShippingMethodsWithCart {
     private final List<ShippingMethod> shippingMethods;
     private final Cart cart;
 
-    public ShippingMethodsWithCart(final List<ShippingMethod> shippingMethods, final Cart cart) {
+    private ShippingMethodsWithCart(final List<ShippingMethod> shippingMethods, final Cart cart) {
         this.shippingMethods = shippingMethods;
         this.cart = cart;
     }
@@ -21,5 +21,9 @@ public final class ShippingMethodsWithCart {
 
     public Cart getCart() {
         return cart;
+    }
+
+    public static ShippingMethodsWithCart of(final List<ShippingMethod> shippingMethods, final Cart cart) {
+        return new ShippingMethodsWithCart(shippingMethods, cart);
     }
 }

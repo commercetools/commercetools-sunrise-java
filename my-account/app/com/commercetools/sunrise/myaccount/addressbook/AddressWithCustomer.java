@@ -3,12 +3,12 @@ package com.commercetools.sunrise.myaccount.addressbook;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 
-public class AddressWithCustomer {
+public final class AddressWithCustomer {
 
     private final Address address;
     private final Customer customer;
 
-    public AddressWithCustomer(final Customer customer, final Address address) {
+    private AddressWithCustomer(final Address address, final Customer customer) {
         this.address = address;
         this.customer = customer;
     }
@@ -19,5 +19,9 @@ public class AddressWithCustomer {
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public static AddressWithCustomer of(final Address address, final Customer customer) {
+        return new AddressWithCustomer(address, customer);
     }
 }

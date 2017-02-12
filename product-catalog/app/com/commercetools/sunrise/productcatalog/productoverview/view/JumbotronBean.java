@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.productcatalog.productoverview.view;
 
 import com.commercetools.sunrise.common.models.TitleDescriptionBean;
 import io.sphere.sdk.models.LocalizedString;
