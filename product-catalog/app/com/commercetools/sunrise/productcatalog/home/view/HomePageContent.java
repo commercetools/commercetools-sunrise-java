@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.productcatalog.home;
+package com.commercetools.sunrise.productcatalog.home.view;
 
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;

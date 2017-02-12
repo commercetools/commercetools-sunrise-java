@@ -8,7 +8,7 @@ import com.commercetools.sunrise.hooks.events.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
-import com.commercetools.sunrise.productcatalog.productdetail.ProductDetailPageContent;
+import com.commercetools.sunrise.productcatalog.productdetail.view.ProductDetailPageContent;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
 

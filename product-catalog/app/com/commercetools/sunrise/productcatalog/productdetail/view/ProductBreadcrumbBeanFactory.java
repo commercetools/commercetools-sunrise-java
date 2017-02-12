@@ -1,6 +1,7 @@
-package com.commercetools.sunrise.productcatalog.productdetail;
+package com.commercetools.sunrise.productcatalog.productdetail.view;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.AbstractBreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
@@ -9,7 +10,7 @@ import io.sphere.sdk.categories.CategoryTree;
 import javax.inject.Inject;
 
 @RequestScoped
-public class ProductBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<ProductDetailControllerData> {
+public class ProductBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<ProductWithVariant> {
 
     @Inject
     public ProductBreadcrumbBeanFactory(final CategoryTree categoryTree, final ProductReverseRouter productReverseRouter) {
@@ -17,8 +18,8 @@ public class ProductBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<
     }
 
     @Override
-    public final BreadcrumbBean create(final ProductDetailControllerData data) {
-        return super.create(data);
+    public final BreadcrumbBean create(final ProductWithVariant productWithVariant) {
+        return super.create(productWithVariant);
     }
 
     @Override
@@ -27,12 +28,12 @@ public class ProductBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<
     }
 
     @Override
-    protected final void initialize(final BreadcrumbBean model, final ProductDetailControllerData data) {
-        super.initialize(model, data);
+    protected final void initialize(final BreadcrumbBean model, final ProductWithVariant productWithVariant) {
+        super.initialize(model, productWithVariant);
     }
 
     @Override
-    protected void fillLinks(final BreadcrumbBean bean, final ProductDetailControllerData data) {
-        bean.setLinks(createProductLinks(data.getProductWithVariant()));
+    protected void fillLinks(final BreadcrumbBean bean, final ProductWithVariant productWithVariant) {
+        bean.setLinks(createProductLinks(productWithVariant));
     }
 }

@@ -1,16 +1,17 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithCmsPage;
+import com.commercetools.sunrise.common.controllers.WithFetchFlow;
 import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
+import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
+import play.twirl.api.Content;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,8 +36,13 @@ import static java.util.Arrays.asList;
  *     <li>product-catalog</li>
  * </ul>
  */
-@RequestScoped
-public abstract class SunriseHomeController extends SunriseFrameworkController implements WithTemplateName, WithCmsPage {
+public abstract class SunriseHomeController extends SunriseFrameworkController implements WithTemplateName, WithCmsPage, WithFetchFlow<Void> {
+
+    private final HomePageContentFactory homePageContentFactory;
+
+    protected SunriseHomeController(final HomePageContentFactory homePageContentFactory) {
+        this.homePageContentFactory = homePageContentFactory;
+    }
 
     @Override
     public String getTemplateName() {
@@ -53,24 +59,15 @@ public abstract class SunriseHomeController extends SunriseFrameworkController i
         return new HashSet<>(asList("home", "product-catalog"));
     }
 
-    public CompletionStage<Result> index() {
-        return redirectToHome();
-    }
-
     @SunriseRoute("homePageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(this::showHome);
+        return doRequest(() -> showPage(null));
     }
 
-    protected CompletionStage<Result> showHome() {
+    @Override
+    public CompletionStage<Content> renderPage(final Void output) {
         return cmsPage().thenComposeAsync(cmsPage ->
-                        asyncOk(renderPageWithTemplate(createPageContent(), getTemplateName(), cmsPage.orElse(null))),
+                        renderPageWithTemplate(homePageContentFactory.create(null), getTemplateName(), cmsPage.orElse(null)),
                 HttpExecution.defaultContext());
-    }
-
-    protected PageContent createPageContent() {
-        final HomePageContent pageContent = new HomePageContent();
-        setI18nTitle(pageContent, "catalog:home.title");
-        return pageContent;
     }
 }

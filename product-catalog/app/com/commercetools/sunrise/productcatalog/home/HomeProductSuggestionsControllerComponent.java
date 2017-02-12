@@ -8,6 +8,7 @@ import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.productcatalog.common.ProductListBean;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
+import com.commercetools.sunrise.productcatalog.home.view.HomePageContent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
@@ -31,33 +32,43 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
 
     private static final Logger logger = LoggerFactory.getLogger(HomeProductSuggestionsControllerComponent.class);
 
-    private List<String> suggestionsExternalIds;
-    private int numSuggestions;
+    private final int numSuggestions;
+    private final List<String> suggestionsExternalIds;
+    private final ProductListBeanFactory productListBeanFactory;
+    private final ProductRecommendation productRecommendation;
+    private final CategoryTree categoryTree;
+
     private Set<ProductProjection> recommendedProducts;
 
     @Inject
-    private ProductListBeanFactory productListBeanFactory;
-    @Inject
-    private ProductRecommendation productRecommendation;
-    @Inject
-    private CategoryTree categoryTree;
-
-    @Inject
-    public void setConfiguration(final Configuration configuration) {
+    public HomeProductSuggestionsControllerComponent(final Configuration configuration, final ProductListBeanFactory productListBeanFactory,
+                                                     final ProductRecommendation productRecommendation, final CategoryTree categoryTree) {
         this.suggestionsExternalIds = configuration.getStringList("homeSuggestions.externalId", emptyList());
         this.numSuggestions = configuration.getInt("homeSuggestions.count", 4);
+        this.productListBeanFactory = productListBeanFactory;
+        this.productRecommendation = productRecommendation;
+        this.categoryTree = categoryTree;
     }
 
 
     @Override
     public CompletionStage<?> onRequestStarted(final Http.Context context) {
         final List<Category> suggestedCategories = suggestionsExternalIds.stream()
-                .map(extId -> categoryTree.findByExternalId(extId))
+                .map(categoryTree::findByExternalId)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
         return getRecommendedProducts(suggestedCategories)
                 .thenAccept(recommendedProducts -> this.recommendedProducts = recommendedProducts);
+    }
+
+    @Override
+    public void onPageDataReady(final PageData pageData) {
+        if (recommendedProducts != null && pageData.getContent() instanceof HomePageContent) {
+            final HomePageContent content = (HomePageContent) pageData.getContent();
+            final ProductListBean productListBean = productListBeanFactory.create(recommendedProducts);
+            content.setSuggestions(new SuggestionsBean(productListBean));
+        }
     }
 
     private CompletionStage<Set<ProductProjection>> getRecommendedProducts(final List<Category> suggestedCategories) {
@@ -69,15 +80,6 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
                     });
         } else {
             return completedFuture(emptySet());
-        }
-    }
-
-    @Override
-    public void onPageDataReady(final PageData pageData) {
-        if (pageData.getContent() instanceof HomePageContent) {
-            final HomePageContent content = (HomePageContent) pageData.getContent();
-            final ProductListBean productListBean = productListBeanFactory.create(recommendedProducts);
-            content.setSuggestions(new SuggestionsBean(productListBean));
         }
     }
 }

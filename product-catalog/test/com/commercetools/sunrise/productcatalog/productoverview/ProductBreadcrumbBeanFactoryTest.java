@@ -2,11 +2,10 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.controllers.TestableCall;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
-import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbLinkBean;
-import com.commercetools.sunrise.productcatalog.productdetail.ProductBreadcrumbBeanFactory;
-import com.commercetools.sunrise.productcatalog.productdetail.ProductDetailControllerData;
+import com.commercetools.sunrise.productcatalog.productdetail.view.ProductBreadcrumbBeanFactory;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.products.ProductProjection;
@@ -34,8 +33,8 @@ public class ProductBreadcrumbBeanFactoryTest {
     }
 
     private void testProductBreadcrumb(final ProductProjection product, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
-        final ProductDetailControllerData productDetailControllerData = new ProductDetailControllerData(new ProductWithVariant(product, product.getMasterVariant()));
-        final BreadcrumbBean breadcrumb = createBreadcrumbFactory().create(productDetailControllerData);
+        final ProductWithVariant productWithVariant = ProductWithVariant.of(product, product.getMasterVariant());
+        final BreadcrumbBean breadcrumb = createBreadcrumbFactory().create(productWithVariant);
         testBreadcrumb(breadcrumb, texts, urls);
     }
 
@@ -48,11 +47,22 @@ public class ProductBreadcrumbBeanFactoryTest {
     }
 
     private static ProductBreadcrumbBeanFactory createBreadcrumbFactory() {
-        return new ProductBreadcrumbBeanFactory(Locale.ENGLISH, CATEGORY_TREE, reverseRouter());
+        return new ProductBreadcrumbBeanFactory(CATEGORY_TREE, reverseRouter());
     }
 
-    private static ProductSimpleReverseRouter reverseRouter() {
-        return new ProductSimpleReverseRouter() {
+    private static ProductReverseRouter reverseRouter() {
+        return new ProductReverseRouter() {
+
+            @Override
+            public String languageTag() {
+                return "en";
+            }
+
+            @Override
+            public Locale locale() {
+                return Locale.ENGLISH;
+            }
+
             @Override
             public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
                 return new TestableCall("pdp");

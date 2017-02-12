@@ -4,12 +4,12 @@ import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
-public class ProductWithVariant extends Base {
+public final class ProductWithVariant extends Base {
 
     private final ProductProjection product;
     private final ProductVariant variant;
 
-    public ProductWithVariant(final ProductProjection product, final ProductVariant variant) {
+    private ProductWithVariant(final ProductProjection product, final ProductVariant variant) {
         this.product = product;
         this.variant = variant;
     }
@@ -20,5 +20,9 @@ public class ProductWithVariant extends Base {
 
     public ProductVariant getVariant() {
         return variant;
+    }
+
+    public static ProductWithVariant of(final ProductProjection product, final ProductVariant variant) {
+        return new ProductWithVariant(product, variant);
     }
 }
