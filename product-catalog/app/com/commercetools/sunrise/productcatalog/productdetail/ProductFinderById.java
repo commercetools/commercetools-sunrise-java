@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public class ProductFinderById extends AbstractProductSearchExecutor implements ProductFinder {
+public class ProductFinderById extends AbstractSingleProductSearchExecutor implements ProductFinder {
 
     private final PriceSelection priceSelection;
 

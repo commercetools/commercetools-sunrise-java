@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.productoverview.view;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
-import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewControllerData;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductsWithCategory;
 import play.mvc.Http;
 
 import javax.inject.Inject;
@@ -10,7 +10,7 @@ import java.util.Locale;
 
 import static java.util.Collections.singletonList;
 
-public class ProductOverviewPageContentFactory extends PageContentFactory<ProductOverviewPageContent, ProductOverviewControllerData> {
+public class ProductOverviewPageContentFactory extends PageContentFactory<ProductOverviewPageContent, ProductsWithCategory> {
 
     private final Locale locale;
     private final Http.Request httpRequest;
@@ -41,12 +41,12 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
 
 
     @Override
-    public final ProductOverviewPageContent create(final ProductOverviewControllerData data) {
+    public final ProductOverviewPageContent create(final ProductsWithCategory data) {
         return super.create(data);
     }
 
     @Override
-    protected final void initialize(final ProductOverviewPageContent model, final ProductOverviewControllerData data) {
+    protected final void initialize(final ProductOverviewPageContent model, final ProductsWithCategory data) {
         super.initialize(model, data);
         fillProducts(model, data);
         fillFilterProductsUrl(model, data);
@@ -57,33 +57,33 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     }
 
     @Override
-    protected void fillTitle(final ProductOverviewPageContent model, final ProductOverviewControllerData data) {
-        if (data.getCategory() != null) {
-            model.setTitle(data.getCategory().getName().find(singletonList(locale)).orElse(""));
+    protected void fillTitle(final ProductOverviewPageContent model, final ProductsWithCategory productsWithCategory) {
+        if (productsWithCategory.getCategory() != null) {
+            model.setTitle(productsWithCategory.getCategory().getName().find(singletonList(locale)).orElse(""));
         }
     }
 
-    protected void fillFilterProductsUrl(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
+    protected void fillFilterProductsUrl(final ProductOverviewPageContent bean, final ProductsWithCategory productsWithCategory) {
         bean.setFilterProductsUrl(httpRequest.path());
     }
 
-    protected void fillProducts(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
-        bean.setProducts(productListBeanFactory.create(data.getProductSearchResult().getResults()));
+    protected void fillProducts(final ProductOverviewPageContent bean, final ProductsWithCategory productsWithCategory) {
+        bean.setProducts(productListBeanFactory.create(productsWithCategory.getProducts().getResults()));
     }
 
-    protected void fillSeo(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
-        bean.setSeo(seoBeanFactory.create(data));
+    protected void fillSeo(final ProductOverviewPageContent bean, final ProductsWithCategory productsWithCategory) {
+        bean.setSeo(seoBeanFactory.create(productsWithCategory));
     }
 
-    protected void fillBreadcrumb(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
-        bean.setBreadcrumb(categoryBreadcrumbBeanFactory.create(data));
+    protected void fillBreadcrumb(final ProductOverviewPageContent bean, final ProductsWithCategory productsWithCategory) {
+        bean.setBreadcrumb(categoryBreadcrumbBeanFactory.create(productsWithCategory));
     }
 
-    protected void fillJumbotron(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
-        bean.setJumbotron(jumbotronBeanFactory.create(data));
+    protected void fillJumbotron(final ProductOverviewPageContent bean, final ProductsWithCategory productsWithCategory) {
+        bean.setJumbotron(jumbotronBeanFactory.create(productsWithCategory));
     }
 
-    protected void fillBanner(final ProductOverviewPageContent bean, final ProductOverviewControllerData data) {
-        bean.setBanner(bannerBeanFactory.create(data));
+    protected void fillBanner(final ProductOverviewPageContent bean, final ProductsWithCategory productsWithCategory) {
+        bean.setBanner(bannerBeanFactory.create(productsWithCategory));
     }
 }

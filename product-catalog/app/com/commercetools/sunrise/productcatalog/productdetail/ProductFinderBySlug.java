@@ -11,7 +11,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public class ProductFinderBySlug extends AbstractProductSearchExecutor implements ProductFinder {
+public class ProductFinderBySlug extends AbstractSingleProductSearchExecutor implements ProductFinder {
 
     private final Locale locale;
     private final PriceSelection priceSelection;

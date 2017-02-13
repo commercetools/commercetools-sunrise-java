@@ -13,9 +13,9 @@ import play.libs.concurrent.HttpExecution;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public abstract class AbstractProductSearchExecutor extends AbstractSphereRequestExecutor implements ProductFinder {
+public abstract class AbstractSingleProductSearchExecutor extends AbstractSphereRequestExecutor {
 
-    protected AbstractProductSearchExecutor(final SphereClient sphereClient, final HookContext hookContext) {
+    protected AbstractSingleProductSearchExecutor(final SphereClient sphereClient, final HookContext hookContext) {
         super(sphereClient, hookContext);
     }
 

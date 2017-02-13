@@ -4,13 +4,13 @@ import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.AbstractBreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
-import com.commercetools.sunrise.productcatalog.productoverview.ProductOverviewControllerData;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductsWithCategory;
 import io.sphere.sdk.categories.CategoryTree;
 
 import javax.inject.Inject;
 
 @RequestScoped
-public class CategoryBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<ProductOverviewControllerData> {
+public class CategoryBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory<ProductsWithCategory> {
 
     @Inject
     public CategoryBreadcrumbBeanFactory(final CategoryTree categoryTree, final ProductReverseRouter productReverseRouter) {
@@ -18,7 +18,7 @@ public class CategoryBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory
     }
 
     @Override
-    public final BreadcrumbBean create(final ProductOverviewControllerData data) {
+    public final BreadcrumbBean create(final ProductsWithCategory data) {
         return super.create(data);
     }
 
@@ -28,12 +28,12 @@ public class CategoryBreadcrumbBeanFactory extends AbstractBreadcrumbBeanFactory
     }
 
     @Override
-    protected final void initialize(final BreadcrumbBean model, final ProductOverviewControllerData data) {
+    protected final void initialize(final BreadcrumbBean model, final ProductsWithCategory data) {
         super.initialize(model, data);
     }
 
     @Override
-    protected void fillLinks(final BreadcrumbBean bean, final ProductOverviewControllerData data) {
+    protected void fillLinks(final BreadcrumbBean bean, final ProductsWithCategory data) {
         if (data.getCategory() != null) {
             bean.setLinks(createCategoryTreeLinks(data.getCategory()));
         }

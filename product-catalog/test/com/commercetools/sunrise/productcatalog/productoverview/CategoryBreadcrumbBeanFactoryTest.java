@@ -39,7 +39,7 @@ public class CategoryBreadcrumbBeanFactoryTest {
 
     private void testCategoryBreadcrumb(final String extId, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
         final Category category = CATEGORY_TREE.findByExternalId(extId).get();
-        final ProductOverviewControllerData data = new ProductOverviewControllerData(null, category);
+        final ProductsWithCategory data = new ProductsWithCategory(null, category);
         final BreadcrumbBean breadcrumb = createBreadcrumbFactory().create(data);
         testBreadcrumb(breadcrumb, texts, urls);
     }
