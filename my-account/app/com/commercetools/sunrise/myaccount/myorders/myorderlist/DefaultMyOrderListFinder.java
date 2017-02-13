@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.myorders.AbstractOrderQueryExecutor;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
@@ -14,8 +14,8 @@ import java.util.concurrent.CompletionStage;
 public class DefaultMyOrderListFinder extends AbstractOrderQueryExecutor implements MyOrderListFinder {
 
     @Inject
-    protected DefaultMyOrderListFinder(final SphereClient sphereClient, final RequestHookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected DefaultMyOrderListFinder(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import io.sphere.sdk.client.SphereClient;
@@ -22,8 +22,8 @@ import java.util.concurrent.CompletionStage;
 public class DefaultAddAddressExecutor extends AbstractCustomerUpdateExecutor implements AddAddressExecutor {
 
     @Inject
-    protected DefaultAddAddressExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected DefaultAddAddressExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     @Override

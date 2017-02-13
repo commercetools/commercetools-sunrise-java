@@ -2,12 +2,15 @@ package demo.shoppingcart;
 
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressExecutor;
 import com.commercetools.sunrise.shoppingcart.checkout.address.DefaultCheckoutAddressFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.address.SunriseCheckoutAddressController;
 import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContentFactory;
 import io.sphere.sdk.carts.Cart;
+import play.data.FormFactory;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -19,12 +22,15 @@ public final class CheckoutAddressController extends SunriseCheckoutAddressContr
     private final CheckoutReverseRouter checkoutReverseRouter;
 
     @Inject
-    public CheckoutAddressController(final CartFinder cartFinder,
+    public CheckoutAddressController(final TemplateRenderer templateRenderer,
+                                     final RequestHookContext hookContext,
+                                     final CartFinder cartFinder,
+                                     final FormFactory formFactory,
                                      final CheckoutAddressExecutor checkoutAddressExecutor,
                                      final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory,
                                      final CartReverseRouter cartReverseRouter,
                                      final CheckoutReverseRouter checkoutReverseRouter) {
-        super(cartFinder, checkoutAddressExecutor, checkoutAddressPageContentFactory);
+        super(templateRenderer, hookContext, cartFinder, formFactory, checkoutAddressExecutor, checkoutAddressPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
         this.checkoutReverseRouter = checkoutReverseRouter;
     }
@@ -35,12 +41,12 @@ public final class CheckoutAddressController extends SunriseCheckoutAddressContr
     }
 
     @Override
-    protected CompletionStage<Result> handleNotFoundCart() {
+    public CompletionStage<Result> handleNotFoundCart() {
         return redirectTo(cartReverseRouter.showCart());
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final DefaultCheckoutAddressFormData formData, final Cart oldCart, final Cart updatedCart) {
+    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final DefaultCheckoutAddressFormData formData) {
         return redirectTo(checkoutReverseRouter.checkoutShippingPageCall());
     }
 }

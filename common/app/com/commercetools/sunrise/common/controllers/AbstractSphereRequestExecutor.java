@@ -1,24 +1,24 @@
 package com.commercetools.sunrise.common.controllers;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Base;
 
 public abstract class AbstractSphereRequestExecutor extends Base {
 
     private final SphereClient sphereClient;
-    private final HookContext hookContext;
+    private final HookRunner hookRunner;
 
-    protected AbstractSphereRequestExecutor(final SphereClient sphereClient, final HookContext hookContext) {
+    protected AbstractSphereRequestExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
         this.sphereClient = sphereClient;
-        this.hookContext = hookContext;
+        this.hookRunner = hookRunner;
     }
 
     protected final SphereClient getSphereClient() {
         return sphereClient;
     }
 
-    protected final HookContext getHookContext() {
-        return hookContext;
+    protected final HookRunner getHookRunner() {
+        return hookRunner;
     }
 }

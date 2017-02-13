@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
-import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.engine.TemplateContext;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.engine.TemplateNotFoundException;

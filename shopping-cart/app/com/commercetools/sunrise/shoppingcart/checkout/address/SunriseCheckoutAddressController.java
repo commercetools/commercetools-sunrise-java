@@ -1,40 +1,47 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.SunriseFrameworkShoppingCartController;
-import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContent;
+import com.commercetools.sunrise.shoppingcart.WithCartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
 import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(CheckoutAddressThemeLinksControllerComponent.class)
-public abstract class SunriseCheckoutAddressController<F extends CheckoutAddressFormData> extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<F, Cart, Cart> {
+public abstract class SunriseCheckoutAddressController<F extends CheckoutAddressFormData> extends SunriseFrameworkFormController implements WithFormFlow<F, Cart, Cart>, WithCartFinder {
 
+    private final CartFinder cartFinder;
     private final CheckoutAddressExecutor checkoutAddressExecutor;
     private final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
 
-    protected SunriseCheckoutAddressController(final CartFinder cartFinder, final CheckoutAddressExecutor checkoutAddressExecutor,
+    protected SunriseCheckoutAddressController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+                                               final CartFinder cartFinder, final FormFactory formFactory,
+                                               final CheckoutAddressExecutor checkoutAddressExecutor,
                                                final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory) {
-        super(cartFinder);
+        super(templateRenderer, hookContext, formFactory);
+        this.cartFinder = cartFinder;
         this.checkoutAddressExecutor = checkoutAddressExecutor;
         this.checkoutAddressPageContentFactory = checkoutAddressPageContentFactory;
     }
 
     @Override
     public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
+        final Set<String> frameworkTags = new HashSet<>();
         frameworkTags.addAll(asList("checkout", "checkout-address"));
         return frameworkTags;
     }
@@ -42,6 +49,11 @@ public abstract class SunriseCheckoutAddressController<F extends CheckoutAddress
     @Override
     public String getTemplateName() {
         return "checkout-address";
+    }
+
+    @Override
+    public CartFinder getCartFinder() {
+        return cartFinder;
     }
 
     @SunriseRoute("checkoutAddressesPageCall")
@@ -56,40 +68,39 @@ public abstract class SunriseCheckoutAddressController<F extends CheckoutAddress
     }
 
     @Override
-    public CompletionStage<Cart> doAction(final F formData, final Cart cart) {
+    public CompletionStage<Cart> executeAction(final Cart cart, final F formData) {
         return checkoutAddressExecutor.apply(cart, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Cart cart, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Cart cart, final Form<F> form, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, cart));
+        return showFormPageWithErrors(cart, form);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Cart oldCart, final Cart updatedCart);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final F formData);
 
     @Override
-    public CompletionStage<Content> renderPage(final Form<F> form, final Cart cart) {
-        final CheckoutAddressPageContent pageContent = checkoutAddressPageContentFactory.create(cart, form);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+    public PageContent createPageContent(final Cart cart, final Form<F> form) {
+        return checkoutAddressPageContentFactory.create(cart, form);
     }
 
     @Override
     public Form<F> createForm() {
         return isBillingDifferent()
-                ? formFactory().form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class)
-                : formFactory().form(getFormDataClass());
+                ? getFormFactory().form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class)
+                : getFormFactory().form(getFormDataClass());
     }
 
     @Override
-    public void preFillFormData(final F formData, final Cart cart) {
+    public void preFillFormData(final Cart cart, final F formData) {
         formData.setData(cart);
     }
 
     protected boolean isBillingDifferent() {
         final String flagFieldName = "billingAddressDifferentToBillingAddress";
-        final String fieldValue = formFactory().form().bindFromRequest().get(flagFieldName);
+        final String fieldValue = getFormFactory().form().bindFromRequest().get(flagFieldName);
         return "true".equals(fieldValue);
     }
 }

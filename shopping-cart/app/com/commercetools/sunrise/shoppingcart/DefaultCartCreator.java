@@ -31,10 +31,10 @@ public class DefaultCartCreator extends AbstractSphereRequestExecutor implements
     }
 
     protected final CompletionStage<Cart> executeRequest(final CartCreateCommand baseCommand) {
-        final CartCreateCommand command = CartCreateCommandHook.runHook(getHookContext(), baseCommand);
+        final CartCreateCommand command = CartCreateCommandHook.runHook(getHookRunner(), baseCommand);
         return getSphereClient().execute(command)
                 .thenApplyAsync(cart -> {
-                    CartCreatedHook.runHook(getHookContext(), cart);
+                    CartCreatedHook.runHook(getHookRunner(), cart);
                     return cart;
                 }, HttpExecution.defaultContext());
     }

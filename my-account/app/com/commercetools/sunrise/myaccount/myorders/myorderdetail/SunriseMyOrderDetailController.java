@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
-import com.commercetools.sunrise.common.controllers.WithFetchFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
@@ -17,7 +16,7 @@ import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 
-public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFetchFlow<OrderWithCustomer> {
+public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithQueryFlow<OrderWithCustomer> {
 
     private final MyOrderFinder myOrderFinder;
     private final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory;
@@ -47,9 +46,9 @@ public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyA
     }
 
     @Override
-    public CompletionStage<Content> renderPage(final OrderWithCustomer orderWithCustomer) {
+    public CompletionStage<Content> createPageContent(final OrderWithCustomer orderWithCustomer) {
         final MyOrderDetailPageContent pageContent = myOrderDetailPageContentFactory.create(orderWithCustomer);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+        return renderContent(pageContent, getTemplateName());
     }
 
     protected final CompletionStage<Result> requireOrder(final String orderNumber,

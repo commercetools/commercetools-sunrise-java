@@ -1,8 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.addresslist;
 
 
-import com.commercetools.sunrise.common.controllers.WithFetchFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
@@ -19,7 +18,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(AddressBookThemeLinksControllerComponent.class)
-public abstract class SunriseAddressBookController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFetchFlow<Customer> {
+public abstract class SunriseAddressBookController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithQueryFlow<Customer> {
 
     private final AddressBookPageContentFactory addressBookPageContentFactory;
 
@@ -46,8 +45,8 @@ public abstract class SunriseAddressBookController extends SunriseFrameworkMyAcc
     }
 
     @Override
-    public CompletionStage<Html> renderPage(final Customer customer) {
+    public CompletionStage<Html> createPageContent(final Customer customer) {
         final AddressBookPageContent pageContent = addressBookPageContentFactory.create(customer);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+        return renderContent(pageContent, getTemplateName());
     }
 }

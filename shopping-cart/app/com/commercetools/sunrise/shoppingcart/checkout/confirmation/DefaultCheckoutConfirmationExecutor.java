@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.shoppingcart.CartInSession;
 import com.commercetools.sunrise.shoppingcart.OrderInSession;
 import com.commercetools.sunrise.shoppingcart.checkout.AbstractOrderCreateExecutor;
@@ -23,9 +24,9 @@ public class DefaultCheckoutConfirmationExecutor extends AbstractOrderCreateExec
     private final OrderInSession orderInSession;
 
     @Inject
-    protected DefaultCheckoutConfirmationExecutor(final SphereClient sphereClient, final HookContext hookContext,
+    protected DefaultCheckoutConfirmationExecutor(final SphereClient sphereClient, final HookRunner hookRunner,
                                                   final CartInSession cartInSession, final OrderInSession orderInSession) {
-        super(sphereClient, hookContext);
+        super(sphereClient, hookRunner);
         this.cartInSession = cartInSession;
         this.orderInSession = orderInSession;
     }

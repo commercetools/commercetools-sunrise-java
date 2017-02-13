@@ -1,8 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
@@ -12,6 +10,7 @@ import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.models.errors.DuplicateFieldError;
 import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Result;
 import play.twirl.api.Content;
 
@@ -22,12 +21,14 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(SignUpThemeLinksControllerComponent.class)
-public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<F, Void, CustomerSignInResult> {
+public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseFormFrameworkController implements WithTemplateName, WithFormFlow<F, Void, CustomerSignInResult> {
 
     private final SignUpExecutor signUpExecutor;
     private final SignUpPageContentFactory signUpPageContentFactory;
 
-    protected SunriseSignUpController(final SignUpExecutor signUpExecutor, final SignUpPageContentFactory signUpPageContentFactory) {
+    protected SunriseSignUpController(final FormFactory formFactory, final SignUpExecutor signUpExecutor,
+                                      final SignUpPageContentFactory signUpPageContentFactory) {
+        super(formFactory);
         this.signUpExecutor = signUpExecutor;
         this.signUpPageContentFactory = signUpPageContentFactory;
     }
@@ -52,12 +53,12 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
     }
 
     @Override
-    public CompletionStage<CustomerSignInResult> doAction(final F formData, final Void input) {
+    public CompletionStage<CustomerSignInResult> executeAction(final Void input, final F formData) {
         return signUpExecutor.apply(formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Void input, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final Form<F> form, final ClientErrorException clientErrorException) {
         if (isDuplicatedEmailFieldError(clientErrorException)) {
             saveFormError(form, "A user with this email already exists"); // TODO i18n
         } else {
@@ -67,16 +68,16 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Void input, final CustomerSignInResult result);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Void input, final F formData, final CustomerSignInResult result);
 
     @Override
     public CompletionStage<Content> renderPage(final Form<F> form, final Void input) {
         final AuthenticationPageContent pageContent = signUpPageContentFactory.create(form);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+        return renderContent(pageContent, getTemplateName());
     }
 
     @Override
-    public void preFillFormData(final F formData, final Void input) {
+    public void preFillFormData(final Void input, final F formData) {
         // Do not pre-fill anything
     }
 

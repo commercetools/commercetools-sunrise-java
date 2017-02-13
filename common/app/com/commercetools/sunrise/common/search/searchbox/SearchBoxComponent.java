@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.common.search.searchbox;
 
-import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;

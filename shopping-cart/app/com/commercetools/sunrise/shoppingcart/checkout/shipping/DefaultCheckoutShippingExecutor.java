@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.shoppingcart.AbstractCartUpdateExecutor;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -15,8 +15,8 @@ import java.util.concurrent.CompletionStage;
 public class DefaultCheckoutShippingExecutor extends AbstractCartUpdateExecutor implements CheckoutShippingExecutor {
 
     @Inject
-    protected DefaultCheckoutShippingExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected DefaultCheckoutShippingExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     @Override

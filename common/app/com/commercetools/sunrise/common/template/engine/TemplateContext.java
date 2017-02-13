@@ -15,7 +15,7 @@ public class TemplateContext {
     @Nullable
     private final CmsPage cmsPage;
 
-    public TemplateContext(final PageData pageData, final List<Locale> locales, final CmsPage cmsPage) {
+    public TemplateContext(final PageData pageData, final List<Locale> locales, @Nullable final CmsPage cmsPage) {
         this.pageData = pageData;
         this.locales = locales;
         this.cmsPage = cmsPage;

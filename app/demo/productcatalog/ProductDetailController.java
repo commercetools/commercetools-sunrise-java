@@ -1,9 +1,12 @@
 package demo.productcatalog;
 
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
-import com.commercetools.sunrise.productcatalog.productdetail.view.ProductDetailPageContentFactory;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductFinder;
+import com.commercetools.sunrise.productcatalog.productdetail.ProductVariantFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
+import com.commercetools.sunrise.productcatalog.productdetail.view.ProductDetailPageContentFactory;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import io.sphere.sdk.products.ProductProjection;
 import play.mvc.Result;
@@ -18,10 +21,13 @@ public final class ProductDetailController extends SunriseProductDetailControlle
     private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public ProductDetailController(final ProductFinder productFinder,
+    public ProductDetailController(final TemplateRenderer templateRenderer,
+                                   final RequestHookContext hookContext,
+                                   final ProductFinder productFinder,
+                                   final ProductVariantFinder productVariantFinder,
                                    final ProductDetailPageContentFactory productDetailPageContentFactory,
                                    final ProductReverseRouter productReverseRouter) {
-        super(productFinder, productDetailPageContentFactory);
+        super(templateRenderer, hookContext, productFinder, productVariantFinder, productDetailPageContentFactory);
         this.productReverseRouter = productReverseRouter;
     }
 

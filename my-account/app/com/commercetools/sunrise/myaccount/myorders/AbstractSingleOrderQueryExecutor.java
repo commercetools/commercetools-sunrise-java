@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.myorders;
 
 import com.commercetools.sunrise.common.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
 import com.commercetools.sunrise.hooks.requests.OrderQueryHook;
 import io.sphere.sdk.client.SphereClient;
@@ -15,16 +15,16 @@ import java.util.concurrent.CompletionStage;
 
 public abstract class AbstractSingleOrderQueryExecutor extends AbstractSphereRequestExecutor {
 
-    protected AbstractSingleOrderQueryExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected AbstractSingleOrderQueryExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     protected final CompletionStage<Optional<Order>> executeRequest(final OrderQuery baseQuery) {
-        final OrderQuery query = OrderQueryHook.runHook(getHookContext(), baseQuery);
+        final OrderQuery query = OrderQueryHook.runHook(getHookRunner(), baseQuery);
         return getSphereClient().execute(query)
                 .thenApply(PagedQueryResult::head)
                 .thenApplyAsync(orderOpt -> {
-                    orderOpt.ifPresent(order -> OrderLoadedHook.runHook(getHookContext(), order));
+                    orderOpt.ifPresent(order -> OrderLoadedHook.runHook(getHookRunner(), order));
                     return orderOpt;
                 }, HttpExecution.defaultContext());
     }

@@ -1,21 +1,24 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.SunriseFrameworkShoppingCartController;
-import com.commercetools.sunrise.shoppingcart.checkout.shipping.view.CheckoutShippingPageContent;
+import com.commercetools.sunrise.shoppingcart.WithCartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.view.CheckoutShippingPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.models.Reference;
 import play.data.Form;
+import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -24,16 +27,20 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(CheckoutShippingThemeLinksControllerComponent.class)
-public abstract class SunriseCheckoutShippingController<F extends CheckoutShippingFormData> extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<F, ShippingMethodsWithCart, Cart> {
+public abstract class SunriseCheckoutShippingController<F extends CheckoutShippingFormData> extends SunriseFrameworkFormController implements WithFormFlow<F, ShippingMethodsWithCart, Cart>, WithCartFinder {
 
+    private final CartFinder cartFinder;
     private final CheckoutShippingExecutor checkoutShippingExecutor;
     private final CheckoutShippingPageContentFactory checkoutShippingPageContentFactory;
     private final ShippingSettings shippingSettings;
 
-    protected SunriseCheckoutShippingController(final CartFinder cartFinder, final CheckoutShippingExecutor checkoutShippingExecutor,
+    protected SunriseCheckoutShippingController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+                                                final CartFinder cartFinder, final FormFactory formFactory,
+                                                final CheckoutShippingExecutor checkoutShippingExecutor,
                                                 final CheckoutShippingPageContentFactory checkoutShippingPageContentFactory,
                                                 final ShippingSettings shippingSettings) {
-        super(cartFinder);
+        super(templateRenderer, hookContext, formFactory);
+        this.cartFinder = cartFinder;
         this.checkoutShippingExecutor = checkoutShippingExecutor;
         this.checkoutShippingPageContentFactory = checkoutShippingPageContentFactory;
         this.shippingSettings = shippingSettings;
@@ -41,7 +48,7 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
 
     @Override
     public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
+        final Set<String> frameworkTags = new HashSet<>();
         frameworkTags.addAll(asList("checkout", "checkout-shipping"));
         return frameworkTags;
     }
@@ -49,6 +56,11 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
     @Override
     public String getTemplateName() {
         return "checkout-shipping";
+    }
+
+    @Override
+    public CartFinder getCartFinder() {
+        return cartFinder;
     }
 
     @SunriseRoute("checkoutShippingPageCall")
@@ -62,27 +74,27 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
     }
 
     @Override
-    public CompletionStage<Cart> doAction(final F formData, final ShippingMethodsWithCart shippingMethodsWithCart) {
+    public CompletionStage<Cart> executeAction(final ShippingMethodsWithCart shippingMethodsWithCart, final F formData) {
         return checkoutShippingExecutor.apply(shippingMethodsWithCart, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final ShippingMethodsWithCart shippingMethodsWithCart, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final ShippingMethodsWithCart shippingMethodsWithCart, final Form<F> form, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, shippingMethodsWithCart));
+        return showFormPageWithErrors(shippingMethodsWithCart, form);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final ShippingMethodsWithCart shippingMethodsWithCart, final Cart updatedCart);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final F formData);
+
 
     @Override
-    public CompletionStage<Content> renderPage(final Form<F> form, final ShippingMethodsWithCart shippingMethodsWithCart) {
-        final CheckoutShippingPageContent pageContent = checkoutShippingPageContentFactory.create(shippingMethodsWithCart, form);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+    public PageContent createPageContent(final ShippingMethodsWithCart shippingMethodsWithCart, final Form<F> form) {
+        return checkoutShippingPageContentFactory.create(shippingMethodsWithCart, form);
     }
 
     @Override
-    public void preFillFormData(final F formData, final ShippingMethodsWithCart shippingMethodsWithCart) {
+    public void preFillFormData(final ShippingMethodsWithCart shippingMethodsWithCart, final F formData) {
         final String shippingMethodId = findShippingMethodId(shippingMethodsWithCart.getCart()).orElse(null);
         formData.setShippingMethodId(shippingMethodId);
     }

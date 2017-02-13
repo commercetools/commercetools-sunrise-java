@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.common.search.pagination;
 
-import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;

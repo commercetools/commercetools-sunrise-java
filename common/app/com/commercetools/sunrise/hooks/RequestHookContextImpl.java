@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.hooks;
 
+import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.framework.SunriseComponent;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.utils.CompletableFutureUtils;
@@ -18,7 +19,8 @@ import java.util.stream.Collectors;
 import static io.sphere.sdk.utils.CompletableFutureUtils.successful;
 import static java.util.stream.Collectors.toList;
 
-public class RequestHookContextImpl extends Base implements RequestHookContext {
+@RequestScoped
+final class RequestHookContextImpl extends Base implements RequestHookContext {
     private static final Logger hookRunnerLogger = LoggerFactory.getLogger(HookRunner.class);
     private static final Logger componentRegistryLogger = LoggerFactory.getLogger(ComponentRegistry.class);
 

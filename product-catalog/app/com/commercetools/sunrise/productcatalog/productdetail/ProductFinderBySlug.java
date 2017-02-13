@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.PriceSelection;
@@ -17,9 +18,9 @@ public class ProductFinderBySlug extends AbstractSingleProductSearchExecutor imp
     private final PriceSelection priceSelection;
 
     @Inject
-    protected ProductFinderBySlug(final SphereClient sphereClient, final HookContext hookContext, final Locale locale,
+    protected ProductFinderBySlug(final SphereClient sphereClient, final HookRunner hookRunner, final Locale locale,
                                   final PriceSelection priceSelection) {
-        super(sphereClient, hookContext);
+        super(sphereClient, hookRunner);
         this.locale = locale;
         this.priceSelection = priceSelection;
     }

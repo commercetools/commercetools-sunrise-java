@@ -37,7 +37,7 @@ public class AddAddressController extends SunriseAddAddressController<DefaultAdd
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final DefaultAddressBookAddressFormData formData, final Customer oldCustomer, final Customer updatedCustomer) {
+    public CompletionStage<Result> handleSuccessfulAction(final Customer oldCustomer, final DefaultAddressBookAddressFormData formData, final Customer updatedCustomer) {
         return redirectTo(addressBookReverseRouter.addressBookCall());
     }
 

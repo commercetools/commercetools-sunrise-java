@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.shoppingcart.AbstractCartUpdateExecutor;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -13,8 +13,8 @@ import java.util.concurrent.CompletionStage;
 public class DefaultChangeLineItemQuantityExecutor extends AbstractCartUpdateExecutor implements ChangeLineItemQuantityExecutor {
 
     @Inject
-    protected DefaultChangeLineItemQuantityExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected DefaultChangeLineItemQuantityExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     @Override

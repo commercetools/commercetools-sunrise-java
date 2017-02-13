@@ -1,6 +1,8 @@
 package demo.shoppingcart;
 
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.CartCreator;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.cart.addtocart.AddProductToCartExecutor;
@@ -8,6 +10,7 @@ import com.commercetools.sunrise.shoppingcart.cart.addtocart.DefaultAddProductTo
 import com.commercetools.sunrise.shoppingcart.cart.addtocart.SunriseAddProductToCartController;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
 import io.sphere.sdk.carts.Cart;
+import play.data.FormFactory;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -18,12 +21,15 @@ public final class AddProductToCartController extends SunriseAddProductToCartCon
     private final CartReverseRouter cartReverseRouter;
 
     @Inject
-    public AddProductToCartController(final CartCreator cartCreator,
+    public AddProductToCartController(final TemplateRenderer templateRenderer,
+                                      final RequestHookContext hookContext,
+                                      final CartCreator cartCreator,
                                       final CartFinder cartFinder,
+                                      final FormFactory formFactory,
                                       final AddProductToCartExecutor addProductToCartExecutor,
                                       final CartDetailPageContentFactory cartDetailPageContentFactory,
                                       final CartReverseRouter cartReverseRouter) {
-        super(cartCreator, cartFinder, addProductToCartExecutor, cartDetailPageContentFactory);
+        super(templateRenderer, hookContext, cartCreator, cartFinder, formFactory, addProductToCartExecutor, cartDetailPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
     }
 
@@ -33,7 +39,7 @@ public final class AddProductToCartController extends SunriseAddProductToCartCon
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final DefaultAddProductToCartFormData formData, final Cart oldCart, final Cart updatedCart) {
+    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final DefaultAddProductToCartFormData formData) {
         return redirectTo(cartReverseRouter.showCart());
     }
 }

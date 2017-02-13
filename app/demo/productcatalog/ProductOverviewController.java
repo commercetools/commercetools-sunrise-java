@@ -4,6 +4,8 @@ import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchCompon
 import com.commercetools.sunrise.common.search.pagination.PaginationComponent;
 import com.commercetools.sunrise.common.search.searchbox.SearchBoxComponent;
 import com.commercetools.sunrise.common.search.sort.SortSelectorComponent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
@@ -18,8 +20,12 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public final class ProductOverviewController extends SunriseProductOverviewController {
 
     @Inject
-    public ProductOverviewController(final CategoryFinder categoryFinder, final ProductListFinder productListFinder, final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
-        super(categoryFinder, productListFinder, productOverviewPageContentFactory);
+    public ProductOverviewController(final TemplateRenderer templateRenderer,
+                                     final RequestHookContext hookContext,
+                                     final CategoryFinder categoryFinder,
+                                     final ProductListFinder productListFinder,
+                                     final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
+        super(templateRenderer, hookContext, categoryFinder, productListFinder, productOverviewPageContentFactory);
     }
 
     @Inject

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
@@ -17,8 +17,8 @@ public class DefaultProductListFinder extends AbstractProductSearchExecutor impl
     private final PriceSelection priceSelection;
 
     @Inject
-    protected DefaultProductListFinder(final SphereClient sphereClient, final HookContext hookContext, final PriceSelection priceSelection) {
-        super(sphereClient, hookContext);
+    protected DefaultProductListFinder(final SphereClient sphereClient, final HookRunner hookRunner, final PriceSelection priceSelection) {
+        super(sphereClient, hookRunner);
         this.priceSelection = priceSelection;
     }
 

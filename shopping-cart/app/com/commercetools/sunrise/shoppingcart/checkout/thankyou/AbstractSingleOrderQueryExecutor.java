@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
 import com.commercetools.sunrise.hooks.requests.OrderQueryHook;
 import io.sphere.sdk.client.SphereClient;
@@ -17,16 +17,16 @@ import java.util.concurrent.CompletionStage;
 public abstract class AbstractSingleOrderQueryExecutor extends AbstractSphereRequestExecutor {
 
     @Inject
-    protected AbstractSingleOrderQueryExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected AbstractSingleOrderQueryExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     protected final CompletionStage<Optional<Order>> executeRequest(final OrderQuery baseQuery) {
-        final OrderQuery request = OrderQueryHook.runHook(getHookContext(), baseQuery);
+        final OrderQuery request = OrderQueryHook.runHook(getHookRunner(), baseQuery);
         return getSphereClient().execute(request)
                 .thenApply(PagedQueryResult::head)
                 .thenApplyAsync(orderOpt -> {
-                    orderOpt.ifPresent(order -> OrderLoadedHook.runHook(getHookContext(), order));
+                    orderOpt.ifPresent(order -> OrderLoadedHook.runHook(getHookRunner(), order));
                     return orderOpt;
                 }, HttpExecution.defaultContext());
     }

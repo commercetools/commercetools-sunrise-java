@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.hooks.actions.CartUpdatedActionHook;
 import com.commercetools.sunrise.hooks.events.CartUpdatedHook;
 import com.commercetools.sunrise.hooks.requests.CartUpdateCommandHook;
@@ -16,17 +16,17 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public abstract class AbstractCartUpdateExecutor extends AbstractSphereRequestExecutor {
 
-    protected AbstractCartUpdateExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected AbstractCartUpdateExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     protected final CompletionStage<Cart> executeRequest(final Cart cart, final CartUpdateCommand baseCommand) {
-        final CartUpdateCommand command = CartUpdateCommandHook.runHook(getHookContext(), baseCommand);
+        final CartUpdateCommand command = CartUpdateCommandHook.runHook(getHookRunner(), baseCommand);
         if (!command.getUpdateActions().isEmpty()) {
             return getSphereClient().execute(command)
-                    .thenComposeAsync(updatedCart -> CartUpdatedActionHook.runHook(getHookContext(), updatedCart, command), HttpExecution.defaultContext())
+                    .thenComposeAsync(updatedCart -> CartUpdatedActionHook.runHook(getHookRunner(), updatedCart, command), HttpExecution.defaultContext())
                     .thenApplyAsync(updatedCart -> {
-                        CartUpdatedHook.runHook(getHookContext(), updatedCart);
+                        CartUpdatedHook.runHook(getHookRunner(), updatedCart);
                         return updatedCart;
                     }, HttpExecution.defaultContext());
         } else {

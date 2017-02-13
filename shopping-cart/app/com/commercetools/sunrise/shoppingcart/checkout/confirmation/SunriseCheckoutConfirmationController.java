@@ -1,41 +1,48 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.SunriseFrameworkShoppingCartController;
-import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContent;
+import com.commercetools.sunrise.shoppingcart.WithCartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.orders.Order;
 import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(CheckoutConfirmationThemeLinksControllerComponent.class)
-public abstract class SunriseCheckoutConfirmationController<F extends CheckoutConfirmationFormData> extends SunriseFrameworkShoppingCartController implements WithTemplateName, WithFormFlow<F, Cart, Order> {
+public abstract class SunriseCheckoutConfirmationController<F extends CheckoutConfirmationFormData> extends SunriseFrameworkFormController implements WithFormFlow<F, Cart, Order>, WithCartFinder {
 
+    private final CartFinder cartFinder;
     private final CheckoutConfirmationExecutor checkoutConfirmationExecutor;
     private final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory;
 
-    protected SunriseCheckoutConfirmationController(final CartFinder cartFinder, final CheckoutConfirmationExecutor checkoutConfirmationExecutor,
+    protected SunriseCheckoutConfirmationController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+                                                    final CartFinder cartFinder, final FormFactory formFactory,
+                                                    final CheckoutConfirmationExecutor checkoutConfirmationExecutor,
                                                     final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory) {
-        super(cartFinder);
+        super(templateRenderer, hookContext, formFactory);
+        this.cartFinder = cartFinder;
         this.checkoutConfirmationExecutor = checkoutConfirmationExecutor;
         this.checkoutConfirmationPageContentFactory = checkoutConfirmationPageContentFactory;
     }
 
     @Override
     public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
+        final Set<String> frameworkTags = new HashSet<>();
         frameworkTags.addAll(asList("checkout", "checkout-confirmation"));
         return frameworkTags;
     }
@@ -43,6 +50,11 @@ public abstract class SunriseCheckoutConfirmationController<F extends CheckoutCo
     @Override
     public String getTemplateName() {
         return "checkout-confirmation";
+    }
+
+    @Override
+    public CartFinder getCartFinder() {
+        return cartFinder;
     }
 
     @SunriseRoute("checkoutConfirmationPageCall")
@@ -56,27 +68,26 @@ public abstract class SunriseCheckoutConfirmationController<F extends CheckoutCo
     }
 
     @Override
-    public CompletionStage<Order> doAction(final F formData, final Cart cart) {
+    public CompletionStage<Order> executeAction(final Cart cart, final F formData) {
         return checkoutConfirmationExecutor.apply(cart, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Cart cart, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Cart cart, final Form<F> form, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, cart));
+        return showFormPageWithErrors(cart, form);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Cart cart, final Order order);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Order order, final F formData);
 
     @Override
-    public CompletionStage<Content> renderPage(final Form<F> form, final Cart cart) {
-        final CheckoutConfirmationPageContent pageContent = checkoutConfirmationPageContentFactory.create(cart, form);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+    public PageContent createPageContent(final Cart cart, final Form<F> form) {
+        return checkoutConfirmationPageContentFactory.create(cart, form);
     }
 
     @Override
-    public void preFillFormData(final F formData, final Cart cart) {
+    public void preFillFormData(final Cart cart, final F formData) {
         // Do not pre-fill anything
     }
 }

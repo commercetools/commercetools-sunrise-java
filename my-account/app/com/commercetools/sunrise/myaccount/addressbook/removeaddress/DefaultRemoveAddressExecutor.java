@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
 import io.sphere.sdk.client.SphereClient;
@@ -14,8 +14,8 @@ import java.util.concurrent.CompletionStage;
 public class DefaultRemoveAddressExecutor extends AbstractCustomerUpdateExecutor implements RemoveAddressExecutor {
 
     @Inject
-    protected DefaultRemoveAddressExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected DefaultRemoveAddressExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     @Override

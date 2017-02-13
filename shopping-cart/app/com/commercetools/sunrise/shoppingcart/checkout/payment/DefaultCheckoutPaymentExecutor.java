@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.shoppingcart.AbstractCartUpdateExecutor;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -36,8 +36,8 @@ public class DefaultCheckoutPaymentExecutor extends AbstractCartUpdateExecutor i
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckoutPaymentExecutor.class);
 
     @Inject
-    protected DefaultCheckoutPaymentExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected DefaultCheckoutPaymentExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     @Override

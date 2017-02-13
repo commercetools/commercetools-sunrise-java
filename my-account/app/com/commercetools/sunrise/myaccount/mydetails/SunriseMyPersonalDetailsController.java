@@ -1,40 +1,47 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
-import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContent;
+import com.commercetools.sunrise.myaccount.WithCustomerFinder;
 import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.singletonList;
 
 @IntroducingMultiControllerComponents(MyPersonalDetailsThemeLinksControllerComponent.class)
-public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<F, Customer, Customer> {
+public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseFrameworkFormController implements WithFormFlow<F, Customer, Customer>, WithCustomerFinder {
 
+    private final CustomerFinder customerFinder;
     private final MyPersonalDetailsExecutor myPersonalDetailsExecutor;
     private final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory;
 
-    protected SunriseMyPersonalDetailsController(final CustomerFinder customerFinder, final MyPersonalDetailsExecutor myPersonalDetailsExecutor,
+    protected SunriseMyPersonalDetailsController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+                                                 final FormFactory formFactory, final CustomerFinder customerFinder,
+                                                 final MyPersonalDetailsExecutor myPersonalDetailsExecutor,
                                                  final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory) {
-        super(customerFinder);
+        super(templateRenderer, hookContext, formFactory);
+        this.customerFinder = customerFinder;
         this.myPersonalDetailsExecutor = myPersonalDetailsExecutor;
         this.myPersonalDetailsPageContentFactory = myPersonalDetailsPageContentFactory;
     }
 
     @Override
     public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
+        final Set<String> frameworkTags = new HashSet<>();
         frameworkTags.addAll(singletonList("my-personal-details"));
         return frameworkTags;
     }
@@ -42,6 +49,11 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     @Override
     public String getTemplateName() {
         return "my-account-personal-details";
+    }
+
+    @Override
+    public CustomerFinder getCustomerFinder() {
+        return customerFinder;
     }
 
     @SunriseRoute("myPersonalDetailsPageCall")
@@ -55,27 +67,26 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     }
 
     @Override
-    public CompletionStage<Customer> doAction(final F formData, final Customer customer) {
+    public CompletionStage<Customer> executeAction(final Customer customer, final F formData) {
         return myPersonalDetailsExecutor.apply(customer, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Customer customer, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Customer customer, final Form<F> form, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, customer));
+        return showFormPageWithErrors(customer, form);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Customer oldCustomer, final Customer updatedCustomer);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final F formData);
 
     @Override
-    public CompletionStage<Content> renderPage(final Form<F> form, final Customer customer) {
-        final MyPersonalDetailsPageContent pageContent = myPersonalDetailsPageContentFactory.create(customer, form);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+    public PageContent createPageContent(final Customer customer, final Form<F> form) {
+        return myPersonalDetailsPageContentFactory.create(customer, form);
     }
 
     @Override
-    public void preFillFormData(final F formData, final Customer customer) {
+    public void preFillFormData(final Customer customer, final F formData) {
         formData.applyCustomerName(customer.getName());
         formData.setEmail(customer.getEmail());
     }

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.shoppingcart.OrderInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.orders.Order;
@@ -18,9 +18,9 @@ public class DefaultOrderFinder extends AbstractSingleOrderQueryExecutor impleme
     private final OrderInSession orderInSession;
 
     @Inject
-    protected DefaultOrderFinder(final SphereClient sphereClient, final HookContext hookContext,
+    protected DefaultOrderFinder(final SphereClient sphereClient, final HookRunner hookRunner,
                                  final OrderInSession orderInSession) {
-        super(sphereClient, hookContext);
+        super(sphereClient, hookRunner);
         this.orderInSession = orderInSession;
     }
 

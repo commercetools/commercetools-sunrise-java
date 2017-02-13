@@ -1,17 +1,16 @@
 package com.commercetools.sunrise.productcatalog.home;
 
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.WithCmsPage;
-import com.commercetools.sunrise.common.controllers.WithFetchFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.controllers.WithQueryFlow;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
 import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,11 +35,13 @@ import static java.util.Arrays.asList;
  *     <li>product-catalog</li>
  * </ul>
  */
-public abstract class SunriseHomeController extends SunriseFrameworkController implements WithTemplateName, WithCmsPage, WithFetchFlow<Void> {
+public abstract class SunriseHomeController extends SunriseFrameworkController implements WithQueryFlow<Void> {
 
     private final HomePageContentFactory homePageContentFactory;
 
-    protected SunriseHomeController(final HomePageContentFactory homePageContentFactory) {
+    protected SunriseHomeController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+                                    final HomePageContentFactory homePageContentFactory) {
+        super(templateRenderer, hookContext);
         this.homePageContentFactory = homePageContentFactory;
     }
 
@@ -65,9 +66,7 @@ public abstract class SunriseHomeController extends SunriseFrameworkController i
     }
 
     @Override
-    public CompletionStage<Content> renderPage(final Void output) {
-        return cmsPage().thenComposeAsync(cmsPage ->
-                        renderPageWithTemplate(homePageContentFactory.create(null), getTemplateName(), cmsPage.orElse(null)),
-                HttpExecution.defaultContext());
+    public PageContent createPageContent(final Void input) {
+        return homePageContentFactory.create(null);
     }
 }

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.hooks.events.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
 import io.sphere.sdk.client.SphereClient;
@@ -15,16 +15,16 @@ import java.util.concurrent.CompletionStage;
 
 public abstract class AbstractSingleProductSearchExecutor extends AbstractSphereRequestExecutor {
 
-    protected AbstractSingleProductSearchExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected AbstractSingleProductSearchExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     protected final CompletionStage<Optional<ProductProjection>> executeRequest(final ProductProjectionSearch baseRequest) {
-        final ProductProjectionSearch request = ProductProjectionSearchHook.runHook(getHookContext(), baseRequest);
+        final ProductProjectionSearch request = ProductProjectionSearchHook.runHook(getHookRunner(), baseRequest);
         return getSphereClient().execute(request)
                 .thenApply(PagedSearchResult::head)
                 .thenApplyAsync(productOpt -> {
-                    productOpt.ifPresent(product -> ProductProjectionLoadedHook.runHook(getHookContext(), product));
+                    productOpt.ifPresent(product -> ProductProjectionLoadedHook.runHook(getHookRunner(), product));
                     return productOpt;
                 }, HttpExecution.defaultContext());
     }

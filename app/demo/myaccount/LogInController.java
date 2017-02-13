@@ -29,7 +29,7 @@ public class LogInController extends SunriseLogInController<DefaultLogInFormData
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final DefaultLogInFormData formData, final Void input, final CustomerSignInResult result) {
+    public CompletionStage<Result> handleSuccessfulAction(final Void input, final DefaultLogInFormData formData, final CustomerSignInResult result) {
         return redirectTo(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall());
     }
 }

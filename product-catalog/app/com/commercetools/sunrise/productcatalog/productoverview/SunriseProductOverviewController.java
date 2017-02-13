@@ -1,25 +1,25 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.WithFetchFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.controllers.WithQueryFlow;
+import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchComponent;
 import com.commercetools.sunrise.common.search.pagination.PaginationComponent;
 import com.commercetools.sunrise.common.search.searchbox.SearchBoxComponent;
 import com.commercetools.sunrise.common.search.sort.SortSelectorComponent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.CategoryLoadedHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
-import com.commercetools.sunrise.productcatalog.productoverview.view.ProductOverviewPageContent;
 import com.commercetools.sunrise.productcatalog.productoverview.view.ProductOverviewPageContentFactory;
 import io.sphere.sdk.categories.Category;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -57,14 +57,16 @@ import static java.util.Arrays.asList;
  * </ul>
  */
 @IntroducingMultiControllerComponents(ProductOverviewThemeLinksControllerComponent.class)
-public abstract class SunriseProductOverviewController extends SunriseFrameworkController implements WithTemplateName, WithFetchFlow<ProductsWithCategory> {
+public abstract class SunriseProductOverviewController extends SunriseFrameworkController implements WithQueryFlow<ProductsWithCategory> {
 
     private final CategoryFinder categoryFinder;
     private final ProductListFinder productListFinder;
     private final ProductOverviewPageContentFactory productOverviewPageContentFactory;
 
-    protected SunriseProductOverviewController(final CategoryFinder categoryFinder, final ProductListFinder productListFinder,
+    protected SunriseProductOverviewController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+                                               final CategoryFinder categoryFinder, final ProductListFinder productListFinder,
                                                final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
+        super(templateRenderer, hookContext);
         this.categoryFinder = categoryFinder;
         this.productListFinder = productListFinder;
         this.productOverviewPageContentFactory = productOverviewPageContentFactory;
@@ -105,9 +107,8 @@ public abstract class SunriseProductOverviewController extends SunriseFrameworkC
     }
 
     @Override
-    public CompletionStage<Content> renderPage(final ProductsWithCategory productsWithCategory) {
-        final ProductOverviewPageContent pageContent = productOverviewPageContentFactory.create(productsWithCategory);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+    public PageContent createPageContent(final ProductsWithCategory productsWithCategory) {
+        return productOverviewPageContentFactory.create(productsWithCategory);
     }
 
     protected abstract CompletionStage<Result> handleNotFoundCategory();

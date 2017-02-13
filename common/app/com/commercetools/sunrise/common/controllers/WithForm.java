@@ -10,10 +10,10 @@ public interface WithForm<T> {
     }
 
     default Form<T> createForm() {
-        return formFactory().form(getFormDataClass());
+        return getFormFactory().form(getFormDataClass());
     }
 
     Class<T> getFormDataClass();
 
-    FormFactory formFactory();
+    FormFactory getFormFactory();
 }

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
@@ -24,8 +24,8 @@ import java.util.function.Function;
 public class DefaultChangeAddressExecutor extends AbstractCustomerUpdateExecutor implements ChangeAddressExecutor {
 
     @Inject
-    protected DefaultChangeAddressExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected DefaultChangeAddressExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     @Override

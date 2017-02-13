@@ -1,19 +1,15 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.WithFetchFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.controllers.WithQueryFlow;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
-import com.commercetools.sunrise.hooks.events.OrderLoadedHook;
-import com.commercetools.sunrise.hooks.events.RequestStartedHook;
-import com.commercetools.sunrise.hooks.requests.OrderByIdGetHook;
-import com.commercetools.sunrise.shoppingcart.checkout.thankyou.view.CheckoutThankYouPageContent;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.view.CheckoutThankYouPageContentFactory;
 import io.sphere.sdk.orders.Order;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,26 +22,20 @@ import static java.util.Arrays.asList;
  * Controller to show as last checkout step the confirmation of the order data.
  * By default the last order ID is taken from the cookie.
  *
- * <p id="hooks">supported hooks</p>
- * <ul>
- *     <li>{@link RequestStartedHook}</li>
- *     <li>{@link PageDataReadyHook}</li>
- *     <li>{@link OrderByIdGetHook}</li>
- *     <li>{@link OrderLoadedHook}</li>
- * </ul>
  * <p>tags</p>
  * <ul>
  *     <li>checkout-thank-you</li>
  *     <li>checkout</li>
  * </ul>
  */
-public abstract class SunriseCheckoutThankYouController extends SunriseFrameworkController implements WithTemplateName, WithFetchFlow<Order> {
+public abstract class SunriseCheckoutThankYouController extends SunriseFrameworkController implements WithQueryFlow<Order> {
 
     private final OrderFinder orderFinder;
     private final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory;
 
-    protected SunriseCheckoutThankYouController(final OrderFinder orderFinder,
-                                                final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory) {
+    protected SunriseCheckoutThankYouController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+                                                final OrderFinder orderFinder, final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory) {
+        super(templateRenderer, hookContext);
         this.orderFinder = orderFinder;
         this.checkoutThankYouPageContentFactory = checkoutThankYouPageContentFactory;
     }
@@ -70,9 +60,8 @@ public abstract class SunriseCheckoutThankYouController extends SunriseFramework
     protected abstract CompletionStage<Result> handleNotFoundOrder();
 
     @Override
-    public CompletionStage<Content> renderPage(final Order order) {
-        final CheckoutThankYouPageContent pageContent = checkoutThankYouPageContentFactory.create(order);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+    public PageContent createPageContent(final Order order) {
+        return checkoutThankYouPageContentFactory.create(order);
     }
 
     private CompletionStage<Result> requireOrder(final Function<Order, CompletionStage<Result>> nextAction) {

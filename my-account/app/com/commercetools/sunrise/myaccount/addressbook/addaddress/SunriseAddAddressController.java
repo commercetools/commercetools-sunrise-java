@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
@@ -60,27 +59,27 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
     }
 
     @Override
-    public CompletionStage<Customer> doAction(final F formData, final Customer customer) {
+    public CompletionStage<Customer> executeAction(final Customer customer, final F formData) {
         return addAddressExecutor.apply(customer, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final Customer customer, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Customer customer, final Form<F> form, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
         return asyncBadRequest(renderPage(form, customer));
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final Customer oldCustomer, final Customer updatedCustomer);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer oldCustomer, final F formData, final Customer updatedCustomer);
 
     @Override
     public CompletionStage<Content> renderPage(final Form<F> form, final Customer customer) {
         final AddAddressPageContent pageContent = addAddressPageContentFactory.create(customer, form);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+        return renderContent(pageContent, getTemplateName());
     }
 
     @Override
-    public void preFillFormData(final F formData, final Customer customer) {
+    public void preFillFormData(final Customer customer, final F formData) {
         final Address address = Address.of(country)
                 .withTitle(customer.getTitle())
                 .withFirstName(customer.getFirstName())

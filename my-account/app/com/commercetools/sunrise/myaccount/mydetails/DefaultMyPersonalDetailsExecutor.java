@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.commands.UpdateAction;
@@ -21,8 +21,8 @@ import java.util.concurrent.CompletionStage;
 public class DefaultMyPersonalDetailsExecutor extends AbstractCustomerUpdateExecutor implements MyPersonalDetailsExecutor {
 
     @Inject
-    protected DefaultMyPersonalDetailsExecutor(final SphereClient sphereClient, final HookContext hookContext) {
-        super(sphereClient, hookContext);
+    protected DefaultMyPersonalDetailsExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
     }
 
     @Override

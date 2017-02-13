@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.authentication.AbstractCustomerSignInExecutor;
 import com.commercetools.sunrise.shoppingcart.CartInSession;
 import io.sphere.sdk.client.SphereClient;
@@ -15,8 +15,8 @@ public class DefaultLogInExecutor extends AbstractCustomerSignInExecutor impleme
     private final CartInSession cartInSession;
 
     @Inject
-    protected DefaultLogInExecutor(final SphereClient sphereClient, final HookContext hookContext, final CartInSession cartInSession) {
-        super(sphereClient, hookContext);
+    protected DefaultLogInExecutor(final SphereClient sphereClient, final HookRunner hookRunner, final CartInSession cartInSession) {
+        super(sphereClient, hookRunner);
         this.cartInSession = cartInSession;
     }
 

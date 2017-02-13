@@ -1,41 +1,50 @@
 package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
+import com.commercetools.sunrise.common.controllers.SunriseFrameworkFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.myaccount.WithCustomerFinder;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
-import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
-import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContent;
+import com.commercetools.sunrise.myaccount.addressbook.WithAddressFinder;
 import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
-import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
-import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
-public abstract class SunriseRemoveAddressController<F extends RemoveAddressFormData> extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<F, AddressWithCustomer, Customer> {
+public abstract class SunriseRemoveAddressController<F extends RemoveAddressFormData> extends SunriseFrameworkFormController implements WithFormFlow<F, AddressWithCustomer, Customer>, WithCustomerFinder, WithAddressFinder {
 
+    private final CustomerFinder customerFinder;
+    private final AddressFinder addressFinder;
     private final RemoveAddressExecutor removeAddressExecutor;
     private final AddressBookPageContentFactory addressBookPageContentFactory;
 
-    protected SunriseRemoveAddressController(final CustomerFinder customerFinder, final RemoveAddressExecutor removeAddressExecutor,
+    protected SunriseRemoveAddressController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+                                             final FormFactory formFactory, final CustomerFinder customerFinder,
+                                             final AddressFinder addressFinder, final RemoveAddressExecutor removeAddressExecutor,
                                              final AddressBookPageContentFactory addressBookPageContentFactory) {
-        super(customerFinder);
+        super(templateRenderer, hookContext, formFactory);
+        this.customerFinder = customerFinder;
+        this.addressFinder = addressFinder;
         this.removeAddressExecutor = removeAddressExecutor;
         this.addressBookPageContentFactory = addressBookPageContentFactory;
     }
 
     @Override
     public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
+        final Set<String> frameworkTags = new HashSet<>();
         frameworkTags.addAll(asList("address-book", "remove-address", "address"));
         return frameworkTags;
     }
@@ -45,33 +54,45 @@ public abstract class SunriseRemoveAddressController<F extends RemoveAddressForm
         return "my-account-address-book";
     }
 
-    @SunriseRoute("removeAddressFromAddressBookProcessFormCall")
-    public CompletionStage<Result> process(final String languageTag, final String addressId) {
-        return doRequest(() -> requireAddressWithCustomer(addressId, this::processForm));
+    @Override
+    public CustomerFinder getCustomerFinder() {
+        return customerFinder;
     }
 
     @Override
-    public CompletionStage<Customer> doAction(final F formData, final AddressWithCustomer addressWithCustomer) {
+    public AddressFinder getAddressFinder() {
+        return addressFinder;
+    }
+
+    @SunriseRoute("removeAddressFromAddressBookProcessFormCall")
+    public CompletionStage<Result> process(final String languageTag, final String addressId) {
+        return doRequest(() ->
+                requireCustomer(customer ->
+                        requireAddress(customer, addressId,
+                                address -> processForm(AddressWithCustomer.of(address, customer)))));
+    }
+
+    @Override
+    public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final F formData) {
         return removeAddressExecutor.apply(addressWithCustomer, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<F> form, final AddressWithCustomer addressWithCustomer, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final AddressWithCustomer addressWithCustomer, final Form<F> form, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, addressWithCustomer));
+        return showFormPageWithErrors(addressWithCustomer, form);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final F formData, final AddressWithCustomer addressWithCustomer, final Customer updatedCustomer);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final F formData);
 
     @Override
-    public void preFillFormData(final F formData, final AddressWithCustomer input) {
+    public void preFillFormData(final AddressWithCustomer input, final F formData) {
         // Do not pre-fill anything
     }
 
     @Override
-    public CompletionStage<Content> renderPage(final Form<F> form, final AddressWithCustomer addressWithCustomer) {
-        final AddressBookPageContent pageContent = addressBookPageContentFactory.create(addressWithCustomer.getCustomer());
-        return renderPageWithTemplate(pageContent, getTemplateName());
+    public PageContent createPageContent(final AddressWithCustomer addressWithCustomer, final Form<F> form) {
+        return addressBookPageContentFactory.create(addressWithCustomer.getCustomer());
     }
 }

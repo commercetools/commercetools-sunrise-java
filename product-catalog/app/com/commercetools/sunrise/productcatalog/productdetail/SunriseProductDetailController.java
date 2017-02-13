@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.WithFetchFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
+import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.hooks.events.ProductVariantLoadedHook;
@@ -17,10 +18,8 @@ import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
@@ -50,13 +49,18 @@ import static java.util.Arrays.asList;
  *     <li>product-catalog</li>
  * </ul>
  */
-public abstract class SunriseProductDetailController extends SunriseFrameworkController implements WithTemplateName, WithFetchFlow<ProductWithVariant> {
+public abstract class SunriseProductDetailController extends SunriseFrameworkController implements WithQueryFlow<ProductWithVariant> {
 
     private final ProductFinder productFinder;
+    private final ProductVariantFinder productVariantFinder;
     private final ProductDetailPageContentFactory productDetailPageContentFactory;
 
-    protected SunriseProductDetailController(final ProductFinder productFinder, final ProductDetailPageContentFactory productDetailPageContentFactory) {
+    protected SunriseProductDetailController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+                                             final ProductFinder productFinder, final ProductVariantFinder productVariantFinder,
+                                             final ProductDetailPageContentFactory productDetailPageContentFactory) {
+        super(templateRenderer, hookContext);
         this.productFinder = productFinder;
+        this.productVariantFinder = productVariantFinder;
         this.productDetailPageContentFactory = productDetailPageContentFactory;
     }
 
@@ -80,31 +84,25 @@ public abstract class SunriseProductDetailController extends SunriseFrameworkCon
     protected abstract CompletionStage<Result> handleNotFoundProduct();
 
     @Override
-    public CompletionStage<Content> renderPage(final ProductWithVariant productWithVariant) {
-        final PageContent pageContent = productDetailPageContentFactory.create(productWithVariant);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+    public PageContent createPageContent(final ProductWithVariant productWithVariant) {
+        return productDetailPageContentFactory.create(productWithVariant);
     }
 
     protected final CompletionStage<Result> requireProductWithVariant(final String productIdentifier, final String variantIdentifier,
                                                                       final Function<ProductWithVariant, CompletionStage<Result>> nextAction) {
         return productFinder.apply(productIdentifier)
                 .thenComposeAsync(productOpt -> productOpt
-                                .map(product -> findProductVariant(product, variantIdentifier)
-                                        .map(variant -> {
-                                            runHookOnFoundVariant(product, variant);
-                                            return ProductWithVariant.of(product, variant);
-                                        })
-                                        .map(nextAction)
-                                        .orElseGet(() -> handleNotFoundVariant(product)))
+                                .map(product -> requireVariant(product, variantIdentifier, nextAction))
                                 .orElseGet(this::handleNotFoundProduct),
                         HttpExecution.defaultContext());
     }
 
-    protected final void runHookOnFoundVariant(final ProductProjection product, final ProductVariant variant) {
-        ProductVariantLoadedHook.runHook(hooks(), product, variant);
-    }
-
-    protected Optional<ProductVariant> findProductVariant(final ProductProjection product, final String variantIdentifier) {
-        return product.findVariantBySku(variantIdentifier);
+    protected final CompletionStage<Result> requireVariant(final ProductProjection product, final String variantIdentifier,
+                                                   final Function<ProductWithVariant, CompletionStage<Result>> nextAction) {
+        return productVariantFinder.apply(product, variantIdentifier)
+                .thenComposeAsync(variantOpt -> variantOpt
+                        .map(variant -> ProductWithVariant.of(product, variant))
+                        .map(nextAction)
+                        .orElseGet(() -> handleNotFoundVariant(product)));
     }
 }
