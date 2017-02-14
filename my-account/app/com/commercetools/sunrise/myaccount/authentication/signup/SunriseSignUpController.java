@@ -1,9 +1,12 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
@@ -12,7 +15,6 @@ import io.sphere.sdk.models.errors.DuplicateFieldError;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,14 +23,15 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(SignUpThemeLinksControllerComponent.class)
-public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseFormFrameworkController implements WithTemplateName, WithFormFlow<F, Void, CustomerSignInResult> {
+public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseFormController implements WithFormFlow<F, Void, CustomerSignInResult> {
 
     private final SignUpExecutor signUpExecutor;
     private final SignUpPageContentFactory signUpPageContentFactory;
 
-    protected SunriseSignUpController(final FormFactory formFactory, final SignUpExecutor signUpExecutor,
+    protected SunriseSignUpController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+                                      final FormFactory formFactory, final SignUpExecutor signUpExecutor,
                                       final SignUpPageContentFactory signUpPageContentFactory) {
-        super(formFactory);
+        super(hookContext, templateRenderer, formFactory);
         this.signUpExecutor = signUpExecutor;
         this.signUpPageContentFactory = signUpPageContentFactory;
     }
@@ -64,16 +67,15 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
         } else {
             saveUnexpectedFormError(form, clientErrorException);
         }
-        return asyncBadRequest(renderPage(form, input));
+        return showFormPageWithErrors(input, form);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Void input, final F formData, final CustomerSignInResult result);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final F formData);
 
     @Override
-    public CompletionStage<Content> renderPage(final Form<F> form, final Void input) {
-        final AuthenticationPageContent pageContent = signUpPageContentFactory.create(form);
-        return renderContent(pageContent, getTemplateName());
+    public PageContent createPageContent(final Void input, final Form<F> form) {
+        return signUpPageContentFactory.create(form);
     }
 
     @Override

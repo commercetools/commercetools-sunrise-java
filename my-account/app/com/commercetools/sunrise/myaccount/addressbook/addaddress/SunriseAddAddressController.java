@@ -1,36 +1,45 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
+import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContent;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContentFactory;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(AddAddressThemeLinksControllerComponent.class)
-public abstract class SunriseAddAddressController<F extends AddressBookAddressFormData> extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<F, Customer, Customer> {
+public abstract class SunriseAddAddressController<F extends AddressBookAddressFormData> extends SunriseFormController implements WithFormFlow<F, Customer, Customer>, WithRequiredCustomer {
 
+    private final CustomerFinder customerFinder;
     private final AddAddressExecutor addAddressExecutor;
     private final AddAddressPageContentFactory addAddressPageContentFactory;
     private final CountryCode country;
 
-    protected SunriseAddAddressController(final CustomerFinder customerFinder, final AddAddressExecutor addAddressExecutor,
-                                          final AddAddressPageContentFactory addAddressPageContentFactory, final CountryCode country) {
-        super(customerFinder);
+    protected SunriseAddAddressController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+                                          final FormFactory formFactory, final CustomerFinder customerFinder,
+                                          final AddAddressExecutor addAddressExecutor,
+                                          final AddAddressPageContentFactory addAddressPageContentFactory,
+                                          final CountryCode country) {
+        super(hookContext, templateRenderer, formFactory);
+        this.customerFinder = customerFinder;
         this.addAddressExecutor = addAddressExecutor;
         this.addAddressPageContentFactory = addAddressPageContentFactory;
         this.country = country;
@@ -38,7 +47,7 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
 
     @Override
     public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
+        final Set<String> frameworkTags = new HashSet<>();
         frameworkTags.addAll(asList("address-book", "add-address", "address"));
         return frameworkTags;
     }
@@ -46,6 +55,11 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
     @Override
     public String getTemplateName() {
         return "my-account-new-address";
+    }
+
+    @Override
+    public CustomerFinder getCustomerFinder() {
+        return customerFinder;
     }
 
     @SunriseRoute("addAddressToAddressBookCall")
@@ -66,16 +80,15 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Customer customer, final Form<F> form, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return asyncBadRequest(renderPage(form, customer));
+        return showFormPageWithErrors(customer, form);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer oldCustomer, final F formData, final Customer updatedCustomer);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final F formData);
 
     @Override
-    public CompletionStage<Content> renderPage(final Form<F> form, final Customer customer) {
-        final AddAddressPageContent pageContent = addAddressPageContentFactory.create(customer, form);
-        return renderContent(pageContent, getTemplateName());
+    public PageContent createPageContent(final Customer customer, final Form<F> form) {
+        return addAddressPageContentFactory.create(customer, form);
     }
 
     @Override

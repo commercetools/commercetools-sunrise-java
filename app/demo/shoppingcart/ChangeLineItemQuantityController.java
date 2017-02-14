@@ -1,5 +1,6 @@
 package demo.shoppingcart;
 
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.hooks.RequestHookContext;
@@ -15,19 +16,20 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
+@NoCache
 public final class ChangeLineItemQuantityController extends SunriseChangeLineItemQuantityController<DefaultChangeLineItemQuantityFormData> {
 
     private final CartReverseRouter cartReverseRouter;
 
     @Inject
-    public ChangeLineItemQuantityController(final TemplateRenderer templateRenderer,
-                                            final RequestHookContext hookContext,
-                                            final CartFinder cartFinder,
+    public ChangeLineItemQuantityController(final RequestHookContext hookContext,
+                                            final TemplateRenderer templateRenderer,
                                             final FormFactory formFactory,
+                                            final CartFinder cartFinder,
                                             final CartDetailPageContentFactory cartDetailPageContentFactory,
                                             final ChangeLineItemQuantityExecutor changeLineItemQuantityExecutor,
                                             final CartReverseRouter cartReverseRouter) {
-        super(templateRenderer, hookContext, cartFinder, formFactory, cartDetailPageContentFactory, changeLineItemQuantityExecutor);
+        super(hookContext, templateRenderer, formFactory, cartFinder, cartDetailPageContentFactory, changeLineItemQuantityExecutor);
         this.cartReverseRouter = cartReverseRouter;
     }
 

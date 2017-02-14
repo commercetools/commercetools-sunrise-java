@@ -1,55 +1,35 @@
 package com.commercetools.sunrise.common.controllers;
 
-import com.commercetools.sunrise.common.cache.NoCache;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import play.Application;
-import play.inject.Injector;
 import play.libs.concurrent.HttpExecution;
+import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 
-import javax.inject.Inject;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Controller for health and general status report.
+ * Controller for health check report.
  */
-@NoCache
-public abstract class SunriseStatusController extends SunriseFrameworkController {
+public abstract class SunriseHealthCheckController extends Controller {
 
-    protected static final Logger logger = LoggerFactory.getLogger(SunriseStatusController.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final SphereClient sphereClient;
 
-    @Inject
-    private Injector injector;
-    @Inject
-    private SphereClient sphere;
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        return Collections.emptySet();
+    protected SunriseHealthCheckController(final SphereClient sphereClient) {
+        this.sphereClient = sphereClient;
     }
 
-    public Result showVersion() throws IOException {
-        final Application application = injector.instanceOf(Application.class);
-        final InputStream versionAsStream = application.resourceAsStream("internal/version.json");
-        final String versionAsString = IOUtils.toString(versionAsStream, StandardCharsets.UTF_8);
-        return ok(versionAsString).as(Http.MimeTypes.JSON);
-    }
-
-    public CompletionStage<Result> showHealth() throws IOException {
+    @SuppressWarnings("unused")
+    public CompletionStage<Result> show() throws IOException {
         final ProductProjectionSearch productRequest = ProductProjectionSearch.ofCurrent().withLimit(1);
-        return sphere.execute(productRequest)
+        return sphereClient.execute(productRequest)
                 .thenApplyAsync(this::renderGoodHealthStatus, HttpExecution.defaultContext())
                 .exceptionally(this::renderBadHealthStatus)
                 .thenApply(result -> result.as(Http.MimeTypes.JSON));

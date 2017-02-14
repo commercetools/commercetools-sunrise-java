@@ -13,13 +13,13 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public class DefaultOrderFinder extends AbstractSingleOrderQueryExecutor implements OrderFinder {
+public class DefaultOrderCreatedFinder extends AbstractSingleOrderQueryExecutor implements OrderCreatedFinder {
 
     private final OrderInSession orderInSession;
 
     @Inject
-    protected DefaultOrderFinder(final SphereClient sphereClient, final HookRunner hookRunner,
-                                 final OrderInSession orderInSession) {
+    protected DefaultOrderCreatedFinder(final SphereClient sphereClient, final HookRunner hookRunner,
+                                        final OrderInSession orderInSession) {
         super(sphereClient, hookRunner);
         this.orderInSession = orderInSession;
     }

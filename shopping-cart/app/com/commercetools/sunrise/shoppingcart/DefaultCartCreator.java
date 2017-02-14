@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.hooks.HookContext;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.hooks.events.CartCreatedHook;
 import com.commercetools.sunrise.hooks.requests.CartCreateCommandHook;
 import io.sphere.sdk.carts.Cart;
@@ -20,8 +20,8 @@ public class DefaultCartCreator extends AbstractSphereRequestExecutor implements
     private final CurrencyUnit currency;
 
     @Inject
-    protected DefaultCartCreator(final SphereClient sphereClient, final HookContext hookContext, final CurrencyUnit currency) {
-        super(sphereClient, hookContext);
+    protected DefaultCartCreator(final SphereClient sphereClient, final HookRunner hookRunner, final CurrencyUnit currency) {
+        super(sphereClient, hookRunner);
         this.currency = currency;
     }
 

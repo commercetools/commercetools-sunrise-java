@@ -3,20 +3,17 @@ package com.commercetools.sunrise.productcatalog.common;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 
 import javax.inject.Inject;
-import java.util.Locale;
 
 @RequestScoped
 public class ProductVariantReferenceBeanFactory extends ViewModelFactory<ProductVariantReferenceBean, ProductWithVariant> {
 
-    private final Locale locale;
-    private final ProductSimpleReverseRouter productReverseRouter;
+    private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public ProductVariantReferenceBeanFactory(final Locale locale, final ProductSimpleReverseRouter productReverseRouter) {
-        this.locale = locale;
+    public ProductVariantReferenceBeanFactory(final ProductReverseRouter productReverseRouter) {
         this.productReverseRouter = productReverseRouter;
     }
 
@@ -41,6 +38,6 @@ public class ProductVariantReferenceBeanFactory extends ViewModelFactory<Product
     }
 
     protected void fillUrl(final ProductVariantReferenceBean model, final ProductWithVariant productWithVariant) {
-        model.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, productWithVariant.getProduct(), productWithVariant.getVariant()));
+        model.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(productWithVariant.getProduct(), productWithVariant.getVariant()));
     }
 }

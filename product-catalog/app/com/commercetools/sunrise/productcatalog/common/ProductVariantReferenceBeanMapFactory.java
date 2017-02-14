@@ -65,7 +65,7 @@ public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<
     }
 
     private ProductVariantReferenceBean createMapValue(final ProductProjection product, final ProductVariant productVariant) {
-        final ProductWithVariant productWithVariant = new ProductWithVariant(product, productVariant);
+        final ProductWithVariant productWithVariant = ProductWithVariant.of(product, productVariant);
         return productVariantReferenceBeanFactory.create(productWithVariant);
     }
 }

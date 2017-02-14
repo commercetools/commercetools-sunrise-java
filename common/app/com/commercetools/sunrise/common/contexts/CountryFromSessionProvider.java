@@ -1,23 +1,21 @@
 package com.commercetools.sunrise.common.contexts;
 
+import com.commercetools.sunrise.common.localization.CountryInSession;
 import com.neovisionaries.i18n.CountryCode;
-import play.mvc.Http;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Optional;
 
-import static com.commercetools.sunrise.common.localization.SunriseLocalizationController.SESSION_COUNTRY;
-
 public final class CountryFromSessionProvider implements Provider<CountryCode> {
 
-    private final Http.Context httpContext;
     private final ProjectContext projectContext;
+    private final CountryInSession countryInSession;
 
     @Inject
-    public CountryFromSessionProvider(final Http.Context httpContext, final ProjectContext projectContext) {
-        this.httpContext = httpContext;
+    public CountryFromSessionProvider(final ProjectContext projectContext, final CountryInSession countryInSession) {
         this.projectContext = projectContext;
+        this.countryInSession = countryInSession;
     }
 
     @Override
@@ -29,7 +27,6 @@ public final class CountryFromSessionProvider implements Provider<CountryCode> {
 
 
     private Optional<CountryCode> findCurrentCountry() {
-        return Optional.ofNullable(httpContext.session().get(SESSION_COUNTRY))
-                .map(countryInSession -> CountryCode.getByCode(countryInSession, false));
+        return countryInSession.findCountry();
     }
 }

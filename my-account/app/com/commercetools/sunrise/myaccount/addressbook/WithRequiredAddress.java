@@ -8,7 +8,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-public interface WithAddressFinder {
+public interface WithRequiredAddress {
 
     AddressFinder getAddressFinder();
 

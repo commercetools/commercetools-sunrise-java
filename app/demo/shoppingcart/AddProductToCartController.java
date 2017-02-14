@@ -1,5 +1,6 @@
 package demo.shoppingcart;
 
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.hooks.RequestHookContext;
@@ -16,20 +17,21 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
+@NoCache
 public final class AddProductToCartController extends SunriseAddProductToCartController<DefaultAddProductToCartFormData> {
 
     private final CartReverseRouter cartReverseRouter;
 
     @Inject
-    public AddProductToCartController(final TemplateRenderer templateRenderer,
-                                      final RequestHookContext hookContext,
-                                      final CartCreator cartCreator,
-                                      final CartFinder cartFinder,
+    public AddProductToCartController(final RequestHookContext hookContext,
+                                      final TemplateRenderer templateRenderer,
                                       final FormFactory formFactory,
+                                      final CartFinder cartFinder,
+                                      final CartCreator cartCreator,
                                       final AddProductToCartExecutor addProductToCartExecutor,
                                       final CartDetailPageContentFactory cartDetailPageContentFactory,
                                       final CartReverseRouter cartReverseRouter) {
-        super(templateRenderer, hookContext, cartCreator, cartFinder, formFactory, addProductToCartExecutor, cartDetailPageContentFactory);
+        super(hookContext, templateRenderer, formFactory, cartFinder, cartCreator, addProductToCartExecutor, cartDetailPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
     }
 

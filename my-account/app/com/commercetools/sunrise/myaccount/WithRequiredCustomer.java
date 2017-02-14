@@ -7,7 +7,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-public interface WithCustomerFinder {
+public interface WithRequiredCustomer {
 
     CustomerFinder getCustomerFinder();
 

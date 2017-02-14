@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.common.search.facetedsearch;
 
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;

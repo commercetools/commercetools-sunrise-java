@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
-import com.commercetools.sunrise.hooks.HookContext;
 import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.shoppingcart.CartInSession;
 import com.commercetools.sunrise.shoppingcart.OrderInSession;

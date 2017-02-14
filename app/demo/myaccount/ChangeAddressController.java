@@ -1,5 +1,6 @@
 package demo.myaccount;
 
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
@@ -17,14 +18,15 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
+@NoCache
 public final class ChangeAddressController extends SunriseChangeAddressController<DefaultAddressBookAddressFormData> {
 
     private final AuthenticationReverseRouter authenticationReverseRouter;
     private final AddressBookReverseRouter addressBookReverseRouter;
 
     @Inject
-    public ChangeAddressController(final TemplateRenderer templateRenderer,
-                                   final RequestHookContext hookContext,
+    public ChangeAddressController(final RequestHookContext hookContext,
+                                   final TemplateRenderer templateRenderer,
                                    final FormFactory formFactory,
                                    final CustomerFinder customerFinder,
                                    final AddressFinder addressFinder,
@@ -32,7 +34,7 @@ public final class ChangeAddressController extends SunriseChangeAddressControlle
                                    final ChangeAddressPageContentFactory changeAddressPageContentFactory,
                                    final AuthenticationReverseRouter authenticationReverseRouter,
                                    final AddressBookReverseRouter addressBookReverseRouter) {
-        super(templateRenderer, hookContext, formFactory, customerFinder, addressFinder, changeAddressExecutor, changeAddressPageContentFactory);
+        super(hookContext, templateRenderer, formFactory, customerFinder, addressFinder, changeAddressExecutor, changeAddressPageContentFactory);
         this.authenticationReverseRouter = authenticationReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
     }

@@ -1,36 +1,41 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithQueryFlow;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
-import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContent;
+import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContentFactory;
-import play.libs.concurrent.HttpExecution;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 import static java.util.Arrays.asList;
 
-public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithQueryFlow<OrderWithCustomer> {
+public abstract class SunriseMyOrderDetailController extends SunriseFormController implements WithQueryFlow<OrderWithCustomer>, WithRequiredCustomer, WithRequiredMyOrder {
 
+    private final CustomerFinder customerFinder;
     private final MyOrderFinder myOrderFinder;
     private final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory;
 
-    protected SunriseMyOrderDetailController(final CustomerFinder customerFinder, final MyOrderFinder myOrderFinder,
+    protected SunriseMyOrderDetailController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+                                             final FormFactory formFactory, final CustomerFinder customerFinder, final MyOrderFinder myOrderFinder,
                                              final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory) {
-        super(customerFinder);
+        super(hookContext, templateRenderer, formFactory);
+        this.customerFinder = customerFinder;
         this.myOrderFinder = myOrderFinder;
         this.myOrderDetailPageContentFactory = myOrderDetailPageContentFactory;
     }
 
     @Override
     public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
+        final Set<String> frameworkTags = new HashSet<>();
         frameworkTags.addAll(asList("my-orders", "my-order-detail", "order"));
         return frameworkTags;
     }
@@ -40,27 +45,26 @@ public abstract class SunriseMyOrderDetailController extends SunriseFrameworkMyA
         return "my-account-my-orders-order";
     }
 
-    @SunriseRoute("myOrderDetailPageCall")
-    public CompletionStage<Result> showByOrderNumber(final String languageTag, final String orderNumber) {
-        return doRequest(() -> requireOrder(orderNumber, this::showPage));
+    @Override
+    public CustomerFinder getCustomerFinder() {
+        return customerFinder;
     }
 
     @Override
-    public CompletionStage<Content> createPageContent(final OrderWithCustomer orderWithCustomer) {
-        final MyOrderDetailPageContent pageContent = myOrderDetailPageContentFactory.create(orderWithCustomer);
-        return renderContent(pageContent, getTemplateName());
+    public MyOrderFinder getMyOrderFinder() {
+        return myOrderFinder;
     }
 
-    protected final CompletionStage<Result> requireOrder(final String orderNumber,
-                                                         final Function<OrderWithCustomer, CompletionStage<Result>> nextAction) {
-        return requireCustomer(customer ->
-                myOrderFinder.apply(customer, orderNumber)
-                        .thenComposeAsync(orderOpt -> orderOpt
-                                        .map(order -> OrderWithCustomer.of(order, customer))
-                                        .map(nextAction)
-                                        .orElseGet(this::handleNotFoundOrder),
-                                HttpExecution.defaultContext()));
+    @SunriseRoute("myOrderDetailPageCall")
+    public CompletionStage<Result> showByOrderNumber(final String languageTag, final String orderNumber) {
+        return doRequest(() ->
+                requireCustomer(customer ->
+                        requireMyOrder(customer, orderNumber, myOrder ->
+                                showPage(OrderWithCustomer.of(myOrder, customer)))));
     }
 
-    protected abstract CompletionStage<Result> handleNotFoundOrder();
+    @Override
+    public PageContent createPageContent(final OrderWithCustomer orderWithCustomer) {
+        return myOrderDetailPageContentFactory.create(orderWithCustomer);
+    }
 }

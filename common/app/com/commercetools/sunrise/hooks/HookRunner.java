@@ -1,12 +1,14 @@
 package com.commercetools.sunrise.hooks;
 
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
+import com.google.inject.ImplementedBy;
 
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@ImplementedBy(RequestHookContextImpl.class)
 public interface HookRunner {
     /**
      * Executes a hook which takes 0 to n parameters and returns a {@link CompletionStage}.

@@ -1,15 +1,12 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateController;
 import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.RequestHookContext;
-import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
-import com.commercetools.sunrise.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
-import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
 import play.mvc.Result;
 
 import java.util.HashSet;
@@ -20,28 +17,14 @@ import static java.util.Arrays.asList;
 
 /**
  * Controller for the home page.
- <p>Components that may be a fit</p>
- * <ul>
- *     <li>{@link ProductSuggestionsControllerComponent}</li>
- * </ul>
- * <p id="hooks">supported hooks</p>
- * <ul>
- *     <li>{@link RequestStartedHook}</li>
- *     <li>{@link PageDataReadyHook}</li>
- * </ul>
- * <p>tags</p>
- * <ul>
- *     <li>home</li>
- *     <li>product-catalog</li>
- * </ul>
  */
-public abstract class SunriseHomeController extends SunriseFrameworkController implements WithQueryFlow<Void> {
+public abstract class SunriseHomeController extends SunriseTemplateController implements WithQueryFlow<Void> {
 
     private final HomePageContentFactory homePageContentFactory;
 
-    protected SunriseHomeController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+    protected SunriseHomeController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
                                     final HomePageContentFactory homePageContentFactory) {
-        super(templateRenderer, hookContext);
+        super(hookContext, templateRenderer);
         this.homePageContentFactory = homePageContentFactory;
     }
 

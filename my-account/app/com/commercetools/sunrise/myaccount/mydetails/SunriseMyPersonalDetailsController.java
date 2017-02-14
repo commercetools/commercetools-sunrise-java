@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkFormController;
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
@@ -8,7 +8,7 @@ import com.commercetools.sunrise.framework.annotations.IntroducingMultiControlle
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.WithCustomerFinder;
+import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
@@ -23,17 +23,17 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Collections.singletonList;
 
 @IntroducingMultiControllerComponents(MyPersonalDetailsThemeLinksControllerComponent.class)
-public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseFrameworkFormController implements WithFormFlow<F, Customer, Customer>, WithCustomerFinder {
+public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseFormController implements WithFormFlow<F, Customer, Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final MyPersonalDetailsExecutor myPersonalDetailsExecutor;
     private final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory;
 
-    protected SunriseMyPersonalDetailsController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+    protected SunriseMyPersonalDetailsController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
                                                  final FormFactory formFactory, final CustomerFinder customerFinder,
                                                  final MyPersonalDetailsExecutor myPersonalDetailsExecutor,
                                                  final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory) {
-        super(templateRenderer, hookContext, formFactory);
+        super(hookContext, templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.myPersonalDetailsExecutor = myPersonalDetailsExecutor;
         this.myPersonalDetailsPageContentFactory = myPersonalDetailsPageContentFactory;

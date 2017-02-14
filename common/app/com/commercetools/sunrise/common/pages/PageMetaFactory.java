@@ -3,14 +3,13 @@ package com.commercetools.sunrise.common.pages;
 import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
 import com.commercetools.sunrise.common.models.CommonViewModelFactory;
-import com.commercetools.sunrise.common.reverserouter.HomeSimpleReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerInSession;
 import play.filters.csrf.CSRF;
 import play.mvc.Call;
 import play.mvc.Http;
 
 import javax.inject.Inject;
-import java.util.Locale;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -18,16 +17,14 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class PageMetaFactory extends CommonViewModelFactory<PageMeta> {
 
-    private final Locale locale;
     private final Http.Context httpContext;
     private final CustomerInSession customerInSession;
-    private final HomeSimpleReverseRouter homeReverseRouter;
+    private final HomeReverseRouter homeReverseRouter;
     private final WebJarAssetsReverseRouter webJarAssetsReverseRouter;
 
     @Inject
-    public PageMetaFactory(final Locale locale, final Http.Context httpContext, final CustomerInSession customerInSession,
-                           final HomeSimpleReverseRouter homeReverseRouter, final WebJarAssetsReverseRouter webJarAssetsReverseRouter) {
-        this.locale = locale;
+    public PageMetaFactory(final Http.Context httpContext, final CustomerInSession customerInSession,
+                           final HomeReverseRouter homeReverseRouter, final WebJarAssetsReverseRouter webJarAssetsReverseRouter) {
         this.httpContext = httpContext;
         this.customerInSession = customerInSession;
         this.homeReverseRouter = homeReverseRouter;
@@ -77,7 +74,7 @@ public class PageMetaFactory extends CommonViewModelFactory<PageMeta> {
     }
 
     protected void fillHomePageUrl(final PageMeta bean) {
-        final Call call = homeReverseRouter.homePageCall(locale.toLanguageTag());
+        final Call call = homeReverseRouter.homePageCall();
         bean.addHalLink(call, "home", "continueShopping");
     }
 

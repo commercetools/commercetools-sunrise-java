@@ -1,18 +1,20 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.authentication.login.view.LogInPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
 import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,12 +23,15 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(LogInThemeLinksControllerComponent.class)
-public abstract class SunriseLogInController<F extends LogInFormData> extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<F, Void, CustomerSignInResult> {
+public abstract class SunriseLogInController<F extends LogInFormData> extends SunriseFormController implements WithFormFlow<F, Void, CustomerSignInResult> {
 
     private final LogInExecutor logInExecutor;
     private final LogInPageContentFactory logInPageContentFactory;
 
-    protected SunriseLogInController(final LogInExecutor logInExecutor, final LogInPageContentFactory logInPageContentFactory) {
+    protected SunriseLogInController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+                                     final FormFactory formFactory, final LogInExecutor logInExecutor,
+                                     final LogInPageContentFactory logInPageContentFactory) {
+        super(hookContext, templateRenderer, formFactory);
         this.logInExecutor = logInExecutor;
         this.logInPageContentFactory = logInPageContentFactory;
     }
@@ -63,16 +68,15 @@ public abstract class SunriseLogInController<F extends LogInFormData> extends Su
         } else {
             saveUnexpectedFormError(form, clientErrorException);
         }
-        return asyncBadRequest(renderPage(form, input));
+        return showFormPageWithErrors(input, form);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Void input, final F formData, final CustomerSignInResult result);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final F formData);
 
     @Override
-    public CompletionStage<Content> renderPage(final Form<F> form, final Void input) {
-        final AuthenticationPageContent pageContent = logInPageContentFactory.create(form);
-        return renderContent(pageContent, getTemplateName());
+    public PageContent createPageContent(final Void input, final Form<F> form) {
+        return logInPageContentFactory.create(form);
     }
 
     @Override

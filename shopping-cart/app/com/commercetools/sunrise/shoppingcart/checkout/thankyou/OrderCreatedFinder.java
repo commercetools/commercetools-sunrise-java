@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
-@ImplementedBy(DefaultOrderFinder.class)
+@ImplementedBy(DefaultOrderCreatedFinder.class)
 @FunctionalInterface
-public interface OrderFinder extends Supplier<CompletionStage<Optional<Order>>> {
+public interface OrderCreatedFinder extends Supplier<CompletionStage<Optional<Order>>> {
 
     @Override
     CompletionStage<Optional<Order>> get();

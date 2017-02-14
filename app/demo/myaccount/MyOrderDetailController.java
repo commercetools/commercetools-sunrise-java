@@ -1,41 +1,47 @@
 package demo.myaccount;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContentFactory;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.MyOrderFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.SunriseMyOrderDetailController;
+import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContentFactory;
+import play.data.FormFactory;
 import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-@RequestScoped
-public class MyOrderDetailController extends SunriseMyOrderDetailController {
+@NoCache
+public final class MyOrderDetailController extends SunriseMyOrderDetailController {
 
     private final MyOrdersReverseRouter myOrdersReverseRouter;
     private final AuthenticationReverseRouter authenticationReverseRouter;
 
     @Inject
-    public MyOrderDetailController(final CustomerFinder customerFinder,
+    public MyOrderDetailController(final RequestHookContext hookContext,
+                                   final TemplateRenderer templateRenderer,
+                                   final FormFactory formFactory,
+                                   final CustomerFinder customerFinder,
                                    final MyOrderFinder myOrderFinder,
                                    final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory,
                                    final MyOrdersReverseRouter myOrdersReverseRouter,
                                    final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(customerFinder, myOrderFinder, myOrderDetailPageContentFactory);
+        super(hookContext, templateRenderer, formFactory, customerFinder, myOrderFinder, myOrderDetailPageContentFactory);
         this.myOrdersReverseRouter = myOrdersReverseRouter;
         this.authenticationReverseRouter = authenticationReverseRouter;
     }
 
     @Override
-    protected CompletionStage<Result> handleNotFoundCustomer() {
+    public CompletionStage<Result> handleNotFoundCustomer() {
         return redirectTo(authenticationReverseRouter.showLogInForm());
     }
 
     @Override
-    protected CompletionStage<Result> handleNotFoundOrder() {
+    public CompletionStage<Result> handleNotFoundMyOrder() {
         return redirectTo(myOrdersReverseRouter.myOrderListPageCall());
     }
 }

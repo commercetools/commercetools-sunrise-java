@@ -20,6 +20,7 @@ public final class PageDataFactory {
         pageData.setHeader(pageHeaderFactory.create(content));
         pageData.setFooter(pageFooterFactory.create(content));
         pageData.setMeta(pageMetaFactory.create());
+        pageData.setContent(content);
         return pageData;
     }
 }

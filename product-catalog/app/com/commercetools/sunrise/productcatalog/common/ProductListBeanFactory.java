@@ -44,6 +44,6 @@ public class ProductListBeanFactory extends ViewModelFactory<ProductListBean, It
     private ProductWithVariant createProductWithVariant(final ProductProjection product) {
         final ProductVariant selectedVariant = product.findFirstMatchingVariant()
                 .orElseGet(product::getMasterVariant);
-        return new ProductWithVariant(product, selectedVariant);
+        return ProductWithVariant.of(product, selectedVariant);
     }
 }

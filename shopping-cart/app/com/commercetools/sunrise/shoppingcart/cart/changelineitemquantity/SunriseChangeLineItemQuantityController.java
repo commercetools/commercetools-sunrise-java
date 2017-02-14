@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkFormController;
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
@@ -8,7 +8,7 @@ import com.commercetools.sunrise.framework.annotations.IntroducingMultiControlle
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.WithCartFinder;
+import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
@@ -23,17 +23,17 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(ChangeLineItemQuantityThemeLinksControllerComponent.class)
-public abstract class SunriseChangeLineItemQuantityController<F extends ChangeLineItemQuantityFormData> extends SunriseFrameworkFormController implements WithFormFlow<F, Cart, Cart>, WithCartFinder {
+public abstract class SunriseChangeLineItemQuantityController<F extends ChangeLineItemQuantityFormData> extends SunriseFormController implements WithFormFlow<F, Cart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
     private final CartDetailPageContentFactory cartDetailPageContentFactory;
     private final ChangeLineItemQuantityExecutor changeLineItemQuantityExecutor;
 
-    protected SunriseChangeLineItemQuantityController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
-                                                      final CartFinder cartFinder, final FormFactory formFactory,
+    protected SunriseChangeLineItemQuantityController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+                                                      final FormFactory formFactory, final CartFinder cartFinder,
                                                       final CartDetailPageContentFactory cartDetailPageContentFactory,
                                                       final ChangeLineItemQuantityExecutor changeLineItemQuantityExecutor) {
-        super(templateRenderer, hookContext, formFactory);
+        super(hookContext, templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.cartDetailPageContentFactory = cartDetailPageContentFactory;
         this.changeLineItemQuantityExecutor = changeLineItemQuantityExecutor;

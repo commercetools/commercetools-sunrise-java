@@ -1,17 +1,23 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithQueryFlow;
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.SunriseFrameworkMyAccountController;
-import com.commercetools.sunrise.myaccount.WithCustomerFinder;
-import com.commercetools.sunrise.myaccount.myorders.myorderlist.view.MyOrderListPageContent;
+import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.view.MyOrderListPageContentFactory;
+import io.sphere.sdk.customers.Customer;
+import io.sphere.sdk.orders.Order;
+import io.sphere.sdk.queries.PagedQueryResult;
+import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
-import play.twirl.api.Content;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
@@ -19,22 +25,24 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(MyOrderListThemeLinksControllerComponent.class)
-public abstract class SunriseMyOrderListController extends SunriseFrameworkMyAccountController implements WithQueryFlow<OrderListWithCustomer>, WithCustomerFinder {
+public abstract class SunriseMyOrderListController extends SunriseFormController implements WithQueryFlow<OrderListWithCustomer>, WithRequiredCustomer {
 
-    private
+    private final CustomerFinder customerFinder;
     private final MyOrderListFinder myOrderListFinder;
     private final MyOrderListPageContentFactory myOrderListPageContentFactory;
 
-    protected SunriseMyOrderListController(final CustomerFinder customerFinder, final MyOrderListFinder myOrderListFinder,
+    protected SunriseMyOrderListController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+                                           final FormFactory formFactory, final CustomerFinder customerFinder, final MyOrderListFinder myOrderListFinder,
                                            final MyOrderListPageContentFactory myOrderListPageContentFactory) {
-        super(customerFinder);
+        super(hookContext, templateRenderer, formFactory);
+        this.customerFinder = customerFinder;
         this.myOrderListFinder = myOrderListFinder;
         this.myOrderListPageContentFactory = myOrderListPageContentFactory;
     }
 
     @Override
     public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
+        final Set<String> frameworkTags = new HashSet<>();
         frameworkTags.addAll(asList("my-orders", "my-order-list", "order"));
         return frameworkTags;
     }
@@ -44,20 +52,26 @@ public abstract class SunriseMyOrderListController extends SunriseFrameworkMyAcc
         return "my-account-my-orders";
     }
 
+    @Override
+    public CustomerFinder getCustomerFinder() {
+        return customerFinder;
+    }
+
     @SunriseRoute("myOrderListPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireOrderListWithCustomer(this::showPage));
+        return doRequest(() ->
+                requireCustomer(customer ->
+                        findMyOrderList(customer, orders ->
+                                showPage(OrderListWithCustomer.of(orders, customer)))));
     }
 
     @Override
-    public CompletionStage<Content> createPageContent(final OrderListWithCustomer orderListWithCustomer) {
-        final MyOrderListPageContent pageContent = myOrderListPageContentFactory.create(orderListWithCustomer);
-        return renderContent(pageContent, getTemplateName());
+    public PageContent createPageContent(final OrderListWithCustomer orderListWithCustomer) {
+        return myOrderListPageContentFactory.create(orderListWithCustomer);
     }
 
-    protected final CompletionStage<Result> requireOrderListWithCustomer(final Function<OrderListWithCustomer, CompletionStage<Result>> nextAction) {
-        return requireCustomer(customer -> myOrderListFinder.apply(customer)
-                .thenApply(orders -> OrderListWithCustomer.of(orders, customer))
-                .thenComposeAsync(nextAction, HttpExecution.defaultContext()));
+    protected final CompletionStage<Result> findMyOrderList(final Customer customer, final Function<PagedQueryResult<Order>, CompletionStage<Result>> nextAction) {
+        return myOrderListFinder.apply(customer)
+                .thenComposeAsync(nextAction, HttpExecution.defaultContext());
     }
 }

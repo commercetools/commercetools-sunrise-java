@@ -1,5 +1,6 @@
 package demo.productcatalog;
 
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchComponent;
 import com.commercetools.sunrise.common.search.pagination.PaginationComponent;
 import com.commercetools.sunrise.common.search.searchbox.SearchBoxComponent;
@@ -17,15 +18,16 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
+@NoCache
 public final class ProductOverviewController extends SunriseProductOverviewController {
 
     @Inject
-    public ProductOverviewController(final TemplateRenderer templateRenderer,
-                                     final RequestHookContext hookContext,
+    public ProductOverviewController(final RequestHookContext hookContext,
+                                     final TemplateRenderer templateRenderer,
                                      final CategoryFinder categoryFinder,
                                      final ProductListFinder productListFinder,
                                      final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
-        super(templateRenderer, hookContext, categoryFinder, productListFinder, productOverviewPageContentFactory);
+        super(hookContext, templateRenderer, categoryFinder, productListFinder, productOverviewPageContentFactory);
     }
 
     @Inject
@@ -49,7 +51,7 @@ public final class ProductOverviewController extends SunriseProductOverviewContr
     }
 
     @Override
-    protected CompletionStage<Result> handleNotFoundCategory() {
+    public CompletionStage<Result> handleNotFoundCategory() {
         return completedFuture(notFound());
     }
 }

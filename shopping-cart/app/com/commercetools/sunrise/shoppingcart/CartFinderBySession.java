@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.hooks.HookContext;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.common.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.hooks.events.CartLoadedHook;
 import com.commercetools.sunrise.hooks.requests.CartQueryHook;
 import com.commercetools.sunrise.myaccount.CustomerInSession;
@@ -18,34 +18,31 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-final class CartFinderBySession implements CartFinder {
+final class CartFinderBySession extends AbstractSphereRequestExecutor implements CartFinder {
 
     private final CartInSession cartInSession;
     private final CustomerInSession customerInSession;
-    private final SphereClient sphereClient;
-    private final HookContext hookContext;
 
     @Inject
-    CartFinderBySession(final CartInSession cartInSession, final CustomerInSession customerInSession,
-                        final SphereClient sphereClient, final HookContext hookContext) {
+    CartFinderBySession(final SphereClient sphereClient, final HookRunner hookRunner,
+                        final CartInSession cartInSession, final CustomerInSession customerInSession) {
+        super(sphereClient, hookRunner);
         this.cartInSession = cartInSession;
         this.customerInSession = customerInSession;
-        this.sphereClient = sphereClient;
-        this.hookContext = hookContext;
     }
 
     @Override
     public CompletionStage<Optional<Cart>> get() {
         final CompletionStage<Optional<Cart>> cartStage = fetchCart();
         cartStage.thenAcceptAsync(cartOpt ->
-                cartOpt.ifPresent(cart -> CartLoadedHook.runHook(hookContext, cart)), HttpExecution.defaultContext());
+                cartOpt.ifPresent(cart -> CartLoadedHook.runHook(getHookRunner(), cart)), HttpExecution.defaultContext());
         return cartStage;
     }
 
     private CompletionStage<Optional<Cart>> fetchCart() {
         return buildQuery()
-                .map(query -> CartQueryHook.runHook(hookContext, query))
-                .map(query -> sphereClient.execute(query)
+                .map(query -> CartQueryHook.runHook(getHookRunner(), query))
+                .map(query -> getSphereClient().execute(query)
                         .thenApplyAsync(PagedResult::head, HttpExecution.defaultContext()))
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }

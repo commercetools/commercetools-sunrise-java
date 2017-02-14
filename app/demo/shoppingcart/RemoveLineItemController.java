@@ -20,14 +20,14 @@ public final class RemoveLineItemController extends SunriseRemoveLineItemControl
     private final CartReverseRouter cartReverseRouter;
 
     @Inject
-    public RemoveLineItemController(final TemplateRenderer templateRenderer,
-                                    final RequestHookContext hookContext,
-                                    final CartFinder cartFinder,
+    public RemoveLineItemController(final RequestHookContext hookContext,
+                                    final TemplateRenderer templateRenderer,
                                     final FormFactory formFactory,
+                                    final CartFinder cartFinder,
                                     final RemoveLineItemExecutor removeLineItemExecutor,
                                     final CartDetailPageContentFactory cartDetailPageContentFactory,
                                     final CartReverseRouter cartReverseRouter) {
-        super(templateRenderer, hookContext, cartFinder, formFactory, removeLineItemExecutor, cartDetailPageContentFactory);
+        super(hookContext, templateRenderer, formFactory, cartFinder, removeLineItemExecutor, cartDetailPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
     }
 

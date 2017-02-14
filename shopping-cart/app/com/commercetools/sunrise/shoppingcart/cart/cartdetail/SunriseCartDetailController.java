@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.cart.cartdetail;
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateController;
 import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
@@ -8,7 +8,7 @@ import com.commercetools.sunrise.framework.annotations.IntroducingMultiControlle
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.WithCartFinder;
+import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.mvc.Result;
@@ -20,14 +20,14 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(CartDetailThemeLinksControllerComponent.class)
-public abstract class SunriseCartDetailController extends SunriseFrameworkController implements WithQueryFlow<Cart>, WithCartFinder {
+public abstract class SunriseCartDetailController extends SunriseTemplateController implements WithQueryFlow<Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
     private final CartDetailPageContentFactory cartDetailPageContentFactory;
 
-    protected SunriseCartDetailController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
+    protected SunriseCartDetailController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
                                           final CartFinder cartFinder, final CartDetailPageContentFactory cartDetailPageContentFactory) {
-        super(templateRenderer, hookContext);
+        super(hookContext, templateRenderer);
         this.cartFinder = cartFinder;
         this.cartDetailPageContentFactory = cartDetailPageContentFactory;
     }
@@ -51,7 +51,7 @@ public abstract class SunriseCartDetailController extends SunriseFrameworkContro
 
     @SunriseRoute("showCart")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireNonEmptyCart(this::showPage));
+        return doRequest(() -> requireCart(this::showPage));
     }
 
     @Override

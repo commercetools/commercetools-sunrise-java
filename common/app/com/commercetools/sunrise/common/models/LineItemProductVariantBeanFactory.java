@@ -1,26 +1,23 @@
 package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.common.utils.ProductPriceUtils;
 import io.sphere.sdk.carts.LineItem;
 
 import javax.inject.Inject;
-import java.util.Locale;
 
 @RequestScoped
 public class LineItemProductVariantBeanFactory extends AbstractProductVariantBeanFactory<LineItem> {
 
-    private final Locale locale;
     private final PriceFormatter priceFormatter;
-    private final ProductSimpleReverseRouter productReverseRouter;
+    private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public LineItemProductVariantBeanFactory(final Locale locale, final PriceFormatter priceFormatter,
-                                             final ProductSimpleReverseRouter productReverseRouter) {
+    public LineItemProductVariantBeanFactory(final PriceFormatter priceFormatter,
+                                             final ProductReverseRouter productReverseRouter) {
         super();
-        this.locale = locale;
         this.priceFormatter = priceFormatter;
         this.productReverseRouter = productReverseRouter;
     }
@@ -47,7 +44,7 @@ public class LineItemProductVariantBeanFactory extends AbstractProductVariantBea
 
     @Override
     protected void fillUrl(final ProductVariantBean bean, final LineItem lineItem) {
-        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(locale, lineItem));
+        bean.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(lineItem));
     }
 
     @Override

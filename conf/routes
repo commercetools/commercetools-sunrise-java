@@ -4,7 +4,7 @@
 # Untrail url
 GET         /*path/                                            @demo.common.ApplicationController.untrail(path: String)
 
-# Main entry point that decides whether to go to home page or to setup wizard
+# Main entry point that redirects to home page
 GET         /                                                  @demo.productcatalog.HomeController.index()
 
 
@@ -12,9 +12,9 @@ GET         /                                                  @demo.productcata
 # ~~~~~
 
 # Shows the deployed version, artifactId and GIT SHA
-GET         /version                                           @demo.common.StatusController.showVersion()
+GET         /version                                           @demo.common.VersionController.show()
 # Shows if the application is healthy
-GET         /health                                            @demo.common.StatusController.showHealth()
+GET         /health                                            @demo.common.HealthCheckController.show()
 
 # Endpoint to manually refresh category tree (otherwise an app restart is required)
 GET         /categories/refresh                                @com.commercetools.sunrise.common.categorytree.CategoriesRefreshController.refresh()
@@ -42,9 +42,9 @@ GET         /:languageTag/home                                 @demo.productcata
 # ~~~~~
 
 # Changes the language of the app
-POST        /changeLanguage                                    @demo.common.LocalizationController.changeLanguage()
+POST        /changeLanguage                                    @demo.common.ChangeLanguageController.process()
 # Changes the country of the app
-POST        /:languageTag/changeCountry                        @demo.common.LocalizationController.changeCountry(languageTag: String)
+POST        /:languageTag/changeCountry                        @demo.common.ChangeCountryController.process(languageTag: String)
 
 
 # CART
@@ -129,9 +129,7 @@ GET         /:languageTag/user/orders/:orderNumber             @demo.myaccount.M
 # ~~~~~
 
 # Shows the product detail page
-GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @demo.productcatalog.ProductDetailController.showProductBySlugAndSku(languageTag: String, productSlug: String, sku: String)
-# TODO framework remove this route
-GET         /:languageTag/:productId/:variantId                @demo.productcatalog.ProductDetailController.showProductByProductIdAndVariantId(languageTag: String, productId: String, variantId: Int)
+GET         /:languageTag/:productSlug-$sku<[^-]+>.html        @demo.productcatalog.ProductDetailController.show(languageTag: String, productSlug: String, sku: String)
 
 
 # PRODUCT OVERVIEW

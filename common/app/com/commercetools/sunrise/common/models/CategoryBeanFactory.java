@@ -1,14 +1,13 @@
 package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import play.Configuration;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.Locale;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
@@ -18,15 +17,13 @@ public class CategoryBeanFactory extends ViewModelFactory<CategoryBean, Category
 
     @Nullable
     private final String saleCategoryExtId;
-    private final Locale locale;
     private final CategoryTree categoryTree;
-    private final ProductSimpleReverseRouter productReverseRouter;
+    private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public CategoryBeanFactory(final Configuration configuration, final Locale locale, final CategoryTree categoryTree,
-                               final ProductSimpleReverseRouter productReverseRouter) {
+    public CategoryBeanFactory(final Configuration configuration, final CategoryTree categoryTree,
+                               final ProductReverseRouter productReverseRouter) {
         this.saleCategoryExtId = configuration.getString("common.saleCategoryExternalId");
-        this.locale = locale;
         this.categoryTree = categoryTree;
         this.productReverseRouter = productReverseRouter;
     }
@@ -54,7 +51,7 @@ public class CategoryBeanFactory extends ViewModelFactory<CategoryBean, Category
     }
 
     protected void fillUrl(final CategoryBean model, final Category category) {
-        model.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(locale, category));
+        model.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(category));
     }
 
     protected void fillSale(final CategoryBean model, final Category category) {

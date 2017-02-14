@@ -1,5 +1,6 @@
 package demo.shoppingcart;
 
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
@@ -16,21 +17,22 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
+@NoCache
 public final class CheckoutConfirmationController extends SunriseCheckoutConfirmationController<DefaultCheckoutConfirmationFormData> {
 
     private final CartReverseRouter cartReverseRouter;
     private final CheckoutReverseRouter checkoutReverseRouter;
 
     @Inject
-    public CheckoutConfirmationController(final TemplateRenderer templateRenderer,
-                                          final RequestHookContext hookContext,
-                                          final CartFinder cartFinder,
+    public CheckoutConfirmationController(final RequestHookContext hookContext,
+                                          final TemplateRenderer templateRenderer,
                                           final FormFactory formFactory,
+                                          final CartFinder cartFinder,
                                           final CheckoutConfirmationExecutor checkoutConfirmationExecutor,
                                           final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory,
                                           final CartReverseRouter cartReverseRouter,
                                           final CheckoutReverseRouter checkoutReverseRouter) {
-        super(templateRenderer, hookContext, cartFinder, formFactory, checkoutConfirmationExecutor, checkoutConfirmationPageContentFactory);
+        super(hookContext, templateRenderer, formFactory, cartFinder, checkoutConfirmationExecutor, checkoutConfirmationPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
         this.checkoutReverseRouter = checkoutReverseRouter;
     }

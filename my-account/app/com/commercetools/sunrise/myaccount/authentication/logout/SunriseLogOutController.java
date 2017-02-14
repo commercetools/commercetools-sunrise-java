@@ -1,10 +1,12 @@
 package com.commercetools.sunrise.myaccount.authentication.logout;
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunriseController;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
+import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.CustomerInSession;
 import com.commercetools.sunrise.shoppingcart.CartInSession;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
 import java.util.HashSet;
@@ -12,14 +14,16 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @IntroducingMultiControllerComponents(LogOutThemeLinksControllerComponent.class)
-public abstract class SunriseLogOutController extends SunriseFrameworkController {
+public abstract class SunriseLogOutController extends SunriseController {
 
     private final CustomerInSession customerInSession;
     private final CartInSession cartInSession;
 
-    protected SunriseLogOutController(final CustomerInSession customerInSession, final CartInSession cartInSession) {
+    protected SunriseLogOutController(final RequestHookContext hookContext, final CustomerInSession customerInSession, final CartInSession cartInSession) {
+        super(hookContext);
         this.customerInSession = customerInSession;
         this.cartInSession = cartInSession;
     }
@@ -31,15 +35,14 @@ public abstract class SunriseLogOutController extends SunriseFrameworkController
 
     @SunriseRoute("processLogOut")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> {
-            logOut();
-            return handleSuccessfulAction();
-        });
+        return doRequest(() -> executeAction()
+                .thenComposeAsync(unused -> handleSuccessfulAction(), HttpExecution.defaultContext()));
     }
 
-    protected void logOut() {
+    protected CompletionStage<Void> executeAction() {
         customerInSession.remove();
         cartInSession.remove();
+        return completedFuture(null);
     }
 
     protected abstract CompletionStage<Result> handleSuccessfulAction();

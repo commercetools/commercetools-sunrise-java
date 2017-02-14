@@ -1,5 +1,6 @@
 package demo.shoppingcart;
 
+import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
@@ -8,13 +9,14 @@ import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPag
 
 import javax.inject.Inject;
 
+@NoCache
 public final class CartDetailController extends SunriseCartDetailController {
 
     @Inject
-    public CartDetailController(final TemplateRenderer templateRenderer,
-                                final RequestHookContext hookContext,
+    public CartDetailController(final RequestHookContext hookContext,
+                                final TemplateRenderer templateRenderer,
                                 final CartFinder cartFinder,
                                 final CartDetailPageContentFactory cartDetailPageContentFactory) {
-        super(templateRenderer, hookContext, cartFinder, cartDetailPageContentFactory);
+        super(hookContext, templateRenderer, cartFinder, cartDetailPageContentFactory);
     }
 }

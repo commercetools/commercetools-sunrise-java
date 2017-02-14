@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkFormController;
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
@@ -8,7 +8,7 @@ import com.commercetools.sunrise.framework.annotations.IntroducingMultiControlle
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.WithCartFinder;
+import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
@@ -24,17 +24,17 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(CheckoutConfirmationThemeLinksControllerComponent.class)
-public abstract class SunriseCheckoutConfirmationController<F extends CheckoutConfirmationFormData> extends SunriseFrameworkFormController implements WithFormFlow<F, Cart, Order>, WithCartFinder {
+public abstract class SunriseCheckoutConfirmationController<F extends CheckoutConfirmationFormData> extends SunriseFormController implements WithFormFlow<F, Cart, Order>, WithRequiredCart {
 
     private final CartFinder cartFinder;
     private final CheckoutConfirmationExecutor checkoutConfirmationExecutor;
     private final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory;
 
-    protected SunriseCheckoutConfirmationController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
-                                                    final CartFinder cartFinder, final FormFactory formFactory,
+    protected SunriseCheckoutConfirmationController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+                                                    final FormFactory formFactory, final CartFinder cartFinder,
                                                     final CheckoutConfirmationExecutor checkoutConfirmationExecutor,
                                                     final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory) {
-        super(templateRenderer, hookContext, formFactory);
+        super(hookContext, templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.checkoutConfirmationExecutor = checkoutConfirmationExecutor;
         this.checkoutConfirmationPageContentFactory = checkoutConfirmationPageContentFactory;

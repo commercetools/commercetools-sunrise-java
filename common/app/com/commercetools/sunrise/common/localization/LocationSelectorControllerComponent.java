@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.common.localization;
 
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 

@@ -1,18 +1,18 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkFormController;
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.WithCustomerFinder;
+import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
-import com.commercetools.sunrise.myaccount.addressbook.WithAddressFinder;
+import com.commercetools.sunrise.myaccount.addressbook.WithRequiredAddress;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.view.ChangeAddressPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
@@ -29,18 +29,18 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-public abstract class SunriseChangeAddressController<F extends AddressBookAddressFormData> extends SunriseFrameworkFormController implements WithFormFlow<F, AddressWithCustomer, Customer>, WithCustomerFinder, WithAddressFinder {
+public abstract class SunriseChangeAddressController<F extends AddressBookAddressFormData> extends SunriseFormController implements WithFormFlow<F, AddressWithCustomer, Customer>, WithRequiredCustomer, WithRequiredAddress {
 
     private final CustomerFinder customerFinder;
     private final AddressFinder addressFinder;
     private final ChangeAddressExecutor changeAddressExecutor;
     private final ChangeAddressPageContentFactory changeAddressPageContentFactory;
 
-    protected SunriseChangeAddressController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext,
-                                             final FormFactory formFactory, final CustomerFinder customerFinder,
-                                             final AddressFinder addressFinder, final ChangeAddressExecutor changeAddressExecutor,
+    protected SunriseChangeAddressController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+                                             final FormFactory formFactory, final CustomerFinder customerFinder, final AddressFinder addressFinder,
+                                             final ChangeAddressExecutor changeAddressExecutor,
                                              final ChangeAddressPageContentFactory changeAddressPageContentFactory) {
-        super(templateRenderer, hookContext, formFactory);
+        super(hookContext, templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.addressFinder = addressFinder;
         this.changeAddressExecutor = changeAddressExecutor;

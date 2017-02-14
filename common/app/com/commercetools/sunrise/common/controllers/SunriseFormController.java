@@ -4,12 +4,13 @@ import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import play.data.FormFactory;
 
-public abstract class SunriseFrameworkFormController extends SunriseFrameworkController {
+public abstract class SunriseFormController extends SunriseTemplateController {
 
     private final FormFactory formFactory;
 
-    protected SunriseFrameworkFormController(final TemplateRenderer templateRenderer, final RequestHookContext hookContext, final FormFactory formFactory) {
-        super(templateRenderer, hookContext);
+    protected SunriseFormController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+                                    final FormFactory formFactory) {
+        super(hookContext, templateRenderer);
         this.formFactory = formFactory;
     }
 

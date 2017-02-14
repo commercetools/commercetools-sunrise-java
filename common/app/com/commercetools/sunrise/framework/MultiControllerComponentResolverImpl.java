@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework;
 
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
+import com.commercetools.sunrise.common.controllers.SunriseController;
 import io.sphere.sdk.models.Base;
 
 import java.util.HashMap;
@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 
 final class MultiControllerComponentResolverImpl extends Base implements MultiControllerComponentResolver {
 
-    private final Map<Class<? extends ControllerComponent>, Predicate<SunriseFrameworkController>> classToPredicateMap;
+    private final Map<Class<? extends ControllerComponent>, Predicate<SunriseController>> classToPredicateMap;
 
-    public MultiControllerComponentResolverImpl(final Map<Class<? extends ControllerComponent>, Predicate<SunriseFrameworkController>> classToPredicateMap) {
+    public MultiControllerComponentResolverImpl(final Map<Class<? extends ControllerComponent>, Predicate<SunriseController>> classToPredicateMap) {
         this.classToPredicateMap = new HashMap<>(classToPredicateMap);
     }
 
     @Override
-    public List<Class<? extends ControllerComponent>> findMatchingComponents(final SunriseFrameworkController controller) {
+    public List<Class<? extends ControllerComponent>> findMatchingComponents(final SunriseController controller) {
         return classToPredicateMap.entrySet().stream()
                 .filter(entry -> entry.getValue().test(controller))
-                .map(entry -> entry.getKey())
+                .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
 }
