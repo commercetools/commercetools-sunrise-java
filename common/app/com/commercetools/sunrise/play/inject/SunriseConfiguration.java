@@ -80,7 +80,7 @@ public class SunriseConfiguration extends Configuration {
                                                       final PlayException e) {
         if (e.getCause() instanceof ConfigException.WrongType) {
             return Optional.ofNullable(getString(key))
-                    .map(parser::apply)
+                    .map(parser)
                     .filter(value -> !value.isEmpty());
         } else {
             throw e;
@@ -104,7 +104,7 @@ public class SunriseConfiguration extends Configuration {
     }
 
     private static Stream<String> parseList(final String value) {
-        return Arrays.asList(value.split(",")).stream()
+        return Arrays.stream(value.split(","))
                 .map(String::trim)
                 .filter(v -> !v.isEmpty());
     }

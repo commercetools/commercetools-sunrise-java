@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.common.contexts;
 
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import io.sphere.sdk.models.Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ final class UserLanguageImpl extends Base implements UserLanguage {
     UserLanguageImpl(final Locale locale, final Http.Request request, final ProjectContext projectContext) {
         this.locale = locale;
         this.locales = acceptedLocales(locale, request, projectContext);
-        LOGGER.debug("UserLanguage: locale {}, locales {}", locale, locales);
+        LOGGER.debug("User locale {}, locales {}", locale, locales);
     }
 
     @Override

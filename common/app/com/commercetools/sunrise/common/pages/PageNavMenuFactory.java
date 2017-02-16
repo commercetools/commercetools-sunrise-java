@@ -2,14 +2,14 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.models.CategoryBean;
 import com.commercetools.sunrise.common.models.CategoryBeanFactory;
-import com.commercetools.sunrise.common.models.CommonViewModelFactory;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.categories.CategoryTree;
 
 import javax.inject.Inject;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PageNavMenuFactory extends CommonViewModelFactory<PageNavMenu> {
+public class PageNavMenuFactory extends ViewModelFactory<PageNavMenu, Void> {
 
     private final CategoryTree categoryTree;
     private final CategoryBeanFactory categoryBeanFactory;
@@ -20,17 +20,17 @@ public class PageNavMenuFactory extends CommonViewModelFactory<PageNavMenu> {
         this.categoryBeanFactory = categoryBeanFactory;
     }
 
-    public final PageNavMenu create() {
-        return initializedViewModel();
-    }
-
     @Override
     protected PageNavMenu getViewModelInstance() {
         return new PageNavMenu();
     }
 
+    public final PageNavMenu create(final Void data) {
+        return initializedViewModel(data);
+    }
+
     @Override
-    protected final void initialize(final PageNavMenu model) {
+    protected final void initialize(final PageNavMenu model, final Void data) {
         fillCategories(model);
     }
 

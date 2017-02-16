@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.models;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.ctp.AttributeSettings;
+import com.commercetools.sunrise.common.ctp.ProductAttributeSettings;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.utils.AttributeFormatter;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductVariant;
@@ -18,14 +18,14 @@ import static java.util.stream.Collectors.toList;
 public class SelectableProductAttributeBeanFactory extends SelectableViewModelFactory<SelectableProductAttributeBean, List<ProductVariant>, AttributeWithProductType> {
 
     private final AttributeFormatter attributeFormatter;
-    private final AttributeSettings attributeSettings;
+    private final ProductAttributeSettings productAttributeSettings;
     private final ProductAttributeFormSelectableOptionBeanFactory productAttributeFormSelectableOptionBeanFactory;
 
     @Inject
-    public SelectableProductAttributeBeanFactory(final AttributeFormatter attributeFormatter, final AttributeSettings attributeSettings,
+    public SelectableProductAttributeBeanFactory(final AttributeFormatter attributeFormatter, final ProductAttributeSettings productAttributeSettings,
                                                  final ProductAttributeFormSelectableOptionBeanFactory productAttributeFormSelectableOptionBeanFactory) {
         this.attributeFormatter = attributeFormatter;
-        this.attributeSettings = attributeSettings;
+        this.productAttributeSettings = productAttributeSettings;
         this.productAttributeFormSelectableOptionBeanFactory = productAttributeFormSelectableOptionBeanFactory;
     }
 
@@ -41,7 +41,7 @@ public class SelectableProductAttributeBeanFactory extends SelectableViewModelFa
 
     public final List<SelectableProductAttributeBean> createList(final ProductWithVariant productWithVariant) {
         final Reference<ProductType> productTypeRef = productWithVariant.getProduct().getProductType();
-        return attributeSettings.getSelectableAttributes().stream()
+        return productAttributeSettings.getSelectableAttributes().stream()
                 .map(productWithVariant.getVariant()::getAttribute)
                 .filter(Objects::nonNull)
                 .map(attribute -> create(productWithVariant.getProduct().getAllVariants(), new AttributeWithProductType(attribute, productTypeRef)))
@@ -71,7 +71,7 @@ public class SelectableProductAttributeBeanFactory extends SelectableViewModelFa
     }
 
     protected void fillReload(final SelectableProductAttributeBean model, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
-        model.setReload(attributeSettings.getHardSelectableAttributes().contains(selectedAttribute.getAttribute().getName()));
+        model.setReload(productAttributeSettings.getSelectablePrimaryAttributes().contains(selectedAttribute.getAttribute().getName()));
     }
 
     protected void fillList(final SelectableProductAttributeBean model, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
@@ -95,7 +95,7 @@ public class SelectableProductAttributeBeanFactory extends SelectableViewModelFa
 
     private Map<String, List<String>> createAllowedAttributeCombinations(final AttributeWithProductType fixedAttribute, final List<ProductVariant> variants) {
         final Map<String, List<String>> attrCombination = new HashMap<>();
-        attributeSettings.getSelectableAttributes().stream()
+        productAttributeSettings.getSelectableAttributes().stream()
                 .filter(enabledAttrKey -> !fixedAttribute.getAttribute().getName().equals(enabledAttrKey))
                 .forEach(enabledAttrKey -> {
                     final List<String> allowedAttrValues = attributeCombination(enabledAttrKey, fixedAttribute, variants);

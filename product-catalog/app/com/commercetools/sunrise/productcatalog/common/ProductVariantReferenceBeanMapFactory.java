@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.ctp.AttributeSettings;
+import com.commercetools.sunrise.common.ctp.ProductAttributeSettings;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.AttributeWithProductType;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
@@ -21,13 +21,13 @@ import static java.util.stream.Collectors.joining;
 @RequestScoped
 public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<String, ProductVariantReferenceBean>, ProductWithVariant> {
 
-    private final AttributeSettings attributeSettings;
+    private final ProductAttributeSettings productAttributeSettings;
     private final AttributeFormatter attributeFormatter;
     private final ProductVariantReferenceBeanFactory productVariantReferenceBeanFactory;
 
     @Inject
-    public ProductVariantReferenceBeanMapFactory(final AttributeSettings attributeSettings, final AttributeFormatter attributeFormatter, final ProductVariantReferenceBeanFactory productVariantReferenceBeanFactory) {
-        this.attributeSettings = attributeSettings;
+    public ProductVariantReferenceBeanMapFactory(final ProductAttributeSettings productAttributeSettings, final AttributeFormatter attributeFormatter, final ProductVariantReferenceBeanFactory productVariantReferenceBeanFactory) {
+        this.productAttributeSettings = productAttributeSettings;
         this.attributeFormatter = attributeFormatter;
         this.productVariantReferenceBeanFactory = productVariantReferenceBeanFactory;
     }
@@ -57,7 +57,7 @@ public class ProductVariantReferenceBeanMapFactory extends ViewModelFactory<Map<
     }
 
     private String createMapKey(final ProductVariant variant, final Referenceable<ProductType> productTypeRef) {
-        return attributeSettings.getSelectableAttributes().stream()
+        return productAttributeSettings.getSelectableAttributes().stream()
                 .map(variant::getAttribute)
                 .filter(Objects::nonNull)
                 .map(attribute -> attributeFormatter.valueAsKey(new AttributeWithProductType(attribute, productTypeRef)))

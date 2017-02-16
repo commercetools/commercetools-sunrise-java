@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.pages.ParsedRoutes;
+import com.commercetools.sunrise.framework.ParsedRouteList;
 import play.mvc.Call;
 
 import javax.inject.Inject;
@@ -14,10 +14,10 @@ final class ReflectionProductReverseRouter extends AbstractReflectionReverseRout
     private final ReverseCaller processSearchProductsForm;
 
     @Inject
-    private ReflectionProductReverseRouter(final ParsedRoutes parsedRoutes) {
-        productDetailPageCaller = getCallerForRoute(parsedRoutes, "productDetailPageCall");
-        productOverviewPageCaller = getCallerForRoute(parsedRoutes, "productOverviewPageCall");
-        processSearchProductsForm = getCallerForRoute(parsedRoutes, "processSearchProductsForm");
+    private ReflectionProductReverseRouter(final ParsedRouteList parsedRouteList) {
+        productDetailPageCaller = getCallerForRoute(parsedRouteList, "productDetailPageCall");
+        productOverviewPageCaller = getCallerForRoute(parsedRouteList, "productOverviewPageCall");
+        processSearchProductsForm = getCallerForRoute(parsedRouteList, "processSearchProductsForm");
     }
 
     @Override

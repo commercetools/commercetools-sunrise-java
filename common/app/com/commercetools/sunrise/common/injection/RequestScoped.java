@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.contexts;
+package com.commercetools.sunrise.common.injection;
 
 import com.google.inject.ScopeAnnotation;
 

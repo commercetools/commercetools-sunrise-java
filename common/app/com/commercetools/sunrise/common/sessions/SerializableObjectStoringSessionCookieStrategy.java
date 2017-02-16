@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.sessions;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
 import play.mvc.Http;
@@ -14,7 +14,7 @@ import java.util.Optional;
  * Notice that cookies have a very limited space, so do not use this strategy to store a large amount of data.
  */
 @RequestScoped
-public class SerializableObjectStoringSessionCookieStrategy extends SessionCookieStrategy implements ObjectStoringSessionStrategy {
+public final class SerializableObjectStoringSessionCookieStrategy extends SessionCookieStrategy implements ObjectStoringSessionStrategy {
 
     @Inject
     public SerializableObjectStoringSessionCookieStrategy(final Http.Session session) {

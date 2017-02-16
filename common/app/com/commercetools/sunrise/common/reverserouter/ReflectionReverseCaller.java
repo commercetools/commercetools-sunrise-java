@@ -1,16 +1,17 @@
 package com.commercetools.sunrise.common.reverserouter;
 
+import com.commercetools.sunrise.common.models.SunriseModel;
 import play.mvc.Call;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.CompletionException;
 
-public class ReflectionReverseCaller implements ReverseCaller {
+public final class ReflectionReverseCaller extends SunriseModel implements ReverseCaller {
 
     private final Method method;
     private final Object object;
 
-    public ReflectionReverseCaller(final Method method, final Object object) {
+    private ReflectionReverseCaller(final Method method, final Object object) {
         this.method = method;
         this.object = object;
     }
@@ -22,5 +23,9 @@ public class ReflectionReverseCaller implements ReverseCaller {
         } catch (Exception e) {
             throw new CompletionException(e);
         }
+    }
+
+    public static ReflectionReverseCaller of(final Method method, final Object object) {
+        return new ReflectionReverseCaller(method, object);
     }
 }

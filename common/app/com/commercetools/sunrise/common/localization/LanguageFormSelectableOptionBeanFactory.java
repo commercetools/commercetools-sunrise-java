@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.localization;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
 
 import javax.annotation.Nullable;

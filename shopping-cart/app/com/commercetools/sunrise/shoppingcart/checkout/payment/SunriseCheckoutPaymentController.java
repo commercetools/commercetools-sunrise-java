@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.common.controllers.SunriseFormController;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
@@ -31,7 +31,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @IntroducingMultiControllerComponents(CheckoutPaymentThemeLinksControllerComponent.class)
-public abstract class SunriseCheckoutPaymentController<F extends CheckoutPaymentFormData> extends SunriseFormController implements WithFormFlow<F, PaymentMethodsWithCart, Cart>, WithRequiredCart {
+public abstract class SunriseCheckoutPaymentController<F extends CheckoutPaymentFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, PaymentMethodsWithCart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
     private final CheckoutPaymentExecutor checkoutPaymentExecutor;

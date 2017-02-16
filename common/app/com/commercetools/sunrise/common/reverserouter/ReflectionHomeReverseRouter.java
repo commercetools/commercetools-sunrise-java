@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.pages.ParsedRoutes;
+import com.commercetools.sunrise.framework.ParsedRouteList;
 import play.mvc.Call;
 
 import javax.inject.Inject;
@@ -12,8 +12,8 @@ final class ReflectionHomeReverseRouter extends AbstractReflectionReverseRouter 
     private final ReverseCaller homePageCaller;
 
     @Inject
-    private ReflectionHomeReverseRouter(final ParsedRoutes parsedRoutes) {
-        homePageCaller = getCallerForRoute(parsedRoutes, "homePageCall");
+    private ReflectionHomeReverseRouter(final ParsedRouteList parsedRouteList) {
+        homePageCaller = getCallerForRoute(parsedRouteList, "homePageCall");
     }
 
     @Override

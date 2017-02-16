@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 
-@ImplementedBy(ProductVariantFinderBySlug.class)
+@ImplementedBy(ProductVariantFinderBySku.class)
 @FunctionalInterface
 public interface ProductVariantFinder extends BiFunction<ProductProjection, String, CompletionStage<Optional<ProductVariant>>> {
 

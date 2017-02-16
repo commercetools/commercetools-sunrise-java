@@ -32,7 +32,7 @@ public final class SortFormSettings extends FormSettingsWithOptions<SortFormOpti
     private static final String DEFAULT_KEY = "sort";
 
     @Inject
-    public SortFormSettings(final Configuration configuration) {
+    SortFormSettings(final Configuration configuration) {
         super(key(configuration), options(configuration));
         LOGGER.debug("Provide SortConfig: {}", getOptions().stream().map(SortFormOption::getValue).collect(toList()));
     }
@@ -63,7 +63,7 @@ public final class SortFormSettings extends FormSettingsWithOptions<SortFormOpti
     }
 
     private static SortFormOption initializeFormOption(final Configuration optionConfig) {
-        return new SortFormOption(
+        return SortFormOption.of(
                 extractLabel(optionConfig),
                 extractValue(optionConfig),
                 extractExpressions(optionConfig),
@@ -80,13 +80,10 @@ public final class SortFormSettings extends FormSettingsWithOptions<SortFormOpti
     }
 
     private static List<SortExpression<ProductProjection>> extractExpressions(final Configuration optionConfig) {
-        final List<SortExpression<ProductProjection>> expressions = optionConfig.getStringList(OPTION_EXPR_ATTR, emptyList()).stream()
+        return optionConfig.getStringList(OPTION_EXPR_ATTR, emptyList()).stream()
+                .filter(expr -> !expr.isEmpty())
                 .map(SortExpression::<ProductProjection>of)
                 .collect(toList());
-        if (expressions.isEmpty()) {
-            throw new SunriseConfigurationException("Missing sort expression", OPTION_EXPR_ATTR, CONFIG_OPTIONS);
-        }
-        return expressions;
     }
 
     private static Boolean extractIsDefault(final Configuration optionConfig) {

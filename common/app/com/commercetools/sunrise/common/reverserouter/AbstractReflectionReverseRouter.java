@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.pages.ParsedRoute;
-import com.commercetools.sunrise.common.pages.ParsedRoutes;
+import com.commercetools.sunrise.framework.ParsedRoute;
+import com.commercetools.sunrise.framework.ParsedRouteList;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import io.sphere.sdk.models.Base;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -19,14 +19,14 @@ import static java.lang.String.format;
 
 public abstract class AbstractReflectionReverseRouter extends Base {
 
-    protected final ReverseCaller getCallerForRoute(final ParsedRoutes parsedRoutes, final String tag) {
+    protected final ReverseCaller getCallerForRoute(final ParsedRouteList parsedRouteList, final String tag) {
         try {
-            return parsedRoutes.getRoutes().stream()
+            return parsedRouteList.getRoutes().stream()
                     .filter(r -> r.getControllerClass() != null)
                     .map((parsedRoute) -> findReverseRouterMethod(parsedRoute, tag))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
-                    .map(p -> (ReverseCaller) new ReflectionReverseCaller(p.getRight(), p.getLeft()))
+                    .map(p -> (ReverseCaller) ReflectionReverseCaller.of(p.getRight(), p.getLeft()))
                     .findFirst()
                     .orElseGet(() -> {
                         LoggerFactory.getLogger(this.getClass()).warn(format("Cannot find route for %s, falling back to GET /.", tag));

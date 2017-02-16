@@ -2,7 +2,6 @@ package com.commercetools.sunrise.common.template.engine.handlebars;
 
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.common.template.engine.TemplateContext;
-import com.commercetools.sunrise.common.utils.ErrorFormatter;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.ValueResolver;
@@ -22,8 +21,12 @@ import static java.util.stream.Collectors.toList;
 
 public class HandlebarsContextFactory extends Base {
 
+    private final PlayJavaFormResolver playJavaFormResolver;
+
     @Inject
-    private ErrorFormatter errorFormatter;
+    public HandlebarsContextFactory(final PlayJavaFormResolver playJavaFormResolver) {
+        this.playJavaFormResolver = playJavaFormResolver;
+    }
 
     public Context create(final Handlebars handlebars, final String templateName, final TemplateContext templateContext) {
         final Context.Builder contextBuilder = createContextBuilder(templateContext);
@@ -66,16 +69,11 @@ public class HandlebarsContextFactory extends Base {
     }
 
     protected List<ValueResolver> valueResolversInContext(final TemplateContext templateContext) {
-        final PlayJavaFormResolver playJavaFormResolver = createPlayJavaFormResolver(templateContext);
         final SunriseJavaBeanValueResolver javaBeanValueResolver = createJavaBeanValueResolver(templateContext);
         return asList(MapValueResolver.INSTANCE, javaBeanValueResolver, playJavaFormResolver);
     }
 
-    protected final SunriseJavaBeanValueResolver createJavaBeanValueResolver(final TemplateContext templateContext) {
+    private SunriseJavaBeanValueResolver createJavaBeanValueResolver(final TemplateContext templateContext) {
         return new SunriseJavaBeanValueResolver(JavaBeanValueResolver.INSTANCE, templateContext.locales());
-    }
-
-    protected final PlayJavaFormResolver createPlayJavaFormResolver(final TemplateContext templateContext) {
-        return new PlayJavaFormResolver(templateContext.locales(), errorFormatter);
     }
 }

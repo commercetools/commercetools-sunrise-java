@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.toList;
 
 public final class SortFormOption extends FormOption<List<SortExpression<ProductProjection>>> {
 
-    public SortFormOption(final String fieldLabel, final String fieldValue, final List<SortExpression<ProductProjection>> expressions, final boolean isDefault) {
+    private SortFormOption(final String fieldLabel, final String fieldValue, final List<SortExpression<ProductProjection>> expressions, final boolean isDefault) {
         super(fieldLabel, fieldValue, expressions, isDefault);
     }
 
@@ -45,5 +45,9 @@ public final class SortFormOption extends FormOption<List<SortExpression<Product
     @Override
     public boolean isDefault() {
         return super.isDefault();
+    }
+
+    public static SortFormOption of(final String fieldLabel, final String fieldValue, final List<SortExpression<ProductProjection>> expressions, final boolean isDefault) {
+        return new SortFormOption(fieldLabel, fieldValue, expressions, isDefault);
     }
 }

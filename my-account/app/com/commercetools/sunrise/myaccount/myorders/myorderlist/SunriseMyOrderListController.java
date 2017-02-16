@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
-import com.commercetools.sunrise.common.controllers.SunriseFormController;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
 import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(MyOrderListThemeLinksControllerComponent.class)
-public abstract class SunriseMyOrderListController extends SunriseFormController implements WithQueryFlow<OrderListWithCustomer>, WithRequiredCustomer {
+public abstract class SunriseMyOrderListController extends SunriseTemplateFormController implements WithQueryFlow<OrderListWithCustomer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final MyOrderListFinder myOrderListFinder;

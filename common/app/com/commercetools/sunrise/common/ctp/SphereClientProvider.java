@@ -14,26 +14,31 @@ import javax.inject.Inject;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class SphereClientProvider implements Provider<SphereClient> {
-    private static final Logger logger = LoggerFactory.getLogger(SphereClientProvider.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SphereClientProvider.class);
+
+    private final ApplicationLifecycle applicationLifecycle;
+    private final SphereClientConfig sphereClientConfig;
+    private final HttpClient httpClient;
+    private final SphereAccessTokenSupplier sphereAccessTokenSupplier;
 
     @Inject
-    private ApplicationLifecycle applicationLifecycle;
-    @Inject
-    private HttpClient httpClient;
-    @Inject
-    private SphereAccessTokenSupplier sphereAccessTokenSupplier;
-    @Inject
-    private SphereClientConfig sphereClientConfig;
+    public SphereClientProvider(final ApplicationLifecycle applicationLifecycle, final SphereClientConfig sphereClientConfig,
+                                final HttpClient httpClient, final SphereAccessTokenSupplier sphereAccessTokenSupplier) {
+        this.applicationLifecycle = applicationLifecycle;
+        this.sphereClientConfig = sphereClientConfig;
+        this.httpClient = httpClient;
+        this.sphereAccessTokenSupplier = sphereAccessTokenSupplier;
+    }
 
     @Override
     public SphereClient get() {
-        SphereClient sphereClient = SphereClient.of(sphereClientConfig, httpClient, sphereAccessTokenSupplier);
-        logger.info("Provide SphereClient");
+        final SphereClient sphereClient = SphereClient.of(sphereClientConfig, httpClient, sphereAccessTokenSupplier);
+        LOGGER.debug("Initialize SphereClient");
         applicationLifecycle.addStopHook(() -> {
             sphereClient.close();
             return completedFuture(null);
         });
         return sphereClient;
     }
-
 }

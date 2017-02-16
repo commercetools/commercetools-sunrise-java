@@ -7,7 +7,13 @@ public final class SearchUtils {
     private SearchUtils() {
     }
 
-    public static String localizeExpression(final String expr, final Locale locale) {
-        return expr.replaceAll("\\{\\{locale\\}\\}", locale.toLanguageTag());
+    /**
+     * Replaces all {@code {{locale}}} references in the expression with the given {@link Locale} language tag.
+     * @param expression the expression that may contain locale references
+     * @param locale the locale to be used when replacing the references
+     * @return the new expression with the language tags instead of the locale references.
+     */
+    public static String localizeExpression(final String expression, final Locale locale) {
+        return expression.replaceAll("\\{\\{locale\\}\\}", locale.toLanguageTag());
     }
 }

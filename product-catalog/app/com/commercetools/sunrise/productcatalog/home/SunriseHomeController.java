@@ -34,11 +34,6 @@ public abstract class SunriseHomeController extends SunriseTemplateController im
     }
 
     @Override
-    public String getCmsPageKey() {
-        return "home";
-    }
-
-    @Override
     public Set<String> getFrameworkTags() {
         return new HashSet<>(asList("home", "product-catalog"));
     }

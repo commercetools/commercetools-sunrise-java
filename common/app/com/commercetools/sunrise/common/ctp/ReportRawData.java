@@ -4,6 +4,7 @@ import io.sphere.sdk.http.HttpRequest;
 import io.sphere.sdk.http.HttpResponse;
 
 public final class ReportRawData {
+
     private final HttpRequest HttpRequest;
     private final HttpResponse httpResponse;
     private final long startTimestamp;

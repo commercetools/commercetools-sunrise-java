@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.view;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.forms.FormFieldWithOptions;
 import com.commercetools.sunrise.common.models.FormFieldViewModelFactory;
 import io.sphere.sdk.shippingmethods.ShippingMethod;

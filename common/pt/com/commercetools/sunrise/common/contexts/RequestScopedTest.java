@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.common.contexts;
 
 import com.commercetools.sunrise.common.WithSunriseApplication;
+import com.commercetools.sunrise.common.injection.RequestScope;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;

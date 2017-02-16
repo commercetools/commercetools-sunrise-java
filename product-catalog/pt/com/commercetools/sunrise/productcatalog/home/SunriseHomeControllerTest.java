@@ -2,8 +2,8 @@ package com.commercetools.sunrise.productcatalog.home;
 
 import com.commercetools.sunrise.common.DefaultTestModule;
 import com.commercetools.sunrise.common.WithSunriseApplication;
-import com.commercetools.sunrise.common.contexts.RequestScope;
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScope;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.controllers.TestableCall;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.HomeSimpleReverseRouter;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
-import com.commercetools.sunrise.common.controllers.SunriseFormController;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
 import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.Arrays.asList;
 
-public abstract class SunriseMyOrderDetailController extends SunriseFormController implements WithQueryFlow<OrderWithCustomer>, WithRequiredCustomer, WithRequiredMyOrder {
+public abstract class SunriseMyOrderDetailController extends SunriseTemplateFormController implements WithQueryFlow<OrderWithCustomer>, WithRequiredCustomer, WithRequiredMyOrder {
 
     private final CustomerFinder customerFinder;
     private final MyOrderFinder myOrderFinder;

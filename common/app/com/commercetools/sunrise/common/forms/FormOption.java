@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.common.forms;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.SunriseModel;
 
-public abstract class FormOption<D> extends Base {
+public abstract class FormOption<D> extends SunriseModel {
 
     private final String fieldLabel;
     private final String fieldValue;
     private final D value;
     private final boolean isDefault;
 
-    public FormOption(final String fieldLabel, final String fieldValue, final D value, final boolean isDefault) {
+    protected FormOption(final String fieldLabel, final String fieldValue, final D value, final boolean isDefault) {
         this.fieldLabel = fieldLabel;
         this.fieldValue = fieldValue;
         this.value = value;

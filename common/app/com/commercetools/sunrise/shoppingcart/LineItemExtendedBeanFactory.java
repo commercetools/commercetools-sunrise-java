@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.ctp.AttributeSettings;
+import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.common.ctp.ProductAttributeSettings;
 import com.commercetools.sunrise.common.models.AttributeWithProductType;
 import com.commercetools.sunrise.common.models.LineItemProductVariantBeanFactory;
 import com.commercetools.sunrise.common.models.ProductAttributeBean;
@@ -18,14 +18,14 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class LineItemExtendedBeanFactory extends AbstractLineItemBeanFactory<LineItemExtendedBean> {
 
-    private final AttributeSettings attributeSettings;
+    private final ProductAttributeSettings productAttributeSettings;
     private final ProductAttributeBeanFactory productAttributeBeanFactory;
 
     @Inject
     public LineItemExtendedBeanFactory(final PriceFormatter priceFormatter, final LineItemProductVariantBeanFactory lineItemProductVariantBeanFactory,
-                                       final AttributeSettings attributeSettings, final ProductAttributeBeanFactory productAttributeBeanFactory) {
+                                       final ProductAttributeSettings productAttributeSettings, final ProductAttributeBeanFactory productAttributeBeanFactory) {
         super(priceFormatter, lineItemProductVariantBeanFactory);
-        this.attributeSettings = attributeSettings;
+        this.productAttributeSettings = productAttributeSettings;
         this.productAttributeBeanFactory = productAttributeBeanFactory;
     }
 
@@ -47,7 +47,7 @@ public class LineItemExtendedBeanFactory extends AbstractLineItemBeanFactory<Lin
 
     protected void fillAttributes(final LineItemExtendedBean model, final LineItem lineItem) {
         final List<ProductAttributeBean> attributes = lineItem.getVariant().getAttributes().stream()
-                .filter(attr -> attributeSettings.getSelectableAttributes().contains(attr.getName()))
+                .filter(attr -> productAttributeSettings.getSelectableAttributes().contains(attr.getName()))
                 .map(attribute -> createProductAttributeBean(lineItem, attribute))
                 .collect(toList());
         model.setAttributes(attributes);

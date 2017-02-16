@@ -33,7 +33,7 @@ public final class ProductsPerPageFormSettings extends FormSettingsWithOptions<P
     private static final String DEFAULT_KEY = "ppp";
 
     @Inject
-    public ProductsPerPageFormSettings(final Configuration configuration) {
+    ProductsPerPageFormSettings(final Configuration configuration) {
         super(key(configuration), options(configuration));
         LOGGER.debug("Provide ProductsPerPageFormConfiguration: {}", getOptions().stream().map(ProductsPerPageFormOption::getFieldValue).collect(toList()));
     }
@@ -64,7 +64,7 @@ public final class ProductsPerPageFormSettings extends FormSettingsWithOptions<P
     }
 
     private static ProductsPerPageFormOption initializeOption(final Configuration optionConfig) {
-        return new ProductsPerPageFormOption(
+        return ProductsPerPageFormOption.of(
                 extractLabel(optionConfig),
                 extractValue(optionConfig),
                 extractAmount(optionConfig),

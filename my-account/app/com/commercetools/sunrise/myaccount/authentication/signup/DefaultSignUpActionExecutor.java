@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
+import com.commercetools.sunrise.common.sessions.carts.CartInSession;
 import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.authentication.AbstractCustomerSignInExecutor;
-import com.commercetools.sunrise.shoppingcart.CartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -13,12 +13,12 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-public class DefaultSignUpExecutor extends AbstractCustomerSignInExecutor implements SignUpExecutor {
+public class DefaultSignUpActionExecutor extends AbstractCustomerSignInExecutor implements SignUpActionExecutor {
 
     private final CartInSession cartInSession;
 
     @Inject
-    protected DefaultSignUpExecutor(final SphereClient sphereClient, final HookRunner hookRunner, final CartInSession cartInSession) {
+    protected DefaultSignUpActionExecutor(final SphereClient sphereClient, final HookRunner hookRunner, final CartInSession cartInSession) {
         super(sphereClient, hookRunner);
         this.cartInSession = cartInSession;
     }

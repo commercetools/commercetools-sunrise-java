@@ -15,7 +15,7 @@ public final class PaginationSettings extends FormSettings<Integer> {
     private static final String DEFAULT_KEY = "page";
 
     @Inject
-    public PaginationSettings(final Configuration configuration) {
+    PaginationSettings(final Configuration configuration) {
         super(configuration.getString(CONFIG_KEY, DEFAULT_KEY), DEFAULT_PAGE);
     }
 

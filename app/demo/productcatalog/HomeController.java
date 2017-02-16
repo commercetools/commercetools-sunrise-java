@@ -32,6 +32,11 @@ public final class HomeController extends SunriseHomeController {
         registerControllerComponent(component);
     }
 
+    @Override
+    public String getCmsPageKey() {
+        return "home";
+    }
+
     public CompletionStage<Result> index() {
         return redirectTo(homeReverseRouter.homePageCall());
     }

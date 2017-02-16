@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.Configuration;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.Optional;
 
 public final class BasicAuthenticationProvider implements Provider<HttpAuthentication> {
 
@@ -16,20 +16,30 @@ public final class BasicAuthenticationProvider implements Provider<HttpAuthentic
     private static final String CONFIG_REALM = "httpAuth.basic.realm";
     private static final String CONFIG_CREDENTIALS = "httpAuth.basic.credentials";
     private static final String REGEX_CREDENTIALS = "^[^ :]+:[^ :]+$";
+
+    @Nullable
+    private final String credentials;
+    private final String realm;
+
     @Inject
-    private Configuration configuration;
+    public BasicAuthenticationProvider(final Configuration configuration) {
+        final String credentials = configuration.getString(CONFIG_CREDENTIALS, "");
+        this.credentials = credentials.isEmpty() ? null : credentials;
+        this.realm = configuration.getString(CONFIG_REALM, "Sunrise Authentication");
+    }
 
     @Override
     public HttpAuthentication get() {
-        return findCredentials()
-                .map(this::enabledBasicHttpAuth)
-                .orElseGet(this::disabledBasicHttpAuth);
+        if (credentials != null) {
+            return enabledBasicHttpAuth(credentials);
+        } else {
+            return disabledBasicHttpAuth();
+        }
     }
 
     private BasicHttpAuthentication enabledBasicHttpAuth(final String credentials) {
         if (credentials.matches(REGEX_CREDENTIALS)) {
-            final String realm = realm();
-            logger.info("Basic authentication: enabled for realm \"{}\"", realm);
+            logger.debug("Basic authentication enabled for realm \"{}\"", realm);
             return new BasicHttpAuthentication(realm, credentials);
         } else {
             throw new SunriseConfigurationException("Basic access authentication credentials must be of the form"
@@ -38,16 +48,7 @@ public final class BasicAuthenticationProvider implements Provider<HttpAuthentic
     }
 
     private BasicHttpAuthentication disabledBasicHttpAuth() {
-        logger.info("Basic authentication: disabled");
+        logger.info("Basic authentication disabled");
         return new BasicHttpAuthentication();
-    }
-
-    private Optional<String> findCredentials() {
-        return Optional.ofNullable(configuration.getString(CONFIG_CREDENTIALS))
-                .filter(credentials -> credentials != null && !credentials.isEmpty());
-    }
-
-    private String realm() {
-        return configuration.getString(CONFIG_REALM, "Sunrise Authentication");
     }
 }

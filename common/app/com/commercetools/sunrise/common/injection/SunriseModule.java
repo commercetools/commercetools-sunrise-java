@@ -1,11 +1,9 @@
 package com.commercetools.sunrise.common.injection;
 
-import com.commercetools.sunrise.common.contexts.RequestScope;
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.ctp.SphereAccessTokenSupplierProvider;
 import com.commercetools.sunrise.common.ctp.SphereClientConfigProvider;
 import com.commercetools.sunrise.common.ctp.SphereClientProvider;
-import com.commercetools.sunrise.common.pages.RoutesMultiControllerComponentResolverProvider;
+import com.commercetools.sunrise.framework.RoutesMultiControllerComponentResolverProvider;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;

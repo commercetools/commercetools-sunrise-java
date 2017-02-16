@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public final class HandlebarsTemplateEngine implements TemplateEngine {
 
-    private static final Logger logger = LoggerFactory.getLogger(HandlebarsTemplateEngine.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateEngine.class);
     private final Handlebars handlebars;
     private final HandlebarsContextFactory contextFactory;
 
@@ -28,7 +28,7 @@ public final class HandlebarsTemplateEngine implements TemplateEngine {
         final Template template = compileTemplate(templateName);
         final Context context = contextFactory.create(handlebars, templateName, templateContext);
         try {
-            logger.debug("Rendering template " + templateName);
+            LOGGER.debug("Rendering template " + templateName);
             return template.apply(context);
         } catch (IOException e) {
             throw new TemplateRenderException("Context could not be applied to template " + templateName, e);

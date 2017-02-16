@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.myaccount;
 
+import com.commercetools.sunrise.common.sessions.customers.CustomerInSession;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.hooks.events.CustomerLoadedHook;
 import io.sphere.sdk.client.SphereClient;

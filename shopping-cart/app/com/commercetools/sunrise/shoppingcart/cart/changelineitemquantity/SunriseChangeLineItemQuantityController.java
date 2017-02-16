@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
-import com.commercetools.sunrise.common.controllers.SunriseFormController;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(ChangeLineItemQuantityThemeLinksControllerComponent.class)
-public abstract class SunriseChangeLineItemQuantityController<F extends ChangeLineItemQuantityFormData> extends SunriseFormController implements WithFormFlow<F, Cart, Cart>, WithRequiredCart {
+public abstract class SunriseChangeLineItemQuantityController<F extends ChangeLineItemQuantityFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Cart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
     private final CartDetailPageContentFactory cartDetailPageContentFactory;

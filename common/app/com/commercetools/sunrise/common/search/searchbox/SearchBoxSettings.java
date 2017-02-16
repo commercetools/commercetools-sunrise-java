@@ -13,7 +13,7 @@ public final class SearchBoxSettings extends FormSettings<String> {
     private static final String DEFAULT_KEY = "q";
 
     @Inject
-    public SearchBoxSettings(final Configuration configuration) {
+    SearchBoxSettings(final Configuration configuration) {
         super(configuration.getString(CONFIG_KEY, DEFAULT_KEY), "");
     }
 

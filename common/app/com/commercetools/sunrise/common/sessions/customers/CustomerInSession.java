@@ -1,9 +1,8 @@
-package com.commercetools.sunrise.myaccount;
+package com.commercetools.sunrise.common.sessions.customers;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.common.sessions.ObjectStoringSessionStrategy;
-import com.google.inject.Injector;
 import io.sphere.sdk.customers.Customer;
 import play.Configuration;
 
@@ -20,19 +19,24 @@ public class CustomerInSession extends DataFromResourceStoringOperations<Custome
     private static final String DEFAULT_CUSTOMER_ID_SESSION_KEY = "sunrise-customer-id";
     private static final String DEFAULT_CUSTOMER_EMAIL_SESSION_KEY = "sunrise-customer-email";
     private static final String DEFAULT_USER_INFO_SESSION_KEY = "sunrise-user-info";
+
     private final String customerIdSessionKey;
     private final String customerEmailSessionKey;
     private final String userInfoSessionKey;
     private final ObjectStoringSessionStrategy session;
-    @Inject
-    private Injector injector;
+    private final UserInfoBeanFactory userInfoBeanFactory;
 
     @Inject
-    public CustomerInSession(final ObjectStoringSessionStrategy session, final Configuration configuration) {
+    public CustomerInSession(final Configuration configuration, final ObjectStoringSessionStrategy session, final UserInfoBeanFactory userInfoBeanFactory) {
         this.customerIdSessionKey = configuration.getString("session.customer.customerId", DEFAULT_CUSTOMER_ID_SESSION_KEY);
         this.customerEmailSessionKey = configuration.getString("session.customer.customerEmail", DEFAULT_CUSTOMER_EMAIL_SESSION_KEY);
         this.userInfoSessionKey = configuration.getString("session.customer.userInfo", DEFAULT_USER_INFO_SESSION_KEY);
         this.session = session;
+        this.userInfoBeanFactory = userInfoBeanFactory;
+    }
+
+    protected final ObjectStoringSessionStrategy getSession() {
+        return session;
     }
 
     public Optional<String> findCustomerId() {
@@ -59,7 +63,7 @@ public class CustomerInSession extends DataFromResourceStoringOperations<Custome
 
     @Override
     protected void storeAssociatedData(final Customer customer) {
-        session.overwriteObjectByKey(userInfoSessionKey, createUserInfo(customer));
+        session.overwriteObjectByKey(userInfoSessionKey, userInfoBeanFactory.create(customer));
         session.overwriteValueByKey(customerIdSessionKey, customer.getId());
         session.overwriteValueByKey(customerEmailSessionKey, customer.getEmail());
     }
@@ -69,9 +73,5 @@ public class CustomerInSession extends DataFromResourceStoringOperations<Custome
         session.removeObjectByKey(userInfoSessionKey);
         session.removeValueByKey(customerIdSessionKey);
         session.removeValueByKey(customerEmailSessionKey);
-    }
-
-    protected UserInfoBean createUserInfo(final Customer customer) {
-        return injector.getInstance(UserInfoBeanFactory.class).create(customer);
     }
 }

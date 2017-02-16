@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.controllers;
 
-import com.commercetools.sunrise.common.pages.ParsedRoutes;
+import com.commercetools.sunrise.framework.ParsedRouteList;
 import com.commercetools.sunrise.common.reverserouter.ReflectionReverseCaller;
 import com.commercetools.sunrise.common.reverserouter.ReverseCaller;
 import io.sphere.sdk.models.Base;
@@ -20,25 +20,33 @@ final class ReflectionWebJarAssetsReverseRouter extends Base implements WebJarAs
     private final ReverseCaller reverseCaller;
 
     @Inject
-    public ReflectionWebJarAssetsReverseRouter(final ParsedRoutes parsedRoutes) {
-        final boolean routeIsPresent = parsedRoutes.getRoutes().stream()
-                .filter(p -> "controllers.WebJarAssets.at(file:String)".equals(p.getRouteDocumentation().getControllerMethodInvocation()))
-                .findFirst()
-                .map(p -> p).isPresent();
-        if (routeIsPresent) {
+    ReflectionWebJarAssetsReverseRouter(final ParsedRouteList parsedRouteList) {
+        if (isWebJarsRoutePresent(parsedRouteList)) {
             try {
-                final Class<?> routesClass = getClassByName("controllers.routes");
-                final Class<?> reverseControllerClass = getClassByName("controllers.ReverseWebJarAssets");
-                final Field field = routesClass.getField("WebJarAssets");
-                final Object o = field.get(null);
-                final Method reverseRouteMethod = reverseControllerClass.getMethod("at", new Class<?>[]{String.class});
-                reverseCaller = new ReflectionReverseCaller(reverseRouteMethod, o);
+                final Method reverseRouteMethod = getMethod();
+                final Object object = getField().get(null);
+                this.reverseCaller = ReflectionReverseCaller.of(reverseRouteMethod, object);
             } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException | NoSuchMethodException e) {
                 throw new CompletionException(e);
             }
         } else {
             throw new CompletionException(new RuntimeException("missing WebJarAssets controller in routes"));
         }
+    }
+
+    private static boolean isWebJarsRoutePresent(final ParsedRouteList parsedRouteList) {
+        return parsedRouteList.getRoutes().stream()
+                .anyMatch(p -> "controllers.WebJarAssets.at(file:String)".equals(p.getRouteDocumentation().getControllerMethodInvocation()));
+    }
+
+    private static Method getMethod() throws ClassNotFoundException, NoSuchMethodException {
+        final Class<?> reverseControllerClass = getClassByName("controllers.ReverseWebJarAssets");
+        return reverseControllerClass.getMethod("at", String.class);
+    }
+
+    private static Field getField() throws ClassNotFoundException, NoSuchFieldException {
+        final Class<?> routesClass = getClassByName("controllers.routes");
+        return routesClass.getField("WebJarAssets");
     }
 
     @Override

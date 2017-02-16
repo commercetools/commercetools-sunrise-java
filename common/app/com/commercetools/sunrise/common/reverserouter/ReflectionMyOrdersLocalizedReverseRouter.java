@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Call;
 

@@ -11,18 +11,18 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-final class ProductVariantFinderBySlug implements ProductVariantFinder {
+final class ProductVariantFinderBySku implements ProductVariantFinder {
 
     private final HookRunner hookRunner;
 
     @Inject
-    ProductVariantFinderBySlug(final HookRunner hookRunner) {
+    ProductVariantFinderBySku(final HookRunner hookRunner) {
         this.hookRunner = hookRunner;
     }
 
     @Override
-    public CompletionStage<Optional<ProductVariant>> apply(final ProductProjection product, final String identifier) {
-        final Optional<ProductVariant> variantOpt = product.findVariantBySku(identifier);
+    public CompletionStage<Optional<ProductVariant>> apply(final ProductProjection product, final String sku) {
+        final Optional<ProductVariant> variantOpt = product.findVariantBySku(sku);
         variantOpt.ifPresent(variant -> ProductVariantLoadedHook.runHook(hookRunner, product, variant));
         return completedFuture(variantOpt);
     }

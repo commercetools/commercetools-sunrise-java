@@ -1,7 +1,11 @@
-package com.commercetools.sunrise.shoppingcart;
+package com.commercetools.sunrise.common.sessions.carts;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
+import com.commercetools.sunrise.shoppingcart.LineItemBean;
+import com.commercetools.sunrise.shoppingcart.LineItemBeanFactory;
+import com.commercetools.sunrise.shoppingcart.MiniCartBean;
+import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
 import io.sphere.sdk.carts.Cart;
 
 import javax.annotation.Nullable;
@@ -14,25 +18,17 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class TruncatedMiniCartBeanFactory extends MiniCartBeanFactory {
 
-    @Nullable
-    private Integer lineItemsLimit;
+    private static final int LINE_ITEMS_LIMIT = 5;
 
     @Inject
     public TruncatedMiniCartBeanFactory(final CurrencyUnit currency, final PriceFormatter priceFormatter, final LineItemBeanFactory lineItemBeanFactory) {
         super(currency, priceFormatter, lineItemBeanFactory);
     }
 
-    public final MiniCartBean create(@Nullable final Cart cart, final int lineItemsLimit) {
-        this.lineItemsLimit = lineItemsLimit;
-        return super.create(cart);
-    }
-
     @Override
     protected void fillLineItems(final MiniCartBean bean, @Nullable final Cart cart) {
         super.fillLineItems(bean, cart);
-        if (lineItemsLimit != null) {
-            bean.getLineItems().setList(truncateLineItems(bean.getLineItems().getList(), lineItemsLimit));
-        }
+        bean.getLineItems().setList(truncateLineItems(bean.getLineItems().getList(), LINE_ITEMS_LIMIT));
     }
 
     /**

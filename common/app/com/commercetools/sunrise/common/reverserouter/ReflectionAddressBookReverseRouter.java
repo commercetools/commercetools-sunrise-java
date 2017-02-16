@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.pages.ParsedRoutes;
+import com.commercetools.sunrise.framework.ParsedRouteList;
 import play.mvc.Call;
 
 import javax.inject.Inject;
@@ -17,13 +17,13 @@ final class ReflectionAddressBookReverseRouter extends AbstractReflectionReverse
     private final ReverseCaller removeAddressFromAddressBookProcessFormCaller;
 
     @Inject
-    private ReflectionAddressBookReverseRouter(final ParsedRoutes parsedRoutes) {
-        addressBookCaller = getCallerForRoute(parsedRoutes, "addressBookCall");
-        addAddressToAddressBookCaller = getCallerForRoute(parsedRoutes, "addAddressToAddressBookCall");
-        addAddressToAddressBookProcessFormCaller = getCallerForRoute(parsedRoutes, "addAddressToAddressBookProcessFormCall");
-        changeAddressInAddressBookCaller = getCallerForRoute(parsedRoutes, "changeAddressInAddressBookCall");
-        changeAddressInAddressBookProcessFormCaller = getCallerForRoute(parsedRoutes, "changeAddressInAddressBookProcessFormCall");
-        removeAddressFromAddressBookProcessFormCaller = getCallerForRoute(parsedRoutes, "removeAddressFromAddressBookProcessFormCall");
+    private ReflectionAddressBookReverseRouter(final ParsedRouteList parsedRouteList) {
+        addressBookCaller = getCallerForRoute(parsedRouteList, "addressBookCall");
+        addAddressToAddressBookCaller = getCallerForRoute(parsedRouteList, "addAddressToAddressBookCall");
+        addAddressToAddressBookProcessFormCaller = getCallerForRoute(parsedRouteList, "addAddressToAddressBookProcessFormCall");
+        changeAddressInAddressBookCaller = getCallerForRoute(parsedRouteList, "changeAddressInAddressBookCall");
+        changeAddressInAddressBookProcessFormCaller = getCallerForRoute(parsedRouteList, "changeAddressInAddressBookProcessFormCall");
+        removeAddressFromAddressBookProcessFormCaller = getCallerForRoute(parsedRouteList, "removeAddressFromAddressBookProcessFormCall");
     }
 
     @Override

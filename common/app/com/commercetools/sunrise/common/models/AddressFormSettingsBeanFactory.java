@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.forms.CountryFormFieldBeanFactory;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;
 import play.Configuration;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;

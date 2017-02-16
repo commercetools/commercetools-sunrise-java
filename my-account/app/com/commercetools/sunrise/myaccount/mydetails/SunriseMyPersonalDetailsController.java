@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import com.commercetools.sunrise.common.controllers.SunriseFormController;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Collections.singletonList;
 
 @IntroducingMultiControllerComponents(MyPersonalDetailsThemeLinksControllerComponent.class)
-public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseFormController implements WithFormFlow<F, Customer, Customer>, WithRequiredCustomer {
+public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final MyPersonalDetailsExecutor myPersonalDetailsExecutor;

@@ -1,10 +1,9 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
-import com.commercetools.sunrise.common.models.CommonViewModelFactory;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.myaccount.CustomerInSession;
+import com.commercetools.sunrise.common.sessions.customers.CustomerInSession;
 import play.filters.csrf.CSRF;
 import play.mvc.Call;
 import play.mvc.Http;
@@ -14,8 +13,7 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 
-@RequestScoped
-public class PageMetaFactory extends CommonViewModelFactory<PageMeta> {
+public class PageMetaFactory extends ViewModelFactory<PageMeta, PageContent> {
 
     private final Http.Context httpContext;
     private final CustomerInSession customerInSession;
@@ -31,54 +29,54 @@ public class PageMetaFactory extends CommonViewModelFactory<PageMeta> {
         this.webJarAssetsReverseRouter = webJarAssetsReverseRouter;
     }
 
-    public final PageMeta create() {
-        return initializedViewModel();
-    }
-
     @Override
     protected PageMeta getViewModelInstance() {
         return new PageMeta();
     }
 
-    @Override
-    protected final void initialize(final PageMeta model) {
-        fillUserInfo(model);
-        fillAssetsPath(model);
-        fillBagQuantityOptions(model);
-        fillCsrfToken(model);
-        fillHomePageUrl(model);
-        fillSelfPageUrl(model);
+    public final PageMeta create(final PageContent content) {
+        return initializedViewModel(content);
     }
 
-    protected void fillCsrfToken(final PageMeta bean) {
+    @Override
+    protected final void initialize(final PageMeta model, final PageContent content) {
+        fillUserInfo(model, content);
+        fillAssetsPath(model, content);
+        fillBagQuantityOptions(model, content);
+        fillCsrfToken(model, content);
+        fillHomePageUrl(model, content);
+        fillSelfPageUrl(model, content);
+    }
+
+    protected void fillCsrfToken(final PageMeta model, final PageContent content) {
         CSRF.getToken(httpContext.request())
                 .map(CSRF.Token::value)
-                .ifPresent(bean::setCsrfToken);
+                .ifPresent(model::setCsrfToken);
     }
 
-    protected void fillBagQuantityOptions(final PageMeta bean) {
-        bean.setBagQuantityOptions(IntStream
+    protected void fillBagQuantityOptions(final PageMeta model, final PageContent content) {
+        model.setBagQuantityOptions(IntStream
                 .rangeClosed(1, 9)
                 .boxed()
                 .collect(toList()));
     }
 
-    protected void fillUserInfo(final PageMeta bean) {
+    protected void fillUserInfo(final PageMeta model, final PageContent content) {
         customerInSession.findUserInfo()
-                .ifPresent(bean::setUser);
+                .ifPresent(model::setUser);
     }
 
-    protected void fillAssetsPath(final PageMeta bean) {
+    protected void fillAssetsPath(final PageMeta model, final PageContent content) {
         final Call call = webJarAssetsReverseRouter.webJarAssetsCall("");
-        bean.setAssetsPath(call.url());
+        model.setAssetsPath(call.url());
     }
 
-    protected void fillHomePageUrl(final PageMeta bean) {
+    protected void fillHomePageUrl(final PageMeta model, final PageContent content) {
         final Call call = homeReverseRouter.homePageCall();
-        bean.addHalLink(call, "home", "continueShopping");
+        model.addHalLink(call, "home", "continueShopping");
     }
 
-    protected void fillSelfPageUrl(final PageMeta bean) {
-        bean.addHalLinkOfHrefAndRel(httpContext.request().uri(), "self");
+    protected void fillSelfPageUrl(final PageMeta model, final PageContent content) {
+        model.addHalLinkOfHrefAndRel(httpContext.request().uri(), "self");
     }
 }

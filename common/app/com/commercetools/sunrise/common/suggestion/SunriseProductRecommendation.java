@@ -27,12 +27,16 @@ import static java.util.stream.Collectors.toSet;
  */
 public class SunriseProductRecommendation implements ProductRecommendation {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SunriseProductRecommendation.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductRecommendation.class);
+
+    private final SphereClient sphereClient;
+    private final PriceSelection priceSelection;
 
     @Inject
-    private SphereClient sphereClient;
-    @Inject
-    private PriceSelection priceSelection;
+    protected SunriseProductRecommendation(final SphereClient sphereClient, final PriceSelection priceSelection) {
+        this.sphereClient = sphereClient;
+        this.priceSelection = priceSelection;
+    }
 
     /**
      * Gets products from the same categories as the given product, excluding the product itself, up to {@code numProducts}.

@@ -6,9 +6,9 @@ import io.sphere.sdk.customers.CustomerSignInResult;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-@ImplementedBy(DefaultSignUpExecutor.class)
+@ImplementedBy(DefaultSignUpActionExecutor.class)
 @FunctionalInterface
-public interface SignUpExecutor extends Function<SignUpFormData, CompletionStage<CustomerSignInResult>> {
+public interface SignUpActionExecutor extends Function<SignUpFormData, CompletionStage<CustomerSignInResult>> {
 
     @Override
     CompletionStage<CustomerSignInResult> apply(final SignUpFormData formData);

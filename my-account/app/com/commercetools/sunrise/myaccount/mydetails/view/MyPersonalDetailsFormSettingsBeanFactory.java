@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.mydetails.view;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.forms.TitleFormFieldBeanFactory;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;

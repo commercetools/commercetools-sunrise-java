@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.pages.ParsedRoutes;
+import com.commercetools.sunrise.framework.ParsedRouteList;
 import play.mvc.Call;
 
 import javax.inject.Inject;
@@ -15,11 +15,11 @@ final class ReflectionAuthenticationReverseRouter extends AbstractReflectionReve
     private final ReverseCaller processLogOut;
 
     @Inject
-    private ReflectionAuthenticationReverseRouter(final ParsedRoutes parsedRoutes) {
-        showLogInForm = getCallerForRoute(parsedRoutes, "showLogInForm");
-        processLogInForm = getCallerForRoute(parsedRoutes, "processLogInForm");
-        processSignUpForm = getCallerForRoute(parsedRoutes, "processSignUpForm");
-        processLogOut = getCallerForRoute(parsedRoutes, "processLogOut");
+    private ReflectionAuthenticationReverseRouter(final ParsedRouteList parsedRouteList) {
+        showLogInForm = getCallerForRoute(parsedRouteList, "showLogInForm");
+        processLogInForm = getCallerForRoute(parsedRouteList, "processLogInForm");
+        processSignUpForm = getCallerForRoute(parsedRouteList, "processSignUpForm");
+        processLogOut = getCallerForRoute(parsedRouteList, "processLogOut");
     }
 
     @Override

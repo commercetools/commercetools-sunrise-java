@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
-import com.commercetools.sunrise.common.controllers.SunriseFormController;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(LogInThemeLinksControllerComponent.class)
-public abstract class SunriseLogInController<F extends LogInFormData> extends SunriseFormController implements WithFormFlow<F, Void, CustomerSignInResult> {
+public abstract class SunriseLogInController<F extends LogInFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Void, CustomerSignInResult> {
 
     private final LogInExecutor logInExecutor;
     private final LogInPageContentFactory logInPageContentFactory;

@@ -21,16 +21,16 @@ import static play.mvc.Results.unauthorized;
 /**
  * Request filter that enables HTTP Access Authentication.
  */
-public class HttpAuthenticationFilter extends Filter {
+public final class HttpAuthenticationFilter extends Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpAuthenticationFilter.class);
 
-    @Inject
-    private HttpAuthentication httpAuthentication;
+    private final HttpAuthentication httpAuthentication;
 
     @Inject
-    public HttpAuthenticationFilter(final Materializer mat) {
+    public HttpAuthenticationFilter(final Materializer mat, final HttpAuthentication httpAuthentication) {
         super(mat);
+        this.httpAuthentication = httpAuthentication;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class HttpAuthenticationFilter extends Filter {
 
     private CompletionStage<Result> successfulAuthentication(final Function<Http.RequestHeader, CompletionStage<Result>> nextFilter,
                                                              final Http.RequestHeader requestHeader) {
-        logger.trace("Authorized");
+        logger.debug("Authorized");
         return nextFilter.apply(requestHeader);
     }
 
@@ -69,12 +69,11 @@ public class HttpAuthenticationFilter extends Filter {
     }
 
     private CompletableFuture<Result> failedAuthentication() {
-        logger.info("Failed authentication");
+        logger.debug("Failed authentication");
         return completedFuture(unauthorized("Unauthorized"));
     }
 
     private Optional<String> findAuthorizationHeader(final Http.RequestHeader requestHeader) {
         return Optional.ofNullable(requestHeader.getHeader(AUTHORIZATION));
     }
-
 }

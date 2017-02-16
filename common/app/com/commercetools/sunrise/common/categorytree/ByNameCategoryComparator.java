@@ -9,12 +9,12 @@ public final class ByNameCategoryComparator implements CategoryComparator {
 
     private final Locale locale;
 
-    public ByNameCategoryComparator(Locale locale) {
+    public ByNameCategoryComparator(final Locale locale) {
         this.locale = locale;
     }
 
     @Override
-    public int compare(Category c1, Category c2) {
+    public int compare(final Category c1, final Category c2) {
         return localizedName(c1).orElse("").compareTo(localizedName(c2).orElse(""));
     }
 

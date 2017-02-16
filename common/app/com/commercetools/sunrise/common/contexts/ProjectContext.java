@@ -6,6 +6,7 @@ import com.neovisionaries.i18n.CountryCode;
 import javax.money.CurrencyUnit;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * A container for all information related to the project, such as supported countries, languages or currencies.
@@ -33,21 +34,21 @@ public interface ProjectContext {
 
     default Locale defaultLocale() {
         return locales().stream()
-                .filter(locale -> locale != null)
+                .filter(Objects::nonNull)
                 .findFirst()
                 .orElseThrow(() -> new NoLocaleFoundException("Project does not have any valid locale associated"));
     }
 
     default CountryCode defaultCountry() {
         return countries().stream()
-                .filter(country -> country != null)
+                .filter(Objects::nonNull)
                 .findFirst()
                 .orElseThrow(() -> new NoCountryFoundException("Project does not have any valid country code associated"));
     }
 
     default CurrencyUnit defaultCurrency() {
         return currencies().stream()
-                .filter(country -> country != null)
+                .filter(Objects::nonNull)
                 .findFirst()
                 .orElseThrow(() -> new NoCurrencyFoundException("Project does not have any valid currency unit associated"));
     }

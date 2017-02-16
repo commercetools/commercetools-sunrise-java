@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.pages.ParsedRoutes;
+import com.commercetools.sunrise.framework.ParsedRouteList;
 import play.mvc.Call;
 
 import javax.inject.Inject;
@@ -20,16 +20,16 @@ final class ReflectionCheckoutReverseRouter extends AbstractReflectionReverseRou
     private final ReverseCaller checkoutThankYouPageCaller;
 
     @Inject
-    private ReflectionCheckoutReverseRouter(final ParsedRoutes parsedRoutes) {
-        checkoutAddressesPageCaller = getCallerForRoute(parsedRoutes, "checkoutAddressesPageCall");
-        checkoutAddressesProcessFormCaller = getCallerForRoute(parsedRoutes, "checkoutAddressesProcessFormCall");
-        checkoutShippingPageCaller = getCallerForRoute(parsedRoutes, "checkoutShippingPageCall");
-        checkoutShippingProcessFormCaller = getCallerForRoute(parsedRoutes, "checkoutShippingProcessFormCall");
-        checkoutPaymentPageCaller = getCallerForRoute(parsedRoutes, "checkoutPaymentPageCall");
-        checkoutPaymentProcessFormCaller = getCallerForRoute(parsedRoutes, "checkoutPaymentProcessFormCall");
-        checkoutConfirmationPageCaller = getCallerForRoute(parsedRoutes, "checkoutConfirmationPageCall");
-        checkoutConfirmationProcessFormCaller = getCallerForRoute(parsedRoutes, "checkoutConfirmationProcessFormCall");
-        checkoutThankYouPageCaller = getCallerForRoute(parsedRoutes, "checkoutThankYouPageCall");
+    private ReflectionCheckoutReverseRouter(final ParsedRouteList parsedRouteList) {
+        checkoutAddressesPageCaller = getCallerForRoute(parsedRouteList, "checkoutAddressesPageCall");
+        checkoutAddressesProcessFormCaller = getCallerForRoute(parsedRouteList, "checkoutAddressesProcessFormCall");
+        checkoutShippingPageCaller = getCallerForRoute(parsedRouteList, "checkoutShippingPageCall");
+        checkoutShippingProcessFormCaller = getCallerForRoute(parsedRouteList, "checkoutShippingProcessFormCall");
+        checkoutPaymentPageCaller = getCallerForRoute(parsedRouteList, "checkoutPaymentPageCall");
+        checkoutPaymentProcessFormCaller = getCallerForRoute(parsedRouteList, "checkoutPaymentProcessFormCall");
+        checkoutConfirmationPageCaller = getCallerForRoute(parsedRouteList, "checkoutConfirmationPageCall");
+        checkoutConfirmationProcessFormCaller = getCallerForRoute(parsedRouteList, "checkoutConfirmationProcessFormCall");
+        checkoutThankYouPageCaller = getCallerForRoute(parsedRouteList, "checkoutThankYouPageCall");
     }
 
     @Override

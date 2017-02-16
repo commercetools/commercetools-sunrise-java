@@ -1,6 +1,6 @@
-package com.commercetools.sunrise.shoppingcart;
+package com.commercetools.sunrise.common.sessions.orders;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.common.sessions.SessionStrategy;
 import io.sphere.sdk.orders.Order;
@@ -17,13 +17,18 @@ import java.util.Optional;
 public class OrderInSession extends DataFromResourceStoringOperations<Order> {
 
     private static final String DEFAULT_LAST_ORDER_ID_SESSION_KEY = "sunrise-last-order-id";
+
     private final String lastOrderIdSessionKey;
-    protected final SessionStrategy session;
+    private final SessionStrategy session;
 
     @Inject
     public OrderInSession(final SessionStrategy session, final Configuration configuration) {
         this.lastOrderIdSessionKey = configuration.getString("session.order.lastOrderId", DEFAULT_LAST_ORDER_ID_SESSION_KEY);
         this.session = session;
+    }
+
+    protected final SessionStrategy getSession() {
+        return session;
     }
 
     public Optional<String> findLastOrderId() {

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.common.utils.ProductPriceUtils;
@@ -32,7 +32,7 @@ public class ProductVariantBeanFactory extends AbstractProductVariantBeanFactory
 
     @Override
     protected void fillSku(final ProductVariantBean model, final ProductWithVariant productWithVariant) {
-        model.setSku(createSku(productWithVariant.getVariant()));
+        model.setSku(findSku(productWithVariant.getVariant()));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ProductVariantBeanFactory extends AbstractProductVariantBeanFactory
 
     @Override
     protected void fillImage(final ProductVariantBean model, final ProductWithVariant productWithVariant) {
-        createImageUrl(productWithVariant.getVariant()).ifPresent(model::setImage);
+        findImageUrl(productWithVariant.getVariant()).ifPresent(model::setImage);
     }
 
     @Override

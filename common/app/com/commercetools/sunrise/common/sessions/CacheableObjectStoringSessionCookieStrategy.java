@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.sessions;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import play.Configuration;
 import play.cache.CacheApi;
 import play.mvc.Http;
@@ -15,7 +15,7 @@ import java.util.UUID;
  * For more information: <a href="https://www.playframework.com/documentation/2.5.x/JavaSessionFlash">Session in Play Framework</a>
  */
 @RequestScoped
-public class CacheableObjectStoringSessionCookieStrategy extends SessionCookieStrategy implements ObjectStoringSessionStrategy {
+public final class CacheableObjectStoringSessionCookieStrategy extends SessionCookieStrategy implements ObjectStoringSessionStrategy {
 
     private static final String DEFAULT_SESSION_ID_KEY = "sunrise-session-id";
     private final String sessionIdKey;

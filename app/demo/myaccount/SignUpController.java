@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRo
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.hooks.RequestHookContext;
 import com.commercetools.sunrise.myaccount.authentication.signup.DefaultSignUpFormData;
-import com.commercetools.sunrise.myaccount.authentication.signup.SignUpExecutor;
+import com.commercetools.sunrise.myaccount.authentication.signup.SignUpActionExecutor;
 import com.commercetools.sunrise.myaccount.authentication.signup.SunriseSignUpController;
 import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpPageContentFactory;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -24,10 +24,10 @@ public final class SignUpController extends SunriseSignUpController<DefaultSignU
     public SignUpController(final RequestHookContext hookContext,
                             final TemplateRenderer templateRenderer,
                             final FormFactory formFactory,
-                            final SignUpExecutor signUpExecutor,
+                            final SignUpActionExecutor signUpActionExecutor,
                             final SignUpPageContentFactory signUpPageContentFactory,
                             final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter) {
-        super(hookContext, templateRenderer, formFactory, signUpExecutor, signUpPageContentFactory);
+        super(hookContext, templateRenderer, formFactory, signUpActionExecutor, signUpPageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
     }
 

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.common.controllers.SunriseFormController;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
@@ -27,7 +27,7 @@ import java.util.function.Function;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(CheckoutShippingThemeLinksControllerComponent.class)
-public abstract class SunriseCheckoutShippingController<F extends CheckoutShippingFormData> extends SunriseFormController implements WithFormFlow<F, ShippingMethodsWithCart, Cart>, WithRequiredCart {
+public abstract class SunriseCheckoutShippingController<F extends CheckoutShippingFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, ShippingMethodsWithCart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
     private final CheckoutShippingExecutor checkoutShippingExecutor;

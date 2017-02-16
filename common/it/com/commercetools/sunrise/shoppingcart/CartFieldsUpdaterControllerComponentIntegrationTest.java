@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.WithSphereClient;
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -16,7 +16,7 @@ import org.junit.Test;
 import static com.commercetools.sunrise.common.TestFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CartComponentIntegrationTest extends WithSphereClient {
+public class CartFieldsUpdaterControllerComponentIntegrationTest extends WithSphereClient {
 
     private Injector injector;
 
@@ -82,7 +82,7 @@ public class CartComponentIntegrationTest extends WithSphereClient {
     }
 
     private Cart invokeUpdateCartWithMissingInfoOnSignIn(final CustomerSignInResult customerSignInResult) {
-        return injector.getInstance(CartComponent.class)
+        return injector.getInstance(CartFieldsUpdaterControllerComponent.class)
                 .updateCartWithMissingInfoOnSignIn(customerSignInResult.getCart(), customerSignInResult.getCustomer())
                 .toCompletableFuture().join();
     }

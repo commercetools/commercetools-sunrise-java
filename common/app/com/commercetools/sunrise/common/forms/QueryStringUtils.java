@@ -2,14 +2,13 @@ package com.commercetools.sunrise.common.forms;
 
 import play.mvc.Http;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.commercetools.sunrise.common.utils.ArrayUtils.arrayToList;
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toMap;
 
 public final class QueryStringUtils {
 
@@ -76,9 +75,8 @@ public final class QueryStringUtils {
      * @return query string from the request
      */
     public static Map<String, List<String>> extractQueryString(final Http.Request request) {
-        final Map<String, List<String>> queryStringWithList = new HashMap<>();
-        request.queryString().forEach((key, arrayValue) -> queryStringWithList.put(key, asList(arrayValue)));
-        return queryStringWithList;
+        return request.queryString().entrySet().stream()
+                .collect(toMap(Map.Entry::getKey, entry -> arrayToList(entry.getValue())));
     }
 
     /**

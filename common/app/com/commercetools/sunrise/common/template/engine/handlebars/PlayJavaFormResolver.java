@@ -2,12 +2,14 @@ package com.commercetools.sunrise.common.template.engine.handlebars;
 
 import com.commercetools.sunrise.common.forms.ErrorBean;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.utils.ErrorFormatter;
 import com.github.jknack.handlebars.ValueResolver;
 import play.data.Form;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.util.*;
 
 import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
@@ -15,13 +17,13 @@ import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 /**
  * Resolves the values form a {@link Form} instance.
  */
-public class PlayJavaFormResolver implements ValueResolver {
+@RequestScoped
+public final class PlayJavaFormResolver implements ValueResolver {
 
     private final ErrorFormatter errorFormatter;
-    private final List<Locale> locales;
 
-    public PlayJavaFormResolver(final List<Locale> locales, final ErrorFormatter errorFormatter) {
-        this.locales = locales;
+    @Inject
+    public PlayJavaFormResolver(final ErrorFormatter errorFormatter) {
         this.errorFormatter = errorFormatter;
     }
 
@@ -59,7 +61,7 @@ public class PlayJavaFormResolver implements ValueResolver {
         if (form != null) {
             form.errors().forEach((field, errors) ->
                     errors.forEach(error -> {
-                        final String errorMessage = errorFormatter.format(locales, error);
+                        final String errorMessage = errorFormatter.format(error);
                         errorList.add(new ErrorBean(errorMessage));
                     }));
         }

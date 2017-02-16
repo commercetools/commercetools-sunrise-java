@@ -1,4 +1,4 @@
-import com.commercetools.sunrise.common.contexts.RequestScope;
+import com.commercetools.sunrise.common.injection.RequestScope;
 import com.commercetools.sunrise.hooks.Hook;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.RequestStartedHook;

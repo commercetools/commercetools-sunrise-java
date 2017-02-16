@@ -10,12 +10,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-final class SunriseJavaBeanValueResolver implements ValueResolver {
+public final class SunriseJavaBeanValueResolver implements ValueResolver {
 
     private final ValueResolver delegate;
     private final List<Locale> locales;
 
-    SunriseJavaBeanValueResolver(final ValueResolver delegate, final List<Locale> locales) {
+    public SunriseJavaBeanValueResolver(final ValueResolver delegate, final List<Locale> locales) {
         this.delegate = delegate;
         this.locales = locales;
     }

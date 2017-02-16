@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import com.commercetools.sunrise.common.controllers.SunriseFormController;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
@@ -23,16 +23,16 @@ import java.util.concurrent.CompletionStage;
 import static java.util.Arrays.asList;
 
 @IntroducingMultiControllerComponents(SignUpThemeLinksControllerComponent.class)
-public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseFormController implements WithFormFlow<F, Void, CustomerSignInResult> {
+public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Void, CustomerSignInResult> {
 
-    private final SignUpExecutor signUpExecutor;
+    private final SignUpActionExecutor signUpActionExecutor;
     private final SignUpPageContentFactory signUpPageContentFactory;
 
     protected SunriseSignUpController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
-                                      final FormFactory formFactory, final SignUpExecutor signUpExecutor,
+                                      final FormFactory formFactory, final SignUpActionExecutor signUpActionExecutor,
                                       final SignUpPageContentFactory signUpPageContentFactory) {
         super(hookContext, templateRenderer, formFactory);
-        this.signUpExecutor = signUpExecutor;
+        this.signUpActionExecutor = signUpActionExecutor;
         this.signUpPageContentFactory = signUpPageContentFactory;
     }
 
@@ -57,7 +57,7 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
 
     @Override
     public CompletionStage<CustomerSignInResult> executeAction(final Void input, final F formData) {
-        return signUpExecutor.apply(formData);
+        return signUpActionExecutor.apply(formData);
     }
 
     @Override

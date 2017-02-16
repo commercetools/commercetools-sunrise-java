@@ -37,11 +37,11 @@ abstract class AbstractProductVariantBeanFactory<D> extends ViewModelFactory<Pro
 
     protected abstract void fillPriceOld(final ProductVariantBean model, final D data);
 
-    protected String createSku(final ProductVariant variant) {
+    protected String findSku(final ProductVariant variant) {
         return variant.getSku();
     }
 
-    protected Optional<String> createImageUrl(final ProductVariant variant) {
+    protected Optional<String> findImageUrl(final ProductVariant variant) {
         return variant.getImages().stream()
                 .findFirst()
                 .map(Image::getUrl);

@@ -13,14 +13,17 @@ import javax.inject.Inject;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class SphereAccessTokenSupplierProvider implements Provider<SphereAccessTokenSupplier> {
-    private static final Logger logger = LoggerFactory.getLogger(SphereAccessTokenSupplierProvider.class);
+
+    private final ApplicationLifecycle applicationLifecycle;
+    private final SphereClientConfig sphereClientConfig;
+    private final HttpClient httpClient;
 
     @Inject
-    private ApplicationLifecycle applicationLifecycle;
-    @Inject
-    private SphereClientConfig sphereClientConfig;
-    @Inject
-    private HttpClient httpClient;
+    public SphereAccessTokenSupplierProvider(final ApplicationLifecycle applicationLifecycle, final SphereClientConfig sphereClientConfig, final HttpClient httpClient) {
+        this.applicationLifecycle = applicationLifecycle;
+        this.sphereClientConfig = sphereClientConfig;
+        this.httpClient = httpClient;
+    }
 
     @Override
     public SphereAccessTokenSupplier get() {

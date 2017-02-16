@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.common.localization;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.forms.CountryFormSelectableOptionBean;
 import com.commercetools.sunrise.common.forms.CountryFormSelectableOptionBeanFactory;
-import com.commercetools.sunrise.common.models.CommonViewModelFactory;
+import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.neovisionaries.i18n.CountryCode;
 
 import javax.inject.Inject;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 @RequestScoped
-public class LocalizationSelectorBeanFactory extends CommonViewModelFactory<LocalizationSelectorBean> {
+public class LocalizationSelectorBeanFactory extends ViewModelFactory<LocalizationSelectorBean, Void> {
 
     private final Locale locale;
     private final CountryCode country;
@@ -38,12 +38,12 @@ public class LocalizationSelectorBeanFactory extends CommonViewModelFactory<Loca
     }
 
     @Override
-    public final LocalizationSelectorBean create() {
-        return super.create();
+    public final LocalizationSelectorBean create(final Void data) {
+        return super.create(data);
     }
 
     @Override
-    protected final void initialize(final LocalizationSelectorBean model) {
+    protected final void initialize(final LocalizationSelectorBean model, final Void data) {
         fillCountry(model);
         fillLanguage(model);
     }

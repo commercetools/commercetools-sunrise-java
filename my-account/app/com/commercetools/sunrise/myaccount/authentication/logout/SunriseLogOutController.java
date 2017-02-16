@@ -4,8 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseController;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.RequestHookContext;
-import com.commercetools.sunrise.myaccount.CustomerInSession;
-import com.commercetools.sunrise.shoppingcart.CartInSession;
+import com.commercetools.sunrise.common.sessions.customers.CustomerInSession;
+import com.commercetools.sunrise.common.sessions.carts.CartInSession;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 

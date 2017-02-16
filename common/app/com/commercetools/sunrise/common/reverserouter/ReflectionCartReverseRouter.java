@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.pages.ParsedRoutes;
+import com.commercetools.sunrise.framework.ParsedRouteList;
 import play.mvc.Call;
 
 import javax.inject.Inject;
@@ -15,11 +15,11 @@ final class ReflectionCartReverseRouter extends AbstractReflectionReverseRouter 
     private final ReverseCaller processChangeLineItemQuantityForm;
 
     @Inject
-    private ReflectionCartReverseRouter(final ParsedRoutes parsedRoutes) {
-        showCart = getCallerForRoute(parsedRoutes, "showCart");
-        processAddProductToCartForm = getCallerForRoute(parsedRoutes, "processAddProductToCartForm");
-        processDeleteLineItemForm = getCallerForRoute(parsedRoutes, "processDeleteLineItemForm");
-        processChangeLineItemQuantityForm = getCallerForRoute(parsedRoutes, "processChangeLineItemQuantityForm");
+    private ReflectionCartReverseRouter(final ParsedRouteList parsedRouteList) {
+        showCart = getCallerForRoute(parsedRouteList, "showCart");
+        processAddProductToCartForm = getCallerForRoute(parsedRouteList, "processAddProductToCartForm");
+        processDeleteLineItemForm = getCallerForRoute(parsedRouteList, "processDeleteLineItemForm");
+        processChangeLineItemQuantityForm = getCallerForRoute(parsedRouteList, "processChangeLineItemQuantityForm");
     }
     @Override
     public Call showCart(final String languageTag) {

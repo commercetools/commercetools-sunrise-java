@@ -1,23 +1,30 @@
 package com.commercetools.sunrise.common.utils;
 
+import com.commercetools.sunrise.common.contexts.UserLanguage;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Locale;
 
-class ErrorFormatterImpl implements ErrorFormatter {
+@RequestScoped
+final class ErrorFormatterImpl implements ErrorFormatter {
+
+    private final UserLanguage userLanguage;
+    private final I18nResolver i18nResolver;
+    private final I18nIdentifierFactory i18nIdentifierFactory;
 
     @Inject
-    private I18nResolver i18nResolver;
-    @Inject
-    private I18nIdentifierFactory i18nIdentifierFactory;
+    ErrorFormatterImpl(final UserLanguage userLanguage, final I18nResolver i18nResolver, final I18nIdentifierFactory i18nIdentifierFactory) {
+        this.userLanguage = userLanguage;
+        this.i18nResolver = i18nResolver;
+        this.i18nIdentifierFactory = i18nIdentifierFactory;
+    }
 
     @Override
-    public String format(final List<Locale> locales, final String messageKey) {
+    public String format(final String messageKey) {
         final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(messageKey);
-        return i18nResolver.getOrKey(locales, i18nIdentifier);
+        return i18nResolver.getOrKey(userLanguage.locales(), i18nIdentifier);
     }
 }

@@ -3,9 +3,9 @@ package demo.myaccount;
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.hooks.RequestHookContext;
-import com.commercetools.sunrise.myaccount.CustomerInSession;
+import com.commercetools.sunrise.common.sessions.customers.CustomerInSession;
 import com.commercetools.sunrise.myaccount.authentication.logout.SunriseLogOutController;
-import com.commercetools.sunrise.shoppingcart.CartInSession;
+import com.commercetools.sunrise.common.sessions.carts.CartInSession;
 import play.mvc.Result;
 
 import javax.inject.Inject;

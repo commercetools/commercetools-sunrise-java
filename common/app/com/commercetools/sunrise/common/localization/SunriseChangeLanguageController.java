@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.localization;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplatelessFormController;
-import com.commercetools.sunrise.common.controllers.WithTemplatelessFormFlow;
+import com.commercetools.sunrise.common.controllers.SunriseFormController;
+import com.commercetools.sunrise.common.controllers.WithFormFlow;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
 import com.commercetools.sunrise.hooks.RequestHookContext;
@@ -16,7 +16,7 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @IntroducingMultiControllerComponents(LocalizationThemeLinksControllerComponent.class)
-public abstract class SunriseChangeLanguageController<F extends LanguageFormData> extends SunriseTemplatelessFormController implements WithTemplatelessFormFlow<Void, Void, F> {
+public abstract class SunriseChangeLanguageController<F extends LanguageFormData> extends SunriseFormController implements WithFormFlow<F, Void, Void> {
 
     private final LanguageInSession languageInSession;
 

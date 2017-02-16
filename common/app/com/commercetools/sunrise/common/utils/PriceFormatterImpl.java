@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.utils;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import org.javamoney.moneta.format.CurrencyStyle;
 
 import javax.inject.Inject;
@@ -13,7 +13,7 @@ import java.util.Locale;
 import static org.javamoney.moneta.format.AmountFormatParams.PATTERN;
 
 @RequestScoped
-class PriceFormatterImpl implements PriceFormatter {
+final class PriceFormatterImpl implements PriceFormatter {
 
     private static final String PATTERN_WITHOUT_DECIMAL = "¤ #,###,##0.-";
     private static final String PATTERN_WITH_DECIMAL = "¤ #,###,##0.00";

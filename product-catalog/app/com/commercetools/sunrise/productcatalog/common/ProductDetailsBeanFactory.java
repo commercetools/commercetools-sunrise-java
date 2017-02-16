@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.ctp.AttributeSettings;
+import com.commercetools.sunrise.common.ctp.ProductAttributeSettings;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.*;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.attributes.Attribute;
@@ -16,12 +16,12 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class ProductDetailsBeanFactory extends ViewModelFactory<ProductDetailsBean, ProductWithVariant> {
 
-    private final AttributeSettings attributeSettings;
+    private final ProductAttributeSettings productAttributeSettings;
     private final ProductAttributeBeanFactory productAttributeBeanFactory;
 
     @Inject
-    public ProductDetailsBeanFactory(final AttributeSettings attributeSettings, final ProductAttributeBeanFactory productAttributeBeanFactory) {
-        this.attributeSettings = attributeSettings;
+    public ProductDetailsBeanFactory(final ProductAttributeSettings productAttributeSettings, final ProductAttributeBeanFactory productAttributeBeanFactory) {
+        this.productAttributeSettings = productAttributeSettings;
         this.productAttributeBeanFactory = productAttributeBeanFactory;
     }
 
@@ -41,7 +41,7 @@ public class ProductDetailsBeanFactory extends ViewModelFactory<ProductDetailsBe
     }
 
     protected void fillList(final ProductDetailsBean bean, final ProductWithVariant productWithVariant) {
-        final List<ProductAttributeBean> attributes = attributeSettings.getDisplayedAttributes().stream()
+        final List<ProductAttributeBean> attributes = productAttributeSettings.getDisplayedAttributes().stream()
                 .map(productWithVariant.getVariant()::getAttribute)
                 .filter(Objects::nonNull)
                 .map(attribute -> createProductAttributeBean(productWithVariant, attribute))

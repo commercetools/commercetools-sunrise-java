@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.reverserouter;
 
-import com.commercetools.sunrise.common.pages.ParsedRoutes;
+import com.commercetools.sunrise.framework.ParsedRouteList;
 import play.mvc.Call;
 
 import javax.inject.Inject;
@@ -13,9 +13,9 @@ final class ReflectionLocalizationReverseRouter extends AbstractReflectionRevers
     private final ReverseCaller processChangeCountryForm;
 
     @Inject
-    private ReflectionLocalizationReverseRouter(final ParsedRoutes parsedRoutes) {
-        processChangeLanguageForm = getCallerForRoute(parsedRoutes, "processChangeLanguageForm");
-        processChangeCountryForm = getCallerForRoute(parsedRoutes, "processChangeCountryForm");
+    private ReflectionLocalizationReverseRouter(final ParsedRouteList parsedRouteList) {
+        processChangeLanguageForm = getCallerForRoute(parsedRouteList, "processChangeLanguageForm");
+        processChangeCountryForm = getCallerForRoute(parsedRouteList, "processChangeCountryForm");
     }
 
 

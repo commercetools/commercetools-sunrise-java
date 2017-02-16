@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.utils;
 
 import com.commercetools.sunrise.common.contexts.ProjectContext;
-import com.commercetools.sunrise.common.contexts.RequestScoped;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
@@ -17,7 +17,7 @@ import static com.commercetools.sunrise.common.utils.LanguageUtils.requestAccept
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
-class PageTitleResolverImpl implements PageTitleResolver {
+final class PageTitleResolverImpl implements PageTitleResolver {
 
     private final List<Locale> availableLocales;
     private final I18nResolver i18nResolver;

@@ -4,14 +4,15 @@ import com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree;
 import com.commercetools.sunrise.common.contexts.CountryFromSessionProvider;
 import com.commercetools.sunrise.common.contexts.CurrencyFromCountryProvider;
 import com.commercetools.sunrise.common.contexts.LocaleFromUrlProvider;
-import com.commercetools.sunrise.common.contexts.RequestScoped;
 import com.commercetools.sunrise.common.ctp.MetricSphereClientProvider;
 import com.commercetools.sunrise.common.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.common.httpauth.basic.BasicAuthenticationProvider;
+import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.localization.LocationSelectorControllerComponent;
 import com.commercetools.sunrise.common.pages.DefaultPageNavMenuControllerComponent;
 import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigList;
 import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigListProvider;
+import com.commercetools.sunrise.common.sessions.customers.CustomerInSessionControllerComponent;
 import com.commercetools.sunrise.common.template.cms.FileBasedCmsServiceProvider;
 import com.commercetools.sunrise.common.template.engine.HandlebarsTemplateEngineProvider;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
@@ -19,9 +20,10 @@ import com.commercetools.sunrise.common.template.i18n.ConfigurableI18nResolverPr
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuilder;
-import com.commercetools.sunrise.myaccount.CustomerComponent;
-import com.commercetools.sunrise.shoppingcart.CartComponent;
+import com.commercetools.sunrise.shoppingcart.CartFieldsUpdaterControllerComponent;
+import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
 import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
+import com.commercetools.sunrise.common.sessions.carts.TruncatedMiniCartBeanFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -57,6 +59,7 @@ public class Module extends AbstractModule {
         bind(HttpAuthentication.class).toProvider(BasicAuthenticationProvider.class).in(Singleton.class);
         bind(CategoryTree.class).annotatedWith(Names.named("new")).toProvider(CategoryTreeInNewProvider.class).in(Singleton.class);
         bind(FacetedSearchConfigList.class).toProvider(FacetedSearchConfigListProvider.class).in(Singleton.class);
+        bind(MiniCartBeanFactory.class).to(TruncatedMiniCartBeanFactory.class);
     }
 
     @Provides
@@ -100,8 +103,8 @@ public class Module extends AbstractModule {
                 .add(MiniCartControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
                 .add(DefaultPageNavMenuControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
                 .add(LocationSelectorControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
-                .add(CartComponent.class, controller -> controller.getFrameworkTags().contains("shopping-cart") || controller.getFrameworkTags().contains("authentication"))
-                .add(CustomerComponent.class, controller -> controller.getFrameworkTags().contains("my-account"))
+                .add(CartFieldsUpdaterControllerComponent.class, controller -> controller.getFrameworkTags().contains("shopping-cart") || controller.getFrameworkTags().contains("authentication"))
+                .add(CustomerInSessionControllerComponent.class, controller -> controller.getFrameworkTags().contains("my-account"))
                 .build();
     }
 }

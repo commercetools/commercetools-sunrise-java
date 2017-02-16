@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 public class HandlebarsFactory extends Base {
+
     private static final Logger logger = LoggerFactory.getLogger(HandlebarsFactory.class);
     private static final String CONFIG_TEMPLATE_LOADERS = "templateLoaders";
     private static final String CLASSPATH_TYPE = "classpath";
@@ -28,10 +29,14 @@ public class HandlebarsFactory extends Base {
     private static final String TYPE_ATTR = "type";
     private static final String PATH_ATTR = "path";
 
+    private final I18nResolver i18NResolver;
+    private final I18nIdentifierFactory i18nIdentifierFactory;
+
     @Inject
-    private I18nResolver i18NResolver;
-    @Inject
-    private I18nIdentifierFactory i18nIdentifierFactory;
+    public HandlebarsFactory(final I18nResolver i18NResolver, final I18nIdentifierFactory i18nIdentifierFactory) {
+        this.i18NResolver = i18NResolver;
+        this.i18nIdentifierFactory = i18nIdentifierFactory;
+    }
 
     public Handlebars create(final Configuration configuration) {
         final List<TemplateLoader> templateLoaders = initializeTemplateLoaders(configuration, CONFIG_TEMPLATE_LOADERS);

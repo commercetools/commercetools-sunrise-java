@@ -35,20 +35,20 @@ public abstract class SunriseHealthCheckController extends Controller {
                 .thenApply(result -> result.as(Http.MimeTypes.JSON));
     }
 
-    protected Result renderGoodHealthStatus(final PagedSearchResult<ProductProjection> productResult) {
-        final boolean containsProducts = !productResult.getResults().isEmpty();
-        if (!containsProducts) {
+    private Result renderGoodHealthStatus(final PagedSearchResult<ProductProjection> productResult) {
+        final boolean containsNoProducts = productResult.getResults().isEmpty();
+        if (containsNoProducts) {
             throw new RuntimeException("Cannot find any product!");
         }
         return ok(healthReportAsJson(true));
     }
 
-    protected Result renderBadHealthStatus(final Throwable throwable) {
+    private Result renderBadHealthStatus(final Throwable throwable) {
         logger.error("Could not fetch products", throwable);
         return status(Http.Status.SERVICE_UNAVAILABLE, healthReportAsJson(false));
     }
 
-    protected String healthReportAsJson(final boolean healthy) {
+    private String healthReportAsJson(final boolean healthy) {
         return "{\n" +
                 "  \"self\" : {\n" +
                 "    \"healthy\" : " + healthy + "\n" +

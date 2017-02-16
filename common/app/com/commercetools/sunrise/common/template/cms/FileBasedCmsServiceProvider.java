@@ -9,29 +9,31 @@ import com.commercetools.sunrise.common.template.i18n.composite.CompositeI18nRes
 import com.google.inject.Provider;
 import play.Configuration;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.Optional;
 
 public final class FileBasedCmsServiceProvider implements Provider<CmsService> {
 
     private static final String CONFIG_CMS_I18N = "application.cms.i18n";
 
+    @Nullable
+    private final Configuration i18nCmsConfiguration;
+    private final ProjectContext projectContext;
+    private final CompositeI18nResolverFactory compositeI18nResolverFactory;
+
     @Inject
-    private Configuration configuration;
-    @Inject
-    private ProjectContext projectContext;
-    @Inject
-    private CompositeI18nResolverFactory compositeI18nResolverFactory;
+    public FileBasedCmsServiceProvider(final Configuration configuration, final ProjectContext projectContext, final CompositeI18nResolverFactory compositeI18nResolverFactory) {
+        this.i18nCmsConfiguration = configuration.getConfig(CONFIG_CMS_I18N);
+        if (i18nCmsConfiguration == null) {
+            throw new SunriseConfigurationException("Could not initialize FileBasedCmsService, as it requires its own i18nResolver configuration and it is missing", CONFIG_CMS_I18N);
+        }
+        this.projectContext = projectContext;
+        this.compositeI18nResolverFactory = compositeI18nResolverFactory;
+    }
 
     @Override
     public CmsService get() {
-        return Optional.ofNullable(configuration.getConfig(CONFIG_CMS_I18N))
-                .map(this::createFileBasedCmsService)
-                .orElseThrow(() -> new SunriseConfigurationException("Could not create FileBasedCmsService, as it requires its own i18nResolver configuration and it is missing", CONFIG_CMS_I18N));
-    }
-
-    private FileBasedCmsService createFileBasedCmsService(final Configuration config) {
-        final CompositeI18nResolver i18nResolver = compositeI18nResolverFactory.create(config, projectContext.locales());
+        final CompositeI18nResolver i18nResolver = compositeI18nResolverFactory.create(i18nCmsConfiguration, projectContext.locales());
         return FileBasedCmsService.of(i18nResolver);
     }
 }
