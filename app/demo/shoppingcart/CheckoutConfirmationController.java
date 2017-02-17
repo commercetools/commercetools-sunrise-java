@@ -4,8 +4,9 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationExecutor;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.DefaultCheckoutConfirmationFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.SunriseCheckoutConfirmationController;
@@ -24,7 +25,7 @@ public final class CheckoutConfirmationController extends SunriseCheckoutConfirm
     private final CheckoutReverseRouter checkoutReverseRouter;
 
     @Inject
-    public CheckoutConfirmationController(final RequestHookContext hookContext,
+    public CheckoutConfirmationController(final ComponentRegistry componentRegistry,
                                           final TemplateRenderer templateRenderer,
                                           final FormFactory formFactory,
                                           final CartFinder cartFinder,
@@ -32,9 +33,14 @@ public final class CheckoutConfirmationController extends SunriseCheckoutConfirm
                                           final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory,
                                           final CartReverseRouter cartReverseRouter,
                                           final CheckoutReverseRouter checkoutReverseRouter) {
-        super(hookContext, templateRenderer, formFactory, cartFinder, checkoutConfirmationExecutor, checkoutConfirmationPageContentFactory);
+        super(componentRegistry, templateRenderer, formFactory, cartFinder, checkoutConfirmationExecutor, checkoutConfirmationPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
         this.checkoutReverseRouter = checkoutReverseRouter;
+    }
+
+    @Inject
+    public void registerComponents(final CheckoutStepControllerComponent checkoutStepControllerComponent) {
+        register(checkoutStepControllerComponent);
     }
 
     @Override

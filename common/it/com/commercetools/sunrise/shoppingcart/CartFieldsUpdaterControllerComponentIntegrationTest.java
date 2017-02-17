@@ -1,35 +1,21 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.WithSphereClient;
-import com.commercetools.sunrise.common.injection.RequestScoped;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Scopes;
+import com.commercetools.sunrise.it.WithSphereClient;
+import com.commercetools.sunrise.common.sessions.customer.CustomerInSession;
+import com.commercetools.sunrise.common.sessions.customer.UserInfoBean;
+import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.CustomerSignInResult;
-import org.junit.Before;
 import org.junit.Test;
 
-import static com.commercetools.sunrise.common.TestFixtures.*;
+import javax.annotation.Nullable;
+import java.util.Optional;
+
+import static com.commercetools.sunrise.it.TestFixtures.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CartFieldsUpdaterControllerComponentIntegrationTest extends WithSphereClient {
-
-    private Injector injector;
-
-    @Before
-    public void setUp() throws Exception {
-        this.injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(SphereClient.class).toInstance(sphereClient());
-                bindScope(RequestScoped.class, Scopes.NO_SCOPE);
-            }
-        });
-    }
 
     @Test
     public void updatesCartWithCustomerEmailWhenNotDefined() throws Exception {
@@ -37,7 +23,7 @@ public class CartFieldsUpdaterControllerComponentIntegrationTest extends WithSph
             final Customer customer = customerCreatedResult.getCustomer();
             withCart(sphereClient(), cartDraft(), anonymousCart -> {
                 final CustomerSignInResult signInResult = logInCustomer(sphereClient(), customer, anonymousCart);
-                final Cart updatedCart = invokeUpdateCartWithMissingInfoOnSignIn(signInResult);
+                final Cart updatedCart = runComponent(signInResult);
                 assertThat(anonymousCart.getCustomerEmail()).isNull();
                 assertThat(updatedCart.getCustomerEmail()).isEqualTo(customer.getEmail());
                 return updatedCart;
@@ -52,7 +38,7 @@ public class CartFieldsUpdaterControllerComponentIntegrationTest extends WithSph
             final Customer customer = customerCreatedResult.getCustomer();
             withCart(sphereClient(), cartDraft().withCustomerEmail("anonymous-cart@email.com"), anonymousCart -> {
                 final CustomerSignInResult signInResult = logInCustomer(sphereClient(), customer, anonymousCart);
-                final Cart updatedCart = invokeUpdateCartWithMissingInfoOnSignIn(signInResult);
+                final Cart updatedCart = runComponent(signInResult);
                 assertThat(updatedCart.getCustomerEmail())
                         .isEqualTo(anonymousCart.getCustomerEmail())
                         .isEqualTo("anonymous-cart@email.com");
@@ -69,7 +55,7 @@ public class CartFieldsUpdaterControllerComponentIntegrationTest extends WithSph
                 final Customer customer = customerCreatedResult.getCustomer();
                 withCart(sphereClient(), cartDraft().withCustomerEmail("anonymous-cart@email.com"), anonymousCart -> {
                     final CustomerSignInResult signInResult = logInCustomer(sphereClient(), customer, anonymousCart);
-                    final Cart updatedCart = invokeUpdateCartWithMissingInfoOnSignIn(signInResult);
+                    final Cart updatedCart = runComponent(signInResult);
                     assertThat(updatedCart.getCustomerEmail())
                             .isEqualTo(registeredCart.getCustomerEmail())
                             .isEqualTo("registered-cart@email.com");
@@ -81,10 +67,38 @@ public class CartFieldsUpdaterControllerComponentIntegrationTest extends WithSph
         });
     }
 
-    private Cart invokeUpdateCartWithMissingInfoOnSignIn(final CustomerSignInResult customerSignInResult) {
-        return injector.getInstance(CartFieldsUpdaterControllerComponent.class)
-                .updateCartWithMissingInfoOnSignIn(customerSignInResult.getCart(), customerSignInResult.getCustomer())
-                .toCompletableFuture().join();
+    private Cart runComponent(final CustomerSignInResult customerSignInResult) {
+        return new CartFieldsUpdaterControllerComponent(CountryCode.DE, getCustomerInSession(), sphereClient())
+                .onCustomerSignedInAction(customerSignInResult, null).toCompletableFuture().join().getCart();
+    }
+
+    private CustomerInSession getCustomerInSession() {
+        return new CustomerInSession() {
+            @Override
+            public Optional<String> findCustomerId() {
+                return Optional.of("customer-id");
+            }
+
+            @Override
+            public Optional<String> findCustomerEmail() {
+                return Optional.of("customer-email");
+            }
+
+            @Override
+            public Optional<UserInfoBean> findUserInfo() {
+                return null;
+            }
+
+            @Override
+            public void store(@Nullable final Customer customer) {
+
+            }
+
+            @Override
+            public void remove() {
+
+            }
+        };
     }
 
 }

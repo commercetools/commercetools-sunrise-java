@@ -13,11 +13,7 @@ object TestCommon {
 
   private val itBaseTestSettings = Defaults.itSettings ++ configTestDirs(IntegrationTest, "it")
 
-  private val ptBaseTestSettings = inConfig(PlayTest)(Defaults.testSettings) ++ configTestDirs(PlayTest, "pt") ++ Seq (
-    libraryDependencies ++= Seq (
-      javaWs % "pt"
-    )
-  )
+  private val ptBaseTestSettings = inConfig(PlayTest)(Defaults.testSettings) ++ configTestDirs(PlayTest, "pt") ++ configJavaWsDependency("pt")
 
   def configTestDirs(config: Configuration, folderName: String) = Seq(
     javaSource in config := baseDirectory.value / folderName,
@@ -34,6 +30,12 @@ object TestCommon {
     ),
     dependencyOverrides ++= Set (
       "junit" % "junit" % "4.12" % scopes
+    )
+  )
+
+  def configJavaWsDependency(scopes: String) = Seq(
+    libraryDependencies ++= Seq (
+      javaWs % scopes
     )
   )
 }

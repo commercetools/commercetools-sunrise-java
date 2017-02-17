@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
@@ -19,13 +18,9 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
-
-@IntroducingMultiControllerComponents(AddAddressThemeLinksControllerComponent.class)
 public abstract class SunriseAddAddressController<F extends AddressBookAddressFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
@@ -33,23 +28,21 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
     private final AddAddressPageContentFactory addAddressPageContentFactory;
     private final CountryCode country;
 
-    protected SunriseAddAddressController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseAddAddressController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                           final FormFactory formFactory, final CustomerFinder customerFinder,
                                           final AddAddressExecutor addAddressExecutor,
                                           final AddAddressPageContentFactory addAddressPageContentFactory,
                                           final CountryCode country) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.addAddressExecutor = addAddressExecutor;
         this.addAddressPageContentFactory = addAddressPageContentFactory;
         this.country = country;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(asList("address-book", "add-address", "address"));
-        return frameworkTags;
+    @Inject
+    private void registerThemeLinks(final AddAddressThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -64,12 +57,12 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
 
     @SunriseRoute("addAddressToAddressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::showFormPage));
+        return requireCustomer(this::showFormPage);
     }
 
     @SunriseRoute("addAddressToAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::processForm));
+        return requireCustomer(this::processForm);
     }
 
     @Override

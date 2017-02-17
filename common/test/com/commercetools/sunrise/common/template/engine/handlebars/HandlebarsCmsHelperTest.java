@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
 import com.commercetools.sunrise.cms.CmsPage;
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.engine.TemplateContext;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
-import com.commercetools.sunrise.common.template.engine.TestablePageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.TestableI18nResolver;
 import com.github.jknack.handlebars.Handlebars;
@@ -19,8 +19,6 @@ import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class HandlebarsCmsHelperTest {
-
-    private static final PageData SOME_PAGE_DATA = new TestablePageData();
 
     @Test
     public void resolvesMessage() throws Exception {
@@ -38,7 +36,7 @@ public class HandlebarsCmsHelperTest {
     }
 
     private static String renderTemplate(final String templateName, final TemplateEngine templateEngine) throws Exception {
-        final TemplateContext templateContext = new TemplateContext(SOME_PAGE_DATA, emptyList(), cmsPage());
+        final TemplateContext templateContext = new TemplateContext(new PageData(), emptyList(), cmsPage());
         return templateEngine.render(templateName, templateContext);
     }
 
@@ -53,6 +51,6 @@ public class HandlebarsCmsHelperTest {
         final TestableI18nResolver i18nResolver = new TestableI18nResolver(emptyMap());
         final List<TemplateLoader> templateLoaders = singletonList(new ClassPathTemplateLoader("/templates/cmsHelper"));
         final Handlebars handlebars = HandlebarsFactory.create(templateLoaders, i18nResolver, new I18nIdentifierFactory());
-        return HandlebarsTemplateEngine.of(handlebars, new HandlebarsContextFactory());
+        return HandlebarsTemplateEngine.of(handlebars, new HandlebarsContextFactory(new PlayJavaFormResolver(msg -> msg)));
     }
 }

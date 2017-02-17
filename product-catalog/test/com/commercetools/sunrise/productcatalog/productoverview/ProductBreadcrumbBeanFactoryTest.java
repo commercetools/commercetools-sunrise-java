@@ -1,8 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.controllers.TestableCall;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.productcatalog.TestableProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbLinkBean;
 import com.commercetools.sunrise.productcatalog.productdetail.view.ProductBreadcrumbBeanFactory;
@@ -10,7 +9,6 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.products.ProductProjection;
 import org.junit.Test;
-import play.mvc.Call;
 
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +27,7 @@ public class ProductBreadcrumbBeanFactoryTest {
     public void createProductBreadcrumb() throws Exception {
         testProductBreadcrumb(PRODUCT,
                 texts -> assertThat(texts).containsExactly("1st Level", "2nd Level", "Some product"),
-                urls -> assertThat(urls).containsExactly("category-1st-level", "category-2nd-level", "product-some-product-some-sku"));
+                urls -> assertThat(urls).containsExactly("1st-level", "2nd-level", "some-product-some-sku"));
     }
 
     private void testProductBreadcrumb(final ProductProjection product, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
@@ -47,36 +45,6 @@ public class ProductBreadcrumbBeanFactoryTest {
     }
 
     private static ProductBreadcrumbBeanFactory createBreadcrumbFactory() {
-        return new ProductBreadcrumbBeanFactory(CATEGORY_TREE, reverseRouter());
-    }
-
-    private static ProductReverseRouter reverseRouter() {
-        return new ProductReverseRouter() {
-
-            @Override
-            public String languageTag() {
-                return "en";
-            }
-
-            @Override
-            public Locale locale() {
-                return Locale.ENGLISH;
-            }
-
-            @Override
-            public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
-                return new TestableCall("pdp");
-            }
-
-            @Override
-            public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
-                return new TestableCall("pop");
-            }
-
-            @Override
-            public Call processSearchProductsForm(final String languageTag) {
-                return new TestableCall("search");
-            }
-        };
+        return new ProductBreadcrumbBeanFactory(CATEGORY_TREE, new TestableProductReverseRouter());
     }
 }

@@ -1,13 +1,8 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.common.DefaultTestModule;
-import com.commercetools.sunrise.common.WithSunriseApplication;
-import com.commercetools.sunrise.common.injection.RequestScope;
-import com.commercetools.sunrise.common.injection.RequestScoped;
-import com.commercetools.sunrise.common.controllers.TestableCall;
-import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.HomeSimpleReverseRouter;
-import com.commercetools.sunrise.productcatalog.ProductCatalogTestModule;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
+import com.commercetools.sunrise.pt.WithSunriseApplication;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import org.junit.Test;
@@ -32,22 +27,16 @@ public class SunriseHomeControllerTest extends WithSunriseApplication {
         final Module module = new AbstractModule() {
             @Override
             protected void configure() {
-                bind(WebJarAssetsReverseRouter.class).toInstance(file -> new TestableCall("assets"));
-                bind(HomeSimpleReverseRouter.class).toInstance(languageTag -> new TestableCall("/"));
-                bind(Http.Context.class).toInstance(Http.Context.current());
-                bind(Http.Session.class).toInstance(Http.Context.current().session());
-                bindScope(RequestScoped.class, new RequestScope());
+
             }
         };
         return appBuilder(module).build();
     }
 
-    @Override
-    protected DefaultTestModule defaultModule() {
-        return new ProductCatalogTestModule();
-    }
-
     private static class HomeTestController extends SunriseHomeController {
 
+        public HomeTestController(final TemplateRenderer templateRenderer, final HomePageContentFactory homePageContentFactory) {
+            super(x -> {}, templateRenderer, homePageContentFactory);
+        }
     }
 }

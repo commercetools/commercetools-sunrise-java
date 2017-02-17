@@ -1,13 +1,14 @@
 package com.commercetools.sunrise.common.httpauth;
 
 import akka.stream.Materializer;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.mvc.Filter;
 import play.mvc.Http;
 import play.mvc.Result;
 
-import javax.inject.Inject;
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -23,28 +24,29 @@ import static play.mvc.Results.unauthorized;
  */
 public final class HttpAuthenticationFilter extends Filter {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpAuthenticationFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpAuthenticationFilter.class);
 
-    private final HttpAuthentication httpAuthentication;
+    @Nullable
+    @Inject(optional = true)
+    private HttpAuthentication httpAuthentication;
 
     @Inject
-    public HttpAuthenticationFilter(final Materializer mat, final HttpAuthentication httpAuthentication) {
+    public HttpAuthenticationFilter(final Materializer mat) {
         super(mat);
-        this.httpAuthentication = httpAuthentication;
     }
 
     @Override
     public CompletionStage<Result> apply(final Function<Http.RequestHeader, CompletionStage<Result>> nextFilter,
                                          final Http.RequestHeader requestHeader) {
-        if (httpAuthentication.isEnabled()) {
-            return authenticate(nextFilter, requestHeader);
+        if (httpAuthentication != null && httpAuthentication.isEnabled()) {
+            return authenticate(nextFilter, requestHeader, httpAuthentication);
         } else {
             return nextFilter.apply(requestHeader);
         }
     }
 
     private CompletionStage<Result> authenticate(final Function<Http.RequestHeader, CompletionStage<Result>> nextFilter,
-                                                 final Http.RequestHeader requestHeader) {
+                                                 final Http.RequestHeader requestHeader, final HttpAuthentication httpAuthentication) {
         return findAuthorizationHeader(requestHeader)
                 .map(authorizationHeader -> {
                     if (httpAuthentication.isAuthorized(authorizationHeader)) {
@@ -52,24 +54,24 @@ public final class HttpAuthenticationFilter extends Filter {
                     } else {
                         return failedAuthentication();
                     }
-                }).orElseGet(this::missingAuthentication);
+                }).orElseGet(() -> missingAuthentication(httpAuthentication));
     }
 
     private CompletionStage<Result> successfulAuthentication(final Function<Http.RequestHeader, CompletionStage<Result>> nextFilter,
                                                              final Http.RequestHeader requestHeader) {
-        logger.debug("Authorized");
+        LOGGER.debug("Authorized");
         return nextFilter.apply(requestHeader);
     }
 
-    private CompletableFuture<Result> missingAuthentication() {
-        logger.debug("Missing authentication");
+    private CompletableFuture<Result> missingAuthentication(final HttpAuthentication httpAuthentication) {
+        LOGGER.debug("Missing authentication");
         final Result result = unauthorized()
                 .withHeader(WWW_AUTHENTICATE, httpAuthentication.getWwwAuthenticateHeaderValue());
         return completedFuture(result);
     }
 
     private CompletableFuture<Result> failedAuthentication() {
-        logger.debug("Failed authentication");
+        LOGGER.debug("Failed authentication");
         return completedFuture(unauthorized("Unauthorized"));
     }
 

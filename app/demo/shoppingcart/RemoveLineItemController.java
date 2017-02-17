@@ -2,7 +2,7 @@ package demo.shoppingcart;
 
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.cart.removelineitem.DefaultRemoveLineItemFormData;
@@ -20,14 +20,14 @@ public final class RemoveLineItemController extends SunriseRemoveLineItemControl
     private final CartReverseRouter cartReverseRouter;
 
     @Inject
-    public RemoveLineItemController(final RequestHookContext hookContext,
+    public RemoveLineItemController(final ComponentRegistry componentRegistry,
                                     final TemplateRenderer templateRenderer,
                                     final FormFactory formFactory,
                                     final CartFinder cartFinder,
                                     final RemoveLineItemExecutor removeLineItemExecutor,
                                     final CartDetailPageContentFactory cartDetailPageContentFactory,
                                     final CartReverseRouter cartReverseRouter) {
-        super(hookContext, templateRenderer, formFactory, cartFinder, removeLineItemExecutor, cartDetailPageContentFactory);
+        super(componentRegistry, templateRenderer, formFactory, cartFinder, removeLineItemExecutor, cartDetailPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
     }
 

@@ -4,12 +4,14 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.mydetails.DefaultMyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsExecutor;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
 import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
+import demo.CommonControllerComponentListSupplier;
+import demo.PageHeaderControllerComponentListSupplier;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -24,7 +26,7 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
     private final AuthenticationReverseRouter authenticationReverseRouter;
 
     @Inject
-    public MyPersonalDetailsController(final RequestHookContext hookContext,
+    public MyPersonalDetailsController(final ComponentRegistry componentRegistry,
                                        final TemplateRenderer templateRenderer,
                                        final FormFactory formFactory,
                                        final CustomerFinder customerFinder,
@@ -32,9 +34,16 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
                                        final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory,
                                        final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter,
                                        final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(hookContext, templateRenderer, formFactory, customerFinder, myPersonalDetailsExecutor, myPersonalDetailsPageContentFactory);
+        super(componentRegistry, templateRenderer, formFactory, customerFinder, myPersonalDetailsExecutor, myPersonalDetailsPageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
         this.authenticationReverseRouter = authenticationReverseRouter;
+    }
+
+    @Inject
+    public void registerComponents(final CommonControllerComponentListSupplier commonControllerComponentListSupplier,
+                                   final PageHeaderControllerComponentListSupplier pageHeaderControllerComponentListSupplier) {
+        register(commonControllerComponentListSupplier);
+        register(pageHeaderControllerComponentListSupplier);
     }
 
     @Override

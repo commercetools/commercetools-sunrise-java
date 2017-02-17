@@ -5,15 +5,13 @@ import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.hooks.RequestHookAction;
 import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
 import play.mvc.Result;
+import play.mvc.With;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
-
-import static java.util.Arrays.asList;
 
 /**
  * Controller for the home page.
@@ -22,9 +20,9 @@ public abstract class SunriseHomeController extends SunriseTemplateController im
 
     private final HomePageContentFactory homePageContentFactory;
 
-    protected SunriseHomeController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseHomeController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                     final HomePageContentFactory homePageContentFactory) {
-        super(hookContext, templateRenderer);
+        super(componentRegistry, templateRenderer);
         this.homePageContentFactory = homePageContentFactory;
     }
 
@@ -33,14 +31,10 @@ public abstract class SunriseHomeController extends SunriseTemplateController im
         return "home";
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("home", "product-catalog"));
-    }
-
+    @With(RequestHookAction.class)
     @SunriseRoute("homePageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> showPage(null));
+        return showPage(null);
     }
 
     @Override

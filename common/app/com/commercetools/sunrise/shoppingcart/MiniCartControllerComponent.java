@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.common.sessions.carts.CartInSession;
+import com.commercetools.sunrise.common.sessions.cart.CartInSession;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 

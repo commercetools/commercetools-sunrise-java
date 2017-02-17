@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.common.controllers.TestableCall;
-import com.commercetools.sunrise.common.reverserouter.ProductSimpleReverseRouter;
+import com.commercetools.sunrise.productcatalog.TestableProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbLinkBean;
 import com.commercetools.sunrise.productcatalog.productoverview.view.CategoryBreadcrumbBeanFactory;
@@ -9,7 +8,6 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import org.junit.Test;
-import play.mvc.Call;
 
 import java.util.List;
 import java.util.Locale;
@@ -27,19 +25,19 @@ public class CategoryBreadcrumbBeanFactoryTest {
     public void createCategoryBreadcrumbOfOneLevel() {
         testCategoryBreadcrumb("1stLevel",
                 texts -> assertThat(texts).containsExactly("1st Level"),
-                urls -> assertThat(urls).containsExactly("category-1st-level"));
+                urls -> assertThat(urls).containsExactly("1st-level"));
     }
 
     @Test
     public void createCategoryBreadcrumbOfManyLevels() {
         testCategoryBreadcrumb("3rdLevel",
                 texts -> assertThat(texts).containsExactly("1st Level", "2nd Level", "3rd Level"),
-                urls -> assertThat(urls).containsExactly("category-1st-level", "category-2nd-level", "category-3rd-level"));
+                urls -> assertThat(urls).containsExactly("1st-level", "2nd-level", "3rd-level"));
     }
 
     private void testCategoryBreadcrumb(final String extId, final Consumer<List<String>> texts, final Consumer<List<String>> urls) {
         final Category category = CATEGORY_TREE.findByExternalId(extId).get();
-        final ProductsWithCategory data = new ProductsWithCategory(null, category);
+        final ProductsWithCategory data = ProductsWithCategory.of(null, category);
         final BreadcrumbBean breadcrumb = createBreadcrumbFactory().create(data);
         testBreadcrumb(breadcrumb, texts, urls);
     }
@@ -53,25 +51,6 @@ public class CategoryBreadcrumbBeanFactoryTest {
     }
 
     private static CategoryBreadcrumbBeanFactory createBreadcrumbFactory() {
-        return new CategoryBreadcrumbBeanFactory(Locale.ENGLISH, CATEGORY_TREE, reverseRouter());
-    }
-
-    private static ProductSimpleReverseRouter reverseRouter() {
-        return new ProductSimpleReverseRouter() {
-            @Override
-            public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
-                return new TestableCall("pdp");
-            }
-
-            @Override
-            public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
-                return new TestableCall("pop");
-            }
-
-            @Override
-            public Call processSearchProductsForm(final String languageTag) {
-                return new TestableCall("search");
-            }
-        };
+        return new CategoryBreadcrumbBeanFactory(CATEGORY_TREE, new TestableProductReverseRouter());
     }
 }

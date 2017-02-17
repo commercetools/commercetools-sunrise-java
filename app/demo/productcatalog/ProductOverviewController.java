@@ -1,16 +1,15 @@
 package demo.productcatalog;
 
 import com.commercetools.sunrise.common.cache.NoCache;
-import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchComponent;
-import com.commercetools.sunrise.common.search.pagination.PaginationComponent;
-import com.commercetools.sunrise.common.search.searchbox.SearchBoxComponent;
-import com.commercetools.sunrise.common.search.sort.SortSelectorComponent;
+import com.commercetools.sunrise.common.search.SearchControllerComponentListSupplier;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
 import com.commercetools.sunrise.productcatalog.productoverview.view.ProductOverviewPageContentFactory;
+import demo.CommonControllerComponentListSupplier;
+import demo.PageHeaderControllerComponentListSupplier;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -22,32 +21,21 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public final class ProductOverviewController extends SunriseProductOverviewController {
 
     @Inject
-    public ProductOverviewController(final RequestHookContext hookContext,
+    public ProductOverviewController(final ComponentRegistry componentRegistry,
                                      final TemplateRenderer templateRenderer,
                                      final CategoryFinder categoryFinder,
                                      final ProductListFinder productListFinder,
                                      final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
-        super(hookContext, templateRenderer, categoryFinder, productListFinder, productOverviewPageContentFactory);
+        super(componentRegistry, templateRenderer, categoryFinder, productListFinder, productOverviewPageContentFactory);
     }
 
     @Inject
-    public void setSortSelectorComponent(final SortSelectorComponent component) {
-        registerControllerComponent(component);
-    }
-
-    @Inject
-    public void setPaginationComponent(final PaginationComponent component) {
-        registerControllerComponent(component);
-    }
-
-    @Inject
-    public void setSearchBoxComponent(final SearchBoxComponent component) {
-        registerControllerComponent(component);
-    }
-
-    @Inject
-    public void setFacetedSearchComponent(final FacetedSearchComponent component) {
-        registerControllerComponent(component);
+    public void registerComponents(final CommonControllerComponentListSupplier commonControllerComponentListSupplier,
+                                   final PageHeaderControllerComponentListSupplier pageHeaderControllerComponentListSupplier,
+                                   final SearchControllerComponentListSupplier searchControllerComponentListSupplier) {
+        register(commonControllerComponentListSupplier);
+        register(pageHeaderControllerComponentListSupplier);
+        register(searchControllerComponentListSupplier);
     }
 
     @Override

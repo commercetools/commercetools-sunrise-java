@@ -1,8 +1,11 @@
 package com.commercetools.sunrise.hooks;
 
+import com.google.inject.ImplementedBy;
+
 import java.util.concurrent.CompletionStage;
 
-public interface RequestHookRunner {
+@ImplementedBy(HookContextImpl.class)
+public interface RequestHookRunner extends HookRunner {
 
-    CompletionStage<Object> allAsyncHooksCompletionStage();
+    CompletionStage<?> waitForComponentsToFinish();
 }

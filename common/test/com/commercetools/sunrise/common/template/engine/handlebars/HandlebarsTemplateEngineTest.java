@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.engine.TemplateContext;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.engine.TemplateNotFoundException;
-import com.commercetools.sunrise.common.template.engine.TestablePageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
@@ -27,7 +27,6 @@ public class HandlebarsTemplateEngineTest {
     private static final TemplateLoader OVERRIDE_LOADER = new ClassPathTemplateLoader("/templates/override");
     private static final I18nResolver I18N_MESSAGES = ((locale, i18nIdentifier, hashArgs) -> Optional.empty());
     private static final List<Locale> LOCALES = emptyList();
-    private static final PageData SOME_PAGE_DATA = new TestablePageData();
 
     @Test
     public void rendersTemplateWithPartial() throws Exception {
@@ -68,11 +67,16 @@ public class HandlebarsTemplateEngineTest {
     }
 
     private static TemplateEngine defaultHandlebars() {
-        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(singletonList(DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()), new HandlebarsContextFactory());
+        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(singletonList(DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()), createHandlebarsContextFactory());
+    }
+
+    private static HandlebarsContextFactory createHandlebarsContextFactory() {
+        final PlayJavaFormResolver playJavaFormResolver = new PlayJavaFormResolver(message -> message);
+        return new HandlebarsContextFactory(playJavaFormResolver);
     }
 
     private static TemplateEngine handlebarsWithOverride() {
-        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()), new HandlebarsContextFactory());
+        return HandlebarsTemplateEngine.of(HandlebarsFactory.create(asList(OVERRIDE_LOADER, DEFAULT_LOADER), I18N_MESSAGES, new I18nIdentifierFactory()), createHandlebarsContextFactory());
     }
 
     private static void testTemplate(final String templateName, final TemplateEngine templateEngine, final Consumer<String> test) {
@@ -81,7 +85,10 @@ public class HandlebarsTemplateEngineTest {
     }
 
     private static String renderTemplate(final String templateName, final TemplateEngine templateEngine) {
-        final TemplateContext templateContext = new TemplateContext(SOME_PAGE_DATA, LOCALES, f -> Optional.empty());
+        final PageData pageData = new PageData();
+        pageData.put("title", "foo");
+        pageData.put("message", "bar");
+        final TemplateContext templateContext = new TemplateContext(pageData, LOCALES, f -> Optional.empty());
         return templateEngine.render(templateName, templateContext);
     }
 }

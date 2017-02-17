@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.contexts.UserLanguage;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.pages.PageDataFactory;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.RequestHookRunner;
 import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +27,8 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
 public class HtmlTemplateRenderer implements TemplateRenderer {
 
     private static final Logger pageDataLoggerAsJson = LoggerFactory.getLogger(PageData.class.getName() + "Json");
@@ -34,16 +36,16 @@ public class HtmlTemplateRenderer implements TemplateRenderer {
 
     private final UserLanguage userLanguage;
     private final PageDataFactory pageDataFactory;
-    private final RequestHookContext hookContext;
+    private final RequestHookRunner hookRunner;
     private final TemplateEngine templateEngine;
     private final CmsService cmsService;
 
     @Inject
-    public HtmlTemplateRenderer(final UserLanguage userLanguage, final PageDataFactory pageDataFactory, final RequestHookContext hookContext,
+    public HtmlTemplateRenderer(final UserLanguage userLanguage, final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner,
                                 final TemplateEngine templateEngine, final CmsService cmsService) {
         this.userLanguage = userLanguage;
         this.pageDataFactory = pageDataFactory;
-        this.hookContext = hookContext;
+        this.hookRunner = hookRunner;
         this.templateEngine = templateEngine;
         this.cmsService = cmsService;
     }
@@ -51,12 +53,16 @@ public class HtmlTemplateRenderer implements TemplateRenderer {
     @Override
     public CompletionStage<Content> render(final PageContent pageContent, final String templateName, @Nullable final String cmsKey) {
         final PageData pageData = pageDataFactory.create(pageContent);
-        return hookContext.allAsyncHooksCompletionStage()
+        return hookRunner.waitForComponentsToFinish()
                 .thenComposeAsync(unused -> {
-                    PageDataReadyHook.runHook(hookContext, pageData);
+                    PageDataReadyHook.runHook(hookRunner, pageData);
                     logFinalPageData(pageData);
-                    return cmsService.page(cmsKey, userLanguage.locales())
-                            .thenApplyAsync(cmsPage -> renderTemplate(templateName, pageData, cmsPage.orElse(null)));
+                    if (cmsKey != null) {
+                        return cmsService.page(cmsKey, userLanguage.locales())
+                                .thenApplyAsync(cmsPage -> renderTemplate(templateName, pageData, cmsPage.orElse(null)));
+                    } else {
+                        return completedFuture(renderTemplate(templateName, pageData, null));
+                    }
                 }, HttpExecution.defaultContext());
     }
 

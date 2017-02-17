@@ -4,11 +4,13 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.MyOrdersReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.MyOrderFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.SunriseMyOrderDetailController;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContentFactory;
+import demo.CommonControllerComponentListSupplier;
+import demo.PageHeaderControllerComponentListSupplier;
 import play.data.FormFactory;
 import play.mvc.Result;
 
@@ -22,7 +24,7 @@ public final class MyOrderDetailController extends SunriseMyOrderDetailControlle
     private final AuthenticationReverseRouter authenticationReverseRouter;
 
     @Inject
-    public MyOrderDetailController(final RequestHookContext hookContext,
+    public MyOrderDetailController(final ComponentRegistry componentRegistry,
                                    final TemplateRenderer templateRenderer,
                                    final FormFactory formFactory,
                                    final CustomerFinder customerFinder,
@@ -30,9 +32,16 @@ public final class MyOrderDetailController extends SunriseMyOrderDetailControlle
                                    final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory,
                                    final MyOrdersReverseRouter myOrdersReverseRouter,
                                    final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(hookContext, templateRenderer, formFactory, customerFinder, myOrderFinder, myOrderDetailPageContentFactory);
+        super(componentRegistry, templateRenderer, formFactory, customerFinder, myOrderFinder, myOrderDetailPageContentFactory);
         this.myOrdersReverseRouter = myOrdersReverseRouter;
         this.authenticationReverseRouter = authenticationReverseRouter;
+    }
+
+    @Inject
+    public void registerComponents(final CommonControllerComponentListSupplier commonControllerComponentListSupplier,
+                                   final PageHeaderControllerComponentListSupplier pageHeaderControllerComponentListSupplier) {
+        register(commonControllerComponentListSupplier);
+        register(pageHeaderControllerComponentListSupplier);
     }
 
     @Override

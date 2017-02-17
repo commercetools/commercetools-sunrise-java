@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.common.sessions;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -67,6 +69,11 @@ public class DataFromResourceStoringOperationsTest {
 
         Optional<String> findOtherValue() {
             return Optional.ofNullable(session.get("some-other-key"));
+        }
+
+        @Override
+        protected Logger getLogger() {
+            return LoggerFactory.getILoggerFactory().getLogger(Logger.ROOT_LOGGER_NAME);
         }
 
         @Override

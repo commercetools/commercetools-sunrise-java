@@ -43,6 +43,7 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
     @Inject
     public HomeProductSuggestionsControllerComponent(final Configuration configuration, final ProductListBeanFactory productListBeanFactory,
                                                      final ProductRecommendation productRecommendation, final CategoryTree categoryTree) {
+        System.out.println("asdfasdfasdf");
         this.suggestionsExternalIds = configuration.getStringList("homeSuggestions.externalId", emptyList());
         this.numSuggestions = configuration.getInt("homeSuggestions.count", 4);
         this.productListBeanFactory = productListBeanFactory;
@@ -53,6 +54,7 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
 
     @Override
     public CompletionStage<?> onRequestStarted(final Http.Context context) {
+        System.out.println("asdfasdfasdf start");
         final List<Category> suggestedCategories = suggestionsExternalIds.stream()
                 .map(categoryTree::findByExternalId)
                 .filter(Optional::isPresent)
@@ -64,6 +66,7 @@ public class HomeProductSuggestionsControllerComponent implements ControllerComp
 
     @Override
     public void onPageDataReady(final PageData pageData) {
+        System.out.println("asdfasdfasdf ready");
         if (recommendedProducts != null && pageData.getContent() instanceof HomePageContent) {
             final HomePageContent content = (HomePageContent) pageData.getContent();
             final ProductListBean productListBean = productListBeanFactory.create(recommendedProducts);

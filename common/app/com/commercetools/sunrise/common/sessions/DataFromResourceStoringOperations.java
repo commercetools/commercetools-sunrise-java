@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.common.sessions;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
@@ -14,7 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 public abstract class DataFromResourceStoringOperations<T> implements ResourceStoringOperations<T> {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    protected abstract Logger getLogger();
 
     /**
      * {@inheritDoc}

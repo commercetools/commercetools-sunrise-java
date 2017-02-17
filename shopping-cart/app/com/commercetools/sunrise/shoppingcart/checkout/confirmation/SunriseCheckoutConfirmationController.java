@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContentFactory;
@@ -17,34 +16,28 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
-
-@IntroducingMultiControllerComponents(CheckoutConfirmationThemeLinksControllerComponent.class)
 public abstract class SunriseCheckoutConfirmationController<F extends CheckoutConfirmationFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Cart, Order>, WithRequiredCart {
 
     private final CartFinder cartFinder;
     private final CheckoutConfirmationExecutor checkoutConfirmationExecutor;
     private final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory;
 
-    protected SunriseCheckoutConfirmationController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseCheckoutConfirmationController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                                     final FormFactory formFactory, final CartFinder cartFinder,
                                                     final CheckoutConfirmationExecutor checkoutConfirmationExecutor,
                                                     final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.checkoutConfirmationExecutor = checkoutConfirmationExecutor;
         this.checkoutConfirmationPageContentFactory = checkoutConfirmationPageContentFactory;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(asList("checkout", "checkout-confirmation"));
-        return frameworkTags;
+    @Inject
+    private void registerThemeLinks(final CheckoutConfirmationThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -59,12 +52,12 @@ public abstract class SunriseCheckoutConfirmationController<F extends CheckoutCo
 
     @SunriseRoute("checkoutConfirmationPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireNonEmptyCart(this::showFormPage));
+        return requireNonEmptyCart(this::showFormPage);
     }
 
     @SunriseRoute("checkoutConfirmationProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requireNonEmptyCart(this::processForm));
+        return requireNonEmptyCart(this::processForm);
     }
 
     @Override

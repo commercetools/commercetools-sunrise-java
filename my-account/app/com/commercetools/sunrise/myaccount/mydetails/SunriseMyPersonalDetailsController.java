@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
@@ -16,34 +15,28 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Collections.singletonList;
-
-@IntroducingMultiControllerComponents(MyPersonalDetailsThemeLinksControllerComponent.class)
 public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final MyPersonalDetailsExecutor myPersonalDetailsExecutor;
     private final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory;
 
-    protected SunriseMyPersonalDetailsController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseMyPersonalDetailsController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                                  final FormFactory formFactory, final CustomerFinder customerFinder,
                                                  final MyPersonalDetailsExecutor myPersonalDetailsExecutor,
                                                  final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.myPersonalDetailsExecutor = myPersonalDetailsExecutor;
         this.myPersonalDetailsPageContentFactory = myPersonalDetailsPageContentFactory;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(singletonList("my-personal-details"));
-        return frameworkTags;
+    @Inject
+    private void registerThemeLinks(final MyPersonalDetailsThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -58,12 +51,12 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
 
     @SunriseRoute("myPersonalDetailsPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::showFormPage));
+        return requireCustomer(this::showFormPage);
     }
 
     @SunriseRoute("myPersonalDetailsProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::processForm));
+        return requireCustomer(this::processForm);
     }
 
     @Override

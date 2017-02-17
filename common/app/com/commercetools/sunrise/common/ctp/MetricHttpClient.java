@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.ctp;
 import io.sphere.sdk.http.HttpClient;
 import io.sphere.sdk.http.HttpRequest;
 import io.sphere.sdk.http.HttpResponse;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.mvc.Http;
 
@@ -12,11 +13,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.common.ctp.MetricAction.KEY;
-
 final class MetricHttpClient implements HttpClient {
 
-    public static final String LOGGER_NAME = "sphere.metrics.simple";
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetricHttpClient.class);
+    static final String KEY = "io.sphere.sdk.play.metrics.reportRawData";
+
     private final HttpClient underlying;
     private final Http.Context context;
     private final boolean metricsEnabled;
@@ -24,7 +25,7 @@ final class MetricHttpClient implements HttpClient {
     private MetricHttpClient(final HttpClient underlying, final Http.Context context) {
         this.underlying = underlying;
         this.context = context;
-        this.metricsEnabled = LoggerFactory.getLogger(LOGGER_NAME).isDebugEnabled();
+        this.metricsEnabled = LOGGER.isDebugEnabled();
         if (metricsEnabled) {
             final List<ReportRawData> rawData = Collections.synchronizedList(new LinkedList<>());
             context.args.put(KEY, rawData);
@@ -45,7 +46,7 @@ final class MetricHttpClient implements HttpClient {
 
     @SuppressWarnings("unchecked")
     private void report(final Http.Context context, final HttpRequest httpRequest, final HttpResponse response, long startTimestamp, long stopTimestamp) {
-        final Optional<List<ReportRawData>> dataOptional = Optional.ofNullable((List<ReportRawData>) context.args.get(MetricAction.KEY));
+        final Optional<List<ReportRawData>> dataOptional = Optional.ofNullable((List<ReportRawData>) context.args.get(KEY));
         dataOptional.ifPresent(data -> data.add(new ReportRawData(httpRequest, response, startTimestamp, stopTimestamp)));
     }
 

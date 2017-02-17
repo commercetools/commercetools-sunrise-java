@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
@@ -16,29 +15,25 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
-
-@IntroducingMultiControllerComponents(SignUpThemeLinksControllerComponent.class)
 public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Void, CustomerSignInResult> {
 
     private final SignUpActionExecutor signUpActionExecutor;
     private final SignUpPageContentFactory signUpPageContentFactory;
 
-    protected SunriseSignUpController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseSignUpController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                       final FormFactory formFactory, final SignUpActionExecutor signUpActionExecutor,
                                       final SignUpPageContentFactory signUpPageContentFactory) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.signUpActionExecutor = signUpActionExecutor;
         this.signUpPageContentFactory = signUpPageContentFactory;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("my-account", "sign-up", "authentication", "customer", "user"));
+    @Inject
+    private void registerThemeLinks(final SignUpThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -47,12 +42,12 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
     }
 
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> showFormPage(null));
+        return showFormPage(null);
     }
 
     @SunriseRoute("processSignUpForm")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> processForm(null));
+        return processForm(null);
     }
 
     @Override

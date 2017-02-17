@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.view.CheckoutShippingPageContentFactory;
@@ -18,15 +17,11 @@ import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
-import java.util.HashSet;
+import javax.inject.Inject;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-import static java.util.Arrays.asList;
-
-@IntroducingMultiControllerComponents(CheckoutShippingThemeLinksControllerComponent.class)
 public abstract class SunriseCheckoutShippingController<F extends CheckoutShippingFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, ShippingMethodsWithCart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
@@ -34,23 +29,21 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
     private final CheckoutShippingPageContentFactory checkoutShippingPageContentFactory;
     private final ShippingSettings shippingSettings;
 
-    protected SunriseCheckoutShippingController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseCheckoutShippingController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                                 final FormFactory formFactory, final CartFinder cartFinder,
                                                 final CheckoutShippingExecutor checkoutShippingExecutor,
                                                 final CheckoutShippingPageContentFactory checkoutShippingPageContentFactory,
                                                 final ShippingSettings shippingSettings) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.checkoutShippingExecutor = checkoutShippingExecutor;
         this.checkoutShippingPageContentFactory = checkoutShippingPageContentFactory;
         this.shippingSettings = shippingSettings;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(asList("checkout", "checkout-shipping"));
-        return frameworkTags;
+    @Inject
+    private void registerThemeLinks(final CheckoutShippingThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -65,12 +58,12 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
 
     @SunriseRoute("checkoutShippingPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireShippingMethodsWithCart(this::showFormPage));
+        return requireShippingMethodsWithCart(this::showFormPage);
     }
 
     @SunriseRoute("checkoutShippingProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requireShippingMethodsWithCart(this::processForm));
+        return requireShippingMethodsWithCart(this::processForm);
     }
 
     @Override

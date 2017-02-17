@@ -12,6 +12,11 @@ public final class MultiControllerComponentResolverBuilder {
     public MultiControllerComponentResolverBuilder() {
     }
 
+    public MultiControllerComponentResolverBuilder add(final Class<? extends ControllerComponent> clazz) {
+        classToPredicateMap.put(clazz, x -> true);
+        return this;
+    }
+
     public MultiControllerComponentResolverBuilder add(final Class<? extends ControllerComponent> clazz, final Predicate<SunriseController> predicate) {
         classToPredicateMap.put(clazz, predicate);
         return this;

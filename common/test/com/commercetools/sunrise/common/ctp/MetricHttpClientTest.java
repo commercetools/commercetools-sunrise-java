@@ -39,7 +39,7 @@ public class MetricHttpClientTest {
     }
 
     private void testMetrics(final HttpRequest request, BiConsumer<HttpResponse, Http.Context> test) {
-        final Logger metricsLogger = (Logger) LoggerFactory.getLogger(MetricHttpClient.LOGGER_NAME);
+        final Logger metricsLogger = (Logger) LoggerFactory.getLogger(MetricHttpClient.class);
         metricsLogger.setLevel(Level.DEBUG); // TODO check better way to do this
         final Http.Context context = emptyContext();
         final MetricHttpClient metricHttpClient = MetricHttpClient.of(httpClient(), context);
@@ -50,12 +50,12 @@ public class MetricHttpClientTest {
 
     @SuppressWarnings("unchecked")
     private List<ReportRawData> reportFromContext(final Http.Context context) {
-        return (List<ReportRawData>) context.args.get(MetricAction.KEY);
+        return (List<ReportRawData>) context.args.get(MetricsLogger.KEY);
     }
 
     private Http.Context emptyContext() {
         final Http.Context context = new Http.Context(null, null, null, emptyMap(), emptyMap(), emptyMap());
-        context.args.put(MetricAction.KEY, new LinkedList<>());
+        context.args.put(MetricsLogger.KEY, new LinkedList<>());
         return context;
     }
 

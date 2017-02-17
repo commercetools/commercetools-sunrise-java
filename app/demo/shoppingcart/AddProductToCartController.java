@@ -3,13 +3,15 @@ package demo.shoppingcart;
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartCreator;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.cart.addtocart.AddProductToCartExecutor;
 import com.commercetools.sunrise.shoppingcart.cart.addtocart.DefaultAddProductToCartFormData;
 import com.commercetools.sunrise.shoppingcart.cart.addtocart.SunriseAddProductToCartController;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
+import demo.CommonControllerComponentListSupplier;
+import demo.PageHeaderControllerComponentListSupplier;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -23,7 +25,7 @@ public final class AddProductToCartController extends SunriseAddProductToCartCon
     private final CartReverseRouter cartReverseRouter;
 
     @Inject
-    public AddProductToCartController(final RequestHookContext hookContext,
+    public AddProductToCartController(final ComponentRegistry componentRegistry,
                                       final TemplateRenderer templateRenderer,
                                       final FormFactory formFactory,
                                       final CartFinder cartFinder,
@@ -31,8 +33,15 @@ public final class AddProductToCartController extends SunriseAddProductToCartCon
                                       final AddProductToCartExecutor addProductToCartExecutor,
                                       final CartDetailPageContentFactory cartDetailPageContentFactory,
                                       final CartReverseRouter cartReverseRouter) {
-        super(hookContext, templateRenderer, formFactory, cartFinder, cartCreator, addProductToCartExecutor, cartDetailPageContentFactory);
+        super(componentRegistry, templateRenderer, formFactory, cartFinder, cartCreator, addProductToCartExecutor, cartDetailPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
+    }
+
+    @Inject
+    public void registerComponents(final CommonControllerComponentListSupplier commonControllerComponentListSupplier,
+                                   final PageHeaderControllerComponentListSupplier pageHeaderControllerComponentListSupplier) {
+        register(commonControllerComponentListSupplier);
+        register(pageHeaderControllerComponentListSupplier);
     }
 
     @Override

@@ -2,17 +2,15 @@ package com.commercetools.sunrise.common.localization;
 
 import com.commercetools.sunrise.common.controllers.SunriseFormController;
 import com.commercetools.sunrise.common.controllers.WithFormFlow;
+import com.commercetools.sunrise.common.sessions.language.LanguageInSession;
 import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @IntroducingMultiControllerComponents(LocalizationThemeLinksControllerComponent.class)
@@ -20,20 +18,15 @@ public abstract class SunriseChangeLanguageController<F extends LanguageFormData
 
     private final LanguageInSession languageInSession;
 
-    protected SunriseChangeLanguageController(final RequestHookContext hookContext, final FormFactory formFactory,
+    protected SunriseChangeLanguageController(final ComponentRegistry componentRegistry, final FormFactory formFactory,
                                               final LanguageInSession languageInSession) {
-        super(hookContext, formFactory);
+        super(componentRegistry, formFactory);
         this.languageInSession = languageInSession;
-    }
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("localization-controller", "language"));
     }
 
     @SunriseRoute("processChangeLanguageForm")
     public CompletionStage<Result> process() {
-        return doRequest(() -> processForm(null));
+        return processForm(null);
     }
 
     @Override

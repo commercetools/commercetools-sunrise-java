@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TestableI18nResolver implements I18nResolver {
+
     private final Map<String, String> i18nMap;
 
     public TestableI18nResolver(final Map<String, String> i18nMap) {

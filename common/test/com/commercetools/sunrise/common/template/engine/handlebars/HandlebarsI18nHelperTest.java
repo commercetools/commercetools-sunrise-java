@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.template.engine.handlebars;
 
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.template.engine.TemplateContext;
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
-import com.commercetools.sunrise.common.template.engine.TestablePageData;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.template.i18n.TestableI18nResolver;
@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class HandlebarsI18nHelperTest {
 
     private static final TemplateLoader DEFAULT_LOADER = new ClassPathTemplateLoader("/templates/i18nHelper");
-    private static final PageData SOME_PAGE_DATA = new TestablePageData();
 
     @Test
     public void resolvesMessage() throws Exception {
@@ -61,13 +60,13 @@ public class HandlebarsI18nHelperTest {
     private static void testTemplate(final String templateName, final Locale locale, final Map<String, String> i18nMap,
                                      final Consumer<String> test) {
         final Handlebars handlebars = HandlebarsFactory.create(singletonList(DEFAULT_LOADER), i18nResolver(i18nMap), new I18nIdentifierFactory());
-        final TemplateEngine templateEngine = HandlebarsTemplateEngine.of(handlebars, new HandlebarsContextFactory());
+        final TemplateEngine templateEngine = HandlebarsTemplateEngine.of(handlebars, new HandlebarsContextFactory(new PlayJavaFormResolver(msg -> msg)));
         final String html = renderTemplate(templateName, templateEngine, locale);
         test.accept(html);
     }
 
     private static String renderTemplate(final String templateName, final TemplateEngine templateEngine, final Locale locale) {
-        final TemplateContext templateContext = new TemplateContext(SOME_PAGE_DATA, singletonList(locale), null);
+        final TemplateContext templateContext = new TemplateContext(new PageData(), singletonList(locale), null);
         return templateEngine.render(templateName, templateContext);
     }
 

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.httpauth;
 
-import com.commercetools.sunrise.common.WithSunriseApplication;
+import com.commercetools.sunrise.pt.WithSunriseApplication;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import org.junit.Test;

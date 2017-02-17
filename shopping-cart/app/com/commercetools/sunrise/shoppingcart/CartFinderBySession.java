@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.common.sessions.carts.CartInSession;
+import com.commercetools.sunrise.common.sessions.cart.CartInSession;
 import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.hooks.events.CartLoadedHook;
 import com.commercetools.sunrise.hooks.requests.CartQueryHook;
-import com.commercetools.sunrise.common.sessions.customers.CustomerInSession;
+import com.commercetools.sunrise.common.sessions.customer.CustomerInSession;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartState;
 import io.sphere.sdk.carts.queries.CartQuery;

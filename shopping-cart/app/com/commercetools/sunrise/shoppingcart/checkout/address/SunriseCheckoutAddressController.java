@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContentFactory;
@@ -16,34 +15,28 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
-
-@IntroducingMultiControllerComponents(CheckoutAddressThemeLinksControllerComponent.class)
 public abstract class SunriseCheckoutAddressController<F extends CheckoutAddressFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Cart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
     private final CheckoutAddressExecutor checkoutAddressExecutor;
     private final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
 
-    protected SunriseCheckoutAddressController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseCheckoutAddressController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                                final FormFactory formFactory, final CartFinder cartFinder,
                                                final CheckoutAddressExecutor checkoutAddressExecutor,
                                                final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.checkoutAddressExecutor = checkoutAddressExecutor;
         this.checkoutAddressPageContentFactory = checkoutAddressPageContentFactory;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(asList("checkout", "checkout-address"));
-        return frameworkTags;
+    @Inject
+    private void registerThemeLinks(final CheckoutAddressThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -58,13 +51,13 @@ public abstract class SunriseCheckoutAddressController<F extends CheckoutAddress
 
     @SunriseRoute("checkoutAddressesPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireNonEmptyCart(this::showFormPage));
+        return requireNonEmptyCart(this::showFormPage);
     }
 
     @SuppressWarnings("unused")
     @SunriseRoute("checkoutAddressesProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requireNonEmptyCart(this::processForm));
+        return requireNonEmptyCart(this::processForm);
     }
 
     @Override

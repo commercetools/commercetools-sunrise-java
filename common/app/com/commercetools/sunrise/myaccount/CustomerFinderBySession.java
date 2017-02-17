@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount;
 
-import com.commercetools.sunrise.common.sessions.customers.CustomerInSession;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.common.sessions.customer.CustomerInSession;
+import com.commercetools.sunrise.hooks.HookRunner;
 import com.commercetools.sunrise.hooks.events.CustomerLoadedHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
@@ -18,14 +18,14 @@ public class CustomerFinderBySession implements CustomerFinder {
 
     private final CustomerInSession customerInSession;
     private final SphereClient sphereClient;
-    private final RequestHookContext hookContext;
+    private final HookRunner hookRunner;
 
     @Inject
     protected CustomerFinderBySession(final CustomerInSession customerInSession, final SphereClient sphereClient,
-                                      final RequestHookContext hookContext) {
+                                      final HookRunner hookRunner) {
         this.sphereClient = sphereClient;
         this.customerInSession = customerInSession;
-        this.hookContext = hookContext;
+        this.hookRunner = hookRunner;
     }
 
     @Override
@@ -46,6 +46,6 @@ public class CustomerFinderBySession implements CustomerFinder {
     }
 
     private CompletionStage<?> runHookOnCustomerLoaded(final Customer customer) {
-        return CustomerLoadedHook.runHook(hookContext, customer);
+        return CustomerLoadedHook.runHook(hookRunner, customer);
     }
 }

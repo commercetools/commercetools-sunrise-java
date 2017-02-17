@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartCreator;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
@@ -18,13 +17,9 @@ import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
-
-@IntroducingMultiControllerComponents(AddProductToCartThemeLinksControllerComponent.class)
 public abstract class SunriseAddProductToCartController<F extends AddProductToCartFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Cart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
@@ -32,22 +27,20 @@ public abstract class SunriseAddProductToCartController<F extends AddProductToCa
     private final AddProductToCartExecutor addProductToCartExecutor;
     private final CartDetailPageContentFactory cartDetailPageContentFactory;
 
-    protected SunriseAddProductToCartController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseAddProductToCartController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                                 final FormFactory formFactory, final CartFinder cartFinder, final CartCreator cartCreator,
                                                 final AddProductToCartExecutor addProductToCartExecutor,
                                                 final CartDetailPageContentFactory cartDetailPageContentFactory) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.cartCreator = cartCreator;
         this.addProductToCartExecutor = addProductToCartExecutor;
         this.cartDetailPageContentFactory = cartDetailPageContentFactory;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(asList("shopping-cart", "cart", "add-line-item-to-cart"));
-        return frameworkTags;
+    @Inject
+    private void registerThemeLinks(final AddProductToCartThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -67,7 +60,7 @@ public abstract class SunriseAddProductToCartController<F extends AddProductToCa
     @SuppressWarnings("unused")
     @SunriseRoute("processAddProductToCartForm")
     public CompletionStage<Result> addProductToCart(final String languageTag) {
-        return doRequest(() -> requireCart(this::processForm));
+        return requireCart(this::processForm);
     }
 
     @Override

@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.myaccount.authentication.login.view.LogInPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
@@ -16,29 +15,25 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
-
-@IntroducingMultiControllerComponents(LogInThemeLinksControllerComponent.class)
 public abstract class SunriseLogInController<F extends LogInFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Void, CustomerSignInResult> {
 
     private final LogInExecutor logInExecutor;
     private final LogInPageContentFactory logInPageContentFactory;
 
-    protected SunriseLogInController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseLogInController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                      final FormFactory formFactory, final LogInExecutor logInExecutor,
                                      final LogInPageContentFactory logInPageContentFactory) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.logInExecutor = logInExecutor;
         this.logInPageContentFactory = logInPageContentFactory;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("my-account", "log-in", "authentication", "customer", "user"));
+    @Inject
+    private void registerThemeLinks(final LogInThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -48,12 +43,12 @@ public abstract class SunriseLogInController<F extends LogInFormData> extends Su
 
     @SunriseRoute("showLogInForm")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> showFormPage(null));
+        return showFormPage(null);
     }
 
     @SunriseRoute("processLogInForm")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> processForm(null));
+        return processForm(null);
     }
 
     @Override

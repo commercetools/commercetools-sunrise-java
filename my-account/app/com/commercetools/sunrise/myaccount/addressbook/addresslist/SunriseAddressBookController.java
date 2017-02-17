@@ -5,40 +5,33 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateController;
 import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.addresslist.view.AddressBookPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
-
-@IntroducingMultiControllerComponents(AddressBookThemeLinksControllerComponent.class)
 public abstract class SunriseAddressBookController extends SunriseTemplateController implements WithQueryFlow<Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final AddressBookPageContentFactory addressBookPageContentFactory;
 
-    protected SunriseAddressBookController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseAddressBookController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                            final CustomerFinder customerFinder,
                                            final AddressBookPageContentFactory addressBookPageContentFactory) {
-        super(hookContext, templateRenderer);
+        super(componentRegistry, templateRenderer);
         this.customerFinder = customerFinder;
         this.addressBookPageContentFactory = addressBookPageContentFactory;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(asList("address-book"));
-        return frameworkTags;
+    @Inject
+    private void registerThemeLinks(final AddressBookThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -53,7 +46,7 @@ public abstract class SunriseAddressBookController extends SunriseTemplateContro
 
     @SunriseRoute("addressBookCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requireCustomer(this::showPage));
+        return requireCustomer(this::showPage);
     }
 
     @Override

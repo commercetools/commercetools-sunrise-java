@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.contexts;
 
-import com.commercetools.sunrise.common.localization.CountryInSession;
+import com.commercetools.sunrise.common.sessions.country.CountryInSession;
 import com.neovisionaries.i18n.CountryCode;
 
 import javax.inject.Inject;

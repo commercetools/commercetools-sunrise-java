@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.models.HalLink;
 import com.commercetools.sunrise.common.models.ViewModel;
-import com.commercetools.sunrise.common.sessions.customers.UserInfoBean;
+import com.commercetools.sunrise.common.sessions.customer.UserInfoBean;
 import play.mvc.Call;
 
 import java.util.HashMap;

@@ -12,21 +12,24 @@ import play.mvc.Http;
 import javax.inject.Inject;
 
 public final class MetricSphereClientProvider implements Provider<SphereClient> {
-    private static final Logger logger = LoggerFactory.getLogger(MetricSphereClientProvider.class);
+
+    private final HttpClient httpClient;
+    private final SphereAccessTokenSupplier sphereAccessTokenSupplier;
+    private final SphereClientConfig sphereClientConfig;
+    private final Http.Context context;
 
     @Inject
-    private HttpClient httpClient;
-    @Inject
-    private SphereAccessTokenSupplier sphereAccessTokenSupplier;
-    @Inject
-    private SphereClientConfig sphereClientConfig;
-    @Inject
-    private Http.Context context;
+    public MetricSphereClientProvider(final HttpClient httpClient, final SphereAccessTokenSupplier sphereAccessTokenSupplier,
+                                      final SphereClientConfig sphereClientConfig, final Http.Context context) {
+        this.httpClient = httpClient;
+        this.sphereAccessTokenSupplier = sphereAccessTokenSupplier;
+        this.sphereClientConfig = sphereClientConfig;
+        this.context = context;
+    }
 
     @Override
     public SphereClient get() {
         final MetricHttpClient metricHttpClient = MetricHttpClient.of(httpClient, context);
-        logger.info("Provide RequestScopedSphereClient: MetricHttpClient");
         return SphereClient.of(sphereClientConfig, metricHttpClient, sphereAccessTokenSupplier);
     }
 

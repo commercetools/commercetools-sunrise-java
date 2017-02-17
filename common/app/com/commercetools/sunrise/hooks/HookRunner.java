@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-@ImplementedBy(RequestHookContextImpl.class)
+@ImplementedBy(HookContextImpl.class)
 public interface HookRunner {
     /**
      * Executes a hook which takes 0 to n parameters and returns a {@link CompletionStage}.

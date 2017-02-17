@@ -147,6 +147,7 @@ public class CacheableObjectStoringSessionCookieStrategyTest {
 
             final Map<String, Object> cache = new HashMap<>(initialCache);
 
+            @SuppressWarnings("unchecked")
             @Override
             public <T> T get(final String key) {
                 return (T) cache.get(key);

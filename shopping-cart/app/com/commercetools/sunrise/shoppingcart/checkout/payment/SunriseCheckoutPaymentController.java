@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.view.CheckoutPaymentPageContentFactory;
@@ -20,17 +19,14 @@ import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
-import java.util.HashSet;
+import javax.inject.Inject;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-import static java.util.Arrays.asList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-@IntroducingMultiControllerComponents(CheckoutPaymentThemeLinksControllerComponent.class)
 public abstract class SunriseCheckoutPaymentController<F extends CheckoutPaymentFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, PaymentMethodsWithCart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
@@ -38,23 +34,21 @@ public abstract class SunriseCheckoutPaymentController<F extends CheckoutPayment
     private final CheckoutPaymentPageContentFactory checkoutPaymentPageContentFactory;
     private final PaymentSettings paymentSettings;
 
-    protected SunriseCheckoutPaymentController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseCheckoutPaymentController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                                final FormFactory formFactory, final CartFinder cartFinder,
                                                final CheckoutPaymentExecutor checkoutPaymentExecutor,
                                                final CheckoutPaymentPageContentFactory checkoutPaymentPageContentFactory,
                                                final PaymentSettings paymentSettings) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.checkoutPaymentExecutor = checkoutPaymentExecutor;
         this.checkoutPaymentPageContentFactory = checkoutPaymentPageContentFactory;
         this.paymentSettings = paymentSettings;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(asList("checkout", "checkout-payment"));
-        return frameworkTags;
+    @Inject
+    private void registerThemeLinks(final CheckoutPaymentThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -69,12 +63,12 @@ public abstract class SunriseCheckoutPaymentController<F extends CheckoutPayment
 
     @SunriseRoute("checkoutPaymentPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> requirePaymentMethodsWithCart(this::showFormPage));
+        return requirePaymentMethodsWithCart(this::showFormPage);
     }
 
     @SunriseRoute("checkoutPaymentProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> requirePaymentMethodsWithCart(this::processForm));
+        return requirePaymentMethodsWithCart(this::processForm);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.commercetools.sunrise.common.pages;
 import com.commercetools.sunrise.common.controllers.WebJarAssetsReverseRouter;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.sessions.customers.CustomerInSession;
+import com.commercetools.sunrise.common.sessions.customer.CustomerInSession;
 import play.filters.csrf.CSRF;
 import play.mvc.Call;
 import play.mvc.Http;

@@ -3,7 +3,8 @@ package demo.shoppingcart;
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.OrderCreatedFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.SunriseCheckoutThankYouController;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.view.CheckoutThankYouPageContentFactory;
@@ -18,13 +19,18 @@ public final class CheckoutThankYouController extends SunriseCheckoutThankYouCon
     private final HomeReverseRouter homeReverseRouter;
 
     @Inject
-    public CheckoutThankYouController(final RequestHookContext hookContext,
+    public CheckoutThankYouController(final ComponentRegistry componentRegistry,
                                       final TemplateRenderer templateRenderer,
                                       final OrderCreatedFinder orderCreatedFinder,
                                       final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory,
                                       final HomeReverseRouter homeReverseRouter) {
-        super(hookContext, templateRenderer, orderCreatedFinder, checkoutThankYouPageContentFactory);
+        super(componentRegistry, templateRenderer, orderCreatedFinder, checkoutThankYouPageContentFactory);
         this.homeReverseRouter = homeReverseRouter;
+    }
+
+    @Inject
+    public void registerComponents(final CheckoutStepControllerComponent checkoutStepControllerComponent) {
+        register(checkoutStepControllerComponent);
     }
 
     @Override

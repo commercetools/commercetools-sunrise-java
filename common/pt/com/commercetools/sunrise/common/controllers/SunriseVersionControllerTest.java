@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.controllers;
 
-import com.commercetools.sunrise.common.WithSunriseApplication;
+import com.commercetools.sunrise.pt.WithSunriseApplication;
 import org.junit.Test;
 import play.Application;
 import play.mvc.Http;

@@ -1,14 +1,13 @@
 package com.commercetools.sunrise.common.suggestion;
 
-import com.commercetools.sunrise.common.controllers.TestableSphereClient;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.commercetools.sunrise.test.TestableSphereClient;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.search.PriceSelection;
 import org.junit.Test;
 
+import javax.money.Monetary;
 import java.util.Set;
 
 import static java.util.Collections.emptyList;
@@ -31,13 +30,8 @@ public class SunriseProductRecommendationTest {
     }
 
     private SunriseProductRecommendation productRecommendation(final SphereClient sphereClient) {
-        final Injector injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(SphereClient.class).toInstance(sphereClient);
-            }
-        });
-        return injector.getInstance(SunriseProductRecommendation.class);
+        final PriceSelection priceSelection = PriceSelection.of(Monetary.getCurrency("EUR"));
+        return new SunriseProductRecommendation(sphereClient, priceSelection);
     }
 
     private ProductProjection productWithNoCategories() {

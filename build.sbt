@@ -1,6 +1,6 @@
 import sbt.Keys._
 import sbt._
-import UnidocKeys._
+import sbtunidoc.Plugin.UnidocKeys._
 
 name := "commercetools-sunrise"
 
@@ -37,7 +37,7 @@ lazy val common = project
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.sunriseTheme ++ Dependencies.sunriseModules ++ Dependencies.commonLib: _*)
-  .dependsOn(`move-to-sdk`)
+  .dependsOn(`move-to-sdk`, `test-lib`)
 
 lazy val `product-catalog` = project
   .enablePlugins(PlayJava)
@@ -68,7 +68,12 @@ lazy val `move-to-sdk` = project
   .settings(Release.enableSignedRelease ++ TestCommon.settingsWithoutPlayTest: _*)
   .settings(Dependencies.jvmSdk)
 
-lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;test->test;it->it;pt->pt"
+lazy val `test-lib` = project
+  .enablePlugins(PlayJava)
+  .settings(Release.enableSignedRelease ++ TestCommon.configCommonTestSettings("compile") ++ TestCommon.configJavaWsDependency("compile"): _*)
+  .settings(Dependencies.jvmSdk ++ Dependencies.commonLib: _*)
+
+lazy val commonWithTests: ClasspathDep[ProjectReference] = common
 
 lazy val javadocSettings = javaUnidocSettings ++ Seq (
   unidocProjectFilter in (JavaUnidoc, unidoc) := inProjects(childProjects: _*)

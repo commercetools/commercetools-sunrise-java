@@ -4,9 +4,8 @@ import com.commercetools.sunrise.common.controllers.SunriseTemplateFormControlle
 import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
@@ -16,34 +15,28 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
-
-@IntroducingMultiControllerComponents(RemoveLineItemThemeLinksControllerComponent.class)
 public abstract class SunriseRemoveLineItemController<F extends RemoveLineItemFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Cart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
     private final RemoveLineItemExecutor removeLineItemExecutor;
     private final CartDetailPageContentFactory cartDetailPageContentFactory;
 
-    protected SunriseRemoveLineItemController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseRemoveLineItemController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                               final FormFactory formFactory, final CartFinder cartFinder,
                                               final RemoveLineItemExecutor removeLineItemExecutor,
                                               final CartDetailPageContentFactory cartDetailPageContentFactory) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.removeLineItemExecutor = removeLineItemExecutor;
         this.cartDetailPageContentFactory = cartDetailPageContentFactory;
     }
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(asList("cart", "manage-cart", "remove-line-item-from-cart"));
-        return frameworkTags;
+    @Inject
+    private void registerThemeLinks(final RemoveLineItemThemeLinksControllerComponent themeLinksControllerComponent) {
+        register(themeLinksControllerComponent);
     }
 
     @Override
@@ -58,7 +51,7 @@ public abstract class SunriseRemoveLineItemController<F extends RemoveLineItemFo
 
     @SunriseRoute("processDeleteLineItemForm")
     public CompletionStage<Result> removeLineItem(final String languageTag) {
-        return doRequest(() -> requireNonEmptyCart(this::processForm));
+        return requireNonEmptyCart(this::processForm);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.common.controllers;
 
-import com.commercetools.sunrise.common.WithSunriseApplication;
+import com.commercetools.sunrise.pt.WithSunriseApplication;
+import com.commercetools.sunrise.test.TestableSphereClient;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import io.sphere.sdk.client.SphereClient;
@@ -47,14 +48,14 @@ public class SunriseHealthCheckControllerTest extends WithSunriseApplication {
     }
 
     private void rendersHealthyCtp(final HealthCheckControllerTest controller) throws Exception {
-        final Result result = controller.showHealth().toCompletableFuture().get(1, TimeUnit.SECONDS);
+        final Result result = controller.show().toCompletableFuture().get(1, TimeUnit.SECONDS);
         assertThat(result.status()).isEqualTo(Http.Status.OK);
         assertThat(result.contentType()).contains(Http.MimeTypes.JSON);
         assertThat(contentAsString(result)).contains("\"healthy\" : true");
     }
 
     private void rendersUnhealthyCtp(final HealthCheckControllerTest controller) throws Exception {
-        final Result result = controller.showHealth().toCompletableFuture().get(1, TimeUnit.SECONDS);
+        final Result result = controller.show().toCompletableFuture().get(1, TimeUnit.SECONDS);
         assertThat(result.status()).isEqualTo(Http.Status.SERVICE_UNAVAILABLE);
         assertThat(result.contentType()).contains(Http.MimeTypes.JSON);
         assertThat(contentAsString(result)).contains("\"healthy\" : false");

@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
@@ -18,11 +18,7 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
-
-import static java.util.Arrays.asList;
 
 public abstract class SunriseRemoveAddressController<F extends RemoveAddressFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, AddressWithCustomer, Customer>, WithRequiredCustomer, WithRequiredAddress {
 
@@ -31,22 +27,15 @@ public abstract class SunriseRemoveAddressController<F extends RemoveAddressForm
     private final RemoveAddressExecutor removeAddressExecutor;
     private final AddressBookPageContentFactory addressBookPageContentFactory;
 
-    protected SunriseRemoveAddressController(final RequestHookContext hookContext, final TemplateRenderer templateRenderer,
+    protected SunriseRemoveAddressController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
                                              final FormFactory formFactory, final CustomerFinder customerFinder, final AddressFinder addressFinder,
                                              final RemoveAddressExecutor removeAddressExecutor,
                                              final AddressBookPageContentFactory addressBookPageContentFactory) {
-        super(hookContext, templateRenderer, formFactory);
+        super(componentRegistry, templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.addressFinder = addressFinder;
         this.removeAddressExecutor = removeAddressExecutor;
         this.addressBookPageContentFactory = addressBookPageContentFactory;
-    }
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = new HashSet<>();
-        frameworkTags.addAll(asList("address-book", "remove-address", "address"));
-        return frameworkTags;
     }
 
     @Override
@@ -66,10 +55,9 @@ public abstract class SunriseRemoveAddressController<F extends RemoveAddressForm
 
     @SunriseRoute("removeAddressFromAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
-        return doRequest(() ->
-                requireCustomer(customer ->
-                        requireAddress(customer, addressId,
-                                address -> processForm(AddressWithCustomer.of(address, customer)))));
+        return requireCustomer(customer ->
+                requireAddress(customer, addressId,
+                        address -> processForm(AddressWithCustomer.of(address, customer))));
     }
 
     @Override

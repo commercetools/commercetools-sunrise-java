@@ -2,10 +2,10 @@ package demo.common;
 
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.localization.LanguageFormData;
-import com.commercetools.sunrise.common.localization.LanguageInSession;
 import com.commercetools.sunrise.common.localization.SunriseChangeLanguageController;
 import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.common.sessions.language.LanguageInSession;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import io.sphere.sdk.client.ClientErrorException;
 import play.data.Form;
 import play.data.FormFactory;
@@ -20,11 +20,11 @@ public final class ChangeLanguageController extends SunriseChangeLanguageControl
     private final HomeReverseRouter homeReverseRouter;
 
     @Inject
-    public ChangeLanguageController(final RequestHookContext hookContext,
+    public ChangeLanguageController(final ComponentRegistry componentRegistry,
                                     final FormFactory formFactory,
                                     final LanguageInSession languageInSession,
                                     final HomeReverseRouter homeReverseRouter) {
-        super(hookContext, formFactory, languageInSession);
+        super(componentRegistry, formFactory, languageInSession);
         this.homeReverseRouter = homeReverseRouter;
     }
 

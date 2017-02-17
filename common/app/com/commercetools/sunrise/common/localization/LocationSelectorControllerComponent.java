@@ -17,6 +17,6 @@ public class LocationSelectorControllerComponent implements ControllerComponent,
 
     @Override
     public void onPageDataReady(final PageData pageData) {
-        pageData.getHeader().setLocation(localizationSelectorBeanFactory.create());
+        pageData.getHeader().setLocation(localizationSelectorBeanFactory.create(null));
     }
 }

@@ -4,8 +4,9 @@ import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.reverserouter.CheckoutReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.hooks.RequestHookContext;
+import com.commercetools.sunrise.hooks.ComponentRegistry;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressExecutor;
 import com.commercetools.sunrise.shoppingcart.checkout.address.DefaultCheckoutAddressFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.address.SunriseCheckoutAddressController;
@@ -24,7 +25,7 @@ public final class CheckoutAddressController extends SunriseCheckoutAddressContr
     private final CheckoutReverseRouter checkoutReverseRouter;
 
     @Inject
-    public CheckoutAddressController(final RequestHookContext hookContext,
+    public CheckoutAddressController(final ComponentRegistry componentRegistry,
                                      final TemplateRenderer templateRenderer,
                                      final FormFactory formFactory,
                                      final CartFinder cartFinder,
@@ -32,9 +33,14 @@ public final class CheckoutAddressController extends SunriseCheckoutAddressContr
                                      final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory,
                                      final CartReverseRouter cartReverseRouter,
                                      final CheckoutReverseRouter checkoutReverseRouter) {
-        super(hookContext, templateRenderer, formFactory, cartFinder, checkoutAddressExecutor, checkoutAddressPageContentFactory);
+        super(componentRegistry, templateRenderer, formFactory, cartFinder, checkoutAddressExecutor, checkoutAddressPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
         this.checkoutReverseRouter = checkoutReverseRouter;
+    }
+
+    @Inject
+    public void registerComponents(final CheckoutStepControllerComponent checkoutStepControllerComponent) {
+        register(checkoutStepControllerComponent);
     }
 
     @Override
