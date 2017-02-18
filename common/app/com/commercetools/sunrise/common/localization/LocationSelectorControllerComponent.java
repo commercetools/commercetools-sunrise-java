@@ -1,8 +1,9 @@
 package com.commercetools.sunrise.common.localization;
 
+import com.commercetools.sunrise.common.models.LocalizationSelectorBeanFactory;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
+import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 
 import javax.inject.Inject;
 

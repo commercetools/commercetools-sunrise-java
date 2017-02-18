@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount;
 
-import com.commercetools.sunrise.common.sessions.customer.CustomerInSession;
-import com.commercetools.sunrise.hooks.HookRunner;
-import com.commercetools.sunrise.hooks.events.CustomerLoadedHook;
+import com.commercetools.sunrise.sessions.customer.CustomerInSession;
+import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.framework.hooks.events.CustomerLoadedHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.queries.CustomerByIdGet;

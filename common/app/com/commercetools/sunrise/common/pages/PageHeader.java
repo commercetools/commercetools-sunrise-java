@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.localization.LocalizationSelectorBean;
+import com.commercetools.sunrise.common.models.LocalizationSelectorBean;
 import com.commercetools.sunrise.common.models.ViewModel;
 import com.commercetools.sunrise.shoppingcart.MiniCartBean;
 

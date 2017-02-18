@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import com.commercetools.sunrise.common.sessions.cart.CartInSession;
-import com.commercetools.sunrise.hooks.HookRunner;
+import com.commercetools.sunrise.sessions.cart.CartInSession;
+import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.authentication.AbstractCustomerSignInExecutor;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerDraft;

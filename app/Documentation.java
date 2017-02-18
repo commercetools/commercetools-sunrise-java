@@ -1,8 +1,8 @@
 import com.commercetools.sunrise.common.injection.RequestScope;
-import com.commercetools.sunrise.hooks.Hook;
-import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
-import com.commercetools.sunrise.hooks.events.RequestStartedHook;
-import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
+import com.commercetools.sunrise.framework.hooks.Hook;
+import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
+import com.commercetools.sunrise.framework.hooks.events.RequestStartedHook;
+import com.commercetools.sunrise.framework.hooks.requests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;

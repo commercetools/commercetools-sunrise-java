@@ -1,0 +1,51 @@
+package com.commercetools.sunrise.productcatalog.productoverview;
+
+import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.controllers.WithQueryFlow;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
+import com.commercetools.sunrise.productcatalog.productoverview.view.ProductOverviewPageContentFactory;
+import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.search.PagedSearchResult;
+import play.libs.concurrent.HttpExecution;
+import play.mvc.Result;
+
+import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
+
+/**
+ * Provides facilities to search products.
+ */
+public abstract class SunriseSearchController extends SunriseTemplateController implements WithQueryFlow<ProductsWithCategory> {
+
+    private final ProductListFinder productListFinder;
+    private final ProductOverviewPageContentFactory productOverviewPageContentFactory;
+
+    protected SunriseSearchController(final TemplateRenderer templateRenderer,
+                                      final ProductListFinder productListFinder,
+                                      final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
+        super(templateRenderer);
+        this.productListFinder = productListFinder;
+        this.productOverviewPageContentFactory = productOverviewPageContentFactory;
+    }
+
+    @RunRequestStartedHook
+    @SunriseRoute(ProductReverseRouter.SEARCH_PROCESS)
+    public CompletionStage<Result> process(final String languageTag) {
+        return findProducts(products ->
+                showPage(ProductsWithCategory.of(products)));
+    }
+
+    protected final CompletionStage<Result> findProducts(final Function<PagedSearchResult<ProductProjection>, CompletionStage<Result>> nextAction) {
+        return productListFinder.apply(null)
+                .thenComposeAsync(nextAction, HttpExecution.defaultContext());
+    }
+
+    @Override
+    public PageContent createPageContent(final ProductsWithCategory productsWithCategory) {
+        return productOverviewPageContentFactory.create(productsWithCategory);
+    }
+}

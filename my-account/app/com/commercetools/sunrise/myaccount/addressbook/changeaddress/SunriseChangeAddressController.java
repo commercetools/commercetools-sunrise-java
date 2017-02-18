@@ -1,12 +1,13 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
@@ -53,7 +54,7 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("changeAddressInAddressBookCall")
+    @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PAGE)
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
         return requireCustomer(customer ->
                 requireAddress(customer, addressId, address ->
@@ -61,7 +62,7 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("changeAddressInAddressBookProcessFormCall")
+    @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PROCESS)
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return requireCustomer(customer ->
                 requireAddress(customer, addressId, address ->

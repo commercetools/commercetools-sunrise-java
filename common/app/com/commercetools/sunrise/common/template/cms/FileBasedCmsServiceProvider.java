@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.template.cms;
 
 import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.SunriseConfigurationException;
-import com.commercetools.sunrise.common.contexts.ProjectContext;
+import com.commercetools.sunrise.contexts.ProjectContext;
 import com.commercetools.sunrise.common.template.cms.filebased.FileBasedCmsService;
 import com.commercetools.sunrise.common.template.i18n.composite.CompositeI18nResolver;
 import com.commercetools.sunrise.common.template.i18n.composite.CompositeI18nResolverFactory;

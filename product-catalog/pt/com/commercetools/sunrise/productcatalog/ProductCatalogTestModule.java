@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog;
 
-import com.commercetools.sunrise.common.reverserouter.productcatalog.HomeReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.productcatalog.ProductReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.pt.DefaultTestModule;
 import com.commercetools.sunrise.test.TestableCall;
@@ -73,7 +73,7 @@ public class ProductCatalogTestModule extends DefaultTestModule {
             }
 
             @Override
-            public Call processSearchProductsForm(final String languageTag) {
+            public Call searchProcessCall(final String languageTag) {
                 throw new UnsupportedOperationException();
             }
         };

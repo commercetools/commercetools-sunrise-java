@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
-import com.commercetools.sunrise.hooks.HookRunner;
+import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.myorders.AbstractOrderQueryExecutor;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog;
 
-import com.commercetools.sunrise.common.reverserouter.productcatalog.ProductReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
 import com.commercetools.sunrise.test.TestableCall;
 import play.mvc.Call;
 
@@ -29,7 +29,7 @@ public class TestableProductReverseRouter implements ProductReverseRouter {
     }
 
     @Override
-    public Call processSearchProductsForm(final String languageTag) {
+    public Call searchProcessCall(final String languageTag) {
         return new TestableCall("search");
     }
 }

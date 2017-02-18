@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount;
 
-import com.commercetools.sunrise.common.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.hooks.HookRunner;
-import com.commercetools.sunrise.hooks.events.CustomerUpdatedHook;
-import com.commercetools.sunrise.hooks.requests.CustomerUpdateCommandHook;
+import com.commercetools.sunrise.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.framework.hooks.events.CustomerUpdatedHook;
+import com.commercetools.sunrise.framework.hooks.requests.CustomerUpdateCommandHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;

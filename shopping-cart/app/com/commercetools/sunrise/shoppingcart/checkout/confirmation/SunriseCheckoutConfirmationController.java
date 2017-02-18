@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContentFactory;
@@ -39,13 +40,13 @@ public abstract class SunriseCheckoutConfirmationController<F extends CheckoutCo
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("checkoutConfirmationPageCall")
+    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_CONFIRMATION_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
         return requireNonEmptyCart(this::showFormPage);
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("checkoutConfirmationProcessFormCall")
+    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_CONFIRMATION_PROCESS)
     public CompletionStage<Result> process(final String languageTag) {
         return requireNonEmptyCart(this::processForm);
     }

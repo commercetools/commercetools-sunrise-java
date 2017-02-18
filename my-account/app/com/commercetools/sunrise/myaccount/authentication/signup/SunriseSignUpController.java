@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -31,12 +32,7 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
     }
 
     @RunRequestStartedHook
-    public CompletionStage<Result> show(final String languageTag) {
-        return showFormPage(null);
-    }
-
-    @RunRequestStartedHook
-    @SunriseRoute("processSignUpForm")
+    @SunriseRoute(AuthenticationReverseRouter.SIGN_UP_PROCESS)
     public CompletionStage<Result> process(final String languageTag) {
         return processForm(null);
     }

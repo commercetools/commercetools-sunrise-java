@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.view;
 
 import com.commercetools.sunrise.common.injection.RequestScoped;
-import com.commercetools.sunrise.common.reverserouter.productcatalog.ProductReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.common.AbstractBreadcrumbBeanFactory;
 import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductsWithCategory;

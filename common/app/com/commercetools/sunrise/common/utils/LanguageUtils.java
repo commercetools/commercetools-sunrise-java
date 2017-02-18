@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.utils;
 
-import com.commercetools.sunrise.common.contexts.ProjectContext;
+import com.commercetools.sunrise.contexts.ProjectContext;
 import play.mvc.Http;
 
 import java.util.List;

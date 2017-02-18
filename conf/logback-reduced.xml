@@ -17,11 +17,11 @@
     <logger name="sphere.metrics.simple" level="trace" />
 
     <logger name="com.commercetools.sunrise" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.httpauth.basic.BasicAuthenticationProvider" level="WARN" />
+    <logger name="com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider" level="WARN" />
     <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider" level="WARN" />
     <logger name="com.commercetools.sunrise.common.template.i18n.yaml.YamlI18nResolver" level="WARN" />
     <logger name="com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree" level="WARN" />
-    <logger name="com.commercetools.sunrise.common.contexts.ProjectContext" level="WARN" />
+    <logger name="com.commercetools.sunrise.contexts.ProjectContext" level="WARN" />
     <logger name="com.commercetools.sunrise.common.ctp.ProductDataConfigProvider" level="WARN" />
     <logger name="com.commercetools.sunrise.common.ctp.MetricSphereClientProvider" level="WARN" />
     <logger name="com.commercetools.sunrise.common.suggestion.SunriseProductRecommendation" level="INFO" />

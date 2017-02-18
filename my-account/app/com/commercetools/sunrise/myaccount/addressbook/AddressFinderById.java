@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
-import com.commercetools.sunrise.hooks.HookRunner;
-import com.commercetools.sunrise.hooks.events.AddressLoadedHook;
+import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.framework.hooks.events.AddressLoadedHook;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 

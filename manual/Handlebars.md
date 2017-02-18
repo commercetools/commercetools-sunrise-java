@@ -80,39 +80,21 @@ public final class SummerCampaignControllerComponent extends Base implements Con
 }
 ```
 
-We still need to wire the `ControllerComponent` to the desired controllers. Let's say that we want to display it on all pages except for the checkout, for that we need to build a `MultiControllerComponentResolver` with our Controller Component included, which is then injected via Dependency Injection.
+We still need to wire the `ControllerComponent` to the desired controllers. Let's say that we want to display it on the home page.
  
-Check the following Guice Module as an example:
-
 ```java
-import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
-import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuilder;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import demo.productcatalog.SummerCampaignControllerComponent;
+import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 
-public class ComponentsModule extends AbstractModule {
-    @Override
-    protected void configure() {
-    }
+import com.commercetools.sunrise.hooks.RegisteredComponents;
 
-    @Provides
-    public MultiControllerComponentResolver multiControllerComponentResolver() {
-        return new MultiControllerComponentResolverBuilder()
-                .add(SummerCampaignControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
-                //add more controller components here
-                .build();
-    }
+@RegisteredComponents(SummerCampaignControllerComponent.class)
+public class HomeController extends SunriseHomeController {
+    // body of the controller
 }
 ```
 
-As always, make sure you have the Module enabled in `application.conf`:
-
-```
-play.modules.enabled += "absolute.path.to.your.ComponentsModule"
-```
-
-If everything went right, all pages except the checkout pages should have a banner like this:
+If everything went right, the home page should have a banner like this:
 
 ![result](images/summercampaign-sungrasses-home.png)
 

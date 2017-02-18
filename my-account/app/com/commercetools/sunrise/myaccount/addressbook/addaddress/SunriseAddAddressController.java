@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
@@ -44,13 +45,13 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("addAddressToAddressBookCall")
+    @SunriseRoute(AddressBookReverseRouter.ADD_ADDRESS_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
         return requireCustomer(this::showFormPage);
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("addAddressToAddressBookProcessFormCall")
+    @SunriseRoute(AddressBookReverseRouter.ADD_ADDRESS_PROCESS)
     public CompletionStage<Result> process(final String languageTag) {
         return requireCustomer(this::processForm);
     }

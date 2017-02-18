@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateController;
-import com.commercetools.sunrise.common.controllers.WithQueryFlow;
+import com.commercetools.sunrise.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.view.CheckoutThankYouPageContentFactory;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Result;
@@ -35,7 +36,7 @@ public abstract class SunriseCheckoutThankYouController extends SunriseTemplateC
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("checkoutThankYouPageCall")
+    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_THANK_YOU_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
         return requireOrderCreated(this::showPage);
     }

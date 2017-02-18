@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout;
 
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
+import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContent;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContent;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.view.CheckoutPaymentPageContent;

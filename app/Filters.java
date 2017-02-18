@@ -1,4 +1,4 @@
-import com.commercetools.sunrise.common.httpauth.HttpAuthenticationFilter;
+import com.commercetools.sunrise.httpauth.HttpAuthenticationFilter;
 import play.filters.csrf.CSRFFilter;
 import play.http.DefaultHttpFilters;
 

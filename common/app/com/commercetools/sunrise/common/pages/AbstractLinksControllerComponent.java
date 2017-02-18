@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
+import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 import io.sphere.sdk.models.Base;
 
 public abstract class AbstractLinksControllerComponent<T> extends Base implements ControllerComponent, PageDataReadyHook {

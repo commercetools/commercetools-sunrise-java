@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.controllers.WithQueryFlow;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.MyOrdersReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.view.MyOrderListPageContentFactory;
@@ -40,7 +41,7 @@ public abstract class SunriseMyOrderListController extends SunriseTemplateFormCo
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("myOrderListPageCall")
+    @SunriseRoute(MyOrdersReverseRouter.MY_ORDER_LIST_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
         return requireCustomer(customer ->
                 findMyOrderList(customer, orders ->

@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.cart.cartdetail;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateController;
-import com.commercetools.sunrise.common.controllers.WithQueryFlow;
+import com.commercetools.sunrise.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
@@ -33,7 +34,7 @@ public abstract class SunriseCartDetailController extends SunriseTemplateControl
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("showCart")
+    @SunriseRoute(CartReverseRouter.CART_DETAIL_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
         return requireCart(this::showPage);
     }

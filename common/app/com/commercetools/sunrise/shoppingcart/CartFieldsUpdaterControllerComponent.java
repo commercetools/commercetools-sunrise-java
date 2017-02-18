@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.injection.RequestScoped;
-import com.commercetools.sunrise.common.sessions.customer.CustomerInSession;
+import com.commercetools.sunrise.sessions.customer.CustomerInSession;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.actions.CartLoadedActionHook;
-import com.commercetools.sunrise.hooks.actions.CustomerSignedInActionHook;
-import com.commercetools.sunrise.hooks.requests.CartCreateCommandHook;
+import com.commercetools.sunrise.framework.hooks.actions.CartLoadedActionHook;
+import com.commercetools.sunrise.framework.hooks.actions.CustomerSignedInActionHook;
+import com.commercetools.sunrise.framework.hooks.requests.CartCreateCommandHook;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;

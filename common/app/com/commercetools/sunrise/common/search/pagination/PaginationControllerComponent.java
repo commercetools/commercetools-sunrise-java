@@ -2,9 +2,9 @@ package com.commercetools.sunrise.common.search.pagination;
 
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
-import com.commercetools.sunrise.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
-import com.commercetools.sunrise.hooks.requests.ProductProjectionSearchHook;
+import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
+import com.commercetools.sunrise.framework.hooks.events.ProductProjectionPagedSearchResultLoadedHook;
+import com.commercetools.sunrise.framework.hooks.requests.ProductProjectionSearchHook;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;

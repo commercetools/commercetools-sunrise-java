@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.myaccount.authentication.logout;
 
-import com.commercetools.sunrise.common.controllers.SunriseController;
-import com.commercetools.sunrise.common.controllers.WithExecutionFlow;
-import com.commercetools.sunrise.common.sessions.cart.CartInSession;
-import com.commercetools.sunrise.common.sessions.customer.CustomerInSession;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.controllers.SunriseController;
+import com.commercetools.sunrise.controllers.WithExecutionFlow;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
+import com.commercetools.sunrise.sessions.cart.CartInSession;
+import com.commercetools.sunrise.sessions.customer.CustomerInSession;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import io.sphere.sdk.client.ClientErrorException;
 import play.mvc.Result;
 
@@ -24,7 +25,7 @@ public abstract class SunriseLogOutController extends SunriseController implemen
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("processLogOut")
+    @SunriseRoute(AuthenticationReverseRouter.LOG_OUT_PROCESS)
     public CompletionStage<Result> process(final String languageTag) {
         return processRequest(null);
     }

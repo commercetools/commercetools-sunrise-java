@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.controllers.WithQueryFlow;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.MyOrdersReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContentFactory;
@@ -40,10 +41,10 @@ public abstract class SunriseMyOrderDetailController extends SunriseTemplateForm
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("myOrderDetailPageCall")
-    public CompletionStage<Result> showByOrderNumber(final String languageTag, final String orderNumber) {
+    @SunriseRoute(MyOrdersReverseRouter.MY_ORDER_DETAIL_PAGE)
+    public CompletionStage<Result> show(final String languageTag, final String orderIdentifier) {
         return requireCustomer(customer ->
-                requireMyOrder(customer, orderNumber, myOrder ->
+                requireMyOrder(customer, orderIdentifier, myOrder ->
                         showPage(OrderWithCustomer.of(myOrder, customer))));
     }
 

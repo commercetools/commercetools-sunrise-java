@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateController;
-import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.controllers.WithQueryFlow;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
 import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
 import play.mvc.Result;
 
@@ -25,7 +26,7 @@ public abstract class SunriseHomeController extends SunriseTemplateController im
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("homePageCall")
+    @SunriseRoute(HomeReverseRouter.HOME_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
         return showPage(null);
     }

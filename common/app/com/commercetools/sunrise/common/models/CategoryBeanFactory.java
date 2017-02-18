@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.injection.RequestScoped;
-import com.commercetools.sunrise.common.reverserouter.productcatalog.ProductReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import play.Configuration;

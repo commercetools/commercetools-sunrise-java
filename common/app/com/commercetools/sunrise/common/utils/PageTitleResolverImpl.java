@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.utils;
 
-import com.commercetools.sunrise.common.contexts.ProjectContext;
+import com.commercetools.sunrise.contexts.ProjectContext;
 import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
 import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
-import com.commercetools.sunrise.hooks.HookRunner;
+import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;

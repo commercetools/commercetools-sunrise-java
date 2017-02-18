@@ -1,12 +1,13 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateController;
-import com.commercetools.sunrise.common.controllers.WithQueryFlow;
+import com.commercetools.sunrise.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.productdetail.view.ProductDetailPageContentFactory;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -44,7 +45,7 @@ public abstract class SunriseProductDetailController extends SunriseTemplateCont
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("productDetailPageCall")
+    @SunriseRoute(ProductReverseRouter.PRODUCT_DETAIL_PAGE)
     public CompletionStage<Result> show(final String languageTag, final String productIdentifier, final String variantIdentifier) {
         return requireProduct(productIdentifier, product ->
                 requireProductVariant(product, variantIdentifier, variant ->

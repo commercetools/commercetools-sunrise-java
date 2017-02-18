@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.common.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
+import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.view.CheckoutShippingPageContentFactory;
@@ -47,7 +48,7 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("checkoutShippingPageCall")
+    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_SHIPPING_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
         return requireNonEmptyCart(cart ->
                 findShippingMethods(cart, shippingMethods ->
@@ -55,7 +56,7 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
     }
 
     @RunRequestStartedHook
-    @SunriseRoute("checkoutShippingProcessFormCall")
+    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_SHIPPING_PROCESS)
     public CompletionStage<Result> process(final String languageTag) {
         return requireNonEmptyCart(cart ->
                 findShippingMethods(cart, shippingMethods ->
