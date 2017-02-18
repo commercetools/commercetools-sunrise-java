@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.view.MyOrderListPageContentFactory;
@@ -16,7 +16,6 @@ import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
-import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
@@ -26,23 +25,13 @@ public abstract class SunriseMyOrderListController extends SunriseTemplateFormCo
     private final MyOrderListFinder myOrderListFinder;
     private final MyOrderListPageContentFactory myOrderListPageContentFactory;
 
-    protected SunriseMyOrderListController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
-                                           final FormFactory formFactory, final CustomerFinder customerFinder, final MyOrderListFinder myOrderListFinder,
+    protected SunriseMyOrderListController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+                                           final CustomerFinder customerFinder, final MyOrderListFinder myOrderListFinder,
                                            final MyOrderListPageContentFactory myOrderListPageContentFactory) {
-        super(componentRegistry, templateRenderer, formFactory);
+        super(templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.myOrderListFinder = myOrderListFinder;
         this.myOrderListPageContentFactory = myOrderListPageContentFactory;
-    }
-
-    @Inject
-    private void registerThemeLinks(final MyOrderListThemeLinksControllerComponent themeLinksControllerComponent) {
-        register(themeLinksControllerComponent);
-    }
-
-    @Override
-    public String getTemplateName() {
-        return "my-account-my-orders";
     }
 
     @Override
@@ -50,6 +39,7 @@ public abstract class SunriseMyOrderListController extends SunriseTemplateFormCo
         return customerFinder;
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("myOrderListPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return requireCustomer(customer ->

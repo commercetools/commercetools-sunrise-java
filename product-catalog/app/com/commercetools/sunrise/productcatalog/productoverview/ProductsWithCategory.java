@@ -30,4 +30,8 @@ public final class ProductsWithCategory extends Base {
     public static ProductsWithCategory of(final PagedSearchResult<ProductProjection> products, @Nullable final Category category) {
         return new ProductsWithCategory(products, category);
     }
+
+    public static ProductsWithCategory of(final PagedSearchResult<ProductProjection> products) {
+        return new ProductsWithCategory(products, null);
+    }
 }

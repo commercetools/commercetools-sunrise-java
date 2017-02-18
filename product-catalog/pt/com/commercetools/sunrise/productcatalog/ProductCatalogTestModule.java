@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog;
 
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.productcatalog.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.productcatalog.ProductReverseRouter;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.pt.DefaultTestModule;
 import com.commercetools.sunrise.test.TestableCall;

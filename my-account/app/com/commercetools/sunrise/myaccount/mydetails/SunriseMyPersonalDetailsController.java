@@ -5,17 +5,15 @@ import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
-import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
@@ -24,24 +22,14 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     private final MyPersonalDetailsExecutor myPersonalDetailsExecutor;
     private final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory;
 
-    protected SunriseMyPersonalDetailsController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
-                                                 final FormFactory formFactory, final CustomerFinder customerFinder,
+    protected SunriseMyPersonalDetailsController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+                                                 final CustomerFinder customerFinder,
                                                  final MyPersonalDetailsExecutor myPersonalDetailsExecutor,
                                                  final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory) {
-        super(componentRegistry, templateRenderer, formFactory);
+        super(templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.myPersonalDetailsExecutor = myPersonalDetailsExecutor;
         this.myPersonalDetailsPageContentFactory = myPersonalDetailsPageContentFactory;
-    }
-
-    @Inject
-    private void registerThemeLinks(final MyPersonalDetailsThemeLinksControllerComponent themeLinksControllerComponent) {
-        register(themeLinksControllerComponent);
-    }
-
-    @Override
-    public String getTemplateName() {
-        return "my-account-personal-details";
     }
 
     @Override
@@ -49,11 +37,13 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
         return customerFinder;
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("myPersonalDetailsPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return requireCustomer(this::showFormPage);
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("myPersonalDetailsProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
         return requireCustomer(this::processForm);
@@ -62,12 +52,6 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     @Override
     public CompletionStage<Customer> executeAction(final Customer customer, final F formData) {
         return myPersonalDetailsExecutor.apply(customer, formData);
-    }
-
-    @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Customer customer, final Form<F> form, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException);
-        return showFormPageWithErrors(customer, form);
     }
 
     @Override

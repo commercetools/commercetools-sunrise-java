@@ -10,7 +10,6 @@ public class ProductDetailPageContent extends PageContent {
     private BreadcrumbBean breadcrumb;
     private ProductBean product;
     private SuggestionsBean suggestions;
-    private String addToCartFormUrl;
 
     public ProductDetailPageContent() {
     }
@@ -37,13 +36,5 @@ public class ProductDetailPageContent extends PageContent {
 
     public void setSuggestions(final SuggestionsBean suggestions) {
         this.suggestions = suggestions;
-    }
-
-    public String getAddToCartFormUrl() {
-        return addToCartFormUrl;
-    }
-
-    public void setAddToCartFormUrl(final String addToCartFormUrl) {
-        this.addToCartFormUrl = addToCartFormUrl;
     }
 }

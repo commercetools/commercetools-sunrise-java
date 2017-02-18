@@ -1,7 +1,8 @@
 package com.commercetools.sunrise.common.sessions.customer;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.hooks.events.CustomerLoadedHook;
 import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
 import com.commercetools.sunrise.hooks.events.CustomerUpdatedHook;
@@ -13,8 +14,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-@RequestScoped
-public final class CustomerInSessionControllerComponent implements ControllerComponent, CustomerSignInResultLoadedHook, CustomerUpdatedHook, CustomerLoadedHook {
+public final class CustomerInSessionControllerComponent implements ControllerComponent, CustomerSignInResultLoadedHook, CustomerUpdatedHook, CustomerLoadedHook, PageDataReadyHook {
 
     private final CustomerInSession customerInSession;
 
@@ -39,6 +39,12 @@ public final class CustomerInSessionControllerComponent implements ControllerCom
     public CompletionStage<?> onCustomerLoaded(final Customer customer) {
         overwriteCustomerInSession(customer);
         return completedFuture(null);
+    }
+
+    @Override
+    public void onPageDataReady(final PageData pageData) {
+        customerInSession.findUserInfo()
+                .ifPresent(pageData.getMeta()::setUser);
     }
 
     private void overwriteCustomerInSession(final Customer customer) {

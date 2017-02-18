@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @With(NoCacheAction.class)
 @Target({ElementType.TYPE,ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME )
+@Retention(RetentionPolicy.RUNTIME)
 public @interface NoCache {
 }

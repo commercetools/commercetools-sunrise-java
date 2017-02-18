@@ -1,17 +1,17 @@
 package demo.myaccount;
 
-import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
-import com.commercetools.sunrise.common.reverserouter.AuthenticationReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.myaccount.AddressBookReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.myaccount.AuthenticationReverseRouter;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.SunriseAddAddressController;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContentFactory;
 import com.neovisionaries.i18n.CountryCode;
-import demo.CommonControllerComponentListSupplier;
-import demo.PageHeaderControllerComponentListSupplier;
+import com.commercetools.sunrise.common.CommonControllerComponentSupplier;
+import demo.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -19,14 +19,17 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
+@RegisteredComponents({
+        CommonControllerComponentSupplier.class,
+        PageHeaderControllerComponentSupplier.class
+})
 public final class AddAddressController extends SunriseAddAddressController<DefaultAddressBookAddressFormData> {
 
     private final AuthenticationReverseRouter authenticationReverseRouter;
     private final AddressBookReverseRouter addressBookReverseRouter;
 
     @Inject
-    public AddAddressController(final ComponentRegistry componentRegistry,
-                                final TemplateRenderer templateRenderer,
+    public AddAddressController(final TemplateRenderer templateRenderer,
                                 final FormFactory formFactory,
                                 final CustomerFinder customerFinder,
                                 final AddAddressExecutor addAddressExecutor,
@@ -34,16 +37,14 @@ public final class AddAddressController extends SunriseAddAddressController<Defa
                                 final CountryCode country,
                                 final AuthenticationReverseRouter authenticationReverseRouter,
                                 final AddressBookReverseRouter addressBookReverseRouter) {
-        super(componentRegistry, templateRenderer, formFactory, customerFinder, addAddressExecutor, addAddressPageContentFactory, country);
+        super(templateRenderer, formFactory, customerFinder, addAddressExecutor, addAddressPageContentFactory, country);
         this.authenticationReverseRouter = authenticationReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
     }
 
-    @Inject
-    public void registerComponents(final CommonControllerComponentListSupplier commonControllerComponentListSupplier,
-                                   final PageHeaderControllerComponentListSupplier pageHeaderControllerComponentListSupplier) {
-        register(commonControllerComponentListSupplier);
-        register(pageHeaderControllerComponentListSupplier);
+    @Override
+    public String getTemplateName() {
+        return "my-account-new-address";
     }
 
     @Override

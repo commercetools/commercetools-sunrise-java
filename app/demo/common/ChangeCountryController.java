@@ -3,9 +3,8 @@ package demo.common;
 import com.commercetools.sunrise.common.cache.NoCache;
 import com.commercetools.sunrise.common.localization.CountryFormData;
 import com.commercetools.sunrise.common.localization.SunriseChangeCountryController;
-import com.commercetools.sunrise.common.reverserouter.HomeReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.productcatalog.HomeReverseRouter;
 import com.commercetools.sunrise.common.sessions.country.CountryInSession;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
 import io.sphere.sdk.client.ClientErrorException;
 import play.data.Form;
 import play.data.FormFactory;
@@ -20,11 +19,10 @@ public final class ChangeCountryController extends SunriseChangeCountryControlle
     private final HomeReverseRouter homeReverseRouter;
 
     @Inject
-    public ChangeCountryController(final ComponentRegistry componentRegistry,
-                                   final FormFactory formFactory,
+    public ChangeCountryController(final FormFactory formFactory,
                                    final CountryInSession countryInSession,
                                    final HomeReverseRouter homeReverseRouter) {
-        super(componentRegistry, formFactory, countryInSession);
+        super(formFactory, countryInSession);
         this.homeReverseRouter = homeReverseRouter;
     }
 

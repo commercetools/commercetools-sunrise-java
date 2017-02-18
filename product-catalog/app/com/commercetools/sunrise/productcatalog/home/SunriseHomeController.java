@@ -5,11 +5,9 @@ import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
-import com.commercetools.sunrise.hooks.RequestHookAction;
+import com.commercetools.sunrise.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
 import play.mvc.Result;
-import play.mvc.With;
 
 import java.util.concurrent.CompletionStage;
 
@@ -20,18 +18,13 @@ public abstract class SunriseHomeController extends SunriseTemplateController im
 
     private final HomePageContentFactory homePageContentFactory;
 
-    protected SunriseHomeController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
+    protected SunriseHomeController(final TemplateRenderer templateRenderer,
                                     final HomePageContentFactory homePageContentFactory) {
-        super(componentRegistry, templateRenderer);
+        super(templateRenderer);
         this.homePageContentFactory = homePageContentFactory;
     }
 
-    @Override
-    public String getTemplateName() {
-        return "home";
-    }
-
-    @With(RequestHookAction.class)
+    @RunRequestStartedHook
     @SunriseRoute("homePageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return showPage(null);

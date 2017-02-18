@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContentFactory;
@@ -20,18 +20,13 @@ public abstract class SunriseMyOrderDetailController extends SunriseTemplateForm
     private final MyOrderFinder myOrderFinder;
     private final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory;
 
-    protected SunriseMyOrderDetailController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
-                                             final FormFactory formFactory, final CustomerFinder customerFinder, final MyOrderFinder myOrderFinder,
+    protected SunriseMyOrderDetailController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+                                             final CustomerFinder customerFinder, final MyOrderFinder myOrderFinder,
                                              final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory) {
-        super(componentRegistry, templateRenderer, formFactory);
+        super(templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.myOrderFinder = myOrderFinder;
         this.myOrderDetailPageContentFactory = myOrderDetailPageContentFactory;
-    }
-
-    @Override
-    public String getTemplateName() {
-        return "my-account-my-orders-order";
     }
 
     @Override
@@ -44,6 +39,7 @@ public abstract class SunriseMyOrderDetailController extends SunriseTemplateForm
         return myOrderFinder;
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("myOrderDetailPageCall")
     public CompletionStage<Result> showByOrderNumber(final String languageTag, final String orderNumber) {
         return requireCustomer(customer ->

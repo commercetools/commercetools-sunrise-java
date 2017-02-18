@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.common.controllers;
 
 import com.commercetools.sunrise.common.pages.PageContent;
+import io.sphere.sdk.client.ClientErrorException;
 import org.apache.commons.beanutils.BeanUtils;
 import play.data.Form;
 import play.mvc.Result;
@@ -27,6 +28,12 @@ public interface WithTemplateFormFlow<F, I, O> extends WithFormFlow<F, I, O>, Wi
 
     @Override
     default CompletionStage<Result> handleInvalidForm(final I input, final Form<F> form) {
+        return showFormPageWithErrors(input, form);
+    }
+
+    @Override
+    default CompletionStage<Result> handleClientErrorFailedAction(final I input, final Form<F> form, final ClientErrorException clientErrorException) {
+        saveUnexpectedFormError(form, clientErrorException);
         return showFormPageWithErrors(input, form);
     }
 

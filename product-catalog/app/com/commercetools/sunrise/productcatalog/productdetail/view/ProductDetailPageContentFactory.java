@@ -2,7 +2,6 @@ package com.commercetools.sunrise.productcatalog.productdetail.view;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
-import com.commercetools.sunrise.common.reverserouter.CartReverseRouter;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.productcatalog.common.ProductBeanFactory;
 
@@ -15,16 +14,14 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
 
     private final Locale locale;
     private final PageTitleResolver pageTitleResolver;
-    private final CartReverseRouter cartReverseRouter;
     private final ProductBreadcrumbBeanFactory productBreadcrumbBeanFactory;
     private final ProductBeanFactory productBeanFactory;
 
     @Inject
-    public ProductDetailPageContentFactory(final Locale locale, final PageTitleResolver pageTitleResolver, final CartReverseRouter cartReverseRouter,
+    public ProductDetailPageContentFactory(final Locale locale, final PageTitleResolver pageTitleResolver,
                                            final ProductBreadcrumbBeanFactory productBreadcrumbBeanFactory, final ProductBeanFactory productBeanFactory) {
         this.locale = locale;
         this.pageTitleResolver = pageTitleResolver;
-        this.cartReverseRouter = cartReverseRouter;
         this.productBreadcrumbBeanFactory = productBreadcrumbBeanFactory;
         this.productBeanFactory = productBeanFactory;
     }
@@ -44,7 +41,6 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
         super.initialize(model, productWithVariant);
         fillProduct(model, productWithVariant);
         fillBreadCrumb(model, productWithVariant);
-        fillAddToCartFormUrl(model, productWithVariant);
     }
 
     @Override
@@ -53,10 +49,6 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
                 productWithVariant.getProduct().getName().find(singletonList(locale)).orElse(""),
                 pageTitleResolver.getOrEmpty("catalog:productDetailPage.title"));
         model.setTitle(title);
-    }
-
-    protected void fillAddToCartFormUrl(final ProductDetailPageContent content, final ProductWithVariant productWithVariant) {
-        content.setAddToCartFormUrl(cartReverseRouter.processAddProductToCartForm().url()); // TODO move to page meta
     }
 
     protected void fillBreadCrumb(final ProductDetailPageContent content, final ProductWithVariant productWithVariant) {

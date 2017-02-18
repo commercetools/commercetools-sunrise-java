@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
@@ -14,7 +14,6 @@ import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.WithRequiredAddress;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.view.ChangeAddressPageContentFactory;
-import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
@@ -32,20 +31,15 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
     private final ChangeAddressExecutor changeAddressExecutor;
     private final ChangeAddressPageContentFactory changeAddressPageContentFactory;
 
-    protected SunriseChangeAddressController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
-                                             final FormFactory formFactory, final CustomerFinder customerFinder, final AddressFinder addressFinder,
+    protected SunriseChangeAddressController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+                                             final CustomerFinder customerFinder, final AddressFinder addressFinder,
                                              final ChangeAddressExecutor changeAddressExecutor,
                                              final ChangeAddressPageContentFactory changeAddressPageContentFactory) {
-        super(componentRegistry, templateRenderer, formFactory);
+        super(templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.addressFinder = addressFinder;
         this.changeAddressExecutor = changeAddressExecutor;
         this.changeAddressPageContentFactory = changeAddressPageContentFactory;
-    }
-
-    @Override
-    public String getTemplateName() {
-        return "my-account-edit-address";
     }
 
     @Override
@@ -58,6 +52,7 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
         return addressFinder;
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("changeAddressInAddressBookCall")
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
         return requireCustomer(customer ->
@@ -65,6 +60,7 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
                         showFormPage(AddressWithCustomer.of(address, customer))));
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("changeAddressInAddressBookProcessFormCall")
     public CompletionStage<Result> process(final String languageTag, final String addressId) {
         return requireCustomer(customer ->
@@ -75,12 +71,6 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
     @Override
     public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final F formData) {
         return changeAddressExecutor.apply(addressWithCustomer, formData);
-    }
-
-    @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final AddressWithCustomer addressWithCustomer, final Form<F> form, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException);
-        return showFormPageWithErrors(addressWithCustomer, form);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.models;
 
 import com.commercetools.sunrise.common.injection.RequestScoped;
-import com.commercetools.sunrise.common.reverserouter.ProductReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.productcatalog.ProductReverseRouter;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.common.utils.ProductPriceUtils;
 

@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.view.CheckoutThankYouPageContentFactory;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Result;
@@ -21,17 +21,12 @@ public abstract class SunriseCheckoutThankYouController extends SunriseTemplateC
     private final OrderCreatedFinder orderCreatedFinder;
     private final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory;
 
-    protected SunriseCheckoutThankYouController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
+    protected SunriseCheckoutThankYouController(final TemplateRenderer templateRenderer,
                                                 final OrderCreatedFinder orderCreatedFinder,
                                                 final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory) {
-        super(componentRegistry, templateRenderer);
+        super(templateRenderer);
         this.orderCreatedFinder = orderCreatedFinder;
         this.checkoutThankYouPageContentFactory = checkoutThankYouPageContentFactory;
-    }
-
-    @Override
-    public String getTemplateName() {
-        return "checkout-thankyou";
     }
 
     @Override
@@ -39,6 +34,7 @@ public abstract class SunriseCheckoutThankYouController extends SunriseTemplateC
         return orderCreatedFinder;
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("checkoutThankYouPageCall")
     public CompletionStage<Result> show(final String languageTag) {
         return requireOrderCreated(this::showPage);

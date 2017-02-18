@@ -5,19 +5,19 @@ import com.commercetools.sunrise.common.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.view.CheckoutShippingPageContentFactory;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.models.Reference;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
-import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
@@ -29,26 +29,16 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
     private final CheckoutShippingPageContentFactory checkoutShippingPageContentFactory;
     private final ShippingSettings shippingSettings;
 
-    protected SunriseCheckoutShippingController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
-                                                final FormFactory formFactory, final CartFinder cartFinder,
+    protected SunriseCheckoutShippingController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+                                                final CartFinder cartFinder,
                                                 final CheckoutShippingExecutor checkoutShippingExecutor,
                                                 final CheckoutShippingPageContentFactory checkoutShippingPageContentFactory,
                                                 final ShippingSettings shippingSettings) {
-        super(componentRegistry, templateRenderer, formFactory);
+        super(templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.checkoutShippingExecutor = checkoutShippingExecutor;
         this.checkoutShippingPageContentFactory = checkoutShippingPageContentFactory;
         this.shippingSettings = shippingSettings;
-    }
-
-    @Inject
-    private void registerThemeLinks(final CheckoutShippingThemeLinksControllerComponent themeLinksControllerComponent) {
-        register(themeLinksControllerComponent);
-    }
-
-    @Override
-    public String getTemplateName() {
-        return "checkout-shipping";
     }
 
     @Override
@@ -56,14 +46,25 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
         return cartFinder;
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("checkoutShippingPageCall")
     public CompletionStage<Result> show(final String languageTag) {
-        return requireShippingMethodsWithCart(this::showFormPage);
+        return requireNonEmptyCart(cart ->
+                findShippingMethods(cart, shippingMethods ->
+                        showFormPage(ShippingMethodsWithCart.of(shippingMethods, cart))));
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("checkoutShippingProcessFormCall")
     public CompletionStage<Result> process(final String languageTag) {
-        return requireShippingMethodsWithCart(this::processForm);
+        return requireNonEmptyCart(cart ->
+                findShippingMethods(cart, shippingMethods ->
+                        processForm(ShippingMethodsWithCart.of(shippingMethods, cart))));
+    }
+
+    protected final CompletionStage<Result> findShippingMethods(final Cart cart, final Function<List<ShippingMethod>, CompletionStage<Result>> nextAction) {
+        return shippingSettings.getShippingMethods(cart)
+                .thenComposeAsync(nextAction, HttpExecution.defaultContext());
     }
 
     @Override
@@ -72,14 +73,7 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final ShippingMethodsWithCart shippingMethodsWithCart, final Form<F> form, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException);
-        return showFormPageWithErrors(shippingMethodsWithCart, form);
-    }
-
-    @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final F formData);
-
 
     @Override
     public PageContent createPageContent(final ShippingMethodsWithCart shippingMethodsWithCart, final Form<F> form) {
@@ -90,12 +84,6 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
     public void preFillFormData(final ShippingMethodsWithCart shippingMethodsWithCart, final F formData) {
         final String shippingMethodId = findShippingMethodId(shippingMethodsWithCart.getCart()).orElse(null);
         formData.setShippingMethodId(shippingMethodId);
-    }
-
-    protected final CompletionStage<Result> requireShippingMethodsWithCart(final Function<ShippingMethodsWithCart, CompletionStage<Result>> nextAction) {
-        return requireNonEmptyCart(cart -> shippingSettings.getShippingMethods(cart)
-                .thenApply(shippingMethods -> ShippingMethodsWithCart.of(shippingMethods, cart))
-                .thenComposeAsync(nextAction, HttpExecution.defaultContext()));
     }
 
     protected final Optional<String> findShippingMethodId(final Cart cart) {

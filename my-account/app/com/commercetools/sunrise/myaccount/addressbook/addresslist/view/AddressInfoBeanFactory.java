@@ -3,7 +3,7 @@ package com.commercetools.sunrise.myaccount.addressbook.addresslist.view;
 import com.commercetools.sunrise.common.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.AddressBeanFactory;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
-import com.commercetools.sunrise.common.reverserouter.AddressBookReverseRouter;
+import com.commercetools.sunrise.common.reverserouter.myaccount.AddressBookReverseRouter;
 import io.sphere.sdk.models.Address;
 
 import javax.inject.Inject;

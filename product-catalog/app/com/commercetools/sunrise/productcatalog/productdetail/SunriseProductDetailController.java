@@ -6,7 +6,7 @@ import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.pages.PageContent;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.ComponentRegistry;
+import com.commercetools.sunrise.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.productcatalog.productdetail.view.ProductDetailPageContentFactory;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -24,18 +24,13 @@ public abstract class SunriseProductDetailController extends SunriseTemplateCont
     private final ProductVariantFinder productVariantFinder;
     private final ProductDetailPageContentFactory productDetailPageContentFactory;
 
-    protected SunriseProductDetailController(final ComponentRegistry componentRegistry, final TemplateRenderer templateRenderer,
+    protected SunriseProductDetailController(final TemplateRenderer templateRenderer,
                                              final ProductFinder productFinder, final ProductVariantFinder productVariantFinder,
                                              final ProductDetailPageContentFactory productDetailPageContentFactory) {
-        super(componentRegistry, templateRenderer);
+        super(templateRenderer);
         this.productFinder = productFinder;
         this.productVariantFinder = productVariantFinder;
         this.productDetailPageContentFactory = productDetailPageContentFactory;
-    }
-
-    @Override
-    public String getTemplateName() {
-        return "pdp";
     }
 
     @Override
@@ -48,6 +43,7 @@ public abstract class SunriseProductDetailController extends SunriseTemplateCont
         return productVariantFinder;
     }
 
+    @RunRequestStartedHook
     @SunriseRoute("productDetailPageCall")
     public CompletionStage<Result> show(final String languageTag, final String productIdentifier, final String variantIdentifier) {
         return requireProduct(productIdentifier, product ->

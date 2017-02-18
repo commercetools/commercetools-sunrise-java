@@ -15,7 +15,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 /**
  * Approach to handle form data (Template Method Pattern).
  * @param <F> stereotype of the in a form wrapped class
- * @param <I> type of the input data of the form, possibly a parameter object
+ * @param <I> type of the input data, possibly a parameter object
  * @param <O> type of the output object, normally the updated object if the form is valid
  */
 public interface WithFormFlow<F, I, O> extends WithForm<F> {

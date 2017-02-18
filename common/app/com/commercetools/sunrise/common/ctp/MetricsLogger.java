@@ -48,8 +48,8 @@ public final class MetricsLogger extends Action.Simple {
                         rawData.size(),
                         queries.size(),
                         commands.size(),
-                        calculateTotalSize(rawData),
-                        calculateDuration(rawData)));
+                        calculateTotalBytes(rawData),
+                        calculateTotalDuration(rawData)));
             }
         }
     }
@@ -69,7 +69,7 @@ public final class MetricsLogger extends Action.Simple {
         return split.length == 4 ? "/" + split[3] : url;
     }
 
-    private static String calculateDuration(final List<ReportRawData> rawData) {
+    private static String calculateTotalDuration(final List<ReportRawData> rawData) {
         return rawData.stream()
                 .map(data -> data.getStopTimestamp() - data.getStartTimestamp())
                 .map(l -> Long.toString(l) + " ms")
@@ -88,7 +88,7 @@ public final class MetricsLogger extends Action.Simple {
         return partition(rawData, data -> data.getHttpRequest().getHttpMethod() == HttpMethod.GET || data.getHttpRequest().getUrl().contains("/product-projections/search"));
     }
 
-    private static Integer calculateTotalSize(final List<ReportRawData> rawData) {
+    private static Integer calculateTotalBytes(final List<ReportRawData> rawData) {
         return rawData.stream().map(MetricsLogger::getBodySize).reduce(0, (a, b) -> a + b);
     }
 
