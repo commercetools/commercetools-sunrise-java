@@ -13,15 +13,15 @@ import java.util.Optional;
 @ImplementedBy(ReflectionProductReverseRouter.class)
 interface ProductSimpleReverseRouter {
 
-    String PRODUCT_DETAIL_PAGE = "productDetailPage";
+    String PRODUCT_DETAIL_PAGE = "productDetailPageCall";
 
     Call productDetailPageCall(final String languageTag, final String productSlug, final String sku);
 
-    String PRODUCT_OVERVIEW_PAGE = "productOverviewPage";
+    String PRODUCT_OVERVIEW_PAGE = "productOverviewPageCall";
 
     Call productOverviewPageCall(final String languageTag, final String categorySlug);
 
-    String SEARCH_PROCESS = "searchProcess";
+    String SEARCH_PROCESS = "searchProcessCall";
 
     Call searchProcessCall(final String languageTag);
 

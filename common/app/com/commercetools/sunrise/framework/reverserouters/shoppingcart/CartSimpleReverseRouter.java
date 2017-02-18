@@ -7,19 +7,19 @@ import play.mvc.Call;
 @ImplementedBy(ReflectionCartReverseRouter.class)
 interface CartSimpleReverseRouter extends ReverseRouter {
 
-    String CART_DETAIL_PAGE = "cartDetailPage";
+    String CART_DETAIL_PAGE = "cartDetailPageCall";
 
     Call cartDetailPageCall(final String languageTag);
 
-    String ADD_LINE_ITEM_PROCESS = "addLineItemProcess";
+    String ADD_LINE_ITEM_PROCESS = "addLineItemProcessCall";
 
     Call addLineItemProcessCall(final String languageTag);
 
-    String CHANGE_LINE_ITEM_QUANTITY_PROCESS = "changeLineItemQuantityProcess";
+    String CHANGE_LINE_ITEM_QUANTITY_PROCESS = "changeLineItemQuantityProcessCall";
 
     Call changeLineItemQuantityProcessCall(final String languageTag);
 
-    String REMOVE_LINE_ITEM_PROCESS = "removeLineItemProcess";
+    String REMOVE_LINE_ITEM_PROCESS = "removeLineItemProcessCall";
 
     Call removeLineItemProcessCall(final String languageTag);
 }

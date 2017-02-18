@@ -6,11 +6,11 @@ import play.mvc.Call;
 @ImplementedBy(ReflectionMyPersonalDetailsReverseRouter.class)
 interface MyPersonalDetailsSimpleReverseRouter {
 
-    String MY_PERSONAL_DETAILS_PAGE = "myPersonalDetailsPage";
+    String MY_PERSONAL_DETAILS_PAGE = "myPersonalDetailsPageCall";
 
     Call myPersonalDetailsPageCall(final String languageTag);
 
-    String MY_PERSONAL_DETAILS_PROCESS = "myPersonalDetailsProcess";
+    String MY_PERSONAL_DETAILS_PROCESS = "myPersonalDetailsProcessCall";
 
     Call myPersonalDetailsProcessCall(final String languageTag);
 }

@@ -6,7 +6,7 @@ import play.mvc.Call;
 @ImplementedBy(ReflectionHomeReverseRouter.class)
 interface HomeSimpleReverseRouter {
 
-    String HOME_PAGE = "homePage";
+    String HOME_PAGE = "homePageCall";
 
     Call homePageCall(final String languageTag);
 }

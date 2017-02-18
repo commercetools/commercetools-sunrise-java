@@ -6,39 +6,39 @@ import play.mvc.Call;
 @ImplementedBy(ReflectionCheckoutReverseRouter.class)
 interface CheckoutSimpleReverseRouter {
 
-    String CHECKOUT_ADDRESS_PAGE = "checkoutAddressPage";
+    String CHECKOUT_ADDRESS_PAGE = "checkoutAddressPageCall";
 
     Call checkoutAddressPageCall(final String languageTag);
 
-    String CHECKOUT_ADDRESS_PROCESS = "checkoutAddressProcess";
+    String CHECKOUT_ADDRESS_PROCESS = "checkoutAddressProcessCall";
 
     Call checkoutAddressProcessCall(final String languageTag);
 
-    String CHECKOUT_SHIPPING_PAGE = "checkoutShippingPage";
+    String CHECKOUT_SHIPPING_PAGE = "checkoutShippingPageCall";
 
     Call checkoutShippingPageCall(final String languageTag);
 
-    String CHECKOUT_SHIPPING_PROCESS = "checkoutShippingProcess";
+    String CHECKOUT_SHIPPING_PROCESS = "checkoutShippingProcessCall";
 
     Call checkoutShippingProcessCall(final String languageTag);
 
-    String CHECKOUT_PAYMENT_PAGE = "checkoutPaymentPage";
+    String CHECKOUT_PAYMENT_PAGE = "checkoutPaymentPageCall";
 
     Call checkoutPaymentPageCall(final String languageTag);
 
-    String CHECKOUT_PAYMENT_PROCESS = "checkoutPaymentProcess";
+    String CHECKOUT_PAYMENT_PROCESS = "checkoutPaymentProcessCall";
 
     Call checkoutPaymentProcessCall(final String languageTag);
 
-    String CHECKOUT_CONFIRMATION_PAGE = "checkoutConfirmationPage";
+    String CHECKOUT_CONFIRMATION_PAGE = "checkoutConfirmationPageCall";
 
     Call checkoutConfirmationPageCall(final String languageTag);
 
-    String CHECKOUT_CONFIRMATION_PROCESS = "checkoutConfirmationProcess";
+    String CHECKOUT_CONFIRMATION_PROCESS = "checkoutConfirmationProcessCall";
 
     Call checkoutConfirmationProcessCall(final String languageTag);
 
-    String CHECKOUT_THANK_YOU_PAGE = "checkoutThankYouPage";
+    String CHECKOUT_THANK_YOU_PAGE = "checkoutThankYouPageCall";
 
     Call checkoutThankYouPageCall(final String languageTag);
 }

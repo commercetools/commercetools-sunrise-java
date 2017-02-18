@@ -10,11 +10,11 @@ import java.util.Optional;
 @ImplementedBy(ReflectionMyOrdersReverseRouter.class)
 interface MyOrdersSimpleReverseRouter {
 
-    String MY_ORDER_LIST_PAGE = "myOrderListPage";
+    String MY_ORDER_LIST_PAGE = "myOrderListPageCall";
 
     Call myOrderListPageCall(final String languageTag);
 
-    String MY_ORDER_DETAIL_PAGE = "myOrderDetailPage";
+    String MY_ORDER_DETAIL_PAGE = "myOrderDetailPageCall";
 
     Call myOrderDetailPageCall(final String languageTag, final String orderNumber);
 

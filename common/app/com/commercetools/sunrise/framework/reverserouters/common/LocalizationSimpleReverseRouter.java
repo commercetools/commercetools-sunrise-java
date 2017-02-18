@@ -6,11 +6,11 @@ import play.mvc.Call;
 @ImplementedBy(ReflectionLocalizationReverseRouter.class)
 interface LocalizationSimpleReverseRouter {
 
-    String CHANGE_LANGUAGE_PROCESS = "changeLanguageProcess";
+    String CHANGE_LANGUAGE_PROCESS = "changeLanguageProcessCall";
 
     Call changeLanguageProcessCall();
 
-    String CHANGE_COUNTRY_PROCESS = "changeCountryProcess";
+    String CHANGE_COUNTRY_PROCESS = "changeCountryProcessCall";
 
     Call changeCountryProcessCall(final String languageTag);
 }

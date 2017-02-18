@@ -1,14 +1,14 @@
 package controllers.productcatalog;
 
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
+import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
 import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
 import com.commercetools.sunrise.productcatalog.home.HomeProductSuggestionsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import play.mvc.Result;
 

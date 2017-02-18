@@ -6,19 +6,19 @@ import play.mvc.Call;
 @ImplementedBy(ReflectionAuthenticationReverseRouter.class)
 interface AuthenticationSimpleReverseRouter {
 
-    String LOG_IN_PAGE = "logInPage";
+    String LOG_IN_PAGE = "logInPageCall";
 
     Call logInPageCall(final String languageTag);
 
-    String LOG_IN_PROCESS = "logInProcess";
+    String LOG_IN_PROCESS = "logInProcessCall";
 
     Call logInProcessCall(final String languageTag);
 
-    String SIGN_UP_PROCESS = "signUpProcess";
+    String SIGN_UP_PROCESS = "signUpProcessCall";
 
     Call signUpProcessCall(final String languageTag);
 
-    String LOG_OUT_PROCESS = "logOutProcess";
+    String LOG_OUT_PROCESS = "logOutProcessCall";
 
     Call logOutProcessCall(final String languageTag);
 }
