@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
-import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
@@ -21,16 +21,16 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseCheckoutConfirmationController<F extends CheckoutConfirmationFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Cart, Order>, WithRequiredCart {
 
     private final CartFinder cartFinder;
-    private final CheckoutConfirmationExecutor checkoutConfirmationExecutor;
+    private final CheckoutConfirmationControllerAction checkoutConfirmationControllerAction;
     private final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory;
 
     protected SunriseCheckoutConfirmationController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
                                                     final CartFinder cartFinder,
-                                                    final CheckoutConfirmationExecutor checkoutConfirmationExecutor,
+                                                    final CheckoutConfirmationControllerAction checkoutConfirmationControllerAction,
                                                     final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory) {
         super(templateRenderer, formFactory);
         this.cartFinder = cartFinder;
-        this.checkoutConfirmationExecutor = checkoutConfirmationExecutor;
+        this.checkoutConfirmationControllerAction = checkoutConfirmationControllerAction;
         this.checkoutConfirmationPageContentFactory = checkoutConfirmationPageContentFactory;
     }
 
@@ -53,7 +53,7 @@ public abstract class SunriseCheckoutConfirmationController<F extends CheckoutCo
 
     @Override
     public CompletionStage<Order> executeAction(final Cart cart, final F formData) {
-        return checkoutConfirmationExecutor.apply(cart, formData);
+        return checkoutConfirmationControllerAction.apply(cart, formData);
     }
 
     @Override

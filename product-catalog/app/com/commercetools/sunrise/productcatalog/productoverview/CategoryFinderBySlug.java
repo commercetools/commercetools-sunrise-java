@@ -12,7 +12,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-final class CategoryFinderBySlug implements CategoryFinder {
+public final class CategoryFinderBySlug implements CategoryFinder {
 
     private final Locale locale;
     private final CategoryTree categoryTree;

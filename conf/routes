@@ -106,7 +106,7 @@ POST        /:languageTag/user                                 @controllers.myac
 
 
 # Shows the address book
-GET         /:languageTag/user/addressbook                     @controllers.myaccount.AddressBookController.show(languageTag: String)
+GET         /:languageTag/user/addressbook                     @controllers.myaccount.AddressBookDetailController.show(languageTag: String)
 # Shows the form to add an address to the customer's address book
 GET         /:languageTag/user/addressbook/add                 @controllers.myaccount.AddAddressController.show(languageTag: String)
 # Adds an address to the customer's address book

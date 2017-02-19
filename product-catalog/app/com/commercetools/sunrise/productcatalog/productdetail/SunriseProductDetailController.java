@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.controllers.SunriseTemplateController;
-import com.commercetools.sunrise.controllers.WithQueryFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;

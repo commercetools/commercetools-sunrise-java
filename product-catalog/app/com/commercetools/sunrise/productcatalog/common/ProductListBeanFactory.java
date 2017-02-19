@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.common;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.ProductWithVariant;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.products.ProductProjection;

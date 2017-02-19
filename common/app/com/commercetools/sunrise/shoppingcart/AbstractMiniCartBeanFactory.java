@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateTotalPrice;
 
-abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, D extends CartLike<?>> extends ViewModelFactory<T, D> {
+public abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, D extends CartLike<?>> extends ViewModelFactory<T, D> {
 
     private final CurrencyUnit currency;
     private final PriceFormatter priceFormatter;
@@ -68,7 +68,7 @@ abstract class AbstractMiniCartBeanFactory<T extends MiniCartBean, D extends Car
 
     abstract LineItemBean createLineItem(final LineItem lineItem);
 
-    MonetaryAmount zeroAmount(final CurrencyUnit currency) {
+    protected final MonetaryAmount zeroAmount(final CurrencyUnit currency) {
         return PriceUtils.zeroAmount(currency);
     }
 }

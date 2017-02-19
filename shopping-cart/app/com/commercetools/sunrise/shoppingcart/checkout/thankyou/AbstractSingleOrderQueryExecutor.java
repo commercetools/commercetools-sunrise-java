@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
-import com.commercetools.sunrise.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.framework.hooks.events.OrderLoadedHook;
 import com.commercetools.sunrise.framework.hooks.requests.OrderQueryHook;

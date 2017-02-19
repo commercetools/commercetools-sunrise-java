@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.contexts;
 
-import com.commercetools.sunrise.common.SunriseConfigurationException;
+import com.commercetools.sunrise.framework.SunriseConfigurationException;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;

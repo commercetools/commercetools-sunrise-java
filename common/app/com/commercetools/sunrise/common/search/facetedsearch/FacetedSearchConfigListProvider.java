@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.search.facetedsearch;
 
-import com.commercetools.sunrise.common.SunriseConfigurationException;
+import com.commercetools.sunrise.framework.SunriseConfigurationException;
 import io.sphere.sdk.facets.*;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.model.FacetedSearchSearchModel;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.reverserouters.productcatalog;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.categories.Category;

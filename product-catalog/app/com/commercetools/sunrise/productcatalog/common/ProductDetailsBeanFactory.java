@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.common;
 
 import com.commercetools.sunrise.common.ctp.ProductAttributeSettings;
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.*;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.attributes.Attribute;

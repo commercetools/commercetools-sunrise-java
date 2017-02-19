@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.sessions;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import play.Configuration;
 import play.cache.CacheApi;
 import play.mvc.Http;

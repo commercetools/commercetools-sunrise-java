@@ -1,9 +1,8 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
-import com.commercetools.sunrise.sessions.cart.CartInSession;
-import com.commercetools.sunrise.sessions.customer.CustomerInSession;
+import com.commercetools.sunrise.myaccount.authentication.logout.LogOutControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.logout.SunriseLogOutController;
 import play.mvc.Result;
 
@@ -16,10 +15,9 @@ public final class LogOutController extends SunriseLogOutController {
     private final HomeReverseRouter homeReverseRouter;
 
     @Inject
-    public LogOutController(final CustomerInSession customerInSession,
-                            final CartInSession cartInSession,
+    public LogOutController(final LogOutControllerAction logOutControllerAction,
                             final HomeReverseRouter homeReverseRouter) {
-        super(customerInSession, cartInSession);
+        super(logOutControllerAction);
         this.homeReverseRouter = homeReverseRouter;
     }
 

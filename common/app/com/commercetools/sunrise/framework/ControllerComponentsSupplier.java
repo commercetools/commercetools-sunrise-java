@@ -1,9 +1,0 @@
-package com.commercetools.sunrise.framework;
-
-import java.util.List;
-import java.util.function.Supplier;
-
-@FunctionalInterface
-public interface ControllerComponentsSupplier extends Supplier<List<ControllerComponent>> {
-
-}

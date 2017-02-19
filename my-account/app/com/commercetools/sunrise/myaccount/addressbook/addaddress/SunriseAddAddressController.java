@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
@@ -23,18 +23,18 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseAddAddressController<F extends AddressBookAddressFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
-    private final AddAddressExecutor addAddressExecutor;
+    private final AddAddressControllerAction addAddressControllerAction;
     private final AddAddressPageContentFactory addAddressPageContentFactory;
     private final CountryCode country;
 
     protected SunriseAddAddressController(final TemplateRenderer templateRenderer,
                                           final FormFactory formFactory, final CustomerFinder customerFinder,
-                                          final AddAddressExecutor addAddressExecutor,
+                                          final AddAddressControllerAction addAddressControllerAction,
                                           final AddAddressPageContentFactory addAddressPageContentFactory,
                                           final CountryCode country) {
         super(templateRenderer, formFactory);
         this.customerFinder = customerFinder;
-        this.addAddressExecutor = addAddressExecutor;
+        this.addAddressControllerAction = addAddressControllerAction;
         this.addAddressPageContentFactory = addAddressPageContentFactory;
         this.country = country;
     }
@@ -58,7 +58,7 @@ public abstract class SunriseAddAddressController<F extends AddressBookAddressFo
 
     @Override
     public CompletionStage<Customer> executeAction(final Customer customer, final F formData) {
-        return addAddressExecutor.apply(customer, formData);
+        return addAddressControllerAction.apply(customer, formData);
     }
 
     @Override

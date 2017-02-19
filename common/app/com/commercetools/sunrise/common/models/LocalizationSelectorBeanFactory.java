@@ -3,7 +3,7 @@ package com.commercetools.sunrise.common.models;
 import com.commercetools.sunrise.contexts.ProjectContext;
 import com.commercetools.sunrise.common.forms.CountryFormSelectableOptionBean;
 import com.commercetools.sunrise.common.forms.CountryFormSelectableOptionBeanFactory;
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.neovisionaries.i18n.CountryCode;
 
 import javax.inject.Inject;

@@ -1,9 +1,10 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
+import com.commercetools.sunrise.common.models.SunriseModel;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 
-public final class AddressWithCustomer {
+public final class AddressWithCustomer extends SunriseModel {
 
     private final Address address;
     private final Customer customer;

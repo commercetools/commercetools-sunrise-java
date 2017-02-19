@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.view;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.shoppingcart.CartFinder;

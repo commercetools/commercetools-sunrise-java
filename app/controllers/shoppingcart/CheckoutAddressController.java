@@ -1,13 +1,13 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
-import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressExecutor;
+import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.address.DefaultCheckoutAddressFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.address.SunriseCheckoutAddressController;
 import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContentFactory;
@@ -31,11 +31,11 @@ public final class CheckoutAddressController extends SunriseCheckoutAddressContr
     public CheckoutAddressController(final TemplateRenderer templateRenderer,
                                      final FormFactory formFactory,
                                      final CartFinder cartFinder,
-                                     final CheckoutAddressExecutor checkoutAddressExecutor,
+                                     final CheckoutAddressControllerAction checkoutAddressControllerAction,
                                      final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory,
                                      final CartReverseRouter cartReverseRouter,
                                      final CheckoutReverseRouter checkoutReverseRouter) {
-        super(templateRenderer, formFactory, cartFinder, checkoutAddressExecutor, checkoutAddressPageContentFactory);
+        super(templateRenderer, formFactory, cartFinder, checkoutAddressControllerAction, checkoutAddressPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
         this.checkoutReverseRouter = checkoutReverseRouter;
     }

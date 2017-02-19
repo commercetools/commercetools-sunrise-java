@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.framework.hooks;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
-import com.commercetools.sunrise.framework.SunriseComponent;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.framework.components.SunriseComponent;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;

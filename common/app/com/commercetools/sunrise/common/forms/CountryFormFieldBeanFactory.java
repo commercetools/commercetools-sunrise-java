@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.forms;
 
 import com.commercetools.sunrise.contexts.ProjectContext;
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.FormFieldViewModelFactory;
 import com.neovisionaries.i18n.CountryCode;
 import play.data.Form;

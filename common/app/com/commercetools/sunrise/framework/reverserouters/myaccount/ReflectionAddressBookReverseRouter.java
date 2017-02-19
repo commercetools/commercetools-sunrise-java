@@ -11,7 +11,7 @@ import javax.inject.Singleton;
 @Singleton
 final class ReflectionAddressBookReverseRouter extends AbstractReflectionReverseRouter implements AddressBookSimpleReverseRouter {
 
-    private final ReverseCaller addressBookPageCaller;
+    private final ReverseCaller addressBookDetailPageCaller;
     private final ReverseCaller addAddressPageCaller;
     private final ReverseCaller addAddressProcessCaller;
     private final ReverseCaller changeAddressPageCaller;
@@ -20,7 +20,7 @@ final class ReflectionAddressBookReverseRouter extends AbstractReflectionReverse
 
     @Inject
     private ReflectionAddressBookReverseRouter(final ParsedRouteList parsedRouteList) {
-        addressBookPageCaller = getCallerForRoute(parsedRouteList, ADDRESS_BOOK_PAGE);
+        addressBookDetailPageCaller = getCallerForRoute(parsedRouteList, ADDRESS_BOOK_DETAIL_PAGE);
         addAddressPageCaller = getCallerForRoute(parsedRouteList, ADD_ADDRESS_PAGE);
         addAddressProcessCaller = getCallerForRoute(parsedRouteList, ADD_ADDRESS_PROCESS);
         changeAddressPageCaller = getCallerForRoute(parsedRouteList, CHANGE_ADDRESS_PAGE);
@@ -29,8 +29,8 @@ final class ReflectionAddressBookReverseRouter extends AbstractReflectionReverse
     }
 
     @Override
-    public Call addressBookPageCall(final String languageTag) {
-        return addressBookPageCaller.call(languageTag);
+    public Call addressBookDetailPageCall(final String languageTag) {
+        return addressBookDetailPageCaller.call(languageTag);
     }
 
     @Override

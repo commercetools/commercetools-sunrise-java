@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
 import play.mvc.Call;
 
@@ -19,8 +19,8 @@ final class ReflectionAddressBookLocalizedReverseRouter extends AbstractLocalize
     }
 
     @Override
-    public Call addressBookPageCall(final String languageTag) {
-        return delegate.addressBookPageCall(languageTag);
+    public Call addressBookDetailPageCall(final String languageTag) {
+        return delegate.addressBookDetailPageCall(languageTag);
     }
 
     @Override

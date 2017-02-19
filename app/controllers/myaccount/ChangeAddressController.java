@@ -1,17 +1,17 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.changeaddress.ChangeAddressExecutor;
+import com.commercetools.sunrise.myaccount.addressbook.changeaddress.ChangeAddressControllerAction;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.SunriseChangeAddressController;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.view.ChangeAddressPageContentFactory;
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
@@ -35,11 +35,11 @@ public final class ChangeAddressController extends SunriseChangeAddressControlle
                                    final FormFactory formFactory,
                                    final CustomerFinder customerFinder,
                                    final AddressFinder addressFinder,
-                                   final ChangeAddressExecutor changeAddressExecutor,
+                                   final ChangeAddressControllerAction changeAddressControllerAction,
                                    final ChangeAddressPageContentFactory changeAddressPageContentFactory,
                                    final AuthenticationReverseRouter authenticationReverseRouter,
                                    final AddressBookReverseRouter addressBookReverseRouter) {
-        super(templateRenderer, formFactory, customerFinder, addressFinder, changeAddressExecutor, changeAddressPageContentFactory);
+        super(templateRenderer, formFactory, customerFinder, addressFinder, changeAddressControllerAction, changeAddressPageContentFactory);
         this.authenticationReverseRouter = authenticationReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
     }
@@ -61,11 +61,11 @@ public final class ChangeAddressController extends SunriseChangeAddressControlle
 
     @Override
     public CompletionStage<Result> handleNotFoundAddress() {
-        return redirectTo(addressBookReverseRouter.addressBookPageCall());
+        return redirectTo(addressBookReverseRouter.addressBookDetailPageCall());
     }
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final DefaultAddressBookAddressFormData formData) {
-        return redirectTo(addressBookReverseRouter.addressBookPageCall());
+        return redirectTo(addressBookReverseRouter.addressBookDetailPageCall());
     }
 }

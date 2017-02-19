@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
+import com.commercetools.sunrise.common.models.SunriseModel;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.shippingmethods.ShippingMethod;
 
 import java.util.List;
 
-public final class ShippingMethodsWithCart {
+public final class ShippingMethodsWithCart extends SunriseModel {
 
     private final List<ShippingMethod> shippingMethods;
     private final Cart cart;

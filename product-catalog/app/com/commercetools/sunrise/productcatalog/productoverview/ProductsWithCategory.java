@@ -1,13 +1,13 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
+import com.commercetools.sunrise.common.models.SunriseModel;
 import io.sphere.sdk.categories.Category;
-import io.sphere.sdk.models.Base;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 
 import javax.annotation.Nullable;
 
-public final class ProductsWithCategory extends Base {
+public final class ProductsWithCategory extends SunriseModel {
 
     private final PagedSearchResult<ProductProjection> products;
     @Nullable

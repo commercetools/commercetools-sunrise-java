@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
-import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
@@ -20,14 +20,14 @@ import static com.commercetools.sunrise.common.utils.SphereExceptionUtils.isCust
 
 public abstract class SunriseLogInController<F extends LogInFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Void, CustomerSignInResult> {
 
-    private final LogInExecutor logInExecutor;
+    private final LogInControllerAction logInControllerAction;
     private final LogInPageContentFactory logInPageContentFactory;
 
     protected SunriseLogInController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
-                                     final LogInExecutor logInExecutor,
+                                     final LogInControllerAction logInControllerAction,
                                      final LogInPageContentFactory logInPageContentFactory) {
         super(templateRenderer, formFactory);
-        this.logInExecutor = logInExecutor;
+        this.logInControllerAction = logInControllerAction;
         this.logInPageContentFactory = logInPageContentFactory;
     }
 
@@ -45,7 +45,7 @@ public abstract class SunriseLogInController<F extends LogInFormData> extends Su
 
     @Override
     public CompletionStage<CustomerSignInResult> executeAction(final Void input, final F formData) {
-        return logInExecutor.apply(formData);
+        return logInControllerAction.apply(formData);
     }
 
     @Override

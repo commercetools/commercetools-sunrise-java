@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.sessions.cart;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.shoppingcart.LineItemBean;
 import com.commercetools.sunrise.shoppingcart.LineItemBeanFactory;

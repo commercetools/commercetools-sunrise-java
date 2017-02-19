@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.sessions.order;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.SessionStrategy;
 import io.sphere.sdk.orders.Order;

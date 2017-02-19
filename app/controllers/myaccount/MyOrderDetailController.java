@@ -1,15 +1,15 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyOrdersReverseRouter;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.MyOrderFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.SunriseMyOrderDetailController;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContentFactory;
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import play.data.FormFactory;
 import play.mvc.Result;

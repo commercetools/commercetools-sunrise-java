@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;

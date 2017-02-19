@@ -1,16 +1,16 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.mydetails.DefaultMyPersonalDetailsFormData;
-import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsExecutor;
+import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsControllerAction;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
 import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
@@ -33,11 +33,11 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
     public MyPersonalDetailsController(final TemplateRenderer templateRenderer,
                                        final FormFactory formFactory,
                                        final CustomerFinder customerFinder,
-                                       final MyPersonalDetailsExecutor myPersonalDetailsExecutor,
+                                       final MyPersonalDetailsControllerAction myPersonalDetailsControllerAction,
                                        final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory,
                                        final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter,
                                        final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(templateRenderer, formFactory, customerFinder, myPersonalDetailsExecutor, myPersonalDetailsPageContentFactory);
+        super(templateRenderer, formFactory, customerFinder, myPersonalDetailsControllerAction, myPersonalDetailsPageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
         this.authenticationReverseRouter = authenticationReverseRouter;
     }

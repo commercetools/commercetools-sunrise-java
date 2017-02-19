@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.search.facetedsearch;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import io.sphere.sdk.categories.Category;
 
 import javax.inject.Inject;

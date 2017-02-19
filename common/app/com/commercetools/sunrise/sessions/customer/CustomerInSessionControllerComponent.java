@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.sessions.customer;
 
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.framework.hooks.events.CustomerLoadedHook;
 import com.commercetools.sunrise.framework.hooks.events.CustomerSignInResultLoadedHook;

@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity;
 
-import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
@@ -21,16 +21,16 @@ public abstract class SunriseChangeLineItemQuantityController<F extends ChangeLi
 
     private final CartFinder cartFinder;
     private final CartDetailPageContentFactory cartDetailPageContentFactory;
-    private final ChangeLineItemQuantityExecutor changeLineItemQuantityExecutor;
+    private final ChangeLineItemQuantityControllerAction changeLineItemQuantityControllerAction;
 
     protected SunriseChangeLineItemQuantityController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
                                                       final CartFinder cartFinder,
                                                       final CartDetailPageContentFactory cartDetailPageContentFactory,
-                                                      final ChangeLineItemQuantityExecutor changeLineItemQuantityExecutor) {
+                                                      final ChangeLineItemQuantityControllerAction changeLineItemQuantityControllerAction) {
         super(templateRenderer, formFactory);
         this.cartFinder = cartFinder;
         this.cartDetailPageContentFactory = cartDetailPageContentFactory;
-        this.changeLineItemQuantityExecutor = changeLineItemQuantityExecutor;
+        this.changeLineItemQuantityControllerAction = changeLineItemQuantityControllerAction;
     }
 
     @Override
@@ -46,7 +46,7 @@ public abstract class SunriseChangeLineItemQuantityController<F extends ChangeLi
 
     @Override
     public CompletionStage<Cart> executeAction(final Cart cart, final F formData) {
-        return changeLineItemQuantityExecutor.apply(cart, formData);
+        return changeLineItemQuantityControllerAction.apply(cart, formData);
     }
 
     @Override

@@ -2,8 +2,8 @@ package controllers;
 
 import com.commercetools.sunrise.common.localization.LocationSelectorControllerComponent;
 import com.commercetools.sunrise.common.pages.PageNavMenuControllerComponent;
-import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.framework.ControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.ControllerComponent;
+import com.commercetools.sunrise.framework.components.ControllerComponentsSupplier;
 import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
 
 import javax.inject.Inject;

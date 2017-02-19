@@ -1,12 +1,12 @@
 package controllers.productcatalog;
 
 
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
-import com.commercetools.sunrise.productcatalog.home.HomeProductSuggestionsControllerComponent;
+import com.commercetools.sunrise.productcatalog.home.HomeRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
 import controllers.PageHeaderControllerComponentsSupplier;
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletionStage;
 
 @NoCache
 @RegisteredComponents({
-        HomeProductSuggestionsControllerComponent.class,
+        HomeRecommendationsControllerComponent.class,
         CommonControllerComponentsSupplier.class,
         PageHeaderControllerComponentsSupplier.class
 })

@@ -1,9 +1,10 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
+import com.commercetools.sunrise.common.models.SunriseModel;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.orders.Order;
 
-public final class OrderWithCustomer {
+public final class OrderWithCustomer extends SunriseModel {
 
     private final Order order;
     private final Customer customer;

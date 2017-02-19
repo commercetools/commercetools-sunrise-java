@@ -1,13 +1,13 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
-import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationExecutor;
+import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.DefaultCheckoutConfirmationFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.SunriseCheckoutConfirmationController;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContentFactory;
@@ -31,11 +31,11 @@ public final class CheckoutConfirmationController extends SunriseCheckoutConfirm
     public CheckoutConfirmationController(final TemplateRenderer templateRenderer,
                                           final FormFactory formFactory,
                                           final CartFinder cartFinder,
-                                          final CheckoutConfirmationExecutor checkoutConfirmationExecutor,
+                                          final CheckoutConfirmationControllerAction checkoutConfirmationControllerAction,
                                           final CheckoutConfirmationPageContentFactory checkoutConfirmationPageContentFactory,
                                           final CartReverseRouter cartReverseRouter,
                                           final CheckoutReverseRouter checkoutReverseRouter) {
-        super(templateRenderer, formFactory, cartFinder, checkoutConfirmationExecutor, checkoutConfirmationPageContentFactory);
+        super(templateRenderer, formFactory, cartFinder, checkoutConfirmationControllerAction, checkoutConfirmationPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
         this.checkoutReverseRouter = checkoutReverseRouter;
     }

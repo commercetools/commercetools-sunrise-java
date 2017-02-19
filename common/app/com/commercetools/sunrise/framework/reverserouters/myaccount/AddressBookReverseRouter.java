@@ -7,8 +7,8 @@ import play.mvc.Call;
 @ImplementedBy(ReflectionAddressBookLocalizedReverseRouter.class)
 public interface AddressBookReverseRouter extends AddressBookSimpleReverseRouter, LocalizedReverseRouter {
 
-    default Call addressBookPageCall() {
-        return addressBookPageCall(languageTag());
+    default Call addressBookDetailPageCall() {
+        return addressBookDetailPageCall(languageTag());
     }
 
     default Call addAddressPageCall() {

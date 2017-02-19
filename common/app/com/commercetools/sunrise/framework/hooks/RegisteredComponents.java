@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.hooks;
 
-import com.commercetools.sunrise.framework.ControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.ControllerComponentsSupplier;
 import play.mvc.With;
 
 import java.lang.annotation.ElementType;

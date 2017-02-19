@@ -1,12 +1,12 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.myaccount.authentication.login.DefaultLogInFormData;
-import com.commercetools.sunrise.myaccount.authentication.login.LogInExecutor;
+import com.commercetools.sunrise.myaccount.authentication.login.LogInControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.login.SunriseLogInController;
 import com.commercetools.sunrise.myaccount.authentication.login.view.LogInPageContentFactory;
 import controllers.PageHeaderControllerComponentsSupplier;
@@ -29,10 +29,10 @@ public final class LogInController extends SunriseLogInController<DefaultLogInFo
     @Inject
     public LogInController(final TemplateRenderer templateRenderer,
                            final FormFactory formFactory,
-                           final LogInExecutor logInExecutor,
+                           final LogInControllerAction logInControllerAction,
                            final LogInPageContentFactory logInPageContentFactory,
                            final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter) {
-        super(templateRenderer, formFactory, logInExecutor, logInPageContentFactory);
+        super(templateRenderer, formFactory, logInControllerAction, logInPageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
     }
 

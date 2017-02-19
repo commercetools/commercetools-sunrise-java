@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.framework.hooks.actions.CustomerSignedInActionHook;
 import com.commercetools.sunrise.framework.hooks.events.CustomerSignInResultLoadedHook;

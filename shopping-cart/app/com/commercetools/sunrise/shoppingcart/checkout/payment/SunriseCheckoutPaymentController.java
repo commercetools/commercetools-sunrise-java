@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
@@ -30,18 +30,18 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public abstract class SunriseCheckoutPaymentController<F extends CheckoutPaymentFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, PaymentMethodsWithCart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
-    private final CheckoutPaymentExecutor checkoutPaymentExecutor;
+    private final CheckoutPaymentControllerAction checkoutPaymentControllerAction;
     private final CheckoutPaymentPageContentFactory checkoutPaymentPageContentFactory;
     private final PaymentSettings paymentSettings;
 
     protected SunriseCheckoutPaymentController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
                                                final CartFinder cartFinder,
-                                               final CheckoutPaymentExecutor checkoutPaymentExecutor,
+                                               final CheckoutPaymentControllerAction checkoutPaymentControllerAction,
                                                final CheckoutPaymentPageContentFactory checkoutPaymentPageContentFactory,
                                                final PaymentSettings paymentSettings) {
         super(templateRenderer, formFactory);
         this.cartFinder = cartFinder;
-        this.checkoutPaymentExecutor = checkoutPaymentExecutor;
+        this.checkoutPaymentControllerAction = checkoutPaymentControllerAction;
         this.checkoutPaymentPageContentFactory = checkoutPaymentPageContentFactory;
         this.paymentSettings = paymentSettings;
     }
@@ -74,7 +74,7 @@ public abstract class SunriseCheckoutPaymentController<F extends CheckoutPayment
 
     @Override
     public CompletionStage<Cart> executeAction(final PaymentMethodsWithCart paymentMethodsWithCart, final F formData) {
-        return checkoutPaymentExecutor.apply(paymentMethodsWithCart, formData);
+        return checkoutPaymentControllerAction.apply(paymentMethodsWithCart, formData);
     }
 
     @Override

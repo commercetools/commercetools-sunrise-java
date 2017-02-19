@@ -2,15 +2,15 @@ package controllers.myaccount;
 
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressExecutor;
+import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressControllerAction;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.SunriseAddAddressController;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContentFactory;
 import com.neovisionaries.i18n.CountryCode;
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
@@ -32,12 +32,12 @@ public final class AddAddressController extends SunriseAddAddressController<Defa
     public AddAddressController(final TemplateRenderer templateRenderer,
                                 final FormFactory formFactory,
                                 final CustomerFinder customerFinder,
-                                final AddAddressExecutor addAddressExecutor,
+                                final AddAddressControllerAction addAddressControllerAction,
                                 final AddAddressPageContentFactory addAddressPageContentFactory,
                                 final CountryCode country,
                                 final AuthenticationReverseRouter authenticationReverseRouter,
                                 final AddressBookReverseRouter addressBookReverseRouter) {
-        super(templateRenderer, formFactory, customerFinder, addAddressExecutor, addAddressPageContentFactory, country);
+        super(templateRenderer, formFactory, customerFinder, addAddressControllerAction, addAddressPageContentFactory, country);
         this.authenticationReverseRouter = authenticationReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
     }
@@ -54,7 +54,7 @@ public final class AddAddressController extends SunriseAddAddressController<Defa
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final DefaultAddressBookAddressFormData formData) {
-        return redirectTo(addressBookReverseRouter.addressBookPageCall());
+        return redirectTo(addressBookReverseRouter.addressBookDetailPageCall());
     }
 
     @Override

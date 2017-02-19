@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.search.pagination;
 
-import com.commercetools.sunrise.common.SunriseConfigurationException;
+import com.commercetools.sunrise.framework.SunriseConfigurationException;
 import com.commercetools.sunrise.common.forms.FormSettingsWithOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

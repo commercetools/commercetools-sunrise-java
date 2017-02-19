@@ -6,9 +6,9 @@ import play.mvc.Call;
 @ImplementedBy(ReflectionAddressBookReverseRouter.class)
 interface AddressBookSimpleReverseRouter {
 
-    String ADDRESS_BOOK_PAGE = "addressBookPageCall";
+    String ADDRESS_BOOK_DETAIL_PAGE = "addressBookDetailPageCall";
     
-    Call addressBookPageCall(final String languageTag);
+    Call addressBookDetailPageCall(final String languageTag);
 
     String ADD_ADDRESS_PAGE = "addAddressPageCall";
 

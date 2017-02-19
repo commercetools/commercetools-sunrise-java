@@ -15,7 +15,7 @@ import java.util.concurrent.CompletionStage;
 
 final class MetricHttpClient implements HttpClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MetricHttpClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger("sphere.metrics");
     static final String KEY = "io.sphere.sdk.play.metrics.reportRawData";
 
     private final HttpClient underlying;
@@ -36,8 +36,8 @@ final class MetricHttpClient implements HttpClient {
     public CompletionStage<HttpResponse> execute(final HttpRequest httpRequest) {
         final long startTimestamp = System.currentTimeMillis();
         return underlying.execute(httpRequest).thenApply(res -> {//important to not use async here
-            final long stopTimestamp = System.currentTimeMillis();
             if (metricsEnabled) {
+                final long stopTimestamp = System.currentTimeMillis();
                 report(context, httpRequest, res, startTimestamp, stopTimestamp);
             }
             return res;

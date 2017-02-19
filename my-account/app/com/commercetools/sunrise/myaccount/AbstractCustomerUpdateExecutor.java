@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount;
 
-import com.commercetools.sunrise.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.framework.hooks.events.CustomerUpdatedHook;
 import com.commercetools.sunrise.framework.hooks.requests.CustomerUpdateCommandHook;

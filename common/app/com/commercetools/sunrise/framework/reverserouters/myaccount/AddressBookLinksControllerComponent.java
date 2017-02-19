@@ -23,6 +23,6 @@ public class AddressBookLinksControllerComponent extends AbstractLinksController
     protected void addLinksToPage(final PageMeta meta, final AddressBookReverseRouter reverseRouter) {
         meta.addHalLink(reverseRouter.addAddressPageCall(), "myAddressBookAddAddress");
         meta.addHalLink(reverseRouter.addAddressProcessCall(), "myAddressBookAddAddressSubmit");
-        meta.addHalLink(reverseRouter.addressBookPageCall(), "myAddressBook");
+        meta.addHalLink(reverseRouter.addressBookDetailPageCall(), "myAddressBook");
     }
 }

@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.common.models;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.framework.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierFactory;
+import com.commercetools.sunrise.framework.template.i18n.I18nResolver;
 import io.sphere.sdk.models.Address;
 
 import javax.annotation.Nullable;

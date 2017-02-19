@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.common.search.facetedsearch;
 
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifier;
-import com.commercetools.sunrise.common.template.i18n.I18nIdentifierFactory;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.framework.template.i18n.I18nIdentifier;
+import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierFactory;
+import com.commercetools.sunrise.framework.template.i18n.I18nResolver;
+import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.framework.hooks.events.CategoryLoadedHook;
 import com.commercetools.sunrise.framework.hooks.events.ProductProjectionPagedSearchResultLoadedHook;

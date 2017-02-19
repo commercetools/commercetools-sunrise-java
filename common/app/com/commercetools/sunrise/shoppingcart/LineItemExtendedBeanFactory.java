@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.ctp.ProductAttributeSettings;
 import com.commercetools.sunrise.common.models.AttributeWithProductType;
 import com.commercetools.sunrise.common.models.LineItemProductVariantBeanFactory;

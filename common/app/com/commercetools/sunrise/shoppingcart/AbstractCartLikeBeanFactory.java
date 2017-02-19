@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
 
-abstract class AbstractCartLikeBeanFactory<T extends CartBean, D extends CartLike<?>> extends AbstractMiniCartBeanFactory<T, D> {
+public abstract class AbstractCartLikeBeanFactory<T extends CartBean, D extends CartLike<?>> extends AbstractMiniCartBeanFactory<T, D> {
 
     private final CurrencyUnit currency;
     private final PriceFormatter priceFormatter;

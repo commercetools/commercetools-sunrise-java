@@ -1,15 +1,15 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
-import com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity.ChangeLineItemQuantityExecutor;
+import com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity.ChangeLineItemQuantityControllerAction;
 import com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity.DefaultChangeLineItemQuantityFormData;
 import com.commercetools.sunrise.shoppingcart.cart.changelineitemquantity.SunriseChangeLineItemQuantityController;
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
@@ -32,9 +32,9 @@ public final class ChangeLineItemQuantityController extends SunriseChangeLineIte
                                             final FormFactory formFactory,
                                             final CartFinder cartFinder,
                                             final CartDetailPageContentFactory cartDetailPageContentFactory,
-                                            final ChangeLineItemQuantityExecutor changeLineItemQuantityExecutor,
+                                            final ChangeLineItemQuantityControllerAction changeLineItemQuantityControllerAction,
                                             final CartReverseRouter cartReverseRouter) {
-        super(templateRenderer, formFactory, cartFinder, cartDetailPageContentFactory, changeLineItemQuantityExecutor);
+        super(templateRenderer, formFactory, cartFinder, cartDetailPageContentFactory, changeLineItemQuantityControllerAction);
         this.cartReverseRouter = cartReverseRouter;
     }
 

@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 
-import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
@@ -29,17 +29,17 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
 
     private final CustomerFinder customerFinder;
     private final AddressFinder addressFinder;
-    private final ChangeAddressExecutor changeAddressExecutor;
+    private final ChangeAddressControllerAction changeAddressControllerAction;
     private final ChangeAddressPageContentFactory changeAddressPageContentFactory;
 
     protected SunriseChangeAddressController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
                                              final CustomerFinder customerFinder, final AddressFinder addressFinder,
-                                             final ChangeAddressExecutor changeAddressExecutor,
+                                             final ChangeAddressControllerAction changeAddressControllerAction,
                                              final ChangeAddressPageContentFactory changeAddressPageContentFactory) {
         super(templateRenderer, formFactory);
         this.customerFinder = customerFinder;
         this.addressFinder = addressFinder;
-        this.changeAddressExecutor = changeAddressExecutor;
+        this.changeAddressControllerAction = changeAddressControllerAction;
         this.changeAddressPageContentFactory = changeAddressPageContentFactory;
     }
 
@@ -71,7 +71,7 @@ public abstract class SunriseChangeAddressController<F extends AddressBookAddres
 
     @Override
     public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final F formData) {
-        return changeAddressExecutor.apply(addressWithCustomer, formData);
+        return changeAddressControllerAction.apply(addressWithCustomer, formData);
     }
 
     @Override

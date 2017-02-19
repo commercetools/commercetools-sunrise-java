@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDetailsReverseRouter;
@@ -20,16 +20,16 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
-    private final MyPersonalDetailsExecutor myPersonalDetailsExecutor;
+    private final MyPersonalDetailsControllerAction myPersonalDetailsControllerAction;
     private final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory;
 
     protected SunriseMyPersonalDetailsController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
                                                  final CustomerFinder customerFinder,
-                                                 final MyPersonalDetailsExecutor myPersonalDetailsExecutor,
+                                                 final MyPersonalDetailsControllerAction myPersonalDetailsControllerAction,
                                                  final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory) {
         super(templateRenderer, formFactory);
         this.customerFinder = customerFinder;
-        this.myPersonalDetailsExecutor = myPersonalDetailsExecutor;
+        this.myPersonalDetailsControllerAction = myPersonalDetailsControllerAction;
         this.myPersonalDetailsPageContentFactory = myPersonalDetailsPageContentFactory;
     }
 
@@ -52,7 +52,7 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
 
     @Override
     public CompletionStage<Customer> executeAction(final Customer customer, final F formData) {
-        return myPersonalDetailsExecutor.apply(customer, formData);
+        return myPersonalDetailsControllerAction.apply(customer, formData);
     }
 
     @Override

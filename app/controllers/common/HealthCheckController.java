@@ -1,7 +1,7 @@
 package controllers.common;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
-import com.commercetools.sunrise.common.SunriseHealthCheckController;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
+import com.commercetools.sunrise.common.healthcheck.SunriseHealthCheckController;
 import io.sphere.sdk.client.SphereClient;
 
 import javax.inject.Inject;

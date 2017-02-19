@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.forms;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
 
 import javax.annotation.Nullable;

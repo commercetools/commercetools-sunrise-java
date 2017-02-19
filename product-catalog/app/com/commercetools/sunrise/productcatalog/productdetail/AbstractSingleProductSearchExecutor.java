@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.framework.hooks.events.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.framework.hooks.requests.ProductProjectionSearchHook;

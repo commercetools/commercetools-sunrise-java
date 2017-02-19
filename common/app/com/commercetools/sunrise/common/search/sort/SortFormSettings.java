@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.search.sort;
 
-import com.commercetools.sunrise.common.SunriseConfigurationException;
+import com.commercetools.sunrise.framework.SunriseConfigurationException;
 import com.commercetools.sunrise.common.forms.FormSettingsWithOptions;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.SortExpression;

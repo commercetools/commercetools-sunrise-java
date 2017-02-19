@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.contexts;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import io.sphere.sdk.models.Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

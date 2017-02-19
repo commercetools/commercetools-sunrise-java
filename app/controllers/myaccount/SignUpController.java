@@ -1,14 +1,14 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.authentication.signup.DefaultSignUpFormData;
-import com.commercetools.sunrise.myaccount.authentication.signup.SignUpActionExecutor;
+import com.commercetools.sunrise.myaccount.authentication.signup.SignUpControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.signup.SunriseSignUpController;
 import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpPageContentFactory;
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.FormFactory;
@@ -29,10 +29,10 @@ public final class SignUpController extends SunriseSignUpController<DefaultSignU
     @Inject
     public SignUpController(final TemplateRenderer templateRenderer,
                             final FormFactory formFactory,
-                            final SignUpActionExecutor signUpActionExecutor,
+                            final SignUpControllerAction signUpControllerAction,
                             final SignUpPageContentFactory signUpPageContentFactory,
                             final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter) {
-        super(templateRenderer, formFactory, signUpActionExecutor, signUpPageContentFactory);
+        super(templateRenderer, formFactory, signUpControllerAction, signUpPageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
     }
 

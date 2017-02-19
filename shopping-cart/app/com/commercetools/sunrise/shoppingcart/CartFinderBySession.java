@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
 import com.commercetools.sunrise.sessions.cart.CartInSession;
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.framework.hooks.events.CartLoadedHook;

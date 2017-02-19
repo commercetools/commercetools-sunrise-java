@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.view;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductsWithCategory;
 import io.sphere.sdk.categories.CategoryTree;

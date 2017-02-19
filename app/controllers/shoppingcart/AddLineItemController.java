@@ -1,15 +1,15 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
-import com.commercetools.sunrise.shoppingcart.CartCreator;
+import com.commercetools.sunrise.shoppingcart.cart.addlineitem.CartCreator;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.cart.addtocart.AddProductToCartExecutor;
-import com.commercetools.sunrise.shoppingcart.cart.addtocart.DefaultAddProductToCartFormData;
-import com.commercetools.sunrise.shoppingcart.cart.addtocart.SunriseAddLineItemController;
+import com.commercetools.sunrise.shoppingcart.cart.addlineitem.AddLineItemControllerAction;
+import com.commercetools.sunrise.shoppingcart.cart.addlineitem.DefaultAddLineItemFormData;
+import com.commercetools.sunrise.shoppingcart.cart.addlineitem.SunriseAddLineItemController;
 import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.carts.Cart;
@@ -24,7 +24,7 @@ import java.util.concurrent.CompletionStage;
         CommonControllerComponentsSupplier.class,
         PageHeaderControllerComponentsSupplier.class
 })
-public final class AddLineItemController extends SunriseAddLineItemController<DefaultAddProductToCartFormData> {
+public final class AddLineItemController extends SunriseAddLineItemController<DefaultAddLineItemFormData> {
 
     private final CartReverseRouter cartReverseRouter;
 
@@ -33,10 +33,10 @@ public final class AddLineItemController extends SunriseAddLineItemController<De
                                  final FormFactory formFactory,
                                  final CartFinder cartFinder,
                                  final CartCreator cartCreator,
-                                 final AddProductToCartExecutor addProductToCartExecutor,
+                                 final AddLineItemControllerAction addLineItemControllerAction,
                                  final CartDetailPageContentFactory cartDetailPageContentFactory,
                                  final CartReverseRouter cartReverseRouter) {
-        super(templateRenderer, formFactory, cartFinder, cartCreator, addProductToCartExecutor, cartDetailPageContentFactory);
+        super(templateRenderer, formFactory, cartFinder, cartCreator, addLineItemControllerAction, cartDetailPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
     }
 
@@ -46,12 +46,12 @@ public final class AddLineItemController extends SunriseAddLineItemController<De
     }
 
     @Override
-    public Class<DefaultAddProductToCartFormData> getFormDataClass() {
-        return DefaultAddProductToCartFormData.class;
+    public Class<DefaultAddLineItemFormData> getFormDataClass() {
+        return DefaultAddLineItemFormData.class;
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final DefaultAddProductToCartFormData formData) {
+    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final DefaultAddLineItemFormData formData) {
         return redirectTo(cartReverseRouter.cartDetailPageCall());
     }
 }

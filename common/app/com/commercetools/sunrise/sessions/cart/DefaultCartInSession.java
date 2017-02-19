@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.sessions.cart;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.ObjectStoringSessionStrategy;
 import com.commercetools.sunrise.shoppingcart.MiniCartBean;

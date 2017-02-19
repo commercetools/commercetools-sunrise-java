@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.framework.hooks;
 
-import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.framework.ControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.ControllerComponent;
+import com.commercetools.sunrise.framework.components.ControllerComponentsSupplier;
 import com.google.inject.Injector;
 import play.mvc.Action;
 import play.mvc.Http;

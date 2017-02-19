@@ -4,8 +4,8 @@ import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchContro
 import com.commercetools.sunrise.common.search.pagination.PaginationControllerComponent;
 import com.commercetools.sunrise.common.search.searchbox.SearchBoxControllerComponent;
 import com.commercetools.sunrise.common.search.sort.SortSelectorControllerComponent;
-import com.commercetools.sunrise.framework.ControllerComponent;
-import com.commercetools.sunrise.framework.ControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.components.ControllerComponent;
+import com.commercetools.sunrise.framework.components.ControllerComponentsSupplier;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

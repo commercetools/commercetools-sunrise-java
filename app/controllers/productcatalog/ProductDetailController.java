@@ -1,15 +1,15 @@
 package controllers.productcatalog;
 
-import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductVariantFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
 import com.commercetools.sunrise.productcatalog.productdetail.view.ProductDetailPageContentFactory;
-import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
-import com.commercetools.sunrise.common.CommonControllerComponentsSupplier;
+import com.commercetools.sunrise.productcatalog.productdetail.ProductRecommendationsControllerComponent;
+import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.products.ProductProjection;
 import play.mvc.Result;
@@ -21,7 +21,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @NoCache
 @RegisteredComponents({
-        ProductSuggestionsControllerComponent.class,
+        ProductRecommendationsControllerComponent.class,
         CommonControllerComponentsSupplier.class,
         PageHeaderControllerComponentsSupplier.class
 })

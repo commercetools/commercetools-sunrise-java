@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.hooks;
 
-import com.commercetools.sunrise.framework.SunriseComponent;
+import com.commercetools.sunrise.framework.components.SunriseComponent;
 import com.google.inject.ImplementedBy;
 
 @ImplementedBy(HookContextImpl.class)

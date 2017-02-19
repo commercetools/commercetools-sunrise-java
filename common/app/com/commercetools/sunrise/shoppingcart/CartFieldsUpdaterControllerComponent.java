@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.common.injection.RequestScoped;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.customer.CustomerInSession;
-import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.actions.CartLoadedActionHook;
 import com.commercetools.sunrise.framework.hooks.actions.CustomerSignedInActionHook;
 import com.commercetools.sunrise.framework.hooks.requests.CartCreateCommandHook;

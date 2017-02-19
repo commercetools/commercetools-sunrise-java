@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart;
 
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.sessions.cart.CartInSession;
-import com.commercetools.sunrise.framework.ControllerComponent;
+import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
+import com.commercetools.sunrise.sessions.cart.CartInSession;
 
 import javax.inject.Inject;
 

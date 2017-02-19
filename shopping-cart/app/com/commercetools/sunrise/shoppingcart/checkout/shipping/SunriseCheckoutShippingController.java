@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
@@ -26,18 +26,18 @@ import java.util.function.Function;
 public abstract class SunriseCheckoutShippingController<F extends CheckoutShippingFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, ShippingMethodsWithCart, Cart>, WithRequiredCart {
 
     private final CartFinder cartFinder;
-    private final CheckoutShippingExecutor checkoutShippingExecutor;
+    private final CheckoutShippingControllerAction checkoutShippingControllerAction;
     private final CheckoutShippingPageContentFactory checkoutShippingPageContentFactory;
     private final ShippingSettings shippingSettings;
 
     protected SunriseCheckoutShippingController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
                                                 final CartFinder cartFinder,
-                                                final CheckoutShippingExecutor checkoutShippingExecutor,
+                                                final CheckoutShippingControllerAction checkoutShippingControllerAction,
                                                 final CheckoutShippingPageContentFactory checkoutShippingPageContentFactory,
                                                 final ShippingSettings shippingSettings) {
         super(templateRenderer, formFactory);
         this.cartFinder = cartFinder;
-        this.checkoutShippingExecutor = checkoutShippingExecutor;
+        this.checkoutShippingControllerAction = checkoutShippingControllerAction;
         this.checkoutShippingPageContentFactory = checkoutShippingPageContentFactory;
         this.shippingSettings = shippingSettings;
     }
@@ -70,7 +70,7 @@ public abstract class SunriseCheckoutShippingController<F extends CheckoutShippi
 
     @Override
     public CompletionStage<Cart> executeAction(final ShippingMethodsWithCart shippingMethodsWithCart, final F formData) {
-        return checkoutShippingExecutor.apply(shippingMethodsWithCart, formData);
+        return checkoutShippingControllerAction.apply(shippingMethodsWithCart, formData);
     }
 
     @Override
