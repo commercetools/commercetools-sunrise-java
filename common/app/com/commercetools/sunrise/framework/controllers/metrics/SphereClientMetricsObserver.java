@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.ctp.metrics;
+package com.commercetools.sunrise.framework.controllers.metrics;
 
 import io.sphere.sdk.client.metrics.ObservedTotalDuration;
 

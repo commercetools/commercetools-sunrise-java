@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.common.ctp.metrics;
+package com.commercetools.sunrise.framework.controllers.metrics;
 
 import com.google.inject.Provider;
 import io.sphere.sdk.client.SphereClient;

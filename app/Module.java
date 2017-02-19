@@ -1,13 +1,12 @@
 import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider;
 import com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree;
-import com.commercetools.sunrise.common.ctp.SphereClientProvider;
-import com.commercetools.sunrise.common.ctp.metrics.SimpleMetricsSphereClientProvider;
 import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigList;
 import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigListProvider;
 import com.commercetools.sunrise.contexts.CountryFromSessionProvider;
 import com.commercetools.sunrise.contexts.CurrencyFromCountryProvider;
 import com.commercetools.sunrise.contexts.LocaleFromUrlProvider;
+import com.commercetools.sunrise.framework.controllers.metrics.SimpleMetricsSphereClientProvider;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.template.cms.FileBasedCmsServiceProvider;
 import com.commercetools.sunrise.framework.template.engine.HandlebarsTemplateEngineProvider;
@@ -24,7 +23,6 @@ import com.google.inject.name.Names;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.client.metrics.SimpleMetricsSphereClient;
 import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.ProductTypeLocalRepository;
@@ -45,6 +43,7 @@ public class Module extends AbstractModule {
     @Override
     protected void configure() {
         bindUserContext();
+        bind(SphereClient.class).toProvider(SimpleMetricsSphereClientProvider.class).in(Singleton.class);
         bind(CmsService.class).toProvider(FileBasedCmsServiceProvider.class).in(Singleton.class);
         bind(TemplateEngine.class).toProvider(HandlebarsTemplateEngineProvider.class).in(Singleton.class);
         bind(I18nResolver.class).toProvider(ConfigurableI18nResolverProvider.class).in(Singleton.class);
@@ -52,13 +51,6 @@ public class Module extends AbstractModule {
         bind(CategoryTree.class).annotatedWith(Names.named("new")).toProvider(CategoryTreeInNewProvider.class).in(Singleton.class);
         bind(FacetedSearchConfigList.class).toProvider(FacetedSearchConfigListProvider.class).in(Singleton.class);
         bind(MiniCartBeanFactory.class).to(TruncatedMiniCartBeanFactory.class);
-        bind(SimpleMetricsSphereClient.class).toProvider(SimpleMetricsSphereClientProvider.class).in(Singleton.class);
-    }
-
-    @Provides
-    @Singleton
-    public SphereClient provideSphereClient(final SimpleMetricsSphereClient metricsSphereClient) {
-        return metricsSphereClient;
     }
 
     @Provides

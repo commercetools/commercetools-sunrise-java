@@ -14,7 +14,7 @@
     <logger name="play" level="INFO" />
     <logger name="play.requests" level="DEBUG" />
     <logger name="sphere" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.ctp.metrics.MetricsLoggerAction" level="DEBUG" />
+    <logger name="com.commercetools.sunrise.framework.controllers.metrics.MetricsLoggerAction" level="DEBUG" />
     <logger name="com.github.jknack.handlebars.Handlebars" level="ERROR" />
     <logger name="com.commercetools.sunrise" level="INFO" />
     <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider" level="INFO" />

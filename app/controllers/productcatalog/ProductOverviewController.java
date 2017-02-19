@@ -1,6 +1,6 @@
 package controllers.productcatalog;
 
-import com.commercetools.sunrise.common.ctp.metrics.LogMetrics;
+import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.common.search.SearchControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
