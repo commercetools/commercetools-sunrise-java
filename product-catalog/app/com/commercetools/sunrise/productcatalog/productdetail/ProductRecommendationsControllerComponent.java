@@ -1,14 +1,12 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListBeanFactory;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.framework.hooks.events.ProductProjectionLoadedHook;
-import com.commercetools.sunrise.productcatalog.common.ProductListBean;
-import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
-import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
-import com.commercetools.sunrise.productcatalog.productdetail.view.ProductDetailPageContent;
+import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContent;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
 
@@ -45,12 +43,7 @@ public final class ProductRecommendationsControllerComponent implements Controll
     public void onPageDataReady(final PageData pageData) {
         if (recommendations != null && pageData.getContent() instanceof ProductDetailPageContent) {
             final ProductDetailPageContent content = (ProductDetailPageContent) pageData.getContent();
-            content.setSuggestions(createSuggestions(recommendations));
+            content.setSuggestions(productListBeanFactory.create(recommendations));
         }
-    }
-
-    private SuggestionsBean createSuggestions(final Set<ProductProjection> suggestions) {
-        final ProductListBean productListData = productListBeanFactory.create(suggestions);
-        return new SuggestionsBean(productListData);
     }
 }

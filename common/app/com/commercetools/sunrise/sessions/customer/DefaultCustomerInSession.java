@@ -1,5 +1,7 @@
 package com.commercetools.sunrise.sessions.customer;
 
+import com.commercetools.sunrise.common.models.customers.UserInfoBean;
+import com.commercetools.sunrise.common.models.customers.UserInfoBeanFactory;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.ObjectStoringSessionStrategy;

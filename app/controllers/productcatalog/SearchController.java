@@ -7,7 +7,7 @@ import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseSearchController;
-import com.commercetools.sunrise.productcatalog.productoverview.view.ProductOverviewPageContentFactory;
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
 import controllers.PageHeaderControllerComponentsSupplier;
 
 import javax.inject.Inject;

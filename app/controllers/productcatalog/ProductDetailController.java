@@ -7,7 +7,7 @@ import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductVariantFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
-import com.commercetools.sunrise.productcatalog.productdetail.view.ProductDetailPageContentFactory;
+import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContentFactory;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductRecommendationsControllerComponent;
 import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;

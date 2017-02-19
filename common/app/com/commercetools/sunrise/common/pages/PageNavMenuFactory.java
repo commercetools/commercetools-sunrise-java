@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.models.CategoryBean;
-import com.commercetools.sunrise.common.models.CategoryBeanFactory;
+import com.commercetools.sunrise.common.models.categories.CategoryBean;
+import com.commercetools.sunrise.common.models.categories.CategoryBeanFactory;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.categories.CategoryTree;
 

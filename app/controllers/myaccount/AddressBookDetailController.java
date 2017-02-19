@@ -6,7 +6,7 @@ import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.SunriseAddressBookDetailController;
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.view.AddressBookPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import play.mvc.Result;

@@ -7,10 +7,10 @@ import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
-import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.ChangeAddressControllerAction;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.SunriseChangeAddressController;
-import com.commercetools.sunrise.myaccount.addressbook.changeaddress.view.ChangeAddressPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels.ChangeAddressPageContentFactory;
 import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.customers.Customer;
@@ -25,7 +25,7 @@ import java.util.concurrent.CompletionStage;
         CommonControllerComponentsSupplier.class,
         PageHeaderControllerComponentsSupplier.class
 })
-public final class ChangeAddressController extends SunriseChangeAddressController<DefaultAddressBookAddressFormData> {
+public final class ChangeAddressController extends SunriseChangeAddressController<DefaultAddressFormData> {
 
     private final AuthenticationReverseRouter authenticationReverseRouter;
     private final AddressBookReverseRouter addressBookReverseRouter;
@@ -50,8 +50,8 @@ public final class ChangeAddressController extends SunriseChangeAddressControlle
     }
 
     @Override
-    public Class<DefaultAddressBookAddressFormData> getFormDataClass() {
-        return DefaultAddressBookAddressFormData.class;
+    public Class<DefaultAddressFormData> getFormDataClass() {
+        return DefaultAddressFormData.class;
     }
 
     @Override
@@ -65,7 +65,7 @@ public final class ChangeAddressController extends SunriseChangeAddressControlle
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final DefaultAddressBookAddressFormData formData) {
+    public CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final DefaultAddressFormData formData) {
         return redirectTo(addressBookReverseRouter.addressBookDetailPageCall());
     }
 }

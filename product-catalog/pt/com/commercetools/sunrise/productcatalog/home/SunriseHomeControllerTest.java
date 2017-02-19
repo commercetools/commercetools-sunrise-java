@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.home;
 
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
+import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
 import com.commercetools.sunrise.pt.WithSunriseApplication;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;

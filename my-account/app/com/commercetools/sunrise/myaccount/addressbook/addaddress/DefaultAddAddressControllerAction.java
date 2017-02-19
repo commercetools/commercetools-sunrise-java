@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
@@ -27,17 +27,17 @@ public class DefaultAddAddressControllerAction extends AbstractCustomerUpdateExe
     }
 
     @Override
-    public CompletionStage<Customer> apply(final Customer customer, final AddressBookAddressFormData formData) {
+    public CompletionStage<Customer> apply(final Customer customer, final AddressFormData formData) {
         return executeRequest(customer, buildRequest(customer, formData))
                 .thenComposeAsync(updatedCustomer -> executeRequest(updatedCustomer, buildPostRequest(updatedCustomer, formData)), HttpExecution.defaultContext());
     }
 
-    protected CustomerUpdateCommand buildRequest(final Customer customer, final AddressBookAddressFormData formData) {
+    protected CustomerUpdateCommand buildRequest(final Customer customer, final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = buildUpdateActions(formData);
         return CustomerUpdateCommand.of(customer, updateActions);
     }
 
-    protected CustomerUpdateCommand buildPostRequest(final Customer customer, final AddressBookAddressFormData formData) {
+    protected CustomerUpdateCommand buildPostRequest(final Customer customer, final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = buildPostUpdateActions(customer, formData);
         return CustomerUpdateCommand.of(customer, updateActions);
     }
@@ -49,13 +49,13 @@ public class DefaultAddAddressControllerAction extends AbstractCustomerUpdateExe
                 .map(Address::getId);
     }
 
-    private List<UpdateAction<Customer>> buildUpdateActions(final AddressBookAddressFormData formData) {
+    private List<UpdateAction<Customer>> buildUpdateActions(final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
         updateActions.add(AddAddress.of(formData.toAddress()));
         return updateActions;
     }
 
-    private List<UpdateAction<Customer>> buildPostUpdateActions(final Customer customer, final AddressBookAddressFormData formData) {
+    private List<UpdateAction<Customer>> buildPostUpdateActions(final Customer customer, final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
         findAddressId(customer, formData.toAddress())
                 .ifPresent(addressId -> {

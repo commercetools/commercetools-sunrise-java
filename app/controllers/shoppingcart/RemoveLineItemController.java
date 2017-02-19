@@ -6,7 +6,7 @@ import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.cart.removelineitem.DefaultRemoveLineItemFormData;
 import com.commercetools.sunrise.shoppingcart.cart.removelineitem.RemoveLineItemControllerAction;
 import com.commercetools.sunrise.shoppingcart.cart.removelineitem.SunriseRemoveLineItemController;

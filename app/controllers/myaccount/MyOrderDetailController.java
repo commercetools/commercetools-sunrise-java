@@ -8,7 +8,7 @@ import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.MyOrderFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.SunriseMyOrderDetailController;
-import com.commercetools.sunrise.myaccount.myorders.myorderdetail.view.MyOrderDetailPageContentFactory;
+import com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels.MyOrderDetailPageContentFactory;
 import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import play.data.FormFactory;

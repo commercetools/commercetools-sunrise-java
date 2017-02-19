@@ -10,7 +10,7 @@ import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerCom
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.address.DefaultCheckoutAddressFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.address.SunriseCheckoutAddressController;
-import com.commercetools.sunrise.shoppingcart.checkout.address.view.CheckoutAddressPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.checkout.address.viewmodels.CheckoutAddressPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;

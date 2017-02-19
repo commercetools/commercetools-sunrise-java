@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
-import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
+import com.commercetools.sunrise.common.models.AddressWithCustomer;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerUpdateCommand;

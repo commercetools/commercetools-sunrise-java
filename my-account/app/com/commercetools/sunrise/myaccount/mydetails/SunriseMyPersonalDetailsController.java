@@ -9,7 +9,7 @@ import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
-import com.commercetools.sunrise.myaccount.mydetails.view.MyPersonalDetailsPageContentFactory;
+import com.commercetools.sunrise.myaccount.mydetails.viewmodels.MyPersonalDetailsPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 import play.data.FormFactory;

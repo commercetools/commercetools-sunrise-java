@@ -7,7 +7,7 @@ import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.authentication.signup.DefaultSignUpFormData;
 import com.commercetools.sunrise.myaccount.authentication.signup.SignUpControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.signup.SunriseSignUpController;
-import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpPageContentFactory;
+import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpPageContentFactory;
 import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.customers.CustomerSignInResult;

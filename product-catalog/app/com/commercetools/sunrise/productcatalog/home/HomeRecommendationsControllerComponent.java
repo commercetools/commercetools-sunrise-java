@@ -1,14 +1,12 @@
 package com.commercetools.sunrise.productcatalog.home;
 
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListBeanFactory;
 import com.commercetools.sunrise.common.pages.PageData;
 import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
 import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.framework.hooks.events.RequestStartedHook;
-import com.commercetools.sunrise.productcatalog.common.ProductListBean;
-import com.commercetools.sunrise.productcatalog.common.ProductListBeanFactory;
-import com.commercetools.sunrise.productcatalog.common.SuggestionsBean;
-import com.commercetools.sunrise.productcatalog.home.view.HomePageContent;
+import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContent;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
@@ -28,7 +26,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public class HomeRecommendationsControllerComponent implements ControllerComponent, RequestStartedHook, PageDataReadyHook {
+public final class HomeRecommendationsControllerComponent implements ControllerComponent, RequestStartedHook, PageDataReadyHook {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeRecommendationsControllerComponent.class);
 
@@ -66,8 +64,7 @@ public class HomeRecommendationsControllerComponent implements ControllerCompone
     public void onPageDataReady(final PageData pageData) {
         if (recommendedProducts != null && pageData.getContent() instanceof HomePageContent) {
             final HomePageContent content = (HomePageContent) pageData.getContent();
-            final ProductListBean productListBean = productListBeanFactory.create(recommendedProducts);
-            content.setSuggestions(new SuggestionsBean(productListBean));
+            content.setSuggestions(productListBeanFactory.create(recommendedProducts));
         }
     }
 

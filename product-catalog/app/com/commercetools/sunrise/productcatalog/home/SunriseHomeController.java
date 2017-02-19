@@ -7,7 +7,7 @@ import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
-import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
+import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
 import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;

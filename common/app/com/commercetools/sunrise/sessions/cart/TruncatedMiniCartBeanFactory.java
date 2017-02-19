@@ -2,10 +2,10 @@ package com.commercetools.sunrise.sessions.cart;
 
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
-import com.commercetools.sunrise.shoppingcart.LineItemBean;
-import com.commercetools.sunrise.shoppingcart.LineItemBeanFactory;
-import com.commercetools.sunrise.shoppingcart.MiniCartBean;
-import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
+import com.commercetools.sunrise.common.models.carts.LineItemBean;
+import com.commercetools.sunrise.common.models.carts.LineItemBeanFactory;
+import com.commercetools.sunrise.common.models.carts.MiniCartBean;
+import com.commercetools.sunrise.common.models.carts.MiniCartBeanFactory;
 import io.sphere.sdk.carts.Cart;
 
 import javax.annotation.Nullable;

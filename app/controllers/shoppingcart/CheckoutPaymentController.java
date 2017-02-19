@@ -11,7 +11,7 @@ import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentCo
 import com.commercetools.sunrise.shoppingcart.checkout.payment.DefaultCheckoutPaymentFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.PaymentSettings;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.SunriseCheckoutPaymentController;
-import com.commercetools.sunrise.shoppingcart.checkout.payment.view.CheckoutPaymentPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels.CheckoutPaymentPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;

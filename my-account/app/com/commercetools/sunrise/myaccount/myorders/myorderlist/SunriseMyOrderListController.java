@@ -9,7 +9,7 @@ import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyOrdersReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
-import com.commercetools.sunrise.myaccount.myorders.myorderlist.view.MyOrderListPageContentFactory;
+import com.commercetools.sunrise.myaccount.myorders.myorderlist.viewmodels.MyOrderListPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.queries.PagedQueryResult;

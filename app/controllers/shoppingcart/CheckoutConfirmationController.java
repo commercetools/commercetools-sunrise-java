@@ -10,7 +10,7 @@ import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerCom
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.DefaultCheckoutConfirmationFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.SunriseCheckoutConfirmationController;
-import com.commercetools.sunrise.shoppingcart.checkout.confirmation.view.CheckoutConfirmationPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.checkout.confirmation.viewmodels.CheckoutConfirmationPageContentFactory;
 import io.sphere.sdk.orders.Order;
 import play.data.FormFactory;
 import play.mvc.Result;

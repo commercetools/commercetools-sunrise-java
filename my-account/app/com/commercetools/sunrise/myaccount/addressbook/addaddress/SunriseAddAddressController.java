@@ -9,8 +9,8 @@ import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.addaddress.view.AddAddressPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.addaddress.viewmodels.AddAddressPageContentFactory;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
@@ -20,7 +20,7 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddAddressController<F extends AddressBookAddressFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
+public abstract class SunriseAddAddressController<F extends AddressFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final AddAddressControllerAction addAddressControllerAction;

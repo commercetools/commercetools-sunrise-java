@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.sessions.customer;
 
+import com.commercetools.sunrise.common.models.customers.UserInfoBean;
 import com.commercetools.sunrise.sessions.ResourceStoringOperations;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.Customer;

@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.localization.LocationSelectorControllerC
 import com.commercetools.sunrise.common.pages.PageNavMenuControllerComponent;
 import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.components.ControllerComponentsSupplier;
-import com.commercetools.sunrise.shoppingcart.MiniCartControllerComponent;
+import com.commercetools.sunrise.framework.components.MiniCartControllerComponent;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

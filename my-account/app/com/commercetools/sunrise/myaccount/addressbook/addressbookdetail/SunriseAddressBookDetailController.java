@@ -10,7 +10,7 @@ import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.view.AddressBookPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import play.mvc.Result;
 

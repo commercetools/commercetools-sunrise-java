@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.models.CategoryBean;
+import com.commercetools.sunrise.common.models.categories.CategoryBean;
 import com.commercetools.sunrise.common.models.ViewModel;
 
 import java.util.List;

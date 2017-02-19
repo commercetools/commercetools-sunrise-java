@@ -7,7 +7,7 @@ import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.view.AddressBookPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.DefaultRemoveAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressControllerAction;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.SunriseRemoveAddressController;

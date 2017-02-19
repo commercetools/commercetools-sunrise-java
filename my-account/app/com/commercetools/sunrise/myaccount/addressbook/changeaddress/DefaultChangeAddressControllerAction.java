@@ -2,8 +2,8 @@ package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
+import com.commercetools.sunrise.common.models.AddressWithCustomer;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
@@ -29,23 +29,23 @@ public class DefaultChangeAddressControllerAction extends AbstractCustomerUpdate
     }
 
     @Override
-    public CompletionStage<Customer> apply(final AddressWithCustomer addressWithCustomer, final AddressBookAddressFormData formData) {
+    public CompletionStage<Customer> apply(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
         return executeRequest(addressWithCustomer.getCustomer(), buildRequest(addressWithCustomer, formData));
     }
 
-    protected CustomerUpdateCommand buildRequest(final AddressWithCustomer addressWithCustomer, final AddressBookAddressFormData formData) {
+    protected CustomerUpdateCommand buildRequest(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = buildUpdateActions(addressWithCustomer, formData);
         return CustomerUpdateCommand.of(addressWithCustomer.getCustomer(), updateActions);
     }
 
-    private List<UpdateAction<Customer>> buildUpdateActions(final AddressWithCustomer addressWithCustomer, final AddressBookAddressFormData formData) {
+    private List<UpdateAction<Customer>> buildUpdateActions(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
         updateActions.add(ChangeAddress.ofOldAddressToNewAddress(addressWithCustomer.getAddress(), formData.toAddress()));
         updateActions.addAll(buildSetDefaultAddressActions(addressWithCustomer.getCustomer(), addressWithCustomer.getAddress().getId(), formData));
         return updateActions;
     }
 
-    private List<UpdateAction<Customer>> buildSetDefaultAddressActions(final Customer customer, final String addressId, final AddressBookAddressFormData formData) {
+    private List<UpdateAction<Customer>> buildSetDefaultAddressActions(final Customer customer, final String addressId, final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
         buildSetDefaultAddressAction(addressId, formData.isDefaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
                 .ifPresent(updateActions::add);

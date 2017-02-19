@@ -3,7 +3,6 @@ package com.commercetools.sunrise.framework.components;
 import com.commercetools.sunrise.framework.reverserouters.TemplateLinksComponentsSupplier;
 import com.commercetools.sunrise.sessions.cart.CartInSessionControllerComponent;
 import com.commercetools.sunrise.sessions.customer.CustomerInSessionControllerComponent;
-import com.commercetools.sunrise.shoppingcart.CartFieldsUpdaterControllerComponent;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

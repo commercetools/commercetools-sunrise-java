@@ -9,7 +9,7 @@ import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeRev
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.productcatalog.home.HomeRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
-import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
+import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
 import controllers.PageHeaderControllerComponentsSupplier;
 import play.mvc.Result;
 

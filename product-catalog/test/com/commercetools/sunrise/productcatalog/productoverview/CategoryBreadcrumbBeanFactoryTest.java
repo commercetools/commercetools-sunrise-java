@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
 import com.commercetools.sunrise.productcatalog.TestableProductReverseRouter;
-import com.commercetools.sunrise.productcatalog.common.BreadcrumbBean;
-import com.commercetools.sunrise.productcatalog.common.BreadcrumbLinkBean;
-import com.commercetools.sunrise.productcatalog.productoverview.view.CategoryBreadcrumbBeanFactory;
+import com.commercetools.sunrise.common.models.BreadcrumbBean;
+import com.commercetools.sunrise.common.models.BreadcrumbLinkBean;
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.CategoryBreadcrumbBeanFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.categories.queries.CategoryQuery;

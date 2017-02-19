@@ -1,8 +1,9 @@
 package com.commercetools.sunrise.shoppingcart;
 
+import com.commercetools.sunrise.framework.components.CartFieldsUpdaterControllerComponent;
 import com.commercetools.sunrise.it.WithSphereClient;
 import com.commercetools.sunrise.sessions.customer.CustomerInSession;
-import com.commercetools.sunrise.sessions.customer.UserInfoBean;
+import com.commercetools.sunrise.common.models.customers.UserInfoBean;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.customers.Customer;

@@ -10,11 +10,11 @@ import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
-import com.commercetools.sunrise.myaccount.addressbook.AddressWithCustomer;
+import com.commercetools.sunrise.common.models.AddressWithCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.WithRequiredAddress;
-import com.commercetools.sunrise.myaccount.addressbook.changeaddress.view.ChangeAddressPageContentFactory;
+import com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels.ChangeAddressPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseChangeAddressController<F extends AddressBookAddressFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, AddressWithCustomer, Customer>, WithRequiredCustomer, WithRequiredAddress {
+public abstract class SunriseChangeAddressController<F extends AddressFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, AddressWithCustomer, Customer>, WithRequiredCustomer, WithRequiredAddress {
 
     private final CustomerFinder customerFinder;
     private final AddressFinder addressFinder;

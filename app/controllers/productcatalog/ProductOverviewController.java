@@ -9,7 +9,7 @@ import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
-import com.commercetools.sunrise.productcatalog.productoverview.view.ProductOverviewPageContentFactory;
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
 import controllers.PageHeaderControllerComponentsSupplier;
 import play.mvc.Result;
 

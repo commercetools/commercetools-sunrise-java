@@ -7,7 +7,7 @@ import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
-import com.commercetools.sunrise.myaccount.authentication.signup.view.SignUpPageContentFactory;
+import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.Form;

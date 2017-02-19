@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.sessions.cart;
 
 import com.commercetools.sunrise.sessions.ResourceStoringOperations;
-import com.commercetools.sunrise.shoppingcart.MiniCartBean;
+import com.commercetools.sunrise.common.models.carts.MiniCartBean;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.Cart;
 

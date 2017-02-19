@@ -10,7 +10,7 @@ import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.cart.addlineitem.AddLineItemControllerAction;
 import com.commercetools.sunrise.shoppingcart.cart.addlineitem.DefaultAddLineItemFormData;
 import com.commercetools.sunrise.shoppingcart.cart.addlineitem.SunriseAddLineItemController;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.view.CartDetailPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;

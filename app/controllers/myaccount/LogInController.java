@@ -8,7 +8,7 @@ import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDe
 import com.commercetools.sunrise.myaccount.authentication.login.DefaultLogInFormData;
 import com.commercetools.sunrise.myaccount.authentication.login.LogInControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.login.SunriseLogInController;
-import com.commercetools.sunrise.myaccount.authentication.login.view.LogInPageContentFactory;
+import com.commercetools.sunrise.myaccount.authentication.login.viewmodels.LogInPageContentFactory;
 import controllers.PageHeaderControllerComponentsSupplier;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.FormFactory;
