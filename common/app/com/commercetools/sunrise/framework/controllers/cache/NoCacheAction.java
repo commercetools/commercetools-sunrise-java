@@ -7,7 +7,7 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public class NoCacheAction extends Action<NoCache> {
+final class NoCacheAction extends Action<NoCache> {
 
     @Override
     public CompletionStage<Result> call(final Http.Context ctx) {

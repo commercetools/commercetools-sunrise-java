@@ -1,11 +1,12 @@
 package controllers.productcatalog;
 
 
+import com.commercetools.sunrise.common.ctp.metrics.LogMetrics;
 import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.productcatalog.home.HomeRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.home.view.HomePageContentFactory;
@@ -16,6 +17,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
+@LogMetrics
 @NoCache
 @RegisteredComponents({
         HomeRecommendationsControllerComponent.class,

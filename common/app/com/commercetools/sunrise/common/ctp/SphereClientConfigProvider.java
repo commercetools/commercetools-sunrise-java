@@ -38,6 +38,7 @@ public final class SphereClientConfigProvider implements Provider<SphereClientCo
     }
 
     private String getValue(final Configuration configuration, final String key) {
-        return Optional.ofNullable(configuration.getString(key)).orElseThrow(() -> new SphereClientCredentialsException("Missing value for configuration key " + key));
+        return Optional.ofNullable(configuration.getString(key))
+                .orElseThrow(() -> new SphereClientCredentialsException("Missing value for configuration key " + key));
     }
 }

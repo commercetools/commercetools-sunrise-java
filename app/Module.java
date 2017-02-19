@@ -1,21 +1,22 @@
 import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider;
 import com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree;
+import com.commercetools.sunrise.common.ctp.SphereClientProvider;
+import com.commercetools.sunrise.common.ctp.metrics.SimpleMetricsSphereClientProvider;
+import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigList;
+import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigListProvider;
 import com.commercetools.sunrise.contexts.CountryFromSessionProvider;
 import com.commercetools.sunrise.contexts.CurrencyFromCountryProvider;
 import com.commercetools.sunrise.contexts.LocaleFromUrlProvider;
-import com.commercetools.sunrise.common.ctp.MetricSphereClientProvider;
-import com.commercetools.sunrise.httpauth.HttpAuthentication;
-import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigList;
-import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigListProvider;
-import com.commercetools.sunrise.sessions.cart.TruncatedMiniCartBeanFactory;
 import com.commercetools.sunrise.framework.template.cms.FileBasedCmsServiceProvider;
 import com.commercetools.sunrise.framework.template.engine.HandlebarsTemplateEngineProvider;
 import com.commercetools.sunrise.framework.template.engine.TemplateEngine;
 import com.commercetools.sunrise.framework.template.i18n.ConfigurableI18nResolverProvider;
 import com.commercetools.sunrise.framework.template.i18n.I18nResolver;
+import com.commercetools.sunrise.httpauth.HttpAuthentication;
+import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
+import com.commercetools.sunrise.sessions.cart.TruncatedMiniCartBeanFactory;
 import com.commercetools.sunrise.shoppingcart.MiniCartBeanFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -23,12 +24,12 @@ import com.google.inject.name.Names;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.client.metrics.SimpleMetricsSphereClient;
 import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.ProductTypeLocalRepository;
 import io.sphere.sdk.producttypes.queries.ProductTypeQuery;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.money.CurrencyUnit;
 import java.time.format.DateTimeFormatter;
@@ -43,7 +44,6 @@ public class Module extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(SphereClient.class).toProvider(MetricSphereClientProvider.class).in(RequestScoped.class);
         bindUserContext();
         bind(CmsService.class).toProvider(FileBasedCmsServiceProvider.class).in(Singleton.class);
         bind(TemplateEngine.class).toProvider(HandlebarsTemplateEngineProvider.class).in(Singleton.class);
@@ -52,17 +52,24 @@ public class Module extends AbstractModule {
         bind(CategoryTree.class).annotatedWith(Names.named("new")).toProvider(CategoryTreeInNewProvider.class).in(Singleton.class);
         bind(FacetedSearchConfigList.class).toProvider(FacetedSearchConfigListProvider.class).in(Singleton.class);
         bind(MiniCartBeanFactory.class).to(TruncatedMiniCartBeanFactory.class);
+        bind(SimpleMetricsSphereClient.class).toProvider(SimpleMetricsSphereClientProvider.class).in(Singleton.class);
     }
 
     @Provides
     @Singleton
-    public CategoryTree provideRefreshableCategoryTree(@Named("global") final SphereClient sphereClient) {
+    public SphereClient provideSphereClient(final SimpleMetricsSphereClient metricsSphereClient) {
+        return metricsSphereClient;
+    }
+
+    @Provides
+    @Singleton
+    public CategoryTree provideRefreshableCategoryTree(final SphereClient sphereClient) {
         return RefreshableCategoryTree.of(sphereClient);
     }
 
     @Provides
     @Singleton
-    private ProductTypeLocalRepository fetchProductTypeLocalRepository(@Named("global") final SphereClient sphereClient) {
+    private ProductTypeLocalRepository fetchProductTypeLocalRepository(final SphereClient sphereClient) {
         final ProductTypeQuery query = ProductTypeQuery.of();
         final List<ProductType> productTypes = blockingWait(queryAll(sphereClient, query), 30, TimeUnit.SECONDS);
         return ProductTypeLocalRepository.of(productTypes);

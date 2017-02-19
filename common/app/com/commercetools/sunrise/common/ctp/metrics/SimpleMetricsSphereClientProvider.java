@@ -1,33 +1,35 @@
-package com.commercetools.sunrise.common.ctp;
+package com.commercetools.sunrise.common.ctp.metrics;
 
 import com.google.inject.Provider;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereClientConfig;
 import io.sphere.sdk.client.SphereClientFactory;
+import io.sphere.sdk.client.metrics.SimpleMetricsSphereClient;
 import play.inject.ApplicationLifecycle;
 
 import javax.inject.Inject;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public final class SphereClientProvider implements Provider<SphereClient> {
+public final class SimpleMetricsSphereClientProvider implements Provider<SimpleMetricsSphereClient> {
 
     private final ApplicationLifecycle applicationLifecycle;
     private final SphereClientConfig sphereClientConfig;
 
     @Inject
-    public SphereClientProvider(final ApplicationLifecycle applicationLifecycle, final SphereClientConfig sphereClientConfig) {
+    public SimpleMetricsSphereClientProvider(final ApplicationLifecycle applicationLifecycle, final SphereClientConfig sphereClientConfig) {
         this.applicationLifecycle = applicationLifecycle;
         this.sphereClientConfig = sphereClientConfig;
     }
 
     @Override
-    public SphereClient get() {
+    public SimpleMetricsSphereClient get() {
         final SphereClient sphereClient = SphereClientFactory.of().createClient(sphereClientConfig);
+        final SimpleMetricsSphereClient metricsSphereClient = SimpleMetricsSphereClient.of(sphereClient);
         applicationLifecycle.addStopHook(() -> {
-            sphereClient.close();
+            metricsSphereClient.close();
             return completedFuture(null);
         });
-        return sphereClient;
+        return metricsSphereClient;
     }
 }

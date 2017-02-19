@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.common.utils.LogUtils.logProductRequest;
+import static com.commercetools.sunrise.common.utils.LogUtils.printableProductRequest;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -93,7 +93,7 @@ public class SunriseProductRecommendation implements ProductRecommendation {
                 .withSort(product -> product.allVariants().price().desc())
                 .withPriceSelection(priceSelection);
         return sphereClient.execute(request)
-                .whenCompleteAsync((result, t) -> logProductRequest(LOGGER, request, result), HttpExecution.defaultContext())
+                .whenCompleteAsync((result, t) -> LOGGER.debug(printableProductRequest(request, result)), HttpExecution.defaultContext())
                 .thenApply(SunriseProductRecommendation::resultToProductSet);
     }
 

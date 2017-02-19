@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import play.Configuration;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
@@ -44,7 +43,7 @@ final class ProjectContextImpl extends Base implements ProjectContext {
     private final List<CurrencyUnit> currencies;
 
     @Inject
-    ProjectContextImpl(final Configuration configuration, @Named("global") final SphereClient client) {
+    ProjectContextImpl(final Configuration configuration, final SphereClient client) {
         try {
             final SphereRequest<Project> request = ProjectGet.of();
             final Project project = blockingWait(client.execute(request), Duration.ofMinutes(1));

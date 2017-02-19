@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.common.utils;
 
 import io.sphere.sdk.client.HttpRequestIntent;
+import io.sphere.sdk.client.SphereRequest;
 import io.sphere.sdk.http.FormUrlEncodedHttpRequestBody;
 import io.sphere.sdk.http.StringHttpRequestBody;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.search.PagedSearchResult;
-import org.slf4j.Logger;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,14 +16,19 @@ public final class LogUtils {
     private LogUtils() {
     }
 
-    public static void logProductRequest(final Logger logger, final ProductProjectionSearch request, final PagedSearchResult<ProductProjection> result) {
-        final HttpRequestIntent httpRequest = request.httpRequestIntent();
-        final String requestBody = printableRequestBody(httpRequest)
-                .map(body -> " with body {" + body + "}")
-                .orElse("");
-        logger.debug("Fetched {} out of {} products with request {} {}",
+    public static String printableProductRequest(final ProductProjectionSearch request, final PagedSearchResult<ProductProjection> result) {
+        return String.format("Fetched %s out of %s products with request %s",
                 result.getCount(),
                 result.getTotal(),
+                printableRequest(request));
+    }
+
+    public static String printableRequest(final SphereRequest<?> request) {
+        final HttpRequestIntent httpRequest = request.httpRequestIntent();
+        final String requestBody = printableRequestBody(httpRequest)
+                .map(body -> " with body:\n \"" + body + "\"")
+                .orElse("");
+        return String.format("%s %s",
                 httpRequest.getHttpMethod(),
                 httpRequest.getPath() + requestBody);
     }
