@@ -1,6 +1,7 @@
 import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider;
 import com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree;
+import com.commercetools.sunrise.common.models.carts.MiniCartBeanFactory;
 import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigList;
 import com.commercetools.sunrise.common.search.facetedsearch.FacetedSearchConfigListProvider;
 import com.commercetools.sunrise.contexts.CountryFromSessionProvider;
@@ -16,7 +17,6 @@ import com.commercetools.sunrise.framework.template.i18n.I18nResolver;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
 import com.commercetools.sunrise.sessions.cart.TruncatedMiniCartBeanFactory;
-import com.commercetools.sunrise.common.models.carts.MiniCartBeanFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;

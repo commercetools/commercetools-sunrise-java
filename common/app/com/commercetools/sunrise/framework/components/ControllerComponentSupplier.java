@@ -4,6 +4,6 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @FunctionalInterface
-public interface ControllerComponentsSupplier extends Supplier<List<ControllerComponent>> {
+public interface ControllerComponentSupplier extends Supplier<List<ControllerComponent>> {
 
 }

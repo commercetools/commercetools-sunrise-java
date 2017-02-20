@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.framework.hooks;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.components.SunriseComponent;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ final class HookContextImpl extends Base implements HookContext {
 
     @Override
     public <T extends Hook> CompletionStage<?> runEventHook(final Class<T> hookClass, final Function<T, CompletionStage<?>> f) {
-        hookRunnerLogger.debug("runEventHook {}", hookClass.getSimpleName());
+        hookRunnerLogger.debug("Running EventHook {}", hookClass.getSimpleName());
         //TODO throw a helpful NPE if component returns null instead of CompletionStage
         final List<CompletionStage<Void>> collect = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
@@ -45,7 +45,7 @@ final class HookContextImpl extends Base implements HookContext {
 
     @Override
     public <T extends Hook, R> CompletionStage<R> runActionHook(final Class<T> hookClass, final BiFunction<T, R, CompletionStage<R>> f, final R param) {
-        hookRunnerLogger.debug("runActionHook {}", hookClass.getSimpleName());
+        hookRunnerLogger.debug("Running ActionHook {}", hookClass.getSimpleName());
         CompletionStage<R> result = successful(param);
         final List<T> applicableHooks = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
@@ -59,7 +59,7 @@ final class HookContextImpl extends Base implements HookContext {
 
     @Override
     public <H extends Hook, R> R runUnaryOperatorHook(final Class<H> hookClass, final BiFunction<H, R, R> f, final R param) {
-        hookRunnerLogger.debug("runUnaryOperatorHook {}", hookClass.getSimpleName());
+        hookRunnerLogger.debug("Running UnaryOperatorHook {}", hookClass.getSimpleName());
         R result = param;
         final List<H> applicableHooks = controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
@@ -73,20 +73,20 @@ final class HookContextImpl extends Base implements HookContext {
 
     @Override
     public <H extends Hook> void runConsumerHook(final Class<H> hookClass, final Consumer<H> consumer) {
-        hookRunnerLogger.debug("runConsumerHook {}", hookClass.getSimpleName());
+        hookRunnerLogger.debug("Running ConsumerHook {}", hookClass.getSimpleName());
         controllerComponents.stream()
                 .filter(x -> hookClass.isAssignableFrom(x.getClass()))
                 .forEach(action -> consumer.accept((H) action));
     }
 
     @Override
-    public CompletionStage<Object> waitForComponentsToFinish() {
+    public CompletionStage<Object> waitForHookedComponentsToFinish() {
         return CompletableFutureUtils.listOfFuturesToFutureOfList(asyncHooksCompletionStages).thenApply(list -> null);
     }
 
     @Override
     public void add(final SunriseComponent component) {
-        componentRegistryLogger.debug("add component {}", component);
+        componentRegistryLogger.debug("Registered component {}", component.getClass().getCanonicalName());
         controllerComponents.add(component);
     }
 }

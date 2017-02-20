@@ -1,13 +1,14 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyOrdersReverseRouter;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.viewmodels.MyOrderListPageContentFactory;
 import io.sphere.sdk.customers.Customer;
@@ -20,7 +21,8 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-public abstract class SunriseMyOrderListController extends SunriseTemplateFormController implements WithQueryFlow<OrderListWithCustomer>, WithRequiredCustomer {
+public abstract class SunriseMyOrderListController extends SunriseTemplateFormController
+        implements MyAccountController, WithQueryFlow<OrderListWithCustomer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final MyOrderListFinder myOrderListFinder;

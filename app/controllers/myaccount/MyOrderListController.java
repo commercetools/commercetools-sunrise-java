@@ -1,15 +1,16 @@
 package controllers.myaccount;
 
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
+import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.MyOrderListFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.SunriseMyOrderListController;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.viewmodels.MyOrderListPageContentFactory;
-import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
-import controllers.PageHeaderControllerComponentsSupplier;
+import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
+import controllers.PageHeaderControllerComponentSupplier;
 import play.data.FormFactory;
 import play.mvc.Result;
 
@@ -18,8 +19,9 @@ import java.util.concurrent.CompletionStage;
 
 @NoCache
 @RegisteredComponents({
-        CommonControllerComponentsSupplier.class,
-        PageHeaderControllerComponentsSupplier.class
+        TemplateControllerComponentsSupplier.class,
+        PageHeaderControllerComponentSupplier.class,
+        CustomerOperationsControllerComponentSupplier.class
 })
 public final class MyOrderListController extends SunriseMyOrderListController {
 

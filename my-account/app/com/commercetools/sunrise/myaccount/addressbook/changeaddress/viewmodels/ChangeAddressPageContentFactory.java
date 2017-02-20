@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels;
 
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsBeanFactory;
+import com.commercetools.sunrise.common.models.AddressWithCustomer;
 import com.commercetools.sunrise.common.models.FormPageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
-import com.commercetools.sunrise.common.models.AddressWithCustomer;
+import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsBeanFactory;
 import play.data.Form;
 
 import javax.inject.Inject;
@@ -47,6 +47,6 @@ public class ChangeAddressPageContentFactory extends FormPageContentFactory<Chan
     }
 
     protected void fillEditAddressFormSettings(final ChangeAddressPageContent model, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {
-        model.setEditAddressFormSettings(addressFormSettingsFactory.create(form));
+        model.setEditAddressFormSettings(addressFormSettingsFactory.create(addressWithCustomer.getCustomer(), form));
     }
 }

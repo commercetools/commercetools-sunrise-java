@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.version;
 
+import com.commercetools.sunrise.framework.controllers.SunriseController;
 import org.apache.commons.io.IOUtils;
 import play.Application;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 
@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * Controller for showing the version of the application.
  */
-public abstract class SunriseVersionController extends Controller {
+public abstract class SunriseVersionController extends SunriseController {
 
     private final Application application;
 

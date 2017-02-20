@@ -1,9 +1,10 @@
 package controllers.shoppingcart;
 
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
+import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.OrderCreatedFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.SunriseCheckoutThankYouController;
@@ -15,6 +16,7 @@ import java.util.concurrent.CompletionStage;
 
 @NoCache
 @RegisteredComponents({
+        TemplateControllerComponentsSupplier.class,
         CheckoutStepControllerComponent.class
 })
 public final class CheckoutThankYouController extends SunriseCheckoutThankYouController {

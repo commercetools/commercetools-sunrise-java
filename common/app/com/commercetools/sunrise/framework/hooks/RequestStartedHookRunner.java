@@ -10,14 +10,14 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Action that runs the {@link com.commercetools.sunrise.framework.hooks.events.RequestStartedHook} for the request.
+ * Action that runs the {@link com.commercetools.sunrise.framework.hooks.events.RequestStartedHook} for the annotated request.
  */
-final class RequestStartedHookRunnerAction extends Action.Simple {
+final class RequestStartedHookRunner extends Action<RunRequestStartedHook> {
 
     private final Injector injector;
 
     @Inject
-    RequestStartedHookRunnerAction(final Injector injector) {
+    RequestStartedHookRunner(final Injector injector) {
         this.injector = injector;
     }
 

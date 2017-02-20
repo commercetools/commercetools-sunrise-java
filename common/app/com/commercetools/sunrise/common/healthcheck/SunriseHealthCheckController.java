@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.common.healthcheck;
 
+import com.commercetools.sunrise.framework.controllers.SunriseController;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
@@ -7,7 +8,6 @@ import io.sphere.sdk.search.PagedSearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
-import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 
@@ -17,7 +17,7 @@ import java.util.concurrent.CompletionStage;
 /**
  * Controller for health check report.
  */
-public abstract class SunriseHealthCheckController extends Controller {
+public abstract class SunriseHealthCheckController extends SunriseController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final SphereClient sphereClient;

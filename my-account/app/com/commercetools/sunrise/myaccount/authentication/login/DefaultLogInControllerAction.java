@@ -1,17 +1,25 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
-import com.commercetools.sunrise.sessions.cart.CartInSession;
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.authentication.AbstractCustomerSignInExecutor;
+import com.commercetools.sunrise.sessions.cart.CartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+
+import static com.commercetools.sunrise.common.utils.SphereExceptionUtils.isInvalidOperationError;
+import static io.sphere.sdk.utils.CompletableFutureUtils.exceptionallyCompletedFuture;
+import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
 
 public class DefaultLogInControllerAction extends AbstractCustomerSignInExecutor implements LogInControllerAction {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(LogInControllerAction.class);
     private final CartInSession cartInSession;
 
     @Inject
@@ -22,11 +30,23 @@ public class DefaultLogInControllerAction extends AbstractCustomerSignInExecutor
 
     @Override
     public CompletionStage<CustomerSignInResult> apply(final LogInFormData formData) {
-        return executeRequest(buildRequest(formData));
+        final CompletionStage<CustomerSignInResult> resultStage = executeRequest(buildRequest(formData));
+        return resultOrRecoverIfMergingCartFailed(resultStage, formData);
     }
 
     protected CustomerSignInCommand buildRequest(final LogInFormData formData) {
         final String cartId = cartInSession.findCartId().orElse(null);
         return CustomerSignInCommand.of(formData.getUsername(), formData.getPassword(), cartId);
+    }
+
+    protected final CompletableFuture<CustomerSignInResult> resultOrRecoverIfMergingCartFailed(final CompletionStage<CustomerSignInResult> resultStage,
+                                                                                               final LogInFormData formData) {
+        return recoverWith(resultStage, throwable -> {
+            if (isInvalidOperationError(throwable.getCause())) {
+                LOGGER.warn("Sign in failed probably due to merging cart issues, trying to sign in without a cart");
+                return executeRequest(CustomerSignInCommand.of(formData.getUsername(), formData.getPassword()));
+            }
+            return exceptionallyCompletedFuture(throwable);
+        });
     }
 }

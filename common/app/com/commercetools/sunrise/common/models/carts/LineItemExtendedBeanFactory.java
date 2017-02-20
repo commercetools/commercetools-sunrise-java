@@ -53,6 +53,6 @@ public class LineItemExtendedBeanFactory extends AbstractLineItemBeanFactory<Lin
     }
 
     private ProductAttributeBean createProductAttributeBean(final LineItem lineItem, final Attribute attribute) {
-        return productAttributeBeanFactory.create(new AttributeWithProductType(attribute, lineItem.getProductType()));
+        return productAttributeBeanFactory.create(AttributeWithProductType.of(attribute, lineItem.getProductType()));
     }
 }

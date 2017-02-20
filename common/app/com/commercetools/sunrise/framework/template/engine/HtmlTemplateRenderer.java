@@ -53,7 +53,7 @@ public class HtmlTemplateRenderer implements TemplateRenderer {
     @Override
     public CompletionStage<Content> render(final PageContent pageContent, final String templateName, @Nullable final String cmsKey) {
         final PageData pageData = pageDataFactory.create(pageContent);
-        return hookRunner.waitForComponentsToFinish()
+        return hookRunner.waitForHookedComponentsToFinish()
                 .thenComposeAsync(unused -> {
                     PageDataReadyHook.runHook(hookRunner, pageData);
                     logFinalPageData(pageData);

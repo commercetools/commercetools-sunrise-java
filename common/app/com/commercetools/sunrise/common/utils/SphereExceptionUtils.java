@@ -1,23 +1,29 @@
 package com.commercetools.sunrise.common.utils;
 
-import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
 import io.sphere.sdk.models.errors.DuplicateFieldError;
+
+import javax.annotation.Nullable;
 
 public final class SphereExceptionUtils {
 
     private SphereExceptionUtils() {
     }
 
-    public static boolean isCustomerInvalidCredentialsError(final ClientErrorException clientErrorException) {
-        return clientErrorException instanceof ErrorResponseException
-                && ((ErrorResponseException) clientErrorException).hasErrorCode(CustomerInvalidCredentials.CODE);
+    public static boolean isInvalidOperationError(@Nullable final Throwable throwable) {
+        return throwable instanceof ErrorResponseException
+                && ((ErrorResponseException) throwable).hasErrorCode("InvalidOperation");
     }
 
-    public static boolean isDuplicatedEmailFieldError(final ClientErrorException clientErrorException) {
-        return clientErrorException instanceof ErrorResponseException
-                && ((ErrorResponseException) clientErrorException).getErrors().stream()
+    public static boolean isCustomerInvalidCredentialsError(@Nullable final Throwable throwable) {
+        return throwable instanceof ErrorResponseException
+                && ((ErrorResponseException) throwable).hasErrorCode(CustomerInvalidCredentials.CODE);
+    }
+
+    public static boolean isDuplicatedEmailFieldError(@Nullable final Throwable throwable) {
+        return throwable instanceof ErrorResponseException
+                && ((ErrorResponseException) throwable).getErrors().stream()
                 .filter(error -> error.getCode().equals(DuplicateFieldError.CODE))
                 .map(error -> error.as(DuplicateFieldError.class).getField())
                 .anyMatch(duplicatedField -> duplicatedField != null && duplicatedField.equals("email"));

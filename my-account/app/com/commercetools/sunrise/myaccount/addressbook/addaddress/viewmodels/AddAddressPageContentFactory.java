@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress.viewmodels;
 
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsBeanFactory;
 import com.commercetools.sunrise.common.models.FormPageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsBeanFactory;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 
@@ -47,6 +47,6 @@ public class AddAddressPageContentFactory extends FormPageContentFactory<AddAddr
     }
 
     protected void fillNewAddressFormSettings(final AddAddressPageContent model, final Customer customer, final Form<? extends AddressFormData> form) {
-        model.setNewAddressFormSettings(addressFormSettingsBeanFactory.create(form));
+        model.setNewAddressFormSettings(addressFormSettingsBeanFactory.create(customer, form));
     }
 }

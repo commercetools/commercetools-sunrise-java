@@ -20,14 +20,14 @@ import static java.util.stream.Collectors.joining;
 /**
  * Action that logs metrics for every request.
  */
-final class MetricsLoggerAction extends Action.Simple {
+final class MetricsLogger extends Action.Simple {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MetricsLoggerAction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetricsLogger.class);
 
     private final SphereClient sphereClient;
 
     @Inject
-    MetricsLoggerAction(final SphereClient sphereClient) {
+    MetricsLogger(final SphereClient sphereClient) {
         this.sphereClient = sphereClient;
     }
 

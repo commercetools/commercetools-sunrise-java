@@ -1,16 +1,16 @@
 package controllers.productcatalog;
 
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
+import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductFinder;
+import com.commercetools.sunrise.productcatalog.productdetail.ProductRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductVariantFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
 import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContentFactory;
-import com.commercetools.sunrise.productcatalog.productdetail.ProductRecommendationsControllerComponent;
-import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
-import controllers.PageHeaderControllerComponentsSupplier;
+import controllers.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.products.ProductProjection;
 import play.mvc.Result;
 
@@ -21,9 +21,9 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @NoCache
 @RegisteredComponents({
-        ProductRecommendationsControllerComponent.class,
-        CommonControllerComponentsSupplier.class,
-        PageHeaderControllerComponentsSupplier.class
+        TemplateControllerComponentsSupplier.class,
+        PageHeaderControllerComponentSupplier.class,
+        ProductRecommendationsControllerComponent.class
 })
 public final class ProductDetailController extends SunriseProductDetailController {
 

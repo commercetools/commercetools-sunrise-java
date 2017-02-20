@@ -1,15 +1,18 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDetailsReverseRouter;
+import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.myaccount.authentication.login.DefaultLogInFormData;
 import com.commercetools.sunrise.myaccount.authentication.login.LogInControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.login.SunriseLogInController;
 import com.commercetools.sunrise.myaccount.authentication.login.viewmodels.LogInPageContentFactory;
-import controllers.PageHeaderControllerComponentsSupplier;
+import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
+import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
+import controllers.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -17,10 +20,13 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
+@LogMetrics
 @NoCache
 @RegisteredComponents({
-        CommonControllerComponentsSupplier.class,
-        PageHeaderControllerComponentsSupplier.class
+        TemplateControllerComponentsSupplier.class,
+        PageHeaderControllerComponentSupplier.class,
+        CustomerOperationsControllerComponentSupplier.class,
+        CartOperationsControllerComponentSupplier.class
 })
 public final class LogInController extends SunriseLogInController<DefaultLogInFormData> {
 

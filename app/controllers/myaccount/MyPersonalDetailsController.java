@@ -1,17 +1,18 @@
 package controllers.myaccount;
 
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDetailsReverseRouter;
+import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.mydetails.DefaultMyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsControllerAction;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
 import com.commercetools.sunrise.myaccount.mydetails.viewmodels.MyPersonalDetailsPageContentFactory;
-import com.commercetools.sunrise.framework.components.CommonControllerComponentsSupplier;
-import controllers.PageHeaderControllerComponentsSupplier;
+import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
+import controllers.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -21,8 +22,9 @@ import java.util.concurrent.CompletionStage;
 
 @NoCache
 @RegisteredComponents({
-        CommonControllerComponentsSupplier.class,
-        PageHeaderControllerComponentsSupplier.class
+        TemplateControllerComponentsSupplier.class,
+        PageHeaderControllerComponentSupplier.class,
+        CustomerOperationsControllerComponentSupplier.class
 })
 public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsController<DefaultMyPersonalDetailsFormData> {
 

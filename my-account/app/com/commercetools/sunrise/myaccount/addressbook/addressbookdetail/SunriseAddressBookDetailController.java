@@ -2,13 +2,14 @@ package com.commercetools.sunrise.myaccount.addressbook.addressbookdetail;
 
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.controllers.SunriseTemplateController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AddressBookReverseRouter;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import io.sphere.sdk.customers.Customer;
@@ -16,7 +17,8 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddressBookDetailController extends SunriseTemplateController implements WithQueryFlow<Customer>, WithRequiredCustomer {
+public abstract class SunriseAddressBookDetailController extends SunriseTemplateController
+        implements MyAccountController, WithQueryFlow<Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final AddressBookPageContentFactory addressBookPageContentFactory;
