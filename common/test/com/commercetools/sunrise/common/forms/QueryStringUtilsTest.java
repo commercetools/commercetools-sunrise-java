@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.forms;
 import org.junit.Test;
 import play.mvc.Http;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import static com.commercetools.sunrise.common.forms.QueryStringUtils.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static play.test.Helpers.fakeRequest;
 
 public class QueryStringUtilsTest {
 
@@ -138,14 +140,31 @@ public class QueryStringUtilsTest {
     }
 
     @Test
-    public void buildsQueryString() throws Exception {
+    public void buildsUri() throws Exception {
         final Map<String, List<String>> queryString = new HashMap<>();
         queryString.put("foo", asList("jacket", "shirt", "shoes"));
         queryString.put("bar", asList("1", "2"));
         queryString.put("qux", singletonList("x"));
         queryString.put("baz", emptyList());
-        assertThat(buildUri("some-path", queryString))
-                .isEqualTo("some-path?bar=1&bar=2&qux=x&foo=jacket&foo=shirt&foo=shoes");
+        final String expectedUri = "some-path?bar=1&bar=2&qux=x&foo=jacket&foo=shirt&foo=shoes";
+        final String uri = buildUri("some-path", queryString);
+        assertThat(uri).isEqualTo(expectedUri);
+        assertThat(URLDecoder.decode(uri, "UTF-8"))
+                .as("Decoded URI stays the same")
+                .isEqualTo(expectedUri);
+    }
+
+    @Test
+    public void builtUrlShouldHaveQueryStringValuesEncoded() throws Exception {
+        final Map<String, List<String>> queryString = new HashMap<>();
+        queryString.put("foo", asList("jacket shirt", "shoes "));
+        queryString.put("bar", asList("1 2", "€√!L", "*-._~"));
+        final String expectedUri = "some-path?bar=1+2&bar=%E2%82%AC%E2%88%9A%21L&bar=*-._%7E&foo=jacket+shirt&foo=shoes+";
+        final String uri = buildUri("some-path", queryString);
+        assertThat(uri).isEqualTo(expectedUri);
+        assertThat(URLDecoder.decode(uri, "UTF-8"))
+                .as("Decoded URI matches too")
+                .isEqualTo("some-path?bar=1 2&bar=€√!L&bar=*-._~&foo=jacket shirt&foo=shoes ");
     }
 
     @Test
@@ -164,7 +183,7 @@ public class QueryStringUtilsTest {
     }
 
     private static void testWithHttpRequest(final Map<String, List<String>> queryString, final Consumer<Http.Request> test) {
-        final Http.Request request = new Http.RequestBuilder()
+        final Http.Request request = fakeRequest()
                 .uri(QueryStringUtils.buildUri("path", queryString))
                 .build();
         test.accept(request);

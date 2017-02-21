@@ -2,6 +2,9 @@ package com.commercetools.sunrise.common.forms;
 
 import play.mvc.Http;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -101,7 +104,22 @@ public final class QueryStringUtils {
         if (values.isEmpty()) {
             return "";
         } else {
-            return values.stream().collect(joining("&" + key + "=", key + "=", ""));
+            return values.stream()
+                    .map(QueryStringUtils::encode)
+                    .collect(joining("&" + key + "=", key + "=", ""));
+        }
+    }
+
+    /**
+     * URL-encodes the given value via {@link URLEncoder#encode(String, String)}.
+     * @param value the value to encode
+     * @return the URL-encoded value
+     */
+    private static String encode(final String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalArgumentException("Couldn't encode value", e);
         }
     }
 }
