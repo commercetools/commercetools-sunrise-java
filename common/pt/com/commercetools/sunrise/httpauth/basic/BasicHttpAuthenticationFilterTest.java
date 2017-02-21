@@ -1,80 +1,79 @@
 package com.commercetools.sunrise.httpauth.basic;
 
-import com.commercetools.sunrise.pt.WithSunriseApplication;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import org.junit.Test;
 import play.Application;
-import play.Configuration;
+import play.inject.guice.GuiceApplicationBuilder;
+import play.libs.ws.WS;
 import play.libs.ws.WSAuthScheme;
+import play.libs.ws.WSClient;
 import play.libs.ws.WSResponse;
 import play.mvc.Http;
 import play.routing.Router;
 import play.routing.RoutingDsl;
+import play.test.WithServer;
 
-import java.util.Map;
-
-import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static play.mvc.Results.ok;
 
-public class BasicHttpAuthenticationFilterTest extends WithSunriseApplication {
+public class BasicHttpAuthenticationFilterTest extends WithServer {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String REALM = "My Realm";
-    private static final Router ROUTER = new RoutingDsl().GET("/").routeTo(() -> ok()).build();
+    private static final String URI = "/";
 
     @Test
     public void authorizedWhenEnabledAndCredentialsProvided() throws Exception {
-        run(appWithBasicAuthEnabled(), "/", request -> {
-            final WSResponse response = request
+        try (WSClient wsClient = WS.newClient(testServer.port())) {
+            final WSResponse response = wsClient
+                    .url(URI)
                     .setAuth(USERNAME, PASSWORD, WSAuthScheme.BASIC)
-                    .get().toCompletableFuture().join();
+                    .get().toCompletableFuture().get();
             assertThat(response.getStatus()).isEqualTo(Http.Status.OK);
-        });
+        }
     }
 
     @Test
     public void unauthorizedWhenEnabledAndWrongCredentialsProvided() throws Exception {
-        run(appWithBasicAuthEnabled(), "/", request -> {
-            final WSResponse response = request
+        try (WSClient wsClient = WS.newClient(testServer.port())) {
+            final WSResponse response = wsClient
+                    .url(URI)
                     .setAuth(USERNAME, "wrong", WSAuthScheme.BASIC)
-                    .get().toCompletableFuture().join();
+                    .get().toCompletableFuture().get();
             assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
             assertThat(response.getHeader(Http.HeaderNames.WWW_AUTHENTICATE)).isNull();
-        });
+        }
     }
 
     @Test
     public void unauthorizedWhenEnabledAndNoCredentialsProvided() throws Exception {
-        run(appWithBasicAuthEnabled(), "/", request -> {
-            final WSResponse response = request.get().toCompletableFuture().join();
+        try (WSClient wsClient = WS.newClient(testServer.port())) {
+            final WSResponse response = wsClient
+                    .url(URI)
+                    .get().toCompletableFuture().get();
             assertThat(response.getStatus()).isEqualTo(Http.Status.UNAUTHORIZED);
             assertThat(response.getHeader(Http.HeaderNames.WWW_AUTHENTICATE)).contains(REALM);
-        });
+        }
     }
 
-    private Application appWithBasicAuthEnabled() {
-        return application(new BasicHttpAuthentication(REALM, USERNAME + ":" + PASSWORD));
-    }
-
-    private Application application(final HttpAuthentication httpAuthentication) {
+    @Override
+    protected Application provideApplication() {
+        final Router router = new RoutingDsl()
+                .GET(URI).routeTo(() -> ok())
+                .build();
         final Module module = new AbstractModule() {
             @Override
             protected void configure() {
-                bind(HttpAuthentication.class).toInstance(httpAuthentication);
-                bind(play.api.routing.Router.class).toInstance(ROUTER.asScala());
+                bind(HttpAuthentication.class).toInstance(new BasicHttpAuthentication(REALM, USERNAME + ":" + PASSWORD));
+                bind(play.api.routing.Router.class).toInstance(router.asScala());
             }
         };
-        return appBuilder(module)
-                .loadConfig(configurationWithBasicAuthFilterEnabled())
+        return new GuiceApplicationBuilder()
+                .configure("play.http.filters", "com.commercetools.sunrise.httpauth.basic.BasicHttpAuthenticationFilters")
+                .overrides(module)
                 .build();
-    }
-
-    private Configuration configurationWithBasicAuthFilterEnabled() {
-        final Map<String, Object> configMap = singletonMap("play.http.filters", "com.commercetools.sunrise.common.httpauth.basic.BasicHttpAuthenticationFilter");
-        return new Configuration(configMap).withFallback(testConfiguration());
     }
 }

@@ -6,11 +6,11 @@ import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartRever
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
-import com.commercetools.sunrise.shoppingcart.cart.removelineitem.DefaultRemoveLineItemFormData;
-import com.commercetools.sunrise.shoppingcart.cart.removelineitem.RemoveLineItemControllerAction;
-import com.commercetools.sunrise.shoppingcart.cart.removelineitem.SunriseRemoveLineItemController;
+import com.commercetools.sunrise.framework.CartFinder;
+import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
+import com.commercetools.sunrise.framework.cart.removelineitem.DefaultRemoveLineItemFormData;
+import com.commercetools.sunrise.framework.cart.removelineitem.RemoveLineItemControllerAction;
+import com.commercetools.sunrise.framework.cart.removelineitem.SunriseRemoveLineItemController;
 import controllers.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;

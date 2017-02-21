@@ -2,50 +2,47 @@ package com.commercetools.sunrise.framework.controllers;
 
 import com.commercetools.sunrise.common.categorytree.ByNameCategoryComparator;
 import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.models.LocalizedString;
 import org.junit.Test;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static io.sphere.sdk.json.SphereJsonUtils.readObject;
 import static java.util.Arrays.asList;
 import static java.util.Locale.ENGLISH;
+import static java.util.Locale.GERMAN;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ByNameCategoryComparatorTest {
 
     @Test
     public void sortsAccordingToTheProvidedLocale() {
-        List<Category> categories = asList(category("Pants", "Hose"), category("Shirts", "Hemden"), category("Dresses", "Kleider"));
-        sort(categories, ENGLISH, (sortedNames) -> assertThat(sortedNames).containsExactly("Dresses", "Pants", "Shirts"));
+        final Category pants = categoryWithName(LocalizedString.of(ENGLISH, "Pants", GERMAN, "Hose"));
+        final Category shirts = categoryWithName(LocalizedString.of(ENGLISH, "Shirts", GERMAN, "Hemden"));
+        final Category dresses = categoryWithName(LocalizedString.of(ENGLISH, "Dresses", GERMAN, "Kleider"));
+        final List<Category> list = asList(pants, shirts, dresses);
+        list.sort(new ByNameCategoryComparator(ENGLISH));
+        assertThat(list)
+                .extracting(category -> category.getName().get(ENGLISH))
+                .containsExactly("Dresses", "Pants", "Shirts");
     }
 
     @Test
     public void sortsWhenTheLocalizedNameForTheProvidedLocaleIsMissing() {
-        List<Category> categories = asList(category("Pants", "Hose"), category(null, "Hemden"), category("Dresses", "Kleider"));
-        sort(categories, ENGLISH, (sortedNames) -> assertThat(sortedNames).containsExactly(null, "Dresses", "Pants"));
+        final Category pants = categoryWithName(LocalizedString.of(ENGLISH, "Pants", GERMAN, "Hose"));
+        final Category shirts = categoryWithName(LocalizedString.of(GERMAN, "Hemden"));
+        final Category dresses = categoryWithName(LocalizedString.of(ENGLISH, "Dresses", GERMAN, "Kleider"));
+        final List<Category> list = asList(pants, shirts, dresses);
+        list.sort(new ByNameCategoryComparator(ENGLISH));
+        assertThat(list)
+                .extracting(category -> category.getName().get(ENGLISH))
+                .containsExactly(null, "Dresses", "Pants");
     }
 
-    private void sort(List<Category> unsortedList, Locale locale, Consumer<List<String>> test) {
-        final Stream<Category> sortedCategories = unsortedList.stream().sorted(new ByNameCategoryComparator(locale));
-        final Stream<String> sortedNames = sortedCategories.map(category -> category.getName().get(locale));
-        test.accept(sortedNames.collect(Collectors.toList()));
-    }
-
-    private static Category category(@Nullable final String englishName, final String germanName) {
-        final String englishNameJson = Optional.ofNullable(englishName).map(e -> "\"en\": \""+ e +"\",").orElse("");
-        final String json =
-                "{" +
-                "  \"name\": {" +
-                    englishNameJson +
-                "    \"de\" : \""+ germanName + "\"" +
-                "  }" +
-                "}";
-        return readObject(json, Category.typeReference());
+    private Category categoryWithName(final LocalizedString name) {
+        final Category category = mock(Category.class);
+        when(category.getName()).thenReturn(name);
+        return category;
     }
 }

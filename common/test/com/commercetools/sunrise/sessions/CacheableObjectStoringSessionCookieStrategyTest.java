@@ -143,6 +143,7 @@ public class CacheableObjectStoringSessionCookieStrategyTest {
     }
 
     private static CacheApi buildCache(final Map<String, Object> initialCache) {
+
         return new CacheApi() {
 
             final Map<String, Object> cache = new HashMap<>(initialCache);
@@ -179,4 +180,6 @@ public class CacheableObjectStoringSessionCookieStrategyTest {
             }
         };
     }
+
+
 }

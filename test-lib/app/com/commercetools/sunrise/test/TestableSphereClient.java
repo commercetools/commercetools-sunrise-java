@@ -40,13 +40,13 @@ public class TestableSphereClient implements SphereClient {
         return new TestableSphereClient(CompletableFuture.completedFuture(""));
     }
 
-    public static SphereClient ofUnhealthyCtp() {
+    public static SphereClient ofUnhealthyPlatform() {
         final CompletableFuture<Object> future = new CompletableFuture<>();
         future.completeExceptionally(new RuntimeException("Unhealthy CTP client"));
         return new TestableSphereClient(future);
     }
 
-    public static SphereClient ofUnresponsiveCtp() {
+    public static SphereClient ofUnresponsivePlatform() {
         final TestableSphereClient client = new TestableSphereClient(new CompletableFuture<>());
         return TimeoutSphereClientDecorator.of(client, 1L, TimeUnit.MILLISECONDS);
     }

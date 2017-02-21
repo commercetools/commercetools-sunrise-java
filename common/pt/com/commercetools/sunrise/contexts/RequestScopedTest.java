@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.contexts;
 
-import com.commercetools.sunrise.pt.WithSunriseApplication;
 import com.commercetools.sunrise.framework.injection.RequestScope;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.google.inject.AbstractModule;
@@ -9,43 +8,59 @@ import com.google.inject.Provides;
 import org.junit.Test;
 import play.Application;
 import play.Configuration;
-import play.inject.Injector;
+import play.inject.guice.GuiceApplicationBuilder;
 import play.mvc.Http;
+import play.test.WithApplication;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static play.test.Helpers.fakeRequest;
+import static play.test.Helpers.invokeWithContext;
 
-public class RequestScopedTest extends WithSunriseApplication {
+public class RequestScopedTest extends WithApplication {
+
+    private static final String MARKER = "marker";
 
     @Test
-    public void keepsAliveDuringRequestWhenUsed() throws Exception {
-        final Application application = application();
-        final Injector injector = application.injector();
-        run(application, "/de/home", request -> {
-            setNewContextWithMarkerHeaderValueOf("1");
-            final SomethingRequestScoped requestScoped1 = injector.instanceOf(SomethingRequestScoped.class);
-            final NotRequestScoped notRequestScoped1 = injector.instanceOf(NotRequestScoped.class);
-
-            setNewContextWithMarkerHeaderValueOf("2");
-            final SomethingRequestScoped requestScoped2 = injector.instanceOf(SomethingRequestScoped.class);
-            final NotRequestScoped notRequestScoped2 = injector.instanceOf(NotRequestScoped.class);
-
-            assertThat(requestScoped1.getContext().request().getHeader("marker")).isEqualTo("1");
-            assertThat(requestScoped2.getContext().request().getHeader("marker")).isEqualTo("2");
-
-            assertThat(requestScoped1)
-                    .as("request scoped stuff is new with every request")
-                    .isNotSameAs(requestScoped2);
-
-            assertThat(notRequestScoped2)
-                    .as("singletons are reused among requests")
-                    .isSameAs(notRequestScoped1);
+    public void keepsAliveInTheSameRequest() throws Exception {
+        invokeWithContext(fakeRequest().header(MARKER, "1"), () -> {
+            final RequestScopedClass instance1 = app.injector().instanceOf(RequestScopedClass.class);
+            final RequestScopedClass instance2 = app.injector().instanceOf(RequestScopedClass.class);
+            assertThat(instance1)
+                    .as("Request scoped instance is kept alive in the same request")
+                    .isSameAs(instance2);
+            return null;
         });
     }
 
-    private Application application() {
+    @Test
+    public void createsANewInstanceBetweenRequests() throws Exception {
+        final RequestScopedClass instance1 = invokeWithContext(fakeRequest().header(MARKER, "1"), () ->
+                app.injector().instanceOf(RequestScopedClass.class));
+        final RequestScopedClass instance2 = invokeWithContext(fakeRequest().header(MARKER, "2"), () ->
+                app.injector().instanceOf(RequestScopedClass.class));
+        assertThat(instance1.getContext().request().getHeader(MARKER)).isEqualTo("1");
+        assertThat(instance2.getContext().request().getHeader(MARKER)).isEqualTo("2");
+        assertThat(instance1)
+                .as("Request scoped instance is new with every request")
+                .isNotSameAs(instance2);
+    }
+
+    @Test
+    public void singletonIsNotAffected() throws Exception {
+        final NotRequestScopedClass instance1 = invokeWithContext(fakeRequest(), () ->
+                app.injector().instanceOf(NotRequestScopedClass.class));
+        final NotRequestScopedClass instance2 = invokeWithContext(fakeRequest(), () ->
+                app.injector().instanceOf(NotRequestScopedClass.class));
+        assertThat(instance1)
+                .as("Singletons are reused among requests")
+                .isSameAs(instance2);
+    }
+
+    @Override
+    protected Application provideApplication() {
         final Module module = new AbstractModule() {
             @Override
             protected void configure() {
@@ -59,15 +74,13 @@ public class RequestScopedTest extends WithSunriseApplication {
                 return Http.Context.current();
             }
         };
-        return appBuilder(module).build();
-    }
-
-    private void setNewContextWithMarkerHeaderValueOf(final String marker) {
-        setContext(new Http.RequestBuilder().header("marker", marker).build());
+        return new GuiceApplicationBuilder()
+                .overrides(module)
+                .build();
     }
 
     @RequestScoped
-    private static class SomethingRequestScoped {
+    private static class RequestScopedClass {
         @Inject
         private Configuration configuration;
         @Inject
@@ -83,7 +96,7 @@ public class RequestScopedTest extends WithSunriseApplication {
     }
 
     @Singleton
-    private static class NotRequestScoped {
+    private static class NotRequestScopedClass {
         @Inject
         private Configuration configuration;
 

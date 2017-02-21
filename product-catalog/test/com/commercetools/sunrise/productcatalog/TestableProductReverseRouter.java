@@ -6,7 +6,7 @@ import play.mvc.Call;
 
 import java.util.Locale;
 
-public class TestableProductReverseRouter implements ProductReverseRouter {
+public final class TestableProductReverseRouter implements ProductReverseRouter {
 
     @Override
     public String languageTag() {
@@ -30,6 +30,6 @@ public class TestableProductReverseRouter implements ProductReverseRouter {
 
     @Override
     public Call searchProcessCall(final String languageTag) {
-        return new TestableCall("search");
+        return new TestableCall("search/search");
     }
 }

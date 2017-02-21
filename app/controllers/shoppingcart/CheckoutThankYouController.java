@@ -5,10 +5,10 @@ import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.HomeReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
-import com.commercetools.sunrise.shoppingcart.checkout.thankyou.OrderCreatedFinder;
-import com.commercetools.sunrise.shoppingcart.checkout.thankyou.SunriseCheckoutThankYouController;
-import com.commercetools.sunrise.shoppingcart.checkout.thankyou.viewmodels.CheckoutThankYouPageContentFactory;
+import com.commercetools.sunrise.framework.checkout.CheckoutStepControllerComponent;
+import com.commercetools.sunrise.framework.checkout.thankyou.OrderCreatedFinder;
+import com.commercetools.sunrise.framework.checkout.thankyou.SunriseCheckoutThankYouController;
+import com.commercetools.sunrise.framework.checkout.thankyou.viewmodels.CheckoutThankYouPageContentFactory;
 import play.mvc.Result;
 
 import javax.inject.Inject;

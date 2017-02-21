@@ -1,17 +1,17 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListBeanFactory;
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.common.suggestion.ProductRecommendation;
+import com.commercetools.sunrise.common.suggestion.ProductRecommender;
 import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.framework.hooks.events.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContent;
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListBeanFactory;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
 
 import javax.inject.Inject;
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 
 /**
@@ -19,31 +19,31 @@ import java.util.concurrent.CompletionStage;
  */
 public final class ProductRecommendationsControllerComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataReadyHook {
 
-    private final ProductRecommendation productRecommendation;
+    private final ProductRecommender productRecommender;
     private final ProductListBeanFactory productListBeanFactory;
     private final int numRecommendations;
 
-    private Set<ProductProjection> recommendations;
+    private List<ProductProjection> recommendedProducts;
 
     @Inject
-    public ProductRecommendationsControllerComponent(final ProductRecommendation productRecommendation,
+    public ProductRecommendationsControllerComponent(final ProductRecommender productRecommender,
                                                      final ProductListBeanFactory productListBeanFactory, final Configuration configuration) {
-        this.productRecommendation = productRecommendation;
+        this.productRecommender = productRecommender;
         this.productListBeanFactory = productListBeanFactory;
         this.numRecommendations = configuration.getInt("productSuggestions.count", 4);
     }
 
     @Override
     public CompletionStage<?> onProductProjectionLoaded(final ProductProjection product) {
-        return productRecommendation.relatedToProduct(product, numRecommendations)
-                .thenAccept(recommendations -> this.recommendations = recommendations);
+        return productRecommender.relatedToProduct(product, numRecommendations)
+                .thenAccept(recommendations -> this.recommendedProducts = recommendations);
     }
 
     @Override
     public void onPageDataReady(final PageData pageData) {
-        if (recommendations != null && pageData.getContent() instanceof ProductDetailPageContent) {
+        if (recommendedProducts != null && pageData.getContent() instanceof ProductDetailPageContent) {
             final ProductDetailPageContent content = (ProductDetailPageContent) pageData.getContent();
-            content.setSuggestions(productListBeanFactory.create(recommendations));
+            content.setSuggestions(productListBeanFactory.create(recommendedProducts));
         }
     }
 }

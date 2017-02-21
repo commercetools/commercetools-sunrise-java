@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.framework.hooks;
 
 import com.commercetools.sunrise.framework.hooks.events.RequestStartedHook;
-import com.google.inject.Injector;
+import play.inject.Injector;
 import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -24,7 +24,7 @@ final class RequestStartedHookRunner extends Action<RunRequestStartedHook> {
     @Override
     public CompletionStage<Result> call(final Http.Context ctx) {
         // On creation of this action there isn't any HTTP context, necessary to initialize the HookRunner
-        final HookRunner hookRunner = injector.getInstance(HookRunner.class);
+        final HookRunner hookRunner = injector.instanceOf(HookRunner.class);
         RequestStartedHook.runHook(hookRunner, ctx);
         return delegate.call(ctx);
     }

@@ -3,7 +3,6 @@ package com.commercetools.sunrise.common.categorytree;
 import io.sphere.sdk.categories.Category;
 
 import java.util.Locale;
-import java.util.Optional;
 
 public final class ByNameCategoryComparator implements CategoryComparator {
 
@@ -15,10 +14,10 @@ public final class ByNameCategoryComparator implements CategoryComparator {
 
     @Override
     public int compare(final Category c1, final Category c2) {
-        return localizedName(c1).orElse("").compareTo(localizedName(c2).orElse(""));
+        return localizedNameOrEmpty(c1).compareTo(localizedNameOrEmpty(c2));
     }
 
-    private Optional<String> localizedName(final Category c1) {
-        return Optional.ofNullable(c1.getName().get(locale));
+    private String localizedNameOrEmpty(final Category c1) {
+        return c1.getName().find(locale).orElse("");
     }
 }

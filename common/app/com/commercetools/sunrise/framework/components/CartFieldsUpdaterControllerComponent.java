@@ -1,17 +1,10 @@
 package com.commercetools.sunrise.framework.components;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.sessions.customer.CustomerInSession;
-import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.actions.CartLoadedActionHook;
 import com.commercetools.sunrise.framework.hooks.actions.CustomerSignedInActionHook;
-import com.commercetools.sunrise.framework.hooks.requests.CartCreateCommandHook;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.CartDraft;
-import io.sphere.sdk.carts.CartDraftBuilder;
-import io.sphere.sdk.carts.CartDraftDsl;
-import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;
 import io.sphere.sdk.carts.commands.updateactions.SetCustomerEmail;
@@ -33,33 +26,15 @@ import java.util.concurrent.CompletionStage;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-public class CartFieldsUpdaterControllerComponent implements ControllerComponent, CartCreateCommandHook, CartLoadedActionHook, CustomerSignedInActionHook {
+public class CartFieldsUpdaterControllerComponent implements ControllerComponent, CartLoadedActionHook, CustomerSignedInActionHook {
 
     private final CountryCode country;
-    private final CustomerInSession customerInSession;
     private final SphereClient sphereClient;
 
     @Inject
-    public CartFieldsUpdaterControllerComponent(final CountryCode country, final CustomerInSession customerInSession, final SphereClient sphereClient) {
+    public CartFieldsUpdaterControllerComponent(final CountryCode country, final SphereClient sphereClient) {
         this.country = country;
-        this.customerInSession = customerInSession;
         this.sphereClient = sphereClient;
-    }
-
-    @Override
-    public CartCreateCommand onCartCreateCommand(final CartCreateCommand cartCreateCommand) {
-        final CartDraft cartDraft = cartDraftWithAdditionalInfo(cartCreateCommand.getDraft());
-        return CartCreateCommand.of(cartDraft)
-                .withExpansionPaths(cartCreateCommand.expansionPaths());
-    }
-
-    private CartDraftDsl cartDraftWithAdditionalInfo(final CartDraft cartDraft) {
-        return CartDraftBuilder.of(cartDraft)
-                .country(country)
-                .shippingAddress(Address.of(country))
-                .customerId(customerInSession.findCustomerId().orElse(null))
-                .customerEmail(customerInSession.findCustomerEmail().orElse(null))
-                .build();
     }
 
     @Override
@@ -100,8 +75,8 @@ public class CartFieldsUpdaterControllerComponent implements ControllerComponent
             updateActions.add(SetShippingAddress.of(shippingAddress));
             updateActions.add(SetCountry.of(country));
         }
-        final boolean hasDifferentCustomerEmail = customer != null && !customer.getEmail().equals(cart.getCustomerEmail());
-        if (hasDifferentCustomerEmail) {
+        final boolean hasNoCustomerEmail = customer != null && cart.getCustomerEmail() == null;
+        if (hasNoCustomerEmail) {
             updateActions.add(SetCustomerEmail.of(customer.getEmail()));
         }
         return updateActions;

@@ -5,9 +5,9 @@ import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.SunriseCartDetailController;
-import com.commercetools.sunrise.shoppingcart.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
+import com.commercetools.sunrise.framework.CartFinder;
+import com.commercetools.sunrise.framework.cart.cartdetail.SunriseCartDetailController;
+import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
 import controllers.PageHeaderControllerComponentSupplier;
 
 import javax.inject.Inject;
