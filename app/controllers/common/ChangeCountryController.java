@@ -14,30 +14,26 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 @NoCache
-public final class ChangeCountryController extends SunriseChangeCountryController<ChangeCountryFormData> {
+public final class ChangeCountryController extends SunriseChangeCountryController {
 
     private final HomeReverseRouter homeReverseRouter;
 
     @Inject
     public ChangeCountryController(final FormFactory formFactory,
-                                   final ChangeCountryControllerAction changeCountryControllerAction,
+                                   final ChangeCountryFormData formData,
+                                   final ChangeCountryControllerAction controllerAction,
                                    final HomeReverseRouter homeReverseRouter) {
-        super(formFactory, changeCountryControllerAction);
+        super(formFactory, formData, controllerAction);
         this.homeReverseRouter = homeReverseRouter;
     }
 
     @Override
-    public Class<ChangeCountryFormData> getFormDataClass() {
-        return ChangeCountryFormData.class;
-    }
-
-    @Override
-    public CompletionStage<Result> handleInvalidForm(final Void input, final Form<ChangeCountryFormData> form) {
+    public CompletionStage<Result> handleInvalidForm(final Void input, final Form<? extends ChangeCountryFormData> form) {
         return redirectTo(homeReverseRouter.homePageCall());
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final Form<ChangeCountryFormData> form, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final Form<? extends ChangeCountryFormData> form, final ClientErrorException clientErrorException) {
         return redirectTo(homeReverseRouter.homePageCall());
     }
 

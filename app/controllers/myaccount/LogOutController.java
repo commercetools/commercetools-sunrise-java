@@ -17,9 +17,9 @@ public final class LogOutController extends SunriseLogOutController {
     private final HomeReverseRouter homeReverseRouter;
 
     @Inject
-    public LogOutController(final LogOutControllerAction logOutControllerAction,
+    public LogOutController(final LogOutControllerAction controllerAction,
                             final HomeReverseRouter homeReverseRouter) {
-        super(logOutControllerAction);
+        super(controllerAction);
         this.homeReverseRouter = homeReverseRouter;
     }
 

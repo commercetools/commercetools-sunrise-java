@@ -1,4 +1,4 @@
-package controllers;
+package com.commercetools.sunrise.framework.components;
 
 import com.commercetools.sunrise.common.localization.LocationSelectorControllerComponent;
 import com.commercetools.sunrise.common.pages.PageNavMenuControllerComponent;

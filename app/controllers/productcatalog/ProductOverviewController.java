@@ -10,7 +10,7 @@ import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -31,8 +31,8 @@ public final class ProductOverviewController extends SunriseProductOverviewContr
     public ProductOverviewController(final TemplateRenderer templateRenderer,
                                      final CategoryFinder categoryFinder,
                                      final ProductListFinder productListFinder,
-                                     final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
-        super(templateRenderer, categoryFinder, productListFinder, productOverviewPageContentFactory);
+                                     final ProductOverviewPageContentFactory pageContentFactory) {
+        super(templateRenderer, categoryFinder, productListFinder, pageContentFactory);
     }
 
     @Override

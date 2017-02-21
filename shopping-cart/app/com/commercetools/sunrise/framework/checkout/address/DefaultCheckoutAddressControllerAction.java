@@ -35,8 +35,8 @@ public class DefaultCheckoutAddressControllerAction extends AbstractCartUpdateEx
     }
 
     private List<UpdateAction<Cart>> buildUpdateActions(final CheckoutAddressFormData formData) {
-        final Address shippingAddress = formData.toShippingAddress();
-        final Address billingAddress = formData.toBillingAddress();
+        final Address shippingAddress = formData.obtainShippingAddress();
+        final Address billingAddress = formData.obtainBillingAddress();
         final List<UpdateAction<Cart>> updateActions = new ArrayList<>();
         updateActions.add(SetCountry.of(shippingAddress.getCountry()));
         updateActions.add(SetShippingAddress.of(shippingAddress));

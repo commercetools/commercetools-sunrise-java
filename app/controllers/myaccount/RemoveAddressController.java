@@ -9,11 +9,11 @@ import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
-import com.commercetools.sunrise.myaccount.addressbook.removeaddress.DefaultRemoveAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressControllerAction;
+import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.SunriseRemoveAddressController;
 import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -27,7 +27,7 @@ import java.util.concurrent.CompletionStage;
         PageHeaderControllerComponentSupplier.class,
         CustomerOperationsControllerComponentSupplier.class
 })
-public final class RemoveAddressController extends SunriseRemoveAddressController<DefaultRemoveAddressFormData> {
+public final class RemoveAddressController extends SunriseRemoveAddressController {
 
     private final AuthenticationReverseRouter authenticationReverseRouter;
     private final AddressBookReverseRouter addressBookReverseRouter;
@@ -35,13 +35,14 @@ public final class RemoveAddressController extends SunriseRemoveAddressControlle
     @Inject
     public RemoveAddressController(final TemplateRenderer templateRenderer,
                                    final FormFactory formFactory,
+                                   final RemoveAddressFormData formData,
                                    final CustomerFinder customerFinder,
                                    final AddressFinder addressFinder,
-                                   final RemoveAddressControllerAction removeAddressControllerAction,
-                                   final AddressBookPageContentFactory addressBookPageContentFactory,
+                                   final RemoveAddressControllerAction controllerAction,
+                                   final AddressBookPageContentFactory pageContentFactory,
                                    final AuthenticationReverseRouter authenticationReverseRouter,
                                    final AddressBookReverseRouter addressBookReverseRouter) {
-        super(templateRenderer, formFactory, customerFinder, addressFinder, removeAddressControllerAction, addressBookPageContentFactory);
+        super(templateRenderer, formFactory, formData, customerFinder, addressFinder, controllerAction, pageContentFactory);
         this.authenticationReverseRouter = authenticationReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
     }
@@ -49,11 +50,6 @@ public final class RemoveAddressController extends SunriseRemoveAddressControlle
     @Override
     public String getTemplateName() {
         return "my-account-address-book";
-    }
-
-    @Override
-    public Class<DefaultRemoveAddressFormData> getFormDataClass() {
-        return DefaultRemoveAddressFormData.class;
     }
 
     @Override
@@ -67,7 +63,7 @@ public final class RemoveAddressController extends SunriseRemoveAddressControlle
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final DefaultRemoveAddressFormData formData) {
+    public CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final RemoveAddressFormData formData) {
         return redirectTo(addressBookReverseRouter.addressBookDetailPageCall());
     }
 }

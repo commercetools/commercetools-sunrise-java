@@ -5,13 +5,13 @@ import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.myaccount.authentication.signup.DefaultSignUpFormData;
 import com.commercetools.sunrise.myaccount.authentication.signup.SignUpControllerAction;
+import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormData;
 import com.commercetools.sunrise.myaccount.authentication.signup.SunriseSignUpController;
 import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpPageContentFactory;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -26,17 +26,18 @@ import java.util.concurrent.CompletionStage;
         CustomerOperationsControllerComponentSupplier.class,
         CartOperationsControllerComponentSupplier.class
 })
-public final class SignUpController extends SunriseSignUpController<DefaultSignUpFormData> {
+public final class SignUpController extends SunriseSignUpController {
 
     private final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
 
     @Inject
     public SignUpController(final TemplateRenderer templateRenderer,
                             final FormFactory formFactory,
-                            final SignUpControllerAction signUpControllerAction,
-                            final SignUpPageContentFactory signUpPageContentFactory,
+                            final SignUpFormData formData,
+                            final SignUpControllerAction controllerAction,
+                            final SignUpPageContentFactory pageContentFactory,
                             final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter) {
-        super(templateRenderer, formFactory, signUpControllerAction, signUpPageContentFactory);
+        super(templateRenderer, formFactory, formData, controllerAction, pageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
     }
 
@@ -46,12 +47,7 @@ public final class SignUpController extends SunriseSignUpController<DefaultSignU
     }
 
     @Override
-    public Class<DefaultSignUpFormData> getFormDataClass() {
-        return DefaultSignUpFormData.class;
-    }
-
-    @Override
-    public CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final DefaultSignUpFormData formData) {
+    public CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final SignUpFormData formData) {
         return redirectTo(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall());
     }
 }

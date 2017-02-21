@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.framework.cart.addlineitem;
 
 import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.framework.CartFinder;
+import com.commercetools.sunrise.framework.WithRequiredCart;
+import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
 import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
 import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.CartFinder;
-import com.commercetools.sunrise.framework.WithRequiredCart;
-import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -18,22 +18,31 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddLineItemController<F extends AddLineItemFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Cart, Cart>, WithRequiredCart {
+public abstract class SunriseAddLineItemController extends SunriseTemplateFormController
+        implements WithTemplateFormFlow<AddLineItemFormData, Cart, Cart>, WithRequiredCart {
 
+    private final AddLineItemFormData formData;
     private final CartFinder cartFinder;
     private final CartCreator cartCreator;
-    private final AddLineItemControllerAction addLineItemControllerAction;
-    private final CartDetailPageContentFactory cartDetailPageContentFactory;
+    private final AddLineItemControllerAction controllerAction;
+    private final CartDetailPageContentFactory pageContentFactory;
 
-    protected SunriseAddLineItemController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseAddLineItemController(final TemplateRenderer templateRenderer,
+                                           final FormFactory formFactory, final AddLineItemFormData formData,
                                            final CartFinder cartFinder, final CartCreator cartCreator,
-                                           final AddLineItemControllerAction addLineItemControllerAction,
-                                           final CartDetailPageContentFactory cartDetailPageContentFactory) {
+                                           final AddLineItemControllerAction controllerAction,
+                                           final CartDetailPageContentFactory pageContentFactory) {
         super(templateRenderer, formFactory);
+        this.formData = formData;
         this.cartFinder = cartFinder;
         this.cartCreator = cartCreator;
-        this.addLineItemControllerAction = addLineItemControllerAction;
-        this.cartDetailPageContentFactory = cartDetailPageContentFactory;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
+    }
+
+    @Override
+    public Class<? extends AddLineItemFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
@@ -52,8 +61,8 @@ public abstract class SunriseAddLineItemController<F extends AddLineItemFormData
     }
 
     @Override
-    public CompletionStage<Cart> executeAction(final Cart cart, final F formData) {
-        return addLineItemControllerAction.apply(cart, formData);
+    public CompletionStage<Cart> executeAction(final Cart cart, final AddLineItemFormData formData) {
+        return controllerAction.apply(cart, formData);
     }
 
     @Override
@@ -63,15 +72,15 @@ public abstract class SunriseAddLineItemController<F extends AddLineItemFormData
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final F formData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final AddLineItemFormData formData);
 
     @Override
-    public PageContent createPageContent(final Cart cart, final Form<F> form) {
-        return cartDetailPageContentFactory.create(cart);
+    public PageContent createPageContent(final Cart cart, final Form<? extends AddLineItemFormData> form) {
+        return pageContentFactory.create(cart);
     }
 
     @Override
-    public void preFillFormData(final Cart cart, final F formData) {
+    public void preFillFormData(final Cart cart, final AddLineItemFormData formData) {
         // Do not pre-fill with anything
     }
 }

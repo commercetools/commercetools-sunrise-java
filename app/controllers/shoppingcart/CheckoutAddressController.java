@@ -1,5 +1,11 @@
 package controllers.shoppingcart;
 
+import com.commercetools.sunrise.framework.CartFinder;
+import com.commercetools.sunrise.framework.checkout.CheckoutStepControllerComponent;
+import com.commercetools.sunrise.framework.checkout.address.CheckoutAddressControllerAction;
+import com.commercetools.sunrise.framework.checkout.address.CheckoutAddressFormData;
+import com.commercetools.sunrise.framework.checkout.address.SunriseCheckoutAddressController;
+import com.commercetools.sunrise.framework.checkout.address.viewmodels.CheckoutAddressPageContentFactory;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
@@ -7,12 +13,6 @@ import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutR
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.framework.CartFinder;
-import com.commercetools.sunrise.framework.checkout.CheckoutStepControllerComponent;
-import com.commercetools.sunrise.framework.checkout.address.CheckoutAddressControllerAction;
-import com.commercetools.sunrise.framework.checkout.address.DefaultCheckoutAddressFormData;
-import com.commercetools.sunrise.framework.checkout.address.SunriseCheckoutAddressController;
-import com.commercetools.sunrise.framework.checkout.address.viewmodels.CheckoutAddressPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -26,7 +26,7 @@ import java.util.concurrent.CompletionStage;
         CheckoutStepControllerComponent.class,
         CartOperationsControllerComponentSupplier.class
 })
-public final class CheckoutAddressController extends SunriseCheckoutAddressController<DefaultCheckoutAddressFormData> {
+public final class CheckoutAddressController extends SunriseCheckoutAddressController {
 
     private final CartReverseRouter cartReverseRouter;
     private final CheckoutReverseRouter checkoutReverseRouter;
@@ -34,12 +34,13 @@ public final class CheckoutAddressController extends SunriseCheckoutAddressContr
     @Inject
     public CheckoutAddressController(final TemplateRenderer templateRenderer,
                                      final FormFactory formFactory,
+                                     final CheckoutAddressFormData formData,
                                      final CartFinder cartFinder,
-                                     final CheckoutAddressControllerAction checkoutAddressControllerAction,
-                                     final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory,
+                                     final CheckoutAddressControllerAction controllerAction,
+                                     final CheckoutAddressPageContentFactory pageContentFactory,
                                      final CartReverseRouter cartReverseRouter,
                                      final CheckoutReverseRouter checkoutReverseRouter) {
-        super(templateRenderer, formFactory, cartFinder, checkoutAddressControllerAction, checkoutAddressPageContentFactory);
+        super(templateRenderer, formFactory, formData, cartFinder, controllerAction, pageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
         this.checkoutReverseRouter = checkoutReverseRouter;
     }
@@ -50,17 +51,12 @@ public final class CheckoutAddressController extends SunriseCheckoutAddressContr
     }
 
     @Override
-    public Class<DefaultCheckoutAddressFormData> getFormDataClass() {
-        return DefaultCheckoutAddressFormData.class;
-    }
-
-    @Override
     public CompletionStage<Result> handleNotFoundCart() {
         return redirectTo(cartReverseRouter.cartDetailPageCall());
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final DefaultCheckoutAddressFormData formData) {
+    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final CheckoutAddressFormData formData) {
         return redirectTo(checkoutReverseRouter.checkoutShippingPageCall());
     }
 }

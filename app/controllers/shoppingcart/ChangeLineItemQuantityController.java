@@ -1,17 +1,17 @@
 package controllers.shoppingcart;
 
+import com.commercetools.sunrise.framework.CartFinder;
+import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
+import com.commercetools.sunrise.framework.cart.changelineitemquantity.ChangeLineItemQuantityControllerAction;
+import com.commercetools.sunrise.framework.cart.changelineitemquantity.ChangeLineItemQuantityFormData;
+import com.commercetools.sunrise.framework.cart.changelineitemquantity.SunriseChangeLineItemQuantityController;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CartReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.framework.CartFinder;
-import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
-import com.commercetools.sunrise.framework.cart.changelineitemquantity.ChangeLineItemQuantityControllerAction;
-import com.commercetools.sunrise.framework.cart.changelineitemquantity.DefaultChangeLineItemQuantityFormData;
-import com.commercetools.sunrise.framework.cart.changelineitemquantity.SunriseChangeLineItemQuantityController;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -25,18 +25,19 @@ import java.util.concurrent.CompletionStage;
         PageHeaderControllerComponentSupplier.class,
         CartOperationsControllerComponentSupplier.class
 })
-public final class ChangeLineItemQuantityController extends SunriseChangeLineItemQuantityController<DefaultChangeLineItemQuantityFormData> {
+public final class ChangeLineItemQuantityController extends SunriseChangeLineItemQuantityController {
 
     private final CartReverseRouter cartReverseRouter;
 
     @Inject
     public ChangeLineItemQuantityController(final TemplateRenderer templateRenderer,
                                             final FormFactory formFactory,
+                                            final ChangeLineItemQuantityFormData formData,
                                             final CartFinder cartFinder,
-                                            final CartDetailPageContentFactory cartDetailPageContentFactory,
-                                            final ChangeLineItemQuantityControllerAction changeLineItemQuantityControllerAction,
+                                            final CartDetailPageContentFactory pageContentFactory,
+                                            final ChangeLineItemQuantityControllerAction controllerAction,
                                             final CartReverseRouter cartReverseRouter) {
-        super(templateRenderer, formFactory, cartFinder, cartDetailPageContentFactory, changeLineItemQuantityControllerAction);
+        super(templateRenderer, formFactory, formData, cartFinder, pageContentFactory, controllerAction);
         this.cartReverseRouter = cartReverseRouter;
     }
 
@@ -46,17 +47,12 @@ public final class ChangeLineItemQuantityController extends SunriseChangeLineIte
     }
 
     @Override
-    public Class<DefaultChangeLineItemQuantityFormData> getFormDataClass() {
-        return DefaultChangeLineItemQuantityFormData.class;
-    }
-
-    @Override
     public CompletionStage<Result> handleNotFoundCart() {
         return redirectTo(cartReverseRouter.cartDetailPageCall());
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final DefaultChangeLineItemQuantityFormData formData) {
+    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final ChangeLineItemQuantityFormData formData) {
         return redirectTo(cartReverseRouter.cartDetailPageCall());
     }
 }

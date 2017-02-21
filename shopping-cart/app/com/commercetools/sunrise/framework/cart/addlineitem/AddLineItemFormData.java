@@ -1,9 +1,13 @@
 package com.commercetools.sunrise.framework.cart.addlineitem;
 
+import com.google.inject.ImplementedBy;
+
+@ImplementedBy(DefaultAddLineItemFormData.class)
 public interface AddLineItemFormData {
-    String getProductId();
 
-    Integer getVariantId();
+    String obtainProductId();
 
-    Long getQuantity();
+    Integer obtainVariantId();
+
+    Long obtainQuantity();
 }

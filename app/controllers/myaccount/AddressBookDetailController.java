@@ -9,7 +9,7 @@ import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.SunriseAddressBookDetailController;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -28,9 +28,9 @@ public final class AddressBookDetailController extends SunriseAddressBookDetailC
     @Inject
     public AddressBookDetailController(final TemplateRenderer templateRenderer,
                                        final CustomerFinder customerFinder,
-                                       final AddressBookPageContentFactory addressBookPageContentFactory,
+                                       final AddressBookPageContentFactory pageContentFactory,
                                        final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(templateRenderer, customerFinder, addressBookPageContentFactory);
+        super(templateRenderer, customerFinder, pageContentFactory);
         this.authenticationReverseRouter = authenticationReverseRouter;
     }
 

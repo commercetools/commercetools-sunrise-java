@@ -21,24 +21,31 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddAddressController<F extends AddressFormData> extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
+public abstract class SunriseAddAddressController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<AddressFormData, Customer, Customer>, WithRequiredCustomer {
 
+    private final AddressFormData formData;
     private final CustomerFinder customerFinder;
-    private final AddAddressControllerAction addAddressControllerAction;
-    private final AddAddressPageContentFactory addAddressPageContentFactory;
+    private final AddAddressControllerAction controllerAction;
+    private final AddAddressPageContentFactory pageContentFactory;
     private final CountryCode country;
 
-    protected SunriseAddAddressController(final TemplateRenderer templateRenderer,
-                                          final FormFactory formFactory, final CustomerFinder customerFinder,
-                                          final AddAddressControllerAction addAddressControllerAction,
-                                          final AddAddressPageContentFactory addAddressPageContentFactory,
+    protected SunriseAddAddressController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+                                          final AddressFormData formData, final CustomerFinder customerFinder,
+                                          final AddAddressControllerAction controllerAction,
+                                          final AddAddressPageContentFactory pageContentFactory,
                                           final CountryCode country) {
         super(templateRenderer, formFactory);
+        this.formData = formData;
         this.customerFinder = customerFinder;
-        this.addAddressControllerAction = addAddressControllerAction;
-        this.addAddressPageContentFactory = addAddressPageContentFactory;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
         this.country = country;
+    }
+
+    @Override
+    public Class<? extends AddressFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
@@ -49,7 +56,7 @@ public abstract class SunriseAddAddressController<F extends AddressFormData> ext
     @RunRequestStartedHook
     @SunriseRoute(AddressBookReverseRouter.ADD_ADDRESS_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
-        return requireCustomer(this::showFormPage);
+        return requireCustomer(customer -> showFormPage(customer, formData));
     }
 
     @RunRequestStartedHook
@@ -59,20 +66,20 @@ public abstract class SunriseAddAddressController<F extends AddressFormData> ext
     }
 
     @Override
-    public CompletionStage<Customer> executeAction(final Customer customer, final F formData) {
-        return addAddressControllerAction.apply(customer, formData);
+    public CompletionStage<Customer> executeAction(final Customer customer, final AddressFormData formData) {
+        return controllerAction.apply(customer, formData);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final F formData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final AddressFormData formData);
 
     @Override
-    public PageContent createPageContent(final Customer customer, final Form<F> form) {
-        return addAddressPageContentFactory.create(customer, form);
+    public PageContent createPageContent(final Customer customer, final Form<? extends AddressFormData> form) {
+        return pageContentFactory.create(customer, form);
     }
 
     @Override
-    public void preFillFormData(final Customer customer, final F formData) {
+    public void preFillFormData(final Customer customer, final AddressFormData formData) {
         final Address address = Address.of(country)
                 .withTitle(customer.getTitle())
                 .withFirstName(customer.getFirstName())

@@ -12,14 +12,21 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseChangeCountryController<F extends ChangeCountryFormData> extends SunriseFormController implements WithFormFlow<F, Void, Void> {
+public abstract class SunriseChangeCountryController extends SunriseFormController implements WithFormFlow<ChangeCountryFormData, Void, Void> {
 
-    private final ChangeCountryControllerAction changeCountryControllerAction;
+    private final ChangeCountryFormData formData;
+    private final ChangeCountryControllerAction controllerAction;
 
-    protected SunriseChangeCountryController(final FormFactory formFactory,
-                                             final ChangeCountryControllerAction changeCountryControllerAction) {
+    protected SunriseChangeCountryController(final FormFactory formFactory, final ChangeCountryFormData formData,
+                                             final ChangeCountryControllerAction controllerAction) {
         super(formFactory);
-        this.changeCountryControllerAction = changeCountryControllerAction;
+        this.formData = formData;
+        this.controllerAction = controllerAction;
+    }
+
+    @Override
+    public Class<? extends ChangeCountryFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @RunRequestStartedHook
@@ -29,8 +36,8 @@ public abstract class SunriseChangeCountryController<F extends ChangeCountryForm
     }
 
     @Override
-    public CompletionStage<Void> executeAction(final Void input, final F formData) {
-        changeCountryControllerAction.accept(formData);
+    public CompletionStage<Void> executeAction(final Void input, final ChangeCountryFormData formData) {
+        controllerAction.accept(formData);
         return completedFuture(null);
     }
 }

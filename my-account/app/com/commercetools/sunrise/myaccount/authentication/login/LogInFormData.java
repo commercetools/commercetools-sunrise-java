@@ -1,11 +1,14 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
+import com.google.inject.ImplementedBy;
+
+@ImplementedBy(DefaultLogInFormData.class)
 public interface LogInFormData {
 
-    String getUsername();
+    String obtainUsername();
 
-    String getPassword();
+    String obtainPassword();
 
-    void setUsername(final String username);
+    void applyUsername(final String username);
 }
 

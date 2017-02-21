@@ -23,7 +23,7 @@ public class DefaultChangeLineItemQuantityControllerAction extends AbstractCartU
     }
 
     protected CartUpdateCommand buildRequest(final Cart cart, final ChangeLineItemQuantityFormData formData) {
-        final ChangeLineItemQuantity updateAction = ChangeLineItemQuantity.of(formData.getLineItemId(), formData.getQuantity());
+        final ChangeLineItemQuantity updateAction = ChangeLineItemQuantity.of(formData.obtainLineItemId(), formData.obtainQuantity());
         return CartUpdateCommand.of(cart, updateAction);
     }
 }

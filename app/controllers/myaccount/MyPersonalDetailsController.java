@@ -7,12 +7,12 @@ import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDe
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
-import com.commercetools.sunrise.myaccount.mydetails.DefaultMyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsControllerAction;
+import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
 import com.commercetools.sunrise.myaccount.mydetails.viewmodels.MyPersonalDetailsPageContentFactory;
 import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -26,7 +26,7 @@ import java.util.concurrent.CompletionStage;
         PageHeaderControllerComponentSupplier.class,
         CustomerOperationsControllerComponentSupplier.class
 })
-public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsController<DefaultMyPersonalDetailsFormData> {
+public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsController {
 
     private final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
     private final AuthenticationReverseRouter authenticationReverseRouter;
@@ -34,12 +34,13 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
     @Inject
     public MyPersonalDetailsController(final TemplateRenderer templateRenderer,
                                        final FormFactory formFactory,
+                                       final MyPersonalDetailsFormData formData,
                                        final CustomerFinder customerFinder,
-                                       final MyPersonalDetailsControllerAction myPersonalDetailsControllerAction,
-                                       final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory,
+                                       final MyPersonalDetailsControllerAction controllerAction,
+                                       final MyPersonalDetailsPageContentFactory pageContentFactory,
                                        final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter,
                                        final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(templateRenderer, formFactory, customerFinder, myPersonalDetailsControllerAction, myPersonalDetailsPageContentFactory);
+        super(templateRenderer, formFactory, formData, customerFinder, controllerAction, pageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
         this.authenticationReverseRouter = authenticationReverseRouter;
     }
@@ -50,12 +51,7 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
     }
 
     @Override
-    public Class<DefaultMyPersonalDetailsFormData> getFormDataClass() {
-        return DefaultMyPersonalDetailsFormData.class;
-    }
-
-    @Override
-    public CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final DefaultMyPersonalDetailsFormData formData) {
+    public CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final MyPersonalDetailsFormData formData) {
         return redirectTo(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall());
     }
 

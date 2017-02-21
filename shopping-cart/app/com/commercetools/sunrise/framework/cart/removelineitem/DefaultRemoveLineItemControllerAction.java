@@ -23,7 +23,7 @@ public class DefaultRemoveLineItemControllerAction extends AbstractCartUpdateExe
     }
 
     protected CartUpdateCommand buildRequest(final Cart cart, final RemoveLineItemFormData formData) {
-        final RemoveLineItem removeLineItem = RemoveLineItem.of(formData.getLineItemId());
+        final RemoveLineItem removeLineItem = RemoveLineItem.of(formData.obtainLineItemId());
         return CartUpdateCommand.of(cart, removeLineItem);
     }
 }

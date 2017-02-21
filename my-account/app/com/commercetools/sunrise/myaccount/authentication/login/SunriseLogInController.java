@@ -19,24 +19,31 @@ import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.common.utils.SphereExceptionUtils.isCustomerInvalidCredentialsError;
 
-public abstract class SunriseLogInController<F extends LogInFormData> extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<F, Void, CustomerSignInResult> {
+public abstract class SunriseLogInController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<LogInFormData, Void, CustomerSignInResult> {
 
-    private final LogInControllerAction logInControllerAction;
-    private final LogInPageContentFactory logInPageContentFactory;
+    private final LogInFormData formData;
+    private final LogInControllerAction controllerAction;
+    private final LogInPageContentFactory pageContentFactory;
 
     protected SunriseLogInController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
-                                     final LogInControllerAction logInControllerAction,
-                                     final LogInPageContentFactory logInPageContentFactory) {
+                                     final LogInFormData formData, final LogInControllerAction controllerAction,
+                                     final LogInPageContentFactory pageContentFactory) {
         super(templateRenderer, formFactory);
-        this.logInControllerAction = logInControllerAction;
-        this.logInPageContentFactory = logInPageContentFactory;
+        this.formData = formData;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
+    }
+
+    @Override
+    public Class<? extends LogInFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @RunRequestStartedHook
     @SunriseRoute(AuthenticationReverseRouter.LOG_IN_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
-        return showFormPage(null);
+        return showFormPage(null, formData);
     }
 
     @RunRequestStartedHook
@@ -46,12 +53,12 @@ public abstract class SunriseLogInController<F extends LogInFormData> extends Su
     }
 
     @Override
-    public CompletionStage<CustomerSignInResult> executeAction(final Void input, final F formData) {
-        return logInControllerAction.apply(formData);
+    public CompletionStage<CustomerSignInResult> executeAction(final Void input, final LogInFormData formData) {
+        return controllerAction.apply(formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final Form<F> form, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final Form<? extends LogInFormData> form, final ClientErrorException clientErrorException) {
         if (isCustomerInvalidCredentialsError(clientErrorException)) {
             saveFormError(form, "Invalid credentials"); // TODO i18n
             return showFormPageWithErrors(input, form);
@@ -61,15 +68,15 @@ public abstract class SunriseLogInController<F extends LogInFormData> extends Su
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final F formData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final LogInFormData formData);
 
     @Override
-    public PageContent createPageContent(final Void input, final Form<F> form) {
-        return logInPageContentFactory.create(form);
+    public PageContent createPageContent(final Void input, final Form<? extends LogInFormData> form) {
+        return pageContentFactory.create(form);
     }
 
     @Override
-    public void preFillFormData(final Void input, final F formData) {
+    public void preFillFormData(final Void input, final LogInFormData formData) {
         // Do nothing
     }
 }

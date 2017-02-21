@@ -1,23 +1,37 @@
 package com.commercetools.sunrise.framework.cart.addlineitem;
 
 import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints;
+import play.data.validation.Constraints.Min;
+import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Required;
 
 public class DefaultAddLineItemFormData extends Base implements AddLineItemFormData {
-    @Constraints.Required
-    @Constraints.MinLength(1)
+
+    @Required
+    @MinLength(1)
     private String productId;
-    @Constraints.Required
-    @Constraints.Min(1)
+    @Required
+    @Min(1)
     private Integer variantId;
-    @Constraints.Required
-    @Constraints.Min(1)
+    @Required
+    @Min(1)
     private Long quantity;
 
-    public DefaultAddLineItemFormData() {
+    @Override
+    public String obtainProductId() {
+        return productId;
     }
 
     @Override
+    public Integer obtainVariantId() {
+        return variantId;
+    }
+
+    @Override
+    public Long obtainQuantity() {
+        return quantity;
+    }
+
     public String getProductId() {
         return productId;
     }
@@ -26,7 +40,6 @@ public class DefaultAddLineItemFormData extends Base implements AddLineItemFormD
         this.productId = productId;
     }
 
-    @Override
     public Integer getVariantId() {
         return variantId;
     }
@@ -35,7 +48,6 @@ public class DefaultAddLineItemFormData extends Base implements AddLineItemFormD
         this.variantId = variantId;
     }
 
-    @Override
     public Long getQuantity() {
         return quantity;
     }

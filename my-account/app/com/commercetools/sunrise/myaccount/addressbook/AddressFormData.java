@@ -1,18 +1,20 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
+import com.google.inject.ImplementedBy;
 import io.sphere.sdk.models.Address;
 
+@ImplementedBy(DefaultAddressFormData.class)
 public interface AddressFormData {
 
-    Address toAddress();
+    Address obtainAddress();
+
+    boolean obtainIsDefaultShippingAddress();
+
+    boolean obtainIsDefaultBillingAddress();
 
     void applyAddress(final Address address);
-    
-    boolean isDefaultShippingAddress();
 
-    boolean isDefaultBillingAddress();
+    void applyIsDefaultShippingAddress(final boolean defaultShippingAddress);
 
-    void setDefaultShippingAddress(final boolean defaultShippingAddress);
-
-    void setDefaultBillingAddress(final boolean defaultBillingAddress);
+    void applyIsDefaultBillingAddress(final boolean defaultBillingAddress);
 }

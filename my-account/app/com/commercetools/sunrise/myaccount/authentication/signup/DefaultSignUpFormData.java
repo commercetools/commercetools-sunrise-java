@@ -1,23 +1,24 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
+import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerDraftBuilder;
 import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints;
+import play.data.validation.Constraints.Required;
 
 public class DefaultSignUpFormData extends Base implements SignUpFormData {
 
     private String title;
-    @Constraints.Required
+    @Required
     private String firstName;
-    @Constraints.Required
+    @Required
     private String lastName;
-    @Constraints.Required
+    @Required
     private String email;
-    @Constraints.Required
+    @Required
     private String password;
-    @Constraints.Required
+    @Required
     private String confirmPassword;
-    @Constraints.Required
+    @Required
     private boolean agreeToTerms;
 
     public String validate() {
@@ -28,6 +29,15 @@ public class DefaultSignUpFormData extends Base implements SignUpFormData {
             return "You must agree to terms"; // TODO use i18n version
         }
         return null;
+    }
+
+    @Override
+    public CustomerDraft obtainCustomerDraft() {
+        return CustomerDraftBuilder.of(email, password)
+                .title(title)
+                .firstName(firstName)
+                .lastName(lastName)
+                .build();
     }
 
     public String getTitle() {
@@ -84,14 +94,6 @@ public class DefaultSignUpFormData extends Base implements SignUpFormData {
 
     public void setAgreeToTerms(final boolean agreeToTerms) {
         this.agreeToTerms = agreeToTerms;
-    }
-
-    @Override
-    public CustomerDraftBuilder toCustomerDraftBuilder() {
-        return CustomerDraftBuilder.of(email, password)
-                .title(title)
-                .firstName(firstName)
-                .lastName(lastName);
     }
 }
 

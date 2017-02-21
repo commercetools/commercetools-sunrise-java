@@ -15,6 +15,6 @@ public final class DefaultChangeLanguageControllerAction implements ChangeLangua
 
     @Override
     public void accept(final ChangeLanguageFormData formData) {
-        languageInSession.store(formData.toLocale());
+        languageInSession.store(formData.obtainLocale());
     }
 }

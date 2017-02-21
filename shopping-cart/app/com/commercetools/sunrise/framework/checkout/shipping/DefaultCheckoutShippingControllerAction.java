@@ -25,7 +25,7 @@ public class DefaultCheckoutShippingControllerAction extends AbstractCartUpdateE
     }
 
     protected CartUpdateCommand buildRequest(final ShippingMethodsWithCart shippingMethodsWithCart, final CheckoutShippingFormData formData) {
-        final Reference<ShippingMethod> shippingMethodRef = ShippingMethod.referenceOfId(formData.getShippingMethodId());
+        final Reference<ShippingMethod> shippingMethodRef = ShippingMethod.referenceOfId(formData.obtainShippingMethod());
         final SetShippingMethod setShippingMethod = SetShippingMethod.of(shippingMethodRef);
         return CartUpdateCommand.of(shippingMethodsWithCart.getCart(), setShippingMethod);
     }

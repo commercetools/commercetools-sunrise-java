@@ -12,14 +12,21 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseChangeLanguageController<F extends ChangeLanguageFormData> extends SunriseFormController implements WithFormFlow<F, Void, Void> {
+public abstract class SunriseChangeLanguageController extends SunriseFormController implements WithFormFlow<ChangeLanguageFormData, Void, Void> {
 
-    private final ChangeLanguageControllerAction changeLanguageControllerAction;
+    private final ChangeLanguageFormData formData;
+    private final ChangeLanguageControllerAction controllerAction;
 
-    protected SunriseChangeLanguageController(final FormFactory formFactory,
-                                              final ChangeLanguageControllerAction changeLanguageControllerAction) {
+    protected SunriseChangeLanguageController(final FormFactory formFactory, final ChangeLanguageFormData formData,
+                                              final ChangeLanguageControllerAction controllerAction) {
         super(formFactory);
-        this.changeLanguageControllerAction = changeLanguageControllerAction;
+        this.formData = formData;
+        this.controllerAction = controllerAction;
+    }
+
+    @Override
+    public Class<? extends ChangeLanguageFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @RunRequestStartedHook
@@ -29,8 +36,8 @@ public abstract class SunriseChangeLanguageController<F extends ChangeLanguageFo
     }
 
     @Override
-    public CompletionStage<Void> executeAction(final Void input, final F formData) {
-        changeLanguageControllerAction.accept(formData);
+    public CompletionStage<Void> executeAction(final Void input, final ChangeLanguageFormData formData) {
+        controllerAction.accept(formData);
         return completedFuture(null);
     }
 }

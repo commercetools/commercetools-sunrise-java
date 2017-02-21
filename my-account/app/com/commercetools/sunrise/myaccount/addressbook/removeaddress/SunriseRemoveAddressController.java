@@ -21,23 +21,31 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseRemoveAddressController<F extends RemoveAddressFormData> extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<F, AddressWithCustomer, Customer>, WithRequiredCustomer, WithRequiredAddress {
+public abstract class SunriseRemoveAddressController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<RemoveAddressFormData, AddressWithCustomer, Customer>, WithRequiredCustomer, WithRequiredAddress {
 
+    private final RemoveAddressFormData formData;
     private final CustomerFinder customerFinder;
     private final AddressFinder addressFinder;
-    private final RemoveAddressControllerAction removeAddressControllerAction;
-    private final AddressBookPageContentFactory addressBookPageContentFactory;
+    private final RemoveAddressControllerAction controllerAction;
+    private final AddressBookPageContentFactory pageContentFactory;
 
-    protected SunriseRemoveAddressController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseRemoveAddressController(final TemplateRenderer templateRenderer,
+                                             final FormFactory formFactory, final RemoveAddressFormData formData,
                                              final CustomerFinder customerFinder, final AddressFinder addressFinder,
-                                             final RemoveAddressControllerAction removeAddressControllerAction,
-                                             final AddressBookPageContentFactory addressBookPageContentFactory) {
+                                             final RemoveAddressControllerAction controllerAction,
+                                             final AddressBookPageContentFactory pageContentFactory) {
         super(templateRenderer, formFactory);
+        this.formData = formData;
         this.customerFinder = customerFinder;
         this.addressFinder = addressFinder;
-        this.removeAddressControllerAction = removeAddressControllerAction;
-        this.addressBookPageContentFactory = addressBookPageContentFactory;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
+    }
+
+    @Override
+    public Class<? extends RemoveAddressFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
@@ -59,20 +67,20 @@ public abstract class SunriseRemoveAddressController<F extends RemoveAddressForm
     }
 
     @Override
-    public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final F formData) {
-        return removeAddressControllerAction.apply(addressWithCustomer, formData);
+    public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final RemoveAddressFormData formData) {
+        return controllerAction.apply(addressWithCustomer, formData);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final F formData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final RemoveAddressFormData formData);
 
     @Override
-    public void preFillFormData(final AddressWithCustomer input, final F formData) {
+    public void preFillFormData(final AddressWithCustomer input, final RemoveAddressFormData formData) {
         // Do not pre-fill anything
     }
 
     @Override
-    public PageContent createPageContent(final AddressWithCustomer addressWithCustomer, final Form<F> form) {
-        return addressBookPageContentFactory.create(addressWithCustomer.getCustomer());
+    public PageContent createPageContent(final AddressWithCustomer addressWithCustomer, final Form<? extends RemoveAddressFormData> form) {
+        return pageContentFactory.create(addressWithCustomer.getCustomer());
     }
 }

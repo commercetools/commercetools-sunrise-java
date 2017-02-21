@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.framework.checkout.payment;
 
 import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.framework.CartFinder;
+import com.commercetools.sunrise.framework.WithRequiredCart;
+import com.commercetools.sunrise.framework.checkout.payment.viewmodels.CheckoutPaymentPageContentFactory;
 import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
 import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.CartFinder;
-import com.commercetools.sunrise.framework.WithRequiredCart;
-import com.commercetools.sunrise.framework.checkout.payment.viewmodels.CheckoutPaymentPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.payments.Payment;
@@ -27,23 +27,31 @@ import java.util.function.Function;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseCheckoutPaymentController<F extends CheckoutPaymentFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, PaymentMethodsWithCart, Cart>, WithRequiredCart {
+public abstract class SunriseCheckoutPaymentController extends SunriseTemplateFormController
+        implements WithTemplateFormFlow<CheckoutPaymentFormData, PaymentMethodsWithCart, Cart>, WithRequiredCart {
 
+    private final CheckoutPaymentFormData formData;
     private final CartFinder cartFinder;
-    private final CheckoutPaymentControllerAction checkoutPaymentControllerAction;
-    private final CheckoutPaymentPageContentFactory checkoutPaymentPageContentFactory;
+    private final CheckoutPaymentControllerAction controllerAction;
+    private final CheckoutPaymentPageContentFactory pageContentFactory;
     private final PaymentSettings paymentSettings;
 
     protected SunriseCheckoutPaymentController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
-                                               final CartFinder cartFinder,
-                                               final CheckoutPaymentControllerAction checkoutPaymentControllerAction,
-                                               final CheckoutPaymentPageContentFactory checkoutPaymentPageContentFactory,
+                                               final CheckoutPaymentFormData formData, final CartFinder cartFinder,
+                                               final CheckoutPaymentControllerAction controllerAction,
+                                               final CheckoutPaymentPageContentFactory pageContentFactory,
                                                final PaymentSettings paymentSettings) {
         super(templateRenderer, formFactory);
+        this.formData = formData;
         this.cartFinder = cartFinder;
-        this.checkoutPaymentControllerAction = checkoutPaymentControllerAction;
-        this.checkoutPaymentPageContentFactory = checkoutPaymentPageContentFactory;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
         this.paymentSettings = paymentSettings;
+    }
+
+    @Override
+    public Class<? extends CheckoutPaymentFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
@@ -56,7 +64,7 @@ public abstract class SunriseCheckoutPaymentController<F extends CheckoutPayment
     public CompletionStage<Result> show(final String languageTag) {
         return requireNonEmptyCart(cart ->
                 findPaymentMethods(cart, paymentMethods ->
-                        showFormPage(PaymentMethodsWithCart.of(paymentMethods, cart))));
+                        showFormPage(PaymentMethodsWithCart.of(paymentMethods, cart), formData)));
     }
 
     @RunRequestStartedHook
@@ -73,24 +81,24 @@ public abstract class SunriseCheckoutPaymentController<F extends CheckoutPayment
     }
 
     @Override
-    public CompletionStage<Cart> executeAction(final PaymentMethodsWithCart paymentMethodsWithCart, final F formData) {
-        return checkoutPaymentControllerAction.apply(paymentMethodsWithCart, formData);
+    public CompletionStage<Cart> executeAction(final PaymentMethodsWithCart paymentMethodsWithCart, final CheckoutPaymentFormData formData) {
+        return controllerAction.apply(paymentMethodsWithCart, formData);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final F formData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final CheckoutPaymentFormData formData);
 
     @Override
-    public PageContent createPageContent(final PaymentMethodsWithCart paymentMethodsWithCart, final Form<F> form) {
-        return checkoutPaymentPageContentFactory.create(paymentMethodsWithCart, form);
+    public PageContent createPageContent(final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
+        return pageContentFactory.create(paymentMethodsWithCart, form);
     }
 
     @Override
-    public void preFillFormData(final PaymentMethodsWithCart paymentMethodsWithCart, final F formData) {
+    public void preFillFormData(final PaymentMethodsWithCart paymentMethodsWithCart, final CheckoutPaymentFormData formData) {
         final String paymentMethodId = findPaymentMethodInfo(paymentMethodsWithCart.getCart())
                 .map(PaymentMethodInfo::getMethod)
                 .orElse(null);
-        formData.setPayment(paymentMethodId);
+        formData.applyPaymentMethod(paymentMethodId);
     }
 
     protected final Optional<PaymentMethodInfo> findPaymentMethodInfo(final Cart cart) {
@@ -103,7 +111,7 @@ public abstract class SunriseCheckoutPaymentController<F extends CheckoutPayment
     }
 
     @Override
-    public CompletionStage<Form<F>> validateForm(final PaymentMethodsWithCart paymentMethodsWithCart, final Form<F> filledForm) {
+    public CompletionStage<Form<? extends CheckoutPaymentFormData>> validateForm(final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> filledForm) {
         final String selectedPaymentMethod = filledForm.field("payment").valueOr("");
         if (!selectedPaymentMethod.isEmpty() && !isValidPaymentMethod(paymentMethodsWithCart, selectedPaymentMethod)) {
             filledForm.reject("Invalid payment error"); // TODO get from i18n

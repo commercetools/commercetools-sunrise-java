@@ -6,13 +6,13 @@ import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.myaccount.authentication.login.DefaultLogInFormData;
 import com.commercetools.sunrise.myaccount.authentication.login.LogInControllerAction;
+import com.commercetools.sunrise.myaccount.authentication.login.LogInFormData;
 import com.commercetools.sunrise.myaccount.authentication.login.SunriseLogInController;
 import com.commercetools.sunrise.myaccount.authentication.login.viewmodels.LogInPageContentFactory;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -28,17 +28,18 @@ import java.util.concurrent.CompletionStage;
         CustomerOperationsControllerComponentSupplier.class,
         CartOperationsControllerComponentSupplier.class
 })
-public final class LogInController extends SunriseLogInController<DefaultLogInFormData> {
+public final class LogInController extends SunriseLogInController {
 
     private final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
 
     @Inject
     public LogInController(final TemplateRenderer templateRenderer,
                            final FormFactory formFactory,
-                           final LogInControllerAction logInControllerAction,
-                           final LogInPageContentFactory logInPageContentFactory,
+                           final LogInFormData formData,
+                           final LogInControllerAction controllerAction,
+                           final LogInPageContentFactory pageContentFactory,
                            final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter) {
-        super(templateRenderer, formFactory, logInControllerAction, logInPageContentFactory);
+        super(templateRenderer, formFactory, formData, controllerAction, pageContentFactory);
         this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
     }
 
@@ -48,12 +49,7 @@ public final class LogInController extends SunriseLogInController<DefaultLogInFo
     }
 
     @Override
-    public Class<DefaultLogInFormData> getFormDataClass() {
-        return DefaultLogInFormData.class;
-    }
-
-    @Override
-    public CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final DefaultLogInFormData formData) {
+    public CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final LogInFormData formData) {
         return redirectTo(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall());
     }
 }

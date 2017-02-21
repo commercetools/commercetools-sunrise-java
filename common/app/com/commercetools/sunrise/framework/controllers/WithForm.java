@@ -5,15 +5,15 @@ import play.data.FormFactory;
 
 public interface WithForm<T> {
 
-    default Form<T> bindForm() {
+    default Form<? extends T> bindForm() {
         return createForm().bindFromRequest();
     }
 
-    default Form<T> createForm() {
+    default Form<? extends T> createForm() {
         return getFormFactory().form(getFormDataClass());
     }
 
-    Class<T> getFormDataClass();
+    Class<? extends T> getFormDataClass();
 
     FormFactory getFormFactory();
 }

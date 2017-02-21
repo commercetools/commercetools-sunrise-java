@@ -10,7 +10,7 @@ import com.commercetools.sunrise.productcatalog.productdetail.ProductRecommendat
 import com.commercetools.sunrise.productcatalog.productdetail.ProductVariantFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
 import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContentFactory;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.products.ProductProjection;
 import play.mvc.Result;
 
@@ -33,9 +33,9 @@ public final class ProductDetailController extends SunriseProductDetailControlle
     public ProductDetailController(final TemplateRenderer templateRenderer,
                                    final ProductFinder productFinder,
                                    final ProductVariantFinder productVariantFinder,
-                                   final ProductDetailPageContentFactory productDetailPageContentFactory,
+                                   final ProductDetailPageContentFactory pageContentFactory,
                                    final ProductReverseRouter productReverseRouter) {
-        super(templateRenderer, productFinder, productVariantFinder, productDetailPageContentFactory);
+        super(templateRenderer, productFinder, productVariantFinder, pageContentFactory);
         this.productReverseRouter = productReverseRouter;
     }
 

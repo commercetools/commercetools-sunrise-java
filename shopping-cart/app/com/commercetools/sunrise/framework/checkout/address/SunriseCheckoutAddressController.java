@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.framework.checkout.address;
 
 import com.commercetools.sunrise.common.pages.PageContent;
+import com.commercetools.sunrise.framework.CartFinder;
+import com.commercetools.sunrise.framework.WithRequiredCart;
+import com.commercetools.sunrise.framework.checkout.address.viewmodels.CheckoutAddressPageContentFactory;
 import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
 import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
-import com.commercetools.sunrise.framework.CartFinder;
-import com.commercetools.sunrise.framework.WithRequiredCart;
-import com.commercetools.sunrise.framework.checkout.address.viewmodels.CheckoutAddressPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -17,20 +17,29 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseCheckoutAddressController<F extends CheckoutAddressFormData> extends SunriseTemplateFormController implements WithTemplateFormFlow<F, Cart, Cart>, WithRequiredCart {
+public abstract class SunriseCheckoutAddressController extends SunriseTemplateFormController
+        implements WithTemplateFormFlow<CheckoutAddressFormData, Cart, Cart>, WithRequiredCart {
 
+    private final CheckoutAddressFormData formData;
     private final CartFinder cartFinder;
-    private final CheckoutAddressControllerAction checkoutAddressControllerAction;
-    private final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory;
+    private final CheckoutAddressControllerAction controllerAction;
+    private final CheckoutAddressPageContentFactory pageContentFactory;
 
-    protected SunriseCheckoutAddressController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseCheckoutAddressController(final TemplateRenderer templateRenderer,
+                                               final FormFactory formFactory, final CheckoutAddressFormData formData,
                                                final CartFinder cartFinder,
-                                               final CheckoutAddressControllerAction checkoutAddressControllerAction,
-                                               final CheckoutAddressPageContentFactory checkoutAddressPageContentFactory) {
+                                               final CheckoutAddressControllerAction controllerAction,
+                                               final CheckoutAddressPageContentFactory pageContentFactory) {
         super(templateRenderer, formFactory);
+        this.formData = formData;
         this.cartFinder = cartFinder;
-        this.checkoutAddressControllerAction = checkoutAddressControllerAction;
-        this.checkoutAddressPageContentFactory = checkoutAddressPageContentFactory;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
+    }
+
+    @Override
+    public Class<? extends CheckoutAddressFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
@@ -41,7 +50,7 @@ public abstract class SunriseCheckoutAddressController<F extends CheckoutAddress
     @RunRequestStartedHook
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_ADDRESS_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
-        return requireNonEmptyCart(this::showFormPage);
+        return requireNonEmptyCart(cart -> showFormPage(cart, formData));
     }
 
     @RunRequestStartedHook
@@ -51,33 +60,34 @@ public abstract class SunriseCheckoutAddressController<F extends CheckoutAddress
     }
 
     @Override
-    public CompletionStage<Cart> executeAction(final Cart cart, final F formData) {
-        return checkoutAddressControllerAction.apply(cart, formData);
+    public CompletionStage<Cart> executeAction(final Cart cart, final CheckoutAddressFormData formData) {
+        return controllerAction.apply(cart, formData);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final F formData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final CheckoutAddressFormData formData);
 
     @Override
-    public PageContent createPageContent(final Cart cart, final Form<F> form) {
-        return checkoutAddressPageContentFactory.create(cart, form);
+    public PageContent createPageContent(final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        return pageContentFactory.create(cart, form);
     }
 
     @Override
-    public Form<F> createForm() {
-        return isBillingDifferent()
-                ? getFormFactory().form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class)
-                : getFormFactory().form(getFormDataClass());
+    public Form<? extends CheckoutAddressFormData> createForm() {
+        if (isBillingAddressDifferent()) {
+            return getFormFactory().form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class);
+        }
+        return WithTemplateFormFlow.super.createForm();
     }
 
-    protected boolean isBillingDifferent() {
+    protected boolean isBillingAddressDifferent() {
         final String flagFieldName = "billingAddressDifferentToBillingAddress";
         final String fieldValue = getFormFactory().form().bindFromRequest().get(flagFieldName);
         return "true".equals(fieldValue);
     }
 
     @Override
-    public void preFillFormData(final Cart cart, final F formData) {
-        formData.setData(cart);
+    public void preFillFormData(final Cart cart, final CheckoutAddressFormData formData) {
+        formData.applyCart(cart);
     }
 }

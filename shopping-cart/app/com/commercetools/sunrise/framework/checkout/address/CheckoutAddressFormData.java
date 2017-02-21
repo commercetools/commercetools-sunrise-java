@@ -1,15 +1,17 @@
 package com.commercetools.sunrise.framework.checkout.address;
 
+import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Address;
 
 import javax.annotation.Nullable;
 
+@ImplementedBy(DefaultCheckoutAddressFormData.class)
 public interface CheckoutAddressFormData {
 
-    void setData(final Cart cart);
+    void applyCart(final Cart cart);
 
-    Address toShippingAddress();
+    Address obtainShippingAddress();
 
-    @Nullable Address toBillingAddress();
+    @Nullable Address obtainBillingAddress();
 }

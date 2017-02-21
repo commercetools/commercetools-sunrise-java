@@ -4,31 +4,27 @@ import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints;
+import play.data.validation.Constraints.Required;
 
 public class DefaultAddressFormData extends Base implements AddressFormData {
 
     private String title;
-    @Constraints.Required
+    @Required
     private String firstName;
-    @Constraints.Required
+    @Required
     private String lastName;
-    @Constraints.Required
+    @Required
     private String streetName;
     private String additionalStreetInfo;
-    @Constraints.Required
+    @Required
     private String city;
-    @Constraints.Required
+    @Required
     private String postalCode;
-    @Constraints.Required
+    @Required
     private String country;
     private String region;
-
     private boolean defaultShippingAddress;
     private boolean defaultBillingAddress;
-
-    public DefaultAddressFormData() {
-    }
 
     public String validate() {
         final CountryCode country = CountryCode.getByCode(this.country);
@@ -36,6 +32,54 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
             return "Invalid country"; // TODO use i18n version
         }
         return null;
+    }
+
+    @Override
+    public boolean obtainIsDefaultShippingAddress() {
+        return defaultShippingAddress;
+    }
+
+    @Override
+    public void applyIsDefaultShippingAddress(final boolean defaultShippingAddress) {
+        this.defaultShippingAddress = defaultShippingAddress;
+    }
+
+    @Override
+    public boolean obtainIsDefaultBillingAddress() {
+        return defaultBillingAddress;
+    }
+
+    @Override
+    public void applyIsDefaultBillingAddress(final boolean defaultBillingAddress) {
+        this.defaultBillingAddress = defaultBillingAddress;
+    }
+
+    @Override
+    public void applyAddress(final Address address) {
+        this.title = address.getTitle();
+        this.firstName = address.getFirstName();
+        this.lastName = address.getLastName();
+        this.streetName = address.getStreetName();
+        this.additionalStreetInfo = address.getAdditionalStreetInfo();
+        this.city = address.getCity();
+        this.postalCode = address.getPostalCode();
+        this.country = address.getCountry().getAlpha2();
+        this.region = address.getRegion();
+    }
+
+    @Override
+    public Address obtainAddress() {
+        final CountryCode countryCode = CountryCode.getByCode(country);
+        return AddressBuilder.of(countryCode)
+                .title(title)
+                .firstName(firstName)
+                .lastName(lastName)
+                .streetName(streetName)
+                .additionalStreetInfo(additionalStreetInfo)
+                .city(city)
+                .postalCode(postalCode)
+                .region(region)
+                .build();
     }
 
     public String getTitle() {
@@ -110,51 +154,19 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
         this.region = region;
     }
 
-    @Override
     public boolean isDefaultShippingAddress() {
         return defaultShippingAddress;
     }
 
-    @Override
     public void setDefaultShippingAddress(final boolean defaultShippingAddress) {
         this.defaultShippingAddress = defaultShippingAddress;
     }
 
-    @Override
     public boolean isDefaultBillingAddress() {
         return defaultBillingAddress;
     }
 
-    @Override
     public void setDefaultBillingAddress(final boolean defaultBillingAddress) {
         this.defaultBillingAddress = defaultBillingAddress;
-    }
-
-    @Override
-    public void applyAddress(final Address address) {
-        this.title = address.getTitle();
-        this.firstName = address.getFirstName();
-        this.lastName = address.getLastName();
-        this.streetName = address.getStreetName();
-        this.additionalStreetInfo = address.getAdditionalStreetInfo();
-        this.city = address.getCity();
-        this.postalCode = address.getPostalCode();
-        this.country = address.getCountry().getAlpha2();
-        this.region = address.getRegion();
-    }
-
-    @Override
-    public Address toAddress() {
-        final CountryCode country = CountryCode.getByCode(getCountry());
-        return AddressBuilder.of(country)
-                .title(getTitle())
-                .firstName(getFirstName())
-                .lastName(getLastName())
-                .streetName(getStreetName())
-                .additionalStreetInfo(getAdditionalStreetInfo())
-                .city(getCity())
-                .postalCode(getPostalCode())
-                .region(getRegion())
-                .build();
     }
 }

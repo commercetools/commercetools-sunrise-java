@@ -1,8 +1,11 @@
 package com.commercetools.sunrise.framework.checkout.shipping;
 
+import com.google.inject.ImplementedBy;
+
+@ImplementedBy(DefaultCheckoutShippingFormData.class)
 public interface CheckoutShippingFormData {
 
-    String getShippingMethodId();
+    String obtainShippingMethod();
 
-    void setShippingMethodId(final String shippingMethodId);
+    void applyShippingMethod(final String shippingMethod);
 }

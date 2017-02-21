@@ -1,15 +1,20 @@
 package com.commercetools.sunrise.framework.cart.removelineitem;
 
 import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints;
+import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Required;
 
 public class DefaultRemoveLineItemFormData extends Base implements RemoveLineItemFormData {
 
-    @Constraints.Required
-    @Constraints.MinLength(1)
+    @Required
+    @MinLength(1)
     private String lineItemId;
 
     @Override
+    public String obtainLineItemId() {
+        return lineItemId;
+    }
+
     public String getLineItemId() {
         return lineItemId;
     }

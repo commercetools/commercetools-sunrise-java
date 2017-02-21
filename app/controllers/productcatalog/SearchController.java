@@ -8,7 +8,7 @@ import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseSearchController;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 
 import javax.inject.Inject;
 
@@ -23,8 +23,8 @@ public final class SearchController extends SunriseSearchController {
     @Inject
     public SearchController(final TemplateRenderer templateRenderer,
                             final ProductListFinder productListFinder,
-                            final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
-        super(templateRenderer, productListFinder, productOverviewPageContentFactory);
+                            final ProductOverviewPageContentFactory pageContentFactory) {
+        super(templateRenderer, productListFinder, pageContentFactory);
     }
 
     @Override

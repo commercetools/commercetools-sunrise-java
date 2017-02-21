@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist;
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.hooks.RunRequestStartedHook;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
@@ -14,24 +14,23 @@ import com.commercetools.sunrise.myaccount.myorders.myorderlist.viewmodels.MyOrd
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.queries.PagedQueryResult;
-import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-public abstract class SunriseMyOrderListController extends SunriseTemplateFormController
+public abstract class SunriseMyOrderListController extends SunriseTemplateController
         implements MyAccountController, WithQueryFlow<OrderListWithCustomer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final MyOrderListFinder myOrderListFinder;
     private final MyOrderListPageContentFactory myOrderListPageContentFactory;
 
-    protected SunriseMyOrderListController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseMyOrderListController(final TemplateRenderer templateRenderer,
                                            final CustomerFinder customerFinder, final MyOrderListFinder myOrderListFinder,
                                            final MyOrderListPageContentFactory myOrderListPageContentFactory) {
-        super(templateRenderer, formFactory);
+        super(templateRenderer);
         this.customerFinder = customerFinder;
         this.myOrderListFinder = myOrderListFinder;
         this.myOrderListPageContentFactory = myOrderListPageContentFactory;

@@ -17,38 +17,37 @@ import java.util.concurrent.CompletionStage;
  */
 public interface WithTemplateFormFlow<F, I, O> extends WithFormFlow<F, I, O>, WithTemplate {
 
-    default CompletionStage<Result> showFormPage(final I input) {
-        final Form<F> form = createNewFilledForm(input);
+    default CompletionStage<Result> showFormPage(final I input, final F emptyFormData) {
+        final Form<? extends F> form = createFilledForm(input, emptyFormData);
         return okResultWithPageContent(createPageContent(input, form));
     }
 
-    default CompletionStage<Result> showFormPageWithErrors(final I input, final Form<F> form) {
+    default CompletionStage<Result> showFormPageWithErrors(final I input, final Form<? extends F> form) {
         return badRequestResultWithPageContent(createPageContent(input, form));
     }
 
     @Override
-    default CompletionStage<Result> handleInvalidForm(final I input, final Form<F> form) {
+    default CompletionStage<Result> handleInvalidForm(final I input, final Form<? extends F> form) {
         return showFormPageWithErrors(input, form);
     }
 
     @Override
-    default CompletionStage<Result> handleClientErrorFailedAction(final I input, final Form<F> form, final ClientErrorException clientErrorException) {
+    default CompletionStage<Result> handleClientErrorFailedAction(final I input, final Form<? extends F> form, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
         return showFormPageWithErrors(input, form);
     }
 
-    PageContent createPageContent(final I input, final Form<F> form);
+    PageContent createPageContent(final I input, final Form<? extends F> form);
 
-    default Form<F> createNewFilledForm(final I input) {
+    default Form<? extends F> createFilledForm(final I input, final F formData) {
+        preFillFormData(input, formData);
         try {
-            final F formData = getFormDataClass().getConstructor().newInstance();
-            preFillFormData(input, formData);
             final Map<String, String> classFieldValues = BeanUtils.describe(formData);
-            final Form<F> filledForm = getFormFactory().form(getFormDataClass()).bind(classFieldValues);
+            final Form<? extends F> filledForm = createForm().bind(classFieldValues);
             filledForm.discardErrors();
             return filledForm;
         } catch (ReflectiveOperationException e) {
-            throw new RuntimeException("Missing empty constructor for class " + getFormDataClass().getCanonicalName(), e);
+            throw new RuntimeException("Form cannot be populated for class " + getFormDataClass().getCanonicalName(), e);
         }
     }
 

@@ -1,5 +1,6 @@
 package controllers.myaccount;
 
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.hooks.RegisteredComponents;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.AuthenticationReverseRouter;
@@ -11,8 +12,6 @@ import com.commercetools.sunrise.myaccount.myorders.myorderdetail.MyOrderFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.SunriseMyOrderDetailController;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels.MyOrderDetailPageContentFactory;
 import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
-import controllers.PageHeaderControllerComponentSupplier;
-import play.data.FormFactory;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -31,13 +30,12 @@ public final class MyOrderDetailController extends SunriseMyOrderDetailControlle
 
     @Inject
     public MyOrderDetailController(final TemplateRenderer templateRenderer,
-                                   final FormFactory formFactory,
                                    final CustomerFinder customerFinder,
                                    final MyOrderFinder myOrderFinder,
-                                   final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory,
+                                   final MyOrderDetailPageContentFactory pageContentFactory,
                                    final MyOrdersReverseRouter myOrdersReverseRouter,
                                    final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(templateRenderer, formFactory, customerFinder, myOrderFinder, myOrderDetailPageContentFactory);
+        super(templateRenderer, customerFinder, myOrderFinder, pageContentFactory);
         this.myOrdersReverseRouter = myOrdersReverseRouter;
         this.authenticationReverseRouter = authenticationReverseRouter;
     }

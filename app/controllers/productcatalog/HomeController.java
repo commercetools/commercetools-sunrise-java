@@ -10,7 +10,7 @@ import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.productcatalog.home.HomeRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 import play.mvc.Result;
 
 import javax.annotation.Nullable;
@@ -30,9 +30,9 @@ public final class HomeController extends SunriseHomeController {
 
     @Inject
     public HomeController(final TemplateRenderer templateRenderer,
-                          final HomePageContentFactory homePageContentFactory,
+                          final HomePageContentFactory pageContentFactory,
                           final HomeReverseRouter homeReverseRouter) {
-        super(templateRenderer, homePageContentFactory);
+        super(templateRenderer, pageContentFactory);
         this.homeReverseRouter = homeReverseRouter;
     }
 

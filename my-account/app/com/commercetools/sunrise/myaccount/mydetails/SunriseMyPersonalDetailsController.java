@@ -18,21 +18,28 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDetailsFormData> extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<F, Customer, Customer>, WithRequiredCustomer {
+public abstract class SunriseMyPersonalDetailsController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<MyPersonalDetailsFormData, Customer, Customer>, WithRequiredCustomer {
 
+    private final MyPersonalDetailsFormData formData;
     private final CustomerFinder customerFinder;
-    private final MyPersonalDetailsControllerAction myPersonalDetailsControllerAction;
-    private final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory;
+    private final MyPersonalDetailsControllerAction controllerAction;
+    private final MyPersonalDetailsPageContentFactory pageContentFactory;
 
     protected SunriseMyPersonalDetailsController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
-                                                 final CustomerFinder customerFinder,
-                                                 final MyPersonalDetailsControllerAction myPersonalDetailsControllerAction,
-                                                 final MyPersonalDetailsPageContentFactory myPersonalDetailsPageContentFactory) {
+                                                 final MyPersonalDetailsFormData formData, final CustomerFinder customerFinder,
+                                                 final MyPersonalDetailsControllerAction controllerAction,
+                                                 final MyPersonalDetailsPageContentFactory pageContentFactory) {
         super(templateRenderer, formFactory);
+        this.formData = formData;
         this.customerFinder = customerFinder;
-        this.myPersonalDetailsControllerAction = myPersonalDetailsControllerAction;
-        this.myPersonalDetailsPageContentFactory = myPersonalDetailsPageContentFactory;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
+    }
+
+    @Override
+    public Class<? extends MyPersonalDetailsFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
@@ -43,7 +50,7 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     @RunRequestStartedHook
     @SunriseRoute(MyPersonalDetailsReverseRouter.MY_PERSONAL_DETAILS_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
-        return requireCustomer(this::showFormPage);
+        return requireCustomer(customer -> showFormPage(customer, formData));
     }
 
     @RunRequestStartedHook
@@ -53,21 +60,21 @@ public abstract class SunriseMyPersonalDetailsController<F extends MyPersonalDet
     }
 
     @Override
-    public CompletionStage<Customer> executeAction(final Customer customer, final F formData) {
-        return myPersonalDetailsControllerAction.apply(customer, formData);
+    public CompletionStage<Customer> executeAction(final Customer customer, final MyPersonalDetailsFormData formData) {
+        return controllerAction.apply(customer, formData);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final F formData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final MyPersonalDetailsFormData formData);
 
     @Override
-    public PageContent createPageContent(final Customer customer, final Form<F> form) {
-        return myPersonalDetailsPageContentFactory.create(customer, form);
+    public PageContent createPageContent(final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
+        return pageContentFactory.create(customer, form);
     }
 
     @Override
-    public void preFillFormData(final Customer customer, final F formData) {
+    public void preFillFormData(final Customer customer, final MyPersonalDetailsFormData formData) {
         formData.applyCustomerName(customer.getName());
-        formData.setEmail(customer.getEmail());
+        formData.applyEmail(customer.getEmail());
     }
 }

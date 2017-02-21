@@ -51,18 +51,18 @@ public class DefaultAddAddressControllerAction extends AbstractCustomerUpdateExe
 
     private List<UpdateAction<Customer>> buildUpdateActions(final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        updateActions.add(AddAddress.of(formData.toAddress()));
+        updateActions.add(AddAddress.of(formData.obtainAddress()));
         return updateActions;
     }
 
     private List<UpdateAction<Customer>> buildPostUpdateActions(final Customer customer, final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        findAddressId(customer, formData.toAddress())
+        findAddressId(customer, formData.obtainAddress())
                 .ifPresent(addressId -> {
-                    if (formData.isDefaultShippingAddress()) {
+                    if (formData.obtainIsDefaultShippingAddress()) {
                         updateActions.add(SetDefaultShippingAddress.of(addressId));
                     }
-                    if (formData.isDefaultBillingAddress()) {
+                    if (formData.obtainIsDefaultBillingAddress()) {
                         updateActions.add(SetDefaultBillingAddress.of(addressId));
                     }
                 });

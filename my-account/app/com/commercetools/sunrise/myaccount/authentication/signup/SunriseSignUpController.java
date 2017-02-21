@@ -19,18 +19,25 @@ import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.common.utils.SphereExceptionUtils.isDuplicatedEmailFieldError;
 
-public abstract class SunriseSignUpController<F extends SignUpFormData> extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<F, Void, CustomerSignInResult> {
+public abstract class SunriseSignUpController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<SignUpFormData, Void, CustomerSignInResult> {
 
-    private final SignUpControllerAction signUpControllerAction;
-    private final SignUpPageContentFactory signUpPageContentFactory;
+    private final SignUpFormData formData;
+    private final SignUpControllerAction controllerAction;
+    private final SignUpPageContentFactory pageContentFactory;
 
     protected SunriseSignUpController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
-                                      final SignUpControllerAction signUpControllerAction,
-                                      final SignUpPageContentFactory signUpPageContentFactory) {
+                                      final SignUpFormData formData, final SignUpControllerAction controllerAction,
+                                      final SignUpPageContentFactory pageContentFactory) {
         super(templateRenderer, formFactory);
-        this.signUpControllerAction = signUpControllerAction;
-        this.signUpPageContentFactory = signUpPageContentFactory;
+        this.formData = formData;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
+    }
+
+    @Override
+    public Class<? extends SignUpFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @RunRequestStartedHook
@@ -40,12 +47,12 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
     }
 
     @Override
-    public CompletionStage<CustomerSignInResult> executeAction(final Void input, final F formData) {
-        return signUpControllerAction.apply(formData);
+    public CompletionStage<CustomerSignInResult> executeAction(final Void input, final SignUpFormData formData) {
+        return controllerAction.apply(formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final Form<F> form, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final Form<? extends SignUpFormData> form, final ClientErrorException clientErrorException) {
         if (isDuplicatedEmailFieldError(clientErrorException)) {
             saveFormError(form, "A user with this email already exists"); // TODO i18n
             return showFormPageWithErrors(input, form);
@@ -55,15 +62,15 @@ public abstract class SunriseSignUpController<F extends SignUpFormData> extends 
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final F formData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final SignUpFormData formData);
 
     @Override
-    public PageContent createPageContent(final Void input, final Form<F> form) {
-        return signUpPageContentFactory.create(form);
+    public PageContent createPageContent(final Void input, final Form<? extends SignUpFormData> form) {
+        return pageContentFactory.create(form);
     }
 
     @Override
-    public void preFillFormData(final Void input, final F formData) {
+    public void preFillFormData(final Void input, final SignUpFormData formData) {
         // Do not pre-fill anything
     }
 }

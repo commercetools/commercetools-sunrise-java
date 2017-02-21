@@ -98,7 +98,7 @@ public class DefaultCheckoutPaymentControllerAction extends AbstractCartUpdateEx
 
     private PaymentMethodInfo findPaymentMethod(final List<PaymentMethodInfo> paymentMethods, final CheckoutPaymentFormData formData) {
         return paymentMethods.stream()
-                .filter(paymentMethod -> Objects.equals(paymentMethod.getMethod(), formData.getPayment()))
+                .filter(paymentMethod -> Objects.equals(paymentMethod.getMethod(), formData.obtainPaymentMethod()))
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("No valid payment method found")); // Should not happen after validation
     }

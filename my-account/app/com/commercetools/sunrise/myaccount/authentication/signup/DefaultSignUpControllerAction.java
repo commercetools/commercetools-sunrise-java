@@ -1,10 +1,11 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import com.commercetools.sunrise.sessions.cart.CartInSession;
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.authentication.AbstractCustomerSignInExecutor;
+import com.commercetools.sunrise.sessions.cart.CartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerDraft;
+import io.sphere.sdk.customers.CustomerDraftBuilder;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -39,7 +40,7 @@ public class DefaultSignUpControllerAction extends AbstractCustomerSignInExecuto
 
     private CustomerDraft buildDraft(final SignUpFormData formData) {
         final String cartId = cartInSession.findCartId().orElse(null);
-        return formData.toCustomerDraftBuilder()
+        return CustomerDraftBuilder.of(formData.obtainCustomerDraft())
                 .customerNumber(generateCustomerNumber())
                 .anonymousCartId(cartId)
                 .build();

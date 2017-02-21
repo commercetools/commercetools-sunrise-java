@@ -1,18 +1,29 @@
 package com.commercetools.sunrise.framework.cart.changelineitemquantity;
 
 import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints;
+import play.data.validation.Constraints.Min;
+import play.data.validation.Constraints.MinLength;
+import play.data.validation.Constraints.Required;
 
 public class DefaultChangeLineItemQuantityFormData extends Base implements ChangeLineItemQuantityFormData {
 
-    @Constraints.Required
-    @Constraints.MinLength(1)
+    @Required
+    @MinLength(1)
     private String lineItemId;
-    @Constraints.Min(1)
-    @Constraints.Required
+    @Min(1)
+    @Required
     private Long quantity;
 
     @Override
+    public String obtainLineItemId() {
+        return lineItemId;
+    }
+
+    @Override
+    public Long obtainQuantity() {
+        return quantity;
+    }
+
     public String getLineItemId() {
         return lineItemId;
     }
@@ -21,7 +32,6 @@ public class DefaultChangeLineItemQuantityFormData extends Base implements Chang
         this.lineItemId = lineItemId;
     }
 
-    @Override
     public Long getQuantity() {
         return quantity;
     }

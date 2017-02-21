@@ -26,23 +26,31 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseChangeAddressController<F extends AddressFormData> extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<F, AddressWithCustomer, Customer>, WithRequiredCustomer, WithRequiredAddress {
+public abstract class SunriseChangeAddressController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<AddressFormData, AddressWithCustomer, Customer>, WithRequiredCustomer, WithRequiredAddress {
 
+    private final AddressFormData formData;
     private final CustomerFinder customerFinder;
     private final AddressFinder addressFinder;
-    private final ChangeAddressControllerAction changeAddressControllerAction;
-    private final ChangeAddressPageContentFactory changeAddressPageContentFactory;
+    private final ChangeAddressControllerAction controllerAction;
+    private final ChangeAddressPageContentFactory pageContentFactory;
 
-    protected SunriseChangeAddressController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseChangeAddressController(final TemplateRenderer templateRenderer,
+                                             final FormFactory formFactory, final AddressFormData formData,
                                              final CustomerFinder customerFinder, final AddressFinder addressFinder,
-                                             final ChangeAddressControllerAction changeAddressControllerAction,
-                                             final ChangeAddressPageContentFactory changeAddressPageContentFactory) {
+                                             final ChangeAddressControllerAction controllerAction,
+                                             final ChangeAddressPageContentFactory pageContentFactory) {
         super(templateRenderer, formFactory);
+        this.formData = formData;
         this.customerFinder = customerFinder;
         this.addressFinder = addressFinder;
-        this.changeAddressControllerAction = changeAddressControllerAction;
-        this.changeAddressPageContentFactory = changeAddressPageContentFactory;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
+    }
+
+    @Override
+    public Class<? extends AddressFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
@@ -60,7 +68,7 @@ public abstract class SunriseChangeAddressController<F extends AddressFormData> 
     public CompletionStage<Result> show(final String languageTag, final String addressId) {
         return requireCustomer(customer ->
                 requireAddress(customer, addressId, address ->
-                        showFormPage(AddressWithCustomer.of(address, customer))));
+                        showFormPage(AddressWithCustomer.of(address, customer), formData)));
     }
 
     @RunRequestStartedHook
@@ -72,25 +80,25 @@ public abstract class SunriseChangeAddressController<F extends AddressFormData> 
     }
 
     @Override
-    public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final F formData) {
-        return changeAddressControllerAction.apply(addressWithCustomer, formData);
+    public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
+        return controllerAction.apply(addressWithCustomer, formData);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final F formData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final AddressFormData formData);
 
     @Override
-    public void preFillFormData(final AddressWithCustomer addressWithCustomer, final F formData) {
+    public void preFillFormData(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
         final Address address = addressWithCustomer.getAddress();
         final Customer customer = addressWithCustomer.getCustomer();
         formData.applyAddress(address);
-        formData.setDefaultShippingAddress(isDefaultAddress(address, customer.getDefaultShippingAddressId()));
-        formData.setDefaultBillingAddress(isDefaultAddress(address, customer.getDefaultBillingAddressId()));
+        formData.applyIsDefaultShippingAddress(isDefaultAddress(address, customer.getDefaultShippingAddressId()));
+        formData.applyIsDefaultBillingAddress(isDefaultAddress(address, customer.getDefaultBillingAddressId()));
     }
 
     @Override
-    public PageContent createPageContent(final AddressWithCustomer addressWithCustomer, final Form<F> form) {
-        return changeAddressPageContentFactory.create(addressWithCustomer, form);
+    public PageContent createPageContent(final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {
+        return pageContentFactory.create(addressWithCustomer, form);
     }
 
     private boolean isDefaultAddress(final Address address, @Nullable final String defaultAddressId) {

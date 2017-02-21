@@ -8,7 +8,7 @@ import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponent
 import com.commercetools.sunrise.framework.CartFinder;
 import com.commercetools.sunrise.framework.cart.cartdetail.SunriseCartDetailController;
 import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
-import controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.framework.components.PageHeaderControllerComponentSupplier;
 
 import javax.inject.Inject;
 
@@ -23,8 +23,8 @@ public final class CartDetailController extends SunriseCartDetailController {
     @Inject
     public CartDetailController(final TemplateRenderer templateRenderer,
                                 final CartFinder cartFinder,
-                                final CartDetailPageContentFactory cartDetailPageContentFactory) {
-        super(templateRenderer, cartFinder, cartDetailPageContentFactory);
+                                final CartDetailPageContentFactory pageContentFactory) {
+        super(templateRenderer, cartFinder, pageContentFactory);
     }
 
     @Override
