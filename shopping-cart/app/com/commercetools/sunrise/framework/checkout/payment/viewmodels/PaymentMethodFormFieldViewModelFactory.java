@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.framework.checkout.payment.viewmodels;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.forms.FormFieldWithOptions;
 import com.commercetools.sunrise.common.models.FormFieldViewModelFactory;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 import play.data.Form;
 
@@ -47,9 +47,9 @@ public class PaymentMethodFormFieldViewModelFactory extends FormFieldViewModelFa
         fillList(viewModel, formFieldWithOptions);
     }
 
-    protected void fillList(final PaymentMethodFormFieldViewModel viewModel, final FormFieldWithOptions<PaymentMethodInfo> data) {
-        viewModel.setList(data.getFormOptions().stream()
-                .map(paymentMethodInfo -> paymentFormSelectableOptionViewModelFactory.create(paymentMethodInfo, data.getFormField().value()))
+    protected void fillList(final PaymentMethodFormFieldViewModel viewModel, final FormFieldWithOptions<PaymentMethodInfo> formFieldWithOptions) {
+        viewModel.setList(formFieldWithOptions.getFormOptions().stream()
+                .map(paymentMethodInfo -> paymentFormSelectableOptionViewModelFactory.create(paymentMethodInfo, formFieldWithOptions.getFormField().value()))
                 .collect(toList()));
     }
 }
