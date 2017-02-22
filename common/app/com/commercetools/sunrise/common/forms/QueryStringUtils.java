@@ -83,7 +83,7 @@ public final class QueryStringUtils {
     }
 
     /**
-     * Builds a URI from the given path and the query string, of the form: path?foo=1&bar=2
+     * Builds a URI from the given path and the query string, of the form: {@code path?foo=1&bar=2}
      * @param path URI path without query string
      * @param queryString the query string
      * @return a URI composed by the path and query string
