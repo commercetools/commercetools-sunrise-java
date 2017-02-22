@@ -9,15 +9,15 @@ public class I18nIdentifierFactoryTest {
     @Test
     public void parsesIdentifier() throws Exception {
         final I18nIdentifier identifier = i18nIdentifierFactory().create("bundle:message.key");
-        assertThat(identifier.bundle()).isEqualTo("bundle");
-        assertThat(identifier.messageKey()).isEqualTo("message.key");
+        assertThat(identifier.getBundle()).isEqualTo("bundle");
+        assertThat(identifier.getMessageKey()).isEqualTo("message.key");
     }
 
     @Test
     public void parsesIdentifierWithoutBundle() throws Exception {
         final I18nIdentifier identifier = i18nIdentifierFactory().create("message.key");
-        assertThat(identifier.bundle()).isEqualTo("main");
-        assertThat(identifier.messageKey()).isEqualTo("message.key");
+        assertThat(identifier.getBundle()).isEqualTo("main");
+        assertThat(identifier.getMessageKey()).isEqualTo("message.key");
     }
 
     private I18nIdentifierFactory i18nIdentifierFactory() {
