@@ -37,7 +37,7 @@ lazy val common = project
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.sunriseTheme ++ Dependencies.sunriseModules ++ Dependencies.commonLib: _*)
-  .dependsOn(`move-to-sdk`, `test-lib`)
+  .dependsOn(`move-to-sdk`, `test-lib` % "test,it,pt")
 
 lazy val `product-catalog` = project
   .enablePlugins(PlayJava)
