@@ -6,5 +6,5 @@ import play.mvc.Call;
 @ImplementedBy(ReflectionWebJarAssetsReverseRouter.class)
 public interface WebJarAssetsReverseRouter {
 
-    Call webJarAssetsCall(final String file);
+    Call webJarAssetsCall(final String filepath);
 }

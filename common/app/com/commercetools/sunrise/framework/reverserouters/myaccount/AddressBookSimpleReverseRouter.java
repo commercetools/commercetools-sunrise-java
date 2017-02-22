@@ -20,13 +20,13 @@ interface AddressBookSimpleReverseRouter {
 
     String CHANGE_ADDRESS_PAGE = "changeAddressPageCall";
 
-    Call changeAddressPageCall(final String languageTag, final String addressId);
+    Call changeAddressPageCall(final String languageTag, final String addressIdentifier);
 
     String CHANGE_ADDRESS_PROCESS = "changeAddressProcessCall";
 
-    Call changeAddressProcessCall(final String languageTag, final String addressId);
+    Call changeAddressProcessCall(final String languageTag, final String addressIdentifier);
 
     String REMOVE_ADDRESS_PROCESS = "removeAddressProcessCall";
 
-    Call removeAddressProcessCall(final String languageTag, final String addressId);
+    Call removeAddressProcessCall(final String languageTag, final String addressIdentifier);
 }

@@ -25,27 +25,15 @@ public interface ProductReverseRouter extends ProductSimpleReverseRouter, Locali
         return searchProcessCall(languageTag());
     }
 
-    default Optional<Call> productDetailPageCall(final ProductProjection product, final ProductVariant productVariant) {
-        return productDetailPageCall(locale(), product, productVariant);
+    default Optional<Call> productDetailPageCallByProductSlugAndSku(final ProductProjection product, final ProductVariant productVariant) {
+        return productDetailPageCallByProductSlugAndSku(locale(), product, productVariant);
     }
 
-    default String productDetailPageUrlOrEmpty(final ProductProjection product, final ProductVariant productVariant) {
-        return productDetailPageUrlOrEmpty(locale(), product, productVariant);
+    default Optional<Call> productDetailPageCallByProductSlugAndSku(final LineItem lineItem) {
+        return productDetailPageCallByProductSlugAndSku(locale(), lineItem);
     }
 
-    default Optional<Call> productDetailPageCall(final LineItem lineItem) {
-        return productDetailPageCall(locale(), lineItem);
-    }
-
-    default String productDetailPageUrlOrEmpty(final LineItem lineItem) {
-        return productDetailPageUrlOrEmpty(locale(), lineItem);
-    }
-
-    default Optional<Call> productOverviewPageCall(final Category category) {
-        return productOverviewPageCall(locale(), category);
-    }
-
-    default String productOverviewPageUrlOrEmpty(final Category category) {
-        return productOverviewPageUrlOrEmpty(locale(), category);
+    default Optional<Call> productOverviewPageCallByCategorySlug(final Category category) {
+        return productOverviewPageCallByCategorySlug(locale(), category);
     }
 }

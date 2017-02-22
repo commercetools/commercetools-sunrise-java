@@ -18,11 +18,7 @@ public interface MyOrdersReverseRouter extends MyOrdersSimpleReverseRouter, Loca
         return myOrderDetailPageCall(languageTag(), orderNumber);
     }
 
-    default Optional<Call> myOrderDetailPageCall(final Order order) {
-        return myOrderDetailPageCall(locale(), order);
-    }
-
-    default String myOrderDetailPageUrlOrEmpty(final Order order) {
-        return myOrderDetailPageUrlOrEmpty(locale(), order);
+    default Optional<Call> myOrderDetailPageCallByOrderNumber(final Order order) {
+        return myOrderDetailPageCallByOrderNumber(locale(), order);
     }
 }

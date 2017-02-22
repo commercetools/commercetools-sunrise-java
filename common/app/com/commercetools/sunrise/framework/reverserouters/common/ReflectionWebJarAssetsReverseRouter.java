@@ -52,7 +52,7 @@ final class ReflectionWebJarAssetsReverseRouter extends Base implements WebJarAs
     }
 
     @Override
-    public Call webJarAssetsCall(final String file) {
-        return reverseCaller.call(file);
+    public Call webJarAssetsCall(final String filepath) {
+        return reverseCaller.call(filepath);
     }
 }

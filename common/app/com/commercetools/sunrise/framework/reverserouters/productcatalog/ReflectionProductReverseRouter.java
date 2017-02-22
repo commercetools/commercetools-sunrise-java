@@ -23,13 +23,13 @@ final class ReflectionProductReverseRouter extends AbstractReflectionReverseRout
     }
 
     @Override
-    public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
-        return productDetailPageCaller.call(languageTag, productSlug, sku);
+    public Call productDetailPageCall(final String languageTag, final String productIdentifier, final String productVariantIdentifier) {
+        return productDetailPageCaller.call(languageTag, productIdentifier, productVariantIdentifier);
     }
 
     @Override
-    public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
-        return productOverviewPageCaller.call(languageTag, categorySlug);
+    public Call productOverviewPageCall(final String languageTag, final String categoryIdentifier) {
+        return productOverviewPageCaller.call(languageTag, categoryIdentifier);
     }
 
     @Override

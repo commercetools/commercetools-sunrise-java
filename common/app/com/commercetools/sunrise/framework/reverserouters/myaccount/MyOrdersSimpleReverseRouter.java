@@ -16,14 +16,10 @@ interface MyOrdersSimpleReverseRouter {
 
     String MY_ORDER_DETAIL_PAGE = "myOrderDetailPageCall";
 
-    Call myOrderDetailPageCall(final String languageTag, final String orderNumber);
+    Call myOrderDetailPageCall(final String languageTag, final String orderIdentifier);
 
-    default Optional<Call> myOrderDetailPageCall(final Locale locale, final Order order) {
+    default Optional<Call> myOrderDetailPageCallByOrderNumber(final Locale locale, final Order order) {
         return Optional.ofNullable(order.getOrderNumber())
                 .map(orderNumber -> myOrderDetailPageCall(locale.toLanguageTag(), orderNumber));
-    }
-
-    default String myOrderDetailPageUrlOrEmpty(final Locale locale, final Order order) {
-        return myOrderDetailPageCall(locale, order).map(Call::url).orElse("");
     }
 }

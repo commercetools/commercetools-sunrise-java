@@ -19,13 +19,13 @@ public final class TestableProductReverseRouter implements ProductReverseRouter 
     }
 
     @Override
-    public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
-        return new TestableCall(productSlug + sku);
+    public Call productDetailPageCall(final String languageTag, final String productIdentifier, final String productVariantIdentifier) {
+        return new TestableCall(productIdentifier + productVariantIdentifier);
     }
 
     @Override
-    public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
-        return new TestableCall(categorySlug);
+    public Call productOverviewPageCall(final String languageTag, final String categoryIdentifier) {
+        return new TestableCall(categoryIdentifier);
     }
 
     @Override

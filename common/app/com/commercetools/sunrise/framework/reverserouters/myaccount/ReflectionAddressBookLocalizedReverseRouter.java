@@ -34,17 +34,17 @@ final class ReflectionAddressBookLocalizedReverseRouter extends AbstractLocalize
     }
 
     @Override
-    public Call changeAddressPageCall(final String languageTag, final String addressId) {
-        return delegate.changeAddressPageCall(languageTag, addressId);
+    public Call changeAddressPageCall(final String languageTag, final String addressIdentifier) {
+        return delegate.changeAddressPageCall(languageTag, addressIdentifier);
     }
 
     @Override
-    public Call changeAddressProcessCall(final String languageTag, final String addressId) {
-        return delegate.changeAddressProcessCall(languageTag, addressId);
+    public Call changeAddressProcessCall(final String languageTag, final String addressIdentifier) {
+        return delegate.changeAddressProcessCall(languageTag, addressIdentifier);
     }
 
     @Override
-    public Call removeAddressProcessCall(final String languageTag, final String addressId) {
-        return delegate.removeAddressProcessCall(languageTag, addressId);
+    public Call removeAddressProcessCall(final String languageTag, final String addressIdentifier) {
+        return delegate.removeAddressProcessCall(languageTag, addressIdentifier);
     }
 }

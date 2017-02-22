@@ -6,6 +6,7 @@ import com.commercetools.sunrise.framework.reverserouters.productcatalog.Product
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import play.Configuration;
+import play.mvc.Call;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -52,7 +53,10 @@ public class CategoryViewModelFactory extends ViewModelFactory<CategoryViewModel
     }
 
     protected void fillUrl(final CategoryViewModel viewModel, final Category category) {
-        viewModel.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(category));
+        viewModel.setUrl(productReverseRouter
+                .productOverviewPageCallByCategorySlug(category)
+                .map(Call::url)
+                .orElse(""));
     }
 
     protected void fillSale(final CategoryViewModel viewModel, final Category category) {

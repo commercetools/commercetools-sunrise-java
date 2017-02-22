@@ -44,17 +44,17 @@ final class ReflectionAddressBookReverseRouter extends AbstractReflectionReverse
     }
 
     @Override
-    public Call changeAddressPageCall(final String languageTag, final String addressId) {
-        return changeAddressPageCaller.call(languageTag, addressId);
+    public Call changeAddressPageCall(final String languageTag, final String addressIdentifier) {
+        return changeAddressPageCaller.call(languageTag, addressIdentifier);
     }
 
     @Override
-    public Call changeAddressProcessCall(final String languageTag, final String addressId) {
-        return changeAddressProcessCaller.call(languageTag, addressId);
+    public Call changeAddressProcessCall(final String languageTag, final String addressIdentifier) {
+        return changeAddressProcessCaller.call(languageTag, addressIdentifier);
     }
 
     @Override
-    public Call removeAddressProcessCall(final String languageTag, final String addressId) {
-        return removeAddressProcessCaller.call(languageTag, addressId);
+    public Call removeAddressProcessCall(final String languageTag, final String addressIdentifier) {
+        return removeAddressProcessCaller.call(languageTag, addressIdentifier);
     }
 }

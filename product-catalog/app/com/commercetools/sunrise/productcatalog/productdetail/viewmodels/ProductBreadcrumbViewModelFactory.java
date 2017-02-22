@@ -7,6 +7,7 @@ import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductWithVariant;
 import io.sphere.sdk.categories.CategoryTree;
+import play.mvc.Call;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -60,7 +61,11 @@ public class ProductBreadcrumbViewModelFactory extends AbstractBreadcrumbViewMod
     private BreadcrumbLinkViewModel createProductLink(final ProductWithVariant productWithVariant) {
         final BreadcrumbLinkViewModel linkViewModel = new BreadcrumbLinkViewModel();
         linkViewModel.setText(productWithVariant.getProduct().getName());
-        linkViewModel.setUrl(getProductReverseRouter().productDetailPageUrlOrEmpty(productWithVariant.getProduct(), productWithVariant.getVariant()));
+        final String productUrl = getProductReverseRouter()
+                .productDetailPageCallByProductSlugAndSku(productWithVariant.getProduct(), productWithVariant.getVariant())
+                .map(Call::url)
+                .orElse("");
+        linkViewModel.setUrl(productUrl);
         return linkViewModel;
     }
 }

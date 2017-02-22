@@ -3,6 +3,7 @@ package com.commercetools.sunrise.common.models;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.ProductReverseRouter;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
+import play.mvc.Call;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,7 +59,10 @@ public abstract class AbstractBreadcrumbViewModelFactory<D> extends ViewModelFac
     private BreadcrumbLinkViewModel createCategoryLinkData(final Category category) {
         final BreadcrumbLinkViewModel linkViewModel = new BreadcrumbLinkViewModel();
         linkViewModel.setText(category.getName());
-        linkViewModel.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(category));
+        linkViewModel.setUrl(productReverseRouter
+                .productOverviewPageCallByCategorySlug(category)
+                .map(Call::url)
+                .orElse(""));
         return linkViewModel;
     }
 }

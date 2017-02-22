@@ -24,13 +24,13 @@ final class ReflectionProductLocalizedReverseRouter extends AbstractLocalizedRev
     }
 
     @Override
-    public Call productDetailPageCall(final String languageTag, final String productSlug, final String sku) {
-        return delegate.productDetailPageCall(languageTag, productSlug, sku);
+    public Call productDetailPageCall(final String languageTag, final String productIdentifier, final String productVariantIdentifier) {
+        return delegate.productDetailPageCall(languageTag, productIdentifier, productVariantIdentifier);
     }
 
     @Override
-    public Call productOverviewPageCall(final String languageTag, final String categorySlug) {
-        return delegate.productOverviewPageCall(languageTag, categorySlug);
+    public Call productOverviewPageCall(final String languageTag, final String categoryIdentifier) {
+        return delegate.productOverviewPageCall(languageTag, categoryIdentifier);
     }
 
     @Override
@@ -39,32 +39,17 @@ final class ReflectionProductLocalizedReverseRouter extends AbstractLocalizedRev
     }
 
     @Override
-    public Optional<Call> productDetailPageCall(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
-        return delegate.productDetailPageCall(locale, product, productVariant);
+    public Optional<Call> productDetailPageCallByProductSlugAndSku(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
+        return delegate.productDetailPageCallByProductSlugAndSku(locale, product, productVariant);
     }
 
     @Override
-    public String productDetailPageUrlOrEmpty(final Locale locale, final ProductProjection product, final ProductVariant productVariant) {
-        return delegate.productDetailPageUrlOrEmpty(locale, product, productVariant);
+    public Optional<Call> productDetailPageCallByProductSlugAndSku(final Locale locale, final LineItem lineItem) {
+        return delegate.productDetailPageCallByProductSlugAndSku(locale, lineItem);
     }
 
     @Override
-    public Optional<Call> productDetailPageCall(final Locale locale, final LineItem lineItem) {
-        return delegate.productDetailPageCall(locale, lineItem);
-    }
-
-    @Override
-    public String productDetailPageUrlOrEmpty(final Locale locale, final LineItem lineItem) {
-        return delegate.productDetailPageUrlOrEmpty(locale, lineItem);
-    }
-
-    @Override
-    public Optional<Call> productOverviewPageCall(final Locale locale, final Category category) {
-        return delegate.productOverviewPageCall(locale, category);
-    }
-
-    @Override
-    public String productOverviewPageUrlOrEmpty(final Locale locale, final Category category) {
-        return delegate.productOverviewPageUrlOrEmpty(locale, category);
+    public Optional<Call> productOverviewPageCallByCategorySlug(final Locale locale, final Category category) {
+        return delegate.productOverviewPageCallByCategorySlug(locale, category);
     }
 }

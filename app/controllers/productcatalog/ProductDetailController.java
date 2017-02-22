@@ -51,7 +51,8 @@ public final class ProductDetailController extends SunriseProductDetailControlle
 
     @Override
     public CompletionStage<Result> handleNotFoundProductVariant(final ProductProjection product) {
-        return productReverseRouter.productDetailPageCall(product, product.getMasterVariant())
+        return productReverseRouter
+                .productDetailPageCallByProductSlugAndSku(product, product.getMasterVariant())
                 .map(this::redirectTo)
                 .orElseGet(() -> completedFuture(notFound()));
     }

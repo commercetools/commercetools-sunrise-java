@@ -8,6 +8,7 @@ import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierFactory;
 import com.commercetools.sunrise.framework.template.i18n.I18nResolver;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import io.sphere.sdk.orders.Order;
+import play.mvc.Call;
 
 import javax.inject.Inject;
 import java.time.format.DateTimeFormatter;
@@ -60,7 +61,10 @@ public class OrderOverviewViewModelFactory extends ViewModelFactory<OrderOvervie
     }
 
     protected void fillOrderUrl(final OrderOverviewViewModel viewModel, final Order order) {
-        viewModel.setShowOrderUrl(myOrdersReverseRouter.myOrderDetailPageUrlOrEmpty(order));
+        viewModel.setShowOrderUrl(myOrdersReverseRouter
+                .myOrderDetailPageCallByOrderNumber(order)
+                .map(Call::url)
+                .orElse(""));
     }
 
     protected void fillOrderNumber(final OrderOverviewViewModel viewModel, final Order order) {

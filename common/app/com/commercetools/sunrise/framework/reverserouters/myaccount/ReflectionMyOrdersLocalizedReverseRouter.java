@@ -26,17 +26,12 @@ final class ReflectionMyOrdersLocalizedReverseRouter extends AbstractLocalizedRe
     }
 
     @Override
-    public Call myOrderDetailPageCall(final String languageTag, final String orderNumber) {
-        return delegate.myOrderDetailPageCall(languageTag, orderNumber);
+    public Call myOrderDetailPageCall(final String languageTag, final String orderIdentifier) {
+        return delegate.myOrderDetailPageCall(languageTag, orderIdentifier);
     }
 
     @Override
-    public Optional<Call> myOrderDetailPageCall(final Locale locale, final Order order) {
-        return delegate.myOrderDetailPageCall(locale, order);
-    }
-
-    @Override
-    public String myOrderDetailPageUrlOrEmpty(final Locale locale, final Order order) {
-        return delegate.myOrderDetailPageUrlOrEmpty(locale, order);
+    public Optional<Call> myOrderDetailPageCallByOrderNumber(final Locale locale, final Order order) {
+        return delegate.myOrderDetailPageCallByOrderNumber(locale, order);
     }
 }

@@ -19,15 +19,15 @@ public interface AddressBookReverseRouter extends AddressBookSimpleReverseRouter
         return addAddressProcessCall(languageTag());
     }
 
-    default Call changeAddressPageCall(final String addressId) {
-        return changeAddressPageCall(languageTag(), addressId);
+    default Call changeAddressPageCall(final String addressIdentifier) {
+        return changeAddressPageCall(languageTag(), addressIdentifier);
     }
 
-    default Call changeAddressProcessCall(final String addressId) {
-        return changeAddressProcessCall(languageTag(), addressId);
+    default Call changeAddressProcessCall(final String addressIdentifier) {
+        return changeAddressProcessCall(languageTag(), addressIdentifier);
     }
 
-    default Call removeAddressProcessCall(final String addressId) {
-        return removeAddressProcessCall(languageTag(), addressId);
+    default Call removeAddressProcessCall(final String addressIdentifier) {
+        return removeAddressProcessCall(languageTag(), addressIdentifier);
     }
 }

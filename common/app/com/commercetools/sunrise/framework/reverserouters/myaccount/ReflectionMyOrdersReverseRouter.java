@@ -26,7 +26,7 @@ final class ReflectionMyOrdersReverseRouter extends AbstractReflectionReverseRou
     }
 
     @Override
-    public Call myOrderDetailPageCall(final String languageTag, final String orderNumber) {
-        return myOrderDetailPageCaller.call(languageTag, orderNumber);
+    public Call myOrderDetailPageCall(final String languageTag, final String orderIdentifier) {
+        return myOrderDetailPageCaller.call(languageTag, orderIdentifier);
     }
 }
