@@ -1,27 +1,31 @@
-sudo: required
+dist: trusty
+sudo: false
+
 language: scala
 scala:
 - 2.11.7
-services:
-  - docker
-before_install:
-- docker pull java:8u92-jdk-alpine
-- wget https://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/0.13.11/sbt-launch.jar
-- echo 'java -Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M -jar sbt-launch.jar "$@"' > sbt.sh
+jdk:
+- oraclejdk8
+
+cache:
+  # md5deep
+  # - https://github.com/travis-ci/travis-ci/issues/3122
+  # - https://github.com/travis-ci/travis-ci/issues/3039
+  branch: md5deep
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/
+before_cache:
+  # Tricks to avoid unnecessary cache updates
+  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+  - find $HOME/.sbt -name "*.lock" -delete
+
 script:
-- "docker run -it --rm -e SUNRISE_IT_CTP_PROJECT_KEY=$SUNRISE_IT_CTP_PROJECT_KEY -e SUNRISE_IT_CTP_CLIENT_ID=$SUNRISE_IT_CTP_CLIENT_ID -e SUNRISE_IT_CTP_CLIENT_SECRET=$SUNRISE_IT_CTP_CLIENT_SECRET --volume=$(pwd):/src --volume=/home/travis/.ivy2:/ivy2  --volume=/home/travis/.sbt:/sbt -w /src java:8u92-jdk-alpine sh sbt.sh compile test it:test pt:test unidoc"
-#- rm conf/dev.conf Enable setup widget first
-- ls -l
-- sudo chown -R travis:travis /home/travis
-- ls -l
+- sbt compile test it:test pt:test unidoc
 - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then ./sbt
   "gitPublish target/javaunidoc https://$GH_TOKEN:x-oauth-basic@github.com/$TRAVIS_REPO_SLUG.git
   javadoc sphere-oss automation@commercetools.de"; fi
-jdk:
-- oraclejdk8
-env:
-  matrix:
-  - SBT_OPTS="-XX:PermSize=512M -XX:MaxPermSize=1024M"
+
 notifications:
   email:
     on_success: never
