@@ -56,33 +56,33 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     }
 
     @Override
-    protected void fillTitle(final ProductOverviewPageContent model, final ProductsWithCategory productsWithCategory) {
+    protected void fillTitle(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
         if (productsWithCategory.getCategory() != null) {
-            model.setTitle(productsWithCategory.getCategory().getName().find(singletonList(locale)).orElse(""));
+            viewModel.setTitle(productsWithCategory.getCategory().getName().find(singletonList(locale)).orElse(""));
         }
     }
 
-    protected void fillFilterProductsUrl(final ProductOverviewPageContent model, final ProductsWithCategory productsWithCategory) {
-        model.setFilterProductsUrl(httpRequest.path());
+    protected void fillFilterProductsUrl(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
+        viewModel.setFilterProductsUrl(httpRequest.path());
     }
 
-    protected void fillProducts(final ProductOverviewPageContent model, final ProductsWithCategory productsWithCategory) {
-        model.setProducts(productListViewModelFactory.create(productsWithCategory.getProducts().getResults()));
+    protected void fillProducts(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
+        viewModel.setProducts(productListViewModelFactory.create(productsWithCategory.getProducts().getResults()));
     }
 
-    protected void fillSeo(final ProductOverviewPageContent model, final ProductsWithCategory productsWithCategory) {
-        model.setSeo(seoViewModelFactory.create(productsWithCategory));
+    protected void fillSeo(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
+        viewModel.setSeo(seoViewModelFactory.create(productsWithCategory));
     }
 
-    protected void fillBreadcrumb(final ProductOverviewPageContent model, final ProductsWithCategory productsWithCategory) {
-        model.setBreadcrumb(categoryBreadcrumbViewModelFactory.create(productsWithCategory));
+    protected void fillBreadcrumb(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
+        viewModel.setBreadcrumb(categoryBreadcrumbViewModelFactory.create(productsWithCategory));
     }
 
-    protected void fillJumbotron(final ProductOverviewPageContent model, final ProductsWithCategory productsWithCategory) {
-        model.setJumbotron(jumbotronViewModelFactory.create(productsWithCategory));
+    protected void fillJumbotron(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
+        viewModel.setJumbotron(jumbotronViewModelFactory.create(productsWithCategory));
     }
 
-    protected void fillBanner(final ProductOverviewPageContent model, final ProductsWithCategory productsWithCategory) {
-        model.setBanner(bannerViewModelFactory.create(productsWithCategory));
+    protected void fillBanner(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
+        viewModel.setBanner(bannerViewModelFactory.create(productsWithCategory));
     }
 }

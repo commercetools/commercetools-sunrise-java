@@ -78,21 +78,21 @@ public final class FacetedSearchControllerComponent implements ControllerCompone
     }
 
     private FacetSelectorViewModel createFacetSelectorViewModel(final FacetedSearchSelector facetedSearchSelector, final PagedSearchResult<ProductProjection> searchResult) {
-        final FacetSelectorViewModel model = new FacetSelectorViewModel();
+        final FacetSelectorViewModel viewModel = new FacetSelectorViewModel();
         final Facet<ProductProjection> facet = facetedSearchSelector.getFacet(searchResult);
         if (facet.getLabel() != null) {
             final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(facet.getLabel());
             final String label = i18nResolver.getOrKey(singletonList(locale), i18nIdentifier);
-            model.setFacet(facet.withLabel(label));
+            viewModel.setFacet(facet.withLabel(label));
         } else {
-            model.setFacet(facet);
+            viewModel.setFacet(facet);
         }
-        return model;
+        return viewModel;
     }
 
     private FacetSelectorListViewModel createFacetSelectorList(final List<FacetSelectorViewModel> facetSelectorViewModels) {
-        final FacetSelectorListViewModel model = new FacetSelectorListViewModel();
-        model.setList(facetSelectorViewModels);
-        return model;
+        final FacetSelectorListViewModel viewModel = new FacetSelectorListViewModel();
+        viewModel.setList(facetSelectorViewModels);
+        return viewModel;
     }
 }

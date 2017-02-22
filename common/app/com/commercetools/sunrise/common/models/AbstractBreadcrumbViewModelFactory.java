@@ -37,7 +37,7 @@ public abstract class AbstractBreadcrumbViewModelFactory<D> extends ViewModelFac
         fillLinks(viewModel, input);
     }
 
-    protected abstract void fillLinks(final BreadcrumbViewModel model, final D data);
+    protected abstract void fillLinks(final BreadcrumbViewModel viewModel, final D data);
 
     protected List<BreadcrumbLinkViewModel> createCategoryTreeLinks(final Category category) {
         return getCategoryWithAncestors(category).stream()

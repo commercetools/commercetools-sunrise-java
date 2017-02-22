@@ -20,17 +20,17 @@ public class LogInPageContentFactory extends AbstractAuthenticationPageContentFa
     }
 
     @Override
-    protected void fillLogInForm(final AuthenticationPageContent model, final Form<? extends LogInFormData> form) {
-        model.setLogInForm(form);
+    protected void fillLogInForm(final AuthenticationPageContent viewModel, final Form<? extends LogInFormData> form) {
+        viewModel.setLogInForm(form);
     }
 
     @Override
-    protected void fillSignUpForm(final AuthenticationPageContent model, final Form<? extends LogInFormData> form) {
-        model.setSignUpForm(null);
+    protected void fillSignUpForm(final AuthenticationPageContent viewModel, final Form<? extends LogInFormData> form) {
+        viewModel.setSignUpForm(null);
     }
 
     @Override
-    protected void fillSignUpFormSettings(final AuthenticationPageContent model, final Form<? extends LogInFormData> form) {
-        model.setSignUpFormSettings(signUpFormSettingsViewModelFactory.create(null));
+    protected void fillSignUpFormSettings(final AuthenticationPageContent viewModel, final Form<? extends LogInFormData> form) {
+        viewModel.setSignUpFormSettings(signUpFormSettingsViewModelFactory.create(null));
     }
 }

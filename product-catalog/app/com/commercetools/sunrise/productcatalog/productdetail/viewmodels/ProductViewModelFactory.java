@@ -55,43 +55,43 @@ public class ProductViewModelFactory extends ViewModelFactory<ProductViewModel, 
         fillAttributeCombination(viewModel, productWithVariant);
     }
 
-    protected void fillProductId(final ProductViewModel model, final ProductWithVariant productWithVariant) {
-        model.setProductId(productWithVariant.getProduct().getId());
+    protected void fillProductId(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setProductId(productWithVariant.getProduct().getId());
     }
 
-    protected void fillVariantId(final ProductViewModel model, final ProductWithVariant productWithVariant) {
-        model.setVariantId(productWithVariant.getVariant().getId());
+    protected void fillVariantId(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setVariantId(productWithVariant.getVariant().getId());
     }
 
-    protected void fillDescription(final ProductViewModel model, final ProductWithVariant productWithVariant) {
-        model.setDescription(productWithVariant.getProduct().getDescription());
+    protected void fillDescription(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setDescription(productWithVariant.getProduct().getDescription());
     }
 
-    protected void fillGallery(final ProductViewModel model, final ProductWithVariant productWithVariant) {
-        model.setGallery(productGalleryViewModelFactory.create(productWithVariant));
+    protected void fillGallery(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setGallery(productGalleryViewModelFactory.create(productWithVariant));
     }
 
-    protected void fillDetails(final ProductViewModel model, final ProductWithVariant productWithVariant) {
-        model.setDetails(productDetailsViewModelFactory.create(productWithVariant));
+    protected void fillDetails(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setDetails(productDetailsViewModelFactory.create(productWithVariant));
     }
 
-    protected void fillVariant(final ProductViewModel model, final ProductWithVariant productWithVariant) {
-        model.setVariant(productVariantViewModelFactory.create(productWithVariant));
+    protected void fillVariant(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setVariant(productVariantViewModelFactory.create(productWithVariant));
     }
 
-    protected void fillAttributes(final ProductViewModel model, final ProductWithVariant productWithVariant) {
-        model.setAttributes(selectableProductAttributeViewModelFactory.createList(productWithVariant));
+    protected void fillAttributes(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setAttributes(selectableProductAttributeViewModelFactory.createList(productWithVariant));
     }
 
-    protected void fillAttributeCombination(final ProductViewModel model, final ProductWithVariant productWithVariant) {
-        model.setVariants(productVariantReferenceViewModelMapFactory.create(productWithVariant));
+    protected void fillAttributeCombination(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setVariants(productVariantReferenceViewModelMapFactory.create(productWithVariant));
     }
 
-    protected void fillVariantIdentifiers(final ProductViewModel model, final ProductWithVariant productWithVariant) {
-        model.setVariantIdentifiers(productAttributeSettings.getSelectableAttributes());
+    protected void fillVariantIdentifiers(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setVariantIdentifiers(productAttributeSettings.getSelectableAttributes());
     }
 
-    protected void fillAvailability(final ProductViewModel model, final ProductWithVariant productWithVariant) {
+    protected void fillAvailability(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
         Optional.ofNullable(productWithVariant.getVariant().getAvailability())
                 .flatMap(productVariantAvailability -> Optional.ofNullable(productVariantAvailability.getAvailableQuantity()))
                 .ifPresent(quantity -> {
@@ -103,7 +103,7 @@ public class ProductViewModelFactory extends ViewModelFactory<ProductViewModel, 
                     } else {
                         status = "fewItemsLeft";
                     }
-                    model.setAvailability(status);
+                    viewModel.setAvailability(status);
                 });
     }
 }

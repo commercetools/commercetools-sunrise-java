@@ -47,22 +47,22 @@ public class CategoryViewModelFactory extends ViewModelFactory<CategoryViewModel
         fillChildren(viewModel, category);
     }
 
-    protected void fillText(final CategoryViewModel model, final Category category) {
-        model.setText(category.getName());
+    protected void fillText(final CategoryViewModel viewModel, final Category category) {
+        viewModel.setText(category.getName());
     }
 
-    protected void fillUrl(final CategoryViewModel model, final Category category) {
-        model.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(category));
+    protected void fillUrl(final CategoryViewModel viewModel, final Category category) {
+        viewModel.setUrl(productReverseRouter.productOverviewPageUrlOrEmpty(category));
     }
 
-    protected void fillSale(final CategoryViewModel model, final Category category) {
-        model.setSale(Optional.ofNullable(category.getExternalId())
+    protected void fillSale(final CategoryViewModel viewModel, final Category category) {
+        viewModel.setSale(Optional.ofNullable(category.getExternalId())
                 .map(id -> id.equals(saleCategoryExtId))
                 .orElse(false));
     }
 
-    protected void fillChildren(final CategoryViewModel model, final Category category) {
-        model.setChildren(categoryTree.findChildren(category).stream()
+    protected void fillChildren(final CategoryViewModel viewModel, final Category category) {
+        viewModel.setChildren(categoryTree.findChildren(category).stream()
                 .map(this::create)
                 .collect(toList()));
     }

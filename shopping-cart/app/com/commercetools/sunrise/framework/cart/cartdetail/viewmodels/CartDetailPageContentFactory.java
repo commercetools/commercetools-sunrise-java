@@ -35,11 +35,11 @@ public class CartDetailPageContentFactory extends PageContentFactory<CartDetailP
     }
 
     @Override
-    protected void fillTitle(final CartDetailPageContent model, @Nullable final Cart cart) {
-        model.setTitle(pageTitleResolver.getOrEmpty("checkout:cartDetailPage.title"));
+    protected void fillTitle(final CartDetailPageContent viewModel, @Nullable final Cart cart) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:cartDetailPage.title"));
     }
 
-    protected void fillCart(final CartDetailPageContent model, @Nullable final Cart cart) {
-        model.setCart(cartViewModelFactory.create(cart));
+    protected void fillCart(final CartDetailPageContent viewModel, @Nullable final Cart cart) {
+        viewModel.setCart(cartViewModelFactory.create(cart));
     }
 }

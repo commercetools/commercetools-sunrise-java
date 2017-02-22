@@ -24,13 +24,17 @@ public class HomePageContentFactory extends PageContentFactory<HomePageContent, 
         return super.create(input);
     }
 
+    public final HomePageContent create() {
+        return create(null);
+    }
+
     @Override
     protected final void initialize(final HomePageContent viewModel, final Void input) {
         super.initialize(viewModel, input);
     }
 
     @Override
-    protected void fillTitle(final HomePageContent model, final Void input) {
-        model.setTitle(pageTitleResolver.getOrEmpty("catalog:home.title"));
+    protected void fillTitle(final HomePageContent viewModel, final Void input) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("catalog:home.title"));
     }
 }

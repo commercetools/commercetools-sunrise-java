@@ -29,22 +29,22 @@ public class CountryFormSelectableOptionViewModelFactory extends SelectableViewM
     }
 
     @Override
-    protected final void initialize(final CountryFormSelectableOptionViewModel model, final CountryCode option, @Nullable final CountryCode selectedValue) {
-        fillLabel(model, option, selectedValue);
-        fillValue(model, option, selectedValue);
-        fillSelected(model, option, selectedValue);
+    protected final void initialize(final CountryFormSelectableOptionViewModel viewModel, final CountryCode option, @Nullable final CountryCode selectedValue) {
+        fillLabel(viewModel, option, selectedValue);
+        fillValue(viewModel, option, selectedValue);
+        fillSelected(viewModel, option, selectedValue);
     }
 
-    protected void fillLabel(final CountryFormSelectableOptionViewModel model, final CountryCode option, @Nullable final CountryCode selectedValue) {
-        model.setLabel(option.toLocale().getDisplayCountry(locale));
+    protected void fillLabel(final CountryFormSelectableOptionViewModel viewModel, final CountryCode option, @Nullable final CountryCode selectedValue) {
+        viewModel.setLabel(option.toLocale().getDisplayCountry(locale));
     }
 
-    protected void fillValue(final CountryFormSelectableOptionViewModel model, final CountryCode option, @Nullable final CountryCode selectedValue) {
-        model.setValue(option.getAlpha2());
+    protected void fillValue(final CountryFormSelectableOptionViewModel viewModel, final CountryCode option, @Nullable final CountryCode selectedValue) {
+        viewModel.setValue(option.getAlpha2());
     }
 
-    protected void fillSelected(final CountryFormSelectableOptionViewModel model, final CountryCode option, @Nullable final CountryCode selectedValue) {
-        model.setSelected(option.equals(selectedValue));
+    protected void fillSelected(final CountryFormSelectableOptionViewModel viewModel, final CountryCode option, @Nullable final CountryCode selectedValue) {
+        viewModel.setSelected(option.equals(selectedValue));
     }
 
 }

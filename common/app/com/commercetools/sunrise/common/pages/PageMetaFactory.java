@@ -34,20 +34,20 @@ public class PageMetaFactory extends ViewModelFactory<PageMeta, PageContent> {
         fillSelfPageUrl(viewModel, content);
     }
 
-    protected void fillCsrfToken(final PageMeta model, final PageContent content) {
+    protected void fillCsrfToken(final PageMeta viewModel, final PageContent content) {
         CSRF.getToken(httpContext.request())
                 .map(CSRF.Token::value)
-                .ifPresent(model::setCsrfToken);
+                .ifPresent(viewModel::setCsrfToken);
     }
 
-    protected void fillBagQuantityOptions(final PageMeta model, final PageContent content) {
-        model.setBagQuantityOptions(IntStream
+    protected void fillBagQuantityOptions(final PageMeta viewModel, final PageContent content) {
+        viewModel.setBagQuantityOptions(IntStream
                 .rangeClosed(1, 9)
                 .boxed()
                 .collect(toList()));
     }
 
-    protected void fillSelfPageUrl(final PageMeta model, final PageContent content) {
-        model.addHalLinkOfHrefAndRel(httpContext.request().uri(), "self");
+    protected void fillSelfPageUrl(final PageMeta viewModel, final PageContent content) {
+        viewModel.addHalLinkOfHrefAndRel(httpContext.request().uri(), "self");
     }
 }

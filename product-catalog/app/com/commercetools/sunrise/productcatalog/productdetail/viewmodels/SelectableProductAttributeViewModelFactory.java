@@ -52,48 +52,48 @@ public class SelectableProductAttributeViewModelFactory extends SelectableViewMo
     }
 
     @Override
-    protected void initialize(final SelectableProductAttributeViewModel model, final List<ProductVariant> option, final AttributeWithProductType selectedValue) {
-        fillKey(model, option, selectedValue);
-        fillName(model, option, selectedValue);
-        fillValue(model, option, selectedValue);
-        fillReload(model, option, selectedValue);
-        fillList(model, option, selectedValue);
-        fillSelectData(model, option, selectedValue);
+    protected void initialize(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> option, final AttributeWithProductType selectedValue) {
+        fillKey(viewModel, option, selectedValue);
+        fillName(viewModel, option, selectedValue);
+        fillValue(viewModel, option, selectedValue);
+        fillReload(viewModel, option, selectedValue);
+        fillList(viewModel, option, selectedValue);
+        fillSelectData(viewModel, option, selectedValue);
     }
 
-    protected void fillKey(final SelectableProductAttributeViewModel model, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
-        model.setKey(selectedAttribute.getAttribute().getName());
+    protected void fillKey(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
+        viewModel.setKey(selectedAttribute.getAttribute().getName());
     }
 
-    protected void fillName(final SelectableProductAttributeViewModel model, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
-        model.setName(attributeFormatter.label(selectedAttribute));
+    protected void fillName(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
+        viewModel.setName(attributeFormatter.label(selectedAttribute));
     }
 
-    protected void fillValue(final SelectableProductAttributeViewModel model, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
-        model.setValue(attributeFormatter.value(selectedAttribute));
+    protected void fillValue(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
+        viewModel.setValue(attributeFormatter.value(selectedAttribute));
     }
 
-    protected void fillReload(final SelectableProductAttributeViewModel model, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
-        model.setReload(productAttributeSettings.getSelectablePrimaryAttributes().contains(selectedAttribute.getAttribute().getName()));
+    protected void fillReload(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
+        viewModel.setReload(productAttributeSettings.getSelectablePrimaryAttributes().contains(selectedAttribute.getAttribute().getName()));
     }
 
-    protected void fillList(final SelectableProductAttributeViewModel model, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
+    protected void fillList(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
         final List<ProductAttributeFormSelectableOptionViewModel> formOptions = new ArrayList<>();
         findDistinctAttributeOptions(variants, selectedAttribute).forEach(attribute -> {
             final AttributeWithProductType attributeWithProductType = AttributeWithProductType.of(attribute, selectedAttribute.getProductTypeRef());
             formOptions.add(productAttributeFormSelectableOptionViewModelFactory.create(attributeWithProductType, selectedAttribute.getAttribute()));
         });
-        model.setList(formOptions);
+        viewModel.setList(formOptions);
     }
 
-    protected void fillSelectData(final SelectableProductAttributeViewModel model, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
+    protected void fillSelectData(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
         final Map<String, Map<String, List<String>>> selectableData = new HashMap<>();
         findDistinctAttributeOptions(variants, selectedAttribute).forEach(attrOption -> {
             final AttributeWithProductType attributeOptionWithProductType = AttributeWithProductType.of(attrOption, selectedAttribute.getProductTypeRef());
             final String attrOptionValue = attributeFormatter.value(attributeOptionWithProductType);
             selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attributeOptionWithProductType, variants));
         });
-        model.setSelectData(selectableData);
+        viewModel.setSelectData(selectableData);
     }
 
     private Map<String, List<String>> createAllowedAttributeCombinations(final AttributeWithProductType fixedAttribute, final List<ProductVariant> variants) {

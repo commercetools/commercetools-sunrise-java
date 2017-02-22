@@ -33,7 +33,7 @@ public class MyPersonalDetailsFormSettingsViewModelFactory extends ViewModelFact
         fillTitle(viewModel, form);
     }
 
-    protected void fillTitle(final MyPersonalDetailsFormSettingsViewModel model, final Form<? extends MyPersonalDetailsFormData> form) {
-        model.setTitle(titleFormFieldViewModelFactory.createWithDefaultOptions(form.field("title")));
+    protected void fillTitle(final MyPersonalDetailsFormSettingsViewModel viewModel, final Form<? extends MyPersonalDetailsFormData> form) {
+        viewModel.setTitle(titleFormFieldViewModelFactory.createWithDefaultOptions(form.field("title")));
     }
 }

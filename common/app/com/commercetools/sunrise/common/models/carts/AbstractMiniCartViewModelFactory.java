@@ -30,7 +30,7 @@ public abstract class AbstractMiniCartViewModelFactory<T extends MiniCartViewMod
         fillLineItems(viewModel, input);
     }
 
-    protected void fillTotalItems(final T model, @Nullable final D cartLike) {
+    protected void fillTotalItems(final T viewModel, @Nullable final D cartLike) {
         final long totalItems;
         if (cartLike != null) {
             totalItems = cartLike.getLineItems().stream()
@@ -39,23 +39,23 @@ public abstract class AbstractMiniCartViewModelFactory<T extends MiniCartViewMod
         } else {
             totalItems = 0;
         }
-        model.setTotalItems(totalItems);
+        viewModel.setTotalItems(totalItems);
     }
 
-    protected void fillLineItems(final T model, @Nullable final D cartLike) {
+    protected void fillLineItems(final T viewModel, @Nullable final D cartLike) {
         if (cartLike != null) {
-            model.setLineItems(createLineItemList(cartLike));
+            viewModel.setLineItems(createLineItemList(cartLike));
         }
     }
 
-    protected void fillTotalPrice(final T model, @Nullable final D cartLike) {
+    protected void fillTotalPrice(final T viewModel, @Nullable final D cartLike) {
         final MonetaryAmount totalPrice;
         if (cartLike != null) {
             totalPrice = calculateTotalPrice(cartLike);
         } else {
             totalPrice = zeroAmount(currency);
         }
-        model.setTotalPrice(priceFormatter.format(totalPrice));
+        viewModel.setTotalPrice(priceFormatter.format(totalPrice));
     }
 
     private LineItemListViewModel createLineItemList(final CartLike<?> cartLike) {

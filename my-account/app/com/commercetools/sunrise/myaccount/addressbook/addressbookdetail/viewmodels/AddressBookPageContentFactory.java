@@ -6,7 +6,6 @@ import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 
 import javax.inject.Inject;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -40,26 +39,25 @@ public class AddressBookPageContentFactory extends PageContentFactory<AddressBoo
     }
 
     @Override
-    protected void fillTitle(final AddressBookPageContent model, final Customer customer) {
-        model.setTitle(pageTitleResolver.getOrEmpty("myAccount:addressBookPage.title"));
+    protected void fillTitle(final AddressBookPageContent viewModel, final Customer customer) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:addressBookPage.title"));
     }
 
-    protected void fillDefaultShippingAddress(final AddressBookPageContent model, final Customer customer) {
+    protected void fillDefaultShippingAddress(final AddressBookPageContent viewModel, final Customer customer) {
         customer.findDefaultShippingAddress()
-                .ifPresent(address -> model.setDefaultShippingAddress(editableAddressViewModelFactory.create(address)));
+                .ifPresent(address -> viewModel.setDefaultShippingAddress(editableAddressViewModelFactory.create(address)));
     }
 
-    protected void fillDefaultBillingAddress(final AddressBookPageContent model, final Customer customer) {
+    protected void fillDefaultBillingAddress(final AddressBookPageContent viewModel, final Customer customer) {
         customer.findDefaultBillingAddress()
-                .ifPresent(address -> model.setDefaultBillingAddress(editableAddressViewModelFactory.create(address)));
+                .ifPresent(address -> viewModel.setDefaultBillingAddress(editableAddressViewModelFactory.create(address)));
     }
 
-    protected void fillAddresses(final AddressBookPageContent model, final Customer customer) {
-        final List<EditableAddressViewModel> modelList = customer.getAddresses().stream()
+    protected void fillAddresses(final AddressBookPageContent viewModel, final Customer customer) {
+        viewModel.setAddresses(customer.getAddresses().stream()
                 .filter(address -> isNotAnyDefaultAddress(customer, address))
                 .map(editableAddressViewModelFactory::create)
-                .collect(Collectors.toList());
-        model.setAddresses(modelList);
+                .collect(Collectors.toList()));
     }
 
     private boolean isNotAnyDefaultAddress(final Customer customer, final Address address) {

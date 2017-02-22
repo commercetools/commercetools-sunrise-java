@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.signup.viewmodels;
 
+import com.commercetools.sunrise.common.models.FormViewModelFactory;
 import com.commercetools.sunrise.common.models.addresses.TitleFormFieldViewModelFactory;
-import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormData;
 import play.data.Form;
 import play.data.FormFactory;
@@ -9,7 +9,7 @@ import play.data.FormFactory;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
-public class SignUpFormSettingsViewModelFactory extends ViewModelFactory<SignUpFormSettingsViewModel, Form<? extends SignUpFormData>> {
+public class SignUpFormSettingsViewModelFactory extends FormViewModelFactory<SignUpFormSettingsViewModel, Void, SignUpFormData> {
 
     private final FormFactory formFactory;
     private final TitleFormFieldViewModelFactory titleFormFieldViewModelFactory;
@@ -26,18 +26,22 @@ public class SignUpFormSettingsViewModelFactory extends ViewModelFactory<SignUpF
     }
 
     @Override
-    public final SignUpFormSettingsViewModel create(@Nullable final Form<? extends SignUpFormData> input) {
-        return super.create(input);
+    public final SignUpFormSettingsViewModel create(final Void input, @Nullable final Form<? extends SignUpFormData> form) {
+        return super.create(input, form);
+    }
+
+    public final SignUpFormSettingsViewModel create(@Nullable final Form<? extends SignUpFormData> form) {
+        return create(null, form);
     }
 
     @Override
-    protected final void initialize(final SignUpFormSettingsViewModel viewModel, @Nullable final Form<? extends SignUpFormData> form) {
+    protected final void initialize(final SignUpFormSettingsViewModel viewModel, final Void input, @Nullable final Form<? extends SignUpFormData> form) {
         fillTitle(viewModel, form);
     }
 
-    protected void fillTitle(final SignUpFormSettingsViewModel model, @Nullable final Form<? extends SignUpFormData> form) {
+    protected void fillTitle(final SignUpFormSettingsViewModel viewModel, @Nullable final Form<? extends SignUpFormData> form) {
         final Form<?> nonNullForm = createForm(form);
-        model.setTitle(titleFormFieldViewModelFactory.createWithDefaultOptions(nonNullForm.field("title")));
+        viewModel.setTitle(titleFormFieldViewModelFactory.createWithDefaultOptions(nonNullForm.field("title")));
     }
 
     private Form<?> createForm(@Nullable final Form<?> form) {

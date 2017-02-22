@@ -25,11 +25,11 @@ public class PageHeaderFactory extends ViewModelFactory<PageHeader, PageContent>
         fillCustomerServiceNumber(viewModel);
     }
 
-    protected void fillTitle(final PageHeader model, final PageContent content) {
-        model.setTitle(content.getTitle());
+    protected void fillTitle(final PageHeader viewModel, final PageContent content) {
+        viewModel.setTitle(content.getTitle());
     }
 
-    protected void fillCustomerServiceNumber(final PageHeader model) {
-        model.setCustomerServiceNumber(customerServiceNumber);
+    protected void fillCustomerServiceNumber(final PageHeader viewModel) {
+        viewModel.setCustomerServiceNumber(customerServiceNumber);
     }
 }

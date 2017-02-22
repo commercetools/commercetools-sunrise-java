@@ -4,8 +4,8 @@ import com.commercetools.sunrise.common.models.LanguageFormSelectableOptionViewM
 import com.commercetools.sunrise.common.models.LanguageFormSelectableOptionViewModelFactory;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.models.addresses.CountryFormSelectableOptionViewModel;
-import com.commercetools.sunrise.contexts.ProjectContext;
 import com.commercetools.sunrise.common.models.addresses.CountryFormSelectableOptionViewModelFactory;
+import com.commercetools.sunrise.contexts.ProjectContext;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.neovisionaries.i18n.CountryCode;
 
@@ -44,29 +44,33 @@ public class LocalizationSelectorViewModelFactory extends ViewModelFactory<Local
         return super.create(input);
     }
 
+    public final LocalizationSelectorViewModel create() {
+        return create(null);
+    }
+
     @Override
     protected final void initialize(final LocalizationSelectorViewModel viewModel, final Void input) {
         fillCountry(viewModel);
         fillLanguage(viewModel);
     }
 
-    protected void fillCountry(final LocalizationSelectorViewModel model) {
+    protected void fillCountry(final LocalizationSelectorViewModel viewModel) {
         final List<CountryFormSelectableOptionViewModel> options = new ArrayList<>();
         final List<CountryCode> countries = projectContext.countries();
         if (countries.size() > 1) {
             countries.forEach(country ->
                     options.add(countryFormSelectableOptionViewModelFactory.create(country, this.country)));
         }
-        model.setCountry(options);
+        viewModel.setCountry(options);
     }
 
-    protected void fillLanguage(final LocalizationSelectorViewModel model) {
+    protected void fillLanguage(final LocalizationSelectorViewModel viewModel) {
         final List<LanguageFormSelectableOptionViewModel> options = new ArrayList<>();
         final List<Locale> locales = projectContext.locales();
         if (locales.size() > 1) {
             locales.forEach(locale ->
                     options.add(languageFormSelectableOptionViewModelFactory.create(locale, this.locale)));
         }
-        model.setLanguage(options);
+        viewModel.setLanguage(options);
     }
 }

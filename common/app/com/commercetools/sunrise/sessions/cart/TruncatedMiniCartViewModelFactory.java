@@ -26,10 +26,10 @@ public class TruncatedMiniCartViewModelFactory extends MiniCartViewModelFactory 
     }
 
     @Override
-    protected void fillLineItems(final MiniCartViewModel model, @Nullable final Cart cart) {
-        super.fillLineItems(model, cart);
-        if (model.getLineItems() != null) {
-            model.getLineItems().setList(truncateLineItems(model.getLineItems().getList(), LINE_ITEMS_LIMIT));
+    protected void fillLineItems(final MiniCartViewModel viewModel, @Nullable final Cart cart) {
+        super.fillLineItems(viewModel, cart);
+        if (viewModel.getLineItems() != null) {
+            viewModel.getLineItems().setList(truncateLineItems(viewModel.getLineItems().getList(), LINE_ITEMS_LIMIT));
         }
     }
 

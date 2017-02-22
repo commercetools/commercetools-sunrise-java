@@ -49,9 +49,9 @@ public class CountryFormFieldViewModelFactory extends FormFieldViewModelFactory<
         fillList(viewModel, formFieldWithOptions);
     }
 
-    protected void fillList(final CountryFormFieldViewModel model, final FormFieldWithOptions<CountryCode> formFieldWithOptions) {
+    protected void fillList(final CountryFormFieldViewModel viewModel, final FormFieldWithOptions<CountryCode> formFieldWithOptions) {
         final CountryCode selectedCountry = CountryCode.getByCode(formFieldWithOptions.getFormField().value());
-        model.setList(formFieldWithOptions.getFormOptions().stream()
+        viewModel.setList(formFieldWithOptions.getFormOptions().stream()
                 .map(country -> countryFormSelectableOptionViewModelFactory.create(country, selectedCountry))
                 .collect(toList()));
     }

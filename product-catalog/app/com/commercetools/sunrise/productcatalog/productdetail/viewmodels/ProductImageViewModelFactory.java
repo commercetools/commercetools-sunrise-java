@@ -27,11 +27,11 @@ public class ProductImageViewModelFactory extends ViewModelFactory<ProductImageV
         fillBigImage(viewModel, image);
     }
 
-    protected void fillBigImage(final ProductImageViewModel model, final Image image) {
-        model.setBigImage(image.getUrl());
+    protected void fillBigImage(final ProductImageViewModel viewModel, final Image image) {
+        viewModel.setBigImage(image.getUrl());
     }
 
-    protected void fillThumbImage(final ProductImageViewModel model, final Image image) {
-        model.setThumbImage(image.getUrl());
+    protected void fillThumbImage(final ProductImageViewModel viewModel, final Image image) {
+        viewModel.setThumbImage(image.getUrl());
     }
 }

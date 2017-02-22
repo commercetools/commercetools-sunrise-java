@@ -24,15 +24,15 @@ public class BannerViewModelFactory extends ViewModelFactory<BannerViewModel, Pr
         fillDescription(viewModel, productsWithCategory);
     }
 
-    protected void fillDescription(final BannerViewModel model, final ProductsWithCategory data) {
+    protected void fillDescription(final BannerViewModel viewModel, final ProductsWithCategory data) {
         if (data.getCategory() != null && data.getCategory().getDescription() != null) {
-            model.setDescription(data.getCategory().getDescription());
+            viewModel.setDescription(data.getCategory().getDescription());
         }
     }
 
-    protected void fillTitle(final BannerViewModel model, final ProductsWithCategory data) {
+    protected void fillTitle(final BannerViewModel viewModel, final ProductsWithCategory data) {
         if (data.getCategory() != null) {
-            model.setTitle(data.getCategory().getName());
+            viewModel.setTitle(data.getCategory().getName());
         }
     }
 }

@@ -46,15 +46,15 @@ public class CheckoutAddressPageContentFactory extends FormPageContentFactory<Ch
         viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
     }
 
-    protected void fillCart(final CheckoutAddressPageContent model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        model.setCart(cartViewModelFactory.create(cart));
+    protected void fillCart(final CheckoutAddressPageContent viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        viewModel.setCart(cartViewModelFactory.create(cart));
     }
 
-    protected void fillForm(final CheckoutAddressPageContent model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        model.setAddressForm(form);
+    protected void fillForm(final CheckoutAddressPageContent viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        viewModel.setAddressForm(form);
     }
 
-    protected void fillFormSettings(final CheckoutAddressPageContent model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        model.setAddressFormSettings(addressFormSettingsFactory.create(cart, form));
+    protected void fillFormSettings(final CheckoutAddressPageContent viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        viewModel.setAddressFormSettings(addressFormSettingsFactory.create(cart, form));
     }
 }

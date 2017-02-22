@@ -42,11 +42,11 @@ public class CheckoutConfirmationPageContentFactory extends FormPageContentFacto
         viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:confirmationPage.title"));
     }
 
-    protected void fillCart(final CheckoutConfirmationPageContent model, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
-        model.setCart(cartViewModelFactory.create(cart));
+    protected void fillCart(final CheckoutConfirmationPageContent viewModel, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
+        viewModel.setCart(cartViewModelFactory.create(cart));
     }
 
-    protected void fillForm(final CheckoutConfirmationPageContent model, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
-        model.setCheckoutForm(form);
+    protected void fillForm(final CheckoutConfirmationPageContent viewModel, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
+        viewModel.setCheckoutForm(form);
     }
 }

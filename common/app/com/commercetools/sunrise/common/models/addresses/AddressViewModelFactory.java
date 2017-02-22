@@ -52,71 +52,71 @@ public class AddressViewModelFactory extends ViewModelFactory<AddressViewModel, 
         fillEmail(viewModel, address);
     }
 
-    protected void fillTitle(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillTitle(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null && address.getTitle() != null) {
             final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(address.getTitle());
             final String title = i18nResolver.getOrKey(singletonList(locale), i18nIdentifier);
-            model.setTitle(title);
+            viewModel.setTitle(title);
         }
     }
 
-    protected void fillFirstName(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillFirstName(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setFirstName(address.getFirstName());
+            viewModel.setFirstName(address.getFirstName());
         }
     }
 
-    protected void fillLastName(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillLastName(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setLastName(address.getLastName());
+            viewModel.setLastName(address.getLastName());
         }
     }
 
-    protected void fillStreetName(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillStreetName(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setStreetName(address.getStreetName());
+            viewModel.setStreetName(address.getStreetName());
         }
     }
 
-    protected void fillAdditionalStreetInfo(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillAdditionalStreetInfo(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setAdditionalStreetInfo(address.getAdditionalStreetInfo());
+            viewModel.setAdditionalStreetInfo(address.getAdditionalStreetInfo());
         }
     }
 
-    protected void fillCity(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillCity(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setCity(address.getCity());
+            viewModel.setCity(address.getCity());
         }
     }
 
-    protected void fillRegion(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillRegion(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setRegion(address.getRegion());
+            viewModel.setRegion(address.getRegion());
         }
     }
 
-    protected void fillPostalCode(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillPostalCode(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setPostalCode(address.getPostalCode());
+            viewModel.setPostalCode(address.getPostalCode());
         }
     }
 
-    protected void fillEmail(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillEmail(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setEmail(address.getEmail());
+            viewModel.setEmail(address.getEmail());
         }
     }
 
-    protected void fillPhone(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillPhone(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setPhone(address.getPhone());
+            viewModel.setPhone(address.getPhone());
         }
     }
 
-    protected void fillCountry(final AddressViewModel model, @Nullable final Address address) {
+    protected void fillCountry(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            model.setCountry(address.getCountry().toLocale().getDisplayCountry(locale));
+            viewModel.setCountry(address.getCountry().toLocale().getDisplayCountry(locale));
         }
     }
 }

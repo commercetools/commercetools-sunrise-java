@@ -44,11 +44,11 @@ public class AddressFormSettingsViewModelFactory extends FormViewModelFactory<Ad
         fillCountries(viewModel, customer, form);
     }
 
-    protected void fillTitle(final AddressFormSettingsViewModel model, final Customer customer, final Form<? extends AddressFormData> form) {
-        model.setTitle(titleFormFieldViewModelFactory.createWithDefaultOptions(form.field(titleFormFieldName)));
+    protected void fillTitle(final AddressFormSettingsViewModel viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+        viewModel.setTitle(titleFormFieldViewModelFactory.createWithDefaultOptions(form.field(titleFormFieldName)));
     }
 
-    protected void fillCountries(final AddressFormSettingsViewModel model, final Customer customer, final Form<? extends AddressFormData> form) {
-        model.setCountries(countryFormFieldViewModelFactory.createWithDefaultOptions(form.field(countryFormFieldName)));
+    protected void fillCountries(final AddressFormSettingsViewModel viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+        viewModel.setCountries(countryFormFieldViewModelFactory.createWithDefaultOptions(form.field(countryFormFieldName)));
     }
 }

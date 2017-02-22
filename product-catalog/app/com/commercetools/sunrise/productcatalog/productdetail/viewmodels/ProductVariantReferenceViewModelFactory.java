@@ -33,11 +33,11 @@ public class ProductVariantReferenceViewModelFactory extends ViewModelFactory<Pr
         fillUrl(viewModel, productWithVariant);
     }
 
-    protected void fillId(final ProductVariantReferenceViewModel model, final ProductWithVariant productWithVariant) {
-        model.setId(productWithVariant.getVariant().getId());
+    protected void fillId(final ProductVariantReferenceViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setId(productWithVariant.getVariant().getId());
     }
 
-    protected void fillUrl(final ProductVariantReferenceViewModel model, final ProductWithVariant productWithVariant) {
-        model.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(productWithVariant.getProduct(), productWithVariant.getVariant()));
+    protected void fillUrl(final ProductVariantReferenceViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(productWithVariant.getProduct(), productWithVariant.getVariant()));
     }
 }

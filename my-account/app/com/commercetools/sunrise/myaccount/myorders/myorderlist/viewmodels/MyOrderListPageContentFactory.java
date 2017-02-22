@@ -33,12 +33,12 @@ public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderLis
     }
 
     @Override
-    protected void fillTitle(final MyOrderListPageContent model, final OrderListWithCustomer orderListWithCustomer) {
+    protected void fillTitle(final MyOrderListPageContent viewModel, final OrderListWithCustomer orderListWithCustomer) {
 
     }
 
-    protected void fillOrders(final MyOrderListPageContent model, final OrderListWithCustomer orderListWithCustomer) {
-        model.setOrders(orderListWithCustomer.getOrders().getResults().stream()
+    protected void fillOrders(final MyOrderListPageContent viewModel, final OrderListWithCustomer orderListWithCustomer) {
+        viewModel.setOrders(orderListWithCustomer.getOrders().getResults().stream()
                 .map(orderOverviewViewModelFactory::create)
                 .collect(toList()));
     }

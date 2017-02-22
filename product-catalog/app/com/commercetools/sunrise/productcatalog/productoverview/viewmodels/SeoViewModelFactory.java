@@ -24,15 +24,15 @@ public class SeoViewModelFactory extends ViewModelFactory<SeoViewModel, Products
         fillDescription(viewModel, productsWithCategory);
     }
 
-    protected void fillTitle(final SeoViewModel model, final ProductsWithCategory data) {
+    protected void fillTitle(final SeoViewModel viewModel, final ProductsWithCategory data) {
         if (data.getCategory() != null && data.getCategory().getMetaTitle() != null) {
-            model.setTitle(data.getCategory().getMetaTitle());
+            viewModel.setTitle(data.getCategory().getMetaTitle());
         }
     }
 
-    protected void fillDescription(final SeoViewModel model, final ProductsWithCategory data) {
+    protected void fillDescription(final SeoViewModel viewModel, final ProductsWithCategory data) {
         if (data.getCategory() != null && data.getCategory().getMetaDescription() != null) {
-            model.setDescription(data.getCategory().getMetaDescription());
+            viewModel.setDescription(data.getCategory().getMetaDescription());
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.pages;
 
+import com.commercetools.sunrise.common.models.ViewModelFactory;
 import com.commercetools.sunrise.common.models.categories.CategoryViewModel;
 import com.commercetools.sunrise.common.models.categories.CategoryViewModelFactory;
-import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.categories.CategoryTree;
 
 import javax.inject.Inject;
@@ -25,8 +25,13 @@ public class PageNavMenuFactory extends ViewModelFactory<PageNavMenu, Void> {
         return new PageNavMenu();
     }
 
+    @Override
     public final PageNavMenu create(final Void input) {
-        return initializedViewModel(input);
+        return super.create(input);
+    }
+
+    public final PageNavMenu create() {
+        return create(null);
     }
 
     @Override
@@ -34,9 +39,9 @@ public class PageNavMenuFactory extends ViewModelFactory<PageNavMenu, Void> {
         fillCategories(viewModel);
     }
 
-    protected void fillCategories(final PageNavMenu model) {
+    protected void fillCategories(final PageNavMenu viewModel) {
         final List<CategoryViewModel> categories = new LinkedList<>();
         categoryTree.getRoots().forEach(root -> categories.add(categoryViewModelFactory.create(root)));
-        model.setCategories(categories);
+        viewModel.setCategories(categories);
     }
 }

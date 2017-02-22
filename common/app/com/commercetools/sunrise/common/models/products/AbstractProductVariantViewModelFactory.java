@@ -26,17 +26,17 @@ public abstract class AbstractProductVariantViewModelFactory<D> extends ViewMode
         fillPriceOld(viewModel, input);
     }
 
-    protected abstract void fillSku(final ProductVariantViewModel model, final D data);
+    protected abstract void fillSku(final ProductVariantViewModel viewModel, final D data);
 
-    protected abstract void fillName(final ProductVariantViewModel model, final D data);
+    protected abstract void fillName(final ProductVariantViewModel viewModel, final D data);
 
-    protected abstract void fillUrl(final ProductVariantViewModel model, final D data);
+    protected abstract void fillUrl(final ProductVariantViewModel viewModel, final D data);
 
-    protected abstract void fillImage(final ProductVariantViewModel model, final D data);
+    protected abstract void fillImage(final ProductVariantViewModel viewModel, final D data);
 
-    protected abstract void fillPrice(final ProductVariantViewModel model, final D data);
+    protected abstract void fillPrice(final ProductVariantViewModel viewModel, final D data);
 
-    protected abstract void fillPriceOld(final ProductVariantViewModel model, final D data);
+    protected abstract void fillPriceOld(final ProductVariantViewModel viewModel, final D data);
 
     protected String findSku(final ProductVariant variant) {
         return variant.getSku();

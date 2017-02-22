@@ -44,31 +44,31 @@ public class ShippingFormSelectableOptionViewModelFactory extends SelectableView
     }
 
     @Override
-    protected final void initialize(final ShippingFormSelectableOptionViewModel model, final ShippingMethod option, @Nullable final String selectedValue) {
-        fillLabel(model, option, selectedValue);
-        fillValue(model, option, selectedValue);
-        fillSelected(model, option, selectedValue);
-        fillDescription(model, option, selectedValue);
-        fillPrice(model, option, selectedValue);
+    protected final void initialize(final ShippingFormSelectableOptionViewModel viewModel, final ShippingMethod option, @Nullable final String selectedValue) {
+        fillLabel(viewModel, option, selectedValue);
+        fillValue(viewModel, option, selectedValue);
+        fillSelected(viewModel, option, selectedValue);
+        fillDescription(viewModel, option, selectedValue);
+        fillPrice(viewModel, option, selectedValue);
     }
 
-    protected void fillLabel(final ShippingFormSelectableOptionViewModel model, final ShippingMethod option, @Nullable final String selectedValue) {
-        model.setLabel(option.getName());
+    protected void fillLabel(final ShippingFormSelectableOptionViewModel viewModel, final ShippingMethod option, @Nullable final String selectedValue) {
+        viewModel.setLabel(option.getName());
     }
 
-    protected void fillValue(final ShippingFormSelectableOptionViewModel model, final ShippingMethod option, @Nullable final String selectedValue) {
-        model.setValue(option.getId());
+    protected void fillValue(final ShippingFormSelectableOptionViewModel viewModel, final ShippingMethod option, @Nullable final String selectedValue) {
+        viewModel.setValue(option.getId());
     }
 
-    protected void fillSelected(final ShippingFormSelectableOptionViewModel model, final ShippingMethod option, @Nullable final String selectedValue) {
-        model.setSelected(option.getId().equals(selectedValue));
+    protected void fillSelected(final ShippingFormSelectableOptionViewModel viewModel, final ShippingMethod option, @Nullable final String selectedValue) {
+        viewModel.setSelected(option.getId().equals(selectedValue));
     }
 
-    protected void fillDescription(final ShippingFormSelectableOptionViewModel model, final ShippingMethod option, @Nullable final String selectedValue) {
-        model.setDescription(option.getDescription());
+    protected void fillDescription(final ShippingFormSelectableOptionViewModel viewModel, final ShippingMethod option, @Nullable final String selectedValue) {
+        viewModel.setDescription(option.getDescription());
     }
 
-    protected void fillPrice(final ShippingFormSelectableOptionViewModel model, final ShippingMethod option, @Nullable final String selectedValue) {
+    protected void fillPrice(final ShippingFormSelectableOptionViewModel viewModel, final ShippingMethod option, @Nullable final String selectedValue) {
         // Need to do this since zones are not expanded in shipping methods yet (but will be soon)
         // Rather this (even though it's expensive -two requests per shipping method-) but it will mean less breaking changes in the future
         cartFinder.get()
@@ -77,7 +77,7 @@ public class ShippingFormSelectableOptionViewModelFactory extends SelectableView
                                 .ifPresent(location -> fetchZone(location)
                                         .thenAccept(zoneOpt -> zoneOpt
                                                 .ifPresent(zone -> findShippingMethodPrice(option, zone, cart)
-                                                        .ifPresent(model::setPrice))))));
+                                                        .ifPresent(viewModel::setPrice))))));
     }
 
     private CompletionStage<Optional<Zone>> fetchZone(final Location location) {

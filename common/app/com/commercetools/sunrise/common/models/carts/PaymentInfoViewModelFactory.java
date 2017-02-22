@@ -27,7 +27,7 @@ public class PaymentInfoViewModelFactory extends ViewModelFactory<PaymentInfoVie
         fillType(viewModel, cartLike);
     }
 
-    protected void fillType(final PaymentInfoViewModel model, @Nullable final CartLike<?> cartLike) {
+    protected void fillType(final PaymentInfoViewModel viewModel, @Nullable final CartLike<?> cartLike) {
         if (cartLike != null && cartLike.getPaymentInfo() != null) {
             final LocalizedString paymentType = cartLike.getPaymentInfo().getPayments().stream()
                     .map(Reference::getObj)
@@ -35,7 +35,7 @@ public class PaymentInfoViewModelFactory extends ViewModelFactory<PaymentInfoVie
                     .map(payment -> payment.getPaymentMethodInfo().getName())
                     .findFirst()
                     .orElseGet(LocalizedString::empty);
-            model.setType(paymentType);
+            viewModel.setType(paymentType);
         }
     }
 }

@@ -9,5 +9,5 @@ public abstract class PageContentFactory<M extends PageContent, I> extends ViewM
         fillTitle(viewModel, input);
     }
 
-    protected abstract void fillTitle(final M model, final I input);
+    protected abstract void fillTitle(final M viewModel, final I input);
 }

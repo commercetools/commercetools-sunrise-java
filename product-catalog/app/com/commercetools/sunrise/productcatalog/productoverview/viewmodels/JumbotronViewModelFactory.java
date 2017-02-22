@@ -34,22 +34,22 @@ public class JumbotronViewModelFactory extends ViewModelFactory<JumbotronViewMod
         fillDescription(viewModel, productsWithCategory);
     }
 
-    protected void fillTitle(final JumbotronViewModel model, final ProductsWithCategory data) {
+    protected void fillTitle(final JumbotronViewModel viewModel, final ProductsWithCategory data) {
         if (data.getCategory() != null) {
-            model.setTitle(data.getCategory().getName());
+            viewModel.setTitle(data.getCategory().getName());
         }
     }
 
-    protected void fillSubtitle(final JumbotronViewModel model, final ProductsWithCategory data) {
+    protected void fillSubtitle(final JumbotronViewModel viewModel, final ProductsWithCategory data) {
         if (data.getCategory() != null && data.getCategory().getParent() != null) {
             categoryTree.findById(data.getCategory().getParent().getId())
-                    .ifPresent(parent -> model.setSubtitle(parent.getName()));
+                    .ifPresent(parent -> viewModel.setSubtitle(parent.getName()));
         }
     }
 
-    protected void fillDescription(final JumbotronViewModel model, final ProductsWithCategory data) {
+    protected void fillDescription(final JumbotronViewModel viewModel, final ProductsWithCategory data) {
         if (data.getCategory() != null && data.getCategory().getDescription() != null) {
-            model.setDescription(data.getCategory().getDescription());
+            viewModel.setDescription(data.getCategory().getDescription());
         }
     }
 }

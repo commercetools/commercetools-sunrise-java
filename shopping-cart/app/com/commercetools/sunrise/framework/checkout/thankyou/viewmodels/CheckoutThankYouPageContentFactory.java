@@ -35,11 +35,11 @@ public class CheckoutThankYouPageContentFactory extends PageContentFactory<Check
     }
 
     @Override
-    protected void fillTitle(final CheckoutThankYouPageContent model, final Order order) {
-        model.setTitle(pageTitleResolver.getOrEmpty("checkout:thankYouPage.title"));
+    protected void fillTitle(final CheckoutThankYouPageContent viewModel, final Order order) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:thankYouPage.title"));
     }
 
-    protected void fillOrder(final CheckoutThankYouPageContent model, final Order order) {
-        model.setOrder(orderViewModelFactory.create(order));
+    protected void fillOrder(final CheckoutThankYouPageContent viewModel, final Order order) {
+        viewModel.setOrder(orderViewModelFactory.create(order));
     }
 }

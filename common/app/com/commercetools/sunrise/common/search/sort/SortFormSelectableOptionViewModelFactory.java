@@ -37,22 +37,22 @@ public class SortFormSelectableOptionViewModelFactory extends SelectableViewMode
     }
 
     @Override
-    protected final void initialize(final SortFormSelectableOptionViewModel model, final SortFormOption option, @Nullable final String selectedValue) {
-        fillLabel(model, option, selectedValue);
-        fillValue(model, option, selectedValue);
-        fillSelected(model, option, selectedValue);
+    protected final void initialize(final SortFormSelectableOptionViewModel viewModel, final SortFormOption option, @Nullable final String selectedValue) {
+        fillLabel(viewModel, option, selectedValue);
+        fillValue(viewModel, option, selectedValue);
+        fillSelected(viewModel, option, selectedValue);
     }
 
-    protected void fillLabel(final SortFormSelectableOptionViewModel model, final SortFormOption option, @Nullable final String selectedOptionValue) {
+    protected void fillLabel(final SortFormSelectableOptionViewModel viewModel, final SortFormOption option, @Nullable final String selectedOptionValue) {
         final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(option.getFieldLabel());
-        model.setLabel(i18nResolver.getOrKey(Collections.singletonList(locale), i18nIdentifier));
+        viewModel.setLabel(i18nResolver.getOrKey(Collections.singletonList(locale), i18nIdentifier));
     }
 
-    protected void fillValue(final SortFormSelectableOptionViewModel model, final SortFormOption option, @Nullable final String selectedOptionValue) {
-        model.setValue(option.getFieldValue());
+    protected void fillValue(final SortFormSelectableOptionViewModel viewModel, final SortFormOption option, @Nullable final String selectedOptionValue) {
+        viewModel.setValue(option.getFieldValue());
     }
 
-    protected void fillSelected(final SortFormSelectableOptionViewModel model, final SortFormOption option, @Nullable final String selectedOptionValue) {
-        model.setSelected(option.getFieldValue().equals(selectedOptionValue));
+    protected void fillSelected(final SortFormSelectableOptionViewModel viewModel, final SortFormOption option, @Nullable final String selectedOptionValue) {
+        viewModel.setSelected(option.getFieldValue().equals(selectedOptionValue));
     }
 }

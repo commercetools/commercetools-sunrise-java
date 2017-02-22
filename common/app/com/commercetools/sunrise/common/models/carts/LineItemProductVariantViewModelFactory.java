@@ -35,33 +35,33 @@ public class LineItemProductVariantViewModelFactory extends AbstractProductVaria
     }
 
     @Override
-    protected void fillSku(final ProductVariantViewModel model, final LineItem lineItem) {
-        model.setSku(findSku(lineItem.getVariant()));
+    protected void fillSku(final ProductVariantViewModel viewModel, final LineItem lineItem) {
+        viewModel.setSku(findSku(lineItem.getVariant()));
     }
 
     @Override
-    protected void fillName(final ProductVariantViewModel model, final LineItem lineItem) {
-        model.setName(lineItem.getName());
+    protected void fillName(final ProductVariantViewModel viewModel, final LineItem lineItem) {
+        viewModel.setName(lineItem.getName());
     }
 
     @Override
-    protected void fillUrl(final ProductVariantViewModel model, final LineItem lineItem) {
-        model.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(lineItem));
+    protected void fillUrl(final ProductVariantViewModel viewModel, final LineItem lineItem) {
+        viewModel.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(lineItem));
     }
 
     @Override
-    protected void fillImage(final ProductVariantViewModel model, final LineItem lineItem) {
-        findImageUrl(lineItem.getVariant()).ifPresent(model::setImage);
+    protected void fillImage(final ProductVariantViewModel viewModel, final LineItem lineItem) {
+        findImageUrl(lineItem.getVariant()).ifPresent(viewModel::setImage);
     }
 
     @Override
-    protected void fillPrice(final ProductVariantViewModel model, final LineItem lineItem) {
-        model.setPrice(priceFormatter.format(ProductPriceUtils.calculateAppliedProductPrice(lineItem)));
+    protected void fillPrice(final ProductVariantViewModel viewModel, final LineItem lineItem) {
+        viewModel.setPrice(priceFormatter.format(ProductPriceUtils.calculateAppliedProductPrice(lineItem)));
     }
 
     @Override
-    protected void fillPriceOld(final ProductVariantViewModel model, final LineItem lineItem) {
+    protected void fillPriceOld(final ProductVariantViewModel viewModel, final LineItem lineItem) {
         ProductPriceUtils.calculatePreviousProductPrice(lineItem)
-                .ifPresent(oldPrice -> model.setPriceOld(priceFormatter.format(oldPrice)));
+                .ifPresent(oldPrice -> viewModel.setPriceOld(priceFormatter.format(oldPrice)));
     }
 }

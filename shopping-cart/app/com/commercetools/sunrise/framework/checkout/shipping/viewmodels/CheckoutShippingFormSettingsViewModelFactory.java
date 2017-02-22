@@ -36,8 +36,8 @@ public class CheckoutShippingFormSettingsViewModelFactory extends FormViewModelF
         fillPaymentMethod(viewModel, shippingMethodsWithCart, form);
     }
 
-    protected void fillPaymentMethod(final CheckoutShippingFormSettingsViewModel model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
+    protected void fillPaymentMethod(final CheckoutShippingFormSettingsViewModel viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
         final FormFieldWithOptions<ShippingMethod> formFieldWithOptions = new FormFieldWithOptions<>(form.field(shippingFormFieldName), shippingMethodsWithCart.getShippingMethods());
-        model.setShippingMethod(shippingMethodFormFieldViewModelFactory.create(formFieldWithOptions));
+        viewModel.setShippingMethod(shippingMethodFormFieldViewModelFactory.create(formFieldWithOptions));
     }
 }

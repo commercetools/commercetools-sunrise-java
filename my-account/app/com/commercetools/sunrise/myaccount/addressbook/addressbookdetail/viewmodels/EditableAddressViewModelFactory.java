@@ -37,15 +37,15 @@ public class EditableAddressViewModelFactory extends ViewModelFactory<EditableAd
         fillAddressDeleteUrl(viewModel, address);
     }
 
-    protected void fillAddress(final EditableAddressViewModel model, final Address address) {
-        model.setAddress(addressViewModelFactory.create(address));
+    protected void fillAddress(final EditableAddressViewModel viewModel, final Address address) {
+        viewModel.setAddress(addressViewModelFactory.create(address));
     }
 
-    protected void fillAddressEditUrl(final EditableAddressViewModel model, final Address address) {
-        model.setAddressEditUrl(addressBookReverseRouter.changeAddressPageCall(address.getId()).url());
+    protected void fillAddressEditUrl(final EditableAddressViewModel viewModel, final Address address) {
+        viewModel.setAddressEditUrl(addressBookReverseRouter.changeAddressPageCall(address.getId()).url());
     }
 
-    protected void fillAddressDeleteUrl(final EditableAddressViewModel model, final Address address) {
-        model.setAddressDeleteUrl(addressBookReverseRouter.removeAddressProcessCall(address.getId()).url());
+    protected void fillAddressDeleteUrl(final EditableAddressViewModel viewModel, final Address address) {
+        viewModel.setAddressDeleteUrl(addressBookReverseRouter.removeAddressProcessCall(address.getId()).url());
     }
 }

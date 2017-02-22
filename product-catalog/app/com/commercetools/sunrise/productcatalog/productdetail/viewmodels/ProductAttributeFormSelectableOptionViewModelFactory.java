@@ -30,21 +30,21 @@ public class ProductAttributeFormSelectableOptionViewModelFactory extends Select
     }
 
     @Override
-    protected final void initialize(final ProductAttributeFormSelectableOptionViewModel model, final AttributeWithProductType option, @Nullable final Attribute selectedValue) {
-        fillLabel(model, option, selectedValue);
-        fillValue(model, option, selectedValue);
-        fillSelected(model, option, selectedValue);
+    protected final void initialize(final ProductAttributeFormSelectableOptionViewModel viewModel, final AttributeWithProductType option, @Nullable final Attribute selectedValue) {
+        fillLabel(viewModel, option, selectedValue);
+        fillValue(viewModel, option, selectedValue);
+        fillSelected(viewModel, option, selectedValue);
     }
 
-    protected void fillLabel(final ProductAttributeFormSelectableOptionViewModel model, final AttributeWithProductType option, @Nullable final Attribute selectedAttribute) {
-        model.setLabel(attributeFormatter.value(option));
+    protected void fillLabel(final ProductAttributeFormSelectableOptionViewModel viewModel, final AttributeWithProductType option, @Nullable final Attribute selectedAttribute) {
+        viewModel.setLabel(attributeFormatter.value(option));
     }
 
-    protected void fillValue(final ProductAttributeFormSelectableOptionViewModel model, final AttributeWithProductType option, @Nullable final Attribute selectedAttribute) {
-        model.setValue(attributeFormatter.valueAsKey(option));
+    protected void fillValue(final ProductAttributeFormSelectableOptionViewModel viewModel, final AttributeWithProductType option, @Nullable final Attribute selectedAttribute) {
+        viewModel.setValue(attributeFormatter.valueAsKey(option));
     }
 
-    protected void fillSelected(final ProductAttributeFormSelectableOptionViewModel model, final AttributeWithProductType option, @Nullable final Attribute selectedAttribute) {
-        model.setSelected(option.getAttribute().equals(selectedAttribute));
+    protected void fillSelected(final ProductAttributeFormSelectableOptionViewModel viewModel, final AttributeWithProductType option, @Nullable final Attribute selectedAttribute) {
+        viewModel.setSelected(option.getAttribute().equals(selectedAttribute));
     }
 }

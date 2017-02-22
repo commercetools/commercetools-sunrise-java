@@ -20,7 +20,7 @@ public class CustomerInfoViewModelFactory extends ViewModelFactory<CustomerInfoV
         fillCustomer(viewModel, customer);
     }
 
-    protected void fillCustomer(final CustomerInfoViewModel model, final Customer customer) {
-        model.setCustomer(customer);
+    protected void fillCustomer(final CustomerInfoViewModel viewModel, final Customer customer) {
+        viewModel.setCustomer(customer);
     }
 }

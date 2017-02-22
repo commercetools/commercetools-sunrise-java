@@ -42,11 +42,11 @@ public class ChangeAddressPageContentFactory extends FormPageContentFactory<Chan
         viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:changeAddressPage.title"));
     }
 
-    protected void fillEditAddressForm(final ChangeAddressPageContent model, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {
-        model.setEditAddressForm(form);
+    protected void fillEditAddressForm(final ChangeAddressPageContent viewModel, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {
+        viewModel.setEditAddressForm(form);
     }
 
-    protected void fillEditAddressFormSettings(final ChangeAddressPageContent model, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {
-        model.setEditAddressFormSettings(addressFormSettingsFactory.create(addressWithCustomer.getCustomer(), form));
+    protected void fillEditAddressFormSettings(final ChangeAddressPageContent viewModel, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {
+        viewModel.setEditAddressFormSettings(addressFormSettingsFactory.create(addressWithCustomer.getCustomer(), form));
     }
 }

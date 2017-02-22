@@ -43,28 +43,28 @@ public class ShippingInfoViewModelFactory extends ViewModelFactory<ShippingInfoV
         fillPrice(viewModel, cartLike);
     }
 
-    protected void fillLabel(final ShippingInfoViewModel model, @Nullable final CartLike<?> cartLike) {
+    protected void fillLabel(final ShippingInfoViewModel viewModel, @Nullable final CartLike<?> cartLike) {
         if (cartLike != null && cartLike.getShippingInfo() != null) {
-            model.setLabel(cartLike.getShippingInfo().getShippingMethodName());
+            viewModel.setLabel(cartLike.getShippingInfo().getShippingMethodName());
         }
     }
 
-    protected void fillDescription(final ShippingInfoViewModel model, @Nullable final CartLike<?> cartLike) {
+    protected void fillDescription(final ShippingInfoViewModel viewModel, @Nullable final CartLike<?> cartLike) {
         if (cartLike != null && cartLike.getShippingInfo() != null) {
             final Reference<ShippingMethod> ref = cartLike.getShippingInfo().getShippingMethod();
             if (ref != null && ref.getObj() != null) {
-                model.setDescription(ref.getObj().getDescription());
+                viewModel.setDescription(ref.getObj().getDescription());
             }
         }
     }
 
-    protected void fillPrice(final ShippingInfoViewModel model, @Nullable final CartLike<?> cartLike) {
+    protected void fillPrice(final ShippingInfoViewModel viewModel, @Nullable final CartLike<?> cartLike) {
         if (cartLike != null) {
             final MonetaryAmount amount = CartPriceUtils.calculateAppliedShippingPrice(cartLike)
                     .orElseGet(() -> zeroAmount(cartLike.getCurrency()));
-            model.setPrice(priceFormatter.format(amount));
+            viewModel.setPrice(priceFormatter.format(amount));
         } else {
-            model.setPrice(priceFormatter.format(zeroAmount(currency)));
+            viewModel.setPrice(priceFormatter.format(zeroAmount(currency)));
         }
     }
 

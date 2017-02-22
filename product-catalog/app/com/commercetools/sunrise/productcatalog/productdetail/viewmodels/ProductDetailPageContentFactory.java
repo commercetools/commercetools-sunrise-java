@@ -43,11 +43,11 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
     }
 
     @Override
-    protected void fillTitle(final ProductDetailPageContent model, final ProductWithVariant productWithVariant) {
+    protected void fillTitle(final ProductDetailPageContent viewModel, final ProductWithVariant productWithVariant) {
         final String title = String.format("%s %s",
                 productWithVariant.getProduct().getName().find(singletonList(locale)).orElse(""),
                 pageTitleResolver.getOrEmpty("catalog:productDetailPage.title"));
-        model.setTitle(title);
+        viewModel.setTitle(title);
     }
 
     protected void fillBreadCrumb(final ProductDetailPageContent content, final ProductWithVariant productWithVariant) {

@@ -35,11 +35,11 @@ public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderD
     }
 
     @Override
-    protected void fillTitle(final MyOrderDetailPageContent model, final OrderWithCustomer orderWithCustomer) {
-        model.setTitle(pageTitleResolver.getOrEmpty("myAccount:myOrderDetailPage.title"));
+    protected void fillTitle(final MyOrderDetailPageContent viewModel, final OrderWithCustomer orderWithCustomer) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:myOrderDetailPage.title"));
     }
 
-    protected void fillOrder(final MyOrderDetailPageContent model, final OrderWithCustomer orderWithCustomer) {
-        model.setOrder(orderViewModelFactory.create(orderWithCustomer.getOrder()));
+    protected void fillOrder(final MyOrderDetailPageContent viewModel, final OrderWithCustomer orderWithCustomer) {
+        viewModel.setOrder(orderViewModelFactory.create(orderWithCustomer.getOrder()));
     }
 }

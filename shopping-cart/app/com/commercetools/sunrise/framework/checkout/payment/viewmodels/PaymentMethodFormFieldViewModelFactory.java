@@ -47,8 +47,8 @@ public class PaymentMethodFormFieldViewModelFactory extends FormFieldViewModelFa
         fillList(viewModel, formFieldWithOptions);
     }
 
-    protected void fillList(final PaymentMethodFormFieldViewModel model, final FormFieldWithOptions<PaymentMethodInfo> data) {
-        model.setList(data.getFormOptions().stream()
+    protected void fillList(final PaymentMethodFormFieldViewModel viewModel, final FormFieldWithOptions<PaymentMethodInfo> data) {
+        viewModel.setList(data.getFormOptions().stream()
                 .map(paymentMethodInfo -> paymentFormSelectableOptionViewModelFactory.create(paymentMethodInfo, data.getFormField().value()))
                 .collect(toList()));
     }

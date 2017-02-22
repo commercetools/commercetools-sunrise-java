@@ -37,8 +37,8 @@ public class ProductBreadcrumbViewModelFactory extends AbstractBreadcrumbViewMod
     }
 
     @Override
-    protected void fillLinks(final BreadcrumbViewModel model, final ProductWithVariant productWithVariant) {
-        model.setLinks(createProductLinks(productWithVariant));
+    protected void fillLinks(final BreadcrumbViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setLinks(createProductLinks(productWithVariant));
     }
 
     protected List<BreadcrumbLinkViewModel> createProductLinks(final ProductWithVariant productWithVariant) {

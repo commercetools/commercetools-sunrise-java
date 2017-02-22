@@ -43,13 +43,13 @@ public class ProductDetailsViewModelFactory extends ViewModelFactory<ProductDeta
         fillList(viewModel, productWithVariant);
     }
 
-    protected void fillList(final ProductDetailsViewModel model, final ProductWithVariant productWithVariant) {
+    protected void fillList(final ProductDetailsViewModel viewModel, final ProductWithVariant productWithVariant) {
         final List<ProductAttributeViewModel> attributes = productAttributeSettings.getDisplayedAttributes().stream()
                 .map(productWithVariant.getVariant()::getAttribute)
                 .filter(Objects::nonNull)
                 .map(attribute -> createProductAttributeViewModel(productWithVariant, attribute))
                 .collect(toList());
-        model.setFeatures(attributes);
+        viewModel.setFeatures(attributes);
     }
 
     private ProductAttributeViewModel createProductAttributeViewModel(final ProductWithVariant productWithVariant, final Attribute attribute) {

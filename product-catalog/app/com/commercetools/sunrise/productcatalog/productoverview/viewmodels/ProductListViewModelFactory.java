@@ -35,10 +35,10 @@ public class ProductListViewModelFactory extends ViewModelFactory<ProductListVie
         fillList(viewModel, products);
     }
 
-    protected void fillList(final ProductListViewModel model, final Iterable<ProductProjection> products) {
+    protected void fillList(final ProductListViewModel viewModel, final Iterable<ProductProjection> products) {
         final List<ProductThumbnailViewModel> list = new ArrayList<>();
         products.forEach(product -> list.add(productThumbnailViewModelFactory.create(createProductWithVariant(product))));
-        model.setList(list);
+        viewModel.setList(list);
     }
 
     private ProductWithVariant createProductWithVariant(final ProductProjection product) {

@@ -27,22 +27,22 @@ public class LanguageFormSelectableOptionViewModelFactory extends SelectableView
     }
 
     @Override
-    protected final void initialize(final LanguageFormSelectableOptionViewModel model, final Locale option, @Nullable final Locale selectedValue) {
-        fillLabel(model, option, selectedValue);
-        fillValue(model, option, selectedValue);
-        fillSelected(model, option, selectedValue);
+    protected final void initialize(final LanguageFormSelectableOptionViewModel viewModel, final Locale option, @Nullable final Locale selectedValue) {
+        fillLabel(viewModel, option, selectedValue);
+        fillValue(viewModel, option, selectedValue);
+        fillSelected(viewModel, option, selectedValue);
     }
 
-    protected void fillLabel(final LanguageFormSelectableOptionViewModel model, final Locale option, @Nullable final Locale selectedLocale) {
-        model.setLabel(option.getDisplayName(locale));
+    protected void fillLabel(final LanguageFormSelectableOptionViewModel viewModel, final Locale option, @Nullable final Locale selectedLocale) {
+        viewModel.setLabel(option.getDisplayName(locale));
     }
 
-    protected void fillValue(final LanguageFormSelectableOptionViewModel model, final Locale option, @Nullable final Locale selectedLocale) {
-        model.setValue(option.getLanguage());
+    protected void fillValue(final LanguageFormSelectableOptionViewModel viewModel, final Locale option, @Nullable final Locale selectedLocale) {
+        viewModel.setValue(option.getLanguage());
     }
 
-    protected void fillSelected(final LanguageFormSelectableOptionViewModel model, final Locale option, @Nullable final Locale selectedLocale) {
-        model.setSelected(option.equals(selectedLocale));
+    protected void fillSelected(final LanguageFormSelectableOptionViewModel viewModel, final Locale option, @Nullable final Locale selectedLocale) {
+        viewModel.setSelected(option.equals(selectedLocale));
     }
 
 }

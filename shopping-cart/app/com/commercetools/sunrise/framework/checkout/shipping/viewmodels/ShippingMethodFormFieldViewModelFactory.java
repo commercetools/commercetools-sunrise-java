@@ -47,8 +47,8 @@ public class ShippingMethodFormFieldViewModelFactory extends FormFieldViewModelF
         fillList(viewModel, formFieldWithOptions);
     }
 
-    protected void fillList(final ShippingMethodFormFieldViewModel model, final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {
-        model.setList(formFieldWithOptions.getFormOptions().stream()
+    protected void fillList(final ShippingMethodFormFieldViewModel viewModel, final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {
+        viewModel.setList(formFieldWithOptions.getFormOptions().stream()
                 .map(shippingMethod -> shippingFormSelectableOptionViewModelFactory.create(shippingMethod, formFieldWithOptions.getFormField().value()))
                 .collect(toList()));
     }

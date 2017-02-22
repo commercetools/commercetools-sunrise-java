@@ -46,12 +46,12 @@ public class SortSelectorViewModelFactory extends ViewModelFactory<SortSelectorV
         fillList(viewModel, pagedResult);
     }
 
-    protected void fillKey(final SortSelectorViewModel model, final PagedResult<ProductProjection> pagedResult) {
-        model.setKey(settings.getFieldName());
+    protected void fillKey(final SortSelectorViewModel viewModel, final PagedResult<ProductProjection> pagedResult) {
+        viewModel.setKey(settings.getFieldName());
     }
 
-    protected void fillList(final SortSelectorViewModel model, final PagedResult<ProductProjection> pagedResult) {
-        model.setList(settings.getOptions().stream()
+    protected void fillList(final SortSelectorViewModel viewModel, final PagedResult<ProductProjection> pagedResult) {
+        viewModel.setList(settings.getOptions().stream()
                 .map(option -> sortFormSelectableOptionViewModelFactory.create(option, selectedOptionValue))
                 .collect(toList()));
     }

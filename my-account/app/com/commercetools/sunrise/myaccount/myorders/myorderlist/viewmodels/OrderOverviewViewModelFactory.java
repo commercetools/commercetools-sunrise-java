@@ -59,24 +59,24 @@ public class OrderOverviewViewModelFactory extends ViewModelFactory<OrderOvervie
         fillOrderUrl(viewModel, order);
     }
 
-    protected void fillOrderUrl(final OrderOverviewViewModel model, final Order order) {
-        model.setShowOrderUrl(myOrdersReverseRouter.myOrderDetailPageUrlOrEmpty(order));
+    protected void fillOrderUrl(final OrderOverviewViewModel viewModel, final Order order) {
+        viewModel.setShowOrderUrl(myOrdersReverseRouter.myOrderDetailPageUrlOrEmpty(order));
     }
 
-    protected void fillOrderNumber(final OrderOverviewViewModel model, final Order order) {
-        model.setOrderNumber(order.getOrderNumber());
+    protected void fillOrderNumber(final OrderOverviewViewModel viewModel, final Order order) {
+        viewModel.setOrderNumber(order.getOrderNumber());
     }
 
-    protected void fillTotal(final OrderOverviewViewModel model, final Order order) {
-        model.setTotal(priceFormatter.format(calculateTotalPrice(order)));
+    protected void fillTotal(final OrderOverviewViewModel viewModel, final Order order) {
+        viewModel.setTotal(priceFormatter.format(calculateTotalPrice(order)));
     }
 
-    protected void fillOrderDate(final OrderOverviewViewModel model, final Order order) {
-        model.setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
+    protected void fillOrderDate(final OrderOverviewViewModel viewModel, final Order order) {
+        viewModel.setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
     }
 
-    protected void fillShipping(final OrderOverviewViewModel model, final Order order) {
-        model.setShipping(Optional.ofNullable(order.getShipmentState())
+    protected void fillShipping(final OrderOverviewViewModel viewModel, final Order order) {
+        viewModel.setShipping(Optional.ofNullable(order.getShipmentState())
                 .map(state -> {
                     final String stateName = state.name();
                     final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("main:order.shippingStatus." + enumToCamelCase(stateName));
@@ -84,8 +84,8 @@ public class OrderOverviewViewModelFactory extends ViewModelFactory<OrderOvervie
                 }).orElse("-"));
     }
 
-    protected void fillPaymentStatus(final OrderOverviewViewModel model, final Order order) {
-        model.setPaymentStatus(Optional.ofNullable(order.getPaymentState())
+    protected void fillPaymentStatus(final OrderOverviewViewModel viewModel, final Order order) {
+        viewModel.setPaymentStatus(Optional.ofNullable(order.getPaymentState())
                 .map(state -> {
                     final String stateName = state.name();
                     final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create("main:order.paymentStatus." + enumToCamelCase(stateName));

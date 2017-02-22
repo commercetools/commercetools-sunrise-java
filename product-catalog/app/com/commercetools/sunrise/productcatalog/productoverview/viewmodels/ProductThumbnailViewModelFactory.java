@@ -40,16 +40,16 @@ public class ProductThumbnailViewModelFactory extends ViewModelFactory<ProductTh
         fillSale(viewModel, productWithVariant);
     }
 
-    protected void fillProduct(final ProductThumbnailViewModel model, final ProductWithVariant productWithVariant) {
-        model.setProduct(productViewModelFactory.create(productWithVariant));
+    protected void fillProduct(final ProductThumbnailViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setProduct(productViewModelFactory.create(productWithVariant));
     }
 
-    protected void fillNew(final ProductThumbnailViewModel model, final ProductWithVariant productWithVariant) {
-        model.setNew(productWithVariant.getProduct().getCategories().stream()
+    protected void fillNew(final ProductThumbnailViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setNew(productWithVariant.getProduct().getCategories().stream()
                 .anyMatch(category -> categoryTreeInNew.findById(category.getId()).isPresent()));
     }
 
-    protected void fillSale(final ProductThumbnailViewModel model, final ProductWithVariant productWithVariant) {
-        model.setSale(hasDiscount(productWithVariant.getVariant()));
+    protected void fillSale(final ProductThumbnailViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setSale(hasDiscount(productWithVariant.getVariant()));
     }
 }

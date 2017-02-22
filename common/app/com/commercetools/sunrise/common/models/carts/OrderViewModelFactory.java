@@ -42,47 +42,47 @@ public class OrderViewModelFactory extends AbstractCartLikeViewModelFactory<Orde
         fillOrderNumber(viewModel, order);
     }
 
-    protected void fillOrderNumber(final OrderViewModel model, final Order order) {
-        model.setOrderNumber(order.getOrderNumber());
+    protected void fillOrderNumber(final OrderViewModel viewModel, final Order order) {
+        viewModel.setOrderNumber(order.getOrderNumber());
     }
 
-    protected void fillOrderDate(final OrderViewModel model, final Order order) {
-        model.setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
-    }
-
-    @Override
-    protected void fillSalesTax(final OrderViewModel model, final Order cartLike) {
-        super.fillSalesTax(model, cartLike);
+    protected void fillOrderDate(final OrderViewModel viewModel, final Order order) {
+        viewModel.setOrderDate(dateTimeFormatter.format(order.getCreatedAt()));
     }
 
     @Override
-    protected void fillSubtotalPrice(final OrderViewModel model, final Order cartLike) {
-        super.fillSubtotalPrice(model, cartLike);
+    protected void fillSalesTax(final OrderViewModel viewModel, final Order cartLike) {
+        super.fillSalesTax(viewModel, cartLike);
     }
 
     @Override
-    protected void fillCustomerEmail(final OrderViewModel model, final Order cartLike) {
-        super.fillCustomerEmail(model, cartLike);
+    protected void fillSubtotalPrice(final OrderViewModel viewModel, final Order cartLike) {
+        super.fillSubtotalPrice(viewModel, cartLike);
     }
 
     @Override
-    protected void fillPaymentDetails(final OrderViewModel model, final Order cartLike) {
-        super.fillPaymentDetails(model, cartLike);
+    protected void fillCustomerEmail(final OrderViewModel viewModel, final Order cartLike) {
+        super.fillCustomerEmail(viewModel, cartLike);
     }
 
     @Override
-    protected void fillShippingMethod(final OrderViewModel model, final Order cartLike) {
-        super.fillShippingMethod(model, cartLike);
+    protected void fillPaymentDetails(final OrderViewModel viewModel, final Order cartLike) {
+        super.fillPaymentDetails(viewModel, cartLike);
     }
 
     @Override
-    protected void fillShippingAddress(final OrderViewModel model, final Order cartLike) {
-        super.fillShippingAddress(model, cartLike);
+    protected void fillShippingMethod(final OrderViewModel viewModel, final Order cartLike) {
+        super.fillShippingMethod(viewModel, cartLike);
     }
 
     @Override
-    protected void fillBillingAddress(final OrderViewModel model, final Order cartLike) {
-        super.fillBillingAddress(model, cartLike);
+    protected void fillShippingAddress(final OrderViewModel viewModel, final Order cartLike) {
+        super.fillShippingAddress(viewModel, cartLike);
+    }
+
+    @Override
+    protected void fillBillingAddress(final OrderViewModel viewModel, final Order cartLike) {
+        super.fillBillingAddress(viewModel, cartLike);
     }
 
     @Override

@@ -33,9 +33,9 @@ public class CategoryBreadcrumbViewModelFactory extends AbstractBreadcrumbViewMo
     }
 
     @Override
-    protected void fillLinks(final BreadcrumbViewModel model, final ProductsWithCategory data) {
+    protected void fillLinks(final BreadcrumbViewModel viewModel, final ProductsWithCategory data) {
         if (data.getCategory() != null) {
-            model.setLinks(createCategoryTreeLinks(data.getCategory()));
+            viewModel.setLinks(createCategoryTreeLinks(data.getCategory()));
         }
     }
 }

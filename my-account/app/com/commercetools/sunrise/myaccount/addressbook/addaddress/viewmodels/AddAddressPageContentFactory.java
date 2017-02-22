@@ -42,11 +42,11 @@ public class AddAddressPageContentFactory extends FormPageContentFactory<AddAddr
         viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:addAddressPage.title"));
     }
 
-    protected void fillNewAddressForm(final AddAddressPageContent model, final Customer customer, final Form<? extends AddressFormData> form) {
-        model.setNewAddressForm(form);
+    protected void fillNewAddressForm(final AddAddressPageContent viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+        viewModel.setNewAddressForm(form);
     }
 
-    protected void fillNewAddressFormSettings(final AddAddressPageContent model, final Customer customer, final Form<? extends AddressFormData> form) {
-        model.setNewAddressFormSettings(addressFormSettingsViewModelFactory.create(customer, form));
+    protected void fillNewAddressFormSettings(final AddAddressPageContent viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+        viewModel.setNewAddressFormSettings(addressFormSettingsViewModelFactory.create(customer, form));
     }
 }

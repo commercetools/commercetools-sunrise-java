@@ -26,19 +26,19 @@ public class UserInfoViewModelFactory extends ViewModelFactory<UserInfoViewModel
         fillEmail(viewModel, customer);
     }
 
-    protected void fillLoggedIn(final UserInfoViewModel model, @Nullable final Customer customer) {
-        model.setLoggedIn(customer != null);
+    protected void fillLoggedIn(final UserInfoViewModel viewModel, @Nullable final Customer customer) {
+        viewModel.setLoggedIn(customer != null);
     }
 
-    protected void fillName(final UserInfoViewModel model, @Nullable final Customer customer) {
+    protected void fillName(final UserInfoViewModel viewModel, @Nullable final Customer customer) {
         if (customer != null) {
-            model.setName(customer.getFirstName());
+            viewModel.setName(customer.getFirstName());
         }
     }
 
-    protected void fillEmail(final UserInfoViewModel model, @Nullable final Customer customer) {
+    protected void fillEmail(final UserInfoViewModel viewModel, @Nullable final Customer customer) {
         if (customer != null) {
-            model.setEmail(customer.getEmail());
+            viewModel.setEmail(customer.getEmail());
         }
     }
 }

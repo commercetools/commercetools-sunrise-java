@@ -46,12 +46,12 @@ public class ProductsPerPageSelectorViewModelFactory extends ViewModelFactory<Pr
         fillList(viewModel, pagedResult);
     }
 
-    protected void fillKey(final ProductsPerPageSelectorViewModel model, final PagedResult<ProductProjection> pagedResult) {
-        model.setKey(settings.getFieldName());
+    protected void fillKey(final ProductsPerPageSelectorViewModel viewModel, final PagedResult<ProductProjection> pagedResult) {
+        viewModel.setKey(settings.getFieldName());
     }
 
-    protected void fillList(final ProductsPerPageSelectorViewModel model, final PagedResult<ProductProjection> pagedResult) {
-        model.setList(settings.getOptions().stream()
+    protected void fillList(final ProductsPerPageSelectorViewModel viewModel, final PagedResult<ProductProjection> pagedResult) {
+        viewModel.setList(settings.getOptions().stream()
                 .map(option -> productsPerPageFormSelectableOptionViewModelFactory.create(option, selectedOptionValue))
                 .collect(toList()));
     }

@@ -55,33 +55,33 @@ public class PaginationViewModelFactory extends ViewModelFactory<PaginationViewM
         fillPages(viewModel, pagedResult);
     }
 
-    protected void fillNextUrl(final PaginationViewModel model, final PagedResult<?> pagedResult) {
+    protected void fillNextUrl(final PaginationViewModel viewModel, final PagedResult<?> pagedResult) {
         if (!pagedResult.isLast()) {
-            model.setNextUrl(buildUriWithPage(settings.getFieldName(), currentPage + 1));
+            viewModel.setNextUrl(buildUriWithPage(settings.getFieldName(), currentPage + 1));
         }
     }
 
-    protected void fillPreviousUrl(final PaginationViewModel model, final PagedResult<?> pagedResult) {
+    protected void fillPreviousUrl(final PaginationViewModel viewModel, final PagedResult<?> pagedResult) {
         if (!pagedResult.isFirst()) {
-            model.setPreviousUrl(buildUriWithPage(settings.getFieldName(), currentPage - 1));
+            viewModel.setPreviousUrl(buildUriWithPage(settings.getFieldName(), currentPage - 1));
         }
     }
 
-    protected void fillFirstPage(final PaginationViewModel model, final PagedResult<?> pagedResult) {
+    protected void fillFirstPage(final PaginationViewModel viewModel, final PagedResult<?> pagedResult) {
         final long totalPages = calculateTotalPages(pagedResult);
         if (firstPageIsDisplayed(totalPages)) {
-            model.setFirstPage(createLinkData(1));
+            viewModel.setFirstPage(createLinkData(1));
         }
     }
 
-    protected void fillLastPage(final PaginationViewModel model, final PagedResult<?> pagedResult) {
+    protected void fillLastPage(final PaginationViewModel viewModel, final PagedResult<?> pagedResult) {
         final long totalPages = calculateTotalPages(pagedResult);
         if (lastPageIsDisplayed(totalPages)) {
-            model.setLastPage(createLinkData(totalPages));
+            viewModel.setLastPage(createLinkData(totalPages));
         }
     }
 
-    protected void fillPages(final PaginationViewModel model, final PagedResult<?> pagedResult) {
+    protected void fillPages(final PaginationViewModel viewModel, final PagedResult<?> pagedResult) {
         final long totalPages = calculateTotalPages(pagedResult);
         long startPage = 1;
         long endPage = totalPages;
@@ -93,7 +93,7 @@ public class PaginationViewModelFactory extends ViewModelFactory<PaginationViewM
         } else if (lastPageIsDisplayed(totalPages)) {
             endPage = calculateBottomThreshold();
         }
-        model.setPages(createPages(startPage, endPage));
+        viewModel.setPages(createPages(startPage, endPage));
     }
 
     private boolean notAllPagesAreDisplayed(final long totalPages) {

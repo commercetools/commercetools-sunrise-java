@@ -30,24 +30,24 @@ public class PaymentFormSelectableOptionViewModelFactory extends SelectableViewM
     }
 
     @Override
-    protected final void initialize(final PaymentFormSelectableOptionViewModel model, final PaymentMethodInfo option, @Nullable final String selectedValue) {
-        fillLabel(model, option, selectedValue);
-        fillValue(model, option, selectedValue);
-        fillSelected(model, option, selectedValue);
+    protected final void initialize(final PaymentFormSelectableOptionViewModel viewModel, final PaymentMethodInfo option, @Nullable final String selectedValue) {
+        fillLabel(viewModel, option, selectedValue);
+        fillValue(viewModel, option, selectedValue);
+        fillSelected(viewModel, option, selectedValue);
     }
 
-    protected void fillLabel(final PaymentFormSelectableOptionViewModel model, final PaymentMethodInfo option, @Nullable final String selectedValue) {
+    protected void fillLabel(final PaymentFormSelectableOptionViewModel viewModel, final PaymentMethodInfo option, @Nullable final String selectedValue) {
         final String label = Optional.ofNullable(option.getName())
                 .flatMap(name -> name.find(locale))
                 .orElseGet(option::getMethod);
-        model.setLabel(label);
+        viewModel.setLabel(label);
     }
 
-    protected void fillValue(final PaymentFormSelectableOptionViewModel model, final PaymentMethodInfo option, @Nullable final String selectedValue) {
-        model.setValue(option.getMethod());
+    protected void fillValue(final PaymentFormSelectableOptionViewModel viewModel, final PaymentMethodInfo option, @Nullable final String selectedValue) {
+        viewModel.setValue(option.getMethod());
     }
 
-    protected void fillSelected(final PaymentFormSelectableOptionViewModel model, final PaymentMethodInfo option, @Nullable final String selectedValue) {
-        model.setSelected(option.getMethod() != null && option.getMethod().equals(selectedValue));
+    protected void fillSelected(final PaymentFormSelectableOptionViewModel viewModel, final PaymentMethodInfo option, @Nullable final String selectedValue) {
+        viewModel.setSelected(option.getMethod() != null && option.getMethod().equals(selectedValue));
     }
 }

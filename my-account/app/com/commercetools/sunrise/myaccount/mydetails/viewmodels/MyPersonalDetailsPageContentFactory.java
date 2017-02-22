@@ -46,15 +46,15 @@ public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<
         viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:myPersonalDetailsPage.title"));
     }
 
-    protected void fillCustomer(final MyPersonalDetailsPageContent model, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
-        model.setCustomerInfo(customerInfoViewModelFactory.create(customer));
+    protected void fillCustomer(final MyPersonalDetailsPageContent viewModel, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
+        viewModel.setCustomerInfo(customerInfoViewModelFactory.create(customer));
     }
 
-    protected void fillPersonalDetailsForm(final MyPersonalDetailsPageContent model, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
-        model.setPersonalDetailsForm(form);
+    protected void fillPersonalDetailsForm(final MyPersonalDetailsPageContent viewModel, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
+        viewModel.setPersonalDetailsForm(form);
     }
 
-    protected void fillPersonalDetailsFormSettings(final MyPersonalDetailsPageContent model, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
-        model.setPersonalDetailsFormSettings(myPersonalDetailsFormSettingsViewModelFactory.create(form));
+    protected void fillPersonalDetailsFormSettings(final MyPersonalDetailsPageContent viewModel, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
+        viewModel.setPersonalDetailsFormSettings(myPersonalDetailsFormSettingsViewModelFactory.create(form));
     }
 }

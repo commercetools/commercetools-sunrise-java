@@ -22,19 +22,19 @@ public abstract class AbstractLineItemViewModelFactory<T extends LineItemViewMod
         fillTotalPrice(viewModel, lineItem);
     }
 
-    protected void fillLineItemId(final T model, final LineItem lineItem) {
-        model.setLineItemId(lineItem.getId());
+    protected void fillLineItemId(final T viewModel, final LineItem lineItem) {
+        viewModel.setLineItemId(lineItem.getId());
     }
 
-    protected void fillQuantity(final T model, final LineItem lineItem) {
-        model.setQuantity(lineItem.getQuantity());
+    protected void fillQuantity(final T viewModel, final LineItem lineItem) {
+        viewModel.setQuantity(lineItem.getQuantity());
     }
 
-    protected void fillVariant(final T model, final LineItem lineItem) {
-        model.setVariant(lineItemProductVariantViewModelFactory.create(lineItem));
+    protected void fillVariant(final T viewModel, final LineItem lineItem) {
+        viewModel.setVariant(lineItemProductVariantViewModelFactory.create(lineItem));
     }
 
-    protected void fillTotalPrice(final T model, final LineItem lineItem) {
-        model.setTotalPrice(priceFormatter.format(lineItem.getTotalPrice()));
+    protected void fillTotalPrice(final T viewModel, final LineItem lineItem) {
+        viewModel.setTotalPrice(priceFormatter.format(lineItem.getTotalPrice()));
     }
 }

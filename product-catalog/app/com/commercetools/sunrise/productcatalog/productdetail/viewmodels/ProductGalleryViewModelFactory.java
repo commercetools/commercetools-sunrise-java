@@ -33,8 +33,8 @@ public class ProductGalleryViewModelFactory extends ViewModelFactory<ProductGall
         fillList(viewModel, productWithVariant);
     }
 
-    protected void fillList(final ProductGalleryViewModel model, final ProductWithVariant productWithVariant) {
-        model.setList(productWithVariant.getVariant().getImages().stream()
+    protected void fillList(final ProductGalleryViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setList(productWithVariant.getVariant().getImages().stream()
                 .map(productImageViewModelFactory::create)
                 .collect(toList()));
     }

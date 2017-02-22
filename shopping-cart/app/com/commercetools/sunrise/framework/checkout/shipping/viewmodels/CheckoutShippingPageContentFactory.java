@@ -46,15 +46,15 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
         viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
     }
 
-    protected void fillCart(final CheckoutShippingPageContent model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
-        model.setCart(cartViewModelFactory.create(shippingMethodsWithCart.getCart()));
+    protected void fillCart(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
+        viewModel.setCart(cartViewModelFactory.create(shippingMethodsWithCart.getCart()));
     }
 
-    protected void fillForm(final CheckoutShippingPageContent model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
-        model.setShippingForm(form);
+    protected void fillForm(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
+        viewModel.setShippingForm(form);
     }
 
-    protected void fillFormSettings(final CheckoutShippingPageContent model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
-        model.setShippingFormSettings(checkoutShippingFormSettingsViewModelFactory.create(shippingMethodsWithCart, form));
+    protected void fillFormSettings(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
+        viewModel.setShippingFormSettings(checkoutShippingFormSettingsViewModelFactory.create(shippingMethodsWithCart, form));
     }
 }

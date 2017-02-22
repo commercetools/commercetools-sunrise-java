@@ -34,34 +34,34 @@ public class ProductVariantViewModelFactory extends AbstractProductVariantViewMo
     }
 
     @Override
-    protected void fillSku(final ProductVariantViewModel model, final ProductWithVariant productWithVariant) {
-        model.setSku(findSku(productWithVariant.getVariant()));
+    protected void fillSku(final ProductVariantViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setSku(findSku(productWithVariant.getVariant()));
     }
 
     @Override
-    protected void fillName(final ProductVariantViewModel model, final ProductWithVariant productWithVariant) {
-        model.setName(productWithVariant.getProduct().getName());
+    protected void fillName(final ProductVariantViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setName(productWithVariant.getProduct().getName());
     }
 
     @Override
-    protected void fillUrl(final ProductVariantViewModel model, final ProductWithVariant productWithVariant) {
-        model.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(productWithVariant.getProduct(), productWithVariant.getVariant()));
+    protected void fillUrl(final ProductVariantViewModel viewModel, final ProductWithVariant productWithVariant) {
+        viewModel.setUrl(productReverseRouter.productDetailPageUrlOrEmpty(productWithVariant.getProduct(), productWithVariant.getVariant()));
     }
 
     @Override
-    protected void fillImage(final ProductVariantViewModel model, final ProductWithVariant productWithVariant) {
-        findImageUrl(productWithVariant.getVariant()).ifPresent(model::setImage);
+    protected void fillImage(final ProductVariantViewModel viewModel, final ProductWithVariant productWithVariant) {
+        findImageUrl(productWithVariant.getVariant()).ifPresent(viewModel::setImage);
     }
 
     @Override
-    protected void fillPrice(final ProductVariantViewModel model, final ProductWithVariant productWithVariant) {
+    protected void fillPrice(final ProductVariantViewModel viewModel, final ProductWithVariant productWithVariant) {
         ProductPriceUtils.calculateAppliedProductPrice(productWithVariant.getVariant())
-                .ifPresent(price -> model.setPrice(priceFormatter.format(price)));
+                .ifPresent(price -> viewModel.setPrice(priceFormatter.format(price)));
     }
 
     @Override
-    protected void fillPriceOld(final ProductVariantViewModel model, final ProductWithVariant productWithVariant) {
+    protected void fillPriceOld(final ProductVariantViewModel viewModel, final ProductWithVariant productWithVariant) {
         ProductPriceUtils.calculatePreviousProductPrice(productWithVariant.getVariant())
-                .ifPresent(oldPrice -> model.setPriceOld(priceFormatter.format(oldPrice)));
+                .ifPresent(oldPrice -> viewModel.setPriceOld(priceFormatter.format(oldPrice)));
     }
 }

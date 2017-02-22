@@ -26,13 +26,13 @@ public abstract class AbstractAuthenticationPageContentFactory<F> extends PageCo
     }
 
     @Override
-    protected void fillTitle(final AuthenticationPageContent model, final Form<? extends F> form) {
+    protected void fillTitle(final AuthenticationPageContent viewModel, final Form<? extends F> form) {
         pageTitleResolver.getOrEmpty("myAccount:authenticationPage.title");
     }
 
-    protected abstract void fillLogInForm(final AuthenticationPageContent model, final Form<? extends F> form);
+    protected abstract void fillLogInForm(final AuthenticationPageContent viewModel, final Form<? extends F> form);
 
-    protected abstract void fillSignUpForm(final AuthenticationPageContent model, final Form<? extends F> form);
+    protected abstract void fillSignUpForm(final AuthenticationPageContent viewModel, final Form<? extends F> form);
 
-    protected abstract void fillSignUpFormSettings(final AuthenticationPageContent model, final Form<? extends F> form);
+    protected abstract void fillSignUpFormSettings(final AuthenticationPageContent viewModel, final Form<? extends F> form);
 }

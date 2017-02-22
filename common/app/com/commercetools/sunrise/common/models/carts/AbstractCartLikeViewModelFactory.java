@@ -38,7 +38,7 @@ public abstract class AbstractCartLikeViewModelFactory<T extends CartViewModel, 
         fillPaymentDetails(viewModel, input);
     }
 
-    protected void fillSalesTax(final T model, @Nullable final D cartLike) {
+    protected void fillSalesTax(final T viewModel, @Nullable final D cartLike) {
         final MonetaryAmount salesTax;
         if (cartLike != null) {
             salesTax = cartLike.calculateTotalAppliedTaxes()
@@ -46,49 +46,49 @@ public abstract class AbstractCartLikeViewModelFactory<T extends CartViewModel, 
         } else {
             salesTax = zeroAmount(currency);
         }
-        model.setSalesTax(priceFormatter.format(salesTax));
+        viewModel.setSalesTax(priceFormatter.format(salesTax));
     }
 
-    protected void fillSubtotalPrice(final T model, @Nullable final D cartLike) {
+    protected void fillSubtotalPrice(final T viewModel, @Nullable final D cartLike) {
         final MonetaryAmount subtotal;
         if (cartLike != null) {
             subtotal = cartLike.calculateSubTotalPrice();
         } else {
             subtotal = zeroAmount(currency);
         }
-        model.setSubtotalPrice(priceFormatter.format(subtotal));
+        viewModel.setSubtotalPrice(priceFormatter.format(subtotal));
     }
 
-    protected void fillCustomerEmail(final T model, @Nullable final D cartLike) {
+    protected void fillCustomerEmail(final T viewModel, @Nullable final D cartLike) {
         if (cartLike != null) {
-            model.setCustomerEmail(cartLike.getCustomerEmail());
+            viewModel.setCustomerEmail(cartLike.getCustomerEmail());
         }
     }
 
-    protected void fillPaymentDetails(final T model, @Nullable final D cartLike) {
+    protected void fillPaymentDetails(final T viewModel, @Nullable final D cartLike) {
         if (cartLike != null) {
-            model.setPaymentDetails(paymentInfoViewModelFactory.create(cartLike));
+            viewModel.setPaymentDetails(paymentInfoViewModelFactory.create(cartLike));
         }
     }
 
-    protected void fillShippingMethod(final T model, @Nullable final D cartLike) {
+    protected void fillShippingMethod(final T viewModel, @Nullable final D cartLike) {
         if (cartLike != null) {
-            model.setShippingMethod(shippingInfoViewModelFactory.create(cartLike));
+            viewModel.setShippingMethod(shippingInfoViewModelFactory.create(cartLike));
         }
     }
 
-    protected void fillShippingAddress(final T model, @Nullable final D cartLike) {
+    protected void fillShippingAddress(final T viewModel, @Nullable final D cartLike) {
         if (cartLike != null) {
-            model.setShippingAddress(addressViewModelFactory.create(cartLike.getShippingAddress()));
+            viewModel.setShippingAddress(addressViewModelFactory.create(cartLike.getShippingAddress()));
         }
     }
 
-    protected void fillBillingAddress(final T model, @Nullable final D cartLike) {
+    protected void fillBillingAddress(final T viewModel, @Nullable final D cartLike) {
         if (cartLike != null) {
             if (cartLike.getBillingAddress() != null) {
-                model.setBillingAddress(addressViewModelFactory.create(cartLike.getBillingAddress()));
+                viewModel.setBillingAddress(addressViewModelFactory.create(cartLike.getBillingAddress()));
             } else {
-                model.setBillingAddress(addressViewModelFactory.create(cartLike.getShippingAddress()));
+                viewModel.setBillingAddress(addressViewModelFactory.create(cartLike.getShippingAddress()));
             }
         }
     }

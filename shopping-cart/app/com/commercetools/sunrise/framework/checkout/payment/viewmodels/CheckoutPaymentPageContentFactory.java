@@ -45,15 +45,15 @@ public class CheckoutPaymentPageContentFactory extends FormPageContentFactory<Ch
         viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:paymentPage.title"));
     }
 
-    protected void fillCart(final CheckoutPaymentPageContent model, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
-        model.setCart(cartViewModelFactory.create(paymentMethodsWithCart.getCart()));
+    protected void fillCart(final CheckoutPaymentPageContent viewModel, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
+        viewModel.setCart(cartViewModelFactory.create(paymentMethodsWithCart.getCart()));
     }
 
-    protected void fillForm(final CheckoutPaymentPageContent model, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
-        model.setPaymentForm(form);
+    protected void fillForm(final CheckoutPaymentPageContent viewModel, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
+        viewModel.setPaymentForm(form);
     }
 
-    protected void fillFormSettings(final CheckoutPaymentPageContent model, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
-        model.setPaymentFormSettings(checkoutPaymentFormSettingsViewModelFactory.create(paymentMethodsWithCart, form));
+    protected void fillFormSettings(final CheckoutPaymentPageContent viewModel, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
+        viewModel.setPaymentFormSettings(checkoutPaymentFormSettingsViewModelFactory.create(paymentMethodsWithCart, form));
     }
 }

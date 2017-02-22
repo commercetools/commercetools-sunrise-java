@@ -47,20 +47,20 @@ public class CheckoutAddressFormSettingsViewModelFactory extends FormViewModelFa
         fillTitleBilling(viewModel, cart, form);
     }
 
-    protected void fillTitleBilling(final CheckoutAddressFormSettingsViewModel model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        model.setTitleBilling(titleFormFieldViewModelFactory.createWithDefaultOptions(form.field("titleBilling")));
+    protected void fillTitleBilling(final CheckoutAddressFormSettingsViewModel viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        viewModel.setTitleBilling(titleFormFieldViewModelFactory.createWithDefaultOptions(form.field("titleBilling")));
     }
 
-    protected void fillTitleShipping(final CheckoutAddressFormSettingsViewModel model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        model.setTitleShipping(titleFormFieldViewModelFactory.createWithDefaultOptions(form.field("titleShipping")));
+    protected void fillTitleShipping(final CheckoutAddressFormSettingsViewModel viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        viewModel.setTitleShipping(titleFormFieldViewModelFactory.createWithDefaultOptions(form.field("titleShipping")));
     }
 
-    protected void fillCountriesBilling(final CheckoutAddressFormSettingsViewModel model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        model.setCountriesBilling(countryFormFieldViewModelFactory.createWithDefaultOptions(form.field("countryBilling")));
+    protected void fillCountriesBilling(final CheckoutAddressFormSettingsViewModel viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        viewModel.setCountriesBilling(countryFormFieldViewModelFactory.createWithDefaultOptions(form.field("countryBilling")));
     }
 
-    protected void fillCountriesShipping(final CheckoutAddressFormSettingsViewModel model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+    protected void fillCountriesShipping(final CheckoutAddressFormSettingsViewModel viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
         final FormFieldWithOptions<CountryCode> formFieldWithOptions = new FormFieldWithOptions<>(form.field("countryShipping"), singletonList(country));
-        model.setCountriesShipping(countryFormFieldViewModelFactory.create(formFieldWithOptions));
+        viewModel.setCountriesShipping(countryFormFieldViewModelFactory.create(formFieldWithOptions));
     }
 }

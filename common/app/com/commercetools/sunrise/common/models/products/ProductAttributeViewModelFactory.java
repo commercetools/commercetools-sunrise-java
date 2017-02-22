@@ -34,15 +34,15 @@ public class ProductAttributeViewModelFactory extends ViewModelFactory<ProductAt
         fillValue(viewModel, attributeWithProductType);
     }
 
-    protected void fillKey(final ProductAttributeViewModel model, final AttributeWithProductType attributeWithProductType) {
-        model.setKey(attributeWithProductType.getAttribute().getName());
+    protected void fillKey(final ProductAttributeViewModel viewModel, final AttributeWithProductType attributeWithProductType) {
+        viewModel.setKey(attributeWithProductType.getAttribute().getName());
     }
 
-    protected void fillName(final ProductAttributeViewModel model, final AttributeWithProductType attributeWithProductType) {
-        model.setName(attributeFormatter.label(attributeWithProductType));
+    protected void fillName(final ProductAttributeViewModel viewModel, final AttributeWithProductType attributeWithProductType) {
+        viewModel.setName(attributeFormatter.label(attributeWithProductType));
     }
 
-    protected void fillValue(final ProductAttributeViewModel model, final AttributeWithProductType attributeWithProductType) {
-        model.setValue(attributeFormatter.value(attributeWithProductType));
+    protected void fillValue(final ProductAttributeViewModel viewModel, final AttributeWithProductType attributeWithProductType) {
+        viewModel.setValue(attributeFormatter.value(attributeWithProductType));
     }
 }
