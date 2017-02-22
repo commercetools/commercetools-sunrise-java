@@ -33,16 +33,16 @@ public class CheckoutPaymentPageContentFactory extends FormPageContentFactory<Ch
         return super.create(paymentMethodsWithCart, form);
     }
 
-    protected final void initialize(final CheckoutPaymentPageContent model, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
-        super.initialize(model, paymentMethodsWithCart, form);
-        fillCart(model, paymentMethodsWithCart, form);
-        fillForm(model, paymentMethodsWithCart, form);
-        fillFormSettings(model, paymentMethodsWithCart, form);
+    protected final void initialize(final CheckoutPaymentPageContent viewModel, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
+        super.initialize(viewModel, paymentMethodsWithCart, form);
+        fillCart(viewModel, paymentMethodsWithCart, form);
+        fillForm(viewModel, paymentMethodsWithCart, form);
+        fillFormSettings(viewModel, paymentMethodsWithCart, form);
     }
 
     @Override
-    protected void fillTitle(final CheckoutPaymentPageContent model, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
-        model.setTitle(pageTitleResolver.getOrEmpty("checkout:paymentPage.title"));
+    protected void fillTitle(final CheckoutPaymentPageContent viewModel, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:paymentPage.title"));
     }
 
     protected void fillCart(final CheckoutPaymentPageContent model, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {

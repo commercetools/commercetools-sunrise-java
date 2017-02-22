@@ -32,11 +32,11 @@ public class AddressBookPageContentFactory extends PageContentFactory<AddressBoo
     }
 
     @Override
-    protected final void initialize(final AddressBookPageContent model, final Customer customer) {
-        super.initialize(model, customer);
-        fillDefaultShippingAddress(model, customer);
-        fillDefaultBillingAddress(model, customer);
-        fillAddresses(model, customer);
+    protected final void initialize(final AddressBookPageContent viewModel, final Customer customer) {
+        super.initialize(viewModel, customer);
+        fillDefaultShippingAddress(viewModel, customer);
+        fillDefaultBillingAddress(viewModel, customer);
+        fillAddresses(viewModel, customer);
     }
 
     @Override

@@ -29,9 +29,9 @@ public class CheckoutThankYouPageContentFactory extends PageContentFactory<Check
     }
 
     @Override
-    protected final void initialize(final CheckoutThankYouPageContent model, final Order order) {
-        super.initialize(model, order);
-        fillOrder(model, order);
+    protected final void initialize(final CheckoutThankYouPageContent viewModel, final Order order) {
+        super.initialize(viewModel, order);
+        fillOrder(viewModel, order);
     }
 
     @Override

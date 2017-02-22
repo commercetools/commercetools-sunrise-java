@@ -46,17 +46,17 @@ public class OrderOverviewViewModelFactory extends ViewModelFactory<OrderOvervie
     }
 
     @Override
-    public final OrderOverviewViewModel create(final Order data) {
-        return super.create(data);
+    public final OrderOverviewViewModel create(final Order order) {
+        return super.create(order);
     }
 
-    protected final void initialize(final OrderOverviewViewModel model, final Order data) {
-        fillTotal(model, data);
-        fillOrderDate(model, data);
-        fillShipping(model, data);
-        fillPaymentStatus(model, data);
-        fillOrderNumber(model, data);
-        fillOrderUrl(model, data);
+    protected final void initialize(final OrderOverviewViewModel viewModel, final Order order) {
+        fillTotal(viewModel, order);
+        fillOrderDate(viewModel, order);
+        fillShipping(viewModel, order);
+        fillPaymentStatus(viewModel, order);
+        fillOrderNumber(viewModel, order);
+        fillOrderUrl(viewModel, order);
     }
 
     protected void fillOrderUrl(final OrderOverviewViewModel model, final Order order) {

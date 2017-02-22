@@ -32,8 +32,8 @@ public class ProductBreadcrumbViewModelFactory extends AbstractBreadcrumbViewMod
     }
 
     @Override
-    protected final void initialize(final BreadcrumbViewModel model, final ProductWithVariant productWithVariant) {
-        super.initialize(model, productWithVariant);
+    protected final void initialize(final BreadcrumbViewModel viewModel, final ProductWithVariant productWithVariant) {
+        super.initialize(viewModel, productWithVariant);
     }
 
     @Override

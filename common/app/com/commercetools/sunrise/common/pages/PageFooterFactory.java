@@ -10,6 +10,6 @@ public class PageFooterFactory extends ViewModelFactory<PageFooter, PageContent>
     }
 
     @Override
-    protected final void initialize(final PageFooter model, final PageContent content) {
+    protected final void initialize(final PageFooter viewModel, final PageContent content) {
     }
 }

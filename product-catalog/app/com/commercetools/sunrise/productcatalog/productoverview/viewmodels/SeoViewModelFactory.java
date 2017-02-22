@@ -14,14 +14,14 @@ public class SeoViewModelFactory extends ViewModelFactory<SeoViewModel, Products
     }
 
     @Override
-    public final SeoViewModel create(final ProductsWithCategory data) {
-        return super.create(data);
+    public final SeoViewModel create(final ProductsWithCategory productsWithCategory) {
+        return super.create(productsWithCategory);
     }
 
     @Override
-    protected final void initialize(final SeoViewModel model, final ProductsWithCategory data) {
-        fillTitle(model, data);
-        fillDescription(model, data);
+    protected final void initialize(final SeoViewModel viewModel, final ProductsWithCategory productsWithCategory) {
+        fillTitle(viewModel, productsWithCategory);
+        fillDescription(viewModel, productsWithCategory);
     }
 
     protected void fillTitle(final SeoViewModel model, final ProductsWithCategory data) {

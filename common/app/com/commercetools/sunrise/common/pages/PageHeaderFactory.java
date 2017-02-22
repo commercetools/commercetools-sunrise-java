@@ -20,9 +20,9 @@ public class PageHeaderFactory extends ViewModelFactory<PageHeader, PageContent>
     }
 
     @Override
-    protected final void initialize(final PageHeader model, final PageContent content) {
-        fillTitle(model, content);
-        fillCustomerServiceNumber(model);
+    protected final void initialize(final PageHeader viewModel, final PageContent content) {
+        fillTitle(viewModel, content);
+        fillCustomerServiceNumber(viewModel);
     }
 
     protected void fillTitle(final PageHeader model, final PageContent content) {

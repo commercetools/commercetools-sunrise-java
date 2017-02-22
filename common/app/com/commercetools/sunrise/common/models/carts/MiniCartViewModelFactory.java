@@ -26,13 +26,13 @@ public class MiniCartViewModelFactory extends AbstractMiniCartViewModelFactory<M
     }
 
     @Override
-    public final MiniCartViewModel create(@Nullable final Cart data) {
-        return super.create(data);
+    public final MiniCartViewModel create(@Nullable final Cart cart) {
+        return super.create(cart);
     }
 
     @Override
-    protected final void initialize(final MiniCartViewModel model, final Cart data) {
-        super.initialize(model, data);
+    protected final void initialize(final MiniCartViewModel viewModel, final Cart cart) {
+        super.initialize(viewModel, cart);
     }
 
     @Override

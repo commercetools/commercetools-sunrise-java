@@ -18,11 +18,11 @@ public abstract class AbstractAuthenticationPageContentFactory<F> extends PageCo
     }
 
     @Override
-    protected final void initialize(final AuthenticationPageContent model, final Form<? extends F> form) {
-        super.initialize(model, form);
-        fillLogInForm(model, form);
-        fillSignUpForm(model, form);
-        fillSignUpFormSettings(model, form);
+    protected final void initialize(final AuthenticationPageContent viewModel, final Form<? extends F> form) {
+        super.initialize(viewModel, form);
+        fillLogInForm(viewModel, form);
+        fillSignUpForm(viewModel, form);
+        fillSignUpFormSettings(viewModel, form);
     }
 
     @Override

@@ -24,10 +24,10 @@ public abstract class AbstractMiniCartViewModelFactory<T extends MiniCartViewMod
     }
 
     @Override
-    protected void initialize(final T model, final D data) {
-        fillTotalPrice(model, data);
-        fillTotalItems(model, data);
-        fillLineItems(model, data);
+    protected void initialize(final T viewModel, final D input) {
+        fillTotalPrice(viewModel, input);
+        fillTotalItems(viewModel, input);
+        fillLineItems(viewModel, input);
     }
 
     protected void fillTotalItems(final T model, @Nullable final D cartLike) {

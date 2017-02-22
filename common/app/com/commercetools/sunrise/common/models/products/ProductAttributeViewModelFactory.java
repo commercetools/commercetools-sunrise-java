@@ -23,15 +23,15 @@ public class ProductAttributeViewModelFactory extends ViewModelFactory<ProductAt
     }
 
     @Override
-    public final ProductAttributeViewModel create(final AttributeWithProductType data) {
-        return super.create(data);
+    public final ProductAttributeViewModel create(final AttributeWithProductType attributeWithProductType) {
+        return super.create(attributeWithProductType);
     }
 
     @Override
-    protected final void initialize(final ProductAttributeViewModel model, final AttributeWithProductType data) {
-        fillKey(model, data);
-        fillName(model, data);
-        fillValue(model, data);
+    protected final void initialize(final ProductAttributeViewModel viewModel, final AttributeWithProductType attributeWithProductType) {
+        fillKey(viewModel, attributeWithProductType);
+        fillName(viewModel, attributeWithProductType);
+        fillValue(viewModel, attributeWithProductType);
     }
 
     protected void fillKey(final ProductAttributeViewModel model, final AttributeWithProductType attributeWithProductType) {

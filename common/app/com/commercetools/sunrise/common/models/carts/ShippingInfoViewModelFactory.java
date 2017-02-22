@@ -32,15 +32,15 @@ public class ShippingInfoViewModelFactory extends ViewModelFactory<ShippingInfoV
     }
 
     @Override
-    public final ShippingInfoViewModel create(@Nullable final CartLike<?> data) {
-        return super.create(data);
+    public final ShippingInfoViewModel create(@Nullable final CartLike<?> cartLike) {
+        return super.create(cartLike);
     }
 
     @Override
-    protected final void initialize(final ShippingInfoViewModel model, final CartLike<?> data) {
-        fillLabel(model, data);
-        fillDescription(model, data);
-        fillPrice(model, data);
+    protected final void initialize(final ShippingInfoViewModel viewModel, final CartLike<?> cartLike) {
+        fillLabel(viewModel, cartLike);
+        fillDescription(viewModel, cartLike);
+        fillPrice(viewModel, cartLike);
     }
 
     protected void fillLabel(final ShippingInfoViewModel model, @Nullable final CartLike<?> cartLike) {

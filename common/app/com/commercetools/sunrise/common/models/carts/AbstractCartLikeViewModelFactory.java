@@ -27,15 +27,15 @@ public abstract class AbstractCartLikeViewModelFactory<T extends CartViewModel, 
     }
 
     @Override
-    protected void initialize(final T model, final D data) {
-        super.initialize(model, data);
-        fillSalesTax(model, data);
-        fillSubtotalPrice(model, data);
-        fillCustomerEmail(model, data);
-        fillShippingAddress(model, data);
-        fillBillingAddress(model, data);
-        fillShippingMethod(model, data);
-        fillPaymentDetails(model, data);
+    protected void initialize(final T viewModel, final D input) {
+        super.initialize(viewModel, input);
+        fillSalesTax(viewModel, input);
+        fillSubtotalPrice(viewModel, input);
+        fillCustomerEmail(viewModel, input);
+        fillShippingAddress(viewModel, input);
+        fillBillingAddress(viewModel, input);
+        fillShippingMethod(viewModel, input);
+        fillPaymentDetails(viewModel, input);
     }
 
     protected void fillSalesTax(final T model, @Nullable final D cartLike) {

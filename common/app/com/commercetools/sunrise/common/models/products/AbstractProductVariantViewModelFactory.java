@@ -17,13 +17,13 @@ public abstract class AbstractProductVariantViewModelFactory<D> extends ViewMode
     }
 
     @Override
-    protected void initialize(final ProductVariantViewModel model, final D data) {
-        fillSku(model, data);
-        fillName(model, data);
-        fillUrl(model, data);
-        fillImage(model, data);
-        fillPrice(model, data);
-        fillPriceOld(model, data);
+    protected void initialize(final ProductVariantViewModel viewModel, final D input) {
+        fillSku(viewModel, input);
+        fillName(viewModel, input);
+        fillUrl(viewModel, input);
+        fillImage(viewModel, input);
+        fillPrice(viewModel, input);
+        fillPriceOld(viewModel, input);
     }
 
     protected abstract void fillSku(final ProductVariantViewModel model, final D data);

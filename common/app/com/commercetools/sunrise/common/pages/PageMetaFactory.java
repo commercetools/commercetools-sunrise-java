@@ -28,10 +28,10 @@ public class PageMetaFactory extends ViewModelFactory<PageMeta, PageContent> {
     }
 
     @Override
-    protected final void initialize(final PageMeta model, final PageContent content) {
-        fillBagQuantityOptions(model, content);
-        fillCsrfToken(model, content);
-        fillSelfPageUrl(model, content);
+    protected final void initialize(final PageMeta viewModel, final PageContent content) {
+        fillBagQuantityOptions(viewModel, content);
+        fillCsrfToken(viewModel, content);
+        fillSelfPageUrl(viewModel, content);
     }
 
     protected void fillCsrfToken(final PageMeta model, final PageContent content) {

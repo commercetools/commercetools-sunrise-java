@@ -36,14 +36,14 @@ public class SortSelectorViewModelFactory extends ViewModelFactory<SortSelectorV
     }
 
     @Override
-    public final SortSelectorViewModel create(final PagedResult<ProductProjection> data) {
-        return super.create(data);
+    public final SortSelectorViewModel create(final PagedResult<ProductProjection> pagedResult) {
+        return super.create(pagedResult);
     }
 
     @Override
-    protected final void initialize(final SortSelectorViewModel model, final PagedResult<ProductProjection> data) {
-        fillKey(model, data);
-        fillList(model, data);
+    protected final void initialize(final SortSelectorViewModel viewModel, final PagedResult<ProductProjection> pagedResult) {
+        fillKey(viewModel, pagedResult);
+        fillList(viewModel, pagedResult);
     }
 
     protected void fillKey(final SortSelectorViewModel model, final PagedResult<ProductProjection> pagedResult) {

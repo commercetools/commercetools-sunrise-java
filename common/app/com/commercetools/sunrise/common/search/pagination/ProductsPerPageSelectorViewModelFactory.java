@@ -36,14 +36,14 @@ public class ProductsPerPageSelectorViewModelFactory extends ViewModelFactory<Pr
     }
 
     @Override
-    public final ProductsPerPageSelectorViewModel create(final PagedResult<ProductProjection> data) {
-        return super.create(data);
+    public final ProductsPerPageSelectorViewModel create(final PagedResult<ProductProjection> pagedResult) {
+        return super.create(pagedResult);
     }
 
     @Override
-    protected final void initialize(final ProductsPerPageSelectorViewModel model, final PagedResult<ProductProjection> data) {
-        fillKey(model, data);
-        fillList(model, data);
+    protected final void initialize(final ProductsPerPageSelectorViewModel viewModel, final PagedResult<ProductProjection> pagedResult) {
+        fillKey(viewModel, pagedResult);
+        fillList(viewModel, pagedResult);
     }
 
     protected void fillKey(final ProductsPerPageSelectorViewModel model, final PagedResult<ProductProjection> pagedResult) {

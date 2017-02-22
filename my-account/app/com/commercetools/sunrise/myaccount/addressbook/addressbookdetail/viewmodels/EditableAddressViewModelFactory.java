@@ -26,15 +26,15 @@ public class EditableAddressViewModelFactory extends ViewModelFactory<EditableAd
     }
 
     @Override
-    public final EditableAddressViewModel create(final Address data) {
-        return super.create(data);
+    public final EditableAddressViewModel create(final Address address) {
+        return super.create(address);
     }
 
     @Override
-    protected final void initialize(final EditableAddressViewModel model, final Address data) {
-        fillAddress(model, data);
-        fillAddressEditUrl(model, data);
-        fillAddressDeleteUrl(model, data);
+    protected final void initialize(final EditableAddressViewModel viewModel, final Address address) {
+        fillAddress(viewModel, address);
+        fillAddressEditUrl(viewModel, address);
+        fillAddressDeleteUrl(viewModel, address);
     }
 
     protected void fillAddress(final EditableAddressViewModel model, final Address address) {

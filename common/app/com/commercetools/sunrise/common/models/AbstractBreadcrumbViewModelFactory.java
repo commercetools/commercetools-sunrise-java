@@ -33,8 +33,8 @@ public abstract class AbstractBreadcrumbViewModelFactory<D> extends ViewModelFac
     }
 
     @Override
-    protected void initialize(final BreadcrumbViewModel model, final D data) {
-        fillLinks(model, data);
+    protected void initialize(final BreadcrumbViewModel viewModel, final D input) {
+        fillLinks(viewModel, input);
     }
 
     protected abstract void fillLinks(final BreadcrumbViewModel model, final D data);

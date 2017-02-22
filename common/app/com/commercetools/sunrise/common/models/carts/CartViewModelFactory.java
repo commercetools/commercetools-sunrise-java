@@ -34,8 +34,8 @@ public class CartViewModelFactory extends AbstractCartLikeViewModelFactory<CartV
     }
 
     @Override
-    protected final void initialize(final CartViewModel model, final Cart cart) {
-        super.initialize(model, cart);
+    protected final void initialize(final CartViewModel viewModel, final Cart cart) {
+        super.initialize(viewModel, cart);
     }
 
     @Override

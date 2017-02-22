@@ -33,8 +33,8 @@ public class ShippingMethodFormFieldViewModelFactory extends FormFieldViewModelF
     }
 
     @Override
-    public final ShippingMethodFormFieldViewModel create(final FormFieldWithOptions<ShippingMethod> data) {
-        return super.create(data);
+    public final ShippingMethodFormFieldViewModel create(final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {
+        return super.create(formFieldWithOptions);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class ShippingMethodFormFieldViewModelFactory extends FormFieldViewModelF
     }
 
     @Override
-    protected final void initialize(final ShippingMethodFormFieldViewModel model, final FormFieldWithOptions<ShippingMethod> data) {
-        fillList(model, data);
+    protected final void initialize(final ShippingMethodFormFieldViewModel viewModel, final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {
+        fillList(viewModel, formFieldWithOptions);
     }
 
     protected void fillList(final ShippingMethodFormFieldViewModel model, final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {

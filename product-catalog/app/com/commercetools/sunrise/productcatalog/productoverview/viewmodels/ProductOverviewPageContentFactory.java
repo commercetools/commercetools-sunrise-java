@@ -40,19 +40,19 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
 
 
     @Override
-    public final ProductOverviewPageContent create(final ProductsWithCategory data) {
-        return super.create(data);
+    public final ProductOverviewPageContent create(final ProductsWithCategory productsWithCategory) {
+        return super.create(productsWithCategory);
     }
 
     @Override
-    protected final void initialize(final ProductOverviewPageContent model, final ProductsWithCategory data) {
-        super.initialize(model, data);
-        fillProducts(model, data);
-        fillFilterProductsUrl(model, data);
-        fillBanner(model, data);
-        fillBreadcrumb(model, data);
-        fillJumbotron(model, data);
-        fillSeo(model, data);
+    protected final void initialize(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
+        super.initialize(viewModel, productsWithCategory);
+        fillProducts(viewModel, productsWithCategory);
+        fillFilterProductsUrl(viewModel, productsWithCategory);
+        fillBanner(viewModel, productsWithCategory);
+        fillBreadcrumb(viewModel, productsWithCategory);
+        fillJumbotron(viewModel, productsWithCategory);
+        fillSeo(viewModel, productsWithCategory);
     }
 
     @Override

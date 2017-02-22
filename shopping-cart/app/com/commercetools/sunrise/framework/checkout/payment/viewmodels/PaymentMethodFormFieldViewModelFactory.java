@@ -33,8 +33,8 @@ public class PaymentMethodFormFieldViewModelFactory extends FormFieldViewModelFa
     }
 
     @Override
-    public final PaymentMethodFormFieldViewModel create(final FormFieldWithOptions<PaymentMethodInfo> data) {
-        return super.create(data);
+    public final PaymentMethodFormFieldViewModel create(final FormFieldWithOptions<PaymentMethodInfo> formFieldWithOptions) {
+        return super.create(formFieldWithOptions);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class PaymentMethodFormFieldViewModelFactory extends FormFieldViewModelFa
     }
 
     @Override
-    protected final void initialize(final PaymentMethodFormFieldViewModel model, final FormFieldWithOptions<PaymentMethodInfo> data) {
-        fillList(model, data);
+    protected final void initialize(final PaymentMethodFormFieldViewModel viewModel, final FormFieldWithOptions<PaymentMethodInfo> formFieldWithOptions) {
+        fillList(viewModel, formFieldWithOptions);
     }
 
     protected void fillList(final PaymentMethodFormFieldViewModel model, final FormFieldWithOptions<PaymentMethodInfo> data) {

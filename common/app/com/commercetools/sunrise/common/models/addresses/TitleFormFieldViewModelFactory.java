@@ -48,8 +48,8 @@ public class TitleFormFieldViewModelFactory extends FormFieldViewModelFactory<Ti
     }
 
     @Override
-    public final TitleFormFieldViewModel create(final FormFieldWithOptions<String> data) {
-        return super.create(data);
+    public final TitleFormFieldViewModel create(final FormFieldWithOptions<String> formFieldWithOptions) {
+        return super.create(formFieldWithOptions);
     }
 
     @Override
@@ -58,8 +58,8 @@ public class TitleFormFieldViewModelFactory extends FormFieldViewModelFactory<Ti
     }
 
     @Override
-    protected final void initialize(final TitleFormFieldViewModel model, final FormFieldWithOptions<String> data) {
-        fillList(model, data);
+    protected final void initialize(final TitleFormFieldViewModel viewModel, final FormFieldWithOptions<String> formFieldWithOptions) {
+        fillList(viewModel, formFieldWithOptions);
     }
 
     protected void fillList(final TitleFormFieldViewModel model, final FormFieldWithOptions<String> formFieldWithOptions) {

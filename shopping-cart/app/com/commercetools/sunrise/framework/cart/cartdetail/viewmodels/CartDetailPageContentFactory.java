@@ -29,9 +29,9 @@ public class CartDetailPageContentFactory extends PageContentFactory<CartDetailP
         return super.create(cart);
     }
 
-    protected final void initialize(final CartDetailPageContent model, @Nullable final Cart cart) {
-        super.initialize(model, cart);
-        fillCart(model, cart);
+    protected final void initialize(final CartDetailPageContent viewModel, @Nullable final Cart cart) {
+        super.initialize(viewModel, cart);
+        fillCart(viewModel, cart);
     }
 
     @Override

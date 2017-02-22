@@ -29,8 +29,8 @@ public class ProductDetailsViewModelFactory extends ViewModelFactory<ProductDeta
     }
 
     @Override
-    public final ProductDetailsViewModel create(final ProductWithVariant data) {
-        return super.create(data);
+    public final ProductDetailsViewModel create(final ProductWithVariant productWithVariant) {
+        return super.create(productWithVariant);
     }
 
     @Override
@@ -39,8 +39,8 @@ public class ProductDetailsViewModelFactory extends ViewModelFactory<ProductDeta
     }
 
     @Override
-    protected final void initialize(final ProductDetailsViewModel model, final ProductWithVariant data) {
-        fillList(model, data);
+    protected final void initialize(final ProductDetailsViewModel viewModel, final ProductWithVariant productWithVariant) {
+        fillList(viewModel, productWithVariant);
     }
 
     protected void fillList(final ProductDetailsViewModel model, final ProductWithVariant productWithVariant) {

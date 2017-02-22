@@ -26,13 +26,13 @@ public class SignUpFormSettingsViewModelFactory extends ViewModelFactory<SignUpF
     }
 
     @Override
-    public final SignUpFormSettingsViewModel create(@Nullable final Form<? extends SignUpFormData> data) {
-        return super.create(data);
+    public final SignUpFormSettingsViewModel create(@Nullable final Form<? extends SignUpFormData> input) {
+        return super.create(input);
     }
 
     @Override
-    protected final void initialize(final SignUpFormSettingsViewModel model, @Nullable final Form<? extends SignUpFormData> form) {
-        fillTitle(model, form);
+    protected final void initialize(final SignUpFormSettingsViewModel viewModel, @Nullable final Form<? extends SignUpFormData> form) {
+        fillTitle(viewModel, form);
     }
 
     protected void fillTitle(final SignUpFormSettingsViewModel model, @Nullable final Form<? extends SignUpFormData> form) {

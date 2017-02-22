@@ -18,13 +18,13 @@ public class PaymentInfoViewModelFactory extends ViewModelFactory<PaymentInfoVie
     }
 
     @Override
-    public final PaymentInfoViewModel create(@Nullable final CartLike<?> data) {
-        return super.create(data);
+    public final PaymentInfoViewModel create(@Nullable final CartLike<?> cartLike) {
+        return super.create(cartLike);
     }
 
     @Override
-    protected final void initialize(final PaymentInfoViewModel model, final CartLike<?> data) {
-        fillType(model, data);
+    protected final void initialize(final PaymentInfoViewModel viewModel, final CartLike<?> cartLike) {
+        fillType(viewModel, cartLike);
     }
 
     protected void fillType(final PaymentInfoViewModel model, @Nullable final CartLike<?> cartLike) {

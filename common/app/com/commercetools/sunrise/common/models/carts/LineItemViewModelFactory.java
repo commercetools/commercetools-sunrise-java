@@ -20,12 +20,12 @@ public class LineItemViewModelFactory extends AbstractLineItemViewModelFactory<L
     }
 
     @Override
-    public final LineItemViewModel create(final LineItem data) {
-        return super.create(data);
+    public final LineItemViewModel create(final LineItem lineItem) {
+        return super.create(lineItem);
     }
 
     @Override
-    protected final void initialize(final LineItemViewModel model, final LineItem data) {
-        super.initialize(model, data);
+    protected final void initialize(final LineItemViewModel viewModel, final LineItem lineItem) {
+        super.initialize(viewModel, lineItem);
     }
 }

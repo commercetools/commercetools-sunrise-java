@@ -35,8 +35,8 @@ public class CountryFormFieldViewModelFactory extends FormFieldViewModelFactory<
     }
 
     @Override
-    public final CountryFormFieldViewModel create(final FormFieldWithOptions<CountryCode> data) {
-        return super.create(data);
+    public final CountryFormFieldViewModel create(final FormFieldWithOptions<CountryCode> formFieldWithOptions) {
+        return super.create(formFieldWithOptions);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class CountryFormFieldViewModelFactory extends FormFieldViewModelFactory<
     }
 
     @Override
-    protected final void initialize(final CountryFormFieldViewModel model, final FormFieldWithOptions<CountryCode> data) {
-        fillList(model, data);
+    protected final void initialize(final CountryFormFieldViewModel viewModel, final FormFieldWithOptions<CountryCode> formFieldWithOptions) {
+        fillList(viewModel, formFieldWithOptions);
     }
 
     protected void fillList(final CountryFormFieldViewModel model, final FormFieldWithOptions<CountryCode> formFieldWithOptions) {

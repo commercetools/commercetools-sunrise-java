@@ -27,9 +27,9 @@ public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderLis
     }
 
     @Override
-    protected final void initialize(final MyOrderListPageContent model, final OrderListWithCustomer orderListWithCustomer) {
-        super.initialize(model, orderListWithCustomer);
-        fillOrders(model, orderListWithCustomer);
+    protected final void initialize(final MyOrderListPageContent viewModel, final OrderListWithCustomer orderListWithCustomer) {
+        super.initialize(viewModel, orderListWithCustomer);
+        fillOrders(viewModel, orderListWithCustomer);
     }
 
     @Override

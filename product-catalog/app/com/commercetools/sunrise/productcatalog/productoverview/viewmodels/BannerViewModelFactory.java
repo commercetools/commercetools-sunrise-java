@@ -14,14 +14,14 @@ public class BannerViewModelFactory extends ViewModelFactory<BannerViewModel, Pr
     }
 
     @Override
-    public final BannerViewModel create(final ProductsWithCategory data) {
-        return super.create(data);
+    public final BannerViewModel create(final ProductsWithCategory productsWithCategory) {
+        return super.create(productsWithCategory);
     }
 
     @Override
-    protected final void initialize(final BannerViewModel model, final ProductsWithCategory data) {
-        fillTitle(model, data);
-        fillDescription(model, data);
+    protected final void initialize(final BannerViewModel viewModel, final ProductsWithCategory productsWithCategory) {
+        fillTitle(viewModel, productsWithCategory);
+        fillDescription(viewModel, productsWithCategory);
     }
 
     protected void fillDescription(final BannerViewModel model, final ProductsWithCategory data) {

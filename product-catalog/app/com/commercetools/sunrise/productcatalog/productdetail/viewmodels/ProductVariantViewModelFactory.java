@@ -24,13 +24,13 @@ public class ProductVariantViewModelFactory extends AbstractProductVariantViewMo
     }
 
     @Override
-    public final ProductVariantViewModel create(final ProductWithVariant data) {
-        return super.create(data);
+    public final ProductVariantViewModel create(final ProductWithVariant productWithVariant) {
+        return super.create(productWithVariant);
     }
 
     @Override
-    protected final void initialize(final ProductVariantViewModel model, final ProductWithVariant data) {
-        super.initialize(model, data);
+    protected final void initialize(final ProductVariantViewModel viewModel, final ProductWithVariant productWithVariant) {
+        super.initialize(viewModel, productWithVariant);
     }
 
     @Override

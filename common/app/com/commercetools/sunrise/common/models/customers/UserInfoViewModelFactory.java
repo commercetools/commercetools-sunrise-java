@@ -15,15 +15,15 @@ public class UserInfoViewModelFactory extends ViewModelFactory<UserInfoViewModel
     }
 
     @Override
-    public final UserInfoViewModel create(@Nullable final Customer data) {
-        return super.create(data);
+    public final UserInfoViewModel create(@Nullable final Customer customer) {
+        return super.create(customer);
     }
 
     @Override
-    protected final void initialize(final UserInfoViewModel model, final Customer data) {
-        fillLoggedIn(model, data);
-        fillName(model, data);
-        fillEmail(model, data);
+    protected final void initialize(final UserInfoViewModel viewModel, final Customer customer) {
+        fillLoggedIn(viewModel, customer);
+        fillName(viewModel, customer);
+        fillEmail(viewModel, customer);
     }
 
     protected void fillLoggedIn(final UserInfoViewModel model, @Nullable final Customer customer) {

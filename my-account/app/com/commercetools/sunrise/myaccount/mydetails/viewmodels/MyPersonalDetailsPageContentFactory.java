@@ -34,16 +34,16 @@ public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<
     }
 
     @Override
-    protected void initialize(final MyPersonalDetailsPageContent model, final Customer data, final Form<? extends MyPersonalDetailsFormData> form) {
-        super.initialize(model, data, form);
-        fillCustomer(model, data, form);
-        fillPersonalDetailsForm(model, data, form);
-        fillPersonalDetailsFormSettings(model, data, form);
+    protected void initialize(final MyPersonalDetailsPageContent viewModel, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
+        super.initialize(viewModel, customer, form);
+        fillCustomer(viewModel, customer, form);
+        fillPersonalDetailsForm(viewModel, customer, form);
+        fillPersonalDetailsFormSettings(viewModel, customer, form);
     }
 
     @Override
-    protected void fillTitle(final MyPersonalDetailsPageContent model, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
-        model.setTitle(pageTitleResolver.getOrEmpty("myAccount:myPersonalDetailsPage.title"));
+    protected void fillTitle(final MyPersonalDetailsPageContent viewModel, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:myPersonalDetailsPage.title"));
     }
 
     protected void fillCustomer(final MyPersonalDetailsPageContent model, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {

@@ -15,11 +15,11 @@ public abstract class AbstractLineItemViewModelFactory<T extends LineItemViewMod
     }
 
     @Override
-    protected void initialize(final T model, final LineItem data) {
-        fillLineItemId(model, data);
-        fillQuantity(model, data);
-        fillVariant(model, data);
-        fillTotalPrice(model, data);
+    protected void initialize(final T viewModel, final LineItem lineItem) {
+        fillLineItemId(viewModel, lineItem);
+        fillQuantity(viewModel, lineItem);
+        fillVariant(viewModel, lineItem);
+        fillTotalPrice(viewModel, lineItem);
     }
 
     protected void fillLineItemId(final T model, final LineItem lineItem) {

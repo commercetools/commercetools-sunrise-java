@@ -5,11 +5,11 @@ import play.data.Form;
 
 import java.util.List;
 
-public abstract class FormFieldViewModelFactory<T extends ViewModel, D> extends ViewModelFactory<T, FormFieldWithOptions<D>> {
+public abstract class FormFieldViewModelFactory<M extends ViewModel, I> extends ViewModelFactory<M, FormFieldWithOptions<I>> {
 
-    public T createWithDefaultOptions(final Form.Field formField) {
+    public M createWithDefaultOptions(final Form.Field formField) {
         return create(new FormFieldWithOptions<>(formField, defaultOptions()));
     }
 
-    protected abstract List<D> defaultOptions();
+    protected abstract List<I> defaultOptions();
 }

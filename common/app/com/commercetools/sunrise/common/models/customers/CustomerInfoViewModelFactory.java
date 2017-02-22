@@ -11,13 +11,13 @@ public class CustomerInfoViewModelFactory extends ViewModelFactory<CustomerInfoV
     }
 
     @Override
-    public final CustomerInfoViewModel create(final Customer data) {
-        return super.create(data);
+    public final CustomerInfoViewModel create(final Customer customer) {
+        return super.create(customer);
     }
 
     @Override
-    protected final void initialize(final CustomerInfoViewModel model, final Customer data) {
-        fillCustomer(model, data);
+    protected final void initialize(final CustomerInfoViewModel viewModel, final Customer customer) {
+        fillCustomer(viewModel, customer);
     }
 
     protected void fillCustomer(final CustomerInfoViewModel model, final Customer customer) {

@@ -31,15 +31,15 @@ public class OrderViewModelFactory extends AbstractCartLikeViewModelFactory<Orde
     }
 
     @Override
-    public final OrderViewModel create(final Order data) {
-        return super.create(data);
+    public final OrderViewModel create(final Order order) {
+        return super.create(order);
     }
 
     @Override
-    protected final void initialize(final OrderViewModel model, final Order data) {
-        super.initialize(model, data);
-        fillOrderDate(model, data);
-        fillOrderNumber(model, data);
+    protected final void initialize(final OrderViewModel viewModel, final Order order) {
+        super.initialize(viewModel, order);
+        fillOrderDate(viewModel, order);
+        fillOrderNumber(viewModel, order);
     }
 
     protected void fillOrderNumber(final OrderViewModel model, final Order order) {

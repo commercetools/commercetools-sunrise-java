@@ -42,17 +42,17 @@ public class PaginationViewModelFactory extends ViewModelFactory<PaginationViewM
     }
 
     @Override
-    public final PaginationViewModel create(final PagedResult<?> data) {
-        return super.create(data);
+    public final PaginationViewModel create(final PagedResult<?> pagedResult) {
+        return super.create(pagedResult);
     }
 
     @Override
-    protected final void initialize(final PaginationViewModel model, final PagedResult<?> data) {
-        fillNextUrl(model, data);
-        fillPreviousUrl(model, data);
-        fillFirstPage(model, data);
-        fillLastPage(model, data);
-        fillPages(model, data);
+    protected final void initialize(final PaginationViewModel viewModel, final PagedResult<?> pagedResult) {
+        fillNextUrl(viewModel, pagedResult);
+        fillPreviousUrl(viewModel, pagedResult);
+        fillFirstPage(viewModel, pagedResult);
+        fillLastPage(viewModel, pagedResult);
+        fillPages(viewModel, pagedResult);
     }
 
     protected void fillNextUrl(final PaginationViewModel model, final PagedResult<?> pagedResult) {

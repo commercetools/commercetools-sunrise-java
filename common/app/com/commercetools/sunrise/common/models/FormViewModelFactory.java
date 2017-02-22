@@ -2,19 +2,19 @@ package com.commercetools.sunrise.common.models;
 
 import play.data.Form;
 
-public abstract class FormViewModelFactory<T extends ViewModel, D, F>  {
+public abstract class FormViewModelFactory<M extends ViewModel, I, F>  {
 
-    protected abstract T getViewModelInstance();
+    protected abstract M getViewModelInstance();
 
-    public T create(final D data, final Form<? extends F> form) {
-        return initializedViewModel(data, form);
+    public M create(final I input, final Form<? extends F> form) {
+        return initializedViewModel(input, form);
     }
 
-    protected abstract void initialize(final T model, final D data, final Form<? extends F> form);
+    protected abstract void initialize(final M viewModel, final I input, final Form<? extends F> form);
 
-    protected final T initializedViewModel(final D data, final Form<? extends F> form) {
-        final T model = getViewModelInstance();
-        initialize(model, data, form);
-        return model;
+    protected final M initializedViewModel(final I data, final Form<? extends F> form) {
+        final M viewModel = getViewModelInstance();
+        initialize(viewModel, data, form);
+        return viewModel;
     }
 }

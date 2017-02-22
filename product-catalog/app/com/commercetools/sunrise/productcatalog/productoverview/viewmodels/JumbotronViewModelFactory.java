@@ -23,15 +23,15 @@ public class JumbotronViewModelFactory extends ViewModelFactory<JumbotronViewMod
     }
 
     @Override
-    public final JumbotronViewModel create(final ProductsWithCategory data) {
-        return super.create(data);
+    public final JumbotronViewModel create(final ProductsWithCategory productsWithCategory) {
+        return super.create(productsWithCategory);
     }
 
     @Override
-    protected final void initialize(final JumbotronViewModel model, final ProductsWithCategory data) {
-        fillTitle(model, data);
-        fillSubtitle(model, data);
-        fillDescription(model, data);
+    protected final void initialize(final JumbotronViewModel viewModel, final ProductsWithCategory productsWithCategory) {
+        fillTitle(viewModel, productsWithCategory);
+        fillSubtitle(viewModel, productsWithCategory);
+        fillDescription(viewModel, productsWithCategory);
     }
 
     protected void fillTitle(final JumbotronViewModel model, final ProductsWithCategory data) {

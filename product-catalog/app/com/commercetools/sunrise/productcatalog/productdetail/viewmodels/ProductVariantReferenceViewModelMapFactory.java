@@ -36,13 +36,13 @@ public class ProductVariantReferenceViewModelMapFactory extends ViewModelFactory
     }
 
     @Override
-    public final ProductVariantReferenceMapViewModel create(final ProductWithVariant data) {
-        return super.create(data);
+    public final ProductVariantReferenceMapViewModel create(final ProductWithVariant productWithVariant) {
+        return super.create(productWithVariant);
     }
 
     @Override
-    protected final void initialize(final ProductVariantReferenceMapViewModel model, final ProductWithVariant productWithVariant) {
-        fillMap(model, productWithVariant);
+    protected final void initialize(final ProductVariantReferenceMapViewModel viewModel, final ProductWithVariant productWithVariant) {
+        fillMap(viewModel, productWithVariant);
     }
 
     protected void fillMap(final ProductVariantReferenceMapViewModel map, final ProductWithVariant productWithVariant) {

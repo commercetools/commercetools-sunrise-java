@@ -23,14 +23,14 @@ public class ProductVariantReferenceViewModelFactory extends ViewModelFactory<Pr
     }
 
     @Override
-    public final ProductVariantReferenceViewModel create(final ProductWithVariant data) {
-        return super.create(data);
+    public final ProductVariantReferenceViewModel create(final ProductWithVariant productWithVariant) {
+        return super.create(productWithVariant);
     }
 
     @Override
-    protected final void initialize(final ProductVariantReferenceViewModel model, final ProductWithVariant data) {
-        fillId(model, data);
-        fillUrl(model, data);
+    protected final void initialize(final ProductVariantReferenceViewModel viewModel, final ProductWithVariant productWithVariant) {
+        fillId(viewModel, productWithVariant);
+        fillUrl(viewModel, productWithVariant);
     }
 
     protected void fillId(final ProductVariantReferenceViewModel model, final ProductWithVariant productWithVariant) {

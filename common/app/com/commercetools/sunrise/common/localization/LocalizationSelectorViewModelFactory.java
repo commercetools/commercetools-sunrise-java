@@ -40,14 +40,14 @@ public class LocalizationSelectorViewModelFactory extends ViewModelFactory<Local
     }
 
     @Override
-    public final LocalizationSelectorViewModel create(final Void data) {
-        return super.create(data);
+    public final LocalizationSelectorViewModel create(final Void input) {
+        return super.create(input);
     }
 
     @Override
-    protected final void initialize(final LocalizationSelectorViewModel model, final Void data) {
-        fillCountry(model);
-        fillLanguage(model);
+    protected final void initialize(final LocalizationSelectorViewModel viewModel, final Void input) {
+        fillCountry(viewModel);
+        fillLanguage(viewModel);
     }
 
     protected void fillCountry(final LocalizationSelectorViewModel model) {

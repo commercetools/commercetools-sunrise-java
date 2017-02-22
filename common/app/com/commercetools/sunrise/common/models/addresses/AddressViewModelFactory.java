@@ -33,23 +33,23 @@ public class AddressViewModelFactory extends ViewModelFactory<AddressViewModel, 
     }
 
     @Override
-    public final AddressViewModel create(final Address data) {
-        return super.create(data);
+    public final AddressViewModel create(final Address address) {
+        return super.create(address);
     }
 
     @Override
-    protected final void initialize(final AddressViewModel model, final Address data) {
-        fillTitle(model, data);
-        fillFirstName(model, data);
-        fillLastName(model, data);
-        fillStreetName(model, data);
-        fillAdditionalStreetInfo(model, data);
-        fillCity(model, data);
-        fillRegion(model, data);
-        fillPostalCode(model, data);
-        fillCountry(model, data);
-        fillPhone(model, data);
-        fillEmail(model, data);
+    protected final void initialize(final AddressViewModel viewModel, final Address address) {
+        fillTitle(viewModel, address);
+        fillFirstName(viewModel, address);
+        fillLastName(viewModel, address);
+        fillStreetName(viewModel, address);
+        fillAdditionalStreetInfo(viewModel, address);
+        fillCity(viewModel, address);
+        fillRegion(viewModel, address);
+        fillPostalCode(viewModel, address);
+        fillCountry(viewModel, address);
+        fillPhone(viewModel, address);
+        fillEmail(viewModel, address);
     }
 
     protected void fillTitle(final AddressViewModel model, @Nullable final Address address) {

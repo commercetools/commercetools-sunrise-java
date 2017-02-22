@@ -34,16 +34,16 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
     }
 
     @Override
-    protected final void initialize(final CheckoutShippingPageContent model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
-        super.initialize(model, shippingMethodsWithCart, form);
-        fillCart(model, shippingMethodsWithCart, form);
-        fillForm(model, shippingMethodsWithCart, form);
-        fillFormSettings(model, shippingMethodsWithCart, form);
+    protected final void initialize(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
+        super.initialize(viewModel, shippingMethodsWithCart, form);
+        fillCart(viewModel, shippingMethodsWithCart, form);
+        fillForm(viewModel, shippingMethodsWithCart, form);
+        fillFormSettings(viewModel, shippingMethodsWithCart, form);
     }
 
     @Override
-    protected void fillTitle(final CheckoutShippingPageContent model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
-        model.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
+    protected void fillTitle(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
     }
 
     protected void fillCart(final CheckoutShippingPageContent model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {

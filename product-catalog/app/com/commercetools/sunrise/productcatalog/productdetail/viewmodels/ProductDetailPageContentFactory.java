@@ -36,10 +36,10 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
     }
 
     @Override
-    protected final void initialize(final ProductDetailPageContent model, final ProductWithVariant productWithVariant) {
-        super.initialize(model, productWithVariant);
-        fillProduct(model, productWithVariant);
-        fillBreadCrumb(model, productWithVariant);
+    protected final void initialize(final ProductDetailPageContent viewModel, final ProductWithVariant productWithVariant) {
+        super.initialize(viewModel, productWithVariant);
+        fillProduct(viewModel, productWithVariant);
+        fillBreadCrumb(viewModel, productWithVariant);
     }
 
     @Override

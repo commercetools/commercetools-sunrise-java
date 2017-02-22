@@ -31,15 +31,15 @@ public class AddAddressPageContentFactory extends FormPageContentFactory<AddAddr
     }
 
     @Override
-    protected final void initialize(final AddAddressPageContent model, final Customer customer, final Form<? extends AddressFormData> form) {
-        super.initialize(model, customer, form);
-        fillNewAddressForm(model, customer, form);
-        fillNewAddressFormSettings(model, customer, form);
+    protected final void initialize(final AddAddressPageContent viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+        super.initialize(viewModel, customer, form);
+        fillNewAddressForm(viewModel, customer, form);
+        fillNewAddressFormSettings(viewModel, customer, form);
     }
 
     @Override
-    protected void fillTitle(final AddAddressPageContent model, final Customer customer, final Form<? extends AddressFormData> form) {
-        model.setTitle(pageTitleResolver.getOrEmpty("myAccount:addAddressPage.title"));
+    protected void fillTitle(final AddAddressPageContent viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:addAddressPage.title"));
     }
 
     protected void fillNewAddressForm(final AddAddressPageContent model, final Customer customer, final Form<? extends AddressFormData> form) {

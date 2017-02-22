@@ -37,22 +37,22 @@ public class ProductViewModelFactory extends ViewModelFactory<ProductViewModel, 
     }
 
     @Override
-    public final ProductViewModel create(final ProductWithVariant data) {
-        return super.create(data);
+    public final ProductViewModel create(final ProductWithVariant productWithVariant) {
+        return super.create(productWithVariant);
     }
 
     @Override
-    protected final void initialize(final ProductViewModel model, final ProductWithVariant data) {
-        fillProductId(model, data);
-        fillVariantId(model, data);
-        fillDescription(model, data);
-        fillGallery(model, data);
-        fillDetails(model, data);
-        fillVariant(model, data);
-        fillAttributes(model, data);
-        fillAvailability(model, data);
-        fillVariantIdentifiers(model, data);
-        fillAttributeCombination(model, data);
+    protected final void initialize(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
+        fillProductId(viewModel, productWithVariant);
+        fillVariantId(viewModel, productWithVariant);
+        fillDescription(viewModel, productWithVariant);
+        fillGallery(viewModel, productWithVariant);
+        fillDetails(viewModel, productWithVariant);
+        fillVariant(viewModel, productWithVariant);
+        fillAttributes(viewModel, productWithVariant);
+        fillAvailability(viewModel, productWithVariant);
+        fillVariantIdentifiers(viewModel, productWithVariant);
+        fillAttributeCombination(viewModel, productWithVariant);
     }
 
     protected void fillProductId(final ProductViewModel model, final ProductWithVariant productWithVariant) {

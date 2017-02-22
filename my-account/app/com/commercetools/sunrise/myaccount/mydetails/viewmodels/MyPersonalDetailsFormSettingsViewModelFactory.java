@@ -29,8 +29,8 @@ public class MyPersonalDetailsFormSettingsViewModelFactory extends ViewModelFact
     }
 
     @Override
-    protected final void initialize(final MyPersonalDetailsFormSettingsViewModel model, final Form<? extends MyPersonalDetailsFormData> form) {
-        fillTitle(model, form);
+    protected final void initialize(final MyPersonalDetailsFormSettingsViewModel viewModel, final Form<? extends MyPersonalDetailsFormData> form) {
+        fillTitle(viewModel, form);
     }
 
     protected void fillTitle(final MyPersonalDetailsFormSettingsViewModel model, final Form<? extends MyPersonalDetailsFormData> form) {

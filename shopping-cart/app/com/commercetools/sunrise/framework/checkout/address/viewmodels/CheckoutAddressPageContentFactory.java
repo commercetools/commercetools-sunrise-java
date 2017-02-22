@@ -34,16 +34,16 @@ public class CheckoutAddressPageContentFactory extends FormPageContentFactory<Ch
     }
 
     @Override
-    protected final void initialize(final CheckoutAddressPageContent model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        super.initialize(model, cart, form);
-        fillCart(model, cart, form);
-        fillForm(model, cart, form);
-        fillFormSettings(model, cart, form);
+    protected final void initialize(final CheckoutAddressPageContent viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        super.initialize(viewModel, cart, form);
+        fillCart(viewModel, cart, form);
+        fillForm(viewModel, cart, form);
+        fillFormSettings(viewModel, cart, form);
     }
 
     @Override
-    protected void fillTitle(final CheckoutAddressPageContent model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        model.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
+    protected void fillTitle(final CheckoutAddressPageContent viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
     }
 
     protected void fillCart(final CheckoutAddressPageContent model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {

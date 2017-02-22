@@ -32,8 +32,8 @@ public class CheckoutPaymentFormSettingsViewModelFactory extends FormViewModelFa
     }
 
     @Override
-    protected final void initialize(final CheckoutPaymentFormSettingsViewModel model, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
-        fillPaymentMethod(model, paymentMethodsWithCart, form);
+    protected final void initialize(final CheckoutPaymentFormSettingsViewModel viewModel, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
+        fillPaymentMethod(viewModel, paymentMethodsWithCart, form);
     }
 
     protected void fillPaymentMethod(final CheckoutPaymentFormSettingsViewModel model, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {

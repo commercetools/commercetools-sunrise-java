@@ -31,15 +31,15 @@ public class CheckoutConfirmationPageContentFactory extends FormPageContentFacto
     }
 
     @Override
-    protected final void initialize(final CheckoutConfirmationPageContent model, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
-        super.initialize(model, cart, form);
-        fillCart(model, cart, form);
-        fillForm(model, cart, form);
+    protected final void initialize(final CheckoutConfirmationPageContent viewModel, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
+        super.initialize(viewModel, cart, form);
+        fillCart(viewModel, cart, form);
+        fillForm(viewModel, cart, form);
     }
 
     @Override
-    protected void fillTitle(final CheckoutConfirmationPageContent model, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
-        model.setTitle(pageTitleResolver.getOrEmpty("checkout:confirmationPage.title"));
+    protected void fillTitle(final CheckoutConfirmationPageContent viewModel, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:confirmationPage.title"));
     }
 
     protected void fillCart(final CheckoutConfirmationPageContent model, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {

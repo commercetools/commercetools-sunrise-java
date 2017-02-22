@@ -39,9 +39,9 @@ public class AddressFormSettingsViewModelFactory extends FormViewModelFactory<Ad
     }
 
     @Override
-    protected final void initialize(final AddressFormSettingsViewModel model, final Customer customer, final Form<? extends AddressFormData> form) {
-        fillTitle(model, customer, form);
-        fillCountries(model, customer, form);
+    protected final void initialize(final AddressFormSettingsViewModel viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+        fillTitle(viewModel, customer, form);
+        fillCountries(viewModel, customer, form);
     }
 
     protected void fillTitle(final AddressFormSettingsViewModel model, final Customer customer, final Form<? extends AddressFormData> form) {

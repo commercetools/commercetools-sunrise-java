@@ -25,13 +25,13 @@ public class PageNavMenuFactory extends ViewModelFactory<PageNavMenu, Void> {
         return new PageNavMenu();
     }
 
-    public final PageNavMenu create(final Void data) {
-        return initializedViewModel(data);
+    public final PageNavMenu create(final Void input) {
+        return initializedViewModel(input);
     }
 
     @Override
-    protected final void initialize(final PageNavMenu model, final Void data) {
-        fillCategories(model);
+    protected final void initialize(final PageNavMenu viewModel, final Void input) {
+        fillCategories(viewModel);
     }
 
     protected void fillCategories(final PageNavMenu model) {

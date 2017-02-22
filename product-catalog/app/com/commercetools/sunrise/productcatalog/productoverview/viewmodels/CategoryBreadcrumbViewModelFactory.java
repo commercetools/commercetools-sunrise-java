@@ -18,8 +18,8 @@ public class CategoryBreadcrumbViewModelFactory extends AbstractBreadcrumbViewMo
     }
 
     @Override
-    public final BreadcrumbViewModel create(final ProductsWithCategory data) {
-        return super.create(data);
+    public final BreadcrumbViewModel create(final ProductsWithCategory productsWithCategory) {
+        return super.create(productsWithCategory);
     }
 
     @Override
@@ -28,8 +28,8 @@ public class CategoryBreadcrumbViewModelFactory extends AbstractBreadcrumbViewMo
     }
 
     @Override
-    protected final void initialize(final BreadcrumbViewModel model, final ProductsWithCategory data) {
-        super.initialize(model, data);
+    protected final void initialize(final BreadcrumbViewModel viewModel, final ProductsWithCategory productsWithCategory) {
+        super.initialize(viewModel, productsWithCategory);
     }
 
     @Override

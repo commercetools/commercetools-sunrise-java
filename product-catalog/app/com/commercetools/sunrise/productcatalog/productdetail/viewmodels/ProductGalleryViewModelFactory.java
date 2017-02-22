@@ -19,8 +19,8 @@ public class ProductGalleryViewModelFactory extends ViewModelFactory<ProductGall
     }
 
     @Override
-    public final ProductGalleryViewModel create(final ProductWithVariant data) {
-        return super.create(data);
+    public final ProductGalleryViewModel create(final ProductWithVariant productWithVariant) {
+        return super.create(productWithVariant);
     }
 
     @Override
@@ -29,8 +29,8 @@ public class ProductGalleryViewModelFactory extends ViewModelFactory<ProductGall
     }
 
     @Override
-    protected final void initialize(final ProductGalleryViewModel model, final ProductWithVariant data) {
-        fillList(model, data);
+    protected final void initialize(final ProductGalleryViewModel viewModel, final ProductWithVariant productWithVariant) {
+        fillList(viewModel, productWithVariant);
     }
 
     protected void fillList(final ProductGalleryViewModel model, final ProductWithVariant productWithVariant) {

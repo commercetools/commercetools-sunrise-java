@@ -29,15 +29,15 @@ public class ProductThumbnailViewModelFactory extends ViewModelFactory<ProductTh
     }
 
     @Override
-    public final ProductThumbnailViewModel create(final ProductWithVariant data) {
-        return super.create(data);
+    public final ProductThumbnailViewModel create(final ProductWithVariant productWithVariant) {
+        return super.create(productWithVariant);
     }
 
     @Override
-    protected final void initialize(final ProductThumbnailViewModel model, final ProductWithVariant data) {
-        fillProduct(model, data);
-        fillNew(model, data);
-        fillSale(model, data);
+    protected final void initialize(final ProductThumbnailViewModel viewModel, final ProductWithVariant productWithVariant) {
+        fillProduct(viewModel, productWithVariant);
+        fillNew(viewModel, productWithVariant);
+        fillSale(viewModel, productWithVariant);
     }
 
     protected void fillProduct(final ProductThumbnailViewModel model, final ProductWithVariant productWithVariant) {

@@ -12,8 +12,8 @@ public class ProductImageViewModelFactory extends ViewModelFactory<ProductImageV
     }
 
     @Override
-    public final ProductImageViewModel create(final Image data) {
-        return super.create(data);
+    public final ProductImageViewModel create(final Image image) {
+        return super.create(image);
     }
 
     @Override
@@ -22,9 +22,9 @@ public class ProductImageViewModelFactory extends ViewModelFactory<ProductImageV
     }
 
     @Override
-    protected final void initialize(final ProductImageViewModel model, final Image image) {
-        fillThumbImage(model, image);
-        fillBigImage(model, image);
+    protected final void initialize(final ProductImageViewModel viewModel, final Image image) {
+        fillThumbImage(viewModel, image);
+        fillBigImage(viewModel, image);
     }
 
     protected void fillBigImage(final ProductImageViewModel model, final Image image) {

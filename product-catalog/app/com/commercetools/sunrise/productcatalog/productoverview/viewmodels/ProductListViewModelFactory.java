@@ -26,13 +26,13 @@ public class ProductListViewModelFactory extends ViewModelFactory<ProductListVie
     }
 
     @Override
-    public final ProductListViewModel create(final Iterable<ProductProjection> data) {
-        return super.create(data);
+    public final ProductListViewModel create(final Iterable<ProductProjection> products) {
+        return super.create(products);
     }
 
     @Override
-    protected final void initialize(final ProductListViewModel model, final Iterable<ProductProjection> data) {
-        fillList(model, data);
+    protected final void initialize(final ProductListViewModel viewModel, final Iterable<ProductProjection> products) {
+        fillList(viewModel, products);
     }
 
     protected void fillList(final ProductListViewModel model, final Iterable<ProductProjection> products) {

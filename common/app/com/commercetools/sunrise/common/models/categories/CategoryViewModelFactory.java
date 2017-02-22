@@ -35,16 +35,16 @@ public class CategoryViewModelFactory extends ViewModelFactory<CategoryViewModel
     }
 
     @Override
-    public final CategoryViewModel create(final Category data) {
-        return super.create(data);
+    public final CategoryViewModel create(final Category category) {
+        return super.create(category);
     }
 
     @Override
-    protected final void initialize(final CategoryViewModel model, final Category data) {
-        fillText(model, data);
-        fillUrl(model, data);
-        fillSale(model, data);
-        fillChildren(model, data);
+    protected final void initialize(final CategoryViewModel viewModel, final Category category) {
+        fillText(viewModel, category);
+        fillUrl(viewModel, category);
+        fillSale(viewModel, category);
+        fillChildren(viewModel, category);
     }
 
     protected void fillText(final CategoryViewModel model, final Category category) {

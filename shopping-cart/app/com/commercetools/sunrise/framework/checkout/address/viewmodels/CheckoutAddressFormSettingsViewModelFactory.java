@@ -40,11 +40,11 @@ public class CheckoutAddressFormSettingsViewModelFactory extends FormViewModelFa
     }
 
     @Override
-    protected final void initialize(final CheckoutAddressFormSettingsViewModel model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        fillCountriesShipping(model, cart, form);
-        fillCountriesBilling(model, cart, form);
-        fillTitleShipping(model, cart, form);
-        fillTitleBilling(model, cart, form);
+    protected final void initialize(final CheckoutAddressFormSettingsViewModel viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
+        fillCountriesShipping(viewModel, cart, form);
+        fillCountriesBilling(viewModel, cart, form);
+        fillTitleShipping(viewModel, cart, form);
+        fillTitleBilling(viewModel, cart, form);
     }
 
     protected void fillTitleBilling(final CheckoutAddressFormSettingsViewModel model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {

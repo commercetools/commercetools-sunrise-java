@@ -25,13 +25,13 @@ public class LineItemProductVariantViewModelFactory extends AbstractProductVaria
     }
 
     @Override
-    public final ProductVariantViewModel create(final LineItem data) {
-        return super.create(data);
+    public final ProductVariantViewModel create(final LineItem lineItem) {
+        return super.create(lineItem);
     }
 
     @Override
-    protected final void initialize(final ProductVariantViewModel model, final LineItem data) {
-        super.initialize(model, data);
+    protected final void initialize(final ProductVariantViewModel viewModel, final LineItem lineItem) {
+        super.initialize(viewModel, lineItem);
     }
 
     @Override
