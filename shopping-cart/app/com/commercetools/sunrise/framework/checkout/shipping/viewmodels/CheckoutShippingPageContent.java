@@ -6,7 +6,7 @@ import play.data.Form;
 public class CheckoutShippingPageContent extends AbstractCheckoutPageContent {
 
     private Form<?> shippingForm;
-    private CheckoutShippingFormSettingsBean shippingFormSettings;
+    private CheckoutShippingFormSettingsViewModel shippingFormSettings;
 
     public CheckoutShippingPageContent() {
     }
@@ -19,11 +19,11 @@ public class CheckoutShippingPageContent extends AbstractCheckoutPageContent {
         this.shippingForm = shippingForm;
     }
 
-    public CheckoutShippingFormSettingsBean getShippingFormSettings() {
+    public CheckoutShippingFormSettingsViewModel getShippingFormSettings() {
         return shippingFormSettings;
     }
 
-    public void setShippingFormSettings(final CheckoutShippingFormSettingsBean shippingFormSettings) {
+    public void setShippingFormSettings(final CheckoutShippingFormSettingsViewModel shippingFormSettings) {
         this.shippingFormSettings = shippingFormSettings;
     }
 }

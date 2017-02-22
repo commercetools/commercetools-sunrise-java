@@ -1,39 +1,39 @@
 package com.commercetools.sunrise.productcatalog.productdetail.viewmodels;
 
-import com.commercetools.sunrise.common.models.BreadcrumbBean;
+import com.commercetools.sunrise.common.models.BreadcrumbViewModel;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListBean;
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListViewModel;
 
 public class ProductDetailPageContent extends PageContent {
 
-    private BreadcrumbBean breadcrumb;
-    private ProductBean product;
-    private ProductListBean suggestions;
+    private BreadcrumbViewModel breadcrumb;
+    private ProductViewModel product;
+    private ProductListViewModel suggestions;
 
     public ProductDetailPageContent() {
     }
 
-    public BreadcrumbBean getBreadcrumb() {
+    public BreadcrumbViewModel getBreadcrumb() {
         return breadcrumb;
     }
 
-    public void setBreadcrumb(final BreadcrumbBean breadcrumb) {
+    public void setBreadcrumb(final BreadcrumbViewModel breadcrumb) {
         this.breadcrumb = breadcrumb;
     }
 
-    public ProductBean getProduct() {
+    public ProductViewModel getProduct() {
         return product;
     }
 
-    public void setProduct(final ProductBean product) {
+    public void setProduct(final ProductViewModel product) {
         this.product = product;
     }
 
-    public ProductListBean getSuggestions() {
+    public ProductListViewModel getSuggestions() {
         return suggestions;
     }
 
-    public void setSuggestions(final ProductListBean suggestions) {
+    public void setSuggestions(final ProductListViewModel suggestions) {
         this.suggestions = suggestions;
     }
 }

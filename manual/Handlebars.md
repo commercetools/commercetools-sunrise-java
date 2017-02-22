@@ -38,7 +38,7 @@ First we need to create a `ControllerComponent` that adds the View Component to 
 
 ```java
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.components.ComponentBean;
+import com.commercetools.sunrise.components.ComponentViewModel;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.PageDataHook;
 import io.sphere.sdk.models.Base;
@@ -58,12 +58,12 @@ public final class SummerCampaignControllerComponent extends Base implements Con
 
     @Override
     public void acceptPageData(final PageData pageData) {
-        final ComponentBean component = createComponentBean();
+        final ComponentViewModel component = createComponentViewModel();
         pageData.getContent().addComponent(component);
     }
 
-    private ComponentBean createComponentBean() {
-        final ComponentBean component = new ComponentBean();
+    private ComponentViewModel createComponentViewModel() {
+        final ComponentViewModel component = new ComponentViewModel();
         component.setTemplateName("components/summercampaign/banner"); //template path without .hbs!!!
         component.setComponentData(createComponentData());
         return component;

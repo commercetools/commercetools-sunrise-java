@@ -6,16 +6,16 @@ import java.util.List;
 
 public class MyOrderListPageContent extends PageContent {
 
-    private List<OrderOverviewBean> orders;
+    private List<OrderOverviewViewModel> orders;
 
     public MyOrderListPageContent() {
     }
 
-    public List<OrderOverviewBean> getOrders() {
+    public List<OrderOverviewViewModel> getOrders() {
         return orders;
     }
 
-    public void setOrders(final List<OrderOverviewBean> orders) {
+    public void setOrders(final List<OrderOverviewViewModel> orders) {
         this.orders = orders;
     }
 }

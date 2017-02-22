@@ -1,20 +1,20 @@
 package com.commercetools.sunrise.framework.cart.cartdetail.viewmodels;
 
+import com.commercetools.sunrise.common.models.carts.CartViewModel;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.models.carts.CartBean;
 
 public class CartDetailPageContent extends PageContent {
 
-    private CartBean cart;
+    private CartViewModel cart;
 
     public CartDetailPageContent() {
     }
 
-    public CartBean getCart() {
+    public CartViewModel getCart() {
         return cart;
     }
 
-    public void setCart(final CartBean cart) {
+    public void setCart(final CartViewModel cart) {
         this.cart = cart;
     }
 }

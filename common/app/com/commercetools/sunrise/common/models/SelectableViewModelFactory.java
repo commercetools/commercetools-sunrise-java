@@ -13,8 +13,8 @@ public abstract class SelectableViewModelFactory<T, D, S> {
     protected abstract void initialize(final T model, final D option, @Nullable final S selectedValue);
 
     protected final T initializedViewModel(final D option, @Nullable final S selectedValue) {
-        final T bean = getViewModelInstance();
-        initialize(bean, option, selectedValue);
-        return bean;
+        final T model = getViewModelInstance();
+        initialize(model, option, selectedValue);
+        return model;
     }
 }

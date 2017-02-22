@@ -2,11 +2,11 @@ package com.commercetools.sunrise.common.search.pagination;
 
 public interface WithPaginationViewModel {
 
-    PaginationBean getPagination();
+    PaginationViewModel getPagination();
 
-    void setPagination(final PaginationBean pagination);
+    void setPagination(final PaginationViewModel pagination);
 
-    ProductsPerPageSelectorBean getDisplaySelector();
+    ProductsPerPageSelectorViewModel getDisplaySelector();
 
-    void setDisplaySelector(final ProductsPerPageSelectorBean displaySelector);
+    void setDisplaySelector(final ProductsPerPageSelectorViewModel displaySelector);
 }

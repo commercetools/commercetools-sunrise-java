@@ -3,19 +3,19 @@ package com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels;
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.OrderWithCustomer;
-import com.commercetools.sunrise.common.models.carts.OrderBeanFactory;
+import com.commercetools.sunrise.common.models.carts.OrderViewModelFactory;
 
 import javax.inject.Inject;
 
 public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderDetailPageContent, OrderWithCustomer> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final OrderBeanFactory orderBeanFactory;
+    private final OrderViewModelFactory orderViewModelFactory;
 
     @Inject
-    public MyOrderDetailPageContentFactory(final PageTitleResolver pageTitleResolver, final OrderBeanFactory orderBeanFactory) {
+    public MyOrderDetailPageContentFactory(final PageTitleResolver pageTitleResolver, final OrderViewModelFactory orderViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
-        this.orderBeanFactory = orderBeanFactory;
+        this.orderViewModelFactory = orderViewModelFactory;
     }
 
     @Override
@@ -40,6 +40,6 @@ public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderD
     }
 
     protected void fillOrder(final MyOrderDetailPageContent model, final OrderWithCustomer orderWithCustomer) {
-        model.setOrder(orderBeanFactory.create(orderWithCustomer.getOrder()));
+        model.setOrder(orderViewModelFactory.create(orderWithCustomer.getOrder()));
     }
 }

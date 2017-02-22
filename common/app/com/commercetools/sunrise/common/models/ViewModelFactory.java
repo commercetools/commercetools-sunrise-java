@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.models;
 
-public abstract class ViewModelFactory<T, D> {
+public abstract class ViewModelFactory<T extends ViewModel, D> {
 
     protected abstract T getViewModelInstance();
 
@@ -11,9 +11,9 @@ public abstract class ViewModelFactory<T, D> {
     protected abstract void initialize(final T model, final D data);
 
     protected final T initializedViewModel(final D data) {
-        final T bean = getViewModelInstance();
-        initialize(bean, data);
-        return bean;
+        final T model = getViewModelInstance();
+        initialize(model, data);
+        return model;
     }
 
 }

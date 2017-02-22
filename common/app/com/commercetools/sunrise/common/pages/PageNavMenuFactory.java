@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.models.categories.CategoryBean;
-import com.commercetools.sunrise.common.models.categories.CategoryBeanFactory;
+import com.commercetools.sunrise.common.models.categories.CategoryViewModel;
+import com.commercetools.sunrise.common.models.categories.CategoryViewModelFactory;
 import com.commercetools.sunrise.common.models.ViewModelFactory;
 import io.sphere.sdk.categories.CategoryTree;
 
@@ -12,12 +12,12 @@ import java.util.List;
 public class PageNavMenuFactory extends ViewModelFactory<PageNavMenu, Void> {
 
     private final CategoryTree categoryTree;
-    private final CategoryBeanFactory categoryBeanFactory;
+    private final CategoryViewModelFactory categoryViewModelFactory;
 
     @Inject
-    public PageNavMenuFactory(final CategoryTree categoryTree, final CategoryBeanFactory categoryBeanFactory) {
+    public PageNavMenuFactory(final CategoryTree categoryTree, final CategoryViewModelFactory categoryViewModelFactory) {
         this.categoryTree = categoryTree;
-        this.categoryBeanFactory = categoryBeanFactory;
+        this.categoryViewModelFactory = categoryViewModelFactory;
     }
 
     @Override
@@ -34,9 +34,9 @@ public class PageNavMenuFactory extends ViewModelFactory<PageNavMenu, Void> {
         fillCategories(model);
     }
 
-    protected void fillCategories(final PageNavMenu bean) {
-        final List<CategoryBean> categories = new LinkedList<>();
-        categoryTree.getRoots().forEach(root -> categories.add(categoryBeanFactory.create(root)));
-        bean.setCategories(categories);
+    protected void fillCategories(final PageNavMenu model) {
+        final List<CategoryViewModel> categories = new LinkedList<>();
+        categoryTree.getRoots().forEach(root -> categories.add(categoryViewModelFactory.create(root)));
+        model.setCategories(categories);
     }
 }

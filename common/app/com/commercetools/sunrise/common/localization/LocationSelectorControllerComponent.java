@@ -8,15 +8,15 @@ import javax.inject.Inject;
 
 public class LocationSelectorControllerComponent implements ControllerComponent, PageDataReadyHook {
 
-    private final LocalizationSelectorBeanFactory localizationSelectorBeanFactory;
+    private final LocalizationSelectorViewModelFactory localizationSelectorViewModelFactory;
 
     @Inject
-    public LocationSelectorControllerComponent(final LocalizationSelectorBeanFactory localizationSelectorBeanFactory) {
-        this.localizationSelectorBeanFactory = localizationSelectorBeanFactory;
+    public LocationSelectorControllerComponent(final LocalizationSelectorViewModelFactory localizationSelectorViewModelFactory) {
+        this.localizationSelectorViewModelFactory = localizationSelectorViewModelFactory;
     }
 
     @Override
     public void onPageDataReady(final PageData pageData) {
-        pageData.getHeader().setLocation(localizationSelectorBeanFactory.create(null));
+        pageData.getHeader().setLocation(localizationSelectorViewModelFactory.create(null));
     }
 }

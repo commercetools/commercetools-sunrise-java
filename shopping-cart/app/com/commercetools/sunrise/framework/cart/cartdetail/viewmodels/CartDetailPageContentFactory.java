@@ -2,7 +2,7 @@ package com.commercetools.sunrise.framework.cart.cartdetail.viewmodels;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
-import com.commercetools.sunrise.common.models.carts.CartBeanFactory;
+import com.commercetools.sunrise.common.models.carts.CartViewModelFactory;
 import io.sphere.sdk.carts.Cart;
 
 import javax.annotation.Nullable;
@@ -11,12 +11,12 @@ import javax.inject.Inject;
 public class CartDetailPageContentFactory extends PageContentFactory<CartDetailPageContent, Cart> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final CartBeanFactory cartBeanFactory;
+    private final CartViewModelFactory cartViewModelFactory;
 
     @Inject
-    public CartDetailPageContentFactory(final PageTitleResolver pageTitleResolver, final CartBeanFactory cartBeanFactory) {
+    public CartDetailPageContentFactory(final PageTitleResolver pageTitleResolver, final CartViewModelFactory cartViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
-        this.cartBeanFactory = cartBeanFactory;
+        this.cartViewModelFactory = cartViewModelFactory;
     }
 
     @Override
@@ -40,6 +40,6 @@ public class CartDetailPageContentFactory extends PageContentFactory<CartDetailP
     }
 
     protected void fillCart(final CartDetailPageContent model, @Nullable final Cart cart) {
-        model.setCart(cartBeanFactory.create(cart));
+        model.setCart(cartViewModelFactory.create(cart));
     }
 }

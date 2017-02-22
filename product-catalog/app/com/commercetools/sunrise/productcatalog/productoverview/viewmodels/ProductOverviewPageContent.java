@@ -1,30 +1,30 @@
 package com.commercetools.sunrise.productcatalog.productoverview.viewmodels;
 
-import com.commercetools.sunrise.common.models.TitleDescriptionBean;
+import com.commercetools.sunrise.common.models.BreadcrumbViewModel;
+import com.commercetools.sunrise.common.models.TitleDescriptionViewModel;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.search.facetedsearch.FacetSelectorListBean;
+import com.commercetools.sunrise.common.search.facetedsearch.FacetSelectorListViewModel;
 import com.commercetools.sunrise.common.search.facetedsearch.WithFacetedSearchViewModel;
-import com.commercetools.sunrise.common.search.pagination.PaginationBean;
+import com.commercetools.sunrise.common.search.pagination.PaginationViewModel;
+import com.commercetools.sunrise.common.search.pagination.ProductsPerPageSelectorViewModel;
 import com.commercetools.sunrise.common.search.pagination.WithPaginationViewModel;
-import com.commercetools.sunrise.common.search.pagination.ProductsPerPageSelectorBean;
 import com.commercetools.sunrise.common.search.searchbox.WithSearchBoxViewModel;
-import com.commercetools.sunrise.common.search.sort.SortSelectorBean;
+import com.commercetools.sunrise.common.search.sort.SortSelectorViewModel;
 import com.commercetools.sunrise.common.search.sort.WithSortSelectorViewModel;
-import com.commercetools.sunrise.common.models.BreadcrumbBean;
 
 public class ProductOverviewPageContent extends PageContent implements WithPaginationViewModel, WithSearchBoxViewModel, WithSortSelectorViewModel, WithFacetedSearchViewModel {
 
     private String filterProductsUrl;
     private String searchTerm;
-    private BannerBean banner;
-    private JumbotronBean jumbotron;
-    private TitleDescriptionBean seo;
-    private BreadcrumbBean breadcrumb;
-    private FacetSelectorListBean facets;
-    private PaginationBean pagination;
-    private ProductsPerPageSelectorBean displaySelector;
-    private SortSelectorBean sortSelector;
-    private ProductListBean products;
+    private BannerViewModel banner;
+    private JumbotronViewModel jumbotron;
+    private TitleDescriptionViewModel seo;
+    private BreadcrumbViewModel breadcrumb;
+    private FacetSelectorListViewModel facets;
+    private PaginationViewModel pagination;
+    private ProductsPerPageSelectorViewModel displaySelector;
+    private SortSelectorViewModel sortSelector;
+    private ProductListViewModel products;
 
     public ProductOverviewPageContent() {
     }
@@ -47,83 +47,83 @@ public class ProductOverviewPageContent extends PageContent implements WithPagin
         this.searchTerm = searchTerm;
     }
 
-    public BannerBean getBanner() {
+    public BannerViewModel getBanner() {
         return banner;
     }
 
-    public void setBanner(final BannerBean banner) {
+    public void setBanner(final BannerViewModel banner) {
         this.banner = banner;
     }
 
-    public JumbotronBean getJumbotron() {
+    public JumbotronViewModel getJumbotron() {
         return jumbotron;
     }
 
-    public void setJumbotron(final JumbotronBean jumbotron) {
+    public void setJumbotron(final JumbotronViewModel jumbotron) {
         this.jumbotron = jumbotron;
     }
 
-    public TitleDescriptionBean getSeo() {
+    public TitleDescriptionViewModel getSeo() {
         return seo;
     }
 
-    public void setSeo(final TitleDescriptionBean seo) {
+    public void setSeo(final TitleDescriptionViewModel seo) {
         this.seo = seo;
     }
 
-    public BreadcrumbBean getBreadcrumb() {
+    public BreadcrumbViewModel getBreadcrumb() {
         return breadcrumb;
     }
 
-    public void setBreadcrumb(final BreadcrumbBean breadcrumb) {
+    public void setBreadcrumb(final BreadcrumbViewModel breadcrumb) {
         this.breadcrumb = breadcrumb;
     }
 
     @Override
-    public FacetSelectorListBean getFacets() {
+    public FacetSelectorListViewModel getFacets() {
         return facets;
     }
 
     @Override
-    public void setFacets(final FacetSelectorListBean facets) {
+    public void setFacets(final FacetSelectorListViewModel facets) {
         this.facets = facets;
     }
 
     @Override
-    public PaginationBean getPagination() {
+    public PaginationViewModel getPagination() {
         return pagination;
     }
 
     @Override
-    public void setPagination(final PaginationBean pagination) {
+    public void setPagination(final PaginationViewModel pagination) {
         this.pagination = pagination;
     }
 
     @Override
-    public ProductsPerPageSelectorBean getDisplaySelector() {
+    public ProductsPerPageSelectorViewModel getDisplaySelector() {
         return displaySelector;
     }
 
     @Override
-    public void setDisplaySelector(final ProductsPerPageSelectorBean displaySelector) {
+    public void setDisplaySelector(final ProductsPerPageSelectorViewModel displaySelector) {
         this.displaySelector = displaySelector;
     }
 
     @Override
-    public SortSelectorBean getSortSelector() {
+    public SortSelectorViewModel getSortSelector() {
         return sortSelector;
     }
 
     @Override
-    public void setSortSelector(final SortSelectorBean sortSelector) {
+    public void setSortSelector(final SortSelectorViewModel sortSelector) {
         this.sortSelector = sortSelector;
     }
 
-    public ProductListBean getProducts() {
+    public ProductListViewModel getProducts() {
         return products;
     }
 
-    public void setProducts(final ProductListBean products) {
+    public void setProducts(final ProductListViewModel products) {
         this.products = products;
     }
 }

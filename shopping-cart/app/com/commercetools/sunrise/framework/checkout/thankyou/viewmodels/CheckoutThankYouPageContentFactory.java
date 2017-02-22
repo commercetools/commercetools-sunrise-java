@@ -2,7 +2,7 @@ package com.commercetools.sunrise.framework.checkout.thankyou.viewmodels;
 
 import com.commercetools.sunrise.common.models.PageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
-import com.commercetools.sunrise.common.models.carts.OrderBeanFactory;
+import com.commercetools.sunrise.common.models.carts.OrderViewModelFactory;
 import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
@@ -10,12 +10,12 @@ import javax.inject.Inject;
 public class CheckoutThankYouPageContentFactory extends PageContentFactory<CheckoutThankYouPageContent, Order> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final OrderBeanFactory orderBeanFactory;
+    private final OrderViewModelFactory orderViewModelFactory;
 
     @Inject
-    public CheckoutThankYouPageContentFactory(final PageTitleResolver pageTitleResolver, final OrderBeanFactory orderBeanFactory) {
+    public CheckoutThankYouPageContentFactory(final PageTitleResolver pageTitleResolver, final OrderViewModelFactory orderViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
-        this.orderBeanFactory = orderBeanFactory;
+        this.orderViewModelFactory = orderViewModelFactory;
     }
 
     @Override
@@ -40,6 +40,6 @@ public class CheckoutThankYouPageContentFactory extends PageContentFactory<Check
     }
 
     protected void fillOrder(final CheckoutThankYouPageContent model, final Order order) {
-        model.setOrder(orderBeanFactory.create(order));
+        model.setOrder(orderViewModelFactory.create(order));
     }
 }

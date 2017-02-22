@@ -13,16 +13,16 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
 
     private final Locale locale;
     private final PageTitleResolver pageTitleResolver;
-    private final ProductBreadcrumbBeanFactory productBreadcrumbBeanFactory;
-    private final ProductBeanFactory productBeanFactory;
+    private final ProductBreadcrumbViewModelFactory productBreadcrumbViewModelFactory;
+    private final ProductViewModelFactory productViewModelFactory;
 
     @Inject
     public ProductDetailPageContentFactory(final Locale locale, final PageTitleResolver pageTitleResolver,
-                                           final ProductBreadcrumbBeanFactory productBreadcrumbBeanFactory, final ProductBeanFactory productBeanFactory) {
+                                           final ProductBreadcrumbViewModelFactory productBreadcrumbViewModelFactory, final ProductViewModelFactory productViewModelFactory) {
         this.locale = locale;
         this.pageTitleResolver = pageTitleResolver;
-        this.productBreadcrumbBeanFactory = productBreadcrumbBeanFactory;
-        this.productBeanFactory = productBeanFactory;
+        this.productBreadcrumbViewModelFactory = productBreadcrumbViewModelFactory;
+        this.productViewModelFactory = productViewModelFactory;
     }
 
     @Override
@@ -51,10 +51,10 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
     }
 
     protected void fillBreadCrumb(final ProductDetailPageContent content, final ProductWithVariant productWithVariant) {
-        content.setBreadcrumb(productBreadcrumbBeanFactory.create(productWithVariant));
+        content.setBreadcrumb(productBreadcrumbViewModelFactory.create(productWithVariant));
     }
 
     protected void fillProduct(final ProductDetailPageContent content, final ProductWithVariant productWithVariant) {
-        content.setProduct(productBeanFactory.create(productWithVariant));
+        content.setProduct(productViewModelFactory.create(productWithVariant));
     }
 }

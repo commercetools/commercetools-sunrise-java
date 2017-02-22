@@ -1,20 +1,20 @@
 package com.commercetools.sunrise.productcatalog.home.viewmodels;
 
-import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListBean;
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListViewModel;
 import com.commercetools.sunrise.common.pages.PageContent;
 
 public class HomePageContent extends PageContent {
 
-    private ProductListBean suggestions;
+    private ProductListViewModel suggestions;
 
     public HomePageContent() {
     }
 
-    public ProductListBean getSuggestions() {
+    public ProductListViewModel getSuggestions() {
         return suggestions;
     }
 
-    public void setSuggestions(final ProductListBean suggestions) {
+    public void setSuggestions(final ProductListViewModel suggestions) {
         this.suggestions = suggestions;
     }
 }

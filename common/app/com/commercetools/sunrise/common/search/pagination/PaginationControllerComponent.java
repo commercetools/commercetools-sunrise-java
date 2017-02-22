@@ -23,8 +23,8 @@ public final class PaginationControllerComponent extends Base implements Control
     private static final int CTP_DEFAULT_PAGE_SIZE = 20;
     private final int currentPage;
     private final int pageSize;
-    private final PaginationBeanFactory paginationBeanFactory;
-    private final ProductsPerPageSelectorBeanFactory productsPerPageSelectorBeanFactory;
+    private final PaginationViewModelFactory paginationViewModelFactory;
+    private final ProductsPerPageSelectorViewModelFactory productsPerPageSelectorViewModelFactory;
 
     @Nullable
     private PagedSearchResult<ProductProjection> pagedSearchResult;
@@ -32,13 +32,13 @@ public final class PaginationControllerComponent extends Base implements Control
     @Inject
     public PaginationControllerComponent(final Http.Request httpRequest, final PaginationSettings paginationSettings,
                                          final ProductsPerPageFormSettings productsPerPageFormSettings,
-                                         final PaginationBeanFactory paginationBeanFactory, final ProductsPerPageSelectorBeanFactory productsPerPageSelectorBeanFactory) {
+                                         final PaginationViewModelFactory paginationViewModelFactory, final ProductsPerPageSelectorViewModelFactory productsPerPageSelectorViewModelFactory) {
         this.currentPage = findSelectedValueFromQueryString(paginationSettings, httpRequest);
         this.pageSize = findSelectedValueFromQueryString(productsPerPageFormSettings, httpRequest)
                 .map(ProductsPerPageFormOption::getValue)
                 .orElse(CTP_DEFAULT_PAGE_SIZE);
-        this.paginationBeanFactory = paginationBeanFactory;
-        this.productsPerPageSelectorBeanFactory = productsPerPageSelectorBeanFactory;
+        this.paginationViewModelFactory = paginationViewModelFactory;
+        this.productsPerPageSelectorViewModelFactory = productsPerPageSelectorViewModelFactory;
     }
 
     @Override
@@ -58,8 +58,8 @@ public final class PaginationControllerComponent extends Base implements Control
     public void onPageDataReady(final PageData pageData) {
         if (pagedSearchResult != null && pageData.getContent() instanceof WithPaginationViewModel) {
             final WithPaginationViewModel content = (WithPaginationViewModel) pageData.getContent();
-            content.setPagination(paginationBeanFactory.create(pagedSearchResult));
-            content.setDisplaySelector(productsPerPageSelectorBeanFactory.create(pagedSearchResult));
+            content.setPagination(paginationViewModelFactory.create(pagedSearchResult));
+            content.setDisplaySelector(productsPerPageSelectorViewModelFactory.create(pagedSearchResult));
         }
     }
 }

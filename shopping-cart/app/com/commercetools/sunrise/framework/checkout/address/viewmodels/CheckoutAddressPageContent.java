@@ -6,7 +6,7 @@ import play.data.Form;
 public class CheckoutAddressPageContent extends AbstractCheckoutPageContent {
 
     private Form<?> addressForm;
-    private CheckoutAddressFormSettingsBean addressFormSettings;
+    private CheckoutAddressFormSettingsViewModel addressFormSettings;
 
     public Form<?> getAddressForm() {
         return addressForm;
@@ -16,11 +16,11 @@ public class CheckoutAddressPageContent extends AbstractCheckoutPageContent {
         this.addressForm = addressForm;
     }
 
-    public CheckoutAddressFormSettingsBean getAddressFormSettings() {
+    public CheckoutAddressFormSettingsViewModel getAddressFormSettings() {
         return addressFormSettings;
     }
 
-    public void setAddressFormSettings(final CheckoutAddressFormSettingsBean addressFormSettings) {
+    public void setAddressFormSettings(final CheckoutAddressFormSettingsViewModel addressFormSettings) {
         this.addressFormSettings = addressFormSettings;
     }
 }

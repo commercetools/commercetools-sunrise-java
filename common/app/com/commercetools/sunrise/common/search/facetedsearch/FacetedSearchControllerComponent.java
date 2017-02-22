@@ -35,7 +35,7 @@ public final class FacetedSearchControllerComponent implements ControllerCompone
 
     private List<Category> selectedCategories = emptyList();
     private List<FacetedSearchSelector> facetedSearchSelectorList = emptyList();
-    private List<FacetSelectorBean> facetBeans = emptyList();
+    private List<FacetSelectorViewModel> facetViewModels = emptyList();
 
     @Inject
     public FacetedSearchControllerComponent(final Locale locale, final I18nResolver i18nResolver, final I18nIdentifierFactory i18nIdentifierFactory,
@@ -62,9 +62,9 @@ public final class FacetedSearchControllerComponent implements ControllerCompone
 
     @Override
     public CompletionStage<?> onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult) {
-        facetBeans = facetedSearchSelectorList.stream()
+        facetViewModels = facetedSearchSelectorList.stream()
                 .sorted(Comparator.comparingDouble(FacetedSearchSelector::getPosition))
-                .map(facetedSearchSelector -> createFacetSelectorBean(facetedSearchSelector, pagedSearchResult))
+                .map(facetedSearchSelector -> createFacetSelectorViewModel(facetedSearchSelector, pagedSearchResult))
                 .collect(toList());
         return completedFuture(null);
     }
@@ -73,26 +73,26 @@ public final class FacetedSearchControllerComponent implements ControllerCompone
     public void onPageDataReady(final PageData pageData) {
         if (pageData.getContent() instanceof WithFacetedSearchViewModel) {
             final WithFacetedSearchViewModel content = (WithFacetedSearchViewModel) pageData.getContent();
-            content.setFacets(createFacetSelectorList(facetBeans));
+            content.setFacets(createFacetSelectorList(facetViewModels));
         }
     }
 
-    private FacetSelectorBean createFacetSelectorBean(final FacetedSearchSelector facetedSearchSelector, final PagedSearchResult<ProductProjection> searchResult) {
-        final FacetSelectorBean bean = new FacetSelectorBean();
+    private FacetSelectorViewModel createFacetSelectorViewModel(final FacetedSearchSelector facetedSearchSelector, final PagedSearchResult<ProductProjection> searchResult) {
+        final FacetSelectorViewModel model = new FacetSelectorViewModel();
         final Facet<ProductProjection> facet = facetedSearchSelector.getFacet(searchResult);
         if (facet.getLabel() != null) {
             final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(facet.getLabel());
             final String label = i18nResolver.getOrKey(singletonList(locale), i18nIdentifier);
-            bean.setFacet(facet.withLabel(label));
+            model.setFacet(facet.withLabel(label));
         } else {
-            bean.setFacet(facet);
+            model.setFacet(facet);
         }
-        return bean;
+        return model;
     }
 
-    private FacetSelectorListBean createFacetSelectorList(final List<FacetSelectorBean> facetSelectorBeans) {
-        final FacetSelectorListBean bean = new FacetSelectorListBean();
-        bean.setList(facetSelectorBeans);
-        return bean;
+    private FacetSelectorListViewModel createFacetSelectorList(final List<FacetSelectorViewModel> facetSelectorViewModels) {
+        final FacetSelectorListViewModel model = new FacetSelectorListViewModel();
+        model.setList(facetSelectorViewModels);
+        return model;
     }
 }

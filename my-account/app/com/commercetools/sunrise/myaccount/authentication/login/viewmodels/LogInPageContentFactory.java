@@ -4,19 +4,19 @@ import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.authentication.AbstractAuthenticationPageContentFactory;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.login.LogInFormData;
-import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpFormSettingsBeanFactory;
+import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpFormSettingsViewModelFactory;
 import play.data.Form;
 
 import javax.inject.Inject;
 
 public class LogInPageContentFactory extends AbstractAuthenticationPageContentFactory<LogInFormData> {
 
-    private final SignUpFormSettingsBeanFactory signUpFormSettingsBeanFactory;
+    private final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory;
 
     @Inject
-    public LogInPageContentFactory(final PageTitleResolver pageTitleResolver, final SignUpFormSettingsBeanFactory signUpFormSettingsBeanFactory) {
+    public LogInPageContentFactory(final PageTitleResolver pageTitleResolver, final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory) {
         super(pageTitleResolver);
-        this.signUpFormSettingsBeanFactory = signUpFormSettingsBeanFactory;
+        this.signUpFormSettingsViewModelFactory = signUpFormSettingsViewModelFactory;
     }
 
     @Override
@@ -31,6 +31,6 @@ public class LogInPageContentFactory extends AbstractAuthenticationPageContentFa
 
     @Override
     protected void fillSignUpFormSettings(final AuthenticationPageContent model, final Form<? extends LogInFormData> form) {
-        model.setSignUpFormSettings(signUpFormSettingsBeanFactory.create(null));
+        model.setSignUpFormSettings(signUpFormSettingsViewModelFactory.create(null));
     }
 }

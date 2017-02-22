@@ -4,7 +4,7 @@ import com.commercetools.sunrise.common.models.AddressWithCustomer;
 import com.commercetools.sunrise.common.models.FormPageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsBeanFactory;
+import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsViewModelFactory;
 import play.data.Form;
 
 import javax.inject.Inject;
@@ -12,10 +12,10 @@ import javax.inject.Inject;
 public class ChangeAddressPageContentFactory extends FormPageContentFactory<ChangeAddressPageContent, AddressWithCustomer, AddressFormData> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final AddressFormSettingsBeanFactory addressFormSettingsFactory;
+    private final AddressFormSettingsViewModelFactory addressFormSettingsFactory;
 
     @Inject
-    public ChangeAddressPageContentFactory(final PageTitleResolver pageTitleResolver, final AddressFormSettingsBeanFactory addressFormSettingsFactory) {
+    public ChangeAddressPageContentFactory(final PageTitleResolver pageTitleResolver, final AddressFormSettingsViewModelFactory addressFormSettingsFactory) {
         this.pageTitleResolver = pageTitleResolver;
         this.addressFormSettingsFactory = addressFormSettingsFactory;
     }

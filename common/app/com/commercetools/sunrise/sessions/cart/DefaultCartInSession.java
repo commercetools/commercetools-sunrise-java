@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.sessions.cart;
 
+import com.commercetools.sunrise.common.models.carts.MiniCartViewModel;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.ObjectStoringSessionStrategy;
-import com.commercetools.sunrise.common.models.carts.MiniCartBean;
-import com.commercetools.sunrise.common.models.carts.MiniCartBeanFactory;
+import com.commercetools.sunrise.common.models.carts.MiniCartViewModelFactory;
 import io.sphere.sdk.carts.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +27,14 @@ public class DefaultCartInSession extends DataFromResourceStoringOperations<Cart
     private final String cartIdSessionKey;
     private final String miniCartSessionKey;
     private final ObjectStoringSessionStrategy session;
-    private final MiniCartBeanFactory miniCartBeanFactory;
+    private final MiniCartViewModelFactory miniCartViewModelFactory;
 
     @Inject
-    public DefaultCartInSession(final Configuration configuration, final ObjectStoringSessionStrategy session, final MiniCartBeanFactory miniCartBeanFactory) {
+    public DefaultCartInSession(final Configuration configuration, final ObjectStoringSessionStrategy session, final MiniCartViewModelFactory miniCartViewModelFactory) {
         this.cartIdSessionKey = configuration.getString("session.cart.cartId", DEFAULT_CART_ID_SESSION_KEY);
         this.miniCartSessionKey = configuration.getString("session.cart.miniCart", DEFAULT_MINI_CART_SESSION_KEY);
         this.session = session;
-        this.miniCartBeanFactory = miniCartBeanFactory;
+        this.miniCartViewModelFactory = miniCartViewModelFactory;
     }
 
     @Override
@@ -52,8 +52,8 @@ public class DefaultCartInSession extends DataFromResourceStoringOperations<Cart
     }
 
     @Override
-    public Optional<MiniCartBean> findMiniCart() {
-        return session.findObjectByKey(miniCartSessionKey, MiniCartBean.class);
+    public Optional<MiniCartViewModel> findMiniCart() {
+        return session.findObjectByKey(miniCartSessionKey, MiniCartViewModel.class);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class DefaultCartInSession extends DataFromResourceStoringOperations<Cart
 
     @Override
     protected void storeAssociatedData(final Cart cart) {
-        session.overwriteObjectByKey(miniCartSessionKey, miniCartBeanFactory.create(cart));
+        session.overwriteObjectByKey(miniCartSessionKey, miniCartViewModelFactory.create(cart));
         session.overwriteValueByKey(cartIdSessionKey, cart.getId());
     }
 

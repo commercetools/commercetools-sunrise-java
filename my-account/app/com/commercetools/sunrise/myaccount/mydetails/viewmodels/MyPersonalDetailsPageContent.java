@@ -1,23 +1,23 @@
 package com.commercetools.sunrise.myaccount.mydetails.viewmodels;
 
+import com.commercetools.sunrise.common.models.customers.CustomerInfoViewModel;
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.common.models.customers.CustomerInfoBean;
 import play.data.Form;
 
 public class MyPersonalDetailsPageContent extends PageContent {
 
-    private CustomerInfoBean customerInfo;
+    private CustomerInfoViewModel customerInfo;
     private Form<?> personalDetailsForm;
-    private MyPersonalDetailsFormSettingsBean personalDetailsFormSettings;
+    private MyPersonalDetailsFormSettingsViewModel personalDetailsFormSettings;
 
     public MyPersonalDetailsPageContent() {
     }
 
-    public CustomerInfoBean getCustomerInfo() {
+    public CustomerInfoViewModel getCustomerInfo() {
         return customerInfo;
     }
 
-    public void setCustomerInfo(final CustomerInfoBean customerInfo) {
+    public void setCustomerInfo(final CustomerInfoViewModel customerInfo) {
         this.customerInfo = customerInfo;
     }
 
@@ -29,11 +29,11 @@ public class MyPersonalDetailsPageContent extends PageContent {
         this.personalDetailsForm = personalDetailsForm;
     }
 
-    public MyPersonalDetailsFormSettingsBean getPersonalDetailsFormSettings() {
+    public MyPersonalDetailsFormSettingsViewModel getPersonalDetailsFormSettings() {
         return personalDetailsFormSettings;
     }
 
-    public void setPersonalDetailsFormSettings(final MyPersonalDetailsFormSettingsBean personalDetailsFormSettings) {
+    public void setPersonalDetailsFormSettings(final MyPersonalDetailsFormSettingsViewModel personalDetailsFormSettings) {
         this.personalDetailsFormSettings = personalDetailsFormSettings;
     }
 }

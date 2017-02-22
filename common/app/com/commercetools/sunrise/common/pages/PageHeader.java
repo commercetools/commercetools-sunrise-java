@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.common.pages;
 
-import com.commercetools.sunrise.common.localization.LocalizationSelectorBean;
+import com.commercetools.sunrise.common.localization.LocalizationSelectorViewModel;
 import com.commercetools.sunrise.common.models.ViewModel;
-import com.commercetools.sunrise.common.models.carts.MiniCartBean;
+import com.commercetools.sunrise.common.models.carts.MiniCartViewModel;
 
 public class PageHeader extends ViewModel {
 
     private String title;
     private String customerServiceNumber;
-    private LocalizationSelectorBean location;
-    private MiniCartBean miniCart;
+    private LocalizationSelectorViewModel location;
+    private MiniCartViewModel miniCart;
     private PageNavMenu navMenu;
 
     public PageHeader() {
@@ -27,19 +27,19 @@ public class PageHeader extends ViewModel {
         this.title = title;
     }
 
-    public LocalizationSelectorBean getLocation() {
+    public LocalizationSelectorViewModel getLocation() {
         return location;
     }
 
-    public void setLocation(final LocalizationSelectorBean location) {
+    public void setLocation(final LocalizationSelectorViewModel location) {
         this.location = location;
     }
 
-    public MiniCartBean getMiniCart() {
+    public MiniCartViewModel getMiniCart() {
         return miniCart;
     }
 
-    public void setMiniCart(final MiniCartBean miniCart) {
+    public void setMiniCart(final MiniCartViewModel miniCart) {
         this.miniCart = miniCart;
     }
 

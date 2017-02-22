@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.mydetails.viewmodels;
 
 import com.commercetools.sunrise.common.models.FormPageContentFactory;
-import com.commercetools.sunrise.common.models.customers.CustomerInfoBeanFactory;
+import com.commercetools.sunrise.common.models.customers.CustomerInfoViewModelFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import io.sphere.sdk.customers.Customer;
@@ -12,15 +12,15 @@ import javax.inject.Inject;
 public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<MyPersonalDetailsPageContent, Customer, MyPersonalDetailsFormData> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final CustomerInfoBeanFactory customerInfoBeanFactory;
-    private final MyPersonalDetailsFormSettingsBeanFactory myPersonalDetailsFormSettingsBeanFactory;
+    private final CustomerInfoViewModelFactory customerInfoViewModelFactory;
+    private final MyPersonalDetailsFormSettingsViewModelFactory myPersonalDetailsFormSettingsViewModelFactory;
 
     @Inject
-    public MyPersonalDetailsPageContentFactory(final PageTitleResolver pageTitleResolver, final CustomerInfoBeanFactory customerInfoBeanFactory,
-                                               final MyPersonalDetailsFormSettingsBeanFactory myPersonalDetailsFormSettingsBeanFactory) {
+    public MyPersonalDetailsPageContentFactory(final PageTitleResolver pageTitleResolver, final CustomerInfoViewModelFactory customerInfoViewModelFactory,
+                                               final MyPersonalDetailsFormSettingsViewModelFactory myPersonalDetailsFormSettingsViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
-        this.customerInfoBeanFactory = customerInfoBeanFactory;
-        this.myPersonalDetailsFormSettingsBeanFactory = myPersonalDetailsFormSettingsBeanFactory;
+        this.customerInfoViewModelFactory = customerInfoViewModelFactory;
+        this.myPersonalDetailsFormSettingsViewModelFactory = myPersonalDetailsFormSettingsViewModelFactory;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<
     }
 
     protected void fillCustomer(final MyPersonalDetailsPageContent model, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
-        model.setCustomerInfo(customerInfoBeanFactory.create(customer));
+        model.setCustomerInfo(customerInfoViewModelFactory.create(customer));
     }
 
     protected void fillPersonalDetailsForm(final MyPersonalDetailsPageContent model, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
@@ -55,6 +55,6 @@ public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<
     }
 
     protected void fillPersonalDetailsFormSettings(final MyPersonalDetailsPageContent model, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
-        model.setPersonalDetailsFormSettings(myPersonalDetailsFormSettingsBeanFactory.create(form));
+        model.setPersonalDetailsFormSettings(myPersonalDetailsFormSettingsViewModelFactory.create(form));
     }
 }

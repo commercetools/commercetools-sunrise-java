@@ -1,0 +1,55 @@
+package com.commercetools.sunrise.framework.checkout.shipping.viewmodels;
+
+import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.common.forms.FormFieldWithOptions;
+import com.commercetools.sunrise.common.models.FormFieldViewModelFactory;
+import io.sphere.sdk.shippingmethods.ShippingMethod;
+import play.data.Form;
+
+import javax.inject.Inject;
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
+@RequestScoped
+public class ShippingMethodFormFieldViewModelFactory extends FormFieldViewModelFactory<ShippingMethodFormFieldViewModel, ShippingMethod> {
+
+    private final ShippingFormSelectableOptionViewModelFactory shippingFormSelectableOptionViewModelFactory;
+
+    @Inject
+    public ShippingMethodFormFieldViewModelFactory(final ShippingFormSelectableOptionViewModelFactory shippingFormSelectableOptionViewModelFactory) {
+        this.shippingFormSelectableOptionViewModelFactory = shippingFormSelectableOptionViewModelFactory;
+    }
+
+    @Override
+    protected ShippingMethodFormFieldViewModel getViewModelInstance() {
+        return new ShippingMethodFormFieldViewModel();
+    }
+
+    @Override
+    protected List<ShippingMethod> defaultOptions() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public final ShippingMethodFormFieldViewModel create(final FormFieldWithOptions<ShippingMethod> data) {
+        return super.create(data);
+    }
+
+    @Override
+    public final ShippingMethodFormFieldViewModel createWithDefaultOptions(final Form.Field formField) {
+        return super.createWithDefaultOptions(formField);
+    }
+
+    @Override
+    protected final void initialize(final ShippingMethodFormFieldViewModel model, final FormFieldWithOptions<ShippingMethod> data) {
+        fillList(model, data);
+    }
+
+    protected void fillList(final ShippingMethodFormFieldViewModel model, final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {
+        model.setList(formFieldWithOptions.getFormOptions().stream()
+                .map(shippingMethod -> shippingFormSelectableOptionViewModelFactory.create(shippingMethod, formFieldWithOptions.getFormField().value()))
+                .collect(toList()));
+    }
+}

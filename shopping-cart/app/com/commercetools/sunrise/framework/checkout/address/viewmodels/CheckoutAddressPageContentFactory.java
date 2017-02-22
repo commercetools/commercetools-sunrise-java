@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.framework.checkout.address.viewmodels;
 
 import com.commercetools.sunrise.common.models.FormPageContentFactory;
-import com.commercetools.sunrise.common.models.carts.CartBeanFactory;
+import com.commercetools.sunrise.common.models.carts.CartViewModelFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import com.commercetools.sunrise.framework.checkout.address.CheckoutAddressFormData;
 import io.sphere.sdk.carts.Cart;
@@ -12,14 +12,14 @@ import javax.inject.Inject;
 public class CheckoutAddressPageContentFactory extends FormPageContentFactory<CheckoutAddressPageContent, Cart, CheckoutAddressFormData> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final CartBeanFactory cartBeanFactory;
-    private final CheckoutAddressFormSettingsBeanFactory addressFormSettingsFactory;
+    private final CartViewModelFactory cartViewModelFactory;
+    private final CheckoutAddressFormSettingsViewModelFactory addressFormSettingsFactory;
 
     @Inject
-    public CheckoutAddressPageContentFactory(final PageTitleResolver pageTitleResolver, final CartBeanFactory cartBeanFactory,
-                                             final CheckoutAddressFormSettingsBeanFactory addressFormSettingsFactory) {
+    public CheckoutAddressPageContentFactory(final PageTitleResolver pageTitleResolver, final CartViewModelFactory cartViewModelFactory,
+                                             final CheckoutAddressFormSettingsViewModelFactory addressFormSettingsFactory) {
         this.pageTitleResolver = pageTitleResolver;
-        this.cartBeanFactory = cartBeanFactory;
+        this.cartViewModelFactory = cartViewModelFactory;
         this.addressFormSettingsFactory = addressFormSettingsFactory;
     }
 
@@ -47,7 +47,7 @@ public class CheckoutAddressPageContentFactory extends FormPageContentFactory<Ch
     }
 
     protected void fillCart(final CheckoutAddressPageContent model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        model.setCart(cartBeanFactory.create(cart));
+        model.setCart(cartViewModelFactory.create(cart));
     }
 
     protected void fillForm(final CheckoutAddressPageContent model, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {

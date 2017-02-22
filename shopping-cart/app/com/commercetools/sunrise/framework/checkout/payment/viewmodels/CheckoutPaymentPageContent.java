@@ -6,7 +6,7 @@ import play.data.Form;
 public class CheckoutPaymentPageContent extends AbstractCheckoutPageContent {
 
     private Form<?> paymentForm;
-    private CheckoutPaymentFormSettingsBean paymentFormSettings;
+    private CheckoutPaymentFormSettingsViewModel paymentFormSettings;
 
     public CheckoutPaymentPageContent() {
     }
@@ -19,11 +19,11 @@ public class CheckoutPaymentPageContent extends AbstractCheckoutPageContent {
         this.paymentForm = paymentForm;
     }
 
-    public CheckoutPaymentFormSettingsBean getPaymentFormSettings() {
+    public CheckoutPaymentFormSettingsViewModel getPaymentFormSettings() {
         return paymentFormSettings;
     }
 
-    public void setPaymentFormSettings(final CheckoutPaymentFormSettingsBean paymentFormSettings) {
+    public void setPaymentFormSettings(final CheckoutPaymentFormSettingsViewModel paymentFormSettings) {
         this.paymentFormSettings = paymentFormSettings;
     }
 }

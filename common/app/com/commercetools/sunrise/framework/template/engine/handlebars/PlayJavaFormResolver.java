@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.framework.template.engine.handlebars;
 
-import com.commercetools.sunrise.common.forms.ErrorBean;
-import com.commercetools.sunrise.common.forms.ErrorsBean;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.common.forms.ErrorViewModel;
+import com.commercetools.sunrise.common.forms.ErrorsViewModel;
 import com.commercetools.sunrise.common.utils.ErrorFormatter;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.github.jknack.handlebars.ValueResolver;
 import play.data.Form;
 
@@ -55,17 +55,18 @@ public final class PlayJavaFormResolver implements ValueResolver {
         return value != null && value.equals("false");
     }
 
-    private ErrorsBean extractErrors(@Nullable final Form<?> form) {
-        final ErrorsBean errorsBean = new ErrorsBean();
-        final List<ErrorBean> errorList = new ArrayList<>();
+    private ErrorsViewModel extractErrors(@Nullable final Form<?> form) {
+        final ErrorsViewModel errorsViewModel = new ErrorsViewModel();
+        final List<ErrorViewModel> errorList = new ArrayList<>();
         if (form != null) {
             form.errors().forEach((field, errors) ->
                     errors.forEach(error -> {
-                        final String errorMessage = errorFormatter.format(error);
-                        errorList.add(new ErrorBean(errorMessage));
+                        final ErrorViewModel errorViewModel = new ErrorViewModel();
+                        errorViewModel.setMessage(errorFormatter.format(error));
+                        errorList.add(errorViewModel);
                     }));
         }
-        errorsBean.setGlobalErrors(errorList);
-        return errorsBean;
+        errorsViewModel.setGlobalErrors(errorList);
+        return errorsViewModel;
     }
 }

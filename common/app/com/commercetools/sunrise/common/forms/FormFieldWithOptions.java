@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.common.forms;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.SunriseModel;
 import play.data.Form;
 
 import java.util.List;
 
-public class FormFieldWithOptions<T> extends Base {
+public class FormFieldWithOptions<T> extends SunriseModel {
 
     private final Form.Field formField;
     private final List<T> formOptions;

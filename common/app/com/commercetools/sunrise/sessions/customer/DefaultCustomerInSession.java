@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.sessions.customer;
 
-import com.commercetools.sunrise.common.models.customers.UserInfoBean;
-import com.commercetools.sunrise.common.models.customers.UserInfoBeanFactory;
+import com.commercetools.sunrise.common.models.customers.UserInfoViewModel;
+import com.commercetools.sunrise.common.models.customers.UserInfoViewModelFactory;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.ObjectStoringSessionStrategy;
@@ -29,15 +29,15 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
     private final String customerEmailSessionKey;
     private final String userInfoSessionKey;
     private final ObjectStoringSessionStrategy session;
-    private final UserInfoBeanFactory userInfoBeanFactory;
+    private final UserInfoViewModelFactory userInfoViewModelFactory;
 
     @Inject
-    public DefaultCustomerInSession(final Configuration configuration, final ObjectStoringSessionStrategy session, final UserInfoBeanFactory userInfoBeanFactory) {
+    public DefaultCustomerInSession(final Configuration configuration, final ObjectStoringSessionStrategy session, final UserInfoViewModelFactory userInfoViewModelFactory) {
         this.customerIdSessionKey = configuration.getString("session.customer.customerId", DEFAULT_CUSTOMER_ID_SESSION_KEY);
         this.customerEmailSessionKey = configuration.getString("session.customer.customerEmail", DEFAULT_CUSTOMER_EMAIL_SESSION_KEY);
         this.userInfoSessionKey = configuration.getString("session.customer.userInfo", DEFAULT_USER_INFO_SESSION_KEY);
         this.session = session;
-        this.userInfoBeanFactory = userInfoBeanFactory;
+        this.userInfoViewModelFactory = userInfoViewModelFactory;
     }
 
     @Override
@@ -60,8 +60,8 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
     }
 
     @Override
-    public Optional<UserInfoBean> findUserInfo() {
-        return session.findObjectByKey(userInfoSessionKey, UserInfoBean.class);
+    public Optional<UserInfoViewModel> findUserInfo() {
+        return session.findObjectByKey(userInfoSessionKey, UserInfoViewModel.class);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
 
     @Override
     protected void storeAssociatedData(final Customer customer) {
-        session.overwriteObjectByKey(userInfoSessionKey, userInfoBeanFactory.create(customer));
+        session.overwriteObjectByKey(userInfoSessionKey, userInfoViewModelFactory.create(customer));
         session.overwriteValueByKey(customerIdSessionKey, customer.getId());
         session.overwriteValueByKey(customerEmailSessionKey, customer.getEmail());
     }

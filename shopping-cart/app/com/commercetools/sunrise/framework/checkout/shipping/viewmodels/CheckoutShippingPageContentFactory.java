@@ -2,7 +2,7 @@ package com.commercetools.sunrise.framework.checkout.shipping.viewmodels;
 
 import com.commercetools.sunrise.common.models.FormPageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
-import com.commercetools.sunrise.common.models.carts.CartBeanFactory;
+import com.commercetools.sunrise.common.models.carts.CartViewModelFactory;
 import com.commercetools.sunrise.framework.checkout.shipping.CheckoutShippingFormData;
 import com.commercetools.sunrise.framework.checkout.shipping.ShippingMethodsWithCart;
 import play.data.Form;
@@ -12,15 +12,15 @@ import javax.inject.Inject;
 public class CheckoutShippingPageContentFactory extends FormPageContentFactory<CheckoutShippingPageContent, ShippingMethodsWithCart, CheckoutShippingFormData> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final CartBeanFactory cartBeanFactory;
-    private final CheckoutShippingFormSettingsBeanFactory checkoutShippingFormSettingsBeanFactory;
+    private final CartViewModelFactory cartViewModelFactory;
+    private final CheckoutShippingFormSettingsViewModelFactory checkoutShippingFormSettingsViewModelFactory;
 
     @Inject
-    public CheckoutShippingPageContentFactory(final PageTitleResolver pageTitleResolver, final CartBeanFactory cartBeanFactory,
-                                              final CheckoutShippingFormSettingsBeanFactory checkoutShippingFormSettingsBeanFactory) {
+    public CheckoutShippingPageContentFactory(final PageTitleResolver pageTitleResolver, final CartViewModelFactory cartViewModelFactory,
+                                              final CheckoutShippingFormSettingsViewModelFactory checkoutShippingFormSettingsViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
-        this.cartBeanFactory = cartBeanFactory;
-        this.checkoutShippingFormSettingsBeanFactory = checkoutShippingFormSettingsBeanFactory;
+        this.cartViewModelFactory = cartViewModelFactory;
+        this.checkoutShippingFormSettingsViewModelFactory = checkoutShippingFormSettingsViewModelFactory;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
     }
 
     protected void fillCart(final CheckoutShippingPageContent model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
-        model.setCart(cartBeanFactory.create(shippingMethodsWithCart.getCart()));
+        model.setCart(cartViewModelFactory.create(shippingMethodsWithCart.getCart()));
     }
 
     protected void fillForm(final CheckoutShippingPageContent model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
@@ -55,6 +55,6 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
     }
 
     protected void fillFormSettings(final CheckoutShippingPageContent model, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
-        model.setShippingFormSettings(checkoutShippingFormSettingsBeanFactory.create(shippingMethodsWithCart, form));
+        model.setShippingFormSettings(checkoutShippingFormSettingsViewModelFactory.create(shippingMethodsWithCart, form));
     }
 }

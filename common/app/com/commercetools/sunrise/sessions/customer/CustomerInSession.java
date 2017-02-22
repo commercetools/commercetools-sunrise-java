@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.sessions.customer;
 
-import com.commercetools.sunrise.common.models.customers.UserInfoBean;
+import com.commercetools.sunrise.common.models.customers.UserInfoViewModel;
 import com.commercetools.sunrise.sessions.ResourceStoringOperations;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.Customer;
@@ -18,7 +18,7 @@ public interface CustomerInSession extends ResourceStoringOperations<Customer> {
 
     Optional<String> findCustomerEmail();
 
-    Optional<UserInfoBean> findUserInfo();
+    Optional<UserInfoViewModel> findUserInfo();
 
     @Override
     void store(@Nullable final Customer customer);

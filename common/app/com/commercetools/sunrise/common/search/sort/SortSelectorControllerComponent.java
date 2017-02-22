@@ -25,18 +25,18 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public final class SortSelectorControllerComponent extends Base implements ControllerComponent, PageDataReadyHook, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
 
     private final List<SortExpression<ProductProjection>> selectedSortExpressions;
-    private final SortSelectorBeanFactory sortSelectorBeanFactory;
+    private final SortSelectorViewModelFactory sortSelectorViewModelFactory;
 
     @Nullable
     private PagedSearchResult<ProductProjection> pagedSearchResult;
 
     @Inject
     public SortSelectorControllerComponent(final Locale locale, final SortFormSettings settings, final Http.Request httpRequest,
-                                           final SortSelectorBeanFactory sortSelectorBeanFactory) {
+                                           final SortSelectorViewModelFactory sortSelectorViewModelFactory) {
         this.selectedSortExpressions = findSelectedValueFromQueryString(settings, httpRequest)
                 .map(option -> option.getLocalizedValue(locale))
                 .orElse(emptyList());
-        this.sortSelectorBeanFactory = sortSelectorBeanFactory;
+        this.sortSelectorViewModelFactory = sortSelectorViewModelFactory;
     }
 
     @Override
@@ -58,7 +58,7 @@ public final class SortSelectorControllerComponent extends Base implements Contr
     public void onPageDataReady(final PageData pageData) {
         if (pagedSearchResult != null && pageData.getContent() instanceof WithSortSelectorViewModel) {
             final WithSortSelectorViewModel content = (WithSortSelectorViewModel) pageData.getContent();
-            content.setSortSelector(sortSelectorBeanFactory.create(pagedSearchResult));
+            content.setSortSelector(sortSelectorViewModelFactory.create(pagedSearchResult));
         }
     }
 }

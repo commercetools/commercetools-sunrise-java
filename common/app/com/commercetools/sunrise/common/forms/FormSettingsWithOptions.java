@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.common.forms;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.SunriseModel;
 
 import java.util.List;
 import java.util.Optional;
 
-public abstract class FormSettingsWithOptions<T extends FormOption> extends Base implements WithFormFieldName<T> {
+public abstract class FormSettingsWithOptions<T extends FormOption> extends SunriseModel implements WithFormFieldName<T> {
 
     private final String fieldName;
     private final List<T> options;

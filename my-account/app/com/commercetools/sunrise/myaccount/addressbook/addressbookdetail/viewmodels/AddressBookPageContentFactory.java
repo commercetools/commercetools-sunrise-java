@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 public class AddressBookPageContentFactory extends PageContentFactory<AddressBookPageContent, Customer> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final EditableAddressBeanFactory editableAddressBeanFactory;
+    private final EditableAddressViewModelFactory editableAddressViewModelFactory;
 
     @Inject
-    public AddressBookPageContentFactory(final PageTitleResolver pageTitleResolver, final EditableAddressBeanFactory editableAddressBeanFactory) {
+    public AddressBookPageContentFactory(final PageTitleResolver pageTitleResolver, final EditableAddressViewModelFactory editableAddressViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
-        this.editableAddressBeanFactory = editableAddressBeanFactory;
+        this.editableAddressViewModelFactory = editableAddressViewModelFactory;
     }
 
     @Override
@@ -46,20 +46,20 @@ public class AddressBookPageContentFactory extends PageContentFactory<AddressBoo
 
     protected void fillDefaultShippingAddress(final AddressBookPageContent model, final Customer customer) {
         customer.findDefaultShippingAddress()
-                .ifPresent(address -> model.setDefaultShippingAddress(editableAddressBeanFactory.create(address)));
+                .ifPresent(address -> model.setDefaultShippingAddress(editableAddressViewModelFactory.create(address)));
     }
 
     protected void fillDefaultBillingAddress(final AddressBookPageContent model, final Customer customer) {
         customer.findDefaultBillingAddress()
-                .ifPresent(address -> model.setDefaultBillingAddress(editableAddressBeanFactory.create(address)));
+                .ifPresent(address -> model.setDefaultBillingAddress(editableAddressViewModelFactory.create(address)));
     }
 
     protected void fillAddresses(final AddressBookPageContent model, final Customer customer) {
-        final List<EditableAddressBean> beanList = customer.getAddresses().stream()
+        final List<EditableAddressViewModel> modelList = customer.getAddresses().stream()
                 .filter(address -> isNotAnyDefaultAddress(customer, address))
-                .map(editableAddressBeanFactory::create)
+                .map(editableAddressViewModelFactory::create)
                 .collect(Collectors.toList());
-        model.setAddresses(beanList);
+        model.setAddresses(modelList);
     }
 
     private boolean isNotAnyDefaultAddress(final Customer customer, final Address address) {

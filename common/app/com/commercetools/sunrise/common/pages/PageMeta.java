@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.models.HalLink;
 import com.commercetools.sunrise.common.models.ViewModel;
-import com.commercetools.sunrise.common.models.customers.UserInfoBean;
+import com.commercetools.sunrise.common.models.customers.UserInfoViewModel;
 import play.mvc.Call;
 
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class PageMeta extends ViewModel {
 
     private String assetsPath;
     private String csrfToken;
-    private UserInfoBean user;
+    private UserInfoViewModel user;
     private List<Integer> bagQuantityOptions;
     private Map<String, HalLink> _links = new HashMap<>();
 
@@ -44,11 +44,11 @@ public class PageMeta extends ViewModel {
         this.csrfToken = csrfToken;
     }
 
-    public UserInfoBean getUser() {
+    public UserInfoViewModel getUser() {
         return user;
     }
 
-    public void setUser(final UserInfoBean user) {
+    public void setUser(final UserInfoViewModel user) {
         this.user = user;
     }
 

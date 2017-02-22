@@ -1,13 +1,13 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels;
 
 import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsBean;
+import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsViewModel;
 import play.data.Form;
 
 public class ChangeAddressPageContent extends PageContent {
 
     private Form<?> editAddressForm;
-    private AddressFormSettingsBean editAddressFormSettings;
+    private AddressFormSettingsViewModel editAddressFormSettings;
 
     public Form<?> getEditAddressForm() {
         return editAddressForm;
@@ -17,11 +17,11 @@ public class ChangeAddressPageContent extends PageContent {
         this.editAddressForm = editAddressForm;
     }
 
-    public AddressFormSettingsBean getEditAddressFormSettings() {
+    public AddressFormSettingsViewModel getEditAddressFormSettings() {
         return editAddressFormSettings;
     }
 
-    public void setEditAddressFormSettings(final AddressFormSettingsBean editAddressFormSettings) {
+    public void setEditAddressFormSettings(final AddressFormSettingsViewModel editAddressFormSettings) {
         this.editAddressFormSettings = editAddressFormSettings;
     }
 }

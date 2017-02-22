@@ -6,34 +6,34 @@ import java.util.List;
 
 public class AddressBookPageContent extends PageContent {
 
-    private EditableAddressBean defaultShippingAddress;
-    private EditableAddressBean defaultBillingAddress;
-    private List<EditableAddressBean> addresses;
+    private EditableAddressViewModel defaultShippingAddress;
+    private EditableAddressViewModel defaultBillingAddress;
+    private List<EditableAddressViewModel> addresses;
 
     public AddressBookPageContent() {
     }
 
-    public EditableAddressBean getDefaultShippingAddress() {
+    public EditableAddressViewModel getDefaultShippingAddress() {
         return defaultShippingAddress;
     }
 
-    public void setDefaultShippingAddress(final EditableAddressBean defaultShippingAddress) {
+    public void setDefaultShippingAddress(final EditableAddressViewModel defaultShippingAddress) {
         this.defaultShippingAddress = defaultShippingAddress;
     }
 
-    public EditableAddressBean getDefaultBillingAddress() {
+    public EditableAddressViewModel getDefaultBillingAddress() {
         return defaultBillingAddress;
     }
 
-    public void setDefaultBillingAddress(final EditableAddressBean defaultBillingAddress) {
+    public void setDefaultBillingAddress(final EditableAddressViewModel defaultBillingAddress) {
         this.defaultBillingAddress = defaultBillingAddress;
     }
 
-    public List<EditableAddressBean> getAddresses() {
+    public List<EditableAddressViewModel> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(final List<EditableAddressBean> addresses) {
+    public void setAddresses(final List<EditableAddressViewModel> addresses) {
         this.addresses = addresses;
     }
 }

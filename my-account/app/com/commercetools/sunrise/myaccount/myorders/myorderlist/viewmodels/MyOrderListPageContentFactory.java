@@ -9,11 +9,11 @@ import static java.util.stream.Collectors.toList;
 
 public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderListPageContent, OrderListWithCustomer> {
 
-    private final OrderOverviewBeanFactory orderOverviewBeanFactory;
+    private final OrderOverviewViewModelFactory orderOverviewViewModelFactory;
 
     @Inject
-    public MyOrderListPageContentFactory(final OrderOverviewBeanFactory orderOverviewBeanFactory) {
-        this.orderOverviewBeanFactory = orderOverviewBeanFactory;
+    public MyOrderListPageContentFactory(final OrderOverviewViewModelFactory orderOverviewViewModelFactory) {
+        this.orderOverviewViewModelFactory = orderOverviewViewModelFactory;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderLis
 
     protected void fillOrders(final MyOrderListPageContent model, final OrderListWithCustomer orderListWithCustomer) {
         model.setOrders(orderListWithCustomer.getOrders().getResults().stream()
-                .map(orderOverviewBeanFactory::create)
+                .map(orderOverviewViewModelFactory::create)
                 .collect(toList()));
     }
 }

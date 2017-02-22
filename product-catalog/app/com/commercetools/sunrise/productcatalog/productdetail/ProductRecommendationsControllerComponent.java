@@ -6,7 +6,7 @@ import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.framework.hooks.events.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContent;
-import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListBeanFactory;
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListViewModelFactory;
 import io.sphere.sdk.products.ProductProjection;
 import play.Configuration;
 
@@ -20,16 +20,16 @@ import java.util.concurrent.CompletionStage;
 public final class ProductRecommendationsControllerComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataReadyHook {
 
     private final ProductRecommender productRecommender;
-    private final ProductListBeanFactory productListBeanFactory;
+    private final ProductListViewModelFactory productListViewModelFactory;
     private final int numRecommendations;
 
     private List<ProductProjection> recommendedProducts;
 
     @Inject
     public ProductRecommendationsControllerComponent(final ProductRecommender productRecommender,
-                                                     final ProductListBeanFactory productListBeanFactory, final Configuration configuration) {
+                                                     final ProductListViewModelFactory productListViewModelFactory, final Configuration configuration) {
         this.productRecommender = productRecommender;
-        this.productListBeanFactory = productListBeanFactory;
+        this.productListViewModelFactory = productListViewModelFactory;
         this.numRecommendations = configuration.getInt("productSuggestions.count", 4);
     }
 
@@ -43,7 +43,7 @@ public final class ProductRecommendationsControllerComponent implements Controll
     public void onPageDataReady(final PageData pageData) {
         if (recommendedProducts != null && pageData.getContent() instanceof ProductDetailPageContent) {
             final ProductDetailPageContent content = (ProductDetailPageContent) pageData.getContent();
-            content.setSuggestions(productListBeanFactory.create(recommendedProducts));
+            content.setSuggestions(productListViewModelFactory.create(recommendedProducts));
         }
     }
 }

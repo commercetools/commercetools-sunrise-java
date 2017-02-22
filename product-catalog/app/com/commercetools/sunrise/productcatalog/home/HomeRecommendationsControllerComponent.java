@@ -6,7 +6,7 @@ import com.commercetools.sunrise.framework.components.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.consumers.PageDataReadyHook;
 import com.commercetools.sunrise.framework.hooks.events.RequestStartedHook;
 import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContent;
-import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListBeanFactory;
+import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListViewModelFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;
@@ -30,18 +30,18 @@ public final class HomeRecommendationsControllerComponent implements ControllerC
 
     private final int numSuggestions;
     private final List<String> suggestionsExternalIds;
-    private final ProductListBeanFactory productListBeanFactory;
+    private final ProductListViewModelFactory productListViewModelFactory;
     private final ProductRecommender productRecommender;
     private final CategoryTree categoryTree;
 
     private List<ProductProjection> recommendedProducts;
 
     @Inject
-    public HomeRecommendationsControllerComponent(final Configuration configuration, final ProductListBeanFactory productListBeanFactory,
+    public HomeRecommendationsControllerComponent(final Configuration configuration, final ProductListViewModelFactory productListViewModelFactory,
                                                   final ProductRecommender productRecommender, final CategoryTree categoryTree) {
         this.suggestionsExternalIds = configuration.getStringList("homeSuggestions.externalId", emptyList());
         this.numSuggestions = configuration.getInt("homeSuggestions.count", 4);
-        this.productListBeanFactory = productListBeanFactory;
+        this.productListViewModelFactory = productListViewModelFactory;
         this.productRecommender = productRecommender;
         this.categoryTree = categoryTree;
     }
@@ -62,7 +62,7 @@ public final class HomeRecommendationsControllerComponent implements ControllerC
     public void onPageDataReady(final PageData pageData) {
         if (recommendedProducts != null && pageData.getContent() instanceof HomePageContent) {
             final HomePageContent content = (HomePageContent) pageData.getContent();
-            content.setSuggestions(productListBeanFactory.create(recommendedProducts));
+            content.setSuggestions(productListViewModelFactory.create(recommendedProducts));
         }
     }
 

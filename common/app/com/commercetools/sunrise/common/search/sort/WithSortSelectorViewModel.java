@@ -2,7 +2,7 @@ package com.commercetools.sunrise.common.search.sort;
 
 public interface WithSortSelectorViewModel {
 
-    SortSelectorBean getSortSelector();
+    SortSelectorViewModel getSortSelector();
 
-    void setSortSelector(final SortSelectorBean sortSelector);
+    void setSortSelector(final SortSelectorViewModel sortSelector);
 }

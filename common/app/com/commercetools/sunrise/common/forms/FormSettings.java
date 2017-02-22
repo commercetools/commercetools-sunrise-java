@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.forms;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.common.models.SunriseModel;
 
-public abstract class FormSettings<T> extends Base implements WithFormFieldName<T> {
+public abstract class FormSettings<T> extends SunriseModel implements WithFormFieldName<T> {
 
     private final String fieldName;
     private final T defaultValue;

@@ -10,12 +10,12 @@ import javax.inject.Inject;
 
 public class SignUpPageContentFactory extends AbstractAuthenticationPageContentFactory<SignUpFormData> {
 
-    private final SignUpFormSettingsBeanFactory signUpFormSettingsBeanFactory;
+    private final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory;
 
     @Inject
-    public SignUpPageContentFactory(final PageTitleResolver pageTitleResolver, final SignUpFormSettingsBeanFactory signUpFormSettingsBeanFactory) {
+    public SignUpPageContentFactory(final PageTitleResolver pageTitleResolver, final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory) {
         super(pageTitleResolver);
-        this.signUpFormSettingsBeanFactory = signUpFormSettingsBeanFactory;
+        this.signUpFormSettingsViewModelFactory = signUpFormSettingsViewModelFactory;
     }
 
     @Override
@@ -30,6 +30,6 @@ public class SignUpPageContentFactory extends AbstractAuthenticationPageContentF
 
     @Override
     protected void fillSignUpFormSettings(final AuthenticationPageContent model, final Form<? extends SignUpFormData> form) {
-        model.setSignUpFormSettings(signUpFormSettingsBeanFactory.create(form));
+        model.setSignUpFormSettings(signUpFormSettingsViewModelFactory.create(form));
     }
 }

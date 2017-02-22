@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.sessions.cart;
 
+import com.commercetools.sunrise.common.models.carts.MiniCartViewModel;
 import com.commercetools.sunrise.sessions.ResourceStoringOperations;
-import com.commercetools.sunrise.common.models.carts.MiniCartBean;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.Cart;
 
@@ -16,7 +16,7 @@ public interface CartInSession extends ResourceStoringOperations<Cart> {
 
     Optional<String> findCartId();
 
-    Optional<MiniCartBean> findMiniCart();
+    Optional<MiniCartViewModel> findMiniCart();
 
     @Override
     void store(@Nullable final Cart cart);
