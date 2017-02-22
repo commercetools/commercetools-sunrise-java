@@ -5,9 +5,9 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DefaultLogInFormData.class)
 public interface LogInFormData {
 
-    String obtainUsername();
+    String username();
 
-    String obtainPassword();
+    String password();
 
     void applyUsername(final String username);
 }

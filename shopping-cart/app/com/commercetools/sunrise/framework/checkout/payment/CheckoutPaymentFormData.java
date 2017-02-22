@@ -5,7 +5,7 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DefaultCheckoutPaymentFormData.class)
 public interface CheckoutPaymentFormData {
 
-    String obtainPaymentMethod();
+    String paymentMethod();
 
     void applyPaymentMethod(final String paymentMethod);
 }

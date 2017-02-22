@@ -15,18 +15,13 @@ public class DefaultMyPersonalDetailsFormData extends Base implements MyPersonal
     private String email;
 
     @Override
-    public String obtainEmail() {
-        return email;
-    }
-
-    @Override
-    public void applyEmail(final String email) {
-        this.email = email;
-    }
-
-    @Override
-    public CustomerName obtainCustomerName() {
+    public CustomerName customerName() {
         return CustomerName.ofTitleFirstAndLastName(title, firstName, lastName);
+    }
+
+    @Override
+    public String email() {
+        return email;
     }
 
     @Override
@@ -35,6 +30,14 @@ public class DefaultMyPersonalDetailsFormData extends Base implements MyPersonal
         this.firstName = customerName.getFirstName();
         this.lastName = customerName.getLastName();
     }
+
+    @Override
+    public void applyEmail(final String email) {
+        this.email = email;
+    }
+
+
+    // Getters & setters
 
     public String getTitle() {
         return title;

@@ -7,5 +7,5 @@ import java.util.Locale;
 @ImplementedBy(DefaultChangeLanguageFormData.class)
 public interface ChangeLanguageFormData {
 
-    Locale obtainLocale();
+    Locale locale();
 }

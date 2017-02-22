@@ -35,23 +35,28 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
     }
 
     @Override
-    public boolean obtainIsDefaultShippingAddress() {
+    public Address address() {
+        final CountryCode countryCode = CountryCode.getByCode(country);
+        return AddressBuilder.of(countryCode)
+                .title(title)
+                .firstName(firstName)
+                .lastName(lastName)
+                .streetName(streetName)
+                .additionalStreetInfo(additionalStreetInfo)
+                .city(city)
+                .postalCode(postalCode)
+                .region(region)
+                .build();
+    }
+
+    @Override
+    public boolean defaultShippingAddress() {
         return defaultShippingAddress;
     }
 
     @Override
-    public void applyIsDefaultShippingAddress(final boolean defaultShippingAddress) {
-        this.defaultShippingAddress = defaultShippingAddress;
-    }
-
-    @Override
-    public boolean obtainIsDefaultBillingAddress() {
+    public boolean defaultBillingAddress() {
         return defaultBillingAddress;
-    }
-
-    @Override
-    public void applyIsDefaultBillingAddress(final boolean defaultBillingAddress) {
-        this.defaultBillingAddress = defaultBillingAddress;
     }
 
     @Override
@@ -68,19 +73,17 @@ public class DefaultAddressFormData extends Base implements AddressFormData {
     }
 
     @Override
-    public Address obtainAddress() {
-        final CountryCode countryCode = CountryCode.getByCode(country);
-        return AddressBuilder.of(countryCode)
-                .title(title)
-                .firstName(firstName)
-                .lastName(lastName)
-                .streetName(streetName)
-                .additionalStreetInfo(additionalStreetInfo)
-                .city(city)
-                .postalCode(postalCode)
-                .region(region)
-                .build();
+    public void applyDefaultShippingAddress(final boolean defaultShippingAddress) {
+        this.defaultShippingAddress = defaultShippingAddress;
     }
+
+    @Override
+    public void applyDefaultBillingAddress(final boolean defaultBillingAddress) {
+        this.defaultBillingAddress = defaultBillingAddress;
+    }
+
+
+    // Getters & setters
 
     public String getTitle() {
         return title;

@@ -5,9 +5,9 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DefaultAddLineItemFormData.class)
 public interface AddLineItemFormData {
 
-    String obtainProductId();
+    String productId();
 
-    Integer obtainVariantId();
+    Integer variantId();
 
-    Long obtainQuantity();
+    Long quantity();
 }

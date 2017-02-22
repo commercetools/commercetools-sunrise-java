@@ -11,9 +11,12 @@ public class DefaultChangeLanguageFormData extends Base implements ChangeLanguag
     private String language;
 
     @Override
-    public Locale obtainLocale() {
+    public Locale locale() {
         return Locale.forLanguageTag(language);
     }
+
+
+    // Getters & setters
 
     public String getLanguage() {
         return language;

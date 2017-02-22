@@ -15,14 +15,17 @@ public class DefaultChangeLineItemQuantityFormData extends Base implements Chang
     private Long quantity;
 
     @Override
-    public String obtainLineItemId() {
+    public String lineItemId() {
         return lineItemId;
     }
 
     @Override
-    public Long obtainQuantity() {
+    public Long quantity() {
         return quantity;
     }
+
+
+    // Getters & setters
 
     public String getLineItemId() {
         return lineItemId;

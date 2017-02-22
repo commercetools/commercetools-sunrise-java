@@ -6,15 +6,15 @@ import io.sphere.sdk.models.Address;
 @ImplementedBy(DefaultAddressFormData.class)
 public interface AddressFormData {
 
-    Address obtainAddress();
+    Address address();
 
-    boolean obtainIsDefaultShippingAddress();
+    boolean defaultShippingAddress();
 
-    boolean obtainIsDefaultBillingAddress();
+    boolean defaultBillingAddress();
 
     void applyAddress(final Address address);
 
-    void applyIsDefaultShippingAddress(final boolean defaultShippingAddress);
+    void applyDefaultShippingAddress(final boolean defaultShippingAddress);
 
-    void applyIsDefaultBillingAddress(final boolean defaultBillingAddress);
+    void applyDefaultBillingAddress(final boolean defaultBillingAddress);
 }

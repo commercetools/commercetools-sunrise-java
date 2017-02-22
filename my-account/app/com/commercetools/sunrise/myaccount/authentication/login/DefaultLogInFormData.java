@@ -11,8 +11,13 @@ public class DefaultLogInFormData extends Base implements LogInFormData {
     private String password;
 
     @Override
-    public String obtainUsername() {
+    public String username() {
         return username;
+    }
+
+    @Override
+    public String password() {
+        return password;
     }
 
     @Override
@@ -20,10 +25,8 @@ public class DefaultLogInFormData extends Base implements LogInFormData {
         this.username = username;
     }
 
-    @Override
-    public String obtainPassword() {
-        return password;
-    }
+
+    // Getters & setters
 
     public String getUsername() {
         return username;

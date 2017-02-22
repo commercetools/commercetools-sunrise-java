@@ -10,9 +10,12 @@ public class DefaultChangeCountryFormData extends Base implements ChangeCountryF
     private String country;
 
     @Override
-    public CountryCode obtainCountryCode() {
+    public CountryCode countryCode() {
         return CountryCode.valueOf(country);
     }
+
+
+    // Getters & setters
 
     public String getCountry() {
         return country;

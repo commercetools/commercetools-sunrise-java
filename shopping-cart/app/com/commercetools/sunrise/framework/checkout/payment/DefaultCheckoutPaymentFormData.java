@@ -9,7 +9,7 @@ public class DefaultCheckoutPaymentFormData extends Base implements CheckoutPaym
     private String payment;
 
     @Override
-    public String obtainPaymentMethod() {
+    public String paymentMethod() {
         return payment;
     }
 
@@ -17,6 +17,9 @@ public class DefaultCheckoutPaymentFormData extends Base implements CheckoutPaym
     public void applyPaymentMethod(final String paymentMethod) {
         this.payment = paymentMethod;
     }
+
+
+    // Getters & setters
 
     public String getPayment() {
         return payment;

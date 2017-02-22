@@ -36,7 +36,7 @@ public class DefaultMyPersonalDetailsControllerAction extends AbstractCustomerUp
 
     private List<UpdateAction<Customer>> buildUpdateActions(final Customer customer, final MyPersonalDetailsFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        final CustomerName customerName = formData.obtainCustomerName();
+        final CustomerName customerName = formData.customerName();
         if (!Objects.equals(customer.getTitle(), customerName.getTitle())) {
             updateActions.add(SetTitle.of(customerName.getTitle()));
         }
@@ -46,8 +46,8 @@ public class DefaultMyPersonalDetailsControllerAction extends AbstractCustomerUp
         if (!Objects.equals(customer.getLastName(), customerName.getLastName())) {
             updateActions.add(SetLastName.of(customerName.getLastName()));
         }
-        if (!Objects.equals(customer.getEmail(), formData.obtainEmail())) {
-            updateActions.add(ChangeEmail.of(formData.obtainEmail()));
+        if (!Objects.equals(customer.getEmail(), formData.email())) {
+            updateActions.add(ChangeEmail.of(formData.email()));
         }
         return updateActions;
     }

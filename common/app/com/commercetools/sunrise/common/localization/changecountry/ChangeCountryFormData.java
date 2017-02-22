@@ -6,5 +6,5 @@ import com.neovisionaries.i18n.CountryCode;
 @ImplementedBy(DefaultChangeCountryFormData.class)
 public interface ChangeCountryFormData {
 
-    CountryCode obtainCountryCode();
+    CountryCode countryCode();
 }

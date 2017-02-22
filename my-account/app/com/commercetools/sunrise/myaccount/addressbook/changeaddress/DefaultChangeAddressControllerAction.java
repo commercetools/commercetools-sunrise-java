@@ -40,16 +40,16 @@ public class DefaultChangeAddressControllerAction extends AbstractCustomerUpdate
 
     private List<UpdateAction<Customer>> buildUpdateActions(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        updateActions.add(ChangeAddress.ofOldAddressToNewAddress(addressWithCustomer.getAddress(), formData.obtainAddress()));
+        updateActions.add(ChangeAddress.ofOldAddressToNewAddress(addressWithCustomer.getAddress(), formData.address()));
         updateActions.addAll(buildSetDefaultAddressActions(addressWithCustomer.getCustomer(), addressWithCustomer.getAddress().getId(), formData));
         return updateActions;
     }
 
     private List<UpdateAction<Customer>> buildSetDefaultAddressActions(final Customer customer, final String addressId, final AddressFormData formData) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        buildSetDefaultAddressAction(addressId, formData.obtainIsDefaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
+        buildSetDefaultAddressAction(addressId, formData.defaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
                 .ifPresent(updateActions::add);
-        buildSetDefaultAddressAction(addressId, formData.obtainIsDefaultBillingAddress(), customer.getDefaultBillingAddressId(), SetDefaultBillingAddress::of)
+        buildSetDefaultAddressAction(addressId, formData.defaultBillingAddress(), customer.getDefaultBillingAddressId(), SetDefaultBillingAddress::of)
                 .ifPresent(updateActions::add);
         return updateActions;
     }

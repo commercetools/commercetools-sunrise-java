@@ -15,6 +15,6 @@ public final class DefaultChangeCountryControllerAction implements ChangeCountry
 
     @Override
     public void accept(final ChangeCountryFormData formData) {
-        countryInSession.store(formData.obtainCountryCode());
+        countryInSession.store(formData.countryCode());
     }
 }

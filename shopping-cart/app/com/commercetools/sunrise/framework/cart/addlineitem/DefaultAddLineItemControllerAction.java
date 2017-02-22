@@ -23,7 +23,7 @@ public class DefaultAddLineItemControllerAction extends AbstractCartUpdateExecut
     }
 
     protected CartUpdateCommand buildRequest(final Cart cart, final AddLineItemFormData formData) {
-        final AddLineItem updateAction = AddLineItem.of(formData.obtainProductId(), formData.obtainVariantId(), formData.obtainQuantity());
+        final AddLineItem updateAction = AddLineItem.of(formData.productId(), formData.variantId(), formData.quantity());
         return CartUpdateCommand.of(cart, updateAction);
     }
 }

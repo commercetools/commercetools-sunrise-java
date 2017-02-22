@@ -6,9 +6,9 @@ import io.sphere.sdk.customers.CustomerName;
 @ImplementedBy(DefaultMyPersonalDetailsFormData.class)
 public interface MyPersonalDetailsFormData {
 
-    CustomerName obtainCustomerName();
+    CustomerName customerName();
 
-    String obtainEmail();
+    String email();
 
     void applyCustomerName(final CustomerName customerName);
 

@@ -5,5 +5,5 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DefaultRemoveLineItemFormData.class)
 public interface RemoveLineItemFormData {
 
-    String obtainLineItemId();
+    String lineItemId();
 }

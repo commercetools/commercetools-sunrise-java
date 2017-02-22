@@ -92,8 +92,8 @@ public abstract class SunriseChangeAddressController extends SunriseTemplateForm
         final Address address = addressWithCustomer.getAddress();
         final Customer customer = addressWithCustomer.getCustomer();
         formData.applyAddress(address);
-        formData.applyIsDefaultShippingAddress(isDefaultAddress(address, customer.getDefaultShippingAddressId()));
-        formData.applyIsDefaultBillingAddress(isDefaultAddress(address, customer.getDefaultBillingAddressId()));
+        formData.applyDefaultShippingAddress(isDefaultAddress(address, customer.getDefaultShippingAddressId()));
+        formData.applyDefaultBillingAddress(isDefaultAddress(address, customer.getDefaultBillingAddressId()));
     }
 
     @Override

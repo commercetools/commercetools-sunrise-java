@@ -11,9 +11,12 @@ public class DefaultRemoveLineItemFormData extends Base implements RemoveLineIte
     private String lineItemId;
 
     @Override
-    public String obtainLineItemId() {
+    public String lineItemId() {
         return lineItemId;
     }
+
+
+    // Getters & setters
 
     public String getLineItemId() {
         return lineItemId;

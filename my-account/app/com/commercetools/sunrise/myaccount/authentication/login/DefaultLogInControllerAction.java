@@ -36,7 +36,7 @@ public class DefaultLogInControllerAction extends AbstractCustomerSignInExecutor
 
     protected CustomerSignInCommand buildRequest(final LogInFormData formData) {
         final String cartId = cartInSession.findCartId().orElse(null);
-        return CustomerSignInCommand.of(formData.obtainUsername(), formData.obtainPassword(), cartId);
+        return CustomerSignInCommand.of(formData.username(), formData.password(), cartId);
     }
 
     protected final CompletableFuture<CustomerSignInResult> resultOrRecoverIfMergingCartFailed(final CompletionStage<CustomerSignInResult> resultStage,
@@ -44,7 +44,7 @@ public class DefaultLogInControllerAction extends AbstractCustomerSignInExecutor
         return recoverWith(resultStage, throwable -> {
             if (isInvalidOperationError(throwable.getCause())) {
                 LOGGER.warn("Sign in failed probably due to merging cart issues, trying to sign in without a cart");
-                return executeRequest(CustomerSignInCommand.of(formData.obtainUsername(), formData.obtainPassword()));
+                return executeRequest(CustomerSignInCommand.of(formData.username(), formData.password()));
             }
             return exceptionallyCompletedFuture(throwable);
         });

@@ -85,8 +85,25 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
     }
 
     @Override
+    public Address shippingAddress() {
+        final CountryCode country = CountryCode.getByCode(countryShipping);
+        return AddressBuilder.of(country)
+                .title(titleShipping)
+                .firstName(firstNameShipping)
+                .lastName(lastNameShipping)
+                .streetName(streetNameShipping)
+                .additionalStreetInfo(additionalStreetInfoShipping)
+                .city(cityShipping)
+                .postalCode(postalCodeShipping)
+                .region(regionShipping)
+                .phone(phoneShipping)
+                .email(emailShipping)
+                .build();
+    }
+
+    @Override
     @Nullable
-    public Address obtainBillingAddress() {
+    public Address billingAddress() {
         if (billingAddressDifferentToBillingAddress) {
             final CountryCode country = CountryCode.getByCode(countryBilling);
             return AddressBuilder.of(country)
@@ -104,23 +121,6 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
         } else {
             return null;
         }
-    }
-
-    @Override
-    public Address obtainShippingAddress() {
-        final CountryCode country = CountryCode.getByCode(countryShipping);
-        return AddressBuilder.of(country)
-                .title(titleShipping)
-                .firstName(firstNameShipping)
-                .lastName(lastNameShipping)
-                .streetName(streetNameShipping)
-                .additionalStreetInfo(additionalStreetInfoShipping)
-                .city(cityShipping)
-                .postalCode(postalCodeShipping)
-                .region(regionShipping)
-                .phone(phoneShipping)
-                .email(emailShipping)
-                .build();
     }
 
     @Override
@@ -157,6 +157,9 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
         this.phoneBilling = address.getPhone();
         this.emailBilling = address.getEmail();
     }
+
+
+    // Getters & setters
 
     public String getTitleShipping() {
         return titleShipping;

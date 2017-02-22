@@ -18,19 +18,22 @@ public class DefaultAddLineItemFormData extends Base implements AddLineItemFormD
     private Long quantity;
 
     @Override
-    public String obtainProductId() {
+    public String productId() {
         return productId;
     }
 
     @Override
-    public Integer obtainVariantId() {
+    public Integer variantId() {
         return variantId;
     }
 
     @Override
-    public Long obtainQuantity() {
+    public Long quantity() {
         return quantity;
     }
+
+
+    // Getters & setters
 
     public String getProductId() {
         return productId;

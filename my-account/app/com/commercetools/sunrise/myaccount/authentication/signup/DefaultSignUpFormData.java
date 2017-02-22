@@ -32,13 +32,16 @@ public class DefaultSignUpFormData extends Base implements SignUpFormData {
     }
 
     @Override
-    public CustomerDraft obtainCustomerDraft() {
+    public CustomerDraft customerDraft() {
         return CustomerDraftBuilder.of(email, password)
                 .title(title)
                 .firstName(firstName)
                 .lastName(lastName)
                 .build();
     }
+
+
+    // Getters & setters
 
     public String getTitle() {
         return title;

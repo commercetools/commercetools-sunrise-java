@@ -5,7 +5,7 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DefaultChangeLineItemQuantityFormData.class)
 public interface ChangeLineItemQuantityFormData {
 
-    String obtainLineItemId();
+    String lineItemId();
 
-    Long obtainQuantity();
+    Long quantity();
 }

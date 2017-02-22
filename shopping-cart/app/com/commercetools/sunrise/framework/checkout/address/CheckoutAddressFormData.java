@@ -9,9 +9,9 @@ import javax.annotation.Nullable;
 @ImplementedBy(DefaultCheckoutAddressFormData.class)
 public interface CheckoutAddressFormData {
 
+    Address shippingAddress();
+
+    @Nullable Address billingAddress();
+
     void applyCart(final Cart cart);
-
-    Address obtainShippingAddress();
-
-    @Nullable Address obtainBillingAddress();
 }

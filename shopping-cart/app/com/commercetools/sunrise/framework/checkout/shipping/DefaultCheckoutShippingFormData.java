@@ -11,7 +11,7 @@ public class DefaultCheckoutShippingFormData extends Base implements CheckoutShi
     private String shippingMethodId;
 
     @Override
-    public String obtainShippingMethod() {
+    public String shippingMethod() {
         return shippingMethodId;
     }
 
@@ -19,6 +19,9 @@ public class DefaultCheckoutShippingFormData extends Base implements CheckoutShi
     public void applyShippingMethod(final String shippingMethod) {
         this.shippingMethodId = shippingMethod;
     }
+
+
+    // Getters & setters
 
     public String getShippingMethodId() {
         return shippingMethodId;
