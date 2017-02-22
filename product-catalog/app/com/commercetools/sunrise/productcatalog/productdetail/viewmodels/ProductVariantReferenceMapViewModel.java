@@ -74,7 +74,7 @@ public class ProductVariantReferenceMapViewModel extends ViewModel implements Ma
 
     @Override
     @NotNull
-    public Set<Entry<String, ProductVariantReferenceViewModel>> entrySet() {
+    public Set<Map.Entry<String, ProductVariantReferenceViewModel>> entrySet() {
         return delegate.entrySet();
     }
 }
