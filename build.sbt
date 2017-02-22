@@ -37,25 +37,25 @@ lazy val common = project
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.sunriseTheme ++ Dependencies.sunriseModules ++ Dependencies.commonLib: _*)
-  .dependsOn(`move-to-sdk`, `test-lib` % "test,it,pt")
+  .dependsOn(`move-to-sdk`, `test-lib` % "test")
 
 lazy val `product-catalog` = project
   .enablePlugins(PlayJava)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests)
+  .dependsOn(commonWithTests: _*)
 
 lazy val `shopping-cart` = project
   .enablePlugins(PlayJava)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests)
+  .dependsOn(commonWithTests: _*)
 
 lazy val `my-account` = project
   .enablePlugins(PlayJava)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests)
+  .dependsOn(commonWithTests: _*)
 
 lazy val `sbt-tasks` = project
   .enablePlugins(PlayJava)
@@ -73,7 +73,7 @@ lazy val `test-lib` = project
   .settings(Release.enableSignedRelease ++ TestCommon.configCommonTestSettings("compile") ++ TestCommon.configJavaWsDependency("compile"): _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.commonLib: _*)
 
-lazy val commonWithTests: ClasspathDep[ProjectReference] = common
+lazy val commonWithTests: Seq[ClasspathDep[ProjectReference]] = Seq(common, `test-lib` % "test")
 
 lazy val javadocSettings = javaUnidocSettings ++ Seq (
   unidocProjectFilter in (JavaUnidoc, unidoc) := inProjects(childProjects: _*)
