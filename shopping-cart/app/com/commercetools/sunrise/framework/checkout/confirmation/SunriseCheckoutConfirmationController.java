@@ -19,7 +19,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseCheckoutConfirmationController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<CheckoutConfirmationFormData, Cart, Order>, WithRequiredCart {
+        implements WithTemplateFormFlow<Cart, Order, CheckoutConfirmationFormData>, WithRequiredCart {
 
     private final CheckoutConfirmationFormData formData;
     private final CartFinder cartFinder;
@@ -38,12 +38,12 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseTempl
     }
 
     @Override
-    public Class<? extends CheckoutConfirmationFormData> getFormDataClass() {
+    public final Class<? extends CheckoutConfirmationFormData> getFormDataClass() {
         return formData.getClass();
     }
 
     @Override
-    public CartFinder getCartFinder() {
+    public final CartFinder getCartFinder() {
         return cartFinder;
     }
 

@@ -19,7 +19,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseAddLineItemController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<AddLineItemFormData, Cart, Cart>, WithRequiredCart {
+        implements WithTemplateFormFlow<Cart, Cart, AddLineItemFormData>, WithRequiredCart {
 
     private final AddLineItemFormData formData;
     private final CartFinder cartFinder;
@@ -41,16 +41,16 @@ public abstract class SunriseAddLineItemController extends SunriseTemplateFormCo
     }
 
     @Override
-    public Class<? extends AddLineItemFormData> getFormDataClass() {
+    public final Class<? extends AddLineItemFormData> getFormDataClass() {
         return formData.getClass();
     }
 
     @Override
-    public CartFinder getCartFinder() {
+    public final CartFinder getCartFinder() {
         return cartFinder;
     }
 
-    public CartCreator getCartCreator() {
+    public final CartCreator getCartCreator() {
         return cartCreator;
     }
 

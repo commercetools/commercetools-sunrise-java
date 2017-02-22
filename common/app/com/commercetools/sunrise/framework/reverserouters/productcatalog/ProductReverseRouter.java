@@ -13,12 +13,12 @@ import java.util.Optional;
 @ImplementedBy(ReflectionProductLocalizedReverseRouter.class)
 public interface ProductReverseRouter extends ProductSimpleReverseRouter, LocalizedReverseRouter {
 
-    default Call productDetailPageCall(final String productSlug, final String sku) {
-        return productDetailPageCall(languageTag(), productSlug, sku);
+    default Call productDetailPageCall(final String productIdentifier, final String productVariantIdentifier) {
+        return productDetailPageCall(languageTag(), productIdentifier, productVariantIdentifier);
     }
 
-    default Call productOverviewPageCall(final String categorySlug) {
-        return productOverviewPageCall(languageTag(), categorySlug);
+    default Call productOverviewPageCall(final String categoryIdentifier) {
+        return productOverviewPageCall(languageTag(), categoryIdentifier);
     }
 
     default Call searchProcessCall() {

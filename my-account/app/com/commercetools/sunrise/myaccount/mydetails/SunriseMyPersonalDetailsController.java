@@ -19,7 +19,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseMyPersonalDetailsController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<MyPersonalDetailsFormData, Customer, Customer>, WithRequiredCustomer {
+        implements MyAccountController, WithTemplateFormFlow<Customer, Customer, MyPersonalDetailsFormData>, WithRequiredCustomer {
 
     private final MyPersonalDetailsFormData formData;
     private final CustomerFinder customerFinder;
@@ -38,12 +38,12 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseTemplate
     }
 
     @Override
-    public Class<? extends MyPersonalDetailsFormData> getFormDataClass() {
+    public final Class<? extends MyPersonalDetailsFormData> getFormDataClass() {
         return formData.getClass();
     }
 
     @Override
-    public CustomerFinder getCustomerFinder() {
+    public final CustomerFinder getCustomerFinder() {
         return customerFinder;
     }
 

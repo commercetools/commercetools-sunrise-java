@@ -3,17 +3,17 @@ package com.commercetools.sunrise.framework.controllers;
 import play.data.Form;
 import play.data.FormFactory;
 
-public interface WithForm<T> {
+public interface WithForm<F> {
 
-    default Form<? extends T> bindForm() {
+    default Form<? extends F> bindForm() {
         return createForm().bindFromRequest();
     }
 
-    default Form<? extends T> createForm() {
+    default Form<? extends F> createForm() {
         return getFormFactory().form(getFormDataClass());
     }
 
-    Class<? extends T> getFormDataClass();
+    Class<? extends F> getFormDataClass();
 
     FormFactory getFormFactory();
 }

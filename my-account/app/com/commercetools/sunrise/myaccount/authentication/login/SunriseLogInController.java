@@ -20,7 +20,7 @@ import java.util.concurrent.CompletionStage;
 import static com.commercetools.sunrise.common.utils.SphereExceptionUtils.isCustomerInvalidCredentialsError;
 
 public abstract class SunriseLogInController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<LogInFormData, Void, CustomerSignInResult> {
+        implements MyAccountController, WithTemplateFormFlow<Void, CustomerSignInResult, LogInFormData> {
 
     private final LogInFormData formData;
     private final LogInControllerAction controllerAction;
@@ -36,7 +36,7 @@ public abstract class SunriseLogInController extends SunriseTemplateFormControll
     }
 
     @Override
-    public Class<? extends LogInFormData> getFormDataClass() {
+    public final Class<? extends LogInFormData> getFormDataClass() {
         return formData.getClass();
     }
 

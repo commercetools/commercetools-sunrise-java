@@ -11,11 +11,11 @@ import java.util.concurrent.CompletionStage;
 
 /**
  * Approach to handle form data (Template Method Pattern).
- * @param <F> stereotype of the in a form wrapped class
  * @param <I> type of the input data of the form, possibly a parameter object
  * @param <O> type of the output object, normally the updated object if the form is valid
+ * @param <F> stereotype of the in a form wrapped class
  */
-public interface WithTemplateFormFlow<F, I, O> extends WithFormFlow<F, I, O>, WithTemplate {
+public interface WithTemplateFormFlow<I, O, F> extends WithFormFlow<I, O, F>, WithTemplate {
 
     default CompletionStage<Result> showFormPage(final I input, final F emptyFormData) {
         final Form<? extends F> form = createFilledForm(input, emptyFormData);

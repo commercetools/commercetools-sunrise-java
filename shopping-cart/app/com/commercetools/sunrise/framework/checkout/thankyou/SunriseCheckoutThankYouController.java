@@ -31,7 +31,7 @@ public abstract class SunriseCheckoutThankYouController extends SunriseTemplateC
     }
 
     @Override
-    public OrderCreatedFinder getOrderCreatedFinder() {
+    public final OrderCreatedFinder getOrderCreatedFinder() {
         return orderCreatedFinder;
     }
 

@@ -18,7 +18,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseChangeLineItemQuantityController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<ChangeLineItemQuantityFormData, Cart, Cart>, WithRequiredCart {
+        implements WithTemplateFormFlow<Cart, Cart, ChangeLineItemQuantityFormData>, WithRequiredCart {
 
     private final ChangeLineItemQuantityFormData formData;
     private final CartFinder cartFinder;
@@ -37,12 +37,12 @@ public abstract class SunriseChangeLineItemQuantityController extends SunriseTem
     }
 
     @Override
-    public Class<? extends ChangeLineItemQuantityFormData> getFormDataClass() {
+    public final Class<? extends ChangeLineItemQuantityFormData> getFormDataClass() {
         return formData.getClass();
     }
 
     @Override
-    public CartFinder getCartFinder() {
+    public final CartFinder getCartFinder() {
         return cartFinder;
     }
 

@@ -20,7 +20,7 @@ import java.util.concurrent.CompletionStage;
 import static com.commercetools.sunrise.common.utils.SphereExceptionUtils.isDuplicatedEmailFieldError;
 
 public abstract class SunriseSignUpController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<SignUpFormData, Void, CustomerSignInResult> {
+        implements MyAccountController, WithTemplateFormFlow<Void, CustomerSignInResult, SignUpFormData> {
 
     private final SignUpFormData formData;
     private final SignUpControllerAction controllerAction;
@@ -36,7 +36,7 @@ public abstract class SunriseSignUpController extends SunriseTemplateFormControl
     }
 
     @Override
-    public Class<? extends SignUpFormData> getFormDataClass() {
+    public final Class<? extends SignUpFormData> getFormDataClass() {
         return formData.getClass();
     }
 

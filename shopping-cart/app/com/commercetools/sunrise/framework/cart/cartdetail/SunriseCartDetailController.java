@@ -29,7 +29,7 @@ public abstract class SunriseCartDetailController extends SunriseTemplateControl
     }
 
     @Override
-    public CartFinder getCartFinder() {
+    public final CartFinder getCartFinder() {
         return cartFinder;
     }
 

@@ -24,7 +24,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
 public abstract class SunriseCheckoutShippingController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<CheckoutShippingFormData, ShippingMethodsWithCart, Cart>, WithRequiredCart {
+        implements WithTemplateFormFlow<ShippingMethodsWithCart, Cart, CheckoutShippingFormData>, WithRequiredCart {
 
     private final CheckoutShippingFormData formData;
     private final CartFinder cartFinder;
@@ -46,12 +46,12 @@ public abstract class SunriseCheckoutShippingController extends SunriseTemplateF
     }
 
     @Override
-    public Class<? extends CheckoutShippingFormData> getFormDataClass() {
+    public final Class<? extends CheckoutShippingFormData> getFormDataClass() {
         return formData.getClass();
     }
 
     @Override
-    public CartFinder getCartFinder() {
+    public final CartFinder getCartFinder() {
         return cartFinder;
     }
 

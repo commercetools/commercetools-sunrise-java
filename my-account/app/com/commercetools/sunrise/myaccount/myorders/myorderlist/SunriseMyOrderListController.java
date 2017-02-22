@@ -37,7 +37,7 @@ public abstract class SunriseMyOrderListController extends SunriseTemplateContro
     }
 
     @Override
-    public CustomerFinder getCustomerFinder() {
+    public final CustomerFinder getCustomerFinder() {
         return customerFinder;
     }
 

@@ -28,7 +28,7 @@ import java.util.function.Function;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public abstract class SunriseCheckoutPaymentController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<CheckoutPaymentFormData, PaymentMethodsWithCart, Cart>, WithRequiredCart {
+        implements WithTemplateFormFlow<PaymentMethodsWithCart, Cart, CheckoutPaymentFormData>, WithRequiredCart {
 
     private final CheckoutPaymentFormData formData;
     private final CartFinder cartFinder;
@@ -50,12 +50,12 @@ public abstract class SunriseCheckoutPaymentController extends SunriseTemplateFo
     }
 
     @Override
-    public Class<? extends CheckoutPaymentFormData> getFormDataClass() {
+    public final Class<? extends CheckoutPaymentFormData> getFormDataClass() {
         return formData.getClass();
     }
 
     @Override
-    public CartFinder getCartFinder() {
+    public final CartFinder getCartFinder() {
         return cartFinder;
     }
 

@@ -18,7 +18,8 @@ import java.util.concurrent.CompletionStage;
  * Controller to show the information about a single product.
  * Loads a {@link ProductProjection} and the selected {@link ProductVariant}.
  */
-public abstract class SunriseProductDetailController extends SunriseTemplateController implements WithQueryFlow<ProductWithVariant>, WithRequiredProduct, WithRequiredProductVariant {
+public abstract class SunriseProductDetailController extends SunriseTemplateController
+        implements WithQueryFlow<ProductWithVariant>, WithRequiredProduct, WithRequiredProductVariant {
 
     private final ProductFinder productFinder;
     private final ProductVariantFinder productVariantFinder;
@@ -34,20 +35,20 @@ public abstract class SunriseProductDetailController extends SunriseTemplateCont
     }
 
     @Override
-    public ProductFinder getProductFinder() {
+    public final ProductFinder getProductFinder() {
         return productFinder;
     }
 
     @Override
-    public ProductVariantFinder getProductVariantFinder() {
+    public final ProductVariantFinder getProductVariantFinder() {
         return productVariantFinder;
     }
 
     @RunRequestStartedHook
     @SunriseRoute(ProductReverseRouter.PRODUCT_DETAIL_PAGE)
-    public CompletionStage<Result> show(final String languageTag, final String productIdentifier, final String variantIdentifier) {
+    public CompletionStage<Result> show(final String languageTag, final String productIdentifier, final String productVariantIdentifier) {
         return requireProduct(productIdentifier, product ->
-                requireProductVariant(product, variantIdentifier, variant ->
+                requireProductVariant(product, productVariantIdentifier, variant ->
                         showPage(ProductWithVariant.of(product, variant))));
     }
 

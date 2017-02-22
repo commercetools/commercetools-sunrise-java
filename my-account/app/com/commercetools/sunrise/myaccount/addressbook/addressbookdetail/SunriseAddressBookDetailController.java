@@ -31,7 +31,7 @@ public abstract class SunriseAddressBookDetailController extends SunriseTemplate
     }
 
     @Override
-    public CustomerFinder getCustomerFinder() {
+    public final CustomerFinder getCustomerFinder() {
         return customerFinder;
     }
 

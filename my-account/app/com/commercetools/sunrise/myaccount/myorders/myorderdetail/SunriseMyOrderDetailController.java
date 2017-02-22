@@ -32,12 +32,12 @@ public abstract class SunriseMyOrderDetailController extends SunriseTemplateCont
     }
 
     @Override
-    public CustomerFinder getCustomerFinder() {
+    public final CustomerFinder getCustomerFinder() {
         return customerFinder;
     }
 
     @Override
-    public MyOrderFinder getMyOrderFinder() {
+    public final MyOrderFinder getMyOrderFinder() {
         return myOrderFinder;
     }
 

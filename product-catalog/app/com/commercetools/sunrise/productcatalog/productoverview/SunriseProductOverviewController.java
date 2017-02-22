@@ -36,7 +36,7 @@ public abstract class SunriseProductOverviewController extends SunriseTemplateCo
     }
 
     @Override
-    public CategoryFinder getCategoryFinder() {
+    public final CategoryFinder getCategoryFinder() {
         return categoryFinder;
     }
 

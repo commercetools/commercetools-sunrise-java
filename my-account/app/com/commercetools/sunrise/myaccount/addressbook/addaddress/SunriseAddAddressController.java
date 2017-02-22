@@ -22,7 +22,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseAddAddressController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<AddressFormData, Customer, Customer>, WithRequiredCustomer {
+        implements MyAccountController, WithTemplateFormFlow<Customer, Customer, AddressFormData>, WithRequiredCustomer {
 
     private final AddressFormData formData;
     private final CustomerFinder customerFinder;
@@ -44,12 +44,12 @@ public abstract class SunriseAddAddressController extends SunriseTemplateFormCon
     }
 
     @Override
-    public Class<? extends AddressFormData> getFormDataClass() {
+    public final Class<? extends AddressFormData> getFormDataClass() {
         return formData.getClass();
     }
 
     @Override
-    public CustomerFinder getCustomerFinder() {
+    public final CustomerFinder getCustomerFinder() {
         return customerFinder;
     }
 

@@ -59,7 +59,7 @@ final class MetricsLogger extends Action.Simple {
         if (!reportPerRequest.isEmpty()) {
             reportPerRequest = ":\n" + reportPerRequest;
         }
-        LOGGER.debug("({}ms) {} used {} request(s){}",
+        LOGGER.debug("({}ms) {} used {} CTP request(s){}",
                 totalDuration,
                 ctx.request(),
                 metrics.size(),

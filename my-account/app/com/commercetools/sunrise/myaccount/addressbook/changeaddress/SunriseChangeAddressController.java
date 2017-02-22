@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseChangeAddressController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<AddressFormData, AddressWithCustomer, Customer>, WithRequiredCustomer, WithRequiredAddress {
+        implements MyAccountController, WithTemplateFormFlow<AddressWithCustomer, Customer, AddressFormData>, WithRequiredCustomer, WithRequiredAddress {
 
     private final AddressFormData formData;
     private final CustomerFinder customerFinder;
@@ -49,17 +49,17 @@ public abstract class SunriseChangeAddressController extends SunriseTemplateForm
     }
 
     @Override
-    public Class<? extends AddressFormData> getFormDataClass() {
+    public final Class<? extends AddressFormData> getFormDataClass() {
         return formData.getClass();
     }
 
     @Override
-    public CustomerFinder getCustomerFinder() {
+    public final CustomerFinder getCustomerFinder() {
         return customerFinder;
     }
 
     @Override
-    public AddressFinder getAddressFinder() {
+    public final AddressFinder getAddressFinder() {
         return addressFinder;
     }
 

@@ -18,7 +18,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseRemoveLineItemController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<RemoveLineItemFormData, Cart, Cart>, WithRequiredCart {
+        implements WithTemplateFormFlow<Cart, Cart, RemoveLineItemFormData>, WithRequiredCart {
 
     private final RemoveLineItemFormData formData;
     private final CartFinder cartFinder;
@@ -37,12 +37,12 @@ public abstract class SunriseRemoveLineItemController extends SunriseTemplateFor
     }
 
     @Override
-    public Class<? extends RemoveLineItemFormData> getFormDataClass() {
+    public final Class<? extends RemoveLineItemFormData> getFormDataClass() {
         return formData.getClass();
     }
 
     @Override
-    public CartFinder getCartFinder() {
+    public final CartFinder getCartFinder() {
         return cartFinder;
     }
 
