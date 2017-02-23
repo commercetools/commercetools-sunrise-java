@@ -1,20 +1,15 @@
 package com.commercetools.sunrise.common.models.addresses;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
 
 @RequestScoped
 public class TitleFormSelectableOptionViewModelFactory extends SelectableViewModelFactory<TitleFormSelectableOptionViewModel, String, String> {
 
-    @Inject
-    public TitleFormSelectableOptionViewModelFactory() {
-    }
-
     @Override
-    protected TitleFormSelectableOptionViewModel getViewModelInstance() {
+    protected TitleFormSelectableOptionViewModel newViewModelInstance(final String option, final String selectedValue) {
         return new TitleFormSelectableOptionViewModel();
     }
 

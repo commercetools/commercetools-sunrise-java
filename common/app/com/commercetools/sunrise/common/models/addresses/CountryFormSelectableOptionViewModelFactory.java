@@ -18,8 +18,12 @@ public class CountryFormSelectableOptionViewModelFactory extends SelectableViewM
         this.locale = locale;
     }
 
+    protected final Locale getLocale() {
+        return locale;
+    }
+
     @Override
-    protected CountryFormSelectableOptionViewModel getViewModelInstance() {
+    protected CountryFormSelectableOptionViewModel newViewModelInstance(final CountryCode option, @Nullable final CountryCode selectedValue) {
         return new CountryFormSelectableOptionViewModel();
     }
 

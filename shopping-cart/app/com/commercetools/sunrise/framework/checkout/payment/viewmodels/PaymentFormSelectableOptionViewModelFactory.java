@@ -19,8 +19,12 @@ public class PaymentFormSelectableOptionViewModelFactory extends SelectableViewM
         this.locale = locale;
     }
 
+    protected final Locale getLocale() {
+        return locale;
+    }
+
     @Override
-    protected PaymentFormSelectableOptionViewModel getViewModelInstance() {
+    protected PaymentFormSelectableOptionViewModel newViewModelInstance(final PaymentMethodInfo option, @Nullable final String selectedValue) {
         return new PaymentFormSelectableOptionViewModel();
     }
 

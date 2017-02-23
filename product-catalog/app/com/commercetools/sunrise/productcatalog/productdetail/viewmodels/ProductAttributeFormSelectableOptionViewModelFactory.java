@@ -19,8 +19,12 @@ public class ProductAttributeFormSelectableOptionViewModelFactory extends Select
         this.attributeFormatter = attributeFormatter;
     }
 
+    protected final AttributeFormatter getAttributeFormatter() {
+        return attributeFormatter;
+    }
+
     @Override
-    protected ProductAttributeFormSelectableOptionViewModel getViewModelInstance() {
+    protected ProductAttributeFormSelectableOptionViewModel newViewModelInstance(final AttributeWithProductType option, @Nullable final Attribute selectedValue) {
         return new ProductAttributeFormSelectableOptionViewModel();
     }
 

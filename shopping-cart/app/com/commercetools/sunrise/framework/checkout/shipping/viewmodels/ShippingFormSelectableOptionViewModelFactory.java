@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.framework.checkout.shipping.viewmodels;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
 import com.commercetools.sunrise.framework.CartFinder;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.queries.PagedResult;
@@ -33,8 +33,12 @@ public class ShippingFormSelectableOptionViewModelFactory extends SelectableView
         this.sphereClient = sphereClient;
     }
 
+    protected final PriceFormatter getPriceFormatter() {
+        return priceFormatter;
+    }
+
     @Override
-    protected ShippingFormSelectableOptionViewModel getViewModelInstance() {
+    protected ShippingFormSelectableOptionViewModel newViewModelInstance(final ShippingMethod option, final String selectedValue) {
         return new ShippingFormSelectableOptionViewModel();
     }
 

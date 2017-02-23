@@ -2,18 +2,18 @@ package com.commercetools.sunrise.common.models;
 
 import javax.annotation.Nullable;
 
-public abstract class SelectableViewModelFactory<T, D, S> {
+public abstract class SelectableViewModelFactory<M, O, S> {
 
-    protected abstract T getViewModelInstance();
+    protected abstract M newViewModelInstance(final O option, @Nullable final S selectedValue);
 
-    public T create(final D option, @Nullable final S selectedValue) {
+    public M create(final O option, @Nullable final S selectedValue) {
         return initializedViewModel(option, selectedValue);
     }
 
-    protected abstract void initialize(final T viewModel, final D option, @Nullable final S selectedValue);
+    protected abstract void initialize(final M viewModel, final O option, @Nullable final S selectedValue);
 
-    protected final T initializedViewModel(final D option, @Nullable final S selectedValue) {
-        final T viewModel = getViewModelInstance();
+    protected final M initializedViewModel(final O option, @Nullable final S selectedValue) {
+        final M viewModel = newViewModelInstance(option, selectedValue);
         initialize(viewModel, option, selectedValue);
         return viewModel;
     }

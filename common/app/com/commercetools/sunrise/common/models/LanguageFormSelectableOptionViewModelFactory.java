@@ -16,8 +16,12 @@ public class LanguageFormSelectableOptionViewModelFactory extends SelectableView
         this.locale = locale;
     }
 
+    protected final Locale getLocale() {
+        return locale;
+    }
+
     @Override
-    protected LanguageFormSelectableOptionViewModel getViewModelInstance() {
+    protected LanguageFormSelectableOptionViewModel newViewModelInstance(final Locale option, @Nullable final Locale selectedValue) {
         return new LanguageFormSelectableOptionViewModel();
     }
 

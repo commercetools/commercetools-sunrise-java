@@ -18,11 +18,11 @@ import static java.util.stream.Collectors.toList;
 final class HandlebarsI18nHelper extends Base implements Helper<String> {
 
     static final String LANGUAGE_TAGS_IN_CONTEXT_KEY = "context-language-tags";
-    private final I18nResolver i18n;
+    private final I18nResolver i18nResolver;
     private final I18nIdentifierFactory i18nIdentifierFactory;
 
-    HandlebarsI18nHelper(final I18nResolver i18n, final I18nIdentifierFactory i18nIdentifierFactory) {
-        this.i18n = i18n;
+    HandlebarsI18nHelper(final I18nResolver i18nResolver, final I18nIdentifierFactory i18nIdentifierFactory) {
+        this.i18nResolver = i18nResolver;
         this.i18nIdentifierFactory = i18nIdentifierFactory;
     }
 
@@ -30,7 +30,7 @@ final class HandlebarsI18nHelper extends Base implements Helper<String> {
     public CharSequence apply(final String context, final Options options) throws IOException {
         final List<Locale> locales = getLocalesFromContext(options.context);
         final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(context);
-        return i18n.getOrEmpty(locales, i18nIdentifier, options.hash);
+        return i18nResolver.getOrEmpty(locales, i18nIdentifier, options.hash);
     }
 
     @SuppressWarnings("unchecked")

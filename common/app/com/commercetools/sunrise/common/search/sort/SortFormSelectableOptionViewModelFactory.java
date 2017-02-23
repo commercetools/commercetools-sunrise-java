@@ -1,33 +1,28 @@
 package com.commercetools.sunrise.common.search.sort;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.SelectableViewModelFactory;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifier;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierFactory;
-import com.commercetools.sunrise.framework.template.i18n.I18nResolver;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.Collections;
-import java.util.Locale;
 
 @RequestScoped
 public class SortFormSelectableOptionViewModelFactory extends SelectableViewModelFactory<SortFormSelectableOptionViewModel, SortFormOption, String> {
 
-    private final Locale locale;
-    private final I18nIdentifierFactory i18nIdentifierFactory;
-    private final I18nResolver i18nResolver;
+    private final I18nIdentifierResolver i18nIdentifierResolver;
 
     @Inject
-    public SortFormSelectableOptionViewModelFactory(final Locale locale, final I18nIdentifierFactory i18nIdentifierFactory,
-                                               final I18nResolver i18nResolver) {
-        this.locale = locale;
-        this.i18nIdentifierFactory = i18nIdentifierFactory;
-        this.i18nResolver = i18nResolver;
+    public SortFormSelectableOptionViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver) {
+        this.i18nIdentifierResolver = i18nIdentifierResolver;
+    }
+
+    protected final I18nIdentifierResolver getI18nIdentifierResolver() {
+        return i18nIdentifierResolver;
     }
 
     @Override
-    protected SortFormSelectableOptionViewModel getViewModelInstance() {
+    protected SortFormSelectableOptionViewModel newViewModelInstance(final SortFormOption option, @Nullable final String selectedValue) {
         return new SortFormSelectableOptionViewModel();
     }
 
@@ -44,8 +39,7 @@ public class SortFormSelectableOptionViewModelFactory extends SelectableViewMode
     }
 
     protected void fillLabel(final SortFormSelectableOptionViewModel viewModel, final SortFormOption option, @Nullable final String selectedOptionValue) {
-        final I18nIdentifier i18nIdentifier = i18nIdentifierFactory.create(option.getFieldLabel());
-        viewModel.setLabel(i18nResolver.getOrKey(Collections.singletonList(locale), i18nIdentifier));
+        viewModel.setLabel(i18nIdentifierResolver.resolveOrKey(option.getFieldLabel()));
     }
 
     protected void fillValue(final SortFormSelectableOptionViewModel viewModel, final SortFormOption option, @Nullable final String selectedOptionValue) {

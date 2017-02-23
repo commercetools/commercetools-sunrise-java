@@ -32,8 +32,20 @@ public class SelectableProductAttributeViewModelFactory extends SelectableViewMo
         this.productAttributeFormSelectableOptionViewModelFactory = productAttributeFormSelectableOptionViewModelFactory;
     }
 
+    protected final AttributeFormatter getAttributeFormatter() {
+        return attributeFormatter;
+    }
+
+    protected final ProductAttributeSettings getProductAttributeSettings() {
+        return productAttributeSettings;
+    }
+
+    protected final ProductAttributeFormSelectableOptionViewModelFactory getProductAttributeFormSelectableOptionViewModelFactory() {
+        return productAttributeFormSelectableOptionViewModelFactory;
+    }
+
     @Override
-    protected SelectableProductAttributeViewModel getViewModelInstance() {
+    protected SelectableProductAttributeViewModel newViewModelInstance(final List<ProductVariant> option, final AttributeWithProductType selectedValue) {
         return new SelectableProductAttributeViewModel();
     }
 
