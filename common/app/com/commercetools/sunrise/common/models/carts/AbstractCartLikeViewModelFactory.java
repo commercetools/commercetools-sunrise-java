@@ -10,8 +10,6 @@ import javax.money.MonetaryAmount;
 
 public abstract class AbstractCartLikeViewModelFactory<T extends CartViewModel, D extends CartLike<?>> extends AbstractMiniCartViewModelFactory<T, D> {
 
-    private final CurrencyUnit currency;
-    private final PriceFormatter priceFormatter;
     private final ShippingInfoViewModelFactory shippingInfoViewModelFactory;
     private final PaymentInfoViewModelFactory paymentInfoViewModelFactory;
     private final AddressViewModelFactory addressViewModelFactory;
@@ -19,19 +17,9 @@ public abstract class AbstractCartLikeViewModelFactory<T extends CartViewModel, 
     protected AbstractCartLikeViewModelFactory(final CurrencyUnit currency, final PriceFormatter priceFormatter, final ShippingInfoViewModelFactory shippingInfoViewModelFactory,
                                                final PaymentInfoViewModelFactory paymentInfoViewModelFactory, final AddressViewModelFactory addressViewModelFactory) {
         super(currency, priceFormatter);
-        this.currency = currency;
-        this.priceFormatter = priceFormatter;
         this.shippingInfoViewModelFactory = shippingInfoViewModelFactory;
         this.paymentInfoViewModelFactory = paymentInfoViewModelFactory;
         this.addressViewModelFactory = addressViewModelFactory;
-    }
-
-    protected final CurrencyUnit getCurrency() {
-        return currency;
-    }
-
-    protected final PriceFormatter getPriceFormatter() {
-        return priceFormatter;
     }
 
     protected final ShippingInfoViewModelFactory getShippingInfoViewModelFactory() {
@@ -64,9 +52,9 @@ public abstract class AbstractCartLikeViewModelFactory<T extends CartViewModel, 
             salesTax = cartLike.calculateTotalAppliedTaxes()
                     .orElseGet(() -> zeroAmount(cartLike.getCurrency()));
         } else {
-            salesTax = zeroAmount(currency);
+            salesTax = zeroAmount(getCurrency());
         }
-        viewModel.setSalesTax(priceFormatter.format(salesTax));
+        viewModel.setSalesTax(getPriceFormatter().format(salesTax));
     }
 
     protected void fillSubtotalPrice(final T viewModel, @Nullable final D cartLike) {
@@ -74,9 +62,9 @@ public abstract class AbstractCartLikeViewModelFactory<T extends CartViewModel, 
         if (cartLike != null) {
             subtotal = cartLike.calculateSubTotalPrice();
         } else {
-            subtotal = zeroAmount(currency);
+            subtotal = zeroAmount(getCurrency());
         }
-        viewModel.setSubtotalPrice(priceFormatter.format(subtotal));
+        viewModel.setSubtotalPrice(getPriceFormatter().format(subtotal));
     }
 
     protected void fillCustomerEmail(final T viewModel, @Nullable final D cartLike) {
