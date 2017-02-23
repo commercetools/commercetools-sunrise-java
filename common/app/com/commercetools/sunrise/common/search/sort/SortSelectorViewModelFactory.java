@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 public class SortSelectorViewModelFactory extends ViewModelFactory<SortSelectorViewModel, PagedResult<ProductProjection>> {
 
     @Nullable
-    protected final String selectedOptionValue;
+    private final String selectedOptionValue;
     private final SortFormSettings settings;
     private final SortFormSelectableOptionViewModelFactory sortFormSelectableOptionViewModelFactory;
 
@@ -28,6 +28,19 @@ public class SortSelectorViewModelFactory extends ViewModelFactory<SortSelectorV
                 .orElse(null);
         this.settings = settings;
         this.sortFormSelectableOptionViewModelFactory = sortFormSelectableOptionViewModelFactory;
+    }
+
+    @Nullable
+    protected final String getSelectedOptionValue() {
+        return selectedOptionValue;
+    }
+
+    protected final SortFormSettings getSettings() {
+        return settings;
+    }
+
+    protected final SortFormSelectableOptionViewModelFactory getSortFormSelectableOptionViewModelFactory() {
+        return sortFormSelectableOptionViewModelFactory;
     }
 
     @Override

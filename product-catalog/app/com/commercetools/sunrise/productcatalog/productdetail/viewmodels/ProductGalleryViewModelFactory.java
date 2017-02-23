@@ -18,14 +18,18 @@ public class ProductGalleryViewModelFactory extends ViewModelFactory<ProductGall
         this.productImageViewModelFactory = productImageViewModelFactory;
     }
 
-    @Override
-    public final ProductGalleryViewModel create(final ProductWithVariant productWithVariant) {
-        return super.create(productWithVariant);
+    protected final ProductImageViewModelFactory getProductImageViewModelFactory() {
+        return productImageViewModelFactory;
     }
 
     @Override
     protected ProductGalleryViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductGalleryViewModel();
+    }
+
+    @Override
+    public final ProductGalleryViewModel create(final ProductWithVariant productWithVariant) {
+        return super.create(productWithVariant);
     }
 
     @Override

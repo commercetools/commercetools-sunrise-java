@@ -14,6 +14,10 @@ public class PageHeaderFactory extends ViewModelFactory<PageHeader, PageContent>
         this.customerServiceNumber = configuration.getString("checkout.customerServiceNumber", "");
     }
 
+    protected final String getCustomerServiceNumber() {
+        return customerServiceNumber;
+    }
+
     @Override
     protected final PageHeader getViewModelInstance(final PageContent pageContent) {
         return new PageHeader();

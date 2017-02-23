@@ -20,6 +20,14 @@ public class PageNavMenuFactory extends ViewModelFactory<PageNavMenu, Void> {
         this.categoryViewModelFactory = categoryViewModelFactory;
     }
 
+    protected final CategoryTree getCategoryTree() {
+        return categoryTree;
+    }
+
+    protected final CategoryViewModelFactory getCategoryViewModelFactory() {
+        return categoryViewModelFactory;
+    }
+
     @Override
     protected PageNavMenu getViewModelInstance(final Void input) {
         return new PageNavMenu();

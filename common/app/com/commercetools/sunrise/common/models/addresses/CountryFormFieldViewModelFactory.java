@@ -24,6 +24,14 @@ public class CountryFormFieldViewModelFactory extends FormFieldViewModelFactory<
         this.countryFormSelectableOptionViewModelFactory = countryFormSelectableOptionViewModelFactory;
     }
 
+    protected final List<CountryCode> getDefaultCountries() {
+        return defaultCountries;
+    }
+
+    protected final CountryFormSelectableOptionViewModelFactory getCountryFormSelectableOptionViewModelFactory() {
+        return countryFormSelectableOptionViewModelFactory;
+    }
+
     @Override
     protected CountryFormFieldViewModel getViewModelInstance(final FormFieldWithOptions<CountryCode> formFieldWithOptions) {
         return new CountryFormFieldViewModel();

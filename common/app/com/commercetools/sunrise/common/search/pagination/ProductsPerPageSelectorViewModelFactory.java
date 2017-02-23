@@ -30,6 +30,19 @@ public class ProductsPerPageSelectorViewModelFactory extends ViewModelFactory<Pr
         this.productsPerPageFormSelectableOptionViewModelFactory = productsPerPageFormSelectableOptionViewModelFactory;
     }
 
+    @Nullable
+    protected final String getSelectedOptionValue() {
+        return selectedOptionValue;
+    }
+
+    protected final ProductsPerPageFormSettings getSettings() {
+        return settings;
+    }
+
+    protected final ProductsPerPageFormSelectableOptionViewModelFactory getProductsPerPageFormSelectableOptionViewModelFactory() {
+        return productsPerPageFormSelectableOptionViewModelFactory;
+    }
+
     @Override
     protected ProductsPerPageSelectorViewModel getViewModelInstance(final PagedResult<ProductProjection> pagedResult) {
         return new ProductsPerPageSelectorViewModel();

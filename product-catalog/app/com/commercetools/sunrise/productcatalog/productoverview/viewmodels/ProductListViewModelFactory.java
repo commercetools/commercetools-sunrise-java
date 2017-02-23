@@ -20,6 +20,10 @@ public class ProductListViewModelFactory extends ViewModelFactory<ProductListVie
         this.productThumbnailViewModelFactory = productThumbnailViewModelFactory;
     }
 
+    protected final ProductThumbnailViewModelFactory getProductThumbnailViewModelFactory() {
+        return productThumbnailViewModelFactory;
+    }
+
     @Override
     protected ProductListViewModel getViewModelInstance(final Iterable<ProductProjection> products) {
         return new ProductListViewModel();

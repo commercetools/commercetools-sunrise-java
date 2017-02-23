@@ -20,6 +20,14 @@ public class EditableAddressViewModelFactory extends ViewModelFactory<EditableAd
         this.addressBookReverseRouter = addressBookReverseRouter;
     }
 
+    protected final AddressViewModelFactory getAddressViewModelFactory() {
+        return addressViewModelFactory;
+    }
+
+    protected final AddressBookReverseRouter getAddressBookReverseRouter() {
+        return addressBookReverseRouter;
+    }
+
     @Override
     protected EditableAddressViewModel getViewModelInstance(final Address address) {
         return new EditableAddressViewModel();

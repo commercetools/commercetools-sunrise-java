@@ -8,9 +8,6 @@ import javax.inject.Singleton;
 @Singleton
 public class ProductImageViewModelFactory extends ViewModelFactory<ProductImageViewModel, Image> {
 
-    public ProductImageViewModelFactory() {
-    }
-
     @Override
     public final ProductImageViewModel create(final Image image) {
         return super.create(image);

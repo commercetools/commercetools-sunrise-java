@@ -17,6 +17,10 @@ public class ProductAttributeViewModelFactory extends ViewModelFactory<ProductAt
         this.attributeFormatter = attributeFormatter;
     }
 
+    protected final AttributeFormatter getAttributeFormatter() {
+        return attributeFormatter;
+    }
+
     @Override
     protected ProductAttributeViewModel getViewModelInstance(final AttributeWithProductType attributeWithProductType) {
         return new ProductAttributeViewModel();

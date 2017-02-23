@@ -26,6 +26,14 @@ public class ShippingInfoViewModelFactory extends ViewModelFactory<ShippingInfoV
         this.priceFormatter = priceFormatter;
     }
 
+    protected final CurrencyUnit getCurrency() {
+        return currency;
+    }
+
+    protected final PriceFormatter getPriceFormatter() {
+        return priceFormatter;
+    }
+
     @Override
     protected ShippingInfoViewModel getViewModelInstance(final CartLike<?> cartLike) {
         return new ShippingInfoViewModel();

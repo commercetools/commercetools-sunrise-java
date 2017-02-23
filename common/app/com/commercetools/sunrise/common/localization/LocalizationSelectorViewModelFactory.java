@@ -34,6 +34,26 @@ public class LocalizationSelectorViewModelFactory extends ViewModelFactory<Local
         this.languageFormSelectableOptionViewModelFactory = languageFormSelectableOptionViewModelFactory;
     }
 
+    protected final Locale getLocale() {
+        return locale;
+    }
+
+    protected final CountryCode getCountry() {
+        return country;
+    }
+
+    protected final ProjectContext getProjectContext() {
+        return projectContext;
+    }
+
+    protected final CountryFormSelectableOptionViewModelFactory getCountryFormSelectableOptionViewModelFactory() {
+        return countryFormSelectableOptionViewModelFactory;
+    }
+
+    protected final LanguageFormSelectableOptionViewModelFactory getLanguageFormSelectableOptionViewModelFactory() {
+        return languageFormSelectableOptionViewModelFactory;
+    }
+
     @Override
     protected LocalizationSelectorViewModel getViewModelInstance(final Void input) {
         return new LocalizationSelectorViewModel();

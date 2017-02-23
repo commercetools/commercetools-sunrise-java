@@ -27,6 +27,18 @@ public class AddressViewModelFactory extends ViewModelFactory<AddressViewModel, 
         this.i18nIdentifierFactory = i18nIdentifierFactory;
     }
 
+    protected final Locale getLocale() {
+        return locale;
+    }
+
+    protected final I18nResolver getI18nResolver() {
+        return i18nResolver;
+    }
+
+    protected final I18nIdentifierFactory getI18nIdentifierFactory() {
+        return i18nIdentifierFactory;
+    }
+
     @Override
     protected AddressViewModel getViewModelInstance(final Address address) {
         return new AddressViewModel();

@@ -23,6 +23,14 @@ public abstract class AbstractMiniCartViewModelFactory<T extends MiniCartViewMod
         this.priceFormatter = priceFormatter;
     }
 
+    protected final CurrencyUnit getCurrency() {
+        return currency;
+    }
+
+    protected final PriceFormatter getPriceFormatter() {
+        return priceFormatter;
+    }
+
     @Override
     protected void initialize(final T viewModel, final D input) {
         fillTotalPrice(viewModel, input);

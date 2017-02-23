@@ -26,6 +26,26 @@ public abstract class AbstractCartLikeViewModelFactory<T extends CartViewModel, 
         this.addressViewModelFactory = addressViewModelFactory;
     }
 
+    protected final CurrencyUnit getCurrency() {
+        return currency;
+    }
+
+    protected final PriceFormatter getPriceFormatter() {
+        return priceFormatter;
+    }
+
+    protected final ShippingInfoViewModelFactory getShippingInfoViewModelFactory() {
+        return shippingInfoViewModelFactory;
+    }
+
+    protected final PaymentInfoViewModelFactory getPaymentInfoViewModelFactory() {
+        return paymentInfoViewModelFactory;
+    }
+
+    protected final AddressViewModelFactory getAddressViewModelFactory() {
+        return addressViewModelFactory;
+    }
+
     @Override
     protected void initialize(final T viewModel, final D input) {
         super.initialize(viewModel, input);

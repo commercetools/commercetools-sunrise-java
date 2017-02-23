@@ -23,6 +23,10 @@ public class CartViewModelFactory extends AbstractCartLikeViewModelFactory<CartV
         this.lineItemExtendedViewModelFactory = lineItemExtendedViewModelFactory;
     }
 
+    protected final LineItemExtendedViewModelFactory getLineItemExtendedViewModelFactory() {
+        return lineItemExtendedViewModelFactory;
+    }
+
     @Override
     protected CartViewModel getViewModelInstance(final Cart cart) {
         return new CartViewModel();

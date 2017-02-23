@@ -16,6 +16,10 @@ public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderLis
         this.orderOverviewViewModelFactory = orderOverviewViewModelFactory;
     }
 
+    protected final OrderOverviewViewModelFactory getOrderOverviewViewModelFactory() {
+        return orderOverviewViewModelFactory;
+    }
+
     @Override
     protected MyOrderListPageContent getViewModelInstance(final OrderListWithCustomer orderListWithCustomer) {
         return new MyOrderListPageContent();

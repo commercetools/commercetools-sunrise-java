@@ -33,7 +33,22 @@ public class PaginationViewModelFactory extends ViewModelFactory<PaginationViewM
         this.currentPage = findSelectedValueFromQueryString(settings, httpRequest);
         this.displayedPages = configuration.getInt(CONFIG_DISPLAYED_PAGES, DEFAULT_DISPLAYED_PAGES);
         this.httpRequest = httpRequest;
+    }
 
+    protected final int getCurrentPage() {
+        return currentPage;
+    }
+
+    protected final int getDisplayedPages() {
+        return displayedPages;
+    }
+
+    protected final PaginationSettings getSettings() {
+        return settings;
+    }
+
+    protected final Http.Request getHttpRequest() {
+        return httpRequest;
     }
 
     @Override

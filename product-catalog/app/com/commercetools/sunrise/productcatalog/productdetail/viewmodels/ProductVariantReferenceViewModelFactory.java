@@ -18,6 +18,10 @@ public class ProductVariantReferenceViewModelFactory extends ViewModelFactory<Pr
         this.productReverseRouter = productReverseRouter;
     }
 
+    protected final ProductReverseRouter getProductReverseRouter() {
+        return productReverseRouter;
+    }
+
     @Override
     protected ProductVariantReferenceViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductVariantReferenceViewModel();

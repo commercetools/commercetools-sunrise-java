@@ -27,6 +27,14 @@ public class LineItemExtendedViewModelFactory extends AbstractLineItemViewModelF
         this.productAttributeViewModelFactory = productAttributeViewModelFactory;
     }
 
+    protected final ProductAttributeSettings getProductAttributeSettings() {
+        return productAttributeSettings;
+    }
+
+    protected final ProductAttributeViewModelFactory getProductAttributeViewModelFactory() {
+        return productAttributeViewModelFactory;
+    }
+
     @Override
     protected LineItemExtendedViewModel getViewModelInstance(final LineItem lineItem) {
         return new LineItemExtendedViewModel();

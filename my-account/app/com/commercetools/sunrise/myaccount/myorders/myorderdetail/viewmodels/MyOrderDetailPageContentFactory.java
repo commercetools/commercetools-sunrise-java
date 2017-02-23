@@ -18,6 +18,14 @@ public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderD
         this.orderViewModelFactory = orderViewModelFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final OrderViewModelFactory getOrderViewModelFactory() {
+        return orderViewModelFactory;
+    }
+
     @Override
     protected MyOrderDetailPageContent getViewModelInstance(final OrderWithCustomer orderWithCustomer) {
         return new MyOrderDetailPageContent();

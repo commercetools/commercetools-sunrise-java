@@ -30,6 +30,18 @@ public class ProductVariantReferenceViewModelMapFactory extends ViewModelFactory
         this.productVariantReferenceViewModelFactory = productVariantReferenceViewModelFactory;
     }
 
+    protected final ProductAttributeSettings getProductAttributeSettings() {
+        return productAttributeSettings;
+    }
+
+    protected final AttributeFormatter getAttributeFormatter() {
+        return attributeFormatter;
+    }
+
+    protected final ProductVariantReferenceViewModelFactory getProductVariantReferenceViewModelFactory() {
+        return productVariantReferenceViewModelFactory;
+    }
+
     @Override
     protected ProductVariantReferenceMapViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductVariantReferenceMapViewModel();

@@ -14,6 +14,10 @@ public class HomePageContentFactory extends PageContentFactory<HomePageContent, 
         this.pageTitleResolver = pageTitleResolver;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
     @Override
     protected HomePageContent getViewModelInstance(final Void input) {
         return new HomePageContent();

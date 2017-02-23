@@ -20,6 +20,10 @@ public class MiniCartViewModelFactory extends AbstractMiniCartViewModelFactory<M
         this.lineItemViewModelFactory = lineItemViewModelFactory;
     }
 
+    protected final LineItemViewModelFactory getLineItemViewModelFactory() {
+        return lineItemViewModelFactory;
+    }
+
     @Override
     protected MiniCartViewModel getViewModelInstance(final Cart cart) {
         return new MiniCartViewModel();

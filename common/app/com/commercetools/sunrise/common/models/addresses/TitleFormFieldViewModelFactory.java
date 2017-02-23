@@ -37,6 +37,26 @@ public class TitleFormFieldViewModelFactory extends FormFieldViewModelFactory<Ti
         this.titleFormSelectableOptionViewModelFactory = titleFormSelectableOptionViewModelFactory;
     }
 
+    protected final List<String> getDefaultTitleKeys() {
+        return defaultTitleKeys;
+    }
+
+    protected final Locale getLocale() {
+        return locale;
+    }
+
+    protected final I18nResolver getI18nResolver() {
+        return i18nResolver;
+    }
+
+    protected final I18nIdentifierFactory getI18nIdentifierFactory() {
+        return i18nIdentifierFactory;
+    }
+
+    protected final TitleFormSelectableOptionViewModelFactory getTitleFormSelectableOptionViewModelFactory() {
+        return titleFormSelectableOptionViewModelFactory;
+    }
+
     @Override
     protected TitleFormFieldViewModel getViewModelInstance(final FormFieldWithOptions<String> formFieldWithOptions) {
         return new TitleFormFieldViewModel();

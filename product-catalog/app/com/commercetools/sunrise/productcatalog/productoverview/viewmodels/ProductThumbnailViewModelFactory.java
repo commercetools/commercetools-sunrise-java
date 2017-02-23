@@ -23,6 +23,14 @@ public class ProductThumbnailViewModelFactory extends ViewModelFactory<ProductTh
         this.productViewModelFactory = productViewModelFactory;
     }
 
+    protected final CategoryTree getCategoryTreeInNew() {
+        return categoryTreeInNew;
+    }
+
+    protected final ProductViewModelFactory getProductViewModelFactory() {
+        return productViewModelFactory;
+    }
+
     @Override
     protected ProductThumbnailViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductThumbnailViewModel();

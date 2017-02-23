@@ -24,6 +24,14 @@ public class ProductVariantViewModelFactory extends AbstractProductVariantViewMo
         this.productReverseRouter = productReverseRouter;
     }
 
+    protected final PriceFormatter getPriceFormatter() {
+        return priceFormatter;
+    }
+
+    protected final ProductReverseRouter getProductReverseRouter() {
+        return productReverseRouter;
+    }
+
     @Override
     public final ProductVariantViewModel create(final ProductWithVariant productWithVariant) {
         return super.create(productWithVariant);

@@ -18,6 +18,14 @@ public class CheckoutThankYouPageContentFactory extends PageContentFactory<Check
         this.orderViewModelFactory = orderViewModelFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final OrderViewModelFactory getOrderViewModelFactory() {
+        return orderViewModelFactory;
+    }
+
     @Override
     protected CheckoutThankYouPageContent getViewModelInstance(final Order order) {
         return new CheckoutThankYouPageContent();

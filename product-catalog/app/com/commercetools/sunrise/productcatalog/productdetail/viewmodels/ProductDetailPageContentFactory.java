@@ -25,6 +25,22 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
         this.productViewModelFactory = productViewModelFactory;
     }
 
+    protected final Locale getLocale() {
+        return locale;
+    }
+
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final ProductBreadcrumbViewModelFactory getProductBreadcrumbViewModelFactory() {
+        return productBreadcrumbViewModelFactory;
+    }
+
+    protected final ProductViewModelFactory getProductViewModelFactory() {
+        return productViewModelFactory;
+    }
+
     @Override
     protected ProductDetailPageContent getViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductDetailPageContent();

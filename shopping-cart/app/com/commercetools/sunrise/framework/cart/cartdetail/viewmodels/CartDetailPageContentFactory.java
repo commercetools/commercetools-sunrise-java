@@ -19,6 +19,14 @@ public class CartDetailPageContentFactory extends PageContentFactory<CartDetailP
         this.cartViewModelFactory = cartViewModelFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final CartViewModelFactory getCartViewModelFactory() {
+        return cartViewModelFactory;
+    }
+
     @Override
     protected CartDetailPageContent getViewModelInstance(final Cart cart) {
         return new CartDetailPageContent();

@@ -22,6 +22,10 @@ public class ShippingMethodFormFieldViewModelFactory extends FormFieldViewModelF
         this.shippingFormSelectableOptionViewModelFactory = shippingFormSelectableOptionViewModelFactory;
     }
 
+    protected final ShippingFormSelectableOptionViewModelFactory getShippingFormSelectableOptionViewModelFactory() {
+        return shippingFormSelectableOptionViewModelFactory;
+    }
+
     @Override
     protected ShippingMethodFormFieldViewModel getViewModelInstance(final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {
         return new ShippingMethodFormFieldViewModel();

@@ -22,6 +22,10 @@ public class PaymentMethodFormFieldViewModelFactory extends FormFieldViewModelFa
         this.paymentFormSelectableOptionViewModelFactory = paymentFormSelectableOptionViewModelFactory;
     }
 
+    protected final PaymentFormSelectableOptionViewModelFactory getPaymentFormSelectableOptionViewModelFactory() {
+        return paymentFormSelectableOptionViewModelFactory;
+    }
+
     @Override
     protected List<PaymentMethodInfo> defaultOptions() {
         return Collections.emptyList();

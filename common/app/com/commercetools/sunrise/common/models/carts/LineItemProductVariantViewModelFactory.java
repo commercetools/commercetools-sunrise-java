@@ -25,6 +25,14 @@ public class LineItemProductVariantViewModelFactory extends AbstractProductVaria
         this.productReverseRouter = productReverseRouter;
     }
 
+    protected final PriceFormatter getPriceFormatter() {
+        return priceFormatter;
+    }
+
+    protected final ProductReverseRouter getProductReverseRouter() {
+        return productReverseRouter;
+    }
+
     @Override
     public final ProductVariantViewModel create(final LineItem lineItem) {
         return super.create(lineItem);

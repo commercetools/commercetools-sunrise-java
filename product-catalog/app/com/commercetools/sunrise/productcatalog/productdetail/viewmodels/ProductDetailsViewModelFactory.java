@@ -28,6 +28,14 @@ public class ProductDetailsViewModelFactory extends ViewModelFactory<ProductDeta
         this.productAttributeViewModelFactory = productAttributeViewModelFactory;
     }
 
+    protected final ProductAttributeSettings getProductAttributeSettings() {
+        return productAttributeSettings;
+    }
+
+    protected final ProductAttributeViewModelFactory getProductAttributeViewModelFactory() {
+        return productAttributeViewModelFactory;
+    }
+
     @Override
     public final ProductDetailsViewModel create(final ProductWithVariant productWithVariant) {
         return super.create(productWithVariant);

@@ -33,11 +33,38 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
         this.seoViewModelFactory = seoViewModelFactory;
     }
 
+    protected final Locale getLocale() {
+        return locale;
+    }
+
+    protected final Http.Request getHttpRequest() {
+        return httpRequest;
+    }
+
+    protected final CategoryBreadcrumbViewModelFactory getCategoryBreadcrumbViewModelFactory() {
+        return categoryBreadcrumbViewModelFactory;
+    }
+
+    protected final ProductListViewModelFactory getProductListViewModelFactory() {
+        return productListViewModelFactory;
+    }
+
+    protected final BannerViewModelFactory getBannerViewModelFactory() {
+        return bannerViewModelFactory;
+    }
+
+    protected final JumbotronViewModelFactory getJumbotronViewModelFactory() {
+        return jumbotronViewModelFactory;
+    }
+
+    protected final SeoViewModelFactory getSeoViewModelFactory() {
+        return seoViewModelFactory;
+    }
+
     @Override
     protected ProductOverviewPageContent getViewModelInstance(final ProductsWithCategory productsWithCategory) {
         return new ProductOverviewPageContent();
     }
-
 
     @Override
     public final ProductOverviewPageContent create(final ProductsWithCategory productsWithCategory) {

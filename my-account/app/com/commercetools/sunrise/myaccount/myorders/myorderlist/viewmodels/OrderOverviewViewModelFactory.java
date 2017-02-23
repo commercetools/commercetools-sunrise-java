@@ -41,6 +41,30 @@ public class OrderOverviewViewModelFactory extends ViewModelFactory<OrderOvervie
         this.myOrdersReverseRouter = myOrdersReverseRouter;
     }
 
+    protected final Locale getLocale() {
+        return locale;
+    }
+
+    protected final PriceFormatter getPriceFormatter() {
+        return priceFormatter;
+    }
+
+    protected final DateTimeFormatter getDateTimeFormatter() {
+        return dateTimeFormatter;
+    }
+
+    protected final I18nResolver getI18nResolver() {
+        return i18nResolver;
+    }
+
+    protected final I18nIdentifierFactory getI18nIdentifierFactory() {
+        return i18nIdentifierFactory;
+    }
+
+    protected final MyOrdersReverseRouter getMyOrdersReverseRouter() {
+        return myOrdersReverseRouter;
+    }
+
     @Override
     protected OrderOverviewViewModel getViewModelInstance(final Order order) {
         return new OrderOverviewViewModel();

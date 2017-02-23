@@ -20,6 +20,14 @@ public class AddressBookPageContentFactory extends PageContentFactory<AddressBoo
         this.editableAddressViewModelFactory = editableAddressViewModelFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final EditableAddressViewModelFactory getEditableAddressViewModelFactory() {
+        return editableAddressViewModelFactory;
+    }
+
     @Override
     protected AddressBookPageContent getViewModelInstance(final Customer customer) {
         return new AddressBookPageContent();

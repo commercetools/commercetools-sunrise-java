@@ -17,6 +17,10 @@ public class JumbotronViewModelFactory extends ViewModelFactory<JumbotronViewMod
         this.categoryTree = categoryTree;
     }
 
+    protected final CategoryTree getCategoryTree() {
+        return categoryTree;
+    }
+
     @Override
     protected JumbotronViewModel getViewModelInstance(final ProductsWithCategory productWithCategory) {
         return new JumbotronViewModel();

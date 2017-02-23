@@ -14,6 +14,14 @@ public abstract class AbstractLineItemViewModelFactory<T extends LineItemViewMod
         this.lineItemProductVariantViewModelFactory = lineItemProductVariantViewModelFactory;
     }
 
+    protected final PriceFormatter getPriceFormatter() {
+        return priceFormatter;
+    }
+
+    protected final LineItemProductVariantViewModelFactory getLineItemProductVariantViewModelFactory() {
+        return lineItemProductVariantViewModelFactory;
+    }
+
     @Override
     protected void initialize(final T viewModel, final LineItem lineItem) {
         fillLineItemId(viewModel, lineItem);

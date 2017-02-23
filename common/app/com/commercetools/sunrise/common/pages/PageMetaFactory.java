@@ -18,6 +18,10 @@ public class PageMetaFactory extends ViewModelFactory<PageMeta, PageContent> {
         this.httpContext = httpContext;
     }
 
+    protected final Http.Context getHttpContext() {
+        return httpContext;
+    }
+
     @Override
     protected PageMeta getViewModelInstance(final PageContent pageContent) {
         return new PageMeta();

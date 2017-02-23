@@ -30,6 +30,19 @@ public class CategoryViewModelFactory extends ViewModelFactory<CategoryViewModel
         this.productReverseRouter = productReverseRouter;
     }
 
+    @Nullable
+    protected final String getSaleCategoryExtId() {
+        return saleCategoryExtId;
+    }
+
+    protected final CategoryTree getCategoryTree() {
+        return categoryTree;
+    }
+
+    protected final ProductReverseRouter getProductReverseRouter() {
+        return productReverseRouter;
+    }
+
     @Override
     protected CategoryViewModel getViewModelInstance(final Category category) {
         return new CategoryViewModel();
