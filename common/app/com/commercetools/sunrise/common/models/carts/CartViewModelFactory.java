@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.models.carts;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.common.models.addresses.AddressViewModelFactory;
 import com.commercetools.sunrise.common.utils.PriceFormatter;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.LineItem;
 
@@ -28,7 +28,7 @@ public class CartViewModelFactory extends AbstractCartLikeViewModelFactory<CartV
     }
 
     @Override
-    protected CartViewModel newViewModelInstance(final Cart cart) {
+    protected CartViewModel newViewModelInstance(@Nullable final Cart cart) {
         return new CartViewModel();
     }
 
@@ -38,7 +38,7 @@ public class CartViewModelFactory extends AbstractCartLikeViewModelFactory<CartV
     }
 
     @Override
-    protected final void initialize(final CartViewModel viewModel, final Cart cart) {
+    protected final void initialize(final CartViewModel viewModel, @Nullable final Cart cart) {
         super.initialize(viewModel, cart);
     }
 

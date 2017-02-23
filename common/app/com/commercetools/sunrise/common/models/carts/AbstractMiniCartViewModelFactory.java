@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateTotalPrice;
 
-public abstract class AbstractMiniCartViewModelFactory<T extends MiniCartViewModel, D extends CartLike<?>> extends ViewModelFactory<T, D> {
+public abstract class AbstractMiniCartViewModelFactory<M extends MiniCartViewModel, I extends CartLike<?>> extends ViewModelFactory<M, I> {
 
     private final CurrencyUnit currency;
     private final PriceFormatter priceFormatter;
@@ -32,13 +32,13 @@ public abstract class AbstractMiniCartViewModelFactory<T extends MiniCartViewMod
     }
 
     @Override
-    protected void initialize(final T viewModel, final D input) {
-        fillTotalPrice(viewModel, input);
-        fillTotalItems(viewModel, input);
-        fillLineItems(viewModel, input);
+    protected void initialize(final M viewModel, @Nullable final I cartLike) {
+        fillTotalPrice(viewModel, cartLike);
+        fillTotalItems(viewModel, cartLike);
+        fillLineItems(viewModel, cartLike);
     }
 
-    protected void fillTotalItems(final T viewModel, @Nullable final D cartLike) {
+    protected void fillTotalItems(final M viewModel, @Nullable final I cartLike) {
         final long totalItems;
         if (cartLike != null) {
             totalItems = cartLike.getLineItems().stream()
@@ -50,13 +50,13 @@ public abstract class AbstractMiniCartViewModelFactory<T extends MiniCartViewMod
         viewModel.setTotalItems(totalItems);
     }
 
-    protected void fillLineItems(final T viewModel, @Nullable final D cartLike) {
+    protected void fillLineItems(final M viewModel, @Nullable final I cartLike) {
         if (cartLike != null) {
             viewModel.setLineItems(createLineItemList(cartLike));
         }
     }
 
-    protected void fillTotalPrice(final T viewModel, @Nullable final D cartLike) {
+    protected void fillTotalPrice(final M viewModel, @Nullable final I cartLike) {
         final MonetaryAmount totalPrice;
         if (cartLike != null) {
             totalPrice = calculateTotalPrice(cartLike);
