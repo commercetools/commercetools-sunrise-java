@@ -25,7 +25,7 @@ public class MiniCartViewModelFactory extends AbstractMiniCartViewModelFactory<M
     }
 
     @Override
-    protected MiniCartViewModel getViewModelInstance(final Cart cart) {
+    protected MiniCartViewModel newViewModelInstance(final Cart cart) {
         return new MiniCartViewModel();
     }
 

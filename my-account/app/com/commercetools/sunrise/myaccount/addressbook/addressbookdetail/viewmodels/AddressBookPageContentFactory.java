@@ -29,7 +29,7 @@ public class AddressBookPageContentFactory extends PageContentFactory<AddressBoo
     }
 
     @Override
-    protected AddressBookPageContent getViewModelInstance(final Customer customer) {
+    protected AddressBookPageContent newViewModelInstance(final Customer customer) {
         return new AddressBookPageContent();
     }
 

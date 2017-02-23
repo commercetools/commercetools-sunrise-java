@@ -23,7 +23,7 @@ public class PageMetaFactory extends ViewModelFactory<PageMeta, PageContent> {
     }
 
     @Override
-    protected PageMeta getViewModelInstance(final PageContent pageContent) {
+    protected PageMeta newViewModelInstance(final PageContent pageContent) {
         return new PageMeta();
     }
 

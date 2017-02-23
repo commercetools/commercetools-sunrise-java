@@ -23,7 +23,7 @@ public class ProductGalleryViewModelFactory extends ViewModelFactory<ProductGall
     }
 
     @Override
-    protected ProductGalleryViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
+    protected ProductGalleryViewModel newViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductGalleryViewModel();
     }
 

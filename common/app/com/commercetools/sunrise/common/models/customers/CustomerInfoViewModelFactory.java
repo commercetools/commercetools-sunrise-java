@@ -6,7 +6,7 @@ import io.sphere.sdk.customers.Customer;
 public class CustomerInfoViewModelFactory extends ViewModelFactory<CustomerInfoViewModel, Customer> {
 
     @Override
-    protected CustomerInfoViewModel getViewModelInstance(final Customer customer) {
+    protected CustomerInfoViewModel newViewModelInstance(final Customer customer) {
         return new CustomerInfoViewModel();
     }
 

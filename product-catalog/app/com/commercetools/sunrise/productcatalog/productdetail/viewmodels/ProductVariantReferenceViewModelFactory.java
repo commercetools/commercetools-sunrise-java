@@ -23,7 +23,7 @@ public class ProductVariantReferenceViewModelFactory extends ViewModelFactory<Pr
     }
 
     @Override
-    protected ProductVariantReferenceViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
+    protected ProductVariantReferenceViewModel newViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductVariantReferenceViewModel();
     }
 

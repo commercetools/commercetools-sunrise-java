@@ -19,7 +19,7 @@ public class HomePageContentFactory extends PageContentFactory<HomePageContent, 
     }
 
     @Override
-    protected HomePageContent getViewModelInstance(final Void input) {
+    protected HomePageContent newViewModelInstance(final Void input) {
         return new HomePageContent();
     }
 

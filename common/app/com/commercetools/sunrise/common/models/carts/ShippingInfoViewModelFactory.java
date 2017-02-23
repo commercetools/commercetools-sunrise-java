@@ -35,7 +35,7 @@ public class ShippingInfoViewModelFactory extends ViewModelFactory<ShippingInfoV
     }
 
     @Override
-    protected ShippingInfoViewModel getViewModelInstance(final CartLike<?> cartLike) {
+    protected ShippingInfoViewModel newViewModelInstance(final CartLike<?> cartLike) {
         return new ShippingInfoViewModel();
     }
 

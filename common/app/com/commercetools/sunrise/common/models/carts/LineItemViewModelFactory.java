@@ -15,7 +15,7 @@ public class LineItemViewModelFactory extends AbstractLineItemViewModelFactory<L
     }
 
     @Override
-    protected LineItemViewModel getViewModelInstance(final LineItem lineItem) {
+    protected LineItemViewModel newViewModelInstance(final LineItem lineItem) {
         return new LineItemViewModel();
     }
 

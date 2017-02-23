@@ -13,7 +13,7 @@ import java.util.Objects;
 public class PaymentInfoViewModelFactory extends ViewModelFactory<PaymentInfoViewModel, CartLike<?>> {
 
     @Override
-    protected PaymentInfoViewModel getViewModelInstance(final CartLike<?> cartLike) {
+    protected PaymentInfoViewModel newViewModelInstance(final CartLike<?> cartLike) {
         return new PaymentInfoViewModel();
     }
 

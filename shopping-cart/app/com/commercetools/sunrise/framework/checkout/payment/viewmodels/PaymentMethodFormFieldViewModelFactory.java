@@ -32,7 +32,7 @@ public class PaymentMethodFormFieldViewModelFactory extends FormFieldViewModelFa
     }
 
     @Override
-    protected PaymentMethodFormFieldViewModel getViewModelInstance(final FormFieldWithOptions<PaymentMethodInfo> formFieldWithOptions) {
+    protected PaymentMethodFormFieldViewModel newViewModelInstance(final FormFieldWithOptions<PaymentMethodInfo> formFieldWithOptions) {
         return new PaymentMethodFormFieldViewModel();
     }
 

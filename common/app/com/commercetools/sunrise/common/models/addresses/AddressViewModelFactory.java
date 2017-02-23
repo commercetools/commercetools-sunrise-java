@@ -40,7 +40,7 @@ public class AddressViewModelFactory extends ViewModelFactory<AddressViewModel, 
     }
 
     @Override
-    protected AddressViewModel getViewModelInstance(final Address address) {
+    protected AddressViewModel newViewModelInstance(final Address address) {
         return new AddressViewModel();
     }
 

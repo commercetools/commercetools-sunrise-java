@@ -27,7 +27,7 @@ public class ShippingMethodFormFieldViewModelFactory extends FormFieldViewModelF
     }
 
     @Override
-    protected ShippingMethodFormFieldViewModel getViewModelInstance(final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {
+    protected ShippingMethodFormFieldViewModel newViewModelInstance(final FormFieldWithOptions<ShippingMethod> formFieldWithOptions) {
         return new ShippingMethodFormFieldViewModel();
     }
 

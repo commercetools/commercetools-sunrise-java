@@ -29,7 +29,7 @@ public class PageNavMenuFactory extends ViewModelFactory<PageNavMenu, Void> {
     }
 
     @Override
-    protected PageNavMenu getViewModelInstance(final Void input) {
+    protected PageNavMenu newViewModelInstance(final Void input) {
         return new PageNavMenu();
     }
 

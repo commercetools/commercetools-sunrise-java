@@ -55,7 +55,7 @@ public class LocalizationSelectorViewModelFactory extends ViewModelFactory<Local
     }
 
     @Override
-    protected LocalizationSelectorViewModel getViewModelInstance(final Void input) {
+    protected LocalizationSelectorViewModel newViewModelInstance(final Void input) {
         return new LocalizationSelectorViewModel();
     }
 

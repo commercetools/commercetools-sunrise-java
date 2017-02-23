@@ -12,7 +12,7 @@ public abstract class AbstractProductVariantViewModelFactory<I> extends ViewMode
     }
 
     @Override
-    protected ProductVariantViewModel getViewModelInstance(final I input) {
+    protected ProductVariantViewModel newViewModelInstance(final I input) {
         return new ProductVariantViewModel();
     }
 

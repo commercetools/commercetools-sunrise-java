@@ -29,7 +29,7 @@ public abstract class AbstractBreadcrumbViewModelFactory<I> extends ViewModelFac
     }
 
     @Override
-    protected BreadcrumbViewModel getViewModelInstance(final I input) {
+    protected BreadcrumbViewModel newViewModelInstance(final I input) {
         return new BreadcrumbViewModel();
     }
 

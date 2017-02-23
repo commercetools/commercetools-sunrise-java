@@ -32,7 +32,7 @@ public class ProductThumbnailViewModelFactory extends ViewModelFactory<ProductTh
     }
 
     @Override
-    protected ProductThumbnailViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
+    protected ProductThumbnailViewModel newViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductThumbnailViewModel();
     }
 

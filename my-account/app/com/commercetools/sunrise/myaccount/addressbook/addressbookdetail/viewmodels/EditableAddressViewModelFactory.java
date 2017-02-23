@@ -29,7 +29,7 @@ public class EditableAddressViewModelFactory extends ViewModelFactory<EditableAd
     }
 
     @Override
-    protected EditableAddressViewModel getViewModelInstance(final Address address) {
+    protected EditableAddressViewModel newViewModelInstance(final Address address) {
         return new EditableAddressViewModel();
     }
 

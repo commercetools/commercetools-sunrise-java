@@ -44,7 +44,7 @@ public class CategoryViewModelFactory extends ViewModelFactory<CategoryViewModel
     }
 
     @Override
-    protected CategoryViewModel getViewModelInstance(final Category category) {
+    protected CategoryViewModel newViewModelInstance(final Category category) {
         return new CategoryViewModel();
     }
 

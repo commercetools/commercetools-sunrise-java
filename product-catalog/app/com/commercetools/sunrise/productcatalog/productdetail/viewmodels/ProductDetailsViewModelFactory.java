@@ -42,7 +42,7 @@ public class ProductDetailsViewModelFactory extends ViewModelFactory<ProductDeta
     }
 
     @Override
-    protected ProductDetailsViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
+    protected ProductDetailsViewModel newViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductDetailsViewModel();
     }
 

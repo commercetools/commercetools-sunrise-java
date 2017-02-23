@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 public class UserInfoViewModelFactory extends ViewModelFactory<UserInfoViewModel, Customer> {
 
     @Override
-    protected UserInfoViewModel getViewModelInstance(final Customer customer) {
+    protected UserInfoViewModel newViewModelInstance(final Customer customer) {
         return new UserInfoViewModel();
     }
 

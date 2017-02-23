@@ -28,7 +28,7 @@ public class CartDetailPageContentFactory extends PageContentFactory<CartDetailP
     }
 
     @Override
-    protected CartDetailPageContent getViewModelInstance(final Cart cart) {
+    protected CartDetailPageContent newViewModelInstance(final Cart cart) {
         return new CartDetailPageContent();
     }
 

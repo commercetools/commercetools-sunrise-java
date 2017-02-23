@@ -44,7 +44,7 @@ public class ProductsPerPageSelectorViewModelFactory extends ViewModelFactory<Pr
     }
 
     @Override
-    protected ProductsPerPageSelectorViewModel getViewModelInstance(final PagedResult<ProductProjection> pagedResult) {
+    protected ProductsPerPageSelectorViewModel newViewModelInstance(final PagedResult<ProductProjection> pagedResult) {
         return new ProductsPerPageSelectorViewModel();
     }
 
