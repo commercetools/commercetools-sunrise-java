@@ -28,7 +28,7 @@ public class ProductBreadcrumbViewModelFactory extends AbstractBreadcrumbViewMod
     }
 
     @Override
-    protected BreadcrumbViewModel getViewModelInstance() {
+    protected BreadcrumbViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
         return new BreadcrumbViewModel();
     }
 

@@ -37,7 +37,7 @@ public class PaginationViewModelFactory extends ViewModelFactory<PaginationViewM
     }
 
     @Override
-    protected PaginationViewModel getViewModelInstance() {
+    protected PaginationViewModel getViewModelInstance(final PagedResult<?> pagedResult) {
         return new PaginationViewModel();
     }
 

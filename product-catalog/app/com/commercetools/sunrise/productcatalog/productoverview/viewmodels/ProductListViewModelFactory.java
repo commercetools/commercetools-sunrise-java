@@ -21,7 +21,7 @@ public class ProductListViewModelFactory extends ViewModelFactory<ProductListVie
     }
 
     @Override
-    protected ProductListViewModel getViewModelInstance() {
+    protected ProductListViewModel getViewModelInstance(final Iterable<ProductProjection> products) {
         return new ProductListViewModel();
     }
 

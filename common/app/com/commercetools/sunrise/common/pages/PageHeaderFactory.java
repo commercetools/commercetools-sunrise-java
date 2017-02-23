@@ -15,7 +15,7 @@ public class PageHeaderFactory extends ViewModelFactory<PageHeader, PageContent>
     }
 
     @Override
-    protected final PageHeader getViewModelInstance() {
+    protected final PageHeader getViewModelInstance(final PageContent pageContent) {
         return new PageHeader();
     }
 

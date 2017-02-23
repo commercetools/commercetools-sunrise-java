@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 public class SeoViewModelFactory extends ViewModelFactory<SeoViewModel, ProductsWithCategory> {
 
     @Override
-    protected SeoViewModel getViewModelInstance() {
+    protected SeoViewModel getViewModelInstance(final ProductsWithCategory productsWithCategory) {
         return new SeoViewModel();
     }
 

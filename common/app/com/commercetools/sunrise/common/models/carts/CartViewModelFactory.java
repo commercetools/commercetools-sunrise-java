@@ -24,7 +24,7 @@ public class CartViewModelFactory extends AbstractCartLikeViewModelFactory<CartV
     }
 
     @Override
-    protected CartViewModel getViewModelInstance() {
+    protected CartViewModel getViewModelInstance(final Cart cart) {
         return new CartViewModel();
     }
 

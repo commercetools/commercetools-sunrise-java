@@ -34,7 +34,7 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     }
 
     @Override
-    protected ProductOverviewPageContent getViewModelInstance() {
+    protected ProductOverviewPageContent getViewModelInstance(final ProductsWithCategory productsWithCategory) {
         return new ProductOverviewPageContent();
     }
 

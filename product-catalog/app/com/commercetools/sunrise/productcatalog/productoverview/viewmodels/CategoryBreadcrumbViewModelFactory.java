@@ -23,7 +23,7 @@ public class CategoryBreadcrumbViewModelFactory extends AbstractBreadcrumbViewMo
     }
 
     @Override
-    protected BreadcrumbViewModel getViewModelInstance() {
+    protected BreadcrumbViewModel getViewModelInstance(final ProductsWithCategory productsWithCategory) {
         return new BreadcrumbViewModel();
     }
 
@@ -33,9 +33,9 @@ public class CategoryBreadcrumbViewModelFactory extends AbstractBreadcrumbViewMo
     }
 
     @Override
-    protected void fillLinks(final BreadcrumbViewModel viewModel, final ProductsWithCategory data) {
-        if (data.getCategory() != null) {
-            viewModel.setLinks(createCategoryTreeLinks(data.getCategory()));
+    protected void fillLinks(final BreadcrumbViewModel viewModel, final ProductsWithCategory productsWithCategory) {
+        if (productsWithCategory.getCategory() != null) {
+            viewModel.setLinks(createCategoryTreeLinks(productsWithCategory.getCategory()));
         }
     }
 }

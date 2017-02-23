@@ -31,7 +31,7 @@ public class ProductVariantReferenceViewModelMapFactory extends ViewModelFactory
     }
 
     @Override
-    protected ProductVariantReferenceMapViewModel getViewModelInstance() {
+    protected ProductVariantReferenceMapViewModel getViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductVariantReferenceMapViewModel();
     }
 

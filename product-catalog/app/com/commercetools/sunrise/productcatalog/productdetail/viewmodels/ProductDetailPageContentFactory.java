@@ -26,7 +26,7 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
     }
 
     @Override
-    protected ProductDetailPageContent getViewModelInstance() {
+    protected ProductDetailPageContent getViewModelInstance(final ProductWithVariant productWithVariant) {
         return new ProductDetailPageContent();
     }
 

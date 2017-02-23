@@ -19,7 +19,7 @@ public class MyPersonalDetailsFormSettingsViewModelFactory extends FormViewModel
     }
 
     @Override
-    protected MyPersonalDetailsFormSettingsViewModel getViewModelInstance() {
+    protected MyPersonalDetailsFormSettingsViewModel getViewModelInstance(final Void input) {
         return new MyPersonalDetailsFormSettingsViewModel();
     }
 
@@ -29,7 +29,7 @@ public class MyPersonalDetailsFormSettingsViewModelFactory extends FormViewModel
     }
 
     public final MyPersonalDetailsFormSettingsViewModel create(final Form<? extends MyPersonalDetailsFormData> form) {
-        return create(null, form);
+        return super.create(null, form);
     }
 
     @Override

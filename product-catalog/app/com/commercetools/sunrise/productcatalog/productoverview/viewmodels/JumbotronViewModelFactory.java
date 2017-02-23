@@ -18,7 +18,7 @@ public class JumbotronViewModelFactory extends ViewModelFactory<JumbotronViewMod
     }
 
     @Override
-    protected JumbotronViewModel getViewModelInstance() {
+    protected JumbotronViewModel getViewModelInstance(final ProductsWithCategory productWithCategory) {
         return new JumbotronViewModel();
     }
 

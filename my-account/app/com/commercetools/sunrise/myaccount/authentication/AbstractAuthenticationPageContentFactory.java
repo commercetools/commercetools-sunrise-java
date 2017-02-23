@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.common.models.PageContentFactory;
+import com.commercetools.sunrise.common.models.FormPageContentFactory;
 import com.commercetools.sunrise.common.utils.PageTitleResolver;
 import play.data.Form;
 
-public abstract class AbstractAuthenticationPageContentFactory<F> extends PageContentFactory<AuthenticationPageContent, Form<? extends F>> {
+public abstract class AbstractAuthenticationPageContentFactory<F> extends FormPageContentFactory<AuthenticationPageContent, Void, F> {
 
     private final PageTitleResolver pageTitleResolver;
 
@@ -13,20 +13,20 @@ public abstract class AbstractAuthenticationPageContentFactory<F> extends PageCo
     }
 
     @Override
-    protected AuthenticationPageContent getViewModelInstance() {
+    protected AuthenticationPageContent getViewModelInstance(final Void input) {
         return new AuthenticationPageContent();
     }
 
     @Override
-    protected final void initialize(final AuthenticationPageContent viewModel, final Form<? extends F> form) {
-        super.initialize(viewModel, form);
+    protected final void initialize(final AuthenticationPageContent viewModel, final Void input, final Form<? extends F> form) {
+        super.initialize(viewModel, input, form);
         fillLogInForm(viewModel, form);
         fillSignUpForm(viewModel, form);
         fillSignUpFormSettings(viewModel, form);
     }
 
     @Override
-    protected void fillTitle(final AuthenticationPageContent viewModel, final Form<? extends F> form) {
+    protected void fillTitle(final AuthenticationPageContent viewModel, final Void input, final Form<? extends F> form) {
         pageTitleResolver.getOrEmpty("myAccount:authenticationPage.title");
     }
 

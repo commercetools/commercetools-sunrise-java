@@ -21,7 +21,7 @@ public class CheckoutConfirmationPageContentFactory extends FormPageContentFacto
     }
 
     @Override
-    protected CheckoutConfirmationPageContent getViewModelInstance() {
+    protected CheckoutConfirmationPageContent getViewModelInstance(final Cart cart) {
         return new CheckoutConfirmationPageContent();
     }
 

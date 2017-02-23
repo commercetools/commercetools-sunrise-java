@@ -31,7 +31,7 @@ public class SortSelectorViewModelFactory extends ViewModelFactory<SortSelectorV
     }
 
     @Override
-    protected SortSelectorViewModel getViewModelInstance() {
+    protected SortSelectorViewModel getViewModelInstance(final PagedResult<ProductProjection> pagedResult) {
         return new SortSelectorViewModel();
     }
 

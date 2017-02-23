@@ -38,7 +38,7 @@ public class TitleFormFieldViewModelFactory extends FormFieldViewModelFactory<Ti
     }
 
     @Override
-    protected TitleFormFieldViewModel getViewModelInstance() {
+    protected TitleFormFieldViewModel getViewModelInstance(final FormFieldWithOptions<String> formFieldWithOptions) {
         return new TitleFormFieldViewModel();
     }
 

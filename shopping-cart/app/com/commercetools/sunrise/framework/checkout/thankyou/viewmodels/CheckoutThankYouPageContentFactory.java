@@ -19,7 +19,7 @@ public class CheckoutThankYouPageContentFactory extends PageContentFactory<Check
     }
 
     @Override
-    protected CheckoutThankYouPageContent getViewModelInstance() {
+    protected CheckoutThankYouPageContent getViewModelInstance(final Order order) {
         return new CheckoutThankYouPageContent();
     }
 

@@ -42,7 +42,7 @@ public class OrderOverviewViewModelFactory extends ViewModelFactory<OrderOvervie
     }
 
     @Override
-    protected OrderOverviewViewModel getViewModelInstance() {
+    protected OrderOverviewViewModel getViewModelInstance(final Order order) {
         return new OrderOverviewViewModel();
     }
 

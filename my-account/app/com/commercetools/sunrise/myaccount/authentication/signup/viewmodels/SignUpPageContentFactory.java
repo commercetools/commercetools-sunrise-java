@@ -19,6 +19,15 @@ public class SignUpPageContentFactory extends AbstractAuthenticationPageContentF
     }
 
     @Override
+    public final AuthenticationPageContent create(final Void input, final Form<? extends SignUpFormData> form) {
+        return super.create(input, form);
+    }
+
+    public final AuthenticationPageContent create(final Form<? extends SignUpFormData> form) {
+        return super.create(null, form);
+    }
+
+    @Override
     protected void fillLogInForm(final AuthenticationPageContent viewModel, final Form<? extends SignUpFormData> form) {
         viewModel.setLogInForm(null);
     }

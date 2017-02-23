@@ -17,7 +17,7 @@ public class ProductImageViewModelFactory extends ViewModelFactory<ProductImageV
     }
 
     @Override
-    protected ProductImageViewModel getViewModelInstance() {
+    protected ProductImageViewModel getViewModelInstance(final Image image) {
         return new ProductImageViewModel();
     }
 

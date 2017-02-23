@@ -21,7 +21,7 @@ public class SignUpFormSettingsViewModelFactory extends FormViewModelFactory<Sig
     }
 
     @Override
-    protected SignUpFormSettingsViewModel getViewModelInstance() {
+    protected SignUpFormSettingsViewModel getViewModelInstance(final Void input) {
         return new SignUpFormSettingsViewModel();
     }
 
@@ -31,7 +31,7 @@ public class SignUpFormSettingsViewModelFactory extends FormViewModelFactory<Sig
     }
 
     public final SignUpFormSettingsViewModel create(@Nullable final Form<? extends SignUpFormData> form) {
-        return create(null, form);
+        return super.create(null, form);
     }
 
     @Override

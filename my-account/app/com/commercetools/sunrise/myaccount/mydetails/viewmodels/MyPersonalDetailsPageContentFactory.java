@@ -24,7 +24,7 @@ public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<
     }
 
     @Override
-    protected MyPersonalDetailsPageContent getViewModelInstance() {
+    protected MyPersonalDetailsPageContent getViewModelInstance(final Customer customer) {
         return new MyPersonalDetailsPageContent();
     }
 

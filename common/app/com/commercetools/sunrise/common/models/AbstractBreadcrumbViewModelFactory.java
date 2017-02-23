@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-public abstract class AbstractBreadcrumbViewModelFactory<D> extends ViewModelFactory<BreadcrumbViewModel, D> {
+public abstract class AbstractBreadcrumbViewModelFactory<I> extends ViewModelFactory<BreadcrumbViewModel, I> {
 
     private final CategoryTree categoryTree;
     private final ProductReverseRouter productReverseRouter;
@@ -29,16 +29,16 @@ public abstract class AbstractBreadcrumbViewModelFactory<D> extends ViewModelFac
     }
 
     @Override
-    protected BreadcrumbViewModel getViewModelInstance() {
+    protected BreadcrumbViewModel getViewModelInstance(final I input) {
         return new BreadcrumbViewModel();
     }
 
     @Override
-    protected void initialize(final BreadcrumbViewModel viewModel, final D input) {
+    protected void initialize(final BreadcrumbViewModel viewModel, final I input) {
         fillLinks(viewModel, input);
     }
 
-    protected abstract void fillLinks(final BreadcrumbViewModel viewModel, final D data);
+    protected abstract void fillLinks(final BreadcrumbViewModel viewModel, final I input);
 
     protected List<BreadcrumbLinkViewModel> createCategoryTreeLinks(final Category category) {
         return getCategoryWithAncestors(category).stream()

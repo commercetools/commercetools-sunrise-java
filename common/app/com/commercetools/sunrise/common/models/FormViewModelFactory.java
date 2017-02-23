@@ -4,7 +4,7 @@ import play.data.Form;
 
 public abstract class FormViewModelFactory<M extends ViewModel, I, F>  {
 
-    protected abstract M getViewModelInstance();
+    protected abstract M getViewModelInstance(final I input);
 
     public M create(final I input, final Form<? extends F> form) {
         return initializedViewModel(input, form);
@@ -12,9 +12,9 @@ public abstract class FormViewModelFactory<M extends ViewModel, I, F>  {
 
     protected abstract void initialize(final M viewModel, final I input, final Form<? extends F> form);
 
-    protected final M initializedViewModel(final I data, final Form<? extends F> form) {
-        final M viewModel = getViewModelInstance();
-        initialize(viewModel, data, form);
+    protected final M initializedViewModel(final I input, final Form<? extends F> form) {
+        final M viewModel = getViewModelInstance(input);
+        initialize(viewModel, input, form);
         return viewModel;
     }
 }

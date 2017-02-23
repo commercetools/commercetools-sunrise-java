@@ -29,7 +29,7 @@ public class AddressFormSettingsViewModelFactory extends FormViewModelFactory<Ad
     }
 
     @Override
-    protected AddressFormSettingsViewModel getViewModelInstance() {
+    protected AddressFormSettingsViewModel getViewModelInstance(final Customer customer) {
         return new AddressFormSettingsViewModel();
     }
 

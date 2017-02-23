@@ -20,6 +20,15 @@ public class LogInPageContentFactory extends AbstractAuthenticationPageContentFa
     }
 
     @Override
+    public final AuthenticationPageContent create(final Void input, final Form<? extends LogInFormData> form) {
+        return super.create(input, form);
+    }
+
+    public final AuthenticationPageContent create(final Form<? extends LogInFormData> form) {
+        return super.create(null, form);
+    }
+
+    @Override
     protected void fillLogInForm(final AuthenticationPageContent viewModel, final Form<? extends LogInFormData> form) {
         viewModel.setLogInForm(form);
     }

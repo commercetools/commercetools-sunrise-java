@@ -18,7 +18,7 @@ public class ProductAttributeViewModelFactory extends ViewModelFactory<ProductAt
     }
 
     @Override
-    protected ProductAttributeViewModel getViewModelInstance() {
+    protected ProductAttributeViewModel getViewModelInstance(final AttributeWithProductType attributeWithProductType) {
         return new ProductAttributeViewModel();
     }
 

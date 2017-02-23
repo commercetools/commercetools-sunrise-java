@@ -28,7 +28,7 @@ public class AddressViewModelFactory extends ViewModelFactory<AddressViewModel, 
     }
 
     @Override
-    protected AddressViewModel getViewModelInstance() {
+    protected AddressViewModel getViewModelInstance(final Address address) {
         return new AddressViewModel();
     }
 

@@ -5,7 +5,7 @@ import com.commercetools.sunrise.common.models.ViewModelFactory;
 public class PageFooterFactory extends ViewModelFactory<PageFooter, PageContent> {
 
     @Override
-    protected final PageFooter getViewModelInstance() {
+    protected final PageFooter getViewModelInstance(final PageContent pageContent) {
         return new PageFooter();
     }
 

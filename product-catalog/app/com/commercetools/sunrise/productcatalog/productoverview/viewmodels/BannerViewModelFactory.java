@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 public class BannerViewModelFactory extends ViewModelFactory<BannerViewModel, ProductsWithCategory> {
 
     @Override
-    protected BannerViewModel getViewModelInstance() {
+    protected BannerViewModel getViewModelInstance(final ProductsWithCategory productsWithCategory) {
         return new BannerViewModel();
     }
 

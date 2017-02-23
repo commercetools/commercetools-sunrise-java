@@ -26,7 +26,7 @@ public class OrderViewModelFactory extends AbstractCartLikeViewModelFactory<Orde
     }
 
     @Override
-    protected OrderViewModel getViewModelInstance() {
+    protected OrderViewModel getViewModelInstance(final Order order) {
         return new OrderViewModel();
     }
 

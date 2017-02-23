@@ -15,7 +15,7 @@ public class HomePageContentFactory extends PageContentFactory<HomePageContent, 
     }
 
     @Override
-    protected HomePageContent getViewModelInstance() {
+    protected HomePageContent getViewModelInstance(final Void input) {
         return new HomePageContent();
     }
 
@@ -25,7 +25,7 @@ public class HomePageContentFactory extends PageContentFactory<HomePageContent, 
     }
 
     public final HomePageContent create() {
-        return create(null);
+        return super.create(null);
     }
 
     @Override

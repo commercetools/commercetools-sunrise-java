@@ -25,7 +25,7 @@ public class CountryFormFieldViewModelFactory extends FormFieldViewModelFactory<
     }
 
     @Override
-    protected CountryFormFieldViewModel getViewModelInstance() {
+    protected CountryFormFieldViewModel getViewModelInstance(final FormFieldWithOptions<CountryCode> formFieldWithOptions) {
         return new CountryFormFieldViewModel();
     }
 

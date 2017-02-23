@@ -6,18 +6,18 @@ import io.sphere.sdk.products.ProductVariant;
 
 import java.util.Optional;
 
-public abstract class AbstractProductVariantViewModelFactory<D> extends ViewModelFactory<ProductVariantViewModel, D> {
+public abstract class AbstractProductVariantViewModelFactory<I> extends ViewModelFactory<ProductVariantViewModel, I> {
 
     protected AbstractProductVariantViewModelFactory() {
     }
 
     @Override
-    protected ProductVariantViewModel getViewModelInstance() {
+    protected ProductVariantViewModel getViewModelInstance(final I input) {
         return new ProductVariantViewModel();
     }
 
     @Override
-    protected void initialize(final ProductVariantViewModel viewModel, final D input) {
+    protected void initialize(final ProductVariantViewModel viewModel, final I input) {
         fillSku(viewModel, input);
         fillName(viewModel, input);
         fillUrl(viewModel, input);
@@ -26,17 +26,17 @@ public abstract class AbstractProductVariantViewModelFactory<D> extends ViewMode
         fillPriceOld(viewModel, input);
     }
 
-    protected abstract void fillSku(final ProductVariantViewModel viewModel, final D data);
+    protected abstract void fillSku(final ProductVariantViewModel viewModel, final I input);
 
-    protected abstract void fillName(final ProductVariantViewModel viewModel, final D data);
+    protected abstract void fillName(final ProductVariantViewModel viewModel, final I input);
 
-    protected abstract void fillUrl(final ProductVariantViewModel viewModel, final D data);
+    protected abstract void fillUrl(final ProductVariantViewModel viewModel, final I input);
 
-    protected abstract void fillImage(final ProductVariantViewModel viewModel, final D data);
+    protected abstract void fillImage(final ProductVariantViewModel viewModel, final I input);
 
-    protected abstract void fillPrice(final ProductVariantViewModel viewModel, final D data);
+    protected abstract void fillPrice(final ProductVariantViewModel viewModel, final I input);
 
-    protected abstract void fillPriceOld(final ProductVariantViewModel viewModel, final D data);
+    protected abstract void fillPriceOld(final ProductVariantViewModel viewModel, final I input);
 
     protected String findSku(final ProductVariant variant) {
         return variant.getSku();
