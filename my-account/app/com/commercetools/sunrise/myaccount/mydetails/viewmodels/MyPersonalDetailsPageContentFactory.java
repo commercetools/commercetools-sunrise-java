@@ -23,6 +23,18 @@ public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<
         this.myPersonalDetailsFormSettingsViewModelFactory = myPersonalDetailsFormSettingsViewModelFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final CustomerInfoViewModelFactory getCustomerInfoViewModelFactory() {
+        return customerInfoViewModelFactory;
+    }
+
+    protected final MyPersonalDetailsFormSettingsViewModelFactory getMyPersonalDetailsFormSettingsViewModelFactory() {
+        return myPersonalDetailsFormSettingsViewModelFactory;
+    }
+
     @Override
     protected MyPersonalDetailsPageContent newViewModelInstance(final Customer customer) {
         return new MyPersonalDetailsPageContent();

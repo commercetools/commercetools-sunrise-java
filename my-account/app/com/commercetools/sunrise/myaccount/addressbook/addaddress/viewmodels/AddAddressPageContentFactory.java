@@ -20,6 +20,14 @@ public class AddAddressPageContentFactory extends FormPageContentFactory<AddAddr
         this.addressFormSettingsViewModelFactory = addressFormSettingsViewModelFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final AddressFormSettingsViewModelFactory getAddressFormSettingsViewModelFactory() {
+        return addressFormSettingsViewModelFactory;
+    }
+
     @Override
     protected AddAddressPageContent newViewModelInstance(final Customer customer) {
         return new AddAddressPageContent();

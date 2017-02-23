@@ -29,6 +29,18 @@ public class CheckoutAddressFormSettingsViewModelFactory extends FormViewModelFa
         this.titleFormFieldViewModelFactory = titleFormFieldViewModelFactory;
     }
 
+    protected final CountryCode getCountry() {
+        return country;
+    }
+
+    protected final CountryFormFieldViewModelFactory getCountryFormFieldViewModelFactory() {
+        return countryFormFieldViewModelFactory;
+    }
+
+    protected final TitleFormFieldViewModelFactory getTitleFormFieldViewModelFactory() {
+        return titleFormFieldViewModelFactory;
+    }
+
     @Override
     protected CheckoutAddressFormSettingsViewModel newViewModelInstance(final Cart cart) {
         return new CheckoutAddressFormSettingsViewModel();

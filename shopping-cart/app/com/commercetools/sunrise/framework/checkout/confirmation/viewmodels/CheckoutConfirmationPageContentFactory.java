@@ -20,6 +20,14 @@ public class CheckoutConfirmationPageContentFactory extends FormPageContentFacto
         this.cartViewModelFactory = cartViewModelFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final CartViewModelFactory getCartViewModelFactory() {
+        return cartViewModelFactory;
+    }
+
     @Override
     protected CheckoutConfirmationPageContent newViewModelInstance(final Cart cart) {
         return new CheckoutConfirmationPageContent();

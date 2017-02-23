@@ -20,6 +20,14 @@ public class SignUpFormSettingsViewModelFactory extends FormViewModelFactory<Sig
         this.titleFormFieldViewModelFactory = titleFormFieldViewModelFactory;
     }
 
+    protected final FormFactory getFormFactory() {
+        return formFactory;
+    }
+
+    protected final TitleFormFieldViewModelFactory getTitleFormFieldViewModelFactory() {
+        return titleFormFieldViewModelFactory;
+    }
+
     @Override
     protected SignUpFormSettingsViewModel newViewModelInstance(final Void input) {
         return new SignUpFormSettingsViewModel();

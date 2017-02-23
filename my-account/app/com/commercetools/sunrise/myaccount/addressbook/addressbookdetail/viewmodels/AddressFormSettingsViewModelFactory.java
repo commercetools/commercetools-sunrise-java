@@ -28,6 +28,22 @@ public class AddressFormSettingsViewModelFactory extends FormViewModelFactory<Ad
         this.countryFormFieldViewModelFactory = countryFormFieldViewModelFactory;
     }
 
+    protected final String getTitleFormFieldName() {
+        return titleFormFieldName;
+    }
+
+    protected final String getCountryFormFieldName() {
+        return countryFormFieldName;
+    }
+
+    protected final TitleFormFieldViewModelFactory getTitleFormFieldViewModelFactory() {
+        return titleFormFieldViewModelFactory;
+    }
+
+    protected final CountryFormFieldViewModelFactory getCountryFormFieldViewModelFactory() {
+        return countryFormFieldViewModelFactory;
+    }
+
     @Override
     protected AddressFormSettingsViewModel newViewModelInstance(final Customer customer) {
         return new AddressFormSettingsViewModel();

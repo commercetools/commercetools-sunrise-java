@@ -20,6 +20,14 @@ public class ChangeAddressPageContentFactory extends FormPageContentFactory<Chan
         this.addressFormSettingsFactory = addressFormSettingsFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final AddressFormSettingsViewModelFactory getAddressFormSettingsFactory() {
+        return addressFormSettingsFactory;
+    }
+
     @Override
     protected ChangeAddressPageContent newViewModelInstance(final AddressWithCustomer addressWithCustomer) {
         return new ChangeAddressPageContent();

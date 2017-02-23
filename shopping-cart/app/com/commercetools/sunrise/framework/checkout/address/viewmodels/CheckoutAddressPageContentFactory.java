@@ -23,6 +23,18 @@ public class CheckoutAddressPageContentFactory extends FormPageContentFactory<Ch
         this.addressFormSettingsFactory = addressFormSettingsFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final CartViewModelFactory getCartViewModelFactory() {
+        return cartViewModelFactory;
+    }
+
+    protected final CheckoutAddressFormSettingsViewModelFactory getAddressFormSettingsFactory() {
+        return addressFormSettingsFactory;
+    }
+
     @Override
     protected CheckoutAddressPageContent newViewModelInstance(final Cart cart) {
         return new CheckoutAddressPageContent();

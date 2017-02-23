@@ -23,6 +23,18 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
         this.checkoutShippingFormSettingsViewModelFactory = checkoutShippingFormSettingsViewModelFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final CartViewModelFactory getCartViewModelFactory() {
+        return cartViewModelFactory;
+    }
+
+    protected final CheckoutShippingFormSettingsViewModelFactory getCheckoutShippingFormSettingsViewModelFactory() {
+        return checkoutShippingFormSettingsViewModelFactory;
+    }
+
     @Override
     protected CheckoutShippingPageContent newViewModelInstance(final ShippingMethodsWithCart shippingMethodsWithCart) {
         return new CheckoutShippingPageContent();

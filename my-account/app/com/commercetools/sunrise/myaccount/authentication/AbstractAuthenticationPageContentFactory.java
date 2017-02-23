@@ -12,6 +12,10 @@ public abstract class AbstractAuthenticationPageContentFactory<F> extends FormPa
         this.pageTitleResolver = pageTitleResolver;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
     @Override
     protected AuthenticationPageContent newViewModelInstance(final Void input) {
         return new AuthenticationPageContent();

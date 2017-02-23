@@ -18,6 +18,10 @@ public class MyPersonalDetailsFormSettingsViewModelFactory extends FormViewModel
         this.titleFormFieldViewModelFactory = titleFormFieldViewModelFactory;
     }
 
+    protected final TitleFormFieldViewModelFactory getTitleFormFieldViewModelFactory() {
+        return titleFormFieldViewModelFactory;
+    }
+
     @Override
     protected MyPersonalDetailsFormSettingsViewModel newViewModelInstance(final Void input) {
         return new MyPersonalDetailsFormSettingsViewModel();

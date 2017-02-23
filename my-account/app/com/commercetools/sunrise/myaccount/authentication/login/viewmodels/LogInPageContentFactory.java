@@ -19,6 +19,10 @@ public class LogInPageContentFactory extends AbstractAuthenticationPageContentFa
         this.signUpFormSettingsViewModelFactory = signUpFormSettingsViewModelFactory;
     }
 
+    protected final SignUpFormSettingsViewModelFactory getSignUpFormSettingsViewModelFactory() {
+        return signUpFormSettingsViewModelFactory;
+    }
+
     @Override
     public final AuthenticationPageContent create(final Void input, final Form<? extends LogInFormData> form) {
         return super.create(input, form);

@@ -23,6 +23,18 @@ public class CheckoutPaymentPageContentFactory extends FormPageContentFactory<Ch
         this.checkoutPaymentFormSettingsViewModelFactory = checkoutPaymentFormSettingsViewModelFactory;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
+    protected final CartViewModelFactory getCartViewModelFactory() {
+        return cartViewModelFactory;
+    }
+
+    protected final CheckoutPaymentFormSettingsViewModelFactory getCheckoutPaymentFormSettingsViewModelFactory() {
+        return checkoutPaymentFormSettingsViewModelFactory;
+    }
+
     @Override
     protected CheckoutPaymentPageContent newViewModelInstance(final PaymentMethodsWithCart paymentMethodsWithCart) {
         return new CheckoutPaymentPageContent();

@@ -21,6 +21,14 @@ public class CheckoutPaymentFormSettingsViewModelFactory extends FormViewModelFa
         this.paymentMethodFormFieldViewModelFactory = paymentMethodFormFieldViewModelFactory;
     }
 
+    protected final String getPaymentFormFieldName() {
+        return paymentFormFieldName;
+    }
+
+    protected final PaymentMethodFormFieldViewModelFactory getPaymentMethodFormFieldViewModelFactory() {
+        return paymentMethodFormFieldViewModelFactory;
+    }
+
     @Override
     protected CheckoutPaymentFormSettingsViewModel newViewModelInstance(final PaymentMethodsWithCart paymentMethodsWithCart) {
         return new CheckoutPaymentFormSettingsViewModel();

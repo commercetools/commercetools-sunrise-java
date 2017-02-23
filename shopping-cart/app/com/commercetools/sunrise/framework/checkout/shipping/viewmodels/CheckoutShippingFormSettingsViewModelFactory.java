@@ -21,6 +21,14 @@ public class CheckoutShippingFormSettingsViewModelFactory extends FormViewModelF
         this.shippingMethodFormFieldViewModelFactory = shippingMethodFormFieldViewModelFactory;
     }
 
+    protected final String getShippingFormFieldName() {
+        return shippingFormFieldName;
+    }
+
+    protected final ShippingMethodFormFieldViewModelFactory getShippingMethodFormFieldViewModelFactory() {
+        return shippingMethodFormFieldViewModelFactory;
+    }
+
     @Override
     protected CheckoutShippingFormSettingsViewModel newViewModelInstance(final ShippingMethodsWithCart shippingMethodsWithCart) {
         return new CheckoutShippingFormSettingsViewModel();
