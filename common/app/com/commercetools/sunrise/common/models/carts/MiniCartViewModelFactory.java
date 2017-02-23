@@ -25,7 +25,7 @@ public class MiniCartViewModelFactory extends AbstractMiniCartViewModelFactory<M
     }
 
     @Override
-    protected MiniCartViewModel newViewModelInstance(final Cart cart) {
+    protected MiniCartViewModel newViewModelInstance(@Nullable final Cart cart) {
         return new MiniCartViewModel();
     }
 
@@ -35,7 +35,7 @@ public class MiniCartViewModelFactory extends AbstractMiniCartViewModelFactory<M
     }
 
     @Override
-    protected final void initialize(final MiniCartViewModel viewModel, final Cart cart) {
+    protected final void initialize(final MiniCartViewModel viewModel, @Nullable final Cart cart) {
         super.initialize(viewModel, cart);
     }
 

@@ -35,7 +35,7 @@ public class ShippingInfoViewModelFactory extends ViewModelFactory<ShippingInfoV
     }
 
     @Override
-    protected ShippingInfoViewModel newViewModelInstance(final CartLike<?> cartLike) {
+    protected ShippingInfoViewModel newViewModelInstance(@Nullable final CartLike<?> cartLike) {
         return new ShippingInfoViewModel();
     }
 
@@ -45,7 +45,7 @@ public class ShippingInfoViewModelFactory extends ViewModelFactory<ShippingInfoV
     }
 
     @Override
-    protected final void initialize(final ShippingInfoViewModel viewModel, final CartLike<?> cartLike) {
+    protected final void initialize(final ShippingInfoViewModel viewModel, @Nullable final CartLike<?> cartLike) {
         fillLabel(viewModel, cartLike);
         fillDescription(viewModel, cartLike);
         fillPrice(viewModel, cartLike);

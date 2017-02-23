@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 public class UserInfoViewModelFactory extends ViewModelFactory<UserInfoViewModel, Customer> {
 
     @Override
-    protected UserInfoViewModel newViewModelInstance(final Customer customer) {
+    protected UserInfoViewModel newViewModelInstance(@Nullable final Customer customer) {
         return new UserInfoViewModel();
     }
 
@@ -20,7 +20,7 @@ public class UserInfoViewModelFactory extends ViewModelFactory<UserInfoViewModel
     }
 
     @Override
-    protected final void initialize(final UserInfoViewModel viewModel, final Customer customer) {
+    protected final void initialize(final UserInfoViewModel viewModel, @Nullable final Customer customer) {
         fillLoggedIn(viewModel, customer);
         fillName(viewModel, customer);
         fillEmail(viewModel, customer);

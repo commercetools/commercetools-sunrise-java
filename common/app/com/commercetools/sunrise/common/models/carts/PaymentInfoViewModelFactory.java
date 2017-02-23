@@ -13,7 +13,7 @@ import java.util.Objects;
 public class PaymentInfoViewModelFactory extends ViewModelFactory<PaymentInfoViewModel, CartLike<?>> {
 
     @Override
-    protected PaymentInfoViewModel newViewModelInstance(final CartLike<?> cartLike) {
+    protected PaymentInfoViewModel newViewModelInstance(@Nullable final CartLike<?> cartLike) {
         return new PaymentInfoViewModel();
     }
 
@@ -23,7 +23,7 @@ public class PaymentInfoViewModelFactory extends ViewModelFactory<PaymentInfoVie
     }
 
     @Override
-    protected final void initialize(final PaymentInfoViewModel viewModel, final CartLike<?> cartLike) {
+    protected final void initialize(final PaymentInfoViewModel viewModel, @Nullable final CartLike<?> cartLike) {
         fillType(viewModel, cartLike);
     }
 
