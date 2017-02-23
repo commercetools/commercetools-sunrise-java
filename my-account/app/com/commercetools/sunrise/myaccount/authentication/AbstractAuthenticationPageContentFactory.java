@@ -13,7 +13,7 @@ public abstract class AbstractAuthenticationPageContentFactory<F> extends FormPa
     }
 
     @Override
-    protected AuthenticationPageContent getViewModelInstance(final Void input) {
+    protected AuthenticationPageContent newViewModelInstance(final Void input) {
         return new AuthenticationPageContent();
     }
 

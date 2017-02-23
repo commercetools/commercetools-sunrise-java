@@ -24,7 +24,7 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
     }
 
     @Override
-    protected CheckoutShippingPageContent getViewModelInstance(final ShippingMethodsWithCart shippingMethodsWithCart) {
+    protected CheckoutShippingPageContent newViewModelInstance(final ShippingMethodsWithCart shippingMethodsWithCart) {
         return new CheckoutShippingPageContent();
     }
 

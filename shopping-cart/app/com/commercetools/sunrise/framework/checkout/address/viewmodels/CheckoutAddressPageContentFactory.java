@@ -24,7 +24,7 @@ public class CheckoutAddressPageContentFactory extends FormPageContentFactory<Ch
     }
 
     @Override
-    protected CheckoutAddressPageContent getViewModelInstance(final Cart cart) {
+    protected CheckoutAddressPageContent newViewModelInstance(final Cart cart) {
         return new CheckoutAddressPageContent();
     }
 

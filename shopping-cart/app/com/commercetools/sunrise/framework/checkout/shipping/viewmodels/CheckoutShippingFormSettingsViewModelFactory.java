@@ -22,7 +22,7 @@ public class CheckoutShippingFormSettingsViewModelFactory extends FormViewModelF
     }
 
     @Override
-    protected CheckoutShippingFormSettingsViewModel getViewModelInstance(final ShippingMethodsWithCart shippingMethodsWithCart) {
+    protected CheckoutShippingFormSettingsViewModel newViewModelInstance(final ShippingMethodsWithCart shippingMethodsWithCart) {
         return new CheckoutShippingFormSettingsViewModel();
     }
 

@@ -19,7 +19,7 @@ public class MyPersonalDetailsFormSettingsViewModelFactory extends FormViewModel
     }
 
     @Override
-    protected MyPersonalDetailsFormSettingsViewModel getViewModelInstance(final Void input) {
+    protected MyPersonalDetailsFormSettingsViewModel newViewModelInstance(final Void input) {
         return new MyPersonalDetailsFormSettingsViewModel();
     }
 

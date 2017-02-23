@@ -21,7 +21,7 @@ public class ChangeAddressPageContentFactory extends FormPageContentFactory<Chan
     }
 
     @Override
-    protected ChangeAddressPageContent getViewModelInstance(final AddressWithCustomer addressWithCustomer) {
+    protected ChangeAddressPageContent newViewModelInstance(final AddressWithCustomer addressWithCustomer) {
         return new ChangeAddressPageContent();
     }
 
