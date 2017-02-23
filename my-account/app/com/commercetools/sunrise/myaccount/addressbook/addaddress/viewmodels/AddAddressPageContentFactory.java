@@ -29,7 +29,7 @@ public class AddAddressPageContentFactory extends FormPageContentFactory<AddAddr
     }
 
     @Override
-    protected AddAddressPageContent newViewModelInstance(final Customer customer) {
+    protected AddAddressPageContent newViewModelInstance(final Customer customer, final Form<? extends AddressFormData> form) {
         return new AddAddressPageContent();
     }
 

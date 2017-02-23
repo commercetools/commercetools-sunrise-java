@@ -30,7 +30,7 @@ public class CheckoutPaymentFormSettingsViewModelFactory extends FormViewModelFa
     }
 
     @Override
-    protected CheckoutPaymentFormSettingsViewModel newViewModelInstance(final PaymentMethodsWithCart paymentMethodsWithCart) {
+    protected CheckoutPaymentFormSettingsViewModel newViewModelInstance(final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
         return new CheckoutPaymentFormSettingsViewModel();
     }
 

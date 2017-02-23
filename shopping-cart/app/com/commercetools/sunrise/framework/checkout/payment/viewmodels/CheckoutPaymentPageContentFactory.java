@@ -36,7 +36,7 @@ public class CheckoutPaymentPageContentFactory extends FormPageContentFactory<Ch
     }
 
     @Override
-    protected CheckoutPaymentPageContent newViewModelInstance(final PaymentMethodsWithCart paymentMethodsWithCart) {
+    protected CheckoutPaymentPageContent newViewModelInstance(final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
         return new CheckoutPaymentPageContent();
     }
 

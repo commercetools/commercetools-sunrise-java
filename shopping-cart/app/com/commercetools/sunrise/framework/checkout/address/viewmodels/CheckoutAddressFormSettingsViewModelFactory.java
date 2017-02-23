@@ -42,7 +42,7 @@ public class CheckoutAddressFormSettingsViewModelFactory extends FormViewModelFa
     }
 
     @Override
-    protected CheckoutAddressFormSettingsViewModel newViewModelInstance(final Cart cart) {
+    protected CheckoutAddressFormSettingsViewModel newViewModelInstance(final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
         return new CheckoutAddressFormSettingsViewModel();
     }
 

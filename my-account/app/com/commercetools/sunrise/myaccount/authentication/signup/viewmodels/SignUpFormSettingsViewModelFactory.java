@@ -29,7 +29,7 @@ public class SignUpFormSettingsViewModelFactory extends FormViewModelFactory<Sig
     }
 
     @Override
-    protected SignUpFormSettingsViewModel newViewModelInstance(final Void input) {
+    protected SignUpFormSettingsViewModel newViewModelInstance(final Void input, @Nullable final Form<? extends SignUpFormData> form) {
         return new SignUpFormSettingsViewModel();
     }
 
