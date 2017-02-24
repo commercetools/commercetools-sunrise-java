@@ -38,7 +38,7 @@ First we need to create a `ControllerComponent` that adds the View Component to 
 
 ```java
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.components.ComponentViewModel;
+import com.commercetools.sunrise.components.ViewModelComponent;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.PageDataHook;
 import io.sphere.sdk.models.Base;

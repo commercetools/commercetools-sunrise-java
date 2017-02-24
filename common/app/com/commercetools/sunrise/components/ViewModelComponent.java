@@ -1,13 +1,13 @@
 package com.commercetools.sunrise.components;
 
 import com.commercetools.sunrise.common.models.ViewModel;
+import com.commercetools.sunrise.framework.components.SunriseComponent;
 
-public class ComponentViewModel extends ViewModel {
+public class ViewModelComponent extends ViewModel implements SunriseComponent {
 
     private String templateName;
-    private Object componentData;
 
-    public ComponentViewModel() {
+    public ViewModelComponent() {
     }
 
     public String getTemplateName() {
@@ -16,13 +16,5 @@ public class ComponentViewModel extends ViewModel {
 
     public void setTemplateName(final String templateName) {
         this.templateName = templateName;
-    }
-
-    public Object getComponentData() {
-        return componentData;
-    }
-
-    public void setComponentData(final Object componentData) {
-        this.componentData = componentData;
     }
 }

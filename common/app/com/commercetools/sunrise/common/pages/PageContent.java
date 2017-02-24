@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.pages;
 
 import com.commercetools.sunrise.common.models.ViewModel;
-import com.commercetools.sunrise.components.ComponentViewModel;
+import com.commercetools.sunrise.components.ViewModelComponent;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class PageContent extends ViewModel {
 
     private String title;
-    private List<ComponentViewModel> components;
+    private List<ViewModelComponent> components;
 
     public PageContent() {
     }
@@ -22,15 +22,15 @@ public abstract class PageContent extends ViewModel {
         this.title = title;
     }
 
-    public List<ComponentViewModel> getComponents() {
+    public List<ViewModelComponent> getComponents() {
         return components;
     }
 
-    public void setComponents(final List<ComponentViewModel> components) {
+    public void setComponents(final List<ViewModelComponent> components) {
         this.components = components;
     }
 
-    public void addComponent(final ComponentViewModel component) {
+    public void addComponent(final ViewModelComponent component) {
         if (this.components == null) {
             this.components = new LinkedList<>();
         }
