@@ -1,6 +1,5 @@
 import sbt.Keys._
 import sbt._
-import sbtunidoc.Plugin.UnidocKeys._
 
 name := "commercetools-sunrise"
 
@@ -26,8 +25,9 @@ val childProjects: List[sbt.ProjectReference] =
   List(common, `product-catalog`, `shopping-cart`, `my-account`, `move-to-sdk`, `sbt-tasks`)
 
 lazy val `commercetools-sunrise` = (project in file("."))
-  .enablePlugins(PlayJava)
-  .settings(javadocSettings ++ Release.disablePublish: _*)
+  .enablePlugins(PlayJava, JavaUnidocPlugin)
+  .settings(unidocProjectFilter in (JavaUnidoc, unidoc) := inProjects(childProjects: _*))
+  .settings(Release.disablePublish: _*)
   .settings(Dependencies.sunriseDefaultTheme)
   .aggregate(childProjects: _*)
   .dependsOn(`product-catalog`, `shopping-cart`, `my-account`)
@@ -74,9 +74,5 @@ lazy val `test-lib` = project
   .settings(Dependencies.jvmSdk ++ Dependencies.commonLib: _*)
 
 lazy val commonWithTests: Seq[ClasspathDep[ProjectReference]] = Seq(common, `test-lib` % "test")
-
-lazy val javadocSettings = javaUnidocSettings ++ Seq (
-  unidocProjectFilter in (JavaUnidoc, unidoc) := inProjects(childProjects: _*)
-)
 
 lazy val enableLibFolderInTest = unmanagedBase in Test := baseDirectory.value / "test" / "lib"
