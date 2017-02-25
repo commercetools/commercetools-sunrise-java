@@ -1,4 +1,4 @@
-package io.sphere.sdk.utils;
+package com.commercetools.sunrise.common.utils;
 
 import com.google.common.base.CaseFormat;
 

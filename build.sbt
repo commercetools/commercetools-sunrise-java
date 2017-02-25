@@ -22,7 +22,7 @@ Heroku.deploySettings
 Version.generateVersionInfo
 
 val childProjects: List[sbt.ProjectReference] =
-  List(common, `product-catalog`, `shopping-cart`, `my-account`, `move-to-sdk`, `sbt-tasks`)
+  List(common, `product-catalog`, `shopping-cart`, `my-account`, `test-lib`, `move-to-sdk`, `theme-importer`)
 
 lazy val `commercetools-sunrise` = (project in file("."))
   .enablePlugins(PlayJava, JavaUnidocPlugin)
@@ -57,21 +57,20 @@ lazy val `my-account` = project
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .dependsOn(commonWithTests: _*)
 
-lazy val `sbt-tasks` = project
-  .enablePlugins(PlayJava)
-  .configs(IntegrationTest)
-  .settings(Release.enableSignedRelease ++ TestCommon.settingsWithoutPlayTest ++ enableLibFolderInTest: _*)
-
-lazy val `move-to-sdk` = project
-  .enablePlugins(PlayJava)
-  .configs(IntegrationTest)
-  .settings(Release.enableSignedRelease ++ TestCommon.settingsWithoutPlayTest: _*)
-  .settings(Dependencies.jvmSdk)
-
 lazy val `test-lib` = project
   .enablePlugins(PlayJava)
   .settings(Release.enableSignedRelease ++ TestCommon.configCommonTestSettings("compile") ++ TestCommon.configJavaWsDependency("compile"): _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.commonLib: _*)
+
+lazy val `theme-importer` = project
+  .enablePlugins(PlayJava, ThemeImporterPlugin)
+  .configs(IntegrationTest)
+  .settings(Release.enableSignedRelease ++ TestCommon.settingsWithoutPlayTest ++ enableLibFolderInTest: _*)
+
+lazy val `move-to-sdk` = project
+  .configs(IntegrationTest)
+  .settings(Release.enableSignedRelease ++ TestCommon.settingsWithoutPlayTest: _*)
+  .settings(Dependencies.jvmSdk)
 
 lazy val commonWithTests: Seq[ClasspathDep[ProjectReference]] = Seq(common, `test-lib` % "test")
 

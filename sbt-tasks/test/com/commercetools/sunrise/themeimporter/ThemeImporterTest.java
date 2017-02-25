@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.theme;
+package com.commercetools.sunrise.themeimporter;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -14,9 +14,9 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WebjarsFilesCopierTest {
+public class ThemeImporterTest {
 
-    private static final String DEST_PATH = WebjarsFilesCopierTest.class.getClass().getResource("/").getPath() + "webjarsFilesCopierDestFolder";
+    private static final String DEST_PATH = ThemeImporterTest.class.getClass().getResource("/").getPath() + "webjarsFilesCopierDestFolder";
 
     @Before
     @After
@@ -70,7 +70,7 @@ public class WebjarsFilesCopierTest {
     }
 
     private static List<File> copyFiles(final List<String> originPaths) {
-        WebjarsFilesCopier.copyTemplateFiles(DEST_PATH, originPaths);
+        ThemeImporter.copyTemplateFiles(DEST_PATH, originPaths);
         return originPaths.stream()
                 .map(originPath -> new File(DEST_PATH + File.separator + originPath))
                 .collect(toList());

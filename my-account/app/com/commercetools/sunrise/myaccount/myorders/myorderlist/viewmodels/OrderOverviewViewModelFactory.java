@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static com.commercetools.sunrise.common.utils.CartPriceUtils.calculateTotalPrice;
-import static io.sphere.sdk.utils.EnumUtils.enumToCamelCase;
+import static com.commercetools.sunrise.common.utils.EnumUtils.enumToCamelCase;
 
 @RequestScoped
 public class OrderOverviewViewModelFactory extends ViewModelFactory<OrderOverviewViewModel, Order> {

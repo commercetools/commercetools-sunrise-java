@@ -28,7 +28,7 @@
     <logger name="com.commercetools.sunrise.framework.template.i18n.ConfigurableI18nResolverProvider" level="WARN" />
     <logger name="com.commercetools.sunrise.framework.template.engine.HandlebarsTemplateEngineProvider" level="WARN" />
     <logger name="com.commercetools.sunrise.productcatalog" level="INFO" />
-    <logger name="com.commercetools.sunrise.theme.WebjarsFilesCopier" level="INFO" />
+    <logger name="com.commercetools.sunrise.themeimporter.ThemeImporter" level="INFO" />
     <logger name="com.github.jknack.handlebars.Handlebars" level="ERROR" />
     <logger name="com.github.jknack.handlebars.HelperRegistry" level="ERROR" />
 

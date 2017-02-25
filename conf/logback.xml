@@ -26,7 +26,7 @@
     <logger name="com.commercetools.sunrise.framework.template.i18n.ConfigurableI18nResolverProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.framework.template.engine.HandlebarsTemplateEngineProvider" level="INFO" />
     <logger name="com.commercetools.sunrise.productcatalog" level="INFO" />
-    <logger name="com.commercetools.sunrise.theme.WebjarsFilesCopier" level="INFO" />
+    <logger name="com.commercetools.sunrise.themeimporter.ThemeImporter" level="INFO" />
 
 
     <root level="WARN">
