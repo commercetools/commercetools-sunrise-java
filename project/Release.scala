@@ -19,13 +19,13 @@ object Release {
   )
 
   lazy val publishSettings = Seq(
-    publishTo in ThisBuild <<= version { (v: String) =>
+    publishTo in ThisBuild := version { (v: String) =>
       val nexus = "https://oss.sonatype.org/"
       if (v.trim.endsWith("SNAPSHOT"))
         Some("snapshots" at nexus + "content/repositories/snapshots")
       else
         Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-    },
+    }.value,
     publishMavenStyle in ThisBuild := true,
     publishArtifact in Test in ThisBuild := false,
     licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
