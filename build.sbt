@@ -1,6 +1,5 @@
 import sbt.Keys._
 import sbt._
-import themeimporter.ThemeImporterPlugin
 
 name := "commercetools-sunrise"
 
