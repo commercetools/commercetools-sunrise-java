@@ -7,7 +7,10 @@ organization in ThisBuild := "com.commercetools.sunrise"
 
 scalaVersion in ThisBuild := "2.11.8"
 
-javacOptions in ThisBuild ++= Seq("-source", "1.8", "-target", "1.8")
+javacOptions in Compile ++= Seq("-source", "1.8")
+
+// see https://github.com/sbt/sbt/issues/355#issuecomment-3817629
+javacOptions in (Compile, compile) ++= Seq("-target", "1.8")
 
 resolvers in ThisBuild ++= Seq (
   Resolver.sonatypeRepo("releases"),
@@ -63,6 +66,7 @@ lazy val `test-lib` = project
   .settings(Dependencies.jvmSdk ++ Dependencies.commonLib: _*)
 
 lazy val `move-to-sdk` = project
+  .enablePlugins(JvmPlugin, GenJavadocPlugin)
   .configs(IntegrationTest)
   .settings(Release.enableSignedRelease ++ TestCommon.settingsWithoutPlayTest: _*)
   .settings(Dependencies.jvmSdk)
