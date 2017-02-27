@@ -33,32 +33,32 @@ lazy val `commercetools-sunrise` = (project in file("."))
   .dependsOn(`product-catalog`, `shopping-cart`, `my-account`)
 
 lazy val common = project
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.sunriseTheme ++ Dependencies.sunriseModules ++ Dependencies.commonLib: _*)
   .dependsOn(`move-to-sdk`, `test-lib` % "test")
 
 lazy val `product-catalog` = project
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .dependsOn(commonWithTests: _*)
 
 lazy val `shopping-cart` = project
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .dependsOn(commonWithTests: _*)
 
 lazy val `my-account` = project
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .dependsOn(commonWithTests: _*)
 
 lazy val `test-lib` = project
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, GenJavadocPlugin)
   .settings(Release.enableSignedRelease ++ TestCommon.configCommonTestSettings("compile") ++ TestCommon.configJavaWsDependency("compile"): _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.commonLib: _*)
 
