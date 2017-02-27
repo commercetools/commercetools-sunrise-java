@@ -4,6 +4,8 @@ import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExec
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.framework.hooks.actions.CustomerSignedInActionHook;
 import com.commercetools.sunrise.framework.hooks.events.CustomerSignInResultLoadedHook;
+import com.commercetools.sunrise.framework.hooks.requests.CustomerCreateCommandHook;
+import com.commercetools.sunrise.framework.hooks.requests.CustomerSignInCommandHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -21,11 +23,13 @@ public abstract class AbstractCustomerSignInExecutor extends AbstractSphereReque
         super(sphereClient, hookRunner);
     }
 
-    protected final CompletionStage<CustomerSignInResult> executeRequest(final CustomerCreateCommand request) {
+    protected final CompletionStage<CustomerSignInResult> executeRequest(final CustomerCreateCommand baseRequest) {
+        final CustomerCreateCommand request = CustomerCreateCommandHook.runHook(getHookRunner(), baseRequest);
         return executeRequest(request, request);
     }
 
-    protected final CompletionStage<CustomerSignInResult> executeRequest(final CustomerSignInCommand request) {
+    protected final CompletionStage<CustomerSignInResult> executeRequest(final CustomerSignInCommand baseRequest) {
+        final CustomerSignInCommand request = CustomerSignInCommandHook.runHook(getHookRunner(), baseRequest);
         return executeRequest(request, null);
     }
 
