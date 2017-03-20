@@ -1,143 +1,107 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.DefaultAddressBookAddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
-import com.google.inject.Injector;
-import io.sphere.sdk.client.ClientErrorException;
-import io.sphere.sdk.commands.UpdateAction;
+import com.commercetools.sunrise.framework.viewmodels.content.addresses.AddressWithCustomer;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.hooks.EnableHooks;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.myaccount.MyAccountController;
+import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.WithRequiredAddress;
+import com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels.ChangeAddressPageContentFactory;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
-import io.sphere.sdk.customers.commands.updateactions.ChangeAddress;
-import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
-import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
 import io.sphere.sdk.models.Address;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.libs.concurrent.HttpExecution;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.Objects;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
-import static java.util.Arrays.asList;
+public abstract class SunriseChangeAddressController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<AddressWithCustomer, Customer, AddressFormData>, WithRequiredCustomer, WithRequiredAddress {
 
-@RequestScoped
-public abstract class SunriseChangeAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<AddressBookAddressFormData, AddressBookActionData, Customer> {
+    private final AddressFormData formData;
+    private final CustomerFinder customerFinder;
+    private final AddressFinder addressFinder;
+    private final ChangeAddressControllerAction controllerAction;
+    private final ChangeAddressPageContentFactory pageContentFactory;
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseChangeAddressController.class);
-
-    @Inject
-    private Injector injector;
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
-        frameworkTags.addAll(asList("address-book", "change-address", "address"));
-        return frameworkTags;
+    protected SunriseChangeAddressController(final TemplateRenderer templateRenderer,
+                                             final FormFactory formFactory, final AddressFormData formData,
+                                             final CustomerFinder customerFinder, final AddressFinder addressFinder,
+                                             final ChangeAddressControllerAction controllerAction,
+                                             final ChangeAddressPageContentFactory pageContentFactory) {
+        super(templateRenderer, formFactory);
+        this.formData = formData;
+        this.customerFinder = customerFinder;
+        this.addressFinder = addressFinder;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
-    public String getTemplateName() {
-        return "my-account-edit-address";
+    public final Class<? extends AddressFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
-    public Class<? extends AddressBookAddressFormData> getFormDataClass() {
-        return DefaultAddressBookAddressFormData.class;
-    }
-
-    @SunriseRoute("changeAddressInAddressBookCall")
-    public CompletionStage<Result> show(final String languageTag, final String addressId) {
-        return doRequest(() -> {
-            logger.debug("show edit form for address with id={} in locale={}", addressId, languageTag);
-            return requireAddressBookActionData(addressId)
-                    .thenComposeAsync(this::showForm, HttpExecution.defaultContext());
-        });
-    }
-
-    @SunriseRoute("changeAddressInAddressBookProcessFormCall")
-    public CompletionStage<Result> process(final String languageTag, final String addressId) {
-        return doRequest(() -> {
-            logger.debug("try to change address with id={} in locale={}", addressId, languageTag);
-            return requireAddressBookActionData(addressId)
-                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
-        });
+    public final CustomerFinder getCustomerFinder() {
+        return customerFinder;
     }
 
     @Override
-    public CompletionStage<? extends Customer> doAction(final AddressBookAddressFormData formData, final AddressBookActionData context) {
-        return changeAddress(context.getCustomer(), context.getAddress(), formData)
-                .thenApplyAsync(updatedCustomer -> updatedCustomer, HttpExecution.defaultContext());
+    public final AddressFinder getAddressFinder() {
+        return addressFinder;
+    }
+
+    @EnableHooks
+    @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PAGE)
+    public CompletionStage<Result> show(final String languageTag, final String addressIdentifier) {
+        return requireCustomer(customer ->
+                requireAddress(customer, addressIdentifier, address ->
+                        showFormPage(AddressWithCustomer.of(address, customer), formData)));
+    }
+
+    @EnableHooks
+    @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PROCESS)
+    public CompletionStage<Result> process(final String languageTag, final String addressIdentifier) {
+        return requireCustomer(customer ->
+                requireAddress(customer, addressIdentifier, address ->
+                        processForm(AddressWithCustomer.of(address, customer))));
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData context, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
-        return asyncBadRequest(renderPage(form, context, null));
+    public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
+        return controllerAction.apply(addressWithCustomer, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final AddressBookAddressFormData formData, final AddressBookActionData context, final Customer updatedCustomer) {
-        return redirectToAddressBook();
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final AddressFormData formData);
+
+    @Override
+    public void preFillFormData(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
+        final Address address = addressWithCustomer.getAddress();
+        final Customer customer = addressWithCustomer.getCustomer();
+        formData.applyAddress(address);
+        formData.applyDefaultShippingAddress(isDefaultAddress(address, customer.getDefaultShippingAddressId()));
+        formData.applyDefaultBillingAddress(isDefaultAddress(address, customer.getDefaultBillingAddressId()));
     }
 
     @Override
-    public void fillFormData(final AddressBookAddressFormData formData, final AddressBookActionData context) {
-        formData.applyAddress(context.getAddress());
-        formData.setDefaultShippingAddress(isDefaultAddress(context.getAddress().getId(), context.getCustomer().getDefaultShippingAddressId()));
-        formData.setDefaultBillingAddress(isDefaultAddress(context.getAddress().getId(), context.getCustomer().getDefaultBillingAddressId()));
+    public PageContent createPageContent(final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {
+        return pageContentFactory.create(addressWithCustomer, form);
     }
 
-    @Override
-    public CompletionStage<Html> renderPage(final Form<? extends AddressBookAddressFormData> form, final AddressBookActionData context, @Nullable final Customer updatedCustomer) {
-        final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(context.getCustomer());
-        final ChangeAddressPageContent pageContent = injector.getInstance(ChangeAddressPageContentFactory.class).create(form, customerToRender);
-        return renderPageWithTemplate(pageContent, getTemplateName());
-    }
-
-    private CompletionStage<Customer> changeAddress(final Customer customer, final Address oldAddress, final AddressBookAddressFormData formData) {
-        final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        updateActions.add(ChangeAddress.ofOldAddressToNewAddress(oldAddress, formData.toAddress()));
-        updateActions.addAll(setDefaultAddressActions(customer, oldAddress.getId(), formData));
-        return sphere().execute(CustomerUpdateCommand.of(customer, updateActions));
-    }
-
-    private List<UpdateAction<Customer>> setDefaultAddressActions(final Customer customer, final String addressId, final AddressBookAddressFormData formData) {
-        final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        setDefaultAddressAction(addressId, formData.isDefaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
-                .ifPresent(updateActions::add);
-        setDefaultAddressAction(addressId, formData.isDefaultBillingAddress(), customer.getDefaultBillingAddressId(), SetDefaultBillingAddress::of)
-                .ifPresent(updateActions::add);
-        return updateActions;
-    }
-
-    private Optional<UpdateAction<Customer>> setDefaultAddressAction(final String addressId, final boolean isNewDefaultAddress,
-                                                                     @Nullable final String defaultAddressId,
-                                                                     final Function<String, UpdateAction<Customer>> actionCreator) {
-        final boolean defaultNeedsChange = isDefaultAddressDifferent(addressId, isNewDefaultAddress, defaultAddressId);
-        if (defaultNeedsChange) {
-            final String addressIdToSetAsDefault = isNewDefaultAddress ? addressId : null;
-            return Optional.of(actionCreator.apply(addressIdToSetAsDefault));
-        }
-        return Optional.empty();
-    }
-
-    private boolean isDefaultAddressDifferent(final String addressId, final boolean isNewDefaultAddress, @Nullable final String defaultAddressId) {
-        return isNewDefaultAddress ^ isDefaultAddress(addressId, defaultAddressId);
+    private boolean isDefaultAddress(final Address address, @Nullable final String defaultAddressId) {
+        return Objects.equals(defaultAddressId, address.getId());
     }
 }

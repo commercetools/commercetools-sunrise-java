@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.play.http;
 
-import com.commercetools.sunrise.common.ctp.SphereClientCredentialsException;
+import com.commercetools.sunrise.ctp.SphereClientCredentialsException;
 import com.google.inject.ProvisionException;
 import play.Configuration;
 import play.Environment;
@@ -12,16 +12,19 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import scala.Option;
+import views.html.defaultpages.devError;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
 public class SunriseDefaultHttpErrorHandler extends DefaultHttpErrorHandler {
+
     private final Option<String> playEditor;
 
     @Inject
@@ -36,16 +39,23 @@ public class SunriseDefaultHttpErrorHandler extends DefaultHttpErrorHandler {
                 .map(Throwable::getCause)
                 .filter(e -> e instanceof ProvisionException)
                 .map(e -> (ProvisionException) e)
-                .filter(e -> e.getErrorMessages().stream().anyMatch(m -> m.getCause() instanceof SphereClientCredentialsException))
-                .map(e -> (CompletionStage<Result>) CompletableFuture.completedFuture(Results.internalServerError(views.html.defaultpages.devError.render(playEditor, new SphereCredentialsUsefulException(exception)))))
+                .filter(e -> e.getErrorMessages().stream()
+                        .anyMatch(m -> m.getCause() instanceof SphereClientCredentialsException))
+                .map(e -> renderDevErrorPage(exception))
                 .orElseGet(() ->  super.onDevServerError(request, exception));
+    }
+
+    private CompletionStage<Result> renderDevErrorPage(final UsefulException exception) {
+        final SphereCredentialsUsefulException error = new SphereCredentialsUsefulException(exception);
+        final Result result = Results.internalServerError(devError.render(playEditor, error));
+        return completedFuture(result);
     }
 
     private static class SphereCredentialsUsefulException extends UsefulException {
 
-        public static final String TITLE = "The commercetools platform credentials are not complete.";
+        static final String TITLE = "The commercetools platform credentials are not complete.";
 
-        public SphereCredentialsUsefulException(final UsefulException exception) {
+        SphereCredentialsUsefulException(final UsefulException exception) {
             super(TITLE, exception);
             this.title = TITLE;
             this.description = "One solution could be to create a file dev.conf or use application.conf to set these properties:\n" +

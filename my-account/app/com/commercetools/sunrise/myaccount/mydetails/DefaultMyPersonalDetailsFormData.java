@@ -2,17 +2,42 @@ package com.commercetools.sunrise.myaccount.mydetails;
 
 import io.sphere.sdk.customers.CustomerName;
 import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints;
+import play.data.validation.Constraints.Required;
 
 public class DefaultMyPersonalDetailsFormData extends Base implements MyPersonalDetailsFormData {
 
     private String title;
-    @Constraints.Required
+    @Required
     private String firstName;
-    @Constraints.Required
+    @Required
     private String lastName;
-    @Constraints.Required
+    @Required
     private String email;
+
+    @Override
+    public CustomerName customerName() {
+        return CustomerName.ofTitleFirstAndLastName(title, firstName, lastName);
+    }
+
+    @Override
+    public String email() {
+        return email;
+    }
+
+    @Override
+    public void applyCustomerName(final CustomerName customerName) {
+        this.title = customerName.getTitle();
+        this.firstName = customerName.getFirstName();
+        this.lastName = customerName.getLastName();
+    }
+
+    @Override
+    public void applyEmail(final String email) {
+        this.email = email;
+    }
+
+
+    // Getters & setters
 
     public String getTitle() {
         return title;
@@ -38,26 +63,12 @@ public class DefaultMyPersonalDetailsFormData extends Base implements MyPersonal
         this.lastName = lastName;
     }
 
-    @Override
     public String getEmail() {
         return email;
     }
 
-    @Override
     public void setEmail(final String email) {
         this.email = email;
-    }
-
-    @Override
-    public CustomerName toCustomerName() {
-        return CustomerName.ofTitleFirstAndLastName(title, firstName, lastName);
-    }
-
-    @Override
-    public void applyCustomerName(final CustomerName customerName) {
-        this.title = customerName.getTitle();
-        this.firstName = customerName.getFirstName();
-        this.lastName = customerName.getLastName();
     }
 }
 

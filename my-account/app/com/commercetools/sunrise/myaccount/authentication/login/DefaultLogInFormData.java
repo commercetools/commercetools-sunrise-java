@@ -1,26 +1,41 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
 import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints;
+import play.data.validation.Constraints.Required;
 
 public class DefaultLogInFormData extends Base implements LogInFormData {
 
-    @Constraints.Required
+    @Required
     private String username;
-    @Constraints.Required
+    @Required
     private String password;
 
     @Override
-    public String getUsername() {
+    public String username() {
         return username;
     }
 
     @Override
+    public String password() {
+        return password;
+    }
+
+    @Override
+    public void applyUsername(final String username) {
+        this.username = username;
+    }
+
+
+    // Getters & setters
+
+    public String getUsername() {
+        return username;
+    }
+
     public void setUsername(final String username) {
         this.username = username;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }

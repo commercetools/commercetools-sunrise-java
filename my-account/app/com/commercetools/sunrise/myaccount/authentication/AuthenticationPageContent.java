@@ -1,14 +1,14 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormSettingsBean;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpFormSettingsViewModel;
 import play.data.Form;
 
 public class AuthenticationPageContent extends PageContent {
 
     private Form<?> logInForm;
     private Form<?> signUpForm;
-    private SignUpFormSettingsBean signUpFormSettings;
+    private SignUpFormSettingsViewModel signUpFormSettings;
 
     public Form<?> getLogInForm() {
         return logInForm;
@@ -26,11 +26,11 @@ public class AuthenticationPageContent extends PageContent {
         this.signUpForm = signUpForm;
     }
 
-    public SignUpFormSettingsBean getSignUpFormSettings() {
+    public SignUpFormSettingsViewModel getSignUpFormSettings() {
         return signUpFormSettings;
     }
 
-    public void setSignUpFormSettings(final SignUpFormSettingsBean signUpFormSettings) {
+    public void setSignUpFormSettings(final SignUpFormSettingsViewModel signUpFormSettings) {
         this.signUpFormSettings = signUpFormSettings;
     }
 }

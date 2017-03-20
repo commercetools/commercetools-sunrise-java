@@ -32,9 +32,23 @@ These dependencies provide default Controllers which can be enabled by extending
 
 For example, if we wanted to enable an endpoint to see the contents of the cart, we would simply extend the `SunriseCartDetailController`:
 ```java
-@RequestScoped
-public class CartDetailController extends SunriseCartDetailController {
-  // here you can register components or override methods to change behaviour
+// here you can register controller components
+@RegisteredComponents(CartOperationsControllerComponentSupplier.class)
+public final class CartDetailController extends SunriseCartDetailController {
+
+    @Inject
+    public CartDetailController(final TemplateRenderer templateRenderer,
+                                final CartFinder cartFinder,
+                                final CartDetailPageContentFactory pageContentFactory) {
+        super(templateRenderer, cartFinder, pageContentFactory);
+    }
+
+    @Override
+    public String getTemplateName() {
+        return "cart";
+    }
+    
+    // here you can override methods to change behaviour
 }
 ```
 Then we only need to associate our `CartDetailController` to a route with the desired pattern in `conf/routes`:

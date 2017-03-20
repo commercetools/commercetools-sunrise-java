@@ -37,9 +37,8 @@ We will use the following template, located in `conf/templates/components/summer
 First we need to create a `ControllerComponent` that adds the View Component to the `PageData`:
 
 ```java
-import com.commercetools.sunrise.common.contexts.UserContext;
 import com.commercetools.sunrise.common.pages.PageData;
-import com.commercetools.sunrise.components.ComponentBean;
+import com.commercetools.sunrise.components.ViewModelComponent;
 import com.commercetools.sunrise.framework.ControllerComponent;
 import com.commercetools.sunrise.hooks.PageDataHook;
 import io.sphere.sdk.models.Base;
@@ -48,22 +47,23 @@ import play.Configuration;
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Locale;
 
 public final class SummerCampaignControllerComponent extends Base implements ControllerComponent, PageDataHook {
 
     @Inject
     private Configuration configuration;
     @Inject
-    private UserContext userContext;
+    private Locale locale;
 
     @Override
     public void acceptPageData(final PageData pageData) {
-        final ComponentBean component = createComponentBean();
+        final ComponentViewModel component = createComponentViewModel();
         pageData.getContent().addComponent(component);
     }
 
-    private ComponentBean createComponentBean() {
-        final ComponentBean component = new ComponentBean();
+    private ComponentViewModel createComponentViewModel() {
+        final ComponentViewModel component = new ComponentViewModel();
         component.setTemplateName("components/summercampaign/banner"); //template path without .hbs!!!
         component.setComponentData(createComponentData());
         return component;
@@ -74,45 +74,27 @@ public final class SummerCampaignControllerComponent extends Base implements Con
         data.put("src", configuration.getString("summercampaign.img.src"));
         data.put("width", configuration.getString("summercampaign.img.width"));
         data.put("height", configuration.getString("summercampaign.img.height"));
-        data.put("href", demo.productcatalog.routes.SummerCampaignController.show(userContext.languageTag()).url());
+        data.put("href", demo.productcatalog.routes.SummerCampaignController.show(locale.toLanguageTag()).url());
         return data;
     }
 }
 ```
 
-We still need to wire the `ControllerComponent` to the desired controllers. Let's say that we want to display it on all pages except for the checkout, for that we need to build a `MultiControllerComponentResolver` with our Controller Component included, which is then injected via Dependency Injection.
+We still need to wire the `ControllerComponent` to the desired controllers. Let's say that we want to display it on the home page.
  
-Check the following Guice Module as an example:
-
 ```java
-import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
-import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuilder;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import demo.productcatalog.SummerCampaignControllerComponent;
+import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 
-public class ComponentsModule extends AbstractModule {
-    @Override
-    protected void configure() {
-    }
+import com.commercetools.sunrise.hooks.RegisteredComponents;
 
-    @Provides
-    public MultiControllerComponentResolver multiControllerComponentResolver() {
-        return new MultiControllerComponentResolverBuilder()
-                .add(SummerCampaignControllerComponent.class, controller -> !controller.getFrameworkTags().contains("checkout"))
-                //add more controller components here
-                .build();
-    }
+@RegisteredComponents(SummerCampaignControllerComponent.class)
+public class HomeController extends SunriseHomeController {
+    // body of the controller
 }
 ```
 
-As always, make sure you have the Module enabled in `application.conf`:
-
-```
-play.modules.enabled += "absolute.path.to.your.ComponentsModule"
-```
-
-If everything went right, all pages except the checkout pages should have a banner like this:
+If everything went right, the home page should have a banner like this:
 
 ![result](images/summercampaign-sungrasses-home.png)
 

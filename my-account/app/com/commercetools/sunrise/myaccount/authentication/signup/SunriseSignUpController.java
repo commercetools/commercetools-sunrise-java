@@ -1,128 +1,76 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.events.CustomerSignInResultLoadedHook;
-import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
-import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContentFactory;
-import com.commercetools.sunrise.shoppingcart.CartInSession;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.hooks.EnableHooks;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.myaccount.MyAccountController;
+import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
-import io.sphere.sdk.client.ErrorResponseException;
-import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;
-import io.sphere.sdk.customers.commands.CustomerCreateCommand;
-import io.sphere.sdk.models.errors.DuplicateFieldError;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.mvc.Call;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Html;
 
-import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
+import static com.commercetools.sunrise.ctp.CtpExceptionUtils.isDuplicatedEmailFieldError;
 
-@RequestScoped
-@IntroducingMultiControllerComponents(SunriseSignUpHeroldComponent.class)
-public abstract class SunriseSignUpController extends SunriseFrameworkController implements WithTemplateName, WithFormFlow<SignUpFormData, Void, CustomerSignInResult> {
+public abstract class SunriseSignUpController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<Void, CustomerSignInResult, SignUpFormData> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseSignUpController.class);
+    private final SignUpFormData formData;
+    private final SignUpControllerAction controllerAction;
+    private final SignUpPageContentFactory pageContentFactory;
 
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("my-account", "sign-up", "authentication", "customer", "user"));
+    protected SunriseSignUpController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+                                      final SignUpFormData formData, final SignUpControllerAction controllerAction,
+                                      final SignUpPageContentFactory pageContentFactory) {
+        super(templateRenderer, formFactory);
+        this.formData = formData;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
-    public String getTemplateName() {
-        return "my-account-login";
+    public final Class<? extends SignUpFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
-    @Override
-    public Class<? extends SignUpFormData> getFormDataClass() {
-        return DefaultSignUpFormData.class;
-    }
-
-    public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("show sign up form in locale={}", languageTag);
-            return showForm(null);
-        });
-    }
-
-    @SunriseRoute("processSignUpForm")
+    @EnableHooks
+    @SunriseRoute(AuthenticationReverseRouter.SIGN_UP_PROCESS)
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("process sign up form in locale={}", languageTag);
-            return validateForm(null);
-        });
+        return processForm(null);
     }
 
     @Override
-    public CompletionStage<? extends CustomerSignInResult> doAction(final SignUpFormData formData, final Void context) {
-        final String cartId = injector().getInstance(CartInSession.class).findCartId().orElse(null);
-        final CustomerDraft customerDraft = formData.toCustomerDraftBuilder()
-                .customerNumber(generateCustomerNumber())
-                .anonymousCartId(cartId)
-                .build();
-        final CustomerCreateCommand customerCreateCommand = CustomerCreateCommand.of(customerDraft);
-        return sphere().execute(customerCreateCommand);
+    public CompletionStage<CustomerSignInResult> executeAction(final Void input, final SignUpFormData formData) {
+        return controllerAction.apply(formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends SignUpFormData> form, final Void context, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final Form<? extends SignUpFormData> form, final ClientErrorException clientErrorException) {
         if (isDuplicatedEmailFieldError(clientErrorException)) {
             saveFormError(form, "A user with this email already exists"); // TODO i18n
+            return showFormPageWithErrors(input, form);
         } else {
-            saveUnexpectedFormError(form, clientErrorException, logger);
+            return WithTemplateFormFlow.super.handleClientErrorFailedAction(input, form, clientErrorException);
         }
-        return asyncBadRequest(renderPage(form, context, null));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final SignUpFormData formData, final Void context, final CustomerSignInResult result) {
-        CustomerSignInResultLoadedHook.runHook(hooks(), result);
-        return redirectToMyAccount();
+    public abstract CompletionStage<Result> handleSuccessfulAction(final CustomerSignInResult result, final SignUpFormData formData);
+
+    @Override
+    public PageContent createPageContent(final Void input, final Form<? extends SignUpFormData> form) {
+        return pageContentFactory.create(form);
     }
 
     @Override
-    public CompletionStage<Html> renderPage(final Form<? extends SignUpFormData> form, final Void context, @Nullable final CustomerSignInResult result) {
-        final AuthenticationPageContent pageContent = injector().getInstance(AuthenticationPageContentFactory.class).createWithSignUpForm(form);
-        return renderPageWithTemplate(pageContent, getTemplateName());
-    }
-
-    @Override
-    public void fillFormData(final SignUpFormData formData, final Void context) {
-        // Do nothing
-    }
-
-    protected String generateCustomerNumber() {
-        return RandomStringUtils.randomNumeric(6);
-    }
-
-    protected final boolean isDuplicatedEmailFieldError(final ClientErrorException clientErrorException) {
-        return clientErrorException instanceof ErrorResponseException
-                && ((ErrorResponseException) clientErrorException).getErrors().stream()
-                    .filter(error -> error.getCode().equals(DuplicateFieldError.CODE))
-                    .map(error -> error.as(DuplicateFieldError.class).getField())
-                    .filter(duplicatedField -> duplicatedField != null && duplicatedField.equals("email"))
-                    .findAny()
-                    .isPresent();
-    }
-
-    protected CompletionStage<Result> redirectToMyAccount() {
-        final Call call = injector().getInstance(MyPersonalDetailsReverseRouter.class).myPersonalDetailsPageCall(userContext().languageTag());
-        return completedFuture(redirect(call));
+    public void preFillFormData(final Void input, final SignUpFormData formData) {
+        // Do not pre-fill anything
     }
 }

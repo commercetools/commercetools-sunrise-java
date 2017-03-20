@@ -95,7 +95,7 @@ public final class RefreshableCategoryTree extends Base implements CategoryTree 
     }
 
     private static List<Category> fetchCategories(final SphereClient client) {
-        final List<Category> categories = blockingWait(queryAll(client, CategoryQuery.of()), 30, TimeUnit.SECONDS);
+        final List<Category> categories = blockingWait(queryAll(client, CategoryQuery.of()), 1, TimeUnit.MINUTES);
         return sortCategories(categories);
     }
 

@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
-import io.sphere.sdk.models.Base;
+import com.google.inject.ImplementedBy;
 
-public class RemoveAddressFormData extends Base {
+@ImplementedBy(DefaultRemoveAddressFormData.class)
+public interface RemoveAddressFormData {
+
 }

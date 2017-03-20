@@ -1,76 +1,38 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.common.controllers.WithCmsPage;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.pages.PageContent;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.consumers.PageDataReadyHook;
-import com.commercetools.sunrise.hooks.events.RequestStartedHook;
-import com.commercetools.sunrise.productcatalog.productsuggestions.ProductSuggestionsControllerComponent;
-import play.libs.concurrent.HttpExecution;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
+import com.commercetools.sunrise.framework.hooks.EnableHooks;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.home.HomeReverseRouter;
+import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
-
-import static java.util.Arrays.asList;
 
 /**
  * Controller for the home page.
- <p>Components that may be a fit</p>
- * <ul>
- *     <li>{@link ProductSuggestionsControllerComponent}</li>
- * </ul>
- * <p id="hooks">supported hooks</p>
- * <ul>
- *     <li>{@link RequestStartedHook}</li>
- *     <li>{@link PageDataReadyHook}</li>
- * </ul>
- * <p>tags</p>
- * <ul>
- *     <li>home</li>
- *     <li>product-catalog</li>
- * </ul>
  */
-@RequestScoped
-public abstract class SunriseHomeController extends SunriseFrameworkController implements WithTemplateName, WithCmsPage {
+public abstract class SunriseHomeController extends SunriseTemplateController implements WithQueryFlow<Void> {
 
-    @Override
-    public String getTemplateName() {
-        return "home";
+    private final HomePageContentFactory homePageContentFactory;
+
+    protected SunriseHomeController(final TemplateRenderer templateRenderer,
+                                    final HomePageContentFactory homePageContentFactory) {
+        super(templateRenderer);
+        this.homePageContentFactory = homePageContentFactory;
     }
 
-    @Override
-    public String getCmsPageKey() {
-        return "home";
-    }
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("home", "product-catalog"));
-    }
-
-    public CompletionStage<Result> index() {
-        return redirectToHome();
-    }
-
-    @SunriseRoute("homePageCall")
+    @EnableHooks
+    @SunriseRoute(HomeReverseRouter.HOME_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(this::showHome);
+        return showPage(null);
     }
 
-    protected CompletionStage<Result> showHome() {
-        return cmsPage().thenComposeAsync(cmsPage ->
-                        asyncOk(renderPageWithTemplate(createPageContent(), getTemplateName(), cmsPage.orElse(null))),
-                HttpExecution.defaultContext());
-    }
-
-    protected PageContent createPageContent() {
-        final HomePageContent pageContent = new HomePageContent();
-        setI18nTitle(pageContent, "catalog:home.title");
-        return pageContent;
+    @Override
+    public PageContent createPageContent(final Void input) {
+        return homePageContentFactory.create(null);
     }
 }

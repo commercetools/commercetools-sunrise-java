@@ -1,40 +1,42 @@
 package com.commercetools.sunrise.myaccount.authentication.logout;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.SunriseFrameworkController;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.CustomerInSession;
-import com.commercetools.sunrise.shoppingcart.CartInSession;
+import com.commercetools.sunrise.framework.controllers.SunriseController;
+import com.commercetools.sunrise.framework.controllers.WithExecutionFlow;
+import com.commercetools.sunrise.framework.hooks.EnableHooks;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
+import com.commercetools.sunrise.myaccount.MyAccountController;
+import io.sphere.sdk.client.ClientErrorException;
 import play.mvc.Result;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
-@RequestScoped
-@IntroducingMultiControllerComponents(SunriseLogOutHeroldComponent.class)
-public abstract class SunriseLogOutController extends SunriseFrameworkController {
+public abstract class SunriseLogOutController extends SunriseController
+        implements MyAccountController, WithExecutionFlow<Void, Void> {
+
+    private final LogOutControllerAction logOutControllerAction;
+
+    protected SunriseLogOutController(final LogOutControllerAction logOutControllerAction) {
+        this.logOutControllerAction = logOutControllerAction;
+    }
+
+    @EnableHooks
+    @SunriseRoute(AuthenticationReverseRouter.LOG_OUT_PROCESS)
+    public CompletionStage<Result> process(final String languageTag) {
+        return processRequest(null);
+    }
 
     @Override
-    public Set<String> getFrameworkTags() {
-        return new HashSet<>(asList("my-account", "log-out", "customer", "user"));
+    public CompletionStage<Void> executeAction(final Void input) {
+        logOutControllerAction.run();
+        return completedFuture(null);
     }
 
-    @SunriseRoute("processLogOut")
-    public CompletionStage<Result> process(final String languageTag) {
-        doAction();
-        return handleSuccessfulAction();
-    }
-
-    protected void doAction() {
-        injector().getInstance(CustomerInSession.class).remove();
-        injector().getInstance(CartInSession.class).remove();
-    }
-
-    protected CompletionStage<Result> handleSuccessfulAction() {
-        return redirectToHome();
+    @Override
+    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final ClientErrorException clientErrorException) {
+        // No CTP call involved, this should never be called
+        return handleGeneralFailedAction(clientErrorException);
     }
 }

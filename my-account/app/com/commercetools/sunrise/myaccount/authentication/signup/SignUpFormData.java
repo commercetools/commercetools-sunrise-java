@@ -1,9 +1,11 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
-import io.sphere.sdk.customers.CustomerDraftBuilder;
+import com.google.inject.ImplementedBy;
+import io.sphere.sdk.customers.CustomerDraft;
 
+@ImplementedBy(DefaultSignUpFormData.class)
 public interface SignUpFormData {
 
-    CustomerDraftBuilder toCustomerDraftBuilder();
+    CustomerDraft customerDraft();
 }
 

@@ -1,15 +1,17 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
+import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.CustomerName;
 
+@ImplementedBy(DefaultMyPersonalDetailsFormData.class)
 public interface MyPersonalDetailsFormData {
 
-    CustomerName toCustomerName();
+    CustomerName customerName();
 
-    String getEmail();
+    String email();
 
     void applyCustomerName(final CustomerName customerName);
 
-    void setEmail(final String email);
+    void applyEmail(final String email);
 }
 

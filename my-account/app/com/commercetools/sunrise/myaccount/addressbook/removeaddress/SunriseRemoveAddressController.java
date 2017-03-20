@@ -1,88 +1,86 @@
 package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
-import com.commercetools.sunrise.common.contexts.RequestScoped;
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.myaccount.addressbook.AddressBookActionData;
-import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookManagementController;
-import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContent;
-import com.commercetools.sunrise.myaccount.addressbook.addresslist.AddressBookPageContentFactory;
-import io.sphere.sdk.client.ClientErrorException;
+import com.commercetools.sunrise.framework.viewmodels.content.addresses.AddressWithCustomer;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.hooks.EnableHooks;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.myaccount.MyAccountController;
+import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
+import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
+import com.commercetools.sunrise.myaccount.addressbook.WithRequiredAddress;
+import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
-import io.sphere.sdk.customers.commands.updateactions.RemoveAddress;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.libs.concurrent.HttpExecution;
+import play.data.FormFactory;
 import play.mvc.Result;
-import play.twirl.api.Html;
 
-import javax.annotation.Nullable;
-import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Arrays.asList;
+public abstract class SunriseRemoveAddressController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<AddressWithCustomer, Customer, RemoveAddressFormData>, WithRequiredCustomer, WithRequiredAddress {
 
-@RequestScoped
-public abstract class SunriseRemoveAddressController extends SunriseAddressBookManagementController implements WithTemplateName, WithFormFlow<RemoveAddressFormData, AddressBookActionData, Customer> {
+    private final RemoveAddressFormData formData;
+    private final CustomerFinder customerFinder;
+    private final AddressFinder addressFinder;
+    private final RemoveAddressControllerAction controllerAction;
+    private final AddressBookPageContentFactory pageContentFactory;
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseRemoveAddressController.class);
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
-        frameworkTags.addAll(asList("address-book", "remove-address", "address"));
-        return frameworkTags;
+    protected SunriseRemoveAddressController(final TemplateRenderer templateRenderer,
+                                             final FormFactory formFactory, final RemoveAddressFormData formData,
+                                             final CustomerFinder customerFinder, final AddressFinder addressFinder,
+                                             final RemoveAddressControllerAction controllerAction,
+                                             final AddressBookPageContentFactory pageContentFactory) {
+        super(templateRenderer, formFactory);
+        this.formData = formData;
+        this.customerFinder = customerFinder;
+        this.addressFinder = addressFinder;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
-    public String getTemplateName() {
-        return "my-account-address-book";
+    public final Class<? extends RemoveAddressFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
-    public Class<? extends RemoveAddressFormData> getFormDataClass() {
-        return RemoveAddressFormData.class;
-    }
-
-    @SunriseRoute("removeAddressFromAddressBookProcessFormCall")
-    public CompletionStage<Result> process(final String languageTag, final String addressId) {
-        return doRequest(() -> {
-            logger.debug("try to remove address with id={} in locale={}", addressId, languageTag);
-            return requireAddressBookActionData(addressId)
-                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
-        });
+    public final CustomerFinder getCustomerFinder() {
+        return customerFinder;
     }
 
     @Override
-    public CompletionStage<? extends Customer> doAction(final RemoveAddressFormData formData, final AddressBookActionData context) {
-        final RemoveAddress updateAction = RemoveAddress.of(context.getAddress());
-        return sphere().execute(CustomerUpdateCommand.of(context.getCustomer(), updateAction));
+    public final AddressFinder getAddressFinder() {
+        return addressFinder;
+    }
+
+    @EnableHooks
+    @SunriseRoute(AddressBookReverseRouter.REMOVE_ADDRESS_PROCESS)
+    public CompletionStage<Result> process(final String languageTag, final String addressIdentifier) {
+        return requireCustomer(customer ->
+                requireAddress(customer, addressIdentifier,
+                        address -> processForm(AddressWithCustomer.of(address, customer))));
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final RemoveAddressFormData formData, final AddressBookActionData context, final Customer result) {
-        return redirectToAddressBook();
+    public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final RemoveAddressFormData formData) {
+        return controllerAction.apply(addressWithCustomer, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData context, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
-        return asyncBadRequest(renderPage(form, context, null));
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final RemoveAddressFormData formData);
+
+    @Override
+    public void preFillFormData(final AddressWithCustomer input, final RemoveAddressFormData formData) {
+        // Do not pre-fill anything
     }
 
     @Override
-    public void fillFormData(final RemoveAddressFormData formData, final AddressBookActionData context) {
-        // Do nothing
-    }
-
-    @Override
-    public CompletionStage<Html> renderPage(final Form<? extends RemoveAddressFormData> form, final AddressBookActionData context, @Nullable final Customer updatedCustomer) {
-        final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(context.getCustomer());
-        final AddressBookPageContent pageContent = injector().getInstance(AddressBookPageContentFactory.class).create(customerToRender);
-        return renderPageWithTemplate(pageContent, getTemplateName());
+    public PageContent createPageContent(final AddressWithCustomer addressWithCustomer, final Form<? extends RemoveAddressFormData> form) {
+        return pageContentFactory.create(addressWithCustomer.getCustomer());
     }
 }

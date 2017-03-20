@@ -1,0 +1,5 @@
+package com.commercetools.sunrise.search.facetedsearch;
+
+public interface ConfiguredFacetedSearchFormSettingsWithOptions extends ConfiguredFacetedSearchFormSettings, BaseFacetedSearchWithOptions {
+
+}

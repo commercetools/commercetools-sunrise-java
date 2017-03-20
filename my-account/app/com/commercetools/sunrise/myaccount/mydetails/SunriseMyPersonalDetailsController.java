@@ -1,149 +1,80 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import com.commercetools.sunrise.common.controllers.WithFormFlow;
-import com.commercetools.sunrise.common.controllers.WithTemplateName;
-import com.commercetools.sunrise.common.ctp.ProductDataConfig;
-import com.commercetools.sunrise.common.reverserouter.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.common.template.i18n.I18nResolver;
-import com.commercetools.sunrise.framework.annotations.IntroducingMultiControllerComponents;
-import com.commercetools.sunrise.framework.annotations.SunriseRoute;
-import com.commercetools.sunrise.hooks.events.CustomerUpdatedHook;
-import com.commercetools.sunrise.myaccount.common.SunriseFrameworkMyAccountController;
-import io.sphere.sdk.client.ClientErrorException;
-import io.sphere.sdk.commands.UpdateAction;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
+import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.hooks.EnableHooks;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
+import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.myaccount.MyAccountController;
+import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
+import com.commercetools.sunrise.myaccount.mydetails.viewmodels.MyPersonalDetailsPageContentFactory;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.customers.CustomerName;
-import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
-import io.sphere.sdk.customers.commands.updateactions.ChangeEmail;
-import io.sphere.sdk.customers.commands.updateactions.SetFirstName;
-import io.sphere.sdk.customers.commands.updateactions.SetLastName;
-import io.sphere.sdk.customers.commands.updateactions.SetTitle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import play.Configuration;
 import play.data.Form;
 import play.data.FormFactory;
-import play.libs.concurrent.HttpExecution;
-import play.mvc.Call;
 import play.mvc.Result;
-import play.twirl.api.Html;
 
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import java.util.*;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Collections.singletonList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
+public abstract class SunriseMyPersonalDetailsController extends SunriseTemplateFormController
+        implements MyAccountController, WithTemplateFormFlow<Customer, Customer, MyPersonalDetailsFormData>, WithRequiredCustomer {
 
-@IntroducingMultiControllerComponents(SunriseMyPersonalDetailsHeroldComponent.class)
-public abstract class SunriseMyPersonalDetailsController extends SunriseFrameworkMyAccountController implements WithTemplateName, WithFormFlow<MyPersonalDetailsFormData, Customer, Customer> {
+    private final MyPersonalDetailsFormData formData;
+    private final CustomerFinder customerFinder;
+    private final MyPersonalDetailsControllerAction controllerAction;
+    private final MyPersonalDetailsPageContentFactory pageContentFactory;
 
-    private static final Logger logger = LoggerFactory.getLogger(SunriseMyPersonalDetailsController.class);
-
-    @Inject
-    protected ProductDataConfig productDataConfig;
-    @Inject
-    protected FormFactory formFactory;
-    @Inject
-    protected I18nResolver i18nResolver;
-    @Inject
-    protected Configuration configuration;
-
-    @Override
-    public Set<String> getFrameworkTags() {
-        final Set<String> frameworkTags = super.getFrameworkTags();
-        frameworkTags.addAll(singletonList("my-personal-details"));
-        return frameworkTags;
+    protected SunriseMyPersonalDetailsController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+                                                 final MyPersonalDetailsFormData formData, final CustomerFinder customerFinder,
+                                                 final MyPersonalDetailsControllerAction controllerAction,
+                                                 final MyPersonalDetailsPageContentFactory pageContentFactory) {
+        super(templateRenderer, formFactory);
+        this.formData = formData;
+        this.customerFinder = customerFinder;
+        this.controllerAction = controllerAction;
+        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
-    public String getTemplateName() {
-        return "my-account-personal-details";
+    public final Class<? extends MyPersonalDetailsFormData> getFormDataClass() {
+        return formData.getClass();
     }
 
     @Override
-    public Class<? extends MyPersonalDetailsFormData> getFormDataClass() {
-        return DefaultMyPersonalDetailsFormData.class;
+    public final CustomerFinder getCustomerFinder() {
+        return customerFinder;
     }
 
-    @SunriseRoute("myPersonalDetailsPageCall")
+    @EnableHooks
+    @SunriseRoute(MyPersonalDetailsReverseRouter.MY_PERSONAL_DETAILS_PAGE)
     public CompletionStage<Result> show(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("show my personal details form in locale={}", languageTag);
-            return requireExistingCustomer()
-                    .thenComposeAsync(this::showForm, HttpExecution.defaultContext());
-        });
+        return requireCustomer(customer -> showFormPage(customer, formData));
     }
 
-    @SunriseRoute("myPersonalDetailsProcessFormCall")
+    @EnableHooks
+    @SunriseRoute(MyPersonalDetailsReverseRouter.MY_PERSONAL_DETAILS_PROCESS)
     public CompletionStage<Result> process(final String languageTag) {
-        return doRequest(() -> {
-            logger.debug("process my personal details form in locale={}", languageTag);
-            return requireExistingCustomer()
-                    .thenComposeAsync(this::validateForm, HttpExecution.defaultContext());
-        });
+        return requireCustomer(this::processForm);
     }
 
     @Override
-    public CompletionStage<? extends Customer> doAction(final MyPersonalDetailsFormData formData, final Customer customer) {
-        return updateCustomer(formData, customer);
+    public CompletionStage<Customer> executeAction(final Customer customer, final MyPersonalDetailsFormData formData) {
+        return controllerAction.apply(customer, formData);
     }
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer, final ClientErrorException clientErrorException) {
-        saveUnexpectedFormError(form, clientErrorException, logger);
-        return asyncBadRequest(renderPage(form, customer, null));
+    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final MyPersonalDetailsFormData formData);
+
+    @Override
+    public PageContent createPageContent(final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
+        return pageContentFactory.create(customer, form);
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final MyPersonalDetailsFormData formData, final Customer customer, final Customer updatedCustomer) {
-        CustomerUpdatedHook.runHook(hooks(), updatedCustomer);
-        return redirectToMyPersonalDetails();
-    }
-
-    @Override
-    public CompletionStage<Html> renderPage(final Form<? extends MyPersonalDetailsFormData> form, final Customer customer, @Nullable final Customer updatedCustomer) {
-        final Customer customerToRender = Optional.ofNullable(updatedCustomer).orElse(customer);
-        final MyPersonalDetailsPageContent pageContent = injector().getInstance(MyPersonalDetailsPageContentFactory.class).create(form, customerToRender);
-        return renderPageWithTemplate(pageContent, getTemplateName());
-    }
-
-    @Override
-    public void fillFormData(final MyPersonalDetailsFormData formData, final Customer customer) {
+    public void preFillFormData(final Customer customer, final MyPersonalDetailsFormData formData) {
         formData.applyCustomerName(customer.getName());
-        formData.setEmail(customer.getEmail());
-    }
-
-    protected CompletionStage<Customer> updateCustomer(final MyPersonalDetailsFormData formData, final Customer customer) {
-        final List<UpdateAction<Customer>> updateActions = buildUpdateActions(formData, customer);
-        if (!updateActions.isEmpty()) {
-            return sphere().execute(CustomerUpdateCommand.of(customer, updateActions));
-        } else {
-            return completedFuture(customer);
-        }
-    }
-
-    protected List<UpdateAction<Customer>> buildUpdateActions(final MyPersonalDetailsFormData formData, final Customer customer) {
-        final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        final CustomerName customerName = formData.toCustomerName();
-        if (!Objects.equals(customer.getTitle(), customerName.getTitle())) {
-            updateActions.add(SetTitle.of(customerName.getTitle()));
-        }
-        if (!Objects.equals(customer.getFirstName(), customerName.getFirstName())) {
-            updateActions.add(SetFirstName.of(customerName.getFirstName()));
-        }
-        if (!Objects.equals(customer.getLastName(), customerName.getLastName())) {
-            updateActions.add(SetLastName.of(customerName.getLastName()));
-        }
-        if (!Objects.equals(customer.getEmail(), formData.getEmail())) {
-            updateActions.add(ChangeEmail.of(formData.getEmail()));
-        }
-        return updateActions;
-    }
-
-    protected final CompletionStage<Result> redirectToMyPersonalDetails() {
-        final Call call = injector().getInstance(MyPersonalDetailsReverseRouter.class).myPersonalDetailsPageCall(userContext().languageTag());
-        return completedFuture(redirect(call));
+        formData.applyEmail(customer.getEmail());
     }
 }
