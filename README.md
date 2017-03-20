@@ -18,7 +18,7 @@ The recommended way to start using Sunrise is to clone the [Sunrise Starter Proj
 ### Starting from scratch
 Alternatively you can start your own Play Framework project and configure it yourself, using Sunrise as dependency:
 ```sbt
-val sunriseFrameworkVersion = "0.14.0" // or desired version
+val sunriseFrameworkVersion = "1.0.0-M1" // or desired version
 libraryDependencies ++= Seq(
   // add Sunrise Framework dependencies as needed, e.g.:
   "com.commercetools.sunrise" %% "product-catalog" % sunriseFrameworkVersion,
