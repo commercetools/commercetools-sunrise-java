@@ -75,15 +75,18 @@
       "terms": [
         {
           "term": "one",
-          "count": 30
+          "count": 60,
+          "productCount": 30
         },
         {
           "term": "two",
-          "count": 20
+          "count": 40,
+          "productCount": 20
         },
         {
           "term": "three",
-          "count": 10
+          "count": 20,
+          "productCount": 10
         }
       ]
     }

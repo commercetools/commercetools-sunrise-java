@@ -1,9 +1,10 @@
 package io.sphere.sdk.facets;
 
-import io.sphere.sdk.search.FacetedSearchExpression;
-import io.sphere.sdk.search.PagedSearchResult;
-import io.sphere.sdk.search.TermFacetResult;
+import io.sphere.sdk.search.*;
 import io.sphere.sdk.search.model.FacetedSearchSearchModel;
+import io.sphere.sdk.search.model.TermFacetSearchModel;
+import io.sphere.sdk.search.model.TermFacetedSearchSearchModel;
+import io.sphere.sdk.search.model.TypeSerializer;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -105,15 +106,38 @@ public class SelectFacetImpl<T> extends BaseFacet<T> implements SelectFacet<T> {
 
     @Override
     public FacetedSearchExpression<T> getFacetedSearchExpression() {
-        final FacetedSearchExpression<T> facetedSearchExpr;
+        return buildFacetedSearchExpression();
+    }
+
+    private TermFacetedSearchExpression<T> buildFacetedSearchExpression() {
+        final TermFacetExpression<T> facetExpression = buildFacetExpression();
+        final List<FilterExpression<T>> filterExpressions = buildFilterExpressions();
+        return TermFacetedSearchExpression.of(facetExpression, filterExpressions);
+    }
+
+    private List<FilterExpression<T>> buildFilterExpressions() {
+        final FacetedSearchSearchModel<T> searchModel = TermFacetedSearchSearchModel.of(getAttributePath());
+        final TermFacetedSearchExpression<T> facetedSearchExpr;
         if (selectedValues.isEmpty()) {
-            facetedSearchExpr = facetedSearchSearchModel.allTerms();
-        } else if (matchingAll) {
-            facetedSearchExpr = facetedSearchSearchModel.containsAll(selectedValues);
+            facetedSearchExpr = searchModel.allTerms();
+        } else if (isMatchingAll()) {
+            facetedSearchExpr = searchModel.containsAll(selectedValues);
         } else {
-            facetedSearchExpr = facetedSearchSearchModel.containsAny(selectedValues);
+            facetedSearchExpr = searchModel.containsAny(selectedValues);
         }
-        return facetedSearchExpr;
+        return facetedSearchExpr.filterExpressions();
+    }
+
+
+    private TermFacetExpression<T> buildFacetExpression() {
+        final TermFacetSearchModel<T, String> searchModel = TermFacetSearchModel.of(getAttributePath(), TypeSerializer.ofString());
+        return searchModel
+                .withCountingProducts(!isCountHidden())
+                .allTerms();
+    }
+
+    private String getAttributePath() {
+        return facetedSearchSearchModel.getSearchModel().attributePath();
     }
 
     @Override

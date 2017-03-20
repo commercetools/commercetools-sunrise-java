@@ -11,9 +11,9 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FacetOptionTest {
-    private static final TermStats TERM_ONE = TermStats.of("one", 30L);
-    private static final TermStats TERM_TWO = TermStats.of("two", 20L);
-    private static final TermStats TERM_THREE = TermStats.of("three", 10L);
+    private static final TermStats TERM_ONE = TermStats.of("one", 0L, 30L);
+    private static final TermStats TERM_TWO = TermStats.of("two", 0L, 20L);
+    private static final TermStats TERM_THREE = TermStats.of("three", 0L, 10L);
 
     @Test
     public void createsInstance() throws Exception {
@@ -27,7 +27,7 @@ public class FacetOptionTest {
     public void createsInstanceFromTermStats() throws Exception {
         final FacetOption option = FacetOption.ofTermStats(TERM_TWO, asList(TERM_ONE.getTerm(), TERM_TWO.getTerm()));
         assertThat(option.getValue()).isEqualTo(TERM_TWO.getTerm());
-        assertThat(option.getCount()).isEqualTo(TERM_TWO.getCount());
+        assertThat(option.getCount()).isEqualTo(TERM_TWO.getProductCount());
         assertThat(option.isSelected()).isTrue();
     }
 
@@ -35,7 +35,7 @@ public class FacetOptionTest {
     public void createsInstanceFromTermStatsWithUnselectedValue() throws Exception {
         final FacetOption option = FacetOption.ofTermStats(TERM_THREE, asList(TERM_ONE.getTerm(), TERM_TWO.getTerm()));
         assertThat(option.getValue()).isEqualTo(TERM_THREE.getTerm());
-        assertThat(option.getCount()).isEqualTo(TERM_THREE.getCount());
+        assertThat(option.getCount()).isEqualTo(TERM_THREE.getProductCount());
         assertThat(option.isSelected()).isFalse();
     }
 

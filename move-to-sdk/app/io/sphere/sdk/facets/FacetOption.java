@@ -5,6 +5,7 @@ import io.sphere.sdk.search.TermStats;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 /**
  * Interface that represents an option from a facet, as used in a faceted search.
@@ -85,6 +86,6 @@ public interface FacetOption {
     }
 
     static FacetOption ofTermStats(final TermStats termStats, final List<String> selectedValues) {
-        return FacetOption.of(termStats.getTerm(), termStats.getCount(), selectedValues.contains(termStats.getTerm()));
+        return FacetOption.of(termStats.getTerm(), firstNonNull(termStats.getProductCount(), 0L), selectedValues.contains(termStats.getTerm()));
     }
 }

@@ -23,9 +23,9 @@ public class SelectFacetBuilderTest {
     private static final String LABEL = "Select one option";
     private static final TermFacetedSearchSearchModel<ProductProjection> SEARCH_MODEL = ProductProjectionSearchModel.of().facetedSearch().categories().id();
     private static final TermFacetResult FACET_RESULT_WITH_THREE_TERMS = TermFacetResult.of(5L, 60L, 0L, asList(
-            TermStats.of("one", 30L),
-            TermStats.of("two", 20L),
-            TermStats.of("three", 10L)));
+            TermStats.of("one", 60L, 30L),
+            TermStats.of("two", 40L, 20L),
+            TermStats.of("three", 20L, 10L)));
     private static final List<String> SELECTED_VALUE_TWO = singletonList("two");
     private static final List<FacetOption> OPTIONS = asList(
             FacetOption.of("one", 30, false),
