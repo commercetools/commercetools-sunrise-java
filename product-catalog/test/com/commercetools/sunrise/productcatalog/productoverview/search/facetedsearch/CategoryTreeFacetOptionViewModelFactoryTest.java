@@ -12,6 +12,7 @@ import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
+import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -133,7 +134,8 @@ public class CategoryTreeFacetOptionViewModelFactoryTest {
     private void test(final Category category, final CategoryTree categoryTree, final List<TermStats> termStats, final Consumer<FacetOptionViewModel> test) {
         final UserLanguage userLanguage = mock(UserLanguage.class);
         when(userLanguage.locales()).thenReturn(singletonList(Locale.ENGLISH));
-        final CategoryTreeFacetOptionViewModelFactory factory = new CategoryTreeFacetOptionViewModelFactory(userLanguage, fakeRequest().build(), categoryTree, reverseRouter());
+        final Http.Context context = new Http.Context(fakeRequest());
+        final CategoryTreeFacetOptionViewModelFactory factory = new CategoryTreeFacetOptionViewModelFactory(userLanguage, context, categoryTree, reverseRouter());
         final TermFacetResult termFacetResult = TermFacetResult.of(0L, 0L, 0L, termStats);
         test.accept(factory.create(termFacetResult, category, CAT_C_ID));
     }
