@@ -22,8 +22,8 @@ public final class CacheableObjectStoringSessionCookieStrategy extends SessionCo
     private final CacheApi cacheApi;
 
     @Inject
-    public CacheableObjectStoringSessionCookieStrategy(final Http.Session session, final CacheApi cacheApi, final Configuration configuration) {
-        super(session);
+    public CacheableObjectStoringSessionCookieStrategy(final Http.Context httpContext, final CacheApi cacheApi, final Configuration configuration) {
+        super(httpContext);
         this.cacheApi = cacheApi;
         this.sessionIdKey = configuration.getString("session.idKey", DEFAULT_SESSION_ID_KEY);
     }

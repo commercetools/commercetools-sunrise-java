@@ -18,8 +18,8 @@ public class SessionCookieStrategy implements SessionStrategy {
     private final Http.Session session;
 
     @Inject
-    public SessionCookieStrategy(final Http.Session session) {
-        this.session = session;
+    public SessionCookieStrategy(final Http.Context httpContext) {
+        this.session = httpContext.session();
     }
 
     /**

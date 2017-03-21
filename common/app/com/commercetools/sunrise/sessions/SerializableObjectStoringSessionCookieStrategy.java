@@ -17,8 +17,8 @@ import java.util.Optional;
 public final class SerializableObjectStoringSessionCookieStrategy extends SessionCookieStrategy implements ObjectStoringSessionStrategy {
 
     @Inject
-    public SerializableObjectStoringSessionCookieStrategy(final Http.Session session) {
-        super(session);
+    public SerializableObjectStoringSessionCookieStrategy(final Http.Context httpContext) {
+        super(httpContext);
     }
 
     /**

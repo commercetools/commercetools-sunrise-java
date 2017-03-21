@@ -22,17 +22,12 @@ public class SunriseModule extends AbstractModule {
 
     @Provides
     public Http.Context httpContext() {
-        return Http.Context.current();
-    }
-
-    @Provides
-    public Http.Session httpSession() {
-        return httpContext().session();
-    }
-
-    @Provides
-    public Http.Request httpRequest() {
-        return httpContext().request();
+        final Http.Context context = Http.Context.current.get();
+        if (context != null) {
+            return context;
+        } else {
+            return new Http.Context(new Http.RequestBuilder());
+        }
     }
 
     private void applyJavaMoneyHack() {

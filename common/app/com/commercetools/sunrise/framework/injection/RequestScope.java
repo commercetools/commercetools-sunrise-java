@@ -40,26 +40,30 @@ public final class RequestScope implements Scope {
 
         @Override
         public T get() {
-            final Http.Context currentContext = Http.Context.current();
-            if (key.getTypeLiteral().equals(CONTEXT_TYPE_LITERAL)) {
-                return castToProviderType(currentContext);
-            } else {
-                final Cache cache = new HttpContextCache(currentContext);
-                final String cacheKey = key.toString();
-                final Object obj = cache.get(cacheKey);
-                final boolean objectIsSupposedToBeNull = obj == NullableObject.INSTANCE;
-                if (objectIsSupposedToBeNull) {
-                    return null;
-                } else if (obj == null) {
-                    final T t = provider.get();
-                    if (!Scopes.isCircularProxy(t)) {
-                        final Object cacheValue = t != null ? t : NullableObject.INSTANCE;
-                        cache.put(cacheKey, cacheValue);
-                    }
-                    return t;
+            final Http.Context currentContext = Http.Context.current.get();
+            if (currentContext != null) {
+                if (key.getTypeLiteral().equals(CONTEXT_TYPE_LITERAL)) {
+                    return castToProviderType(currentContext);
                 } else {
-                    return castToProviderType(obj);
+                    final Cache cache = new HttpContextCache(currentContext);
+                    final String cacheKey = key.toString();
+                    final Object obj = cache.get(cacheKey);
+                    final boolean objectIsSupposedToBeNull = obj == NullableObject.INSTANCE;
+                    if (objectIsSupposedToBeNull) {
+                        return null;
+                    } else if (obj == null) {
+                        final T t = provider.get();
+                        if (!Scopes.isCircularProxy(t)) {
+                            final Object cacheValue = t != null ? t : NullableObject.INSTANCE;
+                            cache.put(cacheKey, cacheValue);
+                        }
+                        return t;
+                    } else {
+                        return castToProviderType(obj);
+                    }
                 }
+            } else {
+                return provider.get();
             }
         }
 

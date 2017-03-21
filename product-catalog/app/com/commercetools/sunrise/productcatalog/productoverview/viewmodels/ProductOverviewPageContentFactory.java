@@ -20,12 +20,12 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     private final SeoViewModelFactory seoViewModelFactory;
 
     @Inject
-    public ProductOverviewPageContentFactory(final Locale locale, final Http.Request httpRequest,
+    public ProductOverviewPageContentFactory(final Locale locale, final Http.Context httpContext,
                                              final CategoryBreadcrumbViewModelFactory categoryBreadcrumbViewModelFactory,
                                              final ProductListViewModelFactory productListViewModelFactory, final BannerViewModelFactory bannerViewModelFactory,
                                              final JumbotronViewModelFactory jumbotronViewModelFactory, final SeoViewModelFactory seoViewModelFactory) {
         this.locale = locale;
-        this.httpRequest = httpRequest;
+        this.httpRequest = httpContext.request();
         this.categoryBreadcrumbViewModelFactory = categoryBreadcrumbViewModelFactory;
         this.productListViewModelFactory = productListViewModelFactory;
         this.bannerViewModelFactory = bannerViewModelFactory;

@@ -16,10 +16,10 @@ public class SliderRangeFacetViewModelFactory extends AbstractFacetViewModelFact
     private final SliderRangeEndpointViewModelFactory sliderRangeEndpointViewModelFactory;
 
     @Inject
-    public SliderRangeFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver, final Http.Request httpRequest,
+    public SliderRangeFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver, final Http.Context httpContext,
                                             final SliderRangeEndpointViewModelFactory sliderRangeEndpointViewModelFactory) {
         super(i18nIdentifierResolver);
-        this.httpRequest = httpRequest;
+        this.httpRequest = httpContext.request();
         this.sliderRangeEndpointViewModelFactory = sliderRangeEndpointViewModelFactory;
     }
 

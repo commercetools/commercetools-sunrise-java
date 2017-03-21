@@ -27,10 +27,10 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
     private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public CategoryTreeFacetOptionViewModelFactory(final UserLanguage userLanguage, final Http.Request httpRequest,
+    public CategoryTreeFacetOptionViewModelFactory(final UserLanguage userLanguage, final Http.Context httpContext,
                                                    final CategoryTree categoryTree, final ProductReverseRouter productReverseRouter) {
         this.locales = userLanguage.locales();
-        this.httpRequest = httpRequest;
+        this.httpRequest = httpContext.request();
         this.categoryTree = categoryTree;
         this.productReverseRouter = productReverseRouter;
     }

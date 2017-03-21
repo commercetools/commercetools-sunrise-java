@@ -26,9 +26,9 @@ final class UserLanguageImpl extends Base implements UserLanguage {
     private final List<Locale> locales;
 
     @Inject
-    UserLanguageImpl(final Locale locale, final Http.Request request, final ProjectContext projectContext) {
+    UserLanguageImpl(final Locale locale, final Http.Context httpContext, final ProjectContext projectContext) {
         this.locale = locale;
-        this.locales = acceptedLocales(locale, request, projectContext);
+        this.locales = acceptedLocales(locale, httpContext.request(), projectContext);
         LOGGER.debug("User locale {}, locales {}", locale, locales);
     }
 
