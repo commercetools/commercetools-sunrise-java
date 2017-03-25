@@ -55,7 +55,7 @@ public final class CartDetailController extends SunriseCartDetailController {
 Then we only need to associate our `CartDetailController` to a route with the desired pattern in `conf/routes`:
 ```scala
 # Shows the details of the cart belonging to the current session
-GET  /:languageTag/cart       @shoppingcart.CartDetailController.show(languageTag: String)
+GET  /:languageTag/cart       @controllers.CartDetailController.show(languageTag: String)
 ```
 Accessing [http://localhost:9000/en/cart](http://localhost:9000/en/cart) should now allow us to see the contents of our cart.
 
