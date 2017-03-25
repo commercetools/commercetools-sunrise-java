@@ -24,6 +24,7 @@ public interface RangeEndpointFormSettings extends FormSettings<String> {
 
     /**
      * Generates the facet options according to the facet result provided.
+     * @param fieldName the name of the field for this endpoint
      * @return the generated facet options
      */
     static RangeEndpointFormSettings of(final String fieldName) {
