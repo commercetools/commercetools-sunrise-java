@@ -11,6 +11,11 @@ public final class CtpExceptionUtils {
     private CtpExceptionUtils() {
     }
 
+    public static boolean isInvalidInputError(@Nullable final Throwable throwable) {
+        return throwable instanceof ErrorResponseException
+                && ((ErrorResponseException) throwable).hasErrorCode("InvalidInput");
+    }
+
     public static boolean isInvalidOperationError(@Nullable final Throwable throwable) {
         return throwable instanceof ErrorResponseException
                 && ((ErrorResponseException) throwable).hasErrorCode("InvalidOperation");
