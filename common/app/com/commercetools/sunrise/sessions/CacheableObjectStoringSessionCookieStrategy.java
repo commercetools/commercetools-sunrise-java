@@ -1,11 +1,10 @@
 package com.commercetools.sunrise.sessions;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import play.Configuration;
 import play.cache.CacheApi;
-import play.mvc.Http;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,7 +13,7 @@ import java.util.UUID;
  * Objects are first saved into the cache and uniquely associated with the user's session cookie with a generated session ID.
  * For more information: <a href="https://www.playframework.com/documentation/2.5.x/JavaSessionFlash">Session in Play Framework</a>
  */
-@RequestScoped
+@Singleton
 public final class CacheableObjectStoringSessionCookieStrategy extends SessionCookieStrategy implements ObjectStoringSessionStrategy {
 
     private static final String DEFAULT_SESSION_ID_KEY = "sunrise-session-id";
@@ -22,8 +21,7 @@ public final class CacheableObjectStoringSessionCookieStrategy extends SessionCo
     private final CacheApi cacheApi;
 
     @Inject
-    public CacheableObjectStoringSessionCookieStrategy(final Http.Context httpContext, final CacheApi cacheApi, final Configuration configuration) {
-        super(httpContext);
+    public CacheableObjectStoringSessionCookieStrategy(final CacheApi cacheApi, final Configuration configuration) {
         this.cacheApi = cacheApi;
         this.sessionIdKey = configuration.getString("session.idKey", DEFAULT_SESSION_ID_KEY);
     }

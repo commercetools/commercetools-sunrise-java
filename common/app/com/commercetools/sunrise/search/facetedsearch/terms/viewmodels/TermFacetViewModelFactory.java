@@ -16,23 +16,17 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class TermFacetViewModelFactory extends AbstractFacetWithOptionsViewModelFactory<TermFacetViewModel, TermFacetedSearchFormSettings<?>, TermFacetResult> {
 
-    private final Http.Context httpContext;
     private final TermFacetOptionViewModelFactory termFacetOptionViewModelFactory;
 
     @Inject
-    public TermFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver, final Http.Context httpContext,
+    public TermFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver,
                                      final TermFacetOptionViewModelFactory termFacetOptionViewModelFactory) {
         super(i18nIdentifierResolver);
-        this.httpContext = httpContext;
         this.termFacetOptionViewModelFactory = termFacetOptionViewModelFactory;
     }
 
     protected final TermFacetOptionViewModelFactory getTermFacetOptionViewModelFactory() {
         return termFacetOptionViewModelFactory;
-    }
-
-    protected final Http.Context getHttpContext() {
-        return httpContext;
     }
 
     @Override
@@ -76,7 +70,7 @@ public class TermFacetViewModelFactory extends AbstractFacetWithOptionsViewModel
     }
 
     protected List<FacetOptionViewModel> createOptions(final TermFacetedSearchFormSettings<?> settings, final TermFacetResult facetResult) {
-        final List<String> selectedValues = settings.getAllSelectedValues(httpContext);
+        final List<String> selectedValues = settings.getAllSelectedValues(Http.Context.current());
         return facetResult.getTerms().stream()
                 .map(stats -> termFacetOptionViewModelFactory.create(stats, selectedValues))
                 .collect(toList());

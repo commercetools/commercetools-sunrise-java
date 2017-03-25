@@ -1,9 +1,8 @@
-package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
+package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels;
 
 import com.commercetools.sunrise.framework.localization.UserLanguage;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.framework.viewmodels.forms.FormSelectableOptionViewModel;
-import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels.CategoryTreeFacetOptionViewModelFactory;
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionViewModel;
 import com.commercetools.sunrise.test.TestableCall;
 import io.sphere.sdk.categories.Category;
@@ -12,7 +11,9 @@ import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
+import play.Application;
 import play.mvc.Http;
+import play.test.WithApplication;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static play.test.Helpers.fakeRequest;
 
-public class CategoryTreeFacetOptionViewModelFactoryTest {
+public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication {
 
     private final static String CAT_A_ID = "d5a0952b-6574-49c9-b0cd-61e0d21d36cc";
     private final static String CAT_B_ID = "e92b6d26-7a34-4960-804c-0fc9e40c64e3";
@@ -53,6 +54,13 @@ public class CategoryTreeFacetOptionViewModelFactoryTest {
      * |
      * |-- E
      */
+
+    @Override
+    protected Application provideApplication() {
+        final Application application = super.provideApplication();
+        Http.Context.current.set(new Http.Context(fakeRequest()));
+        return application;
+    }
 
     @Test
     public void resolvesCategory() throws Exception {
@@ -134,8 +142,7 @@ public class CategoryTreeFacetOptionViewModelFactoryTest {
     private void test(final Category category, final CategoryTree categoryTree, final List<TermStats> termStats, final Consumer<FacetOptionViewModel> test) {
         final UserLanguage userLanguage = mock(UserLanguage.class);
         when(userLanguage.locales()).thenReturn(singletonList(Locale.ENGLISH));
-        final Http.Context context = new Http.Context(fakeRequest());
-        final CategoryTreeFacetOptionViewModelFactory factory = new CategoryTreeFacetOptionViewModelFactory(userLanguage, context, categoryTree, reverseRouter());
+        final CategoryTreeFacetOptionViewModelFactory factory = new CategoryTreeFacetOptionViewModelFactory(userLanguage, categoryTree, reverseRouter());
         final TermFacetResult termFacetResult = TermFacetResult.of(0L, 0L, 0L, termStats);
         test.accept(factory.create(termFacetResult, category, CAT_C_ID));
     }

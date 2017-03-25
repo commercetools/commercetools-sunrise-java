@@ -2,10 +2,8 @@ package com.commercetools.sunrise.framework.injection;
 
 import com.commercetools.sunrise.ctp.SphereClientConfigProvider;
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import io.sphere.sdk.client.SphereClientConfig;
 import io.sphere.sdk.utils.MoneyImpl;
-import play.mvc.Http;
 
 import javax.inject.Singleton;
 import javax.money.Monetary;
@@ -18,16 +16,6 @@ public class SunriseModule extends AbstractModule {
         applyJavaMoneyHack();
         bindScope(RequestScoped.class, new RequestScope());
         bind(SphereClientConfig.class).toProvider(SphereClientConfigProvider.class).in(Singleton.class);
-    }
-
-    @Provides
-    public Http.Context httpContext() {
-        final Http.Context context = Http.Context.current.get();
-        if (context != null) {
-            return context;
-        } else {
-            return new Http.Context(new Http.RequestBuilder());
-        }
     }
 
     private void applyJavaMoneyHack() {

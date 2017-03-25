@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.sessions.language;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.SessionStrategy;
 import org.slf4j.Logger;
@@ -9,13 +8,14 @@ import play.Configuration;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Locale;
 import java.util.Optional;
 
 /**
  * Keeps the current language in session.
  */
-@RequestScoped
+@Singleton
 public class DefaultLanguageInSession extends DataFromResourceStoringOperations<Locale> implements LanguageInSession {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LanguageInSession.class);

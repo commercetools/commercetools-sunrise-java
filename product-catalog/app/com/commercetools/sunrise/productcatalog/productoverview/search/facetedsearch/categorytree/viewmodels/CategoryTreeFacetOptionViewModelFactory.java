@@ -22,17 +22,27 @@ import static com.commercetools.sunrise.framework.viewmodels.forms.QueryStringUt
 public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOptionViewModelFactory<TermFacetResult, Category, String> {
 
     private final List<Locale> locales;
-    private final Http.Request httpRequest;
     private final CategoryTree categoryTree;
     private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public CategoryTreeFacetOptionViewModelFactory(final UserLanguage userLanguage, final Http.Context httpContext,
-                                                   final CategoryTree categoryTree, final ProductReverseRouter productReverseRouter) {
+    public CategoryTreeFacetOptionViewModelFactory(final UserLanguage userLanguage, final CategoryTree categoryTree,
+                                                   final ProductReverseRouter productReverseRouter) {
         this.locales = userLanguage.locales();
-        this.httpRequest = httpContext.request();
         this.categoryTree = categoryTree;
         this.productReverseRouter = productReverseRouter;
+    }
+
+    protected final List<Locale> getLocales() {
+        return locales;
+    }
+
+    protected final CategoryTree getCategoryTree() {
+        return categoryTree;
+    }
+
+    protected final ProductReverseRouter getProductReverseRouter() {
+        return productReverseRouter;
     }
 
     @Override
@@ -54,7 +64,7 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
     @Override
     protected void fillValue(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final String selectedValue) {
         productReverseRouter.productOverviewPageCall(category).ifPresent(call -> {
-            viewModel.setValue(buildUri(call.url(), extractQueryString(httpRequest)));
+            viewModel.setValue(buildUri(call.url(), extractQueryString(Http.Context.current().request())));
         });
     }
 

@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.sessions.order;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.SessionStrategy;
 import io.sphere.sdk.orders.Order;
@@ -10,12 +9,13 @@ import play.Configuration;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Optional;
 
 /**
  * Keeps the order ID in session.
  */
-@RequestScoped
+@Singleton
 public class DefaultOrderInSession extends DataFromResourceStoringOperations<Order> implements OrderInSession {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderInSession.class);

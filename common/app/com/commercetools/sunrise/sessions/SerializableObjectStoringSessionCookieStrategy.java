@@ -1,11 +1,9 @@
 package com.commercetools.sunrise.sessions;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
-import play.mvc.Http;
 
-import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Optional;
 
 /**
@@ -13,13 +11,8 @@ import java.util.Optional;
  * Objects are first serialized to JSON to be able to write them into the session cookie.
  * Notice that cookies have a very limited space, so do not use this strategy to store a large amount of data.
  */
-@RequestScoped
+@Singleton
 public final class SerializableObjectStoringSessionCookieStrategy extends SessionCookieStrategy implements ObjectStoringSessionStrategy {
-
-    @Inject
-    public SerializableObjectStoringSessionCookieStrategy(final Http.Context httpContext) {
-        super(httpContext);
-    }
 
     /**
      * {@inheritDoc}

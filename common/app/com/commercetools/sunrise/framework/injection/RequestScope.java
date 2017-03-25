@@ -42,29 +42,42 @@ public final class RequestScope implements Scope {
         public T get() {
             final Http.Context currentContext = Http.Context.current.get();
             if (currentContext != null) {
-                if (key.getTypeLiteral().equals(CONTEXT_TYPE_LITERAL)) {
-                    return castToProviderType(currentContext);
-                } else {
-                    final Cache cache = new HttpContextCache(currentContext);
-                    final String cacheKey = key.toString();
-                    final Object obj = cache.get(cacheKey);
-                    final boolean objectIsSupposedToBeNull = obj == NullableObject.INSTANCE;
-                    if (objectIsSupposedToBeNull) {
-                        return null;
-                    } else if (obj == null) {
-                        final T t = provider.get();
-                        if (!Scopes.isCircularProxy(t)) {
-                            final Object cacheValue = t != null ? t : NullableObject.INSTANCE;
-                            cache.put(cacheKey, cacheValue);
-                        }
-                        return t;
-                    } else {
-                        return castToProviderType(obj);
-                    }
-                }
+                return provideFromContext(currentContext);
             } else {
-                return provider.get();
+                return provideNewInstance();
             }
+        }
+
+        private T provideFromContext(final Http.Context currentContext) {
+            final boolean providerTypeIsHttpContext = key.getTypeLiteral().equals(CONTEXT_TYPE_LITERAL);
+            if (providerTypeIsHttpContext) {
+                return castToProviderType(currentContext);
+            } else {
+                final Cache cache = new HttpContextCache(currentContext);
+                return provideFromCache(cache);
+            }
+        }
+
+        private T provideFromCache(final Cache cache) {
+            final String cacheKey = key.toString();
+            final Object obj = cache.get(cacheKey);
+            final boolean objectIsSupposedToBeNull = obj == NullableObject.INSTANCE;
+            if (objectIsSupposedToBeNull) {
+                return null;
+            } else if (obj == null) {
+                final T t = provideNewInstance();
+                if (!Scopes.isCircularProxy(t)) {
+                    final Object cacheValue = t != null ? t : NullableObject.INSTANCE;
+                    cache.put(cacheKey, cacheValue);
+                }
+                return t;
+            } else {
+                return castToProviderType(obj);
+            }
+        }
+
+        private T provideNewInstance() {
+            return provider.get();
         }
 
         @SuppressWarnings("unchecked")

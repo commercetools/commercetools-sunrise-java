@@ -5,7 +5,7 @@ import play.mvc.Http;
 
 import javax.annotation.Nullable;
 
-public interface PaginationSettings extends FormSettings<Integer> {
+public interface PaginationSettings extends FormSettings<Long> {
 
     /**
      * The amount of pages on each side of the current page that are can be displayed.
@@ -19,16 +19,16 @@ public interface PaginationSettings extends FormSettings<Integer> {
 
     @Nullable
     @Override
-    default Integer mapFieldValueToValue(final String fieldValue) {
+    default Long mapFieldValueToValue(final String fieldValue) {
         try {
-            return Integer.valueOf(fieldValue);
+            return Long.valueOf(fieldValue);
         } catch (NumberFormatException e) {
             return null;
         }
     }
 
     @Override
-    default boolean isValidValue(@Nullable final Integer value) {
+    default boolean isValidValue(@Nullable final Long value) {
         return value != null && value > 0;
     }
 

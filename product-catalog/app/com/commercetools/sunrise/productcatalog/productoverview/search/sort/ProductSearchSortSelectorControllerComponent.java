@@ -21,17 +21,13 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public final class ProductSearchSortSelectorControllerComponent extends AbstractSortSelectorControllerComponent<ProductProjection>
         implements ControllerComponent, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
 
-    private final List<SortExpression<ProductProjection>> sortExpressions;
-
     @Nullable
     private PagedResult<ProductProjection> pagedResult;
 
     @Inject
     public ProductSearchSortSelectorControllerComponent(final ProductSortFormSettings productSortFormSettings,
-                                                        final ProductSearchSortSelectorViewModelFactory sortSelectorViewModelFactory,
-                                                        final Http.Context httpContext) {
+                                                        final ProductSearchSortSelectorViewModelFactory sortSelectorViewModelFactory) {
         super(productSortFormSettings, sortSelectorViewModelFactory);
-        this.sortExpressions = productSortFormSettings.buildSearchExpressions(httpContext);
     }
 
     @Nullable
@@ -42,6 +38,7 @@ public final class ProductSearchSortSelectorControllerComponent extends Abstract
 
     @Override
     public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
+        final List<SortExpression<ProductProjection>> sortExpressions = getSortFormSettings().buildSearchExpressions(Http.Context.current());
         if (!sortExpressions.isEmpty()) {
             return search.plusSort(sortExpressions);
         } else {

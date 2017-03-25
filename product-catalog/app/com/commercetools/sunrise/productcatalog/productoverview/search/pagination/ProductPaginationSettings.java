@@ -23,7 +23,7 @@ public final class ProductPaginationSettings implements PaginationSettings {
     }
 
     @Override
-    public Integer getDefaultValue() {
+    public Long getDefaultValue() {
         return settings.getDefaultValue();
     }
 

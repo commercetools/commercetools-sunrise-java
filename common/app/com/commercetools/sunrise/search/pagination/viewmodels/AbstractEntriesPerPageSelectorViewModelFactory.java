@@ -6,34 +6,21 @@ import com.commercetools.sunrise.search.pagination.EntriesPerPageFormSettings;
 import io.sphere.sdk.queries.PagedResult;
 import play.mvc.Http;
 
-import javax.annotation.Nullable;
-
 import static java.util.stream.Collectors.toList;
 
 public abstract class AbstractEntriesPerPageSelectorViewModelFactory extends SimpleViewModelFactory<EntriesPerPageSelectorViewModel, PagedResult<?>> {
 
-    @Nullable
-    private final String selectedOptionValue;
-    private final EntriesPerPageFormSettings settings;
+    private final EntriesPerPageFormSettings entriesPerPageFormSettings;
     private final EntriesPerPageFormSelectableOptionViewModelFactory entriesPerPageFormSelectableOptionViewModelFactory;
 
-    protected AbstractEntriesPerPageSelectorViewModelFactory(final EntriesPerPageFormSettings settings,
-                                                             final EntriesPerPageFormSelectableOptionViewModelFactory entriesPerPageFormSelectableOptionViewModelFactory,
-                                                             final Http.Context httpContext) {
-        this.selectedOptionValue = settings.getSelectedOption(httpContext)
-                .map(FormOption::getFieldValue)
-                .orElse(null);
-        this.settings = settings;
+    protected AbstractEntriesPerPageSelectorViewModelFactory(final EntriesPerPageFormSettings entriesPerPageFormSettings,
+                                                             final EntriesPerPageFormSelectableOptionViewModelFactory entriesPerPageFormSelectableOptionViewModelFactory) {
+        this.entriesPerPageFormSettings = entriesPerPageFormSettings;
         this.entriesPerPageFormSelectableOptionViewModelFactory = entriesPerPageFormSelectableOptionViewModelFactory;
     }
 
-    @Nullable
-    protected final String getSelectedOptionValue() {
-        return selectedOptionValue;
-    }
-
-    protected final EntriesPerPageFormSettings getSettings() {
-        return settings;
+    protected final EntriesPerPageFormSettings getEntriesPerPageFormSettings() {
+        return entriesPerPageFormSettings;
     }
 
     protected final EntriesPerPageFormSelectableOptionViewModelFactory getEntriesPerPageFormSelectableOptionViewModelFactory() {
@@ -57,11 +44,14 @@ public abstract class AbstractEntriesPerPageSelectorViewModelFactory extends Sim
     }
 
     protected void fillKey(final EntriesPerPageSelectorViewModel viewModel, final PagedResult<?> pagedResult) {
-        viewModel.setKey(settings.getFieldName());
+        viewModel.setKey(entriesPerPageFormSettings.getFieldName());
     }
 
     protected void fillList(final EntriesPerPageSelectorViewModel viewModel, final PagedResult<?> pagedResult) {
-        viewModel.setList(settings.getOptions().stream()
+        final String selectedOptionValue = entriesPerPageFormSettings.getSelectedOption(Http.Context.current())
+                .map(FormOption::getFieldValue)
+                .orElse(null);
+        viewModel.setList(entriesPerPageFormSettings.getOptions().stream()
                 .map(option -> entriesPerPageFormSelectableOptionViewModelFactory.create(option, selectedOptionValue))
                 .collect(toList()));
     }

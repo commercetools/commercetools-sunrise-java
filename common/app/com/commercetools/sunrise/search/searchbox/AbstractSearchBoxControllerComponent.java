@@ -9,14 +9,14 @@ import io.sphere.sdk.models.LocalizedStringEntry;
 
 public abstract class AbstractSearchBoxControllerComponent extends Base implements ControllerComponent, PageDataReadyHook {
 
-    private final SearchBoxSettings settings;
+    private final SearchBoxSettings searchBoxSettings;
 
-    protected AbstractSearchBoxControllerComponent(final SearchBoxSettings settings) {
-        this.settings = settings;
+    protected AbstractSearchBoxControllerComponent(final SearchBoxSettings searchBoxSettings) {
+        this.searchBoxSettings = searchBoxSettings;
     }
 
-    protected final SearchBoxSettings getSettings() {
-        return settings;
+    protected final SearchBoxSettings getSearchBoxSettings() {
+        return searchBoxSettings;
     }
 
     protected abstract LocalizedStringEntry getSearchText();

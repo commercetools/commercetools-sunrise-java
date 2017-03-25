@@ -19,9 +19,6 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public final class ProductPaginationControllerComponent extends AbstractPaginationControllerComponent
         implements ControllerComponent, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
 
-    private final long limit;
-    private final long offset;
-
     @Nullable
     private PagedResult<?> pagedResult;
 
@@ -29,11 +26,8 @@ public final class ProductPaginationControllerComponent extends AbstractPaginati
     public ProductPaginationControllerComponent(final ProductPaginationSettings paginationSettings,
                                                 final ProductsPerPageFormSettings entriesPerPageFormSettings,
                                                 final ProductPaginationViewModelFactory paginationViewModelFactory,
-                                                final ProductsPerPageSelectorViewModelFactory entriesPerPageSelectorViewModelFactory,
-                                                final Http.Context httpContext) {
+                                                final ProductsPerPageSelectorViewModelFactory entriesPerPageSelectorViewModelFactory) {
         super(paginationSettings, entriesPerPageFormSettings, paginationViewModelFactory, entriesPerPageSelectorViewModelFactory);
-        this.limit = entriesPerPageFormSettings.getLimit(httpContext);
-        this.offset = paginationSettings.getOffset(httpContext, limit);
     }
 
     @Nullable
@@ -44,6 +38,9 @@ public final class ProductPaginationControllerComponent extends AbstractPaginati
 
     @Override
     public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
+        final Http.Context context = Http.Context.current();
+        final long limit = getEntriesPerPageSettings().getLimit(context);
+        final long offset = getPaginationSettings().getOffset(context, limit);
         return search
                 .withOffset(offset)
                 .withLimit(limit);

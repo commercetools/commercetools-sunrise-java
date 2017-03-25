@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.sessions.cart;
 
-import com.commercetools.sunrise.framework.viewmodels.content.carts.MiniCartViewModel;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.framework.viewmodels.content.carts.MiniCartViewModel;
+import com.commercetools.sunrise.framework.viewmodels.content.carts.MiniCartViewModelFactory;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.ObjectStoringSessionStrategy;
-import com.commercetools.sunrise.framework.viewmodels.content.carts.MiniCartViewModelFactory;
 import io.sphere.sdk.carts.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

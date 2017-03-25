@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.sessions.country;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.SessionStrategy;
 import com.neovisionaries.i18n.CountryCode;
@@ -10,12 +9,13 @@ import play.Configuration;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Optional;
 
 /**
  * Keeps the current country in session.
  */
-@RequestScoped
+@Singleton
 public class DefaultCountryInSession extends DataFromResourceStoringOperations<CountryCode> implements CountryInSession {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CountryInSession.class);

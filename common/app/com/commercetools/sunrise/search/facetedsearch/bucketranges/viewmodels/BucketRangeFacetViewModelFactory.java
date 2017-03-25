@@ -24,19 +24,13 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class BucketRangeFacetViewModelFactory extends AbstractFacetWithOptionsViewModelFactory<BucketRangeFacetViewModel, BucketRangeFacetedSearchFormSettings<?>, RangeFacetResult> {
 
-    private final Http.Context httpContext;
     private final BucketRangeFacetOptionViewModelFactory bucketRangeFacetOptionViewModelFactory;
 
     @Inject
-    public BucketRangeFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver, final Http.Context httpContext,
+    public BucketRangeFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver,
                                             final BucketRangeFacetOptionViewModelFactory bucketRangeFacetOptionViewModelFactory) {
         super(i18nIdentifierResolver);
-        this.httpContext = httpContext;
         this.bucketRangeFacetOptionViewModelFactory = bucketRangeFacetOptionViewModelFactory;
-    }
-
-    protected final Http.Context getHttpContext() {
-        return httpContext;
     }
 
     protected final BucketRangeFacetOptionViewModelFactory getBucketRangeFacetOptionViewModelFactory() {
@@ -70,7 +64,7 @@ public class BucketRangeFacetViewModelFactory extends AbstractFacetWithOptionsVi
 
     @Override
     protected void fillLimitedOptions(final BucketRangeFacetViewModel viewModel, final BucketRangeFacetedSearchFormSettings<?> settings, final RangeFacetResult facetResult) {
-        final List<String> selectedValues = settings.getAllSelectedOptions(httpContext).stream()
+        final List<String> selectedValues = settings.getAllSelectedOptions(Http.Context.current()).stream()
                 .map(FormOption::getFieldValue)
                 .collect(toList());
         final Map<FacetRange<String>, RangeStats> rangeToStatsMap = mapRangeToStats(facetResult);

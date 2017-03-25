@@ -1,13 +1,12 @@
-package com.commercetools.sunrise.search.pagination;
+package com.commercetools.sunrise.search.pagination.viewmodels;
 
 import com.commercetools.sunrise.framework.viewmodels.forms.QueryStringUtils;
-import com.commercetools.sunrise.search.pagination.viewmodels.AbstractPaginationViewModelFactory;
-import com.commercetools.sunrise.search.pagination.viewmodels.PaginationLinkViewModel;
-import com.commercetools.sunrise.search.pagination.viewmodels.PaginationViewModel;
+import com.commercetools.sunrise.search.pagination.PaginationSettings;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.queries.PagedResult;
 import org.junit.Test;
 import play.mvc.Http;
+import play.test.WithApplication;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -17,7 +16,7 @@ import java.util.Map;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ProductPaginationViewModelFactoryTest {
+public class AbstractPaginationViewModelFactoryTest extends WithApplication {
 
     private static final String URL_PATH = "www.url.dom/path/to/";
     private static final Long PAGE_SIZE = 9L;
@@ -148,8 +147,9 @@ public class ProductPaginationViewModelFactoryTest {
         final Http.Context context = new Http.Context(new Http.RequestBuilder()
                 .uri(QueryStringUtils.buildUri(URL_PATH, buildQueryString(currentPage)))
                 .build());
+        Http.Context.current.set(context);
         final PaginationSettings settings = PaginationSettings.of("page", displayedPages);
-        return new TestablePaginationViewModelFactory(settings, context).create(searchResult);
+        return new TestablePaginationViewModelFactory(settings).create(searchResult, currentPage);
     }
 
     private PagedResult<ProductProjection> pagedResult(final int page, final int totalPages) {
@@ -194,8 +194,8 @@ public class ProductPaginationViewModelFactoryTest {
 
     private static class TestablePaginationViewModelFactory extends AbstractPaginationViewModelFactory {
 
-        TestablePaginationViewModelFactory(final PaginationSettings settings, final Http.Context httpContext) {
-            super(settings, httpContext);
+        TestablePaginationViewModelFactory(final PaginationSettings settings) {
+            super(settings);
         }
     }
 }

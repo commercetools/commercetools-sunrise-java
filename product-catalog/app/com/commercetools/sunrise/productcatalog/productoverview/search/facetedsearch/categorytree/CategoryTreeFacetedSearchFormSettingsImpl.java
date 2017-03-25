@@ -20,8 +20,8 @@ final class CategoryTreeFacetedSearchFormSettingsImpl extends AbstractFacetedSea
 
     private final CategoryFinder categoryFinder;
 
-    public CategoryTreeFacetedSearchFormSettingsImpl(final ConfiguredCategoryTreeFacetedSearchFormSettings settings,
-                                                     final Locale locale, final CategoryFinder categoryFinder) {
+    CategoryTreeFacetedSearchFormSettingsImpl(final ConfiguredCategoryTreeFacetedSearchFormSettings settings,
+                                              final Locale locale, final CategoryFinder categoryFinder) {
         super(settings, locale);
         this.categoryFinder = categoryFinder;
     }

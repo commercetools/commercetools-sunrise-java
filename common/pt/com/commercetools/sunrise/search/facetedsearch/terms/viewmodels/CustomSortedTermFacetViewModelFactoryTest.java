@@ -9,6 +9,8 @@ import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
 import play.mvc.Http;
+import play.test.Helpers;
+import play.test.WithApplication;
 
 import java.util.List;
 import java.util.Locale;
@@ -20,9 +22,8 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static play.test.Helpers.fakeRequest;
 
-public class CustomSortedTermFacetViewModelFactoryTest {
+public class CustomSortedTermFacetViewModelFactoryTest extends WithApplication {
 
     @Test
     public void sortsOptionsAsGivenList() throws Exception {
@@ -90,8 +91,8 @@ public class CustomSortedTermFacetViewModelFactoryTest {
         final List<TermStats> termStats = terms.stream()
                 .map(term -> TermStats.of(term, 0L))
                 .collect(toList());
-        final Http.Context context = new Http.Context(fakeRequest());
-        final List<FacetOptionViewModel> options = new CustomSortedTermFacetViewModelFactory(Optional::of, context, new TermFacetOptionViewModelFactory())
+        Http.Context.current.set(new Http.Context(Helpers.fakeRequest()));
+        final List<FacetOptionViewModel> options = new CustomSortedTermFacetViewModelFactory(Optional::of, new TermFacetOptionViewModelFactory())
                 .createOptions(settings, TermFacetResult.of(0L, 0L, 0L, termStats));
         test.accept(options.stream()
                 .map(FacetOptionViewModel::getValue)

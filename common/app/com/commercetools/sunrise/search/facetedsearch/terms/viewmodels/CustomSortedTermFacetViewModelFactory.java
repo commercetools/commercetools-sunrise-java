@@ -3,11 +3,8 @@ package com.commercetools.sunrise.search.facetedsearch.terms.viewmodels;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
 import com.commercetools.sunrise.search.facetedsearch.terms.TermFacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.TermFacetOptionViewModelFactory;
-import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.TermFacetViewModelFactory;
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionViewModel;
 import io.sphere.sdk.search.TermFacetResult;
-import play.mvc.Http;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -23,9 +20,9 @@ import static java.util.stream.Collectors.toList;
 public final class CustomSortedTermFacetViewModelFactory extends TermFacetViewModelFactory {
 
     @Inject
-    public CustomSortedTermFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver, final Http.Context httpContext,
+    public CustomSortedTermFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver,
                                                  final TermFacetOptionViewModelFactory termFacetOptionViewModelFactory) {
-        super(i18nIdentifierResolver, httpContext, termFacetOptionViewModelFactory);
+        super(i18nIdentifierResolver, termFacetOptionViewModelFactory);
     }
 
     @Override

@@ -20,17 +20,13 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public final class ProductFacetedSearchSelectorControllerComponent extends AbstractFacetedSearchSelectorControllerComponent<ProductProjection>
         implements ControllerComponent, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
 
-    private final List<FacetedSearchExpression<ProductProjection>> facetedSearchExpressions;
-
     @Nullable
     private PagedSearchResult<ProductProjection> pagedSearchResult;
 
     @Inject
     public ProductFacetedSearchSelectorControllerComponent(final ProductFacetedSearchFormSettingsList settingsList,
-                                                           final ProductFacetSelectorListViewModelFactory productFacetSelectorListViewModelFactory,
-                                                           final Http.Context httpContext) {
+                                                           final ProductFacetSelectorListViewModelFactory productFacetSelectorListViewModelFactory) {
         super(settingsList, productFacetSelectorListViewModelFactory);
-        this.facetedSearchExpressions = getSettings().buildFacetedSearchExpressions(httpContext);
     }
 
     @Nullable
@@ -41,6 +37,7 @@ public final class ProductFacetedSearchSelectorControllerComponent extends Abstr
 
     @Override
     public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
+        final List<FacetedSearchExpression<ProductProjection>> facetedSearchExpressions = getSettings().buildFacetedSearchExpressions(Http.Context.current());
         if (!facetedSearchExpressions.isEmpty()) {
             return search.plusFacetedSearch(facetedSearchExpressions);
         } else {

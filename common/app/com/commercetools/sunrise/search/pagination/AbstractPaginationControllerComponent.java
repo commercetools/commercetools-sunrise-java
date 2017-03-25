@@ -8,6 +8,7 @@ import com.commercetools.sunrise.search.pagination.viewmodels.AbstractPagination
 import com.commercetools.sunrise.search.pagination.viewmodels.WithPaginationViewModel;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.PagedResult;
+import play.mvc.Http;
 
 import javax.annotation.Nullable;
 
@@ -45,7 +46,8 @@ public abstract class AbstractPaginationControllerComponent extends Base impleme
         final PagedResult<?> pagedResult = getPagedResult();
         if (pagedResult != null && pageData.getContent() instanceof WithPaginationViewModel) {
             final WithPaginationViewModel content = (WithPaginationViewModel) pageData.getContent();
-            content.setPagination(paginationViewModelFactory.create(pagedResult));
+            final Long currentPage = paginationSettings.getSelectedValue(Http.Context.current());
+            content.setPagination(paginationViewModelFactory.create(pagedResult, currentPage));
             content.setDisplaySelector(entriesPerPageSelectorViewModelFactory.create(pagedResult));
         }
     }

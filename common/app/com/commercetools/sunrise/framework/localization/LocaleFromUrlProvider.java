@@ -12,12 +12,10 @@ import static java.util.Arrays.asList;
 
 public final class LocaleFromUrlProvider implements Provider<Locale> {
 
-    private final Http.Context httpContext;
     private final ProjectContext projectContext;
 
     @Inject
-    public LocaleFromUrlProvider(final Http.Context httpContext, final ProjectContext projectContext) {
-        this.httpContext = httpContext;
+    public LocaleFromUrlProvider(final ProjectContext projectContext) {
         this.projectContext = projectContext;
     }
 
@@ -29,14 +27,19 @@ public final class LocaleFromUrlProvider implements Provider<Locale> {
     }
 
     private Optional<Locale> findCurrentLanguage() {
-        return indexOfLanguageTagInRoutePattern()
-                .map(index -> {
-                    final String languageTag = httpContext.request().path().split("/")[index];
-                    return Locale.forLanguageTag(languageTag);
-                });
+        final Http.Context httpContext = Http.Context.current.get();
+        if (httpContext != null) {
+            return indexOfLanguageTagInRoutePattern(httpContext)
+                    .map(index -> {
+                        final String languageTag = httpContext.request().path().split("/")[index];
+                        return Locale.forLanguageTag(languageTag);
+                    });
+        } else {
+            return Optional.empty();
+        }
     }
 
-    private Optional<Integer> indexOfLanguageTagInRoutePattern() {
+    private Optional<Integer> indexOfLanguageTagInRoutePattern(final Http.Context httpContext) {
         return Optional.ofNullable(httpContext.args.get("ROUTE_PATTERN"))
                 .map(routePattern -> routePattern.toString().replaceAll("<[^>]+>", "")) // Remove regex because splitting '$languageTag<[^/]+>' with '/' would create more words
                 .map(routePattern -> {

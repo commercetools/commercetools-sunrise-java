@@ -5,16 +5,7 @@ import com.commercetools.sunrise.search.facetedsearch.sliderranges.SliderRangeFa
 import io.sphere.sdk.search.model.SimpleRangeStats;
 import play.mvc.Http;
 
-import javax.inject.Inject;
-
 public class SliderRangeEndpointViewModelFactory extends ViewModelFactory {
-
-    private final Http.Context httpContext;
-
-    @Inject
-    public SliderRangeEndpointViewModelFactory(final Http.Context httpContext) {
-        this.httpContext = httpContext;
-    }
 
     protected SliderRangeEndpointViewModel newViewModelInstance(final SliderRangeFacetedSearchFormSettings<?> settings, final SimpleRangeStats rangeStats) {
         return new SliderRangeEndpointViewModel();
@@ -45,11 +36,11 @@ public class SliderRangeEndpointViewModelFactory extends ViewModelFactory {
     }
 
     protected void fillLowerValue(final SliderRangeEndpointViewModel viewModel, final SliderRangeFacetedSearchFormSettings<?> settings, final SimpleRangeStats rangeStats) {
-        viewModel.setLowerValue(settings.getLowerEndpointSettings().getSelectedValue(httpContext));
+        viewModel.setLowerValue(settings.getLowerEndpointSettings().getSelectedValue(Http.Context.current()));
     }
 
     protected void fillUpperValue(final SliderRangeEndpointViewModel viewModel, final SliderRangeFacetedSearchFormSettings<?> settings, final SimpleRangeStats rangeStats) {
-        viewModel.setUpperValue(settings.getUpperEndpointSettings().getSelectedValue(httpContext));
+        viewModel.setUpperValue(settings.getUpperEndpointSettings().getSelectedValue(Http.Context.current()));
     }
 
     protected void fillLowerEndpoint(final SliderRangeEndpointViewModel viewModel, final SliderRangeFacetedSearchFormSettings<?> settings, final SimpleRangeStats rangeStats) {

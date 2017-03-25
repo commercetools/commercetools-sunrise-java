@@ -26,18 +26,18 @@ public final class CategoryTreeFacetViewModelFactory extends TermFacetViewModelF
     private final CategoryTreeFacetOptionViewModelFactory categoryTreeFacetOptionViewModelFactory;
 
     @Inject
-    public CategoryTreeFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver, final Http.Context httpContext,
+    public CategoryTreeFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver,
                                              final TermFacetOptionViewModelFactory termFacetOptionViewModelFactory,
                                              final CategoryTree categoryTree,
                                              final CategoryTreeFacetOptionViewModelFactory categoryTreeFacetOptionViewModelFactory) {
-        super(i18nIdentifierResolver, httpContext, termFacetOptionViewModelFactory);
+        super(i18nIdentifierResolver, termFacetOptionViewModelFactory);
         this.categoryTree = categoryTree;
         this.categoryTreeFacetOptionViewModelFactory = categoryTreeFacetOptionViewModelFactory;
     }
 
     @Override
     protected List<FacetOptionViewModel> createOptions(final TermFacetedSearchFormSettings<?> settings, final TermFacetResult facetResult) {
-        final String selectedValue = settings.getSelectedValue(getHttpContext());
+        final String selectedValue = settings.getSelectedValue(Http.Context.current());
         return categoryTree.getRoots().stream()
                 .map(root -> categoryTreeFacetOptionViewModelFactory.create(facetResult, root, selectedValue))
                 .filter(root -> root.getCount() > 0)

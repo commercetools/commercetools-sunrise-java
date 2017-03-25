@@ -15,10 +15,9 @@ public final class ProductSearchBoxControllerComponent extends AbstractSearchBox
     private final LocalizedStringEntry searchText;
 
     @Inject
-    public ProductSearchBoxControllerComponent(final ProductSearchBoxSettings productSearchBoxSettings,
-                                               final Http.Context httpContext, final Locale locale) {
+    public ProductSearchBoxControllerComponent(final ProductSearchBoxSettings productSearchBoxSettings, final Locale locale) {
         super(productSearchBoxSettings);
-        this.searchText = productSearchBoxSettings.getSearchText(httpContext, locale);
+        this.searchText = productSearchBoxSettings.getSearchText(Http.Context.current(), locale);
     }
 
     @Override

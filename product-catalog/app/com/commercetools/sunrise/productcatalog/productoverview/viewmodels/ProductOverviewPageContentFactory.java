@@ -12,7 +12,6 @@ import static java.util.Collections.singletonList;
 public class ProductOverviewPageContentFactory extends PageContentFactory<ProductOverviewPageContent, ProductsWithCategory> {
 
     private final Locale locale;
-    private final Http.Request httpRequest;
     private final CategoryBreadcrumbViewModelFactory categoryBreadcrumbViewModelFactory;
     private final ProductListViewModelFactory productListViewModelFactory;
     private final BannerViewModelFactory bannerViewModelFactory;
@@ -20,12 +19,13 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     private final SeoViewModelFactory seoViewModelFactory;
 
     @Inject
-    public ProductOverviewPageContentFactory(final Locale locale, final Http.Context httpContext,
+    public ProductOverviewPageContentFactory(final Locale locale,
                                              final CategoryBreadcrumbViewModelFactory categoryBreadcrumbViewModelFactory,
-                                             final ProductListViewModelFactory productListViewModelFactory, final BannerViewModelFactory bannerViewModelFactory,
-                                             final JumbotronViewModelFactory jumbotronViewModelFactory, final SeoViewModelFactory seoViewModelFactory) {
+                                             final ProductListViewModelFactory productListViewModelFactory,
+                                             final BannerViewModelFactory bannerViewModelFactory,
+                                             final JumbotronViewModelFactory jumbotronViewModelFactory,
+                                             final SeoViewModelFactory seoViewModelFactory) {
         this.locale = locale;
-        this.httpRequest = httpContext.request();
         this.categoryBreadcrumbViewModelFactory = categoryBreadcrumbViewModelFactory;
         this.productListViewModelFactory = productListViewModelFactory;
         this.bannerViewModelFactory = bannerViewModelFactory;
@@ -35,10 +35,6 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
 
     protected final Locale getLocale() {
         return locale;
-    }
-
-    protected final Http.Request getHttpRequest() {
-        return httpRequest;
     }
 
     protected final CategoryBreadcrumbViewModelFactory getCategoryBreadcrumbViewModelFactory() {
@@ -90,7 +86,7 @@ public class ProductOverviewPageContentFactory extends PageContentFactory<Produc
     }
 
     protected void fillFilterProductsUrl(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
-        viewModel.setFilterProductsUrl(httpRequest.path());
+        viewModel.setFilterProductsUrl(Http.Context.current().request().path());
     }
 
     protected void fillProducts(final ProductOverviewPageContent viewModel, final ProductsWithCategory productsWithCategory) {
