@@ -45,6 +45,7 @@ public final class CartDetailController extends SunriseCartDetailController {
 
     @Override
     public String getTemplateName() {
+        // here goes the name of your template
         return "cart";
     }
     
