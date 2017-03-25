@@ -2,12 +2,12 @@ package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
 import com.commercetools.sunrise.framework.viewmodels.content.addresses.AddressWithCustomer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
@@ -21,8 +21,8 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseRemoveAddressController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<AddressWithCustomer, Customer, RemoveAddressFormData>, WithRequiredCustomer, WithRequiredAddress {
+public abstract class SunriseRemoveAddressController extends SunriseContentFormController
+        implements MyAccountController, WithContentFormFlow<AddressWithCustomer, Customer, RemoveAddressFormData>, WithRequiredCustomer, WithRequiredAddress {
 
     private final RemoveAddressFormData formData;
     private final CustomerFinder customerFinder;
@@ -30,12 +30,12 @@ public abstract class SunriseRemoveAddressController extends SunriseTemplateForm
     private final RemoveAddressControllerAction controllerAction;
     private final AddressBookPageContentFactory pageContentFactory;
 
-    protected SunriseRemoveAddressController(final TemplateRenderer templateRenderer,
+    protected SunriseRemoveAddressController(final ContentRenderer contentRenderer,
                                              final FormFactory formFactory, final RemoveAddressFormData formData,
                                              final CustomerFinder customerFinder, final AddressFinder addressFinder,
                                              final RemoveAddressControllerAction controllerAction,
                                              final AddressBookPageContentFactory pageContentFactory) {
-        super(templateRenderer, formFactory);
+        super(contentRenderer, formFactory);
         this.formData = formData;
         this.customerFinder = customerFinder;
         this.addressFinder = addressFinder;

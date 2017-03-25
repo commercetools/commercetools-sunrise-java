@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.framework.controllers.SunriseContentController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
@@ -18,17 +18,17 @@ import java.util.concurrent.CompletionStage;
  * Controller to show the information about a single product.
  * Loads a {@link ProductProjection} and the selected {@link ProductVariant}.
  */
-public abstract class SunriseProductDetailController extends SunriseTemplateController
+public abstract class SunriseProductDetailController extends SunriseContentController
         implements WithQueryFlow<ProductWithVariant>, WithRequiredProduct, WithRequiredProductVariant {
 
     private final ProductFinder productFinder;
     private final ProductVariantFinder productVariantFinder;
     private final ProductDetailPageContentFactory productDetailPageContentFactory;
 
-    protected SunriseProductDetailController(final TemplateRenderer templateRenderer,
+    protected SunriseProductDetailController(final ContentRenderer contentRenderer,
                                              final ProductFinder productFinder, final ProductVariantFinder productVariantFinder,
                                              final ProductDetailPageContentFactory productDetailPageContentFactory) {
-        super(templateRenderer);
+        super(contentRenderer);
         this.productFinder = productFinder;
         this.productVariantFinder = productVariantFinder;
         this.productDetailPageContentFactory = productDetailPageContentFactory;

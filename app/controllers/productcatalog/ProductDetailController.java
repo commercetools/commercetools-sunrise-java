@@ -1,11 +1,11 @@
 package controllers.productcatalog;
 
 import com.commercetools.sunrise.framework.components.controllers.PageHeaderControllerComponentSupplier;
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductVariantFinder;
@@ -14,6 +14,7 @@ import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.Product
 import io.sphere.sdk.products.ProductProjection;
 import play.mvc.Result;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -30,15 +31,16 @@ public final class ProductDetailController extends SunriseProductDetailControlle
     private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public ProductDetailController(final TemplateRenderer templateRenderer,
+    public ProductDetailController(final ContentRenderer contentRenderer,
                                    final ProductFinder productFinder,
                                    final ProductVariantFinder productVariantFinder,
                                    final ProductDetailPageContentFactory pageContentFactory,
                                    final ProductReverseRouter productReverseRouter) {
-        super(templateRenderer, productFinder, productVariantFinder, pageContentFactory);
+        super(contentRenderer, productFinder, productVariantFinder, pageContentFactory);
         this.productReverseRouter = productReverseRouter;
     }
 
+    @Nullable
     @Override
     public String getTemplateName() {
         return "pdp";

@@ -2,12 +2,12 @@ package com.commercetools.sunrise.myaccount.addressbook.addressbookdetail;
 
 
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.framework.controllers.SunriseContentController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
@@ -17,15 +17,15 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddressBookDetailController extends SunriseTemplateController
+public abstract class SunriseAddressBookDetailController extends SunriseContentController
         implements MyAccountController, WithQueryFlow<Customer>, WithRequiredCustomer {
 
     private final CustomerFinder customerFinder;
     private final AddressBookPageContentFactory addressBookPageContentFactory;
 
-    protected SunriseAddressBookDetailController(final TemplateRenderer templateRenderer, final CustomerFinder customerFinder,
+    protected SunriseAddressBookDetailController(final ContentRenderer contentRenderer, final CustomerFinder customerFinder,
                                                  final AddressBookPageContentFactory addressBookPageContentFactory) {
-        super(templateRenderer);
+        super(contentRenderer);
         this.customerFinder = customerFinder;
         this.addressBookPageContentFactory = addressBookPageContentFactory;
     }

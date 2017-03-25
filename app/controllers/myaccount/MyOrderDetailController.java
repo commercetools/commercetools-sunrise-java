@@ -1,12 +1,12 @@
 package controllers.myaccount;
 
 import com.commercetools.sunrise.framework.components.controllers.PageHeaderControllerComponentSupplier;
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.MyOrderFinder;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.SunriseMyOrderDetailController;
@@ -14,6 +14,7 @@ import com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels.MyO
 import com.commercetools.sunrise.sessions.customer.CustomerOperationsControllerComponentSupplier;
 import play.mvc.Result;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -29,17 +30,18 @@ public final class MyOrderDetailController extends SunriseMyOrderDetailControlle
     private final AuthenticationReverseRouter authenticationReverseRouter;
 
     @Inject
-    public MyOrderDetailController(final TemplateRenderer templateRenderer,
+    public MyOrderDetailController(final ContentRenderer contentRenderer,
                                    final CustomerFinder customerFinder,
                                    final MyOrderFinder myOrderFinder,
                                    final MyOrderDetailPageContentFactory pageContentFactory,
                                    final MyOrdersReverseRouter myOrdersReverseRouter,
                                    final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(templateRenderer, customerFinder, myOrderFinder, pageContentFactory);
+        super(contentRenderer, customerFinder, myOrderFinder, pageContentFactory);
         this.myOrdersReverseRouter = myOrdersReverseRouter;
         this.authenticationReverseRouter = authenticationReverseRouter;
     }
 
+    @Nullable
     @Override
     public String getTemplateName() {
         return "my-account-my-orders-order";

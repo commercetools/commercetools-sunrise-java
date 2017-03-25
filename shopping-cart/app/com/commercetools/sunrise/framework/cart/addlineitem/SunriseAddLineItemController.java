@@ -4,12 +4,12 @@ import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.CartFinder;
 import com.commercetools.sunrise.framework.WithRequiredCart;
 import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -18,8 +18,8 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddLineItemController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<Cart, Cart, AddLineItemFormData>, WithRequiredCart {
+public abstract class SunriseAddLineItemController extends SunriseContentFormController
+        implements WithContentFormFlow<Cart, Cart, AddLineItemFormData>, WithRequiredCart {
 
     private final AddLineItemFormData formData;
     private final CartFinder cartFinder;
@@ -27,12 +27,12 @@ public abstract class SunriseAddLineItemController extends SunriseTemplateFormCo
     private final AddLineItemControllerAction controllerAction;
     private final CartDetailPageContentFactory pageContentFactory;
 
-    protected SunriseAddLineItemController(final TemplateRenderer templateRenderer,
+    protected SunriseAddLineItemController(final ContentRenderer contentRenderer,
                                            final FormFactory formFactory, final AddLineItemFormData formData,
                                            final CartFinder cartFinder, final CartCreator cartCreator,
                                            final AddLineItemControllerAction controllerAction,
                                            final CartDetailPageContentFactory pageContentFactory) {
-        super(templateRenderer, formFactory);
+        super(contentRenderer, formFactory);
         this.formData = formData;
         this.cartFinder = cartFinder;
         this.cartCreator = cartCreator;

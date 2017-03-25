@@ -1,16 +1,17 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
-import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.home.HomeReverseRouter;
-import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.framework.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.framework.checkout.thankyou.OrderCreatedFinder;
 import com.commercetools.sunrise.framework.checkout.thankyou.SunriseCheckoutThankYouController;
 import com.commercetools.sunrise.framework.checkout.thankyou.viewmodels.CheckoutThankYouPageContentFactory;
+import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.home.HomeReverseRouter;
+import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import play.mvc.Result;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -24,14 +25,15 @@ public final class CheckoutThankYouController extends SunriseCheckoutThankYouCon
     private final HomeReverseRouter homeReverseRouter;
 
     @Inject
-    public CheckoutThankYouController(final TemplateRenderer templateRenderer,
+    public CheckoutThankYouController(final ContentRenderer contentRenderer,
                                       final OrderCreatedFinder orderCreatedFinder,
                                       final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory,
                                       final HomeReverseRouter homeReverseRouter) {
-        super(templateRenderer, orderCreatedFinder, checkoutThankYouPageContentFactory);
+        super(contentRenderer, orderCreatedFinder, checkoutThankYouPageContentFactory);
         this.homeReverseRouter = homeReverseRouter;
     }
 
+    @Nullable
     @Override
     public String getTemplateName() {
         return "checkout-thankyou";

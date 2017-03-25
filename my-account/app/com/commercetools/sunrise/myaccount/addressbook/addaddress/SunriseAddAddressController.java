@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
@@ -21,8 +21,8 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddAddressController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<Customer, Customer, AddressFormData>, WithRequiredCustomer {
+public abstract class SunriseAddAddressController extends SunriseContentFormController
+        implements MyAccountController, WithContentFormFlow<Customer, Customer, AddressFormData>, WithRequiredCustomer {
 
     private final AddressFormData formData;
     private final CustomerFinder customerFinder;
@@ -30,12 +30,12 @@ public abstract class SunriseAddAddressController extends SunriseTemplateFormCon
     private final AddAddressPageContentFactory pageContentFactory;
     private final CountryCode country;
 
-    protected SunriseAddAddressController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseAddAddressController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                           final AddressFormData formData, final CustomerFinder customerFinder,
                                           final AddAddressControllerAction controllerAction,
                                           final AddAddressPageContentFactory pageContentFactory,
                                           final CountryCode country) {
-        super(templateRenderer, formFactory);
+        super(contentRenderer, formFactory);
         this.formData = formData;
         this.customerFinder = customerFinder;
         this.controllerAction = controllerAction;

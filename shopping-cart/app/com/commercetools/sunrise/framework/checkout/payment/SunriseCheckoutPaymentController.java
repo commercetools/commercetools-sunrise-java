@@ -4,12 +4,12 @@ import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.CartFinder;
 import com.commercetools.sunrise.framework.WithRequiredCart;
 import com.commercetools.sunrise.framework.checkout.payment.viewmodels.CheckoutPaymentPageContentFactory;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.payments.Payment;
@@ -27,8 +27,8 @@ import java.util.function.Function;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseCheckoutPaymentController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<PaymentMethodsWithCart, Cart, CheckoutPaymentFormData>, WithRequiredCart {
+public abstract class SunriseCheckoutPaymentController extends SunriseContentFormController
+        implements WithContentFormFlow<PaymentMethodsWithCart, Cart, CheckoutPaymentFormData>, WithRequiredCart {
 
     private final CheckoutPaymentFormData formData;
     private final CartFinder cartFinder;
@@ -36,12 +36,12 @@ public abstract class SunriseCheckoutPaymentController extends SunriseTemplateFo
     private final CheckoutPaymentPageContentFactory pageContentFactory;
     private final PaymentSettings paymentSettings;
 
-    protected SunriseCheckoutPaymentController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseCheckoutPaymentController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                                final CheckoutPaymentFormData formData, final CartFinder cartFinder,
                                                final CheckoutPaymentControllerAction controllerAction,
                                                final CheckoutPaymentPageContentFactory pageContentFactory,
                                                final PaymentSettings paymentSettings) {
-        super(templateRenderer, formFactory);
+        super(contentRenderer, formFactory);
         this.formData = formData;
         this.cartFinder = cartFinder;
         this.controllerAction = controllerAction;

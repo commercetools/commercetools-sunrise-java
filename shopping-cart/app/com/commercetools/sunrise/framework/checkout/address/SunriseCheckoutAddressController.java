@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.framework.checkout.address;
 
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.CartFinder;
 import com.commercetools.sunrise.framework.WithRequiredCart;
 import com.commercetools.sunrise.framework.checkout.address.viewmodels.CheckoutAddressPageContentFactory;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -17,20 +17,20 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseCheckoutAddressController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<Cart, Cart, CheckoutAddressFormData>, WithRequiredCart {
+public abstract class SunriseCheckoutAddressController extends SunriseContentFormController
+        implements WithContentFormFlow<Cart, Cart, CheckoutAddressFormData>, WithRequiredCart {
 
     private final CheckoutAddressFormData formData;
     private final CartFinder cartFinder;
     private final CheckoutAddressControllerAction controllerAction;
     private final CheckoutAddressPageContentFactory pageContentFactory;
 
-    protected SunriseCheckoutAddressController(final TemplateRenderer templateRenderer,
+    protected SunriseCheckoutAddressController(final ContentRenderer contentRenderer,
                                                final FormFactory formFactory, final CheckoutAddressFormData formData,
                                                final CartFinder cartFinder,
                                                final CheckoutAddressControllerAction controllerAction,
                                                final CheckoutAddressPageContentFactory pageContentFactory) {
-        super(templateRenderer, formFactory);
+        super(contentRenderer, formFactory);
         this.formData = formData;
         this.cartFinder = cartFinder;
         this.controllerAction = controllerAction;
@@ -77,7 +77,7 @@ public abstract class SunriseCheckoutAddressController extends SunriseTemplateFo
         if (isBillingAddressDifferent()) {
             return getFormFactory().form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class);
         }
-        return WithTemplateFormFlow.super.createForm();
+        return WithContentFormFlow.super.createForm();
     }
 
     protected boolean isBillingAddressDifferent() {

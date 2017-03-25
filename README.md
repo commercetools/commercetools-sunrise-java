@@ -37,12 +37,13 @@ For example, if we wanted to enable an endpoint to see the contents of the cart,
 public final class CartDetailController extends SunriseCartDetailController {
 
     @Inject
-    public CartDetailController(final TemplateRenderer templateRenderer,
+    public CartDetailController(final ContentRenderer contentRenderer,
                                 final CartFinder cartFinder,
                                 final CartDetailPageContentFactory pageContentFactory) {
-        super(templateRenderer, cartFinder, pageContentFactory);
+        super(contentRenderer, cartFinder, pageContentFactory);
     }
 
+    @Nullable
     @Override
     public String getTemplateName() {
         // here goes the name of your template

@@ -7,17 +7,18 @@ import com.commercetools.sunrise.framework.checkout.shipping.CheckoutShippingFor
 import com.commercetools.sunrise.framework.checkout.shipping.ShippingSettings;
 import com.commercetools.sunrise.framework.checkout.shipping.SunriseCheckoutShippingController;
 import com.commercetools.sunrise.framework.checkout.shipping.viewmodels.CheckoutShippingPageContentFactory;
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -33,7 +34,7 @@ public final class CheckoutShippingController extends SunriseCheckoutShippingCon
     private final CheckoutReverseRouter checkoutReverseRouter;
 
     @Inject
-    public CheckoutShippingController(final TemplateRenderer templateRenderer,
+    public CheckoutShippingController(final ContentRenderer contentRenderer,
                                       final FormFactory formFactory,
                                       final CheckoutShippingFormData formData,
                                       final CartFinder cartFinder,
@@ -42,11 +43,12 @@ public final class CheckoutShippingController extends SunriseCheckoutShippingCon
                                       final ShippingSettings shippingSettings,
                                       final CartReverseRouter cartReverseRouter,
                                       final CheckoutReverseRouter checkoutReverseRouter) {
-        super(templateRenderer, formFactory, formData, cartFinder, controllerAction, pageContentFactory, shippingSettings);
+        super(contentRenderer, formFactory, formData, cartFinder, controllerAction, pageContentFactory, shippingSettings);
         this.cartReverseRouter = cartReverseRouter;
         this.checkoutReverseRouter = checkoutReverseRouter;
     }
 
+    @Nullable
     @Override
     public String getTemplateName() {
         return "checkout-shipping";

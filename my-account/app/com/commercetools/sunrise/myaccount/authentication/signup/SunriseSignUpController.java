@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.myaccount.authentication.signup;
 
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
@@ -19,17 +19,17 @@ import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sunrise.ctp.CtpExceptionUtils.isDuplicatedEmailFieldError;
 
-public abstract class SunriseSignUpController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<Void, CustomerSignInResult, SignUpFormData> {
+public abstract class SunriseSignUpController extends SunriseContentFormController
+        implements MyAccountController, WithContentFormFlow<Void, CustomerSignInResult, SignUpFormData> {
 
     private final SignUpFormData formData;
     private final SignUpControllerAction controllerAction;
     private final SignUpPageContentFactory pageContentFactory;
 
-    protected SunriseSignUpController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseSignUpController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                       final SignUpFormData formData, final SignUpControllerAction controllerAction,
                                       final SignUpPageContentFactory pageContentFactory) {
-        super(templateRenderer, formFactory);
+        super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
         this.pageContentFactory = pageContentFactory;
@@ -57,7 +57,7 @@ public abstract class SunriseSignUpController extends SunriseTemplateFormControl
             saveFormError(form, "A user with this email already exists"); // TODO i18n
             return showFormPageWithErrors(input, form);
         } else {
-            return WithTemplateFormFlow.super.handleClientErrorFailedAction(input, form, clientErrorException);
+            return WithContentFormFlow.super.handleClientErrorFailedAction(input, form, clientErrorException);
         }
     }
 

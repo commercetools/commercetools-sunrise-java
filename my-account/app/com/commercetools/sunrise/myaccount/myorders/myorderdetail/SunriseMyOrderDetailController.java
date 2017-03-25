@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateController;
+import com.commercetools.sunrise.framework.controllers.SunriseContentController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
@@ -15,17 +15,17 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseMyOrderDetailController extends SunriseTemplateController
+public abstract class SunriseMyOrderDetailController extends SunriseContentController
         implements MyAccountController, WithQueryFlow<OrderWithCustomer>, WithRequiredCustomer, WithRequiredMyOrder {
 
     private final CustomerFinder customerFinder;
     private final MyOrderFinder myOrderFinder;
     private final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory;
 
-    protected SunriseMyOrderDetailController(final TemplateRenderer templateRenderer,
+    protected SunriseMyOrderDetailController(final ContentRenderer contentRenderer,
                                              final CustomerFinder customerFinder, final MyOrderFinder myOrderFinder,
                                              final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory) {
-        super(templateRenderer);
+        super(contentRenderer);
         this.customerFinder = customerFinder;
         this.myOrderFinder = myOrderFinder;
         this.myOrderDetailPageContentFactory = myOrderDetailPageContentFactory;

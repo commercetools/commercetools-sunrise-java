@@ -9,7 +9,7 @@ import java.util.concurrent.CompletionStage;
  * Approach to handle query data (Template Method Pattern).
  * @param <I> type of the input object, the one queried
  */
-public interface WithQueryFlow<I> extends WithTemplate {
+public interface WithQueryFlow<I> extends WithContent {
 
     default CompletionStage<Result> showPage(final I input) {
         return okResultWithPageContent(createPageContent(input));

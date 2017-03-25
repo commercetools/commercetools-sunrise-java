@@ -3,12 +3,12 @@ package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 import com.commercetools.sunrise.framework.viewmodels.content.addresses.AddressWithCustomer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseChangeAddressController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<AddressWithCustomer, Customer, AddressFormData>, WithRequiredCustomer, WithRequiredAddress {
+public abstract class SunriseChangeAddressController extends SunriseContentFormController
+        implements MyAccountController, WithContentFormFlow<AddressWithCustomer, Customer, AddressFormData>, WithRequiredCustomer, WithRequiredAddress {
 
     private final AddressFormData formData;
     private final CustomerFinder customerFinder;
@@ -35,12 +35,12 @@ public abstract class SunriseChangeAddressController extends SunriseTemplateForm
     private final ChangeAddressControllerAction controllerAction;
     private final ChangeAddressPageContentFactory pageContentFactory;
 
-    protected SunriseChangeAddressController(final TemplateRenderer templateRenderer,
+    protected SunriseChangeAddressController(final ContentRenderer contentRenderer,
                                              final FormFactory formFactory, final AddressFormData formData,
                                              final CustomerFinder customerFinder, final AddressFinder addressFinder,
                                              final ChangeAddressControllerAction controllerAction,
                                              final ChangeAddressPageContentFactory pageContentFactory) {
-        super(templateRenderer, formFactory);
+        super(contentRenderer, formFactory);
         this.formData = formData;
         this.customerFinder = customerFinder;
         this.addressFinder = addressFinder;

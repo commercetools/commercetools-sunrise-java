@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
@@ -18,19 +18,19 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseMyPersonalDetailsController extends SunriseTemplateFormController
-        implements MyAccountController, WithTemplateFormFlow<Customer, Customer, MyPersonalDetailsFormData>, WithRequiredCustomer {
+public abstract class SunriseMyPersonalDetailsController extends SunriseContentFormController
+        implements MyAccountController, WithContentFormFlow<Customer, Customer, MyPersonalDetailsFormData>, WithRequiredCustomer {
 
     private final MyPersonalDetailsFormData formData;
     private final CustomerFinder customerFinder;
     private final MyPersonalDetailsControllerAction controllerAction;
     private final MyPersonalDetailsPageContentFactory pageContentFactory;
 
-    protected SunriseMyPersonalDetailsController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseMyPersonalDetailsController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                                  final MyPersonalDetailsFormData formData, final CustomerFinder customerFinder,
                                                  final MyPersonalDetailsControllerAction controllerAction,
                                                  final MyPersonalDetailsPageContentFactory pageContentFactory) {
-        super(templateRenderer, formFactory);
+        super(contentRenderer, formFactory);
         this.formData = formData;
         this.customerFinder = customerFinder;
         this.controllerAction = controllerAction;

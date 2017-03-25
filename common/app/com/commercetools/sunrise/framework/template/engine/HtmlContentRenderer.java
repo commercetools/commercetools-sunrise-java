@@ -2,12 +2,12 @@ package com.commercetools.sunrise.framework.template.engine;
 
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.cms.CmsService;
-import com.commercetools.sunrise.framework.localization.UserLanguage;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.viewmodels.PageData;
-import com.commercetools.sunrise.framework.viewmodels.PageDataFactory;
 import com.commercetools.sunrise.framework.hooks.RequestHookRunner;
 import com.commercetools.sunrise.framework.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.framework.localization.UserLanguage;
+import com.commercetools.sunrise.framework.viewmodels.PageData;
+import com.commercetools.sunrise.framework.viewmodels.PageDataFactory;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -29,8 +29,9 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public class HtmlTemplateRenderer implements TemplateRenderer {
+public class HtmlContentRenderer implements ContentRenderer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContentRenderer.class);
     private static final Logger pageDataLoggerAsJson = LoggerFactory.getLogger(PageData.class.getName() + "Json");
     private static final ObjectMapper objectMapper = createObjectMapper();
 
@@ -41,8 +42,8 @@ public class HtmlTemplateRenderer implements TemplateRenderer {
     private final CmsService cmsService;
 
     @Inject
-    public HtmlTemplateRenderer(final UserLanguage userLanguage, final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner,
-                                final TemplateEngine templateEngine, final CmsService cmsService) {
+    public HtmlContentRenderer(final UserLanguage userLanguage, final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner,
+                               final TemplateEngine templateEngine, final CmsService cmsService) {
         this.userLanguage = userLanguage;
         this.pageDataFactory = pageDataFactory;
         this.hookRunner = hookRunner;
@@ -51,7 +52,7 @@ public class HtmlTemplateRenderer implements TemplateRenderer {
     }
 
     @Override
-    public CompletionStage<Content> render(final PageContent pageContent, final String templateName, @Nullable final String cmsKey) {
+    public CompletionStage<Content> render(final PageContent pageContent, @Nullable final String templateName, @Nullable final String cmsKey) {
         final PageData pageData = pageDataFactory.create(pageContent);
         return hookRunner.waitForHookedComponentsToFinish()
                 .thenComposeAsync(unused -> {
@@ -59,17 +60,22 @@ public class HtmlTemplateRenderer implements TemplateRenderer {
                     logFinalPageData(pageData);
                     if (cmsKey != null) {
                         return cmsService.page(cmsKey, userLanguage.locales())
-                                .thenApplyAsync(cmsPage -> renderTemplate(templateName, pageData, cmsPage.orElse(null)));
+                                .thenApplyAsync(cmsPage -> renderTemplate(pageData, templateName, cmsPage.orElse(null)));
                     } else {
-                        return completedFuture(renderTemplate(templateName, pageData, null));
+                        return completedFuture(renderTemplate(pageData, templateName, null));
                     }
                 }, HttpExecution.defaultContext());
     }
 
-    private Content renderTemplate(final String templateName, final PageData pageData, @Nullable final CmsPage cmsPage) {
-        final TemplateContext templateContext = new TemplateContext(pageData, userLanguage.locales(), cmsPage);
-        final String html = templateEngine.render(templateName, templateContext);
-        return new Html(html);
+    private Content renderTemplate(final PageData pageData, @Nullable final String templateName, @Nullable final CmsPage cmsPage) {
+        if (templateName != null) {
+            final TemplateContext templateContext = new TemplateContext(pageData, userLanguage.locales(), cmsPage);
+            final String html = templateEngine.render(templateName, templateContext);
+            return new Html(html);
+        } else {
+            LOGGER.warn("HTML renderer used without template, probably this is not what you intended");
+            return new Html(pageData.toString());
+        }
     }
 
     private static void logFinalPageData(final PageData pageData) {

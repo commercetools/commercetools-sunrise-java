@@ -5,17 +5,18 @@ import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetail
 import com.commercetools.sunrise.framework.cart.removelineitem.RemoveLineItemControllerAction;
 import com.commercetools.sunrise.framework.cart.removelineitem.RemoveLineItemFormData;
 import com.commercetools.sunrise.framework.cart.removelineitem.SunriseRemoveLineItemController;
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.components.controllers.PageHeaderControllerComponentSupplier;
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.framework.components.controllers.PageHeaderControllerComponentSupplier;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -30,17 +31,18 @@ public final class RemoveLineItemController extends SunriseRemoveLineItemControl
     private final CartReverseRouter cartReverseRouter;
 
     @Inject
-    public RemoveLineItemController(final TemplateRenderer templateRenderer,
+    public RemoveLineItemController(final ContentRenderer contentRenderer,
                                     final FormFactory formFactory,
                                     final RemoveLineItemFormData formData,
                                     final CartFinder cartFinder,
                                     final RemoveLineItemControllerAction removeLineItemControllerAction,
                                     final CartDetailPageContentFactory cartDetailPageContentFactory,
                                     final CartReverseRouter cartReverseRouter) {
-        super(templateRenderer, formFactory, formData, cartFinder, removeLineItemControllerAction, cartDetailPageContentFactory);
+        super(contentRenderer, formFactory, formData, cartFinder, removeLineItemControllerAction, cartDetailPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
     }
 
+    @Nullable
     @Override
     public String getTemplateName() {
         return "cart";

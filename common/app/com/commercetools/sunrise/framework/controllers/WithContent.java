@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.framework.controllers;
 
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -10,10 +10,10 @@ import play.twirl.api.Content;
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletionStage;
 
-public interface WithTemplate {
+public interface WithContent {
 
     default CompletionStage<Content> renderContent(final PageContent pageContent) {
-        return getTemplateRenderer().render(pageContent, getTemplateName(), getCmsPageKey());
+        return getContentRenderer().render(pageContent, getTemplateName(), getCmsPageKey());
     }
 
     default CompletionStage<Result> okResultWithPageContent(final PageContent pageContent) {
@@ -26,9 +26,12 @@ public interface WithTemplate {
                 .thenApplyAsync(Results::badRequest, HttpExecution.defaultContext());
     }
 
-    TemplateRenderer getTemplateRenderer();
+    ContentRenderer getContentRenderer();
 
-    String getTemplateName();
+    @Nullable
+    default String getTemplateName() {
+        return null;
+    }
 
     @Nullable
     default String getCmsPageKey() {

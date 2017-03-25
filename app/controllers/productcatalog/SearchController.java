@@ -1,15 +1,16 @@
 package controllers.productcatalog;
 
-import com.commercetools.sunrise.productcatalog.productoverview.search.ProductOverviewSearchControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.components.controllers.PageHeaderControllerComponentSupplier;
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseSearchController;
+import com.commercetools.sunrise.productcatalog.productoverview.search.ProductOverviewSearchControllerComponentsSupplier;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
-import com.commercetools.sunrise.framework.components.controllers.PageHeaderControllerComponentSupplier;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 @NoCache
@@ -21,12 +22,13 @@ import javax.inject.Inject;
 public final class SearchController extends SunriseSearchController {
 
     @Inject
-    public SearchController(final TemplateRenderer templateRenderer,
+    public SearchController(final ContentRenderer contentRenderer,
                             final ProductListFinder productListFinder,
                             final ProductOverviewPageContentFactory pageContentFactory) {
-        super(templateRenderer, productListFinder, pageContentFactory);
+        super(contentRenderer, productListFinder, pageContentFactory);
     }
 
+    @Nullable
     @Override
     public String getTemplateName() {
         return "pop";

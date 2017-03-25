@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.framework.cart.removelineitem;
 
+import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.CartFinder;
 import com.commercetools.sunrise.framework.WithRequiredCart;
 import com.commercetools.sunrise.framework.cart.cartdetail.viewmodels.CartDetailPageContentFactory;
-import com.commercetools.sunrise.framework.controllers.SunriseTemplateFormController;
-import com.commercetools.sunrise.framework.controllers.WithTemplateFormFlow;
+import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.TemplateRenderer;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -17,19 +17,19 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseRemoveLineItemController extends SunriseTemplateFormController
-        implements WithTemplateFormFlow<Cart, Cart, RemoveLineItemFormData>, WithRequiredCart {
+public abstract class SunriseRemoveLineItemController extends SunriseContentFormController
+        implements WithContentFormFlow<Cart, Cart, RemoveLineItemFormData>, WithRequiredCart {
 
     private final RemoveLineItemFormData formData;
     private final CartFinder cartFinder;
     private final RemoveLineItemControllerAction removeLineItemControllerAction;
     private final CartDetailPageContentFactory cartDetailPageContentFactory;
 
-    protected SunriseRemoveLineItemController(final TemplateRenderer templateRenderer, final FormFactory formFactory,
+    protected SunriseRemoveLineItemController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                               final RemoveLineItemFormData formData, final CartFinder cartFinder,
                                               final RemoveLineItemControllerAction removeLineItemControllerAction,
                                               final CartDetailPageContentFactory cartDetailPageContentFactory) {
-        super(templateRenderer, formFactory);
+        super(contentRenderer, formFactory);
         this.formData = formData;
         this.cartFinder = cartFinder;
         this.removeLineItemControllerAction = removeLineItemControllerAction;
