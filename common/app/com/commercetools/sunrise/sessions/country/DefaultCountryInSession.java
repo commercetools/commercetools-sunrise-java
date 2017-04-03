@@ -35,6 +35,10 @@ public class DefaultCountryInSession extends DataFromResourceStoringOperations<C
         return LOGGER;
     }
 
+    protected final String getCountrySessionKey() {
+        return countrySessionKey;
+    }
+
     protected final SessionStrategy getSession() {
         return session;
     }

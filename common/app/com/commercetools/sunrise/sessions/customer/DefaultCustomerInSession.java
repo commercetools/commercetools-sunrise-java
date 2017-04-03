@@ -45,8 +45,24 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
         return LOGGER;
     }
 
+    protected final String getCustomerIdSessionKey() {
+        return customerIdSessionKey;
+    }
+
+    protected final String getCustomerEmailSessionKey() {
+        return customerEmailSessionKey;
+    }
+
+    protected final String getUserInfoSessionKey() {
+        return userInfoSessionKey;
+    }
+
     protected final ObjectStoringSessionStrategy getSession() {
         return session;
+    }
+
+    protected final UserInfoViewModelFactory getUserInfoViewModelFactory() {
+        return userInfoViewModelFactory;
     }
 
     @Override

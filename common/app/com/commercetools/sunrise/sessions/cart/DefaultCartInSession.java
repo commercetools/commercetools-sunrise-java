@@ -42,8 +42,20 @@ public class DefaultCartInSession extends DataFromResourceStoringOperations<Cart
         return LOGGER;
     }
 
+    protected final String getCartIdSessionKey() {
+        return cartIdSessionKey;
+    }
+
+    protected final String getMiniCartSessionKey() {
+        return miniCartSessionKey;
+    }
+
     protected final ObjectStoringSessionStrategy getSession() {
         return session;
+    }
+
+    protected final MiniCartViewModelFactory getMiniCartViewModelFactory() {
+        return miniCartViewModelFactory;
     }
 
     @Override

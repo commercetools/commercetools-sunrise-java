@@ -35,6 +35,10 @@ public class DefaultLanguageInSession extends DataFromResourceStoringOperations<
         return LOGGER;
     }
 
+    protected final String getLanguageSessionKey() {
+        return languageSessionKey;
+    }
+
     protected final SessionStrategy getSession() {
         return session;
     }

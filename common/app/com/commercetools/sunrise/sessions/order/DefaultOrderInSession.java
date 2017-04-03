@@ -35,6 +35,10 @@ public class DefaultOrderInSession extends DataFromResourceStoringOperations<Ord
         return LOGGER;
     }
 
+    protected final String getLastOrderIdSessionKey() {
+        return lastOrderIdSessionKey;
+    }
+
     protected final SessionStrategy getSession() {
         return session;
     }
