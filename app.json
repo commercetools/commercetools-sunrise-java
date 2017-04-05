@@ -1,0 +1,36 @@
+{
+  "name": "commercetools-sunrise-java",
+  "scripts": {},
+  "env": {
+    "APPLICATION_SECRET": {
+      "required": true
+    },
+    "BASIC_AUTH_CREDENTIALS": {
+      "required": true
+    },
+    "CTP_CLIENT_ID": {
+      "required": true
+    },
+    "CTP_CLIENT_SECRET": {
+      "required": true
+    },
+    "CTP_PROJECT_KEY": {
+      "required": true
+    },
+    "NEW_RELIC_LICENSE_KEY": {
+      "required": true
+    },
+    "NEW_RELIC_LOG": {
+      "required": true
+    }
+  },
+  "formation": {},
+  "addons": [
+    "newrelic"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/scala"
+    }
+  ]
+}
