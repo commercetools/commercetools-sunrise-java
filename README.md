@@ -1,7 +1,7 @@
 Sunrise Java Shop Framework :sunrise:
 ==============
 
-[![Build Status](https://travis-ci.org/commercetools/commercetools-sunrise-java.png?branch=master)](https://travis-ci.org/commercetools/commercetools-sunrise-java)
+[![Build Status](https://travis-ci.org/commercetools/commercetools-sunrise-java.svg?branch=master)](https://travis-ci.org/commercetools/commercetools-sunrise-java)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise/product-catalog_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise/product-catalog_2.11)
 [![Stories in Ready](https://badge.waffle.io/commercetools/commercetools-sunrise-java.png?label=ready&title=Ready)](https://waffle.io/commercetools/commercetools-sunrise-java)
 [![Heroku](http://heroku-badge.herokuapp.com/?app=ct-sunrise-prod&style=flat&svg=1)](https://ct-sunrise-prod.herokuapp.com/)
