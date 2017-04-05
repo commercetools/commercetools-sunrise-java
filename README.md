@@ -3,7 +3,7 @@ Sunrise Java Shop Framework :sunrise:
 
 [![Build Status](https://travis-ci.org/commercetools/commercetools-sunrise-java.svg?branch=master)](https://travis-ci.org/commercetools/commercetools-sunrise-java)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise/product-catalog_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.commercetools.sunrise/product-catalog_2.11)
-[![Heroku](http://heroku-badge.herokuapp.com/?app=ct-sunrise-prod&style=flat&svg=1)](https://ct-sunrise-prod.herokuapp.com/)
+[![Heroku](http://heroku-badge.herokuapp.com/?app=ct-sunrise-prod&style=flat&svg=1)](http://ct-sunrise-prod.herokuapp.com/)
 [![Stories in Ready](https://badge.waffle.io/commercetools/commercetools-sunrise-java.svg?label=in+progress&title=waffle.io)](https://waffle.io/commercetools/commercetools-sunrise-java)
 
 The next generation shop framework. 
