@@ -23,6 +23,7 @@ object TestCommon {
 
   def configCommonTestSettings(scopes: String) = Seq(
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-v"),
+    javaOptions in Test += "-Dlogger.resource=logback-test.xml",
     libraryDependencies ++= Seq (
       "org.assertj" % "assertj-core" % "3.0.0" % scopes,
       "com.commercetools.sdk.jvm.core" % "commercetools-test-lib" % "1.0.0-RC2" % scopes,
