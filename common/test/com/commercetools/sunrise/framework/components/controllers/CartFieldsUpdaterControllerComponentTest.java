@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.framework.components.controllers;
 
-import com.commercetools.sunrise.framework.components.controllers.CartFieldsUpdaterControllerComponent;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;

@@ -17,12 +17,12 @@ import io.sphere.sdk.models.DefaultCurrencyUnits;
 import io.sphere.sdk.models.Versioned;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 import java.util.function.Function;
-
-import static io.sphere.sdk.test.SphereTestUtils.randomEmail;
 
 public class TestFixtures {
 
+    private static final Random random = new Random();
     public static String CUSTOMER_PASSWORD = "PSW-12345";
     private static final int DEFAULT_DELETE_TTL = 5;
 
@@ -75,5 +75,9 @@ public class TestFixtures {
         } else {
             throw new RuntimeException("Could not delete resource due to too many concurrent updates, resource: " + resource);
         }
+    }
+
+    public static String randomEmail(final Class<?> clazz) {
+        return  "random-email-" + random.nextInt() + "-" + clazz.getSimpleName() + "@test.commercetools.de";
     }
 }

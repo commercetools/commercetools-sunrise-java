@@ -62,7 +62,7 @@ lazy val `my-account` = project
 
 lazy val `test-lib` = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
-  .settings(Release.enableSignedRelease ++ TestCommon.configCommonTestSettings("compile") ++ TestCommon.configJavaWsDependency("compile"): _*)
+  .settings(Release.enableSignedRelease ++ TestCommon.configCommonTestSettings("compile") ++ TestCommon.configPlayDependencies("compile"): _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.commonLib: _*)
 
 lazy val commonWithTests: Seq[ClasspathDep[ProjectReference]] = Seq(common, `test-lib` % "test")

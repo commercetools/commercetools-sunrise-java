@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.framework.viewmodels.formatters;
 
-import com.commercetools.sunrise.framework.viewmodels.formatters.PriceFormatterImpl;
 import org.javamoney.moneta.Money;
 import org.junit.Test;
 

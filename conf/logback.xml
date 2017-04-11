@@ -1,33 +1,23 @@
-<configuration debug="false">
+<configuration debug="true">
+
+    <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%level %logger - %msg%n%xException</pattern>
+            <pattern>%coloredLevel %logger{15} - %message%n%xException{10}</pattern>
         </encoder>
     </appender>
 
-    <!--
-      The logger name is typically the Java/Scala package name.
-      This configures the log level to log at for a package and its children packages.
-    -->
     <logger name="application" level="DEBUG" />
     <logger name="play" level="INFO" />
     <logger name="play.requests" level="DEBUG" />
-    <logger name="sphere" level="INFO" />
-    <logger name="com.commercetools.sunrise.framework.controllers.metrics.MetricsLogger" level="DEBUG" />
-    <logger name="com.github.jknack.handlebars.Handlebars" level="ERROR" />
-    <logger name="com.commercetools.sunrise" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.categorytree.CategoryTreeInNewProvider" level="INFO" />
-    <logger name="com.commercetools.sunrise.common.categorytree.RefreshableCategoryTree" level="DEBUG" />
-    <logger name="com.commercetools.sunrise.ctp.ProductDataConfigProvider" level="INFO" />
-    <logger name="com.commercetools.sunrise.recommendations.DefaultProductRecommender" level="INFO" />
-    <logger name="com.commercetools.sunrise.framework.template.engine.handlebars.HandlebarsTemplateEngine" level="INFO" />
-    <logger name="com.commercetools.sunrise.framework.template.i18n.yaml.YamlI18nResolver" level="INFO" />
-    <logger name="com.commercetools.sunrise.framework.template.i18n.ConfigurableI18nResolverProvider" level="INFO" />
-    <logger name="com.commercetools.sunrise.framework.template.engine.HandlebarsTemplateEngineProvider" level="INFO" />
-    <logger name="com.commercetools.sunrise.productcatalog" level="INFO" />
-    <logger name="com.commercetools.sunrise.themeimporter.ThemeImporter" level="INFO" />
 
+    <logger name="sphere" level="INFO" />
+
+    <logger name="com.commercetools.sunrise.framework.controllers.metrics.MetricsLogger" level="DEBUG" />
+    <logger name="com.commercetools.sunrise" level="INFO" />
+
+    <logger name="com.github.jknack.handlebars.HelperRegistry" level="ERROR" />
 
     <root level="WARN">
         <appender-ref ref="STDOUT" />

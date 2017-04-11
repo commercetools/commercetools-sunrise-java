@@ -4,16 +4,16 @@ import org.junit.Test;
 import play.Application;
 import play.mvc.Http;
 import play.mvc.Result;
+import play.test.WithApplication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static play.test.Helpers.contentAsString;
-import static play.test.Helpers.fakeApplication;
 
-public class SunriseVersionControllerTest {
+public class SunriseVersionControllerTest extends WithApplication {
 
     @Test
     public void showsVersion() throws Exception {
-        final Result result = new VersionControllerTest(fakeApplication()).show();
+        final Result result = new VersionControllerTest(app).show();
         assertThat(result.status()).isEqualTo(Http.Status.OK);
         assertThat(result.contentType()).contains(Http.MimeTypes.JSON);
         assertThat(contentAsString(result)).contains("version").contains("build");
