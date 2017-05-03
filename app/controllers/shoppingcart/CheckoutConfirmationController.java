@@ -13,6 +13,8 @@ import com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout.
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
+import com.commercetools.sunrise.sessions.cart.CartPaymentInfoExpansionControllerComponent;
+import com.commercetools.sunrise.sessions.cart.CartShippingInfoExpansionControllerComponent;
 import io.sphere.sdk.orders.Order;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -25,7 +27,9 @@ import java.util.concurrent.CompletionStage;
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
         CheckoutStepControllerComponent.class,
-        CartOperationsControllerComponentSupplier.class
+        CartOperationsControllerComponentSupplier.class,
+        CartShippingInfoExpansionControllerComponent.class,
+        CartPaymentInfoExpansionControllerComponent.class
 })
 public final class CheckoutConfirmationController extends SunriseCheckoutConfirmationController {
 

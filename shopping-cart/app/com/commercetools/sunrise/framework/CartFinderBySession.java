@@ -54,8 +54,6 @@ final class CartFinderBySession extends AbstractSingleCartQueryExecutor implemen
     private CartQuery decorateQueryWithAdditionalInfo(final CartQuery query) {
         return query
                 .plusPredicates(cart -> cart.cartState().is(CartState.ACTIVE))
-                .plusExpansionPaths(c -> c.shippingInfo().shippingMethod()) // TODO use run hook on cart query instead
-                .plusExpansionPaths(c -> c.paymentInfo().payments())
                 .withSort(cart -> cart.lastModifiedAt().sort().desc())
                 .withLimit(1);
     }
