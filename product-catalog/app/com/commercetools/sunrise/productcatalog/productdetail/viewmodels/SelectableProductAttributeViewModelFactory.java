@@ -102,7 +102,7 @@ public class SelectableProductAttributeViewModelFactory extends SelectableViewMo
         final Map<String, Map<String, List<String>>> selectableData = new HashMap<>();
         findDistinctAttributeOptions(variants, selectedAttribute).forEach(attrOption -> {
             final AttributeWithProductType attributeOptionWithProductType = AttributeWithProductType.of(attrOption, selectedAttribute.getProductTypeRef());
-            final String attrOptionValue = attributeFormatter.value(attributeOptionWithProductType);
+            final String attrOptionValue = attributeFormatter.encodedValue(attributeOptionWithProductType);
             selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attributeOptionWithProductType, variants));
         });
         viewModel.setSelectData(selectableData);
