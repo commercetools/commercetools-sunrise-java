@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.search.pagination;
 
-import com.commercetools.sunrise.framework.viewmodels.forms.AbstractFormSettings;
+import com.commercetools.sunrise.framework.viewmodels.forms.AbstractFormSettingsWithDefault;
 
-class PaginationSettingsImpl extends AbstractFormSettings<Long> implements PaginationSettings {
+class PaginationSettingsImpl extends AbstractFormSettingsWithDefault<Long> implements PaginationSettings {
 
     private static final long DEFAULT_PAGE = 1;
 

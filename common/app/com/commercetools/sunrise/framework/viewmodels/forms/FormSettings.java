@@ -4,15 +4,13 @@ import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
 public interface FormSettings<T> extends WithFormFieldName {
 
-    T getDefaultValue();
-
-    @Nullable
-    T mapFieldValueToValue(final String fieldValue);
+    Optional<T> mapFieldValueToValue(final String fieldValue);
 
     boolean isValidValue(@Nullable final T value);
 
@@ -24,6 +22,8 @@ public interface FormSettings<T> extends WithFormFieldName {
     default List<T> getAllSelectedValues(final Http.Context httpContext) {
         return getSelectedValuesAsRawList(httpContext).stream()
                 .map(this::mapFieldValueToValue)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .filter(this::isValidValue)
                 .collect(toList());
     }
@@ -32,12 +32,11 @@ public interface FormSettings<T> extends WithFormFieldName {
      * Finds one selected valid value for this form in the HTTP request.
      * If many valid values are selected, which one is going to be returned is non-deterministic.
      * @param httpContext current HTTP context
-     * @return a valid selected value for this form, or the default value if no valid value is selected
+     * @return a valid selected value for this form, or empty if no valid value is selected
      */
-    default T getSelectedValue(final Http.Context httpContext) {
+    default Optional<T> getSelectedValue(final Http.Context httpContext) {
         return getAllSelectedValues(httpContext).stream()
-                .findAny()
-                .orElseGet(this::getDefaultValue);
+                .findAny();
     }
 }
 

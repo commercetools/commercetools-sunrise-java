@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.commercetools.sunrise.framework.viewmodels.forms.FormTestUtils.someQueryString;
 import static com.commercetools.sunrise.framework.viewmodels.forms.FormTestUtils.testWithHttpContext;
@@ -14,17 +15,17 @@ public class FormSettingsTest {
 
     @Test
     public void findsSelectedValueFromForm() throws Exception {
-        final TestableFormSettings formSettings = new TestableFormSettings("bar", 10);
+        final TestableFormSettings formSettings = new TestableFormSettings("bar");
         final Map<String, List<String>> queryString = someQueryString();
         queryString.put("bar", asList("-1", "2", "0", "-5"));
         testWithHttpContext(queryString, httpContext ->
                 assertThat(formSettings.getSelectedValue(httpContext))
-                        .isEqualTo(2));
+                        .contains(2));
     }
 
     @Test
     public void findsAllSelectedValuesFromForm() throws Exception {
-        final TestableFormSettings formSettings = new TestableFormSettings("bar", 10);
+        final TestableFormSettings formSettings = new TestableFormSettings("bar");
         final Map<String, List<String>> queryString = someQueryString();
         queryString.put("bar", asList("-1", "2", "0", "3"));
         testWithHttpContext(queryString, httpContext ->
@@ -33,35 +34,35 @@ public class FormSettingsTest {
     }
 
     @Test
-    public void fallbacksToDefaultValueIfNoneSelected() throws Exception {
-        final TestableFormSettings formSettings = new TestableFormSettings("bar", 10);
+    public void emptyIfNoneSelected() throws Exception {
+        final TestableFormSettings formSettings = new TestableFormSettings("bar");
         testWithHttpContext(someQueryString(), httpContext ->
                 assertThat(formSettings.getSelectedValue(httpContext))
-                        .isEqualTo(10));
+                        .isEmpty());
     }
 
     @Test
-    public void fallbacksToDefaultValueIfNoValidValue() throws Exception {
-        final TestableFormSettings formSettings = new TestableFormSettings("bar", 10);
+    public void emptyIfNoValidValue() throws Exception {
+        final TestableFormSettings formSettings = new TestableFormSettings("bar");
         final Map<String, List<String>> queryString = someQueryString();
         queryString.put("bar", asList("x", "y", "z"));
         testWithHttpContext(queryString, httpContext ->
                 assertThat(formSettings.getSelectedValue(httpContext))
-                        .isEqualTo(10));
+                        .isEmpty());
     }
 
     private static class TestableFormSettings extends AbstractFormSettings<Integer> {
 
-        TestableFormSettings(final String fieldName, final Integer defaultValue) {
-            super(fieldName, defaultValue);
+        TestableFormSettings(final String fieldName) {
+            super(fieldName);
         }
 
         @Override
-        public Integer mapFieldValueToValue(final String fieldValue) {
+        public Optional<Integer> mapFieldValueToValue(final String fieldValue) {
             try {
-                return Integer.valueOf(fieldValue);
+                return Optional.of(Integer.valueOf(fieldValue));
             } catch (NumberFormatException e) {
-                return 0;
+                return Optional.empty();
             }
         }
 

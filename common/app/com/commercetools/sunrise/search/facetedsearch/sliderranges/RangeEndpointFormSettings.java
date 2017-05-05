@@ -1,25 +1,25 @@
 package com.commercetools.sunrise.search.facetedsearch.sliderranges;
 
-import com.commercetools.sunrise.framework.viewmodels.forms.FormSettings;
+import com.commercetools.sunrise.framework.viewmodels.forms.FormSettingsWithDefault;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
-public interface RangeEndpointFormSettings extends FormSettings<String> {
+public interface RangeEndpointFormSettings extends FormSettingsWithDefault<String> {
 
     @Override
     default String getDefaultValue() {
         return "*";
     }
 
-    @Nullable
     @Override
-    default String mapFieldValueToValue(final String fieldValue) {
-        return fieldValue;
+    default Optional<String> mapFieldValueToValue(final String fieldValue) {
+        return Optional.of(fieldValue);
     }
 
     @Override
     default boolean isValidValue(@Nullable final String value) {
-        return value != null;
+        return value != null && !value.trim().isEmpty();
     }
 
     /**

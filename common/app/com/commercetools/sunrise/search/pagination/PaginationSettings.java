@@ -1,11 +1,12 @@
 package com.commercetools.sunrise.search.pagination;
 
-import com.commercetools.sunrise.framework.viewmodels.forms.FormSettings;
+import com.commercetools.sunrise.framework.viewmodels.forms.FormSettingsWithDefault;
 import play.mvc.Http;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
-public interface PaginationSettings extends FormSettings<Long> {
+public interface PaginationSettings extends FormSettingsWithDefault<Long> {
 
     /**
      * The amount of pages on each side of the current page that are can be displayed.
@@ -14,16 +15,15 @@ public interface PaginationSettings extends FormSettings<Long> {
     int getDisplayedPages();
 
     default long getOffset(final Http.Context httpContext, final long limit) {
-        return (getSelectedValue(httpContext) - 1) * limit;
+        return (getSelectedValueOrDefault(httpContext) - 1) * limit;
     }
 
-    @Nullable
     @Override
-    default Long mapFieldValueToValue(final String fieldValue) {
+    default Optional<Long> mapFieldValueToValue(final String fieldValue) {
         try {
-            return Long.valueOf(fieldValue);
+            return Optional.ofNullable(Long.valueOf(fieldValue));
         } catch (NumberFormatException e) {
-            return null;
+            return Optional.empty();
         }
     }
 

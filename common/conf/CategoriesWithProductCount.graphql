@@ -1,0 +1,11 @@
+query CategoriesWithProductCount($limit: Int, $offset: Int, $sort: [String!], $where: String) {
+    categories(limit: $limit, offset: $offset, sort: $sort, where: $where) {
+        total
+        offset
+        count
+        results {
+            id
+            productCount
+        }
+    }
+}

@@ -16,3 +16,4 @@ dist
 /.settings
 dev.conf
 *.log
+/common/graphql.config.json

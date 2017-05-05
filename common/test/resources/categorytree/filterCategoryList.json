@@ -1,0 +1,118 @@
+[
+  {
+    "id": "5dde70ab-3e96-4f32-a616-a4b0eae6268f",
+    "slug": {
+      "de": "A"
+    },
+    "ancestors": []
+  },
+
+  {
+    "id": "622d4a58-00a2-411e-9cb3-1a357a7c395e",
+    "slug": {
+      "de": "A-1"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "5dde70ab-3e96-4f32-a616-a4b0eae6268f"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "5dde70ab-3e96-4f32-a616-a4b0eae6268f"
+    }
+  },
+
+  {
+    "id": "ceb5bc0c-1ead-4eb8-a5cf-6d1829a26fcb",
+    "slug": {
+      "de": "A-1-1"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "5dde70ab-3e96-4f32-a616-a4b0eae6268f"
+      },
+      {
+        "typeId": "category",
+        "id": "622d4a58-00a2-411e-9cb3-1a357a7c395e"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "622d4a58-00a2-411e-9cb3-1a357a7c395e"
+    }
+  },
+
+  {
+    "id": "fbe7f898-600e-420e-822b-881972361f31",
+    "slug": {
+      "de": "A-2"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "5dde70ab-3e96-4f32-a616-a4b0eae6268f"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "5dde70ab-3e96-4f32-a616-a4b0eae6268f"
+    }
+  },
+
+  {
+    "id": "3249e4c1-9afc-4cfd-93a9-451c838b0d55",
+    "slug": {
+      "de": "A-2-1"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "5dde70ab-3e96-4f32-a616-a4b0eae6268f"
+      },
+      {
+        "typeId": "category",
+        "id": "fbe7f898-600e-420e-822b-881972361f31"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "fbe7f898-600e-420e-822b-881972361f31"
+    }
+  },
+
+  {
+    "id": "9d7b89e7-dca4-47e3-b97c-d71a7a104391",
+    "slug": {
+      "de": "B"
+    },
+    "ancestors": []
+  },
+
+  {
+    "id": "0195d44a-05dd-4944-983e-71ead6cb4729",
+    "slug": {
+      "de": "B-1"
+    },
+    "ancestors": [
+      {
+        "typeId": "category",
+        "id": "9d7b89e7-dca4-47e3-b97c-d71a7a104391"
+      }
+    ],
+    "parent": {
+      "typeId": "category",
+      "id": "9d7b89e7-dca4-47e3-b97c-d71a7a104391"
+    }
+  },
+
+  {
+    "id": "56388f1d-3915-4d4e-803b-f955884a0b29",
+    "slug": {
+      "de": "C"
+    },
+    "ancestors": []
+  }
+]

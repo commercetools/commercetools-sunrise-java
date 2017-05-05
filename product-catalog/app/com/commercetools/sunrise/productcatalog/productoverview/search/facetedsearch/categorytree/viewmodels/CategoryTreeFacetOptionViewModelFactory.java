@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels;
 
+import com.commercetools.sunrise.categorytree.NavigationCategoryTree;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.localization.UserLanguage;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
@@ -19,14 +20,14 @@ import static com.commercetools.sunrise.framework.viewmodels.forms.QueryStringUt
 import static com.commercetools.sunrise.framework.viewmodels.forms.QueryStringUtils.extractQueryString;
 
 @RequestScoped
-public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOptionViewModelFactory<TermFacetResult, Category, String> {
+public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOptionViewModelFactory<TermFacetResult, Category, Category> {
 
     private final List<Locale> locales;
     private final CategoryTree categoryTree;
     private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public CategoryTreeFacetOptionViewModelFactory(final UserLanguage userLanguage, final CategoryTree categoryTree,
+    public CategoryTreeFacetOptionViewModelFactory(final UserLanguage userLanguage, @NavigationCategoryTree final CategoryTree categoryTree,
                                                    final ProductReverseRouter productReverseRouter) {
         this.locales = userLanguage.locales();
         this.categoryTree = categoryTree;
@@ -46,35 +47,37 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
     }
 
     @Override
-    public final FacetOptionViewModel create(final TermFacetResult stats, final Category value, @Nullable final String selectedValue) {
+    public final FacetOptionViewModel create(final TermFacetResult stats, final Category value, @Nullable final Category selectedValue) {
         return super.create(stats, value, selectedValue);
     }
 
     @Override
-    protected final void initialize(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category value, @Nullable final String selectedValue) {
+    protected final void initialize(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category value, @Nullable final Category selectedValue) {
         super.initialize(viewModel, stats, value, selectedValue);
         fillChildren(viewModel, stats, value, selectedValue);
     }
 
     @Override
-    protected void fillLabel(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final String selectedValue) {
+    protected void fillLabel(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final Category selectedValue) {
         viewModel.setLabel(category.getName().find(locales).orElseGet(category::getId));
     }
 
     @Override
-    protected void fillValue(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final String selectedValue) {
+    protected void fillValue(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final Category selectedValue) {
         productReverseRouter.productOverviewPageCall(category).ifPresent(call -> {
             viewModel.setValue(buildUri(call.url(), extractQueryString(Http.Context.current().request())));
         });
     }
 
     @Override
-    protected void fillSelected(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final String selectedValue) {
-        viewModel.setSelected(category.getId().equals(selectedValue));
+    protected void fillSelected(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final Category selectedValue) {
+        if (selectedValue != null) {
+            viewModel.setSelected(category.getId().equals(selectedValue.getId()));
+        }
     }
 
     @Override
-    protected void fillCount(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final String selectedValue) {
+    protected void fillCount(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final Category selectedValue) {
         final Long count = findTermStats(stats, category)
                 .map(TermStats::getProductCount)
                 .filter(Objects::nonNull)
@@ -82,7 +85,7 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
         viewModel.setCount(count);
     }
 
-    protected void fillChildren(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final String selectedValue) {
+    protected void fillChildren(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final Category selectedValue) {
         final List<FacetOptionViewModel> childrenViewModels = new ArrayList<>();
         categoryTree.findChildren(category).forEach(child -> {
             final FacetOptionViewModel childViewModel = create(stats, child, selectedValue);

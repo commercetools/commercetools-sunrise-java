@@ -40,7 +40,7 @@ lazy val common = project
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.sunriseTheme ++ Dependencies.sunriseModules ++ Dependencies.commonLib: _*)
-  .dependsOn(`test-lib` % "test")
+  .dependsOn(`test-lib` % TestCommon.allTestScopes)
 
 lazy val `product-catalog` = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
@@ -65,4 +65,4 @@ lazy val `test-lib` = project
   .settings(Release.enableSignedRelease ++ TestCommon.configCommonTestSettings("compile") ++ TestCommon.configPlayDependencies("compile"): _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.commonLib: _*)
 
-lazy val commonWithTests: Seq[ClasspathDep[ProjectReference]] = Seq(common, `test-lib` % "test")
+lazy val commonWithTests: Seq[ClasspathDep[ProjectReference]] = Seq(common, `test-lib` % TestCommon.allTestScopes)

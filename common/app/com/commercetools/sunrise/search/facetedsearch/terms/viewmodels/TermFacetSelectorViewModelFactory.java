@@ -43,7 +43,6 @@ public class TermFacetSelectorViewModelFactory extends AbstractFacetSelectorView
         super.initialize(viewModel, settings, facetResult);
         fillSelectFacet(viewModel, settings, facetResult);
         fillDisplayList(viewModel, settings, facetResult);
-        fillHierarchicalSelectFacet(viewModel, settings, facetResult);
     }
 
     @Override
@@ -61,12 +60,6 @@ public class TermFacetSelectorViewModelFactory extends AbstractFacetSelectorView
     protected void fillDisplayList(final FacetSelectorViewModel viewModel, final TermFacetedSearchFormSettings<?> settings, final TermFacetResult facetResult) {
         if (settings.getUIType() != null) {
             viewModel.setDisplayList(settings.getUIType().equals("list"));
-        }
-    }
-
-    protected void fillHierarchicalSelectFacet(final FacetSelectorViewModel viewModel, final TermFacetedSearchFormSettings<?> settings, final TermFacetResult facetResult) {
-        if (settings.getUIType() != null) {
-            viewModel.setHierarchicalSelectFacet(settings.getUIType().equals("categoryTree"));
         }
     }
 

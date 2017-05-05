@@ -38,8 +38,8 @@ public interface SliderRangeFacetedSearchFormSettings<T> extends ConfiguredSlide
     default List<FilterExpression<T>> buildFilterExpressions(final Http.Context httpContext) {
         final RangeTermFacetedSearchSearchModel<T> searchModel = RangeTermFacetedSearchSearchModel.of(getAttributePath());
         return parseFilterRange(
-                getLowerEndpointSettings().getSelectedValue(httpContext),
-                getUpperEndpointSettings().getSelectedValue(httpContext))
+                getLowerEndpointSettings().getSelectedValueOrDefault(httpContext),
+                getUpperEndpointSettings().getSelectedValueOrDefault(httpContext))
                 .map(searchModel::isBetween)
                 .orElseGet(searchModel::allRanges).filterExpressions();
     }

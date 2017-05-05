@@ -5,9 +5,11 @@ import sbt._
 
 object TestCommon {
 
+  val allTestScopes = "test,it,pt"
+
   lazy val PlayTest: sbt.Configuration = config("pt") extend Test
 
-  lazy val defaultSettings: Def.SettingsDefinition = itBaseTestSettings ++ ptBaseTestSettings ++ configCommonTestSettings("test,it,pt") ++ configPlayDependencies("it,pt")
+  lazy val defaultSettings: Def.SettingsDefinition = itBaseTestSettings ++ ptBaseTestSettings ++ configCommonTestSettings(allTestScopes) ++ configPlayDependencies("it,pt")
 
   lazy val settingsWithoutPlayTest: Def.SettingsDefinition = itBaseTestSettings ++ configCommonTestSettings("test,it") ++ configPlayDependencies("it")
 

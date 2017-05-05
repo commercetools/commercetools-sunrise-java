@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.search.facetedsearch.viewmodels;
 
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
+import com.commercetools.sunrise.search.facetedsearch.FacetedSearchFormSettings;
 import com.commercetools.sunrise.search.facetedsearch.FacetedSearchFormSettingsList;
 import com.commercetools.sunrise.search.facetedsearch.bucketranges.BucketRangeFacetedSearchFormSettings;
 import com.commercetools.sunrise.search.facetedsearch.bucketranges.viewmodels.BucketRangeFacetSelectorViewModelFactory;
@@ -66,16 +67,18 @@ public abstract class AbstractFacetSelectorListViewModelFactory<T> extends Simpl
 
     protected void fillList(final FacetSelectorListViewModel viewModel, final PagedSearchResult<T> pagedSearchResult) {
         final List<FacetSelectorViewModel> list = new ArrayList<>();
-        settingsList.getSettings().forEach(settings -> {
-            if (settings instanceof TermFacetedSearchFormSettings) {
-                createViewModel((TermFacetedSearchFormSettings<T>) settings, pagedSearchResult).ifPresent(list::add);
-            } else if (settings instanceof SliderRangeFacetedSearchFormSettings) {
-                createViewModel((SliderRangeFacetedSearchFormSettings<T>) settings, pagedSearchResult).ifPresent(list::add);
-            } else if (settings instanceof BucketRangeFacetedSearchFormSettings) {
-                createViewModel((BucketRangeFacetedSearchFormSettings<T>) settings, pagedSearchResult).ifPresent(list::add);
-            }
-        });
+        settingsList.getSettings().forEach(settings -> addViewModelToList(list, settings, pagedSearchResult));
         viewModel.setList(list);
+    }
+
+    protected void addViewModelToList(final List<FacetSelectorViewModel> list, final FacetedSearchFormSettings<T> settings, final PagedSearchResult<T> pagedSearchResult) {
+        if (settings instanceof TermFacetedSearchFormSettings) {
+            createViewModel((TermFacetedSearchFormSettings<T>) settings, pagedSearchResult).ifPresent(list::add);
+        } else if (settings instanceof SliderRangeFacetedSearchFormSettings) {
+            createViewModel((SliderRangeFacetedSearchFormSettings<T>) settings, pagedSearchResult).ifPresent(list::add);
+        } else if (settings instanceof BucketRangeFacetedSearchFormSettings) {
+            createViewModel((BucketRangeFacetedSearchFormSettings<T>) settings, pagedSearchResult).ifPresent(list::add);
+        }
     }
 
     private Optional<FacetSelectorViewModel> createViewModel(final TermFacetedSearchFormSettings<T> settings, final PagedSearchResult<T> pagedSearchResult) {

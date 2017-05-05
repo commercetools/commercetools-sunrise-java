@@ -144,7 +144,7 @@ public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication
         when(userLanguage.locales()).thenReturn(singletonList(Locale.ENGLISH));
         final CategoryTreeFacetOptionViewModelFactory factory = new CategoryTreeFacetOptionViewModelFactory(userLanguage, categoryTree, reverseRouter());
         final TermFacetResult termFacetResult = TermFacetResult.of(0L, 0L, 0L, termStats);
-        test.accept(factory.create(termFacetResult, category, CAT_C_ID));
+        test.accept(factory.create(termFacetResult, category, CAT_C));
     }
 
     private static Category category(final String id, @Nullable final String parentId, final String name) {

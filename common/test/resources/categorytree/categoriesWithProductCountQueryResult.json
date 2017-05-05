@@ -1,0 +1,37 @@
+{
+  "total": 7,
+  "results": [
+    {
+      "id": "5dde70ab-3e96-4f32-a616-a4b0eae6268f",
+      "productCount": 15
+    },
+    {
+      "id": "622d4a58-00a2-411e-9cb3-1a357a7c395e",
+      "productCount": 0
+    },
+    {
+      "id": "ceb5bc0c-1ead-4eb8-a5cf-6d1829a26fcb",
+      "productCount": 0
+    },
+    {
+      "id": "fbe7f898-600e-420e-822b-881972361f31",
+      "productCount": 10
+    },
+    {
+      "id": "3249e4c1-9afc-4cfd-93a9-451c838b0d55",
+      "productCount": 5
+    },
+    {
+      "id": "9d7b89e7-dca4-47e3-b97c-d71a7a104391",
+      "productCount": 0
+    },
+    {
+      "id": "0195d44a-05dd-4944-983e-71ead6cb4729",
+      "productCount": 0
+    },
+    {
+      "id": "56388f1d-3915-4d4e-803b-f955884a0b29",
+      "productCount": 0
+    }
+  ]
+}

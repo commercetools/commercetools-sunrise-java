@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.viewmodels;
 
+import com.commercetools.sunrise.categorytree.NavigationCategoryTree;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductsWithCategory;
@@ -13,7 +14,7 @@ public class JumbotronViewModelFactory extends SimpleViewModelFactory<JumbotronV
     private final CategoryTree categoryTree;
 
     @Inject
-    public JumbotronViewModelFactory(final CategoryTree categoryTree) {
+    public JumbotronViewModelFactory(@NavigationCategoryTree final CategoryTree categoryTree) {
         this.categoryTree = categoryTree;
     }
 

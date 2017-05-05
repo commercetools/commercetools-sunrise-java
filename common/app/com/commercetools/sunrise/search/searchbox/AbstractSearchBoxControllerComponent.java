@@ -7,6 +7,8 @@ import com.commercetools.sunrise.search.searchbox.viewmodels.WithSearchBoxViewMo
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.models.LocalizedStringEntry;
 
+import java.util.Optional;
+
 public abstract class AbstractSearchBoxControllerComponent extends Base implements ControllerComponent, PageDataReadyHook {
 
     private final SearchBoxSettings searchBoxSettings;
@@ -19,14 +21,14 @@ public abstract class AbstractSearchBoxControllerComponent extends Base implemen
         return searchBoxSettings;
     }
 
-    protected abstract LocalizedStringEntry getSearchText();
+    protected abstract Optional<LocalizedStringEntry> getSearchText();
 
     @Override
     public void onPageDataReady(final PageData pageData) {
-        final LocalizedStringEntry searchText = getSearchText();
-        if (!searchText.getValue().isEmpty() && pageData.getContent() instanceof WithSearchBoxViewModel) {
+        final Optional<LocalizedStringEntry> searchText = getSearchText();
+        if (searchText.isPresent() && pageData.getContent() instanceof WithSearchBoxViewModel) {
             final WithSearchBoxViewModel content = (WithSearchBoxViewModel) pageData.getContent();
-            content.setSearchTerm(searchText.getValue());
+            content.setSearchTerm(searchText.get().getValue());
         }
     }
 }

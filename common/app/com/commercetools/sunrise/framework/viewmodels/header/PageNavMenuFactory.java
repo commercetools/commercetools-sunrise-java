@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.framework.viewmodels.header;
 
+import com.commercetools.sunrise.categorytree.NavigationCategoryTree;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.content.categories.CategoryViewModel;
 import com.commercetools.sunrise.framework.viewmodels.content.categories.CategoryViewModelFactory;
@@ -15,7 +16,7 @@ public class PageNavMenuFactory extends SimpleViewModelFactory<PageNavMenu, Void
     private final CategoryViewModelFactory categoryViewModelFactory;
 
     @Inject
-    public PageNavMenuFactory(final CategoryTree categoryTree, final CategoryViewModelFactory categoryViewModelFactory) {
+    public PageNavMenuFactory(@NavigationCategoryTree final CategoryTree categoryTree, final CategoryViewModelFactory categoryViewModelFactory) {
         this.categoryTree = categoryTree;
         this.categoryViewModelFactory = categoryViewModelFactory;
     }
@@ -49,7 +50,8 @@ public class PageNavMenuFactory extends SimpleViewModelFactory<PageNavMenu, Void
 
     protected void fillCategories(final PageNavMenu viewModel) {
         final List<CategoryViewModel> categories = new LinkedList<>();
-        categoryTree.getRoots().forEach(root -> categories.add(categoryViewModelFactory.create(root)));
+        categoryTree.getSubtreeRoots()
+                .forEach(root -> categories.add(categoryViewModelFactory.create(root)));
         viewModel.setCategories(categories);
     }
 }

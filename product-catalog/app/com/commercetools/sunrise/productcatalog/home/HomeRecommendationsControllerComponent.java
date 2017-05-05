@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.framework.viewmodels.PageData;
-import com.commercetools.sunrise.recommendations.ProductRecommender;
 import com.commercetools.sunrise.framework.components.controllers.ControllerComponent;
-import com.commercetools.sunrise.framework.hooks.application.PageDataReadyHook;
 import com.commercetools.sunrise.framework.hooks.application.HttpRequestStartedHook;
+import com.commercetools.sunrise.framework.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.framework.viewmodels.PageData;
 import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContent;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListViewModelFactory;
+import com.commercetools.sunrise.recommendations.ProductRecommender;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.products.ProductProjection;

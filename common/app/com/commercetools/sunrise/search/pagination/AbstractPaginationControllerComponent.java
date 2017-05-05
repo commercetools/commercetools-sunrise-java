@@ -46,7 +46,7 @@ public abstract class AbstractPaginationControllerComponent extends Base impleme
         final PagedResult<?> pagedResult = getPagedResult();
         if (pagedResult != null && pageData.getContent() instanceof WithPaginationViewModel) {
             final WithPaginationViewModel content = (WithPaginationViewModel) pageData.getContent();
-            final Long currentPage = paginationSettings.getSelectedValue(Http.Context.current());
+            final Long currentPage = paginationSettings.getSelectedValueOrDefault(Http.Context.current());
             content.setPagination(paginationViewModelFactory.create(pagedResult, currentPage));
             content.setDisplaySelector(entriesPerPageSelectorViewModelFactory.create(pagedResult));
         }

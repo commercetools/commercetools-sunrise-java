@@ -26,6 +26,10 @@ public class ProductFacetedSearchFormSettingsListFactory extends AbstractFaceted
         this.categoryTreeFacetedSearchFormSettingsFactory = categoryTreeFacetedSearchFormSettingsFactory;
     }
 
+    protected final CategoryTreeFacetedSearchFormSettingsFactory getCategoryTreeFacetedSearchFormSettingsFactory() {
+        return categoryTreeFacetedSearchFormSettingsFactory;
+    }
+
     @Override
     protected void addSettingsToList(final List<FacetedSearchFormSettings<ProductProjection>> list, final ConfiguredFacetedSearchFormSettings settings) {
         if (settings instanceof ConfiguredCategoryTreeFacetedSearchFormSettings) {

@@ -36,11 +36,11 @@ public class SliderRangeEndpointViewModelFactory extends ViewModelFactory {
     }
 
     protected void fillLowerValue(final SliderRangeEndpointViewModel viewModel, final SliderRangeFacetedSearchFormSettings<?> settings, final SimpleRangeStats rangeStats) {
-        viewModel.setLowerValue(settings.getLowerEndpointSettings().getSelectedValue(Http.Context.current()));
+        viewModel.setLowerValue(settings.getLowerEndpointSettings().getSelectedValueOrDefault(Http.Context.current()));
     }
 
     protected void fillUpperValue(final SliderRangeEndpointViewModel viewModel, final SliderRangeFacetedSearchFormSettings<?> settings, final SimpleRangeStats rangeStats) {
-        viewModel.setUpperValue(settings.getUpperEndpointSettings().getSelectedValue(Http.Context.current()));
+        viewModel.setUpperValue(settings.getUpperEndpointSettings().getSelectedValueOrDefault(Http.Context.current()));
     }
 
     protected void fillLowerEndpoint(final SliderRangeEndpointViewModel viewModel, final SliderRangeFacetedSearchFormSettings<?> settings, final SimpleRangeStats rangeStats) {
