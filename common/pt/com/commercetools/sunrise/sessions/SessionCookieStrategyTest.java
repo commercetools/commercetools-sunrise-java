@@ -46,6 +46,17 @@ public class SessionCookieStrategyTest extends WithApplication {
     }
 
     @Test
+    public void removesKeyOnNullValue() throws Exception {
+        invokeWithContext(fakeRequest().session(singletonMap("some-key", "some-value")), () -> {
+            final SessionCookieStrategy strategy = strategy();
+            assertThat(strategy.findValueByKey("some-key")).contains("some-value");
+            strategy.overwriteValueByKey("some-key", null);
+            assertThat(strategy.findValueByKey("some-key")).isEmpty();
+            return strategy;
+        });
+    }
+
+    @Test
     public void removesValue() throws Exception {
         invokeWithContext(fakeRequest().session(singletonMap("some-key", "some-value")), () -> {
             final SessionCookieStrategy strategy = strategy();

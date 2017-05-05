@@ -107,6 +107,18 @@ public class CacheableObjectStoringSessionCookieStrategyTest extends WithApplica
     }
 
     @Test
+    public void removesKeyOnNullValue() throws Exception {
+        final CacheApi cache = buildCache(singletonMap("some-cache-key", SOME_OBJECT));
+        invokeWithContext(fakeRequest().session(singletonMap("some-key", "some-cache-key")), () -> {
+            final ObjectStoringSessionStrategy strategy = strategy(cache);
+            assertThat(strategy.findObjectByKey("some-key", SomeObject.class)).contains(SOME_OBJECT);
+            strategy.overwriteObjectByKey("some-key", null);
+            assertThat(strategy.findObjectByKey("some-key", SomeObject.class)).isEmpty();
+            return strategy;
+        });
+    }
+
+    @Test
     public void removesValue() throws Exception {
         final CacheApi cache = buildCache(singletonMap("some-cache-key", SOME_OBJECT));
         invokeWithContext(fakeRequest().session(singletonMap("some-key", "some-cache-key")), () -> {

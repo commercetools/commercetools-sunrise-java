@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.mvc.Http;
 
+import javax.annotation.Nullable;
 import javax.inject.Singleton;
 import java.util.Optional;
 
@@ -33,9 +34,13 @@ public class SessionCookieStrategy implements SessionStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void overwriteValueByKey(final String key, final String value) {
-        session().put(key, value);
-        logger.debug("Saved in session \"{}\" = {}", key, value);
+    public void overwriteValueByKey(final String key, @Nullable final String value) {
+        if (value != null) {
+            session().put(key, value);
+            logger.debug("Saved in session \"{}\" = {}", key, value);
+        } else {
+            removeValueByKey(key);
+        }
     }
 
     /**

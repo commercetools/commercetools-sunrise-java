@@ -3,6 +3,7 @@ package com.commercetools.sunrise.sessions;
 import play.Configuration;
 import play.cache.CacheApi;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Optional;
@@ -61,11 +62,15 @@ public final class CacheableObjectStoringSessionCookieStrategy extends SessionCo
      * {@inheritDoc}
      */
     @Override
-    public <U> void overwriteObjectByKey(final String key, final U object) {
-        final String cacheKey = getCacheKey(key);
-        cacheApi.set(cacheKey, object);
-        logger.debug("Saved in cache \"{}\" = {}", cacheKey, object);
-        overwriteValueByKey(key, cacheKey);
+    public <U> void overwriteObjectByKey(final String key, @Nullable final U object) {
+        if (object != null) {
+            final String cacheKey = getCacheKey(key);
+            cacheApi.set(cacheKey, object);
+            logger.debug("Saved in cache \"{}\" = {}", cacheKey, object);
+            overwriteValueByKey(key, cacheKey);
+        } else {
+            removeObjectByKey(key);
+        }
     }
 
     /**

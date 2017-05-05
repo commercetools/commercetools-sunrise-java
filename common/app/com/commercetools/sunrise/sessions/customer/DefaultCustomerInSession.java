@@ -6,6 +6,7 @@ import com.commercetools.sunrise.framework.viewmodels.content.customers.UserInfo
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.ObjectStoringSessionStrategy;
 import io.sphere.sdk.customers.Customer;
+import io.sphere.sdk.models.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.Configuration;
@@ -107,9 +108,10 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
         session.overwriteObjectByKey(userInfoSessionKey, userInfoViewModelFactory.create(customer));
         session.overwriteValueByKey(customerIdSessionKey, customer.getId());
         session.overwriteValueByKey(customerEmailSessionKey, customer.getEmail());
-        if (customer.getCustomerGroup() != null) {
-            session.overwriteValueByKey(customerGroupIdSessionKey, customer.getCustomerGroup().getId());
-        }
+        final String customerGroupId = Optional.ofNullable(customer.getCustomerGroup())
+                .map(Reference::getId)
+                .orElse(null);
+        session.overwriteValueByKey(customerGroupIdSessionKey, customerGroupId);
     }
 
     @Override

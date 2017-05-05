@@ -3,6 +3,7 @@ package com.commercetools.sunrise.sessions;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Json;
 
+import javax.annotation.Nullable;
 import javax.inject.Singleton;
 import java.util.Optional;
 
@@ -35,10 +36,14 @@ public final class SerializableObjectStoringSessionCookieStrategy extends Sessio
      * {@inheritDoc}
      */
     @Override
-    public <U> void overwriteObjectByKey(final String key, final U object) {
-        final JsonNode jsonNode = Json.toJson(object);
-        final String valueAsJson = Json.stringify(jsonNode);
-        overwriteValueByKey(key, valueAsJson);
+    public <U> void overwriteObjectByKey(final String key, @Nullable final U object) {
+        if (object != null) {
+            final JsonNode jsonNode = Json.toJson(object);
+            final String valueAsJson = Json.stringify(jsonNode);
+            overwriteValueByKey(key, valueAsJson);
+        } else {
+            removeValueByKey(key);
+        }
     }
 
     /**

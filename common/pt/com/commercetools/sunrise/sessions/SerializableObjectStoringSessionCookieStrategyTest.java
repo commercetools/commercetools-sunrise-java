@@ -59,6 +59,17 @@ public class SerializableObjectStoringSessionCookieStrategyTest extends WithAppl
     }
 
     @Test
+    public void removesKeyOnNullValue() throws Exception {
+        invokeWithContext(fakeRequest().session(singletonMap("some-key", JSON_SOME_OBJECT)), () -> {
+            final ObjectStoringSessionStrategy strategy = strategy();
+            assertThat(strategy.findObjectByKey("some-key", SomeObject.class)).contains(SOME_OBJECT);
+            strategy.overwriteObjectByKey("some-key", null);
+            assertThat(strategy.findObjectByKey("some-key", SomeObject.class)).isEmpty();
+            return strategy;
+        });
+    }
+
+    @Test
     public void removesValue() throws Exception {
         final Http.RequestBuilder request = fakeRequest().session(singletonMap("some-key", JSON_SOME_OBJECT));
         invokeWithContext(request, () -> {
