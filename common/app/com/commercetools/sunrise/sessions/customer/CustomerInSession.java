@@ -18,6 +18,8 @@ public interface CustomerInSession extends ResourceStoringOperations<Customer> {
 
     Optional<String> findCustomerEmail();
 
+    Optional<String> findCustomerGroupId();
+
     Optional<UserInfoViewModel> findUserInfo();
 
     @Override

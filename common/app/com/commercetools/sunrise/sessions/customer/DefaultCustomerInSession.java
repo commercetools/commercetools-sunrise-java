@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.sessions.customer;
 
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.viewmodels.content.customers.UserInfoViewModel;
 import com.commercetools.sunrise.framework.viewmodels.content.customers.UserInfoViewModelFactory;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.sessions.ObjectStoringSessionStrategy;
 import io.sphere.sdk.customers.Customer;
@@ -23,10 +23,12 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerInSession.class);
     private static final String DEFAULT_CUSTOMER_ID_SESSION_KEY = "sunrise-customer-id";
     private static final String DEFAULT_CUSTOMER_EMAIL_SESSION_KEY = "sunrise-customer-email";
+    private static final String DEFAULT_CUSTOMER_GROUP_SESSION_KEY = "sunrise-customer-group-id";
     private static final String DEFAULT_USER_INFO_SESSION_KEY = "sunrise-user-info";
 
     private final String customerIdSessionKey;
     private final String customerEmailSessionKey;
+    private final String customerGroupIdSessionKey;
     private final String userInfoSessionKey;
     private final ObjectStoringSessionStrategy session;
     private final UserInfoViewModelFactory userInfoViewModelFactory;
@@ -35,6 +37,7 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
     public DefaultCustomerInSession(final Configuration configuration, final ObjectStoringSessionStrategy session, final UserInfoViewModelFactory userInfoViewModelFactory) {
         this.customerIdSessionKey = configuration.getString("session.customer.customerId", DEFAULT_CUSTOMER_ID_SESSION_KEY);
         this.customerEmailSessionKey = configuration.getString("session.customer.customerEmail", DEFAULT_CUSTOMER_EMAIL_SESSION_KEY);
+        this.customerGroupIdSessionKey = configuration.getString("session.customer.customerGroupId", DEFAULT_CUSTOMER_GROUP_SESSION_KEY);
         this.userInfoSessionKey = configuration.getString("session.customer.userInfo", DEFAULT_USER_INFO_SESSION_KEY);
         this.session = session;
         this.userInfoViewModelFactory = userInfoViewModelFactory;
@@ -51,6 +54,10 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
 
     protected final String getCustomerEmailSessionKey() {
         return customerEmailSessionKey;
+    }
+
+    protected final String getCustomerGroupIdSessionKey() {
+        return customerGroupIdSessionKey;
     }
 
     protected final String getUserInfoSessionKey() {
@@ -76,6 +83,11 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
     }
 
     @Override
+    public Optional<String> findCustomerGroupId() {
+        return session.findValueByKey(customerGroupIdSessionKey);
+    }
+
+    @Override
     public Optional<UserInfoViewModel> findUserInfo() {
         return session.findObjectByKey(userInfoSessionKey, UserInfoViewModel.class);
     }
@@ -95,6 +107,9 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
         session.overwriteObjectByKey(userInfoSessionKey, userInfoViewModelFactory.create(customer));
         session.overwriteValueByKey(customerIdSessionKey, customer.getId());
         session.overwriteValueByKey(customerEmailSessionKey, customer.getEmail());
+        if (customer.getCustomerGroup() != null) {
+            session.overwriteValueByKey(customerGroupIdSessionKey, customer.getCustomerGroup().getId());
+        }
     }
 
     @Override
@@ -102,5 +117,6 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
         session.removeObjectByKey(userInfoSessionKey);
         session.removeValueByKey(customerIdSessionKey);
         session.removeValueByKey(customerEmailSessionKey);
+        session.removeValueByKey(customerGroupIdSessionKey);
     }
 }

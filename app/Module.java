@@ -19,6 +19,7 @@ import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.Alphabeti
 import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.CustomSortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.TermFacetViewModelFactory;
 import com.commercetools.sunrise.sessions.cart.TruncatedMiniCartViewModelFactory;
+import com.commercetools.sunrise.sessions.customer.CustomerInSession;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
@@ -115,8 +116,10 @@ public class Module extends AbstractModule {
 
     @Provides
     @RequestScoped
-    public PriceSelection providePriceSelection(final CurrencyUnit currency, final CountryCode country) {
+    public PriceSelection providePriceSelection(final CurrencyUnit currency, final CountryCode country,
+                                                final CustomerInSession customerInSession) {
         return PriceSelection.of(currency)
-                .withPriceCountry(country);
+                .withPriceCountry(country)
+                .withPriceCustomerGroupId(customerInSession.findCustomerGroupId().orElse(null));
     }
 }
