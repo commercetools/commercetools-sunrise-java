@@ -102,6 +102,9 @@ GET         /:languageTag/user                                                  
 # Processes the form for updating the customer's details
 POST        /:languageTag/user                                                  @controllers.myaccount.MyPersonalDetailsController.process(languageTag: String)
 
+# Shows a form for changing password
+GET         /:languageTag/user/password                                         @controllers.myaccount.ChangePasswordController.show(languageTag: String)
+POST        /:languageTag/user/password                                         @controllers.myaccount.ChangePasswordController.process(languageTag: String)
 
 # Shows the address book
 GET         /:languageTag/user/addressbook                                      @controllers.myaccount.AddressBookDetailController.show(languageTag: String)

@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.ctp;
 
+import com.commercetools.sunrise.ctp.models.errors.CustomerInvalidCurrentPassword;
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
 import io.sphere.sdk.models.errors.DuplicateFieldError;
@@ -12,18 +13,19 @@ public final class CtpExceptionUtils {
     }
 
     public static boolean isInvalidInputError(@Nullable final Throwable throwable) {
-        return throwable instanceof ErrorResponseException
-                && ((ErrorResponseException) throwable).hasErrorCode("InvalidInput");
+        return isErrorResponseWithCode(throwable, "InvalidInput");
     }
 
     public static boolean isInvalidOperationError(@Nullable final Throwable throwable) {
-        return throwable instanceof ErrorResponseException
-                && ((ErrorResponseException) throwable).hasErrorCode("InvalidOperation");
+        return isErrorResponseWithCode(throwable, "InvalidOperation");
     }
 
     public static boolean isCustomerInvalidCredentialsError(@Nullable final Throwable throwable) {
-        return throwable instanceof ErrorResponseException
-                && ((ErrorResponseException) throwable).hasErrorCode(CustomerInvalidCredentials.CODE);
+        return isErrorResponseWithCode(throwable, CustomerInvalidCredentials.CODE);
+    }
+
+    public static boolean isCustomerInvalidCurrentPasswordError(@Nullable final Throwable throwable) {
+        return isErrorResponseWithCode(throwable, CustomerInvalidCurrentPassword.CODE);
     }
 
     public static boolean isDuplicatedEmailFieldError(@Nullable final Throwable throwable) {
@@ -32,5 +34,10 @@ public final class CtpExceptionUtils {
                 .filter(error -> error.getCode().equals(DuplicateFieldError.CODE))
                 .map(error -> error.as(DuplicateFieldError.class).getField())
                 .anyMatch(duplicatedField -> duplicatedField != null && duplicatedField.equals("email"));
+    }
+
+    private static boolean isErrorResponseWithCode(final @Nullable Throwable throwable, final String code) {
+        return throwable instanceof ErrorResponseException
+                && ((ErrorResponseException) throwable).hasErrorCode(code);
     }
 }

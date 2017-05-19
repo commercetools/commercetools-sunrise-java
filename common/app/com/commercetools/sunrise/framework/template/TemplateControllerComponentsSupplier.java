@@ -4,6 +4,7 @@ import com.commercetools.sunrise.framework.reverserouters.common.assets.AssetsLi
 import com.commercetools.sunrise.framework.reverserouters.common.localization.LocalizationLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationLinksControllerComponent;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.changepassword.ChangePasswordLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.myorders.MyOrdersLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.mydetails.MyPersonalDetailsLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.home.HomeLinksControllerComponent;
@@ -26,6 +27,7 @@ public class TemplateControllerComponentsSupplier implements ControllerComponent
                                                 final AssetsLinksControllerComponent assetsLinksControllerComponent,
                                                 final AddressBookLinksControllerComponent addressBookLinksControllerComponent,
                                                 final AuthenticationLinksControllerComponent authenticationLinksControllerComponent,
+                                                final ChangePasswordLinksControllerComponent changePasswordLinksControllerComponent,
                                                 final MyOrdersLinksControllerComponent myOrdersLinksControllerComponent,
                                                 final MyPersonalDetailsLinksControllerComponent myPersonalDetailsLinksControllerComponent,
                                                 final HomeLinksControllerComponent homeLinksControllerComponent,
@@ -36,6 +38,7 @@ public class TemplateControllerComponentsSupplier implements ControllerComponent
         controllerComponents.add(assetsLinksControllerComponent);
         controllerComponents.add(addressBookLinksControllerComponent);
         controllerComponents.add(authenticationLinksControllerComponent);
+        controllerComponents.add(changePasswordLinksControllerComponent);
         controllerComponents.add(myOrdersLinksControllerComponent);
         controllerComponents.add(myPersonalDetailsLinksControllerComponent);
         controllerComponents.add(homeLinksControllerComponent);
