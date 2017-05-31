@@ -1,18 +1,14 @@
 package com.commercetools.sunrise.myaccount.authentication.changepassword;
 
-import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
 import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.framework.hooks.ctpevents.CustomerChangedPasswordHook;
-import com.commercetools.sunrise.framework.hooks.ctprequests.CustomerChangePasswordCommandHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerChangePasswordCommand;
-import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-public class DefaultChangePasswordControllerAction extends AbstractSphereRequestExecutor implements ChangePasswordControllerAction {
+public class DefaultChangePasswordControllerAction extends AbstractCustomerChangePasswordExecutor implements ChangePasswordControllerAction {
 
     @Inject
     protected DefaultChangePasswordControllerAction(final SphereClient sphereClient, final HookRunner hookRunner) {
@@ -21,16 +17,10 @@ public class DefaultChangePasswordControllerAction extends AbstractSphereRequest
 
     @Override
     public CompletionStage<Customer> apply(final Customer customer, final ChangePasswordFormData formData) {
-        return executeRequest(
-                CustomerChangePasswordCommand.of(customer, formData.oldPassword(), formData.newPassword()));
+        return executeRequest(buildRequest(customer, formData));
     }
 
-    private CompletionStage<Customer> executeRequest(final CustomerChangePasswordCommand baseCommand) {
-        final CustomerChangePasswordCommand command = CustomerChangePasswordCommandHook.runHook(getHookRunner(), baseCommand);
-        return getSphereClient().execute(command)
-                .thenApplyAsync(updatedCustomer -> {
-                    CustomerChangedPasswordHook.runHook(getHookRunner(), updatedCustomer);
-                    return updatedCustomer;
-                }, HttpExecution.defaultContext());
+    protected CustomerChangePasswordCommand buildRequest(final Customer customer, final ChangePasswordFormData formData) {
+        return CustomerChangePasswordCommand.of(customer, formData.oldPassword(), formData.newPassword());
     }
 }

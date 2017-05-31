@@ -16,13 +16,21 @@ public class ChangePasswordPageContentFactory extends FormPageContentFactory<Cha
         this.pageTitleResolver = pageTitleResolver;
     }
 
+    protected final PageTitleResolver getPageTitleResolver() {
+        return pageTitleResolver;
+    }
+
     @Override
     protected ChangePasswordPageContent newViewModelInstance(final Void input, final Form<? extends ChangePasswordFormData> form) {
         return new ChangePasswordPageContent();
     }
 
+    public final ChangePasswordPageContent create(final Form<? extends ChangePasswordFormData> form) {
+        return super.create(null, form);
+    }
+
     @Override
-    protected void initialize(final ChangePasswordPageContent viewModel, final Void input, final Form<? extends ChangePasswordFormData> form) {
+    protected final void initialize(final ChangePasswordPageContent viewModel, final Void input, final Form<? extends ChangePasswordFormData> form) {
         super.initialize(viewModel, input, form);
         fillChangePasswordForm(viewModel, form);
     }
@@ -30,10 +38,6 @@ public class ChangePasswordPageContentFactory extends FormPageContentFactory<Cha
     @Override
     protected void fillTitle(final ChangePasswordPageContent viewModel, final Void input, final Form<? extends ChangePasswordFormData> form) {
         viewModel.setTitle(pageTitleResolver.getOrEmpty("my-account:changePassword.changePasswordTitle")); // TODO messages missing in FE templates
-    }
-
-    public final ChangePasswordPageContent create(final Form<? extends ChangePasswordFormData> form) {
-        return super.create(null, form);
     }
 
     private void fillChangePasswordForm(final ChangePasswordPageContent viewModel, final Form<? extends ChangePasswordFormData> form) {
