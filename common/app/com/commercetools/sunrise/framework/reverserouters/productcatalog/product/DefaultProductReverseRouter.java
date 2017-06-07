@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.framework.reverserouters.productcatalog.product;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.categories.Category;
@@ -12,7 +11,6 @@ import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
 
-@RequestScoped
 public class DefaultProductReverseRouter extends AbstractLocalizedReverseRouter implements ProductReverseRouter {
 
     private final SimpleProductReverseRouter delegate;

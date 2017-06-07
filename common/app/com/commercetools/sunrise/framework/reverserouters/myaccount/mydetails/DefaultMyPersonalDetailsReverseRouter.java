@@ -1,13 +1,11 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.mydetails;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
 import play.mvc.Call;
 
 import javax.inject.Inject;
 import java.util.Locale;
 
-@RequestScoped
 public class DefaultMyPersonalDetailsReverseRouter extends AbstractLocalizedReverseRouter implements MyPersonalDetailsReverseRouter {
 
     private final SimpleMyPersonalDetailsReverseRouter delegate;

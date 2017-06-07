@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.myorders;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Call;
@@ -9,7 +8,6 @@ import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
 
-@RequestScoped
 public class DefaultMyOrdersReverseRouter extends AbstractLocalizedReverseRouter implements MyOrdersReverseRouter {
 
     private final SimpleMyOrdersReverseRouter delegate;

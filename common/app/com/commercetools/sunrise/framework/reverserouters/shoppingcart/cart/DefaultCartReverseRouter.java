@@ -1,13 +1,11 @@
 package com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
 import play.mvc.Call;
 
 import javax.inject.Inject;
 import java.util.Locale;
 
-@RequestScoped
 public class DefaultCartReverseRouter extends AbstractLocalizedReverseRouter implements CartReverseRouter {
 
     private final SimpleCartReverseRouter delegate;
