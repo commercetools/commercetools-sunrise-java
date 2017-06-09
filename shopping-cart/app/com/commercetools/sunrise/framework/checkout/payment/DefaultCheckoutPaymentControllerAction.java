@@ -1,8 +1,9 @@
 package com.commercetools.sunrise.framework.checkout.payment;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.framework.AbstractCartUpdateExecutor;
+import com.commercetools.sunrise.framework.hooks.HookRunner;
 import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.carts.PaymentInfo;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.carts.commands.updateactions.AddPayment;
 import io.sphere.sdk.carts.commands.updateactions.RemovePayment;
@@ -16,21 +17,23 @@ import io.sphere.sdk.payments.PaymentDraftBuilder;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 import io.sphere.sdk.payments.commands.PaymentCreateCommand;
 import io.sphere.sdk.payments.commands.PaymentDeleteCommand;
-import io.sphere.sdk.payments.queries.PaymentByIdGet;
-import io.sphere.sdk.utils.CompletableFutureUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Deletes previous payments associated with the cart and adds the new one.
+ * The {@link PaymentInfo#getPayments()} references should be expanded using the expansion path {@code paymentInfo.payments} to properly work, otherwise previous payments will not be removed.
+ */
 public class DefaultCheckoutPaymentControllerAction extends AbstractCartUpdateExecutor implements CheckoutPaymentControllerAction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CheckoutPaymentControllerAction.class);
@@ -55,28 +58,26 @@ public class DefaultCheckoutPaymentControllerAction extends AbstractCartUpdateEx
     }
 
     private CompletionStage<Cart> deletePreviousPayments(final Cart cart, final Payment payment) {
-        final List<CompletionStage<Payment>> paymentStages = findPaymentsToRemove(cart, payment).stream()
-                .map(paymentRef -> getSphereClient().execute(PaymentByIdGet.of(paymentRef)))
-                .collect(toList());
-        return CompletableFutureUtils.listOfFuturesToFutureOfList(paymentStages)
-                .thenComposeAsync(payments -> {
-                    payments.removeIf(Objects::isNull);
-                    return removePaymentsFormCart(cart, payments).thenApply(updatedCart -> {
-                        payments.forEach(paymentToDelete -> getSphereClient().execute(PaymentDeleteCommand.of(paymentToDelete)));
-                        return updatedCart;
-                    });
-                });
+        final List<Payment> paymentsToRemove = findPaymentsToRemove(cart, payment);
+        return removePaymentsFormCart(cart, paymentsToRemove).thenApply(updatedCart -> {
+            paymentsToRemove.forEach(paymentToRemove -> getSphereClient().execute(PaymentDeleteCommand.of(paymentToRemove)));
+            return updatedCart;
+        });
     }
 
-    private List<Reference<Payment>> findPaymentsToRemove(final Cart cart, final Payment payment) {
+    private List<Payment> findPaymentsToRemove(final Cart cart, final Payment payment) {
         return Optional.ofNullable(cart.getPaymentInfo())
-                .map(paymentInfo -> paymentInfo.getPayments().stream()
-                        .filter(paymentRef -> !paymentRef.referencesSameResource(payment))
-                        .collect(toList()))
-                .orElseGet(() -> {
-                    LOGGER.warn("Payment info is not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
-                    return emptyList();
-                });
+                .map(paymentInfo -> {
+                    if (!hasReferencesExpanded(paymentInfo)) {
+                        LOGGER.warn("Payments are not expanded in cart: the new payment information can be saved but the previous payments will not be removed.");
+                    }
+                    return paymentInfo.getPayments().stream()
+                            .filter(paymentRef -> !paymentRef.referencesSameResource(payment))
+                            .map(Reference::getObj)
+                            .filter(Objects::nonNull)
+                            .collect(toList());
+                })
+                .orElseGet(Collections::emptyList);
     }
 
     private CompletionStage<Cart> removePaymentsFormCart(final Cart cart, final List<Payment> paymentsToRemove) {
@@ -101,5 +102,10 @@ public class DefaultCheckoutPaymentControllerAction extends AbstractCartUpdateEx
                 .filter(paymentMethod -> Objects.equals(paymentMethod.getMethod(), formData.paymentMethod()))
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("No valid payment method found")); // Should not happen after validation
+    }
+
+    private boolean hasReferencesExpanded(final PaymentInfo paymentInfo) {
+        return paymentInfo.getPayments().stream()
+                .allMatch(reference -> reference.getObj() != null);
     }
 }
