@@ -30,6 +30,7 @@ public class ProductListFinderByCategory extends AbstractProductSearchExecutor i
     protected ProductProjectionSearch buildRequest(@Nullable final Category category) {
         // In our case category is filtered via faceted search
         return ProductProjectionSearch.ofCurrent()
+                .withMarkingMatchingVariants(false)
                 .withPriceSelection(priceSelection);
     }
 }

@@ -16,7 +16,8 @@ import com.commercetools.sunrise.framework.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.viewmodels.content.carts.MiniCartViewModelFactory;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
-import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels.CategoryTreeFacetViewModelFactory;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinderByCategoryWithMatchingVariants;
 import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.AlphabeticallySortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.CustomSortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.TermFacetViewModelFactory;
@@ -105,6 +106,10 @@ public class Module extends AbstractModule {
 
         // Binding to truncate mini cart to fit it into limited session space
         bind(MiniCartViewModelFactory.class).to(TruncatedMiniCartViewModelFactory.class);
+
+        // Binding to enable matching variants on listing products
+        // IMPORTANT: comment the following line if your project does not require this functionality, leaving it on can severely affect performance
+        bind(ProductListFinder.class).to(ProductListFinderByCategoryWithMatchingVariants.class);
 
         // Provide here your own bindings
     }

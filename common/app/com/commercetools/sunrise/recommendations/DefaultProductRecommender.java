@@ -91,6 +91,7 @@ public class DefaultProductRecommender implements ProductRecommender {
                 .withLimit(numProducts)
                 .withQueryFilters(product -> product.categories().id().containsAny(categoryIds))
                 .withSort(product -> product.allVariants().price().desc())
+                .withMarkingMatchingVariants(false)
                 .withPriceSelection(priceSelection);
         return sphereClient.execute(request)
                 .whenCompleteAsync((result, t) -> LOGGER.debug(printableProductRequest(request, result)), HttpExecution.defaultContext())

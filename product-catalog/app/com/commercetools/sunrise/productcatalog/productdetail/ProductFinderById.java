@@ -27,6 +27,7 @@ public class ProductFinderById extends AbstractSingleProductSearchExecutor imple
 
     protected ProductProjectionSearch buildRequest(final String id) {
         return ProductProjectionSearch.ofCurrent()
+                .withMarkingMatchingVariants(false)
                 .withQueryFilters(m -> m.id().is(id))
                 .withPriceSelection(priceSelection);
     }

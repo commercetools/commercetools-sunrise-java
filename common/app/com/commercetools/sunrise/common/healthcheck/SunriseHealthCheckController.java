@@ -27,7 +27,9 @@ public abstract class SunriseHealthCheckController extends SunriseController {
     }
 
     public CompletionStage<Result> show() throws IOException {
-        final ProductProjectionSearch productRequest = ProductProjectionSearch.ofCurrent().withLimit(1);
+        final ProductProjectionSearch productRequest = ProductProjectionSearch.ofCurrent()
+                .withMarkingMatchingVariants(false)
+                .withLimit(1);
         return sphereClient.execute(productRequest)
                 .thenApplyAsync(this::renderGoodHealthStatus, HttpExecution.defaultContext())
                 .exceptionally(this::renderBadHealthStatus)

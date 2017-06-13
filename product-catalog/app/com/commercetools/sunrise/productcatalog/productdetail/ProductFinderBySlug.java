@@ -31,6 +31,7 @@ public class ProductFinderBySlug extends AbstractSingleProductSearchExecutor imp
 
     protected ProductProjectionSearch buildRequest(final String slug) {
         return ProductProjectionSearch.ofCurrent()
+                .withMarkingMatchingVariants(false)
                 .withQueryFilters(m -> m.slug().locale(locale).is(slug))
                 .withPriceSelection(priceSelection);
     }
