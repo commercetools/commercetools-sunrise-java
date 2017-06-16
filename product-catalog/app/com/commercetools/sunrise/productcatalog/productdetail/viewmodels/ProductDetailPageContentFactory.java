@@ -1,8 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productdetail.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
 import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.productcatalog.productdetail.ProductWithVariant;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
+import com.commercetools.sunrise.framework.viewmodels.content.products.ProductViewModelFactory;
+import com.commercetools.sunrise.framework.viewmodels.content.products.ProductWithVariant;
 
 import javax.inject.Inject;
 import java.util.Locale;

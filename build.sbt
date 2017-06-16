@@ -25,7 +25,7 @@ Heroku.deploySettings
 Version.generateVersionInfo
 
 val childProjects: List[sbt.ProjectReference] =
-  List(common, `product-catalog`, `shopping-cart`, `my-account`, `test-lib`)
+  List(common, `product-catalog`, `shopping-cart`, `my-account`, wishlist, `test-lib`)
 
 lazy val `commercetools-sunrise` = (project in file("."))
   .enablePlugins(PlayJava, JavaUnidocPlugin, SunriseThemeImporterPlugin)
@@ -33,7 +33,7 @@ lazy val `commercetools-sunrise` = (project in file("."))
   .settings(Release.disablePublish: _*)
   .settings(Dependencies.sunriseDefaultTheme)
   .aggregate(childProjects: _*)
-  .dependsOn(`product-catalog`, `shopping-cart`, `my-account`)
+  .dependsOn(`product-catalog`, `shopping-cart`, `my-account`, wishlist)
 
 lazy val common = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
@@ -55,6 +55,12 @@ lazy val `shopping-cart` = project
   .dependsOn(commonWithTests: _*)
 
 lazy val `my-account` = project
+  .enablePlugins(PlayJava, GenJavadocPlugin)
+  .configs(IntegrationTest, TestCommon.PlayTest)
+  .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
+  .dependsOn(commonWithTests: _*)
+
+lazy val wishlist = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)

@@ -11,6 +11,7 @@ import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.productcatalog.home.HomeRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
+import com.commercetools.sunrise.wishlist.controllers.WishlistControllerComponent;
 import play.mvc.Result;
 
 import javax.annotation.Nullable;
@@ -22,7 +23,8 @@ import java.util.concurrent.CompletionStage;
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
         PageHeaderControllerComponentSupplier.class,
-        HomeRecommendationsControllerComponent.class
+        HomeRecommendationsControllerComponent.class,
+        WishlistControllerComponent.class
 })
 public final class HomeController extends SunriseHomeController {
 

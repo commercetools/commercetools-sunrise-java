@@ -12,21 +12,21 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AbstractPaginationViewModelFactoryTest extends WithApplication {
-
     private static final String URL_PATH = "www.url.dom/path/to/";
-    private static final Long PAGE_SIZE = 9L;
+    private static final int PAGE_SIZE = 9;
 
     @Test
     public void calculatesPagination() throws Exception {
         final int page = 3;
         final int totalPages = 5;
         final int displayedPages = 2;
-        final PaginationViewModel pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
+        final PaginationViewModel pagination = createPaginationData(page, displayedPages, nonLastPagePagedResult(page, totalPages));
         assertThat(pagination.getPreviousUrl()).isEqualTo(urlWithPage(2));
         assertThat(pagination.getNextUrl()).isEqualTo(urlWithPage(4));
         assertThat(pagination.getFirstPage()).isNull();
@@ -44,7 +44,7 @@ public class AbstractPaginationViewModelFactoryTest extends WithApplication {
         final int page = 1;
         final int totalPages = 10;
         final int displayedPages = 2;
-        final PaginationViewModel pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
+        final PaginationViewModel pagination = createPaginationData(page, displayedPages, nonLastPagePagedResult(page, totalPages));
         assertThat(pagination.getPreviousUrl()).isNull();
         assertThat(pagination.getNextUrl()).isEqualTo(urlWithPage(2));
         assertThat(pagination.getFirstPage()).isNull();
@@ -62,17 +62,20 @@ public class AbstractPaginationViewModelFactoryTest extends WithApplication {
         final int page = 10;
         final int totalPages = 10;
         final int displayedPages = 2;
-        final PaginationViewModel pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
-        assertThat(pagination.getPreviousUrl()).isEqualTo(urlWithPage(9));
-        assertThat(pagination.getNextUrl()).isNull();
-        assertThat(pagination.getFirstPage().getText()).isEqualTo("1");
-        assertThat(pagination.getLastPage()).isNull();
-        assertThat(pagination.getPages())
-                .extracting(PaginationLinkViewModel::getText)
-                .containsExactly("8", "9", "10");
-        assertThat(pagination.getPages())
-                .extracting(PaginationLinkViewModel::isSelected)
-                .containsExactly(false, false, true);
+
+        Stream.of(1, 2, PAGE_SIZE).forEach(count -> {
+            final PaginationViewModel pagination = createPaginationData(page, displayedPages, pagedResult(page, count, totalPages));
+            assertThat(pagination.getPreviousUrl()).isEqualTo(urlWithPage(9));
+            assertThat(pagination.getNextUrl()).isNull();
+            assertThat(pagination.getFirstPage().getText()).isEqualTo("1");
+            assertThat(pagination.getLastPage()).isNull();
+            assertThat(pagination.getPages())
+                    .extracting(PaginationLinkViewModel::getText)
+                    .containsExactly("8", "9", "10");
+            assertThat(pagination.getPages())
+                    .extracting(PaginationLinkViewModel::isSelected)
+                    .containsExactly(false, false, true);
+        });
     }
 
     @Test
@@ -80,7 +83,7 @@ public class AbstractPaginationViewModelFactoryTest extends WithApplication {
         final int page = 4;
         final int totalPages = 10;
         final int displayedPages = 2;
-        final PaginationViewModel pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
+        final PaginationViewModel pagination = createPaginationData(page, displayedPages, nonLastPagePagedResult(page, totalPages));
         assertThat(pagination.getFirstPage()).isNull();
         assertThat(pagination.getLastPage()).isNotNull();
         assertThat(pagination.getPages())
@@ -96,7 +99,7 @@ public class AbstractPaginationViewModelFactoryTest extends WithApplication {
         final int page = 5;
         final int totalPages = 10;
         final int displayedPages = 2;
-        final PaginationViewModel pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
+        final PaginationViewModel pagination = createPaginationData(page, displayedPages, nonLastPagePagedResult(page, totalPages));
         assertThat(pagination.getFirstPage()).isNotNull();
         assertThat(pagination.getLastPage()).isNotNull();
         assertThat(pagination.getPages())
@@ -112,7 +115,7 @@ public class AbstractPaginationViewModelFactoryTest extends WithApplication {
         final int page = 6;
         final int totalPages = 10;
         final int displayedPages = 2;
-        final PaginationViewModel pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
+        final PaginationViewModel pagination = createPaginationData(page, displayedPages, nonLastPagePagedResult(page, totalPages));
         assertThat(pagination.getFirstPage()).isNotNull();
         assertThat(pagination.getLastPage()).isNotNull();
         assertThat(pagination.getPages())
@@ -128,7 +131,7 @@ public class AbstractPaginationViewModelFactoryTest extends WithApplication {
         final int page = 7;
         final int totalPages = 10;
         final int displayedPages = 2;
-        final PaginationViewModel pagination = createPaginationData(page, displayedPages, pagedResult(page, totalPages));
+        final PaginationViewModel pagination = createPaginationData(page, displayedPages, nonLastPagePagedResult(page, totalPages));
         assertThat(pagination.getFirstPage()).isNotNull();
         assertThat(pagination.getLastPage()).isNull();
         assertThat(pagination.getPages())
@@ -152,10 +155,15 @@ public class AbstractPaginationViewModelFactoryTest extends WithApplication {
         return new TestablePaginationViewModelFactory(settings).create(searchResult, currentPage);
     }
 
-    private PagedResult<ProductProjection> pagedResult(final int page, final int totalPages) {
+    private PagedResult<ProductProjection> nonLastPagePagedResult(final int page, final int totalPages) {
+        return pagedResult(page, PAGE_SIZE, totalPages);
+    }
+
+    private PagedResult<ProductProjection> pagedResult(final int page, final int count, final int totalPages) {
         final long offset = (page - 1) * PAGE_SIZE;
-        final long totalProducts = totalPages * PAGE_SIZE;
-        final List<ProductProjection> products = Collections.nCopies(PAGE_SIZE.intValue(), null);
+        final long totalProducts = (totalPages - 1) * PAGE_SIZE + count;
+        final List<ProductProjection> products = Collections.nCopies(count, null);
+
         return new PagedResult<ProductProjection>() {
             @Override
             public Long getOffset() {
@@ -170,7 +178,7 @@ public class AbstractPaginationViewModelFactoryTest extends WithApplication {
 
             @Override
             public Long getCount() {
-                return PAGE_SIZE;
+                return (long) products.size();
             }
 
             @Override

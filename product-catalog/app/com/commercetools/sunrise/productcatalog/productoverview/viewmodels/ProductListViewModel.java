@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.viewmodels;
 
 import com.commercetools.sunrise.framework.viewmodels.ViewModel;
+import com.commercetools.sunrise.framework.viewmodels.content.products.ProductThumbnailViewModel;
 
 import java.util.List;
 

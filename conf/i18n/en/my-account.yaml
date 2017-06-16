@@ -1,0 +1,94 @@
+myAccount:
+  title: My Account
+myAccountSidebar:
+  personalDetails: Personal Details
+  addressBook: Address Book
+  paymentDetails: Payment Details
+  myOrders: My Orders
+  returnsExchange: Returns / Exchange
+  wishlist: Wishlist
+  signOut: Sign Out
+  changePassword: Change password
+personalDetails:
+  title: Your Personal Details
+  shopAllBtn: Shop All
+  updateBtn: Update Details
+  cancelBtn: Cancel
+  bannerOne:
+    title: Your Sunrise
+    subtitle: Make the great days happen
+  bannerTwo:
+    title: Your Sunrise
+    subtitle: Make the great days happen
+  welcomeBack: Welcome back
+  welcomeDescription: for an even better customer service please provide your customer number
+  subscribedToNewsletter: Subscribed to weekly newsletter
+  personalDetailsForm:
+    title: Title
+    firstName: First Name
+    lastName: Last Name
+    phone: Telephone Number
+    email: Email Address
+    password: Password
+    confirmPassword: Confirm Password
+    subscribeToNewsletter: Please add me to the <a href="">Sunrise Newsletter</a>
+addressBook:
+  title : Address Book
+  defaultAddresses:
+    title: Default Addresses
+  additionalAddress:
+    title: Additional addresses
+  billingAddress:
+    title: Billing Address
+    label: Use as default address for billing
+  shippingAddress:
+    title: Shipping Address
+    label: Use as default address for shipping
+  buttons:
+    saveAddressBtn: Save changes
+    cancelAddressBtn: Cancel editing
+    edit: Edit
+    delete: Delete
+    addNewAddress: Add New Address
+myOrders:
+  title: My Orders
+  orderNumber: Order Number
+  creationDate: Date
+  totalPrice: Total
+  paymentStatus: Payment Status
+  shippingStatus: Shipping Status
+  view: View
+myOrder:
+  title: Your Order Details
+  orderNumber: Order number
+  creationDate: Order date
+  print: Print Receipt
+  shippingAddress: Shipping Address
+  billingAddress: Billing Address
+  shippingMethod: Shipping Method
+  paymentDetails: Payment Details
+  price:
+    discountCode: Promotional Code Applied
+    subtotal: Subtotal
+    cartDiscount: Order Discount
+    shipping: Shipping
+    taxes: Sales Tax
+    total: Total
+  items:
+    productDescription: Description
+    quantity: Quantity
+    unitPrice: Price
+    totalPrice: Total
+myWishlist:
+  title: My Wishlist
+  clear: Delete all
+  itemsTotal: __count__ item in total
+  itemsTotal_plural: __count__ items in total
+changePassword:
+  oldPasswordLabelTxt: Current password
+  newPasswordLabelTxt: New password
+  confirmPasswordLabelTxt: Confirm new password
+  changePasswordTitle: Change your password
+  changeBtn: Change password
+  backBtn: Back
+  feedbackMessage: Password changed successfully.

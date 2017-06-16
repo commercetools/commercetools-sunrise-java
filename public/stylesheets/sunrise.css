@@ -4,11 +4,6 @@
     visibility: hidden;
 }
 
-/* Hide add to wishlist */
-form[name=add-to-wishlist] {
-    display: none;
-}
-
 /* Hide newsletter option in checkout */
 .follow-up label[for=confirmation-newsletter-input] {
     visibility: hidden;
@@ -22,6 +17,11 @@ form[name=add-to-wishlist] {
 /* Hide newsletter option in personal details */
 .personal-details-newsletter {
     display: none;
+}
+
+.wishlist {
+    position: fixed;
+    z-index: 100;
 }
 
 /* Hide not yet implemented tabs in my account */

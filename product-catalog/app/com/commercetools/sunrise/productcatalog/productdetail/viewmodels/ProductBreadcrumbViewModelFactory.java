@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productdetail.viewmodels;
 
+import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.framework.viewmodels.content.breadcrumbs.AbstractBreadcrumbViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.content.breadcrumbs.BreadcrumbLinkViewModel;
 import com.commercetools.sunrise.framework.viewmodels.content.breadcrumbs.BreadcrumbViewModel;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
-import com.commercetools.sunrise.productcatalog.productdetail.ProductWithVariant;
+import com.commercetools.sunrise.framework.viewmodels.content.products.ProductWithVariant;
 import io.sphere.sdk.categories.CategoryTree;
 import play.mvc.Call;
 

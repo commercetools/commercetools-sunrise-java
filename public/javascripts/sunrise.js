@@ -1,4 +1,3 @@
-
 // Submit faceted search on change
 $("form#form-filter-products, form#form-filter-products-mobile").change(function() {
     this.submit();
