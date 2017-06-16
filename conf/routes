@@ -102,8 +102,9 @@ GET         /:languageTag/user                                                  
 # Processes the form for updating the customer's details
 POST        /:languageTag/user                                                  @controllers.myaccount.MyPersonalDetailsController.process(languageTag: String)
 
-# Shows a form for changing password
+# Shows the form for changing password
 GET         /:languageTag/user/password                                         @controllers.myaccount.ChangePasswordController.show(languageTag: String)
+# Processes the form for changing password
 POST        /:languageTag/user/password                                         @controllers.myaccount.ChangePasswordController.process(languageTag: String)
 
 # Shows the address book
@@ -120,13 +121,13 @@ POST        /:languageTag/user/addressbook/:addressIdentifier/edit              
 POST        /:languageTag/user/addressbook/:addressIdentifier/remove            @controllers.myaccount.RemoveAddressController.process(languageTag: String, addressIdentifier: String)
 
 # Shows the wish list
-GET         /:languageTag/wishlist                                         @controllers.wishlist.WishlistController.show(languageTag: String)
+GET         /:languageTag/wishlist                                              @controllers.wishlist.WishlistController.show(languageTag: String)
 # Adds a product variant to the wishlist
-POST        /:languageTag/wishlist/add                                     @controllers.wishlist.AddToWishlistController.process(languageTag: String)
+POST        /:languageTag/wishlist/add                                          @controllers.wishlist.AddToWishlistController.process(languageTag: String)
 # Removes a line item from the wishlist
-POST        /:languageTag/wishlist/remove                                  @controllers.wishlist.RemoveFromWishlistController.process(languageTag: String)
+POST        /:languageTag/wishlist/remove                                       @controllers.wishlist.RemoveFromWishlistController.process(languageTag: String)
 # Clears the wishlist
-POST        /:languageTag/wishlist/clear                                   @controllers.wishlist.ClearWishlistController.process(languageTag: String)
+POST        /:languageTag/wishlist/clear                                        @controllers.wishlist.ClearWishlistController.process(languageTag: String)
 
 # Shows all orders from the customer
 GET         /:languageTag/user/orders                                           @controllers.myaccount.MyOrderListController.show(languageTag: String)
