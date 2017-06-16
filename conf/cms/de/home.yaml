@@ -3,18 +3,18 @@ bannerTopLeft:
   subtitle: Die wichtigsten Stücke des Sommer Trends 2016
   linkText: Jetzt bestellen
   linkHref: men
-  imageSmall: /assets/img/cms/leather_small-4to3.jpg
-  imageMedium: /assets/img/cms/leather_medium-4to3.jpg
-  imageLarge: /assets/img/cms/leather_large-4to3.jpg
+  imageSmall: /assets/img/cms/leather1_small-4to3.jpg
+  imageMedium: /assets/img/cms/leather1_medium-4to3.jpg
+  imageLarge: /assets/img/cms/leather1_large-4to3.jpg
 
 bannerTopRight:
   title: Sommer Fashion
   subtitle: Beste Outfits für die Saison
   linkText: Jetzt bestellen
   linkHref: women
-  imageSmall: /assets/img/cms/woman_small-4to3.jpg
-  imageMedium: /assets/img/cms/woman_medium-4to3.jpg
-  imageLarge: /assets/img/cms/woman_large-4to3.jpg
+  imageSmall: /assets/img/cms/woman1_small-4to3.jpg
+  imageMedium: /assets/img/cms/woman1_medium-4to3.jpg
+  imageLarge: /assets/img/cms/woman1_large-4to3.jpg
 
 bannerMiddle:
   title: <img class="hidden-xs" src="/assets/img/cms/sun-logo.png"/><br/><br/>Here comes the sun
@@ -22,9 +22,9 @@ bannerMiddle:
   description: Die Modetrends für den Sommer 2016 spielen mit Prints, Army- und Safarilooks sowie Pastel Farben. Accessoires wie runde Sonnenbrillen, geschnürte Stiefel und Shopper oder Handtaschen sorgen für Abwechslung. SUNRISE stellt Ihnen die Fashion Trends für den Sommer 2016 vor. Lassen Sie sich inspirieren!<br/><br/>Kaum ist der Frühling vorbei, umfängt uns der warme Sommer. Erfahren Sie, was die wichtigsten Fashion - Trends der kommenden Sommersaison sind und welche traumhaften Stücke Sie besitzen sollen! London, New York, Mailand, Paris – SUNRISE präsentiert die aktuelle Sommermode 2016 aus den Modemetropolen . Die neuesten Kleider, elegante Tops, Hosen, Bademode, exklusive Schuhe und Ballerinas, bezaubernden Schmuck, Sonnenbrillen und Accessoires für den perfekten Sommer.
   linkText: Jetzt kaufen
   linkHref: men-clothing-shirts
-  imageSmall: /assets/img/cms/man_small-8to3.jpg
-  imageMedium: /assets/img/cms/man_medium-8to3.jpg
-  imageLarge: /assets/img/cms/man_large-8to3.jpg
+  imageSmall: /assets/img/cms/man1_small-8to3.jpg
+  imageMedium: /assets/img/cms/man1_medium-8to3.jpg
+  imageLarge: /assets/img/cms/man1_large-8to3.jpg
 
 bannerBottomLeft:
   title: Einzigartige Stücke für jede Saison
