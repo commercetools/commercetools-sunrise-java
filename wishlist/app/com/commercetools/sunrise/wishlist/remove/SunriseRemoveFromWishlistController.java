@@ -20,6 +20,7 @@ import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseRemoveFromWishlistController extends SunriseContentFormController
         implements WithContentFormFlow<ShoppingList, ShoppingList, RemoveWishlistLineItemFormData>, WithRequiredWishlist {
+
     private final RemoveWishlistLineItemFormData formData;
     private final WishlistPageContentFactory wishlistPageContentFactory;
     private final WishlistFinder wishlistFinder;
@@ -38,15 +39,20 @@ public abstract class SunriseRemoveFromWishlistController extends SunriseContent
         this.controllerAction = controllerAction;
     }
 
+    @Override
+    public final Class<? extends RemoveWishlistLineItemFormData> getFormDataClass() {
+        return formData.getClass();
+    }
+
+    @Override
+    public final WishlistFinder getWishlistFinder() {
+        return wishlistFinder;
+    }
+
     @EnableHooks
     @SunriseRoute(WishlistReverseRouter.REMOVE_FROM_WISHLIST_PROCESS)
     public CompletionStage<Result> process(final String languageTag) {
         return requireWishlist(this::processForm);
-    }
-
-    @Override
-    public Class<? extends RemoveWishlistLineItemFormData> getFormDataClass() {
-        return formData.getClass();
     }
 
     @Override
@@ -64,11 +70,6 @@ public abstract class SunriseRemoveFromWishlistController extends SunriseContent
 
     @Override
     public void preFillFormData(final ShoppingList wishlist, final RemoveWishlistLineItemFormData removeWishlistLineItemFormData) {
-
-    }
-
-    @Override
-    public WishlistFinder getWishlistFinder() {
-        return wishlistFinder;
+        // Do not pre-fill anything
     }
 }

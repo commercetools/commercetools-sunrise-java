@@ -22,6 +22,7 @@ import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseAddToWishlistController extends SunriseContentFormController
         implements WithContentFormFlow<ShoppingList, ShoppingList, AddWishlistLineItemFormData>, WithRequiredWishlist {
+
     private final AddWishlistLineItemFormData formData;
     private final WishlistPageContentFactory wishlistPageContentFactory;
     private final WishlistCreator wishlistCreator;
@@ -44,8 +45,13 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
     }
 
     @Override
-    public Class<? extends AddWishlistLineItemFormData> getFormDataClass() {
+    public final Class<? extends AddWishlistLineItemFormData> getFormDataClass() {
         return formData.getClass();
+    }
+
+    @Override
+    public final WishlistFinder getWishlistFinder() {
+        return wishlistFinder;
     }
 
     @EnableHooks
@@ -63,11 +69,6 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
     public abstract CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final AddWishlistLineItemFormData addWishlistLineItemFormData);
 
     @Override
-    public WishlistFinder getWishlistFinder() {
-        return wishlistFinder;
-    }
-
-    @Override
     public PageContent createPageContent(final ShoppingList wishlist, final Form<? extends AddWishlistLineItemFormData> addWishlistLineItemFormData) {
         return wishlistPageContentFactory.create(wishlist);
     }
@@ -80,6 +81,6 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
 
     @Override
     public void preFillFormData(final ShoppingList wishlist, final AddWishlistLineItemFormData addWishlistLineItemFormData) {
-
+        // Do not pre-fill anything
     }
 }
