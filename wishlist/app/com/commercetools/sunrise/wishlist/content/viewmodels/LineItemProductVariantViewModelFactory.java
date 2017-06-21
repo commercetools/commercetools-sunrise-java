@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wishlist.viewmodels;
+package com.commercetools.sunrise.wishlist.content.viewmodels;
 
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;

@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wishlist.viewmodels;
+package com.commercetools.sunrise.wishlist.content.viewmodels;
 
 import com.commercetools.sunrise.framework.viewmodels.GenericListViewModel;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;

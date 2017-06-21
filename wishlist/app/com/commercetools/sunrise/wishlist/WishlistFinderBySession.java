@@ -3,7 +3,6 @@ package com.commercetools.sunrise.wishlist;
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.sessions.customer.CustomerInSession;
 import com.commercetools.sunrise.sessions.wishlist.WishlistInSession;
-import com.commercetools.sunrise.wishlist.controllers.AbstractSingleShoppingListQueryExecutor;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;

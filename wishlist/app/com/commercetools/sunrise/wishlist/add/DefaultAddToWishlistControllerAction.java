@@ -1,7 +1,7 @@
-package com.commercetools.sunrise.wishlist.controllers;
+package com.commercetools.sunrise.wishlist.add;
 
 import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.wishlist.viewmodels.AddWishlistLineItemFormData;
+import com.commercetools.sunrise.wishlist.AbstractShoppingListUpdateExecutor;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import io.sphere.sdk.shoppinglists.commands.ShoppingListUpdateCommand;

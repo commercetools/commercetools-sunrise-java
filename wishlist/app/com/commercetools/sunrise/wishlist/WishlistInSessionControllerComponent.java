@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wishlist.controllers;
+package com.commercetools.sunrise.wishlist;
 
 import com.commercetools.sunrise.framework.components.controllers.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.ctpevents.ShoppingListCreatedHook;

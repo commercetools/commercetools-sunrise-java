@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wishlist.viewmodels;
+package com.commercetools.sunrise.wishlist.add;
 
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.shoppinglists.LineItem;

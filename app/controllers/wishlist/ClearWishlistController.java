@@ -4,9 +4,9 @@ import com.commercetools.sunrise.framework.components.controllers.RegisteredComp
 import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
-import com.commercetools.sunrise.wishlist.controllers.ClearWishlistControllerAction;
-import com.commercetools.sunrise.wishlist.controllers.SunriseClearWishlistController;
-import com.commercetools.sunrise.wishlist.controllers.WishlistInSessionControllerComponent;
+import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
+import com.commercetools.sunrise.wishlist.clear.ClearWishlistControllerAction;
+import com.commercetools.sunrise.wishlist.clear.SunriseClearWishlistController;
 import com.google.inject.Inject;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.FormFactory;

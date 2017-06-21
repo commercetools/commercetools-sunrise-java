@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wishlist.viewmodels;
+package com.commercetools.sunrise.wishlist.content.viewmodels;
 
 import com.commercetools.sunrise.framework.viewmodels.GenericListViewModel;
 import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
@@ -49,11 +49,8 @@ public class WishlistPageContentFactory extends PageContentFactory<WishlistPageC
     }
 
     protected void fillItemsInTotal(final WishlistPageContent viewModel, final ShoppingList wishlist) {
-        if (wishlist != null) {
-            final List<LineItem> lineItems = wishlist.getLineItems();
-
-            viewModel.setItemsInTotal(lineItems == null ? 0 : lineItems.size());
-        }
+        final List<LineItem> lineItems = wishlist != null ? wishlist.getLineItems() : null;
+        viewModel.setItemsInTotal(lineItems == null ? 0 : lineItems.size());
     }
 
     protected void fillProducts(final WishlistPageContent viewModel, final ShoppingList wishlist) {

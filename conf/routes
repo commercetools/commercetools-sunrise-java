@@ -121,7 +121,7 @@ POST        /:languageTag/user/addressbook/:addressIdentifier/edit              
 POST        /:languageTag/user/addressbook/:addressIdentifier/remove            @controllers.myaccount.RemoveAddressController.process(languageTag: String, addressIdentifier: String)
 
 # Shows the wish list
-GET         /:languageTag/wishlist                                              @controllers.wishlist.WishlistController.show(languageTag: String)
+GET         /:languageTag/wishlist                                              @controllers.wishlist.WishlistContentController.show(languageTag: String)
 # Adds a product variant to the wishlist
 POST        /:languageTag/wishlist/add                                          @controllers.wishlist.AddToWishlistController.process(languageTag: String)
 # Removes a line item from the wishlist

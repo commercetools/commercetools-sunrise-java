@@ -1,7 +1,6 @@
-package com.commercetools.sunrise.wishlist.controllers;
+package com.commercetools.sunrise.wishlist.add;
 
 import com.commercetools.sunrise.framework.controllers.ControllerAction;
-import com.commercetools.sunrise.wishlist.viewmodels.AddWishlistLineItemFormData;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 

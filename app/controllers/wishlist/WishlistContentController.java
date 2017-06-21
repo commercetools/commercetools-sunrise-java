@@ -6,9 +6,9 @@ import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
-import com.commercetools.sunrise.wishlist.controllers.SunriseWishlistController;
-import com.commercetools.sunrise.wishlist.controllers.WishlistInSessionControllerComponent;
-import com.commercetools.sunrise.wishlist.viewmodels.WishlistPageContentFactory;
+import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
+import com.commercetools.sunrise.wishlist.content.SunriseWishlistContentController;
+import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -19,12 +19,12 @@ import javax.inject.Inject;
         PageHeaderControllerComponentSupplier.class,
         WishlistInSessionControllerComponent.class
 })
-public final class WishlistController extends SunriseWishlistController {
+public final class WishlistContentController extends SunriseWishlistContentController {
 
     @Inject
-    public WishlistController(final ContentRenderer contentRenderer,
-                              final WishlistPageContentFactory wishlistPageContentFactory,
-                              final WishlistFinder wishlistFinder) {
+    public WishlistContentController(final ContentRenderer contentRenderer,
+                                     final WishlistPageContentFactory wishlistPageContentFactory,
+                                     final WishlistFinder wishlistFinder) {
         super(contentRenderer, wishlistPageContentFactory, wishlistFinder);
     }
 

@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wishlist.controllers;
+package com.commercetools.sunrise.wishlist.clear;
 
 import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.framework.controllers.WithExecutionFlow;

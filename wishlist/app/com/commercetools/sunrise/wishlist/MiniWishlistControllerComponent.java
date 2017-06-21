@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wishlist.controllers;
+package com.commercetools.sunrise.wishlist;
 
 import com.commercetools.sunrise.framework.components.controllers.ControllerComponent;
 import com.commercetools.sunrise.framework.hooks.application.PageDataReadyHook;
@@ -8,13 +8,13 @@ import com.commercetools.sunrise.framework.viewmodels.content.wishlist.WishlistV
 import com.commercetools.sunrise.sessions.wishlist.WishlistInSession;
 import com.google.inject.Inject;
 
-public final class WishlistControllerComponent implements ControllerComponent, PageDataReadyHook {
+public final class MiniWishlistControllerComponent implements ControllerComponent, PageDataReadyHook {
     private final WishlistInSession wishlistInSession;
     private final WishlistViewModelFactory wishlistViewModelFactory;
 
     @Inject
-    protected WishlistControllerComponent(final WishlistInSession wishlistInSession,
-                                          final WishlistViewModelFactory wishlistViewModelFactory) {
+    protected MiniWishlistControllerComponent(final WishlistInSession wishlistInSession,
+                                              final WishlistViewModelFactory wishlistViewModelFactory) {
         this.wishlistInSession = wishlistInSession;
         this.wishlistViewModelFactory = wishlistViewModelFactory;
     }

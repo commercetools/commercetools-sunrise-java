@@ -1,8 +1,7 @@
-package com.commercetools.sunrise.wishlist.controllers;
+package com.commercetools.sunrise.wishlist;
 
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.sessions.customer.CustomerInSession;
-import com.commercetools.sunrise.wishlist.WishlistCreator;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.LocalizedString;

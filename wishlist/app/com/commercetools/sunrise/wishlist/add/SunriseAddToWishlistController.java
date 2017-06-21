@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wishlist.controllers;
+package com.commercetools.sunrise.wishlist.add;
 
 import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
@@ -10,8 +10,7 @@ import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.wishlist.WishlistCreator;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
-import com.commercetools.sunrise.wishlist.viewmodels.AddWishlistLineItemFormData;
-import com.commercetools.sunrise.wishlist.viewmodels.WishlistPageContentFactory;
+import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.Form;
 import play.data.FormFactory;

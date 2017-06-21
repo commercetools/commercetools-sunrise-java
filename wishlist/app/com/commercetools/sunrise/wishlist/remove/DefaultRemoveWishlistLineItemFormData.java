@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.wishlist.viewmodels;
+package com.commercetools.sunrise.wishlist.remove;
 
 import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints.MinLength;

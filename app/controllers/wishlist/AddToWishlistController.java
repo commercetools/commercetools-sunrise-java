@@ -5,11 +5,11 @@ import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistRever
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.wishlist.WishlistCreator;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
-import com.commercetools.sunrise.wishlist.controllers.AddToWishlistControllerAction;
-import com.commercetools.sunrise.wishlist.controllers.SunriseAddToWishlistController;
-import com.commercetools.sunrise.wishlist.controllers.WishlistInSessionControllerComponent;
-import com.commercetools.sunrise.wishlist.viewmodels.AddWishlistLineItemFormData;
-import com.commercetools.sunrise.wishlist.viewmodels.WishlistPageContentFactory;
+import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
+import com.commercetools.sunrise.wishlist.add.AddToWishlistControllerAction;
+import com.commercetools.sunrise.wishlist.add.AddWishlistLineItemFormData;
+import com.commercetools.sunrise.wishlist.add.SunriseAddToWishlistController;
+import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.FormFactory;
 import play.mvc.Result;
