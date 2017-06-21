@@ -17,11 +17,11 @@ public class DefaultAddToWishlistControllerAction extends AbstractShoppingListUp
     }
 
     @Override
-    public CompletionStage<ShoppingList> apply(final ShoppingList wishlist, final AddWishlistLineItemFormData addWishlistLineItemFormData) {
-        return executeRequest(wishlist, buildRequest(wishlist, addWishlistLineItemFormData));
+    public CompletionStage<ShoppingList> apply(final ShoppingList wishlist, final AddToWishlistFormData addToWishlistFormData) {
+        return executeRequest(wishlist, buildRequest(wishlist, addToWishlistFormData));
     }
 
-    protected ShoppingListUpdateCommand buildRequest(final ShoppingList wishlist, final AddWishlistLineItemFormData addToWishlistFormData) {
+    protected ShoppingListUpdateCommand buildRequest(final ShoppingList wishlist, final AddToWishlistFormData addToWishlistFormData) {
         final AddLineItem addLineItem = AddLineItem.of(addToWishlistFormData.productId()).withVariantId(addToWishlistFormData.variantId());
         return ShoppingListUpdateCommand.of(wishlist, addLineItem);
     }

@@ -7,7 +7,6 @@ import com.commercetools.sunrise.framework.reverserouters.common.localization.Lo
 import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.changepassword.ChangePasswordLinksControllerComponent;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.myorders.MyOrdersLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.mydetails.MyPersonalDetailsLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.myorders.MyOrdersLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.home.HomeLinksControllerComponent;

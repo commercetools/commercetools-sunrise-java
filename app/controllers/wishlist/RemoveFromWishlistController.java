@@ -7,7 +7,7 @@ import com.commercetools.sunrise.wishlist.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistControllerAction;
-import com.commercetools.sunrise.wishlist.remove.RemoveWishlistLineItemFormData;
+import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistFormData;
 import com.commercetools.sunrise.wishlist.remove.SunriseRemoveFromWishlistController;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.FormFactory;
@@ -24,7 +24,7 @@ public final class RemoveFromWishlistController extends SunriseRemoveFromWishlis
     public RemoveFromWishlistController(final ContentRenderer contentRenderer,
                                         final FormFactory formFactory,
                                         final WishlistPageContentFactory wishlistPageContentFactory,
-                                        final RemoveWishlistLineItemFormData formData,
+                                        final RemoveFromWishlistFormData formData,
                                         final WishlistFinder wishlistFinder,
                                         final RemoveFromWishlistControllerAction controllerAction,
                                         final WishlistReverseRouter reverseRouter) {
@@ -33,7 +33,7 @@ public final class RemoveFromWishlistController extends SunriseRemoveFromWishlis
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final RemoveWishlistLineItemFormData removeWishlistLineItemFormData) {
+    public CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final RemoveFromWishlistFormData removeFromWishlistFormData) {
         return redirectToCall(reverseRouter.wishlistPageCall());
     }
 

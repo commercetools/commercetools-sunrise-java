@@ -9,7 +9,7 @@ import java.util.function.BiFunction;
 
 @FunctionalInterface
 @ImplementedBy(DefaultRemoveFromWishlistControllerAction.class)
-public interface RemoveFromWishlistControllerAction extends ControllerAction, BiFunction<ShoppingList, RemoveWishlistLineItemFormData, CompletionStage<ShoppingList>> {
+public interface RemoveFromWishlistControllerAction extends ControllerAction, BiFunction<ShoppingList, RemoveFromWishlistFormData, CompletionStage<ShoppingList>> {
     /**
      * Removes a line item from the given wishlist.
      *
@@ -19,5 +19,5 @@ public interface RemoveFromWishlistControllerAction extends ControllerAction, Bi
      * @return the completion stage for the updated wishlist with the removed line item
      */
     @Override
-    CompletionStage<ShoppingList> apply(ShoppingList wishlist, RemoveWishlistLineItemFormData removeWishlistFormData);
+    CompletionStage<ShoppingList> apply(ShoppingList wishlist, RemoveFromWishlistFormData removeWishlistFormData);
 }

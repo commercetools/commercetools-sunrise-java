@@ -9,15 +9,15 @@ import java.util.function.BiFunction;
 
 @FunctionalInterface
 @ImplementedBy(DefaultAddToWishlistControllerAction.class)
-public interface AddToWishlistControllerAction extends ControllerAction, BiFunction<ShoppingList, AddWishlistLineItemFormData, CompletionStage<ShoppingList>> {
+public interface AddToWishlistControllerAction extends ControllerAction, BiFunction<ShoppingList, AddToWishlistFormData, CompletionStage<ShoppingList>> {
     /**
      * Adds a line item to the given wishlist.
      *
      * @param wishlist                    the {@link ShoppingList} to add the line item to
-     * @param addWishlistLineItemFormData specifies the line item to add
+     * @param addToWishlistFormData specifies the line item to add
      *
      * @return the completion stage for the updated wishlist with the added line item
      */
     @Override
-    CompletionStage<ShoppingList> apply(ShoppingList wishlist, AddWishlistLineItemFormData addWishlistLineItemFormData);
+    CompletionStage<ShoppingList> apply(ShoppingList wishlist, AddToWishlistFormData addToWishlistFormData);
 }

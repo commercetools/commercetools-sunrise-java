@@ -7,7 +7,7 @@ import com.commercetools.sunrise.wishlist.WishlistCreator;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
 import com.commercetools.sunrise.wishlist.add.AddToWishlistControllerAction;
-import com.commercetools.sunrise.wishlist.add.AddWishlistLineItemFormData;
+import com.commercetools.sunrise.wishlist.add.AddToWishlistFormData;
 import com.commercetools.sunrise.wishlist.add.SunriseAddToWishlistController;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import io.sphere.sdk.shoppinglists.ShoppingList;
@@ -24,14 +24,14 @@ public final class AddToWishlistController extends SunriseAddToWishlistControlle
     @Inject
     public AddToWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                    final WishlistPageContentFactory wishlistPageContentFactory,
-                                   final AddWishlistLineItemFormData formData, final WishlistCreator wishlistCreator, final WishlistFinder wishlistFinder,
+                                   final AddToWishlistFormData formData, final WishlistCreator wishlistCreator, final WishlistFinder wishlistFinder,
                                    final AddToWishlistControllerAction controllerAction, final WishlistReverseRouter reverseRouter) {
         super(contentRenderer, formFactory, wishlistPageContentFactory, formData, wishlistCreator, wishlistFinder, controllerAction);
         this.reverseRouter = reverseRouter;
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final AddWishlistLineItemFormData addWishlistLineItemFormData) {
+    public CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final AddToWishlistFormData addToWishlistFormData) {
         return redirectToCall(reverseRouter.wishlistPageCall());
     }
 }

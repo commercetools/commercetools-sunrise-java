@@ -1,12 +1,12 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.framework.CartFinder;
-import com.commercetools.sunrise.framework.checkout.CheckoutStepControllerComponent;
-import com.commercetools.sunrise.framework.checkout.shipping.CheckoutShippingControllerAction;
-import com.commercetools.sunrise.framework.checkout.shipping.CheckoutShippingFormData;
-import com.commercetools.sunrise.framework.checkout.shipping.ShippingSettings;
-import com.commercetools.sunrise.framework.checkout.shipping.SunriseCheckoutShippingController;
-import com.commercetools.sunrise.framework.checkout.shipping.viewmodels.CheckoutShippingPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
+import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingControllerAction;
+import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormData;
+import com.commercetools.sunrise.shoppingcart.checkout.shipping.ShippingSettings;
+import com.commercetools.sunrise.shoppingcart.checkout.shipping.SunriseCheckoutShippingController;
+import com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels.CheckoutShippingPageContentFactory;
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;

@@ -21,9 +21,8 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseAddToWishlistController extends SunriseContentFormController
-        implements WithContentFormFlow<ShoppingList, ShoppingList, AddWishlistLineItemFormData>, WithRequiredWishlist {
-
-    private final AddWishlistLineItemFormData formData;
+        implements WithContentFormFlow<ShoppingList, ShoppingList, AddToWishlistFormData>, WithRequiredWishlist {
+    private final AddToWishlistFormData formData;
     private final WishlistPageContentFactory wishlistPageContentFactory;
     private final WishlistCreator wishlistCreator;
     private final WishlistFinder wishlistFinder;
@@ -32,7 +31,7 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
     @Inject
     protected SunriseAddToWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                              final WishlistPageContentFactory wishlistPageContentFactory,
-                                             final AddWishlistLineItemFormData formData,
+                                             final AddToWishlistFormData formData,
                                              final WishlistCreator wishlistCreator,
                                              final WishlistFinder wishlistFinder,
                                              final AddToWishlistControllerAction controllerAction) {
@@ -45,7 +44,7 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
     }
 
     @Override
-    public final Class<? extends AddWishlistLineItemFormData> getFormDataClass() {
+    public final Class<? extends AddToWishlistFormData> getFormDataClass() {
         return formData.getClass();
     }
 
@@ -61,15 +60,15 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
     }
 
     @Override
-    public CompletionStage<ShoppingList> executeAction(final ShoppingList wishlist, final AddWishlistLineItemFormData addWishlistLineItemFormData) {
-        return controllerAction.apply(wishlist, addWishlistLineItemFormData);
+    public CompletionStage<ShoppingList> executeAction(final ShoppingList wishlist, final AddToWishlistFormData formData) {
+        return controllerAction.apply(wishlist, formData);
     }
 
     @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final AddWishlistLineItemFormData addWishlistLineItemFormData);
+    public abstract CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final AddToWishlistFormData formData);
 
     @Override
-    public PageContent createPageContent(final ShoppingList wishlist, final Form<? extends AddWishlistLineItemFormData> addWishlistLineItemFormData) {
+    public PageContent createPageContent(final ShoppingList wishlist, final Form<? extends AddToWishlistFormData> formData) {
         return wishlistPageContentFactory.create(wishlist);
     }
 
@@ -80,7 +79,7 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
     }
 
     @Override
-    public void preFillFormData(final ShoppingList wishlist, final AddWishlistLineItemFormData addWishlistLineItemFormData) {
-        // Do not pre-fill anything
+    public void preFillFormData(final ShoppingList wishlist, final AddToWishlistFormData formData) {
+      // Do not pre-fill anything
     }
 }

@@ -17,11 +17,11 @@ public class DefaultRemoveFromWishlistControllerAction extends AbstractShoppingL
     }
 
     @Override
-    public CompletionStage<ShoppingList> apply(final ShoppingList wishlist, final RemoveWishlistLineItemFormData removeWishlistFormData) {
+    public CompletionStage<ShoppingList> apply(final ShoppingList wishlist, final RemoveFromWishlistFormData removeWishlistFormData) {
         return executeRequest(wishlist, buildRequest(wishlist, removeWishlistFormData));
     }
 
-    protected ShoppingListUpdateCommand buildRequest(final ShoppingList wishlist, final RemoveWishlistLineItemFormData removeWishlistFormData) {
+    protected ShoppingListUpdateCommand buildRequest(final ShoppingList wishlist, final RemoveFromWishlistFormData removeWishlistFormData) {
         final RemoveLineItem removeLineItem = RemoveLineItem.of(removeWishlistFormData.lineItemId());
         return ShoppingListUpdateCommand.of(wishlist, removeLineItem);
     }
