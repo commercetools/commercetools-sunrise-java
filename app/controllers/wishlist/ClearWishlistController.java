@@ -1,6 +1,8 @@
 package controllers.wishlist;
 
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.framework.controllers.cache.NoCache;
+import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
@@ -12,6 +14,8 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
+@LogMetrics
+@NoCache
 @RegisteredComponents(WishlistInSessionControllerComponent.class)
 public final class ClearWishlistController extends SunriseClearWishlistController {
 
