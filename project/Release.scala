@@ -38,6 +38,11 @@ object Release {
       </scm>
       <developers>
         <developer>
+          <id>matthiaskoester</id>
+          <name>Matthias Köster</name>
+          <url>https://github.com/katmatt</url>
+        </developer>
+        <developer>
           <id>lauraluiz</id>
           <name>Laura Luiz</name>
           <url>https://github.com/lauraluiz</url>
