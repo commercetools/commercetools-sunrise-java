@@ -18,7 +18,6 @@ import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -46,10 +45,14 @@ public final class ChangeQuantityInCartController extends SunriseChangeQuantityI
         this.cartReverseRouter = cartReverseRouter;
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "cart";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 
     @Override

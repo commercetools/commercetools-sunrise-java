@@ -17,7 +17,6 @@ import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -44,10 +43,14 @@ public final class RemoveFromWishlistController extends SunriseRemoveFromWishlis
         this.reverseRouter = reverseRouter;
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "my-account-wishlist";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 
     @Override

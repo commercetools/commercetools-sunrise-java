@@ -18,7 +18,6 @@ import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -48,10 +47,14 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
         this.authenticationReverseRouter = authenticationReverseRouter;
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "my-account-personal-details";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 
     @Override

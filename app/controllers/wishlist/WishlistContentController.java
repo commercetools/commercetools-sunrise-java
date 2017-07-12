@@ -11,7 +11,6 @@ import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
 import com.commercetools.sunrise.wishlist.content.SunriseWishlistContentController;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 @LogMetrics
@@ -30,9 +29,13 @@ public final class WishlistContentController extends SunriseWishlistContentContr
         super(contentRenderer, wishlistPageContentFactory, wishlistFinder);
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "my-account-wishlist";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 }
