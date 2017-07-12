@@ -43,6 +43,7 @@ public final class CartDetailController extends SunriseCartDetailController {
     public CartDetailController(final ContentRenderer contentRenderer,
                                 final CartFinder cartFinder,
                                 final CartDetailPageContentFactory pageContentFactory) {
+        // parameters that you can change via injection
         super(contentRenderer, cartFinder, pageContentFactory);
     }
 
