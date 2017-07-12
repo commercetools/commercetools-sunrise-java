@@ -113,6 +113,8 @@ GET         /:languageTag/user/addressbook                                      
 GET         /:languageTag/user/addressbook/add                                  @controllers.myaccount.AddAddressController.show(languageTag: String)
 # Adds an address to the customer's address book
 POST        /:languageTag/user/addressbook/add                                  @controllers.myaccount.AddAddressController.process(languageTag: String)
+# Shows the form to edit an address from the customer's address book
+GET         /:languageTag/user/addressbook/:addressIdentifier/edit              @controllers.myaccount.ChangeAddressController.show(languageTag: String, addressIdentifier: String)
 # Updates an address from the customer's address book
 POST        /:languageTag/user/addressbook/:addressIdentifier/edit              @controllers.myaccount.ChangeAddressController.process(languageTag: String, addressIdentifier: String)
 # Removes an address from the customer's address book
