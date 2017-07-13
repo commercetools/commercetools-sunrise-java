@@ -27,6 +27,7 @@ libraryDependencies ++= Seq(
   "com.commercetools.sunrise" %% "product-catalog" % sunriseFrameworkVersion,
   "com.commercetools.sunrise" %% "shopping-cart" % sunriseFrameworkVersion,
   "com.commercetools.sunrise" %% "my-account" % sunriseFrameworkVersion,
+  "com.commercetools.sunrise" %% "wishlist" % sunriseFrameworkVersion,
   // add the desired Sunrise Theme as dependency, e.g.:
   "com.commercetools.sunrise" % "commercetools-sunrise-theme" % "0.61.1"
 )
