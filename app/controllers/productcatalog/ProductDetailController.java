@@ -16,7 +16,6 @@ import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
 import io.sphere.sdk.products.ProductProjection;
 import play.mvc.Result;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -44,10 +43,14 @@ public final class ProductDetailController extends SunriseProductDetailControlle
         this.productReverseRouter = productReverseRouter;
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "pdp";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 
     @Override

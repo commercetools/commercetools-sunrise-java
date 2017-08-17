@@ -20,7 +20,6 @@ import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -52,10 +51,14 @@ public final class CheckoutPaymentController extends SunriseCheckoutPaymentContr
         this.checkoutReverseRouter = checkoutReverseRouter;
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "checkout-payment";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 
     @Override

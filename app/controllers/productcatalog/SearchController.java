@@ -11,7 +11,6 @@ import com.commercetools.sunrise.productcatalog.productoverview.SunriseSearchCon
 import com.commercetools.sunrise.productcatalog.productoverview.search.ProductOverviewSearchControllerComponentsSupplier;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 @LogMetrics
@@ -30,9 +29,13 @@ public final class SearchController extends SunriseSearchController {
         super(contentRenderer, productListFinder, pageContentFactory);
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "pop";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 }

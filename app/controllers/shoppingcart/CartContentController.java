@@ -12,7 +12,6 @@ import com.commercetools.sunrise.shoppingcart.content.SunriseCartContentControll
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 @LogMetrics
@@ -32,9 +31,13 @@ public final class CartContentController extends SunriseCartContentController {
         super(contentRenderer, cartFinder, pageContentFactory);
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "cart";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 }

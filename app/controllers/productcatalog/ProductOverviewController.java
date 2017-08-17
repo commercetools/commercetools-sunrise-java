@@ -14,7 +14,6 @@ import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.Produ
 import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
 import play.mvc.Result;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -38,10 +37,14 @@ public final class ProductOverviewController extends SunriseProductOverviewContr
         super(contentRenderer, categoryFinder, productListFinder, pageContentFactory);
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "pop";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 
     @Override

@@ -19,7 +19,6 @@ import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
@@ -50,10 +49,14 @@ public final class ChangeAddressController extends SunriseChangeAddressControlle
         this.addressBookReverseRouter = addressBookReverseRouter;
     }
 
-    @Nullable
     @Override
     public String getTemplateName() {
         return "my-account-edit-address";
+    }
+
+    @Override
+    public String getCmsPageKey() {
+        return "default";
     }
 
     @Override
