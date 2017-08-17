@@ -3,7 +3,7 @@ import sbt.Keys._
 import sbt._
 
 object Dependencies {
-  private val sunriseThemeVersion = "0.65.0"
+  private val sunriseThemeVersion = "0.67.0"
   private val jvmSdkVersion = "1.17.0"
   private val jacksonVersion = "2.7.5"
 
