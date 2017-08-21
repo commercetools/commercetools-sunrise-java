@@ -59,6 +59,17 @@ public class DefaultProductReverseRouter extends AbstractLocalizedReverseRouter 
 
     /**
      * {@inheritDoc}
+     * It uses as product identifier the product slug for the current locale and as variant identifier the SKU.
+     */
+    @Override
+    public Optional<Call> productDetailPageCall(final io.sphere.sdk.shoppinglists.LineItem lineItem) {
+        return Optional.ofNullable(lineItem.getProductSlug())
+                .flatMap(slugs -> slugs.find(locale())
+                        .map(slug -> productDetailPageCall(slug, lineItem.getVariant().getSku())));
+    }
+
+    /**
+     * {@inheritDoc}
      * It uses as category identifier the category slug for the current locale.
      */
     @Override
