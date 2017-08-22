@@ -5,9 +5,7 @@ import play.mvc.Http;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
@@ -45,7 +43,19 @@ public final class QueryStringUtils {
      * @return query string from the request
      */
     public static Map<String, List<String>> extractQueryString(final Http.Request httpRequest) {
+        return extractQueryString(httpRequest, Collections.emptySet());
+    }
+
+    /**
+     * Extracts the query string from the request.
+     * @param httpRequest current HTTP request
+     * @param ignoredParams params that should not be included in the link
+     * @return query string from the request
+     */
+    public static Map<String, List<String>> extractQueryString(final Http.Request httpRequest,final Set<String> ignoredParams) {
+
         return httpRequest.queryString().entrySet().stream()
+                .filter(stringEntry -> !ignoredParams.contains(stringEntry.getKey()))
                 .collect(toMap(Map.Entry::getKey, entry -> asList(entry.getValue())));
     }
 
