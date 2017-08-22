@@ -35,7 +35,7 @@ public class WishlistItemViewModelFactory extends SimpleViewModelFactory<Wishlis
     }
 
     protected void fillImageUrl(final WishlistItemViewModel viewModel, final LineItem lineItem) {
-        if (lineItem != null) {
+        if (lineItem != null && lineItem.getVariant() != null) {
             final String imageUrl = lineItem.getVariant().getImages().stream()
                     .findFirst()
                     .map(image -> image.getUrl()).orElse(null);
