@@ -91,3 +91,27 @@ changePassword:
   changeBtn: Passwort ändern
   backBtn: Zurück
   feedbackMessage: Kennwort erfolgreich geändert.
+resetPassword:
+  title: Passwort zurücksetzen
+  newPasswordLabelTxt: Neues Passwort
+  confirmPasswordLabelTxt: Neues Passwort bestätigen
+  resetBtn: Passwort zurücksetzen
+  feedbackMessage: Kennwort erfolgreich geändert.
+forgotPassword:
+  title: Passwort vergessen
+  description: Geben Sie Ihre Emailadresse ein und klicken Sie auf "Passwort zurücksetzen" und wir senden Ihnen einen Link, um ein neues Passwort zu setzen.
+  email:
+    subject: Passwort zurücksetzen
+    passwordResetTitle: Passwort zrücksetzen
+    dearUser: Sehr geehrter
+    passwordResetText: Wir haben Ihre Anfrage zum Zurücksetzen Ihres Passworts erhalten. Bitte verwenden Sie den folgenden Link um Ihr Passwort zurück zu setzen:
+    passwordResetTextTwo: Bitte ignorieren Sie diese Email falls Sie Ihr Passwort nicht zurück setzen möchten.
+    wishes: Mit freundlichen Grüssen
+    who: SUNRISE Customer Service Team
+    companyEmail: www.sunrise.commercetools.de
+    companyAddressOne: Sunny Road 1
+    companyAddressTwo: 23456 Sunshine
+    companyVatNumber: VAT Number 5123123151.
+    bannerTitle: Frauen
+    bannerText: Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem
+    bottomTextTwo: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapibus id, mattis vel, nisi. Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. Nullam mollis. Ut justo. Suspendisse potenti. Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. Morbi purus libero, faucibus adipiscing, commodo quis, gravida id, est. Sed lectus.

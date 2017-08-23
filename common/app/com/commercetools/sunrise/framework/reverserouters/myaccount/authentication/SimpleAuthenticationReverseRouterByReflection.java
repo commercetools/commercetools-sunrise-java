@@ -10,7 +10,6 @@ import javax.inject.Singleton;
 
 @Singleton
 final class SimpleAuthenticationReverseRouterByReflection extends AbstractReflectionReverseRouter implements SimpleAuthenticationReverseRouter {
-
     private final ReverseCaller logInPageCaller;
     private final ReverseCaller logInProcessCaller;
     private final ReverseCaller signUpProcessCaller;
