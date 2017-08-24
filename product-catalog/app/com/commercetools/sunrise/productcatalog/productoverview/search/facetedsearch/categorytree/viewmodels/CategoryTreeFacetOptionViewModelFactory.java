@@ -25,6 +25,7 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
     private final List<Locale> locales;
     private final CategoryTree categoryTree;
     private final ProductReverseRouter productReverseRouter;
+    private static final Set<String> IGNORED_PARAMS = Collections.singleton("page");
 
     @Inject
     public CategoryTreeFacetOptionViewModelFactory(final UserLanguage userLanguage, @NavigationCategoryTree final CategoryTree categoryTree,
@@ -65,7 +66,7 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
     @Override
     protected void fillValue(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final Category selectedValue) {
         productReverseRouter.productOverviewPageCall(category).ifPresent(call -> {
-            viewModel.setValue(buildUri(call.url(), extractQueryString(Http.Context.current().request())));
+            viewModel.setValue(buildUri(call.url(), extractQueryString(Http.Context.current().request(), IGNORED_PARAMS)));
         });
     }
 

@@ -53,7 +53,13 @@ public interface ProductReverseRouter extends SimpleProductReverseRouter, Locali
      * @param lineItem the line item containing the product that we want to access via the page call
      * @return the page call to access the product detail page of the product contained in the line item
      */
-    Optional<Call> productDetailPageCall(final LineItem lineItem);
+    Optional<Call> productDetailPageCall(final LineItem lineItem);    /**
+
+     * Finds the call to access the product detail page of the product contained in the given line item.
+     * @param lineItem the line item containing the product that we want to access via the page call
+     * @return the page call to access the product detail page of the product contained in the line item
+     */
+    Optional<Call> productDetailPageCall(final io.sphere.sdk.shoppinglists.LineItem lineItem);
 
     /**
      * Finds the call to access the product overview page for the products belonging to the given category.

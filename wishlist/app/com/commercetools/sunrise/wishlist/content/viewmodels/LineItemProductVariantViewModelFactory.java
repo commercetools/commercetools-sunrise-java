@@ -6,6 +6,7 @@ import com.commercetools.sunrise.framework.viewmodels.content.products.AbstractP
 import com.commercetools.sunrise.framework.viewmodels.content.products.ProductVariantViewModel;
 import com.commercetools.sunrise.framework.viewmodels.formatters.PriceFormatter;
 import io.sphere.sdk.shoppinglists.LineItem;
+import play.mvc.Call;
 
 import javax.inject.Inject;
 
@@ -53,7 +54,10 @@ public class LineItemProductVariantViewModelFactory extends AbstractProductVaria
 
     @Override
     protected void fillUrl(final ProductVariantViewModel viewModel, final LineItem lineItem) {
-        // not applicable
+        viewModel.setUrl(productReverseRouter
+                .productDetailPageCall(lineItem)
+                .map(Call::url)
+                .orElse(""));
     }
 
     @Override

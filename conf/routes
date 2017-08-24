@@ -93,6 +93,18 @@ POST        /:languageTag/user/signup                                           
 # Logs out the user
 GET         /:languageTag/user/logout                                           @controllers.myaccount.LogOutController.process(languageTag: String)
 
+# PASSWORD RECOVERY
+# ~~~~~
+
+# Show form to enter password recover email
+GET         /:languageTag/password/recovery                                     @controllers.myaccount.RecoverPasswordController.show(languageTag: String)
+# Send recovery password email
+POST         /:languageTag/password/recovery                                    @controllers.myaccount.RecoverPasswordController.process(languageTag: String)
+
+# View password reset
+GET         /:languageTag/password/reset/:token                                 @controllers.myaccount.ResetPasswordController.show(languageTag: String, token: String)
+# Process reset password request
+POST        /:languageTag/password/reset/:token                                 @controllers.myaccount.ResetPasswordController.process(languageTag: String, token: String)
 
 # MY ACCOUNT
 # ~~~~~
@@ -113,6 +125,8 @@ GET         /:languageTag/user/addressbook                                      
 GET         /:languageTag/user/addressbook/add                                  @controllers.myaccount.AddAddressController.show(languageTag: String)
 # Adds an address to the customer's address book
 POST        /:languageTag/user/addressbook/add                                  @controllers.myaccount.AddAddressController.process(languageTag: String)
+# Shows the form to edit an address from the customer's address book
+GET         /:languageTag/user/addressbook/:addressIdentifier/edit              @controllers.myaccount.ChangeAddressController.show(languageTag: String, addressIdentifier: String)
 # Updates an address from the customer's address book
 POST        /:languageTag/user/addressbook/:addressIdentifier/edit              @controllers.myaccount.ChangeAddressController.process(languageTag: String, addressIdentifier: String)
 # Removes an address from the customer's address book

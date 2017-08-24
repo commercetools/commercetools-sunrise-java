@@ -1,7 +1,7 @@
 # Theme
 
 ## Structure
-All template files are loaded as a [WebJars](http://www.webjars.org/) dependency to Sunrise. This includes [Handlebars](http://handlebarsjs.com/) source templates, all web assets (i.e. CSS, JS, images and fonts) and i18n [YAML](http://www.yaml.org/) files. The expected structure being as follows:
+All theme files are loaded as a [WebJars](http://www.webjars.org/) dependency to Sunrise. This includes [Handlebars](http://handlebarsjs.com/) source templates, all web assets (i.e. CSS, JS, images and fonts) and i18n [YAML](http://www.yaml.org/) files. The expected structure being as follows:
 
 ```
 META-INF
@@ -21,14 +21,14 @@ META-INF
 ### Template
 Sunrise uses [Handlebars.java](https://jknack.github.io/handlebars.java/) by default as a template engine.
 
-In order to find the corresponding template source file, it searches first inside the classpath `/templates`. If the file is not found there, then it tries inside the Template's Webjars dependency (i.e. `/META-INF/resources/webjars/templates`). This enables a practical way to override parts of the template without the need of replacing it completely, as we will see in the section _[Customize HTML](#customize-html)_.
+In order to find the corresponding template source file, it searches first inside the classpath `/templates`. If the file is not found there, then it tries inside the Theme's Webjars dependency (i.e. `/META-INF/resources/webjars/templates`). This enables a practical way to override parts of the template without the need of replacing it completely, as we will see in the section _[Customize HTML](#customize-html)_.
 
 Learn how to modify this behaviour in _[Change template source loaders](Configuration.md#change-template-source-loaders)_.
 
 ### Web Assets
-There are two types of routes that serve web assets in Sunrise:
-- `/assets/{css|js|fonts|img}/`: Serves files inside the `css`, `js`, `fonts` or `img` folder of the Template's Webjars. This route allows to access the web assets provided by the template.
-- `/assets/public/`: Serves files from the project's `public` folder. By placing web assets in this folder, you can easily extend Sunrise's functionality, as explained in _[Customize Web Assets](#customize-web-assets)_.
+By calling the `AssetsController` in your routes, your application will first try to load the requested web asset inside Play's `public` folder and then inside the Theme's Webjars. If no web asset with the given path is found, it will return a 404 status error.
+
+Notice that by placing web assets in Play's `public` folder you can easily extend Sunrise's functionality, as explained in _[Customize Web Assets](#customize-web-assets)_.
 
 ### Internationalization
 Sunrise uses [YAML](http://www.yaml.org/) files by default to provide text in different languages. Translations are grouped according to the page or section they belong, which is known as bundles (e.g. `home`, `checkout`). Each YAML file contains the translated text for a particular language and bundle.
@@ -52,7 +52,7 @@ Learn how to modify this behaviour in _[Change i18n resource loaders](Configurat
 
 ## Customization
 
-This guide shows you how to customize different parts of the template in an easy and convenient way. Note it is assuming the configuration has not been changed.
+This guide shows you how to customize different parts of the template in an easy and convenient way. Note it is assuming the configuration has not been changed and that you have installed the [Theme Importer SBT Plugin](https://github.com/commercetools/commercetools-sunrise-java-theme-importer).
 
 ### Customize HTML
 
@@ -72,12 +72,12 @@ Run Sunrise and open it in a browser to inspect the part of the code you want to
 ...
 ```
 
-In order to override this component we need to create a Handlebars template source file in `conf/templates` with the desired content, so that the new code is used instead of the original code. To do so, Sunrise offers a convenient [SBT](http://www.scala-sbt.org/) command `copyTemplateFiles`, which given a whitespace-separated list of template files copies them from the original location to `conf/templates`.
+In order to override this component we need to create a Handlebars template source file in `conf/templates` with the desired content, so that the new code is used instead of the original code. To do so, [Sunrise Theme Importer](https://github.com/commercetools/commercetools-sunrise-java-theme-importer) offers a convenient [SBT](http://www.scala-sbt.org/) command `sunriseThemeImportTemplateFiles`, which given a whitespace-separated list of template files copies them from the original location to `conf/templates`.
 
 Let's execute it for the previous example:
 
 ```shell
-sbt 'copyTemplateFiles common/logo.hbs'
+sbt 'sunriseThemeImportTemplateFiles common/logo.hbs'
 ```
 
 After the execution, `conf/templates/common/logo.hbs` has been created with the content of the original template source file:

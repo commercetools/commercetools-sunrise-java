@@ -22,6 +22,14 @@ public final class FormTestUtils {
         return queryString;
     }
 
+    public static Map<String, List<String>> quxQueryString() {
+        final Map<String, List<String>> queryString = new HashMap<>();
+        queryString.put("qux", asList("v", "w"));
+        return queryString;
+    }
+
+
+
     public static void testWithHttpContext(final Map<String, List<String>> queryString, final Consumer<Http.Context> test) {
         final Http.Request request = fakeRequest()
                 .uri(QueryStringUtils.buildUri("path", queryString))

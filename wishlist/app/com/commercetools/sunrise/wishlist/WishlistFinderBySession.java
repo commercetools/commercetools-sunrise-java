@@ -42,6 +42,7 @@ class WishlistFinderBySession extends AbstractSingleShoppingListQueryExecutor im
     private Optional<ShoppingListQuery> tryBuildQueryByCustomerId() {
         return customerInSession.findCustomerId()
                 .map(customerId -> ShoppingListQuery.of()
+                        .withExpansionPaths(m -> m.lineItems().productSlug())
                         .plusPredicates(m -> m.customer().id().is(customerId)));
     }
 
@@ -54,6 +55,7 @@ class WishlistFinderBySession extends AbstractSingleShoppingListQueryExecutor im
     private ShoppingListQuery decorateQueryWithAdditionalInfo(final ShoppingListQuery query) {
         return query
                 .withExpansionPaths(m -> m.lineItems().variant())
+                .plusExpansionPaths(m -> m.lineItems().productSlug())
                 .withSort(m -> m.createdAt().sort().desc())
                 .withLimit(1);
     }

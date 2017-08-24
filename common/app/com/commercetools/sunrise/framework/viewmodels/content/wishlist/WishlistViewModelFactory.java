@@ -58,7 +58,6 @@ public class WishlistViewModelFactory extends SimpleViewModelFactory<WishlistVie
 
             final List<LineItem> recentlyAdded = lineItems.subList(0, lastIndex);
             final List<WishlistItemViewModel> wishlistItemViewModels = recentlyAdded.stream()
-                    .map(LineItem::getVariant)
                     .map(wishlistItemViewModelFactory::create)
                     .collect(Collectors.toList());
 

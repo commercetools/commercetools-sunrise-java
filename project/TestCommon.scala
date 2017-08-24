@@ -34,7 +34,8 @@ object TestCommon {
     ),
     libraryDependencies ++= Seq (
       "org.assertj" % "assertj-core" % "3.6.2" % scopes,
-      "org.mockito" % "mockito-core" % "2.7.9" % scopes
+      "org.mockito" % "mockito-core" % "2.8.47" % scopes,
+      "com.commercetools.sunrise.email" % "email-smtp" % Dependencies.sunriseEmailVersion  % scopes
     ),
     dependencyOverrides ++= Set (
       "junit" % "junit" % "4.12" % scopes

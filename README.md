@@ -21,12 +21,13 @@ The recommended way to start using Sunrise is to clone the [Sunrise Starter Proj
 ### Starting from scratch
 Alternatively you can start your own Play Framework project and configure it yourself, using Sunrise as dependency:
 ```sbt
-val sunriseFrameworkVersion = "1.0.0-M1" // or desired version
+val sunriseFrameworkVersion = "1.0.0-M5" // or desired version
 libraryDependencies ++= Seq(
   // add Sunrise Framework dependencies as needed, e.g.:
   "com.commercetools.sunrise" %% "product-catalog" % sunriseFrameworkVersion,
   "com.commercetools.sunrise" %% "shopping-cart" % sunriseFrameworkVersion,
   "com.commercetools.sunrise" %% "my-account" % sunriseFrameworkVersion,
+  "com.commercetools.sunrise" %% "wishlist" % sunriseFrameworkVersion,
   // add the desired Sunrise Theme as dependency, e.g.:
   "com.commercetools.sunrise" % "commercetools-sunrise-theme" % "0.61.1"
 )
