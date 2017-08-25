@@ -11,7 +11,7 @@ import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinde
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
 import com.commercetools.sunrise.productcatalog.productoverview.search.ProductOverviewSearchControllerComponentsSupplier;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
-import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
 import play.mvc.Result;
 
 import javax.inject.Inject;

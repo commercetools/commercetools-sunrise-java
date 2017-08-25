@@ -2,7 +2,7 @@ package com.commercetools.sunrise.wishlist;
 
 import com.commercetools.sunrise.framework.hooks.HookRunner;
 import com.commercetools.sunrise.sessions.customer.CustomerInSession;
-import com.commercetools.sunrise.sessions.wishlist.WishlistInSession;
+import com.commercetools.sunrise.sessions.wishlist.ShoppingListsInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
@@ -13,29 +13,29 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-class WishlistFinderBySession extends AbstractSingleShoppingListQueryExecutor implements WishlistFinder {
-    private final WishlistInSession wishlistInSession;
+class ShoppingListFinderBySession extends AbstractSingleShoppingListQueryExecutor implements ShoppingListFinder {
+    private final ShoppingListsInSession shoppingListsInSession;
     private final CustomerInSession customerInSession;
 
     @Inject
-    protected WishlistFinderBySession(final SphereClient sphereClient, final HookRunner hookRunner,
-                                      final WishlistInSession wishlistInSession, final CustomerInSession customerInSession) {
+    protected ShoppingListFinderBySession(final SphereClient sphereClient, final HookRunner hookRunner,
+                                          final ShoppingListsInSession shoppingListsInSession, final CustomerInSession customerInSession) {
         super(sphereClient, hookRunner);
-        this.wishlistInSession = wishlistInSession;
+        this.shoppingListsInSession = shoppingListsInSession;
         this.customerInSession = customerInSession;
     }
 
     @Override
-    public CompletionStage<Optional<ShoppingList>> get() {
-        return buildQuery()
+    public CompletionStage<Optional<ShoppingList>> get(final String shoppinglistType) {
+        return buildQuery(shoppinglistType)
                 .map(this::executeRequest)
                 .orElseGet(() -> completedFuture(Optional.empty()));
     }
 
-    private Optional<ShoppingListQuery> buildQuery() {
+    private Optional<ShoppingListQuery> buildQuery(final String shoppinglistType) {
         return tryBuildQueryByCustomerId()
                 .map(Optional::of)
-                .orElseGet(this::tryBuildQueryByWishlistId)
+                .orElse(tryBuildQueryByWishlistId(shoppinglistType))
                 .map(this::decorateQueryWithAdditionalInfo);
     }
 
@@ -46,8 +46,8 @@ class WishlistFinderBySession extends AbstractSingleShoppingListQueryExecutor im
                         .plusPredicates(m -> m.customer().id().is(customerId)));
     }
 
-    private Optional<ShoppingListQuery> tryBuildQueryByWishlistId() {
-        return wishlistInSession.findWishlistId()
+    private Optional<ShoppingListQuery> tryBuildQueryByWishlistId(final String shoppinglistType) {
+        return shoppingListsInSession.findShoppingListId( shoppinglistType )
                 .map(shoppingListId -> ShoppingListQuery.of()
                         .plusPredicates(m -> m.id().is(shoppingListId)));
     }

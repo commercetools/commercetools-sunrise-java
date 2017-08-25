@@ -5,7 +5,7 @@ import com.commercetools.sunrise.framework.viewmodels.ViewModel;
 /**
  * This view model is used to render the line items of the mini wishlist view.
  */
-public class WishlistItemViewModel extends ViewModel {
+public class ShoppinglistItemViewModel extends ViewModel {
     private String imageUrl;
 
     private String name;

@@ -6,7 +6,7 @@ import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 
 
-public class DefaultAddToWishlistFormData extends Base implements AddToWishlistFormData {
+public class DefaultAddToShoppingListFormData extends Base implements AddToShoppingListFormData {
     @Required
     @MinLength(1)
     private String productId;

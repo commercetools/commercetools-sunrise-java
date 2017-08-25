@@ -13,7 +13,7 @@ import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContent
 import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartFormData;
 import com.commercetools.sunrise.shoppingcart.remove.SunriseRemoveFromCartController;
-import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;

@@ -11,7 +11,7 @@ import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.productcatalog.home.HomeRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
-import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
 import play.mvc.Result;
 
 import javax.inject.Inject;

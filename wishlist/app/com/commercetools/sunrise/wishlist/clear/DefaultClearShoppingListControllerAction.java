@@ -12,15 +12,15 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
-public class DefaultClearWishlistControllerAction extends AbstractShoppingListUpdateExecutor implements ClearWishlistControllerAction {
+public class DefaultClearShoppingListControllerAction extends AbstractShoppingListUpdateExecutor implements ClearShoppingListControllerAction {
     @Inject
-    protected DefaultClearWishlistControllerAction(final SphereClient sphereClient, final HookRunner hookRunner) {
+    protected DefaultClearShoppingListControllerAction(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
     }
 
     @Override
-    public CompletionStage<ShoppingList> apply(final ShoppingList wishlist) {
-        return executeRequest(wishlist, buildRequest(wishlist));
+    public CompletionStage<ShoppingList> apply(final ShoppingList shoppingList) {
+        return executeRequest(shoppingList, buildRequest(shoppingList));
     }
 
     protected ShoppingListUpdateCommand buildRequest(final ShoppingList wishlist) {

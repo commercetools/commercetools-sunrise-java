@@ -5,15 +5,14 @@ import com.google.inject.ImplementedBy;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.Supplier;
 
 @FunctionalInterface
-@ImplementedBy(DefaultWishlistCreator.class)
-public interface WishlistCreator extends ResourceFinder, Supplier<CompletionStage<ShoppingList>> {
+@ImplementedBy(DefaultShoppingListCreator.class)
+public interface ShoppingListCreator extends ResourceFinder {
     /**
      * Creates a wishlist.
      *
      * @return the created wishlist
      */
-    CompletionStage<ShoppingList> get();
+    CompletionStage<ShoppingList> get(final String shoppingListType);
 }

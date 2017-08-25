@@ -4,7 +4,7 @@ import com.commercetools.sunrise.framework.components.controllers.ControllerComp
 import com.commercetools.sunrise.framework.hooks.ctpevents.ShoppingListCreatedHook;
 import com.commercetools.sunrise.framework.hooks.ctpevents.ShoppingListLoadedHook;
 import com.commercetools.sunrise.framework.hooks.ctpevents.ShoppingListUpdatedHook;
-import com.commercetools.sunrise.sessions.wishlist.WishlistInSession;
+import com.commercetools.sunrise.sessions.wishlist.ShoppingListsInSession;
 import com.google.inject.Inject;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 
@@ -13,34 +13,34 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public final class WishlistInSessionControllerComponent implements ControllerComponent,
+public final class ShoppingListInSessionControllerComponent implements ControllerComponent,
         ShoppingListCreatedHook, ShoppingListUpdatedHook, ShoppingListLoadedHook {
-    private final WishlistInSession wishlistInSession;
+    private final ShoppingListsInSession shoppingListsInSession;
 
     @Inject
-    protected WishlistInSessionControllerComponent(final WishlistInSession wishlistInSession) {
-        this.wishlistInSession = wishlistInSession;
+    protected ShoppingListInSessionControllerComponent(final ShoppingListsInSession shoppingListsInSession) {
+        this.shoppingListsInSession = shoppingListsInSession;
     }
 
     @Override
     public CompletionStage<?> onShoppingListLoaded(final ShoppingList shoppingList) {
-        overwriteWishlistInSession(shoppingList);
+        overwriteShoppinglistInSession(shoppingList);
         return completedFuture(null);
     }
 
     @Override
     public CompletionStage<?> onShoppingListCreated(final ShoppingList shoppingList) {
-        overwriteWishlistInSession(shoppingList);
+        overwriteShoppinglistInSession(shoppingList);
         return completedFuture(null);
     }
 
     @Override
     public CompletionStage<?> onShoppingListUpdated(final ShoppingList shoppingList) {
-        overwriteWishlistInSession(shoppingList);
+        overwriteShoppinglistInSession(shoppingList);
         return completedFuture(null);
     }
 
-    private void overwriteWishlistInSession(@Nullable final ShoppingList wishlist) {
-        wishlistInSession.store(wishlist);
+    private void overwriteShoppinglistInSession(@Nullable final ShoppingList shoppingList) {
+        shoppingListsInSession.store(shoppingList);
     }
 }

@@ -14,7 +14,7 @@ import com.commercetools.sunrise.shoppingcart.add.AddToCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.add.AddToCartFormData;
 import com.commercetools.sunrise.shoppingcart.add.SunriseAddToCartController;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
-import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;

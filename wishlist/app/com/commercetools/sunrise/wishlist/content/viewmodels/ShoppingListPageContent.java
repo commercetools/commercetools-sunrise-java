@@ -5,9 +5,9 @@ import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.viewmodels.content.products.ProductThumbnailViewModel;
 
 /**
- * The page content for the wishlist.
+ * The page content for the shoppinglist.
  */
-public class WishlistPageContent extends PageContent {
+public class ShoppingListPageContent extends PageContent {
     private GenericListViewModel<ProductThumbnailViewModel> products;
     private Integer itemsInTotal;
 

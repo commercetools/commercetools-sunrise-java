@@ -8,15 +8,15 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
 @FunctionalInterface
-@ImplementedBy(DefaultClearWishlistControllerAction.class)
-public interface ClearWishlistControllerAction extends ControllerAction, Function<ShoppingList, CompletionStage<ShoppingList>> {
+@ImplementedBy(DefaultClearShoppingListControllerAction.class)
+public interface ClearShoppingListControllerAction extends ControllerAction, Function<ShoppingList, CompletionStage<ShoppingList>> {
     /**
-     * Removes all line items from the given wishlist.
+     * Removes all line items from the given shoppinglist.
      *
-     * @param wishlist the {@link ShoppingList} from which to remove all line items
+     * @param shoppingList the {@link ShoppingList} from which to remove all line items
      *
      * @return the completion stage for the updated wishlist with no line items
      */
     @Override
-    CompletionStage<ShoppingList> apply(ShoppingList wishlist);
+    CompletionStage<ShoppingList> apply(ShoppingList shoppingList);
 }

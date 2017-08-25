@@ -10,7 +10,7 @@ import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponent
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.content.SunriseCartContentController;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
-import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
 
 import javax.inject.Inject;
 

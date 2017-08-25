@@ -8,16 +8,16 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 
 @FunctionalInterface
-@ImplementedBy(DefaultRemoveFromWishlistControllerAction.class)
-public interface RemoveFromWishlistControllerAction extends ControllerAction, BiFunction<ShoppingList, RemoveFromWishlistFormData, CompletionStage<ShoppingList>> {
+@ImplementedBy(DefaultRemoveFromShoppingListControllerAction.class)
+public interface RemoveFromShoppingListControllerAction extends ControllerAction, BiFunction<ShoppingList, RemoveFromShoppingListFormData, CompletionStage<ShoppingList>> {
     /**
      * Removes a line item from the given wishlist.
      *
-     * @param wishlist               the {@link ShoppingList} from which to remove the line items
+     * @param shoppingList               the {@link ShoppingList} from which to remove the line items
      * @param removeWishlistFormData specifies the line item to remove
      *
      * @return the completion stage for the updated wishlist with the removed line item
      */
     @Override
-    CompletionStage<ShoppingList> apply(ShoppingList wishlist, RemoveFromWishlistFormData removeWishlistFormData);
+    CompletionStage<ShoppingList> apply(ShoppingList shoppingList, RemoveFromShoppingListFormData removeWishlistFormData);
 }

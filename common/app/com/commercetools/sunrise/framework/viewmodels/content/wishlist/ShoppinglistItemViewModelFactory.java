@@ -8,10 +8,10 @@ import play.mvc.Call;
 import javax.inject.Inject;
 
 /**
- * This view model factory creates {@link WishlistItemViewModel} instances for the product variants of
+ * This view model factory creates {@link ShoppinglistItemViewModel} instances for the product variants of
  * the wishlists line items {@link LineItem#getVariant()}.
  */
-public class WishlistItemViewModelFactory extends SimpleViewModelFactory<WishlistItemViewModel, LineItem> {
+public class ShoppinglistItemViewModelFactory extends SimpleViewModelFactory<ShoppinglistItemViewModel, LineItem> {
 
 
     @Inject
@@ -19,22 +19,22 @@ public class WishlistItemViewModelFactory extends SimpleViewModelFactory<Wishlis
 
 
     @Override
-    public final WishlistItemViewModel create(final LineItem lineItem) {
+    public final ShoppinglistItemViewModel create(final LineItem lineItem) {
         return super.create(lineItem);
     }
 
     @Override
-    protected WishlistItemViewModel newViewModelInstance(final LineItem lineItem) {
-        return new WishlistItemViewModel();
+    protected ShoppinglistItemViewModel newViewModelInstance(final LineItem lineItem) {
+        return new ShoppinglistItemViewModel();
     }
 
     @Override
-    protected final void initialize(final WishlistItemViewModel viewModel, final LineItem lineItem) {
+    protected final void initialize(final ShoppinglistItemViewModel viewModel, final LineItem lineItem) {
         fillImageUrl(viewModel, lineItem);
         fillProductSlug(viewModel, lineItem);
     }
 
-    protected void fillImageUrl(final WishlistItemViewModel viewModel, final LineItem lineItem) {
+    protected void fillImageUrl(final ShoppinglistItemViewModel viewModel, final LineItem lineItem) {
         if (lineItem != null && lineItem.getVariant() != null) {
             final String imageUrl = lineItem.getVariant().getImages().stream()
                     .findFirst()
@@ -44,7 +44,7 @@ public class WishlistItemViewModelFactory extends SimpleViewModelFactory<Wishlis
         }
     }
 
-    protected void fillProductSlug(final WishlistItemViewModel viewModel, final LineItem lineItem) {
+    protected void fillProductSlug(final ShoppinglistItemViewModel viewModel, final LineItem lineItem) {
         if (lineItem != null) {
             final String productSlug = productReverseRouter
                     .productDetailPageCall(lineItem)

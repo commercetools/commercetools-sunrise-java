@@ -13,7 +13,7 @@ import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCar
 import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartFormData;
 import com.commercetools.sunrise.shoppingcart.changequantity.SunriseChangeQuantityInCartController;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
-import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;

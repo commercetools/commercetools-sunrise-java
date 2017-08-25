@@ -4,7 +4,7 @@ import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 
-public class DefaultRemoveFromWishlistFormData extends Base implements RemoveFromWishlistFormData {
+public class DefaultRemoveFromShoppingListFormData extends Base implements RemoveFromShoppingListFormData {
     @Required
     @MinLength(1)
     private String lineItemId;

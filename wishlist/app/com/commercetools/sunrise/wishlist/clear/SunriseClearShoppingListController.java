@@ -5,8 +5,9 @@ import com.commercetools.sunrise.framework.controllers.WithExecutionFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.wishlist.WishlistFinder;
-import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
+import com.commercetools.sunrise.wishlist.ShoppingListFinder;
+import com.commercetools.sunrise.wishlist.ShoppingListTypeIdentifier;
+import com.commercetools.sunrise.wishlist.WithRequiredShoppingList;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.mvc.Result;
@@ -17,28 +18,28 @@ import java.util.concurrent.CompletionStage;
 /**
  * This controller is used to view the current wishlist.
  */
-public abstract class SunriseClearWishlistController extends SunriseController
-        implements WithExecutionFlow<ShoppingList, ShoppingList>, WithRequiredWishlist {
+public abstract class SunriseClearShoppingListController extends SunriseController
+        implements WithExecutionFlow<ShoppingList, ShoppingList>, WithRequiredShoppingList, ShoppingListTypeIdentifier {
 
-    private final WishlistFinder wishlistFinder;
-    private final ClearWishlistControllerAction controllerAction;
+    private final ShoppingListFinder shoppingListFinder;
+    private final ClearShoppingListControllerAction controllerAction;
 
     @Inject
-    protected SunriseClearWishlistController(final WishlistFinder wishlistFinder,
-                                             final ClearWishlistControllerAction controllerAction) {
-        this.wishlistFinder = wishlistFinder;
+    protected SunriseClearShoppingListController(final ShoppingListFinder shoppingListFinder,
+                                                 final ClearShoppingListControllerAction controllerAction) {
+        this.shoppingListFinder = shoppingListFinder;
         this.controllerAction = controllerAction;
     }
 
     @Override
-    public final WishlistFinder getWishlistFinder() {
-        return wishlistFinder;
+    public final ShoppingListFinder getShoppingListFinder() {
+        return shoppingListFinder;
     }
 
     @EnableHooks
     @SunriseRoute(WishlistReverseRouter.CLEAR_WISHLIST_PROCESS)
     public CompletionStage<Result> process(final String languageTag) {
-        return requireWishlist(this::processRequest);
+        return requireShoppingList(this::processRequest, getShoppingListType());
     }
 
     @Override

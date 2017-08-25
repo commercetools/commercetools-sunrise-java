@@ -6,16 +6,15 @@ import io.sphere.sdk.shoppinglists.ShoppingList;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Supplier;
 
 @FunctionalInterface
-@ImplementedBy(WishlistFinderBySession.class)
-public interface WishlistFinder extends ResourceFinder, Supplier<CompletionStage<Optional<ShoppingList>>> {
+@ImplementedBy(ShoppingListFinderBySession.class)
+public interface ShoppingListFinder extends ResourceFinder{
     /**
      * If the current session contains a signed in customer or a previously created wishlist, this wishlist
      * will be returned. Otherwise an empty optional will be returned.
      *
      * @return the completion stage for the wishlist
      */
-    CompletionStage<Optional<ShoppingList>> get();
+    CompletionStage<Optional<ShoppingList>> get(final String shoppingListType);
 }

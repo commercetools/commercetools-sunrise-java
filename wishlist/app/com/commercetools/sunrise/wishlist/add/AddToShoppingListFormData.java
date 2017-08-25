@@ -11,8 +11,8 @@ import io.sphere.sdk.shoppinglists.ShoppingList;
  * @see LineItem#getProductId()
  * @see LineItem#getVariantId()
  */
-@ImplementedBy(DefaultAddToWishlistFormData.class)
-public interface AddToWishlistFormData {
+@ImplementedBy(DefaultAddToShoppingListFormData.class)
+public interface AddToShoppingListFormData {
 
     String productId();
 

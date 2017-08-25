@@ -6,10 +6,10 @@ import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
-import com.commercetools.sunrise.wishlist.WishlistFinder;
-import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
-import com.commercetools.sunrise.wishlist.content.SunriseWishlistContentController;
-import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
+import com.commercetools.sunrise.wishlist.ShoppingListFinder;
+import com.commercetools.sunrise.wishlist.ShoppingListInSessionControllerComponent;
+import com.commercetools.sunrise.wishlist.content.SunriseShoppingListContentController;
+import com.commercetools.sunrise.wishlist.content.viewmodels.ShoppingListPageContentFactory;
 
 import javax.inject.Inject;
 
@@ -18,15 +18,16 @@ import javax.inject.Inject;
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
         PageHeaderControllerComponentSupplier.class,
-        WishlistInSessionControllerComponent.class
+        ShoppingListInSessionControllerComponent.class
 })
-public final class WishlistContentController extends SunriseWishlistContentController {
+public final class WishlistContentController extends SunriseShoppingListContentController implements WishlistTypeIdentifier {
+
 
     @Inject
     public WishlistContentController(final ContentRenderer contentRenderer,
-                                     final WishlistPageContentFactory wishlistPageContentFactory,
-                                     final WishlistFinder wishlistFinder) {
-        super(contentRenderer, wishlistPageContentFactory, wishlistFinder);
+                                     final ShoppingListPageContentFactory shoppingListPageContentFactory,
+                                     final ShoppingListFinder shoppingListFinder) {
+        super(contentRenderer, shoppingListPageContentFactory, shoppingListFinder);
     }
 
     @Override
