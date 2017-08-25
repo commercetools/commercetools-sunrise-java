@@ -36,11 +36,6 @@ public abstract class SunriseClearShoppingListController extends SunriseControll
         return shoppingListFinder;
     }
 
-    @EnableHooks
-    @SunriseRoute(WishlistReverseRouter.CLEAR_WISHLIST_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
-        return requireShoppingList(this::processRequest, getShoppingListType());
-    }
 
     @Override
     public CompletionStage<ShoppingList> executeAction(final ShoppingList wishlist) {

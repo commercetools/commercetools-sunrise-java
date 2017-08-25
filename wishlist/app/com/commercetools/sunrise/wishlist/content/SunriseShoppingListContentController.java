@@ -39,12 +39,6 @@ public abstract class SunriseShoppingListContentController extends SunriseConten
         return shoppingListFinder;
     }
 
-    @EnableHooks
-    @SunriseRoute(WishlistReverseRouter.WISHLIST_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
-        return requireShoppingList(this::showPage, getShoppingListType());
-    }
-
     @Override
     public PageContent createPageContent(final ShoppingList wishlist) {
         return shoppingListPageContentFactory.create(wishlist);

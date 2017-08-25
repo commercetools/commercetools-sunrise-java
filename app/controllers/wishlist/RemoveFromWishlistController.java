@@ -4,6 +4,8 @@ import com.commercetools.sunrise.framework.components.controllers.PageHeaderCont
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.framework.hooks.EnableHooks;
+import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
@@ -41,6 +43,13 @@ public final class RemoveFromWishlistController extends SunriseRemoveFromShoppin
                                         final WishlistReverseRouter reverseRouter) {
         super(contentRenderer, formFactory, shoppingListPageContentFactory, formData, shoppingListFinder, controllerAction);
         this.reverseRouter = reverseRouter;
+    }
+
+
+    @EnableHooks
+    @SunriseRoute(WishlistReverseRouter.REMOVE_FROM_WISHLIST_PROCESS)
+    public CompletionStage<Result> process(final String languageTag) {
+        return requireShoppingList(this::processForm, getShoppingListType());
     }
 
     @Override

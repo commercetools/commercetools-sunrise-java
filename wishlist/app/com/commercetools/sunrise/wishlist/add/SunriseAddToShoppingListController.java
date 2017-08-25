@@ -54,11 +54,6 @@ public abstract class SunriseAddToShoppingListController extends SunriseContentF
         return shoppingListFinder;
     }
 
-    @EnableHooks
-    @SunriseRoute(WishlistReverseRouter.ADD_TO_WISHLIST_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
-        return requireShoppingList(this::processForm, getShoppingListType());
-    }
 
     @Override
     public CompletionStage<ShoppingList> executeAction(final ShoppingList wishlist, final AddToShoppingListFormData formData) {

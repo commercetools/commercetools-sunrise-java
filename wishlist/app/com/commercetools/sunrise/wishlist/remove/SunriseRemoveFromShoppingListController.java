@@ -49,11 +49,6 @@ public abstract class SunriseRemoveFromShoppingListController extends SunriseCon
         return shoppingListFinder;
     }
 
-    @EnableHooks
-    @SunriseRoute(WishlistReverseRouter.REMOVE_FROM_WISHLIST_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
-        return requireShoppingList(this::processForm, getShoppingListType());
-    }
 
     @Override
     public CompletionStage<ShoppingList> executeAction(final ShoppingList wishlist, final RemoveFromShoppingListFormData formData) {
