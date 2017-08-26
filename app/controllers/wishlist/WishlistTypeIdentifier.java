@@ -1,6 +1,6 @@
 package controllers.wishlist;
 
-import com.commercetools.sunrise.wishlist.ShoppingListTypeIdentifier;
+import com.commercetools.sunrise.shoppinglist.ShoppingListTypeIdentifier;
 
 public interface WishlistTypeIdentifier extends ShoppingListTypeIdentifier {
 

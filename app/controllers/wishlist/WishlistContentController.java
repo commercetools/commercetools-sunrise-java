@@ -9,10 +9,10 @@ import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
-import com.commercetools.sunrise.wishlist.ShoppingListFinder;
-import com.commercetools.sunrise.wishlist.ShoppingListInSessionControllerComponent;
-import com.commercetools.sunrise.wishlist.content.SunriseShoppingListContentController;
-import com.commercetools.sunrise.wishlist.content.viewmodels.ShoppingListPageContentFactory;
+import com.commercetools.sunrise.shoppinglist.ShoppingListFinder;
+import com.commercetools.sunrise.shoppinglist.ShoppingListInSessionControllerComponent;
+import com.commercetools.sunrise.shoppinglist.content.SunriseShoppingListContentController;
+import com.commercetools.sunrise.shoppinglist.content.viewmodels.ShoppingListPageContentFactory;
 import play.mvc.Result;
 
 import javax.inject.Inject;
