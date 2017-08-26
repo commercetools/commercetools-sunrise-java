@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import java.util.Locale;
 
 public class DefaultAuthenticationReverseRouter extends AbstractLocalizedReverseRouter implements AuthenticationReverseRouter {
-
     private final SimpleAuthenticationReverseRouter delegate;
 
     @Inject
