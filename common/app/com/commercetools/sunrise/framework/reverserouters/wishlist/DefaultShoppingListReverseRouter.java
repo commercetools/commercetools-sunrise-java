@@ -6,11 +6,11 @@ import play.mvc.Call;
 import javax.inject.Inject;
 import java.util.Locale;
 
-public class DefaultWishlistReverseRouter extends AbstractLocalizedReverseRouter implements WishlistReverseRouter {
+public class DefaultShoppingListReverseRouter extends AbstractLocalizedReverseRouter implements WishlistReverseRouter {
     private final SimpleWishlistReverseRouter delegate;
 
     @Inject
-    protected DefaultWishlistReverseRouter(final Locale locale, final SimpleWishlistReverseRouter delegate) {
+    protected DefaultShoppingListReverseRouter(final Locale locale, final SimpleWishlistReverseRouter delegate) {
         super(locale);
         this.delegate = delegate;
     }

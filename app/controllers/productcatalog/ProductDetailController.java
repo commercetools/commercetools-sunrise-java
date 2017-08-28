@@ -12,7 +12,7 @@ import com.commercetools.sunrise.productcatalog.productdetail.ProductRecommendat
 import com.commercetools.sunrise.productcatalog.productdetail.ProductVariantFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
 import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContentFactory;
-import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniShoppingListsControllerComponent;
 import io.sphere.sdk.products.ProductProjection;
 import play.mvc.Result;
 
@@ -27,7 +27,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
         TemplateControllerComponentsSupplier.class,
         PageHeaderControllerComponentSupplier.class,
         ProductRecommendationsControllerComponent.class,
-        MiniWishlistControllerComponent.class
+        MiniShoppingListsControllerComponent.class
 })
 public final class ProductDetailController extends SunriseProductDetailController {
 

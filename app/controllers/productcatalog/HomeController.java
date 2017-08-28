@@ -11,7 +11,7 @@ import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.productcatalog.home.HomeRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
-import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniShoppingListsControllerComponent;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
         TemplateControllerComponentsSupplier.class,
         PageHeaderControllerComponentSupplier.class,
         HomeRecommendationsControllerComponent.class,
-        MiniWishlistControllerComponent.class
+        MiniShoppingListsControllerComponent.class
 })
 public final class HomeController extends SunriseHomeController {
 

@@ -4,7 +4,7 @@ import com.commercetools.sunrise.framework.reverserouters.LocalizedReverseRouter
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
-@ImplementedBy(DefaultWishlistReverseRouter.class)
+@ImplementedBy(DefaultShoppingListReverseRouter.class)
 public interface WishlistReverseRouter extends SimpleWishlistReverseRouter, LocalizedReverseRouter {
 
     default Call addToWishlistProcess() {

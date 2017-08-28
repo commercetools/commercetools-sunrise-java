@@ -10,7 +10,7 @@ import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponent
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.content.SunriseCartContentController;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
-import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniShoppingListsControllerComponent;
 
 import javax.inject.Inject;
 
@@ -20,7 +20,7 @@ import javax.inject.Inject;
         TemplateControllerComponentsSupplier.class,
         PageHeaderControllerComponentSupplier.class,
         CartOperationsControllerComponentSupplier.class,
-        MiniWishlistControllerComponent.class
+        MiniShoppingListsControllerComponent.class
 })
 public final class CartContentController extends SunriseCartContentController {
 

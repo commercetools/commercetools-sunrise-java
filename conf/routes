@@ -151,6 +151,19 @@ POST        /:languageTag/wishlist/remove                                       
 POST        /:languageTag/wishlist/clear                                        @controllers.wishlist.ClearWishlistController.process(languageTag: String)
 
 
+# Hololist
+# ~~~~~
+
+# Shows the Hololist
+GET         /:languageTag/hololist                                              @controllers.hololist.HololistContentController.show(languageTag: String)
+# Adds a product variant to the hololist
+POST        /:languageTag/hololist/add                                          @controllers.hololist.AddToHololistController.process(languageTag: String)
+# Removes a line item from the hololist
+POST        /:languageTag/hololist/remove                                       @controllers.hololist.RemoveFromHololistController.process(languageTag: String)
+# Clears the hololist
+POST        /:languageTag/hololist/clear                                        @controllers.hololist.ClearHololistController.process(languageTag: String)
+
+
 # SEARCH
 # ~~~~~
 

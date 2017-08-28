@@ -11,8 +11,10 @@ import play.Configuration;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -44,6 +46,13 @@ public class DefaultShoppingListInSession extends DataFromResourceStoringOperati
         return getShoppinglistsModelContainerInSession()
                 .map(shoppingListsModelContainerContainer -> shoppingListsModelContainerContainer.getShoppingList(shoppingListType))
                 .flatMap(Function.identity());
+    }
+
+    @Override
+    public Set<String> getShoppingListNames(){
+        return getShoppinglistsModelContainerInSession()
+                .map(shoppingListContainer -> shoppingListContainer.getShoppingListsMap().keySet())
+                .orElseGet(HashSet::new);
     }
 
     private Optional<ShoppingListContainer> getShoppinglistsModelContainerInSession(){

@@ -7,6 +7,7 @@ import io.sphere.sdk.shoppinglists.ShoppingList;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * This interface describes the operations to store and retrieve parts of a wishlist in the session.
@@ -24,6 +25,8 @@ public interface ShoppingListsInSession extends ResourceStoringOperations<Shoppi
     Optional<String> findShoppingListId(String shoppingListType);
 
     Optional<ShoppinglistViewModel> findShoppingList(String shoppingListType);
+
+    Set<String> getShoppingListNames();
 
     /**
      * Stores the given shoppingListContainer in the current session.

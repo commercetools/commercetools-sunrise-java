@@ -4,6 +4,7 @@ import com.commercetools.sunrise.framework.components.controllers.ControllerComp
 import com.commercetools.sunrise.framework.components.controllers.ControllerComponentSupplier;
 import com.commercetools.sunrise.framework.reverserouters.common.assets.AssetsLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.common.localization.LocalizationLinksControllerComponent;
+import com.commercetools.sunrise.framework.reverserouters.hololist.HololistLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationLinksControllerComponent;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.changepassword.ChangePasswordLinksControllerComponent;
@@ -35,7 +36,8 @@ public class TemplateControllerComponentsSupplier implements ControllerComponent
                                                 final ProductLinksControllerComponent productLinksControllerComponent,
                                                 final CartLinksControllerComponent cartLinksControllerComponent,
                                                 final CheckoutLinksControllerComponent checkoutLinksControllerComponent,
-                                                final WishlistLinksControllerComponent wishlistLinksControllerComponent) {
+                                                final WishlistLinksControllerComponent wishlistLinksControllerComponent,
+                                                final HololistLinksControllerComponent hololistLinksControllerComponent) {
         controllerComponents.add(localizationLinksControllerComponent);
         controllerComponents.add(assetsLinksControllerComponent);
         controllerComponents.add(addressBookLinksControllerComponent);
@@ -48,6 +50,7 @@ public class TemplateControllerComponentsSupplier implements ControllerComponent
         controllerComponents.add(cartLinksControllerComponent);
         controllerComponents.add(checkoutLinksControllerComponent);
         controllerComponents.add(wishlistLinksControllerComponent);
+        controllerComponents.add(hololistLinksControllerComponent);
     }
 
     @Override

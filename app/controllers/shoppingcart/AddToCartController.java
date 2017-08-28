@@ -14,7 +14,7 @@ import com.commercetools.sunrise.shoppingcart.add.AddToCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.add.AddToCartFormData;
 import com.commercetools.sunrise.shoppingcart.add.SunriseAddToCartController;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
-import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniShoppingListsControllerComponent;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -28,7 +28,7 @@ import java.util.concurrent.CompletionStage;
         TemplateControllerComponentsSupplier.class,
         PageHeaderControllerComponentSupplier.class,
         CartOperationsControllerComponentSupplier.class,
-        MiniWishlistControllerComponent.class
+        MiniShoppingListsControllerComponent.class
 })
 public final class AddToCartController extends SunriseAddToCartController {
 

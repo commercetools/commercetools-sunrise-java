@@ -13,7 +13,7 @@ import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContent
 import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartFormData;
 import com.commercetools.sunrise.shoppingcart.remove.SunriseRemoveFromCartController;
-import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniShoppingListsControllerComponent;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -27,7 +27,7 @@ import java.util.concurrent.CompletionStage;
         TemplateControllerComponentsSupplier.class,
         PageHeaderControllerComponentSupplier.class,
         CartOperationsControllerComponentSupplier.class,
-        MiniWishlistControllerComponent.class
+        MiniShoppingListsControllerComponent.class
 })
 public final class RemoveFromCartController extends SunriseRemoveFromCartController {
 

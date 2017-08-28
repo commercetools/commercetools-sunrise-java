@@ -11,7 +11,7 @@ import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinde
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
 import com.commercetools.sunrise.productcatalog.productoverview.search.ProductOverviewSearchControllerComponentsSupplier;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
-import com.commercetools.sunrise.framework.components.controllers.MiniWishlistControllerComponent;
+import com.commercetools.sunrise.framework.components.controllers.MiniShoppingListsControllerComponent;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -25,7 +25,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
         TemplateControllerComponentsSupplier.class,
         PageHeaderControllerComponentSupplier.class,
         ProductOverviewSearchControllerComponentsSupplier.class,
-        MiniWishlistControllerComponent.class
+        MiniShoppingListsControllerComponent.class
 })
 public final class ProductOverviewController extends SunriseProductOverviewController {
 
