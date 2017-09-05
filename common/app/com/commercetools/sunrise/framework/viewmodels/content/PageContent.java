@@ -11,7 +11,6 @@ public abstract class PageContent extends ViewModel {
 
     private String title;
     private List<ViewModelComponent> components;
-    private WishlistViewModel wishlist;
 
     public PageContent() {
     }

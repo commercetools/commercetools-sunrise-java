@@ -4,14 +4,14 @@ import com.commercetools.sunrise.framework.components.controllers.PageHeaderCont
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.RecoverPasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.RecoverPasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.SunriseRecoverPasswordController;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels.RecoverPasswordPageContentFactory;
-import io.commercetools.sunrise.email.EmailDeliveryException;
+import com.commercetools.sunrise.email.EmailDeliveryException;
 import io.sphere.sdk.customers.CustomerToken;
 import play.data.Form;
 import play.data.FormFactory;
@@ -27,16 +27,16 @@ import java.util.concurrent.CompletionStage;
         PageHeaderControllerComponentSupplier.class
 })
 public final class RecoverPasswordController extends SunriseRecoverPasswordController {
-    private final AuthenticationReverseRouter authenticationReverseRouter;
+    private final RecoverPasswordReverseRouter recoverPasswordReverseRouter;
 
     @Inject
     RecoverPasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                     final RecoverPasswordPageContentFactory pageContentFactory,
-                                     final RecoverPasswordFormData formData,
-                                     final RecoverPasswordControllerAction controllerAction,
-                                     final AuthenticationReverseRouter authenticationReverseRouter) {
+                              final RecoverPasswordPageContentFactory pageContentFactory,
+                              final RecoverPasswordFormData formData,
+                              final RecoverPasswordControllerAction controllerAction,
+                              final RecoverPasswordReverseRouter recoverPasswordReverseRouter) {
         super(contentRenderer, formFactory, pageContentFactory, formData, controllerAction);
-        this.authenticationReverseRouter = authenticationReverseRouter;
+        this.recoverPasswordReverseRouter = recoverPasswordReverseRouter;
     }
 
     @Override
@@ -45,13 +45,25 @@ public final class RecoverPasswordController extends SunriseRecoverPasswordContr
     }
 
     @Override
+    public String getCmsPageKey() {
+        return "default";
+    }
+
+    @Override
     public CompletionStage<Result> handleSuccessfulAction(final CustomerToken customerToken, final RecoverPasswordFormData formData) {
-        return redirectToCall(authenticationReverseRouter.logInProcessCall());
+        flash("success", "A message with further instructions has been sent to your email address");
+        return redirectToCall(recoverPasswordReverseRouter.requestRecoveryEmailPageCall());
+    }
+
+    @Override
+    protected CompletionStage<Result> handleNotFoundEmail(final Form<? extends RecoverPasswordFormData> form) {
+        saveFormError(form, "Email not found");
+        return showFormPageWithErrors(null, form);
     }
 
     @Override
     protected CompletionStage<Result> handleEmailDeliveryException(final Form<? extends RecoverPasswordFormData> form, final EmailDeliveryException emailDeliveryException) {
         saveFormError(form, "Email delivery error");
-        return showFormPageWithErrors(null, form);
+        return internalServerErrorResultWithPageContent(createPageContent(null, form));
     }
 }

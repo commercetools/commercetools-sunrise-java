@@ -1,12 +1,14 @@
+package email.smtp;
+
 import com.google.inject.ImplementedBy;
-import io.commercetools.sunrise.email.smtp.SmtpConfiguration;
+import com.commercetools.sunrise.email.smtp.SmtpConfiguration;
 import play.Configuration;
 
 /**
- * Configuration for {@link io.commercetools.sunrise.email.EmailSender}.
+ * Configuration for {@link com.commercetools.sunrise.email.EmailSender}.
  */
-@ImplementedBy(EmailSenderSettingsImpl.class)
-public interface EmailSenderSettings {
+@ImplementedBy(SmtpEmailSenderSettingsImpl.class)
+public interface SmtpEmailSenderSettings {
     /**
      * @return the smtp configuration
      */
@@ -24,7 +26,7 @@ public interface EmailSenderSettings {
      * @param configPath    the path to the config
      * @return a new instance created from the given configuration
      */
-    static EmailSenderSettings of(final Configuration configuration, final String configPath) {
-        return new EmailSenderSettingsImpl(configuration, configPath);
+    static SmtpEmailSenderSettings of(final Configuration configuration, final String configPath) {
+        return new SmtpEmailSenderSettingsImpl(configuration, configPath);
     }
 }

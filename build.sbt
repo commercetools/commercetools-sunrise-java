@@ -29,47 +29,49 @@ val childProjects: List[sbt.ProjectReference] =
 
 lazy val `commercetools-sunrise` = (project in file("."))
   .enablePlugins(PlayJava, JavaUnidocPlugin, SunriseThemeImporterPlugin)
-  .configs(IntegrationTest, TestCommon.PlayTest) // TODO add common
+  .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(unidocProjectFilter in (JavaUnidoc, unidoc) := inProjects(childProjects: _*))
-  .settings(Release.disablePublish: _*)
+  .settings(Release.disablePublish ++ TestCommon.defaultSettings: _*)
   .settings(Dependencies.sunriseDefaultTheme ++ Dependencies.sunriseEmailSmtp)
   .aggregate(childProjects: _*)
-  .dependsOn(`product-catalog`, `shopping-cart`, `my-account`, wishlist)
+  .dependsOn(testLibDependency, `product-catalog`, `shopping-cart`, `my-account`, wishlist)
 
 lazy val common = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.sunriseTheme ++ Dependencies.sunriseModules ++ Dependencies.commonLib: _*)
-  .dependsOn(`test-lib` % TestCommon.allTestScopes)
+  .dependsOn(testLibDependency)
 
 lazy val `product-catalog` = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests: _*)
+  .dependsOn(defaultDependencies: _*)
 
 lazy val `shopping-cart` = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests: _*)
+  .dependsOn(defaultDependencies: _*)
 
 lazy val `my-account` = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests: _*)
+  .dependsOn(defaultDependencies: _*)
 
 lazy val wishlist = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests: _*)
+  .dependsOn(defaultDependencies: _*)
 
 lazy val `test-lib` = project
   .enablePlugins(PlayJava, GenJavadocPlugin)
   .settings(Release.enableSignedRelease ++ TestCommon.configCommonTestSettings("compile") ++ TestCommon.configPlayDependencies("compile"): _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.commonLib: _*)
 
-lazy val commonWithTests: Seq[ClasspathDep[ProjectReference]] = Seq(common, `test-lib` % TestCommon.allTestScopes)
+lazy val defaultDependencies: Seq[ClasspathDep[ProjectReference]] = Seq(common, testLibDependency)
+
+lazy val testLibDependency: ClasspathDep[ProjectReference] = `test-lib` % TestCommon.allTestScopes

@@ -15,6 +15,7 @@
     <logger name="sphere" level="INFO" />
 
     <logger name="com.commercetools.sunrise.framework.controllers.metrics.MetricsLogger" level="DEBUG" />
+    <logger name="com.commercetools.sunrise.email.EmailSender" level="DEBUG" />
     <logger name="com.commercetools.sunrise" level="INFO" />
 
     <logger name="com.github.jknack.handlebars.HelperRegistry" level="ERROR" />
