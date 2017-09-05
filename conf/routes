@@ -99,7 +99,7 @@ GET         /:languageTag/user/logout                                           
 # Show form to enter password recover email
 GET         /:languageTag/password/recovery                                     @controllers.myaccount.RecoverPasswordController.show(languageTag: String)
 # Send recovery password email
-POST         /:languageTag/password/recovery                                    @controllers.myaccount.RecoverPasswordController.process(languageTag: String)
+POST        /:languageTag/password/recovery                                     @controllers.myaccount.RecoverPasswordController.process(languageTag: String)
 
 # View password reset
 GET         /:languageTag/password/reset/:token                                 @controllers.myaccount.ResetPasswordController.show(languageTag: String, token: String)

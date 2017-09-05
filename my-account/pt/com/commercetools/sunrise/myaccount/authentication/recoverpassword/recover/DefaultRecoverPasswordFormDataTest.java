@@ -15,12 +15,11 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Unit tests for {@link DefaultRecoverPasswordFormData}.
  */
 public class DefaultRecoverPasswordFormDataTest extends WithApplication {
-    private FormFactory formFactory;
     private Form<DefaultRecoverPasswordFormData> form;
 
     @Before
     public void setup() {
-        formFactory = app.injector().instanceOf(FormFactory.class);
+        final FormFactory formFactory = app.injector().instanceOf(FormFactory.class);
         form = formFactory.form(DefaultRecoverPasswordFormData.class);
     }
 

@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.framework.template.engine;
 
-import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.framework.hooks.RequestHookRunner;
 import com.commercetools.sunrise.framework.hooks.application.PageDataReadyHook;
@@ -20,35 +19,26 @@ import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.libs.concurrent.HttpExecution;
 import play.twirl.api.Content;
-import play.twirl.api.Html;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
+final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implements ContentRenderer {
 
-public class HtmlContentRenderer implements ContentRenderer {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContentRenderer.class);
-    private static final Logger pageDataLoggerAsJson = LoggerFactory.getLogger(PageData.class.getName() + "Json");
+    private static final Logger PAGE_DATA_LOGGER_AS_JSON = LoggerFactory.getLogger(PageData.class.getName() + "Json");
     private static final ObjectMapper objectMapper = createObjectMapper();
 
-    private final UserLanguage userLanguage;
     private final PageDataFactory pageDataFactory;
     private final RequestHookRunner hookRunner;
-    private final TemplateEngine templateEngine;
-    private final CmsService cmsService;
 
     @Inject
-    public HtmlContentRenderer(final UserLanguage userLanguage, final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner,
-                               final TemplateEngine templateEngine, final CmsService cmsService) {
-        this.userLanguage = userLanguage;
+    PageHtmlContentRenderer(final UserLanguage userLanguage, final TemplateEngine templateEngine, final CmsService cmsService,
+                            final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner) {
+        super(userLanguage, templateEngine, cmsService);
         this.pageDataFactory = pageDataFactory;
         this.hookRunner = hookRunner;
-        this.templateEngine = templateEngine;
-        this.cmsService = cmsService;
     }
 
     @Override
@@ -58,35 +48,19 @@ public class HtmlContentRenderer implements ContentRenderer {
                 .thenComposeAsync(unused -> {
                     PageDataReadyHook.runHook(hookRunner, pageData);
                     logFinalPageData(pageData);
-                    if (cmsKey != null) {
-                        return cmsService.page(cmsKey, userLanguage.locales())
-                                .thenApplyAsync(cmsPage -> renderTemplate(pageData, templateName, cmsPage.orElse(null)));
-                    } else {
-                        return completedFuture(renderTemplate(pageData, templateName, null));
-                    }
+                    return super.render(pageData, templateName, cmsKey);
                 }, HttpExecution.defaultContext());
     }
 
-    private Content renderTemplate(final PageData pageData, @Nullable final String templateName, @Nullable final CmsPage cmsPage) {
-        if (templateName != null) {
-            final TemplateContext templateContext = new TemplateContext(pageData, userLanguage.locales(), cmsPage);
-            final String html = templateEngine.render(templateName, templateContext);
-            return new Html(html);
-        } else {
-            LOGGER.warn("HTML renderer used without template, probably this is not what you intended");
-            return new Html(pageData.toString());
-        }
-    }
-
     private static void logFinalPageData(final PageData pageData) {
-        if (pageDataLoggerAsJson.isDebugEnabled()) {
+        if (PAGE_DATA_LOGGER_AS_JSON.isDebugEnabled()) {
             try {
                 final ObjectWriter objectWriter = objectMapper.writer()
                         .withDefaultPrettyPrinter();
                 final String formatted = objectWriter.writeValueAsString(pageData);
-                pageDataLoggerAsJson.debug(formatted);
+                PAGE_DATA_LOGGER_AS_JSON.debug(formatted);
             } catch (final Exception e) {
-                pageDataLoggerAsJson.error("serialization of " + pageData + " failed.", e);
+                PAGE_DATA_LOGGER_AS_JSON.error("serialization of " + pageData + " failed.", e);
             }
         }
     }

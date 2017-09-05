@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.framework.viewmodels.content.products;
 
-import io.sphere.sdk.models.Base;
+import com.commercetools.sunrise.framework.SunriseModel;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 
-public final class ProductWithVariant extends Base {
+public final class ProductWithVariant extends SunriseModel {
 
     private final ProductProjection product;
     private final ProductVariant variant;

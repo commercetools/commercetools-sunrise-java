@@ -26,6 +26,11 @@ public interface WithContent {
                 .thenApplyAsync(Results::badRequest, HttpExecution.defaultContext());
     }
 
+    default CompletionStage<Result> internalServerErrorResultWithPageContent(final PageContent pageContent) {
+        return renderContent(pageContent)
+                .thenApplyAsync(Results::internalServerError, HttpExecution.defaultContext());
+    }
+
     ContentRenderer getContentRenderer();
 
     @Nullable
