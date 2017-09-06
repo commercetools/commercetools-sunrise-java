@@ -1,3 +1,4 @@
+<!-- https://www.playframework.com/documentation/latest/SettingsLogger -->
 <configuration>
 
     <conversionRule conversionWord="coloredLevel" converterClass="play.api.libs.logback.ColoredLevel" />
@@ -8,17 +9,19 @@
         </encoder>
     </appender>
 
-    <logger name="application" level="DEBUG" />
     <logger name="play" level="INFO" />
-    <logger name="play.requests" level="DEBUG" />
-
-    <logger name="sphere" level="INFO" />
-
+    <logger name="application" level="DEBUG" />
+    <logger name="com.commercetools.sunrise.framework.hooks.ComponentRegistry" level="OFF" />
+    <logger name="com.commercetools.sunrise.common.pages.PageDataJson" level="OFF" />
     <logger name="com.commercetools.sunrise.framework.controllers.metrics.MetricsLogger" level="DEBUG" />
     <logger name="com.commercetools.sunrise.email.EmailSender" level="DEBUG" />
-    <logger name="com.commercetools.sunrise" level="INFO" />
-
     <logger name="com.github.jknack.handlebars.HelperRegistry" level="ERROR" />
+
+    <!-- Off these ones as they are annoying, and anyway we manage configuration ourselves -->
+    <logger name="com.avaje.ebean.config.PropertyMapLoader" level="OFF" />
+    <logger name="com.avaje.ebeaninternal.server.core.XmlConfigLoader" level="OFF" />
+    <logger name="com.avaje.ebeaninternal.server.lib.BackgroundThread" level="OFF" />
+    <logger name="com.gargoylesoftware.htmlunit.javascript" level="OFF" />
 
     <root level="WARN">
         <appender-ref ref="STDOUT" />
