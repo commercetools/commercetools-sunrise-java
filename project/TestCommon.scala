@@ -43,6 +43,7 @@ object TestCommon {
   )
 
   def configPlayDependencies(scopes: String) = Seq(
+    parallelExecution := false,
     libraryDependencies ++= Seq (
       javaWs % scopes,
       PlayImport.component("play-test") % scopes

@@ -4,11 +4,13 @@ import com.commercetools.sunrise.framework.controllers.SunriseContentFormControl
 import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.recoverpassword.SimpleRecoverPasswordReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.viewmodels.ResetPasswordPageContentFactory;
+import io.sphere.sdk.client.ClientErrorException;
+import io.sphere.sdk.client.NotFoundException;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 import play.data.FormFactory;
@@ -41,13 +43,13 @@ public abstract class SunriseResetPasswordController extends SunriseContentFormC
     }
 
     @EnableHooks
-    @SunriseRoute(SimpleRecoverPasswordReverseRouter.RESET_PASSWORD_PAGE)
+    @SunriseRoute(RecoverPasswordReverseRouter.RESET_PASSWORD_PAGE)
     public CompletionStage<Result> show(final String languageTag, final String resetToken) {
         return showFormPage(resetToken, formData);
     }
 
     @EnableHooks
-    @SunriseRoute(SimpleRecoverPasswordReverseRouter.RESET_PASSWORD_PROCESS)
+    @SunriseRoute(RecoverPasswordReverseRouter.RESET_PASSWORD_PROCESS)
     public CompletionStage<Result> process(final String languageTag, final String resetToken) {
         return processForm(resetToken);
     }
@@ -66,6 +68,16 @@ public abstract class SunriseResetPasswordController extends SunriseContentFormC
     public CompletionStage<Customer> executeAction(final String resetToken, final ResetPasswordFormData formData) {
         return controllerAction.apply(resetToken, formData);
     }
+
+    @Override
+    public CompletionStage<Result> handleClientErrorFailedAction(final String resetToken, final Form<? extends ResetPasswordFormData> form, final ClientErrorException clientErrorException) {
+        if (clientErrorException instanceof NotFoundException) {
+            return handleNotFoundToken(resetToken, form);
+        }
+        return WithContentFormFlow.super.handleClientErrorFailedAction(resetToken, form, clientErrorException);
+    }
+
+    protected abstract CompletionStage<Result> handleNotFoundToken(final String resetToken, final Form<? extends ResetPasswordFormData> form);
 
     @Override
     public void preFillFormData(final String resetToken, final ResetPasswordFormData formData) {
