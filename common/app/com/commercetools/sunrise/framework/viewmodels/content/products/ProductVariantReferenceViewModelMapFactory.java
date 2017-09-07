@@ -10,7 +10,6 @@ import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.producttypes.ProductType;
 
 import javax.inject.Inject;
-import java.util.Objects;
 
 import static java.util.stream.Collectors.joining;
 
@@ -67,8 +66,8 @@ public class ProductVariantReferenceViewModelMapFactory extends SimpleViewModelF
     private String createMapKey(final ProductVariant variant, final Referenceable<ProductType> productTypeRef) {
         return productAttributeSettings.getSelectableAttributes().stream()
                 .map(variant::getAttribute)
-                .filter(Objects::nonNull)
-                .map(attribute -> attributeFormatter.encodedValue(AttributeWithProductType.of(attribute, productTypeRef)))
+                .map(attribute -> attribute != null ? AttributeWithProductType.of(attribute, productTypeRef) : null)
+                .map(attributeFormatter::encodedValue)
                 .collect(joining("-"));
     }
 

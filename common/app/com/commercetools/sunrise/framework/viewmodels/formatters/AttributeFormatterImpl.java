@@ -8,6 +8,7 @@ import io.sphere.sdk.products.attributes.DefaultProductAttributeFormatter;
 import io.sphere.sdk.products.attributes.ProductAttributeConverter;
 import io.sphere.sdk.producttypes.ProductTypeLocalRepository;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
@@ -29,22 +30,27 @@ final class AttributeFormatterImpl implements AttributeFormatter {
     }
 
     @Override
-    public LocalizedString label(final AttributeWithProductType attributeWithProductType) {
-        final String productTypeId = attributeWithProductType.getProductTypeRef().toReference().getId();
-        return productTypeLocalRepository.findById(productTypeId)
-                .flatMap(productType -> productType.findAttribute(attributeWithProductType.getAttribute().getName()))
-                .map(AttributeDefinition::getLabel)
-                .orElseGet(LocalizedString::empty);
+    public LocalizedString label(@Nullable final AttributeWithProductType nullableAttributeWithProductType) {
+        return Optional.ofNullable(nullableAttributeWithProductType)
+                .flatMap(attributeWithProductType -> {
+                    final String productTypeId = attributeWithProductType.getProductTypeRef().toReference().getId();
+                    return productTypeLocalRepository.findById(productTypeId)
+                            .flatMap(productType -> productType.findAttribute(attributeWithProductType.getAttribute().getName()))
+                            .map(AttributeDefinition::getLabel);
+                }).orElseGet(LocalizedString::empty);
     }
 
     @Override
-    public String value(final AttributeWithProductType attributeWithProductType) {
-        return Optional.ofNullable(formatter.convert(attributeWithProductType.getAttribute(), attributeWithProductType.getProductTypeRef()))
+    public String value(@Nullable final AttributeWithProductType nullableAttributeWithProductType) {
+        return Optional.ofNullable(nullableAttributeWithProductType)
+                .flatMap(attributeWithProductType -> Optional.ofNullable(formatter.convert(attributeWithProductType.getAttribute(), attributeWithProductType.getProductTypeRef())))
                 .orElse("");
     }
 
     @Override
-    public String encodedValue(final AttributeWithProductType attributeWithProductType) {
-        return ATTR_WHITELIST.matcher(value(attributeWithProductType)).replaceAll("");
+    public String encodedValue(@Nullable final AttributeWithProductType nullableAttributeWithProductType) {
+        return Optional.ofNullable(nullableAttributeWithProductType)
+                .map(attributeWithProductType -> ATTR_WHITELIST.matcher(value(attributeWithProductType)).replaceAll(""))
+                .orElse("");
     }
 }
