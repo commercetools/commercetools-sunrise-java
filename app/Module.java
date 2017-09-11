@@ -12,6 +12,7 @@ import com.commercetools.sunrise.common.template.engine.HandlebarsTemplateEngine
 import com.commercetools.sunrise.common.template.engine.TemplateEngine;
 import com.commercetools.sunrise.common.template.i18n.ConfigurableI18nResolverProvider;
 import com.commercetools.sunrise.common.template.i18n.I18nResolver;
+import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolver;
 import com.commercetools.sunrise.framework.MultiControllerComponentResolverBuilder;
 import com.commercetools.sunrise.myaccount.CustomerComponent;
@@ -29,6 +30,7 @@ import com.commercetools.sunrise.shoppingcart.common.CheckoutStepWidgetComponent
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
+import email.smtp.EmailSenderProvider;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.LocalizedString;
@@ -53,6 +55,11 @@ public class Module extends AbstractModule {
         bind(ProductsPerPageConfig.class).toProvider(ProductsPerPageConfigProvider.class).in(Singleton.class);
         bind(SortConfig.class).toProvider(SortConfigProvider.class).in(Singleton.class);
         bind(FacetedSearchConfigList.class).toProvider(FacetedSearchConfigListProvider.class).in(Singleton.class);
+
+        // Bindings fo email sender
+        bind(EmailSender.class)
+                .toProvider(EmailSenderProvider.class)
+                .in(Singleton.class);
     }
 
     @Provides

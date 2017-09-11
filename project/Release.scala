@@ -19,13 +19,13 @@ object Release {
   )
 
   lazy val publishSettings = Seq(
-    publishTo in ThisBuild <<= version { (v: String) =>
+    publishTo in ThisBuild := version { (v: String) =>
       val nexus = "https://oss.sonatype.org/"
       if (v.trim.endsWith("SNAPSHOT"))
         Some("snapshots" at nexus + "content/repositories/snapshots")
       else
         Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-    },
+    }.value,
     publishMavenStyle in ThisBuild := true,
     publishArtifact in Test in ThisBuild := false,
     licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
@@ -36,18 +36,23 @@ object Release {
         <url>git@github.com:scommercetools/commercetools-sunrise-java.git</url>
         <connection>scm:git:git@github.com:commercetools/commercetools-sunrise-java.git</connection>
       </scm>
-      <developers>
-        <developer>
-          <id>lauraluiz</id>
-          <name>Laura Luiz</name>
-          <url>https://github.com/lauraluiz</url>
-        </developer>
-        <developer>
-          <id>michaelschleichardt</id>
-          <name>Michael Schleichardt</name>
-          <url>https://github.com/schleichardt</url>
-        </developer>
-      </developers>
+        <developers>
+          <developer>
+            <id>matthiaskoester</id>
+            <name>Matthias Köster</name>
+            <url>https://github.com/katmatt</url>
+          </developer>
+          <developer>
+            <id>lauraluiz</id>
+            <name>Laura Luiz</name>
+            <url>https://github.com/lauraluiz</url>
+          </developer>
+          <developer>
+            <id>michaelschleichardt</id>
+            <name>Michael Schleichardt</name>
+            <url>https://github.com/schleichardt</url>
+          </developer>
+        </developers>
       )
   )
 }

@@ -1,6 +1,5 @@
 import sbt.Keys._
 import sbt._
-import UnidocKeys._
 
 name := "commercetools-sunrise"
 
@@ -8,7 +7,10 @@ organization in ThisBuild := "com.commercetools.sunrise"
 
 scalaVersion in ThisBuild := "2.11.8"
 
-javacOptions in ThisBuild ++= Seq("-source", "1.8", "-target", "1.8")
+javacOptions in Compile ++= Seq("-source", "1.8")
+
+// see https://github.com/sbt/sbt/issues/355#issuecomment-3817629
+javacOptions in (Compile, compile) ++= Seq("-target", "1.8")
 
 resolvers in ThisBuild ++= Seq (
   Resolver.sonatypeRepo("releases"),
@@ -26,36 +28,38 @@ val childProjects: List[sbt.ProjectReference] =
   List(common, `product-catalog`, `shopping-cart`, `my-account`, `move-to-sdk`, `sbt-tasks`)
 
 lazy val `commercetools-sunrise` = (project in file("."))
-  .enablePlugins(PlayJava)
-  .settings(javadocSettings ++ Release.disablePublish: _*)
-  .settings(Dependencies.sunriseDefaultTheme)
+  .enablePlugins(PlayJava, JavaUnidocPlugin)
+  .configs(IntegrationTest, TestCommon.PlayTest)
+  .settings(unidocProjectFilter in (JavaUnidoc, unidoc) := inProjects(childProjects: _*))
+  .settings(Release.disablePublish ++ TestCommon.defaultSettings: _*)
+  .settings(Dependencies.sunriseDefaultTheme ++ Dependencies.sunriseEmailSmtp)
   .aggregate(childProjects: _*)
   .dependsOn(`product-catalog`, `shopping-cart`, `my-account`)
 
 lazy val common = project
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.sunriseTheme ++ Dependencies.sunriseModules ++ Dependencies.commonLib: _*)
   .dependsOn(`move-to-sdk`)
 
 lazy val `product-catalog` = project
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests)
+  .dependsOn(defaultDependencies: _*)
 
 lazy val `shopping-cart` = project
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests)
+  .dependsOn(defaultDependencies: _*)
 
 lazy val `my-account` = project
-  .enablePlugins(PlayJava)
+  .enablePlugins(PlayJava, GenJavadocPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
-  .dependsOn(commonWithTests)
+  .dependsOn(defaultDependencies: _*)
 
 lazy val `sbt-tasks` = project
   .enablePlugins(PlayJava)
@@ -68,10 +72,6 @@ lazy val `move-to-sdk` = project
   .settings(Release.enableSignedRelease ++ TestCommon.settingsWithoutPlayTest: _*)
   .settings(Dependencies.jvmSdk)
 
-lazy val commonWithTests: ClasspathDep[ProjectReference] = common % "compile;test->test;it->it;pt->pt"
-
-lazy val javadocSettings = javaUnidocSettings ++ Seq (
-  unidocProjectFilter in (JavaUnidoc, unidoc) := inProjects(childProjects: _*)
-)
+lazy val defaultDependencies: Seq[ClasspathDep[ProjectReference]] = Seq(common % "compile;test->test;it->it;pt->pt")
 
 lazy val enableLibFolderInTest = unmanagedBase in Test := baseDirectory.value / "test" / "lib"
