@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.play.http;
 
-import com.commercetools.sunrise.ctp.SphereClientCredentialsException;
+import com.commercetools.sunrise.ctp.client.SphereClientCredentialsException;
 import com.google.inject.ProvisionException;
 import play.Configuration;
 import play.Environment;

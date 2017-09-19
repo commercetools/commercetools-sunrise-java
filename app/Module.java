@@ -1,8 +1,9 @@
-import com.commercetools.sunrise.categorytree.CachedCategoryTreeProvider;
-import com.commercetools.sunrise.categorytree.CategoryTreeConfiguration;
-import com.commercetools.sunrise.categorytree.NavigationCategoryTree;
-import com.commercetools.sunrise.categorytree.NewCategoryTree;
 import com.commercetools.sunrise.cms.CmsService;
+import com.commercetools.sunrise.ctp.categories.CachedCategoryTreeProvider;
+import com.commercetools.sunrise.ctp.categories.CategoriesSettings;
+import com.commercetools.sunrise.ctp.categories.NavigationCategoryTree;
+import com.commercetools.sunrise.ctp.categories.NewCategoryTree;
+import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.framework.controllers.metrics.SimpleMetricsSphereClientProvider;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.localization.CountryFromSessionProvider;
@@ -28,7 +29,6 @@ import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.neovisionaries.i18n.CountryCode;
 import email.smtp.EmailSenderProvider;
-import com.commercetools.sunrise.email.EmailSender;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.search.PriceSelection;
@@ -124,8 +124,8 @@ public class Module extends AbstractModule {
     @Provides
     @RequestScoped
     @NavigationCategoryTree
-    private CategoryTree provideNavigationCategoryTree(final CategoryTreeConfiguration configuration, final CategoryTree categoryTree) {
-        return configuration.navigationExternalId()
+    private CategoryTree provideNavigationCategoryTree(final CategoriesSettings categoriesSettings, final CategoryTree categoryTree) {
+        return categoriesSettings.navigationExternalId()
                 .flatMap(categoryTree::findByExternalId)
                 .map(categoryTree::findChildren)
                 .map(categoryTree::getSubtree)
@@ -135,8 +135,8 @@ public class Module extends AbstractModule {
     @Provides
     @RequestScoped
     @NewCategoryTree
-    private CategoryTree provideNewCategoryTree(final CategoryTreeConfiguration configuration, final CategoryTree categoryTree) {
-        return configuration.newExtId()
+    private CategoryTree provideNewCategoryTree(final CategoriesSettings categoriesSettings, final CategoryTree categoryTree) {
+        return categoriesSettings.newExtId()
                 .flatMap(categoryTree::findByExternalId)
                 .map(categoryTree::findChildren)
                 .map(categoryTree::getSubtree)

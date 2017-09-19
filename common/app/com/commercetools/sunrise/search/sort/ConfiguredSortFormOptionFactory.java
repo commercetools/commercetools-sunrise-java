@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.search.sort;
 
-import com.commercetools.sunrise.framework.SunriseConfigurationException;
+import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
 import com.commercetools.sunrise.framework.SunriseModel;
 import play.Configuration;
 

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.search.facetedsearch.sliderranges;
 
-import com.commercetools.sunrise.framework.SunriseConfigurationException;
+import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
 import com.commercetools.sunrise.search.facetedsearch.AbstractConfiguredFacetedSearchFormSettingsFactory;
 import play.Configuration;
 

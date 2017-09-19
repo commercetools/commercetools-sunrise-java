@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.framework.viewmodels.content.carts;
 
-import com.commercetools.sunrise.ctp.ProductAttributeSettings;
+import com.commercetools.sunrise.ctp.products.ProductAttributesSettings;
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.viewmodels.content.products.AttributeWithProductType;
 import com.commercetools.sunrise.framework.viewmodels.content.products.ProductAttributeViewModel;
 import com.commercetools.sunrise.framework.viewmodels.content.products.ProductAttributeViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.formatters.PriceFormatter;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.products.attributes.Attribute;
 
@@ -16,19 +16,19 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class LineItemExtendedViewModelFactory extends AbstractLineItemViewModelFactory<LineItemExtendedViewModel> {
 
-    private final ProductAttributeSettings productAttributeSettings;
+    private final ProductAttributesSettings productAttributesSettings;
     private final ProductAttributeViewModelFactory productAttributeViewModelFactory;
 
     @Inject
     public LineItemExtendedViewModelFactory(final PriceFormatter priceFormatter, final LineItemProductVariantViewModelFactory lineItemProductVariantViewModelFactory,
-                                            final ProductAttributeSettings productAttributeSettings, final ProductAttributeViewModelFactory productAttributeViewModelFactory) {
+                                            final ProductAttributesSettings productAttributeSettings, final ProductAttributeViewModelFactory productAttributeViewModelFactory) {
         super(priceFormatter, lineItemProductVariantViewModelFactory);
-        this.productAttributeSettings = productAttributeSettings;
+        this.productAttributesSettings = productAttributeSettings;
         this.productAttributeViewModelFactory = productAttributeViewModelFactory;
     }
 
-    protected final ProductAttributeSettings getProductAttributeSettings() {
-        return productAttributeSettings;
+    protected final ProductAttributesSettings getProductAttributesSettings() {
+        return productAttributesSettings;
     }
 
     protected final ProductAttributeViewModelFactory getProductAttributeViewModelFactory() {
@@ -53,7 +53,7 @@ public class LineItemExtendedViewModelFactory extends AbstractLineItemViewModelF
 
     protected void fillAttributes(final LineItemExtendedViewModel viewModel, final LineItem lineItem) {
         viewModel.setAttributes(lineItem.getVariant().getAttributes().stream()
-                .filter(attr -> productAttributeSettings.getSelectableAttributes().contains(attr.getName()))
+                .filter(attr -> productAttributesSettings.selectable().contains(attr.getName()))
                 .map(attribute -> createProductAttributeViewModel(lineItem, attribute))
                 .collect(toList()));
     }

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.framework.template.cms;
 
 import com.commercetools.sunrise.cms.CmsService;
-import com.commercetools.sunrise.framework.SunriseConfigurationException;
+import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
 import com.commercetools.sunrise.framework.localization.ProjectContext;
 import com.commercetools.sunrise.framework.template.cms.filebased.FileBasedCmsService;
 import com.commercetools.sunrise.framework.template.i18n.composite.CompositeI18nResolver;

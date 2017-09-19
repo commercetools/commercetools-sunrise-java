@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.framework.viewmodels.content.categories;
 
-import com.commercetools.sunrise.categorytree.CategoryTreeConfiguration;
-import com.commercetools.sunrise.categorytree.NavigationCategoryTree;
-import com.commercetools.sunrise.categorytree.SpecialCategoryConfiguration;
+import com.commercetools.sunrise.ctp.categories.CategoriesSettings;
+import com.commercetools.sunrise.ctp.categories.NavigationCategoryTree;
+import com.commercetools.sunrise.ctp.categories.SpecialCategorySettings;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
@@ -17,20 +17,20 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class CategoryViewModelFactory extends SimpleViewModelFactory<CategoryViewModel, Category> {
 
-    private final CategoryTreeConfiguration categoryTreeConfiguration;
+    private final CategoriesSettings categoriesSettings;
     private final CategoryTree categoryTree;
     private final ProductReverseRouter productReverseRouter;
 
     @Inject
-    public CategoryViewModelFactory(final CategoryTreeConfiguration categoryTreeConfiguration, @NavigationCategoryTree final CategoryTree categoryTree,
+    public CategoryViewModelFactory(final CategoriesSettings categoriesSettings, @NavigationCategoryTree final CategoryTree categoryTree,
                                     final ProductReverseRouter productReverseRouter) {
-        this.categoryTreeConfiguration = categoryTreeConfiguration;
+        this.categoriesSettings = categoriesSettings;
         this.categoryTree = categoryTree;
         this.productReverseRouter = productReverseRouter;
     }
 
-    protected final CategoryTreeConfiguration getCategoryTreeConfiguration() {
-        return categoryTreeConfiguration;
+    protected final CategoriesSettings getCategoriesSettings() {
+        return categoriesSettings;
     }
 
     protected final CategoryTree getCategoryTree() {
@@ -71,8 +71,8 @@ public class CategoryViewModelFactory extends SimpleViewModelFactory<CategoryVie
     }
 
     protected void fillSale(final CategoryViewModel viewModel, final Category category) {
-        final boolean isSale = categoryTreeConfiguration.specialCategories().stream()
-                .filter(SpecialCategoryConfiguration::isSale)
+        final boolean isSale = categoriesSettings.specialCategories().stream()
+                .filter(SpecialCategorySettings::isSale)
                 .anyMatch(specialCategory -> specialCategory.externalId().equals(category.getExternalId()));
         viewModel.setSale(isSale);
     }

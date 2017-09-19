@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.httpauth.basic;
 
-import com.commercetools.sunrise.framework.SunriseConfigurationException;
+import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.google.inject.Provider;
 import org.slf4j.Logger;

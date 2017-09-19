@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.viewmodels.content.products;
 
-import com.commercetools.sunrise.ctp.ProductAttributeSettings;
+import com.commercetools.sunrise.ctp.products.ProductAttributesSettings;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
 import io.sphere.sdk.models.Reference;
@@ -16,17 +16,17 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class ProductDetailsViewModelFactory extends SimpleViewModelFactory<ProductDetailsViewModel, ProductWithVariant> {
 
-    private final ProductAttributeSettings productAttributeSettings;
+    private final ProductAttributesSettings productAttributesSettings;
     private final ProductAttributeViewModelFactory productAttributeViewModelFactory;
 
     @Inject
-    public ProductDetailsViewModelFactory(final ProductAttributeSettings productAttributeSettings, final ProductAttributeViewModelFactory productAttributeViewModelFactory) {
-        this.productAttributeSettings = productAttributeSettings;
+    public ProductDetailsViewModelFactory(final ProductAttributesSettings productAttributesSettings, final ProductAttributeViewModelFactory productAttributeViewModelFactory) {
+        this.productAttributesSettings = productAttributesSettings;
         this.productAttributeViewModelFactory = productAttributeViewModelFactory;
     }
 
-    protected final ProductAttributeSettings getProductAttributeSettings() {
-        return productAttributeSettings;
+    protected final ProductAttributesSettings getProductAttributesSettings() {
+        return productAttributesSettings;
     }
 
     protected final ProductAttributeViewModelFactory getProductAttributeViewModelFactory() {
@@ -49,7 +49,7 @@ public class ProductDetailsViewModelFactory extends SimpleViewModelFactory<Produ
     }
 
     protected void fillList(final ProductDetailsViewModel viewModel, final ProductWithVariant productWithVariant) {
-        final List<ProductAttributeViewModel> attributes = productAttributeSettings.getDisplayedAttributes().stream()
+        final List<ProductAttributeViewModel> attributes = productAttributesSettings.displayed().stream()
                 .map(productWithVariant.getVariant()::getAttribute)
                 .filter(Objects::nonNull)
                 .map(attribute -> createProductAttributeViewModel(productWithVariant, attribute))

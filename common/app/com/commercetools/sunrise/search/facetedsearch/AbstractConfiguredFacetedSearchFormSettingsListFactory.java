@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.search.facetedsearch;
 
-import com.commercetools.sunrise.framework.SunriseConfigurationException;
+import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
 import com.commercetools.sunrise.framework.SunriseModel;
 import com.commercetools.sunrise.search.facetedsearch.bucketranges.ConfiguredBucketRangeFacetedSearchFormSettingsFactory;
 import com.commercetools.sunrise.search.facetedsearch.sliderranges.ConfiguredSliderRangeFacetedSearchFormSettingsFactory;

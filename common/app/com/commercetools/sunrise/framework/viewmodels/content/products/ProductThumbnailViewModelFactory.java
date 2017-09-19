@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.viewmodels.content.products;
 
-import com.commercetools.sunrise.categorytree.NewCategoryTree;
+import com.commercetools.sunrise.ctp.categories.NewCategoryTree;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
 import io.sphere.sdk.categories.CategoryTree;

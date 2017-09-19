@@ -17,7 +17,7 @@ GET         /version                                                            
 GET         /health                                                             @controllers.common.HealthCheckController.show()
 
 # Endpoint to manually refresh category tree (otherwise an app restart is required)
-GET         /categories/refresh                                                 @com.commercetools.sunrise.common.categorytree.CategoriesRefreshController.refresh()
+GET         /categories/refresh                                                 @com.commercetools.sunrise.common.categorytree.CategoryTreeRefreshController.refresh()
 
 
 # WEB ASSETS

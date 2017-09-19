@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.viewmodels.content.products;
 
-import com.commercetools.sunrise.ctp.ProductAttributeSettings;
+import com.commercetools.sunrise.ctp.products.ProductAttributesSettings;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.formatters.AttributeFormatter;
@@ -16,19 +16,19 @@ import static java.util.stream.Collectors.joining;
 @RequestScoped
 public class ProductVariantReferenceViewModelMapFactory extends SimpleViewModelFactory<ProductVariantReferenceMapViewModel, ProductWithVariant> {
 
-    private final ProductAttributeSettings productAttributeSettings;
+    private final ProductAttributesSettings productAttributesSettings;
     private final AttributeFormatter attributeFormatter;
     private final ProductVariantReferenceViewModelFactory productVariantReferenceViewModelFactory;
 
     @Inject
-    public ProductVariantReferenceViewModelMapFactory(final ProductAttributeSettings productAttributeSettings, final AttributeFormatter attributeFormatter, final ProductVariantReferenceViewModelFactory productVariantReferenceViewModelFactory) {
-        this.productAttributeSettings = productAttributeSettings;
+    public ProductVariantReferenceViewModelMapFactory(final ProductAttributesSettings productAttributeSettings, final AttributeFormatter attributeFormatter, final ProductVariantReferenceViewModelFactory productVariantReferenceViewModelFactory) {
+        this.productAttributesSettings = productAttributeSettings;
         this.attributeFormatter = attributeFormatter;
         this.productVariantReferenceViewModelFactory = productVariantReferenceViewModelFactory;
     }
 
-    protected final ProductAttributeSettings getProductAttributeSettings() {
-        return productAttributeSettings;
+    protected final ProductAttributesSettings getProductAttributesSettings() {
+        return productAttributesSettings;
     }
 
     protected final AttributeFormatter getAttributeFormatter() {
@@ -64,7 +64,7 @@ public class ProductVariantReferenceViewModelMapFactory extends SimpleViewModelF
     }
 
     private String createMapKey(final ProductVariant variant, final Referenceable<ProductType> productTypeRef) {
-        return productAttributeSettings.getSelectableAttributes().stream()
+        return productAttributesSettings.selectable().stream()
                 .map(variant::getAttribute)
                 .map(attribute -> attribute != null ? AttributeWithProductType.of(attribute, productTypeRef) : null)
                 .map(attributeFormatter::encodedValue)

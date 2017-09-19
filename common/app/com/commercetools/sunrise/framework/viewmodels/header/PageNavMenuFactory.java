@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.viewmodels.header;
 
-import com.commercetools.sunrise.categorytree.NavigationCategoryTree;
+import com.commercetools.sunrise.ctp.categories.NavigationCategoryTree;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.content.categories.CategoryViewModel;
 import com.commercetools.sunrise.framework.viewmodels.content.categories.CategoryViewModelFactory;

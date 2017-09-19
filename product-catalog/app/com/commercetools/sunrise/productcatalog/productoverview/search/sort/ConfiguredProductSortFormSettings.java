@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
-import com.commercetools.sunrise.framework.SunriseConfigurationException;
+import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
 import com.commercetools.sunrise.search.sort.ConfiguredSortFormOption;
 import com.commercetools.sunrise.search.sort.ConfiguredSortFormSettings;
 import com.commercetools.sunrise.search.sort.ConfiguredSortFormSettingsFactory;

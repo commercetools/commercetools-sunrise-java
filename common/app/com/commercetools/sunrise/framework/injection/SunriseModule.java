@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.injection;
 
-import com.commercetools.sunrise.ctp.SphereClientConfigProvider;
+import com.commercetools.sunrise.ctp.client.SphereClientConfigProvider;
 import com.google.inject.AbstractModule;
 import io.sphere.sdk.client.SphereClientConfig;
 import io.sphere.sdk.utils.MoneyImpl;

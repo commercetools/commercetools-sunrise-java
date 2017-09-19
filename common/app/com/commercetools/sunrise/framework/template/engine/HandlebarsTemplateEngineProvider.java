@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.template.engine;
 
-import com.commercetools.sunrise.framework.SunriseConfigurationException;
+import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
 import com.commercetools.sunrise.framework.template.engine.handlebars.HandlebarsContextFactory;
 import com.commercetools.sunrise.framework.template.engine.handlebars.HandlebarsFactory;
 import com.commercetools.sunrise.framework.template.engine.handlebars.HandlebarsTemplateEngine;

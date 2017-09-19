@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.localization;
 
-import com.commercetools.sunrise.framework.SunriseConfigurationException;
+import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereRequest;

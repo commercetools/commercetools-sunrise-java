@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.play.inject;
 
+import com.commercetools.sunrise.play.configuration.SunriseConfiguration;
 import org.junit.Test;
 import play.Configuration;
 

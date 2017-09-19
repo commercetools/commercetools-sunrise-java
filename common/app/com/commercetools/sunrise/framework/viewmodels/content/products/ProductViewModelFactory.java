@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.viewmodels.content.products;
 
-import com.commercetools.sunrise.ctp.ProductAttributeSettings;
+import com.commercetools.sunrise.ctp.products.ProductAttributesSettings;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 @RequestScoped
 public class ProductViewModelFactory extends SimpleViewModelFactory<ProductViewModel, ProductWithVariant> {
 
-    private final ProductAttributeSettings productAttributeSettings;
+    private final ProductAttributesSettings productAttributesSettings;
     private final ProductVariantViewModelFactory productVariantViewModelFactory;
     private final ProductDetailsViewModelFactory productDetailsViewModelFactory;
     private final ProductGalleryViewModelFactory productGalleryViewModelFactory;
@@ -18,11 +18,11 @@ public class ProductViewModelFactory extends SimpleViewModelFactory<ProductViewM
     private final ProductVariantReferenceViewModelMapFactory productVariantReferenceViewModelMapFactory;
 
     @Inject
-    public ProductViewModelFactory(final ProductAttributeSettings productAttributeSettings, final ProductVariantViewModelFactory productVariantViewModelFactory,
+    public ProductViewModelFactory(final ProductAttributesSettings productAttributesSettings, final ProductVariantViewModelFactory productVariantViewModelFactory,
                                    final ProductDetailsViewModelFactory productDetailsViewModelFactory, final ProductGalleryViewModelFactory productGalleryViewModelFactory,
                                    final SelectableProductAttributeViewModelFactory selectableProductAttributeViewModelFactory,
                                    final ProductVariantReferenceViewModelMapFactory productVariantReferenceViewModelMapFactory) {
-        this.productAttributeSettings = productAttributeSettings;
+        this.productAttributesSettings = productAttributesSettings;
         this.productVariantViewModelFactory = productVariantViewModelFactory;
         this.productDetailsViewModelFactory = productDetailsViewModelFactory;
         this.productGalleryViewModelFactory = productGalleryViewModelFactory;
@@ -30,8 +30,8 @@ public class ProductViewModelFactory extends SimpleViewModelFactory<ProductViewM
         this.productVariantReferenceViewModelMapFactory = productVariantReferenceViewModelMapFactory;
     }
 
-    protected final ProductAttributeSettings getProductAttributeSettings() {
-        return productAttributeSettings;
+    protected final ProductAttributesSettings getProductAttributesSettings() {
+        return productAttributesSettings;
     }
 
     protected final ProductVariantViewModelFactory getProductVariantViewModelFactory() {
@@ -111,7 +111,7 @@ public class ProductViewModelFactory extends SimpleViewModelFactory<ProductViewM
     }
 
     protected void fillVariantIdentifiers(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
-        viewModel.setVariantIdentifiers(productAttributeSettings.getSelectableAttributes());
+        viewModel.setVariantIdentifiers(productAttributesSettings.selectable());
     }
 
     protected void fillAvailability(final ProductViewModel viewModel, final ProductWithVariant productWithVariant) {
