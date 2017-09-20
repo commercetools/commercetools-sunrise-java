@@ -37,10 +37,14 @@ lazy val `commercetools-sunrise` = (project in file("."))
   .dependsOn(testLibDependency, `product-catalog`, `shopping-cart`, `my-account`, wishlist)
 
 lazy val common = project
-  .enablePlugins(PlayJava, GenJavadocPlugin)
+  .enablePlugins(PlayJava, GenJavadocPlugin, BuildInfoPlugin)
   .configs(IntegrationTest, TestCommon.PlayTest)
   .settings(Release.enableSignedRelease ++ TestCommon.defaultSettings: _*)
   .settings(Dependencies.jvmSdk ++ Dependencies.sunriseTheme ++ Dependencies.sunriseModules ++ Dependencies.commonLib: _*)
+  .settings(
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "com.commercetools.sunrise.ctp;"
+  )
   .dependsOn(testLibDependency)
 
 lazy val `product-catalog` = project

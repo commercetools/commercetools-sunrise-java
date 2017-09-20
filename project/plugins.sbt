@@ -13,3 +13,5 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.4")
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.1")
 
 addSbtPlugin("com.commercetools.sunrise" % "sbt-commercetools-sunrise-theme-importer" % "0.2.0")
+
+addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.7.0")

@@ -37,7 +37,7 @@ final class MetricsLogger extends Action.Simple {
             if (sphereClient instanceof SimpleMetricsSphereClient) {
                 return callWithMetrics((SimpleMetricsSphereClient) sphereClient, ctx);
             } else {
-                LOGGER.warn("Enabled logging via @LogMetrics annotation without a SimpleMetricsSphereClient");
+                LOGGER.warn(ctx.request() + " enabled logging via @LogMetrics annotation without a SimpleMetricsSphereClient");
             }
         }
         return delegate.call(ctx);
