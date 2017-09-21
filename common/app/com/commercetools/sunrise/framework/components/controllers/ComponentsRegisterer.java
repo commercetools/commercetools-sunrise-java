@@ -13,12 +13,12 @@ import java.util.concurrent.CompletionStage;
 /**
  * Action that registers the provided {@link ControllerComponent} list.
  */
-final class RegisterComponents extends Action<RegisteredComponents> {
+final class ComponentsRegisterer extends Action<RegisteredComponents> {
 
     private final Injector injector;
 
     @Inject
-    RegisterComponents(final Injector injector) {
+    ComponentsRegisterer(final Injector injector) {
         this.injector = injector;
     }
 
