@@ -13,9 +13,9 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-public class SunriseConfiguration extends Configuration {
+public final class SunriseConfiguration extends Configuration {
 
-    public SunriseConfiguration(final Configuration configuration) {
+    private SunriseConfiguration(final Configuration configuration) {
         super(configuration.underlying());
     }
 
@@ -25,7 +25,7 @@ public class SunriseConfiguration extends Configuration {
         try {
             return super.getStringList(key);
         } catch (PlayException e) {
-            return recoverAndParseList(key, this::parseStringList, e).orElse(null);
+            return recoverAndParseList(key, SunriseConfiguration::parseStringList, e).orElse(null);
         }
     }
 
@@ -34,7 +34,7 @@ public class SunriseConfiguration extends Configuration {
         try {
             return super.getStringList(key, defaultList);
         } catch (PlayException e) {
-            return recoverAndParseList(key, this::parseStringList, e).orElse(defaultList);
+            return recoverAndParseList(key, SunriseConfiguration::parseStringList, e).orElse(defaultList);
         }
     }
 
@@ -44,7 +44,7 @@ public class SunriseConfiguration extends Configuration {
         try {
             return super.getBooleanList(key);
         } catch (PlayException e) {
-            return recoverAndParseList(key, this::parseBooleanList, e).orElse(null);
+            return recoverAndParseList(key, SunriseConfiguration::parseBooleanList, e).orElse(null);
         }
     }
 
@@ -53,7 +53,7 @@ public class SunriseConfiguration extends Configuration {
         try {
             return super.getBooleanList(key, defaultList);
         } catch (PlayException e) {
-            return recoverAndParseList(key, this::parseBooleanList, e).orElse(defaultList);
+            return recoverAndParseList(key, SunriseConfiguration::parseBooleanList, e).orElse(defaultList);
         }
     }
 
@@ -63,7 +63,7 @@ public class SunriseConfiguration extends Configuration {
         try {
             return super.getIntList(key);
         } catch (PlayException e) {
-            return recoverAndParseList(key, this::parseIntList, e).orElse(null);
+            return recoverAndParseList(key, SunriseConfiguration::parseIntList, e).orElse(null);
         }
     }
 
@@ -72,8 +72,34 @@ public class SunriseConfiguration extends Configuration {
         try {
             return super.getIntList(key, defaultList);
         } catch (PlayException e) {
-            return recoverAndParseList(key, this::parseIntList, e).orElse(defaultList);
+            return recoverAndParseList(key, SunriseConfiguration::parseIntList, e).orElse(defaultList);
         }
+    }
+
+    @Override
+    public Configuration getConfig(final String key) {
+        return Optional.ofNullable(super.getConfig(key))
+                .map(SunriseConfiguration::of)
+                .orElse(null);
+    }
+
+    @Override
+    public List<Configuration> getConfigList(final String key) {
+        return convertToSunriseConfigurationList(super.getConfigList(key));
+    }
+
+    @Override
+    public List<Configuration> getConfigList(final String key, final List<Configuration> defaultList) {
+        return convertToSunriseConfigurationList(super.getConfigList(key, defaultList));
+    }
+
+    /**
+     * Returns the configuration using the implementation of {@link SunriseConfiguration}.
+     * @param configuration the original configuration
+     * @return the new configuration
+     */
+    public static Configuration of(final Configuration configuration) {
+        return new SunriseConfiguration(configuration);
     }
 
     private <T> Optional<List<T>> recoverAndParseList(final String key, final Function<String, List<T>> parser,
@@ -87,19 +113,19 @@ public class SunriseConfiguration extends Configuration {
         }
     }
 
-    private List<Integer> parseIntList(final String value) {
+    private static List<Integer> parseIntList(final String value) {
         return parseList(value)
                 .map(Integer::parseInt)
                 .collect(toList());
     }
 
-    private List<Boolean> parseBooleanList(final String value) {
+    private static List<Boolean> parseBooleanList(final String value) {
         return parseList(value)
                 .map(Boolean::parseBoolean)
                 .collect(toList());
     }
 
-    private List<String> parseStringList(final String value) {
+    private static List<String> parseStringList(final String value) {
         return parseList(value).collect(toList());
     }
 
@@ -107,5 +133,13 @@ public class SunriseConfiguration extends Configuration {
         return Arrays.stream(value.split(","))
                 .map(String::trim)
                 .filter(v -> !v.isEmpty());
+    }
+
+    private static List<Configuration> convertToSunriseConfigurationList(@Nullable final List<Configuration> configurations) {
+        return Optional.ofNullable(configurations)
+                .map(list -> list.stream()
+                        .map(SunriseConfiguration::of)
+                        .collect(toList()))
+                .orElse(null);
     }
 }

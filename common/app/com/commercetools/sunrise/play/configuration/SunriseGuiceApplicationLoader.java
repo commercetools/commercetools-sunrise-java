@@ -12,7 +12,7 @@ public class SunriseGuiceApplicationLoader extends GuiceApplicationLoader {
     @Override
     public GuiceApplicationBuilder builder(final ApplicationLoader.Context context) {
         return super.builder(context).overrides(
-                bind(Configuration.class).toInstance(new SunriseConfiguration(context.initialConfiguration()))
+                bind(Configuration.class).toInstance(SunriseConfiguration.of(context.initialConfiguration()))
         );
     }
 }
