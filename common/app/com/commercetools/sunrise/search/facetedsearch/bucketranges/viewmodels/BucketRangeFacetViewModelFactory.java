@@ -7,7 +7,6 @@ import com.commercetools.sunrise.search.facetedsearch.bucketranges.BucketRangeFa
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.AbstractFacetWithOptionsViewModelFactory;
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionViewModel;
 import io.sphere.sdk.search.RangeFacetResult;
-import io.sphere.sdk.search.model.FacetRange;
 import io.sphere.sdk.search.model.RangeStats;
 import play.mvc.Http;
 
@@ -18,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.commercetools.sunrise.search.facetedsearch.RangeUtils.mapRangeToStats;
-import static com.commercetools.sunrise.search.facetedsearch.bucketranges.BucketRangeUtils.optionToFacetRange;
+import static com.commercetools.sunrise.search.facetedsearch.RangeUtils.parseFacetRange;
 import static java.util.stream.Collectors.toList;
 
 @RequestScoped
@@ -67,11 +66,11 @@ public class BucketRangeFacetViewModelFactory extends AbstractFacetWithOptionsVi
         final List<String> selectedValues = settings.getAllSelectedOptions(Http.Context.current()).stream()
                 .map(FormOption::getFieldValue)
                 .collect(toList());
-        final Map<FacetRange<String>, RangeStats> rangeToStatsMap = mapRangeToStats(facetResult);
+        final Map<String, RangeStats> rangeToStatsMap = mapRangeToStats(facetResult);
         final List<FacetOptionViewModel> options = new ArrayList<>();
         settings.getOptions()
-                .forEach(option -> optionToFacetRange(option)
-                        .map(rangeToStatsMap::get)
+                .forEach(option -> parseFacetRange(option.getValue())
+                        .map(range -> rangeToStatsMap.get(range.toString()))
                         .filter(Objects::nonNull)
                         .ifPresent(rangeStats -> options.add(bucketRangeFacetOptionViewModelFactory.create(rangeStats, option, selectedValues))));
         viewModel.setLimitedOptions(options);

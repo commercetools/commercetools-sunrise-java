@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -21,11 +22,15 @@ public final class RangeUtils {
     private RangeUtils() {
     }
 
-    public static Map<FacetRange<String>, RangeStats> mapRangeToStats(final RangeFacetResult facetResult) {
-        final Map<FacetRange<String>, RangeStats> rangeToStats = new HashMap<>();
+    public static Map<String, RangeStats> mapRangeToStats(final RangeFacetResult facetResult) {
+        final Map<String, RangeStats> rangeToStats = new HashMap<>();
         facetResult.getRanges()
-                .forEach(stats -> parseFacetRange(stats.getLowerEndpoint(), stats.getUpperEndpoint())
-                        .ifPresent(range -> rangeToStats.put(range, stats)));
+                .forEach(stats -> {
+                    final String lowerEndpoint = cleanEndpointDecimal(stats.getLowerEndpoint());
+                    final String upperEndpoint = cleanEndpointDecimal(stats.getUpperEndpoint());
+                    parseFacetRange(lowerEndpoint, upperEndpoint)
+                            .ifPresent(range -> rangeToStats.put(range.toString(), stats));
+                });
         return rangeToStats;
     }
 
@@ -41,6 +46,7 @@ public final class RangeUtils {
 
     /**
      * Parses a range of the form {@code (x to y)} to a {@link FilterRange}.
+     * Ranges of the form {@code (* to *)} are not supported.
      * @param rangeAsString range of the form {@code (x to y)}
      * @return the {@link FilterRange} corresponding to that range, or empty if it could not be parsed
      */
@@ -55,11 +61,13 @@ public final class RangeUtils {
                     } else {
                         return FilterRange.atMost(pair.getRight());
                     }
-                });
+                })
+                .filter(RangeUtils::hasNoBounds);
     }
 
     /**
      * Parses a range of the form {@code (x to y)} to a {@link FacetRange}.
+     * Ranges of the form {@code (* to *)} are not supported.
      * @param rangeAsString range of the form {@code (x to y)}
      * @return the {@link FacetRange} corresponding to that range, or empty if it could not be parsed
      */
@@ -74,7 +82,8 @@ public final class RangeUtils {
                     } else {
                         return FacetRange.lessThan(pair.getRight());
                     }
-                });
+                })
+                .filter(RangeUtils::hasNoBounds);
     }
 
     @Nullable
@@ -89,17 +98,48 @@ public final class RangeUtils {
     }
 
     private static String buildRange(@Nullable final String lowerEndpoint, @Nullable final String upperEndpoint) {
-        return String.format("(\"%s\" to \"%s\")",
+        return String.format("(%s to %s)",
                 boundEndpointOrAsterisk(lowerEndpoint),
                 boundEndpointOrAsterisk(upperEndpoint));
     }
 
     @Nullable
     private static String boundEndpointOrNull(@Nullable final String endpoint) {
-        return endpoint == null || endpoint.equals("*") ? null : endpoint;
+        return isEndpointBoundless(endpoint) ? null : endpoint;
     }
 
     private static String boundEndpointOrAsterisk(@Nullable final String endpoint) {
-        return endpoint == null ? "*" : endpoint;
+        return isEndpointBoundless(endpoint) ? "*" : endpoint;
+    }
+
+    private static boolean isEndpointBoundless(@Nullable final String endpoint) {
+        return endpoint == null || endpoint.equals("*");
+    }
+
+    private static <T extends Comparable<T>> boolean hasNoBounds(final FacetRange<T> range) {
+        return range.lowerBound() != null || range.upperBound() != null;
+    }
+
+    private static <T extends Comparable<T>> boolean hasNoBounds(final FilterRange<T> range) {
+        return range.lowerBound() != null || range.upperBound() != null;
+    }
+
+    /**
+     * Cleans the decimal part of the endpoint value due to the backend answering with decimals but not accepting them.
+     * For example, the backend might answer with 9002.0, but it needs to be converted to 9002.
+     * @param endpointValue the value of the endpoint to be cleaned
+     * @return the value of the endpoint without the decimal part, in case the value was a number
+     */
+    @Nullable
+    private static String cleanEndpointDecimal(@Nullable final String endpointValue) {
+        if (endpointValue != null) {
+            try {
+                final int value = new BigDecimal(endpointValue).intValue();
+                return String.valueOf(value);
+            } catch (NumberFormatException e) {
+                // Fallbacks to default case
+            }
+        }
+        return endpointValue;
     }
 }

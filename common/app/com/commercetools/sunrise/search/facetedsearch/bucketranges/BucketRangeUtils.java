@@ -14,7 +14,7 @@ public final class BucketRangeUtils {
 
     public static List<FilterRange<String>> optionsToFilterRange(final List<BucketRangeFacetedSearchFormOption> rangeOptions) {
         return rangeOptions.stream()
-                .map(BucketRangeUtils::optionToFilterRange)
+                .map(option -> parseFilterRange(option.getValue()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toList());
@@ -22,19 +22,9 @@ public final class BucketRangeUtils {
 
     public static List<FacetRange<String>> optionsToFacetRange(final List<BucketRangeFacetedSearchFormOption> rangeOptions) {
         return rangeOptions.stream()
-                .map(BucketRangeUtils::optionToFacetRange)
+                .map(option -> parseFacetRange(option.getValue()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toList());
-    }
-
-    public static Optional<FilterRange<String>> optionToFilterRange(final BucketRangeFacetedSearchFormOption rangeOption) {
-        return parseFilterRange(rangeOption.getValue())
-                .filter(range -> range.isBounded());
-    }
-
-    public static Optional<FacetRange<String>> optionToFacetRange(final BucketRangeFacetedSearchFormOption rangeOption) {
-        return parseFacetRange(rangeOption.getValue())
-                .filter(range -> range.isBounded());
     }
 }
