@@ -15,8 +15,8 @@ public class ErrorsBean extends Base {
     public ErrorsBean() {
     }
 
-    public ErrorsBean(final String errorMessage) {
-        this.globalErrors = singletonList(new ErrorBean(errorMessage));
+    public ErrorsBean(final String errorMessage, final String field) {
+        this.globalErrors = singletonList(new ErrorBean(field, errorMessage));
     }
 
     @Deprecated
@@ -25,7 +25,7 @@ public class ErrorsBean extends Base {
         filledForms.forEach(filledForm ->
                 filledForm.errors().forEach((field, errors) ->
                         errors.forEach(error ->
-                                globalErrors.add(new ErrorBean(error.key() + ": " + error.message())))));
+                                globalErrors.add(new ErrorBean(field, error.key() + ": " + error.message())))));
     }
 
     @Deprecated

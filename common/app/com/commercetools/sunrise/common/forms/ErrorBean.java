@@ -6,10 +6,14 @@ public class ErrorBean extends Base {
 
     private String message;
 
+    private String field;
+
+
     public ErrorBean() {
     }
 
-    public ErrorBean(final String message) {
+    public ErrorBean(final String field, final String message) {
+        this.field = field;
         this.message = message;
     }
 
@@ -19,5 +23,13 @@ public class ErrorBean extends Base {
 
     public void setMessage(final String message) {
         this.message = message;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
     }
 }
