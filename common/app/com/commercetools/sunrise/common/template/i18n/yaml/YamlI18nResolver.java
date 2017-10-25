@@ -40,11 +40,11 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
     }
 
     @Override
-    public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs) {
-        final String message = findPluralizedTranslation(locales, i18nIdentifier, hashArgs)
+    public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> args) {
+        final String message = findPluralizedTranslation(locales, i18nIdentifier, args)
                 .orElseGet(() -> findFirstTranslation(locales, i18nIdentifier.bundle(), i18nIdentifier.messageKey())
                         .orElse(null));
-        return Optional.ofNullable(message).map(resolvedValue -> replaceParameters(resolvedValue, hashArgs));
+        return Optional.ofNullable(message).map(resolvedValue -> replaceParameters(resolvedValue, args));
     }
 
     @Override
@@ -59,8 +59,8 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
     }
 
     private Optional<String> findPluralizedTranslation(final List<Locale> locales, final I18nIdentifier i18nIdentifier,
-                                                       final Map<String, Object> hashArgs) {
-        if (containsPlural(hashArgs)) {
+                                                       final Map<String, Object> args) {
+        if (containsPlural(args)) {
             final String pluralizedKey = i18nIdentifier.messageKey() + "_plural";
             return findFirstTranslation(locales, i18nIdentifier.bundle(), pluralizedKey);
         } else {
@@ -78,9 +78,9 @@ public final class YamlI18nResolver extends Base implements I18nResolver {
         return Optional.empty();
     }
 
-    private String replaceParameters(final String resolvedValue, final Map<String, Object> hashArgs) {
+    private String replaceParameters(final String resolvedValue, final Map<String, Object> args) {
         String message = StringUtils.defaultString(resolvedValue);
-        for (final Map.Entry<String, Object> entry : hashArgs.entrySet()) {
+        for (final Map.Entry<String, Object> entry : args.entrySet()) {
             if (entry.getValue() != null) {
                 final String parameter = "__" + entry.getKey() + "__";
                 message = message.replace(parameter, entry.getValue().toString());

@@ -2,22 +2,19 @@ package com.commercetools.sunrise.common.template.engine.handlebars;
 
 import com.commercetools.sunrise.common.forms.ErrorBean;
 import com.commercetools.sunrise.common.forms.ErrorsBean;
-import com.commercetools.sunrise.common.utils.ErrorFormatter;
-import com.google.common.collect.Maps;
 import org.junit.Test;
 import org.mockito.Mockito;
 import play.data.Form;
 import play.data.validation.ValidationError;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PlayJavaFormResolverTest {
 
-    PlayJavaFormResolver formResolver = new PlayJavaFormResolver(singletonList(Locale.ENGLISH), (locales, message) ->
+    PlayJavaFormResolver formResolver = new PlayJavaFormResolver(singletonList(Locale.ENGLISH), (locales, message, args) ->
             message);
 
     @Test
@@ -28,14 +25,14 @@ public class PlayJavaFormResolverTest {
         ErrorsBean result = formResolver.extractErrors(form);
 
         List<ErrorBean> errors = result.getGlobalErrors();
-        checkError(errors.get(0), errorField1, "errorkey1", "errorMessage1");
-        checkError(errors.get(1), errorField1, "errorkey2", "errorMessage2");
-        checkError(errors.get(2), errorField2, "errorkey21", "errorMessage21");
+        checkError(errors.get(0), errorField1, "errorMessage1");
+        checkError(errors.get(1), errorField1, "errorMessage2");
+        checkError(errors.get(2), errorField2, "errorMessage21");
     }
 
-    private void checkError(ErrorBean error, String field, String key, String message) {
+    private void checkError(ErrorBean error, String field, String message) {
         assertThat(error.getField()).isEqualTo(field);
-        assertThat(error.getMessage()).isEqualTo(message + ": " + key);
+        assertThat(error.getMessage()).isEqualTo(message);
 
     }
 

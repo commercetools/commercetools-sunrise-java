@@ -328,12 +328,12 @@ public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddr
     public String validate() {
         final CountryCode shippingCountry = CountryCode.getByCode(countryShipping);
         if (shippingCountry == null || shippingCountry.equals(CountryCode.UNDEFINED)) {
-            return "Invalid shipping country"; // TODO use i18n version
+            return "messages:checkout.address.invalidShippingCountry";
         }
         if (billingAddressDifferentToBillingAddress) {
             final CountryCode billingCountry = CountryCode.getByCode(countryBilling);
             if (billingCountry == null || billingCountry.equals(CountryCode.UNDEFINED)) {
-                return "Invalid billing country"; // TODO use i18n version
+                return "messages:checkout.address.invalidBillingCountry";
             }
         }
         return null;

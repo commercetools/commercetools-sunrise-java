@@ -22,10 +22,10 @@ public class DefaultSignUpFormData extends Base implements SignUpFormData {
 
     public String validate() {
         if (!password.equals(confirmPassword)) {
-            return "Not matching passwords"; // TODO use i18n version
+            return "messages:myAccount.signUp.notMatchingPasswords";
         }
         if (!agreeToTerms) {
-            return "You must agree to terms"; // TODO use i18n version
+            return "messages:myAccount.signUp.agreeToTerms";
         }
         return null;
     }

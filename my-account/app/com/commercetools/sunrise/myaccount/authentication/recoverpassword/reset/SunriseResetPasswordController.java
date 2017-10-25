@@ -88,7 +88,7 @@ public abstract class SunriseResetPasswordController extends SunriseFrameworkCon
     }
 
     protected CompletionStage<Result> handleNotFoundToken(final Form<? extends ResetPasswordFormData> form, final String resetToken) {
-        saveFormError(form, "Reset token is not valid");
+        saveFormError(form, "messages:myAccount.resetPassword.invalidToken");
         return asyncBadRequest(renderPage(form, resetToken, null));
     }
 

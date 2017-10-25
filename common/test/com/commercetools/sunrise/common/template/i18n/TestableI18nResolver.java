@@ -14,10 +14,10 @@ public class TestableI18nResolver implements I18nResolver {
     }
 
     @Override
-    public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs) {
+    public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> args) {
         final String mapKey = String.format("%s/%s:%s", locales.get(0), i18nIdentifier.bundle(), i18nIdentifier.messageKey());
         final String message = i18nMap.get(mapKey);
-        final String parameters = hashArgs.entrySet().stream()
+        final String parameters = args.entrySet().stream()
                 .map(hashPair -> hashPair.getKey() + "=" + hashPair.getValue())
                 .collect(Collectors.joining(","));
         if (parameters.isEmpty()) {

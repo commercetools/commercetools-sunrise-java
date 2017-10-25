@@ -22,9 +22,9 @@ public final class CompositeI18nResolver extends Base implements I18nResolver {
     }
 
     @Override
-    public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> hashArgs) {
+    public Optional<String> get(final List<Locale> locales, final I18nIdentifier i18nIdentifier, final Map<String, Object> args) {
         for (I18nResolver i18nResolver : i18nResolvers) {
-            final Optional<String> message = i18nResolver.get(locales, i18nIdentifier, hashArgs);
+            final Optional<String> message = i18nResolver.get(locales, i18nIdentifier, args);
             if (message.isPresent()) {
                 return message;
             }

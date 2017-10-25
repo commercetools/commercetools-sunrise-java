@@ -53,7 +53,7 @@ public class PlayJavaFormResolver implements ValueResolver {
         return value != null && value.equals("false");
     }
 
-     ErrorsBean extractErrors(@Nullable final Form<?> form) {
+    ErrorsBean extractErrors(@Nullable final Form<?> form) {
         final ErrorsBean errorsBean = new ErrorsBean();
         final List<ErrorBean> errorList = new ArrayList<>();
         if (form != null) {

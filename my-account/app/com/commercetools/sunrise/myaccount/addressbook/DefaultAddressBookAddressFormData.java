@@ -33,7 +33,7 @@ public class DefaultAddressBookAddressFormData extends Base implements AddressBo
     public String validate() {
         final CountryCode country = CountryCode.getByCode(this.country);
         if (country == null || country.equals(CountryCode.UNDEFINED)) {
-            return "Invalid country"; // TODO use i18n version
+            return "messages:myAccount.addressBook.invalidCountry";
         }
         return null;
     }

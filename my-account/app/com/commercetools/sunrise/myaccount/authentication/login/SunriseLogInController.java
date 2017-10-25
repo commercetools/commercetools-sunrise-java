@@ -78,7 +78,7 @@ public abstract class SunriseLogInController extends SunriseFrameworkController 
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends LogInFormData> form, final Void context, final ClientErrorException clientErrorException) {
         if (isInvalidCredentialsError(clientErrorException)) {
-            saveFormError(form, "Invalid credentials"); // TODO i18n
+            saveFormError(form, "messages:myAccount.logIn.invalidCredentials");
         } else {
             saveUnexpectedFormError(form, clientErrorException, logger);
         }

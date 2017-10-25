@@ -83,7 +83,7 @@ public abstract class SunriseSignUpController extends SunriseFrameworkController
     @Override
     public CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends SignUpFormData> form, final Void context, final ClientErrorException clientErrorException) {
         if (isDuplicatedEmailFieldError(clientErrorException)) {
-            saveFormError(form, "A user with this email already exists"); // TODO i18n
+            saveFormError(form, "messages:myAccount.signUp.duplicatedEmail");
         } else {
             saveUnexpectedFormError(form, clientErrorException, logger);
         }

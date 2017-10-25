@@ -12,7 +12,7 @@ public class DefaultCheckoutConfirmationFormData implements CheckoutConfirmation
     public String validate() {
 // TODO Enable back once theme is adapted
 //        if (!agreeTerms) {
-//            return "You must agree to terms"; // TODO use i18n version
+//            return "messages:checkout.confirmation.agreeToTerms";
 //        }
         return null;
     }

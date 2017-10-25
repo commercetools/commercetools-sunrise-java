@@ -1,0 +1,24 @@
+defaultError: Something went wrong, please try again
+checkout:
+  payment:
+    invalidPayment: Invalid payment
+  addresses:
+    invalidShippingCountry: Invalid shipping country
+    invalidBillingCountry: Invalid billing country
+myAccount:
+  logIn:
+    invalidCredentials: Invalid credentials
+  signUp:
+    duplicatedEmail: A user with this email already exists
+    notMatchingPasswords: Not matching passwords
+    agreeToTerms: You must agree to terms
+  recoverPassword:
+    emailSent: A message with further instructions has been sent to your email address
+    emailNotFound: Email not found
+    emailNotDelivered: Email could not be delivered
+  resetPassword:
+    invalidToken: Reset token is not valid
+  addressBook:
+    invalidCountry: Invalid country
+  confirmation:
+    agreeToTerms: You must agree to terms

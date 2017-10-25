@@ -119,7 +119,7 @@ public class RecoverPasswordControllerIntegrationTest extends WithSphereClient {
                     .bodyForm(singletonMap("email", email)));
 
             assertThat(result.status()).isEqualTo(INTERNAL_SERVER_ERROR);
-            assertThat(contentAsString(result)).contains("Email delivery error");
+            assertThat(contentAsString(result)).contains("Email could not be delivered");
 
             return customerSignInResult.getCustomer();
         });

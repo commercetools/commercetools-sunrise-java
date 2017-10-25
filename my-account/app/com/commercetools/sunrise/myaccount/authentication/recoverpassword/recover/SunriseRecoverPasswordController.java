@@ -100,18 +100,18 @@ public abstract class SunriseRecoverPasswordController extends SunriseFrameworkC
     }
 
     protected CompletionStage<Result> handleNotFoundEmail(final Form<? extends RecoverPasswordFormData> form) {
-        saveFormError(form, "Email not found");
+        saveFormError(form, "messages:myAccount.recoverPassword.emailNotFound");
         return asyncBadRequest(renderPage(form, null, null));
     }
 
     protected CompletionStage<Result> handleEmailDeliveryException(final Form<? extends RecoverPasswordFormData> form, final EmailDeliveryException emailDeliveryException) {
-        saveFormError(form, "Email delivery error");
+        saveFormError(form, "messages:myAccount.recoverPassword.emailNotDelivered");
         return asyncInternalServerError(renderPage(form, null, null));
     }
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final RecoverPasswordFormData formData, final Void context, final CustomerToken customerToken) {
-        flash("success", "A message with further instructions has been sent to your email address");
+        flash("success", "messages:myAccount.recoverPassword.emailSent");
         return redirectToSameForm();
     }
 
