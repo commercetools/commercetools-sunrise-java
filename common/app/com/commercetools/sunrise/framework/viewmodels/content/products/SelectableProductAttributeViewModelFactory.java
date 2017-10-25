@@ -128,7 +128,7 @@ public class SelectableProductAttributeViewModelFactory extends SelectableViewMo
                 })
                 .map(variant -> variant.getAttribute(attributeKey))
                 .filter(Objects::nonNull)
-                .map(attribute -> attributeFormatter.value(AttributeWithProductType.of(attribute, fixedAttribute.getProductTypeRef())))
+                .map(attribute -> attributeFormatter.encodedValue(AttributeWithProductType.of(attribute, fixedAttribute.getProductTypeRef())))
                 .distinct()
                 .collect(toList());
     }
