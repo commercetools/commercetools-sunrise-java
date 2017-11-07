@@ -15,6 +15,19 @@ import static play.test.Helpers.invokeWithContext;
 
 public class RequestScopedTest extends WithApplication {
 
+    @Override
+    protected Application provideApplication() {
+        final Module module = new AbstractModule() {
+            @Override
+            protected void configure() {
+                bindScope(RequestScoped.class, new RequestScope());
+            }
+        };
+        return new GuiceApplicationBuilder()
+                .overrides(module)
+                .build();
+    }
+
     @Test
     public void keepsAliveInTheSameRequest() throws Exception {
         invokeWithContext(fakeRequest(), () -> {
@@ -48,20 +61,6 @@ public class RequestScopedTest extends WithApplication {
         assertThat(instance1)
                 .as("New request scoped instances are created when no HTTP context available")
                 .isNotSameAs(instance2);
-    }
-
-    @Override
-    protected Application provideApplication() {
-        final Module module = new AbstractModule() {
-            @Override
-            protected void configure() {
-                final RequestScope requestScope = new RequestScope();
-                bindScope(RequestScoped.class, requestScope);
-            }
-        };
-        return new GuiceApplicationBuilder()
-                .overrides(module)
-                .build();
     }
 
     @RequestScoped

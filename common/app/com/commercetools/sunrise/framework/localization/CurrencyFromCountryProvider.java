@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.framework.localization;
 
+import com.commercetools.sunrise.ctp.project.ProjectContext;
 import com.neovisionaries.i18n.CountryCode;
 
 import javax.inject.Inject;
@@ -8,13 +9,16 @@ import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.util.Optional;
 
+/**
+ * Provides the {@link CurrencyUnit} corresponding to the injected {@link CountryCode}.
+ */
 public final class CurrencyFromCountryProvider implements Provider<CurrencyUnit> {
 
     private final CountryCode country;
     private final ProjectContext projectContext;
 
     @Inject
-    public CurrencyFromCountryProvider(final CountryCode country, final ProjectContext projectContext) {
+    CurrencyFromCountryProvider(final CountryCode country, final ProjectContext projectContext) {
         this.country = country;
         this.projectContext = projectContext;
     }

@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.framework.localization;
 
+import com.commercetools.sunrise.ctp.project.ProjectContext;
 import org.junit.Test;
 import play.test.WithApplication;
 

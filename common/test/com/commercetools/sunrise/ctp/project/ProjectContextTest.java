@@ -1,18 +1,27 @@
-package com.commercetools.sunrise.framework.localization;
+package com.commercetools.sunrise.ctp.project;
 
+import com.commercetools.sunrise.framework.localization.NoCountryFoundException;
+import com.commercetools.sunrise.framework.localization.NoCurrencyFoundException;
+import com.commercetools.sunrise.framework.localization.NoLocaleFoundException;
 import com.neovisionaries.i18n.CountryCode;
+import io.sphere.sdk.projects.Project;
 import org.junit.Test;
+import play.Configuration;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonMap;
 import static java.util.Locale.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 public class ProjectContextTest {
 
@@ -104,6 +113,21 @@ public class ProjectContextTest {
         assertThatThrownBy(() -> createProjectContext(LOCALES, COUNTRIES, asList(null, null, null)).defaultCurrency())
                 .isInstanceOf(NoCurrencyFoundException.class)
                 .hasMessageContaining("Project does not have any valid currency unit associated");
+    }
+
+    @Test
+    public void createsInstanceWithStaticConstructor() throws Exception {
+        final Map<String, Object> map = new HashMap<>();
+        map.put("languages", asList("de", "en-US"));
+        map.put("countries", asList("DE", "US"));
+        map.put("currencies", asList("EUR", "USD"));
+        final Configuration configuration = new Configuration(singletonMap("foo", map));
+
+        final Project dummyProject = mock(Project.class);
+        final ProjectContext projectContext = ProjectContext.of(configuration, "foo", dummyProject);
+        assertThat(projectContext.locales()).containsExactly(Locale.GERMAN, Locale.US);
+        assertThat(projectContext.countries()).containsExactly(CountryCode.DE, CountryCode.US);
+        assertThat(projectContext.currencies()).containsExactly(EUR, USD);
     }
 
     private static ProjectContext createProjectContext(final List<Locale> locales, final List<CountryCode> countries,

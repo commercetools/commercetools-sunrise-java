@@ -13,7 +13,6 @@ import static play.test.Helpers.invokeWithContext;
 
 public class SerializableObjectStoringSessionCookieStrategyTest extends WithApplication {
 
-
     private static final SomeObject SOME_OBJECT = new SomeObject("hello", 2);
     private static final SomeObject SOME_OTHER_OBJECT = new SomeObject("world", 4);
     private static final String JSON_SOME_OBJECT = Json.stringify(Json.toJson(SOME_OBJECT));

@@ -11,13 +11,16 @@ import javax.inject.Inject;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
+/**
+ * Provides a {@link SphereClient} using the {@link SimpleMetricsSphereClient} implementation.
+ */
 public final class SimpleMetricsSphereClientProvider implements Provider<SimpleMetricsSphereClient> {
 
     private final ApplicationLifecycle applicationLifecycle;
     private final SphereClientConfig sphereClientConfig;
 
     @Inject
-    public SimpleMetricsSphereClientProvider(final ApplicationLifecycle applicationLifecycle, final SphereClientConfig sphereClientConfig) {
+    SimpleMetricsSphereClientProvider(final ApplicationLifecycle applicationLifecycle, final SphereClientConfig sphereClientConfig) {
         this.applicationLifecycle = applicationLifecycle;
         this.sphereClientConfig = sphereClientConfig;
     }

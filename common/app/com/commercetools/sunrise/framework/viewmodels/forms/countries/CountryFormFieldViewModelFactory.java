@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.viewmodels.forms.countries;
 
-import com.commercetools.sunrise.framework.localization.ProjectContext;
+import com.commercetools.sunrise.ctp.project.ProjectContext;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.viewmodels.forms.FormFieldViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.forms.FormFieldWithOptions;

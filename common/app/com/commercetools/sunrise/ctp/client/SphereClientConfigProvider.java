@@ -8,6 +8,9 @@ import play.Configuration;
 
 import javax.inject.Inject;
 
+/**
+ * Provides a {@link SphereClientConfig} extracted from the application's configuration.
+ */
 public final class SphereClientConfigProvider implements Provider<SphereClientConfig> {
 
     private static final String CONFIG_ROOT = "sunrise.ctp.client";

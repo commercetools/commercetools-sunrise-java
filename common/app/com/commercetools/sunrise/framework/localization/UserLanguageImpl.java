@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.framework.localization;
 
+import com.commercetools.sunrise.ctp.project.ProjectContext;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import io.sphere.sdk.models.Base;
 import org.slf4j.Logger;

@@ -1,21 +1,17 @@
 package com.commercetools.sunrise.framework.injection;
 
-import com.commercetools.sunrise.ctp.client.SphereClientConfigProvider;
 import com.google.inject.AbstractModule;
-import io.sphere.sdk.client.SphereClientConfig;
 import io.sphere.sdk.utils.MoneyImpl;
 
-import javax.inject.Singleton;
 import javax.money.Monetary;
 import javax.money.format.MonetaryFormats;
 
-public class SunriseModule extends AbstractModule {
+public final class SunriseModule extends AbstractModule {
 
     @Override
     protected void configure() {
         applyJavaMoneyHack();
         bindScope(RequestScoped.class, new RequestScope());
-        bind(SphereClientConfig.class).toProvider(SphereClientConfigProvider.class).in(Singleton.class);
     }
 
     private void applyJavaMoneyHack() {

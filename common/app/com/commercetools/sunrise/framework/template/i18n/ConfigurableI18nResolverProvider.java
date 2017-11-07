@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.framework.template.i18n;
 
 import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
-import com.commercetools.sunrise.framework.localization.ProjectContext;
+import com.commercetools.sunrise.ctp.project.ProjectContext;
 import com.commercetools.sunrise.framework.template.i18n.composite.CompositeI18nResolverFactory;
 import com.google.inject.Provider;
 import play.Configuration;

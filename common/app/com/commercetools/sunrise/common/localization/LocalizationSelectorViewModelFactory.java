@@ -5,7 +5,7 @@ import com.commercetools.sunrise.framework.viewmodels.forms.languages.LanguageFo
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.forms.countries.CountryFormSelectableOptionViewModel;
 import com.commercetools.sunrise.framework.viewmodels.forms.countries.CountryFormSelectableOptionViewModelFactory;
-import com.commercetools.sunrise.framework.localization.ProjectContext;
+import com.commercetools.sunrise.ctp.project.ProjectContext;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.neovisionaries.i18n.CountryCode;
 

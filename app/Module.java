@@ -1,19 +1,9 @@
-import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.ctp.categories.CachedCategoryTreeProvider;
 import com.commercetools.sunrise.ctp.categories.CategoriesSettings;
 import com.commercetools.sunrise.ctp.categories.NavigationCategoryTree;
 import com.commercetools.sunrise.ctp.categories.NewCategoryTree;
 import com.commercetools.sunrise.email.EmailSender;
-import com.commercetools.sunrise.framework.controllers.metrics.SimpleMetricsSphereClientProvider;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.localization.CountryFromSessionProvider;
-import com.commercetools.sunrise.framework.localization.CurrencyFromCountryProvider;
-import com.commercetools.sunrise.framework.localization.LocaleFromUrlProvider;
-import com.commercetools.sunrise.framework.template.cms.FileBasedCmsServiceProvider;
-import com.commercetools.sunrise.framework.template.engine.HandlebarsTemplateEngineProvider;
-import com.commercetools.sunrise.framework.template.engine.TemplateEngine;
-import com.commercetools.sunrise.framework.template.i18n.ConfigurableI18nResolverProvider;
-import com.commercetools.sunrise.framework.template.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.viewmodels.content.carts.MiniCartViewModelFactory;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
@@ -61,11 +51,6 @@ public class Module extends AbstractModule {
 
     @Override
     protected void configure() {
-        // Binding for the client to connect commercetools
-        bind(SphereClient.class)
-                .toProvider(SimpleMetricsSphereClientProvider.class)
-                .in(Singleton.class);
-
         // Binding for the HTTP Authentication
         bind(HttpAuthentication.class)
                 .toProvider(BasicAuthenticationProvider.class)
@@ -74,32 +59,10 @@ public class Module extends AbstractModule {
         // Binding for category tree
         bind(CategoryTree.class).toProvider(CachedCategoryTreeProvider.class);
 
-        // Binding for all template related, such as the engine, CMS and i18n
-        bind(CmsService.class)
-                .toProvider(FileBasedCmsServiceProvider.class)
-                .in(Singleton.class);
-        bind(TemplateEngine.class)
-                .toProvider(HandlebarsTemplateEngineProvider.class)
-                .in(Singleton.class);
-        bind(I18nResolver.class)
-                .toProvider(ConfigurableI18nResolverProvider.class)
-                .in(Singleton.class);
-
         // Bindings fo email sender
         bind(EmailSender.class)
                 .toProvider(EmailSenderProvider.class)
                 .in(Singleton.class);
-
-        // Bindings for all user context related
-        bind(Locale.class)
-                .toProvider(LocaleFromUrlProvider.class)
-                .in(RequestScoped.class);
-        bind(CountryCode.class)
-                .toProvider(CountryFromSessionProvider.class)
-                .in(RequestScoped.class);
-        bind(CurrencyUnit.class)
-                .toProvider(CurrencyFromCountryProvider.class)
-                .in(RequestScoped.class);
 
         // Bindings for the configured faceted search mappers
         bind(TermFacetViewModelFactory.class)
