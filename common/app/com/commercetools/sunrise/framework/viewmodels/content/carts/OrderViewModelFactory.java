@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.framework.viewmodels.content.carts;
 
+import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.viewmodels.content.addresses.AddressViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.formatters.PriceFormatter;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.orders.Order;
 
@@ -19,8 +19,9 @@ public class OrderViewModelFactory extends AbstractCartLikeViewModelFactory<Orde
     @Inject
     public OrderViewModelFactory(final CurrencyUnit currency, final PriceFormatter priceFormatter, final DateTimeFormatter dateTimeFormatter,
                                  final ShippingInfoViewModelFactory shippingInfoViewModelFactory, final PaymentInfoViewModelFactory paymentInfoViewModelFactory,
-                                 final AddressViewModelFactory addressViewModelFactory, final LineItemExtendedViewModelFactory lineItemExtendedViewModelFactory) {
-        super(currency, priceFormatter, shippingInfoViewModelFactory, paymentInfoViewModelFactory, addressViewModelFactory);
+                                 final AddressViewModelFactory addressViewModelFactory, final LineItemExtendedViewModelFactory lineItemExtendedViewModelFactory,
+                                 final DiscountCodeViewModelFactory discountCodeViewModelFactory) {
+        super(currency, priceFormatter, shippingInfoViewModelFactory, paymentInfoViewModelFactory, addressViewModelFactory, discountCodeViewModelFactory);
         this.dateTimeFormatter = dateTimeFormatter;
         this.lineItemExtendedViewModelFactory = lineItemExtendedViewModelFactory;
     }

@@ -6,6 +6,7 @@ import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.sessions.cart.CartDiscountCodesExpansionControllerComponent;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.content.SunriseCartContentController;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
         TemplateControllerComponentsSupplier.class,
         PageHeaderControllerComponentSupplier.class,
         CartOperationsControllerComponentSupplier.class,
+        CartDiscountCodesExpansionControllerComponent.class,
         MiniWishlistControllerComponent.class
 })
 public final class CartContentController extends SunriseCartContentController {

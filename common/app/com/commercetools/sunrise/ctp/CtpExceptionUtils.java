@@ -4,6 +4,7 @@ import com.commercetools.sunrise.ctp.models.errors.CustomerInvalidCurrentPasswor
 import io.sphere.sdk.client.ErrorResponseException;
 import io.sphere.sdk.customers.errors.CustomerInvalidCredentials;
 import io.sphere.sdk.models.errors.DuplicateFieldError;
+import io.sphere.sdk.orders.errors.DiscountCodeNonApplicableError;
 
 import javax.annotation.Nullable;
 
@@ -26,6 +27,10 @@ public final class CtpExceptionUtils {
 
     public static boolean isCustomerInvalidCurrentPasswordError(@Nullable final Throwable throwable) {
         return isErrorResponseWithCode(throwable, CustomerInvalidCurrentPassword.CODE);
+    }
+
+    public static boolean isDiscountCodeNonApplicableError(@Nullable final Throwable throwable) {
+        return isErrorResponseWithCode(throwable, DiscountCodeNonApplicableError.CODE);
     }
 
     public static boolean isDuplicatedEmailFieldError(@Nullable final Throwable throwable) {

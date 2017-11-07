@@ -7,6 +7,7 @@ import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.Cart
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
 import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.sessions.cart.CartDiscountCodesExpansionControllerComponent;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
@@ -26,7 +27,8 @@ import java.util.concurrent.CompletionStage;
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
         CheckoutStepControllerComponent.class,
-        CartOperationsControllerComponentSupplier.class
+        CartOperationsControllerComponentSupplier.class,
+        CartDiscountCodesExpansionControllerComponent.class,
 })
 public final class CheckoutAddressController extends SunriseCheckoutAddressController {
 

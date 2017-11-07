@@ -56,6 +56,10 @@ POST        /:languageTag/cart/add                                              
 POST        /:languageTag/cart/quantity                                         @controllers.shoppingcart.ChangeQuantityInCartController.process(languageTag: String)
 # Removes a selected line item from the cart of the current session
 POST        /:languageTag/cart/remove                                           @controllers.shoppingcart.RemoveFromCartController.process(languageTag: String)
+# Add a discount code to the cart
+POST        /:languageTag/cart/discount/add                                     @controllers.shoppingcart.AddDiscountCodeController.process(languageTag: String)
+# Add a discount code to the cart
+POST        /:languageTag/cart/discount/remove                                  @controllers.shoppingcart.RemoveDiscountCodeController.process(languageTag: String)
 
 
 # CHECKOUT

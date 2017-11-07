@@ -10,16 +10,16 @@ import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
 import com.commercetools.sunrise.sessions.cart.CartDiscountCodesExpansionControllerComponent;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartControllerAction;
-import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartFormData;
-import com.commercetools.sunrise.shoppingcart.changequantity.SunriseChangeQuantityInCartController;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
+import com.commercetools.sunrise.shoppingcart.removediscountcode.RemoveDiscountCodeControllerAction;
+import com.commercetools.sunrise.shoppingcart.removediscountcode.RemoveDiscountCodeFormData;
+import com.commercetools.sunrise.shoppingcart.removediscountcode.SunriseRemoveDiscountCodeController;
 import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
+import com.google.inject.Inject;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
 
-import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 @LogMetrics
@@ -31,18 +31,15 @@ import java.util.concurrent.CompletionStage;
         CartDiscountCodesExpansionControllerComponent.class,
         MiniWishlistControllerComponent.class
 })
-public final class ChangeQuantityInCartController extends SunriseChangeQuantityInCartController {
+public final class RemoveDiscountCodeController extends SunriseRemoveDiscountCodeController {
 
     private final CartReverseRouter cartReverseRouter;
 
     @Inject
-    public ChangeQuantityInCartController(final ContentRenderer contentRenderer,
-                                          final FormFactory formFactory,
-                                          final ChangeQuantityInCartFormData formData,
-                                          final CartFinder cartFinder,
-                                          final CartPageContentFactory pageContentFactory,
-                                          final ChangeQuantityInCartControllerAction controllerAction,
-                                          final CartReverseRouter cartReverseRouter) {
+    RemoveDiscountCodeController(final ContentRenderer contentRenderer, final FormFactory formFactory,
+                                        final RemoveDiscountCodeFormData formData, final CartFinder cartFinder,
+                                        final CartPageContentFactory pageContentFactory, final RemoveDiscountCodeControllerAction controllerAction,
+                                        final CartReverseRouter cartReverseRouter) {
         super(contentRenderer, formFactory, formData, cartFinder, pageContentFactory, controllerAction);
         this.cartReverseRouter = cartReverseRouter;
     }
@@ -63,7 +60,7 @@ public final class ChangeQuantityInCartController extends SunriseChangeQuantityI
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final ChangeQuantityInCartFormData formData) {
+    public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final RemoveDiscountCodeFormData formData) {
         return redirectToCall(cartReverseRouter.cartDetailPageCall());
     }
 }

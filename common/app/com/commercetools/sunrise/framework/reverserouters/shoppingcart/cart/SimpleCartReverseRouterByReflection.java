@@ -15,6 +15,8 @@ final class SimpleCartReverseRouterByReflection extends AbstractReflectionRevers
     private final ReverseCaller addLineItemProcessCaller;
     private final ReverseCaller changeLineItemQuantityProcessCaller;
     private final ReverseCaller removeLineItemProcessCaller;
+    private final ReverseCaller addDiscountCodeProcessCaller;
+    private final ReverseCaller removeDiscountCodeProcessCaller;
 
     @Inject
     private SimpleCartReverseRouterByReflection(final ParsedRoutes parsedRoutes) {
@@ -22,7 +24,10 @@ final class SimpleCartReverseRouterByReflection extends AbstractReflectionRevers
         addLineItemProcessCaller = getReverseCallerForSunriseRoute(ADD_LINE_ITEM_PROCESS, parsedRoutes);
         changeLineItemQuantityProcessCaller = getReverseCallerForSunriseRoute(CHANGE_LINE_ITEM_QUANTITY_PROCESS, parsedRoutes);
         removeLineItemProcessCaller = getReverseCallerForSunriseRoute(REMOVE_LINE_ITEM_PROCESS, parsedRoutes);
+        addDiscountCodeProcessCaller = getReverseCallerForSunriseRoute(ADD_DISCOUNT_CODE_PROCESS, parsedRoutes);
+        removeDiscountCodeProcessCaller = getReverseCallerForSunriseRoute(REMOVE_DISCOUNT_CODE_PROCESS, parsedRoutes);
     }
+
     @Override
     public Call cartDetailPageCall(final String languageTag) {
         return showCart.call(languageTag);
@@ -41,5 +46,15 @@ final class SimpleCartReverseRouterByReflection extends AbstractReflectionRevers
     @Override
     public Call removeLineItemProcessCall(final String languageTag) {
         return removeLineItemProcessCaller.call(languageTag);
+    }
+
+    @Override
+    public Call addDiscountCodeProcessCall(final String languageTag) {
+        return addDiscountCodeProcessCaller.call(languageTag);
+    }
+
+    @Override
+    public Call removeDiscountCodeProcessCall(final String languageTag) {
+        return removeDiscountCodeProcessCaller.call(languageTag);
     }
 }

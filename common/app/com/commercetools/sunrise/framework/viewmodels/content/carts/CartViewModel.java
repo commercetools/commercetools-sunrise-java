@@ -1,6 +1,9 @@
 package com.commercetools.sunrise.framework.viewmodels.content.carts;
 
 import com.commercetools.sunrise.framework.viewmodels.content.addresses.AddressViewModel;
+import play.data.Form;
+
+import java.util.List;
 
 public class CartViewModel extends MiniCartViewModel {
 
@@ -11,6 +14,8 @@ public class CartViewModel extends MiniCartViewModel {
     private PaymentInfoViewModel paymentDetails;
     private String subtotalPrice;
     private String salesTax;
+    private List<DiscountCodeViewModel> discountCodes;
+    private Form<?> addDiscountCodeForm;
 
     public CartViewModel() {
     }
@@ -69,5 +74,21 @@ public class CartViewModel extends MiniCartViewModel {
 
     public void setSalesTax(final String salesTax) {
         this.salesTax = salesTax;
+    }
+
+    public List<DiscountCodeViewModel> getDiscountCodes() {
+        return discountCodes;
+    }
+
+    public void setDiscountCodes(final List<DiscountCodeViewModel> discountCodes) {
+        this.discountCodes = discountCodes;
+    }
+
+    public Form<?> getAddDiscountCodeForm() {
+        return addDiscountCodeForm;
+    }
+
+    public void setAddDiscountCodeForm(final Form<?> addDiscountCodeForm) {
+        this.addDiscountCodeForm = addDiscountCodeForm;
     }
 }

@@ -3,23 +3,31 @@ package com.commercetools.sunrise.framework.viewmodels.content.carts;
 import com.commercetools.sunrise.framework.viewmodels.content.addresses.AddressViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.formatters.PriceFormatter;
 import io.sphere.sdk.carts.CartLike;
+import io.sphere.sdk.discountcodes.DiscountCodeInfo;
+import io.sphere.sdk.discountcodes.DiscountCodeState;
+import io.sphere.sdk.models.Reference;
 
 import javax.annotation.Nullable;
 import javax.money.CurrencyUnit;
 import javax.money.MonetaryAmount;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractCartLikeViewModelFactory<M extends CartViewModel, I extends CartLike<?>> extends AbstractMiniCartViewModelFactory<M, I> {
 
     private final ShippingInfoViewModelFactory shippingInfoViewModelFactory;
     private final PaymentInfoViewModelFactory paymentInfoViewModelFactory;
     private final AddressViewModelFactory addressViewModelFactory;
+    private final DiscountCodeViewModelFactory discountCodeViewModelFactory;
 
     protected AbstractCartLikeViewModelFactory(final CurrencyUnit currency, final PriceFormatter priceFormatter, final ShippingInfoViewModelFactory shippingInfoViewModelFactory,
-                                               final PaymentInfoViewModelFactory paymentInfoViewModelFactory, final AddressViewModelFactory addressViewModelFactory) {
+                                               final PaymentInfoViewModelFactory paymentInfoViewModelFactory, final AddressViewModelFactory addressViewModelFactory,
+                                               final  DiscountCodeViewModelFactory discountCodeViewModelFactory) {
         super(currency, priceFormatter);
         this.shippingInfoViewModelFactory = shippingInfoViewModelFactory;
         this.paymentInfoViewModelFactory = paymentInfoViewModelFactory;
         this.addressViewModelFactory = addressViewModelFactory;
+        this.discountCodeViewModelFactory = discountCodeViewModelFactory;
     }
 
     protected final ShippingInfoViewModelFactory getShippingInfoViewModelFactory() {
@@ -34,6 +42,10 @@ public abstract class AbstractCartLikeViewModelFactory<M extends CartViewModel, 
         return addressViewModelFactory;
     }
 
+    protected final DiscountCodeViewModelFactory getDiscountCodeViewModelFactory() {
+        return discountCodeViewModelFactory;
+    }
+
     @Override
     protected void initialize(final M viewModel, @Nullable final I cartLike) {
         super.initialize(viewModel, cartLike);
@@ -44,6 +56,22 @@ public abstract class AbstractCartLikeViewModelFactory<M extends CartViewModel, 
         fillBillingAddress(viewModel, cartLike);
         fillShippingMethod(viewModel, cartLike);
         fillPaymentDetails(viewModel, cartLike);
+        fillDiscountCodes(viewModel, cartLike);
+    }
+
+    protected void fillDiscountCodes(final M viewModel, @Nullable final I cartLike) {
+        if (cartLike != null) {
+            final List<DiscountCodeInfo> discountCodes = cartLike.getDiscountCodes();
+            final List<DiscountCodeViewModel> discountCodeViewModels = discountCodes.stream()
+                    .filter(discountCodeInfo -> discountCodeInfo.getState() == DiscountCodeState.MATCHES_CART)
+                    .map(DiscountCodeInfo::getDiscountCode)
+                    .filter(discountCodeReference -> discountCodeReference.getObj() != null)
+                    .map(Reference::getObj)
+                    .map(discountCodeViewModelFactory::create)
+                    .collect(Collectors.toList());
+
+            viewModel.setDiscountCodes(discountCodeViewModels);
+        }
     }
 
     protected void fillSalesTax(final M viewModel, @Nullable final I cartLike) {

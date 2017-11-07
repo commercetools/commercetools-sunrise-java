@@ -22,4 +22,12 @@ public interface SimpleCartReverseRouter extends ReverseRouter {
     String REMOVE_LINE_ITEM_PROCESS = "removeLineItemProcessCall";
 
     Call removeLineItemProcessCall(final String languageTag);
+
+    String ADD_DISCOUNT_CODE_PROCESS = "addDiscountCodeProcessCall";
+
+    Call addDiscountCodeProcessCall(final String languageTag);
+
+    String REMOVE_DISCOUNT_CODE_PROCESS = "removeDiscountCodeProcessCall";
+
+    Call removeDiscountCodeProcessCall(final String languageTag);
 }

@@ -35,4 +35,14 @@ public class DefaultCartReverseRouter extends AbstractLocalizedReverseRouter imp
     public Call changeLineItemQuantityProcessCall(final String languageTag) {
         return delegate.changeLineItemQuantityProcessCall(languageTag);
     }
+
+    @Override
+    public Call addDiscountCodeProcessCall(final String languageTag) {
+        return delegate.addDiscountCodeProcessCall(languageTag);
+    }
+
+    @Override
+    public Call removeDiscountCodeProcessCall(final String languageTag) {
+        return delegate.removeDiscountCodeProcessCall(languageTag);
+    }
 }
