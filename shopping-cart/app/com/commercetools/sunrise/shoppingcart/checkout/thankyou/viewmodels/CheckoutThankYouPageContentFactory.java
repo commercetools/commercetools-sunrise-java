@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
 import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
 import com.commercetools.sunrise.framework.viewmodels.content.carts.OrderViewModelFactory;
 import io.sphere.sdk.orders.Order;
 
@@ -13,7 +13,8 @@ public class CheckoutThankYouPageContentFactory extends PageContentFactory<Check
     private final OrderViewModelFactory orderViewModelFactory;
 
     @Inject
-    public CheckoutThankYouPageContentFactory(final PageTitleResolver pageTitleResolver, final OrderViewModelFactory orderViewModelFactory) {
+    public CheckoutThankYouPageContentFactory(final PageTitleResolver pageTitleResolver,
+                                              final OrderViewModelFactory orderViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
         this.orderViewModelFactory = orderViewModelFactory;
     }

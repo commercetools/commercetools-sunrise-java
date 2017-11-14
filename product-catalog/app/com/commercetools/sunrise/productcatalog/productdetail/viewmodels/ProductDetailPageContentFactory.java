@@ -19,7 +19,8 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
 
     @Inject
     public ProductDetailPageContentFactory(final Locale locale, final PageTitleResolver pageTitleResolver,
-                                           final ProductBreadcrumbViewModelFactory productBreadcrumbViewModelFactory, final ProductViewModelFactory productViewModelFactory) {
+                                           final ProductBreadcrumbViewModelFactory productBreadcrumbViewModelFactory,
+                                           final ProductViewModelFactory productViewModelFactory) {
         this.locale = locale;
         this.pageTitleResolver = pageTitleResolver;
         this.productBreadcrumbViewModelFactory = productBreadcrumbViewModelFactory;

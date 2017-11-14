@@ -1,10 +1,10 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.it.WithSphereClient;
-import com.google.inject.AbstractModule;
 import com.commercetools.sunrise.email.EmailDeliveryException;
 import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.email.MessageEditor;
+import com.commercetools.sunrise.framework.viewmodels.content.messages.MessageType;
+import com.commercetools.sunrise.it.WithSphereClient;
 import io.sphere.sdk.client.SphereClient;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +28,7 @@ import static java.util.Collections.singletonMap;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
+import static play.inject.Bindings.bind;
 import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.*;
 
@@ -43,13 +44,10 @@ public class RecoverPasswordControllerIntegrationTest extends WithSphereClient {
     @Override
     protected Application provideApplication() {
         return new GuiceApplicationBuilder()
-                .overrides(new AbstractModule() {
-                    @Override
-                    protected void configure() {
-                        bind(SphereClient.class).toInstance(sphereClient);
-                        bind(EmailSender.class).toInstance(emailSender);
-                    }
-                }).build();
+                .overrides(
+                        bind(SphereClient.class).toInstance(sphereClient),
+                        bind(EmailSender.class).toInstance(emailSender)
+                ).build();
     }
 
     @Test
@@ -78,16 +76,25 @@ public class RecoverPasswordControllerIntegrationTest extends WithSphereClient {
 
             assertThat(result.status()).isEqualTo(SEE_OTHER);
             assertThat(result.header(LOCATION)).contains("/en/password/recovery");
+            assertThat(result.flash()).containsKey(MessageType.SUCCESS.name());
 
             try {
                 final MimeMessage message = blankMimeMessage();
                 messageEditorCaptor.getValue().edit(message);
 
                 assertThat(message.getAllRecipients()).containsOnly(addressOf(email));
-                assertThat((String) message.getContent()).containsPattern("en\\/password\\/reset\\/[\\w]+");
+                assertThat((String) message.getContent()).containsPattern("en\\/password\\/reset\\/[\\w_-]+");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+
+            final Result resultRedirection = route(new Http.RequestBuilder()
+                    .uri(result.header(LOCATION).get())
+                    .flash(result.flash())
+                    .method(GET));
+
+            assertThat(resultRedirection.status()).isEqualTo(OK);
+            assertThat(contentAsString(resultRedirection)).contains("check your email for instructions");
 
             return customerSignInResult.getCustomer();
         });

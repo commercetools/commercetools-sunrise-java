@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
 import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.myaccount.myorders.myorderdetail.OrderWithCustomer;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
 import com.commercetools.sunrise.framework.viewmodels.content.carts.OrderViewModelFactory;
+import com.commercetools.sunrise.myaccount.myorders.myorderdetail.OrderWithCustomer;
 
 import javax.inject.Inject;
 
@@ -13,7 +13,8 @@ public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderD
     private final OrderViewModelFactory orderViewModelFactory;
 
     @Inject
-    public MyOrderDetailPageContentFactory(final PageTitleResolver pageTitleResolver, final OrderViewModelFactory orderViewModelFactory) {
+    public MyOrderDetailPageContentFactory(final PageTitleResolver pageTitleResolver,
+                                           final OrderViewModelFactory orderViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
         this.orderViewModelFactory = orderViewModelFactory;
     }

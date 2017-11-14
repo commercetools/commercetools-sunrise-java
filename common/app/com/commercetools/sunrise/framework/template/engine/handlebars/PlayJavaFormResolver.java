@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.framework.template.engine.handlebars;
 
-import com.commercetools.sunrise.framework.viewmodels.formatters.ErrorFormatter;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.framework.viewmodels.formatters.ErrorFormatter;
 import com.commercetools.sunrise.framework.viewmodels.forms.ErrorViewModel;
 import com.commercetools.sunrise.framework.viewmodels.forms.ErrorsViewModel;
 import com.github.jknack.handlebars.ValueResolver;

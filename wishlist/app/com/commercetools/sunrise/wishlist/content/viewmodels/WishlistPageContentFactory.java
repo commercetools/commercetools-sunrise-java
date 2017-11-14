@@ -20,7 +20,8 @@ public class WishlistPageContentFactory extends PageContentFactory<WishlistPageC
     private final LineItemThumbnailViewModelFactory thumbnailViewModelFactory;
 
     @Inject
-    protected WishlistPageContentFactory(final PageTitleResolver pageTitleResolver, final LineItemThumbnailViewModelFactory thumbnailViewModelFactory) {
+    public WishlistPageContentFactory(final PageTitleResolver pageTitleResolver,
+                                      final LineItemThumbnailViewModelFactory thumbnailViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
         this.thumbnailViewModelFactory = thumbnailViewModelFactory;
     }

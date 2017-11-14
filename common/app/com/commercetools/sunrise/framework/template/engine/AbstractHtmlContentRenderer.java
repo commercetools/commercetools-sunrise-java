@@ -6,6 +6,7 @@ import com.commercetools.sunrise.framework.localization.UserLanguage;
 import com.commercetools.sunrise.framework.viewmodels.PageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.libs.concurrent.HttpExecution;
 import play.twirl.api.Content;
 import play.twirl.api.Html;
 
@@ -31,7 +32,7 @@ public abstract class AbstractHtmlContentRenderer implements ContentRenderer {
     protected CompletionStage<Content> render(final PageData pageData, @Nullable final String templateName, @Nullable final String cmsKey) {
         if (cmsKey != null) {
             return cmsService.page(cmsKey, userLanguage.locales())
-                    .thenApplyAsync(cmsPage -> renderHtml(pageData, templateName, cmsPage.orElse(null)));
+                    .thenApplyAsync(cmsPage -> renderHtml(pageData, templateName, cmsPage.orElse(null)), HttpExecution.defaultContext());
         } else {
             return completedFuture(renderHtml(pageData, templateName, null));
         }

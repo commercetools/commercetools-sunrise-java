@@ -16,7 +16,8 @@ public class CartPageContentFactory extends PageContentFactory<CartPageContent, 
     private final CartViewModelFactory cartViewModelFactory;
 
     @Inject
-    public CartPageContentFactory(final PageTitleResolver pageTitleResolver, final CartViewModelFactory cartViewModelFactory) {
+    public CartPageContentFactory(final PageTitleResolver pageTitleResolver,
+                                  final CartViewModelFactory cartViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
         this.cartViewModelFactory = cartViewModelFactory;
     }
