@@ -121,11 +121,11 @@ public abstract class AbstractPaginationViewModelFactory extends ViewModelFactor
         return Math.min(currentPage + paginationSettings.getDisplayedPages(), totalPages);
     }
 
-    private long calculateTotalPages(final PagedResult<?> pagedResult, final long currentPage) {
+    static long calculateTotalPages(final PagedResult<?> pagedResult, final long currentPage) {
         if (pagedResult.isLast()) {
             return currentPage;
         } else if (pagedResult.getCount() > 0) {
-            final Double totalPages = Math.ceil(pagedResult.getTotal() / pagedResult.getCount());
+            final Double totalPages = Math.ceil(pagedResult.getTotal() / pagedResult.getCount().doubleValue());
             return totalPages.longValue();
         } else {
             return 0;
