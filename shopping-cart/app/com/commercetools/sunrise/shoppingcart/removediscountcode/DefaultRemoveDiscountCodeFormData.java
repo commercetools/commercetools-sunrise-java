@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.removediscountcode;
 
-import com.commercetools.sunrise.framework.SunriseModel;
+import com.commercetools.sunrise.core.SunriseModel;
 import play.data.validation.Constraints;
 
 public class DefaultRemoveDiscountCodeFormData extends SunriseModel implements RemoveDiscountCodeFormData {

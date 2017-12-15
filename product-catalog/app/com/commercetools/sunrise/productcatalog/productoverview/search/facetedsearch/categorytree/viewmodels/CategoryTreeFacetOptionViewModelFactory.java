@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels;
 
-import com.commercetools.sunrise.ctp.categories.NavigationCategoryTree;
-import com.commercetools.sunrise.framework.i18n.I18nResolver;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.AbstractFacetOptionViewModelFactory;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionViewModel;
+import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
+import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.injection.RequestScoped;
+import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetOptionViewModelFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.search.TermFacetResult;
@@ -16,8 +16,8 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.*;
 
-import static com.commercetools.sunrise.framework.viewmodels.forms.QueryStringUtils.buildUri;
-import static com.commercetools.sunrise.framework.viewmodels.forms.QueryStringUtils.extractQueryString;
+import static com.commercetools.sunrise.core.viewmodels.forms.QueryStringUtils.buildUri;
+import static com.commercetools.sunrise.core.viewmodels.forms.QueryStringUtils.extractQueryString;
 
 @RequestScoped
 public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOptionViewModelFactory<TermFacetResult, Category, Category> {

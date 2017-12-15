@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.mydetails.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.customers.CustomerInfoViewModel;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.customers.CustomerInfoViewModel;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import play.data.Form;
 
 public class MyPersonalDetailsPageContent extends PageContent {

@@ -1,15 +1,15 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
-import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import com.commercetools.sunrise.framework.renderers.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.renderers.ContentRenderer;
-import com.commercetools.sunrise.sessions.cart.CartDiscountCodesExpansionControllerComponent;
-import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.sessions.cart.CartShippingInfoExpansionControllerComponent;
+import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.core.controllers.cache.NoCache;
+import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
+import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
+import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.models.carts.CartDiscountCodesExpansionControllerComponent;
+import com.commercetools.sunrise.models.carts.CartOperationsControllerComponentSupplier;
+import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionControllerComponent;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingControllerAction;

@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
-import com.commercetools.sunrise.framework.renderers.ContentRenderer;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.controllers.SunriseContentController;
-import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
-import com.commercetools.sunrise.framework.hooks.EnableHooks;
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.controllers.SunriseContentController;
+import com.commercetools.sunrise.core.controllers.WithQueryFlow;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;

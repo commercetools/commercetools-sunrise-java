@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
-import com.commercetools.sunrise.framework.renderers.ContentRenderer;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.address.viewmodels.CheckoutAddressPageContentFactory;
-import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
-import com.commercetools.sunrise.framework.hooks.EnableHooks;
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
+import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.viewmodels.content.carts.CartViewModel;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.carts.CartViewModel;
 
 public abstract class AbstractCheckoutPageContent extends PageContent {
 

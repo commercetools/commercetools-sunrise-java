@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
 import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
-import com.commercetools.sunrise.search.pagination.PaginationSettings;
-import com.commercetools.sunrise.search.pagination.PaginationSettingsFactory;
+import com.commercetools.sunrise.models.search.pagination.PaginationSettings;
+import com.commercetools.sunrise.models.search.pagination.PaginationSettingsFactory;
 import play.Configuration;
 
 import javax.inject.Inject;

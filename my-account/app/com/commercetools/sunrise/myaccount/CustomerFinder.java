@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount;
 
-import com.commercetools.sunrise.framework.controllers.ResourceFinder;
+import com.commercetools.sunrise.core.controllers.ResourceFinder;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.Customer;
 

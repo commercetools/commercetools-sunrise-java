@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.framework.hooks.ctpevents.ProductVariantLoadedHook;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.ctpevents.ProductVariantLoadedHook;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 

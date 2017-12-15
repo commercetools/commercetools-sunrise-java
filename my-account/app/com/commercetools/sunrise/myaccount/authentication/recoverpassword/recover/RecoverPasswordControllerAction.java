@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover;
 
-import com.commercetools.sunrise.framework.controllers.ControllerAction;
+import com.commercetools.sunrise.core.controllers.ControllerAction;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.CustomerToken;
 

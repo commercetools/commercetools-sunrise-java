@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.assets;
 
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.common.assets.AssetsReverseRouter;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.common.assets.AssetsReverseRouter;
 import controllers.Assets;
 import controllers.WebJarAssets;
 import play.api.mvc.Action;

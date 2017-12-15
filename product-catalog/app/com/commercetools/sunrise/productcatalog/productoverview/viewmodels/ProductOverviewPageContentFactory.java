@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
+import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductsWithCategory;
 import play.mvc.Http;
 

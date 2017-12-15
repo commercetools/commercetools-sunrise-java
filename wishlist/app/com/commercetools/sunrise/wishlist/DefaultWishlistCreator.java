@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.wishlist;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.sessions.customer.CustomerInSession;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.models.customers.CustomerInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.LocalizedString;

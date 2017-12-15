@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.changepassword.viemodels;
 
-import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.framework.viewmodels.content.FormPageContentFactory;
+import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordFormData;
 import play.data.Form;
 

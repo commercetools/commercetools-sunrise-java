@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover;
 
-import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.framework.hooks.ctpevents.CustomerTokenCreatedHook;
-import com.commercetools.sunrise.framework.hooks.ctprequests.CustomerCreatePasswordTokenCommandHook;
+import com.commercetools.sunrise.core.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.ctpevents.CustomerTokenCreatedHook;
+import com.commercetools.sunrise.core.hooks.ctprequests.CustomerCreatePasswordTokenCommandHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerToken;
 import io.sphere.sdk.customers.commands.CustomerCreatePasswordTokenCommand;

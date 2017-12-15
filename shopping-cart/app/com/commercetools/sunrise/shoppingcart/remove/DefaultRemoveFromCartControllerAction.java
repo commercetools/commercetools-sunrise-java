@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.remove;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.shoppingcart.AbstractCartUpdateExecutor;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;

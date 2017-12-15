@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.content.addresses.AddressViewModelFactory;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
+import com.commercetools.sunrise.core.viewmodels.SimpleViewModelFactory;
+import com.commercetools.sunrise.models.addresses.AddressViewModelFactory;
+import com.commercetools.sunrise.core.injection.RequestScoped;
+import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import io.sphere.sdk.models.Address;
 import play.mvc.Call;
 

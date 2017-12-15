@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.shoppingcart.AbstractCartUpdateExecutor;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;

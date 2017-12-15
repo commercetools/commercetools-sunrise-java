@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.forms.FormFieldWithOptions;
-import com.commercetools.sunrise.framework.viewmodels.FormViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.forms.countries.CountryFormFieldViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.forms.titles.TitleFormFieldViewModelFactory;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.core.viewmodels.forms.FormFieldWithOptions;
+import com.commercetools.sunrise.core.viewmodels.FormViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.forms.countries.CountryFormFieldViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.forms.titles.TitleFormFieldViewModelFactory;
+import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressFormData;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;

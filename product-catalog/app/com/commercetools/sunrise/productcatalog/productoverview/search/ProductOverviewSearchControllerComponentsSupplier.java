@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search;
 
-import com.commercetools.sunrise.framework.components.controllers.AbstractControllerComponentSupplier;
+import com.commercetools.sunrise.core.components.controllers.AbstractControllerComponentSupplier;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.ProductFacetedSearchSelectorControllerComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.ProductPaginationControllerComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.searchbox.ProductSearchBoxControllerComponent;

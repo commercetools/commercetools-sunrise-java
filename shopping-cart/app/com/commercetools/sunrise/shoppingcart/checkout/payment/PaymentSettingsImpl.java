@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.framework.i18n.I18nResolver;
+import com.commercetools.sunrise.core.i18n.I18nResolver;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.models.LocalizedStringEntry;

@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.wishlist.content.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.GenericListViewModel;
-import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
-import com.commercetools.sunrise.framework.viewmodels.content.products.ProductThumbnailViewModel;
+import com.commercetools.sunrise.core.viewmodels.GenericListViewModel;
+import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
+import com.commercetools.sunrise.models.products.ProductThumbnailViewModel;
 import io.sphere.sdk.shoppinglists.LineItem;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 

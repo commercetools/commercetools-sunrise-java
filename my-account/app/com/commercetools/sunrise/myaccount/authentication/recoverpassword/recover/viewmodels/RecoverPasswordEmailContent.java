@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 
 /**
  * The page content for the password reset email template.

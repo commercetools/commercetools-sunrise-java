@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
+import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 

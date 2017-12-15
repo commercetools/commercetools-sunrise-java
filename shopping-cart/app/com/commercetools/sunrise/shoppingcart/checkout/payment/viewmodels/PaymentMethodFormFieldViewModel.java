@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.ViewModel;
+import com.commercetools.sunrise.core.viewmodels.ViewModel;
 
 import java.util.List;
 

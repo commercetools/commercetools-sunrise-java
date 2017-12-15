@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.forms.FormFieldWithOptions;
-import com.commercetools.sunrise.framework.viewmodels.FormViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.forms.FormFieldWithOptions;
+import com.commercetools.sunrise.core.viewmodels.FormViewModelFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.PaymentMethodsWithCart;
 import io.sphere.sdk.payments.PaymentMethodInfo;

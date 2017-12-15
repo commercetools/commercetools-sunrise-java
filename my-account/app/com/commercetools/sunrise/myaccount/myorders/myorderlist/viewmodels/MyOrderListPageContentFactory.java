@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
+import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.OrderListWithCustomer;
 
 import javax.inject.Inject;

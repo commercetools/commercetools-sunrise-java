@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.common.localization.changelanguage;
 
-import com.commercetools.sunrise.framework.controllers.SunriseFormController;
-import com.commercetools.sunrise.framework.controllers.WithFormFlow;
-import com.commercetools.sunrise.framework.hooks.EnableHooks;
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.common.localization.LocalizationReverseRouter;
+import com.commercetools.sunrise.core.controllers.SunriseFormController;
+import com.commercetools.sunrise.core.controllers.WithFormFlow;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.common.localization.LocalizationReverseRouter;
 import play.data.FormFactory;
 import play.mvc.Result;
 

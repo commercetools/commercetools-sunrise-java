@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.wishlist.content.viewmodels;
 
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
-import com.commercetools.sunrise.framework.viewmodels.content.products.AbstractProductVariantViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.content.products.ProductVariantViewModel;
-import com.commercetools.sunrise.framework.viewmodels.formatters.PriceFormatter;
+import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
+import com.commercetools.sunrise.models.products.AbstractProductVariantViewModelFactory;
+import com.commercetools.sunrise.models.products.ProductVariantViewModel;
+import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
 import io.sphere.sdk.shoppinglists.LineItem;
 import play.mvc.Call;
 

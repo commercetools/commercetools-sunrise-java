@@ -1,0 +1,57 @@
+package com.commercetools.sunrise.core.renderers;
+
+import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.controllers.ControllerComponentSupplier;
+import com.commercetools.sunrise.core.reverserouters.common.assets.AssetsLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.common.localization.LocalizationLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.myaccount.changepassword.ChangePasswordLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.productcatalog.home.HomeLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutLinksControllerComponent;
+import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistLinksControllerComponent;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TemplateControllerComponentsSupplier implements ControllerComponentSupplier {
+
+    private final List<ControllerComponent> controllerComponents = new ArrayList<>();
+
+    @Inject
+    public TemplateControllerComponentsSupplier(final LocalizationLinksControllerComponent localizationLinksControllerComponent,
+                                                final AssetsLinksControllerComponent assetsLinksControllerComponent,
+                                                final AddressBookLinksControllerComponent addressBookLinksControllerComponent,
+                                                final AuthenticationLinksControllerComponent authenticationLinksControllerComponent,
+                                                final ChangePasswordLinksControllerComponent changePasswordLinksControllerComponent,
+                                                final MyOrdersLinksControllerComponent myOrdersLinksControllerComponent,
+                                                final MyPersonalDetailsLinksControllerComponent myPersonalDetailsLinksControllerComponent,
+                                                final HomeLinksControllerComponent homeLinksControllerComponent,
+                                                final ProductLinksControllerComponent productLinksControllerComponent,
+                                                final CartLinksControllerComponent cartLinksControllerComponent,
+                                                final CheckoutLinksControllerComponent checkoutLinksControllerComponent,
+                                                final WishlistLinksControllerComponent wishlistLinksControllerComponent) {
+        controllerComponents.add(localizationLinksControllerComponent);
+        controllerComponents.add(assetsLinksControllerComponent);
+        controllerComponents.add(addressBookLinksControllerComponent);
+        controllerComponents.add(authenticationLinksControllerComponent);
+        controllerComponents.add(changePasswordLinksControllerComponent);
+        controllerComponents.add(myOrdersLinksControllerComponent);
+        controllerComponents.add(myPersonalDetailsLinksControllerComponent);
+        controllerComponents.add(homeLinksControllerComponent);
+        controllerComponents.add(productLinksControllerComponent);
+        controllerComponents.add(cartLinksControllerComponent);
+        controllerComponents.add(checkoutLinksControllerComponent);
+        controllerComponents.add(wishlistLinksControllerComponent);
+    }
+
+    @Override
+    public List<ControllerComponent> get() {
+        return controllerComponents;
+    }
+}

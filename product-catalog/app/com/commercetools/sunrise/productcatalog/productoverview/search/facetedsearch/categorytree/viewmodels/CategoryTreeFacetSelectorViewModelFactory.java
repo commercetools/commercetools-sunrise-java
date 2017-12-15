@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.CategoryTreeFacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.AbstractFacetSelectorViewModelFactory;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetSelectorViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetSelectorViewModelFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetSelectorViewModel;
 import io.sphere.sdk.search.TermFacetResult;
 
 import javax.inject.Inject;

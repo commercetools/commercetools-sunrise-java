@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.search.sort.ConfiguredSortFormSettings;
-import com.commercetools.sunrise.search.sort.SortFormOption;
-import com.commercetools.sunrise.search.sort.SortFormSettings;
+import com.commercetools.sunrise.core.injection.RequestScoped;
+import com.commercetools.sunrise.models.search.sort.ConfiguredSortFormSettings;
+import com.commercetools.sunrise.models.search.sort.SortFormOption;
+import com.commercetools.sunrise.models.search.sort.SortFormSettings;
 import io.sphere.sdk.products.ProductProjection;
 
 import javax.inject.Inject;

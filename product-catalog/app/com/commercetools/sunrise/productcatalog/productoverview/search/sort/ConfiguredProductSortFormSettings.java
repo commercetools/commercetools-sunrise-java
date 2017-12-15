@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
 import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
-import com.commercetools.sunrise.search.sort.ConfiguredSortFormOption;
-import com.commercetools.sunrise.search.sort.ConfiguredSortFormSettings;
-import com.commercetools.sunrise.search.sort.ConfiguredSortFormSettingsFactory;
+import com.commercetools.sunrise.models.search.sort.ConfiguredSortFormOption;
+import com.commercetools.sunrise.models.search.sort.ConfiguredSortFormSettings;
+import com.commercetools.sunrise.models.search.sort.ConfiguredSortFormSettingsFactory;
 import play.Configuration;
 
 import javax.inject.Inject;

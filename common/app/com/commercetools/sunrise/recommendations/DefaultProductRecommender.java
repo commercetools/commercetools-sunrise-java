@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.ctp.CtpLogUtils.printableProductRequest;
+import static com.commercetools.sdk.CtpLogUtils.printableProductRequest;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;

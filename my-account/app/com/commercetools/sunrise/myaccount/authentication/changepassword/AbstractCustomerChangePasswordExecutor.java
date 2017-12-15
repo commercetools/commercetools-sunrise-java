@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.authentication.changepassword;
 
-import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.framework.hooks.ctpevents.CustomerChangedPasswordHook;
-import com.commercetools.sunrise.framework.hooks.ctprequests.CustomerChangePasswordCommandHook;
+import com.commercetools.sunrise.core.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.ctpevents.CustomerChangedPasswordHook;
+import com.commercetools.sunrise.core.hooks.ctprequests.CustomerChangePasswordCommandHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.commands.CustomerChangePasswordCommand;

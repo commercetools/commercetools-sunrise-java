@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.framework.SunriseModel;
+import com.commercetools.sunrise.core.SunriseModel;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 

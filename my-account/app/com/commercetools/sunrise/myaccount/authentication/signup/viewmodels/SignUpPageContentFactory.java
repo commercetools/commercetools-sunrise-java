@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.signup.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.authentication.AbstractAuthenticationPageContentFactory;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
 import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormData;

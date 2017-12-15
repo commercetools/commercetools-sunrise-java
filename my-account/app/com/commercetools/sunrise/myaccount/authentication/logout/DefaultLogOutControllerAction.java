@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.logout;
 
-import com.commercetools.sunrise.sessions.cart.CartInSession;
-import com.commercetools.sunrise.sessions.customer.CustomerInSession;
+import com.commercetools.sunrise.models.carts.CartInSession;
+import com.commercetools.sunrise.models.customers.CustomerInSession;
 
 import javax.inject.Inject;
 

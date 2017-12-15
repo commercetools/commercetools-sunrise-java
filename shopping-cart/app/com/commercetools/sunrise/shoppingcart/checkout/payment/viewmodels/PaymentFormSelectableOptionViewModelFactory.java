@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels;
 
-import com.commercetools.sunrise.framework.i18n.I18nResolver;
-import com.commercetools.sunrise.framework.viewmodels.forms.SelectableViewModelFactory;
+import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.viewmodels.forms.SelectableViewModelFactory;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 
 import javax.annotation.Nullable;

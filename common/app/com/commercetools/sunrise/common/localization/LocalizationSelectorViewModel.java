@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.common.localization;
 
-import com.commercetools.sunrise.framework.viewmodels.forms.languages.LanguageFormSelectableOptionViewModel;
-import com.commercetools.sunrise.framework.viewmodels.ViewModel;
-import com.commercetools.sunrise.framework.viewmodels.forms.countries.CountryFormSelectableOptionViewModel;
+import com.commercetools.sunrise.core.viewmodels.forms.languages.LanguageFormSelectableOptionViewModel;
+import com.commercetools.sunrise.core.viewmodels.ViewModel;
+import com.commercetools.sunrise.core.viewmodels.forms.countries.CountryFormSelectableOptionViewModel;
 
 import java.util.List;
 

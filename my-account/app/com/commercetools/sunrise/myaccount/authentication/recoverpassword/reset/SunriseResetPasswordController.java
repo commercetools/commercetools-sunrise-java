@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset;
 
-import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
-import com.commercetools.sunrise.framework.hooks.EnableHooks;
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
-import com.commercetools.sunrise.framework.renderers.ContentRenderer;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.viewmodels.ResetPasswordPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;

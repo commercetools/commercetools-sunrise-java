@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.signup.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.ViewModel;
-import com.commercetools.sunrise.framework.viewmodels.forms.titles.TitleFormFieldViewModel;
+import com.commercetools.sunrise.core.viewmodels.ViewModel;
+import com.commercetools.sunrise.core.viewmodels.forms.titles.TitleFormFieldViewModel;
 
 public class SignUpFormSettingsViewModel extends ViewModel {
 

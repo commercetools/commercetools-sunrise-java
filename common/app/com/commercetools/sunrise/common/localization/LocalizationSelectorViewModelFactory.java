@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.common.localization;
 
-import com.commercetools.sunrise.framework.localization.Countries;
-import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.forms.countries.CountryFormSelectableOptionViewModel;
-import com.commercetools.sunrise.framework.viewmodels.forms.countries.CountryFormSelectableOptionViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.forms.languages.LanguageFormSelectableOptionViewModel;
-import com.commercetools.sunrise.framework.viewmodels.forms.languages.LanguageFormSelectableOptionViewModelFactory;
+import com.commercetools.sunrise.core.localization.Countries;
+import com.commercetools.sunrise.core.viewmodels.SimpleViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.forms.countries.CountryFormSelectableOptionViewModel;
+import com.commercetools.sunrise.core.viewmodels.forms.countries.CountryFormSelectableOptionViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.forms.languages.LanguageFormSelectableOptionViewModel;
+import com.commercetools.sunrise.core.viewmodels.forms.languages.LanguageFormSelectableOptionViewModelFactory;
 import com.neovisionaries.i18n.CountryCode;
 import play.i18n.Lang;
 import play.i18n.Langs;

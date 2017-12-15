@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.wishlist;
 
-import com.commercetools.sunrise.framework.components.controllers.ControllerComponent;
-import com.commercetools.sunrise.framework.hooks.ctpevents.ShoppingListCreatedHook;
-import com.commercetools.sunrise.framework.hooks.ctpevents.ShoppingListLoadedHook;
-import com.commercetools.sunrise.framework.hooks.ctpevents.ShoppingListUpdatedHook;
-import com.commercetools.sunrise.sessions.wishlist.WishlistInSession;
+import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListCreatedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListUpdatedHook;
+import com.commercetools.sunrise.models.wishlists.WishlistInSession;
 import com.google.inject.Inject;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 

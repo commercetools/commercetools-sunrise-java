@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.framework.hooks.ctprequests.CustomerCreatePasswordTokenCommandHook;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.ctprequests.CustomerCreatePasswordTokenCommandHook;
 import com.commercetools.sunrise.email.EmailDeliveryException;
 import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.email.MessageEditor;

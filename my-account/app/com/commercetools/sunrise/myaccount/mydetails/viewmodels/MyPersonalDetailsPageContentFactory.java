@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount.mydetails.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.FormPageContentFactory;
-import com.commercetools.sunrise.framework.viewmodels.content.customers.CustomerInfoViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
+import com.commercetools.sunrise.models.customers.CustomerInfoViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;

@@ -1,11 +1,11 @@
 package controllers.productcatalog;
 
-import com.commercetools.sunrise.framework.components.controllers.PageHeaderControllerComponentSupplier;
-import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
-import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.framework.renderers.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.components.controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.core.controllers.cache.NoCache;
+import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;

@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.wishlist.remove;
 
-import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
-import com.commercetools.sunrise.framework.hooks.EnableHooks;
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.framework.renderers.ContentRenderer;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;

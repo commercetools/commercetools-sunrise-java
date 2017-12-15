@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels;
 
-import com.commercetools.sunrise.framework.i18n.I18nResolver;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
-import com.commercetools.sunrise.framework.viewmodels.forms.FormSelectableOptionViewModel;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionViewModel;
+import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
+import com.commercetools.sunrise.core.viewmodels.forms.FormSelectableOptionViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
 import com.commercetools.sunrise.test.TestableCall;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;

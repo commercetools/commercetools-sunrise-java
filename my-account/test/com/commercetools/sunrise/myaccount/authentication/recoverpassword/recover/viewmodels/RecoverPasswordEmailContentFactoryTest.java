@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels;
 
-import com.commercetools.sunrise.framework.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
+import com.commercetools.sunrise.core.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
 import io.sphere.sdk.customers.CustomerToken;
 import org.junit.Before;
 import org.junit.Test;

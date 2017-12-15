@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.version;
 
-import com.commercetools.sunrise.framework.controllers.SunriseController;
+import com.commercetools.sunrise.core.controllers.SunriseController;
 import org.apache.commons.io.IOUtils;
 import play.Application;
 import play.mvc.Http;

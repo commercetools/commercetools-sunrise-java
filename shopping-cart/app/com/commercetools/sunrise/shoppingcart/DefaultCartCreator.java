@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.sessions.customer.CustomerInSession;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.models.customers.CustomerInSession;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;

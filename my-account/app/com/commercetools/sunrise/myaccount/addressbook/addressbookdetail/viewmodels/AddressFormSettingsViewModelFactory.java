@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.FormViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.forms.countries.CountryFormFieldViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.forms.titles.TitleFormFieldViewModelFactory;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.core.viewmodels.FormViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.forms.countries.CountryFormFieldViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.forms.titles.TitleFormFieldViewModelFactory;
+import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
 import io.sphere.sdk.customers.Customer;
 import play.Configuration;

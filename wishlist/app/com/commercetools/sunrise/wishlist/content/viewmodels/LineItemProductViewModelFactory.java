@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.wishlist.content.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.content.products.ProductGalleryViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.content.products.ProductViewModel;
+import com.commercetools.sunrise.core.viewmodels.SimpleViewModelFactory;
+import com.commercetools.sunrise.models.products.ProductGalleryViewModelFactory;
+import com.commercetools.sunrise.models.products.ProductViewModel;
 import io.sphere.sdk.shoppinglists.LineItem;
 
 import javax.inject.Inject;

@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.wishlist;
 
-import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.framework.hooks.ctpevents.ShoppingListLoadedHook;
-import com.commercetools.sunrise.framework.hooks.ctprequests.ShoppingListQueryHook;
+import com.commercetools.sunrise.core.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctprequests.ShoppingListQueryHook;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.shoppinglists.ShoppingList;

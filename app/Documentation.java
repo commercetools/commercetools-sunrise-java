@@ -1,8 +1,8 @@
-import com.commercetools.sunrise.framework.components.controllers.ControllerComponent;
-import com.commercetools.sunrise.framework.hooks.Hook;
-import com.commercetools.sunrise.framework.hooks.application.HttpRequestStartedHook;
-import com.commercetools.sunrise.framework.hooks.application.PageDataReadyHook;
-import com.commercetools.sunrise.framework.hooks.ctprequests.ProductProjectionSearchHook;
+import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.hooks.Hook;
+import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
+import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.hooks.ctprequests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;

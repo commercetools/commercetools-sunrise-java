@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderlist.viewmodels;
 
-import com.commercetools.sunrise.framework.i18n.I18nResolver;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
-import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
-import com.commercetools.sunrise.framework.viewmodels.formatters.PriceFormatter;
+import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.injection.RequestScoped;
+import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
+import com.commercetools.sunrise.core.viewmodels.SimpleViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Call;
 
@@ -12,8 +12,8 @@ import javax.inject.Inject;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static com.commercetools.sunrise.ctp.CtpEnumUtils.enumToCamelCase;
-import static com.commercetools.sunrise.framework.viewmodels.content.carts.CartPriceUtils.calculateTotalPrice;
+import static com.commercetools.sdk.CtpEnumUtils.enumToCamelCase;
+import static com.commercetools.sunrise.models.carts.CartPriceUtils.calculateTotalPrice;
 
 @RequestScoped
 public class OrderOverviewViewModelFactory extends SimpleViewModelFactory<OrderOverviewViewModel, Order> {

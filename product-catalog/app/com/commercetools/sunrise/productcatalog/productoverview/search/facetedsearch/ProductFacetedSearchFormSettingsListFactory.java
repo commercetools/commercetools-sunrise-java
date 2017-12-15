@@ -2,12 +2,12 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.faceteds
 
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.CategoryTreeFacetedSearchFormSettingsFactory;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.ConfiguredCategoryTreeFacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.AbstractFacetedSearchFormSettingsListFactory;
-import com.commercetools.sunrise.search.facetedsearch.ConfiguredFacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.FacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.bucketranges.BucketRangeFacetedSearchFormSettingsFactory;
-import com.commercetools.sunrise.search.facetedsearch.sliderranges.SliderRangeFacetedSearchFormSettingsFactory;
-import com.commercetools.sunrise.search.facetedsearch.terms.TermFacetedSearchFormSettingsFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.AbstractFacetedSearchFormSettingsListFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.ConfiguredFacetedSearchFormSettings;
+import com.commercetools.sunrise.models.search.facetedsearch.FacetedSearchFormSettings;
+import com.commercetools.sunrise.models.search.facetedsearch.bucketranges.BucketRangeFacetedSearchFormSettingsFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.sliderranges.SliderRangeFacetedSearchFormSettingsFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.terms.TermFacetedSearchFormSettingsFactory;
 import io.sphere.sdk.products.ProductProjection;
 
 import javax.inject.Inject;

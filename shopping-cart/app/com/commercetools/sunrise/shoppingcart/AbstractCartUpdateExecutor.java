@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.framework.hooks.ctpactions.CartUpdatedActionHook;
-import com.commercetools.sunrise.framework.hooks.ctpevents.CartUpdatedHook;
-import com.commercetools.sunrise.framework.hooks.ctprequests.CartUpdateCommandHook;
+import com.commercetools.sunrise.core.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.ctpactions.CartUpdatedActionHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.CartUpdatedHook;
+import com.commercetools.sunrise.core.hooks.ctprequests.CartUpdateCommandHook;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
 import io.sphere.sdk.client.SphereClient;

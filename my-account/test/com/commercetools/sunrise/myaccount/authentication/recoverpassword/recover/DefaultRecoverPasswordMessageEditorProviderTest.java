@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover;
 
 import com.commercetools.sunrise.email.MessageEditor;
-import com.commercetools.sunrise.framework.i18n.I18nResolver;
-import com.commercetools.sunrise.framework.renderers.EmailContentRenderer;
+import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.renderers.EmailContentRenderer;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels.RecoverPasswordEmailContent;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels.RecoverPasswordEmailContentFactory;
 import io.sphere.sdk.customers.CustomerToken;

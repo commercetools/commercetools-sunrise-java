@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.FormPageContentFactory;
-import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.framework.viewmodels.content.carts.CartViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
+import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.models.carts.CartViewModelFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.ShippingMethodsWithCart;
 import play.data.Form;

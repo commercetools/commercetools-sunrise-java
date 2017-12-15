@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.framework.controllers.ResourceFinder;
+import com.commercetools.sunrise.core.controllers.ResourceFinder;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.categories.Category;
 

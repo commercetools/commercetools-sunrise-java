@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.localization.changecountry;
 
-import com.commercetools.sunrise.framework.localization.CountryInSession;
+import com.commercetools.sunrise.core.localization.CountryInSession;
 
 import javax.inject.Inject;
 

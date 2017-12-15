@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels;
 
-import com.commercetools.sunrise.ctp.categories.NavigationCategoryTree;
-import com.commercetools.sunrise.framework.i18n.I18nResolver;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
+import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
+import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.CategoryTreeFacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.AbstractTermFacetViewModelFactory;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.AbstractTermFacetViewModelFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.search.TermFacetResult;

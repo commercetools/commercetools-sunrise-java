@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpFormSettingsViewModel;
 import play.data.Form;
 

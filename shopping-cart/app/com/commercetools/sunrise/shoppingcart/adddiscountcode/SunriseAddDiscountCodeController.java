@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.adddiscountcode;
 
-import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
-import com.commercetools.sunrise.framework.hooks.EnableHooks;
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.framework.renderers.ContentRenderer;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
+import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
@@ -18,7 +18,7 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.ctp.CtpExceptionUtils.isDiscountCodeNonApplicableError;
+import static com.commercetools.sdk.errors.ErrorResponseExceptionUtils.isDiscountCodeNonApplicableError;
 
 public abstract class SunriseAddDiscountCodeController extends SunriseContentFormController
         implements WithContentFormFlow<Cart, Cart, AddDiscountCodeFormData>, WithRequiredCart {

@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.wishlist;
 
-import com.commercetools.sunrise.framework.components.controllers.ControllerComponent;
-import com.commercetools.sunrise.framework.hooks.application.PageDataReadyHook;
-import com.commercetools.sunrise.framework.viewmodels.PageData;
-import com.commercetools.sunrise.framework.viewmodels.content.wishlist.WishlistViewModel;
-import com.commercetools.sunrise.framework.viewmodels.content.wishlist.WishlistViewModelFactory;
-import com.commercetools.sunrise.sessions.wishlist.WishlistInSession;
+import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.models.wishlists.WishlistViewModel;
+import com.commercetools.sunrise.models.wishlists.WishlistViewModelFactory;
+import com.commercetools.sunrise.models.wishlists.WishlistInSession;
 import com.google.inject.Inject;
 
 public final class MiniWishlistControllerComponent implements ControllerComponent, PageDataReadyHook {

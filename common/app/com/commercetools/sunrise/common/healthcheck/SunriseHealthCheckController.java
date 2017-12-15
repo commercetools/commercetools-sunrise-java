@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.common.healthcheck;
 
-import com.commercetools.sunrise.framework.controllers.SunriseController;
+import com.commercetools.sunrise.core.controllers.SunriseController;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;

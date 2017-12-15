@@ -1,13 +1,13 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.framework.controllers.SunriseContentController;
-import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
-import com.commercetools.sunrise.framework.hooks.EnableHooks;
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
-import com.commercetools.sunrise.framework.renderers.ContentRenderer;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.viewmodels.content.products.ProductWithVariant;
+import com.commercetools.sunrise.core.controllers.SunriseContentController;
+import com.commercetools.sunrise.core.controllers.WithQueryFlow;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.products.ProductWithVariant;
 import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContentFactory;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;

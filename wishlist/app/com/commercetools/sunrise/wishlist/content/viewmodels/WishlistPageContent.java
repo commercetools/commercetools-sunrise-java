@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.wishlist.content.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.GenericListViewModel;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.viewmodels.content.products.ProductThumbnailViewModel;
+import com.commercetools.sunrise.core.viewmodels.GenericListViewModel;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.products.ProductThumbnailViewModel;
 
 /**
  * The page content for the wishlist.

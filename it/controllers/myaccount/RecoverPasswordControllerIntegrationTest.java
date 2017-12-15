@@ -3,7 +3,7 @@ package controllers.myaccount;
 import com.commercetools.sunrise.email.EmailDeliveryException;
 import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.email.MessageEditor;
-import com.commercetools.sunrise.framework.viewmodels.content.messages.MessageType;
+import com.commercetools.sunrise.core.viewmodels.content.messages.MessageType;
 import com.commercetools.sunrise.it.WithSphereClient;
 import io.sphere.sdk.client.SphereClient;
 import org.junit.Test;

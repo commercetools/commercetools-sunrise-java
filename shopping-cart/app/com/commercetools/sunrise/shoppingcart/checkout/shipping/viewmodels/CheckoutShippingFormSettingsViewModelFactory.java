@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.forms.FormFieldWithOptions;
-import com.commercetools.sunrise.framework.viewmodels.FormViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.forms.FormFieldWithOptions;
+import com.commercetools.sunrise.core.viewmodels.FormViewModelFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.ShippingMethodsWithCart;
 import io.sphere.sdk.shippingmethods.ShippingMethod;

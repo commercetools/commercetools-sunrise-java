@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.shoppingcart.content.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
-import com.commercetools.sunrise.framework.viewmodels.content.carts.CartViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
+import com.commercetools.sunrise.models.carts.CartViewModelFactory;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.AddDiscountCodeFormData;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;

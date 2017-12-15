@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.removediscountcode;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.shoppingcart.AbstractCartUpdateExecutor;
 import com.google.inject.Inject;
 import io.sphere.sdk.carts.Cart;

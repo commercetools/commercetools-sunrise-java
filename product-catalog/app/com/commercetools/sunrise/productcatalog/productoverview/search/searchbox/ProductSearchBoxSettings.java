@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.searchbox;
 
 import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
-import com.commercetools.sunrise.search.searchbox.SearchBoxSettings;
-import com.commercetools.sunrise.search.searchbox.SearchBoxSettingsFactory;
+import com.commercetools.sunrise.models.search.searchbox.SearchBoxSettings;
+import com.commercetools.sunrise.models.search.searchbox.SearchBoxSettingsFactory;
 import play.Configuration;
 
 import javax.inject.Inject;

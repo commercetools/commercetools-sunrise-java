@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree;
 
-import com.commercetools.sunrise.ctp.categories.CategoriesSettings;
-import com.commercetools.sunrise.framework.SunriseModel;
+import com.commercetools.sunrise.models.categories.CategoriesSettings;
+import com.commercetools.sunrise.core.SunriseModel;
 import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import io.sphere.sdk.categories.CategoryTree;
 

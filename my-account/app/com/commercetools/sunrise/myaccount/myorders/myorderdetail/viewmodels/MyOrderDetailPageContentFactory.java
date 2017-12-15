@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContentFactory;
-import com.commercetools.sunrise.framework.viewmodels.content.carts.OrderViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
+import com.commercetools.sunrise.models.carts.OrderViewModelFactory;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.OrderWithCustomer;
 
 import javax.inject.Inject;

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree;
 
-import com.commercetools.sunrise.search.facetedsearch.terms.ConfiguredTermFacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.terms.TermFacetMapperSettings;
+import com.commercetools.sunrise.models.search.facetedsearch.terms.ConfiguredTermFacetedSearchFormSettings;
+import com.commercetools.sunrise.models.search.facetedsearch.terms.TermFacetMapperSettings;
 
 import javax.annotation.Nullable;
 

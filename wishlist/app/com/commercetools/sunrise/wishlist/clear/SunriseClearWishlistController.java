@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.wishlist.clear;
 
-import com.commercetools.sunrise.framework.controllers.SunriseController;
-import com.commercetools.sunrise.framework.controllers.WithExecutionFlow;
-import com.commercetools.sunrise.framework.hooks.EnableHooks;
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistReverseRouter;
+import com.commercetools.sunrise.core.controllers.SunriseController;
+import com.commercetools.sunrise.core.controllers.WithExecutionFlow;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import io.sphere.sdk.client.ClientErrorException;

@@ -1,16 +1,16 @@
 package com.commercetools.sunrise.productcatalog.productoverview.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.breadcrumbs.BreadcrumbViewModel;
-import com.commercetools.sunrise.framework.viewmodels.TitleDescriptionViewModel;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetSelectorListViewModel;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.WithFacetedSearchViewModel;
-import com.commercetools.sunrise.search.pagination.viewmodels.PaginationViewModel;
-import com.commercetools.sunrise.search.pagination.viewmodels.EntriesPerPageSelectorViewModel;
-import com.commercetools.sunrise.search.pagination.viewmodels.WithPaginationViewModel;
-import com.commercetools.sunrise.search.searchbox.viewmodels.WithSearchBoxViewModel;
-import com.commercetools.sunrise.search.sort.viewmodels.SortSelectorViewModel;
-import com.commercetools.sunrise.search.sort.viewmodels.WithSortSelectorViewModel;
+import com.commercetools.sunrise.models.breadcrumbs.BreadcrumbViewModel;
+import com.commercetools.sunrise.core.viewmodels.TitleDescriptionViewModel;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetSelectorListViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.WithFacetedSearchViewModel;
+import com.commercetools.sunrise.models.search.pagination.viewmodels.PaginationViewModel;
+import com.commercetools.sunrise.models.search.pagination.viewmodels.EntriesPerPageSelectorViewModel;
+import com.commercetools.sunrise.models.search.pagination.viewmodels.WithPaginationViewModel;
+import com.commercetools.sunrise.models.search.searchbox.viewmodels.WithSearchBoxViewModel;
+import com.commercetools.sunrise.models.search.sort.viewmodels.SortSelectorViewModel;
+import com.commercetools.sunrise.models.search.sort.viewmodels.WithSortSelectorViewModel;
 
 public class ProductOverviewPageContent extends PageContent implements WithPaginationViewModel, WithSearchBoxViewModel, WithSortSelectorViewModel, WithFacetedSearchViewModel {
 

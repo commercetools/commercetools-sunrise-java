@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
-import com.commercetools.sunrise.search.pagination.viewmodels.AbstractPaginationViewModelFactory;
+import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractPaginationViewModelFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

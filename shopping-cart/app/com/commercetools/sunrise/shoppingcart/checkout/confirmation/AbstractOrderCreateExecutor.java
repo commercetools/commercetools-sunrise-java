@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
-import com.commercetools.sunrise.framework.controllers.AbstractSphereRequestExecutor;
-import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.core.controllers.AbstractSphereRequestExecutor;
+import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.orders.Order;

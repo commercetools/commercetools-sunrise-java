@@ -1,7 +1,7 @@
 package controllers.shoppingcart;
 
 import com.commercetools.sunrise.it.WithSphereClient;
-import com.commercetools.sunrise.sessions.cart.CartInSession;
+import com.commercetools.sunrise.models.carts.CartInSession;
 import io.sphere.sdk.cartdiscounts.*;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;

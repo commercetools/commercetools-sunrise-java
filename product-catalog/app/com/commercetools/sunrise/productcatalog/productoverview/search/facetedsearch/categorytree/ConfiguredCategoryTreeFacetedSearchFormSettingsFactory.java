@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree;
 
-import com.commercetools.sunrise.search.facetedsearch.AbstractConfiguredFacetedSearchFormSettingsFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.AbstractConfiguredFacetedSearchFormSettingsFactory;
 import play.Configuration;
 
 public class ConfiguredCategoryTreeFacetedSearchFormSettingsFactory extends AbstractConfiguredFacetedSearchFormSettingsFactory {

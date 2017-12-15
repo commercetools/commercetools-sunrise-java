@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.carts.OrderViewModel;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.carts.OrderViewModel;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 
 public class CheckoutThankYouPageContent extends PageContent {
 

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
-import com.commercetools.sunrise.framework.hooks.ctpevents.CategoryLoadedHook;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.ctpevents.CategoryLoadedHook;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import play.i18n.Langs;

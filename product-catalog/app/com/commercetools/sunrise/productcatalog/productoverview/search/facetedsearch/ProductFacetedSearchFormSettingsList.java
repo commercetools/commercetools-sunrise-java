@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.search.facetedsearch.FacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.FacetedSearchFormSettingsList;
+import com.commercetools.sunrise.core.injection.RequestScoped;
+import com.commercetools.sunrise.models.search.facetedsearch.FacetedSearchFormSettings;
+import com.commercetools.sunrise.models.search.facetedsearch.FacetedSearchFormSettingsList;
 import io.sphere.sdk.products.ProductProjection;
 
 import javax.inject.Inject;

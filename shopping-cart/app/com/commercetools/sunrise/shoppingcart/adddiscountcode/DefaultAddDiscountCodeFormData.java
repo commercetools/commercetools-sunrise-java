@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.adddiscountcode;
 
-import com.commercetools.sunrise.framework.SunriseModel;
+import com.commercetools.sunrise.core.SunriseModel;
 import play.data.validation.Constraints;
 
 public class DefaultAddDiscountCodeFormData extends SunriseModel implements AddDiscountCodeFormData {

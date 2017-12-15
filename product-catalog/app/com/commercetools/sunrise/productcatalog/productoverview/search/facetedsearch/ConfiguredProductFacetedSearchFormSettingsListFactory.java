@@ -1,11 +1,11 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.ConfiguredCategoryTreeFacetedSearchFormSettingsFactory;
-import com.commercetools.sunrise.search.facetedsearch.AbstractConfiguredFacetedSearchFormSettingsListFactory;
-import com.commercetools.sunrise.search.facetedsearch.ConfiguredFacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.bucketranges.ConfiguredBucketRangeFacetedSearchFormSettingsFactory;
-import com.commercetools.sunrise.search.facetedsearch.sliderranges.ConfiguredSliderRangeFacetedSearchFormSettingsFactory;
-import com.commercetools.sunrise.search.facetedsearch.terms.ConfiguredTermFacetedSearchFormSettingsFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.AbstractConfiguredFacetedSearchFormSettingsListFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.ConfiguredFacetedSearchFormSettings;
+import com.commercetools.sunrise.models.search.facetedsearch.bucketranges.ConfiguredBucketRangeFacetedSearchFormSettingsFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.sliderranges.ConfiguredSliderRangeFacetedSearchFormSettingsFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.terms.ConfiguredTermFacetedSearchFormSettingsFactory;
 import play.Configuration;
 
 import javax.inject.Inject;

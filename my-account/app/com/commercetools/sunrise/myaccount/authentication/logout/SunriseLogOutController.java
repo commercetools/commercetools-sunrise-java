@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.myaccount.authentication.logout;
 
-import com.commercetools.sunrise.framework.controllers.SunriseController;
-import com.commercetools.sunrise.framework.controllers.WithExecutionFlow;
-import com.commercetools.sunrise.framework.hooks.EnableHooks;
-import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
+import com.commercetools.sunrise.core.controllers.SunriseController;
+import com.commercetools.sunrise.core.controllers.WithExecutionFlow;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
+import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import io.sphere.sdk.client.ClientErrorException;
 import play.mvc.Result;

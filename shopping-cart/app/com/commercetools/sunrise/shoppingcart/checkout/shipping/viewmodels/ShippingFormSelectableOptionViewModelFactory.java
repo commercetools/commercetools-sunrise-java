@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels;
 
 import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.viewmodels.formatters.PriceFormatter;
-import com.commercetools.sunrise.framework.viewmodels.forms.SelectableViewModelFactory;
+import com.commercetools.sunrise.core.injection.RequestScoped;
+import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
+import com.commercetools.sunrise.core.viewmodels.forms.SelectableViewModelFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.queries.PagedResult;
@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static com.commercetools.sunrise.framework.viewmodels.content.carts.CartPriceUtils.calculateApplicableShippingCosts;
+import static com.commercetools.sunrise.models.carts.CartPriceUtils.calculateApplicableShippingCosts;
 
 @RequestScoped
 public class ShippingFormSelectableOptionViewModelFactory extends SelectableViewModelFactory<ShippingFormSelectableOptionViewModel, ShippingMethod, String> {

@@ -1,13 +1,13 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.framework.components.controllers.PageHeaderControllerComponentSupplier;
-import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
-import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
-import com.commercetools.sunrise.framework.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.framework.renderers.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.components.controllers.PageHeaderControllerComponentSupplier;
+import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.core.controllers.cache.NoCache;
+import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
+import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
+import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordFormData;

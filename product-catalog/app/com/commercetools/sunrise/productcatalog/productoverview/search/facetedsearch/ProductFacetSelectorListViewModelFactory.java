@@ -2,12 +2,12 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.faceteds
 
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.CategoryTreeFacetedSearchFormSettings;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels.CategoryTreeFacetSelectorViewModelFactory;
-import com.commercetools.sunrise.search.facetedsearch.FacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.bucketranges.viewmodels.BucketRangeFacetSelectorViewModelFactory;
-import com.commercetools.sunrise.search.facetedsearch.sliderranges.viewmodels.SliderRangeFacetSelectorViewModelFactory;
-import com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.TermFacetSelectorViewModelFactory;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.AbstractFacetSelectorListViewModelFactory;
-import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetSelectorViewModel;
+import com.commercetools.sunrise.models.search.facetedsearch.FacetedSearchFormSettings;
+import com.commercetools.sunrise.models.search.facetedsearch.bucketranges.viewmodels.BucketRangeFacetSelectorViewModelFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.sliderranges.viewmodels.SliderRangeFacetSelectorViewModelFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.TermFacetSelectorViewModelFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetSelectorListViewModelFactory;
+import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetSelectorViewModel;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 

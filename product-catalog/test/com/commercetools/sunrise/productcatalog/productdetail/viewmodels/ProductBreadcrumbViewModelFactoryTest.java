@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productdetail.viewmodels;
 
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
-import com.commercetools.sunrise.framework.viewmodels.content.breadcrumbs.BreadcrumbLinkViewModel;
-import com.commercetools.sunrise.framework.viewmodels.content.breadcrumbs.BreadcrumbViewModel;
-import com.commercetools.sunrise.framework.viewmodels.content.products.ProductWithVariant;
+import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
+import com.commercetools.sunrise.models.breadcrumbs.BreadcrumbLinkViewModel;
+import com.commercetools.sunrise.models.breadcrumbs.BreadcrumbViewModel;
+import com.commercetools.sunrise.models.products.ProductWithVariant;
 import com.commercetools.sunrise.test.TestableCall;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;

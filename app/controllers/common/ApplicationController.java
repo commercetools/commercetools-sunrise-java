@@ -1,6 +1,6 @@
 package controllers.common;
 
-import com.commercetools.sunrise.framework.controllers.SunriseController;
+import com.commercetools.sunrise.core.controllers.SunriseController;
 import play.mvc.Result;
 
 import javax.inject.Singleton;

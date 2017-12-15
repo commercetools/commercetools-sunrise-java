@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
 import com.commercetools.sunrise.play.configuration.SunriseConfigurationException;
-import com.commercetools.sunrise.search.pagination.EntriesPerPageFormOption;
-import com.commercetools.sunrise.search.pagination.EntriesPerPageFormSettings;
-import com.commercetools.sunrise.search.pagination.EntriesPerPageFormSettingsFactory;
+import com.commercetools.sunrise.models.search.pagination.EntriesPerPageFormOption;
+import com.commercetools.sunrise.models.search.pagination.EntriesPerPageFormSettings;
+import com.commercetools.sunrise.models.search.pagination.EntriesPerPageFormSettingsFactory;
 import play.Configuration;
 
 import javax.inject.Inject;

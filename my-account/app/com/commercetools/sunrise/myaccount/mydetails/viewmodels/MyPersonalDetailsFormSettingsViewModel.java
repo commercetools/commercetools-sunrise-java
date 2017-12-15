@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.mydetails.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.forms.titles.TitleFormFieldViewModel;
-import com.commercetools.sunrise.framework.viewmodels.ViewModel;
+import com.commercetools.sunrise.core.viewmodels.forms.titles.TitleFormFieldViewModel;
+import com.commercetools.sunrise.core.viewmodels.ViewModel;
 
 public class MyPersonalDetailsFormSettingsViewModel extends ViewModel {
 

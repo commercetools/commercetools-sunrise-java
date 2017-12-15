@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.ViewModel;
-import com.commercetools.sunrise.framework.viewmodels.forms.countries.CountryFormFieldViewModel;
-import com.commercetools.sunrise.framework.viewmodels.forms.titles.TitleFormFieldViewModel;
+import com.commercetools.sunrise.core.viewmodels.ViewModel;
+import com.commercetools.sunrise.core.viewmodels.forms.countries.CountryFormFieldViewModel;
+import com.commercetools.sunrise.core.viewmodels.forms.titles.TitleFormFieldViewModel;
 
 public class AddressFormSettingsViewModel extends ViewModel {
 

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.sort;
 
-import com.commercetools.sunrise.search.sort.viewmodels.AbstractSortSelectorViewModelFactory;
-import com.commercetools.sunrise.search.sort.viewmodels.SortFormSelectableOptionViewModelFactory;
+import com.commercetools.sunrise.models.search.sort.viewmodels.AbstractSortSelectorViewModelFactory;
+import com.commercetools.sunrise.models.search.sort.viewmodels.SortFormSelectableOptionViewModelFactory;
 import io.sphere.sdk.products.ProductProjection;
 
 import javax.inject.Inject;

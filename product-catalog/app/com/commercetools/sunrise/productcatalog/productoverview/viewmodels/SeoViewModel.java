@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.TitleDescriptionViewModel;
+import com.commercetools.sunrise.core.viewmodels.TitleDescriptionViewModel;
 
 public class SeoViewModel extends TitleDescriptionViewModel {
 

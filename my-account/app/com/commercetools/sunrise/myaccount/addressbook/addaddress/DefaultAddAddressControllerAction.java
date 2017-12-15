@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
 import io.sphere.sdk.client.SphereClient;

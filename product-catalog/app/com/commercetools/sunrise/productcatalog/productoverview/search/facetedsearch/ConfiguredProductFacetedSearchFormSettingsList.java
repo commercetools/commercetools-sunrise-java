@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch;
 
-import com.commercetools.sunrise.search.facetedsearch.ConfiguredFacetedSearchFormSettings;
-import com.commercetools.sunrise.search.facetedsearch.ConfiguredFacetedSearchFormSettingsList;
+import com.commercetools.sunrise.models.search.facetedsearch.ConfiguredFacetedSearchFormSettings;
+import com.commercetools.sunrise.models.search.facetedsearch.ConfiguredFacetedSearchFormSettingsList;
 import play.Configuration;
 
 import javax.inject.Inject;

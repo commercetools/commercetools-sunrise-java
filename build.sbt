@@ -43,7 +43,7 @@ lazy val common = project
   .settings(Dependencies.jvmSdk ++ Dependencies.sunriseTheme ++ Dependencies.sunriseModules ++ Dependencies.commonLib: _*)
   .settings(
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "com.commercetools.sunrise.ctp;"
+    buildInfoPackage := "com.commercetools.sunrise.client;"
   )
   .dependsOn(testLibDependency)
 

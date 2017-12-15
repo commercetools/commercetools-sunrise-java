@@ -3,7 +3,7 @@ package controllers.common;
 import com.commercetools.sunrise.common.localization.changelanguage.ChangeLanguageControllerAction;
 import com.commercetools.sunrise.common.localization.changelanguage.ChangeLanguageFormData;
 import com.commercetools.sunrise.common.localization.changelanguage.SunriseChangeLanguageController;
-import com.commercetools.sunrise.framework.controllers.cache.NoCache;
+import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import io.sphere.sdk.client.ClientErrorException;
 import play.data.Form;
 import play.data.FormFactory;

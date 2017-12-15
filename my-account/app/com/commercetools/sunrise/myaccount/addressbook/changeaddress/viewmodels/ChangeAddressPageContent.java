@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsViewModel;
 import play.data.Form;
 

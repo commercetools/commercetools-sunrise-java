@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.myaccount.authentication.AbstractCustomerSignInExecutor;
-import com.commercetools.sunrise.sessions.cart.CartInSession;
+import com.commercetools.sunrise.models.carts.CartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
@@ -14,8 +14,8 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import static com.commercetools.sunrise.ctp.CtpExceptionUtils.isInvalidInputError;
-import static com.commercetools.sunrise.ctp.CtpExceptionUtils.isInvalidOperationError;
+import static com.commercetools.sdk.errors.ErrorResponseExceptionUtils.isInvalidInputError;
+import static com.commercetools.sdk.errors.ErrorResponseExceptionUtils.isInvalidOperationError;
 import static io.sphere.sdk.utils.CompletableFutureUtils.exceptionallyCompletedFuture;
 import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
 

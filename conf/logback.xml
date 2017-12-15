@@ -11,9 +11,9 @@
 
     <logger name="play" level="INFO" />
     <logger name="application" level="DEBUG" />
-    <logger name="com.commercetools.sunrise.framework.hooks.ComponentRegistry" level="OFF" />
+    <logger name="com.commercetools.sunrise.core.hooks.ComponentRegistry" level="OFF" />
     <logger name="com.commercetools.sunrise.common.pages.PageDataJson" level="OFF" />
-    <logger name="com.commercetools.sunrise.framework.controllers.metrics.MetricsLogger" level="DEBUG" />
+    <logger name="com.commercetools.sunrise.core.controllers.metrics.MetricsLogger" level="DEBUG" />
     <logger name="com.commercetools.sunrise.email.EmailSender" level="DEBUG" />
     <logger name="com.github.jknack.handlebars.HelperRegistry" level="ERROR" />
 

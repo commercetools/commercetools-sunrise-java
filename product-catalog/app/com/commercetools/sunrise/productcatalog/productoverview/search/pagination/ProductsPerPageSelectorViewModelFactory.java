@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.pagination;
 
-import com.commercetools.sunrise.search.pagination.viewmodels.AbstractEntriesPerPageSelectorViewModelFactory;
-import com.commercetools.sunrise.search.pagination.viewmodels.EntriesPerPageFormSelectableOptionViewModelFactory;
+import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractEntriesPerPageSelectorViewModelFactory;
+import com.commercetools.sunrise.models.search.pagination.viewmodels.EntriesPerPageFormSelectableOptionViewModelFactory;
 
 import javax.inject.Inject;
 

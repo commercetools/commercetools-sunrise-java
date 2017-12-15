@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.categorytree;
 
-import com.commercetools.sunrise.ctp.categories.CategoriesSettings;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.home.HomeReverseRouter;
+import com.commercetools.sunrise.models.categories.CategoriesSettings;
+import com.commercetools.sunrise.core.reverserouters.productcatalog.home.HomeReverseRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.cache.CacheApi;

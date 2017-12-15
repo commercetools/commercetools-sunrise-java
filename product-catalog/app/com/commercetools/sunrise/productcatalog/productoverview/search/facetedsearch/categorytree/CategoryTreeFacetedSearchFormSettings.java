@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree;
 
-import com.commercetools.sunrise.search.facetedsearch.terms.BaseTermFacetedSearchFormSettings;
+import com.commercetools.sunrise.models.search.facetedsearch.terms.BaseTermFacetedSearchFormSettings;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.FilterExpression;

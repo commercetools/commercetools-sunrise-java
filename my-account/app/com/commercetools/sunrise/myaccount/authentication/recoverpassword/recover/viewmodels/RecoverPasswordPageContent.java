@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordFormData;
 import play.data.Form;
 

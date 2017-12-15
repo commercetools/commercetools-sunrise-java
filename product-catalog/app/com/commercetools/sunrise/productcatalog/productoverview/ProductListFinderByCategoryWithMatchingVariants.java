@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.framework.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.search.PriceSelection;

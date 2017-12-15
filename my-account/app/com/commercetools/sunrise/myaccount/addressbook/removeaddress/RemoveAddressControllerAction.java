@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
-import com.commercetools.sunrise.framework.controllers.ControllerAction;
-import com.commercetools.sunrise.framework.viewmodels.content.addresses.AddressWithCustomer;
+import com.commercetools.sunrise.core.controllers.ControllerAction;
+import com.commercetools.sunrise.models.addresses.AddressWithCustomer;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.Customer;
 
