@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.shoppingcart.remove;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.shoppingcart.CartFinder;
-import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
+import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
+import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -48,7 +48,7 @@ public abstract class SunriseRemoveFromCartController extends SunriseContentForm
 
     @EnableHooks
     @SunriseRoute(CartReverseRouter.REMOVE_LINE_ITEM_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return requireNonEmptyCart(this::processForm);
     }
 

@@ -1,0 +1,4 @@
+foo:
+  bar: something
+hello: hi
+repeated: yaml

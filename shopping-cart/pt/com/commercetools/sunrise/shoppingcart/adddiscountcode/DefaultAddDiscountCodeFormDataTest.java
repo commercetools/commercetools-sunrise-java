@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Unit tests for {@link DefaultAddDiscountCodeFormData}.
  */
 public class DefaultAddDiscountCodeFormDataTest extends WithApplication {
+
     private Form<DefaultAddDiscountCodeFormData> form;
 
     @Before

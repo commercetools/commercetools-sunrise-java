@@ -1,37 +1,36 @@
 package com.commercetools.sunrise.framework.localization;
 
-import com.commercetools.sunrise.ctp.project.ProjectContext;
 import com.neovisionaries.i18n.CountryCode;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import java.util.Optional;
+import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 /**
  * Provides the {@link CurrencyUnit} corresponding to the injected {@link CountryCode}.
  */
 public final class CurrencyFromCountryProvider implements Provider<CurrencyUnit> {
 
+    private final Currencies currencies;
     private final CountryCode country;
-    private final ProjectContext projectContext;
 
     @Inject
-    CurrencyFromCountryProvider(final CountryCode country, final ProjectContext projectContext) {
+    CurrencyFromCountryProvider(final Currencies currencies, final CountryCode country) {
+        this.currencies = currencies;
         this.country = country;
-        this.projectContext = projectContext;
     }
 
     @Override
     public CurrencyUnit get() {
-        return findCurrentCurrency()
-                .filter(projectContext::isCurrencySupported)
-                .orElseGet(projectContext::defaultCurrency);
+        return currencies.preferred(candidates());
     }
 
-    private Optional<CurrencyUnit> findCurrentCurrency() {
-        return Optional.ofNullable(country.getCurrency())
-                .map(countryCurrency -> Monetary.getCurrency(countryCurrency.getCurrencyCode()));
+    private List<CurrencyUnit> candidates() {
+        final String currencyCode = country.getCurrency().getCurrencyCode();
+        return singletonList(Monetary.getCurrency(currencyCode));
     }
 }

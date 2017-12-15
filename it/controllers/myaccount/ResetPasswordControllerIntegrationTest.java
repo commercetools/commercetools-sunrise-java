@@ -21,12 +21,12 @@ public class ResetPasswordControllerIntegrationTest extends WithSphereClient {
     @Test
     public void showsForm() throws Exception {
         final Result result = route(new Http.RequestBuilder()
-                .uri("/en/password/reset/any-token"));
+                .uri("/password/reset/any-token"));
 
         assertThat(result.status()).isEqualTo(OK);
         assertThat(contentAsString(result))
                 .containsOnlyOnce("id=\"form-change-password\"")
-                .contains("action=\"/en/password/reset/any-token\"")
+                .contains("action=\"/password/reset/any-token\"")
                 .contains("name=\"newPassword\"")
                 .contains("name=\"confirmPassword\"");
     }
@@ -41,12 +41,12 @@ public class ResetPasswordControllerIntegrationTest extends WithSphereClient {
             bodyForm.put("newPassword", "1234");
             bodyForm.put("confirmPassword", "1234");
             final Result result = route(new Http.RequestBuilder()
-                    .uri("/en/password/reset/" + customerToken.getValue())
+                    .uri("/password/reset/" + customerToken.getValue())
                     .method(POST)
                     .bodyForm(bodyForm));
 
             assertThat(result.status()).isEqualTo(SEE_OTHER);
-            assertThat(result.header(LOCATION)).contains("/en/user/login");
+            assertThat(result.header(LOCATION)).contains("/user/login");
 
             return customerSignInResult.getCustomer();
         });
@@ -58,7 +58,7 @@ public class ResetPasswordControllerIntegrationTest extends WithSphereClient {
         bodyForm.put("newPassword", "1234");
         bodyForm.put("confirmPassword", "1234");
         final Result result = route(new Http.RequestBuilder()
-                .uri("/en/password/reset/non-existing-token")
+                .uri("/password/reset/non-existing-token")
                 .method(POST)
                 .bodyForm(bodyForm));
 

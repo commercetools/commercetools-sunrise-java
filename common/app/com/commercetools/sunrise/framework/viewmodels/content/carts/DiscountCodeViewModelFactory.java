@@ -1,24 +1,25 @@
 package com.commercetools.sunrise.framework.viewmodels.content.carts;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.localization.UserLanguage;
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
 import com.google.inject.Inject;
 import io.sphere.sdk.discountcodes.DiscountCode;
 
+import javax.inject.Singleton;
 import java.util.Optional;
 
-@RequestScoped
+@Singleton
 public class DiscountCodeViewModelFactory extends SimpleViewModelFactory<DiscountCodeViewModel, DiscountCode> {
-    private final UserLanguage userLanguage;
+
+    private final I18nResolver i18nResolver;
 
     @Inject
-    public DiscountCodeViewModelFactory(final UserLanguage userLanguage) {
-        this.userLanguage = userLanguage;
+    DiscountCodeViewModelFactory(final I18nResolver i18nResolver) {
+        this.i18nResolver = i18nResolver;
     }
 
-    protected final UserLanguage getUserLanguage() {
-        return userLanguage;
+    protected final I18nResolver getI18nResolver() {
+        return i18nResolver;
     }
 
     @Override
@@ -39,8 +40,8 @@ public class DiscountCodeViewModelFactory extends SimpleViewModelFactory<Discoun
 
     protected void fillName(final DiscountCodeViewModel viewModel, final DiscountCode discountCode) {
         final String displayName = Optional.ofNullable(discountCode.getName())
-                .flatMap(name -> name.find(userLanguage.locales()))
-                .orElseGet(() -> discountCode.getCode());
+                .flatMap(i18nResolver::get)
+                .orElseGet(discountCode::getCode);
         viewModel.setName(displayName);
     }
 

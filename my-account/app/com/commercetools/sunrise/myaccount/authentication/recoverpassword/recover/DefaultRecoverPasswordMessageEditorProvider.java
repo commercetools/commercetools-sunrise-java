@@ -1,10 +1,10 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover;
 
-import com.commercetools.sunrise.framework.template.engine.EmailContentRenderer;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
+import com.commercetools.sunrise.email.MessageEditor;
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
+import com.commercetools.sunrise.framework.renderers.EmailContentRenderer;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels.RecoverPasswordEmailContent;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels.RecoverPasswordEmailContentFactory;
-import com.commercetools.sunrise.email.MessageEditor;
 import io.sphere.sdk.customers.CustomerToken;
 import play.libs.concurrent.HttpExecution;
 import play.twirl.api.Content;
@@ -39,21 +39,21 @@ import java.util.concurrent.CompletionStage;
  */
 public class DefaultRecoverPasswordMessageEditorProvider implements RecoverPasswordMessageEditorProvider {
 
-    private final I18nIdentifierResolver i18nIdentifierResolver;
+    private final I18nResolver i18nResolver;
     private final EmailContentRenderer emailContentRenderer;
     private final RecoverPasswordEmailContentFactory recoverPasswordEmailContentFactory;
 
     @Inject
-    protected DefaultRecoverPasswordMessageEditorProvider(final I18nIdentifierResolver i18nIdentifierResolver,
+    protected DefaultRecoverPasswordMessageEditorProvider(final I18nResolver i18nResolver,
                                                           final EmailContentRenderer emailContentRenderer,
                                                           final RecoverPasswordEmailContentFactory recoverPasswordEmailContentFactory) {
-        this.i18nIdentifierResolver = i18nIdentifierResolver;
+        this.i18nResolver = i18nResolver;
         this.emailContentRenderer = emailContentRenderer;
         this.recoverPasswordEmailContentFactory = recoverPasswordEmailContentFactory;
     }
 
-    protected final I18nIdentifierResolver getI18nIdentifierResolver() {
-        return i18nIdentifierResolver;
+    protected final I18nResolver getI18nResolver() {
+        return i18nResolver;
     }
 
     protected final EmailContentRenderer getEmailContentRenderer() {
@@ -83,11 +83,11 @@ public class DefaultRecoverPasswordMessageEditorProvider implements RecoverPassw
 
     @Nullable
     private String createFromField() {
-        return i18nIdentifierResolver.resolve("my-account:forgotPassword.email.from").orElse(null);
+        return i18nResolver.get("my-account:forgotPassword.email.from").orElse(null);
     }
 
     @Nullable
     private String createSubjectField() {
-        return i18nIdentifierResolver.resolve("my-account:forgotPassword.email.subject").orElse(null);
+        return i18nResolver.get("my-account:forgotPassword.email.subject").orElse(null);
     }
 }

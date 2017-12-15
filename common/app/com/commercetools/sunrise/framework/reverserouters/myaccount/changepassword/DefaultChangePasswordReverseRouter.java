@@ -1,23 +1,32 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.changepassword;
 
-import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.AbstractReflectionReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ParsedRoutes;
+import com.commercetools.sunrise.framework.reverserouters.ReverseCaller;
 import play.mvc.Call;
 
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 
-public class DefaultChangePasswordReverseRouter extends AbstractLocalizedReverseRouter implements ChangePasswordReverseRouter {
+@Singleton
+public class DefaultChangePasswordReverseRouter extends AbstractReflectionReverseRouter implements ChangePasswordReverseRouter {
 
-    private final SimpleChangePasswordReverseRouter delegate;
+    private final ReverseCaller changePasswordPageCaller;
+    private final ReverseCaller changePasswordProcessCaller;
 
     @Inject
-    protected DefaultChangePasswordReverseRouter(final Locale locale, final SimpleChangePasswordReverseRouter reverseRouter) {
-        super(locale);
-        this.delegate = reverseRouter;
+    protected DefaultChangePasswordReverseRouter(final ParsedRoutes parsedRoutes) {
+        changePasswordPageCaller = getReverseCallerForSunriseRoute(CHANGE_PASSWORD_PAGE, parsedRoutes);
+        changePasswordProcessCaller = getReverseCallerForSunriseRoute(CHANGE_PASSWORD_PROCESS, parsedRoutes);
     }
 
     @Override
-    public Call changePasswordProcessCall(final String languageTag) {
-        return delegate.changePasswordProcessCall(languageTag);
+    public Call changePasswordPageCall() {
+        return changePasswordPageCaller.call();
+    }
+
+    @Override
+    public Call changePasswordProcessCall() {
+        return changePasswordProcessCaller.call();
     }
 }

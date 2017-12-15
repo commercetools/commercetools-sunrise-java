@@ -32,7 +32,7 @@ public abstract class SunriseChangeCountryController extends SunriseFormControll
 
     @EnableHooks
     @SunriseRoute(LocalizationReverseRouter.CHANGE_COUNTRY_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return processForm(null);
     }
 

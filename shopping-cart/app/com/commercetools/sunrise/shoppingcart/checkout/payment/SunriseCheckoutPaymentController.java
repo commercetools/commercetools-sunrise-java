@@ -9,7 +9,7 @@ import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.payments.Payment;
@@ -61,7 +61,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseContentFor
 
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_PAYMENT_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return requireNonEmptyCart(cart ->
                 findPaymentMethods(cart, paymentMethods ->
                         showFormPage(PaymentMethodsWithCart.of(paymentMethods, cart), formData)));
@@ -69,7 +69,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseContentFor
 
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_PAYMENT_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return requireNonEmptyCart(cart ->
                 findPaymentMethods(cart, paymentMethods ->
                         processForm(PaymentMethodsWithCart.of(paymentMethods, cart))));

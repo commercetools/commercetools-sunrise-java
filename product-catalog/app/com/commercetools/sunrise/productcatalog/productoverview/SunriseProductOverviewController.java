@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.productcatalog.productoverview;
 
-import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.controllers.SunriseContentController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
+import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
@@ -42,7 +42,7 @@ public abstract class SunriseProductOverviewController extends SunriseContentCon
 
     @EnableHooks
     @SunriseRoute(ProductReverseRouter.PRODUCT_OVERVIEW_PAGE)
-    public CompletionStage<Result> process(final String languageTag, final String categoryIdentifier) {
+    public CompletionStage<Result> show(final String categoryIdentifier) {
         return requireCategory(categoryIdentifier, category ->
                 findProducts(category, products ->
                         showPage(ProductsWithCategory.of(products, category))));

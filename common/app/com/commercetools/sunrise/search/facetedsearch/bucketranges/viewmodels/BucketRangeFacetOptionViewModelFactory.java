@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.search.facetedsearch.bucketranges.viewmodels;
 
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
 import com.commercetools.sunrise.search.facetedsearch.bucketranges.BucketRangeFacetedSearchFormOption;
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.AbstractFacetOptionViewModelFactory;
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionViewModel;
@@ -14,15 +14,15 @@ import java.util.List;
 @RequestScoped
 public class BucketRangeFacetOptionViewModelFactory extends AbstractFacetOptionViewModelFactory<RangeStats, BucketRangeFacetedSearchFormOption, List<String>> {
 
-    private final I18nIdentifierResolver i18nIdentifierResolver;
+    private final I18nResolver i18nResolver;
 
     @Inject
-    public BucketRangeFacetOptionViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver) {
-        this.i18nIdentifierResolver = i18nIdentifierResolver;
+    public BucketRangeFacetOptionViewModelFactory(final I18nResolver i18nResolver) {
+        this.i18nResolver = i18nResolver;
     }
 
-    protected final I18nIdentifierResolver getI18nIdentifierResolver() {
-        return i18nIdentifierResolver;
+    protected final I18nResolver getI18nResolver() {
+        return i18nResolver;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BucketRangeFacetOptionViewModelFactory extends AbstractFacetOptionV
 
     @Override
     protected void fillLabel(final FacetOptionViewModel viewModel, final RangeStats stats, final BucketRangeFacetedSearchFormOption option, @Nullable final List<String> selectedValues) {
-        viewModel.setLabel(i18nIdentifierResolver.resolveOrKey(option.getFieldLabel()));
+        viewModel.setLabel(i18nResolver.getOrKey(option.getFieldLabel()));
     }
 
     @Override

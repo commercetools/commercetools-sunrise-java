@@ -21,9 +21,9 @@ public class WishlistLinksControllerComponent  extends AbstractLinksControllerCo
 
     @Override
     protected void addLinksToPage(final PageMeta meta, final WishlistReverseRouter reverseRouter) {
-        meta.addHalLink(reverseRouter.addToWishlistProcess(), "addToWishlist");
-        meta.addHalLink(reverseRouter.removeFromWishlistProcess(), "removeFromWishlist");
-        meta.addHalLink(reverseRouter.clearWishlistProcess(), "clearWishlist");
+        meta.addHalLink(reverseRouter.addToWishlistProcessCall(), "addToWishlist");
+        meta.addHalLink(reverseRouter.removeFromWishlistProcessCall(), "removeFromWishlist");
+        meta.addHalLink(reverseRouter.clearWishlistProcessCall(), "clearWishlist");
         meta.addHalLink(reverseRouter.wishlistPageCall(), "myWishlist");
     }
 }

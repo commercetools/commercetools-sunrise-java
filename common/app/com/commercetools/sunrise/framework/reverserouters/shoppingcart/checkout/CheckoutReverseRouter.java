@@ -1,45 +1,45 @@
 package com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout;
 
-import com.commercetools.sunrise.framework.reverserouters.LocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ReverseRouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
 @ImplementedBy(DefaultCheckoutReverseRouter.class)
-public interface CheckoutReverseRouter extends SimpleCheckoutReverseRouter, LocalizedReverseRouter {
+public interface CheckoutReverseRouter extends ReverseRouter {
 
-    default Call checkoutAddressPageCall() {
-        return checkoutAddressPageCall(locale().toLanguageTag());
-    }
+    String CHECKOUT_ADDRESS_PAGE = "checkoutAddressPageCall";
 
-    default Call checkoutAddressProcessCall() {
-        return checkoutAddressProcessCall(locale().toLanguageTag());
-    }
+    Call checkoutAddressPageCall();
 
-    default Call checkoutShippingPageCall() {
-        return checkoutShippingPageCall(locale().toLanguageTag());
-    }
+    String CHECKOUT_ADDRESS_PROCESS = "checkoutAddressProcessCall";
 
-    default Call checkoutShippingProcessCall() {
-        return checkoutShippingProcessCall(locale().toLanguageTag());
-    }
+    Call checkoutAddressProcessCall();
 
-    default Call checkoutPaymentPageCall() {
-        return checkoutPaymentPageCall(locale().toLanguageTag());
-    }
+    String CHECKOUT_SHIPPING_PAGE = "checkoutShippingPageCall";
 
-    default Call checkoutPaymentProcessCall() {
-        return checkoutPaymentProcessCall(locale().toLanguageTag());
-    }
+    Call checkoutShippingPageCall();
 
-    default Call checkoutConfirmationPageCall() {
-        return checkoutConfirmationPageCall(locale().toLanguageTag());
-    }
+    String CHECKOUT_SHIPPING_PROCESS = "checkoutShippingProcessCall";
 
-    default Call checkoutConfirmationProcessCall() {
-        return checkoutConfirmationProcessCall(locale().toLanguageTag());
-    }
+    Call checkoutShippingProcessCall();
 
-    default Call checkoutThankYouPageCall() {
-        return checkoutThankYouPageCall(locale().toLanguageTag());
-    }
+    String CHECKOUT_PAYMENT_PAGE = "checkoutPaymentPageCall";
+
+    Call checkoutPaymentPageCall();
+
+    String CHECKOUT_PAYMENT_PROCESS = "checkoutPaymentProcessCall";
+
+    Call checkoutPaymentProcessCall();
+
+    String CHECKOUT_CONFIRMATION_PAGE = "checkoutConfirmationPageCall";
+
+    Call checkoutConfirmationPageCall();
+
+    String CHECKOUT_CONFIRMATION_PROCESS = "checkoutConfirmationProcessCall";
+
+    Call checkoutConfirmationProcessCall();
+
+    String CHECKOUT_THANK_YOU_PAGE = "checkoutThankYouPageCall";
+
+    Call checkoutThankYouPageCall();
 }

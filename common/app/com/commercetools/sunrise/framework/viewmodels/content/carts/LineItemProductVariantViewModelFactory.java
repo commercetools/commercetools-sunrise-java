@@ -1,17 +1,17 @@
 package com.commercetools.sunrise.framework.viewmodels.content.carts;
 
+import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.framework.viewmodels.content.products.AbstractProductVariantViewModelFactory;
+import com.commercetools.sunrise.framework.viewmodels.content.products.ProductPriceUtils;
 import com.commercetools.sunrise.framework.viewmodels.content.products.ProductVariantViewModel;
 import com.commercetools.sunrise.framework.viewmodels.formatters.PriceFormatter;
-import com.commercetools.sunrise.framework.viewmodels.content.products.ProductPriceUtils;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
 import io.sphere.sdk.carts.LineItem;
 import play.mvc.Call;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-@RequestScoped
+@Singleton
 public class LineItemProductVariantViewModelFactory extends AbstractProductVariantViewModelFactory<LineItem> {
 
     private final PriceFormatter priceFormatter;

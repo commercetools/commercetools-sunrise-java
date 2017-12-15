@@ -4,8 +4,8 @@ import com.commercetools.sunrise.framework.components.controllers.PageHeaderCont
 import com.commercetools.sunrise.framework.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;

@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.search.facetedsearch.terms.viewmodels;
 
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import com.commercetools.sunrise.search.facetedsearch.terms.ConfiguredTermFacetedSearchFormSettings;
 import com.commercetools.sunrise.search.facetedsearch.terms.TermFacetMapperSettings;
 import com.commercetools.sunrise.search.facetedsearch.terms.TermFacetedSearchFormSettings;
@@ -8,13 +9,15 @@ import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionView
 import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import play.mvc.Http;
 import play.test.Helpers;
 import play.test.WithApplication;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.commercetools.sunrise.search.facetedsearch.terms.viewmodels.CustomSortedTermFacetViewModelFactory.comparePositions;
@@ -23,7 +26,11 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CustomSortedTermFacetViewModelFactoryTest extends WithApplication {
+
+    @Mock
+    private I18nResolver dummyI18nResolver;
 
     @Test
     public void sortsOptionsAsGivenList() throws Exception {
@@ -92,7 +99,7 @@ public class CustomSortedTermFacetViewModelFactoryTest extends WithApplication {
                 .map(term -> TermStats.of(term, 0L))
                 .collect(toList());
         Http.Context.current.set(new Http.Context(Helpers.fakeRequest()));
-        final List<FacetOptionViewModel> options = new CustomSortedTermFacetViewModelFactory(Optional::of, new TermFacetOptionViewModelFactory())
+        final List<FacetOptionViewModel> options = new CustomSortedTermFacetViewModelFactory(dummyI18nResolver, new TermFacetOptionViewModelFactory())
                 .createOptions(settings, TermFacetResult.of(0L, 0L, 0L, termStats));
         test.accept(options.stream()
                 .map(FacetOptionViewModel::getValue)

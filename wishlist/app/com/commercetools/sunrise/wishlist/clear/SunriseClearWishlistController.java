@@ -37,7 +37,7 @@ public abstract class SunriseClearWishlistController extends SunriseController
 
     @EnableHooks
     @SunriseRoute(WishlistReverseRouter.CLEAR_WISHLIST_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return requireWishlist(this::processRequest);
     }
 

@@ -24,7 +24,7 @@ public abstract class SunriseLogOutController extends SunriseController
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.LOG_OUT_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return processRequest(null);
     }
 

@@ -1,13 +1,13 @@
 package com.commercetools.sunrise.framework.reverserouters.productcatalog.home;
 
-import com.commercetools.sunrise.framework.reverserouters.LocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ReverseRouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
 @ImplementedBy(DefaultHomeReverseRouter.class)
-public interface HomeReverseRouter extends SimpleHomeReverseRouter, LocalizedReverseRouter {
+public interface HomeReverseRouter extends ReverseRouter {
 
-    default Call homePageCall() {
-        return homePageCall(locale().toLanguageTag());
-    }
+    String HOME_PAGE = "homePageCall";
+
+    Call homePageCall();
 }

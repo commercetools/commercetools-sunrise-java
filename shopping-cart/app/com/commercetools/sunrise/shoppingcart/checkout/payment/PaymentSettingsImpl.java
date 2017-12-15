@@ -1,15 +1,14 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.ctp.project.ProjectContext;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifier;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierFactory;
-import com.commercetools.sunrise.framework.template.i18n.I18nResolver;
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.models.LocalizedStringEntry;
 import io.sphere.sdk.payments.PaymentMethodInfo;
 import io.sphere.sdk.payments.PaymentMethodInfoBuilder;
 import play.Configuration;
+import play.i18n.Lang;
+import play.i18n.Langs;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,7 +17,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.emptyMap;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
@@ -33,13 +32,11 @@ final class PaymentSettingsImpl implements PaymentSettings {
     private final List<PaymentMethodInfo> paymentMethods;
 
     @Inject
-    PaymentSettingsImpl(final Configuration configuration, final ProjectContext projectContext,
-                        final I18nResolver i18nResolver, final I18nIdentifierFactory i18nIdentifierFactory) {
+    PaymentSettingsImpl(final Configuration configuration, final Langs langs, final I18nResolver i18nResolver) {
         this.paymentMethods = configuration.getConfigList(CONFIG_PAYMENT_KEY, emptyList()).stream()
                 .map(paymentConfig -> {
                     final LocalizedString name = Optional.ofNullable(paymentConfig.getString(CONFIG_NAME_FIELD_KEY))
-                            .map(i18nIdentifierFactory::create)
-                            .map(i18nIdentifier -> buildLocalizedName(i18nIdentifier, i18nResolver, projectContext))
+                            .map(messageKey -> buildLocalizedName(messageKey, i18nResolver, langs))
                             .orElse(null);
                     return PaymentMethodInfoBuilder.of()
                             .name(name)
@@ -55,10 +52,12 @@ final class PaymentSettingsImpl implements PaymentSettings {
         return completedFuture(paymentMethods);
     }
 
-    private static LocalizedString buildLocalizedName(final I18nIdentifier nameI18nIdentifier, final I18nResolver i18nResolver,
-                                                      final ProjectContext projectContext) {
-        return projectContext.locales().stream()
-                .map(locale -> LocalizedStringEntry.of(locale, i18nResolver.getOrKey(singletonList(locale), nameI18nIdentifier)))
+    private static LocalizedString buildLocalizedName(final String messageKey,
+                                                      final I18nResolver i18nResolver,
+                                                      final Langs langs) {
+        return langs.availables().stream()
+                .map(Lang::toLocale)
+                .map(locale -> LocalizedStringEntry.of(locale, i18nResolver.get(locale, messageKey, emptyMap()).orElse(messageKey)))
                 .collect(LocalizedString.streamCollector());
     }
 }

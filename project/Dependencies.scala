@@ -26,7 +26,9 @@ object Dependencies {
   lazy val sunriseTheme = Seq (
     libraryDependencies ++= Seq (
       "org.webjars" %% "webjars-play" % "2.5.0-2",
-      "com.github.jknack" % "handlebars" % "4.0.5"
+      "com.github.jknack" % "handlebars" % "4.0.5",
+      // YAML localization module
+      "com.github.karelcemus" %% "play-i18n" % "0.5"
     )
   )
 

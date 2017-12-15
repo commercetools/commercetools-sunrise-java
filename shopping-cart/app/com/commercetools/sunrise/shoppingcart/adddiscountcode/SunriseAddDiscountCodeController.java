@@ -5,11 +5,10 @@ import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContent;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
@@ -52,7 +51,7 @@ public abstract class SunriseAddDiscountCodeController extends SunriseContentFor
 
     @EnableHooks
     @SunriseRoute(CartReverseRouter.ADD_DISCOUNT_CODE_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return requireNonEmptyCart(this::processForm);
     }
 
@@ -66,8 +65,7 @@ public abstract class SunriseAddDiscountCodeController extends SunriseContentFor
 
     @Override
     public PageContent createPageContent(final Cart cart, final Form<? extends AddDiscountCodeFormData> form) {
-        final CartPageContent cartPageContent = pageContentFactory.create(cart, form);
-        return cartPageContent;
+        return pageContentFactory.create(cart, form);
     }
 
     @Override

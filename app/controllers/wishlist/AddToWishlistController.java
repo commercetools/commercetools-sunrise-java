@@ -5,8 +5,8 @@ import com.commercetools.sunrise.framework.components.controllers.RegisteredComp
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.wishlist.WishlistCreator;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
@@ -57,7 +57,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseContentFo
 
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_SHIPPING_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return requireNonEmptyCart(cart ->
                 findShippingMethods(cart, shippingMethods ->
                         showFormPage(ShippingMethodsWithCart.of(shippingMethods, cart), formData)));
@@ -65,7 +65,7 @@ public abstract class SunriseCheckoutShippingController extends SunriseContentFo
 
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_SHIPPING_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return requireNonEmptyCart(cart ->
                 findShippingMethods(cart, shippingMethods ->
                         processForm(ShippingMethodsWithCart.of(shippingMethods, cart))));

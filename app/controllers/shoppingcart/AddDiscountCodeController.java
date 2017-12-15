@@ -5,8 +5,8 @@ import com.commercetools.sunrise.framework.components.controllers.RegisteredComp
 import com.commercetools.sunrise.framework.controllers.cache.NoCache;
 import com.commercetools.sunrise.framework.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.framework.template.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.sessions.cart.CartDiscountCodesExpansionControllerComponent;
 import com.commercetools.sunrise.sessions.cart.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.shoppingcart.CartFinder;

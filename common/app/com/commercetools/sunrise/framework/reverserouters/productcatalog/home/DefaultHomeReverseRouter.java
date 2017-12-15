@@ -1,23 +1,25 @@
 package com.commercetools.sunrise.framework.reverserouters.productcatalog.home;
 
-import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.AbstractReflectionReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ParsedRoutes;
+import com.commercetools.sunrise.framework.reverserouters.ReverseCaller;
 import play.mvc.Call;
 
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 
-public class DefaultHomeReverseRouter extends AbstractLocalizedReverseRouter implements HomeReverseRouter {
+@Singleton
+public class DefaultHomeReverseRouter extends AbstractReflectionReverseRouter implements HomeReverseRouter {
 
-    private final SimpleHomeReverseRouter delegate;
+    private final ReverseCaller homePageCaller;
 
     @Inject
-    protected DefaultHomeReverseRouter(final Locale locale, final SimpleHomeReverseRouter reverseRouter) {
-        super(locale);
-        this.delegate = reverseRouter;
+    protected DefaultHomeReverseRouter(final ParsedRoutes parsedRoutes) {
+        homePageCaller = getReverseCallerForSunriseRoute(HOME_PAGE, parsedRoutes);
     }
 
     @Override
-    public Call homePageCall(final String languageTag) {
-        return delegate.homePageCall(languageTag);
+    public Call homePageCall() {
+        return homePageCaller.call();
     }
 }

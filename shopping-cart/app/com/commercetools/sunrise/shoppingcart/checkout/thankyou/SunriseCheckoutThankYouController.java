@@ -3,7 +3,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 import com.commercetools.sunrise.framework.controllers.SunriseContentController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
@@ -37,7 +37,7 @@ public abstract class SunriseCheckoutThankYouController extends SunriseContentCo
 
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_THANK_YOU_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return requireOrderCreated(this::showPage);
     }
 

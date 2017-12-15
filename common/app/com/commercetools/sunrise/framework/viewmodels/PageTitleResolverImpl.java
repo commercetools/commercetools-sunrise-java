@@ -1,23 +1,23 @@
 package com.commercetools.sunrise.framework.viewmodels;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Optional;
 
-@RequestScoped
+@Singleton
 final class PageTitleResolverImpl implements PageTitleResolver {
 
-    private final I18nIdentifierResolver i18nIdentifierResolver;
+    private final I18nResolver i18nResolver;
 
     @Inject
-    PageTitleResolverImpl(final I18nIdentifierResolver i18nIdentifierResolver) {
-        this.i18nIdentifierResolver = i18nIdentifierResolver;
+    PageTitleResolverImpl(final I18nResolver i18nResolver) {
+        this.i18nResolver = i18nResolver;
     }
 
     @Override
     public Optional<String> find(final String key) {
-        return i18nIdentifierResolver.resolve(key);
+        return i18nResolver.get(key);
     }
 }

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook;
 
-import com.commercetools.sunrise.framework.reverserouters.LocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ReverseRouter;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.models.Address;
 import play.mvc.Call;
@@ -8,31 +8,31 @@ import play.mvc.Call;
 import java.util.Optional;
 
 @ImplementedBy(DefaultAddressBookReverseRouter.class)
-public interface AddressBookReverseRouter extends SimpleAddressBookReverseRouter, LocalizedReverseRouter {
+public interface AddressBookReverseRouter extends ReverseRouter {
 
-    default Call addressBookDetailPageCall() {
-        return addressBookDetailPageCall(locale().toLanguageTag());
-    }
+    String ADDRESS_BOOK_DETAIL_PAGE = "addressBookDetailPageCall";
 
-    default Call addAddressPageCall() {
-        return addAddressPageCall(locale().toLanguageTag());
-    }
+    Call addressBookDetailPageCall();
 
-    default Call addAddressProcessCall() {
-        return addAddressProcessCall(locale().toLanguageTag());
-    }
+    String ADD_ADDRESS_PAGE = "addAddressPageCall";
 
-    default Call changeAddressPageCall(final String addressIdentifier) {
-        return changeAddressPageCall(locale().toLanguageTag(), addressIdentifier);
-    }
+    Call addAddressPageCall();
 
-    default Call changeAddressProcessCall(final String addressIdentifier) {
-        return changeAddressProcessCall(locale().toLanguageTag(), addressIdentifier);
-    }
+    String ADD_ADDRESS_PROCESS = "addAddressProcessCall";
 
-    default Call removeAddressProcessCall(final String addressIdentifier) {
-        return removeAddressProcessCall(locale().toLanguageTag(), addressIdentifier);
-    }
+    Call addAddressProcessCall();
+
+    String CHANGE_ADDRESS_PAGE = "changeAddressPageCall";
+
+    Call changeAddressPageCall(final String addressIdentifier);
+
+    String CHANGE_ADDRESS_PROCESS = "changeAddressProcessCall";
+
+    Call changeAddressProcessCall(final String addressIdentifier);
+
+    String REMOVE_ADDRESS_PROCESS = "removeAddressProcessCall";
+
+    Call removeAddressProcessCall(final String addressIdentifier);
 
     /**
      * Finds the call to access the edit form page for the given address.

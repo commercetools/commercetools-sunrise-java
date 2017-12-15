@@ -1,32 +1,25 @@
 package com.commercetools.sunrise.framework.viewmodels.content.addresses;
 
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.viewmodels.SimpleViewModelFactory;
-import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
 import io.sphere.sdk.models.Address;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 
-@RequestScoped
+@Singleton
 public class AddressViewModelFactory extends SimpleViewModelFactory<AddressViewModel, Address> {
 
-    private final Locale locale;
-    private final I18nIdentifierResolver i18nIdentifierResolver;
+    private final I18nResolver i18nResolver;
 
     @Inject
-    public AddressViewModelFactory(final Locale locale, final I18nIdentifierResolver i18nIdentifierResolver) {
-        this.locale = locale;
-        this.i18nIdentifierResolver = i18nIdentifierResolver;
+    public AddressViewModelFactory(final I18nResolver i18nResolver) {
+        this.i18nResolver = i18nResolver;
     }
 
-    protected final Locale getLocale() {
-        return locale;
-    }
-
-    protected final I18nIdentifierResolver getI18nIdentifierResolver() {
-        return i18nIdentifierResolver;
+    protected final I18nResolver getI18nResolver() {
+        return i18nResolver;
     }
 
     @Override
@@ -56,7 +49,7 @@ public class AddressViewModelFactory extends SimpleViewModelFactory<AddressViewM
 
     protected void fillTitle(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null && address.getTitle() != null) {
-            viewModel.setTitle(i18nIdentifierResolver.resolveOrKey(address.getTitle()));
+            viewModel.setTitle(i18nResolver.getOrKey(address.getTitle()));
         }
     }
 
@@ -116,7 +109,7 @@ public class AddressViewModelFactory extends SimpleViewModelFactory<AddressViewM
 
     protected void fillCountry(final AddressViewModel viewModel, @Nullable final Address address) {
         if (address != null) {
-            viewModel.setCountry(address.getCountry().toLocale().getDisplayCountry(locale));
+            viewModel.setCountry(address.getCountry().toLocale().getDisplayCountry(i18nResolver.currentLanguage()));
         }
     }
 }

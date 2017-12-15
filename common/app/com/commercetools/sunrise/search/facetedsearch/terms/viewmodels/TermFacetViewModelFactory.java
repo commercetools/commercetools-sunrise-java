@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.search.facetedsearch.terms.viewmodels;
 
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
 import com.commercetools.sunrise.search.facetedsearch.terms.TermFacetedSearchFormSettings;
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionViewModel;
 import io.sphere.sdk.search.TermFacetResult;
@@ -18,8 +18,8 @@ public class TermFacetViewModelFactory extends AbstractTermFacetViewModelFactory
     private final TermFacetOptionViewModelFactory termFacetOptionViewModelFactory;
 
     @Inject
-    public TermFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver, final TermFacetOptionViewModelFactory termFacetOptionViewModelFactory) {
-        super(i18nIdentifierResolver);
+    public TermFacetViewModelFactory(final I18nResolver i18nResolver, final TermFacetOptionViewModelFactory termFacetOptionViewModelFactory) {
+        super(i18nResolver);
         this.termFacetOptionViewModelFactory = termFacetOptionViewModelFactory;
     }
 

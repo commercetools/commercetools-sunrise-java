@@ -1,51 +1,63 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook;
 
-import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.AbstractReflectionReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ParsedRoutes;
+import com.commercetools.sunrise.framework.reverserouters.ReverseCaller;
 import io.sphere.sdk.models.Address;
 import play.mvc.Call;
 
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 import java.util.Optional;
 
-public class DefaultAddressBookReverseRouter extends AbstractLocalizedReverseRouter implements AddressBookReverseRouter {
+@Singleton
+public class DefaultAddressBookReverseRouter extends AbstractReflectionReverseRouter implements AddressBookReverseRouter {
 
-    private final SimpleAddressBookReverseRouter delegate;
+    private final ReverseCaller addressBookDetailPageCaller;
+    private final ReverseCaller addAddressPageCaller;
+    private final ReverseCaller addAddressProcessCaller;
+    private final ReverseCaller changeAddressPageCaller;
+    private final ReverseCaller changeAddressProcessCaller;
+    private final ReverseCaller removeAddressProcessCaller;
 
     @Inject
-    protected DefaultAddressBookReverseRouter(final Locale locale, final SimpleAddressBookReverseRouter reverseRouter) {
-        super(locale);
-        this.delegate = reverseRouter;
+    protected DefaultAddressBookReverseRouter(final ParsedRoutes parsedRoutes) {
+        addressBookDetailPageCaller = getReverseCallerForSunriseRoute(ADDRESS_BOOK_DETAIL_PAGE, parsedRoutes);
+        addAddressPageCaller = getReverseCallerForSunriseRoute(ADD_ADDRESS_PAGE, parsedRoutes);
+        addAddressProcessCaller = getReverseCallerForSunriseRoute(ADD_ADDRESS_PROCESS, parsedRoutes);
+        changeAddressPageCaller = getReverseCallerForSunriseRoute(CHANGE_ADDRESS_PAGE, parsedRoutes);
+        changeAddressProcessCaller = getReverseCallerForSunriseRoute(CHANGE_ADDRESS_PROCESS, parsedRoutes);
+        removeAddressProcessCaller = getReverseCallerForSunriseRoute(REMOVE_ADDRESS_PROCESS, parsedRoutes);
     }
 
     @Override
-    public Call addressBookDetailPageCall(final String languageTag) {
-        return delegate.addressBookDetailPageCall(languageTag);
+    public Call addressBookDetailPageCall() {
+        return addressBookDetailPageCaller.call();
     }
 
     @Override
-    public Call addAddressPageCall(final String languageTag) {
-        return delegate.addAddressPageCall(languageTag);
+    public Call addAddressPageCall() {
+        return addAddressPageCaller.call();
     }
 
     @Override
-    public Call addAddressProcessCall(final String languageTag) {
-        return delegate.addAddressProcessCall(languageTag);
+    public Call addAddressProcessCall() {
+        return addAddressProcessCaller.call();
     }
 
     @Override
-    public Call changeAddressPageCall(final String languageTag, final String addressIdentifier) {
-        return delegate.changeAddressPageCall(languageTag, addressIdentifier);
+    public Call changeAddressPageCall(final String addressIdentifier) {
+        return changeAddressPageCaller.call(addressIdentifier);
     }
 
     @Override
-    public Call changeAddressProcessCall(final String languageTag, final String addressIdentifier) {
-        return delegate.changeAddressProcessCall(languageTag, addressIdentifier);
+    public Call changeAddressProcessCall(final String addressIdentifier) {
+        return changeAddressProcessCaller.call(addressIdentifier);
     }
 
     @Override
-    public Call removeAddressProcessCall(final String languageTag, final String addressIdentifier) {
-        return delegate.removeAddressProcessCall(languageTag, addressIdentifier);
+    public Call removeAddressProcessCall(final String addressIdentifier) {
+        return removeAddressProcessCaller.call(addressIdentifier);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
@@ -42,13 +42,13 @@ public abstract class SunriseLogInController extends SunriseContentFormControlle
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.LOG_IN_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return showFormPage(null, formData);
     }
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.LOG_IN_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return processForm(null);
     }
 

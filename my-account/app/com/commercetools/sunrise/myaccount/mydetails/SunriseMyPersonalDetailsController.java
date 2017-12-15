@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
@@ -49,13 +49,13 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseContentF
 
     @EnableHooks
     @SunriseRoute(MyPersonalDetailsReverseRouter.MY_PERSONAL_DETAILS_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return requireCustomer(customer -> showFormPage(customer, formData));
     }
 
     @EnableHooks
     @SunriseRoute(MyPersonalDetailsReverseRouter.MY_PERSONAL_DETAILS_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return requireCustomer(this::processForm);
     }
 

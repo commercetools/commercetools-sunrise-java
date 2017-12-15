@@ -1,4 +1,0 @@
-header:
-  title: foo
-content:
-  day: Today is __today__, tomorrow is __tomorrow__

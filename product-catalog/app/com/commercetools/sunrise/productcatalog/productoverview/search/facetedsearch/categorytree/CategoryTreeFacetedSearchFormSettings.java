@@ -5,6 +5,7 @@ import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.FilterExpression;
 import play.mvc.Http;
+import play.routing.Router;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -33,7 +34,7 @@ public interface CategoryTreeFacetedSearchFormSettings extends ConfiguredCategor
 
     @Override
     default List<String> getSelectedValuesAsRawList(final Http.Context httpContext) {
-        return Optional.ofNullable(httpContext.args.get("ROUTE_PATTERN"))
+        return Optional.ofNullable(httpContext.args.get(Router.Tags.ROUTE_PATTERN))
                 .map(routePattern -> routePattern.toString().replaceAll("<[^>]+>", "")) // remove regex since splitting '$categoryIdentifier<[^/]+>' with '/' would create more words
                 .map(routePattern -> {
                     final List<String> paths = asList(routePattern.split("/"));

@@ -1,33 +1,33 @@
 package com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart;
 
-import com.commercetools.sunrise.framework.reverserouters.LocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ReverseRouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
 @ImplementedBy(DefaultCartReverseRouter.class)
-public interface CartReverseRouter extends SimpleCartReverseRouter, LocalizedReverseRouter {
+public interface CartReverseRouter extends ReverseRouter {
 
-    default Call cartDetailPageCall() {
-        return cartDetailPageCall(locale().toLanguageTag());
-    }
+    String CART_DETAIL_PAGE = "cartDetailPageCall";
 
-    default Call addLineItemProcessCall() {
-        return addLineItemProcessCall(locale().toLanguageTag());
-    }
+    Call cartDetailPageCall();
 
-    default Call changeLineItemQuantityProcessCall() {
-        return changeLineItemQuantityProcessCall(locale().toLanguageTag());
-    }
+    String ADD_LINE_ITEM_PROCESS = "addLineItemProcessCall";
 
-    default Call removeLineItemProcessCall() {
-        return removeLineItemProcessCall(locale().toLanguageTag());
-    }
+    Call addLineItemProcessCall();
 
-    default Call addDiscountCodeProcessCall() {
-        return addDiscountCodeProcessCall(locale().toLanguageTag());
-    }
+    String CHANGE_LINE_ITEM_QUANTITY_PROCESS = "changeLineItemQuantityProcessCall";
 
-    default Call removeDiscountCodeProcessCall() {
-        return removeDiscountCodeProcessCall(locale().toLanguageTag());
-    }
+    Call changeLineItemQuantityProcessCall();
+
+    String REMOVE_LINE_ITEM_PROCESS = "removeLineItemProcessCall";
+
+    Call removeLineItemProcessCall();
+
+    String ADD_DISCOUNT_CODE_PROCESS = "addDiscountCodeProcessCall";
+
+    Call addDiscountCodeProcessCall();
+
+    String REMOVE_DISCOUNT_CODE_PROCESS = "removeDiscountCodeProcessCall";
+
+    Call removeDiscountCodeProcessCall();
 }

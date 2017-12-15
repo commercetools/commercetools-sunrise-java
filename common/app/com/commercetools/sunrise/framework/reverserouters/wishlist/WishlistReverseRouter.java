@@ -1,25 +1,25 @@
 package com.commercetools.sunrise.framework.reverserouters.wishlist;
 
-import com.commercetools.sunrise.framework.reverserouters.LocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ReverseRouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
 @ImplementedBy(DefaultWishlistReverseRouter.class)
-public interface WishlistReverseRouter extends SimpleWishlistReverseRouter, LocalizedReverseRouter {
+public interface WishlistReverseRouter extends ReverseRouter {
 
-    default Call addToWishlistProcess() {
-        return addToWishlistProcessCall(locale().toLanguageTag());
-    }
+    String ADD_TO_WISHLIST_PROCESS = "addToWishlistProcessCall";
 
-    default Call removeFromWishlistProcess() {
-        return removeFromWishlistProcessCall(locale().toLanguageTag());
-    }
+    String REMOVE_FROM_WISHLIST_PROCESS = "removeFromWishlistProcessCall";
 
-    default Call clearWishlistProcess() {
-        return clearWishlistProcessCall(locale().toLanguageTag());
-    }
+    String CLEAR_WISHLIST_PROCESS = "clearWishlistProcessCall";
 
-    default Call wishlistPageCall() {
-        return wishlistPageCall(locale().toLanguageTag());
-    }
+    String WISHLIST_PAGE = "wishlistPageCall";
+
+    Call addToWishlistProcessCall();
+
+    Call removeFromWishlistProcessCall();
+
+    Call clearWishlistProcessCall();
+
+    Call wishlistPageCall();
 }

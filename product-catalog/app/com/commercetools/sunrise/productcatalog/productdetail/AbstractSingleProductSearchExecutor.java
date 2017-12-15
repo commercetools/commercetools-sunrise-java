@@ -12,6 +12,7 @@ import play.libs.concurrent.HttpExecution;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Function;
 
 public abstract class AbstractSingleProductSearchExecutor extends AbstractSphereRequestExecutor {
 
@@ -20,9 +21,14 @@ public abstract class AbstractSingleProductSearchExecutor extends AbstractSphere
     }
 
     protected final CompletionStage<Optional<ProductProjection>> executeRequest(final ProductProjectionSearch baseRequest) {
+        return executeRequest(baseRequest, PagedSearchResult::head);
+    }
+
+    protected final CompletionStage<Optional<ProductProjection>> executeRequest(final ProductProjectionSearch baseRequest,
+                                                                                final Function<PagedSearchResult<ProductProjection>, Optional<ProductProjection>> productSelector) {
         final ProductProjectionSearch request = ProductProjectionSearchHook.runHook(getHookRunner(), baseRequest);
         return getSphereClient().execute(request)
-                .thenApply(PagedSearchResult::head)
+                .thenApply(productSelector)
                 .thenApplyAsync(productOpt -> {
                     productOpt.ifPresent(product -> ProductProjectionLoadedHook.runHook(getHookRunner(), product));
                     return productOpt;

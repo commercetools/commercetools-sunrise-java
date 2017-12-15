@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.wishlist.content.viewmodels;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.framework.viewmodels.content.products.AbstractProductVariantViewModelFactory;
 import com.commercetools.sunrise.framework.viewmodels.content.products.ProductVariantViewModel;
@@ -9,8 +8,9 @@ import io.sphere.sdk.shoppinglists.LineItem;
 import play.mvc.Call;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-@RequestScoped
+@Singleton
 public class LineItemProductVariantViewModelFactory extends AbstractProductVariantViewModelFactory<LineItem> {
 
     private final PriceFormatter priceFormatter;

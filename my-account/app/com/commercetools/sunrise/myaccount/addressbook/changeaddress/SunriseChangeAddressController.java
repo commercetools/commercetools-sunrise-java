@@ -8,7 +8,7 @@ import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.myaccount.CustomerFinder;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
@@ -65,7 +65,7 @@ public abstract class SunriseChangeAddressController extends SunriseContentFormC
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PAGE)
-    public CompletionStage<Result> show(final String languageTag, final String addressIdentifier) {
+    public CompletionStage<Result> show(final String addressIdentifier) {
         return requireCustomer(customer ->
                 requireAddress(customer, addressIdentifier, address ->
                         showFormPage(AddressWithCustomer.of(address, customer), formData)));
@@ -73,7 +73,7 @@ public abstract class SunriseChangeAddressController extends SunriseContentFormC
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PROCESS)
-    public CompletionStage<Result> process(final String languageTag, final String addressIdentifier) {
+    public CompletionStage<Result> process(final String addressIdentifier) {
         return requireCustomer(customer ->
                 requireAddress(customer, addressIdentifier, address ->
                         processForm(AddressWithCustomer.of(address, customer))));

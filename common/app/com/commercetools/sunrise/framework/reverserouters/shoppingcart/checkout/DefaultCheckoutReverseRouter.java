@@ -1,63 +1,81 @@
 package com.commercetools.sunrise.framework.reverserouters.shoppingcart.checkout;
 
-import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.AbstractReflectionReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ParsedRoutes;
+import com.commercetools.sunrise.framework.reverserouters.ReverseCaller;
 import play.mvc.Call;
 
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 
-public class DefaultCheckoutReverseRouter extends AbstractLocalizedReverseRouter implements CheckoutReverseRouter {
+@Singleton
+public class DefaultCheckoutReverseRouter extends AbstractReflectionReverseRouter implements CheckoutReverseRouter {
 
-    private final SimpleCheckoutReverseRouter delegate;
+    private final ReverseCaller checkoutAddressPageCaller;
+    private final ReverseCaller checkoutAddressProcessCaller;
+    private final ReverseCaller checkoutShippingPageCaller;
+    private final ReverseCaller checkoutShippingProcessCaller;
+    private final ReverseCaller checkoutPaymentPageCaller;
+    private final ReverseCaller checkoutPaymentProcessCaller;
+    private final ReverseCaller checkoutConfirmationPageCaller;
+    private final ReverseCaller checkoutConfirmationProcessCaller;
+    private final ReverseCaller checkoutThankYouPageCaller;
 
     @Inject
-    protected DefaultCheckoutReverseRouter(final Locale locale, final SimpleCheckoutReverseRouter reverseRouter) {
-        super(locale);
-        this.delegate = reverseRouter;
+    protected DefaultCheckoutReverseRouter(final ParsedRoutes parsedRoutes) {
+        checkoutAddressPageCaller = getReverseCallerForSunriseRoute(CHECKOUT_ADDRESS_PAGE, parsedRoutes);
+        checkoutAddressProcessCaller = getReverseCallerForSunriseRoute(CHECKOUT_ADDRESS_PROCESS, parsedRoutes);
+        checkoutShippingPageCaller = getReverseCallerForSunriseRoute(CHECKOUT_SHIPPING_PAGE, parsedRoutes);
+        checkoutShippingProcessCaller = getReverseCallerForSunriseRoute(CHECKOUT_SHIPPING_PROCESS, parsedRoutes);
+        checkoutPaymentPageCaller = getReverseCallerForSunriseRoute(CHECKOUT_PAYMENT_PAGE, parsedRoutes);
+        checkoutPaymentProcessCaller = getReverseCallerForSunriseRoute(CHECKOUT_PAYMENT_PROCESS, parsedRoutes);
+        checkoutConfirmationPageCaller = getReverseCallerForSunriseRoute(CHECKOUT_CONFIRMATION_PAGE, parsedRoutes);
+        checkoutConfirmationProcessCaller = getReverseCallerForSunriseRoute(CHECKOUT_CONFIRMATION_PROCESS, parsedRoutes);
+        checkoutThankYouPageCaller = getReverseCallerForSunriseRoute(CHECKOUT_THANK_YOU_PAGE, parsedRoutes);
     }
 
     @Override
-    public Call checkoutAddressPageCall(final String languageTag) {
-        return delegate.checkoutAddressPageCall(languageTag);
+    public Call checkoutAddressPageCall() {
+        return checkoutAddressPageCaller.call();
     }
 
     @Override
-    public Call checkoutAddressProcessCall(final String languageTag) {
-        return delegate.checkoutAddressProcessCall(languageTag);
+    public Call checkoutAddressProcessCall() {
+        return checkoutAddressProcessCaller.call();
     }
 
     @Override
-    public Call checkoutShippingPageCall(final String languageTag) {
-        return delegate.checkoutShippingPageCall(languageTag);
+    public Call checkoutShippingPageCall() {
+        return checkoutShippingPageCaller.call();
     }
 
     @Override
-    public Call checkoutShippingProcessCall(final String languageTag) {
-        return delegate.checkoutShippingProcessCall(languageTag);
+    public Call checkoutShippingProcessCall() {
+        return checkoutShippingProcessCaller.call();
     }
 
     @Override
-    public Call checkoutPaymentPageCall(final String languageTag) {
-        return delegate.checkoutPaymentPageCall(languageTag);
+    public Call checkoutPaymentPageCall() {
+        return checkoutPaymentPageCaller.call();
     }
 
     @Override
-    public Call checkoutPaymentProcessCall(final String languageTag) {
-        return delegate.checkoutPaymentProcessCall(languageTag);
+    public Call checkoutPaymentProcessCall() {
+        return checkoutPaymentProcessCaller.call();
     }
 
     @Override
-    public Call checkoutConfirmationPageCall(final String languageTag) {
-        return delegate.checkoutConfirmationPageCall(languageTag);
+    public Call checkoutConfirmationPageCall() {
+        return checkoutConfirmationPageCaller.call();
     }
 
     @Override
-    public Call checkoutConfirmationProcessCall(final String languageTag) {
-        return delegate.checkoutConfirmationProcessCall(languageTag);
+    public Call checkoutConfirmationProcessCall() {
+        return checkoutConfirmationProcessCaller.call();
     }
 
     @Override
-    public Call checkoutThankYouPageCall(final String languageTag) {
-        return delegate.checkoutThankYouPageCall(languageTag);
+    public Call checkoutThankYouPageCall() {
+        return checkoutThankYouPageCaller.call();
     }
 }

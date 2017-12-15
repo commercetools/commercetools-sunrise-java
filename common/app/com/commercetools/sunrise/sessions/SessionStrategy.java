@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Represents a strategy used to read and write information into the user's session.
  */
-@ImplementedBy(SessionCookieStrategy.class)
+@ImplementedBy(DefaultSessionStrategy.class)
 public interface SessionStrategy {
 
     /**

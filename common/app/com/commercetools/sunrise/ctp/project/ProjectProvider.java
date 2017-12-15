@@ -26,6 +26,6 @@ public final class ProjectProvider implements Provider<Project> {
     @Override
     public Project get() {
         final SphereRequest<Project> request = ProjectGet.of();
-        return blockingWait(sphereClient.execute(request), Duration.ofSeconds(30));
+        return blockingWait(sphereClient.execute(request), Duration.ofMinutes(1));
     }
 }

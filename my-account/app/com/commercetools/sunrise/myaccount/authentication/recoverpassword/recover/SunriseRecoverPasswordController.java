@@ -6,7 +6,7 @@ import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels.RecoverPasswordPageContentFactory;
@@ -46,13 +46,13 @@ public abstract class SunriseRecoverPasswordController extends SunriseContentFor
 
     @EnableHooks
     @SunriseRoute(RecoverPasswordReverseRouter.REQUEST_RECOVERY_EMAIL_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return showFormPage(null, formData);
     }
 
     @EnableHooks
     @SunriseRoute(RecoverPasswordReverseRouter.REQUEST_RECOVERY_EMAIL_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return processForm(null);
     }
 

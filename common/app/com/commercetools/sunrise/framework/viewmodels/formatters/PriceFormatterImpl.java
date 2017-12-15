@@ -1,9 +1,10 @@
 package com.commercetools.sunrise.framework.viewmodels.formatters;
 
-import com.commercetools.sunrise.framework.injection.RequestScoped;
 import org.javamoney.moneta.format.CurrencyStyle;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 import javax.money.MonetaryAmount;
 import javax.money.format.AmountFormatQuery;
 import javax.money.format.AmountFormatQueryBuilder;
@@ -12,22 +13,23 @@ import java.util.Locale;
 
 import static org.javamoney.moneta.format.AmountFormatParams.PATTERN;
 
-@RequestScoped
+@Singleton
 final class PriceFormatterImpl implements PriceFormatter {
 
     private static final String PATTERN_WITHOUT_DECIMAL = "¤ #,###,##0.-";
     private static final String PATTERN_WITH_DECIMAL = "¤ #,###,##0.00";
-    private final Locale locale;
+
+    private final Provider<Locale> localeProvider;
 
     @Inject
-    PriceFormatterImpl(final Locale locale) {
-        this.locale = locale;
+    PriceFormatterImpl(final Provider<Locale> localeProvider) {
+        this.localeProvider = localeProvider;
     }
 
     @Override
     public String format(final MonetaryAmount monetaryAmount) {
         final boolean isDecimal = monetaryAmount.getNumber().doubleValueExact() % 1 != 0;//TODO this can be improved with monetary query
-        final AmountFormatQuery pattern = AmountFormatQueryBuilder.of(locale)
+        final AmountFormatQuery pattern = AmountFormatQueryBuilder.of(localeProvider.get())
                 .set(CurrencyStyle.SYMBOL)
                 .set(PATTERN, isDecimal ? PATTERN_WITH_DECIMAL : PATTERN_WITHOUT_DECIMAL)
                 .build();

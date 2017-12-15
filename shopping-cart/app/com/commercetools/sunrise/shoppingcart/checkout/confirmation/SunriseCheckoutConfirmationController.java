@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
@@ -49,13 +49,13 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseConte
 
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_CONFIRMATION_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return requireNonEmptyCart(cart -> showFormPage(cart, formData));
     }
 
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_CONFIRMATION_PROCESS)
-    public CompletionStage<Result> process(final String languageTag) {
+    public CompletionStage<Result> process() {
         return requireNonEmptyCart(this::processForm);
     }
 

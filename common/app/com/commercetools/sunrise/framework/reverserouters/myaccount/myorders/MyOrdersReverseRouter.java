@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.myorders;
 
-import com.commercetools.sunrise.framework.reverserouters.LocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ReverseRouter;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Call;
@@ -8,15 +8,15 @@ import play.mvc.Call;
 import java.util.Optional;
 
 @ImplementedBy(DefaultMyOrdersReverseRouter.class)
-public interface MyOrdersReverseRouter extends SimpleMyOrdersReverseRouter, LocalizedReverseRouter {
+public interface MyOrdersReverseRouter extends ReverseRouter {
 
-    default Call myOrderListPageCall() {
-        return myOrderListPageCall(locale().toLanguageTag());
-    }
+    String MY_ORDER_LIST_PAGE = "myOrderListPageCall";
 
-    default Call myOrderDetailPageCall(final String orderIdentifier) {
-        return myOrderDetailPageCall(locale().toLanguageTag(), orderIdentifier);
-    }
+    Call myOrderListPageCall();
+
+    String MY_ORDER_DETAIL_PAGE = "myOrderDetailPageCall";
+
+    Call myOrderDetailPageCall(final String orderIdentifier);
 
     /**
      * Finds the call to access the order detail page of the given order.

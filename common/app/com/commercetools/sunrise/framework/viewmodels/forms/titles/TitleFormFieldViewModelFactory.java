@@ -1,9 +1,9 @@
 package com.commercetools.sunrise.framework.viewmodels.forms.titles;
 
-import com.commercetools.sunrise.framework.viewmodels.forms.FormFieldWithOptions;
-import com.commercetools.sunrise.framework.viewmodels.forms.FormFieldViewModelFactory;
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
+import com.commercetools.sunrise.framework.viewmodels.forms.FormFieldViewModelFactory;
+import com.commercetools.sunrise.framework.viewmodels.forms.FormFieldWithOptions;
 import play.Configuration;
 import play.data.Form;
 
@@ -17,15 +17,15 @@ import static java.util.stream.Collectors.toList;
 public class TitleFormFieldViewModelFactory extends FormFieldViewModelFactory<TitleFormFieldViewModel, String> {
 
     private final List<String> defaultTitleKeys;
-    private final I18nIdentifierResolver i18nIdentifierResolver;
+    private final I18nResolver i18nResolver;
     private final TitleFormSelectableOptionViewModelFactory titleFormSelectableOptionViewModelFactory;
 
 
     @Inject
-    public TitleFormFieldViewModelFactory(final Configuration configuration, final I18nIdentifierResolver i18nIdentifierResolver,
+    public TitleFormFieldViewModelFactory(final Configuration configuration, final I18nResolver i18nResolver,
                                           final TitleFormSelectableOptionViewModelFactory titleFormSelectableOptionViewModelFactory) {
         this.defaultTitleKeys = configuration.getStringList("form.titles", emptyList());
-        this.i18nIdentifierResolver = i18nIdentifierResolver;
+        this.i18nResolver = i18nResolver;
         this.titleFormSelectableOptionViewModelFactory = titleFormSelectableOptionViewModelFactory;
     }
 
@@ -33,8 +33,8 @@ public class TitleFormFieldViewModelFactory extends FormFieldViewModelFactory<Ti
         return defaultTitleKeys;
     }
 
-    protected final I18nIdentifierResolver getI18nIdentifierResolver() {
-        return i18nIdentifierResolver;
+    protected final I18nResolver getI18nResolver() {
+        return i18nResolver;
     }
 
     protected final TitleFormSelectableOptionViewModelFactory getTitleFormSelectableOptionViewModelFactory() {
@@ -68,7 +68,7 @@ public class TitleFormFieldViewModelFactory extends FormFieldViewModelFactory<Ti
 
     protected void fillList(final TitleFormFieldViewModel viewModel, final FormFieldWithOptions<String> formFieldWithOptions) {
         viewModel.setList(formFieldWithOptions.getFormOptions().stream()
-                .map(titleKey -> titleFormSelectableOptionViewModelFactory.create(i18nIdentifierResolver.resolveOrKey(titleKey), formFieldWithOptions.getFormField().value()))
+                .map(titleKey -> titleFormSelectableOptionViewModelFactory.create(i18nResolver.getOrKey(titleKey), formFieldWithOptions.getFormField().value()))
                 .collect(toList()));
     }
 }

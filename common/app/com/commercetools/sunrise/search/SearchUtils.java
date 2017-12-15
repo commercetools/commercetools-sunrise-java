@@ -37,9 +37,10 @@ public final class SearchUtils {
         final StringBuffer buffer = new StringBuffer(expression.length());
         while (matcher.find()) {
             final String externalId = matcher.group("externalId");
-            categoryTree.findByExternalId(externalId)
-                    .map(category -> matcher.appendReplacement(buffer, Matcher.quoteReplacement(category.getId())))
+            final String replacement = categoryTree.findByExternalId(externalId)
+                    .map(category -> Matcher.quoteReplacement(category.getId()))
                     .orElseThrow(() -> new IllegalArgumentException(String.format("Category with external ID \"%s\" not found in expression \"%s\"", externalId, expression)));
+            matcher.appendReplacement(buffer, replacement);
         }
         matcher.appendTail(buffer);
         return buffer.toString();

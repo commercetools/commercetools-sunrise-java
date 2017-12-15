@@ -1,28 +1,32 @@
 package com.commercetools.sunrise.framework.reverserouters.common.localization;
 
-import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.AbstractReflectionReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ParsedRoutes;
+import com.commercetools.sunrise.framework.reverserouters.ReverseCaller;
 import play.mvc.Call;
 
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 
-public class DefaultLocalizationReverseRouter extends AbstractLocalizedReverseRouter implements LocalizationReverseRouter {
+@Singleton
+public class DefaultLocalizationReverseRouter extends AbstractReflectionReverseRouter implements LocalizationReverseRouter {
 
-    private final SimpleLocalizationReverseRouter delegate;
+    private final ReverseCaller changeLanguageProcessCaller;
+    private final ReverseCaller changeCountryProcessCaller;
 
     @Inject
-    protected DefaultLocalizationReverseRouter(final Locale locale, final SimpleLocalizationReverseRouter reverseRouter) {
-        super(locale);
-        this.delegate = reverseRouter;
+    protected DefaultLocalizationReverseRouter(final ParsedRoutes parsedRoutes) {
+        changeLanguageProcessCaller = getReverseCallerForSunriseRoute(CHANGE_LANGUAGE_PROCESS, parsedRoutes);
+        changeCountryProcessCaller = getReverseCallerForSunriseRoute(CHANGE_COUNTRY_PROCESS, parsedRoutes);
     }
 
     @Override
     public Call changeLanguageProcessCall() {
-        return delegate.changeLanguageProcessCall();
+        return changeLanguageProcessCaller.call();
     }
 
     @Override
-    public Call changeCountryProcessCall(final String languageTag) {
-        return delegate.changeCountryProcessCall(languageTag);
+    public Call changeCountryProcessCall() {
+        return changeCountryProcessCaller.call();
     }
 }

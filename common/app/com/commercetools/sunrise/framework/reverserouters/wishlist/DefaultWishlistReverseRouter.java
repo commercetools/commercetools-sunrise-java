@@ -1,37 +1,46 @@
 package com.commercetools.sunrise.framework.reverserouters.wishlist;
 
-import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.AbstractReflectionReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ParsedRoutes;
+import com.commercetools.sunrise.framework.reverserouters.ReverseCaller;
 import play.mvc.Call;
 
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 
-public class DefaultWishlistReverseRouter extends AbstractLocalizedReverseRouter implements WishlistReverseRouter {
-    private final SimpleWishlistReverseRouter delegate;
+@Singleton
+public class DefaultWishlistReverseRouter extends AbstractReflectionReverseRouter implements WishlistReverseRouter {
+
+    private final ReverseCaller addToWishlistCaller;
+    private final ReverseCaller removeFromWishlistCaller;
+    private final ReverseCaller clearWishlistCaller;
+    private final ReverseCaller wishlistPageCaller;
 
     @Inject
-    protected DefaultWishlistReverseRouter(final Locale locale, final SimpleWishlistReverseRouter delegate) {
-        super(locale);
-        this.delegate = delegate;
+    protected DefaultWishlistReverseRouter(final ParsedRoutes parsedRoutes) {
+        addToWishlistCaller = getReverseCallerForSunriseRoute(ADD_TO_WISHLIST_PROCESS, parsedRoutes);
+        removeFromWishlistCaller = getReverseCallerForSunriseRoute(REMOVE_FROM_WISHLIST_PROCESS, parsedRoutes);
+        clearWishlistCaller = getReverseCallerForSunriseRoute(CLEAR_WISHLIST_PROCESS, parsedRoutes);
+        wishlistPageCaller = getReverseCallerForSunriseRoute(WISHLIST_PAGE, parsedRoutes);
     }
 
     @Override
-    public Call addToWishlistProcessCall(final String languageTag) {
-        return delegate.addToWishlistProcessCall(languageTag);
+    public Call addToWishlistProcessCall() {
+        return addToWishlistCaller.call();
     }
 
     @Override
-    public Call removeFromWishlistProcessCall(final String languageTag) {
-        return delegate.removeFromWishlistProcessCall(languageTag);
+    public Call removeFromWishlistProcessCall() {
+        return removeFromWishlistCaller.call();
     }
 
     @Override
-    public Call clearWishlistProcessCall(final String languageTag) {
-        return delegate.clearWishlistProcessCall(languageTag);
+    public Call clearWishlistProcessCall() {
+        return clearWishlistCaller.call();
     }
 
     @Override
-    public Call wishlistPageCall(final String languageTag) {
-        return delegate.wishlistPageCall(languageTag);
+    public Call wishlistPageCall() {
+        return wishlistPageCaller.call();
     }
 }

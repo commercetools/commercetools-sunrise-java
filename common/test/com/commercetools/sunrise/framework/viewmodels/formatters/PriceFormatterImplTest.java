@@ -51,6 +51,6 @@ public class PriceFormatterImplTest {
     }
 
     private PriceFormatterImpl priceFormatter(final Locale locale) {
-        return new PriceFormatterImpl(locale);
+        return new PriceFormatterImpl(() -> locale);
     }
 }

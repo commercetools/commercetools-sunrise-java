@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.controllers;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import play.data.FormFactory;
 
 public abstract class SunriseContentFormController extends SunriseContentController {

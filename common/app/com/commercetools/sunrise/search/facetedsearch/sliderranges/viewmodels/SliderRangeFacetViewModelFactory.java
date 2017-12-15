@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.search.facetedsearch.sliderranges.viewmodels;
 
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
 import com.commercetools.sunrise.search.facetedsearch.sliderranges.SliderRangeFacetedSearchFormSettings;
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.AbstractFacetViewModelFactory;
 import io.sphere.sdk.search.model.SimpleRangeStats;
@@ -14,9 +14,9 @@ public class SliderRangeFacetViewModelFactory extends AbstractFacetViewModelFact
     private final SliderRangeEndpointViewModelFactory sliderRangeEndpointViewModelFactory;
 
     @Inject
-    public SliderRangeFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver,
+    public SliderRangeFacetViewModelFactory(final I18nResolver i18nResolver,
                                             final SliderRangeEndpointViewModelFactory sliderRangeEndpointViewModelFactory) {
-        super(i18nIdentifierResolver);
+        super(i18nResolver);
         this.sliderRangeEndpointViewModelFactory = sliderRangeEndpointViewModelFactory;
     }
 

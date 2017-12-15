@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.controllers.SunriseContentController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
@@ -43,7 +43,7 @@ public abstract class SunriseMyOrderDetailController extends SunriseContentContr
 
     @EnableHooks
     @SunriseRoute(MyOrdersReverseRouter.MY_ORDER_DETAIL_PAGE)
-    public CompletionStage<Result> show(final String languageTag, final String orderIdentifier) {
+    public CompletionStage<Result> show(final String orderIdentifier) {
         return requireCustomer(customer ->
                 requireMyOrder(customer, orderIdentifier, myOrder ->
                         showPage(OrderWithCustomer.of(myOrder, customer))));

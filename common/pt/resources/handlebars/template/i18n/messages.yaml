@@ -1,0 +1,4 @@
+foo:
+  bar: "something"
+hello:
+  name: "Hello __firstName__ __lastName__!"

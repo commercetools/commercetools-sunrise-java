@@ -2,175 +2,171 @@
 # ~~~~
 
 # Untrail url
-GET         /*path/                                                             @controllers.common.ApplicationController.untrail(path: String)
-
-# Main entry point that redirects to home page
-GET         /                                                                   @controllers.productcatalog.HomeController.index()
+GET         /*path/                                                                 @controllers.common.ApplicationController.untrail(path: String)
 
 
 # ADMIN
 # ~~~~~
 
 # Shows the deployed version, artifactId and GIT SHA
-GET         /version                                                            @controllers.common.VersionController.show()
+GET         /version                                                                @controllers.common.VersionController.show
 # Shows if the application is healthy
-GET         /health                                                             @controllers.common.HealthCheckController.show()
+GET         /health                                                                 @controllers.common.HealthCheckController.show
 
 # Endpoint to manually refresh category tree (otherwise an app restart is required)
-GET         /categories/refresh                                                 @com.commercetools.sunrise.common.categorytree.CategoryTreeRefreshController.refresh()
+GET         /categories/refresh                                                     @com.commercetools.sunrise.common.categorytree.CategoryTreeRefreshController.refresh
 
 
 # WEB ASSETS
 # ~~~~~
 
 # Map static favicon.ico from the public assets to root folder
-GET         /favicon.ico                                                        @controllers.common.AssetsController.at(file="img/favicon.ico")
+GET         /favicon.ico                                                            @controllers.common.AssetsController.at(file="img/favicon.ico")
 # Map static resources from the public assets
-GET         /assets/*file                                                       @controllers.common.AssetsController.at(file)
+GET         /assets/*file                                                           @controllers.common.AssetsController.at(file)
 
 
 # HOME
 # ~~~~~
 
-# Home page
-GET         /:languageTag/home                                                  @controllers.productcatalog.HomeController.show(languageTag: String)
+GET         /                                                                       @controllers.productcatalog.HomeController.show
 
 
 # LOCATION
 # ~~~~~
 
 # Changes the language of the app
-POST        /changeLanguage                                                     @controllers.common.ChangeLanguageController.process()
+POST        /changeLanguage                                                         @controllers.common.ChangeLanguageController.process
 # Changes the country of the app
-POST        /:languageTag/changeCountry                                         @controllers.common.ChangeCountryController.process(languageTag: String)
+POST        /changeCountry                                                          @controllers.common.ChangeCountryController.process
 
 
 # CART
 # ~~~~~
 
 # Shows the details of the cart belonging to the current session
-GET         /:languageTag/cart                                                  @controllers.shoppingcart.CartContentController.show(languageTag: String)
+GET         /cart                                                                   @controllers.shoppingcart.CartContentController.show
 # Adds the selected product to the cart
-POST        /:languageTag/cart/add                                              @controllers.shoppingcart.AddToCartController.process(languageTag: String)
+POST        /cart/add                                                               @controllers.shoppingcart.AddToCartController.process
 # Changes the quantity of a selected line item from the cart of the current session
-POST        /:languageTag/cart/quantity                                         @controllers.shoppingcart.ChangeQuantityInCartController.process(languageTag: String)
+POST        /cart/quantity                                                          @controllers.shoppingcart.ChangeQuantityInCartController.process
 # Removes a selected line item from the cart of the current session
-POST        /:languageTag/cart/remove                                           @controllers.shoppingcart.RemoveFromCartController.process(languageTag: String)
+POST        /cart/remove                                                            @controllers.shoppingcart.RemoveFromCartController.process
 # Add a discount code to the cart
-POST        /:languageTag/cart/discount/add                                     @controllers.shoppingcart.AddDiscountCodeController.process(languageTag: String)
+POST        /cart/discount/add                                                      @controllers.shoppingcart.AddDiscountCodeController.process
 # Add a discount code to the cart
-POST        /:languageTag/cart/discount/remove                                  @controllers.shoppingcart.RemoveDiscountCodeController.process(languageTag: String)
+POST        /cart/discount/remove                                                   @controllers.shoppingcart.RemoveDiscountCodeController.process
 
 
 # CHECKOUT
 # ~~~~~
 
 # Shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/address                                      @controllers.shoppingcart.CheckoutAddressController.show(languageTag: String)
+GET         /checkout/address                                                       @controllers.shoppingcart.CheckoutAddressController.show
 # Processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/address                                      @controllers.shoppingcart.CheckoutAddressController.process(languageTag: String)
+POST        /checkout/address                                                       @controllers.shoppingcart.CheckoutAddressController.process
 # Shows the form to enter shipping address and billing address
-GET         /:languageTag/checkout/shipping                                     @controllers.shoppingcart.CheckoutShippingController.show(languageTag: String)
+GET         /checkout/shipping                                                      @controllers.shoppingcart.CheckoutShippingController.show
 # Processes the form of the shipping address and billing address
-POST        /:languageTag/checkout/shipping                                     @controllers.shoppingcart.CheckoutShippingController.process(languageTag: String)
+POST        /checkout/shipping                                                      @controllers.shoppingcart.CheckoutShippingController.process
 # Shows a form to select the payment method
-GET         /:languageTag/checkout/payment                                      @controllers.shoppingcart.CheckoutPaymentController.show(languageTag: String)
+GET         /checkout/payment                                                       @controllers.shoppingcart.CheckoutPaymentController.show
 # Processes the form for selecting a payment method
-POST        /:languageTag/checkout/payment                                      @controllers.shoppingcart.CheckoutPaymentController.process(languageTag: String)
+POST        /checkout/payment                                                       @controllers.shoppingcart.CheckoutPaymentController.process
 # Shows the form to create an order out of the cart of the session
-GET         /:languageTag/checkout/confirmation                                 @controllers.shoppingcart.CheckoutConfirmationController.show(languageTag: String)
+GET         /checkout/confirmation                                                  @controllers.shoppingcart.CheckoutConfirmationController.show
 # Processes the order creation
-POST        /:languageTag/checkout/confirmation                                 @controllers.shoppingcart.CheckoutConfirmationController.process(languageTag: String)
+POST        /checkout/confirmation                                                  @controllers.shoppingcart.CheckoutConfirmationController.process
 # Shows the customer a confirmation for the created order
-GET         /:languageTag/checkout/thankyou                                     @controllers.shoppingcart.CheckoutThankYouController.show(languageTag: String)
+GET         /checkout/thankyou                                                      @controllers.shoppingcart.CheckoutThankYouController.show
 
 
 # SIGN UP/IN/OUT
 # ~~~~~
 
 # Shows login and signup form
-GET         /:languageTag/user/login                                            @controllers.myaccount.LogInController.show(languageTag: String)
+GET         /user/login                                                             @controllers.myaccount.LogInController.show
 # Logs in the user
-POST        /:languageTag/user/login                                            @controllers.myaccount.LogInController.process(languageTag: String)
+POST        /user/login                                                             @controllers.myaccount.LogInController.process
 # Registers the user
-POST        /:languageTag/user/signup                                           @controllers.myaccount.SignUpController.process(languageTag: String)
+POST        /user/signup                                                            @controllers.myaccount.SignUpController.process
 # Logs out the user
-GET         /:languageTag/user/logout                                           @controllers.myaccount.LogOutController.process(languageTag: String)
+GET         /user/logout                                                            @controllers.myaccount.LogOutController.process
 
 # PASSWORD RECOVERY
 # ~~~~~
 
 # Show form to enter password recover email
-GET         /:languageTag/password/recovery                                     @controllers.myaccount.RecoverPasswordController.show(languageTag: String)
+GET         /password/recovery                                                      @controllers.myaccount.RecoverPasswordController.show
 # Send recovery password email
-POST        /:languageTag/password/recovery                                     @controllers.myaccount.RecoverPasswordController.process(languageTag: String)
+POST        /password/recovery                                                      @controllers.myaccount.RecoverPasswordController.process
 
 # View password reset
-GET         /:languageTag/password/reset/:token                                 @controllers.myaccount.ResetPasswordController.show(languageTag: String, token: String)
+GET         /password/reset/:token                                                  @controllers.myaccount.ResetPasswordController.show(token: String)
 # Process reset password request
-POST        /:languageTag/password/reset/:token                                 @controllers.myaccount.ResetPasswordController.process(languageTag: String, token: String)
+POST        /password/reset/:token                                                  @controllers.myaccount.ResetPasswordController.process(token: String)
 
 # MY ACCOUNT
 # ~~~~~
 
 # Shows a form for updating the customer's details
-GET         /:languageTag/user                                                  @controllers.myaccount.MyPersonalDetailsController.show(languageTag: String)
+GET         /user                                                                   @controllers.myaccount.MyPersonalDetailsController.show
 # Processes the form for updating the customer's details
-POST        /:languageTag/user                                                  @controllers.myaccount.MyPersonalDetailsController.process(languageTag: String)
+POST        /user                                                                   @controllers.myaccount.MyPersonalDetailsController.process
 
 # Shows the form for changing password
-GET         /:languageTag/user/password                                         @controllers.myaccount.ChangePasswordController.show(languageTag: String)
+GET         /user/password                                                          @controllers.myaccount.ChangePasswordController.show
 # Processes the form for changing password
-POST        /:languageTag/user/password                                         @controllers.myaccount.ChangePasswordController.process(languageTag: String)
+POST        /user/password                                                          @controllers.myaccount.ChangePasswordController.process
 
 # Shows the address book
-GET         /:languageTag/user/addressbook                                      @controllers.myaccount.AddressBookDetailController.show(languageTag: String)
+GET         /user/addressbook                                                       @controllers.myaccount.AddressBookDetailController.show
 # Shows the form to add an address to the customer's address book
-GET         /:languageTag/user/addressbook/add                                  @controllers.myaccount.AddAddressController.show(languageTag: String)
+GET         /user/addressbook/add                                                   @controllers.myaccount.AddAddressController.show
 # Adds an address to the customer's address book
-POST        /:languageTag/user/addressbook/add                                  @controllers.myaccount.AddAddressController.process(languageTag: String)
+POST        /user/addressbook/add                                                   @controllers.myaccount.AddAddressController.process
 # Shows the form to edit an address from the customer's address book
-GET         /:languageTag/user/addressbook/:addressIdentifier/edit              @controllers.myaccount.ChangeAddressController.show(languageTag: String, addressIdentifier: String)
+GET         /user/addressbook/:addressIdentifier/edit                               @controllers.myaccount.ChangeAddressController.show(addressIdentifier: String)
 # Updates an address from the customer's address book
-POST        /:languageTag/user/addressbook/:addressIdentifier/edit              @controllers.myaccount.ChangeAddressController.process(languageTag: String, addressIdentifier: String)
+POST        /user/addressbook/:addressIdentifier/edit                               @controllers.myaccount.ChangeAddressController.process(addressIdentifier: String)
 # Removes an address from the customer's address book
-POST        /:languageTag/user/addressbook/:addressIdentifier/remove            @controllers.myaccount.RemoveAddressController.process(languageTag: String, addressIdentifier: String)
+POST        /user/addressbook/:addressIdentifier/remove                             @controllers.myaccount.RemoveAddressController.process(addressIdentifier: String)
 
 # Shows all orders from the customer
-GET         /:languageTag/user/orders                                           @controllers.myaccount.MyOrderListController.show(languageTag: String)
+GET         /user/orders                                                            @controllers.myaccount.MyOrderListController.show
 # Show an order from the customer
-GET         /:languageTag/user/orders/:orderIdentifier                          @controllers.myaccount.MyOrderDetailController.show(languageTag: String, orderIdentifier: String)
+GET         /user/orders/:orderIdentifier                                           @controllers.myaccount.MyOrderDetailController.show(orderIdentifier: String)
 
 
 # WISHLIST
 # ~~~~~
 
 # Shows the wishlist
-GET         /:languageTag/wishlist                                              @controllers.wishlist.WishlistContentController.show(languageTag: String)
+GET         /wishlist                                                               @controllers.wishlist.WishlistContentController.show
 # Adds a product variant to the wishlist
-POST        /:languageTag/wishlist/add                                          @controllers.wishlist.AddToWishlistController.process(languageTag: String)
+POST        /wishlist/add                                                           @controllers.wishlist.AddToWishlistController.process
 # Removes a line item from the wishlist
-POST        /:languageTag/wishlist/remove                                       @controllers.wishlist.RemoveFromWishlistController.process(languageTag: String)
+POST        /wishlist/remove                                                        @controllers.wishlist.RemoveFromWishlistController.process
 # Clears the wishlist
-POST        /:languageTag/wishlist/clear                                        @controllers.wishlist.ClearWishlistController.process(languageTag: String)
+POST        /wishlist/clear                                                         @controllers.wishlist.ClearWishlistController.process
 
 
 # SEARCH
 # ~~~~~
 
 # Shows the search results page
-GET         /:languageTag/search                                                @controllers.productcatalog.SearchController.process(languageTag: String)
+GET         /search                                                                 @controllers.productcatalog.SearchController.process
 
 
 # PRODUCT DETAIL
 # ~~~~~
 
 # Shows the product detail page
-GET         /:languageTag/:productIdentifier-$variantIdentifier<[^-]+>.html     @controllers.productcatalog.ProductDetailController.show(languageTag: String, productIdentifier: String, variantIdentifier: String)
+GET         /:productIdentifier-$variantIdentifier<[^-]+>.html                      @controllers.productcatalog.ProductDetailController.show(productIdentifier: String, variantIdentifier: String)
 
 
 # PRODUCT OVERVIEW
 # ~~~~~
 
 # Shows the product overview page for this category
-GET         /:languageTag/:categoryIdentifier                                   @controllers.productcatalog.ProductOverviewController.process(languageTag: String, categoryIdentifier: String)
+GET         /:categoryIdentifier                                                    @controllers.productcatalog.ProductOverviewController.show(categoryIdentifier: String)

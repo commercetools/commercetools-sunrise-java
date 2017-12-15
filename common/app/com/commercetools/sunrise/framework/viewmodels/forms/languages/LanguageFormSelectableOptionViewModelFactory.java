@@ -43,7 +43,7 @@ public class LanguageFormSelectableOptionViewModelFactory extends SelectableView
     }
 
     protected void fillValue(final LanguageFormSelectableOptionViewModel viewModel, final Locale option, @Nullable final Locale selectedLocale) {
-        viewModel.setValue(option.getLanguage());
+        viewModel.setValue(option.toLanguageTag());
     }
 
     protected void fillSelected(final LanguageFormSelectableOptionViewModel viewModel, final Locale option, @Nullable final Locale selectedLocale) {

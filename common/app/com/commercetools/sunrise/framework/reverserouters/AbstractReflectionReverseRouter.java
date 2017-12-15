@@ -3,6 +3,7 @@ package com.commercetools.sunrise.framework.reverserouters;
 import io.sphere.sdk.models.Base;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.mvc.Call;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -45,7 +46,7 @@ public abstract class AbstractReflectionReverseRouter extends Base {
 
     private Optional<Method> findMethodByName(final String methodName) {
         return Arrays.stream(this.getClass().getMethods())
-                .filter(method -> method.getName().equals(methodName))
+                .filter(method -> method.getName().equals(methodName) && method.getReturnType().equals(Call.class))
                 .findAny();
     }
 

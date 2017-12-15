@@ -1,28 +1,32 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.mydetails;
 
-import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.AbstractReflectionReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ParsedRoutes;
+import com.commercetools.sunrise.framework.reverserouters.ReverseCaller;
 import play.mvc.Call;
 
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 
-public class DefaultMyPersonalDetailsReverseRouter extends AbstractLocalizedReverseRouter implements MyPersonalDetailsReverseRouter {
+@Singleton
+public class DefaultMyPersonalDetailsReverseRouter extends AbstractReflectionReverseRouter implements MyPersonalDetailsReverseRouter {
 
-    private final SimpleMyPersonalDetailsReverseRouter delegate;
+    private final ReverseCaller myPersonalDetailsPageCaller;
+    private final ReverseCaller myPersonalDetailsProcessCaller;
 
     @Inject
-    protected DefaultMyPersonalDetailsReverseRouter(final Locale locale, final SimpleMyPersonalDetailsReverseRouter reverseRouter) {
-        super(locale);
-        this.delegate = reverseRouter;
+    protected DefaultMyPersonalDetailsReverseRouter(final ParsedRoutes parsedRoutes) {
+        myPersonalDetailsPageCaller = getReverseCallerForSunriseRoute(MY_PERSONAL_DETAILS_PAGE, parsedRoutes);
+        myPersonalDetailsProcessCaller = getReverseCallerForSunriseRoute(MY_PERSONAL_DETAILS_PROCESS, parsedRoutes);
     }
 
     @Override
-    public Call myPersonalDetailsPageCall(final String languageTag) {
-        return delegate.myPersonalDetailsPageCall(languageTag);
+    public Call myPersonalDetailsPageCall() {
+        return myPersonalDetailsPageCaller.call();
     }
 
     @Override
-    public Call myPersonalDetailsProcessCall(final String languageTag) {
-        return delegate.myPersonalDetailsProcessCall(languageTag);
+    public Call myPersonalDetailsProcessCall() {
+        return myPersonalDetailsProcessCaller.call();
     }
 }

@@ -7,7 +7,6 @@ import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
 import io.sphere.sdk.carts.CartDraftBuilder;
 import io.sphere.sdk.carts.LineItemDraft;
-import io.sphere.sdk.client.BlockingSphereClient;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.discountcodes.DiscountCode;
 import io.sphere.sdk.discountcodes.DiscountCodeDraft;
@@ -32,7 +31,10 @@ import play.mvc.Http;
 import play.mvc.Result;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static com.commercetools.sunrise.it.CartDiscountTestFixtures.deleteCartDiscountAndDiscountCodes;
@@ -44,6 +46,7 @@ import static com.commercetools.sunrise.it.ProductTypeTestFixtures.productTypeDr
 import static com.commercetools.sunrise.it.ProductTypeTestFixtures.withProductType;
 import static com.commercetools.sunrise.it.TaxCategoryTestFixtures.withTaxCategory;
 import static com.commercetools.sunrise.it.TestFixtures.randomString;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static play.inject.Bindings.bind;
@@ -52,6 +55,10 @@ import static play.test.Helpers.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AddDiscountCodeControllerIntegrationTest extends WithSphereClient {
+
+    private static final String CART_DISCOUNT_NAME = "CartDiscount";
+    private static final String CART_DISCOUNT_SORT_ORDER = "0.6";
+
     @Mock
     private CartInSession cartInSession;
 
@@ -66,18 +73,18 @@ public class AddDiscountCodeControllerIntegrationTest extends WithSphereClient {
 
     @Before
     public void deleteExistingCartDiscountAndDiscountCodes() {
-        deleteCartDiscountAndDiscountCodes(sphereClient, "CartDiscountValue", "0.6");
+        deleteCartDiscountAndDiscountCodes(sphereClient, CART_DISCOUNT_NAME, CART_DISCOUNT_SORT_ORDER);
     }
 
     @Test
     public void showsErrorOnNonExistentDiscountCode() throws Exception {
-        withTaxedAndFilledCart(sphereClient, cart -> {
+        withTaxedAndFilledCart(cart -> {
             when(cartInSession.findCartId()).thenReturn(Optional.of(cart.getId()));
 
             final Map<String, String> bodyForm = new HashMap<>();
             bodyForm.put("code", "NON");
             final Result result = route(new Http.RequestBuilder()
-                    .uri("/en/cart/discount/add")
+                    .uri("/cart/discount/add")
                     .method(POST)
                     .bodyForm(bodyForm));
 
@@ -90,21 +97,21 @@ public class AddDiscountCodeControllerIntegrationTest extends WithSphereClient {
 
     @Test
     public void shouldAcceptAndApplyValidDiscountCode() throws Exception {
-        withCartDiscountAndDiscountCode(sphereClient, discountCode -> {
-            withTaxedAndFilledCart(sphereClient, cart -> {
+        withCartDiscountAndDiscountCode(discountCode -> {
+            withTaxedAndFilledCart(cart -> {
                 when(cartInSession.findCartId()).thenReturn(Optional.of(cart.getId()));
 
                 final Map<String, String> bodyForm = new HashMap<>();
                 bodyForm.put("code", discountCode.getCode());
                 final Result result = route(new Http.RequestBuilder()
-                        .uri("/en/cart/discount/add")
+                        .uri("/cart/discount/add")
                         .method(POST)
                         .bodyForm(bodyForm));
 
                 assertThat(result.status()).isEqualTo(SEE_OTHER);
                 assertThat(result.redirectLocation())
                         .isPresent()
-                        .hasValue("/en/cart");
+                        .hasValue("/cart");
 
                 return cart;
             });
@@ -113,12 +120,12 @@ public class AddDiscountCodeControllerIntegrationTest extends WithSphereClient {
         });
     }
 
-    private static void withTaxedAndFilledCart(final BlockingSphereClient client, final Function<Cart, Cart> test) {
+    private static void withTaxedAndFilledCart(final Function<Cart, Cart> test) {
         final TaxCategoryDraft taxCategoryDraft =
                 TaxCategoryDraftBuilder.of(randomString(), Collections.emptyList(), null)
                         .build();
-        withTaxCategory(client, taxCategoryDraft, taxCategory -> {
-            withProductType(client, productTypeDraft(), productType -> {
+        withTaxCategory(sphereClient, taxCategoryDraft, taxCategory -> {
+            withProductType(sphereClient, productTypeDraft(), productType -> {
                 final ProductVariantDraft productVariantDraft = ProductVariantDraftBuilder.of()
                         .price(PriceDraft.of(BigDecimal.TEN, DefaultCurrencyUnits.EUR))
                         .build();
@@ -127,12 +134,12 @@ public class AddDiscountCodeControllerIntegrationTest extends WithSphereClient {
                         .taxCategory(taxCategory)
                         .masterVariant(productVariantDraft)
                         .build();
-                withProduct(client, productDraft, product -> {
+                withProduct(sphereClient, productDraft, product -> {
                     final LineItemDraft lineItemDraft = LineItemDraft.of(product, 1, 1L);
                     final CartDraft cartDraft = CartDraftBuilder.of(DefaultCurrencyUnits.EUR)
-                            .lineItems(Arrays.asList(lineItemDraft))
+                            .lineItems(singletonList(lineItemDraft))
                             .build();
-                    withCart(client, cartDraft, cart -> test.apply(cart));
+                    withCart(sphereClient, cartDraft, test);
                     return product;
                 });
                 return productType;
@@ -142,12 +149,12 @@ public class AddDiscountCodeControllerIntegrationTest extends WithSphereClient {
         });
     }
 
-    private static void withCartDiscountAndDiscountCode(final BlockingSphereClient client, final Function<DiscountCode, DiscountCode> test) {
+    private static void withCartDiscountAndDiscountCode(final Function<DiscountCode, DiscountCode> test) {
         final CartDiscountValue discountValue = AbsoluteCartDiscountValue.of(MoneyImpl.ofCents(100, DefaultCurrencyUnits.EUR));
         final CartDiscountTarget cartDiscountTarget = LineItemsTarget.of("1=1");
         final CartDiscountDraft cartDiscountDraft =
                 CartDiscountDraftBuilder
-                        .of("1=1", LocalizedString.ofEnglish("CartDiscount"), true, "0.6", cartDiscountTarget, discountValue)
+                        .of("1=1", LocalizedString.ofEnglish(CART_DISCOUNT_NAME), true, CART_DISCOUNT_SORT_ORDER, cartDiscountTarget, discountValue)
                         .build();
         withCartDiscount(sphereClient, cartDiscountDraft, cartDiscount -> {
             final DiscountCodeDraft discountCodeDraft =

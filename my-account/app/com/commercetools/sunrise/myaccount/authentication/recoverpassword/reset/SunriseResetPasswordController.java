@@ -5,7 +5,7 @@ import com.commercetools.sunrise.framework.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.viewmodels.ResetPasswordPageContentFactory;
@@ -21,10 +21,10 @@ import java.util.concurrent.CompletionStage;
 /**
  * This controller performs the reset of a customer's password.
  *
- * It shows a form to enter and confirm the new password {@link #show(String, String)}.
+ * It shows a form to enter and confirm the new password {@link #show(String)}.
  *
  * It processes the form and sends a password reset command to the commercetools platform
- * {@link #process(String, String)}.
+ * {@link #process(String)}.
  */
 public abstract class SunriseResetPasswordController extends SunriseContentFormController
         implements MyAccountController, WithContentFormFlow<String, Customer, ResetPasswordFormData> {
@@ -44,13 +44,13 @@ public abstract class SunriseResetPasswordController extends SunriseContentFormC
 
     @EnableHooks
     @SunriseRoute(RecoverPasswordReverseRouter.RESET_PASSWORD_PAGE)
-    public CompletionStage<Result> show(final String languageTag, final String resetToken) {
+    public CompletionStage<Result> show(final String resetToken) {
         return showFormPage(resetToken, formData);
     }
 
     @EnableHooks
     @SunriseRoute(RecoverPasswordReverseRouter.RESET_PASSWORD_PROCESS)
-    public CompletionStage<Result> process(final String languageTag, final String resetToken) {
+    public CompletionStage<Result> process(final String resetToken) {
         return processForm(resetToken);
     }
 

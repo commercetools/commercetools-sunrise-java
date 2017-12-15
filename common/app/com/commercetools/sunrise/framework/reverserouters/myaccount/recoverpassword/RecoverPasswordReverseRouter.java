@@ -1,26 +1,25 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.recoverpassword;
 
-import com.commercetools.sunrise.framework.reverserouters.LocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ReverseRouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
 @ImplementedBy(DefaultRecoverPasswordReverseRouter.class)
-public interface RecoverPasswordReverseRouter extends SimpleRecoverPasswordReverseRouter, LocalizedReverseRouter {
+public interface RecoverPasswordReverseRouter extends ReverseRouter {
 
-    default Call resetPasswordProcessCall(final String resetToken) {
-        return resetPasswordProcessCall(locale().toLanguageTag(), resetToken);
-    }
+    String REQUEST_RECOVERY_EMAIL_PAGE = "requestRecoveryEmailPageCall";
 
-    default Call resetPasswordPageCall(final String resetToken) {
-        return resetPasswordPageCall(locale().toLanguageTag(), resetToken);
-    }
+    Call requestRecoveryEmailPageCall();
 
-    default Call requestRecoveryEmailPageCall() {
-        return requestRecoveryEmailPageCall(locale().toLanguageTag());
-    }
+    String REQUEST_RECOVERY_EMAIL_PROCESS = "requestRecoveryEmailProcessCall";
 
-    default Call requestRecoveryEmailProcessCall() {
-        return requestRecoveryEmailProcessCall(locale().toLanguageTag());
-    }
+    Call requestRecoveryEmailProcessCall();
 
+    String RESET_PASSWORD_PAGE = "resetPasswordPageCall";
+
+    Call resetPasswordPageCall(final String resetToken);
+
+    String RESET_PASSWORD_PROCESS = "resetPasswordProcessCall";
+
+    Call resetPasswordProcessCall(final String resetToken);
 }

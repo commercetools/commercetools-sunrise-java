@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree.viewmodels;
 
-import com.commercetools.sunrise.framework.localization.UserLanguage;
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.framework.viewmodels.forms.FormSelectableOptionViewModel;
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.FacetOptionViewModel;
@@ -12,6 +12,7 @@ import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
 import org.junit.Test;
 import play.Application;
+import play.inject.guice.GuiceApplicationBuilder;
 import play.mvc.Http;
 import play.test.WithApplication;
 
@@ -28,6 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static play.test.Helpers.fakeRequest;
+import static play.test.Helpers.invokeWithContext;
 
 public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication {
 
@@ -57,9 +59,9 @@ public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication
 
     @Override
     protected Application provideApplication() {
-        final Application application = super.provideApplication();
-        Http.Context.current.set(new Http.Context(fakeRequest()));
-        return application;
+        return new GuiceApplicationBuilder()
+                .configure("play.i18n.langs", singletonList("en"))
+                .build();
     }
 
     @Test
@@ -140,11 +142,14 @@ public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication
     }
 
     private void test(final Category category, final CategoryTree categoryTree, final List<TermStats> termStats, final Consumer<FacetOptionViewModel> test) {
-        final UserLanguage userLanguage = mock(UserLanguage.class);
-        when(userLanguage.locales()).thenReturn(singletonList(Locale.ENGLISH));
-        final CategoryTreeFacetOptionViewModelFactory factory = new CategoryTreeFacetOptionViewModelFactory(userLanguage, categoryTree, reverseRouter());
-        final TermFacetResult termFacetResult = TermFacetResult.of(0L, 0L, 0L, termStats);
-        test.accept(factory.create(termFacetResult, category, CAT_C));
+        invokeWithContext(fakeRequest(), () -> {
+            Http.Context.current().changeLang("en");
+            final I18nResolver i18nResolver = app.injector().instanceOf(I18nResolver.class);
+            final CategoryTreeFacetOptionViewModelFactory factory = new CategoryTreeFacetOptionViewModelFactory(i18nResolver, categoryTree, reverseRouter());
+            final TermFacetResult termFacetResult = TermFacetResult.of(0L, 0L, 0L, termStats);
+            test.accept(factory.create(termFacetResult, category, CAT_C));
+            return null;
+        });
     }
 
     private static Category category(final String id, @Nullable final String parentId, final String name) {

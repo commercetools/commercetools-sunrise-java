@@ -5,7 +5,7 @@ import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
 import com.commercetools.sunrise.framework.hooks.EnableHooks;
 import com.commercetools.sunrise.framework.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.framework.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.wishlist.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
@@ -40,7 +40,7 @@ public abstract class SunriseWishlistContentController extends SunriseContentCon
 
     @EnableHooks
     @SunriseRoute(WishlistReverseRouter.WISHLIST_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return requireWishlist(this::showPage);
     }
 

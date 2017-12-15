@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.search.facetedsearch.bucketranges.viewmodels;
 
+import com.commercetools.sunrise.framework.i18n.I18nResolver;
 import com.commercetools.sunrise.framework.injection.RequestScoped;
-import com.commercetools.sunrise.framework.template.i18n.I18nIdentifierResolver;
 import com.commercetools.sunrise.framework.viewmodels.forms.FormOption;
 import com.commercetools.sunrise.search.facetedsearch.bucketranges.BucketRangeFacetedSearchFormSettings;
 import com.commercetools.sunrise.search.facetedsearch.viewmodels.AbstractFacetWithOptionsViewModelFactory;
@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.commercetools.sunrise.search.facetedsearch.RangeUtils.mapRangeToStats;
 import static com.commercetools.sunrise.search.facetedsearch.RangeUtils.parseFacetRange;
@@ -26,9 +25,9 @@ public class BucketRangeFacetViewModelFactory extends AbstractFacetWithOptionsVi
     private final BucketRangeFacetOptionViewModelFactory bucketRangeFacetOptionViewModelFactory;
 
     @Inject
-    public BucketRangeFacetViewModelFactory(final I18nIdentifierResolver i18nIdentifierResolver,
+    public BucketRangeFacetViewModelFactory(final I18nResolver i18nResolver,
                                             final BucketRangeFacetOptionViewModelFactory bucketRangeFacetOptionViewModelFactory) {
-        super(i18nIdentifierResolver);
+        super(i18nResolver);
         this.bucketRangeFacetOptionViewModelFactory = bucketRangeFacetOptionViewModelFactory;
     }
 
@@ -70,8 +69,9 @@ public class BucketRangeFacetViewModelFactory extends AbstractFacetWithOptionsVi
         final List<FacetOptionViewModel> options = new ArrayList<>();
         settings.getOptions()
                 .forEach(option -> parseFacetRange(option.getValue())
-                        .map(range -> rangeToStatsMap.get(range.toString()))
-                        .filter(Objects::nonNull)
+                        .map(range -> range.toString())
+                        .filter(rangeToStatsMap::containsKey)
+                        .map(rangeToStatsMap::get)
                         .ifPresent(rangeStats -> options.add(bucketRangeFacetOptionViewModelFactory.create(rangeStats, option, selectedValues))));
         viewModel.setLimitedOptions(options);
     }

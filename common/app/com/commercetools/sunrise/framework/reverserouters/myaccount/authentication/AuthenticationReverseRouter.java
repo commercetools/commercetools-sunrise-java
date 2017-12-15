@@ -1,25 +1,25 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.authentication;
 
-import com.commercetools.sunrise.framework.reverserouters.LocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ReverseRouter;
 import com.google.inject.ImplementedBy;
 import play.mvc.Call;
 
 @ImplementedBy(DefaultAuthenticationReverseRouter.class)
-public interface AuthenticationReverseRouter extends SimpleAuthenticationReverseRouter, LocalizedReverseRouter {
+public interface AuthenticationReverseRouter extends ReverseRouter {
 
-    default Call logInPageCall() {
-        return logInPageCall(locale().toLanguageTag());
-    }
+    String LOG_IN_PAGE = "logInPageCall";
 
-    default Call logInProcessCall() {
-        return logInProcessCall(locale().toLanguageTag());
-    }
+    Call logInPageCall();
 
-    default Call signUpProcessCall() {
-        return signUpProcessCall(locale().toLanguageTag());
-    }
+    String LOG_IN_PROCESS = "logInProcessCall";
 
-    default Call logOutProcessCall() {
-        return logOutProcessCall(locale().toLanguageTag());
-    }
+    Call logInProcessCall();
+
+    String SIGN_UP_PROCESS = "signUpProcessCall";
+
+    Call signUpProcessCall();
+
+    String LOG_OUT_PROCESS = "logOutProcessCall";
+
+    Call logOutProcessCall();
 }

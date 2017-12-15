@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.content;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.controllers.SunriseContentController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
@@ -35,7 +35,7 @@ public abstract class SunriseCartContentController extends SunriseContentControl
 
     @EnableHooks
     @SunriseRoute(CartReverseRouter.CART_DETAIL_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return requireCart(this::showPage);
     }
 

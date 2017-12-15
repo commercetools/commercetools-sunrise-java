@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.framework.controllers;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;

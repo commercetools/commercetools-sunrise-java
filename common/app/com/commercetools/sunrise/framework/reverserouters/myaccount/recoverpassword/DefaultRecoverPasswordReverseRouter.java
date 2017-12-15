@@ -1,37 +1,48 @@
 package com.commercetools.sunrise.framework.reverserouters.myaccount.recoverpassword;
 
-import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.AbstractReflectionReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ParsedRoutes;
+import com.commercetools.sunrise.framework.reverserouters.ReverseCaller;
 import play.mvc.Call;
 
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 
-public class DefaultRecoverPasswordReverseRouter extends AbstractLocalizedReverseRouter implements RecoverPasswordReverseRouter {
-    private final SimpleRecoverPasswordReverseRouter delegate;
+@Singleton
+public class DefaultRecoverPasswordReverseRouter extends AbstractReflectionReverseRouter implements RecoverPasswordReverseRouter {
+
+    private final ReverseCaller resetPasswordPageCaller;
+    private final ReverseCaller resetPasswordProcessCaller;
+    private final ReverseCaller requestRecoveryEmailPageCaller;
+    private final ReverseCaller requestRecoveryEmailProcessCaller;
 
     @Inject
-    protected DefaultRecoverPasswordReverseRouter(final Locale locale, final SimpleRecoverPasswordReverseRouter delegate) {
-        super(locale);
-        this.delegate = delegate;
+    protected DefaultRecoverPasswordReverseRouter(final ParsedRoutes parsedRoutes) {
+        resetPasswordPageCaller = getReverseCallerForSunriseRoute(RESET_PASSWORD_PAGE, parsedRoutes);
+        resetPasswordProcessCaller = getReverseCallerForSunriseRoute(RESET_PASSWORD_PROCESS, parsedRoutes);
+        requestRecoveryEmailPageCaller = getReverseCallerForSunriseRoute(REQUEST_RECOVERY_EMAIL_PAGE,
+                parsedRoutes);
+        requestRecoveryEmailProcessCaller = getReverseCallerForSunriseRoute(REQUEST_RECOVERY_EMAIL_PROCESS,
+                parsedRoutes);
     }
 
     @Override
-    public Call resetPasswordPageCall(final String languageTag, final String token) {
-        return delegate.resetPasswordPageCall(languageTag, token);
+    public Call resetPasswordPageCall(final String resetToken) {
+        return resetPasswordPageCaller.call(resetToken);
     }
 
     @Override
-    public Call resetPasswordProcessCall(final String languageTag, final String token) {
-        return delegate.resetPasswordProcessCall(languageTag, token);
+    public Call resetPasswordProcessCall(final String resetToken) {
+        return resetPasswordProcessCaller.call(resetToken);
     }
 
     @Override
-    public Call requestRecoveryEmailPageCall(final String languageTag) {
-        return delegate.requestRecoveryEmailPageCall(languageTag);
+    public Call requestRecoveryEmailPageCall() {
+        return requestRecoveryEmailPageCaller.call();
     }
 
     @Override
-    public Call requestRecoveryEmailProcessCall(final String languageTag) {
-        return delegate.requestRecoveryEmailProcessCall(languageTag);
+    public Call requestRecoveryEmailProcessCall() {
+        return requestRecoveryEmailProcessCaller.call();
     }
 }

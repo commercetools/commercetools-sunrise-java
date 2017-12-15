@@ -1,48 +1,60 @@
 package com.commercetools.sunrise.framework.reverserouters.shoppingcart.cart;
 
-import com.commercetools.sunrise.framework.reverserouters.AbstractLocalizedReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.AbstractReflectionReverseRouter;
+import com.commercetools.sunrise.framework.reverserouters.ParsedRoutes;
+import com.commercetools.sunrise.framework.reverserouters.ReverseCaller;
 import play.mvc.Call;
 
 import javax.inject.Inject;
-import java.util.Locale;
+import javax.inject.Singleton;
 
-public class DefaultCartReverseRouter extends AbstractLocalizedReverseRouter implements CartReverseRouter {
+@Singleton
+public class DefaultCartReverseRouter extends AbstractReflectionReverseRouter implements CartReverseRouter {
 
-    private final SimpleCartReverseRouter delegate;
+    private final ReverseCaller showCart;
+    private final ReverseCaller addLineItemProcessCaller;
+    private final ReverseCaller changeLineItemQuantityProcessCaller;
+    private final ReverseCaller removeLineItemProcessCaller;
+    private final ReverseCaller addDiscountCodeProcessCaller;
+    private final ReverseCaller removeDiscountCodeProcessCaller;
 
     @Inject
-    protected DefaultCartReverseRouter(final Locale locale, final SimpleCartReverseRouter reverseRouter) {
-        super(locale);
-        this.delegate = reverseRouter;
+    protected DefaultCartReverseRouter(final ParsedRoutes parsedRoutes) {
+        showCart = getReverseCallerForSunriseRoute(CART_DETAIL_PAGE, parsedRoutes);
+        addLineItemProcessCaller = getReverseCallerForSunriseRoute(ADD_LINE_ITEM_PROCESS, parsedRoutes);
+        changeLineItemQuantityProcessCaller = getReverseCallerForSunriseRoute(CHANGE_LINE_ITEM_QUANTITY_PROCESS, parsedRoutes);
+        removeLineItemProcessCaller = getReverseCallerForSunriseRoute(REMOVE_LINE_ITEM_PROCESS, parsedRoutes);
+        addDiscountCodeProcessCaller = getReverseCallerForSunriseRoute(ADD_DISCOUNT_CODE_PROCESS, parsedRoutes);
+        removeDiscountCodeProcessCaller = getReverseCallerForSunriseRoute(REMOVE_DISCOUNT_CODE_PROCESS, parsedRoutes);
     }
 
     @Override
-    public Call cartDetailPageCall(final String languageTag) {
-        return delegate.cartDetailPageCall(languageTag);
+    public Call cartDetailPageCall() {
+        return showCart.call();
     }
 
     @Override
-    public Call addLineItemProcessCall(final String languageTag) {
-        return delegate.addLineItemProcessCall(languageTag);
+    public Call addLineItemProcessCall() {
+        return addLineItemProcessCaller.call();
     }
 
     @Override
-    public Call removeLineItemProcessCall(final String languageTag) {
-        return delegate.removeLineItemProcessCall(languageTag);
+    public Call changeLineItemQuantityProcessCall() {
+        return changeLineItemQuantityProcessCaller.call();
     }
 
     @Override
-    public Call changeLineItemQuantityProcessCall(final String languageTag) {
-        return delegate.changeLineItemQuantityProcessCall(languageTag);
+    public Call removeLineItemProcessCall() {
+        return removeLineItemProcessCaller.call();
     }
 
     @Override
-    public Call addDiscountCodeProcessCall(final String languageTag) {
-        return delegate.addDiscountCodeProcessCall(languageTag);
+    public Call addDiscountCodeProcessCall() {
+        return addDiscountCodeProcessCaller.call();
     }
 
     @Override
-    public Call removeDiscountCodeProcessCall(final String languageTag) {
-        return delegate.removeDiscountCodeProcessCall(languageTag);
+    public Call removeDiscountCodeProcessCall() {
+        return removeDiscountCodeProcessCaller.call();
     }
 }

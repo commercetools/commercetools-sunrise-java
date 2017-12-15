@@ -13,7 +13,7 @@ public final class ProjectModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(Project.class)
-                .toProvider(ProjectProvider.class)
+                .toProvider(CachedProjectProvider.class)
                 .in(Singleton.class);
     }
 }

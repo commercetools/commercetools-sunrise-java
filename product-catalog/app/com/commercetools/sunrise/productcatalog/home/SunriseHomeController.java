@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.framework.template.engine.ContentRenderer;
+import com.commercetools.sunrise.framework.renderers.ContentRenderer;
 import com.commercetools.sunrise.framework.viewmodels.content.PageContent;
 import com.commercetools.sunrise.framework.controllers.SunriseContentController;
 import com.commercetools.sunrise.framework.controllers.WithQueryFlow;
@@ -27,7 +27,7 @@ public abstract class SunriseHomeController extends SunriseContentController imp
 
     @EnableHooks
     @SunriseRoute(HomeReverseRouter.HOME_PAGE)
-    public CompletionStage<Result> show(final String languageTag) {
+    public CompletionStage<Result> show() {
         return showPage(null);
     }
 
