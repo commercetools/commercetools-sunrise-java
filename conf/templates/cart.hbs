@@ -19,7 +19,8 @@
               <img class="bag-icon-lg" src="{{meta.assetsPath}}img/hand-bag-2-black-2edd08b27f222728b530d5ad224c1134.png" alt="bag icon">
             </span>
             <span class="text-uppercase your-bag-txt">{{i18n "checkout:yourBag"}}: </span>
-            <span class="items-total-txt">{{i18n "checkout:itemsTotal" count=content.cart.totalItems}}</span>
+            <span class="items-total-txt">
+                {{i18n "checkout:itemsTotal" count=(totalItemsCount content.CARTCART)}}</span>
           </div>
         </div>
         <div class="col-sm-4">

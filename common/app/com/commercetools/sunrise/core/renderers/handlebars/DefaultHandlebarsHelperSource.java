@@ -117,4 +117,10 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         return formatPrice(cartLike.calculateTotalAppliedTaxes()
                 .orElseGet(() -> PriceUtils.zeroAmount(cartLike.getCurrency())));
     }
+
+    public CharSequence totalItemsCount(final CartLike<?> cartLike) {
+        return cartLike.getLineItems().stream()
+                    .mapToLong(LineItem::getQuantity)
+                    .sum() + "";
+    }
 }
