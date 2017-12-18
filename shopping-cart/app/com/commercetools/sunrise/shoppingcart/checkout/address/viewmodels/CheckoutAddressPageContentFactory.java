@@ -51,7 +51,6 @@ public class CheckoutAddressPageContentFactory extends FormPageContentFactory<Ch
         fillCart(viewModel, cart, form);
         fillForm(viewModel, cart, form);
         fillFormSettings(viewModel, cart, form);
-        viewModel.put("CARTCART", cart);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class CheckoutAddressPageContentFactory extends FormPageContentFactory<Ch
     }
 
     protected void fillCart(final CheckoutAddressPageContent viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        viewModel.setCart(cartViewModelFactory.create(cart));
+        viewModel.setCart(cart);
     }
 
     protected void fillForm(final CheckoutAddressPageContent viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {

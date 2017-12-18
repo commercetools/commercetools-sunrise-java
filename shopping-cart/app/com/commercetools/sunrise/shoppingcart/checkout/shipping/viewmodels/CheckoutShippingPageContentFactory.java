@@ -51,7 +51,7 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
         fillCart(viewModel, shippingMethodsWithCart, form);
         fillForm(viewModel, shippingMethodsWithCart, form);
         fillFormSettings(viewModel, shippingMethodsWithCart, form);
-        viewModel.put("CARTCART", shippingMethodsWithCart.getCart());
+        viewModel.put("cart", shippingMethodsWithCart.getCart());
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
     }
 
     protected void fillCart(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
-        viewModel.setCart(cartViewModelFactory.create(shippingMethodsWithCart.getCart()));
+        viewModel.setCart(shippingMethodsWithCart.getCart());
     }
 
     protected void fillForm(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {

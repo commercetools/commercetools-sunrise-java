@@ -43,7 +43,6 @@ public class CheckoutConfirmationPageContentFactory extends FormPageContentFacto
         super.initialize(viewModel, cart, form);
         fillCart(viewModel, cart, form);
         fillForm(viewModel, cart, form);
-        viewModel.put("CARTCART", cart);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class CheckoutConfirmationPageContentFactory extends FormPageContentFacto
     }
 
     protected void fillCart(final CheckoutConfirmationPageContent viewModel, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
-        viewModel.setCart(cartViewModelFactory.create(cart));
+        viewModel.setCart(cart);
     }
 
     protected void fillForm(final CheckoutConfirmationPageContent viewModel, final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {

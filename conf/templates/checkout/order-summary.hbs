@@ -1,7 +1,7 @@
 <!-- start checkout/order-summary.hbs -->
 <div class="{{mainClass}}">
   {{> checkout/order-summary/header}}
-  {{#each CARTCART.lineItems}}
+  {{#each cart.lineItems}}
       <div class="row single-cart-item">
           <div class="col-sm-1 col-xs-4 product-img-col">
               <img class="img-responsive cart-item-img" src="{{imageUrl variant}}" alt="{{name}}">

@@ -22,7 +22,7 @@
     </div>
     <div class="col-sm-2 col-xs-5 text-right">
         <div>
-            <span>{{#if CARTCART}}{{subTotal CARTCART}}{{else}}EUR 0,-{{/if}}</span>
+            <span>{{#if cart}}{{subTotal cart}}{{else}}EUR 0,-{{/if}}</span>
         </div>
       {{#if meta.features.cartDiscounts.active}}
           <div>
@@ -30,14 +30,14 @@
           </div>
       {{/if}}
         <div>
-            <span>{{#if CARTCART.shippingInfo}}{{shippingCosts CARTCART}}{{else}}EUR 0,-{{/if}}</span>
+            <span>{{#if cart.shippingInfo}}{{shippingCosts cart}}{{else}}EUR 0,-{{/if}}</span>
         </div>
         <hr>
         <div>
-            <span>{{#if CARTCART}}{{salesTaxCartLike CARTCART}}{{else}}EUR 0,-{{/if}}</span>
+            <span>{{#if cart}}{{salesTaxCartLike cart}}{{else}}EUR 0,-{{/if}}</span>
         </div>
         <div>
-            <span class="order-total">{{#if CARTCART}}{{total CARTCART}}{{else}}EUR 0,-{{/if}}</span>
+            <span class="order-total">{{#if cart}}{{total cart}}{{else}}EUR 0,-{{/if}}</span>
         </div>
     </div>
 

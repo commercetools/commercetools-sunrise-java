@@ -1,12 +1,12 @@
 package com.commercetools.sunrise.shoppingcart.checkout;
 
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartViewModel;
+import io.sphere.sdk.carts.Cart;
 
 public abstract class AbstractCheckoutPageContent extends PageContent {
 
     private CheckoutStep stepWidget;
-    private CartViewModel cart;
+    private Cart cart;
 
     public CheckoutStep getStepWidget() {
         return stepWidget;
@@ -16,11 +16,11 @@ public abstract class AbstractCheckoutPageContent extends PageContent {
         this.stepWidget = stepWidget;
     }
 
-    public CartViewModel getCart() {
+    public Cart getCart() {
         return cart;
     }
 
-    public void setCart(final CartViewModel cart) {
+    public void setCart(final Cart cart) {
         this.cart = cart;
     }
 }

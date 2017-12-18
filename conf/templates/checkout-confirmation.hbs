@@ -27,13 +27,13 @@
                         {{> form/global-errors errors=content.checkoutForm.errors}}
                         <div class="row">
                             <div class="col-sm-4 checkout-first-col">
-                              {{> checkout/address-confirmation address=content.CARTCART.shippingAddress titleKey="checkout:shippingAddress" editable=true editUrl=meta._links.editShippingAddress.href}}
+                              {{> checkout/address-confirmation address=content.cart.shippingAddress titleKey="checkout:shippingAddress" editable=true editUrl=meta._links.editShippingAddress.href}}
                             </div>
                             <div class="col-sm-4 checkout-second-col">
-                                {{#if content.CARTCART.billingAddress}}
-                                    {{> checkout/address-confirmation address=content.CARTCART.billingAddress titleKey="checkout:billingAddress" editable=true editUrl=meta._links.editBillingAddress.href}}
+                                {{#if content.cart.billingAddress}}
+                                    {{> checkout/address-confirmation address=content.cart.billingAddress titleKey="checkout:billingAddress" editable=true editUrl=meta._links.editBillingAddress.href}}
                                 {{else}}
-                                    {{> checkout/address-confirmation address=content.CARTCART.shippingAddress titleKey="checkout:billingAddress" editable=true editUrl=meta._links.editBillingAddress.href}}
+                                    {{> checkout/address-confirmation address=content.cart.shippingAddress titleKey="checkout:billingAddress" editable=true editUrl=meta._links.editBillingAddress.href}}
                                 {{/if}}
                             </div>
                             <div class="col-sm-4 checkout-third-col">
@@ -41,7 +41,7 @@
                               {{> checkout/payment-confirmation paymentDetails=content.cart.paymentDetails editable=true}}
                             </div>
                         </div>
-                      {{> checkout/order-summary cart=content.cart CARTCART=content.CARTCART mainClass="confirmation-products-title" editable=false checkoutConfirmation=true}}
+                      {{> checkout/order-summary cart=content.cart cart=content.cart mainClass="confirmation-products-title" editable=false checkoutConfirmation=true}}
                     </form>
                 </div>
             </div>

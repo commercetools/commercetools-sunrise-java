@@ -49,6 +49,7 @@ object Dependencies {
     libraryDependencies ++= Seq (
       filters,
       cache,
+      "org.projectlombok" % "lombok" % "1.16.16",
       "commons-beanutils" % "commons-beanutils" % "1.9.2",
       "commons-io" % "commons-io" % "2.4"
     )

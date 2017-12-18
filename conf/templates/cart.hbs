@@ -20,8 +20,8 @@
             </span>
             <span class="text-uppercase your-bag-txt">{{i18n "checkout:yourBag"}}: </span>
             <span class="items-total-txt">
-                {{#if content.CARTCART}}
-                    {{i18n "checkout:itemsTotal" count=(totalItemsCount content.CARTCART)}}</span>
+                {{#if content.cart}}
+                    {{i18n "checkout:itemsTotal" count=(totalItemsCount content.cart)}}</span>
                 {{else}}
                     {{i18n "checkout:itemsTotal" count=0}}</span>
                 {{/if}}
@@ -33,7 +33,7 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          {{> checkout/order-summary cart=content.cart CARTCART=content.CARTCART mainClass="cart-content" editable=true}}
+          {{> checkout/order-summary cart=content.cart cart=content.cart mainClass="cart-content" editable=true}}
         </div>
       </div>
       <div class="row bottom-cart-btns">

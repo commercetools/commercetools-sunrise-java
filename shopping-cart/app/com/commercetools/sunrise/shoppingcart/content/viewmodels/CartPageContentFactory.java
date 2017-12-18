@@ -42,14 +42,12 @@ public class CartPageContentFactory extends PageContentFactory<CartPageContent, 
 
     public final CartPageContent create(@Nullable final Cart cart, final Form<? extends AddDiscountCodeFormData> form) {
         final CartPageContent cartPageContent = super.create(cart);
-        cartPageContent.getCart().setAddDiscountCodeForm(form);
         return cartPageContent;
     }
 
     protected final void initialize(final CartPageContent viewModel, @Nullable final Cart cart) {
         super.initialize(viewModel, cart);
         fillCart(viewModel, cart);
-        viewModel.put("CARTCART", cart);
     }
 
     @Override
@@ -58,6 +56,6 @@ public class CartPageContentFactory extends PageContentFactory<CartPageContent, 
     }
 
     protected void fillCart(final CartPageContent viewModel, @Nullable final Cart cart) {
-        viewModel.setCart(cartViewModelFactory.create(cart));
+        viewModel.setCart(cart);
     }
 }
