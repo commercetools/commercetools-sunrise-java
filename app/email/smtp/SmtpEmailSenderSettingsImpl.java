@@ -11,7 +11,7 @@ final class SmtpEmailSenderSettingsImpl extends Base implements SmtpEmailSenderS
 
     @Inject
     SmtpEmailSenderSettingsImpl(final Configuration globalConfig) {
-        this(globalConfig, "email.sender.smtp");
+        this(globalConfig, "sunrise.email.smtp");
     }
 
     SmtpEmailSenderSettingsImpl(final Configuration globalConfig, final String configPath) {
