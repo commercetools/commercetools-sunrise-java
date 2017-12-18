@@ -12,11 +12,14 @@ public final class HandlebarsProvider implements Provider<Handlebars> {
 
     private final HandlebarsSettings handlebarsSettings;
     private final HandlebarsHelperSource handlebarsHelperSource;
+    private final ProductHelperSource productHelperSource;
 
     @Inject
-    HandlebarsProvider(final HandlebarsSettings handlebarsSettings, final HandlebarsHelperSource handlebarsHelperSource) {
+    HandlebarsProvider(final HandlebarsSettings handlebarsSettings, final HandlebarsHelperSource handlebarsHelperSource,
+                       final ProductHelperSource productHelperSource) {
         this.handlebarsSettings = handlebarsSettings;
         this.handlebarsHelperSource = handlebarsHelperSource;
+        this.productHelperSource = productHelperSource;
     }
 
     @Override
@@ -27,6 +30,7 @@ public final class HandlebarsProvider implements Provider<Handlebars> {
                 .with(loaders)
                 .with(new HighConcurrencyTemplateCache())
                 .infiniteLoops(true)
-                .registerHelpers(handlebarsHelperSource);
+                .registerHelpers(handlebarsHelperSource)
+                .registerHelpers(productHelperSource);
     }
 }

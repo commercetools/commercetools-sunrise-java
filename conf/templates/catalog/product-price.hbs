@@ -1,0 +1,8 @@
+<!-- start catalog/product-price.hbs -->
+<p class="product-price">
+  {{#if product.variant.priceOld}}
+  <span class="discounted-price">{{product.variant.priceOld}}</span>
+  {{/if}}
+  <span>{{product.variant.price}}</span>
+</p>
+<!-- end catalog/product-price.hbs -->
