@@ -49,6 +49,7 @@ public class CartPageContentFactory extends PageContentFactory<CartPageContent, 
     protected final void initialize(final CartPageContent viewModel, @Nullable final Cart cart) {
         super.initialize(viewModel, cart);
         fillCart(viewModel, cart);
+        viewModel.put("CARTCART", cart);
     }
 
     @Override
