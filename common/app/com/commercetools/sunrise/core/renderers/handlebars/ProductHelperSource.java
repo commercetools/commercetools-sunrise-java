@@ -8,7 +8,10 @@ import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
 import io.sphere.sdk.producttypes.ProductType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
@@ -19,6 +22,8 @@ import static java.util.stream.Collectors.joining;
 @Singleton
 public class ProductHelperSource {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductHelperSource.class);
+
     private final AttributeFormatter attributeFormatter;
     private final ProductAttributesSettings productAttributesSettings;
 
@@ -28,22 +33,27 @@ public class ProductHelperSource {
         this.productAttributesSettings = productAttributesSettings;
     }
 
-    public CharSequence attributes(final ProductVariant variant, final Options options) {
+    public CharSequence displayedAttributes(final ProductVariant variant, final Options options) {
         return productAttributesSettings.displayed().stream()
                 .map(variant::getAttribute)
-                .filter(Objects::nonNull)
-                .map(context -> {
-                    try {
-                        return options.fn(context);
-                    } catch (IOException e) {
-                        return null;
-                    }
-                })
+                .map(attribute -> applyTemplateFunction(attribute, options))
                 .filter(Objects::nonNull)
                 .collect(joining());
     }
 
-    public CharSequence attribute(final Attribute attribute, final Reference<ProductType> productTypeRef) {
+    public CharSequence printAttributeValue(final Attribute attribute, final Reference<ProductType> productTypeRef) {
         return attributeFormatter.value(AttributeWithProductType.of(attribute, productTypeRef));
+    }
+
+    @Nullable
+    private CharSequence applyTemplateFunction(@Nullable final Object object, final Options options) {
+        try {
+            if (object != null) {
+                return options.fn(object);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Could not apply the template function", e);
+        }
+        return null;
     }
 }
