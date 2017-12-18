@@ -6,7 +6,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Options;
+import io.sphere.sdk.products.ProductVariant;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Optional;
@@ -62,5 +64,10 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         } else {
             return Optional.empty();
         }
+    }
+
+    @Nullable
+    public CharSequence imageUrl(final ProductVariant object) {
+        return object.getImages().stream().map(image -> (CharSequence) image.getUrl()).findFirst().orElse(null);
     }
 }
