@@ -51,6 +51,7 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
         fillCart(viewModel, shippingMethodsWithCart, form);
         fillForm(viewModel, shippingMethodsWithCart, form);
         fillFormSettings(viewModel, shippingMethodsWithCart, form);
+        viewModel.put("CARTCART", shippingMethodsWithCart.getCart());
     }
 
     @Override

@@ -43,6 +43,7 @@ public class CheckoutConfirmationPageContentFactory extends FormPageContentFacto
         super.initialize(viewModel, cart, form);
         fillCart(viewModel, cart, form);
         fillForm(viewModel, cart, form);
+        viewModel.put("CARTCART", cart);
     }
 
     @Override

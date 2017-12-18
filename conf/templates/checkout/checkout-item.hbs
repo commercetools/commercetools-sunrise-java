@@ -85,7 +85,7 @@
       <div class="col-lg-4 col-md-5 col-sm-5 col-xs-5">
         <div class="text-right checkout-price-digits">
           <span>{{subTotal content.CARTCART}}</span><br>
-          <span>{{#if CARTCART.shippingInfo}}{{shippingCosts content.CARTCART}}{{else}}EUR 0,-{{/if}}</span>
+          <span>{{#if content.CARTCART.shippingInfo}}{{shippingCosts content.CARTCART}}{{else}}EUR 0,-{{/if}}</span>
         </div>
       </div>
     </div>

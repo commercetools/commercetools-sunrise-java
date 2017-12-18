@@ -50,6 +50,7 @@ public class CheckoutPaymentPageContentFactory extends FormPageContentFactory<Ch
         fillCart(viewModel, paymentMethodsWithCart, form);
         fillForm(viewModel, paymentMethodsWithCart, form);
         fillFormSettings(viewModel, paymentMethodsWithCart, form);
+        viewModel.put("CARTCART", paymentMethodsWithCart.getCart());
     }
 
     @Override

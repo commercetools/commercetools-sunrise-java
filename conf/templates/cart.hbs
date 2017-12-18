@@ -20,7 +20,11 @@
             </span>
             <span class="text-uppercase your-bag-txt">{{i18n "checkout:yourBag"}}: </span>
             <span class="items-total-txt">
-                {{i18n "checkout:itemsTotal" count=(totalItemsCount content.CARTCART)}}</span>
+                {{#if content.CARTCART}}
+                    {{i18n "checkout:itemsTotal" count=(totalItemsCount content.CARTCART)}}</span>
+                {{else}}
+                    {{i18n "checkout:itemsTotal" count=0}}</span>
+                {{/if}}
           </div>
         </div>
         <div class="col-sm-4">
