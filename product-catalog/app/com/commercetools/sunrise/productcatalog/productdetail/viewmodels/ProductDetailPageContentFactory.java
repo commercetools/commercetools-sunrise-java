@@ -58,6 +58,8 @@ public class ProductDetailPageContentFactory extends PageContentFactory<ProductD
         super.initialize(viewModel, productWithVariant);
         fillProduct(viewModel, productWithVariant);
         fillBreadCrumb(viewModel, productWithVariant);
+        viewModel.put("myproduct", productWithVariant.getProduct());
+        viewModel.put("myvariant", productWithVariant.getVariant());
     }
 
     @Override
