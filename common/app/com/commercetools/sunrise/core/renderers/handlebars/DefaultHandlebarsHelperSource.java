@@ -4,12 +4,15 @@ import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
+import com.commercetools.sunrise.models.carts.CartPriceUtils;
 import com.commercetools.sunrise.models.products.ProductPriceUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Options;
+import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
+import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
 import play.mvc.Call;
 
@@ -96,5 +99,22 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     public CharSequence formatPrice(final MonetaryAmount object) {
         return priceFormatter.format(object);
+    }
+
+    public CharSequence subTotal(final CartLike<?> object) {
+        return formatPrice(object.calculateSubTotalPrice());
+    }
+
+    public CharSequence total(final CartLike<?> object) {
+        return formatPrice(CartPriceUtils.calculateTotalPrice(object));
+    }
+
+    public CharSequence shippingCosts(final CartLike<?> object) {
+        return CartPriceUtils.calculateAppliedShippingPrice(object).map(this::formatPrice).orElse("kk");
+    }
+
+    public CharSequence salesTaxCartLike(final CartLike<?> cartLike) {
+        return formatPrice(cartLike.calculateTotalAppliedTaxes()
+                .orElseGet(() -> PriceUtils.zeroAmount(cartLike.getCurrency())));
     }
 }
