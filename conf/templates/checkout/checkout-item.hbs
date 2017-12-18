@@ -1,23 +1,24 @@
 <!-- start checkout/checkout-item.hbs -->
 <div class="order">
   <div class="order-summary-items">
-    {{#each content.cart.lineItems.list}}
+    {{#each content.CARTCART.lineItems}}
       <div class="order-summary-item">
         <div class="row">
           <div class="col-xs-4">
             <div class="order-summary-img">
-              <img class="img-responsive" src="{{variant.image}}" alt="{{variant.name}}">
+              <img class="img-responsive" src="{{imageUrl variant}}" alt="{{name}}">
             </div>
           </div>
           <div class="col-xs-8">
             <div class="summary-item-info">
-              <span class="checkout-product-name">{{variant.name}}</span>
+              <span class="checkout-product-name">{{name}}</span>
             </div>
             <div class="sku-code">
               <span>{{variant.sku}}</span>
             </div>
             <div class="checkout-attributes">
                 <div class="checkout-attribute-field">
+                    <!-- TODO MiSc -->
                 {{#each attributes}}
                     <span class="checkout-attribute">{{name}}</span>{{#unless @last}}<br>{{/unless}}
                 {{/each}}
@@ -41,14 +42,14 @@
             <div class="col-xs-4">
               <div class="text-right order-item-value">
                 <span class="text-uppercase pricing-titles">{{i18n "main:common.price"}}</span><br>
-                {{#if variant.priceOld}}<span class="checkout-discounted-price">{{variant.priceOld}}</span><br>{{/if}}
-                <span>{{variant.price}}</span>
+                {{#if price.discounted.value}}<span class="checkout-discounted-price">{{oldPriceForLineItem this}}</span><br>{{/if}}
+                <span>{{currentPriceForLineItem this}}</span>
               </div>
             </div>
             <div class="col-xs-4">
               <div class="text-right order-item-value">
                 <span class="text-uppercase pricing-titles">{{i18n "checkout:total"}}</span><br>
-                <span>{{totalPrice}}</span>
+                <span>{{formatPrice totalPrice}}</span>
               </div>
             </div>
           </div>
@@ -57,7 +58,7 @@
     {{/each}}
   </div>
   <div class="checkout-total-price">
-  {{#if content.cart.discountCodes}}
+  {{#if content.CARTCART.discountCodes}}
     <div class="row">
       <div class="col-lg-8 col-md-7 col-sm-7 col-xs-7">
         <div class="text-right checkout-promo-code">
@@ -66,8 +67,8 @@
       </div>
       <div class="col-lg-4 col-md-5 col-sm-5 col-xs-5">
         <div class="text-right checkout-promo-code">
-          {{#each content.cart.discountCodes}}
-          <span class="text-uppercase">{{name}}</span><br>
+          {{#each content.CARTCART.discountCodes}}
+          <span class="text-uppercase">{{discountCode.obj.code}}</span><br>
           {{/each}}
         </div>
       </div>
@@ -83,8 +84,8 @@
       </div>
       <div class="col-lg-4 col-md-5 col-sm-5 col-xs-5">
         <div class="text-right checkout-price-digits">
-          <span>{{content.cart.subtotalPrice}}</span><br>
-          <span>{{content.cart.shippingMethod.price}}</span>
+          <span>{{subTotal content.CARTCART}}</span><br>
+          <span>{{#if CARTCART.shippingInfo}}{{shippingCosts content.CARTCART}}{{else}}EUR 0,-{{/if}}</span>
         </div>
       </div>
     </div>
@@ -98,8 +99,8 @@
     </div>
     <div class="col-lg-4 col-md-5 col-sm-5 col-xs-5">
       <div class="text-right order-tax-total-digits">
-        <span>{{content.cart.salesTax}}</span><br>
-        <span class="total-order-value">{{content.cart.totalPrice}}</span>
+        <span>{{salesTaxCartLike content.CARTCART}}</span><br>
+        <span class="total-order-value">{{total content.CARTCART}}</span>
       </div>
     </div>
   </div>

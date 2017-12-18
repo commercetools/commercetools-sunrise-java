@@ -70,6 +70,11 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         return objectMapper.writeValueAsString(object);
     }
 
+    public CharSequence prettyJson(final Object object) throws JsonProcessingException {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+    }
+
     private static Optional<CmsPage> getCmsPageFromContext(final Context context) {
         final Object cmsPageAsObject = context.get(CMS_PAGE_IN_CONTEXT_KEY);
         if (cmsPageAsObject instanceof CmsPage) {
@@ -110,7 +115,7 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
     }
 
     public CharSequence shippingCosts(final CartLike<?> object) {
-        return CartPriceUtils.calculateAppliedShippingPrice(object).map(this::formatPrice).orElse("kk");
+        return CartPriceUtils.calculateAppliedShippingPrice(object).map(this::formatPrice).orElse("");
     }
 
     public CharSequence salesTaxCartLike(final CartLike<?> cartLike) {

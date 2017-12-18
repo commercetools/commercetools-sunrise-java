@@ -51,6 +51,7 @@ public class CheckoutAddressPageContentFactory extends FormPageContentFactory<Ch
         fillCart(viewModel, cart, form);
         fillForm(viewModel, cart, form);
         fillFormSettings(viewModel, cart, form);
+        viewModel.put("CARTCART", cart);
     }
 
     @Override
