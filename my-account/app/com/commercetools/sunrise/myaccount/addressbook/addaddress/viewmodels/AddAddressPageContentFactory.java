@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress.viewmodels;
 
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsViewModelFactory;
 import io.sphere.sdk.customers.Customer;
@@ -11,17 +10,11 @@ import javax.inject.Inject;
 
 public class AddAddressPageContentFactory extends FormPageContentFactory<AddAddressPageContent, Customer, AddressFormData> {
 
-    private final PageTitleResolver pageTitleResolver;
     private final AddressFormSettingsViewModelFactory addressFormSettingsViewModelFactory;
 
     @Inject
-    public AddAddressPageContentFactory(final PageTitleResolver pageTitleResolver, final AddressFormSettingsViewModelFactory addressFormSettingsViewModelFactory) {
-        this.pageTitleResolver = pageTitleResolver;
+    public AddAddressPageContentFactory(final AddressFormSettingsViewModelFactory addressFormSettingsViewModelFactory) {
         this.addressFormSettingsViewModelFactory = addressFormSettingsViewModelFactory;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
     }
 
     protected final AddressFormSettingsViewModelFactory getAddressFormSettingsViewModelFactory() {
@@ -43,11 +36,6 @@ public class AddAddressPageContentFactory extends FormPageContentFactory<AddAddr
         super.initialize(viewModel, customer, form);
         fillNewAddressForm(viewModel, customer, form);
         fillNewAddressFormSettings(viewModel, customer, form);
-    }
-
-    @Override
-    protected void fillTitle(final AddAddressPageContent viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("my-account:addAddressPage.title"));
     }
 
     protected void fillNewAddressForm(final AddAddressPageContent viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
