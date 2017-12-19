@@ -11,7 +11,10 @@ public abstract class FormPageContentFactory<M extends PageContent, I, F> extend
         fillMessages(viewModel, input, form);
     }
 
-    protected abstract void fillTitle(final M viewModel, final I input, final Form<? extends F> form);
+    @Deprecated
+    protected void fillTitle(final M viewModel, final I input, final Form<? extends F> form) {
+
+    }
 
     protected void fillMessages(final M viewModel, final I input, final Form<? extends F> form) {
         viewModel.addMessages(extractMessages());

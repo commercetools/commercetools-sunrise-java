@@ -2,7 +2,6 @@ package com.commercetools.sunrise.myaccount.mydetails.viewmodels;
 
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.models.customers.CustomerInfoViewModelFactory;
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
@@ -11,20 +10,14 @@ import javax.inject.Inject;
 
 public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<MyPersonalDetailsPageContent, Customer, MyPersonalDetailsFormData> {
 
-    private final PageTitleResolver pageTitleResolver;
     private final CustomerInfoViewModelFactory customerInfoViewModelFactory;
     private final MyPersonalDetailsFormSettingsViewModelFactory myPersonalDetailsFormSettingsViewModelFactory;
 
     @Inject
-    public MyPersonalDetailsPageContentFactory(final PageTitleResolver pageTitleResolver, final CustomerInfoViewModelFactory customerInfoViewModelFactory,
+    public MyPersonalDetailsPageContentFactory(final CustomerInfoViewModelFactory customerInfoViewModelFactory,
                                                final MyPersonalDetailsFormSettingsViewModelFactory myPersonalDetailsFormSettingsViewModelFactory) {
-        this.pageTitleResolver = pageTitleResolver;
         this.customerInfoViewModelFactory = customerInfoViewModelFactory;
         this.myPersonalDetailsFormSettingsViewModelFactory = myPersonalDetailsFormSettingsViewModelFactory;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
     }
 
     protected final CustomerInfoViewModelFactory getCustomerInfoViewModelFactory() {
@@ -51,11 +44,6 @@ public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<
         fillCustomer(viewModel, customer, form);
         fillPersonalDetailsForm(viewModel, customer, form);
         fillPersonalDetailsFormSettings(viewModel, customer, form);
-    }
-
-    @Override
-    protected void fillTitle(final MyPersonalDetailsPageContent viewModel, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:myPersonalDetailsPage.title"));
     }
 
     protected void fillCustomer(final MyPersonalDetailsPageContent viewModel, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
