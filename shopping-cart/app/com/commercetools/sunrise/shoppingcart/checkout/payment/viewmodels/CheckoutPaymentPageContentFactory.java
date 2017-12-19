@@ -10,18 +10,11 @@ import javax.inject.Inject;
 
 public class CheckoutPaymentPageContentFactory extends FormPageContentFactory<CheckoutPaymentPageContent, PaymentMethodsWithCart, CheckoutPaymentFormData> {
 
-    private final PageTitleResolver pageTitleResolver;
     private final CheckoutPaymentFormSettingsViewModelFactory checkoutPaymentFormSettingsViewModelFactory;
 
     @Inject
-    public CheckoutPaymentPageContentFactory(final PageTitleResolver pageTitleResolver,
-                                             final CheckoutPaymentFormSettingsViewModelFactory checkoutPaymentFormSettingsViewModelFactory) {
-        this.pageTitleResolver = pageTitleResolver;
+    public CheckoutPaymentPageContentFactory(final CheckoutPaymentFormSettingsViewModelFactory checkoutPaymentFormSettingsViewModelFactory) {
         this.checkoutPaymentFormSettingsViewModelFactory = checkoutPaymentFormSettingsViewModelFactory;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
     }
 
     protected final CheckoutPaymentFormSettingsViewModelFactory getCheckoutPaymentFormSettingsViewModelFactory() {
@@ -43,11 +36,6 @@ public class CheckoutPaymentPageContentFactory extends FormPageContentFactory<Ch
         fillCart(viewModel, paymentMethodsWithCart, form);
         fillForm(viewModel, paymentMethodsWithCart, form);
         fillFormSettings(viewModel, paymentMethodsWithCart, form);
-    }
-
-    @Override
-    protected void fillTitle(final CheckoutPaymentPageContent viewModel, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:paymentPage.title"));
     }
 
     protected void fillCart(final CheckoutPaymentPageContent viewModel, final PaymentMethodsWithCart paymentMethodsWithCart, final Form<? extends CheckoutPaymentFormData> form) {
