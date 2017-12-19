@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressFormData;
 import io.sphere.sdk.carts.Cart;
@@ -10,18 +9,11 @@ import javax.inject.Inject;
 
 public class CheckoutAddressPageContentFactory extends FormPageContentFactory<CheckoutAddressPageContent, Cart, CheckoutAddressFormData> {
 
-    private final PageTitleResolver pageTitleResolver;
     private final CheckoutAddressFormSettingsViewModelFactory addressFormSettingsFactory;
 
     @Inject
-    public CheckoutAddressPageContentFactory(final PageTitleResolver pageTitleResolver,
-                                             final CheckoutAddressFormSettingsViewModelFactory addressFormSettingsFactory) {
-        this.pageTitleResolver = pageTitleResolver;
+    public CheckoutAddressPageContentFactory(final CheckoutAddressFormSettingsViewModelFactory addressFormSettingsFactory) {
         this.addressFormSettingsFactory = addressFormSettingsFactory;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
     }
 
     protected final CheckoutAddressFormSettingsViewModelFactory getAddressFormSettingsFactory() {
@@ -44,11 +36,6 @@ public class CheckoutAddressPageContentFactory extends FormPageContentFactory<Ch
         fillCart(viewModel, cart, form);
         fillForm(viewModel, cart, form);
         fillFormSettings(viewModel, cart, form);
-    }
-
-    @Override
-    protected void fillTitle(final CheckoutAddressPageContent viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
     }
 
     protected void fillCart(final CheckoutAddressPageContent viewModel, final Cart cart, final Form<? extends CheckoutAddressFormData> form) {
