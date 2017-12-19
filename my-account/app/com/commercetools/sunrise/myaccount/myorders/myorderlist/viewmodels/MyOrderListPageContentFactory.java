@@ -42,8 +42,6 @@ public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderLis
     }
 
     protected void fillOrders(final MyOrderListPageContent viewModel, final OrderListWithCustomer orderListWithCustomer) {
-        viewModel.setOrders(orderListWithCustomer.getOrders().getResults().stream()
-                .map(orderOverviewViewModelFactory::create)
-                .collect(toList()));
+        viewModel.setOrders(orderListWithCustomer.getOrders().getResults());
     }
 }

@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.core.renderers.handlebars;
 
+import com.commercetools.sdk.CtpEnumUtils;
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
@@ -139,5 +140,9 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     public CharSequence formatDateTime(final ZonedDateTime time) {
         return dateTimeFormatter.format(time);
+    }
+
+    public CharSequence enumToCamelCase(final Object enumValue) {
+        return CtpEnumUtils.enumToCamelCase(enumValue.toString());
     }
 }

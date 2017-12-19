@@ -31,6 +31,7 @@ public final class HandlebarsProvider implements Provider<Handlebars> {
                 .with(loaders)
                 .with(new HighConcurrencyTemplateCache())
                 .infiniteLoops(true)
+                .registerHelpers(StringHelpers.class)
                 .registerHelpers(handlebarsHelperSource)
                 .registerHelpers(productHelperSource);
         StringHelpers.slugify.registerHelper(handlebars);

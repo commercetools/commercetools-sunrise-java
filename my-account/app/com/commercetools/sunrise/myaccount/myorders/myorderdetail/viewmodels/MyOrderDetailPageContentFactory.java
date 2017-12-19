@@ -49,6 +49,6 @@ public class MyOrderDetailPageContentFactory extends PageContentFactory<MyOrderD
     }
 
     protected void fillOrder(final MyOrderDetailPageContent viewModel, final OrderWithCustomer orderWithCustomer) {
-        viewModel.setOrder(orderViewModelFactory.create(orderWithCustomer.getOrder()));
+        viewModel.setOrder(orderWithCustomer.getOrder());
     }
 }
