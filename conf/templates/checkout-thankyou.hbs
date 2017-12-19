@@ -34,10 +34,14 @@
               {{> checkout/address-confirmation address=content.order.shippingAddress titleKey="checkout:shippingAddress" editable=false}}
             </div>
             <div class="col-sm-4 checkout-second-col">
-              {{> checkout/address-confirmation address=content.order.billingAddress titleKey="checkout:billingAddress" editable=false}}
+              {{#if content.order.billingAddress}}
+                {{> checkout/address-confirmation address=content.order.billingAddress titleKey="checkout:billingAddress" editable=false}}
+              {{else}}
+                {{> checkout/address-confirmation address=content.order.shippingAddress titleKey="checkout:billingAddress" editable=false}}
+              {{/if}}
             </div>
             <div class="col-sm-4 checkout-third-col">
-              {{> checkout/shipping-method-confirmation shippingMethod=content.order.shippingMethod editable=false}}
+              {{> checkout/shipping-method-confirmation shippingInfo=content.order.shippingInfo editable=false}}
               {{> checkout/payment-confirmation paymentDetails=content.order.paymentDetails editable=false}}
             </div>
           </div>

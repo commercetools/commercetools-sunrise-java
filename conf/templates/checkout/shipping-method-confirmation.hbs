@@ -1,0 +1,13 @@
+<!-- start checkout/shipping-method-confirmation.hbs -->
+<div class="checkout-summary">
+    <div class="text-uppercase">
+        <span class="checkout-summary-title">{{i18n "checkout:shippingMethod"}}</span>
+        {{> checkout/edit-link id="confirmation-edit-method-btn" url=meta._links.editShippingMethod.href enabled=editable}}
+    </div>
+    <div class="checkout-summary-text">
+        <span>{{shippingInfo.shippingMethodName}}</span>
+        <br>
+        <span>{{shippingInfo.shippingMethod.obj.description}}</span>
+    </div>
+</div>
+<!-- end checkout/shipping-method-confirmation.hbs -->

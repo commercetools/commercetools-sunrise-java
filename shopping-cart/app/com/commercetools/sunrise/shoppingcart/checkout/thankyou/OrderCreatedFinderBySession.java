@@ -36,6 +36,7 @@ public class OrderCreatedFinderBySession extends AbstractSingleOrderQueryExecuto
                 .plusPredicates(order -> order.id().is(orderId))
                 .plusExpansionPaths(m -> m.paymentInfo().payments())
                 .plusExpansionPaths(m -> m.discountCodes().discountCode())
+                .plusExpansionPaths(m -> m.shippingInfo().shippingMethod())
                 .build();
     }
 }
