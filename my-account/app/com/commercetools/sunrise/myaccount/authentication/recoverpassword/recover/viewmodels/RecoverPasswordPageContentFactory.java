@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.RecoverPasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordFormData;
@@ -16,15 +15,8 @@ import javax.inject.Inject;
  */
 public class RecoverPasswordPageContentFactory extends FormPageContentFactory<RecoverPasswordPageContent, Void, RecoverPasswordFormData> {
 
-    private final PageTitleResolver pageTitleResolver;
-
     @Inject
-    protected RecoverPasswordPageContentFactory(final PageTitleResolver pageTitleResolver) {
-        this.pageTitleResolver = pageTitleResolver;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
+    protected RecoverPasswordPageContentFactory() {
     }
 
     @Override
@@ -39,11 +31,6 @@ public class RecoverPasswordPageContentFactory extends FormPageContentFactory<Re
     @Override
     protected RecoverPasswordPageContent newViewModelInstance(final Void input, final Form<? extends RecoverPasswordFormData> form) {
         return new RecoverPasswordPageContent();
-    }
-
-    @Override
-    protected void fillTitle(final RecoverPasswordPageContent viewModel, final Void input, final Form<? extends RecoverPasswordFormData> form) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("my-account:paswordRecovery.title"));
     }
 
     @Override

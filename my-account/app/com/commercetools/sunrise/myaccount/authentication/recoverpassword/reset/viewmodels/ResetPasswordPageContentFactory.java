@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.viewmodels;
 
 import com.commercetools.sunrise.core.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordFormData;
 import play.data.Form;
@@ -15,27 +14,16 @@ import javax.inject.Inject;
  * @see ResetPasswordFormData
  */
 public class ResetPasswordPageContentFactory extends FormPageContentFactory<ResetPasswordPageContent, String, ResetPasswordFormData> {
-    private final PageTitleResolver pageTitleResolver;
     private final RecoverPasswordReverseRouter recoverPasswordReverseRouter;
 
     @Inject
-    protected ResetPasswordPageContentFactory(final PageTitleResolver pageTitleResolver, final RecoverPasswordReverseRouter recoverPasswordReverseRouter) {
-        this.pageTitleResolver = pageTitleResolver;
+    protected ResetPasswordPageContentFactory(final RecoverPasswordReverseRouter recoverPasswordReverseRouter) {
         this.recoverPasswordReverseRouter = recoverPasswordReverseRouter;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
     }
 
     @Override
     protected ResetPasswordPageContent newViewModelInstance(final String resetToken, final Form<? extends ResetPasswordFormData> form) {
         return new ResetPasswordPageContent();
-    }
-
-    @Override
-    protected void fillTitle(final ResetPasswordPageContent viewModel, final String resetToken, final Form<? extends ResetPasswordFormData> form) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("my-account:resetPassword.title"));
     }
 
     public final ResetPasswordPageContent create( final String resetToken, final Form<? extends ResetPasswordFormData> form) {
