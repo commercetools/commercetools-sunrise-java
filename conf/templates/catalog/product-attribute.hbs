@@ -5,7 +5,7 @@
         <div>
             <select name="attribute-{{this}}" class="select-product-detail" data-reload="{{shouldReload this}}" required>
                 {{#eachAttributeOption this content.myproduct content.myvariant}}
-                    <option value="{{variantId}}" data-url="{{variantUrl}}" {{#if disabled}}disabled{{/if}} {{#if selected}}selected{{/if}}>
+                    <option value="{{variantId}}" data-url="{{variantUrl}}" {{#if disabled}}class="grey-p"{{/if}} {{#if selected}}selected{{/if}}>
                         {{attributeValue attribute content.myproduct.productType}}
                     </option>
                 {{/eachAttributeOption}}
