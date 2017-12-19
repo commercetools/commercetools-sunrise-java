@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
 import io.sphere.sdk.orders.Order;
 
@@ -8,15 +7,8 @@ import javax.inject.Inject;
 
 public class CheckoutThankYouPageContentFactory extends PageContentFactory<CheckoutThankYouPageContent, Order> {
 
-    private final PageTitleResolver pageTitleResolver;
-
     @Inject
-    public CheckoutThankYouPageContentFactory(final PageTitleResolver pageTitleResolver) {
-        this.pageTitleResolver = pageTitleResolver;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
+    public CheckoutThankYouPageContentFactory() {
     }
 
     @Override

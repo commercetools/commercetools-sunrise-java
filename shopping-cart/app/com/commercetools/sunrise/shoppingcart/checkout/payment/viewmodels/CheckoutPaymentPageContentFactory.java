@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.PaymentMethodsWithCart;
