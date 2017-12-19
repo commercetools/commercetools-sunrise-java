@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.wishlist.content.viewmodels;
 
 import com.commercetools.sunrise.core.viewmodels.GenericListViewModel;
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
 import com.commercetools.sunrise.models.products.ProductThumbnailViewModel;
 import io.sphere.sdk.shoppinglists.LineItem;
@@ -16,13 +15,10 @@ import java.util.stream.Collectors;
  * The factory class for creating {@link WishlistPageContent}.
  */
 public class WishlistPageContentFactory extends PageContentFactory<WishlistPageContent, ShoppingList> {
-    private final PageTitleResolver pageTitleResolver;
     private final LineItemThumbnailViewModelFactory thumbnailViewModelFactory;
 
     @Inject
-    public WishlistPageContentFactory(final PageTitleResolver pageTitleResolver,
-                                      final LineItemThumbnailViewModelFactory thumbnailViewModelFactory) {
-        this.pageTitleResolver = pageTitleResolver;
+    public WishlistPageContentFactory(final LineItemThumbnailViewModelFactory thumbnailViewModelFactory) {
         this.thumbnailViewModelFactory = thumbnailViewModelFactory;
     }
 
@@ -42,11 +38,6 @@ public class WishlistPageContentFactory extends PageContentFactory<WishlistPageC
 
         fillProducts(viewModel, wishlist);
         fillItemsInTotal(viewModel, wishlist);
-    }
-
-    @Override
-    protected void fillTitle(final WishlistPageContent viewModel, final ShoppingList wishlist) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("my-account:myWishlist.title"));
     }
 
     protected void fillItemsInTotal(final WishlistPageContent viewModel, final ShoppingList wishlist) {
