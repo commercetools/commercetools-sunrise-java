@@ -3,13 +3,14 @@ package com.commercetools.sunrise.core.viewmodels.header;
 import com.commercetools.sunrise.common.localization.LocalizationSelectorViewModel;
 import com.commercetools.sunrise.core.viewmodels.ViewModel;
 import com.commercetools.sunrise.models.carts.MiniCartViewModel;
+import io.sphere.sdk.carts.Cart;
 
 public class PageHeader extends ViewModel {
 
     private String title;
     private String customerServiceNumber;
     private LocalizationSelectorViewModel location;
-    private MiniCartViewModel miniCart;
+    private Cart miniCart;
     private PageNavMenu navMenu;
 
     public PageHeader() {
@@ -35,11 +36,11 @@ public class PageHeader extends ViewModel {
         this.location = location;
     }
 
-    public MiniCartViewModel getMiniCart() {
+    public Cart getMiniCart() {
         return miniCart;
     }
 
-    public void setMiniCart(final MiniCartViewModel miniCart) {
+    public void setMiniCart(final Cart miniCart) {
         this.miniCart = miniCart;
     }
 

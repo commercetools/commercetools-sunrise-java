@@ -4,7 +4,6 @@ import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
 import com.commercetools.sunrise.models.categories.NewCategoryTree;
 import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.models.carts.MiniCartViewModelFactory;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
@@ -12,7 +11,6 @@ import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinde
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.AlphabeticallySortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.CustomSortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.TermFacetViewModelFactory;
-import com.commercetools.sunrise.models.carts.TruncatedMiniCartViewModelFactory;
 import com.commercetools.sunrise.models.customers.CustomerInSession;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -73,9 +71,6 @@ public class Module extends AbstractModule {
                 .annotatedWith(Names.named("customSorted"))
                 .to(CustomSortedTermFacetViewModelFactory.class)
                 .in(RequestScoped.class);
-
-        // Binding to truncate mini cart to fit it into limited session space
-        bind(MiniCartViewModelFactory.class).to(TruncatedMiniCartViewModelFactory.class);
 
         // Binding to enable matching variants on listing products
         // IMPORTANT: comment the following line if your project does not require this functionality, leaving it on can severely affect performance
