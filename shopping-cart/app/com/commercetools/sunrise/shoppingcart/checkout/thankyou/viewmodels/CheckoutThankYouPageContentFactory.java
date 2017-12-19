@@ -49,6 +49,6 @@ public class CheckoutThankYouPageContentFactory extends PageContentFactory<Check
     }
 
     protected void fillOrder(final CheckoutThankYouPageContent viewModel, final Order order) {
-        viewModel.setOrder(orderViewModelFactory.create(order));
+        viewModel.setOrder(order);
     }
 }

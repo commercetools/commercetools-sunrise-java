@@ -1,20 +1,20 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou.viewmodels;
 
-import com.commercetools.sunrise.models.carts.OrderViewModel;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import io.sphere.sdk.orders.Order;
 
 public class CheckoutThankYouPageContent extends PageContent {
 
-    private OrderViewModel order;
+    private Order order;
 
     public CheckoutThankYouPageContent() {
     }
 
-    public OrderViewModel getOrder() {
+    public Order getOrder() {
         return order;
     }
 
-    public void setOrder(final OrderViewModel order) {
+    public void setOrder(final Order order) {
         this.order = order;
     }
 }

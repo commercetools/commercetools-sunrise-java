@@ -36,7 +36,7 @@ final class TestableHandlebarsTemplateEngine implements TemplateEngine {
     }
 
     private static Handlebars handlebars(final List<TemplateLoader> templateLoaders, final I18nResolver i18nResolver) {
-        final DefaultHandlebarsHelperSource helperSource = new DefaultHandlebarsHelperSource(i18nResolver, null, null);
+        final DefaultHandlebarsHelperSource helperSource = new DefaultHandlebarsHelperSource(i18nResolver, null, null, dateTimeFormatter);
         final HandlebarsSettings settings = () -> templateLoaders;
         return new HandlebarsProvider(settings, helperSource, null).get();
     }

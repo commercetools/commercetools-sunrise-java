@@ -14,12 +14,15 @@ import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
+import lombok.NonNull;
 import play.mvc.Call;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.money.MonetaryAmount;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import static com.commercetools.sunrise.core.renderers.handlebars.HandlebarsTemplateEngine.CMS_PAGE_IN_CONTEXT_KEY;
@@ -30,12 +33,14 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
     private final I18nResolver i18nResolver;
     private final ProductReverseRouter productReverseRouter;
     private final PriceFormatter priceFormatter;
+    private final DateTimeFormatter dateTimeFormatter;
 
     @Inject
-    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, ProductReverseRouter productReverseRouter, PriceFormatter priceFormatter) {
+    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, ProductReverseRouter productReverseRouter, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter) {
         this.i18nResolver = i18nResolver;
         this.productReverseRouter = productReverseRouter;
         this.priceFormatter = priceFormatter;
+        this.dateTimeFormatter = dateTimeFormatter;
     }
 
     /**
@@ -85,7 +90,7 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
     }
 
     @Nullable
-    public CharSequence imageUrl(final ProductVariant object) {
+    public CharSequence imageUrl(@NonNull final ProductVariant object) {
         return object.getImages().stream().map(image -> (CharSequence) image.getUrl()).findFirst().orElse(null);
     }
 
@@ -127,5 +132,9 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         return cartLike.getLineItems().stream()
                     .mapToLong(LineItem::getQuantity)
                     .sum() + "";
+    }
+
+    public CharSequence formatDateTime(final ZonedDateTime time) {
+        return dateTimeFormatter.format(time);
     }
 }
