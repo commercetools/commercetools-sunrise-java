@@ -1,0 +1,15 @@
+<!-- start catalog/product-attribute.hbs -->
+{{#selectableAttributes content.myvariant content.myproduct.productType}}
+<li>
+  <p class="text-uppercase">{{label}}</p>
+  <div>
+    <select name="attribute-{{name}}" class="select-product-detail" data-reload="{{reloaded}}" data-cross-select="{{selectableAlgo this content.myproduct}}" data-variants="{{json product.variants}}" data-identifiers="{{json product.identifiers}}" required>
+      {{#attributeOptions this content.myproduct}}
+        <option value="{{slugify value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
+      {{/attributeOptions}}
+    </select>
+  </div>
+  {{> common/required-error-message}}
+</li>
+{{/selectableAttributes}}
+<!-- end catalog/product-attribute.hbs -->

@@ -1,16 +1,12 @@
 <!-- start catalog/add-to-cart.hbs -->
 <form id="form-add-to-cart{{index}}" name="add-to-cart" method="post" action="{{@root.meta._links.addToCart.href}}">
   <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
-  <input type="hidden" name="productId" value="{{product.productId}}">
-  <input type="hidden" name="variantId" value="{{product.variantId}}">
-  <input type="hidden" name="productSku" value="{{product.variant.sku}}">
-  <input type="hidden" name="productSlug" value="{{product.slug}}">
+  <input type="hidden" name="productId" value="{{content.myproduct.id}}">
+  <input type="hidden" name="variantId" value="{{content.myvariant.id}}">
 
   <div class="row select-row">
     <ul class="list-inline">
-      {{#each product.attributes}}
-        {{> catalog/product-attribute attribute=this variants=../product.variants identifiers=../product.variantIdentifiers}}
-      {{/each}}
+        {{> catalog/product-attribute}}
       <li class="size-guide-li">
         {{> catalog/size-guide}}
       </li>

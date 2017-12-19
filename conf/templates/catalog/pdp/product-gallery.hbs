@@ -4,10 +4,10 @@
     <img src="{{@root.meta.assetsPath}}img/zoom-60px-6081bcfddfd9e2ddfd84dbd3eddfa3c7.png" width="25" height="25" />
   </a>
   <ul class="bzoom">
-    {{#each gallery.list}}
-      <li class="gallery-image" data-modal-content="{{bigImage}}">
-        <img class="bzoom_thumb_image" src="{{thumbImage}}">
-        <img class="bzoom_big_image" src="{{bigImage}}">
+    {{#each content.myvariant.images}}
+      <li class="gallery-image" data-modal-content="{{url}}">
+        <img class="bzoom_thumb_image" src="{{url}}">
+        <img class="bzoom_big_image" src="{{url}}">
       </li>
     {{/each}}
   </ul>
@@ -23,8 +23,8 @@
   </div>
 </div>
 <div class="gallery-mobile visible-xs">
-  {{#each gallery.list}}
-    <img src="{{bigImage}}" alt="Product Image" />
+  {{#each content.myvariant.images}}
+    <img src="{{url}}" alt="Product Image" />
   {{/each}}
 </div>
 <!-- end catalog/pdp/product-gallery.hbs -->
