@@ -52,19 +52,15 @@
                       <div class="my-orders-order-dark-box">
                         <div class="my-orders-order-dark-box-title">{{i18n "my-account:myOrder.shippingMethod"}}</div>
                           <div>
-                              {{content.order.shippingMethod.label}}
-                              {{#if content.order.shippingMethod.description}}- {{content.order.shippingMethod.description}}{{/if}}
+                              {{content.order.shippingInfo.shippingMethodName}}
+                              {{#if content.order.shippingInfo.shippingMethod.obj.description}}- {{content.order.shippingInfo.shippingMethod.obj.description}}{{/if}}
                           </div>
                       </div>
                     </div>
                     <div class="col-sm-6">
                       <div class="my-orders-order-dark-box">
                         <div class="my-orders-order-dark-box-title">{{i18n "my-account:myOrder.paymentDetails"}}</div>
-                        <div>{{content.order.paymentDetails.payment}}</div>
-                        <div>{{content.order.paymentDetails.name}}</div>
-                        <div>{{content.order.paymentDetails.type}}</div>
-                        <div>{{content.order.paymentDetails.number}}</div>
-                        <div>{{content.order.paymentDetails.date}}</div>
+                        <div>{{content.order.paymentInfo.payments.0.obj.paymentMethodInfo.name}}</div>
                       </div>
                     </div>
                   </div>
