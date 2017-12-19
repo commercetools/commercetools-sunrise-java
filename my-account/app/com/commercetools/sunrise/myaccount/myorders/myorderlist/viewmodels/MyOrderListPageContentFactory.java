@@ -27,11 +27,6 @@ public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderLis
         fillOrders(viewModel, orderListWithCustomer);
     }
 
-    @Override
-    protected void fillTitle(final MyOrderListPageContent viewModel, final OrderListWithCustomer orderListWithCustomer) {
-
-    }
-
     protected void fillOrders(final MyOrderListPageContent viewModel, final OrderListWithCustomer orderListWithCustomer) {
         viewModel.setOrders(orderListWithCustomer.getOrders().getResults());
     }

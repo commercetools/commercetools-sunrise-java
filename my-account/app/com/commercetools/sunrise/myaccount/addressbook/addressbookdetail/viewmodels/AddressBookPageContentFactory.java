@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
@@ -11,18 +10,11 @@ import java.util.stream.Collectors;
 
 public class AddressBookPageContentFactory extends PageContentFactory<AddressBookPageContent, Customer> {
 
-    private final PageTitleResolver pageTitleResolver;
     private final EditableAddressViewModelFactory editableAddressViewModelFactory;
 
     @Inject
-    public AddressBookPageContentFactory(final PageTitleResolver pageTitleResolver,
-                                         final EditableAddressViewModelFactory editableAddressViewModelFactory) {
-        this.pageTitleResolver = pageTitleResolver;
+    public AddressBookPageContentFactory(final EditableAddressViewModelFactory editableAddressViewModelFactory) {
         this.editableAddressViewModelFactory = editableAddressViewModelFactory;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
     }
 
     protected final EditableAddressViewModelFactory getEditableAddressViewModelFactory() {
@@ -45,11 +37,6 @@ public class AddressBookPageContentFactory extends PageContentFactory<AddressBoo
         fillDefaultShippingAddress(viewModel, customer);
         fillDefaultBillingAddress(viewModel, customer);
         fillAddresses(viewModel, customer);
-    }
-
-    @Override
-    protected void fillTitle(final AddressBookPageContent viewModel, final Customer customer) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:addressBookPage.title"));
     }
 
     protected void fillDefaultShippingAddress(final AddressBookPageContent viewModel, final Customer customer) {
