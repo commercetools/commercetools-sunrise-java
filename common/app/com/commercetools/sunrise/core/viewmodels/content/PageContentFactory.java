@@ -10,6 +10,12 @@ public abstract class PageContentFactory<M extends PageContent, I> extends Simpl
         fillMessages(viewModel, input);
     }
 
+    /**
+     * @deprecated fill the title from within the template like on cart.hbs
+     * @param viewModel
+     * @param input
+     */
+    @Deprecated
     protected abstract void fillTitle(final M viewModel, final I input);
 
     protected void fillMessages(final M viewModel, final I input) {

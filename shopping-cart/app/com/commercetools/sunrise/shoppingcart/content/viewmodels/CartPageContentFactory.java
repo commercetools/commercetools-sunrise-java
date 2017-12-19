@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.shoppingcart.content.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.core.viewmodels.content.PageContentFactory;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.AddDiscountCodeFormData;
 import io.sphere.sdk.carts.Cart;
@@ -11,15 +10,8 @@ import javax.inject.Inject;
 
 public class CartPageContentFactory extends PageContentFactory<CartPageContent, Cart> {
 
-    private final PageTitleResolver pageTitleResolver;
-
     @Inject
-    public CartPageContentFactory(final PageTitleResolver pageTitleResolver) {
-        this.pageTitleResolver = pageTitleResolver;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
+    public CartPageContentFactory() {
     }
 
     @Override
@@ -44,7 +36,6 @@ public class CartPageContentFactory extends PageContentFactory<CartPageContent, 
 
     @Override
     protected void fillTitle(final CartPageContent viewModel, @Nullable final Cart cart) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:cartDetailPage.title"));
     }
 
     protected void fillCart(final CartPageContent viewModel, @Nullable final Cart cart) {
