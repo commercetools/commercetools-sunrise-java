@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.ShippingMethodsWithCart;
@@ -10,18 +9,11 @@ import javax.inject.Inject;
 
 public class CheckoutShippingPageContentFactory extends FormPageContentFactory<CheckoutShippingPageContent, ShippingMethodsWithCart, CheckoutShippingFormData> {
 
-    private final PageTitleResolver pageTitleResolver;
     private final CheckoutShippingFormSettingsViewModelFactory checkoutShippingFormSettingsViewModelFactory;
 
     @Inject
-    public CheckoutShippingPageContentFactory(final PageTitleResolver pageTitleResolver,
-                                              final CheckoutShippingFormSettingsViewModelFactory checkoutShippingFormSettingsViewModelFactory) {
-        this.pageTitleResolver = pageTitleResolver;
+    public CheckoutShippingPageContentFactory(final CheckoutShippingFormSettingsViewModelFactory checkoutShippingFormSettingsViewModelFactory) {
         this.checkoutShippingFormSettingsViewModelFactory = checkoutShippingFormSettingsViewModelFactory;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
     }
 
     protected final CheckoutShippingFormSettingsViewModelFactory getCheckoutShippingFormSettingsViewModelFactory() {
@@ -45,11 +37,6 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
         fillForm(viewModel, shippingMethodsWithCart, form);
         fillFormSettings(viewModel, shippingMethodsWithCart, form);
         viewModel.put("cart", shippingMethodsWithCart.getCart());
-    }
-
-    @Override
-    protected void fillTitle(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("checkout:shippingPage.title"));
     }
 
     protected void fillCart(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
