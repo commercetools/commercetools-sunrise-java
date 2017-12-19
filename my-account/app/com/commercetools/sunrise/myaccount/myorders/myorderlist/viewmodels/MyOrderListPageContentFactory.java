@@ -5,19 +5,10 @@ import com.commercetools.sunrise.myaccount.myorders.myorderlist.OrderListWithCus
 
 import javax.inject.Inject;
 
-import static java.util.stream.Collectors.toList;
-
 public class MyOrderListPageContentFactory extends PageContentFactory<MyOrderListPageContent, OrderListWithCustomer> {
 
-    private final OrderOverviewViewModelFactory orderOverviewViewModelFactory;
-
     @Inject
-    public MyOrderListPageContentFactory(final OrderOverviewViewModelFactory orderOverviewViewModelFactory) {
-        this.orderOverviewViewModelFactory = orderOverviewViewModelFactory;
-    }
-
-    protected final OrderOverviewViewModelFactory getOrderOverviewViewModelFactory() {
-        return orderOverviewViewModelFactory;
+    public MyOrderListPageContentFactory() {
     }
 
     @Override
