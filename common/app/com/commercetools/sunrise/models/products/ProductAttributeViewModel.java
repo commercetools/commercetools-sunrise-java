@@ -1,12 +1,11 @@
 package com.commercetools.sunrise.models.products;
 
 import com.commercetools.sunrise.core.viewmodels.ViewModel;
-import io.sphere.sdk.models.LocalizedString;
 
 public class ProductAttributeViewModel extends ViewModel {
 
     private String key;
-    private LocalizedString name;
+    private String name;
     private String value;
 
     public ProductAttributeViewModel() {
@@ -20,11 +19,11 @@ public class ProductAttributeViewModel extends ViewModel {
         this.key = key;
     }
 
-    public LocalizedString getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(final LocalizedString name) {
+    public void setName(final String name) {
         this.name = name;
     }
 

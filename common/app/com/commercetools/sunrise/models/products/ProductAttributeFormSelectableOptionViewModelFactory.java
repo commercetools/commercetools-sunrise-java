@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.products;
 
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.core.viewmodels.formatters.AttributeFormatter;
+import com.commercetools.sunrise.core.viewmodels.formatters.ProductAttributeFormatter;
 import com.commercetools.sunrise.core.viewmodels.forms.SelectableViewModelFactory;
 import io.sphere.sdk.products.attributes.Attribute;
 
@@ -11,15 +11,15 @@ import javax.inject.Inject;
 @RequestScoped
 public class ProductAttributeFormSelectableOptionViewModelFactory extends SelectableViewModelFactory<ProductAttributeFormSelectableOptionViewModel, AttributeWithProductType, Attribute> {
 
-    private final AttributeFormatter attributeFormatter;
+    private final ProductAttributeFormatter productAttributeFormatter;
 
     @Inject
-    public ProductAttributeFormSelectableOptionViewModelFactory(final AttributeFormatter attributeFormatter) {
-        this.attributeFormatter = attributeFormatter;
+    public ProductAttributeFormSelectableOptionViewModelFactory(final ProductAttributeFormatter productAttributeFormatter) {
+        this.productAttributeFormatter = productAttributeFormatter;
     }
 
-    protected final AttributeFormatter getAttributeFormatter() {
-        return attributeFormatter;
+    protected final ProductAttributeFormatter getProductAttributeFormatter() {
+        return productAttributeFormatter;
     }
 
     @Override
@@ -40,11 +40,13 @@ public class ProductAttributeFormSelectableOptionViewModelFactory extends Select
     }
 
     protected void fillLabel(final ProductAttributeFormSelectableOptionViewModel viewModel, final AttributeWithProductType option, @Nullable final Attribute selectedAttribute) {
-        viewModel.setLabel(attributeFormatter.value(option));
+        productAttributeFormatter.convert(option.getAttribute(), option.getProductTypeRef())
+                .ifPresent(viewModel::setLabel);
     }
 
     protected void fillValue(final ProductAttributeFormSelectableOptionViewModel viewModel, final AttributeWithProductType option, @Nullable final Attribute selectedAttribute) {
-        viewModel.setValue(attributeFormatter.encodedValue(option));
+        productAttributeFormatter.convertEncoded(option.getAttribute(), option.getProductTypeRef())
+                .ifPresent(viewModel::setValue);
     }
 
     protected void fillSelected(final ProductAttributeFormSelectableOptionViewModel viewModel, final AttributeWithProductType option, @Nullable final Attribute selectedAttribute) {

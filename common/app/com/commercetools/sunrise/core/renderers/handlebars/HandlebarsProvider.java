@@ -2,7 +2,6 @@ package com.commercetools.sunrise.core.renderers.handlebars;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.cache.HighConcurrencyTemplateCache;
-import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.TemplateLoader;
 
 import javax.inject.Inject;
@@ -27,14 +26,12 @@ public final class HandlebarsProvider implements Provider<Handlebars> {
     public Handlebars get() {
         final List<TemplateLoader> templateLoaders = handlebarsSettings.templateLoaders();
         final TemplateLoader[] loaders = templateLoaders.toArray(new TemplateLoader[templateLoaders.size()]);
-        final Handlebars handlebars = new Handlebars()
+        return new Handlebars()
                 .with(loaders)
                 .with(new HighConcurrencyTemplateCache())
                 .infiniteLoops(true)
                 .registerHelpers(StringHelpers.class)
                 .registerHelpers(handlebarsHelperSource)
                 .registerHelpers(productHelperSource);
-        StringHelpers.slugify.registerHelper(handlebars);
-        return handlebars;
     }
 }

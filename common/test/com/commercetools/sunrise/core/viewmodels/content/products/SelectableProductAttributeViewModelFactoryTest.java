@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.core.viewmodels.content.products;
 
 import com.commercetools.sunrise.models.products.*;
-import com.commercetools.sunrise.core.viewmodels.formatters.AttributeFormatter;
+import com.commercetools.sunrise.core.viewmodels.formatters.ProductAttributeFormatter;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,7 +39,7 @@ public class SelectableProductAttributeViewModelFactoryTest  {
     @Mock
     private ProductAttributesSettings fakeProductAttributeSettings;
     @Mock
-    private AttributeFormatter fakeAttributeFormatter;
+    private ProductAttributeFormatter fakeProductAttributeFormatter;
     @Mock
     private ProductAttributeFormSelectableOptionViewModelFactory productAttributeFormSelectableOptionViewModelFactory;
     @Mock
@@ -51,10 +52,10 @@ public class SelectableProductAttributeViewModelFactoryTest  {
     public void createFromSelectableStringAttributeAndSelectableNumberAttribute() {
         final String stringValue = "v1";
         final AttributeWithProductType stringAttributeWithProductType = attributeWithProductType(STRING_ATTRIBUTE_NAME, AttributeAccess.ofString(), stringValue);
-        when(fakeAttributeFormatter.encodedValue(eq(stringAttributeWithProductType))).thenReturn(stringValue);
+        when(fakeProductAttributeFormatter.convertEncoded(eq(stringAttributeWithProductType.getAttribute()), eq(stringAttributeWithProductType.getProductTypeRef()))).thenReturn(Optional.of(stringValue));
 
         final AttributeWithProductType numberAttributeWithProductType = attributeWithProductType(NUMBER_ATTRIBUTE_NAME, AttributeAccess.ofDouble(), 12.0);
-        when(fakeAttributeFormatter.encodedValue(eq(numberAttributeWithProductType))).thenReturn("120");
+        when(fakeProductAttributeFormatter.convertEncoded(eq(numberAttributeWithProductType.getAttribute()), eq(numberAttributeWithProductType.getProductTypeRef()))).thenReturn(Optional.of("120"));
 
         mockProductAttributeSettings(STRING_ATTRIBUTE_NAME, NUMBER_ATTRIBUTE_NAME);
         final ProductVariant productVariant = mockProductVariant(stringAttributeWithProductType, numberAttributeWithProductType);

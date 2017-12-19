@@ -1,129 +1,111 @@
 package com.commercetools.sunrise.core.renderers.handlebars;
 
-import com.commercetools.sunrise.models.products.AttributeViewModel;
-import com.commercetools.sunrise.models.products.AttributeViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.formatters.ProductAttributeFormatter;
+import com.commercetools.sunrise.models.products.AttributeOptionViewModelFactory;
 import com.commercetools.sunrise.models.products.ProductAttributesSettings;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jknack.handlebars.Options;
-import com.github.jknack.handlebars.helper.StringHelpers;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
 import io.sphere.sdk.producttypes.ProductType;
+import io.sphere.sdk.producttypes.ProductTypeLocalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.libs.Json;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductHelperSource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductHelperSource.class);
 
-    private final AttributeViewModelFactory attributeViewModelFactory;
+    private final ProductAttributeFormatter productAttributeFormatter;
+    private final AttributeOptionViewModelFactory attributeOptionViewModelFactory;
     private final ProductAttributesSettings attributesSettings;
+    private final ProductTypeLocalRepository productTypeLocalRepository;
 
     @Inject
-    ProductHelperSource(final AttributeViewModelFactory attributeViewModelFactory,
-                        final ProductAttributesSettings attributesSettings) {
-        this.attributeViewModelFactory = attributeViewModelFactory;
+    ProductHelperSource(final ProductAttributeFormatter productAttributeFormatter, final AttributeOptionViewModelFactory attributeOptionViewModelFactory,
+                        final ProductAttributesSettings attributesSettings, final ProductTypeLocalRepository productTypeLocalRepository) {
+        this.productAttributeFormatter = productAttributeFormatter;
+        this.attributeOptionViewModelFactory = attributeOptionViewModelFactory;
         this.attributesSettings = attributesSettings;
+        this.productTypeLocalRepository = productTypeLocalRepository;
     }
 
-    public CharSequence displayedAttributes(final ProductVariant variant, final Reference<ProductType> productTypeRef,
-                                            final Options options) {
-        return applyTemplateFunctionForAttributes(variant, productTypeRef, options, attributesSettings.displayed());
-    }
-
-    public CharSequence selectableAttributes(final ProductVariant variant, final Reference<ProductType> productTypeRef,
-                                             final Options options) {
-        return applyTemplateFunctionForAttributes(variant, productTypeRef, options, attributesSettings.selectable());
-    }
-
-    public CharSequence attributeOptions(final Attribute selectedAttribute, final ProductProjection product, final Options options) {
-        return distinctAttributesStream(selectedAttribute, product)
-                .map(formattedAttribute -> applyTemplateFunction(formattedAttribute, options))
+    public CharSequence eachDisplayedAttribute(final Options options) {
+        return attributesSettings.displayed().stream()
+                .map(attributeName -> safeFnApply(attributeName, options))
                 .collect(joining());
     }
 
-    private Stream<AttributeViewModel> distinctAttributesStream(final Attribute selectedAttribute, final ProductProjection product) {
+    public CharSequence eachSelectableAttributeName(final Options options) {
+        return attributesSettings.selectable().stream()
+                .map(attributeName -> safeFnApply(attributeName, options))
+                .collect(joining());
+    }
+
+    public CharSequence eachPrimarySelectableAttributeName(final Options options) {
+        return attributesSettings.primarySelectable().stream()
+                .map(attributeName -> safeFnApply(attributeName, options))
+                .collect(joining());
+    }
+
+    public CharSequence eachSecondarySelectableAttributeName(final Options options) {
+        return attributesSettings.secondarySelectable().stream()
+                .map(attributeName -> safeFnApply(attributeName, options))
+                .collect(joining());
+    }
+
+
+    public CharSequence withAttribute(final String attributeName, final ProductVariant variant, final Options options) {
+        return Optional.ofNullable(variant.getAttribute(attributeName))
+                .map(attribute -> safeFnApply(attribute, options))
+                .orElse("");
+    }
+
+    public CharSequence attributeLabel(final String attributeName, @Nullable final Reference<ProductType> nullableProductTypeRef) {
+        return productTypeOrDefault(nullableProductTypeRef)
+                .flatMap(productType -> productAttributeFormatter.label(attributeName, productType))
+                .orElse(attributeName);
+    }
+
+    public CharSequence attributeValue(final Attribute selectedAttribute, @Nullable final Reference<ProductType> nullableProductTypeRef) {
+        return productTypeOrDefault(nullableProductTypeRef)
+                .flatMap(productTypeRef -> productAttributeFormatter.convert(selectedAttribute, productTypeRef))
+                .orElseGet(() -> Json.stringify(selectedAttribute.getValueAsJsonNode()));
+    }
+
+    public CharSequence eachAttributeOption(final String attributeName, final ProductProjection product,
+                                            final ProductVariant variant, final Options options) {
+        return distinctAttributeValuesStream(attributeName, product)
+                .map(attribute -> attributeOptionViewModelFactory.create(attribute, product, variant))
+                .map(attribute -> safeFnApply(attribute, options))
+                .collect(joining());
+    }
+
+    private Stream<Attribute> distinctAttributeValuesStream(final String attributeName, final ProductProjection product) {
         return product.getAllVariants().stream()
-                .map(variant -> variant.getAttribute(selectedAttribute.getName()))
+                .map(variant -> variant.getAttribute(attributeName))
                 .filter(Objects::nonNull)
-                .distinct()
-                .map(attribute -> attributeViewModelFactory.create(attribute, product.getProductType(), selectedAttribute));
+                .distinct();
     }
 
-    public CharSequence selectableAlgo(final Attribute selectedAttribute, final ProductProjection product, final Options options) throws JsonProcessingException {
-        final Map<String, Map<String, List<String>>> selectableData = new HashMap<>();
-        distinctAttributesStream(selectedAttribute, product).forEach(attrOption -> {
-            final String attrOptionValue = slugify(attrOption.getValue(), options).toString();
-            selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attrOption, product.getAllVariants(), options));
-        });
-        return new ObjectMapper().writeValueAsString(selectableData);
+    public CharSequence shouldReload(final String attributeName) {
+        return String.valueOf(attributesSettings.primarySelectable().contains(attributeName));
     }
 
-    private Map<String, List<String>> createAllowedAttributeCombinations(final AttributeViewModel fixedAttribute,
-                                                                         final List<ProductVariant> variants, final Options options) {
-        final Map<String, List<String>> attrCombination = new HashMap<>();
-        attributesSettings.selectable().stream()
-                .filter(enabledAttrKey -> !fixedAttribute.getName().equals(enabledAttrKey))
-                .forEach(enabledAttrKey -> {
-                    final List<String> allowedAttrValues = attributeCombination(enabledAttrKey, fixedAttribute, variants, options);
-                    if (!allowedAttrValues.isEmpty()) {
-                        attrCombination.put(enabledAttrKey, allowedAttrValues);
-                    }
-                });
-        return attrCombination;
-    }
-
-    private List<String> attributeCombination(final String attributeKey, final AttributeViewModel fixedAttribute,
-                                              final List<ProductVariant> variants, final Options options) {
-        return variants.stream()
-                .filter(variant -> {
-                    final Attribute variantAttribute = variant.getAttribute(fixedAttribute.getName());
-                    return variantAttribute != null && variantAttribute.equals(fixedAttribute);
-                })
-                .map(variant -> variant.getAttribute(attributeKey))
-                .filter(Objects::nonNull)
-                .map(attribute -> slugify(fixedAttribute.getValue(), options).toString())
-                .distinct()
-                .collect(toList());
-    }
-
-    private String applyTemplateFunctionForAttributes(final ProductVariant variant, final Reference<ProductType> productTypeRef,
-                                                      final Options options, final List<String> attributeNames) {
-        return attributeNames.stream()
-                .map(variant::getAttribute)
-                .filter(Objects::nonNull)
-                .map(attribute -> attributeViewModelFactory.create(attribute, productTypeRef, null))
-                .map(formattedAttribute -> applyTemplateFunction(formattedAttribute, options))
-                .collect(joining());
-    }
-
-    private CharSequence slugify(final String text, final Options options) {
-        try {
-            return StringHelpers.slugify.apply(text, options);
-        } catch (IOException e) {
-            LOGGER.error("Could not slugify text", e);
-            return text;
-        }
-    }
-
-    private CharSequence applyTemplateFunction(@Nullable final Object object, final Options options) {
+    private CharSequence safeFnApply(@Nullable final Object object, final Options options) {
         try {
             if (object != null) {
                 return options.fn(object);
@@ -132,5 +114,12 @@ public class ProductHelperSource {
             LOGGER.error("Could not apply the template function", e);
         }
         return "";
+    }
+
+    private Optional<ProductType> productTypeOrDefault(@Nullable final Reference<ProductType> nullableProductTypeRef) {
+        return Optional.ofNullable(nullableProductTypeRef)
+                .flatMap(productTypeRef -> productTypeLocalRepository.findById(productTypeRef.getId()))
+                .map(Optional::of)
+                .orElseGet(() -> productTypeLocalRepository.getAll().stream().findFirst());
     }
 }

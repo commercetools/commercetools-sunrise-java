@@ -1,23 +1,23 @@
 package com.commercetools.sunrise.models.products;
 
-import com.commercetools.sunrise.core.viewmodels.SimpleViewModelFactory;
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.core.viewmodels.formatters.AttributeFormatter;
+import com.commercetools.sunrise.core.viewmodels.SimpleViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.formatters.ProductAttributeFormatter;
 
 import javax.inject.Inject;
 
 @RequestScoped
 public class ProductAttributeViewModelFactory extends SimpleViewModelFactory<ProductAttributeViewModel, AttributeWithProductType> {
 
-    private final AttributeFormatter attributeFormatter;
+    private final ProductAttributeFormatter productAttributeFormatter;
 
     @Inject
-    public ProductAttributeViewModelFactory(final AttributeFormatter attributeFormatter) {
-        this.attributeFormatter = attributeFormatter;
+    public ProductAttributeViewModelFactory(final ProductAttributeFormatter productAttributeFormatter) {
+        this.productAttributeFormatter = productAttributeFormatter;
     }
 
-    protected final AttributeFormatter getAttributeFormatter() {
-        return attributeFormatter;
+    protected final ProductAttributeFormatter getProductAttributeFormatter() {
+        return productAttributeFormatter;
     }
 
     @Override
@@ -42,10 +42,12 @@ public class ProductAttributeViewModelFactory extends SimpleViewModelFactory<Pro
     }
 
     protected void fillName(final ProductAttributeViewModel viewModel, final AttributeWithProductType attributeWithProductType) {
-        viewModel.setName(attributeFormatter.label(attributeWithProductType));
+        productAttributeFormatter.label(attributeWithProductType.getAttribute().getName(), attributeWithProductType.getProductTypeRef())
+                .ifPresent(viewModel::setName);
     }
 
     protected void fillValue(final ProductAttributeViewModel viewModel, final AttributeWithProductType attributeWithProductType) {
-        viewModel.setValue(attributeFormatter.value(attributeWithProductType));
+        productAttributeFormatter.convert(attributeWithProductType.getAttribute(), attributeWithProductType.getProductTypeRef())
+                .ifPresent(viewModel::setValue);
     }
 }

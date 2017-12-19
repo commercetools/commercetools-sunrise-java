@@ -10,9 +10,14 @@
   <div id="collapseProductDetails" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingProductDetails">
     <div class="panel-body panel-body-pdp">
       <ul class="product-features-list">
-        {{#displayedAttributes content.myvariant content.myproduct.productType}}
-            <li><span>{{label}}:</span> {{value}}</li>
-        {{/displayedAttributes}}
+        {{#eachDisplayedAttribute}}
+            <li>
+                <span>{{attributeLabel this content.myproduct.productType}}:</span>
+                {{#withAttribute this content.myvariant}}
+                    {{attributeValue this content.myproduct.productType}}
+                {{/withAttribute}}
+            </li>
+        {{/eachDisplayedAttribute}}
       </ul>
     </div>
   </div>

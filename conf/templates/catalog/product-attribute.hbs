@@ -1,15 +1,17 @@
 <!-- start catalog/product-attribute.hbs -->
-{{#selectableAttributes content.myvariant content.myproduct.productType}}
-<li>
-  <p class="text-uppercase">{{label}}</p>
-  <div>
-    <select name="attribute-{{name}}" class="select-product-detail" data-reload="{{reloaded}}" data-cross-select="{{selectableAlgo this content.myproduct}}" data-variants="{{json product.variants}}" data-identifiers="{{json product.identifiers}}" required>
-      {{#attributeOptions this content.myproduct}}
-        <option value="{{slugify value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
-      {{/attributeOptions}}
-    </select>
-  </div>
-  {{> common/required-error-message}}
-</li>
-{{/selectableAttributes}}
+{{#eachSelectableAttributeName}}
+    <li>
+        <p class="text-uppercase">{{attributeLabel this content.myproduct.productType}}</p>
+        <div>
+            <select name="attribute-{{this}}" class="select-product-detail" data-reload="{{shouldReload this}}" required>
+                {{#eachAttributeOption this content.myproduct content.myvariant}}
+                    <option value="{{variantId}}" data-url="{{variantUrl}}" {{#if disabled}}disabled{{/if}} {{#if selected}}selected{{/if}}>
+                        {{attributeValue attribute content.myproduct.productType}}
+                    </option>
+                {{/eachAttributeOption}}
+            </select>
+        </div>
+        {{> common/required-error-message}}
+    </li>
+{{/eachSelectableAttributeName}}
 <!-- end catalog/product-attribute.hbs -->

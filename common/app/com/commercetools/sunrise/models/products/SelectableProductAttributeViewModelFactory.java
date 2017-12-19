@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.products;
 
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.core.viewmodels.formatters.AttributeFormatter;
+import com.commercetools.sunrise.core.viewmodels.formatters.ProductAttributeFormatter;
 import com.commercetools.sunrise.core.viewmodels.forms.SelectableViewModelFactory;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductVariant;
@@ -17,20 +17,20 @@ import static java.util.stream.Collectors.toList;
 @RequestScoped
 public class SelectableProductAttributeViewModelFactory extends SelectableViewModelFactory<SelectableProductAttributeViewModel, List<ProductVariant>, AttributeWithProductType> {
 
-    private final AttributeFormatter attributeFormatter;
+    private final ProductAttributeFormatter productAttributeFormatter;
     private final ProductAttributesSettings productAttributesSettings;
     private final ProductAttributeFormSelectableOptionViewModelFactory productAttributeFormSelectableOptionViewModelFactory;
 
     @Inject
-    public SelectableProductAttributeViewModelFactory(final AttributeFormatter attributeFormatter, final ProductAttributesSettings productAttributesSettings,
-                                                 final ProductAttributeFormSelectableOptionViewModelFactory productAttributeFormSelectableOptionViewModelFactory) {
-        this.attributeFormatter = attributeFormatter;
+    public SelectableProductAttributeViewModelFactory(final ProductAttributeFormatter productAttributeFormatter, final ProductAttributesSettings productAttributesSettings,
+                                                      final ProductAttributeFormSelectableOptionViewModelFactory productAttributeFormSelectableOptionViewModelFactory) {
+        this.productAttributeFormatter = productAttributeFormatter;
         this.productAttributesSettings = productAttributesSettings;
         this.productAttributeFormSelectableOptionViewModelFactory = productAttributeFormSelectableOptionViewModelFactory;
     }
 
-    protected final AttributeFormatter getAttributeFormatter() {
-        return attributeFormatter;
+    protected final ProductAttributeFormatter getProductAttributeFormatter() {
+        return productAttributeFormatter;
     }
 
     protected final ProductAttributesSettings getProductAttributesSettings() {
@@ -75,11 +75,13 @@ public class SelectableProductAttributeViewModelFactory extends SelectableViewMo
     }
 
     protected void fillName(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
-        viewModel.setName(attributeFormatter.label(selectedAttribute));
+        productAttributeFormatter.label(selectedAttribute.getAttribute().getName(), selectedAttribute.getProductTypeRef())
+                .ifPresent(viewModel::setName);
     }
 
     protected void fillValue(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
-        viewModel.setValue(attributeFormatter.value(selectedAttribute));
+        productAttributeFormatter.convert(selectedAttribute.getAttribute(), selectedAttribute.getProductTypeRef())
+                .ifPresent(viewModel::setValue);
     }
 
     protected void fillReload(final SelectableProductAttributeViewModel viewModel, final List<ProductVariant> variants, final AttributeWithProductType selectedAttribute) {
@@ -99,8 +101,8 @@ public class SelectableProductAttributeViewModelFactory extends SelectableViewMo
         final Map<String, Map<String, List<String>>> selectableData = new HashMap<>();
         findDistinctAttributeOptions(variants, selectedAttribute).forEach(attrOption -> {
             final AttributeWithProductType attributeOptionWithProductType = AttributeWithProductType.of(attrOption, selectedAttribute.getProductTypeRef());
-            final String attrOptionValue = attributeFormatter.encodedValue(attributeOptionWithProductType);
-            selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attributeOptionWithProductType, variants));
+            productAttributeFormatter.convertEncoded(attributeOptionWithProductType.getAttribute(), attributeOptionWithProductType.getProductTypeRef())
+                    .ifPresent(attrOptionValue -> selectableData.put(attrOptionValue, createAllowedAttributeCombinations(attributeOptionWithProductType, variants)));
         });
         viewModel.setSelectData(selectableData);
     }
@@ -127,7 +129,9 @@ public class SelectableProductAttributeViewModelFactory extends SelectableViewMo
                 })
                 .map(variant -> variant.getAttribute(attributeKey))
                 .filter(Objects::nonNull)
-                .map(attribute -> attributeFormatter.encodedValue(AttributeWithProductType.of(attribute, fixedAttribute.getProductTypeRef())))
+                .map(attribute -> productAttributeFormatter.convertEncoded(attribute, fixedAttribute.getProductTypeRef()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .distinct()
                 .collect(toList());
     }
