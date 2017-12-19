@@ -6,14 +6,7 @@ import play.data.Form;
 
 public abstract class AbstractAuthenticationPageContentFactory<F> extends FormPageContentFactory<AuthenticationPageContent, Void, F> {
 
-    private final PageTitleResolver pageTitleResolver;
-
-    protected AbstractAuthenticationPageContentFactory(final PageTitleResolver pageTitleResolver) {
-        this.pageTitleResolver = pageTitleResolver;
-    }
-
-    protected final PageTitleResolver getPageTitleResolver() {
-        return pageTitleResolver;
+    protected AbstractAuthenticationPageContentFactory() {
     }
 
     @Override
@@ -27,11 +20,6 @@ public abstract class AbstractAuthenticationPageContentFactory<F> extends FormPa
         fillLogInForm(viewModel, form);
         fillSignUpForm(viewModel, form);
         fillSignUpFormSettings(viewModel, form);
-    }
-
-    @Override
-    protected void fillTitle(final AuthenticationPageContent viewModel, final Void input, final Form<? extends F> form) {
-        pageTitleResolver.getOrEmpty("my-account:authenticationPage.title");
     }
 
     protected abstract void fillLogInForm(final AuthenticationPageContent viewModel, final Form<? extends F> form);
