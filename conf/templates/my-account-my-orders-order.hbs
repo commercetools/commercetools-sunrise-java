@@ -35,7 +35,7 @@
                     <div class="your-order-details-title">{{i18n "my-account:myOrder.title"}}</div>
                     <div class="your-order-details">
                       <span class="your-order-details-titles">{{i18n "my-account:myOrder.orderNumber"}}<br>{{i18n "my-account:myOrder.creationDate"}}</span>
-                      <span class="your-order-details-info">{{content.order.orderNumber}}<br>{{content.order.orderDate}}</span>
+                      <span class="your-order-details-info">{{content.order.orderNumber}}<br>{{formatDateTime content.order.createdAt}}</span>
                     </div>
                     <button onclick="window.print()" class="my-orders-print-receipt-btn hidden-xs">{{i18n "my-account:myOrder.print"}}</button>
                   </div>
