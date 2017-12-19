@@ -49,12 +49,6 @@ public class ProductHelperSource {
                 .collect(joining());
     }
 
-    public CharSequence eachSelectableAttributeName(final Options options) {
-        return attributesSettings.selectable().stream()
-                .map(attributeName -> safeFnApply(attributeName, options))
-                .collect(joining());
-    }
-
     public CharSequence eachPrimarySelectableAttributeName(final Options options) {
         return attributesSettings.primarySelectable().stream()
                 .map(attributeName -> safeFnApply(attributeName, options))
@@ -66,7 +60,6 @@ public class ProductHelperSource {
                 .map(attributeName -> safeFnApply(attributeName, options))
                 .collect(joining());
     }
-
 
     public CharSequence withAttribute(final String attributeName, final ProductVariant variant, final Options options) {
         return Optional.ofNullable(variant.getAttribute(attributeName))
@@ -99,10 +92,6 @@ public class ProductHelperSource {
                 .map(variant -> variant.getAttribute(attributeName))
                 .filter(Objects::nonNull)
                 .distinct();
-    }
-
-    public CharSequence shouldReload(final String attributeName) {
-        return String.valueOf(attributesSettings.primarySelectable().contains(attributeName));
     }
 
     private CharSequence safeFnApply(@Nullable final Object object, final Options options) {
