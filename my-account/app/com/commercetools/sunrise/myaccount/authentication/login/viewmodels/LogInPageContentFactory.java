@@ -14,8 +14,7 @@ public class LogInPageContentFactory extends AbstractAuthenticationPageContentFa
     private final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory;
 
     @Inject
-    public LogInPageContentFactory(final PageTitleResolver pageTitleResolver, final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory) {
-        super(pageTitleResolver);
+    public LogInPageContentFactory(final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory) {
         this.signUpFormSettingsViewModelFactory = signUpFormSettingsViewModelFactory;
     }
 

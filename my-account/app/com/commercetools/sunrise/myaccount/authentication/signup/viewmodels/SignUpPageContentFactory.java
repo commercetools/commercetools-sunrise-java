@@ -13,8 +13,7 @@ public class SignUpPageContentFactory extends AbstractAuthenticationPageContentF
     private final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory;
 
     @Inject
-    public SignUpPageContentFactory(final PageTitleResolver pageTitleResolver, final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory) {
-        super(pageTitleResolver);
+    public SignUpPageContentFactory(final SignUpFormSettingsViewModelFactory signUpFormSettingsViewModelFactory) {
         this.signUpFormSettingsViewModelFactory = signUpFormSettingsViewModelFactory;
     }
 
