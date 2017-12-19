@@ -1,8 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
-import com.commercetools.sunrise.models.carts.CartViewModelFactory;
 import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
+import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressFormData;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
@@ -12,23 +11,17 @@ import javax.inject.Inject;
 public class CheckoutAddressPageContentFactory extends FormPageContentFactory<CheckoutAddressPageContent, Cart, CheckoutAddressFormData> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final CartViewModelFactory cartViewModelFactory;
     private final CheckoutAddressFormSettingsViewModelFactory addressFormSettingsFactory;
 
     @Inject
-    public CheckoutAddressPageContentFactory(final PageTitleResolver pageTitleResolver, final CartViewModelFactory cartViewModelFactory,
+    public CheckoutAddressPageContentFactory(final PageTitleResolver pageTitleResolver,
                                              final CheckoutAddressFormSettingsViewModelFactory addressFormSettingsFactory) {
         this.pageTitleResolver = pageTitleResolver;
-        this.cartViewModelFactory = cartViewModelFactory;
         this.addressFormSettingsFactory = addressFormSettingsFactory;
     }
 
     protected final PageTitleResolver getPageTitleResolver() {
         return pageTitleResolver;
-    }
-
-    protected final CartViewModelFactory getCartViewModelFactory() {
-        return cartViewModelFactory;
     }
 
     protected final CheckoutAddressFormSettingsViewModelFactory getAddressFormSettingsFactory() {

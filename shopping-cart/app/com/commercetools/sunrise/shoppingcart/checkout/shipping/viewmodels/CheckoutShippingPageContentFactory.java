@@ -1,8 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.models.carts.CartViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.ShippingMethodsWithCart;
 import play.data.Form;
@@ -12,23 +11,17 @@ import javax.inject.Inject;
 public class CheckoutShippingPageContentFactory extends FormPageContentFactory<CheckoutShippingPageContent, ShippingMethodsWithCart, CheckoutShippingFormData> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final CartViewModelFactory cartViewModelFactory;
     private final CheckoutShippingFormSettingsViewModelFactory checkoutShippingFormSettingsViewModelFactory;
 
     @Inject
-    public CheckoutShippingPageContentFactory(final PageTitleResolver pageTitleResolver, final CartViewModelFactory cartViewModelFactory,
+    public CheckoutShippingPageContentFactory(final PageTitleResolver pageTitleResolver,
                                               final CheckoutShippingFormSettingsViewModelFactory checkoutShippingFormSettingsViewModelFactory) {
         this.pageTitleResolver = pageTitleResolver;
-        this.cartViewModelFactory = cartViewModelFactory;
         this.checkoutShippingFormSettingsViewModelFactory = checkoutShippingFormSettingsViewModelFactory;
     }
 
     protected final PageTitleResolver getPageTitleResolver() {
         return pageTitleResolver;
-    }
-
-    protected final CartViewModelFactory getCartViewModelFactory() {
-        return cartViewModelFactory;
     }
 
     protected final CheckoutShippingFormSettingsViewModelFactory getCheckoutShippingFormSettingsViewModelFactory() {

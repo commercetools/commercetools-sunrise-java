@@ -1,8 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.core.viewmodels.PageTitleResolver;
-import com.commercetools.sunrise.models.carts.CartViewModelFactory;
+import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationFormData;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
@@ -12,20 +11,14 @@ import javax.inject.Inject;
 public class CheckoutConfirmationPageContentFactory extends FormPageContentFactory<CheckoutConfirmationPageContent, Cart, CheckoutConfirmationFormData> {
 
     private final PageTitleResolver pageTitleResolver;
-    private final CartViewModelFactory cartViewModelFactory;
 
     @Inject
-    public CheckoutConfirmationPageContentFactory(final PageTitleResolver pageTitleResolver, final CartViewModelFactory cartViewModelFactory) {
+    public CheckoutConfirmationPageContentFactory(final PageTitleResolver pageTitleResolver) {
         this.pageTitleResolver = pageTitleResolver;
-        this.cartViewModelFactory = cartViewModelFactory;
     }
 
     protected final PageTitleResolver getPageTitleResolver() {
         return pageTitleResolver;
-    }
-
-    protected final CartViewModelFactory getCartViewModelFactory() {
-        return cartViewModelFactory;
     }
 
     @Override
