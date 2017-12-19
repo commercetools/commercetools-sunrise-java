@@ -47,7 +47,7 @@ public class ChangeAddressPageContentFactory extends FormPageContentFactory<Chan
 
     @Override
     protected void fillTitle(final ChangeAddressPageContent viewModel, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:changeAddressPage.title"));
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("my-account:changeAddressPage.title"));
     }
 
     protected void fillEditAddressForm(final ChangeAddressPageContent viewModel, final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {

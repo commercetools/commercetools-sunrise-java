@@ -47,7 +47,7 @@ public class AddAddressPageContentFactory extends FormPageContentFactory<AddAddr
 
     @Override
     protected void fillTitle(final AddAddressPageContent viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
-        viewModel.setTitle(pageTitleResolver.getOrEmpty("myAccount:addAddressPage.title"));
+        viewModel.setTitle(pageTitleResolver.getOrEmpty("my-account:addAddressPage.title"));
     }
 
     protected void fillNewAddressForm(final AddAddressPageContent viewModel, final Customer customer, final Form<? extends AddressFormData> form) {

@@ -31,7 +31,7 @@ public abstract class AbstractAuthenticationPageContentFactory<F> extends FormPa
 
     @Override
     protected void fillTitle(final AuthenticationPageContent viewModel, final Void input, final Form<? extends F> form) {
-        pageTitleResolver.getOrEmpty("myAccount:authenticationPage.title");
+        pageTitleResolver.getOrEmpty("my-account:authenticationPage.title");
     }
 
     protected abstract void fillLogInForm(final AuthenticationPageContent viewModel, final Form<? extends F> form);
