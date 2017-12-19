@@ -2,7 +2,6 @@ package com.commercetools.sunrise.core.viewmodels.header;
 
 import com.commercetools.sunrise.common.localization.LocalizationSelectorViewModel;
 import com.commercetools.sunrise.core.viewmodels.ViewModel;
-import com.commercetools.sunrise.models.carts.MiniCartViewModel;
 import io.sphere.sdk.carts.Cart;
 
 public class PageHeader extends ViewModel {
