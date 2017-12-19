@@ -36,7 +36,6 @@ public class CheckoutShippingPageContentFactory extends FormPageContentFactory<C
         fillCart(viewModel, shippingMethodsWithCart, form);
         fillForm(viewModel, shippingMethodsWithCart, form);
         fillFormSettings(viewModel, shippingMethodsWithCart, form);
-        viewModel.put("cart", shippingMethodsWithCart.getCart());
     }
 
     protected void fillCart(final CheckoutShippingPageContent viewModel, final ShippingMethodsWithCart shippingMethodsWithCart, final Form<? extends CheckoutShippingFormData> form) {
