@@ -16,7 +16,9 @@ public abstract class PageContentFactory<M extends PageContent, I> extends Simpl
      * @param input
      */
     @Deprecated
-    protected abstract void fillTitle(final M viewModel, final I input);
+    protected void fillTitle(final M viewModel, final I input){
+
+    }
 
     protected void fillMessages(final M viewModel, final I input) {
         viewModel.addMessages(extractMessages());

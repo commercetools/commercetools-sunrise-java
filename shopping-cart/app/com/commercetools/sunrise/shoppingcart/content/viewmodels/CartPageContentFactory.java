@@ -34,10 +34,6 @@ public class CartPageContentFactory extends PageContentFactory<CartPageContent, 
         fillCart(viewModel, cart);
     }
 
-    @Override
-    protected void fillTitle(final CartPageContent viewModel, @Nullable final Cart cart) {
-    }
-
     protected void fillCart(final CartPageContent viewModel, @Nullable final Cart cart) {
         viewModel.setCart(cart);
     }
