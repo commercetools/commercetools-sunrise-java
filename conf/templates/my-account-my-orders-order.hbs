@@ -99,17 +99,18 @@
                       </div>
                     </div>
                   </div>
-                    {{#each content.order.lineItems.list}}
+                    {{#each content.order.lineItems}}
                         <div class="order-detail-wrapper">
                             <div class="row">
                                 <div class="col-sm-1 col-xs-4 product-img-col">
-                                    <img class="img-responsive cart-item-img" src="{{variant.image}}" alt="{{variant.name}}">
+                                    <img class="img-responsive cart-item-img" src="{{imageUrl variant}}" alt="{{name}}">
                                 </div>
                                 <div class="col-sm-3 col-xs-8 product-info-text">
                                     <p class="cart-item-name">
-                                        <a href="{{variant.url}}">{{variant.name}}</a>
+                                        <a href="{{variantUrlFromLineItem this}}">{{name}}</a>
                                     </p>
                                     <p class="grey-p">{{variant.sku}}</p>
+                                    <!-- TODO MiSc -->
                                     <p class="cart-attributes">
                                         {{#each attributes}}
                                             {{name}}
@@ -126,16 +127,16 @@
                                 <div class="col-sm-2 col-xs-7">
                                     <div class="text-right cart-item-price">
                                         <span class="visible-xs xs-price-title">{{i18n "main:common.price"}}</span>
-                                        {{#if variant.priceOld}}
-                                            <span class="discounted-price">{{variant.priceOld}}</span>
+                                        {{#if price.discounted.value}}
+                                            <span class="discounted-price">{{oldPriceForLineItem this}}</span>
                                         {{/if}}
-                                        <span>{{variant.price}}</span>
+                                        <span>{{currentPriceForLineItem this}}</span>
                                     </div>
                                 </div>
                                 <div class="col-sm-2 col-xs-5">
                                     <div class="text-right cart-item-price">
                                         <span class="visible-xs xs-price-title">{{i18n "checkout:total"}}</span>
-                                        <span>{{totalPrice}}</span>
+                                        <span>{{formatPrice totalPrice}}</span>
                                     </div>
                                 </div>
                             </div>
