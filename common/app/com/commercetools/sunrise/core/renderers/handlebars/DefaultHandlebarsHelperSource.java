@@ -12,6 +12,8 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
+import io.sphere.sdk.models.LocalizedString;
+import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
 import lombok.NonNull;
@@ -23,6 +25,7 @@ import javax.inject.Singleton;
 import javax.money.MonetaryAmount;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.commercetools.sunrise.core.renderers.handlebars.HandlebarsTemplateEngine.CMS_PAGE_IN_CONTEXT_KEY;

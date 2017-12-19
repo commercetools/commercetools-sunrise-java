@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-sm-4 checkout-third-col">
                               {{> checkout/shipping-method-confirmation shippingInfo=content.cart.shippingInfo editable=true}}
-                              {{> checkout/payment-confirmation paymentDetails=content.cart.paymentDetails editable=true}}
+                              {{> checkout/payment-confirmation paymentInfo=content.cart.paymentInfo editable=true}}
                             </div>
                         </div>
                       {{> checkout/order-summary cart=content.cart cart=content.cart mainClass="confirmation-products-title" editable=false checkoutConfirmation=true}}

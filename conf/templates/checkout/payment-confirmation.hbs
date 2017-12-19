@@ -1,0 +1,11 @@
+<!-- start checkout/payment-confirmation.hbs -->
+<div class="checkout-summary">
+    <div class="text-uppercase">
+        <span class="checkout-summary-title">{{i18n "checkout:paymentInformation"}}</span>
+        {{> checkout/edit-link id="confirmation-edit-details-btn" url=meta._links.editPaymentInfo.href enabled=editable}}
+    </div>
+    <div class="checkout-summary-text">
+        <span>{{paymentInfo.payments.0.obj.paymentMethodInfo.name}}</span>
+    </div>
+</div>
+<!-- end checkout/payment-confirmation.hbs -->
