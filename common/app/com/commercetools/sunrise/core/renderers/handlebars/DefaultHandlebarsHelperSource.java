@@ -3,6 +3,7 @@ package com.commercetools.sunrise.core.renderers.handlebars;
 import com.commercetools.sdk.CtpEnumUtils;
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
 import com.commercetools.sunrise.models.carts.CartPriceUtils;
@@ -13,8 +14,7 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
-import io.sphere.sdk.models.LocalizedString;
-import io.sphere.sdk.models.Reference;
+import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
 import lombok.NonNull;
@@ -26,7 +26,6 @@ import javax.inject.Singleton;
 import javax.money.MonetaryAmount;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.commercetools.sunrise.core.renderers.handlebars.HandlebarsTemplateEngine.CMS_PAGE_IN_CONTEXT_KEY;
@@ -38,13 +37,15 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
     private final ProductReverseRouter productReverseRouter;
     private final PriceFormatter priceFormatter;
     private final DateTimeFormatter dateTimeFormatter;
+    private final MyOrdersReverseRouter myOrdersReverseRouter;
 
     @Inject
-    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, ProductReverseRouter productReverseRouter, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter) {
+    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, ProductReverseRouter productReverseRouter, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter, MyOrdersReverseRouter myOrdersReverseRouter) {
         this.i18nResolver = i18nResolver;
         this.productReverseRouter = productReverseRouter;
         this.priceFormatter = priceFormatter;
         this.dateTimeFormatter = dateTimeFormatter;
+        this.myOrdersReverseRouter = myOrdersReverseRouter;
     }
 
     /**
@@ -144,5 +145,12 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     public CharSequence enumToCamelCase(final Object enumValue) {
         return CtpEnumUtils.enumToCamelCase(enumValue.toString());
+    }
+
+    public CharSequence myOrderDetailPageUrl(final Order order) {
+        return myOrdersReverseRouter
+                .myOrderDetailPageCall(order)
+                .map(Call::url)
+                .orElse("");
     }
 }

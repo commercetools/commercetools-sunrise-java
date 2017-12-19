@@ -84,7 +84,7 @@
                           <span>{{i18n (stringFormat "main:order.shippingStatus.%s" (enumToCamelCase shipmentState))}}</span>
                         </div>
                         <div class="col-sm-2 col-xs-4 text-right">
-                        <form id="form-view-my-order{{@index}}" name="view-my-order" method="GET" action="{{showOrderUrl}}">
+                        <form id="form-view-my-order{{@index}}" name="view-my-order" method="GET" action="{{myOrderDetailPageUrl this}}">
                             <button type="submit" class="my-orders-view-order-btn">{{i18n "my-account:myOrders.view"}}</button>
                         </form>
                         </div>
