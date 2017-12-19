@@ -65,12 +65,12 @@
                     </div>
                   </div>
                   <div class="my-orders-order-price-summary-wrapper">
-                      {{#if content.order.discountCode}}
+                      {{#each content.order.discountCodes}}
                           <div class="text-right">
                               <span class="my-orders-order-promocode-title">{{i18n "my-account:myOrder.price.discountCode"}}</span>
-                              <span class="my-orders-order-promocode">{{content.order.discountCode}}</span>
+                              <span class="my-orders-order-promocode">{{discountCode.obj.code}}</span>
                           </div>
-                      {{/if}}
+                      {{/each}}
                     <div class="text-right">
                         {{> checkout/order-summary/totals cart=content.order}}
                     </div>

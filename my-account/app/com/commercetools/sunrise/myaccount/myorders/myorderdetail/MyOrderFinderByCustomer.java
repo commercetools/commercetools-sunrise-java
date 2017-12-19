@@ -27,6 +27,7 @@ public class MyOrderFinderByCustomer extends AbstractSingleOrderQueryExecutor im
                 .plusPredicates(order -> order.orderNumber().is(identifier))
                 .plusExpansionPaths(order -> order.shippingInfo().shippingMethod())
                 .plusExpansionPaths(order -> order.paymentInfo().payments())
+                .plusExpansionPaths(order -> order.discountCodes().discountCode())
                 .withLimit(1);
     }
 
