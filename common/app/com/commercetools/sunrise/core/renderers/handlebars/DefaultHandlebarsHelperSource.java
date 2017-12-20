@@ -26,6 +26,7 @@ import javax.inject.Singleton;
 import javax.money.MonetaryAmount;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import static com.commercetools.sunrise.core.renderers.handlebars.HandlebarsTemplateEngine.CMS_PAGE_IN_CONTEXT_KEY;
@@ -152,5 +153,9 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
                 .myOrderDetailPageCall(order)
                 .map(Call::url)
                 .orElse("");
+    }
+
+    public CharSequence size(final List<?> list) {
+        return list == null ? "0" : list.size() + "";
     }
 }

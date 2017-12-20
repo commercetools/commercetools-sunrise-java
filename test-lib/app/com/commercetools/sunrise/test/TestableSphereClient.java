@@ -28,7 +28,6 @@ public class TestableSphereClient implements SphereClient {
 
     }
 
-    @Override
     public SphereApiConfig getConfig() {
         throw new UnsupportedOperationException();
     }

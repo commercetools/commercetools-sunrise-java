@@ -22,7 +22,7 @@ public interface WishlistInSession extends ResourceStoringOperations<ShoppingLis
      */
     Optional<String> findWishlistId();
 
-    Optional<WishlistViewModel> findWishlist();
+    Optional<ShoppingList> findWishlist();
 
     /**
      * Stores the given wishlist in the current session.

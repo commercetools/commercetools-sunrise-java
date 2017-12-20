@@ -23,6 +23,8 @@ public class DefaultAddToWishlistControllerAction extends AbstractShoppingListUp
 
     protected ShoppingListUpdateCommand buildRequest(final ShoppingList wishlist, final AddToWishlistFormData addToWishlistFormData) {
         final AddLineItem addLineItem = AddLineItem.of(addToWishlistFormData.productId()).withVariantId(addToWishlistFormData.variantId());
-        return ShoppingListUpdateCommand.of(wishlist, addLineItem);
+        return ShoppingListUpdateCommand.of(wishlist, addLineItem)
+                .plusExpansionPaths(m -> m.lineItems().variant())
+                .plusExpansionPaths(m -> m.lineItems().productSlug());
     }
 }

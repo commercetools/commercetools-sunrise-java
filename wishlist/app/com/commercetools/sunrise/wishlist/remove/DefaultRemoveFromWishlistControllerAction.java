@@ -23,6 +23,8 @@ public class DefaultRemoveFromWishlistControllerAction extends AbstractShoppingL
 
     protected ShoppingListUpdateCommand buildRequest(final ShoppingList wishlist, final RemoveFromWishlistFormData removeWishlistFormData) {
         final RemoveLineItem removeLineItem = RemoveLineItem.of(removeWishlistFormData.lineItemId());
-        return ShoppingListUpdateCommand.of(wishlist, removeLineItem);
+        return ShoppingListUpdateCommand.of(wishlist, removeLineItem)
+                .plusExpansionPaths(m -> m.lineItems().variant())
+                .plusExpansionPaths(m -> m.lineItems().productSlug());
     }
 }

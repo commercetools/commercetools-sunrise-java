@@ -3,27 +3,21 @@ package com.commercetools.sunrise.wishlist;
 import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
-import com.commercetools.sunrise.models.wishlists.WishlistViewModel;
-import com.commercetools.sunrise.models.wishlists.WishlistViewModelFactory;
 import com.commercetools.sunrise.models.wishlists.WishlistInSession;
 import com.google.inject.Inject;
+import io.sphere.sdk.shoppinglists.ShoppingList;
 
 public final class MiniWishlistControllerComponent implements ControllerComponent, PageDataReadyHook {
     private final WishlistInSession wishlistInSession;
-    private final WishlistViewModelFactory wishlistViewModelFactory;
 
     @Inject
-    protected MiniWishlistControllerComponent(final WishlistInSession wishlistInSession,
-                                              final WishlistViewModelFactory wishlistViewModelFactory) {
+    protected MiniWishlistControllerComponent(final WishlistInSession wishlistInSession) {
         this.wishlistInSession = wishlistInSession;
-        this.wishlistViewModelFactory = wishlistViewModelFactory;
     }
 
     @Override
     public void onPageDataReady(final PageData pageData) {
-        final WishlistViewModel wishlist = wishlistInSession.findWishlist()
-                .orElseGet(() -> wishlistViewModelFactory.create(null));
-
-        pageData.getContent().put("wishlist", wishlist); // we use a dynamic property here, because we don't want to extend PageContent
+        ShoppingList value = wishlistInSession.findWishlist().orElse(null);
+        pageData.getContent().put("wishlist", value); // we use a dynamic property here, because we don't want to extend PageContent
     }
 }
