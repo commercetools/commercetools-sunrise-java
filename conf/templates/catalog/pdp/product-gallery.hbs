@@ -4,7 +4,7 @@
     <img src="{{@root.meta.assetsPath}}img/zoom-60px-6081bcfddfd9e2ddfd84dbd3eddfa3c7.png" width="25" height="25" />
   </a>
   <ul class="bzoom">
-    {{#each content.myvariant.images}}
+    {{#each variant.images}}
       <li class="gallery-image" data-modal-content="{{url}}">
         <img class="bzoom_thumb_image" src="{{url}}">
         <img class="bzoom_big_image" src="{{url}}">
@@ -23,7 +23,7 @@
   </div>
 </div>
 <div class="gallery-mobile visible-xs">
-  {{#each content.myvariant.images}}
+  {{#each variant.images}}
     <img src="{{url}}" alt="Product Image" />
   {{/each}}
 </div>

@@ -1,9 +1,19 @@
 package com.commercetools.sunrise.core.renderers.handlebars;
 
+import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.formatters.ProductAttributeFormatter;
-import com.commercetools.sunrise.models.products.AttributeOptionViewModelFactory;
+import com.commercetools.sunrise.models.categories.CategoriesSettings;
+import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
+import com.commercetools.sunrise.models.categories.NewCategoryTree;
+import com.commercetools.sunrise.models.categories.SpecialCategorySettings;
+import com.commercetools.sunrise.models.prices.PriceFactory;
+import com.commercetools.sunrise.models.products.AttributeOption;
+import com.commercetools.sunrise.models.products.AttributeOptionFactory;
 import com.commercetools.sunrise.models.products.ProductAttributesSettings;
+import com.commercetools.sunrise.models.products.ProductPriceUtils;
 import com.github.jknack.handlebars.Options;
+import io.sphere.sdk.categories.Category;
+import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.Reference;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -13,16 +23,18 @@ import io.sphere.sdk.producttypes.ProductTypeLocalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.Json;
+import play.mvc.Call;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class ProductHelperSource {
@@ -30,17 +42,30 @@ public class ProductHelperSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductHelperSource.class);
 
     private final ProductAttributeFormatter productAttributeFormatter;
-    private final AttributeOptionViewModelFactory attributeOptionViewModelFactory;
+    private final AttributeOptionFactory attributeOptionFactory;
     private final ProductAttributesSettings attributesSettings;
     private final ProductTypeLocalRepository productTypeLocalRepository;
+    private final PriceFactory priceFactory;
+    private final ProductReverseRouter productReverseRouter;
+    private final CategoryTree categoryTreeInNew;
+    private final CategoryTree categoryTree;
+    private final CategoriesSettings categoriesSettings;
 
     @Inject
-    ProductHelperSource(final ProductAttributeFormatter productAttributeFormatter, final AttributeOptionViewModelFactory attributeOptionViewModelFactory,
-                        final ProductAttributesSettings attributesSettings, final ProductTypeLocalRepository productTypeLocalRepository) {
+    ProductHelperSource(final ProductAttributeFormatter productAttributeFormatter, final AttributeOptionFactory attributeOptionFactory,
+                        final ProductAttributesSettings attributesSettings, final ProductTypeLocalRepository productTypeLocalRepository,
+                        final PriceFactory priceFactory, final ProductReverseRouter productReverseRouter,
+                        @NewCategoryTree final CategoryTree categoryTreeInNew, @NavigationCategoryTree final CategoryTree categoryTree,
+                        final CategoriesSettings categoriesSettings) {
         this.productAttributeFormatter = productAttributeFormatter;
-        this.attributeOptionViewModelFactory = attributeOptionViewModelFactory;
+        this.attributeOptionFactory = attributeOptionFactory;
         this.attributesSettings = attributesSettings;
         this.productTypeLocalRepository = productTypeLocalRepository;
+        this.priceFactory = priceFactory;
+        this.productReverseRouter = productReverseRouter;
+        this.categoryTreeInNew = categoryTreeInNew;
+        this.categoryTree = categoryTree;
+        this.categoriesSettings = categoriesSettings;
     }
 
     public CharSequence eachDisplayedAttribute(final Options options) {
@@ -68,23 +93,20 @@ public class ProductHelperSource {
     }
 
     public CharSequence attributeLabel(final String attributeName, @Nullable final Reference<ProductType> nullableProductTypeRef) {
-        return productTypeOrDefault(nullableProductTypeRef)
+        return productTypeOrDefault(attributeName, nullableProductTypeRef)
                 .flatMap(productType -> productAttributeFormatter.label(attributeName, productType))
                 .orElse(attributeName);
     }
 
-    public CharSequence attributeValue(final Attribute selectedAttribute, @Nullable final Reference<ProductType> nullableProductTypeRef) {
-        return productTypeOrDefault(nullableProductTypeRef)
-                .flatMap(productTypeRef -> productAttributeFormatter.convert(selectedAttribute, productTypeRef))
-                .orElseGet(() -> Json.stringify(selectedAttribute.getValueAsJsonNode()));
+    public CharSequence attributeValue(final Attribute attribute, @Nullable final Reference<ProductType> nullableProductTypeRef) {
+        return productTypeOrDefault(attribute.getName(), nullableProductTypeRef)
+                .flatMap(productTypeRef -> productAttributeFormatter.convert(attribute, productTypeRef))
+                .orElseGet(() -> Json.stringify(attribute.getValueAsJsonNode()));
     }
 
-    public CharSequence eachAttributeOption(final String attributeName, final ProductProjection product,
-                                            final ProductVariant variant, final Options options) {
-        return distinctAttributeValuesStream(attributeName, product)
-                .map(attribute -> attributeOptionViewModelFactory.create(attribute, product, variant))
-                .map(attribute -> safeFnApply(attribute, options))
-                .collect(joining());
+    public CharSequence withAttributeOptions(final String attributeName, final ProductProjection product,
+                                             final ProductVariant variant, final Options options) throws IOException {
+        return options.fn(attributeOptions(attributeName, product, variant));
     }
 
     public CharSequence availabilityColorCode(final Long availableQuantity) {
@@ -99,11 +121,51 @@ public class ProductHelperSource {
         return code;
     }
 
-    private Stream<Attribute> distinctAttributeValuesStream(final String attributeName, final ProductProjection product) {
+    public CharSequence withProductPrice(final ProductVariant variant, final Options options) {
+        return priceFactory.create(variant)
+                .map(price -> safeFnApply(price, options))
+                .orElse(null);
+    }
+
+    public CharSequence productUrl(final ProductProjection product, final ProductVariant variant) {
+        return productReverseRouter.productDetailPageCall(product, variant).map(Call::url).orElse("");
+    }
+
+    public CharSequence categoryUrl(final Category category) {
+        return productReverseRouter.productOverviewPageCall(category).map(Call::url).orElse("");
+    }
+
+    public CharSequence ifDiscounted(final ProductVariant variant, final Options options) throws IOException {
+        final boolean discounted = ProductPriceUtils.hasDiscount(variant);
+        return discounted ? options.fn() : null;
+    }
+
+    public CharSequence ifNew(final ProductProjection product, final Options options) throws IOException {
+        final boolean isNew = product.getCategories().stream()
+                .anyMatch(categoryRef -> categoryTreeInNew.findById(categoryRef.getId()).isPresent());
+        return isNew ? options.fn() : null;
+    }
+
+    public CharSequence ifSale(final Category category, final Options options) throws IOException {
+        final boolean isSale = categoriesSettings.specialCategories().stream()
+                .filter(SpecialCategorySettings::isSale)
+                .anyMatch(specialCategory -> specialCategory.externalId().equals(category.getExternalId()));
+        return isSale ? options.fn() : null;
+    }
+
+    public CharSequence withCategoryChildren(final Category category, final Options options) throws IOException {
+        final List<Category> children = categoryTree.findChildren(category);
+        return options.fn(children);
+    }
+
+    private List<AttributeOption> attributeOptions(final String attributeName, final ProductProjection product,
+                                                   final ProductVariant currentVariant) {
         return product.getAllVariants().stream()
                 .map(variant -> variant.getAttribute(attributeName))
                 .filter(Objects::nonNull)
-                .distinct();
+                .distinct()
+                .map(attribute -> attributeOptionFactory.create(attribute, product, currentVariant))
+                .collect(toList());
     }
 
     private CharSequence safeFnApply(@Nullable final Object object, final Options options) {
@@ -117,10 +179,13 @@ public class ProductHelperSource {
         return "";
     }
 
-    private Optional<ProductType> productTypeOrDefault(@Nullable final Reference<ProductType> nullableProductTypeRef) {
+    private Optional<ProductType> productTypeOrDefault(final String attributeName,
+                                                       @Nullable final Reference<ProductType> nullableProductTypeRef) {
         return Optional.ofNullable(nullableProductTypeRef)
                 .flatMap(productTypeRef -> productTypeLocalRepository.findById(productTypeRef.getId()))
                 .map(Optional::of)
-                .orElseGet(() -> productTypeLocalRepository.getAll().stream().findFirst());
+                .orElseGet(() -> productTypeLocalRepository.getAll().stream()
+                        .filter(productType -> productType.findAttribute(attributeName).isPresent())
+                        .findFirst());
     }
 }

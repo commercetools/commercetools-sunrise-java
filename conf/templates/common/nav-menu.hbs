@@ -1,0 +1,11 @@
+<!-- start common/nav-menu.hbs -->
+{{#each categoryTree.roots}}
+  <li class="dropdown menu-large">
+    <a href="{{categoryUrl this}}" class="dropdown-toggle {{#ifSale this}}sale icon-ribbon{{/ifSale}}" data-toggle="dropdown">
+      {{name}}
+      <img class="mobile-plus-content visible-xs" src="{{@root.meta.assetsPath}}img/plus79-ff2fd999af2fc5d389613530e5c59636.png" alt="{{i18n "main:more"}}">
+    </a>
+    {{> common/nav-menu-category category=this}}
+  </li>
+{{/each}}
+<!-- end common/nav-menu.hbs -->

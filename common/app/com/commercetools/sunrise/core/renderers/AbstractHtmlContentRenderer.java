@@ -30,7 +30,8 @@ public abstract class AbstractHtmlContentRenderer implements ContentRenderer {
         this.cmsService = cmsService;
     }
 
-    protected CompletionStage<Content> render(final PageData pageData, @Nullable final String templateName, @Nullable final String cmsKey) {
+    @Override
+    public CompletionStage<Content> render(final PageData pageData, @Nullable final String templateName, @Nullable final String cmsKey) {
         if (cmsKey != null) {
             return cmsService.page(cmsKey, singletonList(locale))
                     .thenApplyAsync(cmsPage -> renderHtml(pageData, templateName, cmsPage.orElse(null)), HttpExecution.defaultContext());
