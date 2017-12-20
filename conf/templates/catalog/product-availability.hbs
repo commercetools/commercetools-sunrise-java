@@ -1,17 +1,20 @@
 <!-- start catalog/product-availability.hbs -->
 <div class="status">
-  {{#*inline "available"}}
+  {{#*inline "green"}}
       <div class="status-color green"></div>
       <span class="status-text">{{i18n "main:storeLocation.availability.available"}}</span>
   {{/inline}}
-  {{#*inline "notAvailable"}}
+  {{#*inline "red"}}
       <div class="status-color red"></div>
       <span class="status-text">{{i18n "main:storeLocation.availability.notAvailable"}}</span>
   {{/inline}}
-  {{#*inline "fewItemsLeft"}}
+  {{#*inline "orange"}}
       <div class="status-color orange"></div>
       <span class="status-text">{{i18n "main:storeLocation.availability.fewItemsLeft"}}</span>
   {{/inline}}
-  {{#if availability}}{{> (lookup . 'availability')}}{{/if}}
+
+    {{#with content.myvariant.availability.availableQuantity}}
+        {{> (availabilityColorCode this)}}
+    {{/with}}
 </div>
 <!-- end catalog/product-availability.hbs -->

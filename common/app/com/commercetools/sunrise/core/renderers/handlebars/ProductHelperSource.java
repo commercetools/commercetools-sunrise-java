@@ -87,6 +87,18 @@ public class ProductHelperSource {
                 .collect(joining());
     }
 
+    public CharSequence availabilityColorCode(final Long availableQuantity) {
+        final String code;
+        if (availableQuantity < 4) {
+            code = "red";
+        } else if (availableQuantity > 10) {
+            code = "green";
+        } else {
+            code = "orange";
+        }
+        return code;
+    }
+
     private Stream<Attribute> distinctAttributeValuesStream(final String attributeName, final ProductProjection product) {
         return product.getAllVariants().stream()
                 .map(variant -> variant.getAttribute(attributeName))

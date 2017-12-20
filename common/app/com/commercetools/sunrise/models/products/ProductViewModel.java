@@ -8,7 +8,6 @@ public class ProductViewModel extends ViewModel {
     private int variantId;
     private ProductGalleryViewModel gallery;
     private ProductVariantViewModel variant;
-    private String availability;
 
     public ProductViewModel() {
     }
@@ -43,13 +42,5 @@ public class ProductViewModel extends ViewModel {
 
     public void setVariant(final ProductVariantViewModel variant) {
         this.variant = variant;
-    }
-
-    public String getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(final String availability) {
-        this.availability = availability;
     }
 }
