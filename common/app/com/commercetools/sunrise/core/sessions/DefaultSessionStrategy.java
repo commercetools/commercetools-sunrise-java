@@ -40,6 +40,10 @@ public class DefaultSessionStrategy implements SessionStrategy {
                 session.put(key, value);
                 logger.debug("Saved in session \"{}\" = {}", key, value);
             });
+
+            if (!session().isPresent()) {
+                throw new RuntimeException("missing http context");
+            }
         } else {
             removeValueByKey(key);
         }

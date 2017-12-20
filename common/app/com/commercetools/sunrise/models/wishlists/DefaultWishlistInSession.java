@@ -1,7 +1,10 @@
 package com.commercetools.sunrise.models.wishlists;
 
+import com.commercetools.sunrise.core.sessions.CacheableObjectStoringSessionStrategy;
 import com.commercetools.sunrise.core.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.core.sessions.ObjectStoringSessionStrategy;
+import com.fasterxml.jackson.databind.JsonNode;
+import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +28,7 @@ public class DefaultWishlistInSession extends DataFromResourceStoringOperations<
     private final WishlistViewModelFactory wishlistViewModelFactory;
 
     @Inject
-    protected DefaultWishlistInSession(final Configuration configuration, final ObjectStoringSessionStrategy session,
+    protected DefaultWishlistInSession(final Configuration configuration, final CacheableObjectStoringSessionStrategy session,
                                     final WishlistViewModelFactory wishlistViewModelFactory) {
         this.wishlistIdSessionKey = configuration.getString("session.wishlist.wishlistId", DEFAULT_WISHLIST_ID_SESSION_KEY);
         this.wishlistSessionKey = configuration.getString("session.wishlist.wishlist", DEFAULT_WISHLIST_SESSION_KEY);
@@ -39,8 +42,9 @@ public class DefaultWishlistInSession extends DataFromResourceStoringOperations<
     }
 
     @Override
-    public Optional<WishlistViewModel> findWishlist() {
-        return session.findObjectByKey(wishlistSessionKey, WishlistViewModel.class);
+    public Optional<ShoppingList> findWishlist() {
+        return session.findObjectByKey(wishlistSessionKey, JsonNode.class)
+                .map(json -> SphereJsonUtils.readObject(json, ShoppingList.class));
     }
 
     @Override
@@ -51,7 +55,7 @@ public class DefaultWishlistInSession extends DataFromResourceStoringOperations<
     @Override
     protected void storeAssociatedData(@NotNull final ShoppingList wishlist) {
         session.overwriteValueByKey(wishlistIdSessionKey, wishlist.getId());
-        session.overwriteObjectByKey(wishlistSessionKey, wishlistViewModelFactory.create(wishlist));
+        session.overwriteObjectByKey(wishlistSessionKey, SphereJsonUtils.toJsonNode(wishlist));
     }
 
     @Override

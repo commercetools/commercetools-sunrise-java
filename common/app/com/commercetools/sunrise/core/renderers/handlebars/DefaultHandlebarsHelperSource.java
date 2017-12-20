@@ -100,8 +100,14 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         return object.getImages().stream().map(image -> (CharSequence) image.getUrl()).findFirst().orElse(null);
     }
 
-    public CharSequence variantUrlFromLineItem(final LineItem object) {
-        return productReverseRouter.productDetailPageCall(object).map(Call::url).orElse("");
+    public CharSequence variantUrlFromLineItem(final Object object) {
+        if (object instanceof LineItem) {
+            return productReverseRouter.productDetailPageCall((LineItem)object).map(Call::url).orElse("");
+        } else if (object instanceof io.sphere.sdk.shoppinglists.LineItem ) {
+            return productReverseRouter.productDetailPageCall((io.sphere.sdk.shoppinglists.LineItem )object).map(Call::url).orElse("");
+        } else {
+            throw new IllegalArgumentException("is not a LineItem " + object);
+        }
     }
 
     public CharSequence currentPriceForLineItem(final LineItem object) {

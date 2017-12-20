@@ -51,7 +51,9 @@ public class CookieSessionStrategy implements SessionStrategy {
     @Override
     public void overwriteValueByKey(final String key, @Nullable final String value) {
         if (value != null) {
-            context().ifPresent(ctx -> {
+            Optional<Http.Context> contextOptional = context();
+            if (contextOptional.isPresent()) {
+                Http.Context ctx = contextOptional.get();
                 final Http.Cookie cookie = Http.Cookie.builder(key, value)
                         .withPath(cookiePath())
                         .withDomain(cookieDomain())
@@ -59,7 +61,9 @@ public class CookieSessionStrategy implements SessionStrategy {
                         .build();
                 ctx.response().setCookie(cookie);
                 logger.debug("Saved in session \"{}\" = {}", key, value);
-            });
+            } else {
+                throw new RuntimeException("cannot access HTTP context");
+            }
         } else {
             removeValueByKey(key);
         }
