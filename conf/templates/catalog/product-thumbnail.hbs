@@ -1,4 +1,9 @@
 <!-- start catalog/product-thumbnail.hbs -->
+
+
+
+{{! split into smaller templates to easier make it adaptable for wishlist }}
+
 <a id="link-product-thumbnail{{index}}" href="{{productUrl product variant}}">
   <div class="shop-item">
     {{#ifDiscounted variant}}

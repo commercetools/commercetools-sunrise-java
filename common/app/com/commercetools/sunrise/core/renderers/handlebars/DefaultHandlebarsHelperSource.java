@@ -14,6 +14,7 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
+import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
@@ -76,14 +77,12 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
      * @return the JSON string representation
      * @throws JsonProcessingException if the given object could not be processed into JSON
      */
-    public CharSequence json(final Object object) throws JsonProcessingException {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(object);
+    public String json(final Object object) throws JsonProcessingException {
+        return SphereJsonUtils.toJsonString(object);
     }
 
     public CharSequence prettyJson(final Object object) throws JsonProcessingException {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        return SphereJsonUtils.prettyPrint(json(object));
     }
 
     private static Optional<CmsPage> getCmsPageFromContext(final Context context) {

@@ -1,0 +1,7 @@
+<form name="remove-from-wishlist" action="{{@root.meta._links.removeFromWishlist.href}}" method="post">
+    <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+    <input type="hidden" name="lineItemId" value="{{lineItemId}}">
+    <div class="my-account-wishlist-remove-btn">
+        <button type="submit">{{i18n "catalog:removeBtn.title"}}</button>
+    </div>
+</form>

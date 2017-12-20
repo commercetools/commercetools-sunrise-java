@@ -1,29 +1,19 @@
 package com.commercetools.sunrise.wishlist.content.viewmodels;
 
-import com.commercetools.sunrise.core.viewmodels.GenericListViewModel;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.products.ProductThumbnailViewModel;
+import io.sphere.sdk.shoppinglists.ShoppingList;
 
 /**
  * The page content for the wishlist.
  */
 public class WishlistPageContent extends PageContent {
-    private GenericListViewModel<ProductThumbnailViewModel> products;
-    private Integer itemsInTotal;
+    private ShoppingList wishlist;
 
-    public GenericListViewModel<ProductThumbnailViewModel> getProducts() {
-        return products;
+    public ShoppingList getWishlist() {
+        return wishlist;
     }
 
-    public void setProducts(final GenericListViewModel<ProductThumbnailViewModel> products) {
-        this.products = products;
-    }
-
-    public Integer getItemsInTotal() {
-        return itemsInTotal;
-    }
-
-    public void setItemsInTotal(final Integer itemsInTotal) {
-        this.itemsInTotal = itemsInTotal;
+    public void setWishlist(ShoppingList wishlist) {
+        this.wishlist = wishlist;
     }
 }

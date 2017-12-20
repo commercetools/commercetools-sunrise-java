@@ -1,0 +1,7 @@
+<div class="my-account-wishlist-clear-btn">
+    <form id="form-clear-wishlist" name="clear-wishlist"
+          action="{{@root.meta._links.clearWishlist.href}}" method="post">
+        <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+        <button type="submit">{{i18n "my-account:myWishlist.clear"}}</button>
+    </form>
+</div>

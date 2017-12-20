@@ -15,7 +15,7 @@
         <div class="my-account-title">
             <span class="my-account-title-text icon-user">{{i18n "my-account:myWishlist.title"}}</span>
             &nbsp;&nbsp;&nbsp;
-            <span class="items-total-txt">{{i18n "my-account:myWishlist.itemsTotal" count=content.itemsInTotal}}</span>
+            <span class="items-total-txt">{{i18n "my-account:myWishlist.itemsTotal" count=(size content.wishlist.lineItems)}}</span>
         </div>
         <div class="row">
             <div class="col-sm-12">
@@ -25,35 +25,17 @@
                             <div class="my-orders-order-content">
                                 <div class="my-account-wishlist-items-wrapper">
                                     <div class="row">
-                                        {{#each content.products.list}}
+                                        {{#each content.wishlist.lineItems}}
                                             <div class="col-sm-6 col-md-3">
                                                 {{> catalog/product-thumbnail thumbnail=this index=@index wishlist=true}}
-                                                <form id="form-remove-from-wishlist{{index}}" name="remove-from-wishlist"
-                                                      action="{{@root.meta._links.removeFromWishlist.href}}" method="post">
-                                                    <input type="hidden" name="csrfToken"
-                                                           value="{{@root.meta.csrfToken}}"/>
-                                                    <input type="hidden" name="lineItemId" value="{{product.lineItemId}}">
-
-                                                    <div class="my-account-wishlist-remove-btn">
-                                                        <button type="submit">{{i18n
-                                                                "catalog:removeBtn.title"}}</button>
-                                                    </div>
-                                                </form>
+                                                {{> wishlist/item-removal-form lineItemId=id}}
                                             </div>
                                         {{/each}}
                                     </div>
                                 </div>
                                 <div class="my-account-wishlist-pagination-bottom">
                                 </div>
-                                <div class="my-account-wishlist-clear-btn">
-                                    <form id="form-clear-wishlist" name="clear-wishlist"
-                                          action="{{@root.meta._links.clearWishlist.href}}" method="post">
-                                        <input type="hidden" name="csrfToken"
-                                               value="{{@root.meta.csrfToken}}"/>
-
-                                        <button type="submit">{{i18n "my-account:myWishlist.clear"}}</button>
-                                    </form>
-                                </div>
+                                {{> wishlist/clear-form}}
                             </div>
                         </div>
                     </div>

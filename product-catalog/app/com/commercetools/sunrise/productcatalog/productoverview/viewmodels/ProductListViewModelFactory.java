@@ -2,7 +2,6 @@ package com.commercetools.sunrise.productcatalog.productoverview.viewmodels;
 
 import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.core.viewmodels.SimpleViewModelFactory;
-import com.commercetools.sunrise.models.products.ProductThumbnailViewModelFactory;
 import com.commercetools.sunrise.models.products.ProductWithVariant;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
@@ -13,16 +12,10 @@ import java.util.List;
 @RequestScoped
 public class ProductListViewModelFactory extends SimpleViewModelFactory<ProductListViewModel, List<ProductProjection>> {
 
-    private final ProductThumbnailViewModelFactory productThumbnailViewModelFactory;
-
     @Inject
-    public ProductListViewModelFactory(final ProductThumbnailViewModelFactory productThumbnailViewModelFactory) {
-        this.productThumbnailViewModelFactory = productThumbnailViewModelFactory;
+    public ProductListViewModelFactory() {
     }
 
-    protected final ProductThumbnailViewModelFactory getProductThumbnailViewModelFactory() {
-        return productThumbnailViewModelFactory;
-    }
 
     @Override
     protected ProductListViewModel newViewModelInstance(final List<ProductProjection> products) {
