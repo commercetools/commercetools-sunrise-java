@@ -6,8 +6,8 @@ import play.Configuration;
 import java.util.List;
 import java.util.Optional;
 
-@ImplementedBy(CategoriesSettingsImpl.class)
-public interface CategoriesSettings {
+@ImplementedBy(CategorySettingsImpl.class)
+public interface CategorySettings {
 
     /**
      * @return key from the cache where to store the category tree
@@ -44,7 +44,7 @@ public interface CategoriesSettings {
      */
     List<SpecialCategorySettings> specialCategories();
 
-    static CategoriesSettings of(final Configuration globalConfig, final String configPath) {
-        return new CategoriesSettingsImpl(globalConfig, configPath);
+    static CategorySettings of(final Configuration globalConfig, final String configPath) {
+        return new CategorySettingsImpl(globalConfig, configPath);
     }
 }

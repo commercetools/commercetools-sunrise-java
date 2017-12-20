@@ -1,20 +1,32 @@
 <!-- start catalog/product-attribute.hbs -->
-{{#withAttributeOptions attributeName product variant}}
-    <li>
-        <p class="text-uppercase">{{attributeLabel attributeName product.productType}}</p>
-        <div>
-            <select name="attribute-{{attributeName}}" class="select-product-detail" data-reload="{{reload}}" required>
-                {{#each this}}
-                    <option value="{{variantId}}"
-                            data-url="{{variantUrl}}"
-                        {{#unless reload}}{{#if disabled}}disabled{{/if}}{{/unless}}
-                        {{#if selected}}selected{{/if}}>
-                        {{attributeValue attribute product.productType}}
-                    </option>
-                {{/each}}
-            </select>
-        </div>
-        {{> common/required-error-message}}
-    </li>
-{{/withAttributeOptions}}
+{{#*inline "product-attribute-inline"}}
+    {{#each this}}
+        <li>
+            <p class="text-uppercase">{{attributeLabel this product.productType}}</p>
+            <div>
+                <select name="attribute-{{name}}" class="select-product-detail" data-reload="{{reload}}" required>
+                    {{#withAttributeOptions this product variant}}
+                        {{#each this}}
+                            <option value="{{variantId}}"
+                                    data-url="{{variantUrl}}"
+                                {{#unless reload}}{{#if disabled}}disabled{{/if}}{{/unless}}
+                                {{#if selected}}selected{{/if}}>
+                                {{attributeValue attribute product.productType}}
+                            </option>
+                        {{/each}}
+                    {{/withAttributeOptions}}
+                </select>
+            </div>
+            {{> common/required-error-message}}
+        </li>
+    {{/each}}
+{{/inline}}
+
+{{#withPrimarySelectableAttributes variant}}
+    {{> product-attribute-inline reload=true}}
+{{/withPrimarySelectableAttributes}}
+
+{{#withSecondarySelectableAttributes variant}}
+    {{> product-attribute-inline reload=false}}
+{{/withSecondarySelectableAttributes}}
 <!-- end catalog/product-attribute.hbs -->

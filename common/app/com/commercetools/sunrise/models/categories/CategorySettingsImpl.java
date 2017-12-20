@@ -12,7 +12,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
-final class CategoriesSettingsImpl extends Base implements CategoriesSettings {
+final class CategorySettingsImpl extends Base implements CategorySettings {
 
     private final Integer cacheExpiration;
     private final String cacheKey;
@@ -25,11 +25,11 @@ final class CategoriesSettingsImpl extends Base implements CategoriesSettings {
     private final List<SpecialCategorySettings> specialCategories;
 
     @Inject
-    CategoriesSettingsImpl(final Configuration configuration) {
+    CategorySettingsImpl(final Configuration configuration) {
         this(configuration, "sunrise.categories");
     }
 
-    CategoriesSettingsImpl(final Configuration globalConfig, final String configPath) {
+    CategorySettingsImpl(final Configuration globalConfig, final String configPath) {
         final Configuration config = globalConfig.getConfig(configPath);
         this.cacheKey = config.getString("cacheKey");
         this.cacheExpiration = config.getInt("cacheExpiration");

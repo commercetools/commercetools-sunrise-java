@@ -6,14 +6,7 @@
 
   <div class="row select-row">
     <ul class="list-inline">
-    {{#eachPrimarySelectableAttributeName}}
-        {{> catalog/product-attribute attributeName=this reload=true}}
-    {{/eachPrimarySelectableAttributeName}}
-
-    {{#eachSecondarySelectableAttributeName}}
-        {{> catalog/product-attribute attributeName=this reload=false}}
-    {{/eachSecondarySelectableAttributeName}}
-
+        {{> catalog/product-attribute}}
       <li class="size-guide-li">
         {{> catalog/size-guide}}
       </li>

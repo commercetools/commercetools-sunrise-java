@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.models.products;
+package com.commercetools.sunrise.models.attributes;
 
 import com.google.inject.ImplementedBy;
 import play.Configuration;

@@ -11,6 +11,7 @@ import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import javax.inject.Singleton;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
@@ -19,19 +20,20 @@ import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
 import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
 import static java.util.stream.Collectors.toList;
 
+@Singleton
 public final class CategoryTreeProvider implements Provider<CategoryTree> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryTreeProvider.class);
 
-    private final CategoriesSettings categoriesSettings;
+    private final CategorySettings categorySettings;
     private final CategoryTreeFilter categoryTreeFilter;
     private final SphereClient sphereClient;
 
     @Inject
-    CategoryTreeProvider(final CategoriesSettings categoriesSettings, final CategoryTreeFilter categoryTreeFilter,
+    CategoryTreeProvider(final CategorySettings categorySettings, final CategoryTreeFilter categoryTreeFilter,
                          final SphereClient sphereClient) {
         this.categoryTreeFilter = categoryTreeFilter;
-        this.categoriesSettings = categoriesSettings;
+        this.categorySettings = categorySettings;
         this.sphereClient = sphereClient;
     }
 
@@ -49,7 +51,7 @@ public final class CategoryTreeProvider implements Provider<CategoryTree> {
     }
 
     private CategoryQuery buildQuery() {
-        final List<QuerySort<Category>> sortExpressions = categoriesSettings.sortExpressions().stream()
+        final List<QuerySort<Category>> sortExpressions = categorySettings.sortExpressions().stream()
                 .map(QuerySort::<Category>of)
                 .collect(toList());
         return CategoryQuery.of()

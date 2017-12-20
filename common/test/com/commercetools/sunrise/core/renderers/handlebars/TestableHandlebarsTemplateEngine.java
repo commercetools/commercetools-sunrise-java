@@ -31,13 +31,13 @@ final class TestableHandlebarsTemplateEngine implements TemplateEngine {
 
     private HandlebarsValueResolvers valueResolvers(final I18nResolver i18nResolver) {
         final PlayJavaFormResolver playJavaFormResolver = new PlayJavaFormResolver(msg -> msg);
-        final SunriseJavaBeanValueResolver sunriseJavaBeanValueResolver = new SunriseJavaBeanValueResolver(i18nResolver);
+        final SunriseJavaBeanValueResolver sunriseJavaBeanValueResolver = new SunriseJavaBeanValueResolver(i18nResolver, null);
         return () -> asList(playJavaFormResolver, sunriseJavaBeanValueResolver);
     }
 
     private static Handlebars handlebars(final List<TemplateLoader> templateLoaders, final I18nResolver i18nResolver) {
-        final DefaultHandlebarsHelperSource helperSource = new DefaultHandlebarsHelperSource(i18nResolver, null, null, dateTimeFormatter, myOrdersReverseRouter);
+        final DefaultHandlebarsHelperSource helperSource = new DefaultHandlebarsHelperSource(i18nResolver, null, null, null, null);
         final HandlebarsSettings settings = () -> templateLoaders;
-        return new HandlebarsProvider(settings, helperSource, null).get();
+        return new HandlebarsProvider(settings, helperSource, null, null, null).get();
     }
 }

@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.models.products;
+package com.commercetools.sunrise.models.attributes;
 
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.ViewModelFactory;

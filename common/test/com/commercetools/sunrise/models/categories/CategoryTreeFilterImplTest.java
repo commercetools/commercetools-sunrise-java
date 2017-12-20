@@ -24,12 +24,12 @@ public class CategoryTreeFilterImplTest {
     private static PagedQueryResult<CategoryWithProductCount> categoriesWithProductCountQueryResult = readCtpObject("categorytree/categoriesWithProductCountQueryResult.json", CategoriesWithProductCountQuery.resultTypeReference());
 
     private SphereClient sphereClient;
-    private CategoriesSettings categoriesSettings;
+    private CategorySettings categorySettings;
     private CategoryTree categoryTree;
 
     @Before
     public void setUp() throws Exception {
-        this.categoriesSettings = mock(CategoriesSettings.class);
+        this.categorySettings = mock(CategorySettings.class);
         this.sphereClient = mock(SphereClient.class);
         when(sphereClient.execute(any(CategoriesWithProductCountQuery.class))).thenReturn(completedFuture(categoriesWithProductCountQueryResult));
         this.categoryTree = CategoryTree.of(categoryList);
@@ -37,7 +37,7 @@ public class CategoryTreeFilterImplTest {
 
     @Test
     public void keepsEmptyCategories() throws Exception {
-        when(categoriesSettings.discardEmpty()).thenReturn(false);
+        when(categorySettings.discardEmpty()).thenReturn(false);
         final CategoryTree filteredCategoryTree = filterCategoryTree(categoryTree);
         assertThat(filteredCategoryTree).isSameAs(categoryTree);
         assertThat(filteredCategoryTree.getAllAsFlatList()).hasSize(8);
@@ -45,7 +45,7 @@ public class CategoryTreeFilterImplTest {
 
     @Test
     public void discardsEmptyCategories() throws Exception {
-        when(categoriesSettings.discardEmpty()).thenReturn(true);
+        when(categorySettings.discardEmpty()).thenReturn(true);
         final CategoryTree filteredCategoryTree = filterCategoryTree(categoryTree);
         assertThat(filteredCategoryTree).isNotSameAs(categoryTree);
         assertThat(filteredCategoryTree.getAllAsFlatList())
@@ -55,6 +55,6 @@ public class CategoryTreeFilterImplTest {
     }
 
     private CategoryTree filterCategoryTree(final CategoryTree categoryTree) {
-        return new CategoryTreeFilterImpl(categoriesSettings, sphereClient).filter(categoryTree).toCompletableFuture().join();
+        return new CategoryTreeFilterImpl(categorySettings, sphereClient).filter(categoryTree).toCompletableFuture().join();
     }
 }

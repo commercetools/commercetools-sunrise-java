@@ -1,23 +1,18 @@
-import com.commercetools.sunrise.models.categories.CachedCategoryTreeProvider;
-import com.commercetools.sunrise.models.categories.CategoriesSettings;
-import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
-import com.commercetools.sunrise.models.categories.NewCategoryTree;
-import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.core.injection.RequestScoped;
+import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
-import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
-import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinderByCategoryWithMatchingVariants;
+import com.commercetools.sunrise.models.customers.CustomerInSession;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.AlphabeticallySortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.CustomSortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.TermFacetViewModelFactory;
-import com.commercetools.sunrise.models.customers.CustomerInSession;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
+import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinderByCategoryWithMatchingVariants;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.neovisionaries.i18n.CountryCode;
 import email.smtp.EmailSenderProvider;
-import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.search.PriceSelection;
 import io.sphere.sdk.producttypes.ProductType;
@@ -33,7 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 import static io.sphere.sdk.client.SphereClientUtils.blockingWait;
 import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
-import static java.util.Collections.emptyList;
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -53,9 +47,6 @@ public class Module extends AbstractModule {
         bind(HttpAuthentication.class)
                 .toProvider(BasicAuthenticationProvider.class)
                 .in(Singleton.class);
-
-        // Binding for category tree
-        bind(CategoryTree.class).toProvider(CachedCategoryTreeProvider.class);
 
         // Bindings fo email sender
         bind(EmailSender.class)
@@ -79,27 +70,6 @@ public class Module extends AbstractModule {
         // Provide here your own bindings
     }
 
-    @Provides
-    @RequestScoped
-    @NavigationCategoryTree
-    private CategoryTree provideNavigationCategoryTree(final CategoriesSettings categoriesSettings, final CategoryTree categoryTree) {
-        return categoriesSettings.navigationExternalId()
-                .flatMap(categoryTree::findByExternalId)
-                .map(categoryTree::findChildren)
-                .map(categoryTree::getSubtree)
-                .orElse(categoryTree);
-    }
-
-    @Provides
-    @RequestScoped
-    @NewCategoryTree
-    private CategoryTree provideNewCategoryTree(final CategoriesSettings categoriesSettings, final CategoryTree categoryTree) {
-        return categoriesSettings.newExtId()
-                .flatMap(categoryTree::findByExternalId)
-                .map(categoryTree::findChildren)
-                .map(categoryTree::getSubtree)
-                .orElseGet(() -> CategoryTree.of(emptyList()));
-    }
 
     @Provides
     @Singleton
