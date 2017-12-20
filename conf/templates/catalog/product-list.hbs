@@ -1,0 +1,7 @@
+<!-- start catalog/product-list.hbs -->
+{{#each products.list}}
+<div class="col-xs-12 col-sm-6 col-md-4">
+{{> catalog/product-thumbnail product=this variant=masterVariant index=@index}}
+</div>
+{{/each}}
+<!-- end catalog/product-list.hbs -->

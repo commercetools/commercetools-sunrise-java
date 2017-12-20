@@ -1,0 +1,66 @@
+<!-- start catalog/product-thumbnail.hbs -->
+<a id="link-product-thumbnail{{index}}" href="{{productUrl product variant}}">
+  <div class="shop-item">
+    {{#ifDiscounted variant}}
+      <div class="sale-flag">{{i18n "catalog:thumbnail.sale"}}</div>
+    {{/ifDiscounted}}
+    {{#ifNew product}}
+      <div class="new-flag">{{i18n "catalog:thumbnail.new"}}</div>
+    {{/ifNew}}
+    <form id="form-add-to-wishlist-mobile{{index}}" method="post" {{#if wishlist}}class="hidden"{{/if}} name="add-to-wishlist-mobile" action="{{@root.meta._links.addToWishlist.href}}">
+        <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+        <input type="hidden" name="productId" value="{{product.id}}">
+        <input type="hidden" name="variantId" value="{{variant.id}}">
+
+        <button type="submit" class="heart-xs visible-xs">
+        <span class="sr-only">{{i18n "catalog:wishlist.add"}}</span>
+      </button>
+    </form>
+    <div class="pop-product-image">
+      <img class="img-lazy" data-original="{{variant.images.[0].url}}" alt="{{product.name}}" />
+    </div>
+    <div class="pop-product-name">
+      <span class="name-headline">{{product.name}}</span>
+    </div>
+    <div class="pop-item-price">
+      {{#withProductPrice variant}}
+          {{#if previous}}
+              <span class="strikethrough">{{previous}}</span>
+              <span class="pop-item-price-old">{{current}}</span>
+          {{else}}
+              <span>{{current}}</span>
+          {{/if}}
+      {{/withProductPrice}}
+    </div>
+    <div class="pop-product-more-colors">
+      {{!-- {{#if thumbnail.moreColors}}{{i18n "catalog:thumbnail.moreColors"}}{{/if}}&nbsp; --}}
+      <ul class="list-inline">
+        <li>
+          <div class="product-thumbnail-swatch-red"></div>
+        </li>
+        <li>
+          <div class="product-thumbnail-swatch-green"></div>
+        </li>
+        <li>
+          <div class="product-thumbnail-swatch-blue"></div>
+        </li>
+      </ul>
+    </div>
+    <div class="shop-item-overlay hidden-xs">
+      <button type="button" class="quickview" data-modal="quickview-modal{{index}}">
+        {{i18n "catalog:thumbnail.quickView"}}
+      </button>
+      <form id="form-add-to-wishlist{{index}}" method="post" {{#if wishlist}}class="hidden"{{/if}} name="add-to-wishlist" action="{{@root.meta._links.addToWishlist.href}}">
+          <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+          <input type="hidden" name="productId" value="{{product.id}}">
+          <input type="hidden" name="variantId" value="{{variant.id}}">
+
+          <button type="submit" class="heart">
+          <span class="sr-only">{{i18n "catalog:wishlist.add"}}</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</a>
+{{> catalog/quickview wishlist=wishlist}}
+<!-- end catalog/product-thumbnail.hbs -->
