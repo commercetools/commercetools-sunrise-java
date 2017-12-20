@@ -25,15 +25,12 @@ public class DefaultWishlistInSession extends DataFromResourceStoringOperations<
     private final String wishlistIdSessionKey;
     private final String wishlistSessionKey;
     private final ObjectStoringSessionStrategy session;
-    private final WishlistViewModelFactory wishlistViewModelFactory;
 
     @Inject
-    protected DefaultWishlistInSession(final Configuration configuration, final CacheableObjectStoringSessionStrategy session,
-                                    final WishlistViewModelFactory wishlistViewModelFactory) {
+    protected DefaultWishlistInSession(final Configuration configuration, final CacheableObjectStoringSessionStrategy session) {
         this.wishlistIdSessionKey = configuration.getString("session.wishlist.wishlistId", DEFAULT_WISHLIST_ID_SESSION_KEY);
         this.wishlistSessionKey = configuration.getString("session.wishlist.wishlist", DEFAULT_WISHLIST_SESSION_KEY);
         this.session = session;
-        this.wishlistViewModelFactory = wishlistViewModelFactory;
     }
 
     @Override
