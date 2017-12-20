@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.models.products;
 
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
+import com.commercetools.sunrise.core.viewmodels.ViewModelFactory;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
@@ -15,7 +16,7 @@ import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
-public class AttributeOptionViewModelFactory {
+public class AttributeOptionViewModelFactory extends ViewModelFactory {
 
     private final ProductAttributesSettings attributesSettings;
     private final ProductReverseRouter productReverseRouter;

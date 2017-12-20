@@ -3,12 +3,9 @@ package com.commercetools.sunrise.core.renderers;
 import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import play.twirl.api.Content;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Locale;
-import java.util.concurrent.CompletionStage;
 
 final class EmailHtmlContentRenderer extends AbstractHtmlContentRenderer implements EmailContentRenderer {
 
@@ -18,9 +15,9 @@ final class EmailHtmlContentRenderer extends AbstractHtmlContentRenderer impleme
     }
 
     @Override
-    public CompletionStage<Content> render(final PageContent pageContent, @Nullable final String templateName, @Nullable final String cmsKey) {
+    public PageData buildPageData(final PageContent pageContent) {
         final PageData pageData = new PageData();
         pageData.setContent(pageContent);
-        return render(pageData, templateName, cmsKey);
+        return pageData;
     }
 }

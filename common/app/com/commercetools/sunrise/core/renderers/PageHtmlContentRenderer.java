@@ -42,14 +42,21 @@ final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implemen
     }
 
     @Override
-    public CompletionStage<Content> render(final PageContent pageContent, @Nullable final String templateName, @Nullable final String cmsKey) {
-        final PageData pageData = pageDataFactory.create(pageContent);
+    public CompletionStage<Content> render(final PageData pageData, @Nullable final String templateName, @Nullable final String cmsKey) {
         return hookRunner.waitForHookedComponentsToFinish()
                 .thenComposeAsync(unused -> {
                     PageDataReadyHook.runHook(hookRunner, pageData);
                     logFinalPageData(pageData);
                     return super.render(pageData, templateName, cmsKey);
                 }, HttpExecution.defaultContext());
+    }
+
+    @Override
+    public PageData buildPageData(final PageContent pageContent) {
+        final PageData pageData = pageDataFactory.create(pageContent);
+        pageData.put("product", pageContent.get("myproduct"));
+        pageData.put("variant", pageContent.get("myvariant"));
+        return pageData;
     }
 
     private static void logFinalPageData(final PageData pageData) {

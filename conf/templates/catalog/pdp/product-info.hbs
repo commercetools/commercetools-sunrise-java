@@ -1,6 +1,6 @@
 <!-- start catalog/pdp/product-info.hbs -->
 <div class="col-md-4 col-md-offset-1 col-sm-6">
-  {{> catalog/pdp/product-gallery gallery=product.gallery}}
+  {{> catalog/pdp/product-gallery}}
 </div>
 <div class="col-sm-6 product-description">
   <div class="row">
@@ -15,7 +15,7 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <p class="pdp-product-description view-details more" data-text-show="{{i18n "catalog:description.show"}}" data-text-hide="{{i18n "catalog:description.hide"}}">{{{content.myproduct.description}}}</p>
+      <p class="pdp-product-description view-details more" data-text-show="{{i18n "catalog:description.show"}}" data-text-hide="{{i18n "catalog:description.hide"}}">{{{product.description}}}</p>
     </div>
   </div>
   <div class="row">
@@ -28,7 +28,7 @@
   {{> catalog/reserve-in-store-btn}}
   <div class="row">
     <div class="col-sm-12">
-      {{> catalog/product-availability availability=product.availability}}
+      {{> catalog/product-availability}}
     </div>
   </div>
   <div class="row">

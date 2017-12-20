@@ -13,7 +13,7 @@
       <span class="status-text">{{i18n "main:storeLocation.availability.fewItemsLeft"}}</span>
   {{/inline}}
 
-    {{#with content.myvariant.availability.availableQuantity}}
+    {{#with variant.availability.availableQuantity}}
         {{> (availabilityColorCode this)}}
     {{/with}}
 </div>

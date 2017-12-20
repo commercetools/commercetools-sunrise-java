@@ -1,8 +1,8 @@
 <!-- start catalog/add-to-cart.hbs -->
 <form id="form-add-to-cart{{index}}" name="add-to-cart" method="post" action="{{@root.meta._links.addToCart.href}}">
   <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
-  <input type="hidden" name="productId" value="{{content.myproduct.id}}">
-  <input type="hidden" name="variantId" value="{{content.myvariant.id}}">
+  <input type="hidden" name="productId" value="{{product.id}}">
+  <input type="hidden" name="variantId" value="{{variant.id}}">
 
   <div class="row select-row">
     <ul class="list-inline">
@@ -22,7 +22,7 @@
   <div class="row">
     <ul class="product-actions-list list-inline">
       <li class="bag-items-li">
-        <select value="" name="quantity" class="bag-items" required>
+        <select name="quantity" class="bag-items" required>
           {{#each @root.meta.bagQuantityOptions}}
           <option value="{{this}}">{{this}}</option>
           {{/each}}
