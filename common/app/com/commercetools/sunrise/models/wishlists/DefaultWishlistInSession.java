@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * Default implementation of {@link WishlistInSession}.
  */
-public class DefaultWishlistInSession extends DataFromResourceStoringOperations<ShoppingList> implements  WishlistInSession {
+public class DefaultWishlistInSession extends DataFromResourceStoringOperations<ShoppingList> implements WishlistInSession {
     private static final Logger LOGGER = LoggerFactory.getLogger(WishlistInSession.class);
     private static final String DEFAULT_WISHLIST_ID_SESSION_KEY = "sunrise-wishlist-id";
     private static final String DEFAULT_WISHLIST_SESSION_KEY = "sunrise-wishlist";
