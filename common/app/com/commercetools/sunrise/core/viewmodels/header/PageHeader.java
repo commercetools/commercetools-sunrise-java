@@ -10,7 +10,6 @@ public class PageHeader extends ViewModel {
     private String customerServiceNumber;
     private LocalizationSelectorViewModel location;
     private Cart miniCart;
-    private PageNavMenu navMenu;
 
     public PageHeader() {
     }
@@ -41,14 +40,6 @@ public class PageHeader extends ViewModel {
 
     public void setMiniCart(final Cart miniCart) {
         this.miniCart = miniCart;
-    }
-
-    public PageNavMenu getNavMenu() {
-        return navMenu;
-    }
-
-    public void setNavMenu(final PageNavMenu navMenu) {
-        this.navMenu = navMenu;
     }
 
     public String getCustomerServiceNumber() {

@@ -3,7 +3,7 @@ package com.commercetools.sunrise.models.products;
 import com.commercetools.sunrise.core.viewmodels.ViewModel;
 import io.sphere.sdk.products.attributes.Attribute;
 
-public class AttributeOptionViewModel extends ViewModel {
+public class AttributeOption extends ViewModel {
 
     private final Attribute attribute;
     private String variantUrl;
@@ -11,7 +11,7 @@ public class AttributeOptionViewModel extends ViewModel {
     private boolean selected;
     private boolean disabled;
 
-    public AttributeOptionViewModel(final Attribute attribute) {
+    public AttributeOption(final Attribute attribute) {
         this.attribute = attribute;
     }
 

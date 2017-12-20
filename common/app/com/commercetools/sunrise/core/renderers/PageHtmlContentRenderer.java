@@ -6,6 +6,7 @@ import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.core.viewmodels.PageDataFactory;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
+import io.sphere.sdk.categories.CategoryTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
@@ -32,13 +34,16 @@ final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implemen
 
     private final PageDataFactory pageDataFactory;
     private final RequestHookRunner hookRunner;
+    private final CategoryTree categoryTree;
 
     @Inject
     PageHtmlContentRenderer(final Locale locale, final TemplateEngine templateEngine, final CmsService cmsService,
-                            final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner) {
+                            final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner,
+                            @NavigationCategoryTree final CategoryTree categoryTree) {
         super(locale, templateEngine, cmsService);
         this.pageDataFactory = pageDataFactory;
         this.hookRunner = hookRunner;
+        this.categoryTree = categoryTree;
     }
 
     @Override
@@ -56,6 +61,7 @@ final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implemen
         final PageData pageData = pageDataFactory.create(pageContent);
         pageData.put("product", pageContent.get("myproduct"));
         pageData.put("variant", pageContent.get("myvariant"));
+        pageData.put("categoryTree", categoryTree);
         return pageData;
     }
 

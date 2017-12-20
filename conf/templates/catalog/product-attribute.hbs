@@ -1,18 +1,20 @@
 <!-- start catalog/product-attribute.hbs -->
+{{#withAttributeOptions attributeName product variant}}
     <li>
-        <p class="text-uppercase">{{attributeLabel this product.productType}}</p>
+        <p class="text-uppercase">{{attributeLabel attributeName product.productType}}</p>
         <div>
             <select name="attribute-{{attributeName}}" class="select-product-detail" data-reload="{{reload}}" required>
-                {{#eachAttributeOption attributeName product variant}}
+                {{#each this}}
                     <option value="{{variantId}}"
                             data-url="{{variantUrl}}"
                         {{#unless reload}}{{#if disabled}}disabled{{/if}}{{/unless}}
                         {{#if selected}}selected{{/if}}>
                         {{attributeValue attribute product.productType}}
                     </option>
-                {{/eachAttributeOption}}
+                {{/each}}
             </select>
         </div>
         {{> common/required-error-message}}
     </li>
+{{/withAttributeOptions}}
 <!-- end catalog/product-attribute.hbs -->
