@@ -5,7 +5,7 @@
 To log the `PageData` given to the template engine, add this to your `logback.xml`:
 
 ```xml
-<logger name="com.commercetools.sunrise.common.pages.SunrisePageDataJson" level="DEBUG" />
+<logger name="com.commercetools.sunrise.core.viewmodels.PageDataJson" level="DEBUG" />
 ```
 
 Check this [example output](https://gist.github.com/schleichardt/5e8995bbf8a18f155ae01ceabf9d4765).
