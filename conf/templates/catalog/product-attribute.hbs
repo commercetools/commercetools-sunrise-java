@@ -1,4 +1,6 @@
 <!-- start catalog/product-attribute.hbs -->
+
+{{#if product}}
 {{#withAttributeOptions attributeName product variant}}
     <li>
         <p class="text-uppercase">{{attributeLabel attributeName product.productType}}</p>
@@ -18,3 +20,4 @@
     </li>
 {{/withAttributeOptions}}
 <!-- end catalog/product-attribute.hbs -->
+{{/if}}

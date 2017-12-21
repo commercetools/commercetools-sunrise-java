@@ -1,31 +1,20 @@
 <!-- start catalog/product-thumbnail.hbs -->
-
-
-
-{{! split into smaller templates to easier make it adaptable for wishlist }}
-
-<a id="link-product-thumbnail{{index}}" href="{{productUrl product variant}}">
+<a id="link-product-thumbnail-{{variant.sku}}" href="{{#if product}}{{productUrl product variant}}{{else}}{{variantUrlFromLineItem this}}{{/if}}">
   <div class="shop-item">
     {{#ifDiscounted variant}}
       <div class="sale-flag">{{i18n "catalog:thumbnail.sale"}}</div>
     {{/ifDiscounted}}
-    {{#ifNew product}}
-      <div class="new-flag">{{i18n "catalog:thumbnail.new"}}</div>
-    {{/ifNew}}
-    <form id="form-add-to-wishlist-mobile{{index}}" method="post" {{#if wishlist}}class="hidden"{{/if}} name="add-to-wishlist-mobile" action="{{@root.meta._links.addToWishlist.href}}">
-        <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
-        <input type="hidden" name="productId" value="{{product.id}}">
-        <input type="hidden" name="variantId" value="{{variant.id}}">
-
-        <button type="submit" class="heart-xs visible-xs">
-        <span class="sr-only">{{i18n "catalog:wishlist.add"}}</span>
-      </button>
-    </form>
+      {{#if product}}
+          {{#ifNew product}}
+              <div class="new-flag">{{i18n "catalog:thumbnail.new"}}</div>
+          {{/ifNew}}
+      {{/if}}
+      {{> catalog/add-to-wishlist-form mobile=true context="mobile" productId=product.id variantId=variant.id sku=variant.sku}}
     <div class="pop-product-image">
-      <img class="img-lazy" data-original="{{variant.images.[0].url}}" alt="{{product.name}}" />
+        <img class="img-lazy" data-original="{{imageUrl variant}}" alt="{{#if product}}{{product.name}}{{else}}{{name}}{{/if}}" />
     </div>
     <div class="pop-product-name">
-      <span class="name-headline">{{product.name}}</span>
+      <span class="name-headline">{{#if product}}{{product.name}}{{else}}{{name}}{{/if}}</span>
     </div>
     <div class="pop-item-price">
       {{#withProductPrice variant}}
@@ -33,7 +22,7 @@
               <span class="strikethrough">{{previous}}</span>
               <span class="pop-item-price-old">{{current}}</span>
           {{else}}
-              <span>{{current}}</span>
+              <span class="current-price">{{current}}</span>
           {{/if}}
       {{/withProductPrice}}
     </div>
@@ -55,17 +44,12 @@
       <button type="button" class="quickview" data-modal="quickview-modal{{index}}">
         {{i18n "catalog:thumbnail.quickView"}}
       </button>
-      <form id="form-add-to-wishlist{{index}}" method="post" {{#if wishlist}}class="hidden"{{/if}} name="add-to-wishlist" action="{{@root.meta._links.addToWishlist.href}}">
-          <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
-          <input type="hidden" name="productId" value="{{product.id}}">
-          <input type="hidden" name="variantId" value="{{variant.id}}">
-
-          <button type="submit" class="heart">
-          <span class="sr-only">{{i18n "catalog:wishlist.add"}}</span>
-        </button>
-      </form>
+        {{#unless wishlist}}
+        {{> catalog/add-to-wishlist-form mobile=false productId=product.id variantId=variant.id sku=variant.sku}}
+        {{/unless}}
     </div>
   </div>
 </a>
-{{> catalog/quickview wishlist=wishlist}}
+
+{{> catalog/quickview wishlist=wishlist }}
 <!-- end catalog/product-thumbnail.hbs -->
