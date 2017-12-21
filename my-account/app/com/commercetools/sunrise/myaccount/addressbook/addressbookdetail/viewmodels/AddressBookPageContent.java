@@ -1,39 +1,40 @@
 package com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels;
 
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import io.sphere.sdk.models.Address;
 
 import java.util.List;
 
 public class AddressBookPageContent extends PageContent {
 
-    private EditableAddressViewModel defaultShippingAddress;
-    private EditableAddressViewModel defaultBillingAddress;
-    private List<EditableAddressViewModel> addresses;
+    private Address defaultShippingAddress;
+    private Address defaultBillingAddress;
+    private List<Address> addresses;
 
     public AddressBookPageContent() {
     }
 
-    public EditableAddressViewModel getDefaultShippingAddress() {
+    public Address getDefaultShippingAddress() {
         return defaultShippingAddress;
     }
 
-    public void setDefaultShippingAddress(final EditableAddressViewModel defaultShippingAddress) {
+    public void setDefaultShippingAddress(final Address defaultShippingAddress) {
         this.defaultShippingAddress = defaultShippingAddress;
     }
 
-    public EditableAddressViewModel getDefaultBillingAddress() {
+    public Address getDefaultBillingAddress() {
         return defaultBillingAddress;
     }
 
-    public void setDefaultBillingAddress(final EditableAddressViewModel defaultBillingAddress) {
+    public void setDefaultBillingAddress(final Address defaultBillingAddress) {
         this.defaultBillingAddress = defaultBillingAddress;
     }
 
-    public List<EditableAddressViewModel> getAddresses() {
+    public List<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(final List<EditableAddressViewModel> addresses) {
+    public void setAddresses(final List<Address> addresses) {
         this.addresses = addresses;
     }
 }

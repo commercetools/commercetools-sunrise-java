@@ -3,6 +3,7 @@ package com.commercetools.sunrise.core.renderers.handlebars;
 import com.commercetools.sdk.CtpEnumUtils;
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
@@ -13,8 +14,8 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
-import io.sphere.sdk.customers.CustomerName;
 import io.sphere.sdk.json.SphereJsonUtils;
+import io.sphere.sdk.models.Address;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
@@ -40,14 +41,16 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
     private final PriceFormatter priceFormatter;
     private final DateTimeFormatter dateTimeFormatter;
     private final MyOrdersReverseRouter myOrdersReverseRouter;
+    private final AddressBookReverseRouter addressBookReverseRouter;
 
     @Inject
-    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, ProductReverseRouter productReverseRouter, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter, MyOrdersReverseRouter myOrdersReverseRouter) {
+    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, ProductReverseRouter productReverseRouter, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter, MyOrdersReverseRouter myOrdersReverseRouter, AddressBookReverseRouter addressBookReverseRouter) {
         this.i18nResolver = i18nResolver;
         this.productReverseRouter = productReverseRouter;
         this.priceFormatter = priceFormatter;
         this.dateTimeFormatter = dateTimeFormatter;
         this.myOrdersReverseRouter = myOrdersReverseRouter;
+        this.addressBookReverseRouter = addressBookReverseRouter;
     }
 
     /**
@@ -162,5 +165,13 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     public CharSequence size(final List<?> list) {
         return list == null ? "0" : list.size() + "";
+    }
+
+    public CharSequence editAddressUrl(final Address address) {
+        return addressBookReverseRouter.changeAddressPageCall(address).map(Call::url).orElse("");
+    }
+
+    public CharSequence deleteAddressUrl(final Address address) {
+        return addressBookReverseRouter.removeAddressProcessCall(address).map(Call::url).orElse("");
     }
 }

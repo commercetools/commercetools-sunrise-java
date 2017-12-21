@@ -10,17 +10,6 @@ import java.util.stream.Collectors;
 
 public class AddressBookPageContentFactory extends PageContentFactory<AddressBookPageContent, Customer> {
 
-    private final EditableAddressViewModelFactory editableAddressViewModelFactory;
-
-    @Inject
-    public AddressBookPageContentFactory(final EditableAddressViewModelFactory editableAddressViewModelFactory) {
-        this.editableAddressViewModelFactory = editableAddressViewModelFactory;
-    }
-
-    protected final EditableAddressViewModelFactory getEditableAddressViewModelFactory() {
-        return editableAddressViewModelFactory;
-    }
-
     @Override
     protected AddressBookPageContent newViewModelInstance(final Customer customer) {
         return new AddressBookPageContent();
@@ -41,18 +30,17 @@ public class AddressBookPageContentFactory extends PageContentFactory<AddressBoo
 
     protected void fillDefaultShippingAddress(final AddressBookPageContent viewModel, final Customer customer) {
         customer.findDefaultShippingAddress()
-                .ifPresent(address -> viewModel.setDefaultShippingAddress(editableAddressViewModelFactory.create(address)));
+                .ifPresent(address -> viewModel.setDefaultShippingAddress(address));
     }
 
     protected void fillDefaultBillingAddress(final AddressBookPageContent viewModel, final Customer customer) {
         customer.findDefaultBillingAddress()
-                .ifPresent(address -> viewModel.setDefaultBillingAddress(editableAddressViewModelFactory.create(address)));
+                .ifPresent(address -> viewModel.setDefaultBillingAddress(address));
     }
 
     protected void fillAddresses(final AddressBookPageContent viewModel, final Customer customer) {
         viewModel.setAddresses(customer.getAddresses().stream()
                 .filter(address -> isNotAnyDefaultAddress(customer, address))
-                .map(editableAddressViewModelFactory::create)
                 .collect(Collectors.toList()));
     }
 
