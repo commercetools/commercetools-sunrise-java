@@ -21,6 +21,7 @@ import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
 import lombok.NonNull;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import play.mvc.Call;
 
@@ -31,10 +32,7 @@ import javax.money.MonetaryAmount;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.commercetools.sunrise.core.renderers.handlebars.HandlebarsTemplateEngine.CMS_PAGE_IN_CONTEXT_KEY;
@@ -199,5 +197,11 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
     public CharSequence withLimit(final List<?> list, final int limit, final Options options) throws IOException {
         final List<?> newList = ObjectUtils.firstNonNull(list, emptyList()).stream().limit(limit).collect(toList());
         return options.fn(newList);
+    }
+
+    public CharSequence withReversed(final List<?> list, final Options options) throws IOException {
+        final List<?> reversed = new ArrayList<>(ObjectUtils.firstNonNull(list, emptyList()));
+        Collections.reverse(reversed);
+        return options.fn(reversed);
     }
 }

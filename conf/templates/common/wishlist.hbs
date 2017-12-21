@@ -9,13 +9,15 @@
         </p>
         <span class="recently-added-title">{{i18n "catalog:wishlist.recentlyAdded"}}</span>
         <div class="clearfix">
-            {{#withLimit wishlist.lineItems 3}}
-            {{#each this}}
-                <a href="{{variantUrlFromLineItem this}}">
-                    <img class="pull-left img-responsive wishlist-img" src="{{imageUrl variant}}" alt="{{name}}">
-                </a>
-            {{/each}}
-            {{/withLimit}}
+            {{#withReversed wishlist.lineItems}}{{! the last added items should be shown first}}
+                {{#withLimit this 3}}
+                    {{#each this}}
+                        <a href="{{variantUrlFromLineItem this}}">
+                            <img class="pull-left img-responsive wishlist-img" src="{{imageUrl variant}}" alt="{{name}}">
+                        </a>
+                    {{/each}}
+                {{/withLimit}}
+            {{/withReversed}}
         </div>
         <a href="{{@root.meta._links.myWishlist.href}}" id="wishlist-view-btn" class="btn view-wishlist-btn">
             {{i18n "catalog:wishlist.view"}}
