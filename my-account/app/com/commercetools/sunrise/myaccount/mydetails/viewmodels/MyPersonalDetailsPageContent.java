@@ -1,24 +1,24 @@
 package com.commercetools.sunrise.myaccount.mydetails.viewmodels;
 
-import com.commercetools.sunrise.models.customers.CustomerInfoViewModel;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 
 public class MyPersonalDetailsPageContent extends PageContent {
 
-    private CustomerInfoViewModel customerInfo;
+    private Customer customer;
     private Form<?> personalDetailsForm;
     private MyPersonalDetailsFormSettingsViewModel personalDetailsFormSettings;
 
     public MyPersonalDetailsPageContent() {
     }
 
-    public CustomerInfoViewModel getCustomerInfo() {
-        return customerInfo;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerInfo(final CustomerInfoViewModel customerInfo) {
-        this.customerInfo = customerInfo;
+    public void setCustomer(final Customer customerInfo) {
+        this.customer = customerInfo;
     }
 
     public Form<?> getPersonalDetailsForm() {

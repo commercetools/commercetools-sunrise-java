@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.myaccount.mydetails.viewmodels;
 
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
-import com.commercetools.sunrise.models.customers.CustomerInfoViewModelFactory;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
@@ -10,18 +9,11 @@ import javax.inject.Inject;
 
 public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<MyPersonalDetailsPageContent, Customer, MyPersonalDetailsFormData> {
 
-    private final CustomerInfoViewModelFactory customerInfoViewModelFactory;
     private final MyPersonalDetailsFormSettingsViewModelFactory myPersonalDetailsFormSettingsViewModelFactory;
 
     @Inject
-    public MyPersonalDetailsPageContentFactory(final CustomerInfoViewModelFactory customerInfoViewModelFactory,
-                                               final MyPersonalDetailsFormSettingsViewModelFactory myPersonalDetailsFormSettingsViewModelFactory) {
-        this.customerInfoViewModelFactory = customerInfoViewModelFactory;
+    public MyPersonalDetailsPageContentFactory(final MyPersonalDetailsFormSettingsViewModelFactory myPersonalDetailsFormSettingsViewModelFactory) {
         this.myPersonalDetailsFormSettingsViewModelFactory = myPersonalDetailsFormSettingsViewModelFactory;
-    }
-
-    protected final CustomerInfoViewModelFactory getCustomerInfoViewModelFactory() {
-        return customerInfoViewModelFactory;
     }
 
     protected final MyPersonalDetailsFormSettingsViewModelFactory getMyPersonalDetailsFormSettingsViewModelFactory() {
@@ -47,7 +39,7 @@ public class MyPersonalDetailsPageContentFactory extends FormPageContentFactory<
     }
 
     protected void fillCustomer(final MyPersonalDetailsPageContent viewModel, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {
-        viewModel.setCustomerInfo(customerInfoViewModelFactory.create(customer));
+        viewModel.setCustomer(customer);
     }
 
     protected void fillPersonalDetailsForm(final MyPersonalDetailsPageContent viewModel, final Customer customer, final Form<? extends MyPersonalDetailsFormData> form) {

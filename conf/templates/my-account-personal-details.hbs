@@ -26,11 +26,11 @@
                 <div class="personal-details">
                   <div class="personal-details-text-one">
                     <span>{{i18n "my-account:personalDetails.welcomeBack"}}</span>
-                    <span>{{content.customerInfo.customer.firstName}}</span>
+                    <span>{{content.customer.firstName}}</span>
                   </div>
                   <div class="personal-details-text-two">
                     {{i18n "my-account:personalDetails.welcomeDescription"}}<br>
-                    <span class="customer-number">{{content.customerInfo.customer.customerNumber}}</span>
+                    <span class="customer-number">{{content.customer.customerNumber}}</span>
                   </div>
                     <div class="personal-details-title">
                         <span>{{i18n "my-account:personalDetails.title"}}</span>
@@ -40,12 +40,12 @@
                     <div class="personal-details-edit-hide">
                         <div class="personal-details-box">
                           <div>
-                              {{content.customerInfo.customer.title}}
-                              {{content.customerInfo.customer.firstName}}
-                              {{content.customerInfo.customer.lastName}}
+                              {{content.customer.title}}
+                              {{content.customer.firstName}}
+                              {{content.customer.lastName}}
                           </div>
-                          <div>{{content.customerInfo.customer.email}}</div><br>
-                            {{#if content.customerInfo.subscribed}}
+                          <div>{{content.customer.email}}</div><br>
+                            {{#if content.customer.subscribed}}
                             <div>{{i18n "my-account:personalDetails.subscribedToNewsletter"}}</div>
                             {{/if}}
                           <div class="personal-details-box-edit">
