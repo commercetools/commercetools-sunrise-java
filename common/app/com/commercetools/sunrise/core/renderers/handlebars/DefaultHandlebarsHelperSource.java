@@ -14,6 +14,7 @@ import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
+import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.orders.Order;
@@ -26,12 +27,16 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.money.MonetaryAmount;
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.commercetools.sunrise.core.renderers.handlebars.HandlebarsTemplateEngine.CMS_PAGE_IN_CONTEXT_KEY;
+import static java.util.stream.Collectors.toList;
 
 @Singleton
 public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
@@ -173,5 +178,18 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     public CharSequence deleteAddressUrl(final Address address) {
         return addressBookReverseRouter.removeAddressProcessCall(address).map(Call::url).orElse("");
+    }
+
+    private boolean isNotAnyDefaultAddress(final Customer customer, final Address address) {
+        final boolean isNotDefaultShipping = !Objects.equals(address.getId(), customer.getDefaultShippingAddressId());
+        final boolean isNotDefaultBilling = !Objects.equals(address.getId(), customer.getDefaultBillingAddressId());
+        return isNotDefaultShipping && isNotDefaultBilling;
+    }
+
+    public CharSequence withNonStandardAddresses(final Customer customer, final Options options) throws IOException {
+        final List<Address> addresses = customer.getAddresses().stream()
+                .filter(address -> isNotAnyDefaultAddress(customer, address))
+                .collect(Collectors.toList());
+        return options.fn(addresses);
     }
 }

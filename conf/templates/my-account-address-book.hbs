@@ -36,16 +36,16 @@
                       <div class="box-addresses-title">
                         {{i18n "my-account:addressBook.defaultAddresses.title"}}
                       </div>
-                      {{#if content.defaultShippingAddress}}
+                      {{#if content.customer.defaultShippingAddress}}
                       <div class="address-book-dark-box">
                         <div class="address-book-dark-box-title">{{i18n "my-account:addressBook.shippingAddress.title"}}</div>
-                        {{> myaccount/my-address-book-address content.defaultShippingAddress}}
+                        {{> myaccount/my-address-book-address content.customer.defaultShippingAddress}}
                       </div>
                       {{/if}}
-                      {{#if content.defaultBillingAddress}}
+                      {{#if content.customer.defaultBillingAddress}}
                       <div class="address-book-dark-box">
                         <div class="address-book-dark-box-title">{{i18n "my-account:addressBook.billingAddress.title"}}</div>
-                        {{> myaccount/my-address-book-address content.defaultBillingAddress}}
+                        {{> myaccount/my-address-book-address content.customer.defaultBillingAddress}}
                       </div>
                       {{/if}}
                     </div>
@@ -53,11 +53,13 @@
                       <div class="box-addresses-title">
                         {{i18n "my-account:addressBook.additionalAddress.title"}}
                       </div>
-                      {{#each content.addresses}}
-                      <div class="address-book-white-box">
-                        {{> myaccount/my-address-book-address this}}
-                      </div>
-                      {{/each}}
+                        {{#withNonStandardAddresses content.customer}}
+                          {{#each this}}
+                          <div class="address-book-white-box">
+                            {{> myaccount/my-address-book-address this}}
+                          </div>
+                          {{/each}}
+                        {{/withNonStandardAddresses}}
                     </div>
                   </div>
                   <div class="row">
