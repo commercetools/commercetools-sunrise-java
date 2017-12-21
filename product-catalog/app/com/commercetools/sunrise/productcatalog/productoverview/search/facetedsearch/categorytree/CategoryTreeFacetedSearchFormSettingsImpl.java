@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree;
 
-import com.commercetools.sunrise.models.categories.CategoriesSettings;
+import com.commercetools.sunrise.models.categories.CategorySettings;
 import com.commercetools.sunrise.models.categories.SpecialCategorySettings;
 import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import com.commercetools.sunrise.models.search.SearchUtils;
@@ -27,15 +27,15 @@ final class CategoryTreeFacetedSearchFormSettingsImpl extends AbstractFacetedSea
     private final static Logger LOGGER = LoggerFactory.getLogger(CategoryTreeFacetedSearchFormSettings.class);
 
     private final CategoryFinder categoryFinder;
-    private final CategoriesSettings categoriesSettings;
+    private final CategorySettings categorySettings;
     private final CategoryTree categoryTree;
 
     CategoryTreeFacetedSearchFormSettingsImpl(final ConfiguredCategoryTreeFacetedSearchFormSettings settings,
                                               final Locale locale, final CategoryFinder categoryFinder,
-                                              final CategoriesSettings categoriesSettings, final CategoryTree categoryTree) {
+                                              final CategorySettings categorySettings, final CategoryTree categoryTree) {
         super(settings, locale);
         this.categoryFinder = categoryFinder;
-        this.categoriesSettings = categoriesSettings;
+        this.categorySettings = categorySettings;
         this.categoryTree = categoryTree;
     }
 
@@ -59,7 +59,7 @@ final class CategoryTreeFacetedSearchFormSettingsImpl extends AbstractFacetedSea
 
     @Override
     public List<FilterExpression<ProductProjection>> buildFilterExpressions(final Http.Context httpContext) {
-        final List<SpecialCategorySettings> specialCategories = categoriesSettings.specialCategories();
+        final List<SpecialCategorySettings> specialCategories = categorySettings.specialCategories();
         if (!specialCategories.isEmpty()) {
             final Optional<Category> selectedCategory = getSelectedValue(httpContext);
             if (selectedCategory.isPresent()) {

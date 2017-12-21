@@ -5,6 +5,7 @@ import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.client.SphereClient;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 
@@ -12,20 +13,21 @@ import static io.sphere.sdk.queries.QueryExecutionUtils.queryAll;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
+@Singleton
 class CategoryTreeFilterImpl implements CategoryTreeFilter {
 
-    private final CategoriesSettings categoriesSettings;
+    private final CategorySettings categorySettings;
     private final SphereClient sphereClient;
 
     @Inject
-    CategoryTreeFilterImpl(final CategoriesSettings categoriesSettings, final SphereClient sphereClient) {
-        this.categoriesSettings = categoriesSettings;
+    CategoryTreeFilterImpl(final CategorySettings categorySettings, final SphereClient sphereClient) {
+        this.categorySettings = categorySettings;
         this.sphereClient = sphereClient;
     }
 
     @Override
     public CompletionStage<CategoryTree> filter(final CategoryTree categoryTree) {
-        if (categoriesSettings.discardEmpty()) {
+        if (categorySettings.discardEmpty()) {
             return fetchEmptyCategoryIds()
                     .thenApply(emptyCategoryIds -> discardEmptyCategories(categoryTree, emptyCategoryIds))
                     .thenApply(CategoryTree::of);

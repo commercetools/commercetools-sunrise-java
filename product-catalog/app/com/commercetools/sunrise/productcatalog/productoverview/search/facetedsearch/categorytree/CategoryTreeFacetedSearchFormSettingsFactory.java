@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.categorytree;
 
-import com.commercetools.sunrise.models.categories.CategoriesSettings;
+import com.commercetools.sunrise.models.categories.CategorySettings;
 import com.commercetools.sunrise.core.SunriseModel;
 import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import io.sphere.sdk.categories.CategoryTree;
@@ -12,20 +12,20 @@ public class CategoryTreeFacetedSearchFormSettingsFactory extends SunriseModel {
 
     private final Locale locale;
     private final CategoryFinder categoryFinder;
-    private final CategoriesSettings categoriesSettings;
+    private final CategorySettings categorySettings;
     private final CategoryTree categoryTree;
 
     @Inject
     public CategoryTreeFacetedSearchFormSettingsFactory(final Locale locale, final CategoryFinder categoryFinder,
-                                                        final CategoriesSettings categoriesSettings,
+                                                        final CategorySettings categorySettings,
                                                         final CategoryTree categoryTree) {
         this.locale = locale;
         this.categoryFinder = categoryFinder;
-        this.categoriesSettings = categoriesSettings;
+        this.categorySettings = categorySettings;
         this.categoryTree = categoryTree;
     }
 
     public CategoryTreeFacetedSearchFormSettings create(final ConfiguredCategoryTreeFacetedSearchFormSettings configuration) {
-        return new CategoryTreeFacetedSearchFormSettingsImpl(configuration, locale, categoryFinder, categoriesSettings, categoryTree);
+        return new CategoryTreeFacetedSearchFormSettingsImpl(configuration, locale, categoryFinder, categorySettings, categoryTree);
     }
 }

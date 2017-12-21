@@ -5,30 +5,30 @@ import play.test.WithApplication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CategoriesSettingsTest extends WithApplication {
+public class CategorySettingsTest extends WithApplication {
 
     @Test
     public void fallbacksToDefaultValues() throws Exception {
-        final CategoriesSettings categoriesSettings = app.injector().instanceOf(CategoriesSettings.class);
-        assertThat(categoriesSettings.cacheExpiration())
+        final CategorySettings categorySettings = app.injector().instanceOf(CategorySettings.class);
+        assertThat(categorySettings.cacheExpiration())
                 .as("Cache expiration")
                 .isEmpty();
-        assertThat(categoriesSettings.cacheKey())
+        assertThat(categorySettings.cacheKey())
                 .as("Cache key")
                 .isNotNull();
-        assertThat(categoriesSettings.discardEmpty())
+        assertThat(categorySettings.discardEmpty())
                 .as("Discard empty")
                 .isFalse();
-        assertThat(categoriesSettings.sortExpressions())
+        assertThat(categorySettings.sortExpressions())
                 .as("Sort expressions")
                 .isNotEmpty();
-        assertThat(categoriesSettings.navigationExternalId())
+        assertThat(categorySettings.navigationExternalId())
                 .as("Navigation external ID")
                 .isEmpty();
-        assertThat(categoriesSettings.newExtId())
+        assertThat(categorySettings.newExtId())
                 .as("New external ID")
                 .isEmpty();
-        assertThat(categoriesSettings.specialCategories())
+        assertThat(categorySettings.specialCategories())
                 .as("Special categories")
                 .isEmpty();
     }

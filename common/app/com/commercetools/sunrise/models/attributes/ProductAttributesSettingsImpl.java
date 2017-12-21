@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.models.products;
+package com.commercetools.sunrise.models.attributes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

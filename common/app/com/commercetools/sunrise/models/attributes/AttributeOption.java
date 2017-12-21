@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.models.products;
+package com.commercetools.sunrise.models.attributes;
 
 import com.commercetools.sunrise.core.viewmodels.ViewModel;
 import io.sphere.sdk.products.attributes.Attribute;

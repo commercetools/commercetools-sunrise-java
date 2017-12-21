@@ -1,0 +1,29 @@
+<!-- start common/location-selector.hbs -->
+<button id="location-dropdown-toggle-btn" class="location-dropdown-toggle">
+  <img class="pull-right" src="{{@root.meta.assetsPath}}img/globe-2-1d536d6c59d33518fb95d7261d6640af.png" alt="{{i18n "main:header.location"}}">
+</button>
+<div class="location-dropdown">
+  {{#if location.language}}
+  <form id="form-select-language" action="{{@root.meta._links.selectLanguage.href}}" method="POST">
+    <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+    <span class="location-dropdown-label">{{i18n "main:header.language"}}</span>
+    <select name="language" id="language-select" class="select location-select">
+      {{#each location.language}}
+      <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+      {{/each}}
+    </select>
+  </form>
+  {{/if}}
+  {{#if location.country}}
+  <form id="form-select-country" action="{{@root.meta._links.selectCountry.href}}" method="POST">
+    <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+    <span class="location-dropdown-label">{{i18n "main:header.country"}}</span>
+    <select name="country" id="country-select" class="select location-select">
+      {{#each location.country}}
+      <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+      {{/each}}
+    </select>
+  </form>
+  {{/if}}
+</div>
+<!-- end common/location-selector.hbs -->
