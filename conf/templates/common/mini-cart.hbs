@@ -15,7 +15,7 @@
             <p class="product-title"><a href="{{variantUrlFromLineItem this}}">{{name}}</a></p>
             <div class="details">
               <p class="product-quantity">{{i18n "main:common.quantity"}}<span>{{quantity}}x</span></p>
-              <p class="product-price">{{i18n "main:common.price"}}<span>{{formatPrice totalPrice}}</span></p>
+              <p class="product-price">{{i18n "main:common.price"}}<span>{{totalPrice}}</span></p>
                 <input type="hidden" name="lineItemId" value="{{id}}">
                 <button type="submit" id="minicart-delete-button-{{@index}}" class="delete">
                   <span>
