@@ -21,6 +21,7 @@ import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
 import lombok.NonNull;
+import org.apache.commons.lang3.ObjectUtils;
 import play.mvc.Call;
 
 import javax.annotation.Nullable;
@@ -30,12 +31,14 @@ import javax.money.MonetaryAmount;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.commercetools.sunrise.core.renderers.handlebars.HandlebarsTemplateEngine.CMS_PAGE_IN_CONTEXT_KEY;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
@@ -191,5 +194,10 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
                 .filter(address -> isNotAnyDefaultAddress(customer, address))
                 .collect(Collectors.toList());
         return options.fn(addresses);
+    }
+
+    public CharSequence withLimit(final List<?> list, final int limit, final Options options) throws IOException {
+        final List<?> newList = ObjectUtils.firstNonNull(list, emptyList()).stream().limit(limit).collect(toList());
+        return options.fn(newList);
     }
 }
