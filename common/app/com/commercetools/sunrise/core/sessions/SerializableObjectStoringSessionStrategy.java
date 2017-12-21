@@ -1,6 +1,8 @@
 package com.commercetools.sunrise.core.sessions;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.sphere.sdk.json.SphereJsonUtils;
+import io.sphere.sdk.models.Resource;
 import play.libs.Json;
 
 import javax.annotation.Nullable;
@@ -38,7 +40,7 @@ public final class SerializableObjectStoringSessionStrategy extends DefaultSessi
     @Override
     public <U> void overwriteObjectByKey(final String key, @Nullable final U object) {
         if (object != null) {
-            final JsonNode jsonNode = Json.toJson(object);
+            final JsonNode jsonNode = object instanceof Resource ? SphereJsonUtils.toJsonNode(object) : Json.toJson(object);
             final String valueAsJson = Json.stringify(jsonNode);
             overwriteValueByKey(key, valueAsJson);
         } else {

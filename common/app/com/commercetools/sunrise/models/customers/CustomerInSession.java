@@ -19,7 +19,7 @@ public interface CustomerInSession extends ResourceStoringOperations<Customer> {
 
     Optional<String> findCustomerGroupId();
 
-    Optional<UserInfoViewModel> findUserInfo();
+    Optional<Customer> findUserInfo();
 
     @Override
     void store(@Nullable final Customer customer);

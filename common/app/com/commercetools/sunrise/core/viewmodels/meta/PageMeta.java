@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.core.viewmodels.meta;
 
 import com.commercetools.sunrise.core.viewmodels.ViewModel;
-import com.commercetools.sunrise.models.customers.UserInfoViewModel;
+import io.sphere.sdk.customers.Customer;
 import play.mvc.Call;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ public class PageMeta extends ViewModel {
 
     private String assetsPath;
     private String csrfToken;
-    private UserInfoViewModel user;
+    private Customer user;
     private List<Integer> bagQuantityOptions;
     private Map<String, HalLink> _links = new HashMap<>();
 
@@ -43,11 +43,11 @@ public class PageMeta extends ViewModel {
         this.csrfToken = csrfToken;
     }
 
-    public UserInfoViewModel getUser() {
+    public Customer getUser() {
         return user;
     }
 
-    public void setUser(final UserInfoViewModel user) {
+    public void setUser(final Customer user) {
         this.user = user;
     }
 
