@@ -337,55 +337,20 @@ $(document).ready(function() {
 
 $(document).ready(function() {
 
-    var disableNonAvailableOptions = function(select, form) {
-        var selected = select.find("option:selected"),
-            identifiers = select.data("identifiers");
-
-        console.info(" ***** " + selected.attr("value"))
-        if (identifiers) {
-            $.each(identifiers, function (i, identifier) {
-                var attribute = form.find("select[name='attribute-" + identifier + "']"),
-                    activeSelections = selected.data("options-" + identifier),
-                    selectBox = attribute.data("selectBox-selectBoxIt");
-
-                if (activeSelections) {
-                    // disable all options which are not available for selected value
-                    console.info(activeSelections)
-                    attribute.find('option').each(function (j, option) {
-                        if (activeSelections.indexOf($(option).val()) >= 0) {
-                            selectBox.enableOption(j);
-                        } else {
-                            selectBox.disableOption(j);
-                        }
-                    });
-                    // refresh dropdown to avoid leaving it focused
-                    selectBox.refresh();
-                }
-            });
-        }
-    };
-
     var enableSelectedCombination = function(select, form) {
-        var reload = select.data('reload'),
-            selected = select.find("option:selected");
+        var selected = select.find("option:selected"),
+            value = selected.val();
 
-        if (reload) {
-            window.location = selected.data("url");
+        if (Number.isInteger(Number(value))) {
+            form.find("input[name='variantId']").val(value);
         } else {
-            form.find("input[name='variantId']").val(selected.val());
+            window.location = value;
         }
     };
 
-    // $("select.select-product-detail").each(function () {
-    //     var select = $(this),
-    //         form = select.closest('form');
-    //     disableNonAvailableOptions(select, form);
-    // });
-    //
     $("select.select-product-detail").change(function () {
         var select = $(this),
             form = select.closest('form');
-        // disableNonAvailableOptions(select, form);
         enableSelectedCombination(select, form);
     });
 });

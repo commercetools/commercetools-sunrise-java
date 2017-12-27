@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.core.viewmodels.formatters;
+package com.commercetools.sunrise.models.attributes;
 
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import io.sphere.sdk.models.Referenceable;
@@ -39,6 +39,13 @@ final class ProductAttributeFormatterImpl implements ProductAttributeFormatter {
     @Override
     public Optional<String> convert(final Attribute attribute, final Referenceable<ProductType> productType) {
         return Optional.ofNullable(formatter().convert(attribute, productType));
+    }
+
+    @Override
+    public Optional<ProductType> productTypeOf(final String attributeName) {
+        return productTypeLocalRepository.getAll().stream()
+                .filter(productType -> productType.findAttribute(attributeName).isPresent())
+                .findFirst();
     }
 
     private DefaultProductAttributeFormatter formatter() {

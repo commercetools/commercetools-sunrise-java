@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.core.viewmodels.formatters;
+package com.commercetools.sunrise.models.attributes;
 
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.models.Referenceable;
@@ -13,16 +13,21 @@ import java.util.regex.Pattern;
 @ImplementedBy(ProductAttributeFormatterImpl.class)
 public interface ProductAttributeFormatter extends ProductAttributeConverter<Optional<String>> {
 
-    Pattern ATTR_WHITELIST = Pattern.compile("[^0-9a-zA-Z_\\-+]+");
-
-    Optional<String> label(String attributeName, Referenceable<ProductType> productType);
-
     @Nonnull
     @Override
     Optional<String> convert(Attribute attribute, Referenceable<ProductType> productType);
 
-    default Optional<String> convertEncoded(Attribute attribute, Referenceable<ProductType> productType) {
-        return convert(attribute, productType)
-                .map(unescapedValue -> ATTR_WHITELIST.matcher(unescapedValue).replaceAll(""));
+    default Optional<String> convert(Attribute attribute) {
+        return productTypeOf(attribute.getName())
+                .flatMap(productType -> convert(attribute, productType));
     }
+
+    Optional<String> label(String attributeName, Referenceable<ProductType> productType);
+
+    default Optional<String> label(String attributeName) {
+        return productTypeOf(attributeName)
+                .flatMap(productType -> label(attributeName, productType));
+    }
+
+    Optional<ProductType> productTypeOf(String attributeName);
 }

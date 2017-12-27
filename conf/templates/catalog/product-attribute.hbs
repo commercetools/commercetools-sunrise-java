@@ -1,34 +1,23 @@
 <!-- start catalog/product-attribute.hbs -->
 {{#if product}}
-    {{#*inline "product-attribute-inline"}}
-        {{#each this}}
-            <li>
-                <p class="text-uppercase">{{attributeLabel this product.productType}}</p>
-                <div>
-                    <select name="attribute-{{name}}" class="select-product-detail" data-reload="{{reload}}" required>
-                        {{#withAttributeOptions this product variant}}
-                            {{#each this}}
-                                <option value="{{variantId}}"
-                                        data-url="{{variantUrl}}"
-                                    {{#unless reload}}{{#if disabled}}disabled{{/if}}{{/unless}}
-                                    {{#if selected}}selected{{/if}}>
-                                    {{attributeValue attribute product.productType}}
-                                </option>
-                            {{/each}}
-                        {{/withAttributeOptions}}
-                    </select>
-                </div>
-                {{> common/required-error-message}}
-            </li>
-        {{/each}}
-    {{/inline}}
-
-    {{#withPrimarySelectableAttributes variant}}
-        {{> product-attribute-inline reload=true}}
-    {{/withPrimarySelectableAttributes}}
-
-    {{#withSecondarySelectableAttributes variant}}
-        {{> product-attribute-inline reload=false}}
-    {{/withSecondarySelectableAttributes}}
+{{#withSelectableAttributes variant}}
+    {{#each this}}
+        <li>
+            <p class="text-uppercase">{{label}}</p>
+            <div>
+                <select name="attribute-{{name}}" class="select-product-detail" required>
+                    {{#withAttributeOptions this product variant}}
+                        {{#each this}}
+                            <option value="{{value}}" {{#if disabled}}disabled{{/if}} {{#if selected}}selected{{/if}}>
+                                {{label}}
+                            </option>
+                        {{/each}}
+                    {{/withAttributeOptions}}
+                </select>
+            </div>
+            {{> common/required-error-message}}
+        </li>
+    {{/each}}
+{{/withSelectableAttributes}}
 {{/if}}
 <!-- end catalog/product-attribute.hbs -->

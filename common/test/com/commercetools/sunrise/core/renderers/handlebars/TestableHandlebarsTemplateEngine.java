@@ -31,7 +31,7 @@ final class TestableHandlebarsTemplateEngine implements TemplateEngine {
 
     private HandlebarsValueResolvers valueResolvers(final I18nResolver i18nResolver) {
         final PlayJavaFormResolver playJavaFormResolver = new PlayJavaFormResolver(msg -> msg);
-        final SunriseJavaBeanValueResolver sunriseJavaBeanValueResolver = new SunriseJavaBeanValueResolver(i18nResolver, null);
+        final SunriseJavaBeanValueResolver sunriseJavaBeanValueResolver = new SunriseJavaBeanValueResolver(i18nResolver, null, null);
         return () -> asList(playJavaFormResolver, sunriseJavaBeanValueResolver);
     }
 

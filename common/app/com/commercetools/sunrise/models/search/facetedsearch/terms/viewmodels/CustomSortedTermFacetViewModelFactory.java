@@ -9,6 +9,7 @@ import io.sphere.sdk.search.TermFacetResult;
 import javax.inject.Inject;
 import java.util.List;
 
+import static com.commercetools.sunrise.utils.SortUtils.comparePositions;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -29,28 +30,8 @@ public final class CustomSortedTermFacetViewModelFactory extends TermFacetViewMo
     protected List<FacetOptionViewModel> createOptions(final TermFacetedSearchFormSettings<?> settings, final TermFacetResult facetResult) {
         final List<String> customSortedValues = customSortedValues(settings);
         return super.createOptions(settings, facetResult).stream()
-                .sorted((left, right) -> comparePositions(left, right, customSortedValues))
+                .sorted((left, right) -> comparePositions(left.getValue(), right.getValue(), customSortedValues))
                 .collect(toList());
-    }
-
-    private int comparePositions(final FacetOptionViewModel left, final FacetOptionViewModel right, final List<String> customSortedValues) {
-        final int leftPosition = customSortedValues.indexOf(left.getValue());
-        final int rightPosition = customSortedValues.indexOf(right.getValue());
-        return comparePositions(leftPosition, rightPosition);
-    }
-
-    static int comparePositions(final int leftPosition, final int rightPosition) {
-        final int comparison;
-        if (leftPosition == rightPosition) {
-            comparison = 0;
-        } else if (leftPosition < 0) {
-            comparison = 1;
-        } else if (rightPosition < 0) {
-            comparison = -1;
-        } else {
-            comparison = Integer.compare(leftPosition, rightPosition);
-        }
-        return comparison;
     }
 
     private static List<String> customSortedValues(final TermFacetedSearchFormSettings<?> settings) {

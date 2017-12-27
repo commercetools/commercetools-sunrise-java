@@ -12,10 +12,7 @@
       <ul class="product-features-list">
         {{#withDisplayedAttributes variant}}
             {{#each this}}
-                <li>
-                    <span>{{attributeLabel this product.productType}}:</span>
-                    {{attributeValue this product.productType}}
-                </li>
+                <li><span>{{label}}:</span> {{value}}</li>
             {{/each}}
         {{/withDisplayedAttributes}}
       </ul>
