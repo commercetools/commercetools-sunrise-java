@@ -6,12 +6,12 @@ import play.libs.Json;
 
 import javax.annotation.Nullable;
 
-public class FormattedAttribute implements Attribute {
+public class RichAttribute implements Attribute {
 
     private final Attribute attribute;
     private final ProductAttributeFormatter attributeFormatter;
 
-    public FormattedAttribute(final Attribute attribute, final ProductAttributeFormatter attributeFormatter) {
+    public RichAttribute(final Attribute attribute, final ProductAttributeFormatter attributeFormatter) {
         this.attribute = attribute;
         this.attributeFormatter = attributeFormatter;
     }

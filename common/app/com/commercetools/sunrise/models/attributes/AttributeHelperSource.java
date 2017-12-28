@@ -19,12 +19,14 @@ public class AttributeHelperSource {
 
     private final AttributeSelector attributeSelector;
     private final AttributeSettings attributesSettings;
+    private final ProductAttributeFormatter attributeFormatter;
 
     @Inject
-    AttributeHelperSource(final AttributeSelector attributeSelector,
-                          final AttributeSettings attributesSettings) {
+    AttributeHelperSource(final AttributeSelector attributeSelector, final AttributeSettings attributesSettings,
+                          final ProductAttributeFormatter attributeFormatter) {
         this.attributeSelector = attributeSelector;
         this.attributesSettings = attributesSettings;
+        this.attributeFormatter = attributeFormatter;
     }
 
     public CharSequence withDisplayedAttributes(final ProductVariant variant, final Options options) throws IOException {
@@ -45,6 +47,7 @@ public class AttributeHelperSource {
         final List<Attribute> attributes = attributeNames.stream()
                 .map(variant::getAttribute)
                 .filter(Objects::nonNull)
+                .map(attribute -> new RichAttribute(attribute, attributeFormatter))
                 .collect(toList());
         return attributes.isEmpty() ? null : options.fn(attributes);
     }

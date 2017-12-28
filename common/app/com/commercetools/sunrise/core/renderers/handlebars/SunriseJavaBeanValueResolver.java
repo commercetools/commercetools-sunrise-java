@@ -3,8 +3,8 @@ package com.commercetools.sunrise.core.renderers.handlebars;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.viewmodels.ViewModel;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
-import com.commercetools.sunrise.models.attributes.FormattedAttribute;
 import com.commercetools.sunrise.models.attributes.ProductAttributeFormatter;
+import com.commercetools.sunrise.models.attributes.RichAttribute;
 import com.github.jknack.handlebars.ValueResolver;
 import com.github.jknack.handlebars.context.JavaBeanValueResolver;
 import io.sphere.sdk.models.LocalizedString;
@@ -72,7 +72,7 @@ public final class SunriseJavaBeanValueResolver implements ValueResolver {
         return priceFormatter.format(monetaryAmount);
     }
 
-    private FormattedAttribute resolveAttribute(final Attribute attribute) {
-        return new FormattedAttribute(attribute, attributeFormatter);
+    private RichAttribute resolveAttribute(final Attribute attribute) {
+        return new RichAttribute(attribute, attributeFormatter);
     }
 }
