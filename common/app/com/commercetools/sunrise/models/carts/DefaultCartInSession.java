@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.core.sessions.CacheableObjectStoringSessionStrategy;
 import com.commercetools.sunrise.core.sessions.DataFromResourceStoringOperations;
 import com.commercetools.sunrise.core.sessions.ObjectStoringSessionStrategy;
@@ -11,12 +10,13 @@ import play.Configuration;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Optional;
 
 /**
  * Keeps some parts from the cart in session, such as cart ID and mini cart.
  */
-@RequestScoped
+@Singleton
 public class DefaultCartInSession extends DataFromResourceStoringOperations<Cart> implements CartInSession {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CartInSession.class);

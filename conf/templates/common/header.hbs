@@ -62,11 +62,9 @@
                 </li>
             {{/if}}
 
-            {{#if header.location}}
             <li class="list-item-location clearfix">
-              {{> common/location-selector location=header.location}}
+              {{> common/location-selector}}
             </li>
-            {{/if}}
           </ul>
         </div>
       </div>
@@ -88,11 +86,9 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             {{> common/nav-menu navMenu=header.navMenu}}
-            {{#if header.location}}
             <li class="visible-xs location-xs">
-              {{> common/location-selector-mobile location=header.location}}
+              {{> common/location-selector-mobile}}
             </li>
-            {{/if}}
           </ul>
           {{> common/nav-menu-extension navMenu=header.navMenu}}
         </div>

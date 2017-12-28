@@ -9,7 +9,6 @@ import io.sphere.sdk.search.TermFacetResult;
 import javax.inject.Inject;
 import java.util.List;
 
-import static com.commercetools.sunrise.utils.SortUtils.comparePositions;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -30,7 +29,7 @@ public final class CustomSortedTermFacetViewModelFactory extends TermFacetViewMo
     protected List<FacetOptionViewModel> createOptions(final TermFacetedSearchFormSettings<?> settings, final TermFacetResult facetResult) {
         final List<String> customSortedValues = customSortedValues(settings);
         return super.createOptions(settings, facetResult).stream()
-                .sorted((left, right) -> comparePositions(left.getValue(), right.getValue(), customSortedValues))
+//                .sorted((left, right) -> comparePositions(left.getValue(), right.getValue(), customSortedValues))
                 .collect(toList());
     }
 

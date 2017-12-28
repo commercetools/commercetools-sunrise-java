@@ -3,10 +3,13 @@ package com.commercetools.sunrise.core.renderers.handlebars;
 import com.commercetools.sdk.CtpEnumUtils;
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.i18n.LanguageSelector;
+import com.commercetools.sunrise.core.localization.CountrySelector;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
+import com.commercetools.sunrise.models.SelectOption;
 import com.commercetools.sunrise.models.carts.CartPriceUtils;
 import com.commercetools.sunrise.models.products.ProductPriceUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,7 +24,6 @@ import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
 import lombok.NonNull;
-import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import play.mvc.Call;
 
@@ -48,15 +50,19 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
     private final DateTimeFormatter dateTimeFormatter;
     private final MyOrdersReverseRouter myOrdersReverseRouter;
     private final AddressBookReverseRouter addressBookReverseRouter;
+    private final CountrySelector countrySelector;
+    private final LanguageSelector languageSelector;
 
     @Inject
-    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, ProductReverseRouter productReverseRouter, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter, MyOrdersReverseRouter myOrdersReverseRouter, AddressBookReverseRouter addressBookReverseRouter) {
+    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, ProductReverseRouter productReverseRouter, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter, MyOrdersReverseRouter myOrdersReverseRouter, AddressBookReverseRouter addressBookReverseRouter, final CountrySelector countrySelector, final LanguageSelector languageSelector) {
         this.i18nResolver = i18nResolver;
         this.productReverseRouter = productReverseRouter;
         this.priceFormatter = priceFormatter;
         this.dateTimeFormatter = dateTimeFormatter;
         this.myOrdersReverseRouter = myOrdersReverseRouter;
         this.addressBookReverseRouter = addressBookReverseRouter;
+        this.countrySelector = countrySelector;
+        this.languageSelector = languageSelector;
     }
 
     /**
@@ -203,5 +209,15 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         final List<?> reversed = new ArrayList<>(ObjectUtils.firstNonNull(list, emptyList()));
         Collections.reverse(reversed);
         return options.fn(reversed);
+    }
+
+    public CharSequence withLanguageOptions(final Options options) throws IOException {
+        final List<SelectOption> languageOptions = languageSelector.options();
+        return languageOptions.isEmpty() ? null : options.fn(languageOptions);
+    }
+
+    public CharSequence withCountryOptions(final Options options) throws IOException {
+        final List<SelectOption> countryOptions = countrySelector.options();
+        return countryOptions.isEmpty() ? null : options.fn(countryOptions);
     }
 }

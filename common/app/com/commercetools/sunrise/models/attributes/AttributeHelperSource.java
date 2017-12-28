@@ -17,13 +17,13 @@ import static java.util.stream.Collectors.toList;
 @Singleton
 public class AttributeHelperSource {
 
-    private final AttributeSelectOptionFactory attributeSelectOptionFactory;
+    private final AttributeSelector attributeSelector;
     private final AttributeSettings attributesSettings;
 
     @Inject
-    AttributeHelperSource(final AttributeSelectOptionFactory attributeSelectOptionFactory,
+    AttributeHelperSource(final AttributeSelector attributeSelector,
                           final AttributeSettings attributesSettings) {
-        this.attributeSelectOptionFactory = attributeSelectOptionFactory;
+        this.attributeSelector = attributeSelector;
         this.attributesSettings = attributesSettings;
     }
 
@@ -37,7 +37,7 @@ public class AttributeHelperSource {
 
     public CharSequence withAttributeOptions(final Attribute attribute, final ProductProjection product,
                                              final ProductVariant variant, final Options options) throws IOException {
-        final List<SelectOption> attributeOptions = attributeSelectOptionFactory.createList(attribute.getName(), product, variant);
+        final List<SelectOption> attributeOptions = attributeSelector.options(attribute.getName(), product, variant);
         return attributeOptions.isEmpty() ? null : options.fn(attributeOptions);
     }
 

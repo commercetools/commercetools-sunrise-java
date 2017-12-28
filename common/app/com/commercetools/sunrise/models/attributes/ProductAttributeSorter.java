@@ -10,5 +10,5 @@ import java.util.Comparator;
 @ImplementedBy(ProductAttributeSorterImpl.class)
 public interface ProductAttributeSorter {
 
-    Comparator<Attribute> comparator(String attributeName, Referenceable<ProductType> productTypeRef);
+    Comparator<Attribute> compare(String attributeName, Referenceable<ProductType> productTypeRef);
 }
