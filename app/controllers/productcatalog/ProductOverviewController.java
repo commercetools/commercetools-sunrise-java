@@ -1,11 +1,10 @@
 package controllers.productcatalog;
 
-import com.commercetools.sunrise.core.components.controllers.PageHeaderControllerComponentSupplier;
 import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
@@ -23,7 +22,6 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 @NoCache
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
-        PageHeaderControllerComponentSupplier.class,
         ProductOverviewSearchControllerComponentsSupplier.class,
         MiniWishlistControllerComponent.class
 })

@@ -64,7 +64,7 @@ public final class DefaultCountries implements Countries {
             final List<CountryCode> projectCountries = projectProvider.get().getCountries();
             return projectCountries.isEmpty() ? singletonList(SYSTEM_DEFAULT_COUNTRY) : projectCountries;
         } catch (ProvisionException e) {
-            LOGGER.warn("Countries from CTP could not be provided, falling back to default country");
+            LOGGER.warn("Countries from CTP could not be provided, falling back to default country", e);
             return singletonList(SYSTEM_DEFAULT_COUNTRY);
         }
     }

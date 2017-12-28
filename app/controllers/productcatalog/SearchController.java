@@ -1,11 +1,10 @@
 package controllers.productcatalog;
 
-import com.commercetools.sunrise.core.components.controllers.PageHeaderControllerComponentSupplier;
 import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseSearchController;
 import com.commercetools.sunrise.productcatalog.productoverview.search.ProductOverviewSearchControllerComponentsSupplier;
@@ -17,7 +16,6 @@ import javax.inject.Inject;
 @NoCache
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
-        PageHeaderControllerComponentSupplier.class,
         ProductOverviewSearchControllerComponentsSupplier.class
 })
 public final class SearchController extends SunriseSearchController {

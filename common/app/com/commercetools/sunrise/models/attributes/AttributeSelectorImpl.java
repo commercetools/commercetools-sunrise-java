@@ -40,9 +40,9 @@ final class AttributeSelectorImpl extends ViewModelFactory implements AttributeS
                                       final ProductVariant selectedVariant) {
         final Comparator<Attribute> comparator = attributeSorter.compare(attributeName, selectedProduct.getProductType());
         return selectedProduct.getAllVariants().stream()
+                .filter(variant -> variant.getAttribute(attributeName) != null)
                 .collect(groupingBy(variant -> variant.getAttribute(attributeName)))
                 .entrySet().stream()
-                .filter(entry -> entry.getKey() != null)
                 .sorted((entry1, entry2) -> comparator.compare(entry1.getKey(), entry2.getKey()))
                 .map(entry -> createOption(attributeName, selectedProduct, selectedVariant, entry.getValue()))
                 .collect(toList());

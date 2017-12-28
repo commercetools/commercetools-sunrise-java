@@ -82,7 +82,7 @@ public class DefaultCustomerInSession extends DataFromResourceStoringOperations<
     }
 
     @Override
-    public Optional<Customer> findUserInfo() {
+    public Optional<Customer> findCustomer() {
         return session.findObjectByKey(userInfoSessionKey, Customer.class);
     }
 

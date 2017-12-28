@@ -1,12 +1,11 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.core.components.controllers.PageHeaderControllerComponentSupplier;
 import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
-import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.SunriseResetPasswordController;
@@ -22,8 +21,7 @@ import java.util.concurrent.CompletionStage;
 @LogMetrics
 @NoCache
 @RegisteredComponents({
-        TemplateControllerComponentsSupplier.class,
-        PageHeaderControllerComponentSupplier.class
+        TemplateControllerComponentsSupplier.class
 })
 public final class ResetPasswordController extends SunriseResetPasswordController {
     private final AuthenticationReverseRouter authenticationReverseRouter;

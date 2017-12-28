@@ -6,7 +6,9 @@ import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.core.viewmodels.PageDataFactory;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.carts.CartInSession;
 import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
+import com.commercetools.sunrise.models.customers.CustomerInSession;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -35,15 +37,20 @@ final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implemen
     private final PageDataFactory pageDataFactory;
     private final RequestHookRunner hookRunner;
     private final CategoryTree categoryTree;
+    private final CartInSession cartInSession;
+    private final CustomerInSession customerInSession;
 
     @Inject
     PageHtmlContentRenderer(final Locale locale, final TemplateEngine templateEngine, final CmsService cmsService,
                             final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner,
-                            @NavigationCategoryTree final CategoryTree categoryTree) {
+                            @NavigationCategoryTree final CategoryTree categoryTree, final CartInSession cartInSession,
+                            final CustomerInSession customerInSession) {
         super(locale, templateEngine, cmsService);
         this.pageDataFactory = pageDataFactory;
         this.hookRunner = hookRunner;
         this.categoryTree = categoryTree;
+        this.cartInSession = cartInSession;
+        this.customerInSession = customerInSession;
     }
 
     @Override
@@ -62,6 +69,8 @@ final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implemen
         pageData.put("product", pageContent.get("myproduct"));
         pageData.put("variant", pageContent.get("myvariant"));
         pageData.put("categoryTree", categoryTree);
+        pageData.put("cart", cartInSession.findCart().orElse(null));
+        pageData.put("customer", customerInSession.findCustomer().orElse(null));
         return pageData;
     }
 

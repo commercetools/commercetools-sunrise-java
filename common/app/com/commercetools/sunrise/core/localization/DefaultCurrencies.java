@@ -65,7 +65,7 @@ public final class DefaultCurrencies implements Currencies {
             final List<CurrencyUnit> projectCurrencies = projectProvider.get().getCurrencyUnits();
             return projectCurrencies.isEmpty() ? singletonList(SYSTEM_DEFAULT_CURRENCY) : projectCurrencies;
         } catch (ProvisionException e) {
-            LOGGER.warn("Currencies from CTP could not be provided, falling back to default currency");
+            LOGGER.warn("Currencies from CTP could not be provided, falling back to default currency", e);
             return singletonList(SYSTEM_DEFAULT_CURRENCY);
         }
     }

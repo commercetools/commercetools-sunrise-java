@@ -15,7 +15,7 @@ public interface CartInSession extends ResourceStoringOperations<Cart> {
 
     Optional<String> findCartId();
 
-    Optional<Cart> findMiniCart();
+    Optional<Cart> findCart();
 
     @Override
     void store(@Nullable final Cart cart);

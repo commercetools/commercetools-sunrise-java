@@ -1,12 +1,11 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.core.components.controllers.PageHeaderControllerComponentSupplier;
 import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
+import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.models.carts.CartDiscountCodesExpansionControllerComponent;
 import com.commercetools.sunrise.models.carts.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.shoppingcart.CartFinder;
@@ -26,7 +25,6 @@ import java.util.concurrent.CompletionStage;
 @NoCache
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
-        PageHeaderControllerComponentSupplier.class,
         CartOperationsControllerComponentSupplier.class,
         CartDiscountCodesExpansionControllerComponent.class,
         MiniWishlistControllerComponent.class

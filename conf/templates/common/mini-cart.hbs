@@ -1,13 +1,13 @@
 <!-- start common/mini-cart.hbs -->
-{{#if miniCart.lineItems }}
+{{#if cart.lineItems }}
   <button class="not-empty link-your-bag icon-hand-bag">
     <span class="hidden-xs hidden-sm">{{i18n "main:header.miniCart"}}</span>
-    <span class="cart-item-number">{{totalItemsCount miniCart}}</span>
+    <span class="cart-item-number">{{totalItemsCount cart}}</span>
   </button>
   <div class="col-xs-12">
     <div class="nav-minicart">
       <ul>
-        {{#each miniCart.lineItems}}
+        {{#each cart.lineItems}}
         <li>
           <form action="{{@root.meta._links.deleteLineItem.href}}" method="post">
             <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
@@ -29,7 +29,7 @@
         {{/each}}
       </ul>
       <div class="gradient"></div>
-      <p class="total-price">{{i18n "main:common.totalPrice" totalPrice=(total miniCart)}}</p>
+      <p class="total-price">{{i18n "main:common.totalPrice" totalPrice=(total cart)}}</p>
       <a href="{{@root.meta._links.cart.href}}" class="btn-grey">{{i18n "main:header.viewBag"}}</a>
       <a href="{{@root.meta._links.checkout.href}}" class="btn-yellow">{{i18n "main:header.checkout"}}</a>
     </div>
@@ -38,8 +38,8 @@
 <a href="{{@root.meta._links.cart.href}}" class="not-empty link-your-bag icon-hand-bag">
     <span class="hidden-xs hidden-sm">{{i18n "main:header.miniCart"}}</span>
     <span class="cart-item-number">
-        {{#if miniCart}}
-            {{totalItemsCount miniCart}}
+        {{#if cart}}
+            {{totalItemsCount cart}}
         {{else}}
             0
         {{/if}}

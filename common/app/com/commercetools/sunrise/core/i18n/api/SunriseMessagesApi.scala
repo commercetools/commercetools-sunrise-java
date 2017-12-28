@@ -96,7 +96,7 @@ class SunriseLangs @Inject()(configuration: Configuration, projectProvider: Prov
       if (projectLangs.isEmpty) Seq(Lang.defaultLang) else projectLangs
     } catch {
       case pe: ProvisionException =>
-        Logger.warn("Languages from CTP could not be provided, falling back to default locale")
+        Logger.warn("Languages from CTP could not be provided, falling back to default locale", pe)
         Seq(Lang.defaultLang)
     }
   }

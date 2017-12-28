@@ -1,7 +1,5 @@
 package controllers.myaccount;
 
-import com.commercetools.sunrise.email.EmailDeliveryException;
-import com.commercetools.sunrise.core.components.controllers.PageHeaderControllerComponentSupplier;
 import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
@@ -9,6 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.messages.MessageType;
+import com.commercetools.sunrise.email.EmailDeliveryException;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.RecoverPasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.RecoverPasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.SunriseRecoverPasswordController;
@@ -24,8 +23,7 @@ import java.util.concurrent.CompletionStage;
 @LogMetrics
 @NoCache
 @RegisteredComponents({
-        TemplateControllerComponentsSupplier.class,
-        PageHeaderControllerComponentSupplier.class
+        TemplateControllerComponentsSupplier.class
 })
 public final class RecoverPasswordController extends SunriseRecoverPasswordController {
     private final RecoverPasswordReverseRouter recoverPasswordReverseRouter;
