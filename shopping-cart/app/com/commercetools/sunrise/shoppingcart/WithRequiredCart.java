@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart;
 
+import com.commercetools.sunrise.models.carts.CartFinder;
 import io.sphere.sdk.carts.Cart;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;

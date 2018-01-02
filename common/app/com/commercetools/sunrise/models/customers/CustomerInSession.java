@@ -10,16 +10,14 @@ import java.util.Optional;
 /**
  * Keeps some parts from the customer in session, such as customer ID, email and some general info.
  */
-@ImplementedBy(DefaultCustomerInSession.class)
+@ImplementedBy(CustomerInSessionImpl.class)
 public interface CustomerInSession extends ResourceStoringOperations<Customer> {
 
     Optional<String> findCustomerId();
 
-    Optional<String> findCustomerEmail();
-
     Optional<String> findCustomerGroupId();
 
-    Optional<Customer> findCustomer();
+    Optional<String> findCustomerEmail();
 
     @Override
     void store(@Nullable final Customer customer);

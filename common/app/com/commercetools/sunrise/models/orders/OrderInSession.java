@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * Keeps the order ID in session.
  */
-@ImplementedBy(DefaultOrderInSession.class)
+@ImplementedBy(OrderInSessionImpl.class)
 public interface OrderInSession extends ResourceStoringOperations<Order> {
 
     Optional<String> findLastOrderId();

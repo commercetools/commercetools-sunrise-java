@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels;
 
-import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFinder;
 import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
 import com.commercetools.sunrise.core.viewmodels.forms.SelectableViewModelFactory;

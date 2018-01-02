@@ -6,15 +6,14 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
+import com.commercetools.sunrise.models.carts.CartCreator;
 import com.commercetools.sunrise.models.carts.CartDiscountCodesExpansionControllerComponent;
+import com.commercetools.sunrise.models.carts.CartFinder;
 import com.commercetools.sunrise.models.carts.CartOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.shoppingcart.CartCreator;
-import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.add.AddToCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.add.AddToCartFormData;
 import com.commercetools.sunrise.shoppingcart.add.SunriseAddToCartController;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
-import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -27,8 +26,7 @@ import java.util.concurrent.CompletionStage;
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
         CartOperationsControllerComponentSupplier.class,
-        CartDiscountCodesExpansionControllerComponent.class,
-        MiniWishlistControllerComponent.class
+        CartDiscountCodesExpansionControllerComponent.class
 })
 public final class AddToCartController extends SunriseAddToCartController {
 

@@ -5,7 +5,7 @@ import com.commercetools.sunrise.core.controllers.WithExecutionFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.wishlist.WishlistFinder;
+import com.commercetools.sunrise.models.shoppinglists.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.shoppinglists.ShoppingList;

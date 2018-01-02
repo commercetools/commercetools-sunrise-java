@@ -11,7 +11,7 @@ import com.commercetools.sunrise.models.carts.CartDiscountCodesExpansionControll
 import com.commercetools.sunrise.models.carts.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.models.carts.CartPaymentInfoExpansionControllerComponent;
 import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionControllerComponent;
-import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationFormData;

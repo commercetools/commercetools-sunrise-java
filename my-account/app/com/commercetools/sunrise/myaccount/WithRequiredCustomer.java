@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.myaccount;
 
+import com.commercetools.sunrise.models.customers.CustomerFinder;
 import io.sphere.sdk.customers.Customer;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;

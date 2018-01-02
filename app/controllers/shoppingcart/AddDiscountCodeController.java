@@ -7,13 +7,12 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.models.carts.CartDiscountCodesExpansionControllerComponent;
+import com.commercetools.sunrise.models.carts.CartFinder;
 import com.commercetools.sunrise.models.carts.CartOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.shoppingcart.CartFinder;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.AddDiscountCodeControllerAction;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.AddDiscountCodeFormData;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.SunriseAddDiscountCodeController;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
-import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
 import com.google.inject.Inject;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
@@ -28,8 +27,7 @@ import java.util.concurrent.CompletionStage;
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
         CartOperationsControllerComponentSupplier.class,
-        CartDiscountCodesExpansionControllerComponent.class,
-        MiniWishlistControllerComponent.class
+        CartDiscountCodesExpansionControllerComponent.class
 })
 public final class AddDiscountCodeController extends SunriseAddDiscountCodeController {
 

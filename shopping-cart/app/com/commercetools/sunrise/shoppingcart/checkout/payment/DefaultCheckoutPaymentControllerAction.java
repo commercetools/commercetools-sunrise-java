@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
-import com.commercetools.sunrise.shoppingcart.AbstractCartUpdateExecutor;
+import com.commercetools.sunrise.models.carts.AbstractCartUpdateExecutor;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.PaymentInfo;

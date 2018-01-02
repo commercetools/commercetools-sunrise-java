@@ -8,7 +8,7 @@ import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupp
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.models.customers.CustomerOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFinder;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsControllerAction;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;

@@ -6,7 +6,7 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.wishlist.WishlistFinder;
+import com.commercetools.sunrise.models.shoppinglists.WishlistFinder;
 import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistControllerAction;

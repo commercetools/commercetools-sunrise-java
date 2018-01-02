@@ -9,7 +9,6 @@ import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupp
 import com.commercetools.sunrise.productcatalog.home.HomeRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
 import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
-import com.commercetools.sunrise.wishlist.MiniWishlistControllerComponent;
 
 import javax.inject.Inject;
 
@@ -18,7 +17,6 @@ import javax.inject.Inject;
 @RegisteredComponents({
         TemplateControllerComponentsSupplier.class,
         HomeRecommendationsControllerComponent.class,
-        MiniWishlistControllerComponent.class
 })
 public final class HomeController extends SunriseHomeController {
 

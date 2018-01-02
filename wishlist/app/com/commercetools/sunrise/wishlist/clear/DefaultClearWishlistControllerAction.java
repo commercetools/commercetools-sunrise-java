@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.wishlist.clear;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.wishlist.AbstractShoppingListUpdateExecutor;
+import com.commercetools.sunrise.models.shoppinglists.AbstractShoppingListUpdateExecutor;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import io.sphere.sdk.shoppinglists.commands.ShoppingListUpdateCommand;

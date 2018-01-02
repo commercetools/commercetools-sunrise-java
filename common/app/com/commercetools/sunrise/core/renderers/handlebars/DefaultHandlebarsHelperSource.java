@@ -130,7 +130,7 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     public CharSequence oldPriceForLineItem(final LineItem object) {
         return ProductPriceUtils.calculatePreviousProductPrice(object)
-                .map(oldPrice -> formatPrice(oldPrice)).orElse("");
+                .map(this::formatPrice).orElse("");
     }
 
     public CharSequence formatPrice(final MonetaryAmount object) {

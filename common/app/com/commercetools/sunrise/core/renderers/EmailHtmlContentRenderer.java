@@ -6,6 +6,9 @@ import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 
 import javax.inject.Inject;
 import java.util.Locale;
+import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 final class EmailHtmlContentRenderer extends AbstractHtmlContentRenderer implements EmailContentRenderer {
 
@@ -15,9 +18,9 @@ final class EmailHtmlContentRenderer extends AbstractHtmlContentRenderer impleme
     }
 
     @Override
-    public PageData buildPageData(final PageContent pageContent) {
+    public CompletionStage<PageData> buildPageData(final PageContent pageContent) {
         final PageData pageData = new PageData();
         pageData.setContent(pageContent);
-        return pageData;
+        return completedFuture(pageData);
     }
 }

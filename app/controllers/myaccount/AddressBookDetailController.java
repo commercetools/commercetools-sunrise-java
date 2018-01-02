@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.models.customers.CustomerOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFinder;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.SunriseAddressBookDetailController;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import play.mvc.Result;

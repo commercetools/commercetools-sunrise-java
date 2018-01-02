@@ -1,0 +1,21 @@
+package com.commercetools.sunrise.models.shoppinglists;
+
+import com.commercetools.sunrise.core.controllers.ResourceFinder;
+import com.google.inject.ImplementedBy;
+import io.sphere.sdk.shoppinglists.ShoppingList;
+
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
+
+@FunctionalInterface
+@ImplementedBy(DefaultWishlistFinder.class)
+public interface WishlistFinder extends ResourceFinder, Supplier<CompletionStage<Optional<ShoppingList>>> {
+    /**
+     * If the current session contains a signed in customer or a previously created wishlist, this wishlist
+     * will be returned. Otherwise an empty optional will be returned.
+     *
+     * @return the completion stage for the wishlist
+     */
+    CompletionStage<Optional<ShoppingList>> get();
+}

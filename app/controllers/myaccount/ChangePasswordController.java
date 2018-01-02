@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.myaccount.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFinder;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.SunriseChangePasswordController;

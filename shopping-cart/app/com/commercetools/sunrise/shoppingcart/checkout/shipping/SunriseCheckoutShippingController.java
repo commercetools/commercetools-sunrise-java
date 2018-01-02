@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFinder;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels.CheckoutShippingPageContentFactory;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;

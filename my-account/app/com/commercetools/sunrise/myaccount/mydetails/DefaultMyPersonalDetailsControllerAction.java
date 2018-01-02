@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.myaccount.AbstractCustomerUpdateExecutor;
+import com.commercetools.sunrise.models.customers.AbstractCustomerUpdateExecutor;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;

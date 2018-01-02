@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * Keeps the current country in session.
  */
-@ImplementedBy(DefaultCountryInSession.class)
+@ImplementedBy(CountryInSessionImpl.class)
 public interface CountryInSession extends ResourceStoringOperations<CountryCode> {
 
     Optional<CountryCode> findCountry();

@@ -10,7 +10,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.models.carts.CartDiscountCodesExpansionControllerComponent;
 import com.commercetools.sunrise.models.carts.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.models.carts.CartPaymentInfoExpansionControllerComponent;
-import com.commercetools.sunrise.shoppingcart.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFinder;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentFormData;
