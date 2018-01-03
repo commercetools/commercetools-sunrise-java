@@ -22,7 +22,7 @@ final class WishlistInSessionImpl implements WishlistInSession {
     WishlistInSessionImpl(final Configuration globalConfig, final StoringStrategy storingStrategy) {
         final Configuration config = globalConfig.getConfig("sunrise.wishlists");
         this.cookieName = config.getString("cookieName");
-        this.cookieSecure = config.getBoolean("cookieHttpOnly");
+        this.cookieSecure = config.getBoolean("cookieSecure");
         this.cookieHttpOnly = config.getBoolean("cookieHttpOnly");
         this.storingStrategy = storingStrategy;
     }

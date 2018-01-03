@@ -28,7 +28,7 @@ final class CustomerInSessionImpl implements CustomerInSession {
         this.cookieName = config.getString("cookieName");
         this.emailSessionKey = config.getString("emailSessionKey");
         this.customerGroupSessionKey = config.getString("customerGroupSessionKey");
-        this.cookieSecure = config.getBoolean("cookieHttpOnly");
+        this.cookieSecure = config.getBoolean("cookieSecure");
         this.cookieHttpOnly = config.getBoolean("cookieHttpOnly");
         this.storingStrategy = storingStrategy;
     }

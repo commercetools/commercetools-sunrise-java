@@ -24,7 +24,7 @@ final class CartInSessionImpl implements CartInSession {
     CartInSessionImpl(final Configuration globalConfig, final StoringStrategy storingStrategy) {
         final Configuration config = globalConfig.getConfig("sunrise.carts");
         this.cookieName = config.getString("cookieName");
-        this.cookieSecure = config.getBoolean("cookieHttpOnly");
+        this.cookieSecure = config.getBoolean("cookieSecure");
         this.cookieHttpOnly = config.getBoolean("cookieHttpOnly");
         this.storingStrategy = storingStrategy;
     }
