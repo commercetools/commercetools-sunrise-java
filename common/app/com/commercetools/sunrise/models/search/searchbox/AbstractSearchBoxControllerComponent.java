@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.search.searchbox;
 
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.models.search.searchbox.viewmodels.WithSearchBoxViewModel;

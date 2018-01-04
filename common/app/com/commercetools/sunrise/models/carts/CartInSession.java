@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.sessions.ResourceStoringOperations;
+import com.commercetools.sunrise.core.sessions.ResourceInSession;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.Cart;
 
@@ -11,9 +11,13 @@ import java.util.Optional;
  * Keeps some parts from the cart in session, such as cart ID and mini cart.
  */
 @ImplementedBy(CartInSessionImpl.class)
-public interface CartInSession extends ResourceStoringOperations<Cart> {
+public interface CartInSession extends ResourceInSession<Cart> {
 
-    Optional<String> findCartId();
+    @Override
+    Optional<String> findId();
+
+    @Override
+    Optional<Long> findVersion();
 
     @Override
     void store(@Nullable final Cart cart);

@@ -31,7 +31,9 @@ final class CountryInSessionImpl implements CountryInSession {
 
     @Override
     public Optional<CountryCode> findCountry() {
-        return storingStrategy.findInCookies(cookieName).map(CountryCode::getByCode);
+        return storingStrategy.findInCookies(cookieName)
+                .map(CountryCode::getByCode)
+                .filter(country -> country != null && !country.equals(CountryCode.UNDEFINED));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.ctprequests.CartQueryHook;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.expansion.CartExpansionModel;

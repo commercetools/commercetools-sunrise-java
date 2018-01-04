@@ -57,8 +57,8 @@ public class DefaultCartCreator extends AbstractCartCreateExecutor implements Ca
         return CartDraftBuilder.of(currency)
                 .country(country)
                 .shippingAddress(Address.of(country))
-                .customerId(customerInSession.findCustomerId().orElse(null))
-                .customerEmail(customerInSession.findCustomerEmail().orElse(null))
+                .customerId(customerInSession.findId().orElse(null))
+                .customerEmail(customerInSession.findEmail().orElse(null))
                 .build();
     }
 }

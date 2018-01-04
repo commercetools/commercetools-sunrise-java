@@ -1,15 +1,11 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.models.carts.CartCreator;
-import com.commercetools.sunrise.models.carts.CartDiscountCodesExpansionControllerComponent;
 import com.commercetools.sunrise.models.carts.CartFinder;
-import com.commercetools.sunrise.models.carts.CartOperationsControllerComponentSupplier;
 import com.commercetools.sunrise.shoppingcart.add.AddToCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.add.AddToCartFormData;
 import com.commercetools.sunrise.shoppingcart.add.SunriseAddToCartController;
@@ -23,11 +19,6 @@ import java.util.concurrent.CompletionStage;
 
 @LogMetrics
 @NoCache
-@RegisteredComponents({
-        TemplateControllerComponentsSupplier.class,
-        CartOperationsControllerComponentSupplier.class,
-        CartDiscountCodesExpansionControllerComponent.class
-})
 public final class AddToCartController extends SunriseAddToCartController {
 
     private final CartReverseRouter cartReverseRouter;

@@ -8,8 +8,10 @@ import io.sphere.sdk.carts.commands.updateactions.ChangeLineItemQuantity;
 import io.sphere.sdk.client.SphereClient;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.concurrent.CompletionStage;
 
+@Singleton
 public class DefaultChangeQuantityInCartControllerAction extends AbstractCartUpdateExecutor implements ChangeQuantityInCartControllerAction {
 
     @Inject

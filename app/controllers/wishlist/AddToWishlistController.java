@@ -1,14 +1,11 @@
 package controllers.wishlist;
 
-import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.models.shoppinglists.WishlistCreator;
 import com.commercetools.sunrise.models.shoppinglists.WishlistFinder;
-import com.commercetools.sunrise.wishlist.WishlistInSessionControllerComponent;
 import com.commercetools.sunrise.wishlist.add.AddToWishlistControllerAction;
 import com.commercetools.sunrise.wishlist.add.AddToWishlistFormData;
 import com.commercetools.sunrise.wishlist.add.SunriseAddToWishlistController;
@@ -22,10 +19,6 @@ import java.util.concurrent.CompletionStage;
 
 @LogMetrics
 @NoCache
-@RegisteredComponents({
-        TemplateControllerComponentsSupplier.class,
-        WishlistInSessionControllerComponent.class
-})
 public final class AddToWishlistController extends SunriseAddToWishlistController {
 
     private final WishlistReverseRouter reverseRouter;

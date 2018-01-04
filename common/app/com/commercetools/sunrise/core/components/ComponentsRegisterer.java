@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.core.components.controllers;
+package com.commercetools.sunrise.core.components;
 
 import com.commercetools.sunrise.core.hooks.ComponentRegistry;
 import play.inject.Injector;
@@ -27,14 +27,8 @@ final class ComponentsRegisterer extends Action<RegisteredComponents> {
         if (configuration.value().length > 0) {
             // On creation of this action there isn't any HTTP context, necessary to initialize the ComponentRegistry
             final ComponentRegistry componentRegistry = injector.instanceOf(ComponentRegistry.class);
-            Arrays.stream(configuration.value())
-                    .forEach(componentClass -> registerComponent(componentRegistry, componentClass));
+            Arrays.stream(configuration.value()).forEach(componentRegistry::add);
         }
         return delegate.call(ctx);
-    }
-
-    private void registerComponent(final ComponentRegistry componentRegistry, final Class<? extends ControllerComponentSupplier> componentClass) {
-        final ControllerComponentSupplier controllerComponent = injector.instanceOf(componentClass);
-        componentRegistry.addAll(controllerComponent.get());
     }
 }

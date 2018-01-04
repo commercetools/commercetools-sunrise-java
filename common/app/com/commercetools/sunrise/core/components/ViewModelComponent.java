@@ -1,9 +1,8 @@
-package com.commercetools.sunrise.core.components.viewmodels;
+package com.commercetools.sunrise.core.components;
 
 import com.commercetools.sunrise.core.viewmodels.ViewModel;
-import com.commercetools.sunrise.core.components.SunriseComponent;
 
-public class ViewModelComponent extends ViewModel implements SunriseComponent {
+public class ViewModelComponent extends ViewModel implements Component {
 
     private String templateName;
 

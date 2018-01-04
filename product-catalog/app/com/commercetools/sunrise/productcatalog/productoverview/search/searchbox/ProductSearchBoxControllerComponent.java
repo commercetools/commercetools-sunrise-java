@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productoverview.search.searchbox;
 
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.ctprequests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.models.search.searchbox.AbstractSearchBoxControllerComponent;
 import io.sphere.sdk.models.LocalizedStringEntry;

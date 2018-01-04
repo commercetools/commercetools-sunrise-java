@@ -37,7 +37,7 @@ public class DefaultLogInControllerAction extends AbstractCustomerSignInExecutor
     }
 
     protected CustomerSignInCommand buildRequest(final LogInFormData formData) {
-        final String cartId = cartInSession.findCartId().orElse(null);
+        final String cartId = cartInSession.findId().orElse(null);
         return CustomerSignInCommand.of(formData.username(), formData.password(), cartId);
     }
 

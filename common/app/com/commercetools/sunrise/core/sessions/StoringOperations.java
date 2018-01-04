@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
  * the provided object is stored, which should be specified by the implementation class.
  * @param <T> Class of the stored object
  */
-public interface ResourceStoringOperations<T> {
+public interface StoringOperations<T> {
 
     /**
      * Stores the object, replacing it if a previous version already existed.

@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.core.components.controllers;
+package com.commercetools.sunrise.core.components;
 
 import play.mvc.With;
 
@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegisteredComponents {
-    Class<? extends ControllerComponentSupplier>[] value();
+    Class<? extends ControllerComponent>[] value();
 }

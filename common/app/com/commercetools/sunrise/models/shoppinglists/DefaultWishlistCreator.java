@@ -43,6 +43,6 @@ public class DefaultWishlistCreator extends AbstractShoppingListCreateExecutor i
     }
 
     private Optional<Reference<Customer>> customerReference() {
-        return customerInSession.findCustomerId().map(Customer::referenceOfId);
+        return customerInSession.findId().map(Customer::referenceOfId);
     }
 }

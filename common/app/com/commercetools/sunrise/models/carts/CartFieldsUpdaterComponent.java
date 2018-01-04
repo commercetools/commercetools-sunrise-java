@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.ctpactions.CartLoadedActionHook;
 import com.commercetools.sunrise.core.hooks.ctpactions.CustomerSignedInActionHook;
 import com.commercetools.sunrise.core.injection.RequestScoped;
@@ -27,13 +27,13 @@ import java.util.concurrent.CompletionStage;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @RequestScoped
-public class CartFieldsUpdaterControllerComponent implements ControllerComponent, CartLoadedActionHook, CustomerSignedInActionHook {
+public class CartFieldsUpdaterComponent implements ControllerComponent, CartLoadedActionHook, CustomerSignedInActionHook {
 
     private final CountryCode country;
     private final SphereClient sphereClient;
 
     @Inject
-    public CartFieldsUpdaterControllerComponent(final CountryCode country, final SphereClient sphereClient) {
+    public CartFieldsUpdaterComponent(final CountryCode country, final SphereClient sphereClient) {
         this.country = country;
         this.sphereClient = sphereClient;
     }

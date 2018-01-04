@@ -1,13 +1,18 @@
+import com.commercetools.sunrise.core.hooks.GlobalComponentRegistry;
 import com.commercetools.sunrise.core.injection.RequestScoped;
+import com.commercetools.sunrise.core.renderers.TemplateComponentSupplier;
 import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
+import com.commercetools.sunrise.models.carts.CartComponentSupplier;
+import com.commercetools.sunrise.models.customers.CustomerComponentSupplier;
 import com.commercetools.sunrise.models.customers.CustomerInSession;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.AlphabeticallySortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.CustomSortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.TermFacetViewModelFactory;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
 import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinderByCategoryWithMatchingVariants;
+import com.commercetools.sunrise.wishlist.WishlistStoringComponent;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
@@ -92,5 +97,16 @@ public class Module extends AbstractModule {
         return PriceSelection.of(currency)
                 .withPriceCountry(country)
                 .withPriceCustomerGroupId(customerInSession.findCustomerGroupId().orElse(null));
+    }
+
+    @Provides
+    @Singleton
+    public GlobalComponentRegistry provideGlobalComponentRegistry() {
+        final GlobalComponentRegistry globalComponentRegistry = new GlobalComponentRegistry();
+        globalComponentRegistry.addAll(CartComponentSupplier.get());
+        globalComponentRegistry.addAll(CustomerComponentSupplier.get());
+        globalComponentRegistry.addAll(TemplateComponentSupplier.get());
+        globalComponentRegistry.add(WishlistStoringComponent.class);
+        return globalComponentRegistry;
     }
 }

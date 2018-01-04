@@ -9,12 +9,9 @@ import scala.Option;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-/**
- * Uses a session cookie to store information about the user.
- */
-public abstract class AbstractStoringStrategy implements StoringStrategy {
+final class StoringStrategyImpl implements StoringStrategy {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(StoringStrategy.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StoringStrategy.class);
 
     @Override
     public Optional<String> findInSession(final String key) {

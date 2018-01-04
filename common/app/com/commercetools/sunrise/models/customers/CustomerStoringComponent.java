@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.customers;
 
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.ctpevents.CustomerLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CustomerSignInResultLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CustomerUpdatedHook;
@@ -12,34 +12,35 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public final class CustomerInSessionControllerComponent implements ControllerComponent, CustomerSignInResultLoadedHook, CustomerUpdatedHook, CustomerLoadedHook {
+public final class CustomerStoringComponent implements ControllerComponent, CustomerSignInResultLoadedHook, CustomerUpdatedHook, CustomerLoadedHook {
 
     private final CustomerInSession customerInSession;
+    private final CustomerInCache customerInCache;
 
     @Inject
-    CustomerInSessionControllerComponent(final CustomerInSession customerInSession) {
+    CustomerStoringComponent(final CustomerInSession customerInSession, final CustomerInCache customerInCache) {
         this.customerInSession = customerInSession;
+        this.customerInCache = customerInCache;
     }
 
     @Override
     public CompletionStage<?> onCustomerSignInResultLoaded(final CustomerSignInResult customerSignInResult) {
-        overwriteCustomerInSession(customerSignInResult.getCustomer());
-        return completedFuture(null);
+        return storeCustomer(customerSignInResult.getCustomer());
     }
 
     @Override
     public CompletionStage<?> onCustomerUpdated(final Customer customer) {
-        overwriteCustomerInSession(customer);
-        return completedFuture(null);
+        return storeCustomer(customer);
     }
 
     @Override
     public CompletionStage<?> onCustomerLoaded(final Customer customer) {
-        overwriteCustomerInSession(customer);
-        return completedFuture(null);
+        return storeCustomer(customer);
     }
 
-    private void overwriteCustomerInSession(final Customer customer) {
+    private CompletionStage<?> storeCustomer(final Customer customer) {
         customerInSession.store(customer);
+        customerInCache.store(customer);
+        return completedFuture(null);
     }
 }

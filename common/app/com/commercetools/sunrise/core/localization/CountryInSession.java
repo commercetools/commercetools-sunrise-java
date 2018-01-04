@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.core.localization;
 
-import com.commercetools.sunrise.core.sessions.ResourceStoringOperations;
+import com.commercetools.sunrise.core.sessions.StoringOperations;
 import com.google.inject.ImplementedBy;
 import com.neovisionaries.i18n.CountryCode;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
  * Keeps the current country in session.
  */
 @ImplementedBy(CountryInSessionImpl.class)
-public interface CountryInSession extends ResourceStoringOperations<CountryCode> {
+public interface CountryInSession extends StoringOperations<CountryCode> {
 
     Optional<CountryCode> findCountry();
 

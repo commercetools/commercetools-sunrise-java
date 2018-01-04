@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AbstractResourceStoringOperationsTest {
+public class AbstractResourceInSessionTest {
 
     @Test
     public void overwritesRelatedValues() throws Exception {
@@ -41,8 +41,8 @@ public class AbstractResourceStoringOperationsTest {
         });
     }
 
-    private void testInitializedSession(final Consumer<TestableStringInAbstractResourceStoringOperations> test) {
-        final TestableStringInAbstractResourceStoringOperations stringInSession = new TestableStringInAbstractResourceStoringOperations();
+    private void testInitializedSession(final Consumer<TestableStringInAbstractResourceInSession> test) {
+        final TestableStringInAbstractResourceInSession stringInSession = new TestableStringInAbstractResourceInSession();
         stringInSession.store("some-value");
 
         assertThat(stringInSession.findValue())
@@ -55,11 +55,11 @@ public class AbstractResourceStoringOperationsTest {
         test.accept(stringInSession);
     }
 
-    private static class TestableStringInAbstractResourceStoringOperations extends AbstractResourceStoringOperations<String> {
+    private static class TestableStringInAbstractResourceInSession extends AbstractResourceInSession<String> {
 
         private final Map<String, String> session;
 
-        TestableStringInAbstractResourceStoringOperations() {
+        TestableStringInAbstractResourceInSession() {
             this.session = new HashMap<>();
         }
 

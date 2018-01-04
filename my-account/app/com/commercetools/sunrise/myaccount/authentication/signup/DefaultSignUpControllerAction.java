@@ -39,7 +39,7 @@ public class DefaultSignUpControllerAction extends AbstractCustomerSignInExecuto
     }
 
     private CustomerDraft buildDraft(final SignUpFormData formData) {
-        final String cartId = cartInSession.findCartId().orElse(null);
+        final String cartId = cartInSession.findId().orElse(null);
         return CustomerDraftBuilder.of(formData.customerDraft())
                 .customerNumber(generateCustomerNumber())
                 .anonymousCartId(cartId)

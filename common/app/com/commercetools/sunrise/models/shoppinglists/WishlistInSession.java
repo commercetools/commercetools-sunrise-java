@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.shoppinglists;
 
-import com.commercetools.sunrise.core.sessions.ResourceStoringOperations;
+import com.commercetools.sunrise.core.sessions.ResourceInSession;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
  * This interface describes the operations to store and retrieve parts of a wishlist in the session.
  */
 @ImplementedBy(WishlistInSessionImpl.class)
-public interface WishlistInSession extends ResourceStoringOperations<ShoppingList> {
+public interface WishlistInSession extends ResourceInSession<ShoppingList> {
 
     /**
      * Returns the wishlist ID stored in the current session.
@@ -20,7 +20,18 @@ public interface WishlistInSession extends ResourceStoringOperations<ShoppingLis
      *
      * @return the optional wishlist ID
      */
-    Optional<String> findWishlistId();
+    @Override
+    Optional<String> findId();
+
+    /**
+     * Returns the wishlist version stored in the current session.
+     *
+     * @see ShoppingList#getVersion()
+     *
+     * @return the optional wishlist version
+     */
+    @Override
+    Optional<Long> findVersion();
 
     /**
      * Stores the given wishlist in the current session.

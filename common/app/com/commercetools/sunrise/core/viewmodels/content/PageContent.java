@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.core.viewmodels.content;
 
-import com.commercetools.sunrise.core.components.viewmodels.ViewModelComponent;
+import com.commercetools.sunrise.core.components.ViewModelComponent;
 import com.commercetools.sunrise.core.viewmodels.ViewModel;
 import com.commercetools.sunrise.core.viewmodels.content.messages.MessageViewModel;
 

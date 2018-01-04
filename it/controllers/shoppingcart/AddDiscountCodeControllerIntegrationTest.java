@@ -79,7 +79,7 @@ public class AddDiscountCodeControllerIntegrationTest extends WithSphereClient {
     @Test
     public void showsErrorOnNonExistentDiscountCode() throws Exception {
         withTaxedAndFilledCart(cart -> {
-            when(cartInSession.findCartId()).thenReturn(Optional.of(cart.getId()));
+            when(cartInSession.findId()).thenReturn(Optional.of(cart.getId()));
 
             final Map<String, String> bodyForm = new HashMap<>();
             bodyForm.put("code", "NON");
@@ -99,7 +99,7 @@ public class AddDiscountCodeControllerIntegrationTest extends WithSphereClient {
     public void shouldAcceptAndApplyValidDiscountCode() throws Exception {
         withCartDiscountAndDiscountCode(discountCode -> {
             withTaxedAndFilledCart(cart -> {
-                when(cartInSession.findCartId()).thenReturn(Optional.of(cart.getId()));
+                when(cartInSession.findId()).thenReturn(Optional.of(cart.getId()));
 
                 final Map<String, String> bodyForm = new HashMap<>();
                 bodyForm.put("code", discountCode.getCode());

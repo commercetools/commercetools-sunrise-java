@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.productdetail;
 
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.recommendations.ProductRecommender;
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContent;

@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.models.carts.CartFieldsUpdaterControllerComponent;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.CartUpdateCommand;
@@ -16,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CartFieldsUpdaterControllerComponentTest {
+public class CartFieldsUpdaterComponentTest {
 
     private static final CountryCode CURRENT_COUNTRY = CountryCode.DE;
 
@@ -77,7 +76,7 @@ public class CartFieldsUpdaterControllerComponentTest {
                 .doesNotContain(SetCustomerEmail.of("some@email.com"));
     }
 
-    private CartFieldsUpdaterControllerComponent component() {
-        return new CartFieldsUpdaterControllerComponent(CURRENT_COUNTRY, null);
+    private CartFieldsUpdaterComponent component() {
+        return new CartFieldsUpdaterComponent(CURRENT_COUNTRY, null);
     }
 }

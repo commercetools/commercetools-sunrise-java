@@ -6,8 +6,6 @@ import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartState;
 import io.sphere.sdk.carts.queries.CartQuery;
 import io.sphere.sdk.client.SphereClient;
-import play.cache.CacheApi;
-import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -19,16 +17,13 @@ public class DefaultCartFinder extends AbstractSingleCartQueryExecutor implement
 
     private final CartInSession cartInSession;
     private final CustomerInSession customerInSession;
-    private final CacheApi cacheApi;
 
     @Inject
     protected DefaultCartFinder(final SphereClient sphereClient, final HookRunner hookRunner,
-                                final CartInSession cartInSession, final CustomerInSession customerInSession,
-                                final CacheApi cacheApi) {
+                                final CartInSession cartInSession, final CustomerInSession customerInSession) {
         super(sphereClient, hookRunner);
         this.cartInSession = cartInSession;
         this.customerInSession = customerInSession;
-        this.cacheApi = cacheApi;
     }
 
     protected final CartInSession getCartInSession() {
@@ -39,56 +34,25 @@ public class DefaultCartFinder extends AbstractSingleCartQueryExecutor implement
         return customerInSession;
     }
 
-    protected final CacheApi getCacheApi() {
-        return cacheApi;
-    }
-
     @Override
     public CompletionStage<Optional<Cart>> get() {
-        return generateCacheKey().map(this::findInCacheOrFetch)
-                .orElseGet(() -> completedFuture(Optional.empty()));
+        return buildRequest().map(this::executeRequest).orElseGet(() -> completedFuture(Optional.empty()));
     }
 
-    protected CompletionStage<Optional<CartQuery>> buildRequest() {
-        final Optional<CartQuery> cartQuery = tryBuildQueryByCustomerId()
+    protected Optional<CartQuery> buildRequest() {
+        return tryBuildQueryByCustomerId()
                 .map(Optional::of)
                 .orElseGet(this::tryBuildQueryByCartId)
                 .map(this::decorateQueryWithAdditionalInfo);
-        return completedFuture(cartQuery);
-    }
-
-    protected final Optional<String> generateCacheKey() {
-        return cartInSession.findCartId().map(cartId -> "cart_" + cartId);
-    }
-
-    private CompletionStage<Optional<Cart>> findInCacheOrFetch(final String cacheKey) {
-        final Cart nullableCart = cacheApi.get(cacheKey);
-        return Optional.ofNullable(nullableCart)
-                .map(cart -> (CompletionStage<Optional<Cart>>) completedFuture(Optional.of(cart)))
-                .orElseGet(() -> fetchAndStoreCart(cacheKey));
-    }
-
-    private CompletionStage<Optional<Cart>> fetchAndStoreCart(final String cacheKey) {
-        final CompletionStage<Optional<Cart>> cartStage = fetchCart();
-        cartStage.thenAcceptAsync(cartOpt ->
-                cartOpt.ifPresent(cart -> cacheApi.set(cacheKey, cart)),
-                HttpExecution.defaultContext());
-        return cartStage;
-    }
-
-    private CompletionStage<Optional<Cart>> fetchCart() {
-        return buildRequest().thenComposeAsync(request ->
-                request.map(this::executeRequest).orElseGet(() -> completedFuture(Optional.empty())),
-                HttpExecution.defaultContext());
     }
 
     private Optional<CartQuery> tryBuildQueryByCustomerId() {
-        return customerInSession.findCustomerId()
+        return customerInSession.findId()
                 .map(customerId -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId)));
     }
 
     private Optional<CartQuery> tryBuildQueryByCartId() {
-        return cartInSession.findCartId()
+        return cartInSession.findId()
                 .map(cartId -> CartQuery.of().plusPredicates(cart -> cart.id().is(cartId)));
     }
 

@@ -1,55 +1,52 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.ctpevents.CartCreatedHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CartLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CartUpdatedHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CustomerSignInResultLoadedHook;
-import com.commercetools.sunrise.core.injection.RequestScoped;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.customers.CustomerSignInResult;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-@RequestScoped
-public final class CartInSessionControllerComponent implements ControllerComponent, CartLoadedHook, CartUpdatedHook, CartCreatedHook, CustomerSignInResultLoadedHook {
+public final class CartStoringComponent implements ControllerComponent, CartLoadedHook, CartUpdatedHook, CartCreatedHook, CustomerSignInResultLoadedHook {
 
     private final CartInSession cartInSession;
+    private final CartInCache cartInCache;
 
     @Inject
-    CartInSessionControllerComponent(final CartInSession cartInSession) {
+    CartStoringComponent(final CartInSession cartInSession, final CartInCache cartInCache) {
         this.cartInSession = cartInSession;
+        this.cartInCache = cartInCache;
     }
 
     @Override
     public CompletionStage<?> onCartLoaded(final Cart cart) {
-        overwriteCartInSession(cart);
-        return completedFuture(null);
+        return storeCart(cart);
     }
 
     @Override
     public CompletionStage<?> onCartUpdated(final Cart cart) {
-        overwriteCartInSession(cart);
-        return completedFuture(null);
+        return storeCart(cart);
     }
 
     @Override
     public CompletionStage<?> onCartCreated(final Cart cart) {
-        overwriteCartInSession(cart);
-        return completedFuture(null);
+        return storeCart(cart);
     }
 
     @Override
     public CompletionStage<?> onCustomerSignInResultLoaded(final CustomerSignInResult customerSignInResult) {
-        overwriteCartInSession(customerSignInResult.getCart());
-        return completedFuture(null);
+        return storeCart(customerSignInResult.getCart());
     }
 
-    private void overwriteCartInSession(@Nullable final Cart cart) {
+    private CompletionStage<?> storeCart(final Cart cart) {
         cartInSession.store(cart);
+        cartInCache.store(cart);
+        return completedFuture(null);
     }
 }

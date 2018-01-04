@@ -1,4 +1,4 @@
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.Hook;
 import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;

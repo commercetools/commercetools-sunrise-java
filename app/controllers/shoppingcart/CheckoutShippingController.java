@@ -1,16 +1,13 @@
 package controllers.shoppingcart;
 
-import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.core.components.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.models.carts.CartDiscountCodesExpansionControllerComponent;
-import com.commercetools.sunrise.models.carts.CartOperationsControllerComponentSupplier;
-import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionControllerComponent;
 import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormData;
@@ -27,10 +24,7 @@ import java.util.concurrent.CompletionStage;
 @LogMetrics
 @NoCache
 @RegisteredComponents({
-        TemplateControllerComponentsSupplier.class,
         CheckoutStepControllerComponent.class,
-        CartOperationsControllerComponentSupplier.class,
-        CartDiscountCodesExpansionControllerComponent.class,
         CartShippingInfoExpansionControllerComponent.class
 })
 public final class CheckoutShippingController extends SunriseCheckoutShippingController {

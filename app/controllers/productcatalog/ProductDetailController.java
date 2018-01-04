@@ -1,10 +1,9 @@
 package controllers.productcatalog;
 
-import com.commercetools.sunrise.core.components.controllers.RegisteredComponents;
+import com.commercetools.sunrise.core.components.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.renderers.TemplateControllerComponentsSupplier;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductRecommendationsControllerComponent;
@@ -21,10 +20,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @LogMetrics
 @NoCache
-@RegisteredComponents({
-        TemplateControllerComponentsSupplier.class,
-        ProductRecommendationsControllerComponent.class,
-})
+@RegisteredComponents(ProductRecommendationsControllerComponent.class)
 public final class ProductDetailController extends SunriseProductDetailController {
 
     private final ProductReverseRouter productReverseRouter;

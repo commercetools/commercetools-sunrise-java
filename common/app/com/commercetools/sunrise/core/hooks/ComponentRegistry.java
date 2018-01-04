@@ -1,14 +1,18 @@
 package com.commercetools.sunrise.core.hooks;
 
-import com.commercetools.sunrise.core.components.SunriseComponent;
+import com.commercetools.sunrise.core.components.Component;
 import com.google.inject.ImplementedBy;
+
+import java.util.List;
 
 @ImplementedBy(HookContextImpl.class)
 public interface ComponentRegistry {
 
-    void add(SunriseComponent component);
+    List<Class<? extends Component>> components();
 
-    default void addAll(Iterable<? extends SunriseComponent> components) {
+    void add(Class<? extends Component> component);
+
+    default void addAll(Iterable<Class<? extends Component>> components) {
         components.forEach(this::add);
     }
 }

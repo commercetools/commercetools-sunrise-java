@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.core.reverserouters;
 
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.core.viewmodels.meta.PageMeta;

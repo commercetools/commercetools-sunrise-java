@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.home;
 
-import com.commercetools.sunrise.core.components.controllers.ControllerComponent;
+import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;

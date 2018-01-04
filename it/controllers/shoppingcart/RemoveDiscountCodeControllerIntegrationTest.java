@@ -81,7 +81,7 @@ public class RemoveDiscountCodeControllerIntegrationTest extends WithSphereClien
     public void shouldRemoveDiscountCode() throws Exception {
         withCartDiscountAndDiscountCode(discountCode -> {
             withTaxedFilledAndDiscountedCart(discountCode, cart -> {
-                when(cartInSession.findCartId()).thenReturn(Optional.of(cart.getId()));
+                when(cartInSession.findId()).thenReturn(Optional.of(cart.getId()));
 
                 final Map<String, String> bodyForm = new HashMap<>();
                 bodyForm.put("discountCodeId", discountCode.getId());
