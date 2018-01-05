@@ -1,4 +1,4 @@
 package com.commercetools.sunrise.core.controllers;
 
-public interface ResourceFinder {
+public interface ResourceFinder<T> {
 }

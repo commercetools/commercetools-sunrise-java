@@ -7,6 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
+import com.commercetools.sunrise.models.orders.OrderFetcher;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.viewmodels.CheckoutThankYouPageContentFactory;
 import io.sphere.sdk.orders.Order;
 import play.mvc.Result;
@@ -19,11 +20,11 @@ import java.util.concurrent.CompletionStage;
  */
 public abstract class SunriseCheckoutThankYouController extends SunriseContentController implements WithQueryFlow<Order>, WithRequiredOrderCreated {
 
-    private final OrderCreatedFinder orderCreatedFinder;
+    private final OrderFetcher orderCreatedFinder;
     private final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory;
 
     protected SunriseCheckoutThankYouController(final ContentRenderer contentRenderer,
-                                                final OrderCreatedFinder orderCreatedFinder,
+                                                final OrderFetcher orderCreatedFinder,
                                                 final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory) {
         super(contentRenderer);
         this.orderCreatedFinder = orderCreatedFinder;
@@ -31,7 +32,7 @@ public abstract class SunriseCheckoutThankYouController extends SunriseContentCo
     }
 
     @Override
-    public final OrderCreatedFinder getOrderCreatedFinder() {
+    public final OrderFetcher getOrderCreatedFinder() {
         return orderCreatedFinder;
     }
 

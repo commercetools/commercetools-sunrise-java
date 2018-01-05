@@ -7,10 +7,10 @@ import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
+import com.commercetools.sunrise.models.addresses.AddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.addaddress.viewmodels.AddAddressPageContentFactory;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.customers.Customer;
@@ -25,13 +25,13 @@ public abstract class SunriseAddAddressController extends SunriseContentFormCont
         implements MyAccountController, WithContentFormFlow<Customer, Customer, AddressFormData>, WithRequiredCustomer {
 
     private final AddressFormData formData;
-    private final CustomerFinder customerFinder;
+    private final CustomerFetcher customerFinder;
     private final AddAddressControllerAction controllerAction;
     private final AddAddressPageContentFactory pageContentFactory;
     private final CountryCode country;
 
     protected SunriseAddAddressController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                          final AddressFormData formData, final CustomerFinder customerFinder,
+                                          final AddressFormData formData, final CustomerFetcher customerFinder,
                                           final AddAddressControllerAction controllerAction,
                                           final AddAddressPageContentFactory pageContentFactory,
                                           final CountryCode country) {
@@ -49,7 +49,7 @@ public abstract class SunriseAddAddressController extends SunriseContentFormCont
     }
 
     @Override
-    public final CustomerFinder getCustomerFinder() {
+    public final CustomerFetcher getCustomerFinder() {
         return customerFinder;
     }
 

@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.address.viewmodels.CheckoutAddressPageContentFactory;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
@@ -21,18 +21,18 @@ public abstract class SunriseCheckoutAddressController extends SunriseContentFor
         implements WithContentFormFlow<Cart, Cart, CheckoutAddressFormData>, WithRequiredCart {
 
     private final CheckoutAddressFormData formData;
-    private final CartFinder cartFinder;
+    private final CartFetcher cartFetcher;
     private final CheckoutAddressControllerAction controllerAction;
     private final CheckoutAddressPageContentFactory pageContentFactory;
 
     protected SunriseCheckoutAddressController(final ContentRenderer contentRenderer,
                                                final FormFactory formFactory, final CheckoutAddressFormData formData,
-                                               final CartFinder cartFinder,
+                                               final CartFetcher cartFetcher,
                                                final CheckoutAddressControllerAction controllerAction,
                                                final CheckoutAddressPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.cartFinder = cartFinder;
+        this.cartFetcher = cartFetcher;
         this.controllerAction = controllerAction;
         this.pageContentFactory = pageContentFactory;
     }
@@ -43,8 +43,8 @@ public abstract class SunriseCheckoutAddressController extends SunriseContentFor
     }
 
     @Override
-    public final CartFinder getCartFinder() {
-        return cartFinder;
+    public final CartFetcher getCartFetcher() {
+        return cartFetcher;
     }
 
     @EnableHooks

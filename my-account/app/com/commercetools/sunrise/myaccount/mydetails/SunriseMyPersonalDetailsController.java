@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.mydetails.viewmodels.MyPersonalDetailsPageContentFactory;
@@ -22,12 +22,12 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseContentF
         implements MyAccountController, WithContentFormFlow<Customer, Customer, MyPersonalDetailsFormData>, WithRequiredCustomer {
 
     private final MyPersonalDetailsFormData formData;
-    private final CustomerFinder customerFinder;
+    private final CustomerFetcher customerFinder;
     private final MyPersonalDetailsControllerAction controllerAction;
     private final MyPersonalDetailsPageContentFactory pageContentFactory;
 
     protected SunriseMyPersonalDetailsController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                                 final MyPersonalDetailsFormData formData, final CustomerFinder customerFinder,
+                                                 final MyPersonalDetailsFormData formData, final CustomerFetcher customerFinder,
                                                  final MyPersonalDetailsControllerAction controllerAction,
                                                  final MyPersonalDetailsPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
@@ -43,7 +43,7 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseContentF
     }
 
     @Override
-    public final CustomerFinder getCustomerFinder() {
+    public final CustomerFetcher getCustomerFinder() {
         return customerFinder;
     }
 

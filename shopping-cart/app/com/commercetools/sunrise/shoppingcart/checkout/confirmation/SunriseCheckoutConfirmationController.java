@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.viewmodels.CheckoutConfirmationPageContentFactory;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
@@ -22,17 +22,17 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseConte
         implements WithContentFormFlow<Cart, Order, CheckoutConfirmationFormData>, WithRequiredCart {
 
     private final CheckoutConfirmationFormData formData;
-    private final CartFinder cartFinder;
+    private final CartFetcher cartFetcher;
     private final CheckoutConfirmationControllerAction controllerAction;
     private final CheckoutConfirmationPageContentFactory pageContentFactory;
 
     protected SunriseCheckoutConfirmationController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                                    final CheckoutConfirmationFormData formData, final CartFinder cartFinder,
+                                                    final CheckoutConfirmationFormData formData, final CartFetcher cartFetcher,
                                                     final CheckoutConfirmationControllerAction controllerAction,
                                                     final CheckoutConfirmationPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.cartFinder = cartFinder;
+        this.cartFetcher = cartFetcher;
         this.controllerAction = controllerAction;
         this.pageContentFactory = pageContentFactory;
     }
@@ -43,8 +43,8 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseConte
     }
 
     @Override
-    public final CartFinder getCartFinder() {
-        return cartFinder;
+    public final CartFetcher getCartFetcher() {
+        return cartFetcher;
     }
 
     @EnableHooks

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 import com.commercetools.sunrise.core.controllers.ControllerAction;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
+import com.commercetools.sunrise.models.addresses.AddressFormData;
 import com.commercetools.sunrise.models.addresses.AddressWithCustomer;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.Customer;

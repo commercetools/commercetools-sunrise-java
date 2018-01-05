@@ -7,6 +7,7 @@ import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.products.ProductListFetcher;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
@@ -21,11 +22,11 @@ import java.util.function.Function;
  */
 public abstract class SunriseSearchController extends SunriseContentController implements WithQueryFlow<ProductsWithCategory> {
 
-    private final ProductListFinder productListFinder;
+    private final ProductListFetcher productListFinder;
     private final ProductOverviewPageContentFactory productOverviewPageContentFactory;
 
     protected SunriseSearchController(final ContentRenderer contentRenderer,
-                                      final ProductListFinder productListFinder,
+                                      final ProductListFetcher productListFinder,
                                       final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
         super(contentRenderer);
         this.productListFinder = productListFinder;

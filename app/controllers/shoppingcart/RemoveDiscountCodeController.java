@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.removediscountcode.RemoveDiscountCodeControllerAction;
 import com.commercetools.sunrise.shoppingcart.removediscountcode.RemoveDiscountCodeFormData;
@@ -24,10 +24,10 @@ public final class RemoveDiscountCodeController extends SunriseRemoveDiscountCod
 
     @Inject
     RemoveDiscountCodeController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                        final RemoveDiscountCodeFormData formData, final CartFinder cartFinder,
+                                        final RemoveDiscountCodeFormData formData, final CartFetcher cartFetcher,
                                         final CartPageContentFactory pageContentFactory, final RemoveDiscountCodeControllerAction controllerAction,
                                         final CartReverseRouter cartReverseRouter) {
-        super(contentRenderer, formFactory, formData, cartFinder, pageContentFactory, controllerAction);
+        super(contentRenderer, formFactory, formData, cartFetcher, pageContentFactory, controllerAction);
         this.cartReverseRouter = cartReverseRouter;
     }
 

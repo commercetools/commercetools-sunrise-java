@@ -3,21 +3,16 @@ package com.commercetools.sunrise.models.carts;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.models.customers.CustomerInSession;
 import com.neovisionaries.i18n.CountryCode;
-import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
 import io.sphere.sdk.carts.CartDraftBuilder;
 import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Address;
-import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
 import javax.money.CurrencyUnit;
-import java.util.concurrent.CompletionStage;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
-public class DefaultCartCreator extends AbstractCartCreateExecutor implements CartCreator {
+public class DefaultCartCreator extends AbstractCartCreator implements CartCreator {
 
     private final CountryCode country;
     private final CurrencyUnit currency;
@@ -45,12 +40,8 @@ public class DefaultCartCreator extends AbstractCartCreateExecutor implements Ca
     }
 
     @Override
-    public CompletionStage<Cart> get() {
-        return buildRequest().thenComposeAsync(this::executeRequest, HttpExecution.defaultContext());
-    }
-
-    protected CompletionStage<CartCreateCommand> buildRequest() {
-        return completedFuture(CartCreateCommand.of(buildDraft()));
+    protected CartCreateCommand buildRequest() {
+        return CartCreateCommand.of(buildDraft());
     }
 
     private CartDraft buildDraft() {

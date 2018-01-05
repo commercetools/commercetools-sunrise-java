@@ -5,7 +5,7 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.models.carts.CartCreator;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.add.AddToCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.add.AddToCartFormData;
 import com.commercetools.sunrise.shoppingcart.add.SunriseAddToCartController;
@@ -27,12 +27,12 @@ public final class AddToCartController extends SunriseAddToCartController {
     public AddToCartController(final ContentRenderer contentRenderer,
                                final FormFactory formFactory,
                                final AddToCartFormData formData,
-                               final CartFinder cartFinder,
+                               final CartFetcher cartFetcher,
                                final CartCreator cartCreator,
                                final AddToCartControllerAction controllerAction,
                                final CartPageContentFactory pageContentFactory,
                                final CartReverseRouter cartReverseRouter) {
-        super(contentRenderer, formFactory, formData, cartFinder, cartCreator, controllerAction, pageContentFactory);
+        super(contentRenderer, formFactory, formData, cartFetcher, cartCreator, controllerAction, pageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
     }
 

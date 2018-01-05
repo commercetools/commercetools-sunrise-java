@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout.shipping;
 
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels.CheckoutShippingPageContentFactory;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
@@ -27,19 +27,19 @@ public abstract class SunriseCheckoutShippingController extends SunriseContentFo
         implements WithContentFormFlow<ShippingMethodsWithCart, Cart, CheckoutShippingFormData>, WithRequiredCart {
 
     private final CheckoutShippingFormData formData;
-    private final CartFinder cartFinder;
+    private final CartFetcher cartFetcher;
     private final CheckoutShippingControllerAction controllerAction;
     private final CheckoutShippingPageContentFactory pageContentFactory;
     private final ShippingSettings shippingSettings;
 
     protected SunriseCheckoutShippingController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                                final CheckoutShippingFormData formData, final CartFinder cartFinder,
+                                                final CheckoutShippingFormData formData, final CartFetcher cartFetcher,
                                                 final CheckoutShippingControllerAction controllerAction,
                                                 final CheckoutShippingPageContentFactory pageContentFactory,
                                                 final ShippingSettings shippingSettings) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.cartFinder = cartFinder;
+        this.cartFetcher = cartFetcher;
         this.controllerAction = controllerAction;
         this.pageContentFactory = pageContentFactory;
         this.shippingSettings = shippingSettings;
@@ -51,8 +51,8 @@ public abstract class SunriseCheckoutShippingController extends SunriseContentFo
     }
 
     @Override
-    public final CartFinder getCartFinder() {
-        return cartFinder;
+    public final CartFetcher getCartFetcher() {
+        return cartFetcher;
     }
 
     @EnableHooks

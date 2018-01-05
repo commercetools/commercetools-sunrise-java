@@ -7,7 +7,8 @@ import com.commercetools.sunrise.core.controllers.WithQueryFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
+import com.commercetools.sunrise.models.orders.MyOrderListFetcher;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.myorders.myorderlist.viewmodels.MyOrderListPageContentFactory;
@@ -23,12 +24,12 @@ import java.util.function.Function;
 public abstract class SunriseMyOrderListController extends SunriseContentController
         implements MyAccountController, WithQueryFlow<OrderListWithCustomer>, WithRequiredCustomer {
 
-    private final CustomerFinder customerFinder;
-    private final MyOrderListFinder myOrderListFinder;
+    private final CustomerFetcher customerFinder;
+    private final MyOrderListFetcher myOrderListFinder;
     private final MyOrderListPageContentFactory myOrderListPageContentFactory;
 
     protected SunriseMyOrderListController(final ContentRenderer contentRenderer,
-                                           final CustomerFinder customerFinder, final MyOrderListFinder myOrderListFinder,
+                                           final CustomerFetcher customerFinder, final MyOrderListFetcher myOrderListFinder,
                                            final MyOrderListPageContentFactory myOrderListPageContentFactory) {
         super(contentRenderer);
         this.customerFinder = customerFinder;
@@ -37,7 +38,7 @@ public abstract class SunriseMyOrderListController extends SunriseContentControl
     }
 
     @Override
-    public final CustomerFinder getCustomerFinder() {
+    public final CustomerFetcher getCustomerFinder() {
         return customerFinder;
     }
 

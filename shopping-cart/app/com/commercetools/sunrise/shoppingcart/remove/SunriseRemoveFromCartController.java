@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import io.sphere.sdk.carts.Cart;
@@ -21,17 +21,17 @@ public abstract class SunriseRemoveFromCartController extends SunriseContentForm
         implements WithContentFormFlow<Cart, Cart, RemoveFromCartFormData>, WithRequiredCart {
 
     private final RemoveFromCartFormData formData;
-    private final CartFinder cartFinder;
+    private final CartFetcher cartFetcher;
     private final RemoveFromCartControllerAction removeFromCartControllerAction;
     private final CartPageContentFactory cartPageContentFactory;
 
     protected SunriseRemoveFromCartController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                              final RemoveFromCartFormData formData, final CartFinder cartFinder,
+                                              final RemoveFromCartFormData formData, final CartFetcher cartFetcher,
                                               final RemoveFromCartControllerAction removeFromCartControllerAction,
                                               final CartPageContentFactory cartPageContentFactory) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.cartFinder = cartFinder;
+        this.cartFetcher = cartFetcher;
         this.removeFromCartControllerAction = removeFromCartControllerAction;
         this.cartPageContentFactory = cartPageContentFactory;
     }
@@ -42,8 +42,8 @@ public abstract class SunriseRemoveFromCartController extends SunriseContentForm
     }
 
     @Override
-    public final CartFinder getCartFinder() {
-        return cartFinder;
+    public final CartFetcher getCartFetcher() {
+        return cartFetcher;
     }
 
     @EnableHooks

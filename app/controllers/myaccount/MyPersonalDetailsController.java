@@ -5,7 +5,7 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsControllerAction;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
@@ -28,7 +28,7 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
     public MyPersonalDetailsController(final ContentRenderer contentRenderer,
                                        final FormFactory formFactory,
                                        final MyPersonalDetailsFormData formData,
-                                       final CustomerFinder customerFinder,
+                                       final CustomerFetcher customerFinder,
                                        final MyPersonalDetailsControllerAction controllerAction,
                                        final MyPersonalDetailsPageContentFactory pageContentFactory,
                                        final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter,

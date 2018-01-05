@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.shoppinglists.WishlistFinder;
+import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
 import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import io.sphere.sdk.shoppinglists.ShoppingList;
@@ -21,20 +21,20 @@ import java.util.concurrent.CompletionStage;
  */
 public abstract class SunriseWishlistContentController extends SunriseContentController implements WithQueryFlow<ShoppingList>, WithRequiredWishlist {
 
-    private final WishlistFinder wishlistFinder;
+    private final WishlistFetcher wishlistFinder;
     private final WishlistPageContentFactory wishlistPageContentFactory;
 
     @Inject
     protected SunriseWishlistContentController(final ContentRenderer contentRenderer,
                                                final WishlistPageContentFactory wishlistPageContentFactory,
-                                               final WishlistFinder wishlistFinder) {
+                                               final WishlistFetcher wishlistFinder) {
         super(contentRenderer);
         this.wishlistPageContentFactory = wishlistPageContentFactory;
         this.wishlistFinder = wishlistFinder;
     }
 
     @Override
-    public final WishlistFinder getWishlistFinder() {
+    public final WishlistFetcher getWishlistFinder() {
         return wishlistFinder;
     }
 

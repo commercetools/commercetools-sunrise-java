@@ -9,11 +9,11 @@ import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
+import com.commercetools.sunrise.models.addresses.AddressFinder;
+import com.commercetools.sunrise.models.addresses.AddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.WithRequiredAddress;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels.ChangeAddressPageContentFactory;
 import io.sphere.sdk.customers.Customer;
@@ -30,14 +30,14 @@ public abstract class SunriseChangeAddressController extends SunriseContentFormC
         implements MyAccountController, WithContentFormFlow<AddressWithCustomer, Customer, AddressFormData>, WithRequiredCustomer, WithRequiredAddress {
 
     private final AddressFormData formData;
-    private final CustomerFinder customerFinder;
+    private final CustomerFetcher customerFinder;
     private final AddressFinder addressFinder;
     private final ChangeAddressControllerAction controllerAction;
     private final ChangeAddressPageContentFactory pageContentFactory;
 
     protected SunriseChangeAddressController(final ContentRenderer contentRenderer,
                                              final FormFactory formFactory, final AddressFormData formData,
-                                             final CustomerFinder customerFinder, final AddressFinder addressFinder,
+                                             final CustomerFetcher customerFinder, final AddressFinder addressFinder,
                                              final ChangeAddressControllerAction controllerAction,
                                              final ChangeAddressPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
@@ -54,7 +54,7 @@ public abstract class SunriseChangeAddressController extends SunriseContentFormC
     }
 
     @Override
-    public final CustomerFinder getCustomerFinder() {
+    public final CustomerFetcher getCustomerFinder() {
         return customerFinder;
     }
 

@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.myaccount.myorders.myorderdetail;
 
+import com.commercetools.sunrise.models.orders.MyOrderFetcher;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.orders.Order;
 import play.libs.concurrent.HttpExecution;
@@ -10,7 +11,7 @@ import java.util.function.Function;
 
 public interface WithRequiredMyOrder {
 
-    MyOrderFinder getMyOrderFinder();
+    MyOrderFetcher getMyOrderFinder();
 
     default CompletionStage<Result> requireMyOrder(final Customer customer, final String orderNumber, final Function<Order, CompletionStage<Result>> nextAction) {
         return getMyOrderFinder().apply(customer, orderNumber)

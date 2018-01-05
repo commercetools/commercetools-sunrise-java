@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartFormData;
@@ -26,11 +26,11 @@ public final class RemoveFromCartController extends SunriseRemoveFromCartControl
     public RemoveFromCartController(final ContentRenderer contentRenderer,
                                     final FormFactory formFactory,
                                     final RemoveFromCartFormData formData,
-                                    final CartFinder cartFinder,
+                                    final CartFetcher cartFetcher,
                                     final RemoveFromCartControllerAction removeFromCartControllerAction,
                                     final CartPageContentFactory cartPageContentFactory,
                                     final CartReverseRouter cartReverseRouter) {
-        super(contentRenderer, formFactory, formData, cartFinder, removeFromCartControllerAction, cartPageContentFactory);
+        super(contentRenderer, formFactory, formData, cartFetcher, removeFromCartControllerAction, cartPageContentFactory);
         this.cartReverseRouter = cartReverseRouter;
     }
 

@@ -16,7 +16,7 @@ import io.sphere.sdk.carts.queries.CartQuery;
  * @see CartExpansionModel#discountCodes()
  * @see DiscountCodeInfoExpansionModel#discountCode
  */
-public class CartDiscountCodesExpansionControllerComponent implements ControllerComponent, CartQueryHook, CartUpdateCommandHook {
+public final class CartDiscountCodesExpansionControllerComponent implements ControllerComponent, CartQueryHook, CartUpdateCommandHook {
 
     @Override
     public CartQuery onCartQuery(final CartQuery cartQuery) {

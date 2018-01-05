@@ -5,7 +5,7 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.SunriseChangePasswordController;
@@ -28,7 +28,7 @@ public final class ChangePasswordController extends SunriseChangePasswordControl
     public ChangePasswordController(final ContentRenderer contentRenderer,
                                     final FormFactory formFactory,
                                     final ChangePasswordFormData formData,
-                                    final CustomerFinder customerFinder,
+                                    final CustomerFetcher customerFinder,
                                     final ChangePasswordControllerAction controllerAction,
                                     final ChangePasswordPageContentFactory pageContentFactory,
                                     final AuthenticationReverseRouter authenticationReverseRouter,

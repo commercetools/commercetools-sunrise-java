@@ -6,7 +6,7 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.home.HomeReverseRouter;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
-import com.commercetools.sunrise.shoppingcart.checkout.thankyou.OrderCreatedFinder;
+import com.commercetools.sunrise.models.orders.OrderFetcher;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.SunriseCheckoutThankYouController;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.viewmodels.CheckoutThankYouPageContentFactory;
 import play.mvc.Result;
@@ -23,7 +23,7 @@ public final class CheckoutThankYouController extends SunriseCheckoutThankYouCon
 
     @Inject
     public CheckoutThankYouController(final ContentRenderer contentRenderer,
-                                      final OrderCreatedFinder orderCreatedFinder,
+                                      final OrderFetcher orderCreatedFinder,
                                       final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory,
                                       final HomeReverseRouter homeReverseRouter) {
         super(contentRenderer, orderCreatedFinder, checkoutThankYouPageContentFactory);

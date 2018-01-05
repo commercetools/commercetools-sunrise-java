@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.changepassword.ChangePasswordReverseRouter;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.viemodels.ChangePasswordPageContentFactory;
@@ -27,10 +27,10 @@ public abstract class SunriseChangePasswordController extends SunriseContentForm
     private final ChangePasswordFormData formData;
     private final ChangePasswordControllerAction controllerAction;
     private final ChangePasswordPageContentFactory pageContentFactory;
-    private final CustomerFinder customerFinder;
+    private final CustomerFetcher customerFinder;
 
     protected SunriseChangePasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                              final ChangePasswordFormData formData, final CustomerFinder customerFinder,
+                                              final ChangePasswordFormData formData, final CustomerFetcher customerFinder,
                                               final ChangePasswordControllerAction controllerAction,
                                               final ChangePasswordPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
@@ -53,7 +53,7 @@ public abstract class SunriseChangePasswordController extends SunriseContentForm
     }
 
     @Override
-    public final CustomerFinder getCustomerFinder() {
+    public final CustomerFetcher getCustomerFinder() {
         return customerFinder;
     }
 

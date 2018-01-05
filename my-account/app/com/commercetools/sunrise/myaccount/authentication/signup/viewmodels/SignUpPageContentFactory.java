@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.authentication.signup.viewmodels;
 
 import com.commercetools.sunrise.myaccount.authentication.AbstractAuthenticationPageContentFactory;
 import com.commercetools.sunrise.myaccount.authentication.AuthenticationPageContent;
-import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormData;
+import com.commercetools.sunrise.models.customers.SignUpFormData;
 import play.data.Form;
 
 import javax.inject.Inject;

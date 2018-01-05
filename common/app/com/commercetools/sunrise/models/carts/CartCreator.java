@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.controllers.ResourceFinder;
+import com.commercetools.sunrise.core.controllers.ResourceCreator;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.Cart;
 
@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 @ImplementedBy(DefaultCartCreator.class)
 @FunctionalInterface
-public interface CartCreator extends ResourceFinder, Supplier<CompletionStage<Cart>> {
+public interface CartCreator extends ResourceCreator<Cart>, Supplier<CompletionStage<Cart>> {
 
     @Override
     CompletionStage<Cart> get();

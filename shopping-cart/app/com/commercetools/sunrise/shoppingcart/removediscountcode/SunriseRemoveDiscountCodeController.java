@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import io.sphere.sdk.carts.Cart;
@@ -21,17 +21,17 @@ public abstract class SunriseRemoveDiscountCodeController extends SunriseContent
         implements WithContentFormFlow<Cart, Cart, RemoveDiscountCodeFormData>, WithRequiredCart {
 
     private final RemoveDiscountCodeFormData formData;
-    private final CartFinder cartFinder;
+    private final CartFetcher cartFetcher;
     private final CartPageContentFactory pageContentFactory;
     private final RemoveDiscountCodeControllerAction controllerAction;
 
     protected SunriseRemoveDiscountCodeController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                                  final RemoveDiscountCodeFormData formData, final CartFinder cartFinder,
+                                                  final RemoveDiscountCodeFormData formData, final CartFetcher cartFetcher,
                                                   final CartPageContentFactory pageContentFactory,
                                                   final RemoveDiscountCodeControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.cartFinder = cartFinder;
+        this.cartFetcher = cartFetcher;
         this.pageContentFactory = pageContentFactory;
         this.controllerAction = controllerAction;
     }
@@ -42,8 +42,8 @@ public abstract class SunriseRemoveDiscountCodeController extends SunriseContent
     }
 
     @Override
-    public final CartFinder getCartFinder() {
-        return cartFinder;
+    public final CartFetcher getCartFetcher() {
+        return cartFetcher;
     }
 
     @EnableHooks

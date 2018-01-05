@@ -8,7 +8,7 @@ import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
@@ -20,10 +20,10 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseAddressBookDetailController extends SunriseContentController
         implements MyAccountController, WithQueryFlow<Customer>, WithRequiredCustomer {
 
-    private final CustomerFinder customerFinder;
+    private final CustomerFetcher customerFinder;
     private final AddressBookPageContentFactory addressBookPageContentFactory;
 
-    protected SunriseAddressBookDetailController(final ContentRenderer contentRenderer, final CustomerFinder customerFinder,
+    protected SunriseAddressBookDetailController(final ContentRenderer contentRenderer, final CustomerFetcher customerFinder,
                                                  final AddressBookPageContentFactory addressBookPageContentFactory) {
         super(contentRenderer);
         this.customerFinder = customerFinder;
@@ -31,7 +31,7 @@ public abstract class SunriseAddressBookDetailController extends SunriseContentC
     }
 
     @Override
-    public final CustomerFinder getCustomerFinder() {
+    public final CustomerFetcher getCustomerFinder() {
         return customerFinder;
     }
 

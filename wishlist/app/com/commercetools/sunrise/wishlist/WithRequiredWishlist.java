@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.wishlist;
 
-import com.commercetools.sunrise.models.shoppinglists.WishlistFinder;
+import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
@@ -22,7 +22,7 @@ public interface WithRequiredWishlist {
     /**
      * @return the wishlist finder
      */
-    WishlistFinder getWishlistFinder();
+    WishlistFetcher getWishlistFinder();
 
     /**
      * This template method tries to get the wishlist via the {@link #getWishlistFinder()}.

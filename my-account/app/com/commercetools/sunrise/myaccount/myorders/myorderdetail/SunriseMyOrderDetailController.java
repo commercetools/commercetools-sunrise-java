@@ -7,7 +7,8 @@ import com.commercetools.sunrise.core.controllers.WithQueryFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
+import com.commercetools.sunrise.models.orders.MyOrderFetcher;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels.MyOrderDetailPageContentFactory;
@@ -18,12 +19,12 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseMyOrderDetailController extends SunriseContentController
         implements MyAccountController, WithQueryFlow<OrderWithCustomer>, WithRequiredCustomer, WithRequiredMyOrder {
 
-    private final CustomerFinder customerFinder;
-    private final MyOrderFinder myOrderFinder;
+    private final CustomerFetcher customerFinder;
+    private final MyOrderFetcher myOrderFinder;
     private final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory;
 
     protected SunriseMyOrderDetailController(final ContentRenderer contentRenderer,
-                                             final CustomerFinder customerFinder, final MyOrderFinder myOrderFinder,
+                                             final CustomerFetcher customerFinder, final MyOrderFetcher myOrderFinder,
                                              final MyOrderDetailPageContentFactory myOrderDetailPageContentFactory) {
         super(contentRenderer);
         this.customerFinder = customerFinder;
@@ -32,12 +33,12 @@ public abstract class SunriseMyOrderDetailController extends SunriseContentContr
     }
 
     @Override
-    public final CustomerFinder getCustomerFinder() {
+    public final CustomerFetcher getCustomerFinder() {
         return customerFinder;
     }
 
     @Override
-    public final MyOrderFinder getMyOrderFinder() {
+    public final MyOrderFetcher getMyOrderFinder() {
         return myOrderFinder;
     }
 

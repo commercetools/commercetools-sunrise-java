@@ -5,9 +5,9 @@ import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
-import com.commercetools.sunrise.productcatalog.productdetail.ProductFinder;
+import com.commercetools.sunrise.models.products.ProductFetcher;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductRecommendationsControllerComponent;
-import com.commercetools.sunrise.productcatalog.productdetail.ProductVariantFinder;
+import com.commercetools.sunrise.models.products.ProductVariantFinder;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
 import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContentFactory;
 import io.sphere.sdk.products.ProductProjection;
@@ -27,7 +27,7 @@ public final class ProductDetailController extends SunriseProductDetailControlle
 
     @Inject
     public ProductDetailController(final ContentRenderer contentRenderer,
-                                   final ProductFinder productFinder,
+                                   final ProductFetcher productFinder,
                                    final ProductVariantFinder productVariantFinder,
                                    final ProductDetailPageContentFactory pageContentFactory,
                                    final ProductReverseRouter productReverseRouter) {

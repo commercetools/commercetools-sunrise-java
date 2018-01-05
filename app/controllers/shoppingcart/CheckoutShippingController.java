@@ -6,7 +6,7 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingControllerAction;
@@ -36,13 +36,13 @@ public final class CheckoutShippingController extends SunriseCheckoutShippingCon
     public CheckoutShippingController(final ContentRenderer contentRenderer,
                                       final FormFactory formFactory,
                                       final CheckoutShippingFormData formData,
-                                      final CartFinder cartFinder,
+                                      final CartFetcher cartFetcher,
                                       final CheckoutShippingControllerAction controllerAction,
                                       final CheckoutShippingPageContentFactory pageContentFactory,
                                       final ShippingSettings shippingSettings,
                                       final CartReverseRouter cartReverseRouter,
                                       final CheckoutReverseRouter checkoutReverseRouter) {
-        super(contentRenderer, formFactory, formData, cartFinder, controllerAction, pageContentFactory, shippingSettings);
+        super(contentRenderer, formFactory, formData, cartFetcher, controllerAction, pageContentFactory, shippingSettings);
         this.cartReverseRouter = cartReverseRouter;
         this.checkoutReverseRouter = checkoutReverseRouter;
     }

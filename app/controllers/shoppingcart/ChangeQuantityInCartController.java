@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartFormData;
 import com.commercetools.sunrise.shoppingcart.changequantity.SunriseChangeQuantityInCartController;
@@ -26,11 +26,11 @@ public final class ChangeQuantityInCartController extends SunriseChangeQuantityI
     public ChangeQuantityInCartController(final ContentRenderer contentRenderer,
                                           final FormFactory formFactory,
                                           final ChangeQuantityInCartFormData formData,
-                                          final CartFinder cartFinder,
+                                          final CartFetcher cartFetcher,
                                           final CartPageContentFactory pageContentFactory,
                                           final ChangeQuantityInCartControllerAction controllerAction,
                                           final CartReverseRouter cartReverseRouter) {
-        super(contentRenderer, formFactory, formData, cartFinder, pageContentFactory, controllerAction);
+        super(contentRenderer, formFactory, formData, cartFetcher, pageContentFactory, controllerAction);
         this.cartReverseRouter = cartReverseRouter;
     }
 

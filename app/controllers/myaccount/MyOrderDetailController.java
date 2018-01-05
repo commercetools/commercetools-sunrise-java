@@ -5,8 +5,8 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
-import com.commercetools.sunrise.myaccount.myorders.myorderdetail.MyOrderFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
+import com.commercetools.sunrise.models.orders.MyOrderFetcher;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.SunriseMyOrderDetailController;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels.MyOrderDetailPageContentFactory;
 import play.mvc.Result;
@@ -23,8 +23,8 @@ public final class MyOrderDetailController extends SunriseMyOrderDetailControlle
 
     @Inject
     public MyOrderDetailController(final ContentRenderer contentRenderer,
-                                   final CustomerFinder customerFinder,
-                                   final MyOrderFinder myOrderFinder,
+                                   final CustomerFetcher customerFinder,
+                                   final MyOrderFetcher myOrderFinder,
                                    final MyOrderDetailPageContentFactory pageContentFactory,
                                    final MyOrdersReverseRouter myOrdersReverseRouter,
                                    final AuthenticationReverseRouter authenticationReverseRouter) {

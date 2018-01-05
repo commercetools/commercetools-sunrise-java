@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.components.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
+import com.commercetools.sunrise.models.products.ProductListFetcher;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseSearchController;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.ProductFacetedSearchSelectorControllerComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.ProductPaginationControllerComponent;
@@ -26,7 +26,7 @@ public final class SearchController extends SunriseSearchController {
 
     @Inject
     public SearchController(final ContentRenderer contentRenderer,
-                            final ProductListFinder productListFinder,
+                            final ProductListFetcher productListFinder,
                             final ProductOverviewPageContentFactory pageContentFactory) {
         super(contentRenderer, productListFinder, pageContentFactory);
     }

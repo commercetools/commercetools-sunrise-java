@@ -8,7 +8,7 @@ import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.models.shoppinglists.WishlistCreator;
-import com.commercetools.sunrise.models.shoppinglists.WishlistFinder;
+import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
 import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import io.sphere.sdk.shoppinglists.ShoppingList;
@@ -25,7 +25,7 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
     private final AddToWishlistFormData formData;
     private final WishlistPageContentFactory wishlistPageContentFactory;
     private final WishlistCreator wishlistCreator;
-    private final WishlistFinder wishlistFinder;
+    private final WishlistFetcher wishlistFinder;
     private final AddToWishlistControllerAction controllerAction;
 
     @Inject
@@ -33,7 +33,7 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
                                              final WishlistPageContentFactory wishlistPageContentFactory,
                                              final AddToWishlistFormData formData,
                                              final WishlistCreator wishlistCreator,
-                                             final WishlistFinder wishlistFinder,
+                                             final WishlistFetcher wishlistFinder,
                                              final AddToWishlistControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.wishlistPageContentFactory = wishlistPageContentFactory;
@@ -49,7 +49,7 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
     }
 
     @Override
-    public final WishlistFinder getWishlistFinder() {
+    public final WishlistFetcher getWishlistFinder() {
         return wishlistFinder;
     }
 

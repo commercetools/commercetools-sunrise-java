@@ -6,19 +6,14 @@ import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.models.Reference;
-import io.sphere.sdk.shoppinglists.ShoppingList;
 import io.sphere.sdk.shoppinglists.ShoppingListDraftBuilder;
 import io.sphere.sdk.shoppinglists.ShoppingListDraftDsl;
 import io.sphere.sdk.shoppinglists.commands.ShoppingListCreateCommand;
-import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
 import java.util.Optional;
-import java.util.concurrent.CompletionStage;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
-public class DefaultWishlistCreator extends AbstractShoppingListCreateExecutor implements WishlistCreator {
+public class DefaultWishlistCreator extends AbstractShoppingListCreateExecutor {
 
     private final CustomerInSession customerInSession;
 
@@ -28,12 +23,9 @@ public class DefaultWishlistCreator extends AbstractShoppingListCreateExecutor i
         this.customerInSession = customerInSession;
     }
 
-    public CompletionStage<ShoppingList> get() {
-        return buildRequest().thenComposeAsync(this::executeRequest, HttpExecution.defaultContext());
-    }
-
-    protected CompletionStage<ShoppingListCreateCommand> buildRequest() {
-        return completedFuture(ShoppingListCreateCommand.of(buildDraft()));
+    @Override
+    protected ShoppingListCreateCommand buildRequest() {
+        return ShoppingListCreateCommand.of(buildDraft());
     }
 
     private ShoppingListDraftDsl buildDraft() {

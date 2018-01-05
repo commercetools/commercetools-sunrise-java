@@ -5,8 +5,8 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
+import com.commercetools.sunrise.models.addresses.AddressFinder;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressControllerAction;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressFormData;
@@ -29,7 +29,7 @@ public final class RemoveAddressController extends SunriseRemoveAddressControlle
     public RemoveAddressController(final ContentRenderer contentRenderer,
                                    final FormFactory formFactory,
                                    final RemoveAddressFormData formData,
-                                   final CustomerFinder customerFinder,
+                                   final CustomerFetcher customerFinder,
                                    final AddressFinder addressFinder,
                                    final RemoveAddressControllerAction controllerAction,
                                    final AddressBookPageContentFactory pageContentFactory,

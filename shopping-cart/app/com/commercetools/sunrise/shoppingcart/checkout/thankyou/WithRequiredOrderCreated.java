@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
+import com.commercetools.sunrise.models.orders.OrderFetcher;
 import io.sphere.sdk.orders.Order;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
@@ -9,7 +10,7 @@ import java.util.function.Function;
 
 public interface WithRequiredOrderCreated {
 
-    OrderCreatedFinder getOrderCreatedFinder();
+    OrderFetcher getOrderCreatedFinder();
 
     default CompletionStage<Result> requireOrderCreated(final Function<Order, CompletionStage<Result>> nextAction) {
         return getOrderCreatedFinder().get()

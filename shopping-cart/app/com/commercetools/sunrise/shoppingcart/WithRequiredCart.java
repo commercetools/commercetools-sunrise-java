@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart;
 
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import io.sphere.sdk.carts.Cart;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
@@ -10,10 +10,10 @@ import java.util.function.Function;
 
 public interface WithRequiredCart {
 
-    CartFinder getCartFinder();
+    CartFetcher getCartFetcher();
 
     default CompletionStage<Result> requireCart(final Function<Cart, CompletionStage<Result>> nextAction) {
-        return getCartFinder().get()
+        return getCartFetcher().get()
                 .thenComposeAsync(cartOpt -> cartOpt
                                 .map(nextAction)
                                 .orElseGet(this::handleNotFoundCart),

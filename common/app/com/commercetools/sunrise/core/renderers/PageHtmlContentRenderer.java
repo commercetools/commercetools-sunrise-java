@@ -9,7 +9,7 @@ import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.models.carts.CartInCache;
 import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
 import com.commercetools.sunrise.models.customers.CustomerInCache;
-import com.commercetools.sunrise.models.shoppinglists.WishlistFinder;
+import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -40,13 +40,13 @@ final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implemen
     private final CategoryTree categoryTree;
     private final CartInCache cartInCache;
     private final CustomerInCache customerInCache;
-    private final WishlistFinder wishlistFinder;
+    private final WishlistFetcher wishlistFinder;
 
     @Inject
     PageHtmlContentRenderer(final Locale locale, final TemplateEngine templateEngine, final CmsService cmsService,
                             final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner,
                             @NavigationCategoryTree final CategoryTree categoryTree, final CartInCache cartInCache,
-                            final CustomerInCache customerInCache, final WishlistFinder wishlistFinder) {
+                            final CustomerInCache customerInCache, final WishlistFetcher wishlistFinder) {
         super(locale, templateEngine, cmsService);
         this.pageDataFactory = pageDataFactory;
         this.hookRunner = hookRunner;

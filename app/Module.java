@@ -10,8 +10,8 @@ import com.commercetools.sunrise.models.customers.CustomerInSession;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.AlphabeticallySortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.CustomSortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.TermFacetViewModelFactory;
-import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinder;
-import com.commercetools.sunrise.productcatalog.productoverview.ProductListFinderByCategoryWithMatchingVariants;
+import com.commercetools.sunrise.models.products.ProductListFetcher;
+import com.commercetools.sunrise.models.products.ProductListFetcherWithMatchingVariants;
 import com.commercetools.sunrise.wishlist.WishlistStoringComponent;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -70,7 +70,7 @@ public class Module extends AbstractModule {
 
         // Binding to enable matching variants on listing products
         // IMPORTANT: comment the following line if your project does not require this functionality, leaving it on can severely affect performance
-        bind(ProductListFinder.class).to(ProductListFinderByCategoryWithMatchingVariants.class);
+        bind(ProductListFetcher.class).to(ProductListFetcherWithMatchingVariants.class);
 
         // Provide here your own bindings
     }

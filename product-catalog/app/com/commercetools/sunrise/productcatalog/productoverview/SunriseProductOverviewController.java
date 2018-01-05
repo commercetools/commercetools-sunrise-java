@@ -7,6 +7,7 @@ import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.products.ProductListFetcher;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
@@ -23,11 +24,11 @@ import java.util.function.Function;
 public abstract class SunriseProductOverviewController extends SunriseContentController implements WithQueryFlow<ProductsWithCategory>, WithRequiredCategory {
 
     private final CategoryFinder categoryFinder;
-    private final ProductListFinder productListFinder;
+    private final ProductListFetcher productListFinder;
     private final ProductOverviewPageContentFactory productOverviewPageContentFactory;
 
     protected SunriseProductOverviewController(final ContentRenderer contentRenderer,
-                                               final CategoryFinder categoryFinder, final ProductListFinder productListFinder,
+                                               final CategoryFinder categoryFinder, final ProductListFetcher productListFinder,
                                                final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
         super(contentRenderer);
         this.categoryFinder = categoryFinder;

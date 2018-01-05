@@ -1,0 +1,38 @@
+package com.commercetools.sunrise.models.carts;
+
+import com.commercetools.sunrise.core.controllers.AbstractSingleQueryExecutor;
+import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.hooks.ctpevents.CartLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctprequests.CartQueryHook;
+import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.carts.queries.CartQuery;
+import io.sphere.sdk.client.SphereClient;
+
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
+public abstract class AbstractCartFetcher extends AbstractSingleQueryExecutor<Cart, CartQuery> implements CartFetcher {
+
+    protected AbstractCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
+        super(sphereClient, hookRunner);
+    }
+
+    @Override
+    public CompletionStage<Optional<Cart>> get() {
+        return buildRequest().map(this::executeRequest).orElseGet(() -> completedFuture(Optional.empty()));
+    }
+
+    @Override
+    protected CartQuery runQueryHook(final CartQuery baseRequest) {
+        return CartQueryHook.runHook(getHookRunner(), baseRequest);
+    }
+
+    @Override
+    protected CompletionStage<?> runResourceLoadedHook(final Cart resource) {
+        return CartLoadedHook.runHook(getHookRunner(), resource);
+    }
+
+    protected abstract Optional<CartQuery> buildRequest();
+}

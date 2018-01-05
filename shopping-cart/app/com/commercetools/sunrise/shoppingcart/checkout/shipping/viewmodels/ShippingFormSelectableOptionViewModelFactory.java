@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels;
 
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
 import com.commercetools.sunrise.core.viewmodels.forms.SelectableViewModelFactory;
@@ -28,13 +28,13 @@ public class ShippingFormSelectableOptionViewModelFactory extends SelectableView
 
     private final Logger LOGGER = LoggerFactory.getLogger(ShippingFormSelectableOptionViewModelFactory.class);
 
-    private final CartFinder cartFinder;
+    private final CartFetcher cartFetcher;
     private final PriceFormatter priceFormatter;
     private final SphereClient sphereClient;
 
     @Inject
-    public ShippingFormSelectableOptionViewModelFactory(final CartFinder cartFinder, final PriceFormatter priceFormatter, final SphereClient sphereClient) {
-        this.cartFinder = cartFinder;
+    public ShippingFormSelectableOptionViewModelFactory(final CartFetcher cartFetcher, final PriceFormatter priceFormatter, final SphereClient sphereClient) {
+        this.cartFetcher = cartFetcher;
         this.priceFormatter = priceFormatter;
         this.sphereClient = sphereClient;
     }
@@ -102,7 +102,7 @@ public class ShippingFormSelectableOptionViewModelFactory extends SelectableView
 
     private Optional<Cart> findCart() {
         try {
-            return cartFinder.get().toCompletableFuture().get(5, TimeUnit.SECONDS);
+            return cartFetcher.get().toCompletableFuture().get(5, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOGGER.error("Could not fetch cart", e);
             return Optional.empty();

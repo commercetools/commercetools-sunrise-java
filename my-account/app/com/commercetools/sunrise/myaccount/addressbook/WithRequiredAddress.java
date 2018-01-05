@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
+import com.commercetools.sunrise.models.addresses.AddressFinder;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import play.libs.concurrent.HttpExecution;

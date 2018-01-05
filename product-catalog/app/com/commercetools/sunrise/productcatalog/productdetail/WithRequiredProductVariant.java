@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
+import com.commercetools.sunrise.models.products.ProductVariantFinder;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import play.libs.concurrent.HttpExecution;

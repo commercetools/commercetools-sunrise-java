@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.add;
 
 import com.commercetools.sunrise.models.carts.CartCreator;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
@@ -23,19 +23,19 @@ public abstract class SunriseAddToCartController extends SunriseContentFormContr
         implements WithContentFormFlow<Cart, Cart, AddToCartFormData>, WithRequiredCart {
 
     private final AddToCartFormData formData;
-    private final CartFinder cartFinder;
+    private final CartFetcher cartFetcher;
     private final CartCreator cartCreator;
     private final AddToCartControllerAction controllerAction;
     private final CartPageContentFactory pageContentFactory;
 
     protected SunriseAddToCartController(final ContentRenderer contentRenderer,
                                          final FormFactory formFactory, final AddToCartFormData formData,
-                                         final CartFinder cartFinder, final CartCreator cartCreator,
+                                         final CartFetcher cartFetcher, final CartCreator cartCreator,
                                          final AddToCartControllerAction controllerAction,
                                          final CartPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.cartFinder = cartFinder;
+        this.cartFetcher = cartFetcher;
         this.cartCreator = cartCreator;
         this.controllerAction = controllerAction;
         this.pageContentFactory = pageContentFactory;
@@ -47,8 +47,8 @@ public abstract class SunriseAddToCartController extends SunriseContentFormContr
     }
 
     @Override
-    public final CartFinder getCartFinder() {
-        return cartFinder;
+    public final CartFetcher getCartFetcher() {
+        return cartFetcher;
     }
 
     public final CartCreator getCartCreator() {

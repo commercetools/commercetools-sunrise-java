@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.viewmodels.FormViewModelFactory;
 import com.commercetools.sunrise.core.viewmodels.forms.countries.CountryFormFieldViewModelFactory;
 import com.commercetools.sunrise.core.viewmodels.forms.titles.TitleFormFieldViewModelFactory;
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
+import com.commercetools.sunrise.models.addresses.AddressFormData;
 import io.sphere.sdk.customers.Customer;
 import play.Configuration;
 import play.data.Form;

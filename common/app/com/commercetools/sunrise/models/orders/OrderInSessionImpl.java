@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.models.orders;
 
 import com.commercetools.sunrise.core.sessions.StoringStrategy;
+import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.orders.Order;
 import play.Configuration;
 
@@ -20,7 +21,7 @@ final class OrderInSessionImpl implements OrderInSession {
 
     @Inject
     OrderInSessionImpl(final Configuration configuration, final StoringStrategy storingStrategy) {
-        this.sessionKey = configuration.getString("sunrise.orders.sessionKey");
+        this.sessionKey = configuration.getString("sunrise.orders.idSessionKey");
         this.storingStrategy = storingStrategy;
     }
 

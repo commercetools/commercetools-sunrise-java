@@ -10,16 +10,12 @@ public abstract class AbstractResourceInSession<T extends Resource<T>> implement
 
     private final Configuration configuration;
     private final StoringStrategy storingStrategy;
-    private final String cookieName;
-    private final boolean cookieSecure;
-    private final boolean cookieHttpOnly;
+    private final String idSessionKey;
     private final String versionSessionKey;
 
     protected AbstractResourceInSession(final Configuration config, final StoringStrategy storingStrategy) {
         this.configuration = config;
-        this.cookieName = config.getString("cookieName");
-        this.cookieSecure = config.getBoolean("cookieSecure");
-        this.cookieHttpOnly = config.getBoolean("cookieHttpOnly");
+        this.idSessionKey = config.getString("idSessionKey");
         this.versionSessionKey = config.getString("versionSessionKey");
         this.storingStrategy = storingStrategy;
     }
@@ -34,7 +30,7 @@ public abstract class AbstractResourceInSession<T extends Resource<T>> implement
 
     @Override
     public Optional<String> findId() {
-        return storingStrategy.findInCookies(cookieName);
+        return storingStrategy.findInSession(idSessionKey);
     }
 
     @Override
@@ -57,7 +53,7 @@ public abstract class AbstractResourceInSession<T extends Resource<T>> implement
 
     private void storeId(final @Nullable T resource) {
         final String id = resource != null ? resource.getId() : null;
-        storingStrategy.overwriteInCookies(cookieName, id, cookieHttpOnly, cookieSecure);
+        storingStrategy.overwriteInSession(idSessionKey, id);
     }
 
     private void storeVersion(final @Nullable T resource) {
@@ -67,7 +63,7 @@ public abstract class AbstractResourceInSession<T extends Resource<T>> implement
 
     @Override
     public void remove() {
-        storingStrategy.removeFromCookies(cookieName);
+        storingStrategy.removeFromSession(idSessionKey);
         storingStrategy.removeFromSession(versionSessionKey);
     }
 }

@@ -8,10 +8,10 @@ import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.models.customers.CustomerFinder;
+import com.commercetools.sunrise.models.customers.CustomerFetcher;
 import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFinder;
+import com.commercetools.sunrise.models.addresses.AddressFinder;
 import com.commercetools.sunrise.myaccount.addressbook.WithRequiredAddress;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import io.sphere.sdk.customers.Customer;
@@ -25,14 +25,14 @@ public abstract class SunriseRemoveAddressController extends SunriseContentFormC
         implements MyAccountController, WithContentFormFlow<AddressWithCustomer, Customer, RemoveAddressFormData>, WithRequiredCustomer, WithRequiredAddress {
 
     private final RemoveAddressFormData formData;
-    private final CustomerFinder customerFinder;
+    private final CustomerFetcher customerFinder;
     private final AddressFinder addressFinder;
     private final RemoveAddressControllerAction controllerAction;
     private final AddressBookPageContentFactory pageContentFactory;
 
     protected SunriseRemoveAddressController(final ContentRenderer contentRenderer,
                                              final FormFactory formFactory, final RemoveAddressFormData formData,
-                                             final CustomerFinder customerFinder, final AddressFinder addressFinder,
+                                             final CustomerFetcher customerFinder, final AddressFinder addressFinder,
                                              final RemoveAddressControllerAction controllerAction,
                                              final AddressBookPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
@@ -49,7 +49,7 @@ public abstract class SunriseRemoveAddressController extends SunriseContentFormC
     }
 
     @Override
-    public final CustomerFinder getCustomerFinder() {
+    public final CustomerFetcher getCustomerFinder() {
         return customerFinder;
     }
 

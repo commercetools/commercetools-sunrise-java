@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.models.shoppinglists;
 
-import com.commercetools.sunrise.core.controllers.ResourceFinder;
+import com.commercetools.sunrise.core.controllers.ResourceCreator;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
-@FunctionalInterface
 @ImplementedBy(DefaultWishlistCreator.class)
-public interface WishlistCreator extends ResourceFinder, Supplier<CompletionStage<ShoppingList>> {
+@FunctionalInterface
+public interface WishlistCreator extends ResourceCreator<ShoppingList>, Supplier<CompletionStage<ShoppingList>> {
     /**
      * Creates a wishlist.
      *

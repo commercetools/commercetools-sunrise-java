@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.authentication.signup.viewmodels;
 
 import com.commercetools.sunrise.core.viewmodels.FormViewModelFactory;
 import com.commercetools.sunrise.core.viewmodels.forms.titles.TitleFormFieldViewModelFactory;
-import com.commercetools.sunrise.myaccount.authentication.signup.SignUpFormData;
+import com.commercetools.sunrise.models.customers.SignUpFormData;
 import play.data.Form;
 import play.data.FormFactory;
 

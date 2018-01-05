@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress.viewmodels;
 
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
-import com.commercetools.sunrise.myaccount.addressbook.AddressFormData;
+import com.commercetools.sunrise.models.addresses.AddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsViewModelFactory;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;

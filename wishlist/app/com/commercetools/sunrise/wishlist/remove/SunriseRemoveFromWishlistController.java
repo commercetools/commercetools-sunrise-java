@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.shoppinglists.WishlistFinder;
+import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
 import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import io.sphere.sdk.shoppinglists.ShoppingList;
@@ -22,14 +22,14 @@ public abstract class SunriseRemoveFromWishlistController extends SunriseContent
         implements WithContentFormFlow<ShoppingList, ShoppingList, RemoveFromWishlistFormData>, WithRequiredWishlist {
     private final RemoveFromWishlistFormData formData;
     private final WishlistPageContentFactory wishlistPageContentFactory;
-    private final WishlistFinder wishlistFinder;
+    private final WishlistFetcher wishlistFinder;
     private final RemoveFromWishlistControllerAction controllerAction;
 
     @Inject
     protected SunriseRemoveFromWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                                   final WishlistPageContentFactory wishlistPageContentFactory,
                                                   final RemoveFromWishlistFormData formData,
-                                                  final WishlistFinder wishlistFinder,
+                                                  final WishlistFetcher wishlistFinder,
                                                   final RemoveFromWishlistControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.wishlistPageContentFactory = wishlistPageContentFactory;
@@ -44,7 +44,7 @@ public abstract class SunriseRemoveFromWishlistController extends SunriseContent
     }
 
     @Override
-    public final WishlistFinder getWishlistFinder() {
+    public final WishlistFetcher getWishlistFinder() {
         return wishlistFinder;
     }
 

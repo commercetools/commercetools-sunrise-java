@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.payment;
 
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartFinder;
+import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels.CheckoutPaymentPageContentFactory;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
@@ -31,19 +31,19 @@ public abstract class SunriseCheckoutPaymentController extends SunriseContentFor
         implements WithContentFormFlow<PaymentMethodsWithCart, Cart, CheckoutPaymentFormData>, WithRequiredCart {
 
     private final CheckoutPaymentFormData formData;
-    private final CartFinder cartFinder;
+    private final CartFetcher cartFetcher;
     private final CheckoutPaymentControllerAction controllerAction;
     private final CheckoutPaymentPageContentFactory pageContentFactory;
     private final PaymentSettings paymentSettings;
 
     protected SunriseCheckoutPaymentController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                               final CheckoutPaymentFormData formData, final CartFinder cartFinder,
+                                               final CheckoutPaymentFormData formData, final CartFetcher cartFetcher,
                                                final CheckoutPaymentControllerAction controllerAction,
                                                final CheckoutPaymentPageContentFactory pageContentFactory,
                                                final PaymentSettings paymentSettings) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.cartFinder = cartFinder;
+        this.cartFetcher = cartFetcher;
         this.controllerAction = controllerAction;
         this.pageContentFactory = pageContentFactory;
         this.paymentSettings = paymentSettings;
@@ -55,8 +55,8 @@ public abstract class SunriseCheckoutPaymentController extends SunriseContentFor
     }
 
     @Override
-    public final CartFinder getCartFinder() {
-        return cartFinder;
+    public final CartFetcher getCartFetcher() {
+        return cartFetcher;
     }
 
     @EnableHooks

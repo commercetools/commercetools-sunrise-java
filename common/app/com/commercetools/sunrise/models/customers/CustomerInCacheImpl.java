@@ -12,10 +12,10 @@ import java.util.concurrent.CompletionStage;
 @RequestScoped
 final class CustomerInCacheImpl extends AbstractResourceInCache<Customer> implements CustomerInCache {
 
-    private final CustomerFinder customerFinder;
+    private final CustomerFetcher customerFinder;
 
     @Inject
-    CustomerInCacheImpl(final CustomerInSession customerInSession, final CacheApi cacheApi, final CustomerFinder customerFinder) {
+    CustomerInCacheImpl(final CustomerInSession customerInSession, final CacheApi cacheApi, final CustomerFetcher customerFinder) {
         super(customerInSession, cacheApi);
         this.customerFinder = customerFinder;
     }
