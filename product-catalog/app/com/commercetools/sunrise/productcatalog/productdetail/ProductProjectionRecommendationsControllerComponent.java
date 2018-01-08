@@ -17,7 +17,7 @@ import java.util.concurrent.CompletionStage;
 /**
  * Loads some other products that are related to the loaded product in the controller.
  */
-public final class ProductRecommendationsControllerComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataReadyHook {
+public final class ProductProjectionRecommendationsControllerComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataReadyHook {
 
     private final ProductRecommender productRecommender;
     private final ProductListViewModelFactory productListViewModelFactory;
@@ -26,8 +26,8 @@ public final class ProductRecommendationsControllerComponent implements Controll
     private List<ProductProjection> recommendedProducts;
 
     @Inject
-    public ProductRecommendationsControllerComponent(final ProductRecommender productRecommender,
-                                                     final ProductListViewModelFactory productListViewModelFactory, final Configuration configuration) {
+    public ProductProjectionRecommendationsControllerComponent(final ProductRecommender productRecommender,
+                                                               final ProductListViewModelFactory productListViewModelFactory, final Configuration configuration) {
         this.productRecommender = productRecommender;
         this.productListViewModelFactory = productListViewModelFactory;
         this.numRecommendations = configuration.getInt("productSuggestions.count", 4);

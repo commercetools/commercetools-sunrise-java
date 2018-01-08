@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.models.customers;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.injection.RequestScoped;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.queries.CustomerQuery;
 import io.sphere.sdk.customers.queries.CustomerQueryBuilder;
@@ -8,13 +9,14 @@ import io.sphere.sdk.customers.queries.CustomerQueryBuilder;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class DefaultCustomerFetcher extends AbstractCustomerFetcher {
+@RequestScoped
+public class DefaultMyCustomerFetcher extends AbstractMyCustomerFetcher {
 
     private final CustomerInSession customerInSession;
 
     @Inject
-    protected DefaultCustomerFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                     final CustomerInSession customerInSession) {
+    protected DefaultMyCustomerFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
+                                       final CustomerInSession customerInSession) {
         super(sphereClient, hookRunner);
         this.customerInSession = customerInSession;
     }

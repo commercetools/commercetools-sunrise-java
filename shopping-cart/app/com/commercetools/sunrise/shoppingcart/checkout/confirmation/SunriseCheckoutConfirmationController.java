@@ -18,8 +18,7 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseCheckoutConfirmationController extends SunriseContentFormController
-        implements WithContentFormFlow<Cart, Order, CheckoutConfirmationFormData>, WithRequiredCart {
+public abstract class SunriseCheckoutConfirmationController extends SunriseContentFormController implements WithContentFormFlow<Cart, Order, CheckoutConfirmationFormData> {
 
     private final CheckoutConfirmationFormData formData;
     private final CartFetcher cartFetcher;
@@ -50,13 +49,13 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseConte
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_CONFIRMATION_PAGE)
     public CompletionStage<Result> show() {
-        return requireNonEmptyCart(cart -> showFormPage(cart, formData));
+        return showFormPage(null, formData); // TODO it required non-empty cart
     }
 
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_CONFIRMATION_PROCESS)
     public CompletionStage<Result> process() {
-        return requireNonEmptyCart(this::processForm);
+        return processForm(null); // TODO it required non-empty cart
     }
 
     @Override

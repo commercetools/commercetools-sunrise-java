@@ -13,9 +13,9 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractCustomerFetcher extends AbstractSingleQueryExecutor<Customer, CustomerQuery> implements CustomerFetcher {
+public abstract class AbstractMyCustomerFetcher extends AbstractSingleQueryExecutor<Customer, CustomerQuery> implements MyCustomerFetcher {
 
-    protected AbstractCustomerFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
+    protected AbstractMyCustomerFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
     }
 

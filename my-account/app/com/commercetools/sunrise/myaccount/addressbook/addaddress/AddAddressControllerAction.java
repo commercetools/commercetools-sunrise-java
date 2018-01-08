@@ -6,12 +6,12 @@ import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.Customer;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @ImplementedBy(DefaultAddAddressControllerAction.class)
 @FunctionalInterface
-public interface AddAddressControllerAction extends ControllerAction, BiFunction<Customer, AddressFormData, CompletionStage<Customer>> {
+public interface AddAddressControllerAction extends ControllerAction, Function<AddressFormData, CompletionStage<Customer>> {
 
     @Override
-    CompletionStage<Customer> apply(final Customer customer, final AddressFormData formData);
+    CompletionStage<Customer> apply(final AddressFormData formData);
 }

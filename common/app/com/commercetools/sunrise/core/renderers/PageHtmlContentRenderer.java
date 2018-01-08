@@ -6,9 +6,9 @@ import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.core.viewmodels.PageDataFactory;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartInCache;
+import com.commercetools.sunrise.models.carts.MyCartInCache;
 import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
-import com.commercetools.sunrise.models.customers.CustomerInCache;
+import com.commercetools.sunrise.models.customers.MyCustomerInCache;
 import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,21 +38,21 @@ final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implemen
     private final PageDataFactory pageDataFactory;
     private final RequestHookRunner hookRunner;
     private final CategoryTree categoryTree;
-    private final CartInCache cartInCache;
-    private final CustomerInCache customerInCache;
+    private final MyCartInCache myCartInCache;
+    private final MyCustomerInCache myCustomerInCache;
     private final WishlistFetcher wishlistFinder;
 
     @Inject
     PageHtmlContentRenderer(final Locale locale, final TemplateEngine templateEngine, final CmsService cmsService,
                             final PageDataFactory pageDataFactory, final RequestHookRunner hookRunner,
-                            @NavigationCategoryTree final CategoryTree categoryTree, final CartInCache cartInCache,
-                            final CustomerInCache customerInCache, final WishlistFetcher wishlistFinder) {
+                            @NavigationCategoryTree final CategoryTree categoryTree, final MyCartInCache myCartInCache,
+                            final MyCustomerInCache myCustomerInCache, final WishlistFetcher wishlistFinder) {
         super(locale, templateEngine, cmsService);
         this.pageDataFactory = pageDataFactory;
         this.hookRunner = hookRunner;
         this.categoryTree = categoryTree;
-        this.cartInCache = cartInCache;
-        this.customerInCache = customerInCache;
+        this.myCartInCache = myCartInCache;
+        this.myCustomerInCache = myCustomerInCache;
         this.wishlistFinder = wishlistFinder;
     }
 
@@ -72,8 +72,8 @@ final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implemen
         pageData.put("product", pageContent.get("myproduct"));
         pageData.put("variant", pageContent.get("myvariant"));
         pageData.put("categoryTree", categoryTree);
-        return cartInCache.get().thenComposeAsync(cart ->
-                customerInCache.get().thenComposeAsync(customer ->
+        return myCartInCache.get().thenComposeAsync(cart ->
+                myCustomerInCache.get().thenComposeAsync(customer ->
                         wishlistFinder.get().thenApply(wishlist -> {
                             pageData.put("cart", cart.orElse(null));
                             pageData.put("customer", customer.orElse(null));

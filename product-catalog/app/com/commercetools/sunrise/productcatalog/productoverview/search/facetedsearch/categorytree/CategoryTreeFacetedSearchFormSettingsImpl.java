@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.faceteds
 
 import com.commercetools.sunrise.models.categories.CategorySettings;
 import com.commercetools.sunrise.models.categories.SpecialCategorySettings;
-import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
+import com.commercetools.sunrise.models.categories.CategoryFinder;
 import com.commercetools.sunrise.models.search.SearchUtils;
 import com.commercetools.sunrise.models.search.facetedsearch.AbstractFacetedSearchFormSettingsWithOptions;
 import io.sphere.sdk.categories.Category;

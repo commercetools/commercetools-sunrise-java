@@ -1,20 +1,15 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 
-import com.commercetools.sunrise.models.addresses.AddressWithCustomer;
-import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.models.customers.CustomerFetcher;
-import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.WithRequiredCustomer;
-import com.commercetools.sunrise.models.addresses.AddressFinder;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.models.addresses.AddressFormData;
-import com.commercetools.sunrise.myaccount.addressbook.WithRequiredAddress;
+import com.commercetools.sunrise.myaccount.MyAccountController;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels.ChangeAddressPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
@@ -27,23 +22,18 @@ import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseChangeAddressController extends SunriseContentFormController
-        implements MyAccountController, WithContentFormFlow<AddressWithCustomer, Customer, AddressFormData>, WithRequiredCustomer, WithRequiredAddress {
+        implements MyAccountController, WithContentFormFlow<String, Customer, AddressFormData> {
 
     private final AddressFormData formData;
-    private final CustomerFetcher customerFinder;
-    private final AddressFinder addressFinder;
     private final ChangeAddressControllerAction controllerAction;
     private final ChangeAddressPageContentFactory pageContentFactory;
 
     protected SunriseChangeAddressController(final ContentRenderer contentRenderer,
                                              final FormFactory formFactory, final AddressFormData formData,
-                                             final CustomerFetcher customerFinder, final AddressFinder addressFinder,
                                              final ChangeAddressControllerAction controllerAction,
                                              final ChangeAddressPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.customerFinder = customerFinder;
-        this.addressFinder = addressFinder;
         this.controllerAction = controllerAction;
         this.pageContentFactory = pageContentFactory;
     }
@@ -53,52 +43,39 @@ public abstract class SunriseChangeAddressController extends SunriseContentFormC
         return formData.getClass();
     }
 
-    @Override
-    public final CustomerFetcher getCustomerFinder() {
-        return customerFinder;
-    }
-
-    @Override
-    public final AddressFinder getAddressFinder() {
-        return addressFinder;
-    }
-
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PAGE)
     public CompletionStage<Result> show(final String addressIdentifier) {
-        return requireCustomer(customer ->
-                requireAddress(customer, addressIdentifier, address ->
-                        showFormPage(AddressWithCustomer.of(address, customer), formData)));
+        return showFormPage(addressIdentifier, formData);
     }
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PROCESS)
     public CompletionStage<Result> process(final String addressIdentifier) {
-        return requireCustomer(customer ->
-                requireAddress(customer, addressIdentifier, address ->
-                        processForm(AddressWithCustomer.of(address, customer))));
+        return processForm(addressIdentifier);
     }
 
     @Override
-    public CompletionStage<Customer> executeAction(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
-        return controllerAction.apply(addressWithCustomer, formData);
+    public CompletionStage<Customer> executeAction(final String addressIdentifier, final AddressFormData formData) {
+        return controllerAction.apply(addressIdentifier, formData);
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final AddressFormData formData);
 
+    // TODO move this to templates
     @Override
-    public void preFillFormData(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
-        final Address address = addressWithCustomer.getAddress();
-        final Customer customer = addressWithCustomer.getCustomer();
-        formData.applyAddress(address);
-        formData.applyDefaultShippingAddress(isDefaultAddress(address, customer.getDefaultShippingAddressId()));
-        formData.applyDefaultBillingAddress(isDefaultAddress(address, customer.getDefaultBillingAddressId()));
+    public void preFillFormData(final String addressId, final AddressFormData formData) {
+//        final Address address = addressWithCustomer.getAddress();
+//        final Customer customer = addressWithCustomer.getCustomer();
+//        formData.applyAddress(address);
+//        formData.applyDefaultShippingAddress(isDefaultAddress(address, customer.getDefaultShippingAddressId()));
+//        formData.applyDefaultBillingAddress(isDefaultAddress(address, customer.getDefaultBillingAddressId()));
     }
 
     @Override
-    public PageContent createPageContent(final AddressWithCustomer addressWithCustomer, final Form<? extends AddressFormData> form) {
-        return pageContentFactory.create(addressWithCustomer, form);
+    public PageContent createPageContent(final String addressIdentifier, final Form<? extends AddressFormData> form) {
+        return pageContentFactory.create(null, form);
     }
 
     private boolean isDefaultAddress(final Address address, @Nullable final String defaultAddressId) {

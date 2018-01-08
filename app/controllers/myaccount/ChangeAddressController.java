@@ -5,7 +5,7 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
-import com.commercetools.sunrise.models.customers.CustomerFetcher;
+import com.commercetools.sunrise.models.customers.MyCustomerFetcher;
 import com.commercetools.sunrise.models.addresses.AddressFinder;
 import com.commercetools.sunrise.models.addresses.AddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.changeaddress.ChangeAddressControllerAction;
@@ -29,7 +29,7 @@ public final class ChangeAddressController extends SunriseChangeAddressControlle
     public ChangeAddressController(final ContentRenderer contentRenderer,
                                    final FormFactory formFactory,
                                    final AddressFormData formData,
-                                   final CustomerFetcher customerFinder,
+                                   final MyCustomerFetcher customerFinder,
                                    final AddressFinder addressFinder,
                                    final ChangeAddressControllerAction controllerAction,
                                    final ChangeAddressPageContentFactory pageContentFactory,

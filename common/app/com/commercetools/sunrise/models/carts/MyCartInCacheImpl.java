@@ -10,12 +10,12 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @RequestScoped
-final class CartInCacheImpl extends AbstractResourceInCache<Cart> implements CartInCache {
+final class MyCartInCacheImpl extends AbstractResourceInCache<Cart> implements MyCartInCache {
 
     private final CartFetcher cartFetcher;
 
     @Inject
-    CartInCacheImpl(final CartInSession cartInSession, final CacheApi cacheApi, final CartFetcher cartFetcher) {
+    MyCartInCacheImpl(final CartInSession cartInSession, final CacheApi cacheApi, final CartFetcher cartFetcher) {
         super(cartInSession, cacheApi);
         this.cartFetcher = cartFetcher;
     }

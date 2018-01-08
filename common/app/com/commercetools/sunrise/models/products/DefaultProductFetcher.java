@@ -3,6 +3,7 @@ package com.commercetools.sunrise.models.products;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.products.ProductProjection;
+import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
 import io.sphere.sdk.products.queries.ProductProjectionQueryModel;
 import io.sphere.sdk.products.search.PriceSelection;
@@ -49,6 +50,11 @@ public class DefaultProductFetcher extends AbstractProductFetcher {
         } else {
             return super.selectResource(result);
         }
+    }
+
+    @Override
+    protected ProductVariant selectProductVariant(final ProductProjection product, final String sku) {
+        return product.findVariantBySku(sku).orElseGet(product::getMasterVariant);
     }
 
     private boolean productMatchesSlugInUsersLanguage(final ProductProjection product, final String slug) {

@@ -8,9 +8,9 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
-@ImplementedBy(DefaultCustomerFetcher.class)
+@ImplementedBy(DefaultMyCustomerFetcher.class)
 @FunctionalInterface
-public interface CustomerFetcher extends ResourceFetcher<Customer>, Supplier<CompletionStage<Optional<Customer>>> {
+public interface MyCustomerFetcher extends ResourceFetcher<Customer>, Supplier<CompletionStage<Optional<Customer>>> {
 
     @Override
     CompletionStage<Optional<Customer>> get();

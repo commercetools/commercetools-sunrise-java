@@ -3,12 +3,12 @@ package com.commercetools.sunrise.core.hooks;
 import com.commercetools.sunrise.core.components.Component;
 import org.slf4j.Logger;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public abstract class AbstractComponentRegistry implements ComponentRegistry {
 
-    private final List<Class<? extends Component>> components = new LinkedList<>();
+    private final Set<Class<? extends Component>> components = new LinkedHashSet<>();
 
     @Override
     public void add(final Class<? extends Component> componentClass) {
@@ -17,7 +17,7 @@ public abstract class AbstractComponentRegistry implements ComponentRegistry {
     }
 
     @Override
-    public List<Class<? extends Component>> components() {
+    public Set<Class<? extends Component>> components() {
         return components;
     }
 

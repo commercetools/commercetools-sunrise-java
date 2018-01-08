@@ -3,59 +3,53 @@ package com.commercetools.sunrise.productcatalog.productoverview;
 import com.commercetools.sunrise.core.controllers.SunriseContentController;
 import com.commercetools.sunrise.core.controllers.WithQueryFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
-import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.search.PagedSearchResult;
 import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 /**
  * Provides facilities display products by category.
  */
-public abstract class SunriseProductOverviewController extends SunriseContentController implements WithQueryFlow<ProductsWithCategory>, WithRequiredCategory {
+public abstract class SunriseProductOverviewController extends SunriseContentController implements WithQueryFlow<PagedSearchResult<ProductProjection>> {
 
-    private final CategoryFinder categoryFinder;
-    private final ProductListFetcher productListFinder;
+    private final ProductListFetcher productListFetcher;
     private final ProductOverviewPageContentFactory productOverviewPageContentFactory;
 
     protected SunriseProductOverviewController(final ContentRenderer contentRenderer,
-                                               final CategoryFinder categoryFinder, final ProductListFetcher productListFinder,
+                                               final ProductListFetcher productListFetcher,
                                                final ProductOverviewPageContentFactory productOverviewPageContentFactory) {
         super(contentRenderer);
-        this.categoryFinder = categoryFinder;
-        this.productListFinder = productListFinder;
+        this.productListFetcher = productListFetcher;
         this.productOverviewPageContentFactory = productOverviewPageContentFactory;
     }
 
-    @Override
-    public final CategoryFinder getCategoryFinder() {
-        return categoryFinder;
+    protected final ProductListFetcher getProductListFetcher() {
+        return productListFetcher;
     }
 
     @EnableHooks
     @SunriseRoute(ProductReverseRouter.PRODUCT_OVERVIEW_PAGE)
     public CompletionStage<Result> show(final String categoryIdentifier) {
-        return requireCategory(categoryIdentifier, category ->
-                findProducts(category, products ->
-                        showPage(ProductsWithCategory.of(products, category))));
+        return show();
     }
 
-    protected final CompletionStage<Result> findProducts(final Category category, final Function<PagedSearchResult<ProductProjection>, CompletionStage<Result>> nextAction) {
-        return productListFinder.apply(category)
-                .thenComposeAsync(nextAction, HttpExecution.defaultContext());
+    @EnableHooks
+    @SunriseRoute(ProductReverseRouter.SEARCH_PROCESS)
+    public CompletionStage<Result> show() {
+        return productListFetcher.get().thenComposeAsync(this::showPage, HttpExecution.defaultContext());
     }
 
     @Override
-    public PageContent createPageContent(final ProductsWithCategory productsWithCategory) {
-        return productOverviewPageContentFactory.create(productsWithCategory);
+    public PageContent createPageContent(final PagedSearchResult<ProductProjection> products) {
+        return productOverviewPageContentFactory.create(null);
     }
 }

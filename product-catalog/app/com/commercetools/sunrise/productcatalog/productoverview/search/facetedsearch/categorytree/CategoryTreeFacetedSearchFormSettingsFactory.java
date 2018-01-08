@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.productoverview.search.faceteds
 
 import com.commercetools.sunrise.models.categories.CategorySettings;
 import com.commercetools.sunrise.core.SunriseModel;
-import com.commercetools.sunrise.productcatalog.productoverview.CategoryFinder;
+import com.commercetools.sunrise.models.categories.CategoryFinder;
 import io.sphere.sdk.categories.CategoryTree;
 
 import javax.inject.Inject;

@@ -1,31 +1,22 @@
 package com.commercetools.sunrise.shoppingcart.removediscountcode;
 
-import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.carts.AbstractCartUpdateExecutor;
+import com.commercetools.sunrise.models.carts.MyCartUpdater;
 import com.google.inject.Inject;
 import io.sphere.sdk.carts.Cart;
-import io.sphere.sdk.carts.commands.CartUpdateCommand;
-import io.sphere.sdk.carts.commands.updateactions.RemoveDiscountCode;
-import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.discountcodes.DiscountCode;
 
-import java.util.Arrays;
 import java.util.concurrent.CompletionStage;
 
-public class DefaultRemoveDiscountCodeControllerAction extends AbstractCartUpdateExecutor implements RemoveDiscountCodeControllerAction {
+final class DefaultRemoveDiscountCodeControllerAction implements RemoveDiscountCodeControllerAction {
+
+    private final MyCartUpdater myCartUpdater;
 
     @Inject
-    protected DefaultRemoveDiscountCodeControllerAction(final SphereClient sphereClient, final HookRunner hookRunner) {
-        super(sphereClient, hookRunner);
+    DefaultRemoveDiscountCodeControllerAction(final MyCartUpdater myCartUpdater) {
+        this.myCartUpdater = myCartUpdater;
     }
 
     @Override
-    public CompletionStage<Cart> apply(final Cart cart, final RemoveDiscountCodeFormData removeDiscountCodeFormData) {
-        return executeRequest(cart, buildRequest(cart, removeDiscountCodeFormData));
-    }
-
-    protected CartUpdateCommand buildRequest(final Cart cart, final RemoveDiscountCodeFormData removeDiscountCodeFormData) {
-        final RemoveDiscountCode addDiscountCode = RemoveDiscountCode.of(DiscountCode.referenceOfId(removeDiscountCodeFormData.discountCodeId()));
-        return CartUpdateCommand.of(cart, Arrays.asList(addDiscountCode));
+    public CompletionStage<Cart> apply(final RemoveDiscountCodeFormData formData) {
+        return myCartUpdater.force(formData.removeDiscountCode());
     }
 }

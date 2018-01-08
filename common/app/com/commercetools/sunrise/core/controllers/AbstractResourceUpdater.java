@@ -1,34 +1,71 @@
 package com.commercetools.sunrise.core.controllers;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
+import com.commercetools.sunrise.core.sessions.ResourceInCache;
+import io.sphere.sdk.client.ConcurrentModificationException;
 import io.sphere.sdk.client.SphereClient;
-import io.sphere.sdk.commands.Command;
+import io.sphere.sdk.commands.UpdateAction;
+import io.sphere.sdk.commands.UpdateCommand;
 import io.sphere.sdk.expansion.ExpansionPathContainer;
+import io.sphere.sdk.models.Resource;
 import play.libs.concurrent.HttpExecution;
 
-import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public abstract class AbstractResourceUpdater<T, C extends Command<T>> extends AbstractSphereRequestExecutor implements ResourceCreator<T> {
+import static io.sphere.sdk.utils.CompletableFutureUtils.exceptionallyCompletedFuture;
+import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
-    protected AbstractResourceUpdater(final SphereClient sphereClient, final HookRunner hookRunner) {
+public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends UpdateCommand<T> & ExpansionPathContainer<T>> extends AbstractSphereRequestExecutor implements ResourceUpdater<T> {
+
+    private final ResourceInCache<T> resourceInCache;
+
+    protected AbstractResourceUpdater(final SphereClient sphereClient, final HookRunner hookRunner, final ResourceInCache<T> resourceInCache) {
         super(sphereClient, hookRunner);
+        this.resourceInCache = resourceInCache;
     }
 
-    protected final CompletionStage<T> executeRequest(final C baseCommand, @Nullable final ExpansionPathContainer<T> expansionPathContainer) {
-        final C command = runCreateCommandHook(baseCommand);
-        return getSphereClient().execute(command)
-                .thenComposeAsync(resource -> runActionHook(resource, expansionPathContainer)
-                                .thenApplyAsync(updatedResource -> {
-                                    runCreatedHook(updatedResource);
-                                    return updatedResource;
-                                }, HttpExecution.defaultContext()),
-                        HttpExecution.defaultContext());
+    @Override
+    public CompletionStage<Optional<T>> apply(final List<UpdateAction<T>> updateActions) {
+        return recoverWith(executeRequest(updateActions, resourceInCache.get()), throwable -> {
+            final Throwable causeThrowable = throwable.getCause();
+            if (causeThrowable instanceof ConcurrentModificationException) {
+                resourceInCache.remove();
+                return executeRequest(updateActions, resourceInCache.get());
+            }
+            return exceptionallyCompletedFuture(throwable);
+        }, HttpExecution.defaultContext());
     }
 
-    protected abstract C runCreateCommandHook(C baseCommand);
+    private CompletionStage<Optional<T>> executeRequest(final List<UpdateAction<T>> updateActions, final CompletionStage<Optional<T>> resourceStage) {
+        return resourceStage.thenComposeAsync(resourceOpt -> resourceOpt
+                .map(resource -> executeRequest(resource, buildUpdateCommand(updateActions, resource))
+                        .thenApply(Optional::of))
+                .orElseGet(() -> completedFuture(Optional.empty())), HttpExecution.defaultContext());
+    }
 
-    protected abstract CompletionStage<?> runCreatedHook(T resource);
+    protected final CompletionStage<T> executeRequest(final T resource, final C baseCommand) {
+        final C command = runUpdateCommandHook(getHookRunner(), baseCommand);
+        if (!command.getUpdateActions().isEmpty()) {
+            return getSphereClient().execute(command)
+                    .thenComposeAsync(updatedResource -> runActionHook(getHookRunner(), updatedResource, command)
+                            .thenApplyAsync(finalUpdatedResource -> {
+                                runUpdatedHook(getHookRunner(), finalUpdatedResource);
+                                return finalUpdatedResource;
+                            }, HttpExecution.defaultContext()),
+                    HttpExecution.defaultContext());
+        } else {
+            return completedFuture(resource);
+        }
+    }
 
-    protected abstract CompletionStage<T> runActionHook(T resource, @Nullable final ExpansionPathContainer<T> expansionPathContainer);
+    protected abstract C buildUpdateCommand(final List<UpdateAction<T>> updateActions, final T resource);
+
+    protected abstract C runUpdateCommandHook(HookRunner hookRunner, C baseCommand);
+
+    protected abstract CompletionStage<T> runActionHook(HookRunner hookRunner, T resource, final ExpansionPathContainer<T> expansionPathContainer);
+
+    protected abstract CompletionStage<?> runUpdatedHook(HookRunner hookRunner, T resource);
 }

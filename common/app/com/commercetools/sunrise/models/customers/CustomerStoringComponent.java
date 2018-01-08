@@ -15,12 +15,12 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public final class CustomerStoringComponent implements ControllerComponent, CustomerSignInResultLoadedHook, CustomerUpdatedHook, CustomerLoadedHook {
 
     private final CustomerInSession customerInSession;
-    private final CustomerInCache customerInCache;
+    private final MyCustomerInCache myCustomerInCache;
 
     @Inject
-    CustomerStoringComponent(final CustomerInSession customerInSession, final CustomerInCache customerInCache) {
+    CustomerStoringComponent(final CustomerInSession customerInSession, final MyCustomerInCache myCustomerInCache) {
         this.customerInSession = customerInSession;
-        this.customerInCache = customerInCache;
+        this.myCustomerInCache = myCustomerInCache;
     }
 
     @Override
@@ -40,7 +40,7 @@ public final class CustomerStoringComponent implements ControllerComponent, Cust
 
     private CompletionStage<?> storeCustomer(final Customer customer) {
         customerInSession.store(customer);
-        customerInCache.store(customer);
+        myCustomerInCache.store(customer);
         return completedFuture(null);
     }
 }

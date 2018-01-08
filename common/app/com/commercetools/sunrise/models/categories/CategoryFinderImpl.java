@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.productcatalog.productoverview;
+package com.commercetools.sunrise.models.categories;
 
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;

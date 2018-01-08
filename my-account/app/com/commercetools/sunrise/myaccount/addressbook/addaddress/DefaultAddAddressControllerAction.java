@@ -1,13 +1,9 @@
 package com.commercetools.sunrise.myaccount.addressbook.addaddress;
 
-import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.customers.AbstractCustomerUpdateExecutor;
 import com.commercetools.sunrise.models.addresses.AddressFormData;
-import io.sphere.sdk.client.SphereClient;
+import com.commercetools.sunrise.models.customers.MyCustomerUpdater;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
-import io.sphere.sdk.customers.commands.updateactions.AddAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
 import io.sphere.sdk.models.Address;
@@ -19,43 +15,23 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public class DefaultAddAddressControllerAction extends AbstractCustomerUpdateExecutor implements AddAddressControllerAction {
+public class DefaultAddAddressControllerAction implements AddAddressControllerAction {
+
+    private final MyCustomerUpdater myCustomerUpdater;
 
     @Inject
-    protected DefaultAddAddressControllerAction(final SphereClient sphereClient, final HookRunner hookRunner) {
-        super(sphereClient, hookRunner);
+    protected DefaultAddAddressControllerAction(final MyCustomerUpdater myCustomerUpdater) {
+        this.myCustomerUpdater = myCustomerUpdater;
     }
 
     @Override
-    public CompletionStage<Customer> apply(final Customer customer, final AddressFormData formData) {
-        return executeRequest(customer, buildRequest(customer, formData))
-                .thenComposeAsync(updatedCustomer -> executeRequest(updatedCustomer, buildPostRequest(updatedCustomer, formData)), HttpExecution.defaultContext());
+    public CompletionStage<Customer> apply(final AddressFormData formData) {
+        return myCustomerUpdater.force(formData.updateActions())
+                .thenComposeAsync(customer -> myCustomerUpdater.force(buildActionsToSetDefaults(formData, customer)),
+                        HttpExecution.defaultContext());
     }
 
-    protected CustomerUpdateCommand buildRequest(final Customer customer, final AddressFormData formData) {
-        final List<UpdateAction<Customer>> updateActions = buildUpdateActions(formData);
-        return CustomerUpdateCommand.of(customer, updateActions);
-    }
-
-    protected CustomerUpdateCommand buildPostRequest(final Customer customer, final AddressFormData formData) {
-        final List<UpdateAction<Customer>> updateActions = buildPostUpdateActions(customer, formData);
-        return CustomerUpdateCommand.of(customer, updateActions);
-    }
-
-    protected final Optional<String> findAddressId(final Customer customer, final Address addressWithoutId) {
-        return customer.getAddresses().stream()
-                .filter(address -> address.equalsIgnoreId(addressWithoutId))
-                .findFirst()
-                .map(Address::getId);
-    }
-
-    private List<UpdateAction<Customer>> buildUpdateActions(final AddressFormData formData) {
-        final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        updateActions.add(AddAddress.of(formData.address()));
-        return updateActions;
-    }
-
-    private List<UpdateAction<Customer>> buildPostUpdateActions(final Customer customer, final AddressFormData formData) {
+    private List<UpdateAction<Customer>> buildActionsToSetDefaults(final AddressFormData formData, final Customer customer) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
         findAddressId(customer, formData.address())
                 .ifPresent(addressId -> {
@@ -67,5 +43,12 @@ public class DefaultAddAddressControllerAction extends AbstractCustomerUpdateExe
                     }
                 });
         return updateActions;
+    }
+
+    protected final Optional<String> findAddressId(final Customer customer, final Address addressWithoutId) {
+        return customer.getAddresses().stream()
+                .filter(address -> address.equalsIgnoreId(addressWithoutId))
+                .findAny()
+                .map(Address::getId);
     }
 }

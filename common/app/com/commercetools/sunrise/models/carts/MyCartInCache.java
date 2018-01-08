@@ -8,8 +8,8 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-@ImplementedBy(CartInCacheImpl.class)
-public interface CartInCache extends ResourceInCache<Cart> {
+@ImplementedBy(MyCartInCacheImpl.class)
+public interface MyCartInCache extends ResourceInCache<Cart> {
 
     @Override
     CompletionStage<Optional<Cart>> get();

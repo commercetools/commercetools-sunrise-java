@@ -5,7 +5,7 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
-import com.commercetools.sunrise.models.customers.CustomerFetcher;
+import com.commercetools.sunrise.models.customers.MyCustomerFetcher;
 import com.commercetools.sunrise.models.orders.MyOrderFetcher;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.SunriseMyOrderDetailController;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels.MyOrderDetailPageContentFactory;
@@ -23,7 +23,7 @@ public final class MyOrderDetailController extends SunriseMyOrderDetailControlle
 
     @Inject
     public MyOrderDetailController(final ContentRenderer contentRenderer,
-                                   final CustomerFetcher customerFinder,
+                                   final MyCustomerFetcher customerFinder,
                                    final MyOrderFetcher myOrderFinder,
                                    final MyOrderDetailPageContentFactory pageContentFactory,
                                    final MyOrdersReverseRouter myOrdersReverseRouter,

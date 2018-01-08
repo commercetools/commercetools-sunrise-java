@@ -1,16 +1,17 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.customers.AbstractCustomerUpdateExecutor;
 import com.commercetools.sunrise.models.addresses.AddressFormData;
-import com.commercetools.sunrise.models.addresses.AddressWithCustomer;
+import com.commercetools.sunrise.models.customers.AbstractCustomerUpdateExecutor;
+import com.commercetools.sunrise.models.customers.MyCustomerInCache;
+import com.commercetools.sunrise.models.customers.MyCustomerUpdater;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.customers.commands.CustomerUpdateCommand;
 import io.sphere.sdk.customers.commands.updateactions.ChangeAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
+import play.libs.concurrent.HttpExecution;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -23,29 +24,32 @@ import java.util.function.Function;
 
 public class DefaultChangeAddressControllerAction extends AbstractCustomerUpdateExecutor implements ChangeAddressControllerAction {
 
+    private final MyCustomerUpdater myCustomerUpdater;
+    private final MyCustomerInCache myCustomerInCache;
+
     @Inject
-    protected DefaultChangeAddressControllerAction(final SphereClient sphereClient, final HookRunner hookRunner) {
+    protected DefaultChangeAddressControllerAction(final SphereClient sphereClient, final HookRunner hookRunner,
+                                                   final MyCustomerUpdater myCustomerUpdater, final MyCustomerInCache myCustomerInCache) {
         super(sphereClient, hookRunner);
+        this.myCustomerUpdater = myCustomerUpdater;
+        this.myCustomerInCache = myCustomerInCache;
     }
 
     @Override
-    public CompletionStage<Customer> apply(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
-        return executeRequest(addressWithCustomer.getCustomer(), buildRequest(addressWithCustomer, formData));
+    public CompletionStage<Customer> apply(final String addressId, final AddressFormData formData) {
+        return myCustomerInCache.require()
+                .thenComposeAsync(customer -> myCustomerUpdater.force(buildUpdateActions(addressId, formData, customer)),
+                        HttpExecution.defaultContext());
     }
 
-    protected CustomerUpdateCommand buildRequest(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
-        final List<UpdateAction<Customer>> updateActions = buildUpdateActions(addressWithCustomer, formData);
-        return CustomerUpdateCommand.of(addressWithCustomer.getCustomer(), updateActions);
-    }
-
-    private List<UpdateAction<Customer>> buildUpdateActions(final AddressWithCustomer addressWithCustomer, final AddressFormData formData) {
+    private List<UpdateAction<Customer>> buildUpdateActions(final String addressId, final AddressFormData formData, final Customer customer) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        updateActions.add(ChangeAddress.ofOldAddressToNewAddress(addressWithCustomer.getAddress(), formData.address()));
-        updateActions.addAll(buildSetDefaultAddressActions(addressWithCustomer.getCustomer(), addressWithCustomer.getAddress().getId(), formData));
+        updateActions.add(ChangeAddress.of(addressId, formData.address()));
+        updateActions.addAll(buildSetDefaultAddressActions(addressId, formData, customer));
         return updateActions;
     }
 
-    private List<UpdateAction<Customer>> buildSetDefaultAddressActions(final Customer customer, final String addressId, final AddressFormData formData) {
+    private List<UpdateAction<Customer>> buildSetDefaultAddressActions(final String addressId, final AddressFormData formData, final Customer customer) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
         buildSetDefaultAddressAction(addressId, formData.defaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
                 .ifPresent(updateActions::add);

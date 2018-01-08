@@ -16,12 +16,12 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public final class CartStoringComponent implements ControllerComponent, CartLoadedHook, CartUpdatedHook, CartCreatedHook, CustomerSignInResultLoadedHook {
 
     private final CartInSession cartInSession;
-    private final CartInCache cartInCache;
+    private final MyCartInCache myCartInCache;
 
     @Inject
-    CartStoringComponent(final CartInSession cartInSession, final CartInCache cartInCache) {
+    CartStoringComponent(final CartInSession cartInSession, final MyCartInCache myCartInCache) {
         this.cartInSession = cartInSession;
-        this.cartInCache = cartInCache;
+        this.myCartInCache = myCartInCache;
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class CartStoringComponent implements ControllerComponent, CartLoad
 
     private CompletionStage<?> storeCart(final Cart cart) {
         cartInSession.store(cart);
-        cartInCache.store(cart);
+        myCartInCache.store(cart);
         return completedFuture(null);
     }
 }

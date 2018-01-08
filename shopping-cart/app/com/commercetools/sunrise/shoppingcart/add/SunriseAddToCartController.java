@@ -1,42 +1,32 @@
 package com.commercetools.sunrise.shoppingcart.add;
 
-import com.commercetools.sunrise.models.carts.CartCreator;
-import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartFetcher;
-import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddToCartController extends SunriseContentFormController
-        implements WithContentFormFlow<Cart, Cart, AddToCartFormData>, WithRequiredCart {
+public abstract class SunriseAddToCartController extends SunriseContentFormController implements WithContentFormFlow<Void, Cart, AddToCartFormData> {
 
     private final AddToCartFormData formData;
-    private final CartFetcher cartFetcher;
-    private final CartCreator cartCreator;
     private final AddToCartControllerAction controllerAction;
     private final CartPageContentFactory pageContentFactory;
 
     protected SunriseAddToCartController(final ContentRenderer contentRenderer,
                                          final FormFactory formFactory, final AddToCartFormData formData,
-                                         final CartFetcher cartFetcher, final CartCreator cartCreator,
                                          final AddToCartControllerAction controllerAction,
                                          final CartPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.cartFetcher = cartFetcher;
-        this.cartCreator = cartCreator;
         this.controllerAction = controllerAction;
         this.pageContentFactory = pageContentFactory;
     }
@@ -46,42 +36,27 @@ public abstract class SunriseAddToCartController extends SunriseContentFormContr
         return formData.getClass();
     }
 
-    @Override
-    public final CartFetcher getCartFetcher() {
-        return cartFetcher;
-    }
-
-    public final CartCreator getCartCreator() {
-        return cartCreator;
-    }
-
     @EnableHooks
     @SunriseRoute(CartReverseRouter.ADD_LINE_ITEM_PROCESS)
     public CompletionStage<Result> process() {
-        return requireCart(this::processForm);
+        return processForm(null);
     }
 
     @Override
-    public CompletionStage<Cart> executeAction(final Cart cart, final AddToCartFormData formData) {
-        return controllerAction.apply(cart, formData);
-    }
-
-    @Override
-    public CompletionStage<Result> handleNotFoundCart() {
-        return cartCreator.get()
-                .thenComposeAsync(this::processForm, HttpExecution.defaultContext());
+    public CompletionStage<Cart> executeAction(final Void input, final AddToCartFormData formData) {
+        return controllerAction.apply(formData);
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final AddToCartFormData formData);
 
     @Override
-    public PageContent createPageContent(final Cart cart, final Form<? extends AddToCartFormData> form) {
-        return pageContentFactory.create(cart);
+    public PageContent createPageContent(final Void input, final Form<? extends AddToCartFormData> form) {
+        return pageContentFactory.create(null);
     }
 
     @Override
-    public void preFillFormData(final Cart cart, final AddToCartFormData formData) {
+    public void preFillFormData(final Void input, final AddToCartFormData formData) {
         // Do not pre-fill with anything
     }
 }

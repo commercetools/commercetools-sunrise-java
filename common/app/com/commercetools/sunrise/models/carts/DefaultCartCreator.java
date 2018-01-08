@@ -9,6 +9,7 @@ import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Address;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.money.CurrencyUnit;
 
@@ -40,12 +41,13 @@ public class DefaultCartCreator extends AbstractCartCreator implements CartCreat
     }
 
     @Override
-    protected CartCreateCommand buildRequest() {
-        return CartCreateCommand.of(buildDraft());
+    protected CartCreateCommand buildRequest(@Nullable final CartDraft template) {
+        return CartCreateCommand.of(buildDraft(template));
     }
 
-    private CartDraft buildDraft() {
-        return CartDraftBuilder.of(currency)
+    private CartDraft buildDraft(@Nullable final CartDraft template) {
+        final CartDraftBuilder builder = template != null ? CartDraftBuilder.of(template) : CartDraftBuilder.of(currency);
+        return builder
                 .country(country)
                 .shippingAddress(Address.of(country))
                 .customerId(customerInSession.findId().orElse(null))

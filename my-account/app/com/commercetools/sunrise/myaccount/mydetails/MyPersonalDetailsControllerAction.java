@@ -5,12 +5,12 @@ import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.Customer;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @ImplementedBy(DefaultMyPersonalDetailsControllerAction.class)
 @FunctionalInterface
-public interface MyPersonalDetailsControllerAction extends ControllerAction, BiFunction<Customer, MyPersonalDetailsFormData, CompletionStage<Customer>> {
+public interface MyPersonalDetailsControllerAction extends ControllerAction, Function<MyPersonalDetailsFormData, CompletionStage<Customer>> {
 
     @Override
-    CompletionStage<Customer> apply(final Customer customer, final MyPersonalDetailsFormData formData);
+    CompletionStage<Customer> apply(final MyPersonalDetailsFormData formData);
 }
