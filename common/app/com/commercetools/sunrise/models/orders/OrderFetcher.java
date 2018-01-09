@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
+
+// TODO Consider if show order can be done differently (cache, ctx.args...)
 @ImplementedBy(DefaultOrderFetcher.class)
 @FunctionalInterface
 public interface OrderFetcher extends ResourceFetcher<Order>, Function<String, CompletionStage<Optional<Order>>> {

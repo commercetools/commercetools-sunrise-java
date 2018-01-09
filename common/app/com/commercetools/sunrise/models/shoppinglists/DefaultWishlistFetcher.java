@@ -21,8 +21,16 @@ public class DefaultWishlistFetcher extends AbstractWishlistFetcher {
         this.customerInSession = customerInSession;
     }
 
+    protected final WishlistInSession getWishlistInSession() {
+        return wishlistInSession;
+    }
+
+    protected final CustomerInSession getCustomerInSession() {
+        return customerInSession;
+    }
+
     @Override
-    protected Optional<ShoppingListQuery> buildRequest() {
+    public Optional<ShoppingListQuery> defaultRequest() {
         return tryBuildQueryByCustomerId()
                 .map(Optional::of)
                 .orElseGet(this::tryBuildQueryByWishlistId)

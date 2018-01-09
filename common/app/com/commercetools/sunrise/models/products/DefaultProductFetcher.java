@@ -32,15 +32,16 @@ public class DefaultProductFetcher extends AbstractProductFetcher {
     }
 
     @Override
-    protected Optional<ProductProjectionQuery> buildRequest(final String slug) {
-        return buildSlugPredicate(slug)
+    public Optional<ProductProjectionQuery> defaultRequest(final String productIdentifier) {
+        return buildSlugPredicate(productIdentifier)
                 .map(slugPredicate -> ProductProjectionQuery.ofCurrent()
                         .withPriceSelection(priceSelection)
                         .withPredicates(slugPredicate));
     }
 
     @Override
-    protected Optional<ProductProjection> selectResource(final PagedQueryResult<ProductProjection> result, final String slug) {
+    protected Optional<ProductProjection> selectProduct(final PagedQueryResult<ProductProjection> result,
+                                                         final String slug, final String sku) {
         if (result.getTotal() > 1) {
             return result.getResults().stream()
                     .filter(product -> productMatchesSlugInUsersLanguage(product, slug))
@@ -53,7 +54,7 @@ public class DefaultProductFetcher extends AbstractProductFetcher {
     }
 
     @Override
-    protected ProductVariant selectProductVariant(final ProductProjection product, final String sku) {
+    protected ProductVariant selectVariant(final ProductProjection product, final String sku) {
         return product.findVariantBySku(sku).orElseGet(product::getMasterVariant);
     }
 

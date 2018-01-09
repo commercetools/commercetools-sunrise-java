@@ -34,14 +34,10 @@ public abstract class SunriseProductDetailController extends SunriseContentContr
         this.productDetailPageContentFactory = productDetailPageContentFactory;
     }
 
-    protected final ProductFetcher getProductFetcher() {
-        return productFetcher;
-    }
-
     @EnableHooks
     @SunriseRoute(ProductReverseRouter.PRODUCT_DETAIL_PAGE)
-    public CompletionStage<Result> show(final String productIdentifier, final String productVariantIdentifier) {
-        return productFetcher.require(productIdentifier, productVariantIdentifier)
+    public CompletionStage<Result> show(final String productIdentifier, final String variantIdentifier) {
+        return productFetcher.require(productIdentifier, variantIdentifier)
                 .thenComposeAsync(this::showPage, HttpExecution.defaultContext());
     }
 

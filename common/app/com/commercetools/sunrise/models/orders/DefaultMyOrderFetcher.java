@@ -23,7 +23,7 @@ public class DefaultMyOrderFetcher extends AbstractMyOrderFetcher {
     }
 
     @Override
-    protected Optional<OrderQuery> buildRequest(final String identifier) {
+    public Optional<OrderQuery> defaultRequest(final String identifier) {
         return customerInSession.findId()
                 .map(customerId -> OrderQuery.of().byCustomerId(customerId)
                         .plusPredicates(order -> order.orderNumber().is(identifier))

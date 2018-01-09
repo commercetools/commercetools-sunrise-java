@@ -5,6 +5,7 @@ import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.ShoppingListQueryHook;
 import io.sphere.sdk.client.SphereClient;
+import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 
@@ -17,7 +18,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * This base class provides an execution strategy to execute a {@link ShoppingListQuery} for a single {@link ShoppingList}
  * with the registred hooks {@link ShoppingListQueryHook} and {@link ShoppingListLoadedHook}.
  */
-public abstract class AbstractWishlistFetcher extends AbstractSingleQueryExecutor<ShoppingList, ShoppingListQuery> implements WishlistFetcher {
+public abstract class AbstractWishlistFetcher extends AbstractSingleQueryExecutor<ShoppingList, ShoppingListQuery, PagedQueryResult<ShoppingList>> implements WishlistFetcher {
 
     protected AbstractWishlistFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
@@ -25,7 +26,7 @@ public abstract class AbstractWishlistFetcher extends AbstractSingleQueryExecuto
 
     @Override
     public CompletionStage<Optional<ShoppingList>> get() {
-        return buildRequest().map(this::executeRequest).orElseGet(() -> completedFuture(Optional.empty()));
+        return defaultRequest().map(this::executeRequest).orElseGet(() -> completedFuture(Optional.empty()));
     }
 
     @Override
@@ -37,6 +38,4 @@ public abstract class AbstractWishlistFetcher extends AbstractSingleQueryExecuto
     protected CompletionStage<?> runResourceLoadedHook(final ShoppingList resource) {
         return ShoppingListLoadedHook.runHook(getHookRunner(), resource);
     }
-
-    protected abstract Optional<ShoppingListQuery> buildRequest();
 }

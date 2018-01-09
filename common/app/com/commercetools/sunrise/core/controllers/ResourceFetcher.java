@@ -1,14 +1,17 @@
 package com.commercetools.sunrise.core.controllers;
 
 import com.commercetools.sunrise.core.NotFoundResourceException;
-import com.commercetools.sunrise.models.products.ProductWithVariant;
+import io.sphere.sdk.client.SphereRequest;
+import io.sphere.sdk.queries.PagedResult;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public interface ResourceFetcher<T> {
+public interface ResourceFetcher<T, Q extends SphereRequest<P>, P extends PagedResult<T>> {
 
-    default CompletionStage<ProductWithVariant> require(final CompletionStage<Optional<ProductWithVariant>> resourceStage) {
-        return resourceStage.thenApply(resourceOpt -> resourceOpt.orElseThrow(NotFoundResourceException::new));
+    CompletionStage<Optional<T>> get(final Q request);
+
+    default CompletionStage<T> require(final Q request) {
+        return get(request).thenApply(resourceOpt -> resourceOpt.orElseThrow(NotFoundResourceException::new));
     }
 }

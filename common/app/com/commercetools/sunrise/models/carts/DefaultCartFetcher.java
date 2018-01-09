@@ -9,7 +9,7 @@ import io.sphere.sdk.client.SphereClient;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class DefaultCartFetcher extends AbstractCartFetcher implements CartFetcher {
+public class DefaultCartFetcher extends AbstractCartFetcher {
 
     private final MyCartInSession myCartInSession;
     private final CustomerInSession customerInSession;
@@ -31,7 +31,7 @@ public class DefaultCartFetcher extends AbstractCartFetcher implements CartFetch
     }
 
     @Override
-    protected Optional<CartQuery> buildRequest() {
+    public Optional<CartQuery> defaultRequest() {
         return tryBuildQueryByCustomerId()
                 .map(Optional::of)
                 .orElseGet(this::tryBuildQueryByCartId)
