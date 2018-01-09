@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication.logout;
 
-import com.commercetools.sunrise.models.carts.CartInSession;
+import com.commercetools.sunrise.models.carts.MyCartInSession;
 import com.commercetools.sunrise.models.customers.CustomerInSession;
 
 import javax.inject.Inject;
@@ -8,17 +8,17 @@ import javax.inject.Inject;
 public class DefaultLogOutControllerAction implements LogOutControllerAction {
 
     private final CustomerInSession customerInSession;
-    private final CartInSession cartInSession;
+    private final MyCartInSession myCartInSession;
 
     @Inject
-    protected DefaultLogOutControllerAction(final CustomerInSession customerInSession, final CartInSession cartInSession) {
+    protected DefaultLogOutControllerAction(final CustomerInSession customerInSession, final MyCartInSession myCartInSession) {
         this.customerInSession = customerInSession;
-        this.cartInSession = cartInSession;
+        this.myCartInSession = myCartInSession;
     }
 
     @Override
     public void run() {
         customerInSession.remove();
-        cartInSession.remove();
+        myCartInSession.remove();
     }
 }

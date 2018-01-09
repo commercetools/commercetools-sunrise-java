@@ -1,15 +1,14 @@
 package com.commercetools.sunrise.core.sessions;
 
+import com.commercetools.sunrise.core.NotFoundResourceException;
 import io.sphere.sdk.models.Resource;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Supplier;
 
-public interface ResourceInCache<T extends Resource<T>> extends StoringOperations<T>, Supplier<CompletionStage<Optional<T>>> {
+public interface ResourceInCache<T extends Resource<T>> extends StoringOperations<T> {
 
-    @Override
     CompletionStage<Optional<T>> get();
 
     @Override
@@ -17,4 +16,8 @@ public interface ResourceInCache<T extends Resource<T>> extends StoringOperation
 
     @Override
     void remove();
+
+    default CompletionStage<T> require() {
+        return get().thenApply(resourceOpt -> resourceOpt.orElseThrow(NotFoundResourceException::new));
+    }
 }

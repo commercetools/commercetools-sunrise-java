@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.shoppingcart.checkout.shipping;
+package com.commercetools.sunrise.models.shippingmethods;
 
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.SphereClient;

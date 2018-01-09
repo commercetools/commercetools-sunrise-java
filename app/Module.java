@@ -7,12 +7,12 @@ import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
 import com.commercetools.sunrise.models.carts.CartComponentSupplier;
 import com.commercetools.sunrise.models.customers.CustomerComponentSupplier;
 import com.commercetools.sunrise.models.customers.CustomerInSession;
+import com.commercetools.sunrise.models.products.ProductListFetcher;
+import com.commercetools.sunrise.models.products.ProductListFetcherWithMatchingVariants;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.AlphabeticallySortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.CustomSortedTermFacetViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.TermFacetViewModelFactory;
-import com.commercetools.sunrise.models.products.ProductListFetcher;
-import com.commercetools.sunrise.models.products.ProductListFetcherWithMatchingVariants;
-import com.commercetools.sunrise.wishlist.WishlistStoringComponent;
+import com.commercetools.sunrise.models.shoppinglists.WishlistComponentSupplier;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
@@ -106,7 +106,7 @@ public class Module extends AbstractModule {
         globalComponentRegistry.addAll(CartComponentSupplier.get());
         globalComponentRegistry.addAll(CustomerComponentSupplier.get());
         globalComponentRegistry.addAll(TemplateComponentSupplier.get());
-        globalComponentRegistry.add(WishlistStoringComponent.class);
+        globalComponentRegistry.addAll(WishlistComponentSupplier.get());
         return globalComponentRegistry;
     }
 }

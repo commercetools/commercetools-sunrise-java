@@ -5,7 +5,7 @@ import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 
 public interface ShoppingListQueryHook extends CtpRequestHook {
 
-    ShoppingListQuery onShoppingListQuery(final ShoppingListQuery cartQuery);
+    ShoppingListQuery onShoppingListQuery(final ShoppingListQuery shoppingListQuery);
 
     static ShoppingListQuery runHook(final HookRunner hookRunner, final ShoppingListQuery shoppingListQuery) {
         return hookRunner.runUnaryOperatorHook(ShoppingListQueryHook.class, ShoppingListQueryHook::onShoppingListQuery, shoppingListQuery);

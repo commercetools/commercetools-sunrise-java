@@ -11,19 +11,19 @@ import java.util.Optional;
 
 public class DefaultCartFetcher extends AbstractCartFetcher implements CartFetcher {
 
-    private final CartInSession cartInSession;
+    private final MyCartInSession myCartInSession;
     private final CustomerInSession customerInSession;
 
     @Inject
     protected DefaultCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                 final CartInSession cartInSession, final CustomerInSession customerInSession) {
+                                 final MyCartInSession myCartInSession, final CustomerInSession customerInSession) {
         super(sphereClient, hookRunner);
-        this.cartInSession = cartInSession;
+        this.myCartInSession = myCartInSession;
         this.customerInSession = customerInSession;
     }
 
-    protected final CartInSession getCartInSession() {
-        return cartInSession;
+    protected final MyCartInSession getMyCartInSession() {
+        return myCartInSession;
     }
 
     protected final CustomerInSession getCustomerInSession() {
@@ -44,7 +44,7 @@ public class DefaultCartFetcher extends AbstractCartFetcher implements CartFetch
     }
 
     private Optional<CartQuery> tryBuildQueryByCartId() {
-        return cartInSession.findId()
+        return myCartInSession.findId()
                 .map(cartId -> CartQuery.of().plusPredicates(cart -> cart.id().is(cartId)));
     }
 

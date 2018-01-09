@@ -1,7 +1,7 @@
 package controllers.shoppingcart;
 
 import com.commercetools.sunrise.it.WithSphereClient;
-import com.commercetools.sunrise.models.carts.CartInSession;
+import com.commercetools.sunrise.models.carts.MyCartInSession;
 import io.sphere.sdk.cartdiscounts.*;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
@@ -61,14 +61,14 @@ public class RemoveDiscountCodeControllerIntegrationTest extends WithSphereClien
     private static final String CART_DISCOUNT_SORT_ORDER = "0.6";
 
     @Mock
-    private CartInSession cartInSession;
+    private MyCartInSession myCartInSession;
 
     @Override
     protected Application provideApplication() {
         return new GuiceApplicationBuilder()
                 .overrides(
                         bind(SphereClient.class).toInstance(sphereClient),
-                        bind(CartInSession.class).toInstance(cartInSession)
+                        bind(MyCartInSession.class).toInstance(myCartInSession)
                 ).build();
     }
 
@@ -81,7 +81,7 @@ public class RemoveDiscountCodeControllerIntegrationTest extends WithSphereClien
     public void shouldRemoveDiscountCode() throws Exception {
         withCartDiscountAndDiscountCode(discountCode -> {
             withTaxedFilledAndDiscountedCart(discountCode, cart -> {
-                when(cartInSession.findId()).thenReturn(Optional.of(cart.getId()));
+                when(myCartInSession.findId()).thenReturn(Optional.of(cart.getId()));
 
                 final Map<String, String> bodyForm = new HashMap<>();
                 bodyForm.put("discountCodeId", discountCode.getId());

@@ -10,8 +10,8 @@ import java.util.Optional;
 /**
  * Keeps some parts from the cart in session, such as cart ID and mini cart.
  */
-@ImplementedBy(CartInSessionImpl.class)
-public interface CartInSession extends ResourceInSession<Cart> {
+@ImplementedBy(MyCartInSessionImpl.class)
+public interface MyCartInSession extends ResourceInSession<Cart> {
 
     @Override
     Optional<String> findId();

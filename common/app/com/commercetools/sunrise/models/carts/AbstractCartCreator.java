@@ -11,21 +11,18 @@ import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.expansion.ExpansionPathContainer;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.CompletionStage;
 
-public abstract class AbstractCartCreator extends AbstractResourceCreator<Cart, CartCreateCommand> implements CartCreator {
+public abstract class AbstractCartCreator extends AbstractResourceCreator<Cart, CartDraft, CartCreateCommand> implements CartCreator {
 
     protected AbstractCartCreator(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
     }
 
     @Override
-    public CompletionStage<Cart> get(@Nullable final CartDraft template) {
-        return executeRequest(buildRequest(template));
+    protected CartCreateCommand buildRequest(final CartDraft draft) {
+        return CartCreateCommand.of(draft);
     }
-
-    protected abstract CartCreateCommand buildRequest(@Nullable CartDraft template);
 
     @Override
     protected CartCreateCommand runCreateCommandHook(final HookRunner hookRunner, final CartCreateCommand baseCommand) {

@@ -1,16 +1,13 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.carts.CartFetcher;
-import com.commercetools.sunrise.shoppingcart.WithRequiredCart;
-import com.commercetools.sunrise.shoppingcart.checkout.confirmation.viewmodels.CheckoutConfirmationPageContentFactory;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import io.sphere.sdk.carts.Cart;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.shoppingcart.checkout.confirmation.viewmodels.CheckoutConfirmationPageContentFactory;
 import io.sphere.sdk.orders.Order;
 import play.data.Form;
 import play.data.FormFactory;
@@ -18,20 +15,18 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseCheckoutConfirmationController extends SunriseContentFormController implements WithContentFormFlow<Cart, Order, CheckoutConfirmationFormData> {
+public abstract class SunriseCheckoutConfirmationController extends SunriseContentFormController implements WithContentFormFlow<Void, Order, CheckoutConfirmationFormData> {
 
     private final CheckoutConfirmationFormData formData;
-    private final CartFetcher cartFetcher;
     private final CheckoutConfirmationControllerAction controllerAction;
     private final CheckoutConfirmationPageContentFactory pageContentFactory;
 
     protected SunriseCheckoutConfirmationController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                                    final CheckoutConfirmationFormData formData, final CartFetcher cartFetcher,
+                                                    final CheckoutConfirmationFormData formData,
                                                     final CheckoutConfirmationControllerAction controllerAction,
                                                     final CheckoutConfirmationPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.cartFetcher = cartFetcher;
         this.controllerAction = controllerAction;
         this.pageContentFactory = pageContentFactory;
     }
@@ -39,11 +34,6 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseConte
     @Override
     public final Class<? extends CheckoutConfirmationFormData> getFormDataClass() {
         return formData.getClass();
-    }
-
-    @Override
-    public final CartFetcher getCartFetcher() {
-        return cartFetcher;
     }
 
     @EnableHooks
@@ -59,20 +49,20 @@ public abstract class SunriseCheckoutConfirmationController extends SunriseConte
     }
 
     @Override
-    public CompletionStage<Order> executeAction(final Cart cart, final CheckoutConfirmationFormData formData) {
-        return controllerAction.apply(cart, formData);
+    public CompletionStage<Order> executeAction(final Void input, final CheckoutConfirmationFormData formData) {
+        return controllerAction.apply(formData);
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final Order order, final CheckoutConfirmationFormData formData);
 
     @Override
-    public PageContent createPageContent(final Cart cart, final Form<? extends CheckoutConfirmationFormData> form) {
-        return pageContentFactory.create(cart, form);
+    public PageContent createPageContent(final Void input, final Form<? extends CheckoutConfirmationFormData> form) {
+        return pageContentFactory.create(null, form);
     }
 
     @Override
-    public void preFillFormData(final Cart cart, final CheckoutConfirmationFormData formData) {
+    public void preFillFormData(final Void input, final CheckoutConfirmationFormData formData) {
         // Do not pre-fill anything
     }
 }

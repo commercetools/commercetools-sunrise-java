@@ -14,7 +14,7 @@ import io.sphere.sdk.carts.queries.CartQuery;
  * @see CartExpansionModel#shippingInfo()
  * @see ShippingInfoExpansionModel#shippingMethod()
  */
-public final class CartShippingInfoExpansionControllerComponent implements ControllerComponent, CartQueryHook {
+public final class CartShippingInfoExpansionComponent implements ControllerComponent, CartQueryHook {
     @Override
     public CartQuery onCartQuery(final CartQuery cartQuery) {
         return cartQuery.plusExpansionPaths(m -> m.shippingInfo().shippingMethod());

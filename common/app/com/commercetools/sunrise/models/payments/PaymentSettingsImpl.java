@@ -1,7 +1,6 @@
-package com.commercetools.sunrise.shoppingcart.checkout.payment;
+package com.commercetools.sunrise.models.payments;
 
 import com.commercetools.sunrise.core.i18n.I18nResolver;
-import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.models.LocalizedStringEntry;
 import io.sphere.sdk.payments.PaymentMethodInfo;
@@ -14,11 +13,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletionStage;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
-import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.stream.Collectors.toList;
 
 @Singleton
@@ -48,8 +45,8 @@ final class PaymentSettingsImpl implements PaymentSettings {
     }
 
     @Override
-    public CompletionStage<List<PaymentMethodInfo>> getPaymentMethods(final Cart cart) {
-        return completedFuture(paymentMethods);
+    public List<PaymentMethodInfo> paymentMethods() {
+        return paymentMethods;
     }
 
     private static LocalizedString buildLocalizedName(final String messageKey,

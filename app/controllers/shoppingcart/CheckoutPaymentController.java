@@ -7,11 +7,11 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
 import com.commercetools.sunrise.models.carts.CartFetcher;
-import com.commercetools.sunrise.models.carts.CartPaymentInfoExpansionControllerComponent;
+import com.commercetools.sunrise.models.carts.CartPaymentInfoExpansionComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentFormData;
-import com.commercetools.sunrise.shoppingcart.checkout.payment.PaymentSettings;
+import com.commercetools.sunrise.models.payments.PaymentSettings;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.SunriseCheckoutPaymentController;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels.CheckoutPaymentPageContentFactory;
 import io.sphere.sdk.carts.Cart;
@@ -25,7 +25,7 @@ import java.util.concurrent.CompletionStage;
 @NoCache
 @RegisteredComponents({
         CheckoutStepControllerComponent.class,
-        CartPaymentInfoExpansionControllerComponent.class
+        CartPaymentInfoExpansionComponent.class
 })
 public final class CheckoutPaymentController extends SunriseCheckoutPaymentController {
 

@@ -12,10 +12,10 @@ import javax.inject.Singleton;
  * Keeps some parts from the cart in session, such as cart ID and mini cart.
  */
 @Singleton
-final class CartInSessionImpl extends AbstractResourceInSession<Cart> implements CartInSession {
+final class MyCartInSessionImpl extends AbstractResourceInSession<Cart> implements MyCartInSession {
 
     @Inject
-    CartInSessionImpl(final Configuration globalConfig, final StoringStrategy storingStrategy) {
+    MyCartInSessionImpl(final Configuration globalConfig, final StoringStrategy storingStrategy) {
         super(globalConfig.getConfig("sunrise.carts"), storingStrategy);
     }
 }

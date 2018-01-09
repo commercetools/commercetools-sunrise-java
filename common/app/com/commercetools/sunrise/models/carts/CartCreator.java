@@ -4,17 +4,16 @@ import com.commercetools.sunrise.core.controllers.ResourceCreator;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.CartDraft;
+import play.libs.concurrent.HttpExecution;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.CompletionStage;
 
 @ImplementedBy(DefaultCartCreator.class)
-@FunctionalInterface
-public interface CartCreator extends ResourceCreator<Cart> {
+public interface CartCreator extends ResourceCreator<Cart, CartDraft> {
 
-    CompletionStage<Cart> get(@Nullable CartDraft template);
+    CompletionStage<CartDraft> defaultDraft();
 
     default CompletionStage<Cart> get() {
-        return get(null);
+        return defaultDraft().thenComposeAsync(this::get, HttpExecution.defaultContext());
     }
 }

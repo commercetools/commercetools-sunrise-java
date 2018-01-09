@@ -5,12 +5,10 @@ import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.Cart;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 
 @ImplementedBy(DefaultCheckoutShippingControllerAction.class)
 @FunctionalInterface
-public interface CheckoutShippingControllerAction extends ControllerAction, BiFunction<ShippingMethodsWithCart, CheckoutShippingFormData, CompletionStage<Cart>> {
+public interface CheckoutShippingControllerAction extends ControllerAction {
 
-    @Override
-    CompletionStage<Cart> apply(ShippingMethodsWithCart shippingMethodsWithCart, CheckoutShippingFormData formData);
+    CompletionStage<Cart> apply(CheckoutShippingFormData formData);
 }

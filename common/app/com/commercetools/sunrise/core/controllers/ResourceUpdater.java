@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.core.controllers;
 
-import io.sphere.sdk.client.NotFoundException;
+import com.commercetools.sunrise.core.NotFoundResourceException;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.models.Resource;
 
@@ -20,7 +20,7 @@ public interface ResourceUpdater<T extends Resource<T>> {
     }
 
     default CompletionStage<T> force(List<UpdateAction<T>> updateActions) {
-        return apply(updateActions).thenApply(resource -> resource.orElseThrow(NotFoundException::new));
+        return apply(updateActions).thenApply(resource -> resource.orElseThrow(NotFoundResourceException::new));
     }
 
     default CompletionStage<T> force(UpdateAction<T> updateAction) {

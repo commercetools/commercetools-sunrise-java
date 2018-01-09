@@ -5,15 +5,16 @@ import com.commercetools.sunrise.models.customers.CustomerInSession;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.CartDraft;
 import io.sphere.sdk.carts.CartDraftBuilder;
-import io.sphere.sdk.carts.commands.CartCreateCommand;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.models.Address;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.money.CurrencyUnit;
+import java.util.concurrent.CompletionStage;
 
-public class DefaultCartCreator extends AbstractCartCreator implements CartCreator {
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
+public class DefaultCartCreator extends AbstractCartCreator {
 
     private final CountryCode country;
     private final CurrencyUnit currency;
@@ -41,17 +42,12 @@ public class DefaultCartCreator extends AbstractCartCreator implements CartCreat
     }
 
     @Override
-    protected CartCreateCommand buildRequest(@Nullable final CartDraft template) {
-        return CartCreateCommand.of(buildDraft(template));
-    }
-
-    private CartDraft buildDraft(@Nullable final CartDraft template) {
-        final CartDraftBuilder builder = template != null ? CartDraftBuilder.of(template) : CartDraftBuilder.of(currency);
-        return builder
+    public CompletionStage<CartDraft> defaultDraft() {
+        return completedFuture(CartDraftBuilder.of(currency)
                 .country(country)
                 .shippingAddress(Address.of(country))
                 .customerId(customerInSession.findId().orElse(null))
                 .customerEmail(customerInSession.findEmail().orElse(null))
-                .build();
+                .build());
     }
 }

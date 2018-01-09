@@ -2,15 +2,18 @@ package com.commercetools.sunrise.models.customers;
 
 import com.commercetools.sunrise.core.controllers.ResourceCreator;
 import com.google.inject.ImplementedBy;
+import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;
+import play.libs.concurrent.HttpExecution;
 
 import java.util.concurrent.CompletionStage;
-import java.util.function.Function;
 
 @ImplementedBy(DefaultCustomerCreator.class)
-@FunctionalInterface
-public interface CustomerCreator extends ResourceCreator<CustomerSignInResult>, Function<SignUpFormData, CompletionStage<CustomerSignInResult>> {
+public interface CustomerCreator extends ResourceCreator<CustomerSignInResult, CustomerDraft> {
 
-    @Override
-    CompletionStage<CustomerSignInResult> apply(SignUpFormData formData);
+    CompletionStage<CustomerDraft> defaultDraft(String email, String password);
+
+    default CompletionStage<CustomerSignInResult> get(String email, String password) {
+        return defaultDraft(email, password).thenComposeAsync(this::get, HttpExecution.defaultContext());
+    }
 }

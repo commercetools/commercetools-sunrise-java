@@ -1,26 +1,24 @@
 package com.commercetools.sunrise.models.carts;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.ctpevents.CartCreatedHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.CartLoadedHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.CartUpdatedHook;
-import com.commercetools.sunrise.core.hooks.ctpevents.CustomerSignInResultLoadedHook;
+import com.commercetools.sunrise.core.hooks.ctpevents.*;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.customers.CustomerSignInResult;
+import io.sphere.sdk.orders.Order;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public final class CartStoringComponent implements ControllerComponent, CartLoadedHook, CartUpdatedHook, CartCreatedHook, CustomerSignInResultLoadedHook {
+public final class CartStoringComponent implements ControllerComponent, CartLoadedHook, CartUpdatedHook, CartCreatedHook, CustomerSignInResultLoadedHook, OrderCreatedHook {
 
-    private final CartInSession cartInSession;
+    private final MyCartInSession myCartInSession;
     private final MyCartInCache myCartInCache;
 
     @Inject
-    CartStoringComponent(final CartInSession cartInSession, final MyCartInCache myCartInCache) {
-        this.cartInSession = cartInSession;
+    CartStoringComponent(final MyCartInSession myCartInSession, final MyCartInCache myCartInCache) {
+        this.myCartInSession = myCartInSession;
         this.myCartInCache = myCartInCache;
     }
 
@@ -44,8 +42,15 @@ public final class CartStoringComponent implements ControllerComponent, CartLoad
         return storeCart(customerSignInResult.getCart());
     }
 
+    @Override
+    public CompletionStage<?> onOrderCreated(final Order order) {
+        myCartInSession.remove();
+        myCartInCache.remove();
+        return completedFuture(null);
+    }
+
     private CompletionStage<?> storeCart(final Cart cart) {
-        cartInSession.store(cart);
+        myCartInSession.store(cart);
         myCartInCache.store(cart);
         return completedFuture(null);
     }

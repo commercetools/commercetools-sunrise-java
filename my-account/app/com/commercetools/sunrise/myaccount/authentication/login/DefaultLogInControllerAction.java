@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.carts.CartInSession;
+import com.commercetools.sunrise.models.carts.MyCartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
@@ -21,12 +21,12 @@ import static io.sphere.sdk.utils.CompletableFutureUtils.recoverWith;
 public class DefaultLogInControllerAction extends AbstractCustomerSignInExecutor implements LogInControllerAction {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(LogInControllerAction.class);
-    private final CartInSession cartInSession;
+    private final MyCartInSession myCartInSession;
 
     @Inject
-    protected DefaultLogInControllerAction(final SphereClient sphereClient, final HookRunner hookRunner, final CartInSession cartInSession) {
+    protected DefaultLogInControllerAction(final SphereClient sphereClient, final HookRunner hookRunner, final MyCartInSession myCartInSession) {
         super(sphereClient, hookRunner);
-        this.cartInSession = cartInSession;
+        this.myCartInSession = myCartInSession;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class DefaultLogInControllerAction extends AbstractCustomerSignInExecutor
     }
 
     protected CustomerSignInCommand buildRequest(final LogInFormData formData) {
-        final String cartId = cartInSession.findId().orElse(null);
+        final String cartId = myCartInSession.findId().orElse(null);
         return CustomerSignInCommand.of(formData.username(), formData.password(), cartId);
     }
 

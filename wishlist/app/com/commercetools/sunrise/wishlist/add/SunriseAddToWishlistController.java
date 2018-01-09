@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.shoppinglists.WishlistCreator;
+import com.commercetools.sunrise.models.shoppinglists.MyWishlistCreator;
 import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
 import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
@@ -24,7 +24,7 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
         implements WithContentFormFlow<ShoppingList, ShoppingList, AddToWishlistFormData>, WithRequiredWishlist {
     private final AddToWishlistFormData formData;
     private final WishlistPageContentFactory wishlistPageContentFactory;
-    private final WishlistCreator wishlistCreator;
+    private final MyWishlistCreator myWishlistCreator;
     private final WishlistFetcher wishlistFinder;
     private final AddToWishlistControllerAction controllerAction;
 
@@ -32,13 +32,13 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
     protected SunriseAddToWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                              final WishlistPageContentFactory wishlistPageContentFactory,
                                              final AddToWishlistFormData formData,
-                                             final WishlistCreator wishlistCreator,
+                                             final MyWishlistCreator myWishlistCreator,
                                              final WishlistFetcher wishlistFinder,
                                              final AddToWishlistControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.wishlistPageContentFactory = wishlistPageContentFactory;
         this.formData = formData;
-        this.wishlistCreator = wishlistCreator;
+        this.myWishlistCreator = myWishlistCreator;
         this.wishlistFinder = wishlistFinder;
         this.controllerAction = controllerAction;
     }
@@ -74,7 +74,7 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
 
     @Override
     public CompletionStage<Result> handleNotFoundWishlist() {
-        return wishlistCreator.get()
+        return myWishlistCreator.get()
                 .thenComposeAsync(this::processForm, HttpExecution.defaultContext());
     }
 

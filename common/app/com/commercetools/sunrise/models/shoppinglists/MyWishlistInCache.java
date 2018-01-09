@@ -8,8 +8,8 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-@ImplementedBy(WishlistInCacheImpl.class)
-public interface WishlistInCache extends ResourceInCache<ShoppingList> {
+@ImplementedBy(MyWishlistInCacheImpl.class)
+public interface MyWishlistInCache extends ResourceInCache<ShoppingList> {
 
     @Override
     CompletionStage<Optional<ShoppingList>> get();

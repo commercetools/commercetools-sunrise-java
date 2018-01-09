@@ -1,37 +1,38 @@
 package com.commercetools.sunrise.models.customers;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.carts.CartInSession;
+import com.commercetools.sunrise.models.carts.MyCartInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerDraftBuilder;
-import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class DefaultCustomerCreator extends AbstractCustomerCreator {
 
-    private final CartInSession cartInSession;
+    private final MyCartInSession myCartInSession;
 
     @Inject
-    protected DefaultCustomerCreator(final SphereClient sphereClient, final HookRunner hookRunner, final CartInSession cartInSession) {
+    protected DefaultCustomerCreator(final SphereClient sphereClient, final HookRunner hookRunner, final MyCartInSession myCartInSession) {
         super(sphereClient, hookRunner);
-        this.cartInSession = cartInSession;
+        this.myCartInSession = myCartInSession;
+    }
+
+    protected final MyCartInSession getMyCartInSession() {
+        return myCartInSession;
     }
 
     @Override
-    protected CustomerCreateCommand buildRequest(final SignUpFormData formData) {
-        return CustomerCreateCommand.of(buildDraft(formData));
-    }
-
-    private CustomerDraft buildDraft(final SignUpFormData formData) {
-        final String cartId = cartInSession.findId().orElse(null);
-        return CustomerDraftBuilder.of(formData.customerDraft())
+    public CompletionStage<CustomerDraft> defaultDraft(final String email, final String password) {
+        return completedFuture(CustomerDraftBuilder.of(email, password)
                 .customerNumber(generateCustomerNumber())
-                .anonymousCartId(cartId)
-                .build();
+                .anonymousCartId(myCartInSession.findId().orElse(null))
+                .build());
     }
 
     @Nullable

@@ -15,8 +15,8 @@ final class MyCartInCacheImpl extends AbstractResourceInCache<Cart> implements M
     private final CartFetcher cartFetcher;
 
     @Inject
-    MyCartInCacheImpl(final CartInSession cartInSession, final CacheApi cacheApi, final CartFetcher cartFetcher) {
-        super(cartInSession, cacheApi);
+    MyCartInCacheImpl(final MyCartInSession myCartInSession, final CacheApi cacheApi, final CartFetcher cartFetcher) {
+        super(myCartInSession, cacheApi);
         this.cartFetcher = cartFetcher;
     }
 

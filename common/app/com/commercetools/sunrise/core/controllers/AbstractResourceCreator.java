@@ -8,13 +8,18 @@ import play.libs.concurrent.HttpExecution;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class AbstractResourceCreator<T, C extends CreateCommand<T> & ExpansionPathContainer<T>> extends AbstractSphereRequestExecutor implements ResourceCreator<T> {
+public abstract class AbstractResourceCreator<T, D, C extends CreateCommand<T> & ExpansionPathContainer<T>> extends AbstractSphereRequestExecutor implements ResourceCreator<T, D> {
 
     protected AbstractResourceCreator(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
     }
 
-    protected final CompletionStage<T> executeRequest(final C baseCommand) {
+    @Override
+    public final CompletionStage<T> get(final D draft) {
+        return executeRequest(buildRequest(draft));
+    }
+
+    protected CompletionStage<T> executeRequest(final C baseCommand) {
         final C command = runCreateCommandHook(getHookRunner(), baseCommand);
         return getSphereClient().execute(command)
                 .thenComposeAsync(result -> runActionHook(getHookRunner(), result, command)
@@ -24,6 +29,8 @@ public abstract class AbstractResourceCreator<T, C extends CreateCommand<T> & Ex
                         }, HttpExecution.defaultContext()),
                         HttpExecution.defaultContext());
     }
+
+    protected abstract C buildRequest(D draft);
 
     protected abstract C runCreateCommandHook(HookRunner hookRunner, C baseCommand);
 
