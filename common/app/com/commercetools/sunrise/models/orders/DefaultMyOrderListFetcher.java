@@ -20,7 +20,7 @@ public class DefaultMyOrderListFetcher extends AbstractMyOrderListFetcher {
     }
 
     @Override
-    protected Optional<OrderQuery> buildRequest() {
+    public Optional<OrderQuery> defaultRequest() {
         return customerInSession.findId()
                 .map(customerId -> OrderQuery.of()
                         .byCustomerId(customerId)

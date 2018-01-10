@@ -1,17 +1,22 @@
 package com.commercetools.sunrise.models.customers;
 
-import com.commercetools.sunrise.core.controllers.ResourceFetcher;
+import com.commercetools.sunrise.core.NotFoundResourceException;
+import com.commercetools.sunrise.core.controllers.SingleResourceFetcher;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.Customer;
+import io.sphere.sdk.customers.queries.CustomerQuery;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Supplier;
 
 @ImplementedBy(DefaultMyCustomerFetcher.class)
-@FunctionalInterface
-public interface MyCustomerFetcher extends ResourceFetcher<Customer>, Supplier<CompletionStage<Optional<Customer>>> {
+public interface MyCustomerFetcher extends SingleResourceFetcher<Customer, CustomerQuery> {
 
-    @Override
+    Optional<CustomerQuery> defaultRequest();
+
     CompletionStage<Optional<Customer>> get();
+
+    default CompletionStage<Customer> require() {
+        return get().thenApply(resourceOpt -> resourceOpt.orElseThrow(NotFoundResourceException::new));
+    }
 }

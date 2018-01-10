@@ -3,7 +3,7 @@ package controllers.wishlist;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
+import com.commercetools.sunrise.models.shoppinglists.MyWishlistFetcher;
 import com.commercetools.sunrise.wishlist.clear.ClearWishlistControllerAction;
 import com.commercetools.sunrise.wishlist.clear.SunriseClearWishlistController;
 import com.google.inject.Inject;
@@ -19,7 +19,7 @@ public final class ClearWishlistController extends SunriseClearWishlistControlle
     private final WishlistReverseRouter reverseRouter;
 
     @Inject
-    public ClearWishlistController(final WishlistFetcher wishlistFinder,
+    public ClearWishlistController(final MyWishlistFetcher wishlistFinder,
                                    final ClearWishlistControllerAction controllerAction,
                                    final WishlistReverseRouter reverseRouter) {
         super(wishlistFinder, controllerAction);

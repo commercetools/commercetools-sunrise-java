@@ -19,7 +19,7 @@ public class DefaultProductListFetcher extends AbstractProductListFetcher {
     }
 
     @Override
-    protected Optional<ProductProjectionSearch> buildRequest() {
+    public Optional<ProductProjectionSearch> defaultRequest() {
         return Optional.of(ProductProjectionSearch.ofCurrent()
                 .withMarkingMatchingVariants(false)
                 .withPriceSelection(priceSelection));

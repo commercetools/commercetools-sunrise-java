@@ -5,8 +5,6 @@ import com.commercetools.sunrise.core.controllers.WithExecutionFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
-import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.mvc.Result;
@@ -17,40 +15,31 @@ import java.util.concurrent.CompletionStage;
 /**
  * This controller is used to view the current wishlist.
  */
-public abstract class SunriseClearWishlistController extends SunriseController
-        implements WithExecutionFlow<ShoppingList, ShoppingList>, WithRequiredWishlist {
+public abstract class SunriseClearWishlistController extends SunriseController implements WithExecutionFlow<Void, ShoppingList> {
 
-    private final WishlistFetcher wishlistFinder;
     private final ClearWishlistControllerAction controllerAction;
 
     @Inject
-    protected SunriseClearWishlistController(final WishlistFetcher wishlistFinder,
-                                             final ClearWishlistControllerAction controllerAction) {
-        this.wishlistFinder = wishlistFinder;
+    protected SunriseClearWishlistController(final ClearWishlistControllerAction controllerAction) {
         this.controllerAction = controllerAction;
-    }
-
-    @Override
-    public final WishlistFetcher getWishlistFinder() {
-        return wishlistFinder;
     }
 
     @EnableHooks
     @SunriseRoute(WishlistReverseRouter.CLEAR_WISHLIST_PROCESS)
     public CompletionStage<Result> process() {
-        return requireWishlist(this::processRequest);
+        return processRequest(null);
     }
 
     @Override
-    public CompletionStage<ShoppingList> executeAction(final ShoppingList wishlist) {
-        return controllerAction.apply(wishlist);
+    public CompletionStage<ShoppingList> executeAction(final Void input) {
+        return controllerAction.apply();
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist);
 
     @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final ShoppingList wishlist, final ClientErrorException clientErrorException) {
+    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final ClientErrorException clientErrorException) {
         return handleGeneralFailedAction(clientErrorException);
     }
 }

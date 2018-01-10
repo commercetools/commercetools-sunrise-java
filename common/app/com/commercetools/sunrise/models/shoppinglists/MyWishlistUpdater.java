@@ -14,5 +14,5 @@ import java.util.concurrent.CompletionStage;
 public interface MyWishlistUpdater extends ResourceUpdater<ShoppingList> {
 
     @Override
-    CompletionStage<Optional<ShoppingList>> apply(List<UpdateAction<ShoppingList>> updateActions);
+    CompletionStage<Optional<ShoppingList>> apply(List<? extends UpdateAction<ShoppingList>> updateActions);
 }

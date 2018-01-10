@@ -32,8 +32,7 @@ public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends U
         return recoverWith(executeRequest(updateActions, resourceInCache.get()), throwable -> {
             final Throwable causeThrowable = throwable.getCause();
             if (causeThrowable instanceof ConcurrentModificationException) {
-                resourceInCache.remove();
-                return executeRequest(updateActions, resourceInCache.get());
+                return handleConcurrentModification(updateActions, (ConcurrentModificationException) causeThrowable);
             }
             return exceptionallyCompletedFuture(throwable);
         }, HttpExecution.defaultContext());
@@ -68,4 +67,10 @@ public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends U
     protected abstract CompletionStage<T> runActionHook(HookRunner hookRunner, T resource, final ExpansionPathContainer<T> expansionPathContainer);
 
     protected abstract CompletionStage<?> runUpdatedHook(HookRunner hookRunner, T resource);
+
+    protected CompletionStage<Optional<T>> handleConcurrentModification(final List<UpdateAction<T>> updateActions,
+                                                                        final ConcurrentModificationException exception) {
+        resourceInCache.remove();
+        return executeRequest(updateActions, resourceInCache.get());
+    }
 }

@@ -17,7 +17,7 @@ public final class ProductListFetcherWithMatchingVariants extends DefaultProduct
     }
 
     @Override
-    protected Optional<ProductProjectionSearch> buildRequest() {
-        return super.buildRequest().map(request -> request.withMarkingMatchingVariants(true));
+    public Optional<ProductProjectionSearch> defaultRequest() {
+        return super.defaultRequest().map(request -> request.withMarkingMatchingVariants(true));
     }
 }

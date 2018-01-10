@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.controllers.AbstractSingleQueryExecutor;
+import com.commercetools.sunrise.core.controllers.AbstractSingleResourceFetcher;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpevents.CartLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.CartQueryHook;
@@ -14,7 +14,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractCartFetcher extends AbstractSingleQueryExecutor<Cart, CartQuery, PagedQueryResult<Cart>> implements CartFetcher {
+public abstract class AbstractCartFetcher extends AbstractSingleResourceFetcher<Cart, CartQuery, PagedQueryResult<Cart>> implements CartFetcher {
 
     protected AbstractCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
@@ -26,7 +26,7 @@ public abstract class AbstractCartFetcher extends AbstractSingleQueryExecutor<Ca
     }
 
     @Override
-    protected CartQuery runQueryHook(final CartQuery baseRequest) {
+    protected CartQuery runRequestHook(final CartQuery baseRequest) {
         return CartQueryHook.runHook(getHookRunner(), baseRequest);
     }
 

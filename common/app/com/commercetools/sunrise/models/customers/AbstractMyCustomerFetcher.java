@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.customers;
 
-import com.commercetools.sunrise.core.controllers.AbstractSingleQueryExecutor;
+import com.commercetools.sunrise.core.controllers.AbstractSingleResourceFetcher;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpevents.CustomerLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.CustomerQueryHook;
@@ -13,7 +13,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractMyCustomerFetcher extends AbstractSingleQueryExecutor<Customer, CustomerQuery> implements MyCustomerFetcher {
+public abstract class AbstractMyCustomerFetcher extends AbstractSingleResourceFetcher<Customer, CustomerQuery> implements MyCustomerFetcher {
 
     protected AbstractMyCustomerFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
@@ -25,7 +25,7 @@ public abstract class AbstractMyCustomerFetcher extends AbstractSingleQueryExecu
     }
 
     @Override
-    protected CustomerQuery runQueryHook(final CustomerQuery baseRequest) {
+    protected CustomerQuery runRequestHook(final CustomerQuery baseRequest) {
         return CustomerQueryHook.runHook(getHookRunner(), baseRequest);
     }
 

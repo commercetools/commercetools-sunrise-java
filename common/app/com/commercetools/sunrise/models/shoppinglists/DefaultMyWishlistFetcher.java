@@ -8,14 +8,14 @@ import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class DefaultWishlistFetcher extends AbstractWishlistFetcher {
+public class DefaultMyWishlistFetcher extends AbstractMyWishlistFetcher {
 
     private final WishlistInSession wishlistInSession;
     private final CustomerInSession customerInSession;
 
     @Inject
-    protected DefaultWishlistFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                     final WishlistInSession wishlistInSession, final CustomerInSession customerInSession) {
+    protected DefaultMyWishlistFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
+                                       final WishlistInSession wishlistInSession, final CustomerInSession customerInSession) {
         super(sphereClient, hookRunner);
         this.wishlistInSession = wishlistInSession;
         this.customerInSession = customerInSession;

@@ -14,5 +14,5 @@ import java.util.concurrent.CompletionStage;
 public interface MyCartUpdater extends ResourceUpdater<Cart> {
 
     @Override
-    CompletionStage<Optional<Cart>> apply(List<UpdateAction<Cart>> updateActions);
+    CompletionStage<Optional<Cart>> apply(List<? extends UpdateAction<Cart>> updateActions);
 }

@@ -1,18 +1,17 @@
 package com.commercetools.sunrise.models.products;
 
 import com.commercetools.sunrise.core.NotFoundResourceException;
-import com.commercetools.sunrise.core.controllers.ResourceFetcher;
+import com.commercetools.sunrise.core.controllers.SingleResourceFetcher;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.queries.ProductProjectionQuery;
-import io.sphere.sdk.queries.PagedQueryResult;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 @ImplementedBy(DefaultProductFetcher.class)
-public interface ProductFetcher extends ResourceFetcher<ProductProjection, ProductProjectionQuery, PagedQueryResult<ProductProjection>> {
+public interface ProductFetcher extends SingleResourceFetcher<ProductProjection, ProductProjectionQuery> {
 
     Optional<ProductProjectionQuery> defaultRequest(final String productIdentifier);
 

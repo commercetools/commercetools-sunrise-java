@@ -14,5 +14,5 @@ import java.util.concurrent.CompletionStage;
 public interface MyCustomerUpdater extends ResourceUpdater<Customer> {
 
     @Override
-    CompletionStage<Optional<Customer>> apply(List<UpdateAction<Customer>> updateActions);
+    CompletionStage<Optional<Customer>> apply(List<? extends UpdateAction<Customer>> updateActions);
 }

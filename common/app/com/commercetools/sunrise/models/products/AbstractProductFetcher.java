@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.products;
 
-import com.commercetools.sunrise.core.controllers.AbstractSingleQueryExecutor;
+import com.commercetools.sunrise.core.controllers.AbstractSingleResourceFetcher;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpevents.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.ProductWithVariantLoadedHook;
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractProductFetcher extends AbstractSingleQueryExecutor<ProductProjection, ProductProjectionQuery, PagedQueryResult<ProductProjection>> implements ProductFetcher {
+public abstract class AbstractProductFetcher extends AbstractSingleResourceFetcher<ProductProjection, ProductProjectionQuery, PagedQueryResult<ProductProjection>> implements ProductFetcher {
 
     protected AbstractProductFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
@@ -38,7 +38,7 @@ public abstract class AbstractProductFetcher extends AbstractSingleQueryExecutor
     }
 
     @Override
-    protected final ProductProjectionQuery runQueryHook(final ProductProjectionQuery baseRequest) {
+    protected final ProductProjectionQuery runRequestHook(final ProductProjectionQuery baseRequest) {
         return ProductProjectionQueryHook.runHook(getHookRunner(), baseRequest);
     }
 

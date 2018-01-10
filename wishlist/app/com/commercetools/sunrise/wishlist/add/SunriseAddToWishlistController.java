@@ -7,39 +7,29 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.shoppinglists.MyWishlistCreator;
-import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
-import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.Form;
 import play.data.FormFactory;
-import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddToWishlistController extends SunriseContentFormController
-        implements WithContentFormFlow<ShoppingList, ShoppingList, AddToWishlistFormData>, WithRequiredWishlist {
+public abstract class SunriseAddToWishlistController extends SunriseContentFormController implements WithContentFormFlow<Void, ShoppingList, AddToWishlistFormData> {
+
     private final AddToWishlistFormData formData;
     private final WishlistPageContentFactory wishlistPageContentFactory;
-    private final MyWishlistCreator myWishlistCreator;
-    private final WishlistFetcher wishlistFinder;
     private final AddToWishlistControllerAction controllerAction;
 
     @Inject
     protected SunriseAddToWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                              final WishlistPageContentFactory wishlistPageContentFactory,
                                              final AddToWishlistFormData formData,
-                                             final MyWishlistCreator myWishlistCreator,
-                                             final WishlistFetcher wishlistFinder,
                                              final AddToWishlistControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.wishlistPageContentFactory = wishlistPageContentFactory;
         this.formData = formData;
-        this.myWishlistCreator = myWishlistCreator;
-        this.wishlistFinder = wishlistFinder;
         this.controllerAction = controllerAction;
     }
 
@@ -48,38 +38,27 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
         return formData.getClass();
     }
 
-    @Override
-    public final WishlistFetcher getWishlistFinder() {
-        return wishlistFinder;
-    }
-
     @EnableHooks
     @SunriseRoute(WishlistReverseRouter.ADD_TO_WISHLIST_PROCESS)
     public CompletionStage<Result> process() {
-        return requireWishlist(this::processForm);
+        return processForm(null);
     }
 
     @Override
-    public CompletionStage<ShoppingList> executeAction(final ShoppingList wishlist, final AddToWishlistFormData formData) {
-        return controllerAction.apply(wishlist, formData);
+    public CompletionStage<ShoppingList> executeAction(final Void input, final AddToWishlistFormData formData) {
+        return controllerAction.apply(formData);
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final AddToWishlistFormData formData);
 
     @Override
-    public PageContent createPageContent(final ShoppingList wishlist, final Form<? extends AddToWishlistFormData> formData) {
-        return wishlistPageContentFactory.create(wishlist);
+    public PageContent createPageContent(final Void input, final Form<? extends AddToWishlistFormData> formData) {
+        return wishlistPageContentFactory.create(null);
     }
 
     @Override
-    public CompletionStage<Result> handleNotFoundWishlist() {
-        return myWishlistCreator.get()
-                .thenComposeAsync(this::processForm, HttpExecution.defaultContext());
-    }
-
-    @Override
-    public void preFillFormData(final ShoppingList wishlist, final AddToWishlistFormData formData) {
+    public void preFillFormData(final Void input, final AddToWishlistFormData formData) {
       // Do not pre-fill anything
     }
 }

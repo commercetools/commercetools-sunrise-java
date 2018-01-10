@@ -7,8 +7,6 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
-import com.commercetools.sunrise.wishlist.WithRequiredWishlist;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.Form;
@@ -18,23 +16,20 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseRemoveFromWishlistController extends SunriseContentFormController
-        implements WithContentFormFlow<ShoppingList, ShoppingList, RemoveFromWishlistFormData>, WithRequiredWishlist {
+public abstract class SunriseRemoveFromWishlistController extends SunriseContentFormController implements WithContentFormFlow<Void, ShoppingList, RemoveFromWishlistFormData> {
+
     private final RemoveFromWishlistFormData formData;
     private final WishlistPageContentFactory wishlistPageContentFactory;
-    private final WishlistFetcher wishlistFinder;
     private final RemoveFromWishlistControllerAction controllerAction;
 
     @Inject
     protected SunriseRemoveFromWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                                   final WishlistPageContentFactory wishlistPageContentFactory,
                                                   final RemoveFromWishlistFormData formData,
-                                                  final WishlistFetcher wishlistFinder,
                                                   final RemoveFromWishlistControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.wishlistPageContentFactory = wishlistPageContentFactory;
         this.formData = formData;
-        this.wishlistFinder = wishlistFinder;
         this.controllerAction = controllerAction;
     }
 
@@ -43,32 +38,27 @@ public abstract class SunriseRemoveFromWishlistController extends SunriseContent
         return formData.getClass();
     }
 
-    @Override
-    public final WishlistFetcher getWishlistFinder() {
-        return wishlistFinder;
-    }
-
     @EnableHooks
     @SunriseRoute(WishlistReverseRouter.REMOVE_FROM_WISHLIST_PROCESS)
     public CompletionStage<Result> process() {
-        return requireWishlist(this::processForm);
+        return processForm(null);
     }
 
     @Override
-    public CompletionStage<ShoppingList> executeAction(final ShoppingList wishlist, final RemoveFromWishlistFormData formData) {
-        return controllerAction.apply(wishlist, formData);
+    public CompletionStage<ShoppingList> executeAction(final Void input, final RemoveFromWishlistFormData formData) {
+        return controllerAction.apply(formData);
     }
 
     @Override
     public abstract CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final RemoveFromWishlistFormData formData);
 
     @Override
-    public PageContent createPageContent(final ShoppingList wishlist, final Form<? extends RemoveFromWishlistFormData> formData) {
-        return wishlistPageContentFactory.create(wishlist);
+    public PageContent createPageContent(final Void input, final Form<? extends RemoveFromWishlistFormData> formData) {
+        return wishlistPageContentFactory.create(null);
     }
 
     @Override
-    public void preFillFormData(final ShoppingList wishlist, final RemoveFromWishlistFormData formData) {
+    public void preFillFormData(final Void input, final RemoveFromWishlistFormData formData) {
         // Do not pre-fill anything
     }
 }

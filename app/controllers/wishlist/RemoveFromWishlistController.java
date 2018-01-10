@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.models.shoppinglists.WishlistFetcher;
+import com.commercetools.sunrise.models.shoppinglists.MyWishlistFetcher;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistControllerAction;
 import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistFormData;
@@ -27,7 +27,7 @@ public final class RemoveFromWishlistController extends SunriseRemoveFromWishlis
                                         final FormFactory formFactory,
                                         final WishlistPageContentFactory wishlistPageContentFactory,
                                         final RemoveFromWishlistFormData formData,
-                                        final WishlistFetcher wishlistFinder,
+                                        final MyWishlistFetcher wishlistFinder,
                                         final RemoveFromWishlistControllerAction controllerAction,
                                         final WishlistReverseRouter reverseRouter) {
         super(contentRenderer, formFactory, wishlistPageContentFactory, formData, wishlistFinder, controllerAction);

@@ -10,23 +10,23 @@ import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-public abstract class AbstractSingleQueryExecutor<T, Q extends SphereRequest<P>, P extends PagedResult<T>>  extends AbstractSphereRequestExecutor implements ResourceFetcher<T, Q, P> {
+public abstract class AbstractSingleResourceFetcher<T, R extends SphereRequest<P>, P extends PagedResult<T>>  extends AbstractSphereRequestExecutor implements SingleResourceFetcher<T, R> {
 
-    protected AbstractSingleQueryExecutor(final SphereClient sphereClient, final HookRunner hookRunner) {
+    protected AbstractSingleResourceFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
     }
 
     @Override
-    public CompletionStage<Optional<T>> get(final Q request) {
+    public CompletionStage<Optional<T>> get(final R request) {
         return executeRequest(request);
     }
 
-    protected final CompletionStage<Optional<T>> executeRequest(final Q baseRequest) {
+    protected final CompletionStage<Optional<T>> executeRequest(final R baseRequest) {
         return executeRequest(baseRequest, this::selectResource);
     }
 
-    protected CompletionStage<Optional<T>> executeRequest(final Q baseRequest, final Function<P, Optional<T>> resourceSelector) {
-        final Q request = runQueryHook(baseRequest);
+    protected CompletionStage<Optional<T>> executeRequest(final R baseRequest, final Function<P, Optional<T>> resourceSelector) {
+        final R request = runRequestHook(baseRequest);
         return getSphereClient().execute(request)
                 .thenApply(resourceSelector)
                 .thenApplyAsync(resourceOpt -> {
@@ -39,7 +39,7 @@ public abstract class AbstractSingleQueryExecutor<T, Q extends SphereRequest<P>,
         return pagedResult.head();
     }
 
-    protected abstract Q runQueryHook(Q baseRequest);
+    protected abstract R runRequestHook(R baseRequest);
 
     protected abstract CompletionStage<?> runResourceLoadedHook(T resource);
 }

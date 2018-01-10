@@ -16,9 +16,9 @@ public class DefaultOrderFetcher extends AbstractOrderFetcher {
     }
 
     @Override
-    protected Optional<OrderQuery> buildRequest(final String orderId) {
+    public Optional<OrderQuery> defaultRequest(final String identifier) {
         return Optional.of(OrderQueryBuilder.of()
-                .plusPredicates(order -> order.id().is(orderId))
+                .plusPredicates(order -> order.id().is(identifier))
                 .plusExpansionPaths(m -> m.paymentInfo().payments())
                 .plusExpansionPaths(m -> m.discountCodes().discountCode())
                 .plusExpansionPaths(m -> m.shippingInfo().shippingMethod())
