@@ -3,8 +3,6 @@ package controllers.wishlist;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.models.shoppinglists.MyWishlistFetcher;
 import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistControllerAction;
 import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistFormData;
@@ -20,18 +18,13 @@ import java.util.concurrent.CompletionStage;
 @NoCache
 public final class RemoveFromWishlistController extends SunriseRemoveFromWishlistController {
 
-    private final WishlistReverseRouter reverseRouter;
-
     @Inject
     public RemoveFromWishlistController(final ContentRenderer contentRenderer,
                                         final FormFactory formFactory,
                                         final WishlistPageContentFactory wishlistPageContentFactory,
                                         final RemoveFromWishlistFormData formData,
-                                        final MyWishlistFetcher wishlistFinder,
-                                        final RemoveFromWishlistControllerAction controllerAction,
-                                        final WishlistReverseRouter reverseRouter) {
-        super(contentRenderer, formFactory, wishlistPageContentFactory, formData, wishlistFinder, controllerAction);
-        this.reverseRouter = reverseRouter;
+                                        final RemoveFromWishlistControllerAction controllerAction) {
+        super(contentRenderer, formFactory, wishlistPageContentFactory, formData, controllerAction);
     }
 
     @Override
@@ -46,11 +39,6 @@ public final class RemoveFromWishlistController extends SunriseRemoveFromWishlis
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final RemoveFromWishlistFormData removeFromWishlistFormData) {
-        return redirectToCall(reverseRouter.wishlistPageCall());
-    }
-
-    @Override
-    public CompletionStage<Result> handleNotFoundWishlist() {
-        return redirectToCall(reverseRouter.wishlistPageCall());
+        return redirectAsync(routes.WishlistContentController.show());
     }
 }

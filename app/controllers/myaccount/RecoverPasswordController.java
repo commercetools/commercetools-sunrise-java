@@ -3,7 +3,6 @@ package controllers.myaccount;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.messages.MessageType;
 import com.commercetools.sunrise.email.EmailDeliveryException;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.RecoverPasswordControllerAction;
@@ -21,16 +20,13 @@ import java.util.concurrent.CompletionStage;
 @LogMetrics
 @NoCache
 public final class RecoverPasswordController extends SunriseRecoverPasswordController {
-    private final RecoverPasswordReverseRouter recoverPasswordReverseRouter;
 
     @Inject
     RecoverPasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                               final RecoverPasswordPageContentFactory pageContentFactory,
                               final RecoverPasswordFormData formData,
-                              final RecoverPasswordControllerAction controllerAction,
-                              final RecoverPasswordReverseRouter recoverPasswordReverseRouter) {
+                              final RecoverPasswordControllerAction controllerAction) {
         super(contentRenderer, formFactory, pageContentFactory, formData, controllerAction);
-        this.recoverPasswordReverseRouter = recoverPasswordReverseRouter;
     }
 
     @Override
@@ -46,7 +42,7 @@ public final class RecoverPasswordController extends SunriseRecoverPasswordContr
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final CustomerToken customerToken, final RecoverPasswordFormData formData) {
         saveMessage(MessageType.SUCCESS, "my-account:forgotPassword.feedbackMessage");
-        return redirectToCall(recoverPasswordReverseRouter.requestRecoveryEmailPageCall());
+        return redirectAsync(routes.RecoverPasswordController.show());
     }
 
     @Override

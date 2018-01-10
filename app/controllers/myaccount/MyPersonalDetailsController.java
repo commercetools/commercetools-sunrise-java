@@ -3,9 +3,6 @@ package controllers.myaccount;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
-import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.models.customers.MyCustomerFetcher;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsControllerAction;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
@@ -21,21 +18,13 @@ import java.util.concurrent.CompletionStage;
 @NoCache
 public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsController {
 
-    private final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
-    private final AuthenticationReverseRouter authenticationReverseRouter;
-
     @Inject
     public MyPersonalDetailsController(final ContentRenderer contentRenderer,
                                        final FormFactory formFactory,
                                        final MyPersonalDetailsFormData formData,
-                                       final MyCustomerFetcher customerFinder,
                                        final MyPersonalDetailsControllerAction controllerAction,
-                                       final MyPersonalDetailsPageContentFactory pageContentFactory,
-                                       final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter,
-                                       final AuthenticationReverseRouter authenticationReverseRouter) {
-        super(contentRenderer, formFactory, formData, customerFinder, controllerAction, pageContentFactory);
-        this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
-        this.authenticationReverseRouter = authenticationReverseRouter;
+                                       final MyPersonalDetailsPageContentFactory pageContentFactory) {
+        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
     }
 
     @Override
@@ -50,11 +39,6 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final MyPersonalDetailsFormData formData) {
-        return redirectToCall(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall());
-    }
-
-    @Override
-    public CompletionStage<Result> handleNotFoundCustomer() {
-        return redirectToCall(authenticationReverseRouter.logInPageCall());
+        return redirectAsync(routes.MyPersonalDetailsController.show());
     }
 }

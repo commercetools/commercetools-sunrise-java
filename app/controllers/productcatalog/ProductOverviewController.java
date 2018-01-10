@@ -4,7 +4,6 @@ import com.commercetools.sunrise.core.components.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.models.categories.CategoryFinder;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
 import com.commercetools.sunrise.productcatalog.productoverview.SunriseProductOverviewController;
 import com.commercetools.sunrise.productcatalog.productoverview.search.facetedsearch.ProductFacetedSearchSelectorControllerComponent;
@@ -12,12 +11,8 @@ import com.commercetools.sunrise.productcatalog.productoverview.search.paginatio
 import com.commercetools.sunrise.productcatalog.productoverview.search.searchbox.ProductSearchBoxControllerComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.ProductSearchSortSelectorControllerComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
-import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
-
-import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @LogMetrics
 @NoCache
@@ -31,10 +26,9 @@ public final class ProductOverviewController extends SunriseProductOverviewContr
 
     @Inject
     public ProductOverviewController(final ContentRenderer contentRenderer,
-                                     final CategoryFinder categoryFinder,
                                      final ProductListFetcher productListFinder,
                                      final ProductOverviewPageContentFactory pageContentFactory) {
-        super(contentRenderer, categoryFinder, productListFinder, pageContentFactory);
+        super(contentRenderer, productListFinder, pageContentFactory);
     }
 
     @Override
@@ -45,10 +39,5 @@ public final class ProductOverviewController extends SunriseProductOverviewContr
     @Override
     public String getCmsPageKey() {
         return "default";
-    }
-
-    @Override
-    public CompletionStage<Result> handleNotFoundCategory() {
-        return completedFuture(notFound());
     }
 }

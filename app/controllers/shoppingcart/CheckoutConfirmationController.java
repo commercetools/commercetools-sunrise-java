@@ -4,9 +4,6 @@ import com.commercetools.sunrise.core.components.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.models.carts.CartPaymentInfoExpansionComponent;
 import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
@@ -30,21 +27,13 @@ import java.util.concurrent.CompletionStage;
 })
 public final class CheckoutConfirmationController extends SunriseCheckoutConfirmationController {
 
-    private final CartReverseRouter cartReverseRouter;
-    private final CheckoutReverseRouter checkoutReverseRouter;
-
     @Inject
     public CheckoutConfirmationController(final ContentRenderer contentRenderer,
                                           final FormFactory formFactory,
                                           final CheckoutConfirmationFormData formData,
-                                          final CartFetcher cartFetcher,
                                           final CheckoutConfirmationControllerAction controllerAction,
-                                          final CheckoutConfirmationPageContentFactory pageContentFactory,
-                                          final CartReverseRouter cartReverseRouter,
-                                          final CheckoutReverseRouter checkoutReverseRouter) {
-        super(contentRenderer, formFactory, formData, cartFetcher, controllerAction, pageContentFactory);
-        this.cartReverseRouter = cartReverseRouter;
-        this.checkoutReverseRouter = checkoutReverseRouter;
+                                          final CheckoutConfirmationPageContentFactory pageContentFactory) {
+        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
     }
 
     @Override
@@ -58,12 +47,7 @@ public final class CheckoutConfirmationController extends SunriseCheckoutConfirm
     }
 
     @Override
-    public CompletionStage<Result> handleNotFoundCart() {
-        return redirectToCall(cartReverseRouter.cartDetailPageCall());
-    }
-
-    @Override
     public CompletionStage<Result> handleSuccessfulAction(final Order order, final CheckoutConfirmationFormData formData) {
-        return redirectToCall(checkoutReverseRouter.checkoutThankYouPageCall());
+        return redirectAsync(routes.CheckoutThankYouController.show());
     }
 }

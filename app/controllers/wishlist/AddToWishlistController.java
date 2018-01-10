@@ -3,9 +3,6 @@ package controllers.wishlist;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
-import com.commercetools.sunrise.models.shoppinglists.MyWishlistCreator;
-import com.commercetools.sunrise.models.shoppinglists.MyWishlistFetcher;
 import com.commercetools.sunrise.wishlist.add.AddToWishlistControllerAction;
 import com.commercetools.sunrise.wishlist.add.AddToWishlistFormData;
 import com.commercetools.sunrise.wishlist.add.SunriseAddToWishlistController;
@@ -21,15 +18,13 @@ import java.util.concurrent.CompletionStage;
 @NoCache
 public final class AddToWishlistController extends SunriseAddToWishlistController {
 
-    private final WishlistReverseRouter reverseRouter;
-
     @Inject
-    public AddToWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
+    public AddToWishlistController(final ContentRenderer contentRenderer,
+                                   final FormFactory formFactory,
                                    final WishlistPageContentFactory wishlistPageContentFactory,
-                                   final AddToWishlistFormData formData, final MyWishlistCreator myWishlistCreator, final MyWishlistFetcher wishlistFinder,
-                                   final AddToWishlistControllerAction controllerAction, final WishlistReverseRouter reverseRouter) {
-        super(contentRenderer, formFactory, wishlistPageContentFactory, formData, myWishlistCreator, wishlistFinder, controllerAction);
-        this.reverseRouter = reverseRouter;
+                                   final AddToWishlistFormData formData,
+                                   final AddToWishlistControllerAction controllerAction) {
+        super(contentRenderer, formFactory, wishlistPageContentFactory, formData, controllerAction);
     }
 
     @Override
@@ -44,6 +39,6 @@ public final class AddToWishlistController extends SunriseAddToWishlistControlle
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final ShoppingList wishlist, final AddToWishlistFormData addToWishlistFormData) {
-        return redirectToCall(reverseRouter.wishlistPageCall());
+        return redirectAsync(routes.WishlistContentController.show());
     }
 }

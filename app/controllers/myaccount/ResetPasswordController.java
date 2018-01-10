@@ -3,7 +3,6 @@ package controllers.myaccount;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.SunriseResetPasswordController;
@@ -19,16 +18,13 @@ import java.util.concurrent.CompletionStage;
 @LogMetrics
 @NoCache
 public final class ResetPasswordController extends SunriseResetPasswordController {
-    private final AuthenticationReverseRouter authenticationReverseRouter;
 
     @Inject
     ResetPasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                    final ResetPasswordFormData formData,
                                    final ResetPasswordControllerAction controllerAction,
-                                   final ResetPasswordPageContentFactory pageContentFactory,
-                                   final AuthenticationReverseRouter authenticationReverseRouter) {
+                                   final ResetPasswordPageContentFactory pageContentFactory) {
         super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
-        this.authenticationReverseRouter = authenticationReverseRouter;
     }
 
     @Override
@@ -43,7 +39,7 @@ public final class ResetPasswordController extends SunriseResetPasswordControlle
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final Customer customer, final ResetPasswordFormData formData) {
-        return redirectToCall(authenticationReverseRouter.logInPageCall());
+        return redirectAsync(routes.LogInController.show());
     }
 
     @Override

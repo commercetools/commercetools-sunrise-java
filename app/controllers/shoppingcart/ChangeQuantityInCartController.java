@@ -3,8 +3,6 @@ package controllers.shoppingcart;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartFormData;
 import com.commercetools.sunrise.shoppingcart.changequantity.SunriseChangeQuantityInCartController;
@@ -20,18 +18,13 @@ import java.util.concurrent.CompletionStage;
 @NoCache
 public final class ChangeQuantityInCartController extends SunriseChangeQuantityInCartController {
 
-    private final CartReverseRouter cartReverseRouter;
-
     @Inject
     public ChangeQuantityInCartController(final ContentRenderer contentRenderer,
                                           final FormFactory formFactory,
                                           final ChangeQuantityInCartFormData formData,
-                                          final CartFetcher cartFetcher,
                                           final CartPageContentFactory pageContentFactory,
-                                          final ChangeQuantityInCartControllerAction controllerAction,
-                                          final CartReverseRouter cartReverseRouter) {
-        super(contentRenderer, formFactory, formData, cartFetcher, pageContentFactory, controllerAction);
-        this.cartReverseRouter = cartReverseRouter;
+                                          final ChangeQuantityInCartControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, pageContentFactory, controllerAction);
     }
 
     @Override
@@ -45,12 +38,7 @@ public final class ChangeQuantityInCartController extends SunriseChangeQuantityI
     }
 
     @Override
-    public CompletionStage<Result> handleNotFoundCart() {
-        return redirectToCall(cartReverseRouter.cartDetailPageCall());
-    }
-
-    @Override
     public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final ChangeQuantityInCartFormData formData) {
-        return redirectToCall(cartReverseRouter.cartDetailPageCall());
+        return redirectAsync(routes.CartContentController.show());
     }
 }

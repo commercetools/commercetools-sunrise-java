@@ -3,8 +3,6 @@ package controllers.shoppingcart;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.removediscountcode.RemoveDiscountCodeControllerAction;
 import com.commercetools.sunrise.shoppingcart.removediscountcode.RemoveDiscountCodeFormData;
@@ -20,15 +18,13 @@ import java.util.concurrent.CompletionStage;
 @NoCache
 public final class RemoveDiscountCodeController extends SunriseRemoveDiscountCodeController {
 
-    private final CartReverseRouter cartReverseRouter;
-
     @Inject
-    RemoveDiscountCodeController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                        final RemoveDiscountCodeFormData formData, final CartFetcher cartFetcher,
-                                        final CartPageContentFactory pageContentFactory, final RemoveDiscountCodeControllerAction controllerAction,
-                                        final CartReverseRouter cartReverseRouter) {
-        super(contentRenderer, formFactory, formData, cartFetcher, pageContentFactory, controllerAction);
-        this.cartReverseRouter = cartReverseRouter;
+    RemoveDiscountCodeController(final ContentRenderer contentRenderer,
+                                 final FormFactory formFactory,
+                                 final RemoveDiscountCodeFormData formData,
+                                 final CartPageContentFactory pageContentFactory,
+                                 final RemoveDiscountCodeControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, pageContentFactory, controllerAction);
     }
 
     @Override
@@ -42,12 +38,7 @@ public final class RemoveDiscountCodeController extends SunriseRemoveDiscountCod
     }
 
     @Override
-    public CompletionStage<Result> handleNotFoundCart() {
-        return redirectToCall(cartReverseRouter.cartDetailPageCall());
-    }
-
-    @Override
     public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final RemoveDiscountCodeFormData formData) {
-        return redirectToCall(cartReverseRouter.cartDetailPageCall());
+        return redirectAsync(routes.CartContentController.show());
     }
 }

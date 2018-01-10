@@ -3,9 +3,6 @@ package controllers.myaccount;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
-import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
-import com.commercetools.sunrise.models.customers.MyCustomerFetcher;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.SunriseChangePasswordController;
@@ -21,21 +18,13 @@ import java.util.concurrent.CompletionStage;
 @NoCache
 public final class ChangePasswordController extends SunriseChangePasswordController {
 
-    private final AuthenticationReverseRouter authenticationReverseRouter;
-    private final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter;
-
     @Inject
     public ChangePasswordController(final ContentRenderer contentRenderer,
                                     final FormFactory formFactory,
                                     final ChangePasswordFormData formData,
-                                    final MyCustomerFetcher customerFinder,
                                     final ChangePasswordControllerAction controllerAction,
-                                    final ChangePasswordPageContentFactory pageContentFactory,
-                                    final AuthenticationReverseRouter authenticationReverseRouter,
-                                    final MyPersonalDetailsReverseRouter myPersonalDetailsReverseRouter) {
-        super(contentRenderer, formFactory, formData, customerFinder, controllerAction, pageContentFactory);
-        this.authenticationReverseRouter = authenticationReverseRouter;
-        this.myPersonalDetailsReverseRouter = myPersonalDetailsReverseRouter;
+                                    final ChangePasswordPageContentFactory pageContentFactory) {
+        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
     }
 
     @Override
@@ -49,12 +38,7 @@ public final class ChangePasswordController extends SunriseChangePasswordControl
     }
 
     @Override
-    public CompletionStage<Result> handleNotFoundCustomer() {
-        return redirectToCall(authenticationReverseRouter.logInPageCall());
-    }
-
-    @Override
     public CompletionStage<Result> handleSuccessfulAction(final Customer result, final ChangePasswordFormData formData) {
-        return redirectToCall(myPersonalDetailsReverseRouter.myPersonalDetailsPageCall());
+        return redirectAsync(routes.MyPersonalDetailsController.show());
     }
 }

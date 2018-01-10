@@ -17,7 +17,7 @@ public abstract class SunriseController extends Controller {
         return logger;
     }
 
-    protected final CompletionStage<Result> redirectToCall(final Call call) {
+    protected final CompletionStage<Result> redirectAsync(final Call call) {
         return completedFuture(Results.redirect(call));
     }
 

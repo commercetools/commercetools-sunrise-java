@@ -3,7 +3,6 @@ package controllers.shoppingcart;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.shoppingcart.content.SunriseCartContentController;
 import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 
@@ -15,9 +14,8 @@ public final class CartContentController extends SunriseCartContentController {
 
     @Inject
     public CartContentController(final ContentRenderer contentRenderer,
-                                 final CartFetcher cartFetcher,
                                  final CartPageContentFactory pageContentFactory) {
-        super(contentRenderer, cartFetcher, pageContentFactory);
+        super(contentRenderer, pageContentFactory);
     }
 
     @Override

@@ -4,14 +4,10 @@ import com.commercetools.sunrise.core.components.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import com.commercetools.sunrise.models.carts.CartFetcher;
 import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormData;
-import com.commercetools.sunrise.models.shippingmethods.ShippingSettings;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.SunriseCheckoutShippingController;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels.CheckoutShippingPageContentFactory;
 import io.sphere.sdk.carts.Cart;
@@ -29,22 +25,13 @@ import java.util.concurrent.CompletionStage;
 })
 public final class CheckoutShippingController extends SunriseCheckoutShippingController {
 
-    private final CartReverseRouter cartReverseRouter;
-    private final CheckoutReverseRouter checkoutReverseRouter;
-
     @Inject
     public CheckoutShippingController(final ContentRenderer contentRenderer,
                                       final FormFactory formFactory,
                                       final CheckoutShippingFormData formData,
-                                      final CartFetcher cartFetcher,
                                       final CheckoutShippingControllerAction controllerAction,
-                                      final CheckoutShippingPageContentFactory pageContentFactory,
-                                      final ShippingSettings shippingSettings,
-                                      final CartReverseRouter cartReverseRouter,
-                                      final CheckoutReverseRouter checkoutReverseRouter) {
-        super(contentRenderer, formFactory, formData, cartFetcher, controllerAction, pageContentFactory, shippingSettings);
-        this.cartReverseRouter = cartReverseRouter;
-        this.checkoutReverseRouter = checkoutReverseRouter;
+                                      final CheckoutShippingPageContentFactory pageContentFactory) {
+        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
     }
 
     @Override
@@ -58,12 +45,7 @@ public final class CheckoutShippingController extends SunriseCheckoutShippingCon
     }
 
     @Override
-    public CompletionStage<Result> handleNotFoundCart() {
-        return redirectToCall(cartReverseRouter.cartDetailPageCall());
-    }
-
-    @Override
     public CompletionStage<Result> handleSuccessfulAction(final Cart updatedCart, final CheckoutShippingFormData formData) {
-        return redirectToCall(checkoutReverseRouter.checkoutPaymentPageCall());
+        return redirectAsync(routes.CheckoutPaymentController.show());
     }
 }
