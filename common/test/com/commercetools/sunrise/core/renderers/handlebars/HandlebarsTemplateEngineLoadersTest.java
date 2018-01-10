@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.renderers.TemplateContext;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.core.renderers.TemplateNotFoundException;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import org.junit.Test;
@@ -78,9 +78,9 @@ public class HandlebarsTemplateEngineLoadersTest {
     }
 
     private static TemplateContext templateContext() {
-        final PageData pageData = new PageData();
-        pageData.put("title", "foo");
-        pageData.put("message", "bar");
-        return new TemplateContext(pageData, f -> Optional.empty());
+        final OldPageData oldPageData = new OldPageData();
+        oldPageData.put("title", "foo");
+        oldPageData.put("message", "bar");
+        return new TemplateContext(oldPageData, f -> Optional.empty());
     }
 }

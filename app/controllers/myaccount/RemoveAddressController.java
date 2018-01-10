@@ -3,7 +3,6 @@ package controllers.myaccount;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressControllerAction;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.RemoveAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.removeaddress.SunriseRemoveAddressController;
@@ -22,9 +21,8 @@ public final class RemoveAddressController extends SunriseRemoveAddressControlle
     public RemoveAddressController(final ContentRenderer contentRenderer,
                                    final FormFactory formFactory,
                                    final RemoveAddressFormData formData,
-                                   final RemoveAddressControllerAction controllerAction,
-                                   final AddressBookPageContentFactory pageContentFactory) {
-        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
+                                   final RemoveAddressControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

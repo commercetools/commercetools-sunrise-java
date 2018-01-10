@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
+import com.commercetools.sunrise.models.BlankPageContent;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.Form;
 import play.data.FormFactory;
@@ -19,16 +19,14 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseAddToWishlistController extends SunriseContentFormController implements WithContentFormFlow<Void, ShoppingList, AddToWishlistFormData> {
 
     private final AddToWishlistFormData formData;
-    private final WishlistPageContentFactory wishlistPageContentFactory;
     private final AddToWishlistControllerAction controllerAction;
 
     @Inject
-    protected SunriseAddToWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                             final WishlistPageContentFactory wishlistPageContentFactory,
+    protected SunriseAddToWishlistController(final ContentRenderer contentRenderer,
+                                             final FormFactory formFactory,
                                              final AddToWishlistFormData formData,
                                              final AddToWishlistControllerAction controllerAction) {
         super(contentRenderer, formFactory);
-        this.wishlistPageContentFactory = wishlistPageContentFactory;
         this.formData = formData;
         this.controllerAction = controllerAction;
     }
@@ -54,7 +52,7 @@ public abstract class SunriseAddToWishlistController extends SunriseContentFormC
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends AddToWishlistFormData> formData) {
-        return wishlistPageContentFactory.create(null);
+        return new BlankPageContent();
     }
 
     @Override

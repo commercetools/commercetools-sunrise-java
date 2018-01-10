@@ -2,7 +2,7 @@ package com.commercetools.sunrise.core.renderers.handlebars;
 
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.core.renderers.TemplateContext;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import org.junit.Before;
@@ -59,7 +59,7 @@ public class HandlebarsTemplateEngineCmsTest extends WithApplication {
     }
 
     private void testTemplate(final String templateName, final Consumer<String> test) {
-        final TemplateContext templateContext = new TemplateContext(new PageData(), cmsPageThatReturnsSomething);
+        final TemplateContext templateContext = new TemplateContext(new OldPageData(), cmsPageThatReturnsSomething);
         final HandlebarsTemplateEngine templateEngine = app.injector().instanceOf(HandlebarsTemplateEngine.class);
         final String html = templateEngine.render(templateName, templateContext);
         test.accept(html);

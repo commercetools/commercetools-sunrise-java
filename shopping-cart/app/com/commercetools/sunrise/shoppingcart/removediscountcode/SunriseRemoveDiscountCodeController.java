@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
+import com.commercetools.sunrise.models.BlankPageContent;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -18,16 +18,13 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseRemoveDiscountCodeController extends SunriseContentFormController implements WithContentFormFlow<Void, Cart, RemoveDiscountCodeFormData> {
 
     private final RemoveDiscountCodeFormData formData;
-    private final CartPageContentFactory pageContentFactory;
     private final RemoveDiscountCodeControllerAction controllerAction;
 
     protected SunriseRemoveDiscountCodeController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                                   final RemoveDiscountCodeFormData formData,
-                                                  final CartPageContentFactory pageContentFactory,
                                                   final RemoveDiscountCodeControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.pageContentFactory = pageContentFactory;
         this.controllerAction = controllerAction;
     }
 
@@ -52,7 +49,7 @@ public abstract class SunriseRemoveDiscountCodeController extends SunriseContent
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends RemoveDiscountCodeFormData> form) {
-        return pageContentFactory.create(null);
+        return new BlankPageContent();
     }
 
     @Override

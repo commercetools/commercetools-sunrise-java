@@ -6,7 +6,6 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.myaccount.authentication.login.LogInControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.login.LogInFormData;
 import com.commercetools.sunrise.myaccount.authentication.login.SunriseLogInController;
-import com.commercetools.sunrise.myaccount.authentication.login.viewmodels.LogInPageContentFactory;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -22,9 +21,8 @@ public final class LogInController extends SunriseLogInController {
     public LogInController(final ContentRenderer contentRenderer,
                            final FormFactory formFactory,
                            final LogInFormData formData,
-                           final LogInControllerAction controllerAction,
-                           final LogInPageContentFactory pageContentFactory) {
-        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
+                           final LogInControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

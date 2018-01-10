@@ -1,14 +1,14 @@
 package com.commercetools.sunrise.myaccount.authentication.login;
 
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.BlankPageContent;
 import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.authentication.login.viewmodels.LogInPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.Form;
@@ -24,15 +24,14 @@ public abstract class SunriseLogInController extends SunriseContentFormControlle
 
     private final LogInFormData formData;
     private final LogInControllerAction controllerAction;
-    private final LogInPageContentFactory pageContentFactory;
 
-    protected SunriseLogInController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                     final LogInFormData formData, final LogInControllerAction controllerAction,
-                                     final LogInPageContentFactory pageContentFactory) {
+    protected SunriseLogInController(final ContentRenderer contentRenderer,
+                                     final FormFactory formFactory,
+                                     final LogInFormData formData,
+                                     final LogInControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
@@ -72,7 +71,7 @@ public abstract class SunriseLogInController extends SunriseContentFormControlle
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends LogInFormData> form) {
-        return pageContentFactory.create(form);
+        return new BlankPageContent();
     }
 
     @Override

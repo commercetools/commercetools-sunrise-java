@@ -9,7 +9,6 @@ import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerCom
 import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.CheckoutPaymentFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.SunriseCheckoutPaymentController;
-import com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels.CheckoutPaymentPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -29,9 +28,8 @@ public final class CheckoutPaymentController extends SunriseCheckoutPaymentContr
     public CheckoutPaymentController(final ContentRenderer contentRenderer,
                                      final FormFactory formFactory,
                                      final CheckoutPaymentFormData formData,
-                                     final CheckoutPaymentControllerAction controllerAction,
-                                     final CheckoutPaymentPageContentFactory pageContentFactory) {
-        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
+                                     final CheckoutPaymentControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

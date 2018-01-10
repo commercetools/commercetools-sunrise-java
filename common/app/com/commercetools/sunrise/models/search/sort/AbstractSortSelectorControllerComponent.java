@@ -2,7 +2,7 @@ package com.commercetools.sunrise.models.search.sort;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.models.search.sort.viewmodels.AbstractSortSelectorViewModelFactory;
 import com.commercetools.sunrise.models.search.sort.viewmodels.WithSortSelectorViewModel;
 import io.sphere.sdk.models.Base;
@@ -29,10 +29,10 @@ public abstract class AbstractSortSelectorControllerComponent<T> extends Base im
     protected abstract PagedResult<T> getPagedResult();
 
     @Override
-    public void onPageDataReady(final PageData pageData) {
+    public void onPageDataReady(final OldPageData oldPageData) {
         final PagedResult<T> pagedResult = getPagedResult();
-        if (pagedResult != null && pageData.getContent() instanceof WithSortSelectorViewModel) {
-            final WithSortSelectorViewModel content = (WithSortSelectorViewModel) pageData.getContent();
+        if (pagedResult != null && oldPageData.getContent() instanceof WithSortSelectorViewModel) {
+            final WithSortSelectorViewModel content = (WithSortSelectorViewModel) oldPageData.getContent();
             content.setSortSelector(sortSelectorViewModelFactory.create(pagedResult));
         }
     }

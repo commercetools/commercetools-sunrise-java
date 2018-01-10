@@ -6,7 +6,6 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.AddDiscountCodeControllerAction;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.AddDiscountCodeFormData;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.SunriseAddDiscountCodeController;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import com.google.inject.Inject;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
@@ -24,9 +23,8 @@ public final class AddDiscountCodeController extends SunriseAddDiscountCodeContr
     AddDiscountCodeController(final ContentRenderer contentRenderer,
                               final FormFactory formFactory,
                               final AddDiscountCodeFormData formData,
-                              final CartPageContentFactory pageContentFactory,
                               final AddDiscountCodeControllerAction controllerAction) {
-        super(contentRenderer, formFactory, formData, pageContentFactory, controllerAction);
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

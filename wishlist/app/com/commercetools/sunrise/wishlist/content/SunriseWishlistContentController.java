@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
+import com.commercetools.sunrise.models.BlankPageContent;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -18,13 +18,9 @@ import java.util.concurrent.CompletionStage;
  */
 public abstract class SunriseWishlistContentController extends SunriseContentController implements WithQueryFlow<Void> {
 
-    private final WishlistPageContentFactory wishlistPageContentFactory;
-
     @Inject
-    protected SunriseWishlistContentController(final ContentRenderer contentRenderer,
-                                               final WishlistPageContentFactory wishlistPageContentFactory) {
+    protected SunriseWishlistContentController(final ContentRenderer contentRenderer) {
         super(contentRenderer);
-        this.wishlistPageContentFactory = wishlistPageContentFactory;
     }
 
     @EnableHooks
@@ -35,6 +31,6 @@ public abstract class SunriseWishlistContentController extends SunriseContentCon
 
     @Override
     public PageContent createPageContent(final Void input) {
-        return wishlistPageContentFactory.create(null);
+        return new BlankPageContent();
     }
 }

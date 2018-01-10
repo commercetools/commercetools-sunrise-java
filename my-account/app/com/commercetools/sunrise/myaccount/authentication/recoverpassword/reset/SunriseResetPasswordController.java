@@ -3,12 +3,12 @@ package com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.BlankPageContent;
 import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.viewmodels.ResetPasswordPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.NotFoundException;
 import io.sphere.sdk.customers.Customer;
@@ -26,20 +26,18 @@ import java.util.concurrent.CompletionStage;
  * It processes the form and sends a password reset command to the commercetools platform
  * {@link #process(String)}.
  */
-public abstract class SunriseResetPasswordController extends SunriseContentFormController
-        implements MyAccountController, WithContentFormFlow<String, Customer, ResetPasswordFormData> {
+public abstract class SunriseResetPasswordController extends SunriseContentFormController implements MyAccountController, WithContentFormFlow<String, Customer, ResetPasswordFormData> {
+
     private final ResetPasswordFormData formData;
     private final ResetPasswordControllerAction controllerAction;
-    private final ResetPasswordPageContentFactory pageContentFactory;
 
-    public SunriseResetPasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
+    public SunriseResetPasswordController(final ContentRenderer contentRenderer,
+                                          final FormFactory formFactory,
                                           final ResetPasswordFormData formData,
-                                          final ResetPasswordControllerAction controllerAction,
-                                          final ResetPasswordPageContentFactory pageContentFactory) {
+                                          final ResetPasswordControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @EnableHooks
@@ -61,7 +59,7 @@ public abstract class SunriseResetPasswordController extends SunriseContentFormC
 
     @Override
     public PageContent createPageContent(final String resetToken, final Form<? extends ResetPasswordFormData> form) {
-        return pageContentFactory.create(resetToken, form);
+        return new BlankPageContent();
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.commercetools.sunrise.productcatalog.productoverview.search.facetedse
 import com.commercetools.sunrise.productcatalog.productoverview.search.pagination.ProductPaginationControllerComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.searchbox.ProductSearchBoxControllerComponent;
 import com.commercetools.sunrise.productcatalog.productoverview.search.sort.ProductSearchSortSelectorControllerComponent;
-import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductOverviewPageContentFactory;
 
 import javax.inject.Inject;
 
@@ -26,9 +25,8 @@ public final class ProductOverviewController extends SunriseProductOverviewContr
 
     @Inject
     public ProductOverviewController(final ContentRenderer contentRenderer,
-                                     final ProductListFetcher productListFinder,
-                                     final ProductOverviewPageContentFactory pageContentFactory) {
-        super(contentRenderer, productListFinder, pageContentFactory);
+                                     final ProductListFetcher productListFinder) {
+        super(contentRenderer, productListFinder);
     }
 
     @Override

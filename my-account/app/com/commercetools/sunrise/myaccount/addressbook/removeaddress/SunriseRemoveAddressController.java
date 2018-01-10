@@ -7,8 +7,8 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.BlankPageContent;
 import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 import play.data.FormFactory;
@@ -21,16 +21,14 @@ public abstract class SunriseRemoveAddressController extends SunriseContentFormC
 
     private final RemoveAddressFormData formData;
     private final RemoveAddressControllerAction controllerAction;
-    private final AddressBookPageContentFactory pageContentFactory;
 
     protected SunriseRemoveAddressController(final ContentRenderer contentRenderer,
-                                             final FormFactory formFactory, final RemoveAddressFormData formData,
-                                             final RemoveAddressControllerAction controllerAction,
-                                             final AddressBookPageContentFactory pageContentFactory) {
+                                             final FormFactory formFactory,
+                                             final RemoveAddressFormData formData,
+                                             final RemoveAddressControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
@@ -59,6 +57,6 @@ public abstract class SunriseRemoveAddressController extends SunriseContentFormC
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends RemoveAddressFormData> form) {
-        return pageContentFactory.create(null);
+        return new BlankPageContent();
     }
 }

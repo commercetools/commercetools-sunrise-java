@@ -1,24 +1,24 @@
 package com.commercetools.sunrise.core.renderers;
 
 import com.commercetools.sunrise.cms.CmsPage;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class TemplateContext {
 
-    private final PageData pageData;
+    private final OldPageData oldPageData;
     @Nullable
     private final CmsPage cmsPage;
 
-    public TemplateContext(final PageData pageData, @Nullable final CmsPage cmsPage) {
-        this.pageData = pageData;
+    public TemplateContext(final OldPageData oldPageData, @Nullable final CmsPage cmsPage) {
+        this.oldPageData = oldPageData;
         this.cmsPage = cmsPage;
     }
 
-    public PageData pageData() {
-        return pageData;
+    public OldPageData pageData() {
+        return oldPageData;
     }
 
     public Optional<CmsPage> cmsPage() {

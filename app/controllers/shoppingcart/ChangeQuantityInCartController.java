@@ -6,7 +6,6 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartFormData;
 import com.commercetools.sunrise.shoppingcart.changequantity.SunriseChangeQuantityInCartController;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -22,9 +21,8 @@ public final class ChangeQuantityInCartController extends SunriseChangeQuantityI
     public ChangeQuantityInCartController(final ContentRenderer contentRenderer,
                                           final FormFactory formFactory,
                                           final ChangeQuantityInCartFormData formData,
-                                          final CartPageContentFactory pageContentFactory,
                                           final ChangeQuantityInCartControllerAction controllerAction) {
-        super(contentRenderer, formFactory, formData, pageContentFactory, controllerAction);
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

@@ -17,11 +17,11 @@ public final class PageDataFactory {
         this.pageMetaFactory = pageMetaFactory;
     }
 
-    public PageData create(final PageContent content) {
-        final PageData pageData = new PageData();
-        pageData.setFooter(pageFooterFactory.create(content));
-        pageData.setMeta(pageMetaFactory.create(content));
-        pageData.setContent(content);
-        return pageData;
+    public OldPageData create(final PageContent content) {
+        final OldPageData oldPageData = new OldPageData();
+        oldPageData.setFooter(pageFooterFactory.create(content));
+        oldPageData.setMeta(pageMetaFactory.create(content));
+        oldPageData.setContent(content);
+        return oldPageData;
     }
 }

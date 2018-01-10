@@ -12,17 +12,17 @@ public abstract class ViewModel extends SunriseModel {
     public ViewModel() {
     }
 
-    public void put(final String key, final Object value) {
-        if (this.extendedViewModel == null) {
-            this.extendedViewModel = new HashMap<>();
-        }
-        this.extendedViewModel.put(key, value);
-    }
-
     public Object get(final String key) {
         if (this.extendedViewModel == null) {
             return null;
         }
         return this.extendedViewModel.get(key);
+    }
+
+    public void put(final String key, final Object value) {
+        if (this.extendedViewModel == null) {
+            this.extendedViewModel = new HashMap<>();
+        }
+        this.extendedViewModel.put(key, value);
     }
 }

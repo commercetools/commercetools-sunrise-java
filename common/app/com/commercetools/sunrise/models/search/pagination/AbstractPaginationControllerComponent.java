@@ -2,7 +2,7 @@ package com.commercetools.sunrise.models.search.pagination;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractEntriesPerPageSelectorViewModelFactory;
 import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractPaginationViewModelFactory;
 import com.commercetools.sunrise.models.search.pagination.viewmodels.WithPaginationViewModel;
@@ -42,10 +42,10 @@ public abstract class AbstractPaginationControllerComponent extends Base impleme
     protected abstract PagedResult<?> getPagedResult();
 
     @Override
-    public void onPageDataReady(final PageData pageData) {
+    public void onPageDataReady(final OldPageData oldPageData) {
         final PagedResult<?> pagedResult = getPagedResult();
-        if (pagedResult != null && pageData.getContent() instanceof WithPaginationViewModel) {
-            final WithPaginationViewModel content = (WithPaginationViewModel) pageData.getContent();
+        if (pagedResult != null && oldPageData.getContent() instanceof WithPaginationViewModel) {
+            final WithPaginationViewModel content = (WithPaginationViewModel) oldPageData.getContent();
             final Long currentPage = paginationSettings.getSelectedValueOrDefault(Http.Context.current());
             content.setPagination(paginationViewModelFactory.create(pagedResult, currentPage));
             content.setDisplaySelector(entriesPerPageSelectorViewModelFactory.create(pagedResult));

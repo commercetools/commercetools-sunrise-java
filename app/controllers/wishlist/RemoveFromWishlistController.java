@@ -3,7 +3,6 @@ package controllers.wishlist;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistControllerAction;
 import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistFormData;
 import com.commercetools.sunrise.wishlist.remove.SunriseRemoveFromWishlistController;
@@ -21,10 +20,9 @@ public final class RemoveFromWishlistController extends SunriseRemoveFromWishlis
     @Inject
     public RemoveFromWishlistController(final ContentRenderer contentRenderer,
                                         final FormFactory formFactory,
-                                        final WishlistPageContentFactory wishlistPageContentFactory,
                                         final RemoveFromWishlistFormData formData,
                                         final RemoveFromWishlistControllerAction controllerAction) {
-        super(contentRenderer, formFactory, wishlistPageContentFactory, formData, controllerAction);
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

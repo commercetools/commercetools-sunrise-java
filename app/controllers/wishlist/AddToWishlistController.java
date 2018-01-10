@@ -6,7 +6,6 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.wishlist.add.AddToWishlistControllerAction;
 import com.commercetools.sunrise.wishlist.add.AddToWishlistFormData;
 import com.commercetools.sunrise.wishlist.add.SunriseAddToWishlistController;
-import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -21,10 +20,9 @@ public final class AddToWishlistController extends SunriseAddToWishlistControlle
     @Inject
     public AddToWishlistController(final ContentRenderer contentRenderer,
                                    final FormFactory formFactory,
-                                   final WishlistPageContentFactory wishlistPageContentFactory,
                                    final AddToWishlistFormData formData,
                                    final AddToWishlistControllerAction controllerAction) {
-        super(contentRenderer, formFactory, wishlistPageContentFactory, formData, controllerAction);
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

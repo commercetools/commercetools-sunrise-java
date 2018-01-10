@@ -5,7 +5,6 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.models.orders.MyOrderFetcher;
 import com.commercetools.sunrise.myaccount.myorders.myorderdetail.SunriseMyOrderDetailController;
-import com.commercetools.sunrise.myaccount.myorders.myorderdetail.viewmodels.MyOrderDetailPageContentFactory;
 
 import javax.inject.Inject;
 
@@ -15,9 +14,8 @@ public final class MyOrderDetailController extends SunriseMyOrderDetailControlle
 
     @Inject
     public MyOrderDetailController(final ContentRenderer contentRenderer,
-                                   final MyOrderFetcher myOrderFinder,
-                                   final MyOrderDetailPageContentFactory pageContentFactory) {
-        super(contentRenderer, myOrderFinder, pageContentFactory);
+                                   final MyOrderFetcher myOrderFinder) {
+        super(contentRenderer, myOrderFinder);
     }
 
     @Override

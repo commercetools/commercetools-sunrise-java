@@ -4,15 +4,10 @@ import com.commercetools.sunrise.core.components.RegisteredComponents;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.models.orders.OrderFetcher;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.thankyou.SunriseCheckoutThankYouController;
-import com.commercetools.sunrise.shoppingcart.checkout.thankyou.viewmodels.CheckoutThankYouPageContentFactory;
-import controllers.productcatalog.routes;
-import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
 
 @LogMetrics
 @NoCache
@@ -20,10 +15,8 @@ import java.util.concurrent.CompletionStage;
 public final class CheckoutThankYouController extends SunriseCheckoutThankYouController {
 
     @Inject
-    public CheckoutThankYouController(final ContentRenderer contentRenderer,
-                                      final OrderFetcher orderCreatedFinder,
-                                      final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory) {
-        super(contentRenderer, orderCreatedFinder, checkoutThankYouPageContentFactory);
+    public CheckoutThankYouController(final ContentRenderer contentRenderer) {
+        super(contentRenderer);
     }
 
     @Override
@@ -34,10 +27,5 @@ public final class CheckoutThankYouController extends SunriseCheckoutThankYouCon
     @Override
     public String getCmsPageKey() {
         return "default";
-    }
-
-    @Override
-    public CompletionStage<Result> handleNotFoundOrderCreated() {
-        return redirectAsync(routes.HomeController.show());
     }
 }

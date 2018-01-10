@@ -9,7 +9,6 @@ import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerCom
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.SunriseCheckoutShippingController;
-import com.commercetools.sunrise.shoppingcart.checkout.shipping.viewmodels.CheckoutShippingPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -29,9 +28,8 @@ public final class CheckoutShippingController extends SunriseCheckoutShippingCon
     public CheckoutShippingController(final ContentRenderer contentRenderer,
                                       final FormFactory formFactory,
                                       final CheckoutShippingFormData formData,
-                                      final CheckoutShippingControllerAction controllerAction,
-                                      final CheckoutShippingPageContentFactory pageContentFactory) {
-        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
+                                      final CheckoutShippingControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

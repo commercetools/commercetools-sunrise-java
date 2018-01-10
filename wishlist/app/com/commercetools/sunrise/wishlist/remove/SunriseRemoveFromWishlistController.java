@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.wishlist.WishlistReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.wishlist.content.viewmodels.WishlistPageContentFactory;
+import com.commercetools.sunrise.models.BlankPageContent;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import play.data.Form;
 import play.data.FormFactory;
@@ -19,16 +19,13 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseRemoveFromWishlistController extends SunriseContentFormController implements WithContentFormFlow<Void, ShoppingList, RemoveFromWishlistFormData> {
 
     private final RemoveFromWishlistFormData formData;
-    private final WishlistPageContentFactory wishlistPageContentFactory;
     private final RemoveFromWishlistControllerAction controllerAction;
 
     @Inject
     protected SunriseRemoveFromWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                                  final WishlistPageContentFactory wishlistPageContentFactory,
                                                   final RemoveFromWishlistFormData formData,
                                                   final RemoveFromWishlistControllerAction controllerAction) {
         super(contentRenderer, formFactory);
-        this.wishlistPageContentFactory = wishlistPageContentFactory;
         this.formData = formData;
         this.controllerAction = controllerAction;
     }
@@ -54,7 +51,7 @@ public abstract class SunriseRemoveFromWishlistController extends SunriseContent
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends RemoveFromWishlistFormData> formData) {
-        return wishlistPageContentFactory.create(null);
+        return new BlankPageContent();
     }
 
     @Override

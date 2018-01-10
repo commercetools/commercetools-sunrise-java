@@ -8,9 +8,9 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.BlankPageContent;
 import com.commercetools.sunrise.models.addresses.AddressFormData;
 import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels.ChangeAddressPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
@@ -26,16 +26,14 @@ public abstract class SunriseChangeAddressController extends SunriseContentFormC
 
     private final AddressFormData formData;
     private final ChangeAddressControllerAction controllerAction;
-    private final ChangeAddressPageContentFactory pageContentFactory;
 
     protected SunriseChangeAddressController(final ContentRenderer contentRenderer,
-                                             final FormFactory formFactory, final AddressFormData formData,
-                                             final ChangeAddressControllerAction controllerAction,
-                                             final ChangeAddressPageContentFactory pageContentFactory) {
+                                             final FormFactory formFactory,
+                                             final AddressFormData formData,
+                                             final ChangeAddressControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
@@ -75,7 +73,7 @@ public abstract class SunriseChangeAddressController extends SunriseContentFormC
 
     @Override
     public PageContent createPageContent(final String addressIdentifier, final Form<? extends AddressFormData> form) {
-        return pageContentFactory.create(null, form);
+        return new BlankPageContent();
     }
 
     private boolean isDefaultAddress(final Address address, @Nullable final String defaultAddressId) {

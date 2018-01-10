@@ -7,8 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.mydetails.viewmodels.MyPersonalDetailsPageContentFactory;
+import com.commercetools.sunrise.models.BlankPageContent;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 import play.data.FormFactory;
@@ -17,20 +16,18 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseMyPersonalDetailsController extends SunriseContentFormController
-        implements MyAccountController, WithContentFormFlow<Void, Customer, MyPersonalDetailsFormData> {
+        implements WithContentFormFlow<Void, Customer, MyPersonalDetailsFormData> {
 
     private final MyPersonalDetailsFormData formData;
     private final MyPersonalDetailsControllerAction controllerAction;
-    private final MyPersonalDetailsPageContentFactory pageContentFactory;
 
-    protected SunriseMyPersonalDetailsController(final ContentRenderer contentRenderer, final FormFactory formFactory,
+    protected SunriseMyPersonalDetailsController(final ContentRenderer contentRenderer,
+                                                 final FormFactory formFactory,
                                                  final MyPersonalDetailsFormData formData,
-                                                 final MyPersonalDetailsControllerAction controllerAction,
-                                                 final MyPersonalDetailsPageContentFactory pageContentFactory) {
+                                                 final MyPersonalDetailsControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
@@ -60,7 +57,7 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseContentF
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends MyPersonalDetailsFormData> form) {
-        return pageContentFactory.create(null, form);
+        return new BlankPageContent();
     }
 
     // TODO prefill in templates

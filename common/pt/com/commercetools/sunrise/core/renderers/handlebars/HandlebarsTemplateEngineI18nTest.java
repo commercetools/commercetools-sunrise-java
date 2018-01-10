@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.core.renderers.handlebars;
 
 import com.commercetools.sunrise.core.renderers.TemplateContext;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader;
 import com.github.jknack.handlebars.io.TemplateLoader;
 import org.junit.Test;
@@ -74,7 +74,7 @@ public class HandlebarsTemplateEngineI18nTest extends WithApplication {
     private void testTemplate(final Locale locale, final String templateName, final Consumer<String> test) {
         final String html = invokeWithContext(fakeRequest(), () -> {
             Http.Context.current().changeLang(locale.toLanguageTag());
-            final TemplateContext templateContext = new TemplateContext(new PageData(), null);
+            final TemplateContext templateContext = new TemplateContext(new OldPageData(), null);
             final HandlebarsTemplateEngine templateEngine = app.injector().instanceOf(HandlebarsTemplateEngine.class);
             return templateEngine.render(templateName, templateContext);
         });

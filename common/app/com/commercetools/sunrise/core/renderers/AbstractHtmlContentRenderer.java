@@ -2,7 +2,7 @@ package com.commercetools.sunrise.core.renderers;
 
 import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.cms.CmsService;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.libs.concurrent.HttpExecution;
@@ -31,23 +31,23 @@ public abstract class AbstractHtmlContentRenderer implements ContentRenderer {
     }
 
     @Override
-    public CompletionStage<Content> render(final PageData pageData, @Nullable final String templateName, @Nullable final String cmsKey) {
+    public CompletionStage<Content> render(final OldPageData oldPageData, @Nullable final String templateName, @Nullable final String cmsKey) {
         if (cmsKey != null) {
             return cmsService.page(cmsKey, singletonList(locale))
-                    .thenApplyAsync(cmsPage -> renderHtml(pageData, templateName, cmsPage.orElse(null)), HttpExecution.defaultContext());
+                    .thenApplyAsync(cmsPage -> renderHtml(oldPageData, templateName, cmsPage.orElse(null)), HttpExecution.defaultContext());
         } else {
-            return completedFuture(renderHtml(pageData, templateName, null));
+            return completedFuture(renderHtml(oldPageData, templateName, null));
         }
     }
 
-    private Html renderHtml(final PageData pageData, @Nullable final String templateName, @Nullable final CmsPage cmsPage) {
+    private Html renderHtml(final OldPageData oldPageData, @Nullable final String templateName, @Nullable final CmsPage cmsPage) {
         final String content;
         if (templateName != null) {
-            final TemplateContext templateContext = new TemplateContext(pageData, cmsPage);
+            final TemplateContext templateContext = new TemplateContext(oldPageData, cmsPage);
             content = templateEngine.render(templateName, templateContext);
         } else {
             LOGGER.warn("HTML renderer used without template, probably this is not what you intended");
-            content = pageData.toString();
+            content = oldPageData.toString();
         }
         return new Html(content);
     }

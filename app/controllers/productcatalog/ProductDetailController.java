@@ -7,7 +7,6 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.models.products.ProductFetcher;
 import com.commercetools.sunrise.productcatalog.productdetail.ProductProjectionRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.productdetail.SunriseProductDetailController;
-import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContentFactory;
 
 import javax.inject.Inject;
 
@@ -18,9 +17,8 @@ public final class ProductDetailController extends SunriseProductDetailControlle
 
     @Inject
     public ProductDetailController(final ContentRenderer contentRenderer,
-                                   final ProductFetcher productFinder,
-                                   final ProductDetailPageContentFactory pageContentFactory) {
-        super(contentRenderer, productFinder, pageContentFactory);
+                                   final ProductFetcher productFinder) {
+        super(contentRenderer, productFinder);
     }
 
     @Override

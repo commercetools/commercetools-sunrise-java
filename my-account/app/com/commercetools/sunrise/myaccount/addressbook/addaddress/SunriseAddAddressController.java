@@ -7,9 +7,8 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.BlankPageContent;
 import com.commercetools.sunrise.models.addresses.AddressFormData;
-import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.addressbook.addaddress.viewmodels.AddAddressPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 import play.data.FormFactory;
@@ -17,20 +16,18 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddAddressController extends SunriseContentFormController
-        implements MyAccountController, WithContentFormFlow<Void, Customer, AddressFormData> {
+public abstract class SunriseAddAddressController extends SunriseContentFormController implements WithContentFormFlow<Void, Customer, AddressFormData> {
 
     private final AddressFormData formData;
     private final AddAddressControllerAction controllerAction;
-    private final AddAddressPageContentFactory pageContentFactory;
 
-    protected SunriseAddAddressController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                          final AddressFormData formData, final AddAddressControllerAction controllerAction,
-                                          final AddAddressPageContentFactory pageContentFactory) {
+    protected SunriseAddAddressController(final ContentRenderer contentRenderer,
+                                          final FormFactory formFactory,
+                                          final AddressFormData formData,
+                                          final AddAddressControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
@@ -41,7 +38,7 @@ public abstract class SunriseAddAddressController extends SunriseContentFormCont
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.ADD_ADDRESS_PAGE)
     public CompletionStage<Result> show() {
-        return showFormPage(null, formData);
+        return okResultWithPageContent()
     }
 
     @EnableHooks
@@ -60,7 +57,7 @@ public abstract class SunriseAddAddressController extends SunriseContentFormCont
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends AddressFormData> form) {
-        return pageContentFactory.create(null, form);
+        return new BlankPageContent();
     }
 
     // TODO move this to template

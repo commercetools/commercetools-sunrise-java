@@ -15,9 +15,9 @@ import java.util.concurrent.CompletionStage;
  * @param <O> type of the output object, normally the updated object if the form is valid
  * @param <F> stereotype of the in a form wrapped class
  */
-public interface WithContentFormFlow<I, O, F> extends WithFormFlow<I, O, F>, WithContent {
+public interface WithContentFormFlow<O, F> extends WithFormFlow<O, F>, WithContent {
 
-    default CompletionStage<Result> showFormPage(final I input, final F emptyFormData) {
+    default CompletionStage<Result> showFormPage(final F emptyFormData) {
         final Form<? extends F> form = createFilledForm(input, emptyFormData);
         return okResultWithPageContent(createPageContent(input, form));
     }

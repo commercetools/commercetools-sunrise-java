@@ -2,14 +2,12 @@ package com.commercetools.sunrise.shoppingcart.checkout.thankyou;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentController;
 import com.commercetools.sunrise.core.controllers.WithQueryFlow;
-import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
-import com.commercetools.sunrise.models.orders.OrderFetcher;
-import com.commercetools.sunrise.shoppingcart.checkout.thankyou.viewmodels.CheckoutThankYouPageContentFactory;
-import io.sphere.sdk.orders.Order;
+import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.BlankPageContent;
 import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
@@ -18,32 +16,20 @@ import java.util.concurrent.CompletionStage;
  * Controller to show as last checkout step the confirmation of the order data.
  * By default the last order ID is taken from the cookie.
  */
-public abstract class SunriseCheckoutThankYouController extends SunriseContentController implements WithQueryFlow<Order>, WithRequiredOrderCreated {
+public abstract class SunriseCheckoutThankYouController extends SunriseContentController implements WithQueryFlow<Void> {
 
-    private final OrderFetcher orderCreatedFinder;
-    private final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory;
-
-    protected SunriseCheckoutThankYouController(final ContentRenderer contentRenderer,
-                                                final OrderFetcher orderCreatedFinder,
-                                                final CheckoutThankYouPageContentFactory checkoutThankYouPageContentFactory) {
+    protected SunriseCheckoutThankYouController(final ContentRenderer contentRenderer) {
         super(contentRenderer);
-        this.orderCreatedFinder = orderCreatedFinder;
-        this.checkoutThankYouPageContentFactory = checkoutThankYouPageContentFactory;
-    }
-
-    @Override
-    public final OrderFetcher getOrderCreatedFinder() {
-        return orderCreatedFinder;
     }
 
     @EnableHooks
     @SunriseRoute(CheckoutReverseRouter.CHECKOUT_THANK_YOU_PAGE)
     public CompletionStage<Result> show() {
-        return requireOrderCreated(this::showPage);
+        return showPage(null);
     }
 
     @Override
-    public PageContent createPageContent(final Order order) {
-        return checkoutThankYouPageContentFactory.create(order);
+    public PageContent createPageContent(final Void input) {
+        return new BlankPageContent();
     }
 }

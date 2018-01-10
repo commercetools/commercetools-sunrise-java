@@ -1,15 +1,15 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover;
 
-import com.commercetools.sunrise.email.EmailDeliveryException;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.email.EmailDeliveryException;
+import com.commercetools.sunrise.models.BlankPageContent;
 import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels.RecoverPasswordPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.client.NotFoundException;
 import io.sphere.sdk.customers.CustomerToken;
@@ -23,18 +23,16 @@ import java.util.concurrent.CompletionStage;
  * This abstract controller gets an customer email as input, request a customer reset password token for the
  * customer and then sends an email with a link to the reset password page.
  */
-public abstract class SunriseRecoverPasswordController extends SunriseContentFormController
-        implements MyAccountController, WithContentFormFlow<Void, CustomerToken, RecoverPasswordFormData> {
-    private final RecoverPasswordPageContentFactory pageContentFactory;
+public abstract class SunriseRecoverPasswordController extends SunriseContentFormController implements MyAccountController, WithContentFormFlow<Void, CustomerToken, RecoverPasswordFormData> {
+
     private final RecoverPasswordControllerAction controllerAction;
     private final RecoverPasswordFormData formData;
 
-    protected SunriseRecoverPasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                               final RecoverPasswordPageContentFactory pageContentFactory,
+    protected SunriseRecoverPasswordController(final ContentRenderer contentRenderer,
+                                               final FormFactory formFactory,
                                                final RecoverPasswordFormData formData,
                                                final RecoverPasswordControllerAction controllerAction) {
         super(contentRenderer, formFactory);
-        this.pageContentFactory = pageContentFactory;
         this.controllerAction = controllerAction;
         this.formData = formData;
     }
@@ -85,7 +83,7 @@ public abstract class SunriseRecoverPasswordController extends SunriseContentFor
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends RecoverPasswordFormData> form) {
-        return pageContentFactory.create(form);
+        return new BlankPageContent();
     }
 
     @Override

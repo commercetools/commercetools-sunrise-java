@@ -8,7 +8,6 @@ import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerCom
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressControllerAction;
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.address.SunriseCheckoutAddressController;
-import com.commercetools.sunrise.shoppingcart.checkout.address.viewmodels.CheckoutAddressPageContentFactory;
 import io.sphere.sdk.carts.Cart;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -25,9 +24,8 @@ public final class CheckoutAddressController extends SunriseCheckoutAddressContr
     public CheckoutAddressController(final ContentRenderer contentRenderer,
                                      final FormFactory formFactory,
                                      final CheckoutAddressFormData formData,
-                                     final CheckoutAddressControllerAction controllerAction,
-                                     final CheckoutAddressPageContentFactory pageContentFactory) {
-        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
+                                     final CheckoutAddressControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

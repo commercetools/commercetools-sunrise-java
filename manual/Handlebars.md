@@ -57,9 +57,9 @@ public final class SummerCampaignControllerComponent extends Base implements Con
     private Locale locale;
 
     @Override
-    public void acceptPageData(final PageData pageData) {
+    public void acceptPageData(final PageData oldPageData) {
         final ComponentViewModel component = createComponentViewModel();
-        pageData.getContent().addComponent(component);
+        oldPageData.getContent().addComponent(component);
     }
 
     private ComponentViewModel createComponentViewModel() {

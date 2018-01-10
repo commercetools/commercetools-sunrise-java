@@ -3,7 +3,7 @@ package com.commercetools.sunrise.productcatalog.home;
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContent;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListViewModelFactory;
 import com.commercetools.sunrise.recommendations.ProductRecommender;
@@ -59,9 +59,9 @@ public final class HomeRecommendationsControllerComponent implements ControllerC
     }
 
     @Override
-    public void onPageDataReady(final PageData pageData) {
-        if (recommendedProducts != null && pageData.getContent() instanceof HomePageContent) {
-            final HomePageContent content = (HomePageContent) pageData.getContent();
+    public void onPageDataReady(final OldPageData oldPageData) {
+        if (recommendedProducts != null && oldPageData.getContent() instanceof HomePageContent) {
+            final HomePageContent content = (HomePageContent) oldPageData.getContent();
             content.setSuggestions(productListViewModelFactory.create(recommendedProducts));
         }
     }

@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
+import com.commercetools.sunrise.models.BlankPageContent;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.client.ClientErrorException;
 import play.data.Form;
@@ -21,16 +21,14 @@ import static com.commercetools.sdk.errors.ErrorResponseExceptionUtils.isDiscoun
 public abstract class SunriseAddDiscountCodeController extends SunriseContentFormController implements WithContentFormFlow<Void, Cart, AddDiscountCodeFormData> {
 
     private final AddDiscountCodeFormData formData;
-    private final CartPageContentFactory pageContentFactory;
     private final AddDiscountCodeControllerAction controllerAction;
 
-    protected SunriseAddDiscountCodeController(final ContentRenderer contentRenderer, final FormFactory formFactory,
+    protected SunriseAddDiscountCodeController(final ContentRenderer contentRenderer,
+                                               final FormFactory formFactory,
                                                final AddDiscountCodeFormData formData,
-                                               final CartPageContentFactory pageContentFactory,
                                                final AddDiscountCodeControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
-        this.pageContentFactory = pageContentFactory;
         this.controllerAction = controllerAction;
     }
 
@@ -55,7 +53,7 @@ public abstract class SunriseAddDiscountCodeController extends SunriseContentFor
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends AddDiscountCodeFormData> form) {
-        return pageContentFactory.create(null, form);
+        return new BlankPageContent();
     }
 
     @Override

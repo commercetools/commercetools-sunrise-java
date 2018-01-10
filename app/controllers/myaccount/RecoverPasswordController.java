@@ -8,7 +8,6 @@ import com.commercetools.sunrise.email.EmailDeliveryException;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.RecoverPasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.RecoverPasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.SunriseRecoverPasswordController;
-import com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover.viewmodels.RecoverPasswordPageContentFactory;
 import io.sphere.sdk.customers.CustomerToken;
 import play.data.Form;
 import play.data.FormFactory;
@@ -22,11 +21,11 @@ import java.util.concurrent.CompletionStage;
 public final class RecoverPasswordController extends SunriseRecoverPasswordController {
 
     @Inject
-    RecoverPasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                              final RecoverPasswordPageContentFactory pageContentFactory,
+    RecoverPasswordController(final ContentRenderer contentRenderer,
+                              final FormFactory formFactory,
                               final RecoverPasswordFormData formData,
                               final RecoverPasswordControllerAction controllerAction) {
-        super(contentRenderer, formFactory, pageContentFactory, formData, controllerAction);
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

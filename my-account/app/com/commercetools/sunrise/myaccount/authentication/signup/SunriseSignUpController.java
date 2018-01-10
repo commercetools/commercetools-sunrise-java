@@ -3,13 +3,13 @@ package com.commercetools.sunrise.myaccount.authentication.signup;
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
 import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
+import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.BlankPageContent;
 import com.commercetools.sunrise.models.customers.SignUpFormData;
 import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.authentication.signup.viewmodels.SignUpPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import play.data.Form;
@@ -20,20 +20,18 @@ import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sdk.errors.ErrorResponseExceptionUtils.isDuplicatedEmailFieldError;
 
-public abstract class SunriseSignUpController extends SunriseContentFormController
-        implements MyAccountController, WithContentFormFlow<Void, CustomerSignInResult, SignUpFormData> {
+public abstract class SunriseSignUpController extends SunriseContentFormController implements MyAccountController, WithContentFormFlow<Void, CustomerSignInResult, SignUpFormData> {
 
     private final SignUpFormData formData;
     private final SignUpControllerAction controllerAction;
-    private final SignUpPageContentFactory pageContentFactory;
 
-    protected SunriseSignUpController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                      final SignUpFormData formData, final SignUpControllerAction controllerAction,
-                                      final SignUpPageContentFactory pageContentFactory) {
+    protected SunriseSignUpController(final ContentRenderer contentRenderer,
+                                      final FormFactory formFactory,
+                                      final SignUpFormData formData,
+                                      final SignUpControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
@@ -67,7 +65,7 @@ public abstract class SunriseSignUpController extends SunriseContentFormControll
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends SignUpFormData> form) {
-        return pageContentFactory.create(form);
+        return new BlankPageContent();
     }
 
     @Override

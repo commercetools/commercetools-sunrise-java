@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
+import com.commercetools.sunrise.models.BlankPageContent;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -19,16 +19,13 @@ public abstract class SunriseRemoveFromCartController extends SunriseContentForm
 
     private final RemoveFromCartFormData formData;
     private final RemoveFromCartControllerAction removeFromCartControllerAction;
-    private final CartPageContentFactory cartPageContentFactory;
 
     protected SunriseRemoveFromCartController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                               final RemoveFromCartFormData formData,
-                                              final RemoveFromCartControllerAction removeFromCartControllerAction,
-                                              final CartPageContentFactory cartPageContentFactory) {
+                                              final RemoveFromCartControllerAction removeFromCartControllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.removeFromCartControllerAction = removeFromCartControllerAction;
-        this.cartPageContentFactory = cartPageContentFactory;
     }
 
     @Override
@@ -52,7 +49,7 @@ public abstract class SunriseRemoveFromCartController extends SunriseContentForm
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends RemoveFromCartFormData> form) {
-        return cartPageContentFactory.create(null);
+        return new BlankPageContent();
     }
 
     @Override

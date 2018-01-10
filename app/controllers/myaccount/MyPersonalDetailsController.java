@@ -6,7 +6,6 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsControllerAction;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
-import com.commercetools.sunrise.myaccount.mydetails.viewmodels.MyPersonalDetailsPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -22,9 +21,8 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
     public MyPersonalDetailsController(final ContentRenderer contentRenderer,
                                        final FormFactory formFactory,
                                        final MyPersonalDetailsFormData formData,
-                                       final MyPersonalDetailsControllerAction controllerAction,
-                                       final MyPersonalDetailsPageContentFactory pageContentFactory) {
-        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
+                                       final MyPersonalDetailsControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

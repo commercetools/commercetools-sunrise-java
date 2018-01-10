@@ -2,7 +2,7 @@ package com.commercetools.sunrise.shoppingcart.checkout;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.shoppingcart.checkout.address.viewmodels.CheckoutAddressPageContent;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.viewmodels.CheckoutConfirmationPageContent;
 import com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels.CheckoutPaymentPageContent;
@@ -20,9 +20,9 @@ public class CheckoutStepControllerComponent implements ControllerComponent, Pag
     private static final Map<Class<?>, CheckoutStep> MAPPING = initializeMapping();
 
     @Override
-    public void onPageDataReady(final PageData pageData) {
-        if (pageData.getContent() instanceof AbstractCheckoutPageContent) {
-            final AbstractCheckoutPageContent content = (AbstractCheckoutPageContent) pageData.getContent();
+    public void onPageDataReady(final OldPageData oldPageData) {
+        if (oldPageData.getContent() instanceof AbstractCheckoutPageContent) {
+            final AbstractCheckoutPageContent content = (AbstractCheckoutPageContent) oldPageData.getContent();
             MAPPING.entrySet().stream()
                     .filter(entry -> entry.getKey().isAssignableFrom(content.getClass()))
                     .findAny()

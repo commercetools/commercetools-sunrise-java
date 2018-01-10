@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.shoppingcart.checkout.payment.viewmodels.CheckoutPaymentPageContentFactory;
+import com.commercetools.sunrise.models.BlankPageContent;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -19,16 +19,13 @@ public abstract class SunriseCheckoutPaymentController extends SunriseContentFor
 
     private final CheckoutPaymentFormData formData;
     private final CheckoutPaymentControllerAction controllerAction;
-    private final CheckoutPaymentPageContentFactory pageContentFactory;
 
     protected SunriseCheckoutPaymentController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                                final CheckoutPaymentFormData formData,
-                                               final CheckoutPaymentControllerAction controllerAction,
-                                               final CheckoutPaymentPageContentFactory pageContentFactory) {
+                                               final CheckoutPaymentControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
@@ -58,7 +55,7 @@ public abstract class SunriseCheckoutPaymentController extends SunriseContentFor
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends CheckoutPaymentFormData> form) {
-        return pageContentFactory.create(null, form);
+        return new BlankPageContent();
     }
 
     @Override

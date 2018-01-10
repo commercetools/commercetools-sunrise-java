@@ -4,7 +4,6 @@ import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.SunriseAddressBookDetailController;
-import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressBookPageContentFactory;
 
 import javax.inject.Inject;
 
@@ -13,9 +12,8 @@ import javax.inject.Inject;
 public final class AddressBookDetailController extends SunriseAddressBookDetailController {
 
     @Inject
-    public AddressBookDetailController(final ContentRenderer contentRenderer,
-                                       final AddressBookPageContentFactory pageContentFactory) {
-        super(contentRenderer, pageContentFactory);
+    public AddressBookDetailController(final ContentRenderer contentRenderer) {
+        super(contentRenderer);
     }
 
     @Override

@@ -13,9 +13,8 @@ import javax.inject.Inject;
 public final class WishlistContentController extends SunriseWishlistContentController {
 
     @Inject
-    public WishlistContentController(final ContentRenderer contentRenderer,
-                                     final WishlistPageContentFactory wishlistPageContentFactory) {
-        super(contentRenderer, wishlistPageContentFactory);
+    public WishlistContentController(final ContentRenderer contentRenderer) {
+        super(contentRenderer);
     }
 
     @Override

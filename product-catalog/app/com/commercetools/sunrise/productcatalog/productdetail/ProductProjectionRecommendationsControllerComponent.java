@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.productcatalog.productdetail;
 
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.recommendations.ProductRecommender;
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
@@ -40,9 +40,9 @@ public final class ProductProjectionRecommendationsControllerComponent implement
     }
 
     @Override
-    public void onPageDataReady(final PageData pageData) {
-        if (recommendedProducts != null && pageData.getContent() instanceof ProductDetailPageContent) {
-            final ProductDetailPageContent content = (ProductDetailPageContent) pageData.getContent();
+    public void onPageDataReady(final OldPageData oldPageData) {
+        if (recommendedProducts != null && oldPageData.getContent() instanceof ProductDetailPageContent) {
+            final ProductDetailPageContent content = (ProductDetailPageContent) oldPageData.getContent();
             content.setSuggestions(productListViewModelFactory.create(recommendedProducts));
         }
     }

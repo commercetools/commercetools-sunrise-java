@@ -4,7 +4,6 @@ import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.shoppingcart.content.SunriseCartContentController;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 
 import javax.inject.Inject;
 
@@ -13,9 +12,8 @@ import javax.inject.Inject;
 public final class CartContentController extends SunriseCartContentController {
 
     @Inject
-    public CartContentController(final ContentRenderer contentRenderer,
-                                 final CartPageContentFactory pageContentFactory) {
-        super(contentRenderer, pageContentFactory);
+    public CartContentController(final ContentRenderer contentRenderer) {
+        super(contentRenderer);
     }
 
     @Override

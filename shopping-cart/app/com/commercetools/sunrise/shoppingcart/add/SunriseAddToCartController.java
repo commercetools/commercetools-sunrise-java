@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
+import com.commercetools.sunrise.models.BlankPageContent;
 import io.sphere.sdk.carts.Cart;
 import play.data.Form;
 import play.data.FormFactory;
@@ -19,16 +19,13 @@ public abstract class SunriseAddToCartController extends SunriseContentFormContr
 
     private final AddToCartFormData formData;
     private final AddToCartControllerAction controllerAction;
-    private final CartPageContentFactory pageContentFactory;
 
     protected SunriseAddToCartController(final ContentRenderer contentRenderer,
                                          final FormFactory formFactory, final AddToCartFormData formData,
-                                         final AddToCartControllerAction controllerAction,
-                                         final CartPageContentFactory pageContentFactory) {
+                                         final AddToCartControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @Override
@@ -52,7 +49,7 @@ public abstract class SunriseAddToCartController extends SunriseContentFormContr
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends AddToCartFormData> form) {
-        return pageContentFactory.create(null);
+        return new BlankPageContent();
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.commercetools.sunrise.models.search.facetedsearch;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetSelectorListViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.WithFacetedSearchViewModel;
 import io.sphere.sdk.models.Base;
@@ -29,10 +29,10 @@ public abstract class AbstractFacetedSearchSelectorControllerComponent<T> extend
     protected abstract PagedSearchResult<T> getPagedSearchResult();
 
     @Override
-    public void onPageDataReady(final PageData pageData) {
+    public void onPageDataReady(final OldPageData oldPageData) {
         final PagedSearchResult<T> pagedSearchResult = getPagedSearchResult();
-        if (pagedSearchResult != null && pageData.getContent() instanceof WithFacetedSearchViewModel) {
-            final WithFacetedSearchViewModel content = (WithFacetedSearchViewModel) pageData.getContent();
+        if (pagedSearchResult != null && oldPageData.getContent() instanceof WithFacetedSearchViewModel) {
+            final WithFacetedSearchViewModel content = (WithFacetedSearchViewModel) oldPageData.getContent();
             content.setFacets(facetSelectorListViewModelFactory.create(pagedSearchResult));
         }
     }

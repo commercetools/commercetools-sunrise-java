@@ -6,7 +6,6 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.SunriseChangePasswordController;
-import com.commercetools.sunrise.myaccount.authentication.changepassword.viemodels.ChangePasswordPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import play.data.FormFactory;
 import play.mvc.Result;
@@ -22,9 +21,8 @@ public final class ChangePasswordController extends SunriseChangePasswordControl
     public ChangePasswordController(final ContentRenderer contentRenderer,
                                     final FormFactory formFactory,
                                     final ChangePasswordFormData formData,
-                                    final ChangePasswordControllerAction controllerAction,
-                                    final ChangePasswordPageContentFactory pageContentFactory) {
-        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
+                                    final ChangePasswordControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

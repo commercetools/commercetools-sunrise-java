@@ -7,8 +7,8 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.changepassword.ChangePasswordReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.models.BlankPageContent;
 import com.commercetools.sunrise.myaccount.MyAccountController;
-import com.commercetools.sunrise.myaccount.authentication.changepassword.viemodels.ChangePasswordPageContentFactory;
 import io.sphere.sdk.client.ClientErrorException;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
@@ -24,16 +24,13 @@ public abstract class SunriseChangePasswordController extends SunriseContentForm
 
     private final ChangePasswordFormData formData;
     private final ChangePasswordControllerAction controllerAction;
-    private final ChangePasswordPageContentFactory pageContentFactory;
 
     protected SunriseChangePasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                               final ChangePasswordFormData formData,
-                                              final ChangePasswordControllerAction controllerAction,
-                                              final ChangePasswordPageContentFactory pageContentFactory) {
+                                              final ChangePasswordControllerAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;
-        this.pageContentFactory = pageContentFactory;
     }
 
     @EnableHooks
@@ -70,7 +67,7 @@ public abstract class SunriseChangePasswordController extends SunriseContentForm
 
     @Override
     public PageContent createPageContent(final Void input, final Form<? extends ChangePasswordFormData> form) {
-        return pageContentFactory.create(form);
+        return new BlankPageContent();
     }
 
     @Override

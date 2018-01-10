@@ -7,7 +7,6 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.productcatalog.home.HomeRecommendationsControllerComponent;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
-import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContentFactory;
 
 import javax.inject.Inject;
 
@@ -17,9 +16,8 @@ import javax.inject.Inject;
 public final class HomeController extends SunriseHomeController {
 
     @Inject
-    public HomeController(final ContentRenderer contentRenderer,
-                          final HomePageContentFactory pageContentFactory) {
-        super(contentRenderer, pageContentFactory);
+    public HomeController(final ContentRenderer contentRenderer) {
+        super(contentRenderer);
     }
 
     @Override

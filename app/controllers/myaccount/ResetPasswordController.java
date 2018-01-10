@@ -6,7 +6,6 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordControllerAction;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.SunriseResetPasswordController;
-import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.viewmodels.ResetPasswordPageContentFactory;
 import io.sphere.sdk.customers.Customer;
 import play.data.Form;
 import play.data.FormFactory;
@@ -20,11 +19,11 @@ import java.util.concurrent.CompletionStage;
 public final class ResetPasswordController extends SunriseResetPasswordController {
 
     @Inject
-    ResetPasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                   final ResetPasswordFormData formData,
-                                   final ResetPasswordControllerAction controllerAction,
-                                   final ResetPasswordPageContentFactory pageContentFactory) {
-        super(contentRenderer, formFactory, formData, controllerAction, pageContentFactory);
+    ResetPasswordController(final ContentRenderer contentRenderer,
+                            final FormFactory formFactory,
+                            final ResetPasswordFormData formData,
+                            final ResetPasswordControllerAction controllerAction) {
+        super(contentRenderer, formFactory, formData, controllerAction);
     }
 
     @Override

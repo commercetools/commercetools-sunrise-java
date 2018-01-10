@@ -3,6 +3,7 @@ package com.commercetools.sunrise.core.renderers;
 import com.commercetools.sunrise.cms.CmsService;
 import com.commercetools.sunrise.core.hooks.RequestHookRunner;
 import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.core.viewmodels.PageDataFactory;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
@@ -32,7 +33,7 @@ import java.util.concurrent.CompletionStage;
 
 final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implements ContentRenderer {
 
-    private static final Logger PAGE_DATA_LOGGER_AS_JSON = LoggerFactory.getLogger(PageData.class.getName() + "Json");
+    private static final Logger PAGE_DATA_LOGGER_AS_JSON = LoggerFactory.getLogger(OldPageData.class.getName() + "Json");
     private static final ObjectMapper objectMapper = createObjectMapper();
 
     private final PageDataFactory pageDataFactory;
@@ -82,14 +83,14 @@ final class PageHtmlContentRenderer extends AbstractHtmlContentRenderer implemen
                         }), HttpExecution.defaultContext()), HttpExecution.defaultContext());
     }
 
-    private static void logFinalPageData(final PageData pageData) {
+    private static void logFinalPageData(final PageData oldPageData) {
         if (PAGE_DATA_LOGGER_AS_JSON.isDebugEnabled()) {
             try {
                 final ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
-                final String formatted = objectWriter.writeValueAsString(pageData);
+                final String formatted = objectWriter.writeValueAsString(oldPageData);
                 PAGE_DATA_LOGGER_AS_JSON.debug(formatted);
             } catch (final Exception e) {
-                PAGE_DATA_LOGGER_AS_JSON.error("serialization of " + pageData + " failed.", e);
+                PAGE_DATA_LOGGER_AS_JSON.error("serialization of " + oldPageData + " failed.", e);
             }
         }
     }

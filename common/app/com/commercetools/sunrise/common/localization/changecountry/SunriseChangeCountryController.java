@@ -12,8 +12,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseChangeCountryController extends SunriseFormController
-        implements WithFormFlow<Void, Void, ChangeCountryFormData> {
+public abstract class SunriseChangeCountryController extends SunriseFormController implements WithFormFlow<Void, Void, ChangeCountryFormData> {
 
     private final ChangeCountryFormData formData;
     private final ChangeCountryControllerAction controllerAction;

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.core.renderers;
 
 import com.commercetools.sunrise.cms.CmsService;
-import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.core.viewmodels.content.PageContent;
 
 import javax.inject.Inject;
@@ -18,9 +18,9 @@ final class EmailHtmlContentRenderer extends AbstractHtmlContentRenderer impleme
     }
 
     @Override
-    public CompletionStage<PageData> buildPageData(final PageContent pageContent) {
-        final PageData pageData = new PageData();
-        pageData.setContent(pageContent);
-        return completedFuture(pageData);
+    public CompletionStage<OldPageData> buildPageData(final PageContent pageContent) {
+        final OldPageData oldPageData = new OldPageData();
+        oldPageData.setContent(pageContent);
+        return completedFuture(oldPageData);
     }
 }

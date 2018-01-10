@@ -3,7 +3,6 @@ package controllers.shoppingcart;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.shoppingcart.content.viewmodels.CartPageContentFactory;
 import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartControllerAction;
 import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartFormData;
 import com.commercetools.sunrise.shoppingcart.remove.SunriseRemoveFromCartController;
@@ -22,9 +21,8 @@ public final class RemoveFromCartController extends SunriseRemoveFromCartControl
     public RemoveFromCartController(final ContentRenderer contentRenderer,
                                     final FormFactory formFactory,
                                     final RemoveFromCartFormData formData,
-                                    final RemoveFromCartControllerAction removeFromCartControllerAction,
-                                    final CartPageContentFactory cartPageContentFactory) {
-        super(contentRenderer, formFactory, formData, removeFromCartControllerAction, cartPageContentFactory);
+                                    final RemoveFromCartControllerAction removeFromCartControllerAction) {
+        super(contentRenderer, formFactory, formData, removeFromCartControllerAction);
     }
 
     @Override
