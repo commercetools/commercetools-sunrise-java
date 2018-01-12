@@ -1,69 +1,59 @@
 package com.commercetools.sunrise.myaccount.addressbook.changeaddress;
 
 
-import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.SunriseContentController;
+import com.commercetools.sunrise.core.controllers.WithContent;
+import com.commercetools.sunrise.core.controllers.WithForm;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
-import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.BlankPageContent;
-import com.commercetools.sunrise.models.addresses.AddressFormData;
-import com.commercetools.sunrise.myaccount.MyAccountController;
-import io.sphere.sdk.customers.Customer;
+import com.commercetools.sunrise.core.viewmodels.PageData;
+import com.commercetools.sunrise.models.addresses.MyAddressFetcher;
+import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressFormData;
 import io.sphere.sdk.models.Address;
 import play.data.Form;
-import play.data.FormFactory;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseChangeAddressController extends SunriseContentFormController
-        implements MyAccountController, WithContentFormFlow<String, Customer, AddressFormData> {
+public abstract class SunriseChangeAddressController extends SunriseContentController implements WithContent, WithForm {
 
-    private final AddressFormData formData;
     private final ChangeAddressControllerAction controllerAction;
+    private final MyAddressFetcher myAddressFetcher;
 
     protected SunriseChangeAddressController(final ContentRenderer contentRenderer,
-                                             final FormFactory formFactory,
-                                             final AddressFormData formData,
-                                             final ChangeAddressControllerAction controllerAction) {
-        super(contentRenderer, formFactory);
-        this.formData = formData;
+                                             final ChangeAddressControllerAction controllerAction,
+                                             final MyAddressFetcher myAddressFetcher) {
+        super(contentRenderer);
         this.controllerAction = controllerAction;
-    }
-
-    @Override
-    public final Class<? extends AddressFormData> getFormDataClass() {
-        return formData.getClass();
+        this.myAddressFetcher = myAddressFetcher;
     }
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PAGE)
     public CompletionStage<Result> show(final String addressIdentifier) {
-        return showFormPage(addressIdentifier, formData);
+        return myAddressFetcher.require(addressIdentifier)
+                .thenComposeAsync(address -> okResult(PageData.of().putField("address", address)), HttpExecution.defaultContext());
     }
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PROCESS)
-    public CompletionStage<Result> process(final String addressIdentifier) {
-        return processForm(addressIdentifier);
+    public CompletionStage<Result> process() {
+        final Form<? extends ChangeAddressFormData> form = controllerAction.bindForm();
+        if (form.hasErrors()) {
+            return badRequestResult(PageData.of().putField("changeAddressForm", form));
+        } else {
+            return controllerAction.apply(form.get())
+                    .thenApplyAsync(x -> handleSuccessfulAction(), HttpExecution.defaultContext());
+        }
     }
 
-    @Override
-    public CompletionStage<Customer> executeAction(final String addressIdentifier, final AddressFormData formData) {
-        return controllerAction.apply(addressIdentifier, formData);
-    }
-
-    @Override
-    public abstract CompletionStage<Result> handleSuccessfulAction(final Customer updatedCustomer, final AddressFormData formData);
-
-    // TODO move this to templates
-    @Override
-    public void preFillFormData(final String addressId, final AddressFormData formData) {
+      // TODO move this to templates
+    public void preFillFormData(final AddAddressFormData formData) {
 //        final Address address = addressWithCustomer.getAddress();
 //        final Customer customer = addressWithCustomer.getCustomer();
 //        formData.applyAddress(address);
@@ -71,10 +61,6 @@ public abstract class SunriseChangeAddressController extends SunriseContentFormC
 //        formData.applyDefaultBillingAddress(isDefaultAddress(address, customer.getDefaultBillingAddressId()));
     }
 
-    @Override
-    public PageContent createPageContent(final String addressIdentifier, final Form<? extends AddressFormData> form) {
-        return new BlankPageContent();
-    }
 
     private boolean isDefaultAddress(final Address address, @Nullable final String defaultAddressId) {
         return Objects.equals(defaultAddressId, address.getId());

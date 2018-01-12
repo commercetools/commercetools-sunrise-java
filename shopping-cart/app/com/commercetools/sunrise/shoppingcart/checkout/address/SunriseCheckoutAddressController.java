@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.address;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.WithContentForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -15,7 +15,7 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseCheckoutAddressController extends SunriseContentFormController implements WithContentFormFlow<Void, Cart, CheckoutAddressFormData> {
+public abstract class SunriseCheckoutAddressController extends SunriseContentFormController implements WithContentForm2Flow<Void, Cart, CheckoutAddressFormData> {
 
     private final CheckoutAddressFormData formData;
     private final CheckoutAddressControllerAction controllerAction;
@@ -63,7 +63,7 @@ public abstract class SunriseCheckoutAddressController extends SunriseContentFor
         if (isBillingAddressDifferent()) {
             return getFormFactory().form(getFormDataClass(), BillingAddressDifferentToShippingAddressGroup.class);
         }
-        return WithContentFormFlow.super.createForm();
+        return WithContentForm2Flow.super.createForm();
     }
 
     protected boolean isBillingAddressDifferent() {

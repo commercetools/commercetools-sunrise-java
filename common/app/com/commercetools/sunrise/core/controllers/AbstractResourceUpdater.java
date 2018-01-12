@@ -28,7 +28,7 @@ public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends U
     }
 
     @Override
-    public CompletionStage<Optional<T>> apply(final List<UpdateAction<T>> updateActions) {
+    public CompletionStage<Optional<T>> apply(final List<? extends UpdateAction<T>> updateActions) {
         return recoverWith(executeRequest(updateActions, resourceInCache.get()), throwable -> {
             final Throwable causeThrowable = throwable.getCause();
             if (causeThrowable instanceof ConcurrentModificationException) {
@@ -38,7 +38,7 @@ public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends U
         }, HttpExecution.defaultContext());
     }
 
-    private CompletionStage<Optional<T>> executeRequest(final List<UpdateAction<T>> updateActions, final CompletionStage<Optional<T>> resourceStage) {
+    private CompletionStage<Optional<T>> executeRequest(final List<? extends UpdateAction<T>> updateActions, final CompletionStage<Optional<T>> resourceStage) {
         return resourceStage.thenComposeAsync(resourceOpt -> resourceOpt
                 .map(resource -> executeRequest(resource, buildUpdateCommand(updateActions, resource))
                         .thenApply(Optional::of))
@@ -60,7 +60,7 @@ public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends U
         }
     }
 
-    protected abstract C buildUpdateCommand(final List<UpdateAction<T>> updateActions, final T resource);
+    protected abstract C buildUpdateCommand(final List<? extends UpdateAction<T>> updateActions, final T resource);
 
     protected abstract C runUpdateCommandHook(HookRunner hookRunner, C baseCommand);
 
@@ -68,7 +68,7 @@ public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends U
 
     protected abstract CompletionStage<?> runUpdatedHook(HookRunner hookRunner, T resource);
 
-    protected CompletionStage<Optional<T>> handleConcurrentModification(final List<UpdateAction<T>> updateActions,
+    protected CompletionStage<Optional<T>> handleConcurrentModification(final List<? extends UpdateAction<T>> updateActions,
                                                                         final ConcurrentModificationException exception) {
         resourceInCache.remove();
         return executeRequest(updateActions, resourceInCache.get());

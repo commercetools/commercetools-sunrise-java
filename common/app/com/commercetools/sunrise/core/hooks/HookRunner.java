@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.core.hooks;
 
-import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.google.inject.ImplementedBy;
 
 import java.util.concurrent.CompletionStage;
@@ -21,7 +21,7 @@ public interface HookRunner {
      *
      * Each execution will run in parallel until {@link RequestHookRunner#waitForHookedComponentsToFinish()} is called,
      * in which moment all asynchronous computations for the requests need to be completed successfully.
-     * Typically this is triggered before the hooks {@link PageDataReadyHook} or {@link com.commercetools.sunrise.core.hooks.application.HttpRequestEndedHook} are called.
+     * Typically this is triggered before the hooks {@link PageDataHook} or {@link com.commercetools.sunrise.core.hooks.application.HttpRequestEndedHook} are called.
      *
      * @param hookClass the class which represents the hook
      * @param f         a possible asynchronous computation using the hook

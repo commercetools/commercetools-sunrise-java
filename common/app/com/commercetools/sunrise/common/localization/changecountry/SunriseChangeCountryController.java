@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.common.localization.changecountry;
 
 import com.commercetools.sunrise.core.controllers.SunriseFormController;
-import com.commercetools.sunrise.core.controllers.WithFormFlow;
+import com.commercetools.sunrise.core.controllers.WithForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.common.localization.LocalizationReverseRouter;
@@ -12,7 +12,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class SunriseChangeCountryController extends SunriseFormController implements WithFormFlow<Void, Void, ChangeCountryFormData> {
+public abstract class SunriseChangeCountryController extends SunriseFormController implements WithForm2Flow<Void, Void, ChangeCountryFormData> {
 
     private final ChangeCountryFormData formData;
     private final ChangeCountryControllerAction controllerAction;

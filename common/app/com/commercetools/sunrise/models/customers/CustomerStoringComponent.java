@@ -14,12 +14,12 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class CustomerStoringComponent implements ControllerComponent, CustomerSignInResultLoadedHook, CustomerUpdatedHook, CustomerLoadedHook {
 
-    private final CustomerInSession customerInSession;
+    private final MyCustomerInSession myCustomerInSession;
     private final MyCustomerInCache myCustomerInCache;
 
     @Inject
-    CustomerStoringComponent(final CustomerInSession customerInSession, final MyCustomerInCache myCustomerInCache) {
-        this.customerInSession = customerInSession;
+    CustomerStoringComponent(final MyCustomerInSession myCustomerInSession, final MyCustomerInCache myCustomerInCache) {
+        this.myCustomerInSession = myCustomerInSession;
         this.myCustomerInCache = myCustomerInCache;
     }
 
@@ -39,7 +39,7 @@ public final class CustomerStoringComponent implements ControllerComponent, Cust
     }
 
     private CompletionStage<?> storeCustomer(final Customer customer) {
-        customerInSession.store(customer);
+        myCustomerInSession.store(customer);
         myCustomerInCache.store(customer);
         return completedFuture(null);
     }

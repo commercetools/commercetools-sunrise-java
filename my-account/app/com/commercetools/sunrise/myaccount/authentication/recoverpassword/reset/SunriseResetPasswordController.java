@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.WithContentForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -26,7 +26,7 @@ import java.util.concurrent.CompletionStage;
  * It processes the form and sends a password reset command to the commercetools platform
  * {@link #process(String)}.
  */
-public abstract class SunriseResetPasswordController extends SunriseContentFormController implements MyAccountController, WithContentFormFlow<String, Customer, ResetPasswordFormData> {
+public abstract class SunriseResetPasswordController extends SunriseContentFormController implements MyAccountController, WithContentForm2Flow<String, Customer, ResetPasswordFormData> {
 
     private final ResetPasswordFormData formData;
     private final ResetPasswordControllerAction controllerAction;
@@ -72,7 +72,7 @@ public abstract class SunriseResetPasswordController extends SunriseContentFormC
         if (clientErrorException instanceof NotFoundException) {
             return handleNotFoundToken(resetToken, form);
         }
-        return WithContentFormFlow.super.handleClientErrorFailedAction(resetToken, form, clientErrorException);
+        return WithContentForm2Flow.super.handleClientErrorFailedAction(resetToken, form, clientErrorException);
     }
 
     protected abstract CompletionStage<Result> handleNotFoundToken(final String resetToken, final Form<? extends ResetPasswordFormData> form);

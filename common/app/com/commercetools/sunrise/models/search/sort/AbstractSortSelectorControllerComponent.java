@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.search.sort;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.models.search.sort.viewmodels.AbstractSortSelectorViewModelFactory;
 import com.commercetools.sunrise.models.search.sort.viewmodels.WithSortSelectorViewModel;
@@ -10,7 +10,7 @@ import io.sphere.sdk.queries.PagedResult;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractSortSelectorControllerComponent<T> extends Base implements ControllerComponent, PageDataReadyHook {
+public abstract class AbstractSortSelectorControllerComponent<T> extends Base implements ControllerComponent, PageDataHook {
 
     private final SortFormSettings<T> sortFormSettings;
     private final AbstractSortSelectorViewModelFactory<T> sortSelectorViewModelFactory;

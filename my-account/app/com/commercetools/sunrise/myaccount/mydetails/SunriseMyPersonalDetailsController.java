@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.mydetails;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.WithContentForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -16,7 +16,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseMyPersonalDetailsController extends SunriseContentFormController
-        implements WithContentFormFlow<Void, Customer, MyPersonalDetailsFormData> {
+        implements WithContentForm2Flow<Void, Customer, MyPersonalDetailsFormData> {
 
     private final MyPersonalDetailsFormData formData;
     private final MyPersonalDetailsControllerAction controllerAction;

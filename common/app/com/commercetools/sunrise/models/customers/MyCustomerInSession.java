@@ -10,8 +10,8 @@ import java.util.Optional;
 /**
  * Keeps some parts from the customer in session, such as customer ID, email and some general info.
  */
-@ImplementedBy(CustomerInSessionImpl.class)
-public interface CustomerInSession extends ResourceInSession<Customer> {
+@ImplementedBy(MyCustomerInSessionImpl.class)
+public interface MyCustomerInSession extends ResourceInSession<Customer> {
 
     @Override
     Optional<String> findId();

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.wishlist.add;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.WithContentForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -16,7 +16,7 @@ import play.mvc.Result;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAddToWishlistController extends SunriseContentFormController implements WithContentFormFlow<Void, ShoppingList, AddToWishlistFormData> {
+public abstract class SunriseAddToWishlistController extends SunriseContentFormController implements WithContentForm2Flow<Void, ShoppingList, AddToWishlistFormData> {
 
     private final AddToWishlistFormData formData;
     private final AddToWishlistControllerAction controllerAction;

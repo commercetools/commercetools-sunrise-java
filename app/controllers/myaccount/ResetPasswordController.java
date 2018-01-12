@@ -38,7 +38,7 @@ public final class ResetPasswordController extends SunriseResetPasswordControlle
 
     @Override
     public CompletionStage<Result> handleSuccessfulAction(final Customer customer, final ResetPasswordFormData formData) {
-        return redirectAsync(routes.LogInController.show());
+        return redirectAsync(AuthenticationController.show());
     }
 
     @Override

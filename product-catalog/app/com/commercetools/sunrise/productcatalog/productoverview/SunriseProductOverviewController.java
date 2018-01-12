@@ -38,7 +38,7 @@ public abstract class SunriseProductOverviewController extends SunriseContentCon
         return productListFetcher.get().thenComposeAsync(productList -> {
             final PageData pageData = PageData.of()
                     .putField("products", productList);
-            return okResultWithPageContent(pageData);
+            return okResult(pageData);
         }, HttpExecution.defaultContext());
     }
 }

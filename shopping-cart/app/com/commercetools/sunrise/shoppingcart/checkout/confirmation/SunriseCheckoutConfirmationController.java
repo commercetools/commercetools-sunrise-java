@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout.confirmation;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.WithContentForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -15,7 +15,7 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseCheckoutConfirmationController extends SunriseContentFormController implements WithContentFormFlow<Void, Order, CheckoutConfirmationFormData> {
+public abstract class SunriseCheckoutConfirmationController extends SunriseContentFormController implements WithContentForm2Flow<Void, Order, CheckoutConfirmationFormData> {
 
     private final CheckoutConfirmationFormData formData;
     private final CheckoutConfirmationControllerAction controllerAction;

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.search.facetedsearch;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetSelectorListViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.WithFacetedSearchViewModel;
@@ -10,7 +10,7 @@ import io.sphere.sdk.search.PagedSearchResult;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractFacetedSearchSelectorControllerComponent<T> extends Base implements ControllerComponent, PageDataReadyHook {
+public abstract class AbstractFacetedSearchSelectorControllerComponent<T> extends Base implements ControllerComponent, PageDataHook {
 
     private final FacetedSearchFormSettingsList<T> settings;
     private final AbstractFacetSelectorListViewModelFactory<T> facetSelectorListViewModelFactory;

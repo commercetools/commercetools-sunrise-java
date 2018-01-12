@@ -2,6 +2,7 @@ package com.commercetools.sunrise.core.viewmodels;
 
 import com.commercetools.sunrise.core.SunriseModel;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,11 @@ public abstract class ViewModel extends SunriseModel {
     private Map<String, Object> extendedViewModel;
 
     public ViewModel() {
+    }
+
+    @Nullable
+    protected Map<String, Object> map() {
+        return extendedViewModel;
     }
 
     public Object get(final String key) {

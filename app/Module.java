@@ -1,3 +1,4 @@
+import com.commercetools.sunrise.cms.CmsPageComponent;
 import com.commercetools.sunrise.core.hooks.GlobalComponentRegistry;
 import com.commercetools.sunrise.core.injection.RequestScoped;
 import com.commercetools.sunrise.core.renderers.TemplateComponentSupplier;
@@ -5,8 +6,9 @@ import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
 import com.commercetools.sunrise.models.carts.CartComponentSupplier;
+import com.commercetools.sunrise.models.categories.CategoryTreeDisplayingComponent;
 import com.commercetools.sunrise.models.customers.CustomerComponentSupplier;
-import com.commercetools.sunrise.models.customers.CustomerInSession;
+import com.commercetools.sunrise.models.customers.MyCustomerInSession;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
 import com.commercetools.sunrise.models.products.ProductListFetcherWithMatchingVariants;
 import com.commercetools.sunrise.models.search.facetedsearch.terms.viewmodels.AlphabeticallySortedTermFacetViewModelFactory;
@@ -93,10 +95,10 @@ public class Module extends AbstractModule {
     @Provides
     @RequestScoped
     public PriceSelection providePriceSelection(final CurrencyUnit currency, final CountryCode country,
-                                                final CustomerInSession customerInSession) {
+                                                final MyCustomerInSession myCustomerInSession) {
         return PriceSelection.of(currency)
                 .withPriceCountry(country)
-                .withPriceCustomerGroupId(customerInSession.findCustomerGroupId().orElse(null));
+                .withPriceCustomerGroupId(myCustomerInSession.findCustomerGroupId().orElse(null));
     }
 
     @Provides
@@ -107,6 +109,8 @@ public class Module extends AbstractModule {
         globalComponentRegistry.addAll(CustomerComponentSupplier.get());
         globalComponentRegistry.addAll(TemplateComponentSupplier.get());
         globalComponentRegistry.addAll(WishlistComponentSupplier.get());
+        globalComponentRegistry.add(CategoryTreeDisplayingComponent.class);
+        globalComponentRegistry.add(CmsPageComponent.class);
         return globalComponentRegistry;
     }
 }

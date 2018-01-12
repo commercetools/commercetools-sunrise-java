@@ -36,7 +36,7 @@ public abstract class SunriseProductDetailController extends SunriseContentContr
             final PageData pageData = PageData.of()
                     .putField("product", productWithVariant.getProduct())
                     .putField("variant", productWithVariant.getVariant());
-            return okResultWithPageContent(pageData);
+            return okResult(pageData);
         }, HttpExecution.defaultContext());
     }
 }

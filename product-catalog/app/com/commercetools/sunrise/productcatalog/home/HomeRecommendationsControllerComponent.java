@@ -2,7 +2,7 @@ package com.commercetools.sunrise.productcatalog.home;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
-import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.productcatalog.home.viewmodels.HomePageContent;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListViewModelFactory;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public final class HomeRecommendationsControllerComponent implements ControllerComponent, HttpRequestStartedHook, PageDataReadyHook {
+public final class HomeRecommendationsControllerComponent implements ControllerComponent, HttpRequestStartedHook, PageDataHook {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeRecommendationsControllerComponent.class);
 

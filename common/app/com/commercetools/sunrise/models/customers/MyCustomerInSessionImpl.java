@@ -14,13 +14,13 @@ import java.util.Optional;
  * Keeps some parts from the customer in session, such as customer ID, email and some general info.
  */
 @Singleton
-final class CustomerInSessionImpl extends AbstractResourceInSession<Customer> implements CustomerInSession {
+final class MyCustomerInSessionImpl extends AbstractResourceInSession<Customer> implements MyCustomerInSession {
 
     private final String emailSessionKey;
     private final String customerGroupSessionKey;
 
     @Inject
-    CustomerInSessionImpl(final Configuration globalConfig, final StoringStrategy storingStrategy) {
+    MyCustomerInSessionImpl(final Configuration globalConfig, final StoringStrategy storingStrategy) {
         super(globalConfig.getConfig("sunrise.customers"), storingStrategy);
         this.emailSessionKey = getConfiguration().getString("emailSessionKey");
         this.customerGroupSessionKey = getConfiguration().getString("customerGroupSessionKey");

@@ -15,8 +15,8 @@ final class MyCustomerInCacheImpl extends AbstractResourceInCache<Customer> impl
     private final MyCustomerFetcher customerFinder;
 
     @Inject
-    MyCustomerInCacheImpl(final CustomerInSession customerInSession, final CacheApi cacheApi, final MyCustomerFetcher customerFinder) {
-        super(customerInSession, cacheApi);
+    MyCustomerInCacheImpl(final MyCustomerInSession myCustomerInSession, final CacheApi cacheApi, final MyCustomerFetcher customerFinder) {
+        super(myCustomerInSession, cacheApi);
         this.customerFinder = customerFinder;
     }
 

@@ -12,7 +12,7 @@ public interface RecoverPasswordMessageEditorProvider {
 
     /**
      * Provides a {@link MessageEditor} that allows to modify a {@link javax.mail.internet.MimeMessage}
-     * with the particular information required to render an email for recovering the password with the given {@code resetPasswordToken}.
+     * with the particular information required to badRequest an email for recovering the password with the given {@code resetPasswordToken}.
      *
      * This interface allows to populate an email with information; typically with subject, content or recipients.
      *

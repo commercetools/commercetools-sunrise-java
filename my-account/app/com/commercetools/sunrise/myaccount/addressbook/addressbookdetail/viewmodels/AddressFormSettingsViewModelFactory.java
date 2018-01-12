@@ -4,7 +4,7 @@ import com.commercetools.sunrise.core.viewmodels.FormViewModelFactory;
 import com.commercetools.sunrise.core.viewmodels.forms.countries.CountryFormFieldViewModelFactory;
 import com.commercetools.sunrise.core.viewmodels.forms.titles.TitleFormFieldViewModelFactory;
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.models.addresses.AddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressFormData;
 import io.sphere.sdk.customers.Customer;
 import play.Configuration;
 import play.data.Form;
@@ -12,7 +12,7 @@ import play.data.Form;
 import javax.inject.Inject;
 
 @RequestScoped
-public class AddressFormSettingsViewModelFactory extends FormViewModelFactory<AddressFormSettingsViewModel, Customer, AddressFormData> {
+public class AddressFormSettingsViewModelFactory extends FormViewModelFactory<AddressFormSettingsViewModel, Customer, AddAddressFormData> {
 
     private final String titleFormFieldName;
     private final String countryFormFieldName;
@@ -45,26 +45,26 @@ public class AddressFormSettingsViewModelFactory extends FormViewModelFactory<Ad
     }
 
     @Override
-    protected AddressFormSettingsViewModel newViewModelInstance(final Customer customer, final Form<? extends AddressFormData> form) {
+    protected AddressFormSettingsViewModel newViewModelInstance(final Customer customer, final Form<? extends AddAddressFormData> form) {
         return new AddressFormSettingsViewModel();
     }
 
     @Override
-    public final AddressFormSettingsViewModel create(final Customer customer, final Form<? extends AddressFormData> form) {
+    public final AddressFormSettingsViewModel create(final Customer customer, final Form<? extends AddAddressFormData> form) {
         return super.create(customer, form);
     }
 
     @Override
-    protected final void initialize(final AddressFormSettingsViewModel viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+    protected final void initialize(final AddressFormSettingsViewModel viewModel, final Customer customer, final Form<? extends AddAddressFormData> form) {
         fillTitle(viewModel, customer, form);
         fillCountries(viewModel, customer, form);
     }
 
-    protected void fillTitle(final AddressFormSettingsViewModel viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+    protected void fillTitle(final AddressFormSettingsViewModel viewModel, final Customer customer, final Form<? extends AddAddressFormData> form) {
         viewModel.setTitle(titleFormFieldViewModelFactory.createWithDefaultOptions(form.field(titleFormFieldName)));
     }
 
-    protected void fillCountries(final AddressFormSettingsViewModel viewModel, final Customer customer, final Form<? extends AddressFormData> form) {
+    protected void fillCountries(final AddressFormSettingsViewModel viewModel, final Customer customer, final Form<? extends AddAddressFormData> form) {
         viewModel.setCountries(countryFormFieldViewModelFactory.createWithDefaultOptions(form.field(countryFormFieldName)));
     }
 }

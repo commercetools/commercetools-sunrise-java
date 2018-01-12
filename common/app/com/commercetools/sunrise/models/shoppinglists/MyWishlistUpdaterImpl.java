@@ -23,7 +23,7 @@ final class MyWishlistUpdaterImpl extends AbstractResourceUpdater<ShoppingList, 
     }
 
     @Override
-    protected ShoppingListUpdateCommand buildUpdateCommand(final List<UpdateAction<ShoppingList>> updateActions, final ShoppingList resource) {
+    protected ShoppingListUpdateCommand buildUpdateCommand(final List<? extends UpdateAction<ShoppingList>> updateActions, final ShoppingList resource) {
         return ShoppingListUpdateCommand.of(resource, updateActions);
     }
 

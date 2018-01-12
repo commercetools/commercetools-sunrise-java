@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook.removeaddress;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.WithContentForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -17,7 +17,7 @@ import play.mvc.Result;
 import java.util.concurrent.CompletionStage;
 
 public abstract class SunriseRemoveAddressController extends SunriseContentFormController
-        implements MyAccountController, WithContentFormFlow<Void, Customer, RemoveAddressFormData> {
+        implements MyAccountController, WithContentForm2Flow<Void, Customer, RemoveAddressFormData> {
 
     private final RemoveAddressFormData formData;
     private final RemoveAddressControllerAction controllerAction;

@@ -1,77 +1,56 @@
 package com.commercetools.sunrise.myaccount.authentication.changepassword;
 
-import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.SunriseContentController;
+import com.commercetools.sunrise.core.controllers.WithContent;
+import com.commercetools.sunrise.core.controllers.WithForm;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.changepassword.ChangePasswordReverseRouter;
-import com.commercetools.sunrise.core.viewmodels.content.PageContent;
-import com.commercetools.sunrise.models.BlankPageContent;
-import com.commercetools.sunrise.myaccount.MyAccountController;
-import io.sphere.sdk.client.ClientErrorException;
-import io.sphere.sdk.customers.Customer;
+import com.commercetools.sunrise.core.viewmodels.PageData;
 import play.data.Form;
-import play.data.FormFactory;
+import play.libs.concurrent.HttpExecution;
 import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sdk.errors.ErrorResponseExceptionUtils.isCustomerInvalidCurrentPasswordError;
 
-public abstract class SunriseChangePasswordController extends SunriseContentFormController
-        implements MyAccountController, WithContentFormFlow<Void, Customer, ChangePasswordFormData> {
+public abstract class SunriseChangePasswordController extends SunriseContentController implements WithContent, WithForm<ChangePasswordFormData> {
 
-    private final ChangePasswordFormData formData;
     private final ChangePasswordControllerAction controllerAction;
 
-    protected SunriseChangePasswordController(final ContentRenderer contentRenderer, final FormFactory formFactory,
-                                              final ChangePasswordFormData formData,
+    protected SunriseChangePasswordController(final ContentRenderer contentRenderer,
                                               final ChangePasswordControllerAction controllerAction) {
-        super(contentRenderer, formFactory);
-        this.formData = formData;
+        super(contentRenderer);
         this.controllerAction = controllerAction;
     }
 
     @EnableHooks
     @SunriseRoute(ChangePasswordReverseRouter.CHANGE_PASSWORD_PAGE)
     public CompletionStage<Result> show() {
-        return showFormPage(null, formData);
+        return okResult(PageData.of());
     }
 
     @EnableHooks
     @SunriseRoute(ChangePasswordReverseRouter.CHANGE_PASSWORD_PROCESS)
     public CompletionStage<Result> process() {
-        return processForm(null);
-    }
-
-    @Override
-    public final Class<? extends ChangePasswordFormData> getFormDataClass() {
-        return formData.getClass();
-    }
-
-    @Override
-    public CompletionStage<Customer> executeAction(final Void input, final ChangePasswordFormData formData) {
-        return controllerAction.apply(formData);
-    }
-
-    @Override
-    public CompletionStage<Result> handleClientErrorFailedAction(final Void input, final Form<? extends ChangePasswordFormData> form, final ClientErrorException clientErrorException) {
-        if (isCustomerInvalidCurrentPasswordError(clientErrorException)) {
-            saveFormError(form, "Invalid current password"); // TODO i18n
-            return showFormPageWithErrors(input, form);
+        final Form<? extends ChangePasswordFormData> form = controllerAction.bindForm();
+        if (form.hasErrors()) {
+            return badRequestResult(PageData.of().putField("changePasswordForm", form));
         } else {
-            return WithContentFormFlow.super.handleClientErrorFailedAction(input, form, clientErrorException);
+            return controllerAction.apply(form.get())
+                    .thenApplyAsync(x -> handleSuccessfulAction(), HttpExecution.defaultContext());
         }
     }
 
     @Override
-    public PageContent createPageContent(final Void input, final Form<? extends ChangePasswordFormData> form) {
-        return new BlankPageContent();
-    }
-
-    @Override
-    public void preFillFormData(final Void input, final ChangePasswordFormData formData) {
-        // Do nothing
+    public CompletionStage<Result> handleFailedAction(final Form<? extends ChangePasswordFormData> form, final Throwable throwable) {
+        if (isCustomerInvalidCurrentPasswordError(throwable.getCause())) {
+            form.reject("errors.invalidCurrentPassword");
+            return badRequestResult(PageData.of().putField("changePasswordForm", form));
+        } else {
+            return WithForm.super.handleFailedAction(form, throwable);
+        }
     }
 }

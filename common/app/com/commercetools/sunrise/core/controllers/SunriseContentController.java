@@ -1,16 +1,16 @@
 package com.commercetools.sunrise.core.controllers;
 
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
+import com.commercetools.sunrise.core.renderers.TemplateEngine;
 
 public abstract class SunriseContentController extends SunriseController {
 
-    private final ContentRenderer contentRenderer;
+    private final TemplateEngine templateEngine;
 
-    protected SunriseContentController(final ContentRenderer contentRenderer) {
-        this.contentRenderer = contentRenderer;
+    protected SunriseContentController(final TemplateEngine templateEngine) {
+        this.templateEngine = templateEngine;
     }
 
-    public ContentRenderer getContentRenderer() {
-        return contentRenderer;
+    public TemplateEngine getTemplateEngine() {
+        return templateEngine;
     }
 }

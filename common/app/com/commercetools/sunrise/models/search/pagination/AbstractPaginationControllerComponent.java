@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.search.pagination;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractEntriesPerPageSelectorViewModelFactory;
 import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractPaginationViewModelFactory;
@@ -12,7 +12,7 @@ import play.mvc.Http;
 
 import javax.annotation.Nullable;
 
-public abstract class AbstractPaginationControllerComponent extends Base implements ControllerComponent, PageDataReadyHook {
+public abstract class AbstractPaginationControllerComponent extends Base implements ControllerComponent, PageDataHook {
 
     private final PaginationSettings paginationSettings;
     private final EntriesPerPageFormSettings entriesPerPageFormSettings;

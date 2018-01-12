@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.orders;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.customers.CustomerInSession;
+import com.commercetools.sunrise.models.customers.MyCustomerInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.orders.queries.OrderQuery;
 
@@ -10,18 +10,18 @@ import java.util.Optional;
 
 public class DefaultMyOrderListFetcher extends AbstractMyOrderListFetcher {
 
-    private final CustomerInSession customerInSession;
+    private final MyCustomerInSession myCustomerInSession;
 
     @Inject
     protected DefaultMyOrderListFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                        final CustomerInSession customerInSession) {
+                                        final MyCustomerInSession myCustomerInSession) {
         super(sphereClient, hookRunner);
-        this.customerInSession = customerInSession;
+        this.myCustomerInSession = myCustomerInSession;
     }
 
     @Override
     public Optional<OrderQuery> defaultRequest() {
-        return customerInSession.findId()
+        return myCustomerInSession.findId()
                 .map(customerId -> OrderQuery.of()
                         .byCustomerId(customerId)
                         .withSort(order -> order.createdAt().sort().desc()));

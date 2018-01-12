@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.core.controllers;
 
-import com.commercetools.sunrise.core.viewmodels.content.PageContent;
+import com.commercetools.sunrise.core.viewmodels.PageData;
 import io.sphere.sdk.client.ClientErrorException;
 import org.apache.commons.beanutils.BeanUtils;
 import play.data.Form;
@@ -15,32 +15,32 @@ import java.util.concurrent.CompletionStage;
  * @param <O> type of the output object, normally the updated object if the form is valid
  * @param <F> stereotype of the in a form wrapped class
  */
-public interface WithContentFormFlow<O, F> extends WithFormFlow<O, F>, WithContent {
+public interface WithContentForm2Flow<F> extends WithForm2Flow<F>, WithContent {
 
     default CompletionStage<Result> showFormPage(final F emptyFormData) {
-        final Form<? extends F> form = createFilledForm(input, emptyFormData);
-        return okResultWithPageContent(createPageContent(input, form));
+        final Form<? extends F> form = createFilledForm(emptyFormData);
+        return okResult(createPageContent(form));
     }
 
-    default CompletionStage<Result> showFormPageWithErrors(final I input, final Form<? extends F> form) {
-        return badRequestResultWithPageContent(createPageContent(input, form));
-    }
-
-    @Override
-    default CompletionStage<Result> handleInvalidForm(final I input, final Form<? extends F> form) {
-        return showFormPageWithErrors(input, form);
+    default CompletionStage<Result> showFormPageWithErrors(final Form<? extends F> form) {
+        return badRequestResult(createPageContent(form));
     }
 
     @Override
-    default CompletionStage<Result> handleClientErrorFailedAction(final I input, final Form<? extends F> form, final ClientErrorException clientErrorException) {
+    default CompletionStage<Result> handleInvalidForm(final Form<? extends F> form) {
+        return showFormPageWithErrors(form);
+    }
+
+    @Override
+    default CompletionStage<Result> handleClientErrorFailedAction(final Form<? extends F> form, final ClientErrorException clientErrorException) {
         saveUnexpectedFormError(form, clientErrorException);
-        return showFormPageWithErrors(input, form);
+        return showFormPageWithErrors(form);
     }
 
-    PageContent createPageContent(final I input, final Form<? extends F> form);
+    PageData createPageContent(final Form<? extends F> form);
 
-    default Form<? extends F> createFilledForm(final I input, final F formData) {
-        preFillFormData(input, formData);
+    default Form<? extends F> createFilledForm(final F formData) {
+        preFillFormData(formData);
         try {
             final Map<String, String> classFieldValues = BeanUtils.describe(formData);
             final Form<? extends F> filledForm = createForm().bind(classFieldValues);
@@ -51,5 +51,5 @@ public interface WithContentFormFlow<O, F> extends WithFormFlow<O, F>, WithConte
         }
     }
 
-    void preFillFormData(final I input, final F formData);
+    void preFillFormData(final F formData);
 }

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.myaccount.authentication.recoverpassword.recover;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.WithContentForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
  * This abstract controller gets an customer email as input, request a customer reset password token for the
  * customer and then sends an email with a link to the reset password page.
  */
-public abstract class SunriseRecoverPasswordController extends SunriseContentFormController implements MyAccountController, WithContentFormFlow<Void, CustomerToken, RecoverPasswordFormData> {
+public abstract class SunriseRecoverPasswordController extends SunriseContentFormController implements MyAccountController, WithContentForm2Flow<Void, CustomerToken, RecoverPasswordFormData> {
 
     private final RecoverPasswordControllerAction controllerAction;
     private final RecoverPasswordFormData formData;
@@ -66,7 +66,7 @@ public abstract class SunriseRecoverPasswordController extends SunriseContentFor
             final EmailDeliveryException emailDeliveryException = (EmailDeliveryException) cause;
             return handleEmailDeliveryException(form, emailDeliveryException);
         }
-        return WithContentFormFlow.super.handleFailedAction(input, form, throwable);
+        return WithContentForm2Flow.super.handleFailedAction(input, form, throwable);
     }
 
     @Override
@@ -74,7 +74,7 @@ public abstract class SunriseRecoverPasswordController extends SunriseContentFor
         if (clientErrorException instanceof NotFoundException) {
             return handleNotFoundEmail(form);
         }
-        return WithContentFormFlow.super.handleClientErrorFailedAction(input, form, clientErrorException);
+        return WithContentForm2Flow.super.handleClientErrorFailedAction(input, form, clientErrorException);
     }
 
     protected abstract CompletionStage<Result> handleNotFoundEmail(final Form<? extends RecoverPasswordFormData> form);

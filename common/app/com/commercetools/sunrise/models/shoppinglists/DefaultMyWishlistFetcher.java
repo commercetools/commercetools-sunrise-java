@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.shoppinglists;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.customers.CustomerInSession;
+import com.commercetools.sunrise.models.customers.MyCustomerInSession;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 
@@ -11,22 +11,22 @@ import java.util.Optional;
 public class DefaultMyWishlistFetcher extends AbstractMyWishlistFetcher {
 
     private final WishlistInSession wishlistInSession;
-    private final CustomerInSession customerInSession;
+    private final MyCustomerInSession myCustomerInSession;
 
     @Inject
     protected DefaultMyWishlistFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                       final WishlistInSession wishlistInSession, final CustomerInSession customerInSession) {
+                                       final WishlistInSession wishlistInSession, final MyCustomerInSession myCustomerInSession) {
         super(sphereClient, hookRunner);
         this.wishlistInSession = wishlistInSession;
-        this.customerInSession = customerInSession;
+        this.myCustomerInSession = myCustomerInSession;
     }
 
     protected final WishlistInSession getWishlistInSession() {
         return wishlistInSession;
     }
 
-    protected final CustomerInSession getCustomerInSession() {
-        return customerInSession;
+    protected final MyCustomerInSession getMyCustomerInSession() {
+        return myCustomerInSession;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class DefaultMyWishlistFetcher extends AbstractMyWishlistFetcher {
     }
 
     private Optional<ShoppingListQuery> tryBuildQueryByCustomerId() {
-        return customerInSession.findId()
+        return myCustomerInSession.findId()
                 .map(customerId -> ShoppingListQuery.of()
                         .withExpansionPaths(m -> m.lineItems().productSlug())
                         .plusPredicates(m -> m.customer().id().is(customerId)));

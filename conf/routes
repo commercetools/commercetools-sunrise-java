@@ -85,13 +85,13 @@ GET         /checkout/thankyou                                                  
 # ~~~~~
 
 # Shows login and signup form
-GET         /user/login                                                             @controllers.myaccount.LogInController.show
+GET         /user/login                                                             @controllers.myaccount.AuthenticationController.show
 # Logs in the user
-POST        /user/login                                                             @controllers.myaccount.LogInController.process
+POST        /user/login                                                             @controllers.myaccount.AuthenticationController.processLogIn
 # Registers the user
-POST        /user/signup                                                            @controllers.myaccount.SignUpController.process
+POST        /user/signup                                                            @controllers.myaccount.AuthenticationController.processSignUp
 # Logs out the user
-GET         /user/logout                                                            @controllers.myaccount.LogOutController.process
+GET         /user/logout                                                            @controllers.myaccount.AuthenticationController.processLogOut
 
 # PASSWORD RECOVERY
 # ~~~~~

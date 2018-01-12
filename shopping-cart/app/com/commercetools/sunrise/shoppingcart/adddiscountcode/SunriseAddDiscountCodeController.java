@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.adddiscountcode;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.WithContentForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletionStage;
 
 import static com.commercetools.sdk.errors.ErrorResponseExceptionUtils.isDiscountCodeNonApplicableError;
 
-public abstract class SunriseAddDiscountCodeController extends SunriseContentFormController implements WithContentFormFlow<Void, Cart, AddDiscountCodeFormData> {
+public abstract class SunriseAddDiscountCodeController extends SunriseContentFormController implements WithContentForm2Flow<Void, Cart, AddDiscountCodeFormData> {
 
     private final AddDiscountCodeFormData formData;
     private final AddDiscountCodeControllerAction controllerAction;
@@ -63,7 +63,7 @@ public abstract class SunriseAddDiscountCodeController extends SunriseContentFor
         if (isDiscountCodeNonApplicableError(clientErrorException)) {
             return handleDiscountCodeNonApplicable(input, form, clientErrorException);
         } else {
-            return WithContentFormFlow.super.handleClientErrorFailedAction(input, form, clientErrorException);
+            return WithContentForm2Flow.super.handleClientErrorFailedAction(input, form, clientErrorException);
         }
     }
 

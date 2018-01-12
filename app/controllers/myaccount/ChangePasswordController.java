@@ -4,14 +4,10 @@ import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordControllerAction;
-import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordFormData;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.SunriseChangePasswordController;
-import io.sphere.sdk.customers.Customer;
-import play.data.FormFactory;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
 
 @LogMetrics
 @NoCache
@@ -19,10 +15,8 @@ public final class ChangePasswordController extends SunriseChangePasswordControl
 
     @Inject
     public ChangePasswordController(final ContentRenderer contentRenderer,
-                                    final FormFactory formFactory,
-                                    final ChangePasswordFormData formData,
                                     final ChangePasswordControllerAction controllerAction) {
-        super(contentRenderer, formFactory, formData, controllerAction);
+        super(contentRenderer, controllerAction);
     }
 
     @Override
@@ -36,7 +30,7 @@ public final class ChangePasswordController extends SunriseChangePasswordControl
     }
 
     @Override
-    public CompletionStage<Result> handleSuccessfulAction(final Customer result, final ChangePasswordFormData formData) {
-        return redirectAsync(routes.MyPersonalDetailsController.show());
+    public Result handleSuccessfulAction() {
+        return redirect(routes.MyPersonalDetailsController.show());
     }
 }

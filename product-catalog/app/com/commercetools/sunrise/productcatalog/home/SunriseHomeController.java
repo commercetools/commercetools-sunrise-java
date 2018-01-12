@@ -23,6 +23,6 @@ public abstract class SunriseHomeController extends SunriseContentController imp
     @EnableHooks
     @SunriseRoute(HomeReverseRouter.HOME_PAGE)
     public CompletionStage<Result> show() {
-        return okResultWithPageContent(PageData.of());
+        return okResult(PageData.of());
     }
 }

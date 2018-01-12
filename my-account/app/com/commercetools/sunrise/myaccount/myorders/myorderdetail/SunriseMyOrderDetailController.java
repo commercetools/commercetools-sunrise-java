@@ -29,7 +29,7 @@ public abstract class SunriseMyOrderDetailController extends SunriseContentContr
         return myOrderFetcher.get(orderIdentifier).thenComposeAsync(order -> {
             final PageData pageData = PageData.of()
                     .putField("order", order);
-            return okResultWithPageContent(pageData);
+            return okResult(pageData);
         }, HttpExecution.defaultContext());
     }
 }

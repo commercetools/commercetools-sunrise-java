@@ -3,7 +3,7 @@ package com.commercetools.sunrise.productcatalog.productdetail;
 import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.recommendations.ProductRecommender;
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.ProductProjectionLoadedHook;
 import com.commercetools.sunrise.productcatalog.productdetail.viewmodels.ProductDetailPageContent;
 import com.commercetools.sunrise.productcatalog.productoverview.viewmodels.ProductListViewModelFactory;
@@ -17,7 +17,7 @@ import java.util.concurrent.CompletionStage;
 /**
  * Loads some other products that are related to the loaded product in the controller.
  */
-public final class ProductProjectionRecommendationsControllerComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataReadyHook {
+public final class ProductProjectionRecommendationsControllerComponent implements ControllerComponent, ProductProjectionLoadedHook, PageDataHook {
 
     private final ProductRecommender productRecommender;
     private final ProductListViewModelFactory productListViewModelFactory;

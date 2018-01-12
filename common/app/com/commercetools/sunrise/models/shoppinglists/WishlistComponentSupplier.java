@@ -11,8 +11,9 @@ public final class WishlistComponentSupplier implements ComponentSupplier {
 
     public static List<Class<? extends Component>> get() {
         return asList(
-                ShoppingListLineItemExpansionComponent.class,
-                WishlistStoringComponent.class);
+                WishlistStoringComponent.class,
+                WishlistDisplayingComponent.class,
+                ShoppingListLineItemExpansionComponent.class);
     }
 
 }

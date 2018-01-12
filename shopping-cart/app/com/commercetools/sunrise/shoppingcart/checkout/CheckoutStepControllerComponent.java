@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.checkout;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
-import com.commercetools.sunrise.core.hooks.application.PageDataReadyHook;
+import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.viewmodels.OldPageData;
 import com.commercetools.sunrise.shoppingcart.checkout.address.viewmodels.CheckoutAddressPageContent;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.viewmodels.CheckoutConfirmationPageContent;
@@ -15,7 +15,7 @@ import java.util.Map;
 import static com.commercetools.sunrise.shoppingcart.checkout.CheckoutStep.*;
 
 @Singleton
-public class CheckoutStepControllerComponent implements ControllerComponent, PageDataReadyHook {
+public class CheckoutStepControllerComponent implements ControllerComponent, PageDataHook {
 
     private static final Map<Class<?>, CheckoutStep> MAPPING = initializeMapping();
 

@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.removediscountcode;
 
 import com.commercetools.sunrise.core.controllers.SunriseContentFormController;
-import com.commercetools.sunrise.core.controllers.WithContentFormFlow;
+import com.commercetools.sunrise.core.controllers.WithContentForm2Flow;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -15,7 +15,7 @@ import play.mvc.Result;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseRemoveDiscountCodeController extends SunriseContentFormController implements WithContentFormFlow<Void, Cart, RemoveDiscountCodeFormData> {
+public abstract class SunriseRemoveDiscountCodeController extends SunriseContentFormController implements WithContentForm2Flow<Void, Cart, RemoveDiscountCodeFormData> {
 
     private final RemoveDiscountCodeFormData formData;
     private final RemoveDiscountCodeControllerAction controllerAction;

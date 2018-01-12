@@ -21,6 +21,6 @@ public abstract class SunriseAddressBookDetailController extends SunriseContentC
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.ADDRESS_BOOK_DETAIL_PAGE)
     public CompletionStage<Result> show() {
-        return okResultWithPageContent(PageData.of());
+        return okResult(PageData.of());
     }
 }

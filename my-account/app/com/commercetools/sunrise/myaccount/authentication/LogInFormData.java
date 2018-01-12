@@ -1,4 +1,4 @@
-package com.commercetools.sunrise.myaccount.authentication.login;
+package com.commercetools.sunrise.myaccount.authentication;
 
 import com.google.inject.ImplementedBy;
 
@@ -8,7 +8,5 @@ public interface LogInFormData {
     String username();
 
     String password();
-
-    void applyUsername(final String username);
 }
 

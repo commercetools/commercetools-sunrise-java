@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.carts;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.customers.CustomerInSession;
+import com.commercetools.sunrise.models.customers.MyCustomerInSession;
 import io.sphere.sdk.carts.CartState;
 import io.sphere.sdk.carts.queries.CartQuery;
 import io.sphere.sdk.client.SphereClient;
@@ -12,22 +12,22 @@ import java.util.Optional;
 public class DefaultCartFetcher extends AbstractCartFetcher {
 
     private final MyCartInSession myCartInSession;
-    private final CustomerInSession customerInSession;
+    private final MyCustomerInSession myCustomerInSession;
 
     @Inject
     protected DefaultCartFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                 final MyCartInSession myCartInSession, final CustomerInSession customerInSession) {
+                                 final MyCartInSession myCartInSession, final MyCustomerInSession myCustomerInSession) {
         super(sphereClient, hookRunner);
         this.myCartInSession = myCartInSession;
-        this.customerInSession = customerInSession;
+        this.myCustomerInSession = myCustomerInSession;
     }
 
     protected final MyCartInSession getMyCartInSession() {
         return myCartInSession;
     }
 
-    protected final CustomerInSession getCustomerInSession() {
-        return customerInSession;
+    protected final MyCustomerInSession getMyCustomerInSession() {
+        return myCustomerInSession;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class DefaultCartFetcher extends AbstractCartFetcher {
     }
 
     private Optional<CartQuery> tryBuildQueryByCustomerId() {
-        return customerInSession.findId()
+        return myCustomerInSession.findId()
                 .map(customerId -> CartQuery.of().plusPredicates(cart -> cart.customerId().is(customerId)));
     }
 

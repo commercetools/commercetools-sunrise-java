@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.carts;
 
 import com.commercetools.sunrise.core.hooks.HookRunner;
-import com.commercetools.sunrise.models.customers.CustomerInSession;
+import com.commercetools.sunrise.models.customers.MyCustomerInSession;
 import com.neovisionaries.i18n.CountryCode;
 import io.sphere.sdk.carts.CartDraft;
 import io.sphere.sdk.carts.CartDraftBuilder;
@@ -18,15 +18,15 @@ public class DefaultCartCreator extends AbstractCartCreator {
 
     private final CountryCode country;
     private final CurrencyUnit currency;
-    private final CustomerInSession customerInSession;
+    private final MyCustomerInSession myCustomerInSession;
 
     @Inject
     protected DefaultCartCreator(final SphereClient sphereClient, final HookRunner hookRunner,
-                                 final CountryCode country, final CurrencyUnit currency, final CustomerInSession customerInSession) {
+                                 final CountryCode country, final CurrencyUnit currency, final MyCustomerInSession myCustomerInSession) {
         super(sphereClient, hookRunner);
         this.country = country;
         this.currency = currency;
-        this.customerInSession = customerInSession;
+        this.myCustomerInSession = myCustomerInSession;
     }
 
     protected final CountryCode getCountry() {
@@ -37,8 +37,8 @@ public class DefaultCartCreator extends AbstractCartCreator {
         return currency;
     }
 
-    protected final CustomerInSession getCustomerInSession() {
-        return customerInSession;
+    protected final MyCustomerInSession getMyCustomerInSession() {
+        return myCustomerInSession;
     }
 
     @Override
@@ -46,8 +46,8 @@ public class DefaultCartCreator extends AbstractCartCreator {
         return completedFuture(CartDraftBuilder.of(currency)
                 .country(country)
                 .shippingAddress(Address.of(country))
-                .customerId(customerInSession.findId().orElse(null))
-                .customerEmail(customerInSession.findEmail().orElse(null))
+                .customerId(myCustomerInSession.findId().orElse(null))
+                .customerEmail(myCustomerInSession.findEmail().orElse(null))
                 .build());
     }
 }

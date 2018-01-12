@@ -26,7 +26,7 @@ final class TestableHandlebarsTemplateEngine implements TemplateEngine {
     private TemplateEngine handlebarsTemplateEngine(final List<TemplateLoader> templateLoaders, final I18nResolver i18nResolver) {
         final Handlebars handlebars = handlebars(templateLoaders, i18nResolver);
         final HandlebarsValueResolvers handlebarsValueResolvers = valueResolvers(i18nResolver);
-        return new HandlebarsTemplateEngine(handlebars, handlebarsValueResolvers);
+        return new HandlebarsTemplateEngine(handlebars, handlebarsValueResolvers, hookRunner);
     }
 
     private HandlebarsValueResolvers valueResolvers(final I18nResolver i18nResolver) {

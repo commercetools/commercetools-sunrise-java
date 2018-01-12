@@ -12,21 +12,21 @@ import java.util.Optional;
 @RequestScoped
 public class DefaultMyCustomerFetcher extends AbstractMyCustomerFetcher {
 
-    private final CustomerInSession customerInSession;
+    private final MyCustomerInSession myCustomerInSession;
 
     @Inject
     protected DefaultMyCustomerFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                       final CustomerInSession customerInSession) {
+                                       final MyCustomerInSession myCustomerInSession) {
         super(sphereClient, hookRunner);
-        this.customerInSession = customerInSession;
+        this.myCustomerInSession = myCustomerInSession;
     }
 
-    protected final CustomerInSession getCustomerInSession() {
-        return customerInSession;
+    protected final MyCustomerInSession getMyCustomerInSession() {
+        return myCustomerInSession;
     }
 
     protected Optional<CustomerQuery> buildRequest() {
-        return customerInSession.findId()
+        return myCustomerInSession.findId()
                 .map(customerId -> CustomerQueryBuilder.of()
                         .plusPredicates(customer -> customer.id().is(customerId))
                         .build());

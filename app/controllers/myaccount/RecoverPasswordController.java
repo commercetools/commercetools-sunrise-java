@@ -53,6 +53,6 @@ public final class RecoverPasswordController extends SunriseRecoverPasswordContr
     @Override
     protected CompletionStage<Result> handleEmailDeliveryException(final Form<? extends RecoverPasswordFormData> form, final EmailDeliveryException emailDeliveryException) {
         saveFormError(form, "Email delivery error");
-        return internalServerErrorResultWithPageContent(createPageContent(null, form));
+        return internalServerErrorResult(createPageContent(null, form));
     }
 }
