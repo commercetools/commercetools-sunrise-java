@@ -15,10 +15,10 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public abstract class SunriseChangeLanguageController extends SunriseFormController implements WithForm2Flow<Void, Void, ChangeLanguageFormData> {
 
     private final ChangeLanguageFormData formData;
-    private final ChangeLanguageControllerAction controllerAction;
+    private final ChangeLanguageFormAction controllerAction;
 
     protected SunriseChangeLanguageController(final FormFactory formFactory, final ChangeLanguageFormData formData,
-                                              final ChangeLanguageControllerAction controllerAction) {
+                                              final ChangeLanguageFormAction controllerAction) {
         super(formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;

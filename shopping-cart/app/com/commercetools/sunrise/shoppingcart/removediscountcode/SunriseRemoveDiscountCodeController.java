@@ -18,11 +18,11 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseRemoveDiscountCodeController extends SunriseContentFormController implements WithContentForm2Flow<Void, Cart, RemoveDiscountCodeFormData> {
 
     private final RemoveDiscountCodeFormData formData;
-    private final RemoveDiscountCodeControllerAction controllerAction;
+    private final RemoveDiscountCodeFormAction controllerAction;
 
     protected SunriseRemoveDiscountCodeController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                                   final RemoveDiscountCodeFormData formData,
-                                                  final RemoveDiscountCodeControllerAction controllerAction) {
+                                                  final RemoveDiscountCodeFormAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;

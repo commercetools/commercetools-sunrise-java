@@ -18,12 +18,12 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseChangeQuantityInCartController extends SunriseContentFormController implements WithContentForm2Flow<Void, Cart, ChangeQuantityInCartFormData> {
 
     private final ChangeQuantityInCartFormData formData;
-    private final ChangeQuantityInCartControllerAction controllerAction;
+    private final ChangeQuantityInCartFormAction controllerAction;
 
     protected SunriseChangeQuantityInCartController(final ContentRenderer contentRenderer,
                                                     final FormFactory formFactory,
                                                     final ChangeQuantityInCartFormData formData,
-                                                    final ChangeQuantityInCartControllerAction controllerAction) {
+                                                    final ChangeQuantityInCartFormAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;

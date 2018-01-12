@@ -1,59 +1,75 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.core.controllers.SunriseContentController;
-import com.commercetools.sunrise.core.controllers.WithContent;
+import com.commercetools.sunrise.core.controllers.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
 import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import play.mvc.Result;
+import play.mvc.Results;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class SunriseAuthenticationController extends SunriseContentController implements WithContent {
+public abstract class SunriseAuthenticationController extends SunriseController {
 
-    private final SignUpControllerAction signUpControllerAction;
-    private final LogInControllerAction logInControllerAction;
-    private final LogOutControllerAction logOutControllerAction;
+    private final TemplateEngine templateEngine;
+    private final SignUpFormAction signUpFormAction;
+    private final LogInFormAction logInFormAction;
+    private final LogOutAction logOutAction;
 
     protected SunriseAuthenticationController(final TemplateEngine templateEngine,
-                                              final SignUpControllerAction signUpControllerAction,
-                                              final LogInControllerAction logInControllerAction,
-                                              final LogOutControllerAction logOutControllerAction) {
-        super(templateEngine);
-        this.signUpControllerAction = signUpControllerAction;
-        this.logInControllerAction = logInControllerAction;
-        this.logOutControllerAction = logOutControllerAction;
+                                              final SignUpFormAction signUpFormAction,
+                                              final LogInFormAction logInFormAction,
+                                              final LogOutAction logOutAction) {
+        this.templateEngine = templateEngine;
+        this.signUpFormAction = signUpFormAction;
+        this.logInFormAction = logInFormAction;
+        this.logOutAction = logOutAction;
+    }
+
+    protected final TemplateEngine getTemplateEngine() {
+        return templateEngine;
     }
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.LOG_IN_PAGE)
     public CompletionStage<Result> show() {
-        return render(OK, PageData.of());
+        return templateEngine.render("my-account-login")
+                .thenApply(Results::ok);
     }
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.SIGN_UP_PROCESS)
     public CompletionStage<Result> processSignUp() {
-        return signUpControllerAction.apply(this::handleSuccessfulSignUp);
+        return signUpFormAction.apply(this::onSignUp,
+                form -> {
+                    final PageData pageData = PageData.of().put("signUpForm", form);
+                    return templateEngine.render("my-account-login", pageData)
+                            .thenApply(Results::badRequest);
+                });
     }
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.LOG_IN_PROCESS)
     public CompletionStage<Result> processLogIn() {
-        return logInControllerAction.apply(this::handleSuccessfulLogIn);
+        return logInFormAction.apply(this::onLogIn,
+                form -> {
+                    final PageData pageData = PageData.of().put("logInForm", form);
+                    return templateEngine.render("my-account-login", pageData)
+                            .thenApply(Results::badRequest);
+                });
     }
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.LOG_OUT_PROCESS)
     public CompletionStage<Result> processLogOut() {
-        return logOutControllerAction.apply(this::handleSuccessfulLogOut);
+        return logOutAction.apply(this::onLogOut);
     }
 
-    public abstract Result handleSuccessfulSignUp();
+    public abstract Result onSignUp();
 
-    public abstract Result handleSuccessfulLogIn();
+    public abstract Result onLogIn();
 
-    public abstract Result handleSuccessfulLogOut();
+    public abstract Result onLogOut();
 }

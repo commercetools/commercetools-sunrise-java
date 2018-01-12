@@ -3,7 +3,7 @@ package controllers.shoppingcart;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.shoppingcart.add.AddToCartControllerAction;
+import com.commercetools.sunrise.shoppingcart.add.AddToCartFormAction;
 import com.commercetools.sunrise.shoppingcart.add.AddToCartFormData;
 import com.commercetools.sunrise.shoppingcart.add.SunriseAddToCartController;
 import io.sphere.sdk.carts.Cart;
@@ -21,7 +21,7 @@ public final class AddToCartController extends SunriseAddToCartController {
     public AddToCartController(final ContentRenderer contentRenderer,
                                final FormFactory formFactory,
                                final AddToCartFormData formData,
-                               final AddToCartControllerAction controllerAction) {
+                               final AddToCartFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 

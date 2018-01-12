@@ -1,6 +1,6 @@
 package controllers.common;
 
-import com.commercetools.sunrise.common.localization.changecountry.ChangeCountryControllerAction;
+import com.commercetools.sunrise.common.localization.changecountry.ChangeCountryFormAction;
 import com.commercetools.sunrise.common.localization.changecountry.ChangeCountryFormData;
 import com.commercetools.sunrise.common.localization.changecountry.SunriseChangeCountryController;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
@@ -19,7 +19,7 @@ public final class ChangeCountryController extends SunriseChangeCountryControlle
     @Inject
     public ChangeCountryController(final FormFactory formFactory,
                                    final ChangeCountryFormData formData,
-                                   final ChangeCountryControllerAction controllerAction) {
+                                   final ChangeCountryFormAction controllerAction) {
         super(formFactory, formData, controllerAction);
     }
 

@@ -2,8 +2,8 @@ package controllers.myaccount;
 
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordControllerAction;
+import com.commercetools.sunrise.core.renderers.TemplateEngine;
+import com.commercetools.sunrise.myaccount.authentication.changepassword.ChangePasswordFormAction;
 import com.commercetools.sunrise.myaccount.authentication.changepassword.SunriseChangePasswordController;
 import play.mvc.Result;
 
@@ -14,9 +14,9 @@ import javax.inject.Inject;
 public final class ChangePasswordController extends SunriseChangePasswordController {
 
     @Inject
-    public ChangePasswordController(final ContentRenderer contentRenderer,
-                                    final ChangePasswordControllerAction controllerAction) {
-        super(contentRenderer, controllerAction);
+    public ChangePasswordController(final TemplateEngine templateEngine,
+                                    final ChangePasswordFormAction controllerAction) {
+        super(templateEngine, controllerAction);
     }
 
     @Override
@@ -25,12 +25,7 @@ public final class ChangePasswordController extends SunriseChangePasswordControl
     }
 
     @Override
-    public String getCmsPageKey() {
-        return "default";
-    }
-
-    @Override
-    public Result handleSuccessfulAction() {
+    public Result onPasswordChanged() {
         return redirect(routes.MyPersonalDetailsController.show());
     }
 }

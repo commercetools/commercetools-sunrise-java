@@ -2,48 +2,34 @@ package controllers.myaccount;
 
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
-import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordControllerAction;
-import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.ResetPasswordFormData;
-import com.commercetools.sunrise.myaccount.authentication.recoverpassword.reset.SunriseResetPasswordController;
-import io.sphere.sdk.customers.Customer;
-import play.data.Form;
-import play.data.FormFactory;
+import com.commercetools.sunrise.core.renderers.TemplateEngine;
+import com.commercetools.sunrise.core.viewmodels.content.messages.MessageType;
+import com.commercetools.sunrise.myaccount.authentication.resetpassword.ResetPasswordFormAction;
+import com.commercetools.sunrise.myaccount.authentication.resetpassword.ResetPasswordRequestFormAction;
+import com.commercetools.sunrise.myaccount.authentication.resetpassword.SunriseResetPasswordController;
 import play.mvc.Result;
 
 import javax.inject.Inject;
-import java.util.concurrent.CompletionStage;
 
 @LogMetrics
 @NoCache
 public final class ResetPasswordController extends SunriseResetPasswordController {
 
     @Inject
-    ResetPasswordController(final ContentRenderer contentRenderer,
-                            final FormFactory formFactory,
-                            final ResetPasswordFormData formData,
-                            final ResetPasswordControllerAction controllerAction) {
-        super(contentRenderer, formFactory, formData, controllerAction);
+    public ResetPasswordController(final TemplateEngine templateEngine,
+                                   final ResetPasswordFormAction resetPasswordFormAction,
+                                   final ResetPasswordRequestFormAction resetPasswordRequestFormAction) {
+        super(templateEngine, resetPasswordFormAction, resetPasswordRequestFormAction);
     }
 
     @Override
-    public String getTemplateName() {
-        return "my-account-reset-password";
+    protected Result onPasswordResetRequested() {
+        saveMessage(MessageType.SUCCESS, "my-account.forgotPassword.feedbackMessage");
+        return redirect(routes.ResetPasswordController.showResetPasswordRequest());
     }
 
     @Override
-    public String getCmsPageKey() {
-        return "default";
-    }
-
-    @Override
-    public CompletionStage<Result> handleSuccessfulAction(final Customer customer, final ResetPasswordFormData formData) {
-        return redirectAsync(AuthenticationController.show());
-    }
-
-    @Override
-    protected CompletionStage<Result> handleNotFoundToken(final String resetToken, final Form<? extends ResetPasswordFormData> form) {
-        saveFormError(form, "Reset token is not valid");
-        return showFormPageWithErrors(resetToken, form);
+    protected Result onPasswordReset() {
+        return redirect(routes.ResetPasswordController.showResetPassword());
     }
 }

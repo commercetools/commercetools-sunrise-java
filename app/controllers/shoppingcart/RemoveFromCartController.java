@@ -3,7 +3,7 @@ package controllers.shoppingcart;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartControllerAction;
+import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartFormAction;
 import com.commercetools.sunrise.shoppingcart.remove.RemoveFromCartFormData;
 import com.commercetools.sunrise.shoppingcart.remove.SunriseRemoveFromCartController;
 import io.sphere.sdk.carts.Cart;
@@ -21,7 +21,7 @@ public final class RemoveFromCartController extends SunriseRemoveFromCartControl
     public RemoveFromCartController(final ContentRenderer contentRenderer,
                                     final FormFactory formFactory,
                                     final RemoveFromCartFormData formData,
-                                    final RemoveFromCartControllerAction removeFromCartControllerAction) {
+                                    final RemoveFromCartFormAction removeFromCartControllerAction) {
         super(contentRenderer, formFactory, formData, removeFromCartControllerAction);
     }
 

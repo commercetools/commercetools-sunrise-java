@@ -5,7 +5,7 @@ import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
-import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressControllerAction;
+import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressFormAction;
 import com.commercetools.sunrise.shoppingcart.checkout.address.CheckoutAddressFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.address.SunriseCheckoutAddressController;
 import io.sphere.sdk.carts.Cart;
@@ -24,7 +24,7 @@ public final class CheckoutAddressController extends SunriseCheckoutAddressContr
     public CheckoutAddressController(final ContentRenderer contentRenderer,
                                      final FormFactory formFactory,
                                      final CheckoutAddressFormData formData,
-                                     final CheckoutAddressControllerAction controllerAction) {
+                                     final CheckoutAddressFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 

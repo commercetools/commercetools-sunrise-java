@@ -15,10 +15,10 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 public abstract class SunriseChangeCountryController extends SunriseFormController implements WithForm2Flow<Void, Void, ChangeCountryFormData> {
 
     private final ChangeCountryFormData formData;
-    private final ChangeCountryControllerAction controllerAction;
+    private final ChangeCountryFormAction controllerAction;
 
     protected SunriseChangeCountryController(final FormFactory formFactory, final ChangeCountryFormData formData,
-                                             final ChangeCountryControllerAction controllerAction) {
+                                             final ChangeCountryFormAction controllerAction) {
         super(formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;

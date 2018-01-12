@@ -19,12 +19,12 @@ public abstract class SunriseMyPersonalDetailsController extends SunriseContentF
         implements WithContentForm2Flow<Void, Customer, MyPersonalDetailsFormData> {
 
     private final MyPersonalDetailsFormData formData;
-    private final MyPersonalDetailsControllerAction controllerAction;
+    private final MyPersonalDetailsFormAction controllerAction;
 
     protected SunriseMyPersonalDetailsController(final ContentRenderer contentRenderer,
                                                  final FormFactory formFactory,
                                                  final MyPersonalDetailsFormData formData,
-                                                 final MyPersonalDetailsControllerAction controllerAction) {
+                                                 final MyPersonalDetailsFormAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;

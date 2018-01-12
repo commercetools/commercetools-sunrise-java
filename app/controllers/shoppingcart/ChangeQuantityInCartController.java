@@ -3,7 +3,7 @@ package controllers.shoppingcart;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartControllerAction;
+import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartFormAction;
 import com.commercetools.sunrise.shoppingcart.changequantity.ChangeQuantityInCartFormData;
 import com.commercetools.sunrise.shoppingcart.changequantity.SunriseChangeQuantityInCartController;
 import io.sphere.sdk.carts.Cart;
@@ -21,7 +21,7 @@ public final class ChangeQuantityInCartController extends SunriseChangeQuantityI
     public ChangeQuantityInCartController(final ContentRenderer contentRenderer,
                                           final FormFactory formFactory,
                                           final ChangeQuantityInCartFormData formData,
-                                          final ChangeQuantityInCartControllerAction controllerAction) {
+                                          final ChangeQuantityInCartFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 

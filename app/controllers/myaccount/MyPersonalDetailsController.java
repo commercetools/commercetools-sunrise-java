@@ -3,7 +3,7 @@ package controllers.myaccount;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsControllerAction;
+import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormAction;
 import com.commercetools.sunrise.myaccount.mydetails.MyPersonalDetailsFormData;
 import com.commercetools.sunrise.myaccount.mydetails.SunriseMyPersonalDetailsController;
 import io.sphere.sdk.customers.Customer;
@@ -21,7 +21,7 @@ public final class MyPersonalDetailsController extends SunriseMyPersonalDetailsC
     public MyPersonalDetailsController(final ContentRenderer contentRenderer,
                                        final FormFactory formFactory,
                                        final MyPersonalDetailsFormData formData,
-                                       final MyPersonalDetailsControllerAction controllerAction) {
+                                       final MyPersonalDetailsFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 

@@ -3,23 +3,12 @@ package com.commercetools.sunrise.core.controllers;
 import com.commercetools.sunrise.core.viewmodels.content.messages.MessageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import play.mvc.*;
-
-import java.util.concurrent.CompletionStage;
-
-import static java.util.concurrent.CompletableFuture.completedFuture;
+import play.mvc.Controller;
+import play.mvc.Http;
 
 public abstract class SunriseController extends Controller {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    public final Logger getLogger() {
-        return logger;
-    }
-
-    protected final CompletionStage<Result> redirectAsync(final Call call) {
-        return completedFuture(Results.redirect(call));
-    }
+    protected static final Logger LOGGER = LoggerFactory.getLogger(SunriseController.class);
 
     /**
      * Saves a message of a certain {@link MessageType} meant to be displayed to the user after a redirection to
@@ -37,7 +26,7 @@ public abstract class SunriseController extends Controller {
         final String key = messageType.name();
         final Http.Flash flash = flash();
         if (flash.containsKey(key)) {
-            getLogger().warn("Replacing a message of type \"{}\" within the same request\nOld message: \"{}\"\nNew message: \"{}\"",
+            LOGGER.warn("Replacing a message of type \"{}\" within the same request\nOld message: \"{}\"\nNew message: \"{}\"",
                     key, flash.get(key), message);
         }
         flash.put(key, message);

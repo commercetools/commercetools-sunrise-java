@@ -19,13 +19,13 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseAddToWishlistController extends SunriseContentFormController implements WithContentForm2Flow<Void, ShoppingList, AddToWishlistFormData> {
 
     private final AddToWishlistFormData formData;
-    private final AddToWishlistControllerAction controllerAction;
+    private final AddToWishlistFormAction controllerAction;
 
     @Inject
     protected SunriseAddToWishlistController(final ContentRenderer contentRenderer,
                                              final FormFactory formFactory,
                                              final AddToWishlistFormData formData,
-                                             final AddToWishlistControllerAction controllerAction) {
+                                             final AddToWishlistFormAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;

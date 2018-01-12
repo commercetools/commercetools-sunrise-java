@@ -3,7 +3,7 @@ package controllers.shoppingcart;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.shoppingcart.adddiscountcode.AddDiscountCodeControllerAction;
+import com.commercetools.sunrise.shoppingcart.adddiscountcode.AddDiscountCodeFormAction;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.AddDiscountCodeFormData;
 import com.commercetools.sunrise.shoppingcart.adddiscountcode.SunriseAddDiscountCodeController;
 import com.google.inject.Inject;
@@ -23,7 +23,7 @@ public final class AddDiscountCodeController extends SunriseAddDiscountCodeContr
     AddDiscountCodeController(final ContentRenderer contentRenderer,
                               final FormFactory formFactory,
                               final AddDiscountCodeFormData formData,
-                              final AddDiscountCodeControllerAction controllerAction) {
+                              final AddDiscountCodeFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 

@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.models.carts.CartPaymentInfoExpansionComponent;
 import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
-import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationControllerAction;
+import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationFormAction;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.CheckoutConfirmationFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.confirmation.SunriseCheckoutConfirmationController;
 import io.sphere.sdk.orders.Order;
@@ -30,7 +30,7 @@ public final class CheckoutConfirmationController extends SunriseCheckoutConfirm
     public CheckoutConfirmationController(final ContentRenderer contentRenderer,
                                           final FormFactory formFactory,
                                           final CheckoutConfirmationFormData formData,
-                                          final CheckoutConfirmationControllerAction controllerAction) {
+                                          final CheckoutConfirmationFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 

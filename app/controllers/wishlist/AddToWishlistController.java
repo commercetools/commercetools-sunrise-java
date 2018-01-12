@@ -3,7 +3,7 @@ package controllers.wishlist;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.wishlist.add.AddToWishlistControllerAction;
+import com.commercetools.sunrise.wishlist.add.AddToWishlistFormAction;
 import com.commercetools.sunrise.wishlist.add.AddToWishlistFormData;
 import com.commercetools.sunrise.wishlist.add.SunriseAddToWishlistController;
 import io.sphere.sdk.shoppinglists.ShoppingList;
@@ -21,7 +21,7 @@ public final class AddToWishlistController extends SunriseAddToWishlistControlle
     public AddToWishlistController(final ContentRenderer contentRenderer,
                                    final FormFactory formFactory,
                                    final AddToWishlistFormData formData,
-                                   final AddToWishlistControllerAction controllerAction) {
+                                   final AddToWishlistFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 

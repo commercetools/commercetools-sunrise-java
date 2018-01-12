@@ -18,11 +18,11 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseCheckoutAddressController extends SunriseContentFormController implements WithContentForm2Flow<Void, Cart, CheckoutAddressFormData> {
 
     private final CheckoutAddressFormData formData;
-    private final CheckoutAddressControllerAction controllerAction;
+    private final CheckoutAddressFormAction controllerAction;
 
     protected SunriseCheckoutAddressController(final ContentRenderer contentRenderer,
                                                final FormFactory formFactory, final CheckoutAddressFormData formData,
-                                               final CheckoutAddressControllerAction controllerAction) {
+                                               final CheckoutAddressFormAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;

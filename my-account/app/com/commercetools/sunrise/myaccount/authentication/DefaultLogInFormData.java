@@ -1,13 +1,15 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
 import io.sphere.sdk.models.Base;
-import play.data.validation.Constraints.Required;
+import play.data.validation.Constraints;
 
 public class DefaultLogInFormData extends Base implements LogInFormData {
 
-    @Required
+    @Constraints.Required
     private String username;
-    @Required
+
+    @Constraints.MinLength(1)
+    @Constraints.Required
     private String password;
 
     @Override

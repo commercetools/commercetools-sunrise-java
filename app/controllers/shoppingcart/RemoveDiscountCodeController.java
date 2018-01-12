@@ -3,7 +3,7 @@ package controllers.shoppingcart;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.shoppingcart.removediscountcode.RemoveDiscountCodeControllerAction;
+import com.commercetools.sunrise.shoppingcart.removediscountcode.RemoveDiscountCodeFormAction;
 import com.commercetools.sunrise.shoppingcart.removediscountcode.RemoveDiscountCodeFormData;
 import com.commercetools.sunrise.shoppingcart.removediscountcode.SunriseRemoveDiscountCodeController;
 import com.google.inject.Inject;
@@ -21,7 +21,7 @@ public final class RemoveDiscountCodeController extends SunriseRemoveDiscountCod
     RemoveDiscountCodeController(final ContentRenderer contentRenderer,
                                  final FormFactory formFactory,
                                  final RemoveDiscountCodeFormData formData,
-                                 final RemoveDiscountCodeControllerAction controllerAction) {
+                                 final RemoveDiscountCodeFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 

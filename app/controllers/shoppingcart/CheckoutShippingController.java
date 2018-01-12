@@ -6,7 +6,7 @@ import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
 import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionComponent;
 import com.commercetools.sunrise.shoppingcart.checkout.CheckoutStepControllerComponent;
-import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingControllerAction;
+import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormAction;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.CheckoutShippingFormData;
 import com.commercetools.sunrise.shoppingcart.checkout.shipping.SunriseCheckoutShippingController;
 import io.sphere.sdk.carts.Cart;
@@ -28,7 +28,7 @@ public final class CheckoutShippingController extends SunriseCheckoutShippingCon
     public CheckoutShippingController(final ContentRenderer contentRenderer,
                                       final FormFactory formFactory,
                                       final CheckoutShippingFormData formData,
-                                      final CheckoutShippingControllerAction controllerAction) {
+                                      final CheckoutShippingFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 

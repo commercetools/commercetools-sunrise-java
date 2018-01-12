@@ -23,4 +23,8 @@ public interface TemplateEngine {
      * @throws TemplateRenderException when the provided page data could not be injected to the template
      */
     CompletionStage<Content> render(final String templateName, final PageData pageData);
+
+    default CompletionStage<Content> render(final String templateName) {
+        return render(templateName, PageData.of());
+    }
 }

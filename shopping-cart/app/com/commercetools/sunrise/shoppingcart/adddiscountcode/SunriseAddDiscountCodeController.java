@@ -21,12 +21,12 @@ import static com.commercetools.sdk.errors.ErrorResponseExceptionUtils.isDiscoun
 public abstract class SunriseAddDiscountCodeController extends SunriseContentFormController implements WithContentForm2Flow<Void, Cart, AddDiscountCodeFormData> {
 
     private final AddDiscountCodeFormData formData;
-    private final AddDiscountCodeControllerAction controllerAction;
+    private final AddDiscountCodeFormAction controllerAction;
 
     protected SunriseAddDiscountCodeController(final ContentRenderer contentRenderer,
                                                final FormFactory formFactory,
                                                final AddDiscountCodeFormData formData,
-                                               final AddDiscountCodeControllerAction controllerAction) {
+                                               final AddDiscountCodeFormAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;

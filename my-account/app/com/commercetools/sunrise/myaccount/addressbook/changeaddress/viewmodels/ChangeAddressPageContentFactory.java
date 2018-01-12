@@ -2,7 +2,7 @@ package com.commercetools.sunrise.myaccount.addressbook.changeaddress.viewmodels
 
 import com.commercetools.sunrise.core.viewmodels.content.FormPageContentFactory;
 import com.commercetools.sunrise.models.addresses.AddressWithCustomer;
-import com.commercetools.sunrise.myaccount.addressbook.addaddress.AddAddressFormData;
+import com.commercetools.sunrise.myaccount.addressbook.AddAddressFormData;
 import com.commercetools.sunrise.myaccount.addressbook.addressbookdetail.viewmodels.AddressFormSettingsViewModelFactory;
 import play.data.Form;
 

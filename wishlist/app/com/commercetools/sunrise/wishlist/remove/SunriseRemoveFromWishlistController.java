@@ -19,12 +19,12 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseRemoveFromWishlistController extends SunriseContentFormController implements WithContentForm2Flow<Void, ShoppingList, RemoveFromWishlistFormData> {
 
     private final RemoveFromWishlistFormData formData;
-    private final RemoveFromWishlistControllerAction controllerAction;
+    private final RemoveFromWishlistFormAction controllerAction;
 
     @Inject
     protected SunriseRemoveFromWishlistController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                                   final RemoveFromWishlistFormData formData,
-                                                  final RemoveFromWishlistControllerAction controllerAction) {
+                                                  final RemoveFromWishlistFormAction controllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.controllerAction = controllerAction;

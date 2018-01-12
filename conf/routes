@@ -97,9 +97,9 @@ GET         /user/logout                                                        
 # ~~~~~
 
 # Show form to enter password recover email
-GET         /password/recovery                                                      @controllers.myaccount.RecoverPasswordController.show
+GET         /password/recovery                                                      @controllers.myaccount.ResetPasswordEmailController.show
 # Send recovery password email
-POST        /password/recovery                                                      @controllers.myaccount.RecoverPasswordController.process
+POST        /password/recovery                                                      @controllers.myaccount.ResetPasswordEmailController.process
 
 # View password reset
 GET         /password/reset/:token                                                  @controllers.myaccount.ResetPasswordController.show(token: String)
@@ -120,7 +120,7 @@ GET         /user/password                                                      
 POST        /user/password                                                          @controllers.myaccount.ChangePasswordController.process
 
 # Shows the address book
-GET         /user/addressbook                                                       @controllers.myaccount.AddressBookDetailController.show
+GET         /user/addressbook                                                       @controllers.myaccount.AddressBookController.show
 # Shows the form to add an address to the customer's address book
 GET         /user/addressbook/add                                                   @controllers.myaccount.AddAddressController.show
 # Adds an address to the customer's address book

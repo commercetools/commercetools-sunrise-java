@@ -17,10 +17,10 @@ import java.util.concurrent.CompletionStage;
  */
 public abstract class SunriseClearWishlistController extends SunriseController implements WithExecutionFlow<Void, ShoppingList> {
 
-    private final ClearWishlistControllerAction controllerAction;
+    private final ClearWishlistFormAction controllerAction;
 
     @Inject
-    protected SunriseClearWishlistController(final ClearWishlistControllerAction controllerAction) {
+    protected SunriseClearWishlistController(final ClearWishlistFormAction controllerAction) {
         this.controllerAction = controllerAction;
     }
 

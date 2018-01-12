@@ -1,6 +1,6 @@
 package controllers.common;
 
-import com.commercetools.sunrise.common.localization.changelanguage.ChangeLanguageControllerAction;
+import com.commercetools.sunrise.common.localization.changelanguage.ChangeLanguageFormAction;
 import com.commercetools.sunrise.common.localization.changelanguage.ChangeLanguageFormData;
 import com.commercetools.sunrise.common.localization.changelanguage.SunriseChangeLanguageController;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
@@ -21,7 +21,7 @@ public final class ChangeLanguageController extends SunriseChangeLanguageControl
     @Inject
     public ChangeLanguageController(final FormFactory formFactory,
                                     final ChangeLanguageFormData formData,
-                                    final ChangeLanguageControllerAction controllerAction) {
+                                    final ChangeLanguageFormAction controllerAction) {
         super(formFactory, formData, controllerAction);
     }
 

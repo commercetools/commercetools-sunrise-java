@@ -18,11 +18,11 @@ import java.util.concurrent.CompletionStage;
 public abstract class SunriseRemoveFromCartController extends SunriseContentFormController implements WithContentForm2Flow<Void, Cart, RemoveFromCartFormData> {
 
     private final RemoveFromCartFormData formData;
-    private final RemoveFromCartControllerAction removeFromCartControllerAction;
+    private final RemoveFromCartFormAction removeFromCartControllerAction;
 
     protected SunriseRemoveFromCartController(final ContentRenderer contentRenderer, final FormFactory formFactory,
                                               final RemoveFromCartFormData formData,
-                                              final RemoveFromCartControllerAction removeFromCartControllerAction) {
+                                              final RemoveFromCartFormAction removeFromCartControllerAction) {
         super(contentRenderer, formFactory);
         this.formData = formData;
         this.removeFromCartControllerAction = removeFromCartControllerAction;

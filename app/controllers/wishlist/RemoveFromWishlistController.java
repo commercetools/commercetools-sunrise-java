@@ -3,7 +3,7 @@ package controllers.wishlist;
 import com.commercetools.sunrise.core.controllers.cache.NoCache;
 import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.ContentRenderer;
-import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistControllerAction;
+import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistFormAction;
 import com.commercetools.sunrise.wishlist.remove.RemoveFromWishlistFormData;
 import com.commercetools.sunrise.wishlist.remove.SunriseRemoveFromWishlistController;
 import io.sphere.sdk.shoppinglists.ShoppingList;
@@ -21,7 +21,7 @@ public final class RemoveFromWishlistController extends SunriseRemoveFromWishlis
     public RemoveFromWishlistController(final ContentRenderer contentRenderer,
                                         final FormFactory formFactory,
                                         final RemoveFromWishlistFormData formData,
-                                        final RemoveFromWishlistControllerAction controllerAction) {
+                                        final RemoveFromWishlistFormAction controllerAction) {
         super(contentRenderer, formFactory, formData, controllerAction);
     }
 
