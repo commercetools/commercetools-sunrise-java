@@ -1,14 +1,12 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.google.inject.ImplementedBy;
-import io.sphere.sdk.models.Address;
+import io.sphere.sdk.customers.commands.updateactions.ChangeAddress;
 
 @ImplementedBy(DefaultChangeAddressFormData.class)
 public interface ChangeAddressFormData {
 
-    String addressId();
-
-    Address address();
+    ChangeAddress changeAddress();
 
     boolean defaultShippingAddress();
 

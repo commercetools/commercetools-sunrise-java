@@ -1,6 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
 import com.neovisionaries.i18n.CountryCode;
+import io.sphere.sdk.customers.commands.updateactions.ChangeAddress;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.models.AddressBuilder;
 import io.sphere.sdk.models.Base;
@@ -40,14 +41,9 @@ public class DefaultChangeAddressFormData extends Base implements ChangeAddressF
     private boolean defaultBillingAddress;
 
     @Override
-    public String addressId() {
-        return addressId;
-    }
-
-    @Override
-    public Address address() {
+    public ChangeAddress changeAddress() {
         final CountryCode countryCode = CountryCode.getByCode(country);
-        return AddressBuilder.of(countryCode)
+        final Address address = AddressBuilder.of(countryCode)
                 .title(title)
                 .firstName(firstName)
                 .lastName(lastName)
@@ -57,6 +53,7 @@ public class DefaultChangeAddressFormData extends Base implements ChangeAddressF
                 .postalCode(postalCode)
                 .region(region)
                 .build();
+        return ChangeAddress.of(addressId, address);
     }
 
     @Override

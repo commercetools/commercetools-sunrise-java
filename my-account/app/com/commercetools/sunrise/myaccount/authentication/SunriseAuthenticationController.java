@@ -41,8 +41,8 @@ public abstract class SunriseAuthenticationController extends SunriseController 
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.SIGN_UP_PROCESS)
-    public CompletionStage<Result> processSignUp() {
-        return signUpFormAction.apply(this::onSignUp,
+    public CompletionStage<Result> signUp() {
+        return signUpFormAction.apply(this::onSignedUp,
                 form -> {
                     final PageData pageData = PageData.of().put("signUpForm", form);
                     return templateEngine.render("my-account-login", pageData)
@@ -52,8 +52,8 @@ public abstract class SunriseAuthenticationController extends SunriseController 
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.LOG_IN_PROCESS)
-    public CompletionStage<Result> processLogIn() {
-        return logInFormAction.apply(this::onLogIn,
+    public CompletionStage<Result> logIn() {
+        return logInFormAction.apply(this::onLoggedIn,
                 form -> {
                     final PageData pageData = PageData.of().put("logInForm", form);
                     return templateEngine.render("my-account-login", pageData)
@@ -63,13 +63,13 @@ public abstract class SunriseAuthenticationController extends SunriseController 
 
     @EnableHooks
     @SunriseRoute(AuthenticationReverseRouter.LOG_OUT_PROCESS)
-    public CompletionStage<Result> processLogOut() {
-        return logOutAction.apply(this::onLogOut);
+    public CompletionStage<Result> logOut() {
+        return logOutAction.apply(this::onLoggedOut);
     }
 
-    public abstract Result onSignUp();
+    public abstract Result onSignedUp();
 
-    public abstract Result onLogIn();
+    public abstract Result onLoggedIn();
 
-    public abstract Result onLogOut();
+    public abstract Result onLoggedOut();
 }

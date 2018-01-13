@@ -31,9 +31,13 @@ public abstract class AbstractFormAction<F> implements FormAction<F> {
 
     protected abstract Class<? extends F> formClass();
 
+    protected Form<? extends F> createForm() {
+        return formFactory.form(formClass());
+    }
+
     @Override
     public CompletionStage<Result> apply(final Supplier<Result> onSuccess, final Function<Form<? extends F>, CompletionStage<Result>> onBadRequest) {
-        final Form<? extends F> form = formFactory.form(formClass()).bindFromRequest();
+        final Form<? extends F> form = createForm().bindFromRequest();
         if (form.hasErrors()) {
             return onBadRequest.apply(form);
         } else {

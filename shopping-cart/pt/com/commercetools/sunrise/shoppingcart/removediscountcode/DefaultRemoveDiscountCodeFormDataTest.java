@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.removediscountcode;
 
+import com.commercetools.sunrise.shoppingcart.discountcodes.DefaultRemoveDiscountCodeFormData;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;

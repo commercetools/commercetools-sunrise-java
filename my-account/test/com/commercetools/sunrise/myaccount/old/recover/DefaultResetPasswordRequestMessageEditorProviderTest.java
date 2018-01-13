@@ -1,0 +1,146 @@
+package com.commercetools.sunrise.myaccount.old.recover;
+
+import com.commercetools.sunrise.email.MessageEditor;
+import com.commercetools.sunrise.core.i18n.I18nResolver;
+import com.commercetools.sunrise.core.renderers.EmailContentRenderer;
+import com.commercetools.sunrise.myaccount.resetpassword.DefaultResetPasswordRequestMessageEditorProvider;
+import com.commercetools.sunrise.myaccount.resetpassword.ResetPasswordRequestFormData;
+import com.commercetools.sunrise.myaccount.old.recover.viewmodels.RecoverPasswordEmailContent;
+import com.commercetools.sunrise.myaccount.old.recover.viewmodels.RecoverPasswordEmailContentFactory;
+import io.sphere.sdk.customers.CustomerToken;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import play.twirl.api.Html;
+
+import javax.inject.Inject;
+import javax.mail.internet.MimeMessage;
+import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+
+import static com.commercetools.sunrise.it.EmailTestFixtures.addressOf;
+import static com.commercetools.sunrise.it.EmailTestFixtures.blankMimeMessage;
+import static java.util.concurrent.CompletableFuture.completedFuture;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.notNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
+public class DefaultResetPasswordRequestMessageEditorProviderTest {
+
+    private static final String FROM_FIELD = "sender@mail.com";
+    private static final String SUBJECT_FIELD = "Some subject";
+    private static final String RECIPIENT_FIELD = "someone@mail.com";
+    private static final String CONTENT_FIELD = "Some email content";
+
+    @Mock
+    private I18nResolver i18nResolver;
+    @Mock
+    private EmailContentRenderer emailContentRendererWithSomeContent;
+    @Mock
+    private RecoverPasswordEmailContentFactory dummyEmailContentFactory;
+
+    @InjectMocks
+    private DefaultResetPasswordRequestMessageEditorProvider defaultMessageEditorProvider;
+    @InjectMocks
+    private CustomResetPasswordRequestMessageEditorProvider customMessageEditorProvider;
+
+    @Mock
+    private CustomerToken dummyResetPasswordToken;
+    @Mock
+    private ResetPasswordRequestFormData formDataWithValidEmail;
+
+    @Before
+    public void setUp() throws Exception {
+        when(dummyEmailContentFactory.create(notNull())).thenReturn(new RecoverPasswordEmailContent());
+        when(formDataWithValidEmail.email()).thenReturn(RECIPIENT_FIELD);
+        when(emailContentRendererWithSomeContent.render(notNull(), notNull())).thenReturn(completedFuture(new Html(CONTENT_FIELD)));
+    }
+
+    @Test
+    public void providesMessageEditor() throws Exception {
+        mockI18nResolverThatFindsFromAndSubjectFields();
+
+        final MimeMessage message = blankMimeMessage();
+        defaultMessageEditor().edit(message);
+
+        assertThat(message.getSubject()).isEqualTo(SUBJECT_FIELD);
+        assertThat(message.getFrom()).contains(addressOf(FROM_FIELD));
+        assertThat(message.getContent()).isEqualTo(CONTENT_FIELD);
+        assertThat(message.getAllRecipients()).contains(addressOf(RECIPIENT_FIELD));
+
+        verify(dummyEmailContentFactory).create(dummyResetPasswordToken);
+    }
+
+    @Test
+    public void providesMessageEditorWhenUndefinedFields() throws Exception {
+        final MimeMessage message = blankMimeMessage();
+        defaultMessageEditor().edit(message);
+
+        assertThat(message.getSubject()).isNull();
+        assertThat(message.getFrom()).isNull();
+        assertThat(message.getContent()).isEqualTo(CONTENT_FIELD);
+        assertThat(message.getAllRecipients()).contains(addressOf(RECIPIENT_FIELD));
+
+        verify(dummyEmailContentFactory).create(dummyResetPasswordToken);
+    }
+
+    @Test
+    public void customMessageEditorCanOverrideFields() throws Exception {
+        mockI18nResolverThatFindsFromAndSubjectFields();
+
+        final MimeMessage message = blankMimeMessage();
+        customMessageEditor().edit(message);
+
+        assertThat(message.getSubject())
+                .isNotEqualTo(SUBJECT_FIELD)
+                .isEqualTo("Another subject");
+        assertThat(message.getFrom()).contains(addressOf(FROM_FIELD));
+        assertThat(message.getContent()).isEqualTo(CONTENT_FIELD);
+        assertThat(message.getAllRecipients()).contains(addressOf(RECIPIENT_FIELD));
+        assertThat(message.getDescription()).isEqualTo("Some description");
+
+        verify(dummyEmailContentFactory).create(dummyResetPasswordToken);
+    }
+
+    private MessageEditor defaultMessageEditor() throws Exception {
+        return defaultMessageEditorProvider.get(dummyResetPasswordToken, formDataWithValidEmail).toCompletableFuture().get();
+    }
+
+    private MessageEditor customMessageEditor() throws Exception {
+        return customMessageEditorProvider.get(dummyResetPasswordToken, formDataWithValidEmail).toCompletableFuture().get();
+    }
+
+    private void mockI18nResolverThatFindsFromAndSubjectFields() {
+        when(i18nResolver.get(eq("my-account:forgotPassword.email.from")))
+                .thenReturn(Optional.of(FROM_FIELD));
+        when(i18nResolver.get(eq("my-account:forgotPassword.email.subject")))
+                .thenReturn(Optional.of(SUBJECT_FIELD));
+    }
+
+    private static class CustomResetPasswordRequestMessageEditorProvider extends DefaultResetPasswordRequestMessageEditorProvider {
+
+        @Inject
+        public CustomResetPasswordRequestMessageEditorProvider(final I18nResolver i18nResolver,
+                                                               final EmailContentRenderer emailContentRenderer,
+                                                               final RecoverPasswordEmailContentFactory recoverPasswordEmailContentFactory) {
+            super(i18nResolver, emailContentRenderer, recoverPasswordEmailContentFactory);
+        }
+
+        @Override
+        public CompletionStage<MessageEditor> get(final CustomerToken passwordToken, final ResetPasswordRequestFormData formData) {
+            // Replaces subject and sets description
+            return super.get(passwordToken, formData)
+                    .thenApply(msgEditor -> msg -> {
+                        msgEditor.edit(msg);
+                        msg.setSubject("Another subject");
+                        msg.setDescription("Some description");
+                    });
+        }
+    }
+}

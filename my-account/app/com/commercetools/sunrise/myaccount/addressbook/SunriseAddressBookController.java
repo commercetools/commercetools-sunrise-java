@@ -33,14 +33,6 @@ public abstract class SunriseAddressBookController extends SunriseController {
         this.removeAddressFormAction = removeAddressFormAction;
     }
 
-    protected final TemplateEngine getTemplateEngine() {
-        return templateEngine;
-    }
-
-    protected final MyAddressFetcher getMyAddressFetcher() {
-        return myAddressFetcher;
-    }
-
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.ADDRESS_BOOK_DETAIL_PAGE)
     public CompletionStage<Result> show() {
@@ -50,14 +42,14 @@ public abstract class SunriseAddressBookController extends SunriseController {
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.ADD_ADDRESS_PAGE)
-    public CompletionStage<Result> showAddAddress() {
+    public CompletionStage<Result> showAddAddressForm() {
         return templateEngine.render("my-account-new-address")
                 .thenApply(Results::ok);
     }
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PAGE)
-    public CompletionStage<Result> showChangeAddress(final String addressIdentifier) {
+    public CompletionStage<Result> showChangeAddressForm(final String addressIdentifier) {
         return myAddressFetcher.require(addressIdentifier)
                 .thenApply(address -> PageData.of().put("address", address))
                 .thenComposeAsync(pageData -> templateEngine.render("my-account-edit-address", pageData)
@@ -66,7 +58,7 @@ public abstract class SunriseAddressBookController extends SunriseController {
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.ADD_ADDRESS_PROCESS)
-    public CompletionStage<Result> processAddAddress() {
+    public CompletionStage<Result> addAddress() {
         return addAddressFormAction.apply(this::onAddressAdded,
                 form -> {
                     final PageData pageData = PageData.of().put("addAddressForm", form);
@@ -77,7 +69,7 @@ public abstract class SunriseAddressBookController extends SunriseController {
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.CHANGE_ADDRESS_PROCESS)
-    public CompletionStage<Result> processChangeAddress() {
+    public CompletionStage<Result> changeAddress() {
         return changeAddressFormAction.apply(this::onAddressChanged,
                 form -> {
                     final PageData pageData = PageData.of().put("changeAddressForm", form);
@@ -88,7 +80,7 @@ public abstract class SunriseAddressBookController extends SunriseController {
 
     @EnableHooks
     @SunriseRoute(AddressBookReverseRouter.REMOVE_ADDRESS_PROCESS)
-    public CompletionStage<Result> processRemoveAddress() {
+    public CompletionStage<Result> removeAddress() {
         return removeAddressFormAction.apply(this::onAddressRemoved,
                 form -> {
                     final PageData pageData = PageData.of().put("removeAddressForm", form);

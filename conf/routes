@@ -21,50 +21,50 @@ GET         /categories/refresh                                                 
 # ~~~~~
 
 # Map static favicon.ico from the public assets to root folder
-GET         /favicon.ico                                                            @controllers.common.AssetsController.at(file="img/favicon.ico")
+GET         /favicon.ico                                              @controllers.common.AssetsController.at(file="img/favicon.ico")
 # Map static resources from the public assets
-GET         /assets/*file                                                           @controllers.common.AssetsController.at(file)
+GET         /assets/*file                                             @controllers.common.AssetsController.at(file)
 
 
 # HOME
 # ~~~~~
 
-GET         /                                                                       @controllers.productcatalog.HomeController.show
+GET         /                      @controllers.HomeController.show
 
 
 # LOCATION
 # ~~~~~
 
 # Changes the language of the app
-POST        /changeLanguage                                                         @controllers.common.ChangeLanguageController.process
+POST        /changeLanguage        @controllers.common.ChangeLanguageController.process
 # Changes the country of the app
-POST        /changeCountry                                                          @controllers.common.ChangeCountryController.process
+POST        /changeCountry         @controllers.common.ChangeCountryController.process
 
 
 # CART
 # ~~~~~
 
 # Shows the details of the cart belonging to the current session
-GET         /cart                                                                   @controllers.shoppingcart.CartContentController.show
+GET         /cart                  @controllers.CartsController.show
 # Adds the selected product to the cart
-POST        /cart/add                                                               @controllers.shoppingcart.AddToCartController.process
+POST        /cart/add                    @controllers.shoppingcart.AddToCartController.process
 # Changes the quantity of a selected line item from the cart of the current session
-POST        /cart/quantity                                                          @controllers.shoppingcart.ChangeQuantityInCartController.process
+POST        /cart/quantity               @controllers.shoppingcart.ChangeQuantityInCartController.process
 # Removes a selected line item from the cart of the current session
-POST        /cart/remove                                                            @controllers.shoppingcart.RemoveFromCartController.process
+POST        /cart/remove                 @controllers.shoppingcart.RemoveFromCartController.process
 # Add a discount code to the cart
-POST        /cart/discount/add                                                      @controllers.shoppingcart.AddDiscountCodeController.process
+POST        /cart/discount/add           @controllers.DiscountCodesController.process
 # Add a discount code to the cart
-POST        /cart/discount/remove                                                   @controllers.shoppingcart.RemoveDiscountCodeController.process
+POST        /cart/discount/remove        @controllers.shoppingcart.RemoveDiscountCodeController.process
 
 
 # CHECKOUT
 # ~~~~~
 
 # Shows the form to enter shipping address and billing address
-GET         /checkout/address                                                       @controllers.shoppingcart.CheckoutAddressController.show
+GET         /checkout/address            @controllers.shoppingcart.CheckoutController.show
 # Processes the form of the shipping address and billing address
-POST        /checkout/address                                                       @controllers.shoppingcart.CheckoutAddressController.process
+POST        /checkout/address            @controllers.shoppingcart.CheckoutController.process
 # Shows the form to enter shipping address and billing address
 GET         /checkout/shipping                                                      @controllers.shoppingcart.CheckoutShippingController.show
 # Processes the form of the shipping address and billing address
@@ -76,97 +76,97 @@ POST        /checkout/payment                                                   
 # Shows the form to create an order out of the cart of the session
 GET         /checkout/confirmation                                                  @controllers.shoppingcart.CheckoutConfirmationController.show
 # Processes the order creation
-POST        /checkout/confirmation                                                  @controllers.shoppingcart.CheckoutConfirmationController.process
+POST        /checkout/confirmation                             @controllers.shoppingcart.CheckoutConfirmationController.process
 # Shows the customer a confirmation for the created order
-GET         /checkout/thankyou                                                      @controllers.shoppingcart.CheckoutThankYouController.show
+GET         /checkout/thankyou                                 @controllers.shoppingcart.CheckoutThankYouController.show
 
 
 # SIGN UP/IN/OUT
 # ~~~~~
 
 # Shows login and signup form
-GET         /user/login                                                             @controllers.myaccount.AuthenticationController.show
+GET         /user/login                                        @controllers.AuthenticationController.show
 # Logs in the user
-POST        /user/login                                                             @controllers.myaccount.AuthenticationController.processLogIn
+POST        /user/login                                        @controllers.AuthenticationController.processLogIn
 # Registers the user
-POST        /user/signup                                                            @controllers.myaccount.AuthenticationController.processSignUp
+POST        /user/signup                                       @controllers.AuthenticationController.processSignUp
 # Logs out the user
-GET         /user/logout                                                            @controllers.myaccount.AuthenticationController.processLogOut
+GET         /user/logout                                       @controllers.AuthenticationController.processLogOut
 
 # PASSWORD RECOVERY
 # ~~~~~
 
 # Show form to enter password recover email
-GET         /password/recovery                                                      @controllers.myaccount.ResetPasswordEmailController.show
+GET         /password/recovery                                 @controllers.myaccount.ResetPasswordEmailController.show
 # Send recovery password email
-POST        /password/recovery                                                      @controllers.myaccount.ResetPasswordEmailController.process
+POST        /password/recovery                                 @controllers.myaccount.ResetPasswordEmailController.process
 
 # View password reset
-GET         /password/reset/:token                                                  @controllers.myaccount.ResetPasswordController.show(token: String)
+GET         /password/reset/:token                             @controllers.ResetPasswordController.show(token: String)
 # Process reset password request
-POST        /password/reset/:token                                                  @controllers.myaccount.ResetPasswordController.process(token: String)
+POST        /password/reset/:token                             @controllers.ResetPasswordController.process(token: String)
 
 # MY ACCOUNT
 # ~~~~~
 
 # Shows a form for updating the customer's details
-GET         /user                                                                   @controllers.myaccount.MyPersonalDetailsController.show
+GET         /user                                              @controllers.CustomerProfileController.show
 # Processes the form for updating the customer's details
-POST        /user                                                                   @controllers.myaccount.MyPersonalDetailsController.process
+POST        /user                                              @controllers.CustomerProfileController.process
 
 # Shows the form for changing password
-GET         /user/password                                                          @controllers.myaccount.ChangePasswordController.show
+GET         /user/password                                     @controllers.ChangePasswordController.show
 # Processes the form for changing password
-POST        /user/password                                                          @controllers.myaccount.ChangePasswordController.process
+POST        /user/password                                     @controllers.ChangePasswordController.process
 
 # Shows the address book
-GET         /user/addressbook                                                       @controllers.myaccount.AddressBookController.show
+GET         /user/addressbook                                  @controllers.AddressBookController.show
 # Shows the form to add an address to the customer's address book
-GET         /user/addressbook/add                                                   @controllers.myaccount.AddAddressController.show
+GET         /user/addressbook/add                              @controllers.myaccount.AddAddressController.show
 # Adds an address to the customer's address book
-POST        /user/addressbook/add                                                   @controllers.myaccount.AddAddressController.process
+POST        /user/addressbook/add                              @controllers.myaccount.AddAddressController.process
 # Shows the form to edit an address from the customer's address book
-GET         /user/addressbook/:addressIdentifier/edit                               @controllers.myaccount.ChangeAddressController.show(addressIdentifier: String)
+GET         /user/addressbook/:addressIdentifier/edit          @controllers.myaccount.ChangeAddressController.show(addressIdentifier: String)
 # Updates an address from the customer's address book
-POST        /user/addressbook/:addressIdentifier/edit                               @controllers.myaccount.ChangeAddressController.process(addressIdentifier: String)
+POST        /user/addressbook/:addressIdentifier/edit          @controllers.myaccount.ChangeAddressController.process(addressIdentifier: String)
 # Removes an address from the customer's address book
-POST        /user/addressbook/:addressIdentifier/remove                             @controllers.myaccount.RemoveAddressController.process(addressIdentifier: String)
+POST        /user/addressbook/:addressIdentifier/remove        @controllers.myaccount.RemoveAddressController.process(addressIdentifier: String)
 
 # Shows all orders from the customer
-GET         /user/orders                                                            @controllers.myaccount.MyOrderListController.show
+GET         /user/orders                                       @controllers.OrderHistoryController.show
 # Show an order from the customer
-GET         /user/orders/:orderIdentifier                                           @controllers.myaccount.MyOrderDetailController.show(orderIdentifier: String)
+GET         /user/orders/:orderIdentifier                      @controllers.myaccount.MyOrderDetailController.show(orderIdentifier: String)
 
 
 # WISHLIST
 # ~~~~~
 
 # Shows the wishlist
-GET         /wishlist                                                               @controllers.wishlist.WishlistContentController.show
+GET         /wishlist                                          @controllers.wishlist.WishlistContentController.show
 # Adds a product variant to the wishlist
-POST        /wishlist/add                                                           @controllers.wishlist.AddToWishlistController.process
+POST        /wishlist/add                                      @controllers.wishlist.AddToWishlistController.process
 # Removes a line item from the wishlist
-POST        /wishlist/remove                                                        @controllers.wishlist.RemoveFromWishlistController.process
+POST        /wishlist/remove                                          @controllers.wishlist.RemoveFromWishlistController.process
 # Clears the wishlist
-POST        /wishlist/clear                                                         @controllers.wishlist.ClearWishlistController.process
+POST        /wishlist/clear                                           @controllers.wishlist.ClearWishlistController.process
 
 
 # SEARCH
 # ~~~~~
 
 # Shows the search results page
-GET         /search                                                                 @controllers.productcatalog.SearchController.process
+GET         /search                                                   @controllers.productcatalog.SearchController.process
 
 
 # PRODUCT DETAIL
 # ~~~~~
 
 # Shows the product detail page
-GET         /:productIdentifier-$variantIdentifier<[^-]+>.html                      @controllers.productcatalog.ProductDetailController.show(productIdentifier: String, variantIdentifier: String)
+GET         /:productIdentifier-$variantIdentifier<[^-]+>.html        @controllers.ProductsController.show(productIdentifier: String, variantIdentifier: String)
 
 
 # PRODUCT OVERVIEW
 # ~~~~~
 
 # Shows the product overview page for this category
-GET         /:categoryIdentifier                                                    @controllers.productcatalog.ProductOverviewController.show(categoryIdentifier: String)
+GET         /:categoryIdentifier                                      @controllers.productcatalog.ProductOverviewController.show(categoryIdentifier: String)
