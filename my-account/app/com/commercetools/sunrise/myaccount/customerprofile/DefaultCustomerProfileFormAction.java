@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.customerprofile;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.models.customers.MyCustomerInCache;
 import com.commercetools.sunrise.models.customers.MyCustomerUpdater;
 import io.sphere.sdk.commands.UpdateAction;

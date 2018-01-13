@@ -2,15 +2,17 @@ package com.commercetools.sunrise.models.search.pagination;
 
 import com.commercetools.sunrise.core.components.ControllerComponent;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
-import com.commercetools.sunrise.core.viewmodels.OldPageData;
+import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractEntriesPerPageSelectorViewModelFactory;
 import com.commercetools.sunrise.models.search.pagination.viewmodels.AbstractPaginationViewModelFactory;
-import com.commercetools.sunrise.models.search.pagination.viewmodels.WithPaginationViewModel;
 import io.sphere.sdk.models.Base;
 import io.sphere.sdk.queries.PagedResult;
 import play.mvc.Http;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public abstract class AbstractPaginationControllerComponent extends Base implements ControllerComponent, PageDataHook {
 
@@ -42,13 +44,13 @@ public abstract class AbstractPaginationControllerComponent extends Base impleme
     protected abstract PagedResult<?> getPagedResult();
 
     @Override
-    public void onPageDataReady(final OldPageData oldPageData) {
+    public CompletionStage<PageData> onPageDataReady(final PageData pageData) {
         final PagedResult<?> pagedResult = getPagedResult();
-        if (pagedResult != null && oldPageData.getContent() instanceof WithPaginationViewModel) {
-            final WithPaginationViewModel content = (WithPaginationViewModel) oldPageData.getContent();
+        if (pagedResult != null) {
             final Long currentPage = paginationSettings.getSelectedValueOrDefault(Http.Context.current());
-            content.setPagination(paginationViewModelFactory.create(pagedResult, currentPage));
-            content.setDisplaySelector(entriesPerPageSelectorViewModelFactory.create(pagedResult));
+            pageData.put("pagination", paginationViewModelFactory.create(pagedResult, currentPage))
+                    .put("displaySelector", entriesPerPageSelectorViewModelFactory.create(pagedResult));
         }
+        return completedFuture(pageData);
     }
 }

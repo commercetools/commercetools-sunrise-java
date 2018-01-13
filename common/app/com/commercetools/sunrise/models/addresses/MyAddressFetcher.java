@@ -7,7 +7,7 @@ import io.sphere.sdk.models.Address;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-@ImplementedBy(MyAddressFetcherImpl.class)
+@ImplementedBy(DefaultMyAddressFetcher.class)
 public interface MyAddressFetcher {
 
     CompletionStage<Optional<Address>> get(String identifier);

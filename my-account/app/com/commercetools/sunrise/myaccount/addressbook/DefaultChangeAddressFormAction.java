@@ -1,11 +1,10 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.models.customers.MyCustomerInCache;
 import com.commercetools.sunrise.models.customers.MyCustomerUpdater;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.customers.commands.updateactions.ChangeAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
 import play.data.FormFactory;
@@ -49,16 +48,17 @@ public class DefaultChangeAddressFormAction extends AbstractFormAction<ChangeAdd
 
     private List<UpdateAction<Customer>> buildUpdateActions(final ChangeAddressFormData formData, final Customer customer) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        updateActions.add(ChangeAddress.of(formData.addressId(), formData.address()));
+        updateActions.add(formData.changeAddress());
         updateActions.addAll(buildSetDefaultAddressActions(formData, customer));
         return updateActions;
     }
 
     private List<UpdateAction<Customer>> buildSetDefaultAddressActions(final ChangeAddressFormData formData, final Customer customer) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        buildSetDefaultAddressAction(formData.addressId(), formData.defaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
+        final String addressId = formData.changeAddress().getAddressId();
+        buildSetDefaultAddressAction(addressId, formData.defaultShippingAddress(), customer.getDefaultShippingAddressId(), SetDefaultShippingAddress::of)
                 .ifPresent(updateActions::add);
-        buildSetDefaultAddressAction(formData.addressId(), formData.defaultBillingAddress(), customer.getDefaultBillingAddressId(), SetDefaultBillingAddress::of)
+        buildSetDefaultAddressAction(addressId, formData.defaultBillingAddress(), customer.getDefaultBillingAddressId(), SetDefaultBillingAddress::of)
                 .ifPresent(updateActions::add);
         return updateActions;
     }

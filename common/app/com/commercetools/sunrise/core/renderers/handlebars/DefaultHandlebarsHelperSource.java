@@ -1,7 +1,6 @@
 package com.commercetools.sunrise.core.renderers.handlebars;
 
 import com.commercetools.sdk.CtpEnumUtils;
-import com.commercetools.sunrise.cms.CmsPage;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.i18n.LanguageSelector;
 import com.commercetools.sunrise.core.localization.CountrySelector;
@@ -13,7 +12,6 @@ import com.commercetools.sunrise.models.SelectOption;
 import com.commercetools.sunrise.models.carts.CartPriceUtils;
 import com.commercetools.sunrise.models.products.ProductPriceUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.carts.CartLike;
 import io.sphere.sdk.carts.LineItem;
@@ -34,10 +32,12 @@ import javax.money.MonetaryAmount;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.commercetools.sunrise.core.renderers.handlebars.HandlebarsTemplateEngine.CMS_PAGE_IN_CONTEXT_KEY;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
@@ -82,8 +82,7 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
      * @return the content
      */
     public CharSequence cms(final String fieldName, final Options options) {
-        final Optional<CmsPage> cmsPage = getCmsPageFromContext(options.context);
-        return cmsPage.flatMap(page -> page.field(fieldName)).orElse("");
+        return "ZZZZZ";
     }
 
     /**
@@ -98,15 +97,6 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     public CharSequence prettyJson(final Object object) throws JsonProcessingException {
         return SphereJsonUtils.prettyPrint(json(object));
-    }
-
-    private static Optional<CmsPage> getCmsPageFromContext(final Context context) {
-        final Object cmsPageAsObject = context.get(CMS_PAGE_IN_CONTEXT_KEY);
-        if (cmsPageAsObject instanceof CmsPage) {
-            return Optional.of((CmsPage) cmsPageAsObject);
-        } else {
-            return Optional.empty();
-        }
     }
 
     @Nullable

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.models.orders.OrderCreator;
 import io.sphere.sdk.orders.Order;
 import play.data.FormFactory;

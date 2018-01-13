@@ -4,7 +4,6 @@ import com.commercetools.sunrise.core.hooks.application.HttpRequestStartedHook;
 import com.commercetools.sunrise.core.hooks.application.PageDataHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.ProductProjectionSearchHook;
 import com.commercetools.sunrise.productcatalog.home.SunriseHomeController;
-import com.commercetools.sunrise.productcatalog.products.SunriseProductDetailController;
 import com.commercetools.sunrise.productcatalog.products.SunriseProductsController;
 
 import java.util.Locale;
@@ -18,7 +17,6 @@ import java.util.Locale;
  *
  * <ul>
  *    <li>{@link SunriseHomeController}</li>
- *    <li>{@link SunriseProductDetailController}</li>
  *    <li>{@link SunriseProductsController}</li>
  * </ul>
  *

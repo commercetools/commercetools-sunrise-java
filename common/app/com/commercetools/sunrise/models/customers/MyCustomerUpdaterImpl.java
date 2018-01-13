@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.customers;
 
-import com.commercetools.sunrise.core.controllers.AbstractResourceUpdater;
+import com.commercetools.sunrise.core.AbstractResourceUpdater;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.CustomerUpdatedActionHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CustomerUpdatedHook;
@@ -23,7 +23,7 @@ final class MyCustomerUpdaterImpl extends AbstractResourceUpdater<Customer, Cust
     }
 
     @Override
-    protected CustomerUpdateCommand buildUpdateCommand(final List<UpdateAction<Customer>> updateActions, final Customer resource) {
+    protected CustomerUpdateCommand buildUpdateCommand(final List<? extends UpdateAction<Customer>> updateActions, final Customer resource) {
         return CustomerUpdateCommand.of(resource, updateActions);
     }
 

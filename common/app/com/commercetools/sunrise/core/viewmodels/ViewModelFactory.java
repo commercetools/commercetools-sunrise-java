@@ -1,5 +1,6 @@
 package com.commercetools.sunrise.core.viewmodels;
 
+import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.viewmodels.content.messages.MessageType;
 import com.commercetools.sunrise.core.viewmodels.content.messages.MessageViewModel;
 
@@ -15,7 +16,7 @@ public abstract class ViewModelFactory {
 
     /**
      * Extracts all messages saved via
-     * {@link com.commercetools.sunrise.core.controllers.SunriseController#saveMessage(MessageType, String)}
+     * {@link SunriseController#saveMessage(MessageType, String)}
      * and returns a list of view models with those messages. These view models can be set for example in the
      * {@link com.commercetools.sunrise.core.viewmodels.content.PageContent} using
      * {@link com.commercetools.sunrise.core.viewmodels.content.PageContent#setMessages(List)}

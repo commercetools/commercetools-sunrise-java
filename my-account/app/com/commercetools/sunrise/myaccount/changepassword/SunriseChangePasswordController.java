@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.changepassword;
 
-import com.commercetools.sunrise.core.controllers.SunriseController;
+import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
@@ -31,8 +31,8 @@ public abstract class SunriseChangePasswordController extends SunriseController 
 
     @EnableHooks
     @SunriseRoute(ChangePasswordReverseRouter.CHANGE_PASSWORD_PROCESS)
-    public CompletionStage<Result> changePassword() {
-        return formAction.apply(this::onPasswordChanged,
+    public CompletionStage<Result> change() {
+        return formAction.apply(this::onChanged,
                 form -> {
                     final PageData pageData = PageData.of().put("changePasswordForm", form);
                     return templateEngine.render("my-account-change-password", pageData)
@@ -40,5 +40,5 @@ public abstract class SunriseChangePasswordController extends SunriseController 
                 });
     }
 
-    protected abstract Result onPasswordChanged();
+    protected abstract Result onChanged();
 }

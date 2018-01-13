@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.discountcodes;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.models.carts.MyCartUpdater;
 import com.google.inject.Inject;
 import play.data.FormFactory;

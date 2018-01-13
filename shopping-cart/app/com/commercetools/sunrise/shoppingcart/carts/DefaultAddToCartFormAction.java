@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.shoppingcart.carts;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
-import com.commercetools.sunrise.models.carts.CartCreator;
+import com.commercetools.sunrise.core.AbstractFormAction;
+import com.commercetools.sunrise.models.carts.MyCartCreator;
 import com.commercetools.sunrise.models.carts.MyCartUpdater;
 import io.sphere.sdk.carts.*;
 import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
@@ -19,17 +19,17 @@ public class DefaultAddToCartFormAction extends AbstractFormAction<AddToCartForm
 
     private final AddToCartFormData formData;
     private final MyCartUpdater myCartUpdater;
-    private final CartCreator cartCreator;
+    private final MyCartCreator myCartCreator;
     private final CurrencyUnit currency;
 
     @Inject
     protected DefaultAddToCartFormAction(final FormFactory formFactory, final AddToCartFormData formData,
-                                         final MyCartUpdater myCartUpdater, final CartCreator cartCreator,
+                                         final MyCartUpdater myCartUpdater, final MyCartCreator myCartCreator,
                                          final CurrencyUnit currency) {
         super(formFactory);
         this.formData = formData;
         this.myCartUpdater = myCartUpdater;
-        this.cartCreator = cartCreator;
+        this.myCartCreator = myCartCreator;
         this.currency = currency;
     }
 
@@ -43,7 +43,7 @@ public class DefaultAddToCartFormAction extends AbstractFormAction<AddToCartForm
         return myCartUpdater.apply(formData.addLineItem())
                 .thenComposeAsync(cartOpt -> cartOpt
                         .map(cart -> (CompletionStage<Cart>) completedFuture(cart))
-                        .orElseGet(() -> cartCreator.get(buildCartDraft(formData))), HttpExecution.defaultContext());
+                        .orElseGet(() -> myCartCreator.get(buildCartDraft(formData))), HttpExecution.defaultContext());
     }
 
     private CartDraft buildCartDraft(final AddToCartFormData formData) {

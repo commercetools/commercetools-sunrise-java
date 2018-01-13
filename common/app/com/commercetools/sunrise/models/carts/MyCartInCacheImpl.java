@@ -12,17 +12,17 @@ import java.util.concurrent.CompletionStage;
 @RequestScoped
 final class MyCartInCacheImpl extends AbstractResourceInCache<Cart> implements MyCartInCache {
 
-    private final CartFetcher cartFetcher;
+    private final MyCartFetcher myCartFetcher;
 
     @Inject
-    MyCartInCacheImpl(final MyCartInSession myCartInSession, final CacheApi cacheApi, final CartFetcher cartFetcher) {
+    MyCartInCacheImpl(final MyCartInSession myCartInSession, final CacheApi cacheApi, final MyCartFetcher myCartFetcher) {
         super(myCartInSession, cacheApi);
-        this.cartFetcher = cartFetcher;
+        this.myCartFetcher = myCartFetcher;
     }
 
     @Override
     protected CompletionStage<Optional<Cart>> fetchResource() {
-        return cartFetcher.get();
+        return myCartFetcher.get();
     }
 
     @Override

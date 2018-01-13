@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.shoppingcart.checkout;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.models.carts.MyCartUpdater;
 import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.carts.commands.updateactions.SetCountry;

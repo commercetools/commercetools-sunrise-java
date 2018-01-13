@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.orders;
 
-import com.commercetools.sunrise.core.controllers.ResourceFetcher;
+import com.commercetools.sunrise.core.ResourceFetcher;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.queries.OrderQuery;

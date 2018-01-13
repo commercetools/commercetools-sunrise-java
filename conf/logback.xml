@@ -13,7 +13,7 @@
     <logger name="application" level="DEBUG" />
     <logger name="com.commercetools.sunrise.core.hooks.ComponentRegistry" level="OFF" />
     <logger name="com.commercetools.sunrise.core.viewmodels.PageDataJson" level="OFF" />
-    <logger name="com.commercetools.sunrise.core.controllers.metrics.MetricsLogger" level="DEBUG" />
+    <logger name="com.commercetools.sunrise.controllers.metrics.MetricsLogger" level="DEBUG" />
     <logger name="com.commercetools.sunrise.email.EmailSender" level="DEBUG" />
     <logger name="com.github.jknack.handlebars.HelperRegistry" level="ERROR" />
 

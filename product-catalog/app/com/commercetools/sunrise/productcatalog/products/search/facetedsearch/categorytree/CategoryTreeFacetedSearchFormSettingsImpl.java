@@ -1,8 +1,8 @@
 package com.commercetools.sunrise.productcatalog.products.search.facetedsearch.categorytree;
 
+import com.commercetools.sunrise.models.categories.CategoryFinder;
 import com.commercetools.sunrise.models.categories.CategorySettings;
 import com.commercetools.sunrise.models.categories.SpecialCategorySettings;
-import com.commercetools.sunrise.models.categories.CategoryFinder;
 import com.commercetools.sunrise.models.search.SearchUtils;
 import com.commercetools.sunrise.models.search.facetedsearch.AbstractFacetedSearchFormSettingsWithOptions;
 import io.sphere.sdk.categories.Category;
@@ -16,9 +16,6 @@ import play.mvc.Http;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static java.util.stream.Collectors.toList;
 
@@ -47,12 +44,7 @@ final class CategoryTreeFacetedSearchFormSettingsImpl extends AbstractFacetedSea
     @Override
     public Optional<Category> mapFieldValueToValue(final String categoryIdentifier) {
         if (!categoryIdentifier.isEmpty()) {
-            try {
-                return categoryFinder.apply(categoryIdentifier)
-                        .toCompletableFuture().get(5, TimeUnit.SECONDS);
-            } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                LOGGER.debug("Could not find category", e);
-            }
+            return categoryFinder.apply(categoryIdentifier);
         }
         return Optional.empty();
     }

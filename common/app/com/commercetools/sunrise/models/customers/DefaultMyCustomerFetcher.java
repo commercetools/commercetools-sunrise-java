@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @RequestScoped
-public class DefaultMyCustomerFetcher extends AbstractMyCustomerFetcher {
+public class DefaultMyCustomerFetcher extends AbstractCustomerFetcher {
 
     private final MyCustomerInSession myCustomerInSession;
 
@@ -25,7 +25,8 @@ public class DefaultMyCustomerFetcher extends AbstractMyCustomerFetcher {
         return myCustomerInSession;
     }
 
-    protected Optional<CustomerQuery> buildRequest() {
+    @Override
+    public Optional<CustomerQuery> defaultRequest() {
         return myCustomerInSession.findId()
                 .map(customerId -> CustomerQueryBuilder.of()
                         .plusPredicates(customer -> customer.id().is(customerId))

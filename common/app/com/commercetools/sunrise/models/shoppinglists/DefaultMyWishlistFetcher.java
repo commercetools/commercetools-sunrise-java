@@ -8,21 +8,21 @@ import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class DefaultMyWishlistFetcher extends AbstractMyWishlistFetcher {
+public class DefaultMyWishlistFetcher extends AbstractShoppingListFetcher {
 
-    private final WishlistInSession wishlistInSession;
+    private final MyWishlistInSession myWishlistInSession;
     private final MyCustomerInSession myCustomerInSession;
 
     @Inject
     protected DefaultMyWishlistFetcher(final SphereClient sphereClient, final HookRunner hookRunner,
-                                       final WishlistInSession wishlistInSession, final MyCustomerInSession myCustomerInSession) {
+                                       final MyWishlistInSession myWishlistInSession, final MyCustomerInSession myCustomerInSession) {
         super(sphereClient, hookRunner);
-        this.wishlistInSession = wishlistInSession;
+        this.myWishlistInSession = myWishlistInSession;
         this.myCustomerInSession = myCustomerInSession;
     }
 
-    protected final WishlistInSession getWishlistInSession() {
-        return wishlistInSession;
+    protected final MyWishlistInSession getMyWishlistInSession() {
+        return myWishlistInSession;
     }
 
     protected final MyCustomerInSession getMyCustomerInSession() {
@@ -45,7 +45,7 @@ public class DefaultMyWishlistFetcher extends AbstractMyWishlistFetcher {
     }
 
     private Optional<ShoppingListQuery> tryBuildQueryByWishlistId() {
-        return wishlistInSession.findId()
+        return myWishlistInSession.findId()
                 .map(shoppingListId -> ShoppingListQuery.of()
                         .plusPredicates(m -> m.id().is(shoppingListId)));
     }

@@ -1,8 +1,7 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.models.customers.MyCustomerUpdater;
-import io.sphere.sdk.customers.commands.updateactions.RemoveAddress;
 import play.data.FormFactory;
 
 import javax.inject.Inject;
@@ -28,6 +27,6 @@ public class DefaultRemoveAddressFormAction extends AbstractFormAction<RemoveAdd
 
     @Override
     protected CompletionStage<?> onValidForm(final RemoveAddressFormData formData) {
-        return myCustomerUpdater.force(RemoveAddress.of(formData.addressId()));
+        return myCustomerUpdater.force(formData.removeAddress());
     }
 }

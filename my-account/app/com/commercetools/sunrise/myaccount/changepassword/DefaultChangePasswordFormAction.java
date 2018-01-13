@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.changepassword;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpevents.CustomerChangedPasswordHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.CustomerChangePasswordCommandHook;

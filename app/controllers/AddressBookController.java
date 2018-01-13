@@ -1,14 +1,13 @@
 package controllers;
 
-import com.commercetools.sunrise.core.controllers.cache.NoCache;
-import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.models.addresses.MyAddressFetcher;
-import com.commercetools.sunrise.myaccount.addressbook.RemoveAddressFormAction;
-import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookController;
 import com.commercetools.sunrise.myaccount.addressbook.AddAddressFormAction;
 import com.commercetools.sunrise.myaccount.addressbook.ChangeAddressFormAction;
-import controllers.myaccount.routes;
+import com.commercetools.sunrise.myaccount.addressbook.RemoveAddressFormAction;
+import com.commercetools.sunrise.myaccount.addressbook.SunriseAddressBookController;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -28,12 +27,12 @@ public final class AddressBookController extends SunriseAddressBookController {
 
     @Override
     protected Result onAddressRemoved() {
-        return redirect(controllers.myaccount.routes.AddressBookController.show());
+        return redirect(routes.AddressBookController.show());
     }
 
     @Override
     protected Result onAddressAdded() {
-        return redirect(controllers.myaccount.routes.AddressBookController.show());
+        return redirect(routes.AddressBookController.show());
     }
 
     @Override

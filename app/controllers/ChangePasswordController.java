@@ -1,11 +1,10 @@
 package controllers;
 
-import com.commercetools.sunrise.core.controllers.cache.NoCache;
-import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.myaccount.changepassword.ChangePasswordFormAction;
 import com.commercetools.sunrise.myaccount.changepassword.SunriseChangePasswordController;
-import controllers.myaccount.routes;
 import play.mvc.Result;
 
 import javax.inject.Inject;
@@ -21,7 +20,7 @@ public final class ChangePasswordController extends SunriseChangePasswordControl
     }
 
     @Override
-    public Result onPasswordChanged() {
+    public Result onChanged() {
         return redirect(routes.ChangePasswordController.show());
     }
 }

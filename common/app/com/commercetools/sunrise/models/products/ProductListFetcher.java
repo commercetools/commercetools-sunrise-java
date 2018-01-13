@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.products;
 
-import com.commercetools.sunrise.core.controllers.ResourceFetcher;
+import com.commercetools.sunrise.core.ResourceFetcher;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.controllers.AbstractResourceUpdater;
+import com.commercetools.sunrise.core.AbstractResourceUpdater;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.CartUpdatedActionHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CartUpdatedHook;
@@ -23,7 +23,7 @@ final class MyCartUpdaterImpl extends AbstractResourceUpdater<Cart, CartUpdateCo
     }
 
     @Override
-    protected CartUpdateCommand buildUpdateCommand(final List<UpdateAction<Cart>> updateActions, final Cart resource) {
+    protected CartUpdateCommand buildUpdateCommand(final List<? extends UpdateAction<Cart>> updateActions, final Cart resource) {
         return CartUpdateCommand.of(resource, updateActions);
     }
 

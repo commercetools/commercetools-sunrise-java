@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.carts;
 
-import com.commercetools.sunrise.core.controllers.AbstractResourceCreator;
+import com.commercetools.sunrise.core.AbstractResourceCreator;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.CartCreatedActionHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CartCreatedHook;
@@ -13,7 +13,7 @@ import io.sphere.sdk.expansion.ExpansionPathContainer;
 
 import java.util.concurrent.CompletionStage;
 
-public abstract class AbstractCartCreator extends AbstractResourceCreator<Cart, CartDraft, CartCreateCommand> implements CartCreator {
+public abstract class AbstractCartCreator extends AbstractResourceCreator<Cart, CartDraft, CartCreateCommand> implements MyCartCreator {
 
     protected AbstractCartCreator(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);

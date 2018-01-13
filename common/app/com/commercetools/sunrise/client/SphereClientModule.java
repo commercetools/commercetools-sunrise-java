@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.client;
 
-import com.commercetools.sunrise.core.controllers.metrics.SimpleMetricsSphereClientProvider;
+import com.commercetools.sunrise.controllers.metrics.SimpleMetricsSphereClientProvider;
 import com.google.inject.AbstractModule;
 import io.sphere.sdk.client.SphereClient;
 import io.sphere.sdk.client.SphereClientConfig;

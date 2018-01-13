@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.products;
 
-import com.commercetools.sunrise.core.controllers.AbstractResourceFetcher;
+import com.commercetools.sunrise.core.AbstractResourceFetcher;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpevents.ProductProjectionPagedSearchResultLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.ProductProjectionSearchHook;

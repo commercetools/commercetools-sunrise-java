@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.core.controllers.FormAction;
+import com.commercetools.sunrise.core.FormAction;
 import com.google.inject.ImplementedBy;
 
 @ImplementedBy(DefaultLogInFormAction.class)

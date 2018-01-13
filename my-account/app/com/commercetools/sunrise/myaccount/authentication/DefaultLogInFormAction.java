@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.CustomerSignedInActionHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.CustomerSignInResultLoadedHook;

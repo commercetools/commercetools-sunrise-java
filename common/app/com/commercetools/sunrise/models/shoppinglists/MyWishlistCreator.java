@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.shoppinglists;
 
-import com.commercetools.sunrise.core.controllers.ResourceCreator;
+import com.commercetools.sunrise.core.ResourceCreator;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 import io.sphere.sdk.shoppinglists.ShoppingListDraft;

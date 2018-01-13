@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.customers;
 
-import com.commercetools.sunrise.core.controllers.ResourceCreator;
+import com.commercetools.sunrise.core.ResourceCreator;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;

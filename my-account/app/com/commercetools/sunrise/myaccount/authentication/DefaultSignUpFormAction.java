@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.authentication;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.models.customers.CustomerCreator;
 import play.data.Form;
 import play.data.FormFactory;

@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.orders;
 
-import com.commercetools.sunrise.core.controllers.AbstractSingleResourceFetcher;
+import com.commercetools.sunrise.core.AbstractSingleResourceFetcher;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpevents.OrderLoadedHook;
 import com.commercetools.sunrise.core.hooks.ctprequests.OrderQueryHook;
@@ -14,7 +14,7 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
-public abstract class AbstractOrderFetcher extends AbstractSingleResourceFetcher<Order, OrderQuery, PagedQueryResult<Order>> implements OrderFetcher {
+public abstract class AbstractOrderFetcher extends AbstractSingleResourceFetcher<Order, OrderQuery, PagedQueryResult<Order>> implements MyOrderFetcher {
 
     protected AbstractOrderFetcher(final SphereClient sphereClient, final HookRunner hookRunner) {
         super(sphereClient, hookRunner);
@@ -26,12 +26,12 @@ public abstract class AbstractOrderFetcher extends AbstractSingleResourceFetcher
     }
 
     @Override
-    protected OrderQuery runRequestHook(final OrderQuery baseRequest) {
+    protected final OrderQuery runRequestHook(final OrderQuery baseRequest) {
         return OrderQueryHook.runHook(getHookRunner(), baseRequest);
     }
 
     @Override
-    protected CompletionStage<?> runResourceLoadedHook(final Order resource) {
+    protected final CompletionStage<?> runResourceLoadedHook(final Order resource) {
         return OrderLoadedHook.runHook(getHookRunner(), resource);
     }
 }

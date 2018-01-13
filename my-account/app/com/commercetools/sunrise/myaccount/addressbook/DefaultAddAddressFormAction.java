@@ -1,10 +1,9 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
-import com.commercetools.sunrise.core.controllers.AbstractFormAction;
+import com.commercetools.sunrise.core.AbstractFormAction;
 import com.commercetools.sunrise.models.customers.MyCustomerUpdater;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;
-import io.sphere.sdk.customers.commands.updateactions.AddAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultBillingAddress;
 import io.sphere.sdk.customers.commands.updateactions.SetDefaultShippingAddress;
 import io.sphere.sdk.models.Address;
@@ -37,13 +36,13 @@ public class DefaultAddAddressFormAction extends AbstractFormAction<AddAddressFo
 
     @Override
     protected CompletionStage<?> onValidForm(final AddAddressFormData formData) {
-        return myCustomerUpdater.force(AddAddress.of(formData.address()))
+        return myCustomerUpdater.force(formData.addAddress())
                 .thenComposeAsync(customer -> setDefaultAddresses(formData, customer), HttpExecution.defaultContext());
     }
 
     private CompletionStage<Customer> setDefaultAddresses(final AddAddressFormData formData, final Customer customer) {
         final List<UpdateAction<Customer>> updateActions = new ArrayList<>();
-        findAddressId(customer, formData.address())
+        findAddressId(customer, formData.addAddress().getAddress())
                 .ifPresent(addressId -> {
                     if (formData.defaultShippingAddress()) {
                         updateActions.add(SetDefaultShippingAddress.of(addressId));

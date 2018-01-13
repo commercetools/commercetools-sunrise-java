@@ -1,7 +1,6 @@
 import com.commercetools.sunrise.cms.CmsPageComponent;
 import com.commercetools.sunrise.core.hooks.GlobalComponentRegistry;
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.core.renderers.TemplateComponentSupplier;
 import com.commercetools.sunrise.email.EmailSender;
 import com.commercetools.sunrise.httpauth.HttpAuthentication;
 import com.commercetools.sunrise.httpauth.basic.BasicAuthenticationProvider;
@@ -107,7 +106,6 @@ public class Module extends AbstractModule {
         final GlobalComponentRegistry globalComponentRegistry = new GlobalComponentRegistry();
         globalComponentRegistry.addAll(CartComponentSupplier.get());
         globalComponentRegistry.addAll(CustomerComponentSupplier.get());
-        globalComponentRegistry.addAll(TemplateComponentSupplier.get());
         globalComponentRegistry.addAll(WishlistComponentSupplier.get());
         globalComponentRegistry.add(CategoryTreeDisplayingComponent.class);
         globalComponentRegistry.add(CmsPageComponent.class);

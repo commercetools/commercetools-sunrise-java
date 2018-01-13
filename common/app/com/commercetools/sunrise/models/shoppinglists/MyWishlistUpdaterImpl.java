@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.shoppinglists;
 
-import com.commercetools.sunrise.core.controllers.AbstractResourceUpdater;
+import com.commercetools.sunrise.core.AbstractResourceUpdater;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import com.commercetools.sunrise.core.hooks.ctpactions.ShoppingListUpdatedActionHook;
 import com.commercetools.sunrise.core.hooks.ctpevents.ShoppingListUpdatedHook;

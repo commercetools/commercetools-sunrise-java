@@ -42,10 +42,10 @@ public final class CartDetailController extends SunriseCartDetailController {
 
     @Inject
     public CartDetailController(final ContentRenderer contentRenderer,
-                                final CartFinder cartFetcher,
+                                final CartFinder myCartFetcher,
                                 final CartDetailPageContentFactory pageContentFactory) {
         // parameters that you can change via injection
-        super(contentRenderer, cartFetcher, pageContentFactory);
+        super(contentRenderer, myCartFetcher, pageContentFactory);
     }
 
     @Nullable

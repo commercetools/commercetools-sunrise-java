@@ -1,8 +1,8 @@
 package controllers;
 
 import com.commercetools.sunrise.core.components.RegisteredComponents;
-import com.commercetools.sunrise.core.controllers.cache.NoCache;
-import com.commercetools.sunrise.core.controllers.metrics.LogMetrics;
+import com.commercetools.sunrise.controllers.cache.NoCache;
+import com.commercetools.sunrise.controllers.metrics.LogMetrics;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.models.carts.CartPaymentInfoExpansionComponent;
 import com.commercetools.sunrise.models.carts.CartShippingInfoExpansionComponent;

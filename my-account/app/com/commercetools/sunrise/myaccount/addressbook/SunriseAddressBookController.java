@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.addressbook;
 
-import com.commercetools.sunrise.core.controllers.SunriseController;
+import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.core.reverserouters.SunriseRoute;

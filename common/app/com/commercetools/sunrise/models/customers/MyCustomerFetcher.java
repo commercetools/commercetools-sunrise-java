@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.models.customers;
 
 import com.commercetools.sunrise.core.NotFoundResourceException;
-import com.commercetools.sunrise.core.controllers.SingleResourceFetcher;
+import com.commercetools.sunrise.core.SingleResourceFetcher;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.queries.CustomerQuery;

@@ -1,8 +1,7 @@
 package com.commercetools.sunrise.models.orders;
 
-import com.commercetools.sunrise.core.controllers.ResourceCreator;
+import com.commercetools.sunrise.core.ResourceCreator;
 import com.google.inject.ImplementedBy;
-import io.sphere.sdk.carts.Cart;
 import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.orders.OrderFromCartDraft;
 import play.libs.concurrent.HttpExecution;

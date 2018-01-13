@@ -15,8 +15,8 @@ final class MyWishlistInCacheImpl extends AbstractResourceInCache<ShoppingList> 
     private final MyWishlistFetcher wishlistFinder;
 
     @Inject
-    MyWishlistInCacheImpl(final WishlistInSession wishlistInSession, final CacheApi cacheApi, final MyWishlistFetcher wishlistFinder) {
-        super(wishlistInSession, cacheApi);
+    MyWishlistInCacheImpl(final MyWishlistInSession myWishlistInSession, final CacheApi cacheApi, final MyWishlistFetcher wishlistFinder) {
+        super(myWishlistInSession, cacheApi);
         this.wishlistFinder = wishlistFinder;
     }
 

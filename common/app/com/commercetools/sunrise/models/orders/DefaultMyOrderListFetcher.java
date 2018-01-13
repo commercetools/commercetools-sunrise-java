@@ -8,7 +8,7 @@ import io.sphere.sdk.orders.queries.OrderQuery;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class DefaultMyOrderListFetcher extends AbstractMyOrderListFetcher {
+public class DefaultMyOrderListFetcher extends AbstractOrderListFetcher {
 
     private final MyCustomerInSession myCustomerInSession;
 

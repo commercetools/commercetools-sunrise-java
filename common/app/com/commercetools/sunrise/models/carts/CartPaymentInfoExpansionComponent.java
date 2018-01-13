@@ -16,7 +16,7 @@ import io.sphere.sdk.carts.queries.CartQuery;
  * @see CartExpansionModel#paymentInfo()
  * @see PaymentInfoExpansionModel#payments()
  */
-public class CartPaymentInfoExpansionComponent implements ControllerComponent, CartQueryHook, CartUpdateCommandHook {
+public final class CartPaymentInfoExpansionComponent implements ControllerComponent, CartQueryHook, CartUpdateCommandHook {
 
     @Override
     public CartQuery onCartQuery(final CartQuery cartQuery) {

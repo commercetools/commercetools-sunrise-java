@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.models.customers;
 
-import com.commercetools.sunrise.core.controllers.ResourceUpdater;
+import com.commercetools.sunrise.core.ResourceUpdater;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.customers.Customer;

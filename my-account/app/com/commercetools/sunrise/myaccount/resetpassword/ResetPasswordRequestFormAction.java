@@ -1,6 +1,6 @@
 package com.commercetools.sunrise.myaccount.resetpassword;
 
-import com.commercetools.sunrise.core.controllers.FormAction;
+import com.commercetools.sunrise.core.FormAction;
 import com.google.inject.ImplementedBy;
 import io.sphere.sdk.customers.CustomerToken;
 
