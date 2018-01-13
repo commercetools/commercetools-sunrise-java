@@ -16,26 +16,26 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-final class DefaultCheckoutAddressFormAction extends AbstractFormAction<CheckoutAddressFormData> implements CheckoutAddressFormAction {
+final class DefaultSetAddressFormAction extends AbstractFormAction<SetAddressFormData> implements SetAddressFormAction {
 
-    private final CheckoutAddressFormData formData;
+    private final SetAddressFormData formData;
     private final MyCartUpdater myCartUpdater;
 
     @Inject
-    DefaultCheckoutAddressFormAction(final FormFactory formFactory, final CheckoutAddressFormData formData,
-                                     final MyCartUpdater myCartUpdater) {
+    DefaultSetAddressFormAction(final FormFactory formFactory, final SetAddressFormData formData,
+                                final MyCartUpdater myCartUpdater) {
         super(formFactory);
         this.formData = formData;
         this.myCartUpdater = myCartUpdater;
     }
 
     @Override
-    protected Class<? extends CheckoutAddressFormData> formClass() {
+    protected Class<? extends SetAddressFormData> formClass() {
         return formData.getClass();
     }
 
     @Override
-    public Form<? extends CheckoutAddressFormData> createForm() {
+    public Form<? extends SetAddressFormData> createForm() {
         if (isBillingAddressDifferent()) {
             return getFormFactory().form(formClass(), BillingAddressDifferentToShippingAddressGroup.class);
         }
@@ -43,11 +43,11 @@ final class DefaultCheckoutAddressFormAction extends AbstractFormAction<Checkout
     }
 
     @Override
-    protected CompletionStage<?> onValidForm(final CheckoutAddressFormData formData) {
+    protected CompletionStage<?> onValidForm(final SetAddressFormData formData) {
         return myCartUpdater.force(buildUpdateActions(formData));
     }
 
-    private List<UpdateAction<Cart>> buildUpdateActions(final CheckoutAddressFormData formData) {
+    private List<UpdateAction<Cart>> buildUpdateActions(final SetAddressFormData formData) {
         final List<UpdateAction<Cart>> updateActions = new ArrayList<>();
         updateActions.add(formData.setShippingAddress());
         updateActions.add(formData.setBillingAddress());

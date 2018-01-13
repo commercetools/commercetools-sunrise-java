@@ -6,7 +6,7 @@ import io.sphere.sdk.shippingmethods.ShippingMethod;
 import play.data.validation.Constraints.MinLength;
 import play.data.validation.Constraints.Required;
 
-public class DefaultCheckoutShippingFormData extends Base implements CheckoutShippingFormData {
+public class DefaultSetShippingFormData extends Base implements SetShippingFormData {
 
     @Required
     @MinLength(1)

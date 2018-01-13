@@ -62,15 +62,15 @@ POST        /cart/discount/remove        @controllers.shoppingcart.RemoveDiscoun
 # ~~~~~
 
 # Shows the form to enter shipping address and billing address
-GET         /checkout/address            @controllers.shoppingcart.CheckoutController.show
+GET         /checkout/address            @controllers.CheckoutController.show
 # Processes the form of the shipping address and billing address
-POST        /checkout/address            @controllers.shoppingcart.CheckoutController.process
+POST        /checkout/address            @controllers.CheckoutController.process
 # Shows the form to enter shipping address and billing address
-GET         /checkout/shipping                                                      @controllers.shoppingcart.CheckoutShippingController.show
+GET         /checkout/shipping           @controllers.shoppingcart.CheckoutShippingController.show
 # Processes the form of the shipping address and billing address
-POST        /checkout/shipping                                                      @controllers.shoppingcart.CheckoutShippingController.process
+POST        /checkout/shipping           @controllers.shoppingcart.CheckoutShippingController.process
 # Shows a form to select the payment method
-GET         /checkout/payment                                                       @controllers.shoppingcart.CheckoutPaymentController.show
+GET         /checkout/payment            @controllers.shoppingcart.CheckoutPaymentController.show
 # Processes the form for selecting a payment method
 POST        /checkout/payment                                                       @controllers.shoppingcart.CheckoutPaymentController.process
 # Shows the form to create an order out of the cart of the session

@@ -1,5 +1,6 @@
-package com.commercetools.sunrise.shoppingcart.checkout.payment;
+package com.commercetools.sunrise.shoppingcart.checkout;
 
+import com.commercetools.sunrise.core.controllers.AbstractFormAction;
 import com.commercetools.sunrise.models.carts.MyCartInCache;
 import com.commercetools.sunrise.models.carts.MyCartUpdater;
 import com.commercetools.sunrise.models.payments.PaymentSettings;
@@ -19,6 +20,7 @@ import io.sphere.sdk.payments.commands.PaymentCreateCommand;
 import io.sphere.sdk.payments.commands.PaymentDeleteCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.data.FormFactory;
 import play.libs.concurrent.HttpExecution;
 
 import javax.inject.Inject;
@@ -33,18 +35,22 @@ import static java.util.stream.Collectors.toList;
  * Deletes previous payments associated with the cart and adds the new one.
  * The {@link PaymentInfo#getPayments()} references should be expanded using the expansion path {@code paymentInfo.payments} to properly work, otherwise previous payments will not be deleted.
  */
-final class DefaultCheckoutPaymentFormAction implements CheckoutPaymentFormAction {
+final class DefaultSetPaymentFormAction extends AbstractFormAction<SetPaymentFormData> implements SetPaymentFormAction {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckoutPaymentFormAction.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SetPaymentFormAction.class);
 
+    private final SetPaymentFormData formData;
     private final MyCartUpdater myCartUpdater;
     private final MyCartInCache myCartInCache;
     private final PaymentSettings paymentSettings;
     private final SphereClient sphereClient;
 
     @Inject
-    DefaultCheckoutPaymentFormAction(final MyCartUpdater myCartUpdater, final MyCartInCache myCartInCache,
-                                     final PaymentSettings paymentSettings, final SphereClient sphereClient) {
+    DefaultSetPaymentFormAction(final FormFactory formFactory, final SetPaymentFormData formData,
+                                final MyCartUpdater myCartUpdater, final MyCartInCache myCartInCache,
+                                final PaymentSettings paymentSettings, final SphereClient sphereClient) {
+        super(formFactory);
+        this.formData = formData;
         this.myCartUpdater = myCartUpdater;
         this.myCartInCache = myCartInCache;
         this.paymentSettings = paymentSettings;
@@ -52,7 +58,12 @@ final class DefaultCheckoutPaymentFormAction implements CheckoutPaymentFormActio
     }
 
     @Override
-    public CompletionStage<Cart> apply(final CheckoutPaymentFormData formData) {
+    protected Class<? extends SetPaymentFormData> formClass() {
+        return formData.getClass();
+    }
+
+    @Override
+    protected CompletionStage<?> onValidForm(final SetPaymentFormData formData) {
         return myCartInCache.require().thenComposeAsync(cart ->
                 createPayment(cart, formData).thenComposeAsync(payment -> replacePayment(cart, payment), HttpExecution.defaultContext()),
                 HttpExecution.defaultContext());
@@ -71,7 +82,7 @@ final class DefaultCheckoutPaymentFormAction implements CheckoutPaymentFormActio
         return updateActions;
     }
 
-    private CompletionStage<Payment> createPayment(final Cart cart, final CheckoutPaymentFormData formData) {
+    private CompletionStage<Payment> createPayment(final Cart cart, final SetPaymentFormData formData) {
         final PaymentDraft paymentDraft = PaymentDraftBuilder.of(cart.getTotalPrice())
                 .paymentMethodInfo(paymentMethod(formData).orElse(null))
                 .customer(Optional.ofNullable(cart.getCustomerId()).map(Customer::referenceOfId).orElse(null))
@@ -79,7 +90,7 @@ final class DefaultCheckoutPaymentFormAction implements CheckoutPaymentFormActio
         return sphereClient.execute(PaymentCreateCommand.of(paymentDraft));
     }
 
-    private Optional<PaymentMethodInfo> paymentMethod(final CheckoutPaymentFormData formData) {
+    private Optional<PaymentMethodInfo> paymentMethod(final SetPaymentFormData formData) {
         return paymentSettings.paymentMethods().stream()
                 .filter(paymentMethod -> formData.paymentMethod().equals(paymentMethod.getMethod()))
                 .findAny();

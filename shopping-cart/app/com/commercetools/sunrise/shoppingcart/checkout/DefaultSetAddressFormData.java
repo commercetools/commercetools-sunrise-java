@@ -9,7 +9,7 @@ import io.sphere.sdk.models.Base;
 import play.data.validation.Constraints;
 import play.data.validation.Constraints.Email;
 
-public class DefaultCheckoutAddressFormData extends Base implements CheckoutAddressFormData {
+public class DefaultSetAddressFormData extends Base implements SetAddressFormData {
 
     private String titleShipping;
     

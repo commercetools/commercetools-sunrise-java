@@ -7,26 +7,26 @@ import play.data.FormFactory;
 import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
-final class DefaultCheckoutShippingFormAction extends AbstractFormAction<CheckoutShippingFormData> implements CheckoutShippingFormAction {
+final class DefaultSetShippingFormAction extends AbstractFormAction<SetShippingFormData> implements SetShippingFormAction {
 
-    private final CheckoutShippingFormData formData;
+    private final SetShippingFormData formData;
     private final MyCartUpdater myCartUpdater;
 
     @Inject
-    DefaultCheckoutShippingFormAction(final FormFactory formFactory, final CheckoutShippingFormData formData,
-                                      final MyCartUpdater myCartUpdater) {
+    DefaultSetShippingFormAction(final FormFactory formFactory, final SetShippingFormData formData,
+                                 final MyCartUpdater myCartUpdater) {
         super(formFactory);
         this.formData = formData;
         this.myCartUpdater = myCartUpdater;
     }
 
     @Override
-    protected Class<? extends CheckoutShippingFormData> formClass() {
+    protected Class<? extends SetShippingFormData> formClass() {
         return formData.getClass();
     }
 
     @Override
-    protected CompletionStage<?> onValidForm(final CheckoutShippingFormData formData) {
+    protected CompletionStage<?> onValidForm(final SetShippingFormData formData) {
         return myCartUpdater.force(formData.setShippingMethod());
     }
 }

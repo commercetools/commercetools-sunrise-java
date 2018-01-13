@@ -4,8 +4,8 @@ import com.google.inject.ImplementedBy;
 import io.sphere.sdk.carts.commands.updateactions.SetBillingAddress;
 import io.sphere.sdk.carts.commands.updateactions.SetShippingAddress;
 
-@ImplementedBy(DefaultCheckoutAddressFormData.class)
-public interface CheckoutAddressFormData {
+@ImplementedBy(DefaultSetAddressFormData.class)
+public interface SetAddressFormData {
 
     SetShippingAddress setShippingAddress();
 
