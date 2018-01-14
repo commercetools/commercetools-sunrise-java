@@ -19,7 +19,7 @@ public interface HookRunner {
      * The result should be completed at some point and a successful completion can also contain the value {@code null}
      * hence the successful result is not used directly by the framework.
      *
-     * Each execution will run in parallel until {@link RequestHookRunner#waitForHookedComponentsToFinish()} is called,
+     * Each execution will run in parallel until {@link HookContext#waitForHookedComponentsToFinish()} is called,
      * in which moment all asynchronous computations for the requests need to be completed successfully.
      * Typically this is triggered before the hooks {@link PageDataHook} or {@link com.commercetools.sunrise.core.hooks.application.HttpRequestEndedHook} are called.
      *

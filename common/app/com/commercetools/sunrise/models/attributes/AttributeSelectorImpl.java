@@ -1,12 +1,10 @@
 package com.commercetools.sunrise.models.attributes;
 
-import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.ViewModelFactory;
 import com.commercetools.sunrise.models.SelectOption;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.ProductVariant;
 import io.sphere.sdk.products.attributes.Attribute;
-import play.mvc.Call;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,15 +22,13 @@ final class AttributeSelectorImpl extends ViewModelFactory implements AttributeS
     private final AttributeSettings attributesSettings;
     private final ProductAttributeFormatter attributeFormatter;
     private final ProductAttributeSorter attributeSorter;
-    private final ProductReverseRouter productReverseRouter;
 
     @Inject
     AttributeSelectorImpl(final AttributeSettings attributesSettings, final ProductAttributeFormatter attributeFormatter,
-                          final ProductAttributeSorter attributeSorter, final ProductReverseRouter productReverseRouter) {
+                          final ProductAttributeSorter attributeSorter) {
         this.attributesSettings = attributesSettings;
         this.attributeFormatter = attributeFormatter;
         this.attributeSorter = attributeSorter;
-        this.productReverseRouter = productReverseRouter;
     }
 
     @Override
@@ -87,7 +83,8 @@ final class AttributeSelectorImpl extends ViewModelFactory implements AttributeS
     }
 
     private Optional<String> findUrl(final ProductProjection product, final ProductVariant variant) {
-        return productReverseRouter.productDetailPageCall(product, variant).map(Call::url);
+//        return productReverseRouter.productDetailPageCall(product, variant).map(Call::url);
+        return Optional.empty();
     }
 
     private Optional<ProductVariant> findBestTargetVariant(final String attributeName, final ProductVariant selectedVariant,

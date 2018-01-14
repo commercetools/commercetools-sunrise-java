@@ -1,10 +1,8 @@
 package com.commercetools.sunrise.productcatalog.products.search.facetedsearch.categorytree.viewmodels;
 
 import com.commercetools.sunrise.core.i18n.I18nResolver;
-import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.forms.FormSelectableOptionViewModel;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
-import com.commercetools.sunrise.test.TestableCall;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.models.LocalizedString;
@@ -18,14 +16,12 @@ import play.test.WithApplication;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static play.test.Helpers.fakeRequest;
@@ -145,7 +141,7 @@ public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication
         invokeWithContext(fakeRequest(), () -> {
             Http.Context.current().changeLang("en");
             final I18nResolver i18nResolver = app.injector().instanceOf(I18nResolver.class);
-            final CategoryTreeFacetOptionViewModelFactory factory = new CategoryTreeFacetOptionViewModelFactory(i18nResolver, categoryTree, reverseRouter());
+            final CategoryTreeFacetOptionViewModelFactory factory = new CategoryTreeFacetOptionViewModelFactory(i18nResolver, categoryTree);
             final TermFacetResult termFacetResult = TermFacetResult.of(0L, 0L, 0L, termStats);
             test.accept(factory.create(termFacetResult, category, CAT_C));
             return null;
@@ -161,12 +157,12 @@ public class CategoryTreeFacetOptionViewModelFactoryTest extends WithApplication
         return category;
     }
 
-    private static ProductReverseRouter reverseRouter() {
-        final ProductReverseRouter productReverseRouter = mock(ProductReverseRouter.class);
-        when(productReverseRouter.productOverviewPageCall(any(Category.class)))
-                .then(invocation -> ((Category) invocation.getArgument(0)).getSlug()
-                        .find(Locale.ENGLISH)
-                        .map(TestableCall::new));
-        return productReverseRouter;
-    }
+//    private static ProductReverseRouter reverseRouter() {
+//        final ProductReverseRouter productReverseRouter = mock(ProductReverseRouter.class);
+//        when(productReverseRouter.productOverviewPageCall(any(Category.class)))
+//                .then(invocation -> ((Category) invocation.getArgument(0)).getSlug()
+//                        .find(Locale.ENGLISH)
+//                        .map(TestableCall::new));
+//        return productReverseRouter;
+//    }
 }

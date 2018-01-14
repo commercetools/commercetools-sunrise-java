@@ -3,8 +3,6 @@ package com.commercetools.sunrise.shoppingcart.checkout;
 import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
-import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.checkout.CheckoutReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -33,14 +31,12 @@ public abstract class SunriseCheckoutController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_ADDRESS_PAGE)
     public CompletionStage<Result> showSetAddressForm() {
         return templateEngine.render("checkout-address")
                 .thenApply(Results::ok);
     }
 
     @EnableHooks
-    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_ADDRESS_PROCESS)
     public CompletionStage<Result> setAddress() {
         return setAddressFormAction.apply(this::onAddressSet,
                 form -> {
@@ -51,14 +47,12 @@ public abstract class SunriseCheckoutController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_SHIPPING_PAGE)
     public CompletionStage<Result> showSetShippingForm() {
         return templateEngine.render("checkout-shipping")
                 .thenApply(Results::ok);
     }
 
     @EnableHooks
-    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_SHIPPING_PROCESS)
     public CompletionStage<Result> setShipping() {
         return setShippingFormAction.apply(this::onShippingSet,
                 form -> {
@@ -69,14 +63,12 @@ public abstract class SunriseCheckoutController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_PAYMENT_PAGE)
     public CompletionStage<Result> showSetPaymentForm() {
         return templateEngine.render("checkout-payment")
                 .thenApply(Results::ok);
     }
 
     @EnableHooks
-    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_PAYMENT_PROCESS)
     public CompletionStage<Result> setPayment() {
         return setPaymentFormAction.apply(this::onPaymentSet,
                 form -> {
@@ -87,14 +79,12 @@ public abstract class SunriseCheckoutController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_CONFIRMATION_PAGE)
     public CompletionStage<Result> showPlaceOrderForm() {
         return templateEngine.render("checkout-confirmation")
                 .thenApply(Results::ok);
     }
 
     @EnableHooks
-    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_CONFIRMATION_PROCESS)
     public CompletionStage<Result> placeOrder() {
         return placeOrderFormAction.apply(this::onOrderPlaced,
                 form -> {
@@ -105,7 +95,6 @@ public abstract class SunriseCheckoutController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CheckoutReverseRouter.CHECKOUT_THANK_YOU_PAGE)
     public CompletionStage<Result> showOrder() {
         final String orderNumber = Http.Context.current().flash().get("orderNumber");
         final PageData pageData = PageData.of().put("orderNumber", orderNumber);

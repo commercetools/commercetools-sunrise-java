@@ -1,7 +1,5 @@
 package com.commercetools.sunrise.controllers;
 
-import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.core.reverserouters.common.assets.AssetsReverseRouter;
 import controllers.Assets;
 import controllers.WebJarAssets;
 import play.api.mvc.Action;
@@ -32,7 +30,6 @@ public final class AssetsController extends AssetsControllerBase {
         return webJarAssetsController;
     }
 
-    @SunriseRoute(AssetsReverseRouter.ASSET)
     public Action<AnyContent> at(String file) {
         return super.at(file);
     }

@@ -1,39 +1,32 @@
 package com.commercetools.sunrise.productcatalog.products.search.facetedsearch.categorytree.viewmodels;
 
-import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.injection.RequestScoped;
-import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
+import com.commercetools.sunrise.models.categories.NavigationCategoryTree;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.AbstractFacetOptionViewModelFactory;
 import com.commercetools.sunrise.models.search.facetedsearch.viewmodels.FacetOptionViewModel;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
 import io.sphere.sdk.search.TermFacetResult;
 import io.sphere.sdk.search.TermStats;
-import play.mvc.Http;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.*;
 
-import static com.commercetools.sunrise.core.viewmodels.forms.QueryStringUtils.buildUri;
-import static com.commercetools.sunrise.core.viewmodels.forms.QueryStringUtils.extractQueryString;
-
 @RequestScoped
 public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOptionViewModelFactory<TermFacetResult, Category, Category> {
 
+    private static final Set<String> IGNORED_PARAMS = Collections.singleton("page");
+
     private final I18nResolver i18nResolver;
     private final CategoryTree categoryTree;
-    private final ProductReverseRouter productReverseRouter;
-    private static final Set<String> IGNORED_PARAMS = Collections.singleton("page");
 
     @Inject
     public CategoryTreeFacetOptionViewModelFactory(final I18nResolver i18nResolver,
-                                                   @NavigationCategoryTree final CategoryTree categoryTree,
-                                                   final ProductReverseRouter productReverseRouter) {
+                                                   @NavigationCategoryTree final CategoryTree categoryTree) {
         this.i18nResolver = i18nResolver;
         this.categoryTree = categoryTree;
-        this.productReverseRouter = productReverseRouter;
     }
 
     protected final I18nResolver getI18nResolver() {
@@ -42,10 +35,6 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
 
     protected final CategoryTree getCategoryTree() {
         return categoryTree;
-    }
-
-    protected final ProductReverseRouter getProductReverseRouter() {
-        return productReverseRouter;
     }
 
     @Override
@@ -66,8 +55,8 @@ public class CategoryTreeFacetOptionViewModelFactory extends AbstractFacetOption
 
     @Override
     protected void fillValue(final FacetOptionViewModel viewModel, final TermFacetResult stats, final Category category, @Nullable final Category selectedValue) {
-        productReverseRouter.productOverviewPageCall(category).ifPresent(call ->
-                viewModel.setValue(buildUri(call.url(), extractQueryString(Http.Context.current().request(), IGNORED_PARAMS))));
+//        productReverseRouter.productOverviewPageCall(category).ifPresent(call ->
+//                viewModel.setValue(buildUri(call.url(), extractQueryString(Http.Context.current().request(), IGNORED_PARAMS))));
     }
 
     @Override

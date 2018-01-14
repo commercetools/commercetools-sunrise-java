@@ -26,7 +26,7 @@ final class HooksEnabler extends Action<EnableHooks> {
     @Override
     public CompletionStage<Result> call(final Http.Context ctx) {
         // On creation of this action there isn't any HTTP context, necessary to initialize the HookRunner
-        final RequestHookRunner hookRunner = injector.instanceOf(RequestHookRunner.class);
+        final HookContext hookRunner = injector.instanceOf(HookContext.class);
         HttpRequestStartedHook.runHook(hookRunner, ctx);
         return delegate.call(ctx)
                 .thenCompose(result -> hookRunner.waitForHookedComponentsToFinish()

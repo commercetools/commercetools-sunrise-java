@@ -3,8 +3,6 @@ package com.commercetools.sunrise.myaccount.resetpassword;
 import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
-import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.core.reverserouters.myaccount.recoverpassword.RecoverPasswordReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -33,14 +31,12 @@ public abstract class SunriseResetPasswordController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(RecoverPasswordReverseRouter.REQUEST_RECOVERY_EMAIL_PAGE)
     public CompletionStage<Result> showRequestResetPasswordForm() {
         return templateEngine.render("my-account-forgot-password")
                 .thenApply(Results::ok);
     }
 
     @EnableHooks
-    @SunriseRoute(RecoverPasswordReverseRouter.RESET_PASSWORD_PAGE)
     public CompletionStage<Result> showResetPasswordForm(final String passwordToken) {
         final PageData pageData = PageData.of().put("passwordToken", passwordToken);
         return templateEngine.render("my-account-reset-password", pageData)
@@ -48,7 +44,6 @@ public abstract class SunriseResetPasswordController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(RecoverPasswordReverseRouter.REQUEST_RECOVERY_EMAIL_PROCESS)
     public CompletionStage<Result> requestResetPassword() {
         return resetPasswordRequestFormAction.apply(this::onPasswordResetRequested,
                 form -> {
@@ -59,7 +54,6 @@ public abstract class SunriseResetPasswordController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(RecoverPasswordReverseRouter.RESET_PASSWORD_PROCESS)
     public CompletionStage<Result> resetPassword() {
         return resetPasswordFormAction.apply(this::onPasswordReset,
                 form -> {

@@ -3,8 +3,6 @@ package com.commercetools.sunrise.myaccount.customerprofile;
 import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
-import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.core.reverserouters.myaccount.mydetails.MyPersonalDetailsReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -23,14 +21,12 @@ public abstract class SunriseCustomerProfileController extends SunriseController
     }
 
     @EnableHooks
-    @SunriseRoute(MyPersonalDetailsReverseRouter.MY_PERSONAL_DETAILS_PAGE)
     public CompletionStage<Result> show() {
         return templateEngine.render("my-account-personal-details")
                 .thenApply(Results::ok);
     }
 
     @EnableHooks
-    @SunriseRoute(MyPersonalDetailsReverseRouter.MY_PERSONAL_DETAILS_PROCESS)
     public CompletionStage<Result> edit() {
         return formAction.apply(this::onEdited,
                 form -> {

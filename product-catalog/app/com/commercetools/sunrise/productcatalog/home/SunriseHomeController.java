@@ -3,8 +3,6 @@ package com.commercetools.sunrise.productcatalog.home;
 import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
-import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.core.reverserouters.productcatalog.home.HomeReverseRouter;
 import play.mvc.Result;
 import play.mvc.Results;
 
@@ -22,7 +20,6 @@ public abstract class SunriseHomeController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(HomeReverseRouter.HOME_PAGE)
     public CompletionStage<Result> show() {
         return templateEngine.render("home")
                 .thenApply(Results::ok);

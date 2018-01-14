@@ -3,8 +3,6 @@ package com.commercetools.sunrise.shoppingcart.carts;
 import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
-import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -29,14 +27,12 @@ public abstract class SunriseCartsController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CartReverseRouter.CART_DETAIL_PAGE)
     public CompletionStage<Result> show() {
         return templateEngine.render("cart")
                 .thenApply(Results::ok);
     }
 
     @EnableHooks
-    @SunriseRoute(CartReverseRouter.ADD_LINE_ITEM_PROCESS)
     public CompletionStage<Result> addLineItem() {
         return addToCartFormAction.apply(this::onLineItemAdded,
                 form -> {
@@ -47,7 +43,6 @@ public abstract class SunriseCartsController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CartReverseRouter.CHANGE_LINE_ITEM_QUANTITY_PROCESS)
     public CompletionStage<Result> changeQuantity() {
         return changeQuantityInCartFormAction.apply(this::onQuantityChanged,
                 form -> {
@@ -58,7 +53,6 @@ public abstract class SunriseCartsController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CartReverseRouter.REMOVE_LINE_ITEM_PROCESS)
     public CompletionStage<Result> removeLineItem() {
         return removeFromCartFormAction.apply(this::onLineItemRemoved,
                 form -> {

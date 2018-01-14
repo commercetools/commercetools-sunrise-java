@@ -3,8 +3,6 @@ package com.commercetools.sunrise.myaccount.authentication;
 import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
-import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.core.reverserouters.myaccount.authentication.AuthenticationReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -33,14 +31,12 @@ public abstract class SunriseAuthenticationController extends SunriseController 
     }
 
     @EnableHooks
-    @SunriseRoute(AuthenticationReverseRouter.LOG_IN_PAGE)
     public CompletionStage<Result> show() {
         return templateEngine.render("my-account-login")
                 .thenApply(Results::ok);
     }
 
     @EnableHooks
-    @SunriseRoute(AuthenticationReverseRouter.SIGN_UP_PROCESS)
     public CompletionStage<Result> signUp() {
         return signUpFormAction.apply(this::onSignedUp,
                 form -> {
@@ -51,7 +47,6 @@ public abstract class SunriseAuthenticationController extends SunriseController 
     }
 
     @EnableHooks
-    @SunriseRoute(AuthenticationReverseRouter.LOG_IN_PROCESS)
     public CompletionStage<Result> logIn() {
         return logInFormAction.apply(this::onLoggedIn,
                 form -> {
@@ -62,7 +57,6 @@ public abstract class SunriseAuthenticationController extends SunriseController 
     }
 
     @EnableHooks
-    @SunriseRoute(AuthenticationReverseRouter.LOG_OUT_PROCESS)
     public CompletionStage<Result> logOut() {
         return logOutAction.apply(this::onLoggedOut);
     }

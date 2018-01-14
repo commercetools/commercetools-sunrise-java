@@ -1,6 +1,5 @@
 package com.commercetools.sunrise.controllers;
 
-import com.commercetools.sunrise.core.reverserouters.productcatalog.home.HomeReverseRouter;
 import com.commercetools.sunrise.models.categories.CategorySettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,19 +15,16 @@ public final class CategoryTreeRefreshController extends Controller {
 
     private final CategorySettings categorySettings;
     private final CacheApi cacheApi;
-    private final HomeReverseRouter homeReverseRouter;
 
     @Inject
-    CategoryTreeRefreshController(final CategorySettings categorySettings,
-                                         final CacheApi cacheApi, final HomeReverseRouter homeReverseRouter) {
+    CategoryTreeRefreshController(final CategorySettings categorySettings, final CacheApi cacheApi) {
         this.categorySettings = categorySettings;
         this.cacheApi = cacheApi;
-        this.homeReverseRouter = homeReverseRouter;
     }
 
     public Result refresh() {
         cacheApi.remove(categorySettings.cacheKey());
         LOGGER.info("Cached category tree removed");
-        return redirect(homeReverseRouter.homePageCall());
+        return redirect("/");
     }
 }

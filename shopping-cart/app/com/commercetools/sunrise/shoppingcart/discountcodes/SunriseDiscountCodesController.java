@@ -3,8 +3,6 @@ package com.commercetools.sunrise.shoppingcart.discountcodes;
 import com.commercetools.sunrise.core.SunriseController;
 import com.commercetools.sunrise.core.hooks.EnableHooks;
 import com.commercetools.sunrise.core.renderers.TemplateEngine;
-import com.commercetools.sunrise.core.reverserouters.SunriseRoute;
-import com.commercetools.sunrise.core.reverserouters.shoppingcart.cart.CartReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.PageData;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -26,7 +24,6 @@ public abstract class SunriseDiscountCodesController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CartReverseRouter.ADD_DISCOUNT_CODE_PROCESS)
     public CompletionStage<Result> add() {
         return addDiscountCodeFormAction.apply(this::onAdded,
                 form -> {
@@ -37,7 +34,6 @@ public abstract class SunriseDiscountCodesController extends SunriseController {
     }
 
     @EnableHooks
-    @SunriseRoute(CartReverseRouter.REMOVE_DISCOUNT_CODE_PROCESS)
     public CompletionStage<Result> remove() {
         return removeDiscountCodeFormAction.apply(this::onRemoved,
                 form -> {

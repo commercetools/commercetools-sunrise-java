@@ -1,10 +1,8 @@
 package com.commercetools.sunrise.models.categories;
 
-import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.github.jknack.handlebars.Options;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.CategoryTree;
-import play.mvc.Call;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,13 +13,10 @@ import java.util.List;
 public class CategoryHelperSource {
 
     private CategorySettings categorySettings;
-    private ProductReverseRouter productReverseRouter;
 
     @Inject
-    protected CategoryHelperSource(final CategorySettings categorySettings,
-                                   final ProductReverseRouter productReverseRouter) {
+    protected CategoryHelperSource(final CategorySettings categorySettings) {
         this.categorySettings = categorySettings;
-        this.productReverseRouter = productReverseRouter;
     }
 
     public CharSequence ifSale(final Category category, final Options options) throws IOException {
@@ -35,9 +30,5 @@ public class CategoryHelperSource {
                                              final Options options) throws IOException {
         final List<Category> children = categoryTree.findChildren(category);
         return options.fn(children);
-    }
-
-    public CharSequence categoryUrl(final Category category) {
-        return productReverseRouter.productOverviewPageCall(category).map(Call::url).orElse("");
     }
 }

@@ -4,9 +4,6 @@ import com.commercetools.sdk.CtpEnumUtils;
 import com.commercetools.sunrise.core.i18n.I18nResolver;
 import com.commercetools.sunrise.core.i18n.LanguageSelector;
 import com.commercetools.sunrise.core.localization.CountrySelector;
-import com.commercetools.sunrise.core.reverserouters.myaccount.addressbook.AddressBookReverseRouter;
-import com.commercetools.sunrise.core.reverserouters.myaccount.myorders.MyOrdersReverseRouter;
-import com.commercetools.sunrise.core.reverserouters.productcatalog.product.ProductReverseRouter;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
 import com.commercetools.sunrise.models.SelectOption;
 import com.commercetools.sunrise.models.carts.CartPriceUtils;
@@ -18,12 +15,10 @@ import io.sphere.sdk.carts.LineItem;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.models.Address;
-import io.sphere.sdk.orders.Order;
 import io.sphere.sdk.products.PriceUtils;
 import io.sphere.sdk.products.ProductVariant;
 import lombok.NonNull;
 import org.apache.commons.lang3.ObjectUtils;
-import play.mvc.Call;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -45,22 +40,16 @@ import static java.util.stream.Collectors.toList;
 public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     private final I18nResolver i18nResolver;
-    private final ProductReverseRouter productReverseRouter;
     private final PriceFormatter priceFormatter;
     private final DateTimeFormatter dateTimeFormatter;
-    private final MyOrdersReverseRouter myOrdersReverseRouter;
-    private final AddressBookReverseRouter addressBookReverseRouter;
     private final CountrySelector countrySelector;
     private final LanguageSelector languageSelector;
 
     @Inject
-    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, ProductReverseRouter productReverseRouter, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter, MyOrdersReverseRouter myOrdersReverseRouter, AddressBookReverseRouter addressBookReverseRouter, final CountrySelector countrySelector, final LanguageSelector languageSelector) {
+    protected DefaultHandlebarsHelperSource(final I18nResolver i18nResolver, PriceFormatter priceFormatter, DateTimeFormatter dateTimeFormatter, final CountrySelector countrySelector, final LanguageSelector languageSelector) {
         this.i18nResolver = i18nResolver;
-        this.productReverseRouter = productReverseRouter;
         this.priceFormatter = priceFormatter;
         this.dateTimeFormatter = dateTimeFormatter;
-        this.myOrdersReverseRouter = myOrdersReverseRouter;
-        this.addressBookReverseRouter = addressBookReverseRouter;
         this.countrySelector = countrySelector;
         this.languageSelector = languageSelector;
     }
@@ -102,16 +91,6 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
     @Nullable
     public CharSequence imageUrl(@NonNull final ProductVariant object) {
         return object.getImages().stream().map(image -> (CharSequence) image.getUrl()).findFirst().orElse(null);
-    }
-
-    public CharSequence variantUrlFromLineItem(final Object object) {
-        if (object instanceof LineItem) {
-            return productReverseRouter.productDetailPageCall((LineItem)object).map(Call::url).orElse("");
-        } else if (object instanceof io.sphere.sdk.shoppinglists.LineItem ) {
-            return productReverseRouter.productDetailPageCall((io.sphere.sdk.shoppinglists.LineItem )object).map(Call::url).orElse("");
-        } else {
-            throw new IllegalArgumentException("is not a LineItem " + object);
-        }
     }
 
     public CharSequence currentPriceForLineItem(final LineItem object) {
@@ -158,23 +137,8 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
         return CtpEnumUtils.enumToCamelCase(enumValue.toString());
     }
 
-    public CharSequence myOrderDetailPageUrl(final Order order) {
-        return myOrdersReverseRouter
-                .myOrderDetailPageCall(order)
-                .map(Call::url)
-                .orElse("");
-    }
-
     public CharSequence size(final List<?> list) {
         return list == null ? "0" : list.size() + "";
-    }
-
-    public CharSequence editAddressUrl(final Address address) {
-        return addressBookReverseRouter.changeAddressPageCall(address).map(Call::url).orElse("");
-    }
-
-    public CharSequence deleteAddressUrl(final Address address) {
-        return addressBookReverseRouter.removeAddressProcessCall(address).map(Call::url).orElse("");
     }
 
     private boolean isNotAnyDefaultAddress(final Customer customer, final Address address) {
