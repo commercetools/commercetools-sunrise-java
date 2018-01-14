@@ -4,11 +4,11 @@
     <li class="col-sm-8">
       <div class="nav-accordion">
         {{#each this}}
-          <h3><a href="{{categoryUrl this}}">{{name}}</a></h3>
+          <h3><a href="/{{slug}}">{{name}}</a></h3>
           <ul>
              {{#withCategoryChildren this categoryTree}}
                 {{#each this}}
-                  <li><a href="{{categoryUrl this}}">{{name}}</a></li>
+                  <li><a href="/{{slug}}">{{name}}</a></li>
                 {{/each}}
              {{/withCategoryChildren}}
           </ul>
@@ -16,7 +16,7 @@
       </div>
     </li>
     <li class="col-sm-4 hidden-xs">
-      <img src="{{@root.meta.assetsPath}}img/menu-teaser-98f408c92eb1d7c94ba608dde9782ba0.jpg" alt="{{i18n "main:header.teaser"}}" class="img-responsive megamenu-img">
+      <img src="/assets/img/menu-teaser-98f408c92eb1d7c94ba608dde9782ba0.jpg" alt="{{i18n "main:header.teaser"}}" class="img-responsive megamenu-img">
     </li>
   </ul>
 {{/withCategoryChildren}}

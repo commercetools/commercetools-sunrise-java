@@ -16,11 +16,8 @@ import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.json.SphereJsonUtils;
 import io.sphere.sdk.models.Address;
 import io.sphere.sdk.products.PriceUtils;
-import io.sphere.sdk.products.ProductVariant;
-import lombok.NonNull;
 import org.apache.commons.lang3.ObjectUtils;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.money.MonetaryAmount;
@@ -86,11 +83,6 @@ public class DefaultHandlebarsHelperSource implements HandlebarsHelperSource {
 
     public CharSequence prettyJson(final Object object) throws JsonProcessingException {
         return SphereJsonUtils.prettyPrint(json(object));
-    }
-
-    @Nullable
-    public CharSequence imageUrl(@NonNull final ProductVariant object) {
-        return object.getImages().stream().map(image -> (CharSequence) image.getUrl()).findFirst().orElse(null);
     }
 
     public CharSequence currentPriceForLineItem(final LineItem object) {

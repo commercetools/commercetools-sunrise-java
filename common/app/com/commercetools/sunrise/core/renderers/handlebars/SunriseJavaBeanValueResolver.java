@@ -1,7 +1,7 @@
 package com.commercetools.sunrise.core.renderers.handlebars;
 
 import com.commercetools.sunrise.core.i18n.I18nResolver;
-import com.commercetools.sunrise.core.viewmodels.ViewModel;
+import com.commercetools.sunrise.core.viewmodels.PageData;
 import com.commercetools.sunrise.core.viewmodels.formatters.PriceFormatter;
 import com.commercetools.sunrise.models.attributes.ProductAttributeFormatter;
 import com.commercetools.sunrise.models.attributes.RichAttribute;
@@ -42,8 +42,8 @@ public final class SunriseJavaBeanValueResolver implements ValueResolver {
             result = resolveMonetaryAmount((MonetaryAmount) result);
         } else if (result instanceof Attribute) {
             result = resolveAttribute((Attribute) result);
-        } else if (result == UNRESOLVED && context instanceof ViewModel) {
-            result = resolveExtendedViewModel((ViewModel) context, name);
+        } else if (result == UNRESOLVED && context instanceof PageData) {
+            result = resolveExtendedViewModel((PageData) context, name);
         }
         return result;
     }
@@ -59,8 +59,8 @@ public final class SunriseJavaBeanValueResolver implements ValueResolver {
     }
 
     @Nullable
-    private Object resolveExtendedViewModel(final ViewModel viewModel, final String name) {
-        final Object result = viewModel.get(name);
+    private Object resolveExtendedViewModel(final PageData pageData, final String name) {
+        final Object result = pageData.get(name);
         return result != null ? result : UNRESOLVED;
     }
 

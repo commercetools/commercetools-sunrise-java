@@ -11,15 +11,15 @@
         <li>
           <form action="{{@root.meta._links.deleteLineItem.href}}" method="post">
             <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
-            <a class="img" href="{{variantUrlFromLineItem this}}"><img src="{{imageUrl variant}}" alt="{{name}}" /></a>
-            <p class="product-title"><a href="{{variantUrlFromLineItem this}}">{{name}}</a></p>
+            <a class="img" href="/{{productSlug}}-{{variant.sku}}.html"><img src="{{variant.images.[0].url}}" alt="{{name}}" /></a>
+            <p class="product-title"><a href="/{{productSlug}}-{{variant.sku}}.html">{{name}}</a></p>
             <div class="details">
               <p class="product-quantity">{{i18n "main:common.quantity"}}<span>{{quantity}}x</span></p>
               <p class="product-price">{{i18n "main:common.price"}}<span>{{totalPrice}}</span></p>
                 <input type="hidden" name="lineItemId" value="{{id}}">
                 <button type="submit" id="minicart-delete-button-{{@index}}" class="delete">
                   <span>
-                    <img class="cart-action-icon" src="{{@root.meta.assetsPath}}img/delete-1-421d04c332afe6d751d51e28934399fd.png"
+                    <img class="cart-action-icon" src="/assets/img/delete-1-421d04c332afe6d751d51e28934399fd.png"
                          alt="{{i18n "main:form.delete"}}">
                   </span>
                 </button>

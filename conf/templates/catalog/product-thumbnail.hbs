@@ -1,5 +1,5 @@
 <!-- start catalog/product-thumbnail.hbs -->
-<a id="link-product-thumbnail-{{variant.sku}}" href="{{#if product}}{{productUrl product variant}}{{else}}{{variantUrlFromLineItem this}}{{/if}}">
+<a id="link-product-thumbnail-{{variant.sku}}" href="/{{#if product}}{{product.slug}}{{else}}{{productSlug}}{{/if}}-{{variant.sku}}.html">
   <div class="shop-item">
     {{#ifDiscounted variant}}
       <div class="sale-flag">{{i18n "catalog:thumbnail.sale"}}</div>
@@ -11,7 +11,7 @@
       {{/if}}
       {{> catalog/add-to-wishlist-form mobile=true context="mobile" productId=product.id variantId=variant.id sku=variant.sku}}
     <div class="pop-product-image">
-        <img class="img-lazy" data-original="{{imageUrl variant}}" alt="{{#if product}}{{product.name}}{{else}}{{name}}{{/if}}" />
+        <img class="img-lazy" data-original="{{variant.images.[0].url}}" alt="{{#if product}}{{product.name}}{{else}}{{name}}{{/if}}" />
     </div>
     <div class="pop-product-name">
       <span class="name-headline">{{#if product}}{{product.name}}{{else}}{{name}}{{/if}}</span>
