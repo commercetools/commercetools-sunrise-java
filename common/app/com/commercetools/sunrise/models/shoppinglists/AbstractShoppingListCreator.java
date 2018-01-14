@@ -25,13 +25,13 @@ public abstract class AbstractShoppingListCreator extends AbstractResourceCreato
     }
 
     @Override
-    protected final ShoppingListCreateCommand runCreateCommandHook(final HookRunner hookRunner, final ShoppingListCreateCommand baseCommand) {
+    protected final CompletionStage<ShoppingListCreateCommand> runCreateCommandHook(final HookRunner hookRunner, final ShoppingListCreateCommand baseCommand) {
         return ShoppingListCreateCommandHook.runHook(hookRunner, baseCommand);
     }
 
     @Override
-    protected final CompletionStage<?> runCreatedHook(final HookRunner hookRunner, final ShoppingList resource) {
-        return ShoppingListCreatedHook.runHook(hookRunner, resource);
+    protected final void runCreatedHook(final HookRunner hookRunner, final ShoppingList resource) {
+        ShoppingListCreatedHook.runHook(hookRunner, resource);
     }
 
     @Override

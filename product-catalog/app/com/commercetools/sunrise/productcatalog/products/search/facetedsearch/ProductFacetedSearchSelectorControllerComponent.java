@@ -21,7 +21,7 @@ public final class ProductFacetedSearchSelectorControllerComponent extends Abstr
         implements ControllerComponent, ProductProjectionSearchHook, ProductProjectionPagedSearchResultLoadedHook {
 
     @Nullable
-    private PagedSearchResult<ProductProjection> pagedSearchResult;
+    private PagedSearchResult<ProductProjection> result;
 
     @Inject
     public ProductFacetedSearchSelectorControllerComponent(final ProductFacetedSearchFormSettingsList settingsList,
@@ -31,23 +31,22 @@ public final class ProductFacetedSearchSelectorControllerComponent extends Abstr
 
     @Nullable
     @Override
-    protected PagedSearchResult<ProductProjection> getPagedSearchResult() {
-        return pagedSearchResult;
+    protected PagedSearchResult<ProductProjection> getResult() {
+        return result;
     }
 
     @Override
-    public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
+    public CompletionStage<ProductProjectionSearch> onProductProjectionSearch(final ProductProjectionSearch search) {
         final List<FacetedSearchExpression<ProductProjection>> facetedSearchExpressions = getSettings().buildFacetedSearchExpressions(Http.Context.current());
         if (!facetedSearchExpressions.isEmpty()) {
-            return search.plusFacetedSearch(facetedSearchExpressions);
+            return completedFuture(search.plusFacetedSearch(facetedSearchExpressions));
         } else {
-            return search;
+            return completedFuture(search);
         }
     }
 
     @Override
-    public CompletionStage<?> onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult) {
-        this.pagedSearchResult = pagedSearchResult;
-        return completedFuture(null);
+    public void onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult) {
+        result = pagedSearchResult;
     }
 }

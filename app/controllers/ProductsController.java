@@ -7,7 +7,7 @@ import com.commercetools.sunrise.core.renderers.TemplateEngine;
 import com.commercetools.sunrise.models.categories.CategoryFinder;
 import com.commercetools.sunrise.models.products.ProductFetcher;
 import com.commercetools.sunrise.models.products.ProductListFetcher;
-import com.commercetools.sunrise.productcatalog.products.ProductRecommendationsControllerComponent;
+import com.commercetools.sunrise.productcatalog.products.ProductSuggestionsComponent;
 import com.commercetools.sunrise.productcatalog.products.SunriseProductsController;
 import com.commercetools.sunrise.productcatalog.products.search.facetedsearch.ProductFacetedSearchSelectorControllerComponent;
 import com.commercetools.sunrise.productcatalog.products.search.pagination.ProductPaginationControllerComponent;
@@ -19,7 +19,7 @@ import javax.inject.Inject;
 @LogMetrics
 @NoCache
 @EnableComponents({
-        ProductRecommendationsControllerComponent.class,
+        ProductSuggestionsComponent.class,
         ProductSearchSortSelectorControllerComponent.class,
         ProductPaginationControllerComponent.class,
         ProductSearchBoxControllerComponent.class,

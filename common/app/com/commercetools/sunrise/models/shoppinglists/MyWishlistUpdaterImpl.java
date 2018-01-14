@@ -28,7 +28,7 @@ final class MyWishlistUpdaterImpl extends AbstractResourceUpdater<ShoppingList, 
     }
 
     @Override
-    protected ShoppingListUpdateCommand runUpdateCommandHook(final HookRunner hookRunner, final ShoppingListUpdateCommand baseCommand) {
+    protected CompletionStage<ShoppingListUpdateCommand> runUpdateCommandHook(final HookRunner hookRunner, final ShoppingListUpdateCommand baseCommand) {
         return ShoppingListUpdateCommandHook.runHook(hookRunner, baseCommand);
     }
 
@@ -39,7 +39,7 @@ final class MyWishlistUpdaterImpl extends AbstractResourceUpdater<ShoppingList, 
     }
 
     @Override
-    protected CompletionStage<?> runUpdatedHook(final HookRunner hookRunner, final ShoppingList resource) {
-        return ShoppingListUpdatedHook.runHook(hookRunner, resource);
+    protected void runUpdatedHook(final HookRunner hookRunner, final ShoppingList resource) {
+        ShoppingListUpdatedHook.runHook(hookRunner, resource);
     }
 }

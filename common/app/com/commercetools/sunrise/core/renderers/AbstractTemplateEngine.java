@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import play.data.Form;
-import play.libs.concurrent.HttpExecution;
 
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
@@ -30,12 +29,9 @@ public abstract class AbstractTemplateEngine implements TemplateEngine {
     }
 
     protected final CompletionStage<PageData> applyPageDataHooks(final PageData pageData) {
-        return hookContext.waitForHookedComponentsToFinish()
-                .thenComposeAsync(unused -> {
-                    final CompletionStage<PageData> pageDataStage = PageDataHook.runHook(hookContext, pageData);
-                    pageDataStage.thenAccept(AbstractTemplateEngine::logPageData);
-                    return pageDataStage;
-                }, HttpExecution.defaultContext());
+        final CompletionStage<PageData> pageDataStage = PageDataHook.runHook(hookContext, pageData);
+        pageDataStage.thenAccept(AbstractTemplateEngine::logPageData);
+        return pageDataStage;
     }
 
     private static void logPageData(final PageData pageData) {

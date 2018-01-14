@@ -7,9 +7,9 @@ import java.util.concurrent.CompletionStage;
 
 public interface ProductProjectionLoadedHook extends CtpEventHook {
 
-    CompletionStage<?> onProductProjectionLoaded(final ProductProjection productProjection);
+    void onProductProjectionLoaded(final ProductProjection productProjection);
 
-    static CompletionStage<?> runHook(final HookRunner hookRunner, final ProductProjection productProjection) {
-        return hookRunner.runEventHook(ProductProjectionLoadedHook.class, hook -> hook.onProductProjectionLoaded(productProjection));
+    static void runHook(final HookRunner hookRunner, final ProductProjection productProjection) {
+        hookRunner.runEventHook(ProductProjectionLoadedHook.class, hook -> hook.onProductProjectionLoaded(productProjection));
     }
 }

@@ -11,6 +11,9 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class ProductSearchBoxControllerComponent extends AbstractSearchBoxControllerComponent implements ControllerComponent, ProductProjectionSearchHook {
 
@@ -29,11 +32,11 @@ public final class ProductSearchBoxControllerComponent extends AbstractSearchBox
     }
 
     @Override
-    public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
+    public CompletionStage<ProductProjectionSearch> onProductProjectionSearch(final ProductProjectionSearch search) {
         if (searchText != null) {
-            return search.withText(searchText);
+            return completedFuture(search.withText(searchText));
         } else {
-            return search;
+            return completedFuture(search);
         }
     }
 }

@@ -25,17 +25,17 @@ public abstract class AbstractCustomerCreator extends AbstractResourceCreator<Cu
     }
 
     @Override
-    protected CustomerCreateCommand runCreateCommandHook(final HookRunner hookRunner, final CustomerCreateCommand baseCommand) {
+    protected final CompletionStage<CustomerCreateCommand> runCreateCommandHook(final HookRunner hookRunner, final CustomerCreateCommand baseCommand) {
         return CustomerCreateCommandHook.runHook(hookRunner, baseCommand);
     }
 
     @Override
-    protected CompletionStage<?> runCreatedHook(final HookRunner hookRunner, final CustomerSignInResult resource) {
-        return CustomerSignInResultLoadedHook.runHook(hookRunner, resource);
+    protected final void runCreatedHook(final HookRunner hookRunner, final CustomerSignInResult resource) {
+        CustomerSignInResultLoadedHook.runHook(hookRunner, resource);
     }
 
     @Override
-    protected CompletionStage<CustomerSignInResult> runActionHook(final HookRunner hookRunner, final CustomerSignInResult resource, final ExpansionPathContainer<CustomerSignInResult> expansionPathContainer) {
+    protected final CompletionStage<CustomerSignInResult> runActionHook(final HookRunner hookRunner, final CustomerSignInResult resource, final ExpansionPathContainer<CustomerSignInResult> expansionPathContainer) {
         return CustomerSignedInActionHook.runHook(hookRunner, resource, expansionPathContainer);
     }
 }

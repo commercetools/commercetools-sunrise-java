@@ -3,11 +3,13 @@ package com.commercetools.sunrise.core.hooks.ctprequests;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.customers.commands.CustomerChangePasswordCommand;
 
+import java.util.concurrent.CompletionStage;
+
 public interface CustomerChangePasswordCommandHook extends CtpRequestHook {
 
-    CustomerChangePasswordCommand onCustomerChangePasswordCommand(final CustomerChangePasswordCommand changePasswordCommand);
+    CompletionStage<CustomerChangePasswordCommand> onCustomerChangePasswordCommand(final CustomerChangePasswordCommand command);
 
-    static CustomerChangePasswordCommand runHook(final HookRunner hookRunner, final CustomerChangePasswordCommand changePasswordCommand) {
-        return hookRunner.runUnaryOperatorHook(CustomerChangePasswordCommandHook.class, CustomerChangePasswordCommandHook::onCustomerChangePasswordCommand, changePasswordCommand);
+    static CompletionStage<CustomerChangePasswordCommand> runHook(final HookRunner hookRunner, final CustomerChangePasswordCommand command) {
+        return hookRunner.runActionHook(CustomerChangePasswordCommandHook.class, CustomerChangePasswordCommandHook::onCustomerChangePasswordCommand, command);
     }
 }

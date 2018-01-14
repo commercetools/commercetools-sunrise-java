@@ -7,10 +7,10 @@ import java.util.concurrent.CompletionStage;
 
 public interface ShoppingListLoadedHook extends CtpEventHook {
 
-    CompletionStage<?> onShoppingListLoaded(ShoppingList shoppingList);
+    void onShoppingListLoaded(ShoppingList shoppingList);
 
-    static CompletionStage<?> runHook(final HookRunner hookRunner, final ShoppingList shoppingList) {
-        return hookRunner.runEventHook(ShoppingListLoadedHook.class, hook -> hook.onShoppingListLoaded(shoppingList));
+    static void runHook(final HookRunner hookRunner, final ShoppingList shoppingList) {
+        hookRunner.runEventHook(ShoppingListLoadedHook.class, hook -> hook.onShoppingListLoaded(shoppingList));
     }
 
 }

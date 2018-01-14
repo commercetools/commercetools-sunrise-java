@@ -25,17 +25,17 @@ public abstract class AbstractCartCreator extends AbstractResourceCreator<Cart, 
     }
 
     @Override
-    protected CartCreateCommand runCreateCommandHook(final HookRunner hookRunner, final CartCreateCommand baseCommand) {
+    protected final CompletionStage<CartCreateCommand> runCreateCommandHook(final HookRunner hookRunner, final CartCreateCommand baseCommand) {
         return CartCreateCommandHook.runHook(hookRunner, baseCommand);
     }
 
     @Override
-    protected CompletionStage<?> runCreatedHook(final HookRunner hookRunner, final Cart resource) {
-        return CartCreatedHook.runHook(hookRunner, resource);
+    protected final void runCreatedHook(final HookRunner hookRunner, final Cart resource) {
+        CartCreatedHook.runHook(hookRunner, resource);
     }
 
     @Override
-    protected CompletionStage<Cart> runActionHook(final HookRunner hookRunner, final Cart resource, final ExpansionPathContainer<Cart> expansionPathContainer) {
+    protected final CompletionStage<Cart> runActionHook(final HookRunner hookRunner, final Cart resource, final ExpansionPathContainer<Cart> expansionPathContainer) {
         return CartCreatedActionHook.runHook(hookRunner, resource, expansionPathContainer);
     }
 }

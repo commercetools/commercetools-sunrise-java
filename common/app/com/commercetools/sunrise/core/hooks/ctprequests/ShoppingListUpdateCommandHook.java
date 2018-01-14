@@ -3,11 +3,13 @@ package com.commercetools.sunrise.core.hooks.ctprequests;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.shoppinglists.commands.ShoppingListUpdateCommand;
 
+import java.util.concurrent.CompletionStage;
+
 public interface ShoppingListUpdateCommandHook extends CtpRequestHook {
 
-    ShoppingListUpdateCommand onCartUpdateCommand(ShoppingListUpdateCommand shoppingListUpdateCommand);
+    CompletionStage<ShoppingListUpdateCommand> onCartUpdateCommand(ShoppingListUpdateCommand command);
 
-    static ShoppingListUpdateCommand runHook(final HookRunner hookRunner, final ShoppingListUpdateCommand shoppingListUpdateCommand) {
-        return hookRunner.runUnaryOperatorHook(ShoppingListUpdateCommandHook.class, ShoppingListUpdateCommandHook::onCartUpdateCommand, shoppingListUpdateCommand);
+    static CompletionStage<ShoppingListUpdateCommand> runHook(final HookRunner hookRunner, final ShoppingListUpdateCommand command) {
+        return hookRunner.runActionHook(ShoppingListUpdateCommandHook.class, ShoppingListUpdateCommandHook::onCartUpdateCommand, command);
     }
 }

@@ -28,11 +28,11 @@ public abstract class AbstractFacetedSearchSelectorControllerComponent<T> extend
     }
 
     @Nullable
-    protected abstract PagedSearchResult<T> getPagedSearchResult();
+    protected abstract PagedSearchResult<T> getResult();
 
     @Override
     public CompletionStage<PageData> onPageDataReady(final PageData pageData) {
-        final PagedSearchResult<T> pagedSearchResult = getPagedSearchResult();
+        final PagedSearchResult<T> pagedSearchResult = getResult();
         if (pagedSearchResult != null) {
             pageData.put("facets", facetSelectorListViewModelFactory.create(pagedSearchResult));
         }

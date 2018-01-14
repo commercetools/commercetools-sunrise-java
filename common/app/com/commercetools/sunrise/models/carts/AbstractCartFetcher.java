@@ -26,12 +26,12 @@ public abstract class AbstractCartFetcher extends AbstractSingleResourceFetcher<
     }
 
     @Override
-    protected CartQuery runRequestHook(final CartQuery baseRequest) {
+    protected final CompletionStage<CartQuery> runRequestHook(final CartQuery baseRequest) {
         return CartQueryHook.runHook(getHookRunner(), baseRequest);
     }
 
     @Override
-    protected CompletionStage<?> runResourceLoadedHook(final Cart resource) {
-        return CartLoadedHook.runHook(getHookRunner(), resource);
+    protected final void runResourceLoadedHook(final Cart resource) {
+        CartLoadedHook.runHook(getHookRunner(), resource);
     }
 }

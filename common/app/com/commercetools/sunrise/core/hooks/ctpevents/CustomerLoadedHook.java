@@ -3,13 +3,11 @@ package com.commercetools.sunrise.core.hooks.ctpevents;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.customers.Customer;
 
-import java.util.concurrent.CompletionStage;
-
 public interface CustomerLoadedHook extends CtpEventHook {
 
-    CompletionStage<?> onCustomerLoaded(final Customer customer);
+    void onCustomerLoaded(final Customer customer);
 
-    static CompletionStage<?> runHook(final HookRunner hookRunner, final Customer customer) {
-        return hookRunner.runEventHook(CustomerLoadedHook.class, hook -> hook.onCustomerLoaded(customer));
+    static void runHook(final HookRunner hookRunner, final Customer customer) {
+        hookRunner.runEventHook(CustomerLoadedHook.class, hook -> hook.onCustomerLoaded(customer));
     }
 }

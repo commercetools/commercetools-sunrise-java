@@ -11,17 +11,20 @@ import io.sphere.sdk.shoppinglists.queries.ShoppingListQuery;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public final class ShoppingListLineItemExpansionComponent implements ControllerComponent, ShoppingListQueryHook, ShoppingListUpdateCommandHook {
 
     @Override
-    public ShoppingListQuery onShoppingListQuery(final ShoppingListQuery shoppingListQuery) {
-        return shoppingListQuery.plusExpansionPaths(expansionPaths());
+    public CompletionStage<ShoppingListQuery> onShoppingListQuery(final ShoppingListQuery query) {
+        return completedFuture(query.plusExpansionPaths(expansionPaths()));
     }
 
     @Override
-    public ShoppingListUpdateCommand onCartUpdateCommand(final ShoppingListUpdateCommand shoppingListUpdateCommand) {
-        return shoppingListUpdateCommand.plusExpansionPaths(expansionPaths());
+    public CompletionStage<ShoppingListUpdateCommand> onCartUpdateCommand(final ShoppingListUpdateCommand command) {
+        return completedFuture(command.plusExpansionPaths(expansionPaths()));
     }
 
     private List<ExpansionPath<ShoppingList>> expansionPaths() {

@@ -66,14 +66,15 @@ public class DefaultLogInFormAction extends AbstractFormAction<LogInFormData> im
     }
 
     protected final CompletionStage<CustomerSignInResult> executeWithHooks(final CustomerSignInCommand baseRequest) {
-        final CustomerSignInCommand request = CustomerSignInCommandHook.runHook(hookRunner, baseRequest);
-        return sphereClient.execute(request)
-                .thenComposeAsync(result -> CustomerSignedInActionHook.runHook(hookRunner, result, null)
-                                .thenApplyAsync(updatedResult -> {
-                                    CustomerSignInResultLoadedHook.runHook(hookRunner, updatedResult);
-                                    return updatedResult;
-                                }, HttpExecution.defaultContext()),
-                        HttpExecution.defaultContext());
+        return CustomerSignInCommandHook.runHook(hookRunner, baseRequest)
+                .thenCompose(sphereClient::execute)
+                .thenComposeAsync(this::applyHooks, HttpExecution.defaultContext());
+    }
+
+    private CompletionStage<CustomerSignInResult> applyHooks(final CustomerSignInResult result) {
+        final CompletionStage<CustomerSignInResult> finalResultStage = CustomerSignedInActionHook.runHook(hookRunner, result, null);
+        finalResultStage.thenAcceptAsync(finalResult -> CustomerSignInResultLoadedHook.runHook(hookRunner, finalResult), HttpExecution.defaultContext());
+        return finalResultStage;
     }
 
     private CompletableFuture<CustomerSignInResult> recoverIfMergingCartFailed(final LogInFormData formData,

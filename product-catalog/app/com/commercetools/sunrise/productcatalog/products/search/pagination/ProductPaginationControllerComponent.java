@@ -37,18 +37,17 @@ public final class ProductPaginationControllerComponent extends AbstractPaginati
     }
 
     @Override
-    public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
+    public CompletionStage<ProductProjectionSearch> onProductProjectionSearch(final ProductProjectionSearch search) {
         final Http.Context context = Http.Context.current();
         final long limit = getEntriesPerPageSettings().getLimit(context);
         final long offset = getPaginationSettings().getOffset(context, limit);
-        return search
+        return completedFuture(search
                 .withOffset(offset)
-                .withLimit(limit);
+                .withLimit(limit));
     }
 
     @Override
-    public CompletionStage<?> onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult) {
+    public void onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult) {
         this.pagedResult = pagedSearchResult;
-        return completedFuture(null);
     }
 }

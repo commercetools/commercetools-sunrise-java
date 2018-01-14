@@ -11,8 +11,7 @@ public final class CartComponentSupplier implements ComponentSupplier {
 
     public static List<Class<? extends Component>> get() {
         return asList(
-                CartStoringComponent.class,
-                CartDisplayingComponent.class,
+                CartComponent.class,
                 CartFieldsUpdaterComponent.class,
                 CartDiscountCodesExpansionComponent.class);
     }

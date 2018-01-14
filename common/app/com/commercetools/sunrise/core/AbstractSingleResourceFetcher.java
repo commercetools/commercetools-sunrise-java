@@ -26,20 +26,20 @@ public abstract class AbstractSingleResourceFetcher<T, R extends SphereRequest<P
     }
 
     protected CompletionStage<Optional<T>> executeRequest(final R baseRequest, final Function<P, Optional<T>> resourceSelector) {
-        final R request = runRequestHook(baseRequest);
-        return getSphereClient().execute(request)
-                .thenApply(resourceSelector)
-                .thenApplyAsync(resourceOpt -> {
-                    resourceOpt.ifPresent(this::runResourceLoadedHook);
-                    return resourceOpt;
-                }, HttpExecution.defaultContext());
+        return runRequestHook(baseRequest).thenCompose(request ->
+                getSphereClient().execute(request)
+                        .thenApply(resourceSelector)
+                        .thenApplyAsync(resourceOpt -> {
+                            resourceOpt.ifPresent(this::runResourceLoadedHook);
+                            return resourceOpt;
+                        }, HttpExecution.defaultContext()));
     }
 
     protected Optional<T> selectResource(final P pagedResult) {
         return pagedResult.head();
     }
 
-    protected abstract R runRequestHook(R baseRequest);
+    protected abstract CompletionStage<R> runRequestHook(R baseRequest);
 
-    protected abstract CompletionStage<?> runResourceLoadedHook(T resource);
+    protected abstract void runResourceLoadedHook(T resource);
 }

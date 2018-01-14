@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import java.util.concurrent.CompletionStage;
 
 /**
- * Action that runs the {@link HttpRequestStartedHook} and {@link HttpRequestEndedHook} and waits for all hooks to finish for the annotated request.
+ * Action that runs the {@link HttpRequestStartedHook} and {@link HttpRequestEndedHook}.
  */
 final class HooksEnabler extends Action<EnableHooks> {
 
@@ -28,8 +28,7 @@ final class HooksEnabler extends Action<EnableHooks> {
         // On creation of this action there isn't any HTTP context, necessary to initialize the HookRunner
         final HookContext hookRunner = injector.instanceOf(HookContext.class);
         HttpRequestStartedHook.runHook(hookRunner, ctx);
-        return delegate.call(ctx)
-                .thenCompose(result -> hookRunner.waitForHookedComponentsToFinish()
-                        .thenApplyAsync(unused -> HttpRequestEndedHook.runHook(hookRunner, result), HttpExecution.defaultContext()));
+        return delegate.call(ctx).thenComposeAsync(result ->
+                HttpRequestEndedHook.runHook(hookRunner, result), HttpExecution.defaultContext());
     }
 }

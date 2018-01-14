@@ -25,17 +25,17 @@ public abstract class AbstractOrderCreator extends AbstractResourceCreator<Order
     }
 
     @Override
-    protected OrderFromCartCreateCommand runCreateCommandHook(final HookRunner hookRunner, final OrderFromCartCreateCommand baseCommand) {
+    protected final CompletionStage<OrderFromCartCreateCommand> runCreateCommandHook(final HookRunner hookRunner, final OrderFromCartCreateCommand baseCommand) {
         return OrderFromCartCreateCommandHook.runHook(hookRunner, baseCommand);
     }
 
     @Override
-    protected CompletionStage<?> runCreatedHook(final HookRunner hookRunner, final Order resource) {
-        return OrderCreatedHook.runHook(hookRunner, resource);
+    protected final void runCreatedHook(final HookRunner hookRunner, final Order resource) {
+        OrderCreatedHook.runHook(hookRunner, resource);
     }
 
     @Override
-    protected CompletionStage<Order> runActionHook(final HookRunner hookRunner, final Order resource, final ExpansionPathContainer<Order> expansionPathContainer) {
+    protected final CompletionStage<Order> runActionHook(final HookRunner hookRunner, final Order resource, final ExpansionPathContainer<Order> expansionPathContainer) {
         return OrderCreatedActionHook.runHook(hookRunner, resource, expansionPathContainer);
     }
 }

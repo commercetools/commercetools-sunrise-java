@@ -7,9 +7,9 @@ import java.util.concurrent.CompletionStage;
 
 public interface OrderLoadedHook extends CtpEventHook {
 
-    CompletionStage<?> onOrderLoaded(final Order order);
+    void onOrderLoaded(final Order order);
 
-    static CompletionStage<?> runHook(final HookRunner hookRunner, final Order order) {
-        return hookRunner.runEventHook(OrderLoadedHook.class, hook -> hook.onOrderLoaded(order));
+    static void runHook(final HookRunner hookRunner, final Order order) {
+        hookRunner.runEventHook(OrderLoadedHook.class, hook -> hook.onOrderLoaded(order));
     }
 }

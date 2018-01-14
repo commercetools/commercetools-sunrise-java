@@ -33,7 +33,7 @@ public class CartFieldsUpdaterComponent implements ControllerComponent, CartLoad
     private final SphereClient sphereClient;
 
     @Inject
-    public CartFieldsUpdaterComponent(final CountryCode country, final SphereClient sphereClient) {
+    protected CartFieldsUpdaterComponent(final CountryCode country, final SphereClient sphereClient) {
         this.country = country;
         this.sphereClient = sphereClient;
     }

@@ -20,21 +20,22 @@ public abstract class AbstractResourceCreator<T, D, C extends CreateCommand<T> &
     }
 
     protected CompletionStage<T> executeRequest(final C baseCommand) {
-        final C command = runCreateCommandHook(getHookRunner(), baseCommand);
-        return getSphereClient().execute(command)
-                .thenComposeAsync(result -> runActionHook(getHookRunner(), result, command)
-                        .thenApplyAsync(updatedResource -> {
-                            runCreatedHook(getHookRunner(), updatedResource);
-                            return updatedResource;
-                        }, HttpExecution.defaultContext()),
-                        HttpExecution.defaultContext());
+        return runCreateCommandHook(getHookRunner(), baseCommand)
+                .thenCompose(command -> getSphereClient().execute(command)
+                        .thenComposeAsync(result -> applyHooks(command, result), HttpExecution.defaultContext()));
+    }
+
+    private CompletionStage<T> applyHooks(final C command, final T resource) {
+        final CompletionStage<T> finalResourceStage = runActionHook(getHookRunner(), resource, command);
+        finalResourceStage.thenAcceptAsync(finalResource -> runCreatedHook(getHookRunner(), finalResource), HttpExecution.defaultContext());
+        return finalResourceStage;
     }
 
     protected abstract C buildRequest(D draft);
 
-    protected abstract C runCreateCommandHook(HookRunner hookRunner, C baseCommand);
+    protected abstract CompletionStage<C> runCreateCommandHook(HookRunner hookRunner, C baseCommand);
 
-    protected abstract CompletionStage<?> runCreatedHook(HookRunner hookRunner, T resource);
+    protected abstract void runCreatedHook(HookRunner hookRunner, T resource);
 
     protected abstract CompletionStage<T> runActionHook(HookRunner hookRunner, T resource, ExpansionPathContainer<T> expansionPathContainer);
 }

@@ -3,11 +3,13 @@ package com.commercetools.sunrise.core.hooks.ctprequests;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
 
+import java.util.concurrent.CompletionStage;
+
 public interface CustomerSignInCommandHook extends CtpRequestHook {
 
-    CustomerSignInCommand onCustomerSignInCommand(final CustomerSignInCommand customerSignInCommand);
+    CompletionStage<CustomerSignInCommand> onCustomerSignInCommand(final CustomerSignInCommand command);
 
-    static CustomerSignInCommand runHook(final HookRunner hookRunner, final CustomerSignInCommand customerSignInCommand) {
-        return hookRunner.runUnaryOperatorHook(CustomerSignInCommandHook.class, CustomerSignInCommandHook::onCustomerSignInCommand, customerSignInCommand);
+    static CompletionStage<CustomerSignInCommand> runHook(final HookRunner hookRunner, final CustomerSignInCommand command) {
+        return hookRunner.runActionHook(CustomerSignInCommandHook.class, CustomerSignInCommandHook::onCustomerSignInCommand, command);
     }
 }

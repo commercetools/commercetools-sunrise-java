@@ -9,6 +9,10 @@ import io.sphere.sdk.carts.expansion.CartExpansionModel;
 import io.sphere.sdk.carts.expansion.PaymentInfoExpansionModel;
 import io.sphere.sdk.carts.queries.CartQuery;
 
+import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
 /**
  * This controller component expands the carts payment info with the payments.
  *
@@ -19,12 +23,12 @@ import io.sphere.sdk.carts.queries.CartQuery;
 public final class CartPaymentInfoExpansionComponent implements ControllerComponent, CartQueryHook, CartUpdateCommandHook {
 
     @Override
-    public CartQuery onCartQuery(final CartQuery cartQuery) {
-        return cartQuery.plusExpansionPaths(m -> m.paymentInfo().payments());
+    public CompletionStage<CartQuery> onCartQuery(final CartQuery query) {
+        return completedFuture(query.plusExpansionPaths(m -> m.paymentInfo().payments()));
     }
 
     @Override
-    public CartUpdateCommand onCartUpdateCommand(final CartUpdateCommand cartUpdateCommand){
-        return cartUpdateCommand.plusExpansionPaths(m -> m.paymentInfo().payments());
+    public CompletionStage<CartUpdateCommand> onCartUpdateCommand(final CartUpdateCommand command){
+        return completedFuture(command.plusExpansionPaths(m -> m.paymentInfo().payments()));
     }
 }

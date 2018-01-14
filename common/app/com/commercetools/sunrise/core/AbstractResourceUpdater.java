@@ -46,27 +46,29 @@ public abstract class AbstractResourceUpdater<T extends Resource<T>, C extends U
     }
 
     protected final CompletionStage<T> executeRequest(final T resource, final C baseCommand) {
-        final C command = runUpdateCommandHook(getHookRunner(), baseCommand);
-        if (!command.getUpdateActions().isEmpty()) {
-            return getSphereClient().execute(command)
-                    .thenComposeAsync(updatedResource -> runActionHook(getHookRunner(), updatedResource, command)
-                            .thenApplyAsync(finalUpdatedResource -> {
-                                runUpdatedHook(getHookRunner(), finalUpdatedResource);
-                                return finalUpdatedResource;
-                            }, HttpExecution.defaultContext()),
-                    HttpExecution.defaultContext());
-        } else {
-            return completedFuture(resource);
-        }
+        return runUpdateCommandHook(getHookRunner(), baseCommand).thenCompose(command -> {
+            if (command.getUpdateActions().isEmpty()) {
+                return completedFuture(resource);
+            } else {
+                return getSphereClient().execute(command).thenComposeAsync(updatedResource ->
+                        applyHooks(command, updatedResource), HttpExecution.defaultContext());
+            }
+        });
+    }
+
+    private CompletionStage<T> applyHooks(final C command, final T resource) {
+        final CompletionStage<T> finalResourceStage = runActionHook(getHookRunner(), resource, command);
+        finalResourceStage.thenAcceptAsync(finalResource -> runUpdatedHook(getHookRunner(), finalResource), HttpExecution.defaultContext());
+        return finalResourceStage;
     }
 
     protected abstract C buildUpdateCommand(final List<? extends UpdateAction<T>> updateActions, final T resource);
 
-    protected abstract C runUpdateCommandHook(HookRunner hookRunner, C baseCommand);
+    protected abstract CompletionStage<C> runUpdateCommandHook(HookRunner hookRunner, C baseCommand);
 
     protected abstract CompletionStage<T> runActionHook(HookRunner hookRunner, T resource, final ExpansionPathContainer<T> expansionPathContainer);
 
-    protected abstract CompletionStage<?> runUpdatedHook(HookRunner hookRunner, T resource);
+    protected abstract void runUpdatedHook(HookRunner hookRunner, T resource);
 
     protected CompletionStage<Optional<T>> handleConcurrentModification(final List<? extends UpdateAction<T>> updateActions,
                                                                         final ConcurrentModificationException exception) {

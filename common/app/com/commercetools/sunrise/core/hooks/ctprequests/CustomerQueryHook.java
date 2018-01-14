@@ -3,11 +3,13 @@ package com.commercetools.sunrise.core.hooks.ctprequests;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.customers.queries.CustomerQuery;
 
+import java.util.concurrent.CompletionStage;
+
 public interface CustomerQueryHook extends CtpRequestHook {
 
-    CustomerQuery onCustomerQuery(final CustomerQuery customerQuery);
+    CompletionStage<CustomerQuery> onCustomerQuery(final CustomerQuery query);
 
-    static CustomerQuery runHook(final HookRunner hookRunner, final CustomerQuery customerQuery) {
-        return hookRunner.runUnaryOperatorHook(CustomerQueryHook.class, CustomerQueryHook::onCustomerQuery, customerQuery);
+    static CompletionStage<CustomerQuery> runHook(final HookRunner hookRunner, final CustomerQuery query) {
+        return hookRunner.runActionHook(CustomerQueryHook.class, CustomerQueryHook::onCustomerQuery, query);
     }
 }

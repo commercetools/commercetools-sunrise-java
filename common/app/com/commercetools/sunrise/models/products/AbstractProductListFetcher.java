@@ -29,13 +29,13 @@ public abstract class AbstractProductListFetcher extends AbstractResourceFetcher
     }
 
     @Override
-    protected ProductProjectionSearch runRequestHook(final ProductProjectionSearch baseRequest) {
+    protected CompletionStage<ProductProjectionSearch> runRequestHook(final ProductProjectionSearch baseRequest) {
         return ProductProjectionSearchHook.runHook(getHookRunner(), baseRequest);
     }
 
     @Override
-    protected CompletionStage<?> runPagedResultLoadedHook(final PagedSearchResult<ProductProjection> result) {
-        return ProductProjectionPagedSearchResultLoadedHook.runHook(getHookRunner(), result);
+    protected void runPagedResultLoadedHook(final PagedSearchResult<ProductProjection> result) {
+        ProductProjectionPagedSearchResultLoadedHook.runHook(getHookRunner(), result);
     }
 
     // TODO Replace once implemented in JVM SDK (issue https://github.com/commercetools/commercetools-jvm-sdk/issues/1662)

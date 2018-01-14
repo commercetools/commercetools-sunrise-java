@@ -10,9 +10,9 @@ import java.util.concurrent.CompletionStage;
  */
 public interface CustomerTokenCreatedHook extends CtpEventHook {
 
-    CompletionStage<?> onCustomerTokenCreated(CustomerToken customerToken);
+    void onCustomerTokenCreated(CustomerToken customerToken);
 
-    static CompletionStage<?> runHook(final HookRunner hookRunner, final CustomerToken customerToken) {
-        return hookRunner.runEventHook(CustomerTokenCreatedHook.class, hook -> hook.onCustomerTokenCreated(customerToken));
+    static void runHook(final HookRunner hookRunner, final CustomerToken customerToken) {
+        hookRunner.runEventHook(CustomerTokenCreatedHook.class, hook -> hook.onCustomerTokenCreated(customerToken));
     }
 }

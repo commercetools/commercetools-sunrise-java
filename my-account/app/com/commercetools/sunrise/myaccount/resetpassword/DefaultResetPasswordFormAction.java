@@ -51,6 +51,6 @@ public class DefaultResetPasswordFormAction extends AbstractFormAction<ResetPass
     }
 
     protected final CompletionStage<Customer> executeWithHooks(final CustomerPasswordResetCommand baseCommand) {
-        return sphereClient.execute(CustomerPasswordResetCommandHook.runHook(hookRunner, baseCommand));
+        return CustomerPasswordResetCommandHook.runHook(hookRunner, baseCommand).thenCompose(sphereClient::execute);
     }
 }

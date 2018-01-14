@@ -30,12 +30,12 @@ public abstract class AbstractShoppingListFetcher extends AbstractSingleResource
     }
 
     @Override
-    protected ShoppingListQuery runRequestHook(final ShoppingListQuery baseRequest) {
+    protected final CompletionStage<ShoppingListQuery> runRequestHook(final ShoppingListQuery baseRequest) {
         return ShoppingListQueryHook.runHook(getHookRunner(), baseRequest);
     }
 
     @Override
-    protected CompletionStage<?> runResourceLoadedHook(final ShoppingList resource) {
-        return ShoppingListLoadedHook.runHook(getHookRunner(), resource);
+    protected final void runResourceLoadedHook(final ShoppingList resource) {
+        ShoppingListLoadedHook.runHook(getHookRunner(), resource);
     }
 }

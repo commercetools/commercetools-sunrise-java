@@ -10,9 +10,9 @@ import java.util.concurrent.CompletionStage;
  */
 public interface CartUpdatedHook extends CtpEventHook {
 
-    CompletionStage<?> onCartUpdated(final Cart cart);
+    void onCartUpdated(final Cart cart);
 
-    static CompletionStage<?> runHook(final HookRunner hookRunner, final Cart cart) {
-        return hookRunner.runEventHook(CartUpdatedHook.class, hook -> hook.onCartUpdated(cart));
+    static void runHook(final HookRunner hookRunner, final Cart cart) {
+        hookRunner.runEventHook(CartUpdatedHook.class, hook -> hook.onCartUpdated(cart));
     }
 }

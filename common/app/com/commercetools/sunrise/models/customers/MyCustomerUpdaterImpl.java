@@ -28,7 +28,7 @@ final class MyCustomerUpdaterImpl extends AbstractResourceUpdater<Customer, Cust
     }
 
     @Override
-    protected CustomerUpdateCommand runUpdateCommandHook(final HookRunner hookRunner, final CustomerUpdateCommand baseCommand) {
+    protected CompletionStage<CustomerUpdateCommand> runUpdateCommandHook(final HookRunner hookRunner, final CustomerUpdateCommand baseCommand) {
         return CustomerUpdateCommandHook.runHook(hookRunner, baseCommand);
     }
 
@@ -39,7 +39,7 @@ final class MyCustomerUpdaterImpl extends AbstractResourceUpdater<Customer, Cust
     }
 
     @Override
-    protected CompletionStage<?> runUpdatedHook(final HookRunner hookRunner, final Customer resource) {
-        return CustomerUpdatedHook.runHook(hookRunner, resource);
+    protected void runUpdatedHook(final HookRunner hookRunner, final Customer resource) {
+        CustomerUpdatedHook.runHook(hookRunner, resource);
     }
 }

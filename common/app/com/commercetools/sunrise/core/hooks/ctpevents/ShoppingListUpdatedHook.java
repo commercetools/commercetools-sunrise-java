@@ -3,14 +3,12 @@ package com.commercetools.sunrise.core.hooks.ctpevents;
 import com.commercetools.sunrise.core.hooks.HookRunner;
 import io.sphere.sdk.shoppinglists.ShoppingList;
 
-import java.util.concurrent.CompletionStage;
-
 public interface ShoppingListUpdatedHook extends CtpEventHook {
 
-    CompletionStage<?> onShoppingListUpdated(ShoppingList shoppingList);
+    void onShoppingListUpdated(ShoppingList shoppingList);
 
-    static CompletionStage<?> runHook(final HookRunner hookRunner, final ShoppingList shoppingList) {
-        return hookRunner.runEventHook(ShoppingListUpdatedHook.class, hook -> hook.onShoppingListUpdated(shoppingList));
+    static void runHook(final HookRunner hookRunner, final ShoppingList shoppingList) {
+        hookRunner.runEventHook(ShoppingListUpdatedHook.class, hook -> hook.onShoppingListUpdated(shoppingList));
     }
 
 }

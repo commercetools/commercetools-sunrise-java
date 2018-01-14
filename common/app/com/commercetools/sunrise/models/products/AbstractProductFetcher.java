@@ -38,17 +38,17 @@ public abstract class AbstractProductFetcher extends AbstractSingleResourceFetch
     }
 
     @Override
-    protected final ProductProjectionQuery runRequestHook(final ProductProjectionQuery baseRequest) {
+    protected final CompletionStage<ProductProjectionQuery> runRequestHook(final ProductProjectionQuery baseRequest) {
         return ProductProjectionQueryHook.runHook(getHookRunner(), baseRequest);
     }
 
     @Override
-    protected final CompletionStage<?> runResourceLoadedHook(final ProductProjection resource) {
-        return ProductProjectionLoadedHook.runHook(getHookRunner(), resource);
+    protected final void runResourceLoadedHook(final ProductProjection resource) {
+        ProductProjectionLoadedHook.runHook(getHookRunner(), resource);
     }
 
-    protected final CompletionStage<?> runProductVariantLoadedHook(final ProductWithVariant productWithVariant) {
-        return ProductWithVariantLoadedHook.runHook(getHookRunner(), productWithVariant);
+    protected final void runProductVariantLoadedHook(final ProductWithVariant productWithVariant) {
+        ProductWithVariantLoadedHook.runHook(getHookRunner(), productWithVariant);
     }
 
     protected Optional<ProductProjection> selectProduct(final PagedQueryResult<ProductProjection> pagedResult,

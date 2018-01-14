@@ -9,6 +9,10 @@ import io.sphere.sdk.carts.expansion.CartExpansionModel;
 import io.sphere.sdk.carts.expansion.DiscountCodeInfoExpansionModel;
 import io.sphere.sdk.carts.queries.CartQuery;
 
+import java.util.concurrent.CompletionStage;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
 /**
  * This controller component expands the carts discount code infos with the discount codes.
  *
@@ -19,12 +23,12 @@ import io.sphere.sdk.carts.queries.CartQuery;
 public final class CartDiscountCodesExpansionComponent implements ControllerComponent, CartQueryHook, CartUpdateCommandHook {
 
     @Override
-    public CartQuery onCartQuery(final CartQuery cartQuery) {
-        return cartQuery.plusExpansionPaths(m -> m.discountCodes().discountCode());
+    public CompletionStage<CartQuery> onCartQuery(final CartQuery query) {
+        return completedFuture(query.plusExpansionPaths(m -> m.discountCodes().discountCode()));
     }
 
     @Override
-    public CartUpdateCommand onCartUpdateCommand(final CartUpdateCommand cartUpdateCommand){
-        return cartUpdateCommand.plusExpansionPaths(m -> m.discountCodes().discountCode());
+    public CompletionStage<CartUpdateCommand> onCartUpdateCommand(final CartUpdateCommand command){
+        return completedFuture(command.plusExpansionPaths(m -> m.discountCodes().discountCode()));
     }
 }

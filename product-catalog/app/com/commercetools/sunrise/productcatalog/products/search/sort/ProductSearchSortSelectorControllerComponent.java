@@ -37,18 +37,17 @@ public final class ProductSearchSortSelectorControllerComponent extends Abstract
     }
 
     @Override
-    public ProductProjectionSearch onProductProjectionSearch(final ProductProjectionSearch search) {
+    public CompletionStage<ProductProjectionSearch> onProductProjectionSearch(final ProductProjectionSearch search) {
         final List<SortExpression<ProductProjection>> sortExpressions = getSortFormSettings().buildSearchExpressions(Http.Context.current());
         if (!sortExpressions.isEmpty()) {
-            return search.plusSort(sortExpressions);
+            return completedFuture(search.plusSort(sortExpressions));
         } else {
-            return search;
+            return completedFuture(search);
         }
     }
 
     @Override
-    public CompletionStage<?> onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult) {
+    public void onProductProjectionPagedSearchResultLoaded(final PagedSearchResult<ProductProjection> pagedSearchResult) {
         this.pagedResult = pagedSearchResult;
-        return completedFuture(null);
     }
 }

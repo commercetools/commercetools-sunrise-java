@@ -67,10 +67,9 @@ public class DefaultResetPasswordRequestFormAction extends AbstractFormAction<Re
     }
 
     protected final CompletionStage<CustomerToken> executeRequestWithHooks(final CustomerCreatePasswordTokenCommand baseCommand) {
-        final CustomerCreatePasswordTokenCommand command = CustomerCreatePasswordTokenCommandHook.runHook(hookRunner, baseCommand);
-        return sphereClient.execute(command).thenApplyAsync(customerToken -> {
-            CustomerTokenCreatedHook.runHook(hookRunner, customerToken);
-            return customerToken;
-        }, HttpExecution.defaultContext());
+        final CompletionStage<CustomerToken> resultStage = CustomerCreatePasswordTokenCommandHook.runHook(hookRunner, baseCommand)
+                .thenCompose(sphereClient::execute);
+        resultStage.thenAcceptAsync(result -> CustomerTokenCreatedHook.runHook(hookRunner, result), HttpExecution.defaultContext());
+        return resultStage;
     }
 }

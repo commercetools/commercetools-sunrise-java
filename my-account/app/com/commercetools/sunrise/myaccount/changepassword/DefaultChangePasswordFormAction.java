@@ -60,11 +60,9 @@ final class DefaultChangePasswordFormAction extends AbstractFormAction<ChangePas
     }
 
     protected final CompletionStage<Customer> executeWithHooks(final CustomerChangePasswordCommand baseCommand) {
-        final CustomerChangePasswordCommand command = CustomerChangePasswordCommandHook.runHook(hookRunner, baseCommand);
-        return sphereClient.execute(command)
-                .thenApplyAsync(updatedCustomer -> {
-                    CustomerChangedPasswordHook.runHook(hookRunner, updatedCustomer);
-                    return updatedCustomer;
-                }, HttpExecution.defaultContext());
+        final CompletionStage<Customer> resultStage = CustomerChangePasswordCommandHook.runHook(hookRunner, baseCommand)
+                .thenCompose(sphereClient::execute);
+        resultStage.thenAcceptAsync(resource -> CustomerChangedPasswordHook.runHook(hookRunner, resource), HttpExecution.defaultContext());
+        return resultStage;
     }
 }

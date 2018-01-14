@@ -28,7 +28,7 @@ final class MyCartUpdaterImpl extends AbstractResourceUpdater<Cart, CartUpdateCo
     }
 
     @Override
-    protected CartUpdateCommand runUpdateCommandHook(final HookRunner hookRunner, final CartUpdateCommand baseCommand) {
+    protected CompletionStage<CartUpdateCommand> runUpdateCommandHook(final HookRunner hookRunner, final CartUpdateCommand baseCommand) {
         return CartUpdateCommandHook.runHook(hookRunner, baseCommand);
     }
 
@@ -39,7 +39,7 @@ final class MyCartUpdaterImpl extends AbstractResourceUpdater<Cart, CartUpdateCo
     }
 
     @Override
-    protected CompletionStage<?> runUpdatedHook(final HookRunner hookRunner, final Cart resource) {
-        return CartUpdatedHook.runHook(hookRunner, resource);
+    protected void runUpdatedHook(final HookRunner hookRunner, final Cart resource) {
+        CartUpdatedHook.runHook(hookRunner, resource);
     }
 }

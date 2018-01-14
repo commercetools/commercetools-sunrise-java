@@ -5,13 +5,11 @@ import com.commercetools.sunrise.core.components.ComponentSupplier;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 public final class CustomerComponentSupplier implements ComponentSupplier {
 
     public static List<Class<? extends Component>> get() {
-        return asList(
-                CustomerStoringComponent.class,
-                CustomerDisplayingComponent.class);
+        return singletonList(CustomerComponent.class);
     }
 }
