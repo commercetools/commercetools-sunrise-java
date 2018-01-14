@@ -1,0 +1,12 @@
+<!-- start checkout/remove-line-item-form.hbs -->
+<form action="{{@root.meta._links.deleteLineItem.href}}" method="post">
+    <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+    <input type="hidden" name="lineItemId" value="{{lineItemId}}">
+    <button type="submit" id="cart-delete-button-{{@index}}">
+    <span>
+        <img class="cart-action-icon" src="{{@root.meta.assetsPath}}img/delete-1-421d04c332afe6d751d51e28934399fd.png" alt="delete">
+        {{i18n "main:form.delete"}}
+    </span>
+    </button>
+</form>
+<!-- end checkout/remove-line-item-form.hbs -->

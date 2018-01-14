@@ -26,13 +26,13 @@
             <!-- End -->
 
             <li class="list-item-store">
-              <a href="{{@root.meta._links.storeLocator.href}}" class="store-select icon-marker">
+              <a href="/stores" class="store-select icon-marker">
                 <span class="hidden-xs">{{i18n "main:header.stores"}}</span>
               </a>
             </li>
 
             <li class="list-item-help">
-              <a href="{{@root.meta._links.help.href}}" class="link-help">{{i18n "main:header.help"}}</a>
+              <a href="/help" class="link-help">{{i18n "main:header.help"}}</a>
             </li>
 
             <li class="list-item-call">
@@ -45,18 +45,18 @@
 
             {{#if customer}}
                 <li class="list-item-user">
-                    <a href="{{@root.meta._links.logOut.href}}" class="link-user">
+                    <a href="/logout" class="link-user">
                         <span>{{i18n "main:header.signOut"}}</span>
                     </a>
                 </li>
                 <li class="list-item-user">
-                    <a href="{{@root.meta._links.myAccount.href}}" class="link-user icon-user">
+                    <a href="/user" class="link-user icon-user">
                         <span class="hidden-xs hidden-sm">{{customer.name.firstName}}</span>
                     </a>
                 </li>
             {{else}}
                 <li class="list-item-user">
-                    <a href="{{@root.meta._links.signIn.href}}" class="link-user icon-user">
+                    <a href="/login" class="link-user icon-user">
                         <span class="hidden-xs hidden-sm">{{i18n "main:header.signIn"}}</span>
                     </a>
                 </li>

@@ -1,0 +1,10 @@
+<!-- start catalog/pop/display-selector.hbs -->
+<p class="item-count">{{i18n "catalog:displaySelector.title"}}</p>
+<div class="custom-select-wrapper">
+	<select name="{{displaySelector.key}}" class="select-product-detail" required>
+	  {{#each displaySelector.list}}
+	    <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+	  {{/each}}
+	</select>
+</div>
+<!-- end catalog/pop/display-selector.hbs -->

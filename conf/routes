@@ -36,9 +36,9 @@ GET         /                      @controllers.HomeController.show
 # ~~~~~
 
 # Changes the language of the app
-POST        /changeLanguage        @com.commercetools.sunrise.controllers.LocalizationController.changeLanguage(language: String)
+POST        /language               @com.commercetools.sunrise.controllers.LocalizationController.changeLanguage
 # Changes the country of the app
-POST        /changeCountry         @com.commercetools.sunrise.controllers.LocalizationController.changeCountry(country: String)
+POST        /country                @com.commercetools.sunrise.controllers.LocalizationController.changeCountry
 
 
 # CART
@@ -85,13 +85,13 @@ GET         /checkout/thankyou                                 @controllers.Chec
 # ~~~~~
 
 # Shows login and signup form
-GET         /user/login                                        @controllers.AuthenticationController.show
+GET         /login                                        @controllers.AuthenticationController.show
 # Logs in the user
-POST        /user/login                                        @controllers.AuthenticationController.logIn
+POST        /login                                        @controllers.AuthenticationController.logIn
 # Registers the user
-POST        /user/signup                                       @controllers.AuthenticationController.signUp
+POST        /signup                                       @controllers.AuthenticationController.signUp
 # Logs out the user
-GET         /user/logout                                       @controllers.AuthenticationController.logOut
+GET         /logout                                       @controllers.AuthenticationController.logOut
 
 # PASSWORD RECOVERY
 # ~~~~~

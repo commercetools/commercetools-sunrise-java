@@ -1,0 +1,5 @@
+<!-- start components/components-include.hbs -->
+{{#each content.components}}
+  {{> (lookup . 'templateName') }}
+{{/each}}
+<!-- end components/components-include.hbs -->

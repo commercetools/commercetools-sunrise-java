@@ -2,8 +2,8 @@
 <div class="location-dropdown-xs">
 {{#withLanguageOptions}}
 {{#if this.[1]}}
-  <form id="form-select-language-mobile" action="{{@root.meta._links.selectLanguage.href}}" method="POST">
-    <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+  <form id="form-select-language-mobile" action="/language" method="POST">
+    <input type="hidden" name="csrfToken" value="{{csrfToken}}"/>
     <ul>
       <li>
         <select name="language" id="language-select-mobile" class="select location-select">
@@ -18,7 +18,7 @@
 {{/withLanguageOptions}}
 {{#withCountryOptions}}
 {{#if this.[1]}}
-  <form id="form-select-country-mobile" action="{{@root.meta._links.selectCountry.href}}" method="POST">
+  <form id="form-select-country-mobile" action="/country" method="POST">
     <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
     <ul>
       <li>

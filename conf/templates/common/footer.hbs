@@ -1,0 +1,73 @@
+<!-- start common/footer.hbs -->
+{{> components/components-include}}
+<div class="footer">
+  <div id="footer" class="container">
+    <div class="row text-uppercase">
+      <div class="col-sm-2">
+        <div class="footer-col">
+          <ul>
+            <li class="footer-title hidden-xs">{{i18n "main:footer.customerCare"}}</li>
+            <li><a href="{{@root.meta._links.contactUs.href}}">{{i18n "main:footer.contactUs"}}</a></li>
+            <li><a href="{{@root.meta._links.help.href}}">{{i18n "main:footer.help"}}</a></li>
+            <li><a href="{{@root.meta._links.shipping.href}}">{{i18n "main:footer.shipping"}}</a></li>
+            <li><a href="{{@root.meta._links.returns.href}}">{{i18n "main:footer.returns"}}</a></li>
+            <li><a href="{{@root.meta._links.sizeGuide.href}}">{{i18n "main:footer.sizeGuide"}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-2 hidden-xs">
+        <div class="footer-col">
+          <ul>
+            <li class="footer-title hidden-xs">{{i18n "main:footer.aboutUs"}}</li>
+            <li><a href="{{@root.meta._links.ourStory.href}}">{{i18n "main:footer.ourStory"}}</a></li>
+            <li><a href="{{@root.meta._links.careers.href}}">{{i18n "main:footer.careers"}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-2 hidden-xs">
+        <div class="footer-col">
+          <ul>
+            <li class="footer-title hidden-xs">{{i18n "main:footer.shortcuts"}}</li>
+            <li><a href="{{@root.meta._links.myAccount.href}}">{{i18n "main:footer.myAccount"}}</a></li>
+            <li><a href="{{@root.meta._links.storeLocator.href}}">{{i18n "main:footer.storeLocator"}}</a></li>
+            <li><a href="{{@root.meta._links.giftCards.href}}">{{i18n "main:footer.giftCards"}}</a></li>
+            <li><a href="{{@root.meta._links.payment.href}}">{{i18n "main:footer.payment"}}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-6 text-center newsletter-box">
+        <div class="row">
+          <div class="col-sm-5 text-left footer-title-yellow">
+            <p>{{i18n "main:footer.joinNewsletter"}}</p>
+          </div>
+          <div class="col-sm-7">
+            <form action="{{@root.meta._links.newsletter.href}}" method="POST" id="form-newsletter" class="email-submit">
+              <input type="hidden" name="csrfToken" value="{{@root.meta.csrfToken}}"/>
+              <input name="email" id="newsletter-input" class="email-box" type="email" placeholder="{{i18n "main:footer.yourEmail"}}" required>
+              <button id="newsletter-button" type="submit" class="search-button">
+                <span class="icon-font icon-next"></span>
+                <span class="sr-only">{{i18n "main:footer.subscribe"}}</span>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-8 text-left card-info footer-title">
+            <p>{{i18n "main:footer.paySecure"}}</p>
+            <img src="{{@root.meta.assetsPath}}img/cards-ca1ec3929bc965b45e27e7ae0a14bba6.png" alt="payment types" class="img-responsive payment-cards">
+          </div>
+          <div class="col-sm-4 text-left card-info footer-title">
+            <p>{{i18n "main:footer.followUs"}}</p>
+            <ul class="social-icons">
+              <a href=""><li><img class="social-icon" src="{{@root.meta.assetsPath}}img/Facebook-9de8db4e2bf8450449c8517cf6cfad56.png" alt="Facebook"></li></a>
+              <a href=""><li><img class="social-icon" src="{{@root.meta.assetsPath}}img/Pinterest-a2832f1ad511910bfa594edaf077fe21.png" alt="Pinterest"></li></a>
+              <a href=""><li><img class="social-icon" src="{{@root.meta.assetsPath}}img/Google-ea49d8ca14a1832f21b5ec28f4411e42.png" alt="Google+"></li></a>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{> common/sub-footer}}
+<!-- end common/footer.hbs -->

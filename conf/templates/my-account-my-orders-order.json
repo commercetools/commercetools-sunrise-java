@@ -1,0 +1,1909 @@
+{
+  "header": {
+    "title": "Sunrise - Page Title",
+    "location": {
+      "language": [
+        {
+          "label": "German",
+          "value": "de"
+        },
+        {
+          "label": "English",
+          "value": "en",
+          "selected": true
+        },
+        {
+          "label": "French",
+          "value": "fr"
+        }
+      ],
+      "country": [
+        {
+          "label": "Germany",
+          "value": "DE"
+        },
+        {
+          "label": "United Kingdom (UK)",
+          "value": "United Kingdom (UK)",
+          "selected": true
+        },
+        {
+          "label": "France",
+          "value": "FR"
+        }
+      ]
+    },
+    "miniCart": {
+      "totalItems": 12,
+      "totalPrice": "117,00 €",
+      "lineItems": {
+        "list": [
+          {
+            "lineItemId": "123456",
+            "quantity": 1,
+            "totalPrice": "49,00 €",
+            "variant": {
+              "name": "Enditatem Product Name Optional very long line two",
+              "image": "../../assets/img/blue-jacket-99aa6f1193c7bc3580827175df3c3c73.jpg",
+              "url": "pdp.html",
+              "sku": "Sunrise #SUN123456",
+              "priceOld": "100,00 €",
+              "price": "49,00 €"
+            },
+            "attributes": [
+              {
+                "name": "Color",
+                "key": "color",
+                "value": "Navy Blue"
+              },
+              {
+                "name": "Size",
+                "key": "size",
+                "value": "M"
+              }
+            ]
+          },
+          {
+            "lineItemId": "123456",
+            "quantity": 1,
+            "totalPrice": "49,00 €",
+            "variant": {
+              "name": "Enditatem Product Name Optional very long line two",
+              "image": "../../assets/img/blue-jacket-99aa6f1193c7bc3580827175df3c3c73.jpg",
+              "url": "pdp.html",
+              "sku": "Sunrise #SUN123456",
+              "priceOld": "100,00 €",
+              "price": "49,00 €"
+            },
+            "attributes": [
+              {
+                "name": "Color",
+                "key": "color",
+                "value": "Navy Blue"
+              },
+              {
+                "name": "Size",
+                "key": "size",
+                "value": "M"
+              }
+            ]
+          },
+          {
+            "lineItemId": "123456",
+            "quantity": 1,
+            "totalPrice": "49,00 €",
+            "variant": {
+              "name": "Enditatem Product Name Optional very long line two",
+              "image": "../../assets/img/blue-jacket-99aa6f1193c7bc3580827175df3c3c73.jpg",
+              "url": "pdp.html",
+              "sku": "Sunrise #SUN123456",
+              "priceOld": "100,00 €",
+              "price": "49,00 €"
+            },
+            "attributes": [
+              {
+                "name": "Color",
+                "key": "color",
+                "value": "Navy Blue"
+              },
+              {
+                "name": "Size",
+                "key": "size",
+                "value": "M"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "navMenu": {
+      "new": {
+        "text": "New",
+        "url": ""
+      },
+      "sale": {
+        "text": "Sale",
+        "url": ""
+      },
+      "categories": [
+        {
+          "text": "Women",
+          "url": "",
+          "children": [
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Men",
+          "url": "",
+          "children": [
+            {
+              "text": "Shoes",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Shoes",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Shoes",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Accessories",
+          "url": "",
+          "children": [
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Belts",
+              "url": "",
+              "children": [
+                {
+                  "text": "Basic example",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Vertical variation",
+                  "url": ""
+                }
+              ]
+            },
+            {
+              "text": "Glasses",
+              "url": "",
+              "children": [
+                {
+                  "text": "Lorem",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                },
+                {
+                  "text": "Button toolbar",
+                  "url": ""
+                },
+                {
+                  "text": "Sizing",
+                  "url": ""
+                },
+                {
+                  "text": "Nesting",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation items will be truncated",
+                  "url": ""
+                },
+                {
+                  "text": "Very long navigation item",
+                  "url": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "brands": {
+        "text": "Brands",
+        "url": "",
+        "children": [
+          {
+            "text": "Shoes",
+            "url": "",
+            "children": [
+              {
+                "text": "Basic example",
+                "url": ""
+              },
+              {
+                "text": "Button toolbar",
+                "url": ""
+              },
+              {
+                "text": "Sizing",
+                "url": ""
+              },
+              {
+                "text": "Nesting",
+                "url": ""
+              },
+              {
+                "text": "Vertical variation",
+                "url": ""
+              }
+            ]
+          },
+          {
+            "text": "Glasses",
+            "url": "",
+            "children": [
+              {
+                "text": "Lorem",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation item",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation items will be truncated",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation item",
+                "url": ""
+              },
+              {
+                "text": "Button toolbar",
+                "url": ""
+              },
+              {
+                "text": "Sizing",
+                "url": ""
+              },
+              {
+                "text": "Nesting",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation items will be truncated",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation item",
+                "url": ""
+              }
+            ]
+          },
+          {
+            "text": "Shoes",
+            "url": "",
+            "children": [
+              {
+                "text": "Basic example",
+                "url": ""
+              },
+              {
+                "text": "Button toolbar",
+                "url": ""
+              },
+              {
+                "text": "Sizing",
+                "url": ""
+              },
+              {
+                "text": "Nesting",
+                "url": ""
+              },
+              {
+                "text": "Vertical variation",
+                "url": ""
+              }
+            ]
+          },
+          {
+            "text": "Glasses",
+            "url": "",
+            "children": [
+              {
+                "text": "Lorem",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation item",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation items will be truncated",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation item",
+                "url": ""
+              },
+              {
+                "text": "Button toolbar",
+                "url": ""
+              },
+              {
+                "text": "Sizing",
+                "url": ""
+              },
+              {
+                "text": "Nesting",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation items will be truncated",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation item",
+                "url": ""
+              }
+            ]
+          },
+          {
+            "text": "Shoes",
+            "url": "",
+            "children": [
+              {
+                "text": "Basic example",
+                "url": ""
+              },
+              {
+                "text": "Button toolbar",
+                "url": ""
+              },
+              {
+                "text": "Sizing",
+                "url": ""
+              },
+              {
+                "text": "Nesting",
+                "url": ""
+              },
+              {
+                "text": "Vertical variation",
+                "url": ""
+              }
+            ]
+          },
+          {
+            "text": "Glasses",
+            "url": "",
+            "children": [
+              {
+                "text": "Lorem",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation item",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation items will be truncated",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation item",
+                "url": ""
+              },
+              {
+                "text": "Button toolbar",
+                "url": ""
+              },
+              {
+                "text": "Sizing",
+                "url": ""
+              },
+              {
+                "text": "Nesting",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation items will be truncated",
+                "url": ""
+              },
+              {
+                "text": "Very long navigation item",
+                "url": ""
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "footer": {},
+  "content": {
+    "order": {
+      "orderNumber": "01445678",
+      "orderDate": "Nov 10, 2015",
+      "customerEmail": "thedoctor@commercetools.com",
+      "totalPrice": "150.00 €",
+      "salesTax": "23.95 €",
+      "promoCode": "Sunny Sale",
+      "subtotalPrice": "147.00 €",
+      "lineItems": {
+        "list": [
+          {
+            "lineItemId": "123456",
+            "quantity": 1,
+            "totalPrice": "49,00 €",
+            "variant": {
+              "name": "Enditatem Product Name Optional very long line two",
+              "image": "../../assets/img/blue-jacket-99aa6f1193c7bc3580827175df3c3c73.jpg",
+              "url": "pdp.html",
+              "sku": "Sunrise #SUN123456",
+              "priceOld": "100,00 €",
+              "price": "49,00 €"
+            },
+            "attributes": [
+              {
+                "name": "Color",
+                "key": "color",
+                "value": "Navy Blue"
+              },
+              {
+                "name": "Size",
+                "key": "size",
+                "value": "M"
+              }
+            ]
+          },
+          {
+            "lineItemId": "123456",
+            "quantity": 1,
+            "totalPrice": "49,00 €",
+            "variant": {
+              "name": "Enditatem Product Name Optional very long line two",
+              "image": "../../assets/img/blue-jacket-99aa6f1193c7bc3580827175df3c3c73.jpg",
+              "url": "pdp.html",
+              "sku": "Sunrise #SUN123456",
+              "priceOld": "100,00 €",
+              "price": "49,00 €"
+            },
+            "attributes": [
+              {
+                "name": "Color",
+                "key": "color",
+                "value": "Navy Blue"
+              },
+              {
+                "name": "Size",
+                "key": "size",
+                "value": "M"
+              }
+            ]
+          },
+          {
+            "lineItemId": "123456",
+            "quantity": 1,
+            "totalPrice": "49,00 €",
+            "variant": {
+              "name": "Enditatem Product Name Optional very long line two",
+              "image": "../../assets/img/blue-jacket-99aa6f1193c7bc3580827175df3c3c73.jpg",
+              "url": "pdp.html",
+              "sku": "Sunrise #SUN123456",
+              "priceOld": "100,00 €",
+              "price": "49,00 €"
+            },
+            "attributes": [
+              {
+                "name": "Color",
+                "key": "color",
+                "value": "Navy Blue"
+              },
+              {
+                "name": "Size",
+                "key": "size",
+                "value": "M"
+              }
+            ]
+          }
+        ]
+      },
+      "shippingAddress": {
+        "title": "Mr.",
+        "firstName": "Bruce",
+        "lastName": "Wayne",
+        "streetName": "100 Gotham Street",
+        "additionalStreetInfo": "Basement",
+        "city": "Gotham",
+        "region": "NY",
+        "postalCode": "11111",
+        "country": "United States",
+        "email": "someone@somewhere.com",
+        "phone": "5555-24-64"
+      },
+      "billingAddress": {
+        "title": "Mrs.",
+        "firstName": "Jane",
+        "lastName": "Doe",
+        "streetName": "404 Ave.",
+        "additionalStreetInfo": "Garden house",
+        "city": "Berlin",
+        "region": "Berlin",
+        "postalCode": "80808",
+        "country": "Germany",
+        "phone": "5555-24-64"
+      },
+      "shippingMethod": {
+        "label": "DHL Standard",
+        "value": "dhl-standard",
+        "selected": true,
+        "deliveryDays": "Delivery: 3-5 Days",
+        "url": "",
+        "price": "3,00 €",
+        "description": "DHL Standard - Delivery 3-5 Days"
+      },
+      "paymentDetails": {
+        "type": "Credit Card",
+        "name": "P. Osgood",
+        "card": "Visa",
+        "number": "**** **** **** **56",
+        "date": "09.18"
+      },
+      "discountCodes": [
+        {
+          "name": "Sunrise",
+          "id": "1234"
+        },
+        {
+          "name": "Sunny",
+          "id": "12345"
+        },
+        {
+          "name": "Sunny No",
+          "id": "12345"
+        }
+      ]
+    },
+    "messages": [
+      {
+        "type": "info",
+        "message": "Info!"
+      },
+      {
+        "type": "success",
+        "message": "Success!"
+      }
+    ]
+  },
+  "meta": {
+    "assetsPath": "../../assets/",
+    "csrfToken": "Test123",
+    "bagQuantityOptions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "_links": {
+      "self": {
+        "href": "#"
+      },
+      "selectLanguage": {
+        "href": "language.html"
+      },
+      "selectCountry": {
+        "href": "country.html"
+      },
+      "newsletter": {
+        "href": "newsletter.html"
+      },
+      "contactUs": {
+        "href": "contactus.html"
+      },
+      "help": {
+        "href": "help.html"
+      },
+      "shipping": {
+        "href": "shipping.html"
+      },
+      "returns": {
+        "href": "returns.html"
+      },
+      "sizeGuide": {
+        "href": "sizeguide.html"
+      },
+      "ourStory": {
+        "href": "ourstory.html"
+      },
+      "careers": {
+        "href": "careers.html"
+      },
+      "storeLocator": {
+        "href": "stores.html"
+      },
+      "giftCards": {
+        "href": "giftcards.html"
+      },
+      "payment": {
+        "href": "payment.html"
+      },
+      "imprint": {
+        "href": "imprint.html"
+      },
+      "privacyPolicy": {
+        "href": "privacy.html"
+      },
+      "termsOfUse": {
+        "href": "terms.html"
+      },
+      "home": {
+        "href": "home.html"
+      },
+      "newProducts": {
+        "href": "pop.html"
+      },
+      "search": {
+        "href": "pop.html"
+      },
+      "addToCart": {
+        "href": "cart.html"
+      },
+      "addToWishlist": {
+        "href": "wishlist.html"
+      },
+      "addReview": {
+        "href": "pdp.html"
+      },
+      "signIn": {
+        "href": "my-account-login.html"
+      },
+      "logInSubmit": {
+        "href": "my-account-personal-details.html"
+      },
+      "signUpSubmit": {
+        "href": "my-account-personal-details.html"
+      },
+      "myAccount": {
+        "href": "my-account-personal-details.html"
+      },
+      "myPersonalDetails": {
+        "href": "my-account-personal-details.html"
+      },
+      "changePassword": {
+        "href": "my-account-change-password.html"
+      },
+      "myAddressBook": {
+        "href": "my-account-address-book.html"
+      },
+      "myAddressBookAddAddress": {
+        "href": "my-account-new-address.html"
+      },
+      "myAddressBookAddAddressSubmit": {
+        "href": "my-account-address-book.html"
+      },
+      "myAddressBookEditAddressSubmit": {
+        "href": "my-account-address-book.html"
+      },
+      "myOrders": {
+        "href": "my-account-my-orders.html"
+      },
+      "checkout": {
+        "href": "checkout-shipping.html"
+      },
+      "checkoutConfirmation": {
+        "href": "checkout-confirmation.html"
+      },
+      "checkoutConfirmationSubmit": {
+        "href": "checkout-thankyou.html"
+      },
+      "checkoutThankYou": {
+        "href": "checkout-thankyou.html"
+      },
+      "cart": {
+        "href": "cart.html"
+      },
+      "deleteLineItem": {
+        "href": "cart.html"
+      },
+      "changeLineItem": {
+        "href": "cart.html"
+      },
+      "editShippingAddress": {
+        "href": "checkout-shipping.html"
+      },
+      "editBillingAddress": {
+        "href": "checkout-shipping.html"
+      },
+      "checkoutAddressesSubmit": {
+        "href": "checkout-payment.html"
+      },
+      "editPaymentInfo": {
+        "href": "checkout-payment.html"
+      },
+      "checkoutPaymentSubmit": {
+        "href": "checkout-confirmation.html"
+      },
+      "editShippingMethod": {
+        "href": "checkout-shipping.html#shipping-methods-setting"
+      },
+      "continueShopping": {
+        "href": "pop.html"
+      }
+    },
+    "features": {
+      "myAccount": {
+        "active": false
+      },
+      "cartDiscounts": {
+        "active": false
+      }
+    }
+  }
+}

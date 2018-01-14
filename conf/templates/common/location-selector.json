@@ -1,0 +1,32 @@
+{
+	"language" : [
+		{
+			"label" : "German",
+			"value" : "de"
+		},
+		{
+			"label" : "English",
+			"value" : "en",
+			"selected" : true
+		},
+		{
+			"label" : "French",
+			"value" : "fr"
+		}
+	],
+	"country" : [
+		{
+			"label" : "Germany",
+			"value" : "DE"
+		},
+		{
+			"label" : "United Kingdom (UK)",
+			"value" : "United Kingdom (UK)",
+			"selected" : true
+		},
+		{
+			"label" : "France",
+			"value" : "FR"
+		}
+	]
+}

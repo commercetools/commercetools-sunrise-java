@@ -1,0 +1,6 @@
+{
+	"title" : "Sunrise - Page Title",
+	"location" : { "$ref": "location-selector.json" },
+	"miniCart" : { "$ref": "mini-cart.json" },
+	"navMenu" : { "$ref": "nav-menu.json" }
+}
